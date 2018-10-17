@@ -3,4 +3,23 @@
   <component name="JavaScriptSettings">
     <option name="languageLevel" value="ES6" />
   </component>
+  <component name="ProjectPlainTextFileTypeManager">
+    <file url="file://$PROJECT_DIR$/resources/assets/js/permissions.js" />
+    <file url="file://$PROJECT_DIR$/resources/assets/js/posts-cell-posts.js" />
+    <file url="file://$PROJECT_DIR$/resources/assets/js/posts-cells.js" />
+    <file url="file://$PROJECT_DIR$/resources/assets/js/posts-list.js" />
+    <file url="file://$PROJECT_DIR$/resources/assets/js/posts-order.js" />
+    <file url="file://$PROJECT_DIR$/resources/assets/js/posts-update.js" />
+    <file url="file://$PROJECT_DIR$/resources/assets/js/posts-users.js" />
+    <file url="file://$PROJECT_DIR$/resources/assets/js/project-list.js" />
+    <file url="file://$PROJECT_DIR$/resources/assets/js/project-update.js" />
+    <file url="file://$PROJECT_DIR$/resources/assets/js/project.js" />
+    <file url="file://$PROJECT_DIR$/resources/assets/js/propaganda-wechat.js" />
+    <file url="file://$PROJECT_DIR$/resources/assets/js/puppis-tool.js" />
+    <file url="file://$PROJECT_DIR$/resources/assets/js/releases-list.js" />
+    <file url="file://$PROJECT_DIR$/resources/assets/js/releases-update.js" />
+    <file url="file://$PROJECT_DIR$/resources/assets/js/releases.js" />
+    <file url="file://$PROJECT_DIR$/resources/assets/js/staff.js" />
+    <file url="file://$PROJECT_DIR$/resources/assets/js/table-statistics.js" />
+  </component>
 </project>
