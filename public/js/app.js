@@ -108,46 +108,26 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
 //
 //
 //
+//
+//
+//
+//
+//
+//
+//
+//
 
 /* harmony default export */ __webpack_exports__["default"] = ({
     name: "",
     props: ['data'],
     data: function data() {
         return {
-            // condition: function () {
-            //     return this.data[0].condition
-            // },
-            conditionLength: 1
+            conditionLength: 1,
+            selectorHidden: ''
         };
     },
-
-
-    //
-    // beforeMount() {
-    //     this.condition = this.data[0].condition;
-    //     setTimeout(() => {
-    //         this.refresh();
-    //     }, 0)
-    // },
-
     mounted: function mounted() {
         var self = this;
-
-        // let key = $('.key');
-        // let condition = $('.condition');
-        //
-        // key.selectpicker().on('hidden.bs.select', function () {
-        //     let id = $(this)[0].selectedOptions[0].id;
-        //     self.condition = self.data.find(item => item.id === parseInt(id))['condition'];
-        //     setTimeout(function () {
-        //         self.refresh();
-        //     }, 0);
-        //     self.$emit('change', 'key', $(this).val(), $(this)[0].selectedOptions[0].id);
-        // });
-        //
-        // condition.selectpicker().on('hidden.bs.select', function () {
-        //     self.$emit('change', 'condition', $(this).val(), $(this)[0].selectedOptions[0].id);
-        // });
     },
 
 
@@ -157,6 +137,12 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
         },
         addCondition: function addCondition() {
             this.conditionLength += 1;
+        },
+
+        delSelector: function delSelector(id) {
+            console.log(id);
+            this.selectorHidden = id;
+            this.conditionLength -= 1;
         }
     }
 });
@@ -234,6 +220,7 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
 //
 //
 //
+//
 
 /* harmony default export */ __webpack_exports__["default"] = ({
     props: ['data', 'n'],
@@ -241,7 +228,8 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
         return {
             item: function item() {
                 return this.data[0].child;
-            }
+            },
+            valueType: 'disable'
         };
     },
     beforeMount: function beforeMount() {
@@ -260,9 +248,14 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
 
         father.selectpicker().on('hidden.bs.select', function () {
             var id = $(this)[0].selectedOptions[0].id;
-            self.item = self.data.find(function (item) {
+            var father = self.data.find(function (item) {
                 return item.id === parseInt(id);
-            })['child'];
+            });
+            self.item = father['child'];
+            if (self.valueType === 'number') {
+                self.$refs.numberSpinner.destroy();
+            }
+            self.valueType = father['type'];
             setTimeout(function () {
                 self.refresh();
             }, 0);
@@ -295,8 +288,6 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
 //
 //
 //
-//
-//
 
 /* harmony default export */ __webpack_exports__["default"] = ({
     props: [],
@@ -310,7 +301,11 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
     },
 
 
-    methods: {}
+    methods: {
+        destroy: function destroy() {
+            $(this.$el).asSpinner('destroy');
+        }
+    }
 });
 
 /***/ }),
@@ -543,7 +538,7 @@ exports = module.exports = __webpack_require__("./node_modules/css-loader/lib/cs
 
 
 // module
-exports.push([module.i, "\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n", ""]);
+exports.push([module.i, "\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n", ""]);
 
 // exports
 
@@ -1447,22 +1442,38 @@ var render = function() {
               _c("h5", [_vm._v("筛选条件")]),
               _vm._v(" "),
               _vm._l(_vm.conditionLength, function(n) {
-                return _c(
-                  "div",
-                  [
-                    _c("normal-linkage-selectors", {
-                      attrs: { data: _vm.data, n: n }
-                    })
-                  ],
-                  1
-                )
+                return _c("div", { staticClass: "clearfix" }, [
+                  _vm.selectorHidden !== "selector" + n
+                    ? _c("div", { attrs: { id: "selector" + n } }, [
+                        _c(
+                          "div",
+                          { staticClass: "float-left col-md-11 p-0" },
+                          [
+                            _c("normal-linkage-selectors", {
+                              attrs: { data: _vm.data, n: n }
+                            })
+                          ],
+                          1
+                        ),
+                        _vm._v(" "),
+                        _c("div", { staticClass: "float-left col-md-1 pb-5" }, [
+                          _c("i", {
+                            staticClass: "md-close font-size-18",
+                            staticStyle: { "line-height": "36px" },
+                            attrs: { "aria-hidden": "true" },
+                            on: {
+                              click: function($event) {
+                                _vm.delSelector("selector" + n)
+                              }
+                            }
+                          })
+                        ])
+                      ])
+                    : _vm._e()
+                ])
               }),
               _vm._v(" "),
               _c("div", { staticClass: "example" }, [
-                _c("i", {
-                  staticClass: "icon md-plus",
-                  attrs: { "aria-hidden": "true" }
-                }),
                 _c("span", { on: { click: _vm.addCondition } }, [
                   _vm._v("添加更多条件")
                 ])
@@ -1600,7 +1611,7 @@ var render = function() {
   var _vm = this
   var _h = _vm.$createElement
   var _c = _vm._self._c || _h
-  return _c("div", { staticClass: "clearfix example" }, [
+  return _c("div", { staticClass: "clearfix pb-5" }, [
     _c(
       "select",
       {
@@ -1635,11 +1646,25 @@ var render = function() {
       "div",
       { staticClass: "col-md-4 float-left p-0" },
       [
-        _c("input", { staticClass: "form-control", attrs: { type: "text" } }),
+        _vm.valueType === "disable"
+          ? _c("input", {
+              staticClass: "form-control",
+              attrs: { type: "text", disabled: "" }
+            })
+          : _vm._e(),
         _vm._v(" "),
-        _c("datepicker"),
+        _vm.valueType === "input"
+          ? _c("input", {
+              staticClass: "form-control",
+              attrs: { type: "text" }
+            })
+          : _vm._e(),
         _vm._v(" "),
-        _c("number-spinner")
+        _vm.valueType === "date" ? _c("datepicker") : _vm._e(),
+        _vm._v(" "),
+        _vm.valueType === "number"
+          ? _c("number-spinner", { ref: "numberSpinner" })
+          : _vm._e()
       ],
       1
     )
@@ -1664,21 +1689,12 @@ var render = function() {
   var _vm = this
   var _h = _vm.$createElement
   var _c = _vm._self._c || _h
-  return _vm._m(0)
+  return _c("input", {
+    staticClass: "form-control",
+    attrs: { type: "text", "data-plugin": "asSpinner", value: "0" }
+  })
 }
-var staticRenderFns = [
-  function() {
-    var _vm = this
-    var _h = _vm.$createElement
-    var _c = _vm._self._c || _h
-    return _c("div", [
-      _c("input", {
-        staticClass: "form-control asSpinnerUi",
-        attrs: { type: "text", "data-plugin": "asSpinner", value: "0" }
-      })
-    ])
-  }
-]
+var staticRenderFns = []
 render._withStripped = true
 module.exports = { render: render, staticRenderFns: staticRenderFns }
 if (false) {

@@ -1,8 +1,6 @@
 <template>
 
-    <div>
-        <input type="text" class="form-control asSpinnerUi" data-plugin="asSpinner" value="0">
-    </div>
+    <input type="text" class="form-control" data-plugin="asSpinner" value="0" />
 
 </template>
 
@@ -20,6 +18,10 @@
             )
         },
 
-        methods: {}
+        methods: {
+            destroy() {
+                $(this.$el).asSpinner('destroy');
+            }
+        }
     }
 </script>

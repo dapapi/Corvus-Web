@@ -2,8 +2,8 @@
     <div class="input-group date">
         <input type="text" class="form-control" title="" :placeholder="this.placeholder">
         <span class="input-group-addon">
-                <i class="icon md-apps" aria-hidden="true"></i>
-            </span>
+            <i class="icon md-apps" aria-hidden="true"></i>
+        </span>
     </div>
 </template>
 <script>

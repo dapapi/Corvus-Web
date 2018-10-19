@@ -33,7 +33,7 @@
     <link rel="stylesheet" href="https://res.papitube.com/vendors/jquery-wizard/jquery-wizard.css">
     <link rel="stylesheet" href="https://res.papitube.com/vendors/formvalidation/formValidation.css">
     <link rel="stylesheet" href="https://res.papitube.com/vendors/site.min.css">
-    <link rel="stylesheet" href="https://res.papitube.com/vendors/asspinner/asSpinner.css">
+    <link rel="stylesheet" href="https://res.papitube.com/remark/js/Plugin/asSpinner.css">
 
     <link rel="stylesheet" href="{{ mix('css/base.css') }}">
 

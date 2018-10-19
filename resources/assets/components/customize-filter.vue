@@ -15,12 +15,20 @@
                     <input type="text" class="form-control" id="inputPlaceholder" placeholder="输入筛选名称">
 
                     <h5>筛选条件</h5>
-                    <div v-for="n in conditionLength">
-                        <normal-linkage-selectors :data="data,n"></normal-linkage-selectors>
+                    <div v-for="n in conditionLength" class="clearfix">
+                        <div :id="'selector' + n" v-if="selectorHidden !== ('selector' + n)">
+                            <div class="float-left col-md-11 p-0">
+                                <normal-linkage-selectors :data="data,n"></normal-linkage-selectors>
+                            </div>
+                            <div class="float-left col-md-1 pb-5">
+                                <i class="md-close font-size-18" aria-hidden="true" style="line-height: 36px;"
+                                   @click="delSelector('selector' + n)"></i>
+                            </div>
+                        </div>
                     </div>
 
                     <div class="example">
-                        <i class="icon md-plus" aria-hidden="true"></i><span @click="addCondition">添加更多条件</span>
+                        <span @click="addCondition">添加更多条件</span>
                     </div>
 
                 </div>
@@ -42,39 +50,13 @@
         props: ['data'],
         data() {
             return {
-                // condition: function () {
-                //     return this.data[0].condition
-                // },
-                conditionLength: 1
+                conditionLength: 1,
+                selectorHidden: ''
             }
         },
 
-        //
-        // beforeMount() {
-        //     this.condition = this.data[0].condition;
-        //     setTimeout(() => {
-        //         this.refresh();
-        //     }, 0)
-        // },
-
         mounted() {
             let self = this;
-
-            // let key = $('.key');
-            // let condition = $('.condition');
-            //
-            // key.selectpicker().on('hidden.bs.select', function () {
-            //     let id = $(this)[0].selectedOptions[0].id;
-            //     self.condition = self.data.find(item => item.id === parseInt(id))['condition'];
-            //     setTimeout(function () {
-            //         self.refresh();
-            //     }, 0);
-            //     self.$emit('change', 'key', $(this).val(), $(this)[0].selectedOptions[0].id);
-            // });
-            //
-            // condition.selectpicker().on('hidden.bs.select', function () {
-            //     self.$emit('change', 'condition', $(this).val(), $(this)[0].selectedOptions[0].id);
-            // });
 
         },
 
@@ -84,6 +66,10 @@
             },
             addCondition() {
                 this.conditionLength += 1
+            },
+            delSelector: function (id) {
+                this.selectorHidden = id;
+                this.conditionLength -= 1
             }
         }
     }

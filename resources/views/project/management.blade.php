@@ -68,9 +68,6 @@
                     </tr>
                 </table>
 
-                <number-spinner></number-spinner>
-
-
                 <pagination :current_page="current_page" :method="getProjects" :total_pages="total_pages"
                             :total="total"></pagination>
 

@@ -52,6 +52,18 @@ let app = new Vue({
             ],
             customizeInfo: [
                 {
+                    id: 0,
+                    name: '选择条件',
+                    value: 0,
+                    child: [
+                        {
+                            name: '选择对应关系',
+                            value: 0
+                        }
+                    ],
+                    type: 'disable'
+                },
+                {
                     id: 1,
                     name: '负责人',
                     value: 1,
@@ -77,9 +89,29 @@ let app = new Vue({
                             value: 2
                         },
                     ],
-                    type: 'time'
+                    type: 'date'
                 },
-            ]
+                {
+                    id: 3,
+                    name: '未跟进天数',
+                    value: 3,
+                    child: [
+                        {
+                            name: '等于',
+                            value: 1
+                        },
+                        {
+                            name: '大于',
+                            value: 2
+                        },
+                        {
+                            name: '大于等于',
+                            value: 2
+                        },
+                    ],
+                    type: 'number'
+                },
+            ],
         },
 
         mounted() {

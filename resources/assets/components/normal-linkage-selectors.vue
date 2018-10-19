@@ -1,6 +1,6 @@
 <template>
 
-    <div class="clearfix example">
+    <div class="clearfix pb-5">
         <select :id="'father' + this.n" title="" class="col-md-4 pl-0 float-left">
             <selectorsOptions v-for="option in this.data" v-bind:id="option.id" :val="option.value"
                               :key="option.id">
@@ -14,9 +14,10 @@
             </selectorsOptions>
         </select>
         <div class="col-md-4 float-left p-0">
-            <input type="text" class="form-control">
-            <datepicker></datepicker>
-            <number-spinner></number-spinner>
+            <input type="text" class="form-control" disabled v-if="valueType === 'disable'">
+            <input type="text" class="form-control" v-if="valueType === 'input'">
+            <datepicker v-if="valueType === 'date'"></datepicker>
+            <number-spinner v-if="valueType === 'number'" ref="numberSpinner"></number-spinner>
         </div>
     </div>
 
@@ -28,7 +29,8 @@
             return {
                 item: function () {
                     return this.data[0].child
-                }
+                },
+                valueType: 'disable'
             }
         },
 
@@ -47,7 +49,12 @@
 
             father.selectpicker().on('hidden.bs.select', function () {
                 let id = $(this)[0].selectedOptions[0].id;
-                self.item = self.data.find(item => item.id === parseInt(id))['child'];
+                let father = self.data.find(item => item.id === parseInt(id));
+                self.item = father['child'];
+                if (self.valueType === 'number') {
+                    self.$refs.numberSpinner.destroy();
+                }
+                self.valueType = father['type'];
                 setTimeout(function () {
                     self.refresh();
                 }, 0);

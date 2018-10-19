@@ -15,6 +15,11 @@
   margin: 0;
 }
 
-.asSpinnerUi {
+.asSpinner input {
   width: 78% !important;
+}
+
+.asSpinner {
+  height: 36px;
+  display: flex;
 }
