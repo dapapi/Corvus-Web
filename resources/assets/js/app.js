@@ -15,6 +15,7 @@ Vue.component('customize-filter', require('../components/customize-filter.vue'))
 Vue.component('normal-linkage-selectors', require('../components/normal-linkage-selectors.vue'));
 Vue.component('datepicker', require('../components/datepicker.vue'));
 Vue.component('number-spinner', require('../components/number-spinner.vue'));
+Vue.component('inline-datepicker', require('../components/inline-datepicker.vue'));
 
 
 $(function () {
