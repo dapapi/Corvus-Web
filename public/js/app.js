@@ -116,6 +116,8 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
 //
 //
 //
+//
+//
 
 /* harmony default export */ __webpack_exports__["default"] = ({
     name: "",
@@ -123,12 +125,12 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
     data: function data() {
         return {
             conditionLength: 1,
-            selectorHidden: ''
+            selectorHidden: [],
+            conditionData: {},
+            customizeKeyWords: ''
         };
     },
-    mounted: function mounted() {
-        var self = this;
-    },
+    mounted: function mounted() {},
 
 
     methods: {
@@ -138,11 +140,31 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
         addCondition: function addCondition() {
             this.conditionLength += 1;
         },
-
         delSelector: function delSelector(id) {
-            console.log(id);
-            this.selectorHidden = id;
-            this.conditionLength -= 1;
+            this.selectorHidden.push(id);
+        },
+        conditionChange: function conditionChange(e) {
+            this.conditionData[e.n] = e;
+        },
+        cancelModal: function cancelModal() {
+            var _this = this;
+            $('.modal').modal('hide');
+            _this.conditionLength = 0;
+            _this.selectorHidden = [];
+            _this.conditionData = {};
+            _this.customizeKeyWords = '';
+            setTimeout(function () {
+                _this.conditionLength = 1;
+            }, 0);
+        },
+        filter: function filter() {
+            var data = {
+                keywords: this.customizeKeyWords,
+                conditions: this.conditionData
+            };
+            var self = this;
+            self.$emit('change', data);
+            self.cancelModal();
         }
     }
 });
@@ -221,6 +243,8 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
 //
 //
 //
+//
+//
 
 /* harmony default export */ __webpack_exports__["default"] = ({
     props: ['data', 'n'],
@@ -229,7 +253,11 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
             item: function item() {
                 return this.data[0].child;
             },
-            valueType: 'disable'
+            valueType: 'disable',
+            disableInput: '',
+            normalInput: '',
+            keyId: '',
+            conditionId: ''
         };
     },
     beforeMount: function beforeMount() {
@@ -259,11 +287,12 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
             setTimeout(function () {
                 self.refresh();
             }, 0);
-            self.$emit('change', 'father', $(this).val(), $(this)[0].selectedOptions[0].id);
+            self.keyId = $(this)[0].selectedOptions[0].id;
+            self.conditionId = self.item[0].value;
         });
 
         child.selectpicker().on('hidden.bs.select', function () {
-            self.$emit('change', 'child', $(this).val(), $(this)[0].selectedOptions[0].id);
+            self.conditionId = $(this)[0].value;
         });
     },
 
@@ -271,6 +300,24 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
     methods: {
         refresh: function refresh() {
             $('#child' + this.n).selectpicker('refresh');
+        },
+        datePickerChange: function datePickerChange(value) {
+            this.basicEmit(value);
+        },
+        inputChange: function inputChange() {
+            this.basicEmit(this.normalInput);
+        },
+        numberSpinnerChange: function numberSpinnerChange(value) {
+            this.basicEmit(value);
+        },
+        basicEmit: function basicEmit(value) {
+            var data = {
+                key: this.keyId,
+                condition: this.conditionId,
+                value: value,
+                n: this.n
+            };
+            this.$emit('change', data);
         }
     }
 });
@@ -296,7 +343,11 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
         $(this.$el).asSpinner({
             format: function format(value) {
                 return value;
-            }
+            },
+            min: 0,
+            max: 100
+        }).on('asSpinner::change', function (e) {
+            self.$emit('change', e.currentTarget.value);
         });
     },
 
@@ -538,7 +589,7 @@ exports = module.exports = __webpack_require__("./node_modules/css-loader/lib/cs
 
 
 // module
-exports.push([module.i, "\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n", ""]);
+exports.push([module.i, "\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n", ""]);
 
 // exports
 
@@ -1416,26 +1467,62 @@ var render = function() {
         "aria-hidden": "true",
         "aria-labelledby": "addLabelForm",
         role: "dialog",
-        tabindex: "-1"
+        tabindex: "-1",
+        "data-backdrop": "static",
+        "data-keyboard": "false"
       }
     },
     [
       _c("div", { staticClass: "modal-dialog modal-simple" }, [
         _c("div", { staticClass: "modal-content" }, [
-          _vm._m(0),
+          _c("div", { staticClass: "modal-header" }, [
+            _c(
+              "button",
+              {
+                staticClass: "close",
+                attrs: { type: "button", "aria-hidden": "true" },
+                on: { click: _vm.cancelModal }
+              },
+              [
+                _c("i", {
+                  staticClass: "md-close",
+                  attrs: { "aria-hidden": "true" }
+                })
+              ]
+            ),
+            _vm._v(" "),
+            _c("h4", { staticClass: "modal-title" }, [_vm._v("自定义筛选")])
+          ]),
           _vm._v(" "),
           _c(
             "div",
             { staticClass: "modal-body" },
             [
-              _c("h5", [_vm._v("筛选名称")]),
+              _c("h5", [_vm._v("筛选关键字")]),
               _vm._v(" "),
               _c("input", {
+                directives: [
+                  {
+                    name: "model",
+                    rawName: "v-model",
+                    value: _vm.customizeKeyWords,
+                    expression: "customizeKeyWords"
+                  }
+                ],
                 staticClass: "form-control",
                 attrs: {
                   type: "text",
                   id: "inputPlaceholder",
                   placeholder: "输入筛选名称"
+                },
+                domProps: { value: _vm.customizeKeyWords },
+                on: {
+                  input: function($event) {
+                    if ($event.target.composing) {
+                      return
+                    }
+                    _vm.customizeKeyWords = $event.target.value
+                  }
                 }
               }),
               _vm._v(" "),
@@ -1443,33 +1530,48 @@ var render = function() {
               _vm._v(" "),
               _vm._l(_vm.conditionLength, function(n) {
                 return _c("div", { staticClass: "clearfix" }, [
-                  _vm.selectorHidden !== "selector" + n
-                    ? _c("div", { attrs: { id: "selector" + n } }, [
-                        _c(
-                          "div",
-                          { staticClass: "float-left col-md-11 p-0" },
-                          [
-                            _c("normal-linkage-selectors", {
-                              attrs: { data: _vm.data, n: n }
-                            })
-                          ],
-                          1
-                        ),
-                        _vm._v(" "),
-                        _c("div", { staticClass: "float-left col-md-1 pb-5" }, [
-                          _c("i", {
-                            staticClass: "md-close font-size-18",
-                            staticStyle: { "line-height": "36px" },
-                            attrs: { "aria-hidden": "true" },
-                            on: {
-                              click: function($event) {
-                                _vm.delSelector("selector" + n)
-                              }
-                            }
+                  _c(
+                    "div",
+                    {
+                      directives: [
+                        {
+                          name: "show",
+                          rawName: "v-show",
+                          value:
+                            _vm.selectorHidden.indexOf("selector" + n) === -1,
+                          expression:
+                            "selectorHidden.indexOf('selector' + n) === -1"
+                        }
+                      ],
+                      attrs: { id: "selector" + n }
+                    },
+                    [
+                      _c(
+                        "div",
+                        { staticClass: "float-left col-md-11 p-0" },
+                        [
+                          _c("normal-linkage-selectors", {
+                            attrs: { data: _vm.data, n: n },
+                            on: { change: _vm.conditionChange }
                           })
-                        ])
+                        ],
+                        1
+                      ),
+                      _vm._v(" "),
+                      _c("div", { staticClass: "float-left col-md-1 pb-5" }, [
+                        _c("i", {
+                          staticClass: "md-close font-size-18",
+                          staticStyle: { "line-height": "36px" },
+                          attrs: { "aria-hidden": "true" },
+                          on: {
+                            click: function($event) {
+                              _vm.delSelector("selector" + n)
+                            }
+                          }
+                        })
                       ])
-                    : _vm._e()
+                    ]
+                  )
                 ])
               }),
               _vm._v(" "),
@@ -1482,59 +1584,32 @@ var render = function() {
             2
           ),
           _vm._v(" "),
-          _vm._m(1)
+          _c("div", { staticClass: "modal-footer" }, [
+            _c(
+              "button",
+              {
+                staticClass: "btn btn-sm btn-white btn-pure",
+                on: { click: _vm.cancelModal }
+              },
+              [_vm._v("取消")]
+            ),
+            _vm._v(" "),
+            _c(
+              "button",
+              {
+                staticClass: "btn btn-primary",
+                attrs: { type: "submit" },
+                on: { click: _vm.filter }
+              },
+              [_vm._v("确定")]
+            )
+          ])
         ])
       ])
     ]
   )
 }
-var staticRenderFns = [
-  function() {
-    var _vm = this
-    var _h = _vm.$createElement
-    var _c = _vm._self._c || _h
-    return _c("div", { staticClass: "modal-header" }, [
-      _c(
-        "button",
-        {
-          staticClass: "close",
-          attrs: {
-            type: "button",
-            "aria-hidden": "true",
-            "data-dismiss": "modal"
-          }
-        },
-        [_c("i", { staticClass: "md-close", attrs: { "aria-hidden": "true" } })]
-      ),
-      _vm._v(" "),
-      _c("h4", { staticClass: "modal-title" }, [_vm._v("自定义筛选")])
-    ])
-  },
-  function() {
-    var _vm = this
-    var _h = _vm.$createElement
-    var _c = _vm._self._c || _h
-    return _c("div", { staticClass: "modal-footer" }, [
-      _c(
-        "button",
-        {
-          staticClass: "btn btn-sm btn-white btn-pure",
-          attrs: { "data-dismiss": "modal" }
-        },
-        [_vm._v("取消")]
-      ),
-      _vm._v(" "),
-      _c(
-        "button",
-        {
-          staticClass: "btn btn-primary",
-          attrs: { "data-dismiss": "modal", type: "submit" }
-        },
-        [_vm._v("确定")]
-      )
-    ])
-  }
-]
+var staticRenderFns = []
 render._withStripped = true
 module.exports = { render: render, staticRenderFns: staticRenderFns }
 if (false) {
@@ -1648,22 +1723,61 @@ var render = function() {
       [
         _vm.valueType === "disable"
           ? _c("input", {
+              directives: [
+                {
+                  name: "model",
+                  rawName: "v-model",
+                  value: _vm.disableInput,
+                  expression: "disableInput"
+                }
+              ],
               staticClass: "form-control",
-              attrs: { type: "text", disabled: "" }
+              attrs: { type: "text", disabled: "" },
+              domProps: { value: _vm.disableInput },
+              on: {
+                input: function($event) {
+                  if ($event.target.composing) {
+                    return
+                  }
+                  _vm.disableInput = $event.target.value
+                }
+              }
             })
           : _vm._e(),
         _vm._v(" "),
         _vm.valueType === "input"
           ? _c("input", {
+              directives: [
+                {
+                  name: "model",
+                  rawName: "v-model",
+                  value: _vm.normalInput,
+                  expression: "normalInput"
+                }
+              ],
               staticClass: "form-control",
-              attrs: { type: "text" }
+              attrs: { type: "text", onchange: _vm.inputChange },
+              domProps: { value: _vm.normalInput },
+              on: {
+                input: function($event) {
+                  if ($event.target.composing) {
+                    return
+                  }
+                  _vm.normalInput = $event.target.value
+                }
+              }
             })
           : _vm._e(),
         _vm._v(" "),
-        _vm.valueType === "date" ? _c("datepicker") : _vm._e(),
+        _vm.valueType === "date"
+          ? _c("datepicker", { on: { change: _vm.datePickerChange } })
+          : _vm._e(),
         _vm._v(" "),
         _vm.valueType === "number"
-          ? _c("number-spinner", { ref: "numberSpinner" })
+          ? _c("number-spinner", {
+              ref: "numberSpinner",
+              on: { change: _vm.numberSpinnerChange }
+            })
           : _vm._e()
       ],
       1

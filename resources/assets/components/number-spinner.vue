@@ -1,6 +1,6 @@
 <template>
 
-    <input type="text" class="form-control" data-plugin="asSpinner" value="0" />
+    <input type="text" class="form-control" data-plugin="asSpinner" value="0"/>
 
 </template>
 
@@ -13,9 +13,13 @@
                 {
                     format: function format(value) {
                         return value;
-                    }
+                    },
+                    min: 0,
+                    max: 100,
                 }
-            )
+            ).on('asSpinner::change', function (e) {
+                self.$emit('change', e.currentTarget.value)
+            })
         },
 
         methods: {

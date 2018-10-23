@@ -153,8 +153,8 @@ let app = new Vue({
                 console.log(e)
             },
 
-            customize: function () {
-
+            customize: function (value) {
+                console.log(value)
             }
 
         }

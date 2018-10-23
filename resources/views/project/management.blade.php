@@ -33,8 +33,7 @@
                 <div class="col-md-3 example float-left">
                     <button type="button" class="btn btn-default waves-effect waves-classic float-right"
                             data-toggle="modal" data-target="#customizeContent"
-                            data-placement="right" title=""
-                            @click="customize">
+                            data-placement="right" title="">
                         自定义筛选
                     </button>
                 </div>
@@ -75,7 +74,7 @@
 
         </div>
 
-        <customize-filter :data="customizeInfo"></customize-filter>
+        <customize-filter :data="customizeInfo" @change="customize"></customize-filter>
 
     </div>
     <!-- End Page -->
