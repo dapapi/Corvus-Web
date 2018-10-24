@@ -105,6 +105,8 @@
 <script src="https://res.papitube.com/vendors/peity/jquery.peity.min.js"></script>
 <script src="https://res.papitube.com/vendors/toastr/toastr.min.js"></script>
 <script src="https://res.papitube.com/vendors/jquery-selective/jquery-selective.min.js"></script>
+<script src="https://res.papitube.com/vendors/bootstrap-treeview/bootstrap-treeview.min.js"></script>
+<script src="https://res.papitube.com/vendors/jstree/jstree.min.js"></script>
 
 <!-- Scripts -->
 <script src="https://res.papitube.com/remark/js/Component.js"></script>
@@ -151,6 +153,8 @@
 <script src="https://res.papitube.com/vendors/asspinner/jquery-asSpinner.min.js"></script>
 <script src="https://res.papitube.com/remark/js/Plugin/asspinner.js"></script>
 <script src="https://res.papitube.com/vendors/moment.min.js"></script>
+<script src="https://res.papitube.com/remark/js/Plugin/bootstrap-treeview.js"></script>
+<script src="https://res.papitube.com/remark/js/Plugin/jstree.js"></script>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/fullcalendar/3.9.0/fullcalendar.min.js"></script>
 <script>
     (function (document, window, $) {

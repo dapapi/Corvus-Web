@@ -17,6 +17,7 @@ Vue.component('datepicker', require('../components/datepicker.vue'));
 Vue.component('number-spinner', require('../components/number-spinner.vue'));
 Vue.component('inline-datepicker', require('../components/inline-datepicker.vue'));
 Vue.component('calendar', require('../components/calendar.vue'));
+Vue.component('select-staff', require('../components/select-staff.vue'));
 
 
 $(function () {

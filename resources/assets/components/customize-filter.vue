@@ -1,10 +1,10 @@
 <template>
     <div class="modal fade" id="customizeContent" aria-hidden="true" aria-labelledby="addLabelForm"
-         role="dialog" tabindex="-1" data-backdrop="static" data-keyboard="false">
+         role="dialog" tabindex="-1" >
         <div class="modal-dialog modal-simple">
             <div class="modal-content">
                 <div class="modal-header">
-                    <button type="button" class="close" aria-hidden="true" @click="cancelModal">
+                    <button type="button" class="close" aria-hidden="true" data-dismiss="modal">
                         <i class="md-close" aria-hidden="true"></i>
                     </button>
                     <h4 class="modal-title">自定义筛选</h4>
@@ -35,7 +35,7 @@
 
                 </div>
                 <div class="modal-footer">
-                    <button class="btn btn-sm btn-white btn-pure" @click="cancelModal">取消</button>
+                    <button class="btn btn-sm btn-white btn-pure" data-dismiss="modal">取消</button>
                     <button class="btn btn-primary" type="submit" @click="filter">确定</button>
                 </div>
 
@@ -60,7 +60,16 @@
         },
 
         mounted() {
-
+            let _this = this;
+            $(this.$el).on('hidden.bs.modal',function () {
+                _this.conditionLength = 0;
+                _this.selectorHidden = [];
+                _this.conditionData = {};
+                _this.customizeKeyWords = '';
+                setTimeout(function () {
+                    _this.conditionLength = 1;
+                }, 0);
+            })
         },
 
         methods: {
@@ -76,18 +85,6 @@
             conditionChange: function (e) {
                 this.conditionData[e.n] = e
             },
-            cancelModal: function () {
-                let _this = this;
-                $('.modal').modal('hide');
-                _this.conditionLength = 0;
-                _this.selectorHidden = [];
-                _this.conditionData = {};
-                _this.customizeKeyWords = '';
-                setTimeout(function () {
-                    _this.conditionLength = 1;
-                }, 0);
-
-            },
             filter: function () {
                 let data = {
                     keywords: this.customizeKeyWords,
@@ -95,7 +92,7 @@
                 };
                 let self = this;
                 self.$emit('change', data);
-                self.cancelModal();
+                $('.modal').modal('hide');
             }
         }
     }

@@ -67,13 +67,15 @@
                     </tr>
                 </table>
 
-                <calendar></calendar>
-
                 <pagination :current_page="current_page" :method="getProjects" :total_pages="total_pages"
                             :total="total"></pagination>
 
             </div>
 
+        </div>
+
+        <div class="col-md-3">
+            <select-staff></select-staff>
         </div>
 
         <customize-filter :data="customizeInfo" @change="customize"></customize-filter>

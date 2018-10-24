@@ -2,19 +2,13 @@ import Cookies from 'js-cookie'
 import redirect from "./bootstrap";
 
 let config = {
-    tokenString: 'LIBRA-ACCESS-TOKEN',
-    apiUrl: 'https://sandbox-api-oa.papitube.com',
+    tokenString: 'CORVUS-ACCESS-TOKEN',
+    apiUrl: 'https://sandbox-api-crm.papitube.com/',
     imgUrl: 'https://res.papitube.com/',
-    mMoeUrl: 'https://sandbox-oa.papitube.com',
-    moeUrl: 'https://sandbox-admin-oa.papitube.com',
-
-    puppisTokenString: 'PUPPIS-ACCESS-TOKEN',
-    puppisAdminTokenString: 'PUPPIS-ADMIN-ACCESS-TOKEN',
-    puppisApiUrl: 'https://sandbox-api-puppis.papitube.com',
 
     getHeaders: function () {
         let headers = {
-            'Accept': 'application/vnd.Libra.v1+json',
+            'Accept': 'application/vnd.Corvus.v1+json',
             'Access-Control-Expose-Headers': 'Location',
             'Access-Control-Allow-Headers': 'Authorization'
         };
