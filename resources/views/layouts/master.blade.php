@@ -34,6 +34,8 @@
     <link rel="stylesheet" href="https://res.papitube.com/vendors/formvalidation/formValidation.css">
     <link rel="stylesheet" href="https://res.papitube.com/vendors/site.min.css">
     <link rel="stylesheet" href="https://res.papitube.com/remark/js/Plugin/asSpinner.css">
+    <link rel="stylesheet" href="https://res.papitube.com/vendors/fullcalendar/fullcalendar.css">
+    <link rel="stylesheet" href="https://res.papitube.com/vendors/calendar.css">
 
     <link rel="stylesheet" href="{{ mix('css/base.css') }}">
 
@@ -75,7 +77,7 @@
 
 <!-- Core  -->
 <script src="https://res.papitube.com/vendors/babel-external-helpers/babel-external-helpers.js"></script>
-<script src="https://res.papitube.com/vendors/jquery/jquery.js"></script>
+<script src="https://res.papitube.com/vendors/jquery/jquery.min.js"></script>
 <script src="https://res.papitube.com/vendors/popper-js/umd/popper.min.js"></script>
 <script src="https://res.papitube.com/vendors/bootstrap/bootstrap.js"></script>
 <script src="https://res.papitube.com/vendors/animsition/animsition.js"></script>
@@ -102,6 +104,7 @@
 <script src="https://res.papitube.com/vendors/matchheight/jquery.matchHeight-min.js"></script>
 <script src="https://res.papitube.com/vendors/peity/jquery.peity.min.js"></script>
 <script src="https://res.papitube.com/vendors/toastr/toastr.min.js"></script>
+<script src="https://res.papitube.com/vendors/jquery-selective/jquery-selective.min.js"></script>
 
 <!-- Scripts -->
 <script src="https://res.papitube.com/remark/js/Component.js"></script>
@@ -147,6 +150,8 @@
 <script src="https://res.papitube.com/vendors/sortable/sortable.min.js"></script>
 <script src="https://res.papitube.com/vendors/asspinner/jquery-asSpinner.min.js"></script>
 <script src="https://res.papitube.com/remark/js/Plugin/asspinner.js"></script>
+<script src="https://res.papitube.com/vendors/moment.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/fullcalendar/3.9.0/fullcalendar.min.js"></script>
 <script>
     (function (document, window, $) {
         'use strict';
