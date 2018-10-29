@@ -74,17 +74,11 @@
 
         </div>
 
-        <div class="col-md-3">
-            <select-staff></select-staff>
-        </div>
-
         <customize-filter :data="customizeInfo" @change="customize"></customize-filter>
 
     </div>
     <!-- End Page -->
 
-
-    @include('layouts.footer')
 @endsection
 
 

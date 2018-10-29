@@ -310,6 +310,111 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
 
 /***/ }),
 
+/***/ "./node_modules/babel-loader/lib/index.js?{\"cacheDirectory\":true,\"presets\":[[\"env\",{\"modules\":false,\"targets\":{\"browsers\":[\"> 2%\"],\"uglify\":true}}]],\"plugins\":[\"transform-object-rest-spread\",[\"transform-runtime\",{\"polyfill\":false,\"helpers\":false}]]}!./node_modules/vue-loader/lib/selector.js?type=script&index=0!./resources/assets/components/departments-item.vue":
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+
+/* harmony default export */ __webpack_exports__["default"] = ({
+    name: "departments-item",
+    props: ['data', 'select'],
+    data: function data() {
+        return {
+            departmentsShow: false,
+            total: 0
+        };
+    },
+    mounted: function mounted() {
+        this.total = this.memberNum(this.data);
+    },
+
+
+    methods: {
+        departmentClose: function departmentClose() {
+            this.departmentsShow = !this.departmentsShow;
+        },
+
+        selectMember: function selectMember(userId) {
+            var index = this.select.indexOf(userId);
+            if (index > -1) {
+                this.select.splice(index, 1);
+            } else {
+                this.select.push(userId);
+            }
+        },
+
+        selectAllMember: function selectAllMember() {
+            this.checkMember(this.data);
+        },
+
+        checkMember: function checkMember(data) {
+            for (var i = 0; i < data.users.data.length; i++) {
+                var userId = data.users.data[i].id;
+                var index = this.select.indexOf(userId);
+                if (index === -1) {
+                    this.select.push(userId);
+                }
+            }
+            for (var _i = 0; _i < data.departments.data.length; _i++) {
+                this.checkMember(data.departments.data[_i]);
+            }
+        },
+
+        memberNum: function memberNum(data) {
+            var firstLevelUsers = data.users.data.length;
+            var nextLevelUsers = 0;
+            for (var i = 0; i < data.departments.data.length; i++) {
+                nextLevelUsers += this.memberNum(data.departments.data[i]);
+            }
+            return firstLevelUsers + nextLevelUsers;
+        }
+    }
+});
+
+/***/ }),
+
 /***/ "./node_modules/babel-loader/lib/index.js?{\"cacheDirectory\":true,\"presets\":[[\"env\",{\"modules\":false,\"targets\":{\"browsers\":[\"> 2%\"],\"uglify\":true}}]],\"plugins\":[\"transform-object-rest-spread\",[\"transform-runtime\",{\"polyfill\":false,\"helpers\":false}]]}!./node_modules/vue-loader/lib/selector.js?type=script&index=0!./resources/assets/components/inline-datepicker.vue":
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
@@ -638,6 +743,29 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
 //
 //
 //
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
 
 
 
@@ -646,58 +774,62 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
     data: function data() {
         return {
             normalUsers: {},
-            departmentUsers: {}
+            departmentUsers: {},
+            teamShow: true,
+            selectIdArr: [],
+            searchKeyWord: ''
         };
     },
     mounted: function mounted() {
 
         var self = this;
-        var tree = [{
-            text: "Parent 1",
-            icon: "md-plus",
-            selectedIcon: 'md-folder',
-            state: {
-                selected: true,
-                checked: true,
-                expanded: true
-            },
-            nodes: [{
-                text: "Child 1",
-                nodes: [{
-                    text: "Grandchild 1"
-                }, {
-                    text: "Grandchild 2"
-                }]
-            }, {
-                text: "Child 2"
-            }]
-        }, {
-            text: "Parent 2"
-        }, {
-            text: "Parent 3"
-        }, {
-            text: "Parent 4"
-        }, {
-            text: "Parent 5"
-        }];
         $.ajax({
             url: __WEBPACK_IMPORTED_MODULE_0__js_config__["a" /* default */].apiUrl + '/users',
             headers: __WEBPACK_IMPORTED_MODULE_0__js_config__["a" /* default */].getHeaders(),
             type: 'get',
             statusCode: __WEBPACK_IMPORTED_MODULE_0__js_config__["a" /* default */].getStatusCode()
         }).done(function (response) {
-            console.log(response);
             self.normalUsers = response.data;
         });
 
-        $('#exampleCustomIcons').treeview({
-            data: tree,
-            levels: 3,
-            silent: true
+        $.ajax({
+            url: __WEBPACK_IMPORTED_MODULE_0__js_config__["a" /* default */].apiUrl + '/departments',
+            headers: __WEBPACK_IMPORTED_MODULE_0__js_config__["a" /* default */].getHeaders(),
+            type: 'get',
+            statusCode: __WEBPACK_IMPORTED_MODULE_0__js_config__["a" /* default */].getStatusCode()
+        }).done(function (response) {
+            self.departmentUsers = response.data;
+
+            // console.log(response)
         });
     },
 
-    methods: {}
+    methods: {
+        closeTeam: function closeTeam() {
+            this.teamShow = !this.teamShow;
+        },
+
+        selectAllMember: function selectAllMember() {
+            for (var i = 0; i < this.normalUsers.length; i++) {
+                var userId = this.normalUsers[i].id;
+                var index = this.selectIdArr.indexOf(userId);
+                if (index === -1) {
+                    this.selectIdArr.push(userId);
+                }
+            }
+        },
+
+        selectMember: function selectMember(userId) {
+            var index = this.selectIdArr.indexOf(userId);
+            if (index > -1) {
+                this.selectIdArr.splice(index, 1);
+            } else {
+                this.selectIdArr.push(userId);
+            }
+        },
+
+        searchMember: function searchMember() {}
+    }
 });
 
 /***/ }),
@@ -849,7 +981,7 @@ exports = module.exports = __webpack_require__("./node_modules/css-loader/lib/cs
 
 
 // module
-exports.push([module.i, "\n.nav-item {\n    padding: 0 !important;\n    text-align: center;\n}\nbutton:focus {\n    outline: none;\n}\n.page-content {\n    padding: 15px 30px;\n}\n\n", ""]);
+exports.push([module.i, "\n.nav-item {\n    padding: 0 !important;\n    text-align: center;\n    word-break: keep-all;\n}\nbutton:focus {\n    outline: none;\n}\n.team-title-icon {\n    width: 4px;\n    display: inline-block;\n}\n.team-add-all {\n    display: none;\n}\n.team-title:hover .team-add-all {\n    display: inline-block;\n}\n.users {\n    padding-top: 10px;\n    line-height: 30px;\n    padding-left: 15px;\n    cursor: pointer;\n}\n.users:hover {\n    color: #0000F0;\n}\n.users .avatar {\n    width: 30px;\n    height: 30px;\n    overflow: hidden;\n}\n.selector-page-content {\n    padding: 15px 30px;\n    height: 355px;\n    overflow-x: hidden;\n    overflow-y: auto;\n    position: relative;\n    top: 45px;\n}\n.assistor {\n    position: relative;\n    height: 400px;\n    width: 20rem;\n    -moz-user-select: none;\n    -webkit-user-select: none;\n    -ms-user-select: none;\n    user-select: none;\n}\n.selector-page-content::-webkit-scrollbar {\n    width: 6px;\n    height: 12px;\n    -webkit-appearance: none;\n}\n.selector-page-content::-webkit-scrollbar-thumb {\n    background: #ddd;\n    border-radius: 10px;\n}\n.selector-page-content::-webkit-scrollbar-track-piece {\n    background: #eee;\n    border-radius: 3px;\n}\n.page-nav-tabs {\n    position: absolute;\n    z-index: 2;\n    top: 0;\n    background: white;\n    width: 100%;\n}\n.select-staff {\n    height: 410px;\n}\n.team-title {\n    font-weight: 400;\n}\n\n", ""]);
 
 // exports
 
@@ -865,6 +997,21 @@ exports = module.exports = __webpack_require__("./node_modules/css-loader/lib/cs
 
 // module
 exports.push([module.i, "\n.btn-default {\n    background: white;\n}\n", ""]);
+
+// exports
+
+
+/***/ }),
+
+/***/ "./node_modules/css-loader/index.js!./node_modules/vue-loader/lib/style-compiler/index.js?{\"vue\":true,\"id\":\"data-v-548ec1f8\",\"scoped\":true,\"hasInlineConfig\":true}!./node_modules/vue-loader/lib/selector.js?type=styles&index=0!./resources/assets/components/departments-item.vue":
+/***/ (function(module, exports, __webpack_require__) {
+
+exports = module.exports = __webpack_require__("./node_modules/css-loader/lib/css-base.js")(false);
+// imports
+
+
+// module
+exports.push([module.i, "\n.department-item[data-v-548ec1f8] {\n    position: relative;\n    left: 0.8rem;\n    width: calc(100% - 0.8rem);\n}\n\n", ""]);
 
 // exports
 
@@ -1906,113 +2053,280 @@ var render = function() {
   var _vm = this
   var _h = _vm.$createElement
   var _c = _vm._self._c || _h
-  return _vm._m(0)
+  return _c("div", { staticClass: "assistor" }, [
+    _c("div", { staticClass: "bg-white select-staff" }, [
+      _vm._m(0),
+      _vm._v(" "),
+      _c(
+        "div",
+        {
+          staticClass:
+            "page-content tab-content nav-tabs-animate bg-white selector-page-content"
+        },
+        [
+          _c(
+            "div",
+            {
+              staticClass: "tab-pane animation-fade active",
+              attrs: { id: "forum-team", role: "tabpanel" }
+            },
+            [
+              _c("div", { staticClass: "input-search" }, [
+                _vm._m(1),
+                _vm._v(" "),
+                _c("input", {
+                  directives: [
+                    {
+                      name: "model",
+                      rawName: "v-model",
+                      value: _vm.searchKeyWord,
+                      expression: "searchKeyWord"
+                    }
+                  ],
+                  staticClass: "form-control",
+                  attrs: { type: "text", name: "", placeholder: "搜索成员..." },
+                  domProps: { value: _vm.searchKeyWord },
+                  on: {
+                    input: function($event) {
+                      if ($event.target.composing) {
+                        return
+                      }
+                      _vm.searchKeyWord = $event.target.value
+                    }
+                  }
+                })
+              ]),
+              _vm._v(" "),
+              _c("div", { staticClass: "person-content" }, [
+                _c("div", { staticClass: "pt-2 team-title" }, [
+                  _c(
+                    "span",
+                    {
+                      staticClass: "team-title-icon",
+                      on: { click: _vm.closeTeam }
+                    },
+                    [
+                      _c("i", {
+                        directives: [
+                          {
+                            name: "show",
+                            rawName: "v-show",
+                            value: _vm.teamShow,
+                            expression: "teamShow"
+                          }
+                        ],
+                        staticClass: "icon md-caret-down"
+                      }),
+                      _vm._v(" "),
+                      _c("i", {
+                        directives: [
+                          {
+                            name: "show",
+                            rawName: "v-show",
+                            value: !_vm.teamShow,
+                            expression: "!teamShow"
+                          }
+                        ],
+                        staticClass: "icon md-caret-right"
+                      })
+                    ]
+                  ),
+                  _vm._v(" "),
+                  _c("span", [
+                    _c("i", { staticClass: "icon md-account pl-2" }),
+                    _vm._v(
+                      "\n                        泰洋系（" +
+                        _vm._s(this.normalUsers.length) +
+                        "人)\n                        "
+                    )
+                  ]),
+                  _vm._v(" "),
+                  _c(
+                    "span",
+                    {
+                      staticClass: "team-add-all pl-2",
+                      on: { click: _vm.selectAllMember }
+                    },
+                    [_c("i", { staticClass: "icon md-plus" })]
+                  )
+                ]),
+                _vm._v(" "),
+                _c(
+                  "div",
+                  {
+                    directives: [
+                      {
+                        name: "show",
+                        rawName: "v-show",
+                        value: _vm.teamShow,
+                        expression: "teamShow"
+                      }
+                    ]
+                  },
+                  _vm._l(this.normalUsers, function(user) {
+                    return _c(
+                      "div",
+                      {
+                        directives: [
+                          {
+                            name: "show",
+                            rawName: "v-show",
+                            value: user.name.indexOf(_vm.searchKeyWord) > -1,
+                            expression: "user.name.indexOf(searchKeyWord) > -1"
+                          }
+                        ],
+                        staticClass: "users",
+                        on: {
+                          click: function($event) {
+                            _vm.selectMember(user.id)
+                          }
+                        }
+                      },
+                      [
+                        _vm._m(2, true),
+                        _vm._v(" "),
+                        _c("span", { staticClass: "pl-1" }, [
+                          _vm._v(_vm._s(user.name))
+                        ]),
+                        _vm._v(" "),
+                        _c(
+                          "span",
+                          {
+                            directives: [
+                              {
+                                name: "show",
+                                rawName: "v-show",
+                                value: _vm.selectIdArr.indexOf(user.id) > -1,
+                                expression: "selectIdArr.indexOf(user.id) > -1"
+                              }
+                            ],
+                            staticClass: "float-right"
+                          },
+                          [_c("i", { staticClass: "icon md-check" })]
+                        )
+                      ]
+                    )
+                  })
+                )
+              ])
+            ]
+          ),
+          _vm._v(" "),
+          _c(
+            "div",
+            {
+              staticClass: "tab-pane animation-fade",
+              attrs: { id: "forum-department", role: "tabpanel" }
+            },
+            _vm._l(_vm.departmentUsers, function(department) {
+              return _c(
+                "div",
+                [
+                  _c("departments-item", {
+                    attrs: { data: department, select: _vm.selectIdArr }
+                  })
+                ],
+                1
+              )
+            })
+          )
+        ]
+      )
+    ])
+  ])
 }
 var staticRenderFns = [
   function() {
     var _vm = this
     var _h = _vm.$createElement
     var _c = _vm._self._c || _h
-    return _c("div", { staticClass: "bg-white" }, [
-      _c("div", { staticClass: "page-nav-tabs" }, [
-        _c(
-          "ul",
-          {
-            staticClass: "nav nav-tabs nav-tabs-line",
-            attrs: { role: "tablist" }
-          },
-          [
-            _c(
-              "li",
-              {
-                staticClass: "nav-item col-md-6",
-                attrs: { role: "presentation" }
-              },
-              [
-                _c(
-                  "a",
-                  {
-                    staticClass: "nav-link active",
-                    attrs: {
-                      "data-toggle": "tab",
-                      href: "#forum-team",
-                      "aria-controls": "forum-base",
-                      "aria-expanded": "true",
-                      role: "tab"
-                    }
-                  },
-                  [_vm._v(" 团队 ")]
-                )
-              ]
-            ),
-            _vm._v(" "),
-            _c(
-              "li",
-              {
-                staticClass: "nav-item col-md-6",
-                attrs: { role: "presentation" }
-              },
-              [
-                _c(
-                  "a",
-                  {
-                    staticClass: "nav-link",
-                    attrs: {
-                      "data-toggle": "tab",
-                      href: "#forum-department",
-                      "aria-controls": "forum-present",
-                      "aria-expanded": "false",
-                      role: "tab"
-                    }
-                  },
-                  [_vm._v(" 部门 ")]
-                )
-              ]
-            )
-          ]
-        )
-      ]),
-      _vm._v(" "),
-      _c("div", { staticClass: "page-content tab-content nav-tabs-animate" }, [
-        _c(
-          "div",
-          {
-            staticClass: "tab-pane animation-fade active",
-            attrs: { id: "forum-team", role: "tabpanel" }
-          },
-          [
-            _c("div", { staticClass: "input-search" }, [
+    return _c("div", { staticClass: "page-nav-tabs" }, [
+      _c(
+        "ul",
+        {
+          staticClass: "nav nav-tabs nav-tabs-line",
+          attrs: { role: "tablist" }
+        },
+        [
+          _c(
+            "li",
+            {
+              staticClass: "nav-item col-md-6",
+              attrs: { role: "presentation" }
+            },
+            [
               _c(
-                "button",
-                { staticClass: "input-search-btn", attrs: { type: "submit" } },
-                [
-                  _c("i", {
-                    staticClass: "icon md-search",
-                    attrs: { "aria-hidden": "true" }
-                  })
-                ]
-              ),
-              _vm._v(" "),
-              _c("input", {
-                staticClass: "form-control",
-                attrs: { type: "text", name: "", placeholder: "Search..." }
-              })
-            ]),
-            _vm._v(" "),
-            _c("div", { attrs: { id: "exampleCustomIcons" } })
-          ]
-        ),
-        _vm._v(" "),
-        _c(
-          "div",
-          {
-            staticClass: "tab-pane animation-fade",
-            attrs: { id: "forum-department", role: "tabpanel" }
-          },
-          [_vm._v("\n            department\n        ")]
-        )
-      ])
+                "a",
+                {
+                  staticClass: "nav-link active",
+                  attrs: {
+                    "data-toggle": "tab",
+                    href: "#forum-team",
+                    "aria-controls": "forum-base",
+                    "aria-expanded": "true",
+                    role: "tab"
+                  }
+                },
+                [_vm._v(" 团队 ")]
+              )
+            ]
+          ),
+          _vm._v(" "),
+          _c(
+            "li",
+            {
+              staticClass: "nav-item col-md-6",
+              attrs: { role: "presentation" }
+            },
+            [
+              _c(
+                "a",
+                {
+                  staticClass: "nav-link",
+                  attrs: {
+                    "data-toggle": "tab",
+                    href: "#forum-department",
+                    "aria-controls": "forum-present",
+                    "aria-expanded": "false",
+                    role: "tab"
+                  }
+                },
+                [_vm._v(" 部门 ")]
+              )
+            ]
+          )
+        ]
+      )
     ])
+  },
+  function() {
+    var _vm = this
+    var _h = _vm.$createElement
+    var _c = _vm._self._c || _h
+    return _c(
+      "button",
+      { staticClass: "input-search-btn", attrs: { type: "submit" } },
+      [
+        _c("i", {
+          staticClass: "icon md-search",
+          attrs: { "aria-hidden": "true" }
+        })
+      ]
+    )
+  },
+  function() {
+    var _vm = this
+    var _h = _vm.$createElement
+    var _c = _vm._self._c || _h
+    return _c(
+      "a",
+      { staticClass: "avatar", attrs: { href: "javascript:void(0)" } },
+      [
+        _c("img", {
+          attrs: { src: "https://res.papitube.com/no-icon.png", alt: "..." }
+        })
+      ]
+    )
   }
 ]
 render._withStripped = true
@@ -2220,6 +2534,170 @@ if (false) {
   module.hot.accept()
   if (module.hot.data) {
     require("vue-hot-reload-api")      .rerender("data-v-4c8eae4c", module.exports)
+  }
+}
+
+/***/ }),
+
+/***/ "./node_modules/vue-loader/lib/template-compiler/index.js?{\"id\":\"data-v-548ec1f8\",\"hasScoped\":true,\"buble\":{\"transforms\":{}}}!./node_modules/vue-loader/lib/selector.js?type=template&index=0!./resources/assets/components/departments-item.vue":
+/***/ (function(module, exports, __webpack_require__) {
+
+var render = function() {
+  var _vm = this
+  var _h = _vm.$createElement
+  var _c = _vm._self._c || _h
+  return _c("div", { staticClass: "department-item" }, [
+    _c("div", { staticClass: "pt-2 team-title" }, [
+      _c(
+        "span",
+        {
+          staticClass: "team-title-icon pr-2",
+          on: { click: _vm.departmentClose }
+        },
+        [
+          _c("i", {
+            directives: [
+              {
+                name: "show",
+                rawName: "v-show",
+                value: _vm.departmentsShow,
+                expression: "departmentsShow"
+              }
+            ],
+            staticClass: "icon md-caret-down"
+          }),
+          _vm._v(" "),
+          _c("i", {
+            directives: [
+              {
+                name: "show",
+                rawName: "v-show",
+                value: !_vm.departmentsShow,
+                expression: "!departmentsShow"
+              }
+            ],
+            staticClass: "icon md-caret-right"
+          })
+        ]
+      ),
+      _vm._v(" "),
+      _c("span", [
+        _c("i", { staticClass: "icon md-balance" }),
+        _vm._v(
+          "\n            " +
+            _vm._s(this.data.name) +
+            "（" +
+            _vm._s(this.total) +
+            "人)\n        "
+        )
+      ]),
+      _vm._v(" "),
+      _c(
+        "span",
+        {
+          staticClass: "team-add-all pl-2",
+          on: { click: _vm.selectAllMember }
+        },
+        [_c("i", { staticClass: "icon md-plus" })]
+      )
+    ]),
+    _vm._v(" "),
+    _c(
+      "div",
+      {
+        directives: [
+          {
+            name: "show",
+            rawName: "v-show",
+            value: _vm.departmentsShow,
+            expression: "departmentsShow"
+          }
+        ],
+        staticClass: "items"
+      },
+      [
+        _c(
+          "div",
+          _vm._l(this.data.users.data, function(user) {
+            return _c(
+              "div",
+              {
+                staticClass: "users",
+                on: {
+                  click: function($event) {
+                    _vm.selectMember(user.id)
+                  }
+                }
+              },
+              [
+                _vm._m(0, true),
+                _vm._v(" "),
+                _c("span", { staticClass: "pl-1" }, [
+                  _vm._v(_vm._s(user.name))
+                ]),
+                _vm._v(" "),
+                _c(
+                  "span",
+                  {
+                    directives: [
+                      {
+                        name: "show",
+                        rawName: "v-show",
+                        value: _vm.select.indexOf(user.id) > -1,
+                        expression: "select.indexOf(user.id) > -1"
+                      }
+                    ],
+                    staticClass: "float-right"
+                  },
+                  [_c("i", { staticClass: "icon md-check" })]
+                )
+              ]
+            )
+          })
+        ),
+        _vm._v(" "),
+        this.data.departments.data.length > 0
+          ? _c(
+              "div",
+              _vm._l(this.data.departments.data, function(departmentData) {
+                return _c(
+                  "div",
+                  [
+                    _c("departments-item", {
+                      attrs: { data: departmentData, select: _vm.select }
+                    })
+                  ],
+                  1
+                )
+              })
+            )
+          : _vm._e()
+      ]
+    )
+  ])
+}
+var staticRenderFns = [
+  function() {
+    var _vm = this
+    var _h = _vm.$createElement
+    var _c = _vm._self._c || _h
+    return _c(
+      "a",
+      { staticClass: "avatar", attrs: { href: "javascript:void(0)" } },
+      [
+        _c("img", {
+          attrs: { src: "https://res.papitube.com/no-icon.png", alt: "..." }
+        })
+      ]
+    )
+  }
+]
+render._withStripped = true
+module.exports = { render: render, staticRenderFns: staticRenderFns }
+if (false) {
+  module.hot.accept()
+  if (module.hot.data) {
+    require("vue-hot-reload-api")      .rerender("data-v-548ec1f8", module.exports)
   }
 }
 
@@ -2569,6 +3047,33 @@ if(false) {
  if(!content.locals) {
    module.hot.accept("!!../../../node_modules/css-loader/index.js!../../../node_modules/vue-loader/lib/style-compiler/index.js?{\"vue\":true,\"id\":\"data-v-3564548b\",\"scoped\":false,\"hasInlineConfig\":true}!../../../node_modules/vue-loader/lib/selector.js?type=styles&index=0!./normal-linkage-selectors.vue", function() {
      var newContent = require("!!../../../node_modules/css-loader/index.js!../../../node_modules/vue-loader/lib/style-compiler/index.js?{\"vue\":true,\"id\":\"data-v-3564548b\",\"scoped\":false,\"hasInlineConfig\":true}!../../../node_modules/vue-loader/lib/selector.js?type=styles&index=0!./normal-linkage-selectors.vue");
+     if(typeof newContent === 'string') newContent = [[module.id, newContent, '']];
+     update(newContent);
+   });
+ }
+ // When the module is disposed, remove the <style> tags
+ module.hot.dispose(function() { update(); });
+}
+
+/***/ }),
+
+/***/ "./node_modules/vue-style-loader/index.js!./node_modules/css-loader/index.js!./node_modules/vue-loader/lib/style-compiler/index.js?{\"vue\":true,\"id\":\"data-v-548ec1f8\",\"scoped\":true,\"hasInlineConfig\":true}!./node_modules/vue-loader/lib/selector.js?type=styles&index=0!./resources/assets/components/departments-item.vue":
+/***/ (function(module, exports, __webpack_require__) {
+
+// style-loader: Adds some css to the DOM by adding a <style> tag
+
+// load the styles
+var content = __webpack_require__("./node_modules/css-loader/index.js!./node_modules/vue-loader/lib/style-compiler/index.js?{\"vue\":true,\"id\":\"data-v-548ec1f8\",\"scoped\":true,\"hasInlineConfig\":true}!./node_modules/vue-loader/lib/selector.js?type=styles&index=0!./resources/assets/components/departments-item.vue");
+if(typeof content === 'string') content = [[module.i, content, '']];
+if(content.locals) module.exports = content.locals;
+// add the styles to the DOM
+var update = __webpack_require__("./node_modules/vue-style-loader/lib/addStylesClient.js")("7eacb0ee", content, false, {});
+// Hot Module Replacement
+if(false) {
+ // When the styles change, update the <style> tags
+ if(!content.locals) {
+   module.hot.accept("!!../../../node_modules/css-loader/index.js!../../../node_modules/vue-loader/lib/style-compiler/index.js?{\"vue\":true,\"id\":\"data-v-548ec1f8\",\"scoped\":true,\"hasInlineConfig\":true}!../../../node_modules/vue-loader/lib/selector.js?type=styles&index=0!./departments-item.vue", function() {
+     var newContent = require("!!../../../node_modules/css-loader/index.js!../../../node_modules/vue-loader/lib/style-compiler/index.js?{\"vue\":true,\"id\":\"data-v-548ec1f8\",\"scoped\":true,\"hasInlineConfig\":true}!../../../node_modules/vue-loader/lib/selector.js?type=styles&index=0!./departments-item.vue");
      if(typeof newContent === 'string') newContent = [[module.id, newContent, '']];
      update(newContent);
    });
@@ -14043,6 +14548,58 @@ module.exports = Component.exports
 
 /***/ }),
 
+/***/ "./resources/assets/components/departments-item.vue":
+/***/ (function(module, exports, __webpack_require__) {
+
+var disposed = false
+function injectStyle (ssrContext) {
+  if (disposed) return
+  __webpack_require__("./node_modules/vue-style-loader/index.js!./node_modules/css-loader/index.js!./node_modules/vue-loader/lib/style-compiler/index.js?{\"vue\":true,\"id\":\"data-v-548ec1f8\",\"scoped\":true,\"hasInlineConfig\":true}!./node_modules/vue-loader/lib/selector.js?type=styles&index=0!./resources/assets/components/departments-item.vue")
+}
+var normalizeComponent = __webpack_require__("./node_modules/vue-loader/lib/component-normalizer.js")
+/* script */
+var __vue_script__ = __webpack_require__("./node_modules/babel-loader/lib/index.js?{\"cacheDirectory\":true,\"presets\":[[\"env\",{\"modules\":false,\"targets\":{\"browsers\":[\"> 2%\"],\"uglify\":true}}]],\"plugins\":[\"transform-object-rest-spread\",[\"transform-runtime\",{\"polyfill\":false,\"helpers\":false}]]}!./node_modules/vue-loader/lib/selector.js?type=script&index=0!./resources/assets/components/departments-item.vue")
+/* template */
+var __vue_template__ = __webpack_require__("./node_modules/vue-loader/lib/template-compiler/index.js?{\"id\":\"data-v-548ec1f8\",\"hasScoped\":true,\"buble\":{\"transforms\":{}}}!./node_modules/vue-loader/lib/selector.js?type=template&index=0!./resources/assets/components/departments-item.vue")
+/* template functional */
+var __vue_template_functional__ = false
+/* styles */
+var __vue_styles__ = injectStyle
+/* scopeId */
+var __vue_scopeId__ = "data-v-548ec1f8"
+/* moduleIdentifier (server only) */
+var __vue_module_identifier__ = null
+var Component = normalizeComponent(
+  __vue_script__,
+  __vue_template__,
+  __vue_template_functional__,
+  __vue_styles__,
+  __vue_scopeId__,
+  __vue_module_identifier__
+)
+Component.options.__file = "resources/assets/components/departments-item.vue"
+
+/* hot reload */
+if (false) {(function () {
+  var hotAPI = require("vue-hot-reload-api")
+  hotAPI.install(require("vue"), false)
+  if (!hotAPI.compatible) return
+  module.hot.accept()
+  if (!module.hot.data) {
+    hotAPI.createRecord("data-v-548ec1f8", Component.options)
+  } else {
+    hotAPI.reload("data-v-548ec1f8", Component.options)
+  }
+  module.hot.dispose(function (data) {
+    disposed = true
+  })
+})()}
+
+module.exports = Component.exports
+
+
+/***/ }),
+
 /***/ "./resources/assets/components/inline-datepicker.vue":
 /***/ (function(module, exports, __webpack_require__) {
 
@@ -14515,6 +15072,7 @@ Vue.component('number-spinner', __webpack_require__("./resources/assets/componen
 Vue.component('inline-datepicker', __webpack_require__("./resources/assets/components/inline-datepicker.vue"));
 Vue.component('calendar', __webpack_require__("./resources/assets/components/calendar.vue"));
 Vue.component('select-staff', __webpack_require__("./resources/assets/components/select-staff.vue"));
+Vue.component('departments-item', __webpack_require__("./resources/assets/components/departments-item.vue"));
 
 $(function () {
 
@@ -14631,13 +15189,6 @@ var config = {
 
 /***/ }),
 
-/***/ "./resources/assets/sass/site.scss":
-/***/ (function(module, exports) {
-
-// removed by extract-text-webpack-plugin
-
-/***/ }),
-
 /***/ "./resources/assets/sass/v1.scss":
 /***/ (function(module, exports) {
 
@@ -14650,7 +15201,6 @@ var config = {
 
 __webpack_require__("./resources/assets/js/app.js");
 __webpack_require__("./resources/assets/sass/side-mask.scss");
-__webpack_require__("./resources/assets/sass/site.scss");
 __webpack_require__("./resources/assets/sass/login.scss");
 __webpack_require__("./resources/assets/sass/base.scss");
 module.exports = __webpack_require__("./resources/assets/sass/v1.scss");
