@@ -19,8 +19,8 @@
                     <div v-for="n in conditionLength" class="clearfix">
                         <div :id="'selector' + n" v-show="selectorHidden.indexOf('selector' + n) === -1">
                             <div class="float-left col-md-11 p-0">
-                                <normal-linkage-selectors :data="data,n"
-                                                          @change="conditionChange"></normal-linkage-selectors>
+                                <customize-linkage-selectors :data="data,n"
+                                                          @change="conditionChange"></customize-linkage-selectors>
                             </div>
                             <div class="float-left col-md-1 pb-5">
                                 <i class="md-close font-size-18" aria-hidden="true" style="line-height: 36px;"

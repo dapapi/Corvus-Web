@@ -20,5 +20,9 @@ Route::get('/login', function () {
 });
 
 Route::get('/project/management', function () {
-    return view('project.management');
+    return view('project.index');
+});
+
+Route::get('/task/task', function () {
+    return view('task.index');
 });

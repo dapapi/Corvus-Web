@@ -18,14 +18,14 @@
 
             <div class="page-content tab-content nav-tabs-animate bg-white selector-page-content">
                 <div class="tab-pane animation-fade active" id="forum-team" role="tabpanel">
-                    <div class="input-search">
+                    <div class="input-search example">
                         <button type="submit" class="input-search-btn"><i class="icon md-search" aria-hidden="true"></i>
                         </button>
                         <input type="text" class="form-control" name="" placeholder="搜索成员..." v-model="searchKeyWord">
                     </div>
 
                     <div class="person-content">
-                        <div class="pt-2 team-title">
+                        <div class="team-title">
                             <span class="team-title-icon" @click="closeTeam">
                                 <i class="icon md-caret-down" v-show="teamShow"></i>
                                 <i class="icon md-caret-right" v-show="!teamShow"></i>
@@ -160,7 +160,7 @@
     }
 
     .users {
-        padding-top: 10px;
+        padding-top: 15px;
         line-height: 30px;
         padding-left: 15px;
         cursor: pointer;
@@ -177,7 +177,7 @@
     }
 
     .selector-page-content {
-        padding: 15px 30px;
+        padding: 0 30px;
         height: 355px;
         overflow-x: hidden;
         overflow-y: auto;
@@ -186,13 +186,16 @@
     }
 
     .assistor {
-        position: relative;
+        position: absolute;
         height: 400px;
         width: 20rem;
         -moz-user-select: none;
         -webkit-user-select: none;
         -ms-user-select: none;
         user-select: none;
+        border: 1px solid #f2f2f2;
+        overflow: hidden;
+        z-index: 10;
     }
 
     .selector-page-content::-webkit-scrollbar {
@@ -220,7 +223,7 @@
     }
 
     .select-staff {
-        height: 410px;
+        height: 400px;
     }
 
     .team-title {

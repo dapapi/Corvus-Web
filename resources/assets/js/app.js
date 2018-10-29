@@ -12,6 +12,7 @@ Vue.component('selector2Options', require('../components/selector2-options.vue')
 Vue.component('selector2', require('../components/selector2.vue'));
 Vue.component('pagination', require('../components/pagination.vue'));
 Vue.component('customize-filter', require('../components/customize-filter.vue'));
+Vue.component('customize-linkage-selectors', require('../components/customize-linkage-selectors.vue'));
 Vue.component('normal-linkage-selectors', require('../components/normal-linkage-selectors.vue'));
 Vue.component('datepicker', require('../components/datepicker.vue'));
 Vue.component('number-spinner', require('../components/number-spinner.vue'));
@@ -19,6 +20,7 @@ Vue.component('inline-datepicker', require('../components/inline-datepicker.vue'
 Vue.component('calendar', require('../components/calendar.vue'));
 Vue.component('select-staff', require('../components/select-staff.vue'));
 Vue.component('departments-item', require('../components/departments-item.vue'));
+Vue.component('input-selectors', require('../components/input-selectors.vue'));
 
 
 $(function () {

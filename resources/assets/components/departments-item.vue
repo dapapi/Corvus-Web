@@ -1,6 +1,6 @@
 <template>
 
-    <div class="department-item">
+    <div class="department-item example">
         <div class="pt-2 team-title">
             <span class="team-title-icon pr-2" @click="departmentClose">
                 <i class="icon md-caret-down" v-show="departmentsShow"></i>

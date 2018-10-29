@@ -11,13 +11,13 @@
                         </a>
                         <ul class="site-menu-sub">
                             <li class="site-menu-item">
-                                <a class="animsition-link" href="project/management">
+                                <a class="animsition-link" href="/project/management">
                                     <span class="site-menu-title">项目管理</span>
                                 </a>
                             </li>
                             <li class="site-menu-item">
-                                <a class="animsition-link" href="layouts/menu-collapsed.html">
-                                    <span class="site-menu-title">支持系统</span>
+                                <a class="animsition-link" href="/task/task">
+                                    <span class="site-menu-title">任务管理</span>
                                 </a>
                             </li>
                         </ul>

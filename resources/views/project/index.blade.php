@@ -1,6 +1,6 @@
 @extends('layouts.master')
 
-@section('title','控制台')
+@section('title','项目管理')
 @section('body-class','dashboard')
 
 @section('body')
