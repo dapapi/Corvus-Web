@@ -36,6 +36,7 @@
     <link rel="stylesheet" href="https://res.papitube.com/remark/js/Plugin/asSpinner.css">
     <link rel="stylesheet" href="https://res.papitube.com/vendors/fullcalendar/fullcalendar.css">
     <link rel="stylesheet" href="https://res.papitube.com/vendors/calendar.css">
+    <link rel="stylesheet" href="https://res.papitube.com/vendors/jquery-selective/jquery-selective.css">
 
     <link rel="stylesheet" href="{{ mix('css/base.css') }}">
 

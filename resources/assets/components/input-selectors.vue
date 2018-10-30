@@ -1,13 +1,17 @@
 <template>
-    <div class="selector">
-        <input type="text" class="form-control" title="" @focus="showMember">
-        <select-staff class="selector" v-show="selectMemberShow"></select-staff>
+    <div class="selector" id="inputSelectMember">
+        <div class="float-left">
+            <input type="text" class="form-control" title="" @focus="showMember" :placeholder="this.placeholder">
+        </div>
+        <div class="float-left" >
+            <select-staff class="selector" v-show="selectMemberShow"></select-staff>
+        </div>
     </div>
 </template>
 
 <script>
     export default {
-        props: [],
+        props: ['placeholder', 'inputselectshow'],
         data() {
             return {
                 selectMemberShow: false,
@@ -18,9 +22,16 @@
 
         },
 
+        watch: {
+            inputselectshow(newValue) {
+                this.selectMemberShow = newValue
+            }
+        },
+
         methods: {
             showMember: function () {
-                this.selectMemberShow = !this.selectMemberShow
+                this.selectMemberShow = true;
+                this.$emit('change', this.selectMemberShow);
             }
         }
     }

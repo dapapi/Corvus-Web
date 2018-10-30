@@ -21,6 +21,7 @@ Vue.component('calendar', require('../components/calendar.vue'));
 Vue.component('select-staff', require('../components/select-staff.vue'));
 Vue.component('departments-item', require('../components/departments-item.vue'));
 Vue.component('input-selectors', require('../components/input-selectors.vue'));
+Vue.component('add-member', require('../components/add-member.vue'));
 
 
 $(function () {

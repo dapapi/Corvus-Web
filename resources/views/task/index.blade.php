@@ -23,10 +23,10 @@
                                style="width: 220px">
                     </div>
                     <div class="col-md-3 example float-left">
-                        <selectors :options="projectType" @change="projectChange"></selectors>
+                        <selectors></selectors>
                     </div>
                     <div class="col-md-3 example float-left">
-                        <selectors :options="projectPrincipalType" @change="projectPrincipalChange"></selectors>
+                        <selectors></selectors>
                     </div>
                     <div class="col-md-3 example float-left">
                         <button type="button" class="btn btn-default waves-effect waves-classic float-right"
@@ -64,7 +64,7 @@
 
                 <div class="page-content tab-content nav-tabs-animate bg-white">
                     <div class="tab-pane animation-fade active" id="forum-task-all" role="tabpanel">
-                        <table class="table is-indent example" data-plugin="animateList" data-animate="fade"
+                        <table class="table is-indent" data-plugin="animateList" data-animate="fade"
                                data-child="tr"
                                data-selectable="selectable">
                             <tr class="animation-fade"
@@ -78,16 +78,16 @@
                                 <th class="cell-300" scope="col">截止时间</th>
                                 <th class="suf-cell"></th>
                             </tr>
-                            <tr v-for="project in projectsInfo ">
-                                <td class="pre-cell"></td>
-                                <td @click="redirectProjectPage(project.id)">@{{ project.name }}</td>
-                                <td>@{{ project.principal }}</td>
-                                <td>@{{ project.progress }}</td>
-                                <td>@{{ project.sign_time }}</td>
-                                <td>@{{ project.delivery }}</td>
-                                <td>@{{ project.follow_time }}</td>
-                                <td class="suf-cell"></td>
-                            </tr>
+                            {{--<tr v-for="task in tasksInfo ">--}}
+                            {{--<td class="pre-cell"></td>--}}
+                            {{--<td>@{{ task.name }}</td>--}}
+                            {{--<td>@{{ task.principal }}</td>--}}
+                            {{--<td>@{{ task.progress }}</td>--}}
+                            {{--<td>@{{ task.sign_time }}</td>--}}
+                            {{--<td>@{{ task.delivery }}</td>--}}
+                            {{--<td>@{{ task.follow_time }}</td>--}}
+                            {{--<td class="suf-cell"></td>--}}
+                            {{--</tr>--}}
                         </table>
                         <pagination :current_page="current_page" :method="getProjects" :total_pages="total_pages"
                                     :total="total"></pagination>
@@ -119,7 +119,7 @@
         </div>
 
         <div class="modal fade" id="addTask" aria-hidden="true" aria-labelledby="addLabelForm"
-             role="dialog" tabindex="-1">
+             role="dialog" tabindex="-1" @click="hideSelectStaff">
             <div class="modal-dialog modal-simple">
                 <div class="modal-content">
                     <div class="modal-header">
@@ -151,14 +151,18 @@
                         <div class="example">
                             <div class="col-md-2 text-right float-left">负责人</div>
                             <div class="col-md-5 float-left pl-0">
-                                <input type="text" class="form-control" placeholder="请选择负责人">
+                                <input-selectors :placeholder="memberPlaceholder" :inputselectshow="isInputSelectShow"
+                                                 @change="inputSelectShow"></input-selectors>
                             </div>
                         </div>
                         <div class="example">
                             <div class="col-md-2 text-right float-left">参与人</div>
+                            <div class="col-md-10 float-left pl-0">
+                                <add-member :selectstaffshow="isSelectStaffShow" @change="selectStaffShow"></add-member>
+                            </div>
                         </div>
                         <div class="example">
-                            <div class="col-md-2 text-right float-left">任务类型</div>
+                            <div class="col-md-2 text-right float-left pl-0">任务优先级</div>
                             <div class="col-md-10 float-left pl-0">
                                 <selectors></selectors>
                             </div>
@@ -177,23 +181,18 @@
                             <div class="col-md-2 text-right float-left">任务说明</div>
                             <div class="col-md-10 float-left pl-0">
                                 <textarea class="form-control" name="taskDescription" id="" cols="30"
-                                          rows="5"></textarea>
+                                          rows="5" title=""></textarea>
                             </div>
                         </div>
                     </div>
                     <div class="modal-footer">
                         <button class="btn btn-sm btn-white btn-pure" data-dismiss="modal">取消</button>
-                        <button class="btn btn-primary" type="submit" @click="filter">确定</button>
+                        <button class="btn btn-primary" type="submit">确定</button>
                     </div>
 
                 </div>
             </div>
         </div>
-
-        {{--<div class="">--}}
-        {{--<select-staff></select-staff>--}}
-        {{--</div>--}}
-
 
     </div>
     <!-- End Page -->
@@ -209,7 +208,7 @@
 
     <script src="{{ mix('js/app.js') }}"></script>
     <script src="{{ mix('js/left-menu.js') }}"></script>
-    <script src="{{ mix('js/project.management.js') }}"></script>
+    <script src="{{ mix('js/task.index.js') }}"></script>
 
 @endsection
 
