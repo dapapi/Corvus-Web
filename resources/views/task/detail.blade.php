@@ -45,15 +45,15 @@
                 <div class="card-block">
                     <h4 class="card-title">组织电话会议</h4>
                     <div class="card-text clearfix example">
-                        <div class="float-left pl-0 pr-2">
+                        <div class="float-left pl-0 pr-2 col-md-1">
                             <i class="md-plus pr-2" aria-hidden="true"></i>负责人
                         </div>
                         <div class="font-weight-bold float-left">
-                            <edit-input :content="'张测试'" :is-edit="isEdit" @change=""></edit-input>
+                            <edit-input-selector :content="'张测试'" :is-edit="isEdit" @change="" :is-selecting="isInputSelectShow"></edit-input-selector>
                         </div>
                     </div>
                     <div class="card-text clearfix example">
-                        <div class="float-left pl-0 pr-2">
+                        <div class="float-left pl-0 pr-2 col-md-1">
                             <i class="md-plus pr-2" aria-hidden="true"></i>任务状态
                         </div>
                         <div class="font-weight-bold float-left">
@@ -61,15 +61,15 @@
                         </div>
                     </div>
                     <div class="card-text clearfix example">
-                        <div class="col-md-6 float-left pl-0">
-                            <div class="float-left pl-0 pr-2">
+                        <div class="pl-0">
+                            <div class="float-left pl-0 pr-2 col-md-1">
                                 <i class="md-plus pr-2" aria-hidden="true"></i>结束时间
                             </div>
                             <div class="font-weight-bold float-left">
                                 <edit-datepicker :content="'2018-09-03'" :is-edit="isEdit" @change=""></edit-datepicker>
                             </div>
                         </div>
-                        <div class="col-md-6 float-right text-right pr-0">
+                        <div class="float-right text-right pr-0">
                             <span>关联资源</span>
                             <span class="pl-2 font-weight-bold">博主-bigger研究所</span>
                         </div>
@@ -107,33 +107,45 @@
                             <div class="card-block">
                                 <div class="card-text py-5 clearfix">
                                     <div class="col-md-1 float-left text-right pl-0">参与人</div>
-                                    <div class="col-md-11 float-left font-weight-bold">测试1、测试2</div>
+                                    <div class="col-md-11 float-left font-weight-bold">
+                                        test
+                                    </div>
                                 </div>
                                 <div class="card-text py-5 clearfix">
                                     <div class="col-md-1 float-left text-right pl-0">开始时间</div>
-                                    <div class="col-md-11 float-left font-weight-bold">2018-03-26 10:23</div>
-                                </div>
-                                <div class="card-text py-5 clearfix">
-                                    <div class="col-md-1 float-left text-right pl-0">结束时间</div>
-                                    <div class="col-md-11 float-left font-weight-bold">2018-03-26 10:23</div>
+                                    <div class="col-md-11 float-left font-weight-bold">
+                                        <edit-datepicker :content="'2018-09-03'" :is-edit="isEdit"
+                                                         @change=""></edit-datepicker>
+                                    </div>
                                 </div>
                                 <div class="card-text py-5 clearfix">
                                     <div class="col-md-1 float-left text-right pl-0">优先级</div>
-                                    <div class="col-md-11 float-left font-weight-bold">中</div>
+                                    <div class="col-md-11 float-left font-weight-bold">
+                                        <edit-selector :content="'2'" :is-edit="isEdit" @change=""></edit-selector>
+                                    </div>
                                 </div>
                                 <div class="card-text py-5 clearfix">
+                                    <div class="col-md-1 float-left text-right pl-0">任务说明</div>
+                                    <div class="col-md-11 float-left font-weight-bold">
+                                        <edit-textarea :content="'要求所有参与人必须参加此电话会议'" :is-edit="isEdit"></edit-textarea>
+                                    </div>
+                                </div>
+
+                                <div class="card-text py-5 clearfix">
                                     <div class="col-md-1 float-left text-right pl-0">完成时间</div>
-                                    <div class="col-md-11 float-left font-weight-bold">2018-03-26 10:23</div>
+                                    <div class="col-md-11 float-left font-weight-bold">
+                                        2018-09-03
+                                    </div>
                                 </div>
                                 <div class="card-text py-5 clearfix">
                                     <div class="col-md-1 float-left text-right pl-0">停止时间</div>
-                                    <div class="col-md-11 float-left font-weight-bold">2018-03-26 10:23</div>
+                                    <div class="col-md-11 float-left font-weight-bold">
+                                        2018-09-03
+                                    </div>
                                 </div>
                                 <div class="card-text py-5 clearfix">
                                     <div class="col-md-1 float-left text-right pl-0">创建人</div>
                                     <div class="col-md-11 float-left font-weight-bold">测试1</div>
-                                </div>
-                                <div class="card-text example red-500 font-weight-bold">任务说明 <span class="pl-2">要求所有参与人必须参加此电话会议</span>
                                 </div>
                             </div>
                         </div>
@@ -225,7 +237,7 @@
         </div>
 
         <div class="modal fade" id="addChildTask" aria-hidden="true" aria-labelledby="addLabelForm"
-             role="dialog" tabindex="-1" @click="hideSelectStaff">
+             role="dialog" tabindex="-1">
             <div class="modal-dialog modal-simple">
                 <div class="modal-content">
                     <div class="modal-header">

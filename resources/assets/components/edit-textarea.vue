@@ -1,7 +1,7 @@
 <template>
     <div class="edit-wrap">
         <template v-if="isEditInput">
-            <input class="form-control" type="text" v-model="this.content">
+            <textarea class="form-control" v-model="this.content"></textarea>
         </template>
         <template v-else>
             {{ content }}
@@ -11,7 +11,7 @@
 
 <script>
     export default {
-        name: "editinput",
+        name: "edit-textarea",
         props: ['content', 'is-edit'],
         data() {
             return {

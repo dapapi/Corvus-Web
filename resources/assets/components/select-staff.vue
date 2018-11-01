@@ -161,7 +161,7 @@
     }
 
     .users:hover {
-        color: #0000F0;
+        color: #3f51b5;
     }
 
     .users .avatar {

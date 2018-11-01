@@ -102,7 +102,7 @@ let app = new Vue({
             },
 
             editBaseInfo: function () {
-                app.isEdit = true
+                app.isEdit = true;
             },
 
             customize: function (value) {
@@ -114,25 +114,23 @@ let app = new Vue({
                 let s = document.getElementById("selectStaff");
                 if (s) {
                     if (!s.contains(event.target)) {
-                        this.isSelectStaffShow = false;
-                    }
-                }
-                let i = document.getElementById("inputSelectMember");
-                if (i) {
-                    if (!i.contains(event.target)) {
-                        this.isInputSelectShow = false;
+                        app.isSelectStaffShow = false;
                     }
                 }
             },
 
             selectStaffShow: function (value) {
-                this.isSelectStaffShow = value
+                app.isSelectStaffShow = value
             },
 
             inputSelectShow: function (value) {
-                this.isInputSelectShow = value
+                app.isInputSelectShow = value
             },
             // endCommon
+
+            showSelectMember: function (value) {
+                app.isInputSelectShow = value
+            },
 
             cancelEdit: function () {
                 app.isEdit = false;

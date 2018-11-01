@@ -729,6 +729,69 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
 
 /***/ }),
 
+/***/ "./node_modules/babel-loader/lib/index.js?{\"cacheDirectory\":true,\"presets\":[[\"env\",{\"modules\":false,\"targets\":{\"browsers\":[\"> 2%\"],\"uglify\":true}}]],\"plugins\":[\"transform-object-rest-spread\",[\"transform-runtime\",{\"polyfill\":false,\"helpers\":false}]]}!./node_modules/vue-loader/lib/selector.js?type=script&index=0!./resources/assets/components/edit-input-selector.vue":
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+
+/* harmony default export */ __webpack_exports__["default"] = ({
+    name: "edit-input-selector",
+    props: ['options', 'is-edit', 'content', 'is-selecting'],
+    data: function data() {
+        return {
+            isEditSelect: false,
+            isSelect: false,
+            testOptions: [{
+                name: '进行中',
+                value: 1,
+                id: 1
+            }, {
+                name: '已完成',
+                value: 2,
+                id: 2
+            }, {
+                name: '已暂停',
+                value: 3,
+                id: 3
+            }]
+        };
+    },
+    mounted: function mounted() {},
+
+
+    watch: {
+        isEdit: function isEdit(newValue) {
+            this.isEditSelect = newValue;
+        },
+        isSelecting: function isSelecting(newValue) {
+            this.isSelect = newValue;
+        }
+    },
+    methods: {
+        changeSelect: function changeSelect(value) {
+            this.$emit('change', value);
+        },
+
+        changeMember: function changeMember(value) {
+            console.log(value);
+        }
+    }
+});
+
+/***/ }),
+
 /***/ "./node_modules/babel-loader/lib/index.js?{\"cacheDirectory\":true,\"presets\":[[\"env\",{\"modules\":false,\"targets\":{\"browsers\":[\"> 2%\"],\"uglify\":true}}]],\"plugins\":[\"transform-object-rest-spread\",[\"transform-runtime\",{\"polyfill\":false,\"helpers\":false}]]}!./node_modules/vue-loader/lib/selector.js?type=script&index=0!./resources/assets/components/edit-input.vue":
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
@@ -738,35 +801,29 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
 //
 //
 //
+//
+//
+//
+//
+//
+//
+//
 
 /* harmony default export */ __webpack_exports__["default"] = ({
     name: "editinput",
     props: ['content', 'is-edit'],
+    data: function data() {
+        return {
+            isEditInput: false
+        };
+    },
+
     watch: {
         isEdit: function isEdit(newValue) {
-            if (newValue) {
-                this.editInput();
-            } else {
-                this.disableInput();
-            }
+            this.isEditInput = newValue;
         }
     },
-    methods: {
-        editInput: function editInput() {
-            $(this.$el).removeAttr('readonly');
-
-            $(this.$el).removeClass('input');
-            $(this.$el).addClass('form-control');
-        },
-        disableInput: function disableInput() {
-            $(this.$el).attr('readonly', 'readonly');
-
-            $(this.$el).removeClass('form-control');
-            $(this.$el).addClass('input');
-
-            this.$emit('change', $(this.$el).val());
-        }
-    }
+    methods: {}
 });
 
 /***/ }),
@@ -835,6 +892,42 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
 
 /***/ }),
 
+/***/ "./node_modules/babel-loader/lib/index.js?{\"cacheDirectory\":true,\"presets\":[[\"env\",{\"modules\":false,\"targets\":{\"browsers\":[\"> 2%\"],\"uglify\":true}}]],\"plugins\":[\"transform-object-rest-spread\",[\"transform-runtime\",{\"polyfill\":false,\"helpers\":false}]]}!./node_modules/vue-loader/lib/selector.js?type=script&index=0!./resources/assets/components/edit-textarea.vue":
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+
+/* harmony default export */ __webpack_exports__["default"] = ({
+    name: "edit-textarea",
+    props: ['content', 'is-edit'],
+    data: function data() {
+        return {
+            isEditInput: false
+        };
+    },
+
+    watch: {
+        isEdit: function isEdit(newValue) {
+            this.isEditInput = newValue;
+        }
+    },
+    methods: {}
+});
+
+/***/ }),
+
 /***/ "./node_modules/babel-loader/lib/index.js?{\"cacheDirectory\":true,\"presets\":[[\"env\",{\"modules\":false,\"targets\":{\"browsers\":[\"> 2%\"],\"uglify\":true}}]],\"plugins\":[\"transform-object-rest-spread\",[\"transform-runtime\",{\"polyfill\":false,\"helpers\":false}]]}!./node_modules/vue-loader/lib/selector.js?type=script&index=0!./resources/assets/components/inline-datepicker.vue":
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
@@ -888,25 +981,31 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
 //
 
 /* harmony default export */ __webpack_exports__["default"] = ({
-    props: ['placeholder', 'inputselectshow'],
+    props: ['placeholder'],
     data: function data() {
         return {
-            selectMemberShow: false
+            selectMemberShow: false,
+            randomId: ''
         };
     },
-    mounted: function mounted() {},
-
-
-    watch: {
-        inputselectshow: function inputselectshow(newValue) {
-            this.selectMemberShow = newValue;
-        }
+    mounted: function mounted() {
+        this.globalClick(this.removeSelect);
     },
+
 
     methods: {
         showMember: function showMember() {
             this.selectMemberShow = true;
-            this.$emit('change', this.selectMemberShow);
+        },
+
+        removeSelect: function removeSelect(event) {
+            var i = document.getElementById("inputSelectMember");
+            if (i) {
+                if (!i.contains(event.target)) {
+                    console.log(this);
+                    this.selectMemberShow = false;
+                }
+            }
         }
     }
 });
@@ -1428,7 +1527,7 @@ exports = module.exports = __webpack_require__("./node_modules/css-loader/lib/cs
 
 
 // module
-exports.push([module.i, "\n.nav-item {\n    padding: 0 !important;\n    text-align: center;\n    word-break: keep-all;\n}\nbutton:focus {\n    outline: none;\n}\n.team-title-icon {\n    width: 4px;\n    display: inline-block;\n}\n.team-add-all {\n    display: none;\n}\n.team-title:hover .team-add-all {\n    display: inline-block;\n}\n.users {\n    padding-top: 15px;\n    line-height: 30px;\n    padding-left: 15px;\n    cursor: pointer;\n}\n.users:hover {\n    color: #0000F0;\n}\n.users .avatar {\n    width: 30px;\n    height: 30px;\n    overflow: hidden;\n}\n.selector-page-content {\n    padding: 0 30px;\n    height: 355px;\n    overflow-x: hidden;\n    overflow-y: auto;\n    position: relative;\n    top: 45px;\n}\n.assistor {\n    position: absolute;\n    height: 400px;\n    width: 20rem;\n    -moz-user-select: none;\n    -webkit-user-select: none;\n    -ms-user-select: none;\n    user-select: none;\n    border: 1px solid #f2f2f2;\n    overflow: hidden;\n    z-index: 10;\n}\n.selector-page-content::-webkit-scrollbar {\n    width: 6px;\n    height: 12px;\n    -webkit-appearance: none;\n}\n.selector-page-content::-webkit-scrollbar-thumb {\n    background: #ddd;\n    border-radius: 10px;\n}\n.selector-page-content::-webkit-scrollbar-track-piece {\n    background: #eee;\n    border-radius: 3px;\n}\n.page-nav-tabs {\n    position: absolute;\n    z-index: 2;\n    top: 0;\n    background: white;\n    width: 100%;\n}\n.select-staff {\n    height: 400px;\n}\n.team-title {\n    font-weight: 400;\n}\n\n", ""]);
+exports.push([module.i, "\n.nav-item {\n    padding: 0 !important;\n    text-align: center;\n    word-break: keep-all;\n}\nbutton:focus {\n    outline: none;\n}\n.team-title-icon {\n    width: 4px;\n    display: inline-block;\n}\n.team-add-all {\n    display: none;\n}\n.team-title:hover .team-add-all {\n    display: inline-block;\n}\n.users {\n    padding-top: 15px;\n    line-height: 30px;\n    padding-left: 15px;\n    cursor: pointer;\n}\n.users:hover {\n    color: #3f51b5;\n}\n.users .avatar {\n    width: 30px;\n    height: 30px;\n    overflow: hidden;\n}\n.selector-page-content {\n    padding: 0 30px;\n    height: 355px;\n    overflow-x: hidden;\n    overflow-y: auto;\n    position: relative;\n    top: 45px;\n}\n.assistor {\n    position: absolute;\n    height: 400px;\n    width: 20rem;\n    -moz-user-select: none;\n    -webkit-user-select: none;\n    -ms-user-select: none;\n    user-select: none;\n    border: 1px solid #f2f2f2;\n    overflow: hidden;\n    z-index: 10;\n}\n.selector-page-content::-webkit-scrollbar {\n    width: 6px;\n    height: 12px;\n    -webkit-appearance: none;\n}\n.selector-page-content::-webkit-scrollbar-thumb {\n    background: #ddd;\n    border-radius: 10px;\n}\n.selector-page-content::-webkit-scrollbar-track-piece {\n    background: #eee;\n    border-radius: 3px;\n}\n.page-nav-tabs {\n    position: absolute;\n    z-index: 2;\n    top: 0;\n    background: white;\n    width: 100%;\n}\n.select-staff {\n    height: 400px;\n}\n.team-title {\n    font-weight: 400;\n}\n\n", ""]);
 
 // exports
 
@@ -1548,7 +1647,7 @@ exports = module.exports = __webpack_require__("./node_modules/css-loader/lib/cs
 
 
 // module
-exports.push([module.i, "\n.default[data-v-443d9de8] {\n    color: #757575;\n    font-weight: 400;\n}\n.input[data-v-443d9de8] {\n    border: none;\n    background: white;\n}\n.form-control[data-v-443d9de8] {\n    display: inline;\n    /*width: auto;*/\n    width: calc(100% - 2rem);\n    /*padding: 0 1rem;*/\n}\n\n", ""]);
+exports.push([module.i, "\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n", ""]);
 
 // exports
 
@@ -1594,6 +1693,36 @@ exports = module.exports = __webpack_require__("./node_modules/css-loader/lib/cs
 
 // module
 exports.push([module.i, "\n.fc-button.fc-today-button {\n    background-color: #f6f8f8;\n    height: auto !important;\n    text-transform: capitalize;\n    border-color: #e0e0e0;\n    outline: none;\n    -webkit-box-shadow: none;\n            box-shadow: none;\n    background-image: none !important;\n}\n.fc-button.fc-state-active, .fc-button.fc-state-hover {\n    background-color: #fff;\n}\n\n", ""]);
+
+// exports
+
+
+/***/ }),
+
+/***/ "./node_modules/css-loader/index.js!./node_modules/vue-loader/lib/style-compiler/index.js?{\"vue\":true,\"id\":\"data-v-72a447b0\",\"scoped\":true,\"hasInlineConfig\":true}!./node_modules/vue-loader/lib/selector.js?type=styles&index=0!./resources/assets/components/edit-input-selector.vue":
+/***/ (function(module, exports, __webpack_require__) {
+
+exports = module.exports = __webpack_require__("./node_modules/css-loader/lib/css-base.js")(false);
+// imports
+
+
+// module
+exports.push([module.i, "\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n", ""]);
+
+// exports
+
+
+/***/ }),
+
+/***/ "./node_modules/css-loader/index.js!./node_modules/vue-loader/lib/style-compiler/index.js?{\"vue\":true,\"id\":\"data-v-7eb0ee30\",\"scoped\":true,\"hasInlineConfig\":true}!./node_modules/vue-loader/lib/selector.js?type=styles&index=0!./resources/assets/components/edit-textarea.vue":
+/***/ (function(module, exports, __webpack_require__) {
+
+exports = module.exports = __webpack_require__("./node_modules/css-loader/lib/css-base.js")(false);
+// imports
+
+
+// module
+exports.push([module.i, "\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n", ""]);
 
 // exports
 
@@ -3425,6 +3554,7 @@ var render = function() {
   var _c = _vm._self._c || _h
   return _c(
     "div",
+    { staticClass: "edit-wrap" },
     [
       _vm.isEditDatePicker
         ? [
@@ -3587,27 +3717,38 @@ var render = function() {
   var _vm = this
   var _h = _vm.$createElement
   var _c = _vm._self._c || _h
-  return _c("input", {
-    directives: [
-      {
-        name: "model",
-        rawName: "v-model",
-        value: this.content,
-        expression: "this.content"
-      }
+  return _c(
+    "div",
+    { staticClass: "edit-wrap" },
+    [
+      _vm.isEditInput
+        ? [
+            _c("input", {
+              directives: [
+                {
+                  name: "model",
+                  rawName: "v-model",
+                  value: this.content,
+                  expression: "this.content"
+                }
+              ],
+              staticClass: "form-control",
+              attrs: { type: "text" },
+              domProps: { value: this.content },
+              on: {
+                input: function($event) {
+                  if ($event.target.composing) {
+                    return
+                  }
+                  _vm.$set(this, "content", $event.target.value)
+                }
+              }
+            })
+          ]
+        : [_vm._v("\n        " + _vm._s(_vm.content) + "\n    ")]
     ],
-    staticClass: "default input",
-    attrs: { type: "text", readonly: "" },
-    domProps: { value: this.content },
-    on: {
-      input: function($event) {
-        if ($event.target.composing) {
-          return
-        }
-        _vm.$set(this, "content", $event.target.value)
-      }
-    }
-  })
+    2
+  )
 }
 var staticRenderFns = []
 render._withStripped = true
@@ -3656,7 +3797,7 @@ var render = function() {
     "div",
     { staticClass: "selector", attrs: { id: "inputSelectMember" } },
     [
-      _c("div", { staticClass: "float-left" }, [
+      _c("div", { staticClass: "float-left edit-wrap" }, [
         _c("input", {
           staticClass: "form-control",
           attrs: { type: "text", title: "", placeholder: this.placeholder },
@@ -3916,6 +4057,87 @@ if (false) {
   module.hot.accept()
   if (module.hot.data) {
     require("vue-hot-reload-api")      .rerender("data-v-5fc235c3", module.exports)
+  }
+}
+
+/***/ }),
+
+/***/ "./node_modules/vue-loader/lib/template-compiler/index.js?{\"id\":\"data-v-72a447b0\",\"hasScoped\":true,\"buble\":{\"transforms\":{}}}!./node_modules/vue-loader/lib/selector.js?type=template&index=0!./resources/assets/components/edit-input-selector.vue":
+/***/ (function(module, exports, __webpack_require__) {
+
+var render = function() {
+  var _vm = this
+  var _h = _vm.$createElement
+  var _c = _vm._self._c || _h
+  return _c(
+    "div",
+    {},
+    [
+      _vm.isEditSelect
+        ? [_c("input-selectors", { attrs: { inputselectshow: _vm.isSelect } })]
+        : [_vm._v("\n        " + _vm._s(_vm.content) + "\n    ")]
+    ],
+    2
+  )
+}
+var staticRenderFns = []
+render._withStripped = true
+module.exports = { render: render, staticRenderFns: staticRenderFns }
+if (false) {
+  module.hot.accept()
+  if (module.hot.data) {
+    require("vue-hot-reload-api")      .rerender("data-v-72a447b0", module.exports)
+  }
+}
+
+/***/ }),
+
+/***/ "./node_modules/vue-loader/lib/template-compiler/index.js?{\"id\":\"data-v-7eb0ee30\",\"hasScoped\":true,\"buble\":{\"transforms\":{}}}!./node_modules/vue-loader/lib/selector.js?type=template&index=0!./resources/assets/components/edit-textarea.vue":
+/***/ (function(module, exports, __webpack_require__) {
+
+var render = function() {
+  var _vm = this
+  var _h = _vm.$createElement
+  var _c = _vm._self._c || _h
+  return _c(
+    "div",
+    { staticClass: "edit-wrap" },
+    [
+      _vm.isEditInput
+        ? [
+            _c("textarea", {
+              directives: [
+                {
+                  name: "model",
+                  rawName: "v-model",
+                  value: this.content,
+                  expression: "this.content"
+                }
+              ],
+              staticClass: "form-control",
+              domProps: { value: this.content },
+              on: {
+                input: function($event) {
+                  if ($event.target.composing) {
+                    return
+                  }
+                  _vm.$set(this, "content", $event.target.value)
+                }
+              }
+            })
+          ]
+        : [_vm._v("\n        " + _vm._s(_vm.content) + "\n    ")]
+    ],
+    2
+  )
+}
+var staticRenderFns = []
+render._withStripped = true
+module.exports = { render: render, staticRenderFns: staticRenderFns }
+if (false) {
+  module.hot.accept()
+  if (module.hot.data) {
+    require("vue-hot-reload-api")      .rerender("data-v-7eb0ee30", module.exports)
   }
 }
 
@@ -4539,6 +4761,60 @@ if(false) {
  if(!content.locals) {
    module.hot.accept("!!../../../node_modules/css-loader/index.js!../../../node_modules/vue-loader/lib/style-compiler/index.js?{\"vue\":true,\"id\":\"data-v-5fc235c3\",\"scoped\":false,\"hasInlineConfig\":true}!../../../node_modules/vue-loader/lib/selector.js?type=styles&index=0!./calendar.vue", function() {
      var newContent = require("!!../../../node_modules/css-loader/index.js!../../../node_modules/vue-loader/lib/style-compiler/index.js?{\"vue\":true,\"id\":\"data-v-5fc235c3\",\"scoped\":false,\"hasInlineConfig\":true}!../../../node_modules/vue-loader/lib/selector.js?type=styles&index=0!./calendar.vue");
+     if(typeof newContent === 'string') newContent = [[module.id, newContent, '']];
+     update(newContent);
+   });
+ }
+ // When the module is disposed, remove the <style> tags
+ module.hot.dispose(function() { update(); });
+}
+
+/***/ }),
+
+/***/ "./node_modules/vue-style-loader/index.js!./node_modules/css-loader/index.js!./node_modules/vue-loader/lib/style-compiler/index.js?{\"vue\":true,\"id\":\"data-v-72a447b0\",\"scoped\":true,\"hasInlineConfig\":true}!./node_modules/vue-loader/lib/selector.js?type=styles&index=0!./resources/assets/components/edit-input-selector.vue":
+/***/ (function(module, exports, __webpack_require__) {
+
+// style-loader: Adds some css to the DOM by adding a <style> tag
+
+// load the styles
+var content = __webpack_require__("./node_modules/css-loader/index.js!./node_modules/vue-loader/lib/style-compiler/index.js?{\"vue\":true,\"id\":\"data-v-72a447b0\",\"scoped\":true,\"hasInlineConfig\":true}!./node_modules/vue-loader/lib/selector.js?type=styles&index=0!./resources/assets/components/edit-input-selector.vue");
+if(typeof content === 'string') content = [[module.i, content, '']];
+if(content.locals) module.exports = content.locals;
+// add the styles to the DOM
+var update = __webpack_require__("./node_modules/vue-style-loader/lib/addStylesClient.js")("3b6a57de", content, false, {});
+// Hot Module Replacement
+if(false) {
+ // When the styles change, update the <style> tags
+ if(!content.locals) {
+   module.hot.accept("!!../../../node_modules/css-loader/index.js!../../../node_modules/vue-loader/lib/style-compiler/index.js?{\"vue\":true,\"id\":\"data-v-72a447b0\",\"scoped\":true,\"hasInlineConfig\":true}!../../../node_modules/vue-loader/lib/selector.js?type=styles&index=0!./edit-input-selector.vue", function() {
+     var newContent = require("!!../../../node_modules/css-loader/index.js!../../../node_modules/vue-loader/lib/style-compiler/index.js?{\"vue\":true,\"id\":\"data-v-72a447b0\",\"scoped\":true,\"hasInlineConfig\":true}!../../../node_modules/vue-loader/lib/selector.js?type=styles&index=0!./edit-input-selector.vue");
+     if(typeof newContent === 'string') newContent = [[module.id, newContent, '']];
+     update(newContent);
+   });
+ }
+ // When the module is disposed, remove the <style> tags
+ module.hot.dispose(function() { update(); });
+}
+
+/***/ }),
+
+/***/ "./node_modules/vue-style-loader/index.js!./node_modules/css-loader/index.js!./node_modules/vue-loader/lib/style-compiler/index.js?{\"vue\":true,\"id\":\"data-v-7eb0ee30\",\"scoped\":true,\"hasInlineConfig\":true}!./node_modules/vue-loader/lib/selector.js?type=styles&index=0!./resources/assets/components/edit-textarea.vue":
+/***/ (function(module, exports, __webpack_require__) {
+
+// style-loader: Adds some css to the DOM by adding a <style> tag
+
+// load the styles
+var content = __webpack_require__("./node_modules/css-loader/index.js!./node_modules/vue-loader/lib/style-compiler/index.js?{\"vue\":true,\"id\":\"data-v-7eb0ee30\",\"scoped\":true,\"hasInlineConfig\":true}!./node_modules/vue-loader/lib/selector.js?type=styles&index=0!./resources/assets/components/edit-textarea.vue");
+if(typeof content === 'string') content = [[module.i, content, '']];
+if(content.locals) module.exports = content.locals;
+// add the styles to the DOM
+var update = __webpack_require__("./node_modules/vue-style-loader/lib/addStylesClient.js")("46595fd4", content, false, {});
+// Hot Module Replacement
+if(false) {
+ // When the styles change, update the <style> tags
+ if(!content.locals) {
+   module.hot.accept("!!../../../node_modules/css-loader/index.js!../../../node_modules/vue-loader/lib/style-compiler/index.js?{\"vue\":true,\"id\":\"data-v-7eb0ee30\",\"scoped\":true,\"hasInlineConfig\":true}!../../../node_modules/vue-loader/lib/selector.js?type=styles&index=0!./edit-textarea.vue", function() {
+     var newContent = require("!!../../../node_modules/css-loader/index.js!../../../node_modules/vue-loader/lib/style-compiler/index.js?{\"vue\":true,\"id\":\"data-v-7eb0ee30\",\"scoped\":true,\"hasInlineConfig\":true}!../../../node_modules/vue-loader/lib/selector.js?type=styles&index=0!./edit-textarea.vue");
      if(typeof newContent === 'string') newContent = [[module.id, newContent, '']];
      update(newContent);
    });
@@ -16325,6 +16601,58 @@ module.exports = Component.exports
 
 /***/ }),
 
+/***/ "./resources/assets/components/edit-input-selector.vue":
+/***/ (function(module, exports, __webpack_require__) {
+
+var disposed = false
+function injectStyle (ssrContext) {
+  if (disposed) return
+  __webpack_require__("./node_modules/vue-style-loader/index.js!./node_modules/css-loader/index.js!./node_modules/vue-loader/lib/style-compiler/index.js?{\"vue\":true,\"id\":\"data-v-72a447b0\",\"scoped\":true,\"hasInlineConfig\":true}!./node_modules/vue-loader/lib/selector.js?type=styles&index=0!./resources/assets/components/edit-input-selector.vue")
+}
+var normalizeComponent = __webpack_require__("./node_modules/vue-loader/lib/component-normalizer.js")
+/* script */
+var __vue_script__ = __webpack_require__("./node_modules/babel-loader/lib/index.js?{\"cacheDirectory\":true,\"presets\":[[\"env\",{\"modules\":false,\"targets\":{\"browsers\":[\"> 2%\"],\"uglify\":true}}]],\"plugins\":[\"transform-object-rest-spread\",[\"transform-runtime\",{\"polyfill\":false,\"helpers\":false}]]}!./node_modules/vue-loader/lib/selector.js?type=script&index=0!./resources/assets/components/edit-input-selector.vue")
+/* template */
+var __vue_template__ = __webpack_require__("./node_modules/vue-loader/lib/template-compiler/index.js?{\"id\":\"data-v-72a447b0\",\"hasScoped\":true,\"buble\":{\"transforms\":{}}}!./node_modules/vue-loader/lib/selector.js?type=template&index=0!./resources/assets/components/edit-input-selector.vue")
+/* template functional */
+var __vue_template_functional__ = false
+/* styles */
+var __vue_styles__ = injectStyle
+/* scopeId */
+var __vue_scopeId__ = "data-v-72a447b0"
+/* moduleIdentifier (server only) */
+var __vue_module_identifier__ = null
+var Component = normalizeComponent(
+  __vue_script__,
+  __vue_template__,
+  __vue_template_functional__,
+  __vue_styles__,
+  __vue_scopeId__,
+  __vue_module_identifier__
+)
+Component.options.__file = "resources/assets/components/edit-input-selector.vue"
+
+/* hot reload */
+if (false) {(function () {
+  var hotAPI = require("vue-hot-reload-api")
+  hotAPI.install(require("vue"), false)
+  if (!hotAPI.compatible) return
+  module.hot.accept()
+  if (!module.hot.data) {
+    hotAPI.createRecord("data-v-72a447b0", Component.options)
+  } else {
+    hotAPI.reload("data-v-72a447b0", Component.options)
+  }
+  module.hot.dispose(function (data) {
+    disposed = true
+  })
+})()}
+
+module.exports = Component.exports
+
+
+/***/ }),
+
 /***/ "./resources/assets/components/edit-input.vue":
 /***/ (function(module, exports, __webpack_require__) {
 
@@ -16418,6 +16746,58 @@ if (false) {(function () {
     hotAPI.createRecord("data-v-3dde29e6", Component.options)
   } else {
     hotAPI.reload("data-v-3dde29e6", Component.options)
+  }
+  module.hot.dispose(function (data) {
+    disposed = true
+  })
+})()}
+
+module.exports = Component.exports
+
+
+/***/ }),
+
+/***/ "./resources/assets/components/edit-textarea.vue":
+/***/ (function(module, exports, __webpack_require__) {
+
+var disposed = false
+function injectStyle (ssrContext) {
+  if (disposed) return
+  __webpack_require__("./node_modules/vue-style-loader/index.js!./node_modules/css-loader/index.js!./node_modules/vue-loader/lib/style-compiler/index.js?{\"vue\":true,\"id\":\"data-v-7eb0ee30\",\"scoped\":true,\"hasInlineConfig\":true}!./node_modules/vue-loader/lib/selector.js?type=styles&index=0!./resources/assets/components/edit-textarea.vue")
+}
+var normalizeComponent = __webpack_require__("./node_modules/vue-loader/lib/component-normalizer.js")
+/* script */
+var __vue_script__ = __webpack_require__("./node_modules/babel-loader/lib/index.js?{\"cacheDirectory\":true,\"presets\":[[\"env\",{\"modules\":false,\"targets\":{\"browsers\":[\"> 2%\"],\"uglify\":true}}]],\"plugins\":[\"transform-object-rest-spread\",[\"transform-runtime\",{\"polyfill\":false,\"helpers\":false}]]}!./node_modules/vue-loader/lib/selector.js?type=script&index=0!./resources/assets/components/edit-textarea.vue")
+/* template */
+var __vue_template__ = __webpack_require__("./node_modules/vue-loader/lib/template-compiler/index.js?{\"id\":\"data-v-7eb0ee30\",\"hasScoped\":true,\"buble\":{\"transforms\":{}}}!./node_modules/vue-loader/lib/selector.js?type=template&index=0!./resources/assets/components/edit-textarea.vue")
+/* template functional */
+var __vue_template_functional__ = false
+/* styles */
+var __vue_styles__ = injectStyle
+/* scopeId */
+var __vue_scopeId__ = "data-v-7eb0ee30"
+/* moduleIdentifier (server only) */
+var __vue_module_identifier__ = null
+var Component = normalizeComponent(
+  __vue_script__,
+  __vue_template__,
+  __vue_template_functional__,
+  __vue_styles__,
+  __vue_scopeId__,
+  __vue_module_identifier__
+)
+Component.options.__file = "resources/assets/components/edit-textarea.vue"
+
+/* hot reload */
+if (false) {(function () {
+  var hotAPI = require("vue-hot-reload-api")
+  hotAPI.install(require("vue"), false)
+  if (!hotAPI.compatible) return
+  module.hot.accept()
+  if (!module.hot.data) {
+    hotAPI.createRecord("data-v-7eb0ee30", Component.options)
+  } else {
+    hotAPI.reload("data-v-7eb0ee30", Component.options)
   }
   module.hot.dispose(function (data) {
     disposed = true
@@ -16907,7 +17287,9 @@ Vue.component('datepicker', __webpack_require__("./resources/assets/components/d
 Vue.component('departments-item', __webpack_require__("./resources/assets/components/departments-item.vue"));
 Vue.component('edit-datepicker', __webpack_require__("./resources/assets/components/edit-datepicker.vue"));
 Vue.component('edit-input', __webpack_require__("./resources/assets/components/edit-input.vue"));
+Vue.component('edit-input-selector', __webpack_require__("./resources/assets/components/edit-input-selector.vue"));
 Vue.component('edit-selector', __webpack_require__("./resources/assets/components/edit-selector.vue"));
+Vue.component('edit-textarea', __webpack_require__("./resources/assets/components/edit-textarea.vue"));
 Vue.component('inline-datepicker', __webpack_require__("./resources/assets/components/inline-datepicker.vue"));
 Vue.component('input-selectors', __webpack_require__("./resources/assets/components/input-selectors.vue"));
 Vue.component('normal-linkage-selectors', __webpack_require__("./resources/assets/components/normal-linkage-selectors.vue"));
@@ -16917,6 +17299,12 @@ Vue.component('select-staff', __webpack_require__("./resources/assets/components
 Vue.component('selectors', __webpack_require__("./resources/assets/components/selectors.vue"));
 Vue.component('selectorsOptions', __webpack_require__("./resources/assets/components/selectors-options.vue"));
 Vue.component('task-follow-up', __webpack_require__("./resources/assets/components/task-follow-up.vue"));
+
+Vue.prototype.globalClick = function (callback) {
+    document.getElementById('root').onclick = function () {
+        callback(event);
+    };
+};
 
 $(function () {
 
