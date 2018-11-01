@@ -98,8 +98,6 @@
                 statusCode: config.getStatusCode()
             }).done(function (response) {
                 self.departmentUsers = response.data
-
-                // console.log(response)
             })
 
         },
@@ -125,10 +123,6 @@
                 } else {
                     this.selectIdArr.push(userId)
                 }
-            },
-
-            searchMember: function () {
-
             }
         }
     }

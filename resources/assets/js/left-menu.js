@@ -2,9 +2,9 @@ import config from "./config";
 import redirect from "./bootstrap";
 
 $(function () {
-    getMenu()
-    getUser()
-    getBack()
+    // getMenu()
+    // getUser()
+    // getBack()
 })
 
 function getMenu() {

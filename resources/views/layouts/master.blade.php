@@ -157,6 +157,11 @@
 <script src="https://res.papitube.com/remark/js/Plugin/bootstrap-treeview.js"></script>
 <script src="https://res.papitube.com/remark/js/Plugin/jstree.js"></script>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/fullcalendar/3.9.0/fullcalendar.min.js"></script>
+
+<script src="{{ mix('js/app.js') }}"></script>
+<script src="{{ mix('js/common.js') }}"></script>
+<script src="{{ mix('js/left-menu.js') }}"></script>
+
 <script>
     (function (document, window, $) {
         'use strict';

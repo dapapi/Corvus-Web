@@ -206,8 +206,6 @@
 
 @section('script')
 
-    <script src="{{ mix('js/app.js') }}"></script>
-    <script src="{{ mix('js/left-menu.js') }}"></script>
     <script src="{{ mix('js/task.index.js') }}"></script>
 
 @endsection

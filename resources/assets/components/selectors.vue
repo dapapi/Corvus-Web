@@ -1,5 +1,5 @@
 <template>
-    <select  data-plugin="selectpicker">
+    <select data-plugin="selectpicker">
         <selectorsOptions v-for="option in this.options" v-bind:id="option.id" :val="option.value" :key="option.id">
             {{option.name}}
         </selectorsOptions>
@@ -7,7 +7,7 @@
 </template>
 <script>
     export default {
-        props: ['options', 'n'],
+        props: ['options'],
         data() {
             return {}
         },
@@ -38,7 +38,7 @@
 </script>
 
 <style>
-    .btn-default{
+    .btn-default {
         background: white;
     }
 </style>

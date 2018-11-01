@@ -88,8 +88,6 @@
 
 @section('script')
 
-    <script src="{{ mix('js/app.js') }}"></script>
-    <script src="{{ mix('js/left-menu.js') }}"></script>
     <script src="{{ mix('js/project.management.js') }}"></script>
 
 @endsection

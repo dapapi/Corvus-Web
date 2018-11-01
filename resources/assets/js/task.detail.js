@@ -3,6 +3,7 @@ import config from "./config";
 let app = new Vue({
         el: '#root',
         data: {
+            isEdit: false,
             total: 0,
             current_page: 1,
             total_pages: 1,
@@ -100,6 +101,14 @@ let app = new Vue({
                 })
             },
 
+            editBaseInfo: function () {
+                app.isEdit = true
+            },
+
+            customize: function (value) {
+                console.log(value)
+            },
+
             // Common
             hideSelectStaff: function (event) {
                 let s = document.getElementById("selectStaff");
@@ -125,8 +134,8 @@ let app = new Vue({
             },
             // endCommon
 
-            customize: function (value) {
-                console.log(value)
+            cancelEdit: function () {
+                app.isEdit = false;
             }
 
         }

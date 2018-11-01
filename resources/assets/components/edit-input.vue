@@ -1,12 +1,20 @@
 <template>
-    <input type="text" v-model="this.content" class="default input" readonly v-on:dblclick="editInput(this)"
-           v-on:blur="disableInput">
+    <input type="text" v-model="this.content" class="default input" readonly>
 </template>
 
 <script>
     export default {
         name: "editinput",
-        props: ['content'],
+        props: ['content', 'is-edit'],
+        watch: {
+            isEdit(newValue) {
+                if (newValue) {
+                    this.editInput()
+                } else {
+                    this.disableInput()
+                }
+            }
+        },
         methods: {
             editInput() {
                 $(this.$el).removeAttr('readonly');
@@ -30,14 +38,20 @@
 <style scoped>
 
     .default {
-        color: #868e96;
-        text-align: right;
-        font-weight: 300;
+        color: #757575;
+        font-weight: 400;
     }
 
     .input {
         border: none;
         background: white;
+    }
+
+    .form-control {
+        display: inline;
+        /*width: auto;*/
+        width: calc(100% - 2rem);
+        /*padding: 0 1rem;*/
     }
 
 </style>

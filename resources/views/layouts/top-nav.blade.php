@@ -11,7 +11,7 @@
             <i class="icon md-more" aria-hidden="true"></i>
         </button>
         <div class="navbar-brand navbar-brand-center site-gridmenu-toggle" data-toggle="gridmenu">
-            <img class="navbar-brand-logo" src="/images/logo.png" title="Remark">
+            <img class="navbar-brand-logo bg-white" src="https://work.mttop.cn/worktile-seaweed/3,2b1cf0df45" title="Remark">
             <span class="navbar-brand-text hidden-xs-down"> {{ env('APP_NAME') }}</span>
         </div>
 

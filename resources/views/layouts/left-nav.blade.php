@@ -20,6 +20,11 @@
                                     <span class="site-menu-title">任务管理</span>
                                 </a>
                             </li>
+                            <li class="site-menu-item">
+                                <a class="animsition-link" href="/task/detail">
+                                    <span class="site-menu-title">任务详情</span>
+                                </a>
+                            </li>
                         </ul>
                     </li>
 

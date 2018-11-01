@@ -12,14 +12,17 @@ const mix = require('laravel-mix');
  */
 
 mix.js('resources/assets/js/app.js', 'public/js')
+    .js('resources/assets/js/common.js', 'public/js')
     .js('resources/assets/js/login.js', 'public/js')
     .js('resources/assets/js/tool.js', 'public/js')
     .js('resources/assets/js/moe.js', 'public/js')
     .js('resources/assets/js/left-menu.js', 'public/js')
     .js('resources/assets/js/project.management.js', 'public/js')
     .js('resources/assets/js/task.index.js', 'public/js')
+    .js('resources/assets/js/task.detail.js', 'public/js')
 
     .sass('resources/assets/sass/side-mask.scss', 'public/css')
     .sass('resources/assets/sass/login.scss', 'public/css')
     .sass('resources/assets/sass/base.scss', 'public/css')
+    .sass('resources/assets/sass/task.scss', 'public/css')
     .sass('resources/assets/sass/v1.scss', 'public/css').version();

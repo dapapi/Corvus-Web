@@ -26,3 +26,8 @@ Route::get('/project/management', function () {
 Route::get('/task/task', function () {
     return view('task.index');
 });
+
+Route::get('/task/detail', function () {
+    return view('task.detail');
+});
+
