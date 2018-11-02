@@ -1,5 +1,5 @@
 <template>
-    <div class="input-wraper" :class="showButton ? 'focus-border' : ''">
+    <div class="input-wraper" :class="showButton ? 'focus-border' : ''" id="changeSizeInput">
         <textarea class="" name="" id="" rows="4" title="" @focus="showTaskFollow"
                   v-model="taskFollowText"></textarea>
         <div class="text-right pt-5" v-show="showButton">
@@ -19,6 +19,10 @@
             }
         },
 
+        mounted() {
+            this.globalClick(this.removeFocus);
+        },
+
         methods: {
             showTaskFollow: function () {
                 this.showButton = true
@@ -32,6 +36,14 @@
                 this.showButton = false;
                 this.$emit('change', this.taskFollowText);
                 this.taskFollowText = '';
+            },
+            removeFocus: function (event) {
+                let tag = document.getElementById("changeSizeInput");
+                if (tag) {
+                    if (!tag.contains(event.target)) {
+                        this.showButton = false;
+                    }
+                }
             }
         }
     }

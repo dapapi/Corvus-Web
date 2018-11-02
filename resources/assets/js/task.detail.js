@@ -7,8 +7,7 @@ let app = new Vue({
             total: 0,
             current_page: 1,
             total_pages: 1,
-            isSelectStaffShow: false,
-            isInputSelectShow: false,
+            showChildTask: false,
             memberPlaceholder: '请选择负责人',
             customizeInfo: [
                 {
@@ -75,7 +74,12 @@ let app = new Vue({
         },
 
         mounted() {
-
+            $('#addChildTask').on('show.bs.modal', function () {
+                app.showChildTask = true;
+                app.isEdit = false;
+            }).on('hidden.bs.modal', function () {
+                app.showChildTask = false;
+            })
         },
 
         methods: {
@@ -108,25 +112,6 @@ let app = new Vue({
             customize: function (value) {
                 console.log(value)
             },
-
-            // Common
-            hideSelectStaff: function (event) {
-                let s = document.getElementById("selectStaff");
-                if (s) {
-                    if (!s.contains(event.target)) {
-                        app.isSelectStaffShow = false;
-                    }
-                }
-            },
-
-            selectStaffShow: function (value) {
-                app.isSelectStaffShow = value
-            },
-
-            inputSelectShow: function (value) {
-                app.isInputSelectShow = value
-            },
-            // endCommon
 
             showSelectMember: function (value) {
                 app.isInputSelectShow = value

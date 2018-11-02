@@ -26,26 +26,29 @@
 <script>
     export default {
         name: "",
-        props: ['selectstaffshow'],
+        props: [],
         data() {
             return {
                 isMemberShow: false,
             }
         },
         mounted() {
-
-        },
-        watch: {
-            selectstaffshow(newValue) {
-                this.isMemberShow = newValue
-            }
+            this.globalClick(this.removeSelect);
         },
 
         methods: {
 
             showMember: function () {
                 this.isMemberShow = true;
-                this.$emit('change', this.isMemberShow);
+            },
+
+            removeSelect(event) {
+                let tag = document.getElementById("selectStaff");
+                if (tag) {
+                    if (!tag.contains(event.target)) {
+                        this.isMemberShow = false;
+                    }
+                }
             },
 
         }

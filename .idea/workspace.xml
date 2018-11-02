@@ -2,18 +2,19 @@
 <project version="4">
   <component name="ChangeListManager">
     <list default="true" id="1a3725e8-6f08-4917-871f-ddbfb9d5b08f" name="Default" comment="">
-      <change afterPath="$PROJECT_DIR$/resources/assets/components/edit-input-selector.vue" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/resources/assets/components/edit-textarea.vue" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/resources/assets/components/edit-add-member.vue" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/public/js/app.js" beforeDir="false" afterPath="$PROJECT_DIR$/public/js/app.js" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/resources/assets/components/edit-datepicker.vue" beforeDir="false" afterPath="$PROJECT_DIR$/resources/assets/components/edit-datepicker.vue" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/resources/assets/components/edit-input.vue" beforeDir="false" afterPath="$PROJECT_DIR$/resources/assets/components/edit-input.vue" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/resources/assets/components/add-member.vue" beforeDir="false" afterPath="$PROJECT_DIR$/resources/assets/components/add-member.vue" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/resources/assets/components/change-size-input.vue" beforeDir="false" afterPath="$PROJECT_DIR$/resources/assets/components/change-size-input.vue" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/resources/assets/components/edit-input-selector.vue" beforeDir="false" afterPath="$PROJECT_DIR$/resources/assets/components/edit-input-selector.vue" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/resources/assets/components/input-selectors.vue" beforeDir="false" afterPath="$PROJECT_DIR$/resources/assets/components/input-selectors.vue" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/resources/assets/components/select-staff.vue" beforeDir="false" afterPath="$PROJECT_DIR$/resources/assets/components/select-staff.vue" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/resources/assets/js/app.js" beforeDir="false" afterPath="$PROJECT_DIR$/resources/assets/js/app.js" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/resources/assets/js/common.js" beforeDir="false" afterPath="$PROJECT_DIR$/resources/assets/js/common.js" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/resources/assets/js/task.detail.js" beforeDir="false" afterPath="$PROJECT_DIR$/resources/assets/js/task.detail.js" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/resources/assets/sass/base.scss" beforeDir="false" afterPath="$PROJECT_DIR$/resources/assets/sass/base.scss" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/resources/assets/js/task.index.js" beforeDir="false" afterPath="$PROJECT_DIR$/resources/assets/js/task.index.js" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/resources/views/task/detail.blade.php" beforeDir="false" afterPath="$PROJECT_DIR$/resources/views/task/detail.blade.php" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/resources/views/task/index.blade.php" beforeDir="false" afterPath="$PROJECT_DIR$/resources/views/task/index.blade.php" afterDir="false" />
     </list>
     <option name="EXCLUDED_CONVERTED_TO_IGNORED" value="true" />
     <option name="TRACKING_ENABLED" value="true" />
@@ -30,8 +31,17 @@
       <file leaf-file-name="task.detail.js" pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/resources/assets/js/task.detail.js">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="450">
-              <caret line="128" column="24" lean-forward="true" selection-start-line="128" selection-start-column="24" selection-end-line="128" selection-end-column="24" />
+            <state relative-caret-position="357">
+              <caret line="78" column="35" selection-start-line="78" selection-start-column="35" selection-end-line="78" selection-end-column="35" />
+            </state>
+          </provider>
+        </entry>
+      </file>
+      <file leaf-file-name="change-size-input.vue" pinned="false" current-in-tab="true">
+        <entry file="file://$PROJECT_DIR$/resources/assets/components/change-size-input.vue">
+          <provider selected="true" editor-type-id="text-editor">
+            <state relative-caret-position="555">
+              <caret line="37" column="41" lean-forward="true" selection-start-line="37" selection-start-column="41" selection-end-line="37" selection-end-column="41" />
             </state>
           </provider>
         </entry>
@@ -39,44 +49,8 @@
       <file leaf-file-name="detail.blade.php" pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/resources/views/task/detail.blade.php">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="180">
-              <caret line="62" column="60" lean-forward="true" selection-start-line="62" selection-start-column="60" selection-end-line="62" selection-end-column="60" />
-            </state>
-          </provider>
-        </entry>
-      </file>
-      <file leaf-file-name="select-staff.vue" pinned="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/resources/assets/components/select-staff.vue">
-          <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="1711">
-              <caret line="164" column="4" selection-start-line="164" selection-start-column="4" selection-end-line="164" selection-end-column="4" />
-            </state>
-          </provider>
-        </entry>
-      </file>
-      <file leaf-file-name="edit-textarea.vue" pinned="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/resources/assets/components/edit-textarea.vue">
-          <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="165">
-              <caret line="11" column="8" lean-forward="true" selection-start-line="11" selection-start-column="8" selection-end-line="11" selection-end-column="8" />
-            </state>
-          </provider>
-        </entry>
-      </file>
-      <file leaf-file-name="edit-input.vue" pinned="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/resources/assets/components/edit-input.vue">
-          <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="375">
-              <caret line="25" column="18" selection-start-line="25" selection-start-column="18" selection-end-line="25" selection-end-column="18" />
-            </state>
-          </provider>
-        </entry>
-      </file>
-      <file leaf-file-name="base.scss" pinned="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/resources/assets/sass/base.scss">
-          <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="450">
-              <caret line="30" column="16" lean-forward="true" selection-start-line="30" selection-start-column="16" selection-end-line="30" selection-end-column="16" />
+            <state relative-caret-position="185">
+              <caret line="89" column="90" lean-forward="true" selection-start-line="89" selection-start-column="90" selection-end-line="89" selection-end-column="90" />
             </state>
           </provider>
         </entry>
@@ -84,8 +58,8 @@
       <file leaf-file-name="app.js" pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/resources/assets/js/app.js">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="540">
-              <caret line="36" lean-forward="true" selection-start-line="36" selection-end-line="36" />
+            <state relative-caret-position="555">
+              <caret line="37" lean-forward="true" selection-start-line="37" selection-end-line="37" />
               <folding>
                 <element signature="e#0#29#0" expanded="true" />
               </folding>
@@ -96,17 +70,44 @@
       <file leaf-file-name="edit-input-selector.vue" pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/resources/assets/components/edit-input-selector.vue">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="165">
-              <caret line="11" column="8" lean-forward="true" selection-start-line="11" selection-start-column="8" selection-end-line="11" selection-end-column="8" />
+            <state relative-caret-position="45">
+              <caret line="3" column="18" selection-start-line="3" selection-start-column="18" selection-end-line="3" selection-end-column="18" />
             </state>
           </provider>
         </entry>
       </file>
-      <file leaf-file-name="input-selectors.vue" pinned="false" current-in-tab="true">
+      <file leaf-file-name="index.blade.php" pinned="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/resources/views/task/index.blade.php">
+          <provider selected="true" editor-type-id="text-editor">
+            <state relative-caret-position="594">
+              <caret line="156" column="44" selection-start-line="156" selection-start-column="44" selection-end-line="156" selection-end-column="44" />
+            </state>
+          </provider>
+        </entry>
+      </file>
+      <file leaf-file-name="input-selectors.vue" pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/resources/assets/components/input-selectors.vue">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="150">
-              <caret line="10" lean-forward="true" selection-start-line="10" selection-end-line="10" />
+            <state relative-caret-position="525">
+              <caret line="35" column="21" lean-forward="true" selection-start-line="35" selection-start-column="21" selection-end-line="35" selection-end-column="21" />
+            </state>
+          </provider>
+        </entry>
+      </file>
+      <file leaf-file-name="add-member.vue" pinned="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/resources/assets/components/add-member.vue">
+          <provider selected="true" editor-type-id="text-editor">
+            <state relative-caret-position="454">
+              <caret line="38" column="18" lean-forward="true" selection-start-line="38" selection-start-column="18" selection-end-line="38" selection-end-column="18" />
+            </state>
+          </provider>
+        </entry>
+      </file>
+      <file leaf-file-name="edit-add-member.vue" pinned="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/resources/assets/components/edit-add-member.vue">
+          <provider selected="true" editor-type-id="text-editor">
+            <state relative-caret-position="289">
+              <caret line="17" column="21" lean-forward="true" selection-start-line="17" selection-start-column="21" selection-end-line="17" selection-end-column="21" />
             </state>
           </provider>
         </entry>
@@ -134,13 +135,7 @@
   </component>
   <component name="FindInProjectRecents">
     <findStrings>
-      <find>customizeInfo</find>
-      <find>console</find>
-      <find>isSelectStaffShow</find>
-      <find>id=&quot;selectStaff&quot;</find>
-      <find>customize</find>
       <find>webkit-sc</find>
-      <find>selectStaff</find>
       <find>file</find>
       <find>task-dropdown-item</find>
       <find>attachment-upload</find>
@@ -161,9 +156,15 @@
       <find>&lt;input-selectors</find>
       <find>testMember</find>
       <find>hide</find>
-      <find>hideSelectStaff</find>
       <find>des</find>
+      <find>selectstaffshow</find>
+      <find>selectStaff</find>
+      <find>hideSelectStaff</find>
       <find>edit-input-</find>
+      <find>selectStaffShow</find>
+      <find>isSelectStaffShow</find>
+      <find>inputSelectMember</find>
+      <find>inputSelectShow</find>
     </findStrings>
     <replaceStrings>
       <replace>asSpinner</replace>
@@ -181,7 +182,6 @@
   <component name="IdeDocumentHistory">
     <option name="CHANGED_PATHS">
       <list>
-        <option value="$PROJECT_DIR$/resources/assets/sass/asSpinner.css.scss" />
         <option value="$PROJECT_DIR$/resources/assets/sass/asSpinner.css" />
         <option value="$PROJECT_DIR$/resources/assets/components/number-spinner.vue" />
         <option value="$PROJECT_DIR$/resources/assets/components/inline-datepicker.vue" />
@@ -206,17 +206,14 @@
         <option value="$PROJECT_DIR$/resources/assets/components/customize-linkage-selectors.vue" />
         <option value="$PROJECT_DIR$/routes/web.php" />
         <option value="$PROJECT_DIR$/resources/views/layouts/left-nav.blade.php" />
-        <option value="$PROJECT_DIR$/resources/assets/components/change-size-input.vue" />
         <option value="$PROJECT_DIR$/resources/assets/components/task-follow-up.vue" />
         <option value="$PROJECT_DIR$/resources/assets/sass/task.scss" />
         <option value="$PROJECT_DIR$/resources/assets/components/editinput.vue" />
         <option value="$PROJECT_DIR$/resources/assets/components/customize-field.vue" />
-        <option value="$PROJECT_DIR$/resources/assets/components/add-member.vue" />
         <option value="$PROJECT_DIR$/webpack.mix.js" />
         <option value="$PROJECT_DIR$/resources/assets/js/left-menu.js" />
         <option value="$PROJECT_DIR$/resources/views/layouts/master.blade.php" />
         <option value="$PROJECT_DIR$/resources/views/project/index.blade.php" />
-        <option value="$PROJECT_DIR$/resources/views/task/index.blade.php" />
         <option value="$PROJECT_DIR$/resources/assets/js/common.js" />
         <option value="$PROJECT_DIR$/resources/assets/js/task.index.js" />
         <option value="$PROJECT_DIR$/resources/views/layouts/top-nav.blade.php" />
@@ -227,11 +224,15 @@
         <option value="$PROJECT_DIR$/resources/assets/components/edit-datepicker.vue" />
         <option value="$PROJECT_DIR$/resources/assets/components/edit-textarea.vue" />
         <option value="$PROJECT_DIR$/resources/assets/components/select-staff.vue" />
+        <option value="$PROJECT_DIR$/resources/assets/components/edit-input-selector.vue" />
+        <option value="$PROJECT_DIR$/resources/assets/components/edit-add-member.vue" />
+        <option value="$PROJECT_DIR$/resources/views/task/detail.blade.php" />
+        <option value="$PROJECT_DIR$/resources/assets/components/add-member.vue" />
+        <option value="$PROJECT_DIR$/resources/views/task/index.blade.php" />
         <option value="$PROJECT_DIR$/resources/assets/js/app.js" />
         <option value="$PROJECT_DIR$/resources/assets/js/task.detail.js" />
         <option value="$PROJECT_DIR$/resources/assets/components/input-selectors.vue" />
-        <option value="$PROJECT_DIR$/resources/assets/components/edit-input-selector.vue" />
-        <option value="$PROJECT_DIR$/resources/views/task/detail.blade.php" />
+        <option value="$PROJECT_DIR$/resources/assets/components/change-size-input.vue" />
       </list>
     </option>
   </component>
@@ -472,12 +473,12 @@
       <workItem from="1539918009677" duration="605000" />
       <workItem from="1540176332595" duration="1524000" />
       <workItem from="1540183212461" duration="109678000" />
-      <workItem from="1541061539550" duration="8443000" />
+      <workItem from="1541061539550" duration="15245000" />
     </task>
     <servers />
   </component>
   <component name="TimeTrackingManager">
-    <option name="totallyTimeSpent" value="167290000" />
+    <option name="totallyTimeSpent" value="174092000" />
   </component>
   <component name="ToolWindowManager">
     <frame x="0" y="0" width="1920" height="1080" extended-state="0" />
@@ -516,11 +517,6 @@
     </breakpoint-manager>
   </component>
   <component name="editorHistoryManager">
-    <entry file="file://$PROJECT_DIR$/resources/assets/components/pagination.vue">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="-484" />
-      </provider>
-    </entry>
     <entry file="file://$PROJECT_DIR$/resources/assets/js/user.js">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="180">
@@ -645,13 +641,6 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/resources/assets/components/add-member.vue">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="411">
-          <caret line="41" column="9" selection-start-line="41" selection-start-column="9" selection-end-line="41" selection-end-column="9" />
-        </state>
-      </provider>
-    </entry>
     <entry file="file://$PROJECT_DIR$/resources/assets/js/left-menu.js">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="75">
@@ -770,37 +759,6 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/resources/assets/components/change-size-input.vue">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="537">
-          <caret line="42" column="21" selection-start-line="42" selection-start-column="21" selection-end-line="42" selection-end-column="21" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/resources/views/task/index.blade.php">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="218">
-          <caret line="123" column="42" selection-start-line="123" selection-start-column="42" selection-end-line="123" selection-end-column="42" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/resources/assets/components/select-staff.vue">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="1711">
-          <caret line="164" column="4" selection-start-line="164" selection-start-column="4" selection-end-line="164" selection-end-column="4" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/resources/assets/js/app.js">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="540">
-          <caret line="36" lean-forward="true" selection-start-line="36" selection-end-line="36" />
-          <folding>
-            <element signature="e#0#29#0" expanded="true" />
-          </folding>
-        </state>
-      </provider>
-    </entry>
     <entry file="file://$PROJECT_DIR$/resources/assets/components/edit-datepicker.vue">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="165">
@@ -808,31 +766,76 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/resources/assets/js/task.detail.js">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="450">
-          <caret line="128" column="24" lean-forward="true" selection-start-line="128" selection-start-column="24" selection-end-line="128" selection-end-column="24" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/resources/assets/components/edit-input-selector.vue">
+    <entry file="file://$PROJECT_DIR$/resources/assets/components/select-staff.vue">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="165">
-          <caret line="11" column="8" lean-forward="true" selection-start-line="11" selection-start-column="8" selection-end-line="11" selection-end-column="8" />
+          <caret line="11" column="85" selection-start-line="11" selection-start-column="85" selection-end-line="11" selection-end-column="85" />
         </state>
       </provider>
     </entry>
     <entry file="file://$PROJECT_DIR$/resources/views/task/detail.blade.php">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="180">
-          <caret line="62" column="60" lean-forward="true" selection-start-line="62" selection-start-column="60" selection-end-line="62" selection-end-column="60" />
+        <state relative-caret-position="185">
+          <caret line="89" column="90" lean-forward="true" selection-start-line="89" selection-start-column="90" selection-end-line="89" selection-end-column="90" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/resources/assets/components/edit-input-selector.vue">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="45">
+          <caret line="3" column="18" selection-start-line="3" selection-start-column="18" selection-end-line="3" selection-end-column="18" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/resources/views/task/index.blade.php">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="594">
+          <caret line="156" column="44" selection-start-line="156" selection-start-column="44" selection-end-line="156" selection-end-column="44" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/resources/assets/js/app.js">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="555">
+          <caret line="37" lean-forward="true" selection-start-line="37" selection-end-line="37" />
+          <folding>
+            <element signature="e#0#29#0" expanded="true" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/resources/assets/js/task.detail.js">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="357">
+          <caret line="78" column="35" selection-start-line="78" selection-start-column="35" selection-end-line="78" selection-end-column="35" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/resources/assets/components/edit-add-member.vue">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="289">
+          <caret line="17" column="21" lean-forward="true" selection-start-line="17" selection-start-column="21" selection-end-line="17" selection-end-column="21" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/resources/assets/components/add-member.vue">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="454">
+          <caret line="38" column="18" lean-forward="true" selection-start-line="38" selection-start-column="18" selection-end-line="38" selection-end-column="18" />
         </state>
       </provider>
     </entry>
     <entry file="file://$PROJECT_DIR$/resources/assets/components/input-selectors.vue">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="150">
-          <caret line="10" lean-forward="true" selection-start-line="10" selection-end-line="10" />
+        <state relative-caret-position="525">
+          <caret line="35" column="21" lean-forward="true" selection-start-line="35" selection-start-column="21" selection-end-line="35" selection-end-column="21" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/resources/assets/components/change-size-input.vue">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="555">
+          <caret line="37" column="41" lean-forward="true" selection-start-line="37" selection-start-column="41" selection-end-line="37" selection-end-column="41" />
         </state>
       </provider>
     </entry>

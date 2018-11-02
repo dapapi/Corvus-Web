@@ -49,7 +49,7 @@
                             <i class="md-plus pr-2" aria-hidden="true"></i>负责人
                         </div>
                         <div class="font-weight-bold float-left">
-                            <edit-input-selector :content="'张测试'" :is-edit="isEdit" @change="" :is-selecting="isInputSelectShow"></edit-input-selector>
+                            <edit-input-selector :content="'张测试'" :is-edit="isEdit" @change=""></edit-input-selector>
                         </div>
                     </div>
                     <div class="card-text clearfix example">
@@ -108,7 +108,7 @@
                                 <div class="card-text py-5 clearfix">
                                     <div class="col-md-1 float-left text-right pl-0">参与人</div>
                                     <div class="col-md-11 float-left font-weight-bold">
-                                        test
+                                        <edit-add-member :content="'测试1、测试2'" :is-edit="isEdit"></edit-add-member>
                                     </div>
                                 </div>
                                 <div class="card-text py-5 clearfix">
@@ -246,7 +246,7 @@
                         </button>
                         <h4 class="modal-title">新增子任务</h4>
                     </div>
-                    <div class="modal-body">
+                    <div class="modal-body" v-if="showChildTask">
 
                         <div class="example">
                             <div class="col-md-2 text-right float-left">关联资源</div>
@@ -269,14 +269,13 @@
                         <div class="example">
                             <div class="col-md-2 text-right float-left">负责人</div>
                             <div class="col-md-5 float-left pl-0">
-                                <input-selectors :placeholder="memberPlaceholder" :inputselectshow="isInputSelectShow"
-                                                 @change="inputSelectShow"></input-selectors>
+                                <input-selectors :placeholder="memberPlaceholder"></input-selectors>
                             </div>
                         </div>
                         <div class="example">
                             <div class="col-md-2 text-right float-left">参与人</div>
                             <div class="col-md-10 float-left pl-0">
-                                <add-member :selectstaffshow="isSelectStaffShow" @change="selectStaffShow"></add-member>
+                                <add-member></add-member>
                             </div>
                         </div>
                         <div class="example">

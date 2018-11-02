@@ -1,7 +1,7 @@
 <template>
     <div class="">
-        <template v-if="isEditSelect">
-            <input-selectors></input-selectors>
+        <template v-if="isEditAdd">
+            <add-member></add-member>
         </template>
         <template v-else>
             {{ content }}
@@ -11,11 +11,11 @@
 
 <script>
     export default {
-        name: "edit-input-selector",
+        name: "edit-add-member",
         props: ['is-edit', 'content'],
         data() {
             return {
-                isEditSelect: false,
+                isEditAdd: false,
             }
         },
 
@@ -24,7 +24,7 @@
 
         watch: {
             isEdit(newValue) {
-                this.isEditSelect = newValue;
+                this.isEditAdd = newValue;
             },
         },
         methods: {}

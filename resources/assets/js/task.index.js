@@ -6,8 +6,6 @@ let app = new Vue({
             total: 0,
             current_page: 1,
             total_pages: 1,
-            isSelectStaffShow: false,
-            isInputSelectShow: false,
             memberPlaceholder: '请选择负责人',
             customizeInfo: [
                 {
@@ -99,31 +97,6 @@ let app = new Vue({
                     app.total_pages = pageInfo.total_pages;
                 })
             },
-
-            // Common
-            hideSelectStaff: function (event) {
-                let s = document.getElementById("selectStaff");
-                if (s) {
-                    if (!s.contains(event.target)) {
-                        this.isSelectStaffShow = false;
-                    }
-                }
-                let i = document.getElementById("inputSelectMember");
-                if (i) {
-                    if (!i.contains(event.target)) {
-                        this.isInputSelectShow = false;
-                    }
-                }
-            },
-
-            selectStaffShow: function (value) {
-                this.isSelectStaffShow = value
-            },
-
-            inputSelectShow: function (value) {
-                this.isInputSelectShow = value
-            },
-            // endCommon
 
             customize: function (value) {
                 console.log(value)

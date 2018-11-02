@@ -119,7 +119,7 @@
         </div>
 
         <div class="modal fade" id="addTask" aria-hidden="true" aria-labelledby="addLabelForm"
-             role="dialog" tabindex="-1" @click="hideSelectStaff">
+             role="dialog" tabindex="-1">
             <div class="modal-dialog modal-simple">
                 <div class="modal-content">
                     <div class="modal-header">
@@ -133,7 +133,7 @@
                         <div class="example">
                             <div class="col-md-2 text-right float-left">关联资源</div>
                             <div class="col-md-10 float-left">
-                                <normal-linkage-selectors></normal-linkage-selectors>
+                                {{--<normal-linkage-selectors></normal-linkage-selectors>--}}
                             </div>
                         </div>
                         <div class="example">
@@ -151,14 +151,13 @@
                         <div class="example">
                             <div class="col-md-2 text-right float-left">负责人</div>
                             <div class="col-md-5 float-left pl-0">
-                                <input-selectors :placeholder="memberPlaceholder" :inputselectshow="isInputSelectShow"
-                                                 @change="inputSelectShow"></input-selectors>
+                                <input-selectors :placeholder="memberPlaceholder"></input-selectors>
                             </div>
                         </div>
                         <div class="example">
                             <div class="col-md-2 text-right float-left">参与人</div>
                             <div class="col-md-10 float-left pl-0">
-                                <add-member :selectstaffshow="isSelectStaffShow" @change="selectStaffShow"></add-member>
+                                <add-member></add-member>
                             </div>
                         </div>
                         <div class="example">
