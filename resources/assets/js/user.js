@@ -26,7 +26,7 @@ class User {
             let json = {
                 id: userData.id,
                 avatar: userData.avatar,
-                nickname: userData.nickname
+                nickname: userData.name
             }
             callback(json)
         })

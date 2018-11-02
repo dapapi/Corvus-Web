@@ -19,10 +19,8 @@ $(function () {
     checkLogin();
     checkBindTelephone();
     checkPlatformLoginCallback();
-    initWechatLoginBtn();
     initSendSmsBtn();
     initBindTelephoneBtn();
-    initWorktileLoginBtn();
     checkErrors();
 });
 
@@ -81,7 +79,8 @@ function initLoginForm() {
                 password,
                 grant_type: 'password',
                 client_id: config.clientId,
-                client_secret: config.clientSecret
+                client_secret: config.clientSecret,
+                scope: '*'
             },
             statusCode: {
                 401: function () {
@@ -111,39 +110,6 @@ function initLoginForm() {
         return false;
     })
 }
-
-function initWechatLoginBtn() {
-    $('#wechat-login-btn').click(function () {
-
-        if (Tool.isWeixin()) {
-            //在微信手机版，直接跳转
-            window.location.href = config.apiUrl + '/wechat/oauth?callback=' + 'https://moe.mttop.cn/login'
-        } else {
-            //电脑版显示二维码
-            $.ajax({
-                url: config.apiUrl + '/wechat_open/oauth',
-                type: 'get',
-                statusCode: {
-                    400: function () {
-                        console.log('error')
-                    },
-                    500: function () {
-                        console.log('error')
-                    }
-                }
-            }).done(function (response) {
-                window.location.href = response.url;
-            });
-        }
-    });
-}
-
-function initWorktileLoginBtn() {
-    $('#worktile-login-btn').click(function () {
-        window.location.href = config.apiUrl + '/worktile/oauth?callback=' + config.moeUrl + '/login'
-    })
-}
-
 
 function getDevice() {
     let deviceId = Cookies.get('deviceId');

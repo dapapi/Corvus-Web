@@ -1,7 +1,7 @@
 <template>
-    <div class="edit-wrap">
+    <div>
         <template v-if="isEditDatePicker">
-            <datepicker ref="datepicker" :change="changeDate"></datepicker>
+            <datepicker ref="datepicker" @change="changeDate"></datepicker>
         </template>
         <template v-else>
             {{ content }}

@@ -3,7 +3,7 @@ import redirect from "./bootstrap";
 
 let config = {
     tokenString: 'CORVUS-ACCESS-TOKEN',
-    apiUrl: 'https://sandbox-api-crm.papitube.com/',
+    apiUrl: 'https://sandbox-api-crm.papitube.com',
     imgUrl: 'https://res.papitube.com/',
 
     getHeaders: function () {
@@ -28,8 +28,8 @@ let config = {
         Cookies.remove(this.tokenString);
     },
 
-    clientId: '1',
-    clientSecret: 'password',
+    clientId: '2',
+    clientSecret: 'B7l68XEz38cHE8VqTZPzyYnSBgo17eaCRyuLtpul',
     getStatusCode: function () {
         let that = this;
         return {

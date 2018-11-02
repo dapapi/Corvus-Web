@@ -7,6 +7,53 @@ let app = new Vue({
             current_page: 1,
             total_pages: 1,
             memberPlaceholder: '请选择负责人',
+            participants: [],
+            multiple: false,
+            taskIntroduce: '',
+            startTime: '',
+            startMinutes: '00:00',
+            endTime: '',
+            endMinutes: '00:00',
+            newTask: {},
+            taskType: '',
+            taskName: '',
+            taskLevel: '',
+            taskLevelArr: [
+                {
+                    name: '请选择优先级',
+                    value: 0
+                },
+                {
+                    name: '高',
+                    value: 1
+                },
+                {
+                    name: '中',
+                    value: 2
+                },
+                {
+                    name: '低',
+                    value: 3
+                },
+            ],
+            taskTypeArr: [
+                {
+                    name: '请选择任务类型',
+                    value: 0
+                },
+                {
+                    name: '跑组',
+                    value: 1
+                },
+                {
+                    name: '试戏',
+                    value: 2
+                },
+                {
+                    name: '类型1',
+                    value: 3
+                },
+            ],
             customizeInfo: [
                 {
                     id: 0,
@@ -72,35 +119,87 @@ let app = new Vue({
         },
 
         mounted() {
-
+            this.getTasks()
         },
 
         methods: {
 
-            getProjects: function (pageNum = 1) {
+            getTasks: function (pageNum = 1) {
                 let data = {
                     page: pageNum,
-                    include: 'user, gift, express',
+                    include: 'creator,principal,pTask,tasks,resource.resourceable,resource.resource,affixes,participants',
                 };
 
                 $.ajax({
                     type: 'get',
-                    url: config.apiUrl + '/portal/orders',
+                    url: config.apiUrl + '/tasks/my_all',
                     headers: config.getHeaders(),
                     statusCode: config.getStatusCode(),
                     data: data
                 }).done(function (response) {
-                    app.orderInfo = response.data;
-                    let pageInfo = response.meta.pagination;
-                    app.total = pageInfo.total;
-                    app.current_page = pageInfo.current_page;
-                    app.total_pages = pageInfo.total_pages;
+                    console.log(response)
+                })
+            },
+
+            addTask: function () {
+                let data = {
+                    resource_id: '1718463094',
+                    resourceable_id: '1994731356',
+                    title: app.taskName,
+                    type: app.taskType,
+                    principal_id: app.principal,
+                    priority: app.taskLevel,
+                    start_at: app.startTime + ' ' + app.startMinutes,
+                    end_at: app.endTime + ' ' + app.endMinutes,
+                    desc: app.taskIntroduce
+                };
+                $.ajax({
+                    type: 'post',
+                    url: config.apiUrl + '/tasks',
+                    headers: config.getHeaders(),
+                    // statusCode: config.getStatusCode(),
+                    data: data
+                }).done(function (response) {
+                    console.log(response)
                 })
             },
 
             customize: function (value) {
                 console.log(value)
-            }
+            },
+
+            changeLinkage: function (value) {
+                console.log(value)
+            },
+
+            changeTaskType: function (value) {
+                app.taskType = value
+            },
+
+            principalChange: function (value) {
+                app.principal = value
+            },
+
+            participantChange: function (value) {
+                let flagArr = [];
+                for (let i = 0; i < value.length; i++) {
+                    flagArr.push(value[i].id)
+                }
+                app.participants = flagArr
+            },
+
+            changeTaskLevel: function (value) {
+                app.taskLevel = value
+            },
+
+            changeStartTime: function (value) {
+                console.log(value)
+                app.startTime = value
+            },
+
+            changeEndTime: function (value) {
+                app.endTime = value
+            },
 
         }
 

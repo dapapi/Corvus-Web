@@ -90,24 +90,23 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
 //
 //
 //
-//
-//
-//
-//
-//
 
 /* harmony default export */ __webpack_exports__["default"] = ({
     name: "",
     props: [],
     data: function data() {
         return {
-            isMemberShow: false
+            isMemberShow: false,
+            selectMemberArr: [],
+            selectMemberIdArr: []
         };
     },
     mounted: function mounted() {
         this.globalClick(this.removeSelect);
     },
 
+
+    watch: {},
 
     methods: {
 
@@ -122,7 +121,24 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
                     this.isMemberShow = false;
                 }
             }
+        },
+
+        changeSelectMember: function changeSelectMember(value) {
+            this.selectMemberArr = value;
+        },
+
+        removeMember: function removeMember(userId) {
+            var data = this.selectMemberArr.find(function (item) {
+                return item.id == userId;
+            });
+            var index = this.selectMemberArr.indexOf(data);
+            this.selectMemberArr.splice(index, 1);
+            this.selectMemberIdArr = [];
+            for (var i = 0; i < this.selectMemberArr.length; i++) {
+                this.selectMemberIdArr.push(this.selectMemberArr[i].id);
+            }
         }
+
     }
 });
 
@@ -635,32 +651,54 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
 //
 //
 //
+//
 
 /* harmony default export */ __webpack_exports__["default"] = ({
     name: "departments-item",
-    props: ['data', 'select'],
+    props: ['data', 'select', 'multiple'],
     data: function data() {
         return {
             departmentsShow: false,
-            total: 0
+            total: 0,
+            selectArr: [],
+            isMultiple: ''
         };
     },
     mounted: function mounted() {
         this.total = this.memberNum(this.data);
+        this.isMultiple = this.multiple;
+        this.selectArr = this.select;
     },
 
+
+    watch: {
+        selectArr: function selectArr(newValue) {
+            this.$emit('change', newValue);
+        },
+
+        select: function select(newValue) {
+            this.selectArr = newValue;
+        }
+    },
 
     methods: {
         departmentClose: function departmentClose() {
             this.departmentsShow = !this.departmentsShow;
         },
 
+        memberChange: function memberChange(value) {
+            this.selectArr = value;
+        },
+
         selectMember: function selectMember(userId) {
-            var index = this.select.indexOf(userId);
+            var index = this.selectArr.indexOf(userId);
             if (index > -1) {
-                this.select.splice(index, 1);
+                this.selectArr.splice(index, 1);
             } else {
-                this.select.push(userId);
+                if (!this.multiple && this.selectArr.length > 0) {
+                    this.selectArr = [];
+                }
+                this.selectArr.push(userId);
             }
         },
 
@@ -671,9 +709,9 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
         checkMember: function checkMember(data) {
             for (var i = 0; i < data.users.data.length; i++) {
                 var userId = data.users.data[i].id;
-                var index = this.select.indexOf(userId);
+                var index = this.selectArr.indexOf(userId);
                 if (index === -1) {
-                    this.select.push(userId);
+                    this.selectArr.push(userId);
                 }
             }
             for (var _i = 0; _i < data.departments.data.length; _i++) {
@@ -1007,19 +1045,27 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
 //
 //
 //
+//
 
 /* harmony default export */ __webpack_exports__["default"] = ({
-    props: ['placeholder'],
+    props: ['placeholder', 'multiple'],
     data: function data() {
         return {
             selectMemberShow: false,
-            randomId: ''
+            randomId: '',
+            inputContent: '',
+            selectMember: []
         };
     },
     mounted: function mounted() {
         this.globalClick(this.removeInputSelect);
+        this.randomId = this._uid;
     },
 
+
+    watch: {
+        selectMember: function selectMember(newValue) {}
+    },
 
     methods: {
         showMember: function showMember() {
@@ -1027,11 +1073,25 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
         },
 
         removeInputSelect: function removeInputSelect(event) {
-            var tag = document.getElementById("inputSelectMember");
+            var tag = document.getElementById("inputSelectMember" + this._uid);
             if (tag) {
                 if (!tag.contains(event.target)) {
                     this.selectMemberShow = false;
                 }
+            }
+        },
+
+
+        changeSelectMember: function changeSelectMember(value) {
+            if (value.length <= 0) {
+                return;
+            }
+            if (!this.multiple) {
+                this.selectMemberShow = false;
+                this.inputContent = value[0].name;
+                this.$emit('change', value[0].id);
+            } else {
+                // @todo 多选显示与返回
             }
         }
     }
@@ -1140,7 +1200,7 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
             },
             min: 0,
             max: 100
-        }).on('asSpinner::change', function (e) {
+        }).on('asSpinner:@change', function (e) {
             self.$emit('change', e.currentTarget.value);
         });
     },
@@ -1324,23 +1384,27 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
 //
 //
 //
+//
 
 
 
 /* harmony default export */ __webpack_exports__["default"] = ({
-    props: [],
+    props: ['multiple', 'alreadySelectMember'],
     data: function data() {
         return {
             normalUsers: {},
             departmentUsers: {},
             teamShow: true,
             selectIdArr: [],
-            searchKeyWord: ''
+            searchKeyWord: '',
+            componentId: '',
+            isMultiple: ''
         };
     },
     mounted: function mounted() {
-
         var self = this;
+        self.componentId = self._uid;
+        self.isMultiple = self.multiple;
         $.ajax({
             url: __WEBPACK_IMPORTED_MODULE_0__js_config__["a" /* default */].apiUrl + '/users',
             headers: __WEBPACK_IMPORTED_MODULE_0__js_config__["a" /* default */].getHeaders(),
@@ -1358,6 +1422,29 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
         }).done(function (response) {
             self.departmentUsers = response.data;
         });
+    },
+
+
+    watch: {
+        selectIdArr: function selectIdArr(newValue) {
+            var _this = this;
+
+            var tagArr = [];
+
+            var _loop = function _loop(i) {
+                tagArr.push(_this.normalUsers.find(function (item) {
+                    return item.id == newValue[i];
+                }));
+            };
+
+            for (var i = 0; i < newValue.length; i++) {
+                _loop(i);
+            }
+            this.$emit('change', tagArr);
+        },
+        alreadySelectMember: function alreadySelectMember(newValue) {
+            this.selectIdArr = newValue;
+        }
     },
 
     methods: {
@@ -1380,8 +1467,15 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
             if (index > -1) {
                 this.selectIdArr.splice(index, 1);
             } else {
+                if (!this.isMultiple && this.selectIdArr.length > 0) {
+                    this.selectIdArr = [];
+                }
                 this.selectIdArr.push(userId);
             }
+        },
+
+        memberChange: function memberChange(value) {
+            this.selectIdArr = value;
         }
     }
 });
@@ -1659,7 +1753,7 @@ exports = module.exports = __webpack_require__("./node_modules/css-loader/lib/cs
 
 
 // module
-exports.push([module.i, "\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n", ""]);
+exports.push([module.i, "\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n", ""]);
 
 // exports
 
@@ -2808,7 +2902,64 @@ var render = function() {
   var _c = _vm._self._c || _h
   return _c("div", { staticClass: "assistor" }, [
     _c("div", { staticClass: "bg-white select-staff" }, [
-      _vm._m(0),
+      _c("div", { staticClass: "page-nav-tabs" }, [
+        _c(
+          "ul",
+          {
+            staticClass: "nav nav-tabs nav-tabs-line",
+            attrs: { role: "tablist" }
+          },
+          [
+            _c(
+              "li",
+              {
+                staticClass: "nav-item col-md-6",
+                attrs: { role: "presentation" }
+              },
+              [
+                _c(
+                  "a",
+                  {
+                    staticClass: "nav-link active",
+                    attrs: {
+                      "data-toggle": "tab",
+                      href: "#forum-team" + this.componentId,
+                      "aria-controls": "forum-base",
+                      "aria-expanded": "true",
+                      role: "tab"
+                    }
+                  },
+                  [_vm._v(" 团队 ")]
+                )
+              ]
+            ),
+            _vm._v(" "),
+            _c(
+              "li",
+              {
+                staticClass: "nav-item col-md-6",
+                attrs: { role: "presentation" }
+              },
+              [
+                _c(
+                  "a",
+                  {
+                    staticClass: "nav-link",
+                    attrs: {
+                      "data-toggle": "tab",
+                      href: "#forum-department" + this.componentId,
+                      "aria-controls": "forum-present",
+                      "aria-expanded": "false",
+                      role: "tab"
+                    }
+                  },
+                  [_vm._v(" 部门 ")]
+                )
+              ]
+            )
+          ]
+        )
+      ]),
       _vm._v(" "),
       _c(
         "div",
@@ -2821,11 +2972,11 @@ var render = function() {
             "div",
             {
               staticClass: "tab-pane animation-fade active",
-              attrs: { id: "forum-team", role: "tabpanel" }
+              attrs: { id: "forum-team" + this.componentId, role: "tabpanel" }
             },
             [
               _c("div", { staticClass: "input-search example" }, [
-                _vm._m(1),
+                _vm._m(0),
                 _vm._v(" "),
                 _c("input", {
                   directives: [
@@ -2894,14 +3045,16 @@ var render = function() {
                     )
                   ]),
                   _vm._v(" "),
-                  _c(
-                    "span",
-                    {
-                      staticClass: "team-add-all pl-2",
-                      on: { click: _vm.selectAllMember }
-                    },
-                    [_c("i", { staticClass: "icon md-plus" })]
-                  )
+                  _vm.isMultiple
+                    ? _c(
+                        "span",
+                        {
+                          staticClass: "team-add-all pl-2",
+                          on: { click: _vm.selectAllMember }
+                        },
+                        [_c("i", { staticClass: "icon md-plus" })]
+                      )
+                    : _vm._e()
                 ]),
                 _vm._v(" "),
                 _c(
@@ -2936,7 +3089,7 @@ var render = function() {
                         }
                       },
                       [
-                        _vm._m(2, true),
+                        _vm._m(1, true),
                         _vm._v(" "),
                         _c("span", { staticClass: "pl-1" }, [
                           _vm._v(_vm._s(user.name))
@@ -2969,14 +3122,22 @@ var render = function() {
             "div",
             {
               staticClass: "tab-pane animation-fade",
-              attrs: { id: "forum-department", role: "tabpanel" }
+              attrs: {
+                id: "forum-department" + this.componentId,
+                role: "tabpanel"
+              }
             },
             _vm._l(_vm.departmentUsers, function(department) {
               return _c(
                 "div",
                 [
                   _c("departments-item", {
-                    attrs: { data: department, select: _vm.selectIdArr }
+                    attrs: {
+                      data: department,
+                      select: _vm.selectIdArr,
+                      multiple: _vm.isMultiple
+                    },
+                    on: { change: _vm.memberChange }
                   })
                 ],
                 1
@@ -2989,69 +3150,6 @@ var render = function() {
   ])
 }
 var staticRenderFns = [
-  function() {
-    var _vm = this
-    var _h = _vm.$createElement
-    var _c = _vm._self._c || _h
-    return _c("div", { staticClass: "page-nav-tabs" }, [
-      _c(
-        "ul",
-        {
-          staticClass: "nav nav-tabs nav-tabs-line",
-          attrs: { role: "tablist" }
-        },
-        [
-          _c(
-            "li",
-            {
-              staticClass: "nav-item col-md-6",
-              attrs: { role: "presentation" }
-            },
-            [
-              _c(
-                "a",
-                {
-                  staticClass: "nav-link active",
-                  attrs: {
-                    "data-toggle": "tab",
-                    href: "#forum-team",
-                    "aria-controls": "forum-base",
-                    "aria-expanded": "true",
-                    role: "tab"
-                  }
-                },
-                [_vm._v(" 团队 ")]
-              )
-            ]
-          ),
-          _vm._v(" "),
-          _c(
-            "li",
-            {
-              staticClass: "nav-item col-md-6",
-              attrs: { role: "presentation" }
-            },
-            [
-              _c(
-                "a",
-                {
-                  staticClass: "nav-link",
-                  attrs: {
-                    "data-toggle": "tab",
-                    href: "#forum-department",
-                    "aria-controls": "forum-present",
-                    "aria-expanded": "false",
-                    role: "tab"
-                  }
-                },
-                [_vm._v(" 部门 ")]
-              )
-            ]
-          )
-        ]
-      )
-    ])
-  },
   function() {
     var _vm = this
     var _h = _vm.$createElement
@@ -3597,13 +3695,12 @@ var render = function() {
   var _c = _vm._self._c || _h
   return _c(
     "div",
-    { staticClass: "edit-wrap" },
     [
       _vm.isEditDatePicker
         ? [
             _c("datepicker", {
               ref: "datepicker",
-              attrs: { change: _vm.changeDate }
+              on: { change: _vm.changeDate }
             })
           ]
         : [_vm._v("\n        " + _vm._s(_vm.content) + "\n    ")]
@@ -3677,7 +3774,36 @@ var render = function() {
   var _h = _vm.$createElement
   var _c = _vm._self._c || _h
   return _c("div", { staticClass: "addMember" }, [
-    _vm._m(0),
+    _c(
+      "ul",
+      { staticClass: "addMember-items" },
+      _vm._l(_vm.selectMemberArr, function(member) {
+        return _c("li", { staticClass: "addMember-item mb-5" }, [
+          _c("img", {
+            staticClass: "avatar",
+            attrs: {
+              onerror: "noneAvatar(this)",
+              src: member.avatar,
+              title: "Herman Beck",
+              src: ""
+            }
+          }),
+          _vm._v(" "),
+          _c(
+            "span",
+            {
+              staticClass: "addMember-remove",
+              on: {
+                click: function($event) {
+                  _vm.removeMember(member.id)
+                }
+              }
+            },
+            [_c("i", { staticClass: "md-minus-circle" })]
+          )
+        ])
+      })
+    ),
     _vm._v(" "),
     _c(
       "div",
@@ -3699,49 +3825,22 @@ var render = function() {
         _c(
           "div",
           { staticClass: "addMember-trigger-dropdown" },
-          [_c("select-staff")],
+          [
+            _c("select-staff", {
+              attrs: {
+                multiple: true,
+                alreadySelectMember: _vm.selectMemberIdArr
+              },
+              on: { change: _vm.changeSelectMember }
+            })
+          ],
           1
         )
       ]
     )
   ])
 }
-var staticRenderFns = [
-  function() {
-    var _vm = this
-    var _h = _vm.$createElement
-    var _c = _vm._self._c || _h
-    return _c("ul", { staticClass: "addMember-items" }, [
-      _c("li", { staticClass: "addMember-item" }, [
-        _c("img", {
-          staticClass: "avatar",
-          attrs: {
-            src: "https://res.papitube.com/no-icon.png",
-            title: "Herman Beck"
-          }
-        }),
-        _vm._v(" "),
-        _c("span", { staticClass: "addMember-remove" }, [
-          _c("i", { staticClass: "md-minus-circle" })
-        ])
-      ]),
-      _vm._v(" "),
-      _c("li", { staticClass: "addMember-item" }, [
-        _c("img", {
-          staticClass: "avatar",
-          attrs: {
-            src: "https://res.papitube.com/no-icon.png",
-            title: "Caleb Richards"
-          }
-        }),
-        _vm._v(" "),
-        _c("span", { staticClass: "addMember-remove" }, [
-          _c("i", { staticClass: "md-minus-circle" })
-        ])
-      ])
-    ])
-  }
-]
+var staticRenderFns = []
 render._withStripped = true
 module.exports = { render: render, staticRenderFns: staticRenderFns }
 if (false) {
@@ -3762,7 +3861,7 @@ var render = function() {
   var _c = _vm._self._c || _h
   return _c(
     "div",
-    { staticClass: "edit-wrap" },
+    {},
     [
       _vm.isEditInput
         ? [
@@ -3838,13 +3937,30 @@ var render = function() {
   var _c = _vm._self._c || _h
   return _c(
     "div",
-    { staticClass: "selector", attrs: { id: "inputSelectMember" } },
+    { staticClass: "selector", attrs: { id: "inputSelectMember" + this._uid } },
     [
-      _c("div", { staticClass: "float-left edit-wrap" }, [
+      _c("div", { staticClass: "float-left" }, [
         _c("input", {
+          directives: [
+            {
+              name: "model",
+              rawName: "v-model",
+              value: _vm.inputContent,
+              expression: "inputContent"
+            }
+          ],
           staticClass: "form-control",
           attrs: { type: "text", title: "", placeholder: this.placeholder },
-          on: { focus: _vm.showMember }
+          domProps: { value: _vm.inputContent },
+          on: {
+            focus: _vm.showMember,
+            input: function($event) {
+              if ($event.target.composing) {
+                return
+              }
+              _vm.inputContent = $event.target.value
+            }
+          }
         })
       ]),
       _vm._v(" "),
@@ -3861,7 +3977,13 @@ var render = function() {
           ],
           staticClass: "float-left"
         },
-        [_c("select-staff", { staticClass: "selector" })],
+        [
+          _c("select-staff", {
+            staticClass: "selector",
+            attrs: { multiple: this.multiple },
+            on: { change: _vm.changeSelectMember }
+          })
+        ],
         1
       )
     ]
@@ -3932,14 +4054,16 @@ var render = function() {
         )
       ]),
       _vm._v(" "),
-      _c(
-        "span",
-        {
-          staticClass: "team-add-all pl-2",
-          on: { click: _vm.selectAllMember }
-        },
-        [_c("i", { staticClass: "icon md-plus" })]
-      )
+      _vm.multiple
+        ? _c(
+            "span",
+            {
+              staticClass: "team-add-all pl-2",
+              on: { click: _vm.selectAllMember }
+            },
+            [_c("i", { staticClass: "icon md-plus" })]
+          )
+        : _vm._e()
     ]),
     _vm._v(" "),
     _c(
@@ -3983,8 +4107,8 @@ var render = function() {
                       {
                         name: "show",
                         rawName: "v-show",
-                        value: _vm.select.indexOf(user.id) > -1,
-                        expression: "select.indexOf(user.id) > -1"
+                        value: _vm.selectArr.indexOf(user.id) > -1,
+                        expression: "selectArr.indexOf(user.id) > -1"
                       }
                     ],
                     staticClass: "float-right"
@@ -4004,7 +4128,12 @@ var render = function() {
                   "div",
                   [
                     _c("departments-item", {
-                      attrs: { data: departmentData, select: _vm.select }
+                      attrs: {
+                        data: departmentData,
+                        select: _vm.selectArr,
+                        multiple: _vm.isMultiple
+                      },
+                      on: { change: _vm.memberChange }
                     })
                   ],
                   1
@@ -4172,7 +4301,7 @@ var render = function() {
   var _c = _vm._self._c || _h
   return _c(
     "div",
-    { staticClass: "edit-wrap" },
+    {},
     [
       _vm.isEditInput
         ? [
@@ -17496,7 +17625,7 @@ module.exports = redirect;
 
 var config = {
     tokenString: 'CORVUS-ACCESS-TOKEN',
-    apiUrl: 'https://sandbox-api-crm.papitube.com/',
+    apiUrl: 'https://sandbox-api-crm.papitube.com',
     imgUrl: 'https://res.papitube.com/',
 
     getHeaders: function getHeaders() {
@@ -17521,8 +17650,8 @@ var config = {
         __WEBPACK_IMPORTED_MODULE_0_js_cookie___default.a.remove(this.tokenString);
     },
 
-    clientId: '1',
-    clientSecret: 'password',
+    clientId: '2',
+    clientSecret: 'B7l68XEz38cHE8VqTZPzyYnSBgo17eaCRyuLtpul',
     getStatusCode: function getStatusCode() {
         var that = this;
         return {

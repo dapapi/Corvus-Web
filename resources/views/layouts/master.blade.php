@@ -61,9 +61,6 @@
     <script>
         Breakpoints();
 
-        function noneAvatar(image) {
-            image.src = 'https://res.papitube.com/no-avatar.png'
-        }
     </script>
 </head>
 <body class="animsition page-aside-left @yield('body-class')">
@@ -170,6 +167,10 @@
             Site.run();
         });
     })(document, window, jQuery);
+
+    function noneAvatar(image) {
+        image.src = 'https://res.papitube.com/no-avatar.png'
+    }
 </script>
 
 @yield('script')

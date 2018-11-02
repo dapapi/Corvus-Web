@@ -17,7 +17,7 @@
                     min: 0,
                     max: 100,
                 }
-            ).on('asSpinner::change', function (e) {
+            ).on('asSpinner:@change', function (e) {
                 self.$emit('change', e.currentTarget.value)
             })
         },

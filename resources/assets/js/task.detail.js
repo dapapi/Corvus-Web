@@ -84,9 +84,8 @@ let app = new Vue({
 
         methods: {
 
-            getProjects: function (pageNum = 1) {
+            getTask: function () {
                 let data = {
-                    page: pageNum,
                     include: 'user, gift, express',
                 };
 

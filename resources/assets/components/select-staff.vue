@@ -4,12 +4,12 @@
             <div class="page-nav-tabs">
                 <ul class="nav nav-tabs nav-tabs-line" role="tablist">
                     <li class="nav-item col-md-6" role="presentation">
-                        <a class="nav-link active" data-toggle="tab" href="#forum-team"
+                        <a class="nav-link active" data-toggle="tab" :href="'#forum-team' + this.componentId"
                            aria-controls="forum-base"
                            aria-expanded="true" role="tab"> 团队 </a>
                     </li>
                     <li class="nav-item col-md-6" role="presentation">
-                        <a class="nav-link" data-toggle="tab" href="#forum-department"
+                        <a class="nav-link" data-toggle="tab" :href="'#forum-department' + this.componentId"
                            aria-controls="forum-present"
                            aria-expanded="false" role="tab"> 部门 </a>
                     </li>
@@ -17,7 +17,7 @@
             </div>
 
             <div class="page-content tab-content nav-tabs-animate bg-white selector-page-content">
-                <div class="tab-pane animation-fade active" id="forum-team" role="tabpanel">
+                <div class="tab-pane animation-fade active" :id="'forum-team' + this.componentId" role="tabpanel">
                     <div class="input-search example">
                         <button type="submit" class="input-search-btn"><i class="icon md-search" aria-hidden="true"></i>
                         </button>
@@ -34,7 +34,7 @@
                                  <i class="icon md-account pl-2"></i>
                             泰洋系（{{ this.normalUsers.length }}人)
                             </span>
-                            <span class="team-add-all pl-2" @click="selectAllMember">
+                            <span class="team-add-all pl-2" @click="selectAllMember" v-if="isMultiple">
                                 <i class="icon md-plus"></i>
                             </span>
                         </div>
@@ -54,9 +54,10 @@
                     </div>
 
                 </div>
-                <div class="tab-pane animation-fade" id="forum-department" role="tabpanel">
+                <div class="tab-pane animation-fade" :id="'forum-department' + this.componentId" role="tabpanel">
                     <div v-for="department in departmentUsers">
-                        <departments-item :data="department" :select="selectIdArr"></departments-item>
+                        <departments-item :data="department" :select="selectIdArr"
+                                          @change="memberChange" :multiple="isMultiple"></departments-item>
                     </div>
                 </div>
             </div>
@@ -69,7 +70,7 @@
     import config from '../js/config'
 
     export default {
-        props: [],
+        props: ['multiple', 'alreadySelectMember'],
         data() {
             return {
                 normalUsers: {},
@@ -77,11 +78,14 @@
                 teamShow: true,
                 selectIdArr: [],
                 searchKeyWord: '',
+                componentId: '',
+                isMultiple: '',
             }
         },
         mounted() {
-
             let self = this;
+            self.componentId = self._uid;
+            self.isMultiple = self.multiple;
             $.ajax({
                 url: config.apiUrl + '/users',
                 headers: config.getHeaders(),
@@ -101,6 +105,20 @@
             })
 
         },
+
+        watch: {
+            selectIdArr: function (newValue) {
+                let tagArr = [];
+                for (let i = 0; i < newValue.length; i++) {
+                    tagArr.push(this.normalUsers.find(item => item.id == newValue[i]))
+                }
+                this.$emit('change', tagArr);
+            },
+            alreadySelectMember: function (newValue) {
+                this.selectIdArr = newValue
+            }
+        },
+
         methods: {
             closeTeam: function () {
                 this.teamShow = !this.teamShow
@@ -121,8 +139,15 @@
                 if (index > -1) {
                     this.selectIdArr.splice(index, 1)
                 } else {
+                    if (!this.isMultiple && this.selectIdArr.length > 0) {
+                        this.selectIdArr = []
+                    }
                     this.selectIdArr.push(userId)
                 }
+            },
+
+            memberChange: function (value) {
+                this.selectIdArr = value
             }
         }
     }

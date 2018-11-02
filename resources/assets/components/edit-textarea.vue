@@ -1,5 +1,5 @@
 <template>
-    <div class="edit-wrap">
+    <div class="">
         <template v-if="isEditInput">
             <textarea class="form-control" v-model="this.content"></textarea>
         </template>

@@ -89,7 +89,7 @@
                             {{--<td class="suf-cell"></td>--}}
                             {{--</tr>--}}
                         </table>
-                        <pagination :current_page="current_page" :method="getProjects" :total_pages="total_pages"
+                        <pagination :current_page="current_page" :method="getTasks" :total_pages="total_pages"
                                     :total="total"></pagination>
                     </div>
                     <div class="tab-pane animation-fade" id="forum-task-responsible" role="tabpanel">
@@ -133,60 +133,61 @@
                         <div class="example">
                             <div class="col-md-2 text-right float-left">关联资源</div>
                             <div class="col-md-10 float-left">
-                                {{--<normal-linkage-selectors></normal-linkage-selectors>--}}
+                                <normal-linkage-selectors @change="changeLinkage"></normal-linkage-selectors>
                             </div>
                         </div>
                         <div class="example">
                             <div class="col-md-2 text-right float-left">任务类型</div>
                             <div class="col-md-10 float-left pl-0">
-                                <selectors></selectors>
+                                <selectors :options="taskTypeArr" @change="changeTaskType"></selectors>
                             </div>
                         </div>
                         <div class="example">
                             <div class="col-md-2 text-right float-left">任务名称</div>
                             <div class="col-md-10 float-left pl-0">
-                                <input type="text" class="form-control" placeholder="请输入任务名称">
+                                <input type="text" class="form-control" placeholder="请输入任务名称" v-model="taskName">
                             </div>
                         </div>
                         <div class="example">
                             <div class="col-md-2 text-right float-left">负责人</div>
                             <div class="col-md-5 float-left pl-0">
-                                <input-selectors :placeholder="memberPlaceholder"></input-selectors>
+                                <input-selectors :placeholder="memberPlaceholder" :multiple="multiple"
+                                                 @change="principalChange"></input-selectors>
                             </div>
                         </div>
                         <div class="example">
                             <div class="col-md-2 text-right float-left">参与人</div>
                             <div class="col-md-10 float-left pl-0">
-                                <add-member></add-member>
+                                <add-member @change="participantChange"></add-member>
                             </div>
                         </div>
                         <div class="example">
                             <div class="col-md-2 text-right float-left pl-0">任务优先级</div>
                             <div class="col-md-10 float-left pl-0">
-                                <selectors></selectors>
+                                <selectors :options="taskLevelArr" @change="changeTaskLevel"></selectors>
                             </div>
                         </div>
                         <div class="example">
                             <div class="col-md-2 text-right float-left">开始时间</div>
                             <div class="col-md-4 float-left pl-0">
-                                <datepicker></datepicker>
+                                <datepicker @change="changeStartTime"></datepicker>
                             </div>
                             <div class="col-md-2 text-right float-left">截止时间</div>
                             <div class="col-md-4 float-left pl-0">
-                                <datepicker></datepicker>
+                                <datepicker @change="changeEndTime"></datepicker>
                             </div>
                         </div>
                         <div class="example">
                             <div class="col-md-2 text-right float-left">任务说明</div>
                             <div class="col-md-10 float-left pl-0">
                                 <textarea class="form-control" name="taskDescription" id="" cols="30"
-                                          rows="5" title=""></textarea>
+                                          rows="5" title="" v-model="taskIntroduce"></textarea>
                             </div>
                         </div>
                     </div>
                     <div class="modal-footer">
                         <button class="btn btn-sm btn-white btn-pure" data-dismiss="modal">取消</button>
-                        <button class="btn btn-primary" type="submit">确定</button>
+                        <button class="btn btn-primary" type="submit" @click="addTask">确定</button>
                     </div>
 
                 </div>
