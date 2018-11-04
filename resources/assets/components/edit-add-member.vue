@@ -1,7 +1,7 @@
 <template>
     <div class="">
         <template v-if="isEditAdd">
-            <add-member></add-member>
+            <add-member @change="changeMember"></add-member>
         </template>
         <template v-else>
             {{ content }}
@@ -27,7 +27,11 @@
                 this.isEditAdd = newValue;
             },
         },
-        methods: {}
+        methods: {
+            changeMember: function (value) {
+                this.$emit('change', value)
+            }
+        }
     }
 </script>
 

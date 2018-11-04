@@ -1,11 +1,11 @@
 <template>
     <div>
         <template v-if="isEditSelect">
-            <selectors :options="this.testOptions" @change="changeSelect"
+            <selectors :options="this.options" @change="changeSelect"
                        ref="selector"></selectors>
         </template>
         <template v-else>
-            {{ this.testOptions.find(item => item.value == this.content).name }}
+            {{ this.options.find(item => item.value == this.content).name }}
         </template>
     </div>
 </template>
@@ -17,23 +17,6 @@
         data() {
             return {
                 isEditSelect: false,
-                testOptions: [
-                    {
-                        name: '进行中',
-                        value: 1,
-                        id: 1
-                    },
-                    {
-                        name: '已完成',
-                        value: 2,
-                        id: 2
-                    },
-                    {
-                        name: '已暂停',
-                        value: 3,
-                        id: 3
-                    },
-                ]
             }
         },
 

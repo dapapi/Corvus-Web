@@ -39,23 +39,23 @@
 
                 <div class="col-md-12">
                     <ul class="nav nav-tabs nav-tabs-line" role="tablist">
-                        <li class="nav-item" role="presentation">
-                            <a class="nav-link active" data-toggle="tab" href="#forum-task-all"
+                        <li class="nav-item" role="presentation" @click="getTasks(1)">
+                            <a class="nav-link active" data-toggle="tab" href="#forum-task"
                                aria-controls="forum-base"
                                aria-expanded="true" role="tab">所有任务</a>
                         </li>
-                        <li class="nav-item" role="presentation">
-                            <a class="nav-link" data-toggle="tab" href="#forum-task-responsible"
+                        <li class="nav-item" role="presentation" @click="getMyTasks(1,3)">
+                            <a class="nav-link" data-toggle="tab" href="#forum-task"
                                aria-controls="forum-present"
                                aria-expanded="false" role="tab">我负责的</a>
                         </li>
-                        <li class="nav-item" role="presentation">
-                            <a class="nav-link" data-toggle="tab" href="#forum-task-participate"
+                        <li class="nav-item" role="presentation" @click="getMyTasks(1,2)">
+                            <a class="nav-link" data-toggle="tab" href="#forum-task"
                                aria-controls="forum-present"
                                aria-expanded="false" role="tab">我参与的</a>
                         </li>
-                        <li class="nav-item" role="presentation">
-                            <a class="nav-link" data-toggle="tab" href="#forum-task-create"
+                        <li class="nav-item" role="presentation" @click="getMyTasks(1,1)">
+                            <a class="nav-link" data-toggle="tab" href="#forum-task"
                                aria-controls="forum-present"
                                aria-expanded="false" role="tab">我创建的</a>
                         </li>
@@ -63,7 +63,7 @@
                 </div>
 
                 <div class="page-content tab-content nav-tabs-animate bg-white">
-                    <div class="tab-pane animation-fade active" id="forum-task-all" role="tabpanel">
+                    <div class="tab-pane animation-fade active" id="forum-task" role="tabpanel">
                         <table class="table is-indent" data-plugin="animateList" data-animate="fade"
                                data-child="tr"
                                data-selectable="selectable">
@@ -78,28 +78,29 @@
                                 <th class="cell-300" scope="col">截止时间</th>
                                 <th class="suf-cell"></th>
                             </tr>
-                            {{--<tr v-for="task in tasksInfo ">--}}
-                            {{--<td class="pre-cell"></td>--}}
-                            {{--<td>@{{ task.name }}</td>--}}
-                            {{--<td>@{{ task.principal }}</td>--}}
-                            {{--<td>@{{ task.progress }}</td>--}}
-                            {{--<td>@{{ task.sign_time }}</td>--}}
-                            {{--<td>@{{ task.delivery }}</td>--}}
-                            {{--<td>@{{ task.follow_time }}</td>--}}
-                            {{--<td class="suf-cell"></td>--}}
-                            {{--</tr>--}}
+                            <tr v-for="task in tasksInfo">
+                                <td class="pre-cell"></td>
+                                <td class="detail-content" @click="redirectTaskDetail(task.id)">@{{ task.title }}</td>
+                                <td>暂无</td>
+                                <td>暂无</td>
+                                <td>
+                                    <template v-if="task.status === 1">进行中</template>
+                                    <template v-if="task.status === 2">已完成</template>
+                                    <template v-if="task.status === 3">已停止</template>
+                                </td>
+                                <td>@{{ task.principal }}</td>
+                                <td>@{{ task.end_at }}</td>
+                                <td class="suf-cell"></td>
+                            </tr>
                         </table>
-                        <pagination :current_page="current_page" :method="getTasks" :total_pages="total_pages"
-                                    :total="total"></pagination>
-                    </div>
-                    <div class="tab-pane animation-fade" id="forum-task-responsible" role="tabpanel">
-                        我负责的
-                    </div>
-                    <div class="tab-pane animation-fade" id="forum-task-participate" role="tabpanel">
-                        我参与的
-                    </div>
-                    <div class="tab-pane animation-fade" id="forum-task-create" role="tabpanel">
-                        我创建的
+                        <template v-if="!taskStatus">
+                            <pagination :current_page="current_page" :method="getTasks" :total_pages="total_pages"
+                                        :total="total"></pagination>
+                        </template>
+                        <template v-else>
+                            <pagination :current_page="current_page" :method="getMyTasks" :total_pages="total_pages"
+                                        :total="total"></pagination>
+                        </template>
                     </div>
                 </div>
 
@@ -176,6 +177,7 @@
                             <div class="col-md-4 float-left pl-0">
                                 <datepicker @change="changeEndTime"></datepicker>
                             </div>
+                            {{-- todo 时间组件加上小时分钟 --}}
                         </div>
                         <div class="example">
                             <div class="col-md-2 text-right float-left">任务说明</div>

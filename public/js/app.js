@@ -106,7 +106,11 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
     },
 
 
-    watch: {},
+    watch: {
+        selectMemberArr: function selectMemberArr(newValue) {
+            this.$emit('change', newValue);
+        }
+    },
 
     methods: {
 
@@ -765,7 +769,11 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
             this.isEditAdd = newValue;
         }
     },
-    methods: {}
+    methods: {
+        changeMember: function changeMember(value) {
+            this.$emit('change', value);
+        }
+    }
 });
 
 /***/ }),
@@ -804,6 +812,7 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
             if (newValue) {
                 var _this = this;
                 setTimeout(function () {
+                    console.log(_this.content);
                     _this.$refs.datepicker.setValue(_this.content);
                 }, 0);
             } else {
@@ -853,7 +862,11 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
             this.isEditSelect = newValue;
         }
     },
-    methods: {}
+    methods: {
+        changeMember: function changeMember(value) {
+            this.$emit('change', value);
+        }
+    }
 });
 
 /***/ }),
@@ -917,20 +930,7 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
     props: ['options', 'is-edit', 'content'],
     data: function data() {
         return {
-            isEditSelect: false,
-            testOptions: [{
-                name: '进行中',
-                value: 1,
-                id: 1
-            }, {
-                name: '已完成',
-                value: 2,
-                id: 2
-            }, {
-                name: '已暂停',
-                value: 3,
-                id: 3
-            }]
+            isEditSelect: false
         };
     },
     mounted: function mounted() {},
@@ -987,6 +987,9 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
     watch: {
         isEdit: function isEdit(newValue) {
             this.isEditInput = newValue;
+        },
+        content: function content(newValue) {
+            this.$emit('change', newValue);
         }
     },
     methods: {}
@@ -1723,7 +1726,7 @@ exports = module.exports = __webpack_require__("./node_modules/css-loader/lib/cs
 
 
 // module
-exports.push([module.i, "\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n", ""]);
+exports.push([module.i, "\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n", ""]);
 
 // exports
 
@@ -1738,7 +1741,7 @@ exports = module.exports = __webpack_require__("./node_modules/css-loader/lib/cs
 
 
 // module
-exports.push([module.i, "\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n", ""]);
+exports.push([module.i, "\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n", ""]);
 
 // exports
 
@@ -1753,7 +1756,7 @@ exports = module.exports = __webpack_require__("./node_modules/css-loader/lib/cs
 
 
 // module
-exports.push([module.i, "\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n", ""]);
+exports.push([module.i, "\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n", ""]);
 
 // exports
 
@@ -1813,7 +1816,7 @@ exports = module.exports = __webpack_require__("./node_modules/css-loader/lib/cs
 
 
 // module
-exports.push([module.i, "\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n", ""]);
+exports.push([module.i, "\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n", ""]);
 
 // exports
 
@@ -1843,7 +1846,7 @@ exports = module.exports = __webpack_require__("./node_modules/css-loader/lib/cs
 
 
 // module
-exports.push([module.i, "\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n", ""]);
+exports.push([module.i, "\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n", ""]);
 
 // exports
 
@@ -1858,7 +1861,7 @@ exports = module.exports = __webpack_require__("./node_modules/css-loader/lib/cs
 
 
 // module
-exports.push([module.i, "\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n", ""]);
+exports.push([module.i, "\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n", ""]);
 
 // exports
 
@@ -3735,7 +3738,7 @@ var render = function() {
         ? [
             _c("selectors", {
               ref: "selector",
-              attrs: { options: this.testOptions },
+              attrs: { options: this.options },
               on: { change: _vm.changeSelect }
             })
           ]
@@ -3743,7 +3746,7 @@ var render = function() {
             _vm._v(
               "\n        " +
                 _vm._s(
-                  this.testOptions.find(function(item) {
+                  this.options.find(function(item) {
                     return item.value == this$1.content
                   }).name
                 ) +
@@ -4184,7 +4187,7 @@ var render = function() {
     {},
     [
       _vm.isEditAdd
-        ? [_c("add-member")]
+        ? [_c("add-member", { on: { change: _vm.changeMember } })]
         : [_vm._v("\n        " + _vm._s(_vm.content) + "\n    ")]
     ],
     2
@@ -4274,7 +4277,7 @@ var render = function() {
     {},
     [
       _vm.isEditSelect
-        ? [_c("input-selectors")]
+        ? [_c("input-selectors", { on: { change: _vm.changeMember } })]
         : [_vm._v("\n        " + _vm._s(_vm.content) + "\n    ")]
     ],
     2
@@ -17592,6 +17595,7 @@ $(function () {
         __WEBPACK_IMPORTED_MODULE_0__config__["a" /* default */].deleteAccessToken();
         __WEBPACK_IMPORTED_MODULE_1__bootstrap___default()('/login');
     });
+    var toatr = $('#toatr');
 });
 
 /***/ }),

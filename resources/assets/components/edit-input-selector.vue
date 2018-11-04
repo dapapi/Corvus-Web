@@ -1,7 +1,7 @@
 <template>
     <div class="">
         <template v-if="isEditSelect">
-            <input-selectors></input-selectors>
+            <input-selectors @change="changeMember"></input-selectors>
         </template>
         <template v-else>
             {{ content }}
@@ -27,7 +27,11 @@
                 this.isEditSelect = newValue;
             },
         },
-        methods: {}
+        methods: {
+            changeMember: function (value) {
+                this.$emit('change', value)
+            }
+        }
     }
 </script>
 

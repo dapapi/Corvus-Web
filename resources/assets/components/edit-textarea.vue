@@ -21,6 +21,9 @@
         watch: {
             isEdit(newValue) {
                 this.isEditInput = newValue;
+            },
+            content(newValue) {
+                this.$emit('change', newValue)
             }
         },
         methods: {}

@@ -20,6 +20,8 @@ mix.js('resources/assets/js/app.js', 'public/js')
     .js('resources/assets/js/project.management.js', 'public/js')
     .js('resources/assets/js/task.index.js', 'public/js')
     .js('resources/assets/js/task.detail.js', 'public/js')
+    .js('resources/assets/js/sales.index.js', 'public/js')
+    .js('resources/assets/js/sales.detail.js', 'public/js')
 
     .sass('resources/assets/sass/side-mask.scss', 'public/css')
     .sass('resources/assets/sass/login.scss', 'public/css')

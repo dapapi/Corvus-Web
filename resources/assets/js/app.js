@@ -42,7 +42,8 @@ $(function () {
     $('#logout-btn').click(function () {
         config.deleteAccessToken();
         redirect('/login')
-    })
+    });
+    let toatr = $('#toatr');
 });
 
 

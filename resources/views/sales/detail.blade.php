@@ -1,6 +1,6 @@
 @extends('layouts.master')
 
-@section('title','任务')
+@section('title','销售线索')
 
 @section('style')
     <link rel="stylesheet" href="{{ mix('css/task.css') }}">
@@ -18,20 +18,25 @@
     <div class="page" id="root">
 
         <div class="page-header page-header-bordered">
-            <h1 class="page-title d-inline">任务</h1>
+            <h1 class="page-title d-inline">销售线索</h1>
 
             <div class="page-header-actions dropdown show task-dropdown float-right">
                 <i class="icon md-more font-size-24" aria-hidden="true" id="taskDropdown"
                    data-toggle="dropdown" aria-expanded="false"></i>
                 <div class="dropdown-menu dropdown-menu-right task-dropdown-item" aria-labelledby="taskDropdown"
                      role="menu" x-placement="bottom-end">
-                    <a class="dropdown-item" role="menuitem" @click="changeTaskStatus(3)">暂停</a>
-                    <a class="dropdown-item" role="menuitem" @click="changeTaskStatus(2)">完成</a>
+                    <a class="dropdown-item" role="menuitem" @click="editBaseInfo">编辑</a>
+                    <a class="dropdown-item" role="menuitem">暂停</a>
+                    <a class="dropdown-item" role="menuitem">完成</a>
                     <a class="dropdown-item" role="menuitem" data-toggle="modal" data-target="#customizeFieldContent">自定义字段</a>
-                    <a class="dropdown-item" role="menuitem" @click="privacyTask">转私密</a>
-                    <a class="dropdown-item" role="menuitem" @click="deleteTask">删除</a>
+                    <a class="dropdown-item" role="menuitem">专私密</a>
+                    <a class="dropdown-item" role="menuitem">删除</a>
                 </div>
             </div>
+            <span class="float-right mr-40" v-show="isEdit">
+                <button class="btn btn-sm btn-white btn-pure" @click="cancelEdit">取消</button>
+                <button class="btn btn-primary">确定</button>
+            </span>
         </div>
 
         <div class="page-content container-fluid">
@@ -44,7 +49,7 @@
                             <i class="md-plus pr-2" aria-hidden="true"></i>负责人
                         </div>
                         <div class="font-weight-bold float-left">
-                            张测试
+                            <edit-input-selector :content="'张测试'" :is-edit="isEdit" @change=""></edit-input-selector>
                         </div>
                     </div>
                     <div class="card-text clearfix example">
@@ -52,9 +57,7 @@
                             <i class="md-plus pr-2" aria-hidden="true"></i>任务状态
                         </div>
                         <div class="font-weight-bold float-left">
-                            <template v-if="taskInfo.status === 1">进行中</template>
-                            <template v-else-if="taskInfo.status === 2">已完成</template>
-                            <template v-else-if="taskInfo.status === 3">已停止</template>
+                            <edit-selector :content="'2'" :is-edit="isEdit" @change=""></edit-selector>
                         </div>
                     </div>
                     <div class="card-text clearfix example">
@@ -63,7 +66,7 @@
                                 <i class="md-plus pr-2" aria-hidden="true"></i>结束时间
                             </div>
                             <div class="font-weight-bold float-left">
-                                @{{ taskInfo.end_at }}
+                                <edit-datepicker :content="'2018-09-03'" :is-edit="isEdit" @change=""></edit-datepicker>
                             </div>
                         </div>
                         <div class="float-right text-right pr-0">
@@ -95,96 +98,54 @@
                         </li>
                     </ul>
                 </div>
-                <div class="tab-content nav-tabs-animate bg-white col-md-12" v-if="taskInfo">
+                <div class="tab-content nav-tabs-animate bg-white col-md-12">
                     <div class="tab-pane animation-fade active" id="forum-task-base" role="tabpanel">
                         <div class="card">
                             <div class="card-header card-header-transparent card-header-bordered">
-                                <div class="float-left font-weight-bold third-title">任务详情</div>
-                                <div class="float-right">
-                                    <i class="icon md-edit" aria-hidden="true" @click="editBaseInfo"></i>
-                                </div>
-                                <div class="float-right mr-40" v-show="isEdit">
-                                    <button class="btn btn-sm btn-white btn-pure" @click="cancelEdit">取消</button>
-                                    <button class="btn btn-primary" @click="changeTaskBaseInfo">确定</button>
-                                </div>
+                                <h5>任务详情</h5>
                             </div>
                             <div class="card-block">
                                 <div class="card-text py-5 clearfix">
-                                    <div class="col-md-1 float-left text-right pl-0">负责人</div>
-                                    <div class="col-md-11 float-left font-weight-bold">
-                                        <div class="edit-wrap">
-                                            <edit-input-selector :content="'张测试'" :is-edit="isEdit"
-                                                                 @change="changeTaskPrincipal"></edit-input-selector>
-                                        </div>
-                                    </div>
-                                </div>
-                                <div class="card-text py-5 clearfix">
                                     <div class="col-md-1 float-left text-right pl-0">参与人</div>
                                     <div class="col-md-11 float-left font-weight-bold">
-                                        <edit-add-member :content="participantsArr.join('、')" :is-edit="isEdit"
-                                                         @change="changeTaskParticipants"></edit-add-member>
+                                        <edit-add-member :content="'测试1、测试2'" :is-edit="isEdit"></edit-add-member>
                                     </div>
                                 </div>
                                 <div class="card-text py-5 clearfix">
                                     <div class="col-md-1 float-left text-right pl-0">开始时间</div>
                                     <div class="col-md-11 float-left font-weight-bold">
-                                        <div class="edit-wrap">
-                                            <edit-datepicker :content="taskInfo.start_at" :is-edit="isEdit"
-                                                             @change="changeTaskStartTime"></edit-datepicker>
-                                        </div>
+                                        <edit-datepicker :content="'2018-09-03'" :is-edit="isEdit"
+                                                         @change=""></edit-datepicker>
                                     </div>
                                 </div>
-                                {{--<div class="card-text py-5 clearfix">--}}
-                                {{--<div class="col-md-1 float-left text-right pl-0">任务状态</div>--}}
-                                {{--<div class="col-md-11 float-left font-weight-bold">--}}
-                                {{--<edit-selector :content="taskInfo.status" :is-edit="isEdit"--}}
-                                {{--@change="changeTaskStatus"--}}
-                                {{--:options="taskStatusArr"></edit-selector>--}}
-                                {{--</div>--}}
-                                {{--</div>--}}
                                 <div class="card-text py-5 clearfix">
                                     <div class="col-md-1 float-left text-right pl-0">优先级</div>
                                     <div class="col-md-11 float-left font-weight-bold">
-                                        <edit-selector :content="taskInfo.priority" :is-edit="isEdit"
-                                                       :options="priorityArr" @change="changeTaskLevel"></edit-selector>
+                                        <edit-selector :content="'2'" :is-edit="isEdit" @change=""></edit-selector>
                                     </div>
                                 </div>
                                 <div class="card-text py-5 clearfix">
                                     <div class="col-md-1 float-left text-right pl-0">任务说明</div>
                                     <div class="col-md-11 float-left font-weight-bold">
-                                        <div class="">
-                                            <edit-textarea :content="taskInfo.desc"
-                                                           :is-edit="isEdit"
-                                                           @change="changeTaskIntroduce"></edit-textarea>
-                                        </div>
+                                        <edit-textarea :content="'要求所有参与人必须参加此电话会议'" :is-edit="isEdit"></edit-textarea>
                                     </div>
                                 </div>
-                                <div class="card-text py-5 clearfix">
-                                    <div class="col-md-1 float-left text-right pl-0">结束时间</div>
-                                    <div class="col-md-11 float-left font-weight-bold">
-                                        <div class="edit-wrap">
-                                            <edit-datepicker :content="taskInfo.end_at" :is-edit="isEdit"
-                                                             @change="changeEndTime"></edit-datepicker>
-                                        </div>
-                                    </div>
-                                </div>
+
                                 <div class="card-text py-5 clearfix">
                                     <div class="col-md-1 float-left text-right pl-0">完成时间</div>
                                     <div class="col-md-11 float-left font-weight-bold">
-                                        暂无
+                                        2018-09-03
                                     </div>
                                 </div>
-                                <div class="card-text py-5 clearfix" v-if="taskInfo.stop_at">
+                                <div class="card-text py-5 clearfix">
                                     <div class="col-md-1 float-left text-right pl-0">停止时间</div>
                                     <div class="col-md-11 float-left font-weight-bold">
-                                        @{{ taskInfo.stop_at }}
+                                        2018-09-03
                                     </div>
                                 </div>
                                 <div class="card-text py-5 clearfix">
                                     <div class="col-md-1 float-left text-right pl-0">创建人</div>
-                                    <div class="col-md-11 float-left font-weight-bold">
-                                        @{{ taskInfo.creator.data.name }}
-                                    </div>
+                                    <div class="col-md-11 float-left font-weight-bold">测试1</div>
                                 </div>
                             </div>
                         </div>
@@ -195,18 +156,23 @@
                                 <h5 class="d-inline float-left">上传附件</h5>
                                 <div class="d-inline float-right">
                                     <i class="md-attachment-alt" aria-hidden="true"></i>
-                                    <input type="file" @change="uploadAttachment">
+                                    <input type="file">
                                 </div>
                             </div>
                             <div class="card-block">
                                 <ul class="file-list">
                                     <li>
                                         <i class="md-file pr-5"></i> 会议记要模版
-                                        <span class="float-right pl-10"
-                                              @click="deleteAttachment(attachment.id)">删除</span>
+                                        <span class="float-right pl-10">删除</span>
                                         <span class="float-right px-10">|</span>
-                                        <span class="float-right px-10"
-                                              @click="downloadAttachment(attachment.id, attachment.url)">下载</span>
+                                        <span class="float-right px-10">下载</span>
+                                        <span class="float-right px-10">200kb</span>
+                                    </li>
+                                    <li>
+                                        <i class="md-file pr-5"></i> 会议记要模版
+                                        <span class="float-right pl-10">删除</span>
+                                        <span class="float-right px-10">|</span>
+                                        <span class="float-right px-10">下载</span>
                                         <span class="float-right px-10">200kb</span>
                                     </li>
                                 </ul>
@@ -228,19 +194,14 @@
                                 <th class="cell-300" scope="col">截止日期</th>
                                 <th class="suf-cell"></th>
                             </tr>
-                            <tr v-for="task in taskInfo.tasks.data">
+                            <tr>
                                 <td class="pre-cell"></td>
-                                <td>@{{ task.title }}</td>
-                                <td>@{{ task.type }}</td>
-                                <td>
-                                    <template v-if="task.status === 1">进行中</template>
-                                    <template v-if="task.status === 2">已完成</template>
-                                    <template v-if="task.status === 3">已停止</template>
-                                </td>
-                                <td>@{{ task.principal }}</td>
-                                <td>@{{ task.end_at }}</td>
+                                <td>电话组织会议</td>
+                                <td>类型一</td>
+                                <td>进行中</td>
+                                <td>张测试</td>
+                                <td>2018-09-23 10:23</td>
                             </tr>
-                            {{-- todo 缺少子任务页面--}}
                         </table>
 
                         <div class="site-action add-child-task" data-plugin="actionBtn" data-toggle="modal"
@@ -290,56 +251,54 @@
                         <div class="example">
                             <div class="col-md-2 text-right float-left">关联资源</div>
                             <div class="col-md-10 float-left">
-                                <normal-linkage-selectors @change="addLinkage"></normal-linkage-selectors>
+                                <normal-linkage-selectors></normal-linkage-selectors>
                             </div>
                         </div>
                         <div class="example">
                             <div class="col-md-2 text-right float-left">任务类型</div>
                             <div class="col-md-10 float-left pl-0">
-                                <selectors :options="taskTypeArr" @change="addTaskType"></selectors>
+                                <selectors></selectors>
                             </div>
                         </div>
                         <div class="example">
                             <div class="col-md-2 text-right float-left">任务名称</div>
                             <div class="col-md-10 float-left pl-0">
-                                <input type="text" class="form-control" placeholder="请输入任务名称" v-model="taskName">
+                                <input type="text" class="form-control" placeholder="请输入任务名称">
                             </div>
                         </div>
                         <div class="example">
                             <div class="col-md-2 text-right float-left">负责人</div>
                             <div class="col-md-5 float-left pl-0">
-                                <input-selectors :placeholder="memberPlaceholder" :multiple="multiple"
-                                                 @change="addPrincipal"></input-selectors>
+                                <input-selectors :placeholder="memberPlaceholder"></input-selectors>
                             </div>
                         </div>
                         <div class="example">
                             <div class="col-md-2 text-right float-left">参与人</div>
                             <div class="col-md-10 float-left pl-0">
-                                <add-member @change="addParticipant"></add-member>
+                                <add-member></add-member>
                             </div>
                         </div>
                         <div class="example">
                             <div class="col-md-2 text-right float-left pl-0">任务优先级</div>
                             <div class="col-md-10 float-left pl-0">
-                                <selectors :options="taskLevelArr" @change="addTaskLevel"></selectors>
+                                <selectors></selectors>
                             </div>
                         </div>
                         <div class="example">
                             <div class="col-md-2 text-right float-left">开始时间</div>
                             <div class="col-md-4 float-left pl-0">
-                                <datepicker @change="addStartTime"></datepicker>
+                                <datepicker></datepicker>
                             </div>
                             <div class="col-md-2 text-right float-left">截止时间</div>
                             <div class="col-md-4 float-left pl-0">
-                                <datepicker @change="addEndTime"></datepicker>
+                                <datepicker></datepicker>
                             </div>
-                            {{-- todo 时间组件加上小时分钟 --}}
                         </div>
                         <div class="example">
                             <div class="col-md-2 text-right float-left">任务说明</div>
                             <div class="col-md-10 float-left pl-0">
                                 <textarea class="form-control" name="taskDescription" id="" cols="30"
-                                          rows="5" title="" v-model="taskIntroduce"></textarea>
+                                          rows="5" title=""></textarea>
                             </div>
                         </div>
                         <div class="col-md-12">
@@ -351,7 +310,7 @@
                     </div>
                     <div class="modal-footer">
                         <button class="btn btn-sm btn-white btn-pure" data-dismiss="modal">取消</button>
-                        <button class="btn btn-primary" @click="addChildTask">确定</button>
+                        <button class="btn btn-primary" type="submit">确定</button>
                     </div>
                 </div>
             </div>

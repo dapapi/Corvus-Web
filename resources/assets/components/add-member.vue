@@ -34,7 +34,9 @@
         },
 
         watch: {
-
+            selectMemberArr: function (newValue) {
+                this.$emit('change', newValue)
+            }
         },
 
         methods: {
