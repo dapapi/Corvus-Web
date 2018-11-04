@@ -21,13 +21,8 @@
                                 </a>
                             </li>
                             <li class="site-menu-item">
-                                <a class="animsition-link" href="/sales/index">
+                                <a class="animsition-link" href="/trail/index">
                                     <span class="site-menu-title">销售线索</span>
-                                </a>
-                            </li>
-                            <li class="site-menu-item">
-                                <a class="animsition-link" href="/sales/detail">
-                                    <span class="site-menu-title">销售线索详情</span>
                                 </a>
                             </li>
                         </ul>

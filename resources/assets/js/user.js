@@ -28,12 +28,16 @@ class User {
                 avatar: userData.avatar,
                 nickname: userData.name
             }
-            callback(json)
+            callback(json, userData.company)
         })
     }
 
     storeToLocal(json) {
         Cookies.set('user', json)
+    }
+
+    storeCompamyTypeToLocal(type) {
+        Cookies.set('companyType', type)
     }
 
     getFromLocal() {

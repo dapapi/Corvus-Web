@@ -100,8 +100,10 @@ function initLoginForm() {
             let token = resposne.access_token;
             config.setAccessToken(token);
             let user = new User();
-            user.fecth(function (userJson) {
+            user.fecth(function (userJson, companyType) {
                 user.storeToLocal(userJson);
+                console.log(companyType);
+                user.storeCompamyTypeToLocal(companyType);
                 redirect('/')
             })
 

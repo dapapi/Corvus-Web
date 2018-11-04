@@ -1202,7 +1202,7 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
                 return value;
             },
             min: 0,
-            max: 100
+            max: 100000000
         }).on('asSpinner:@change', function (e) {
             self.$emit('change', e.currentTarget.value);
         });
@@ -1411,8 +1411,8 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
         $.ajax({
             url: __WEBPACK_IMPORTED_MODULE_0__js_config__["a" /* default */].apiUrl + '/users',
             headers: __WEBPACK_IMPORTED_MODULE_0__js_config__["a" /* default */].getHeaders(),
-            type: 'get',
-            statusCode: __WEBPACK_IMPORTED_MODULE_0__js_config__["a" /* default */].getStatusCode()
+            type: 'get'
+            // statusCode: config.getStatusCode()
         }).done(function (response) {
             self.normalUsers = response.data;
         });
@@ -1420,8 +1420,8 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
         $.ajax({
             url: __WEBPACK_IMPORTED_MODULE_0__js_config__["a" /* default */].apiUrl + '/departments',
             headers: __WEBPACK_IMPORTED_MODULE_0__js_config__["a" /* default */].getHeaders(),
-            type: 'get',
-            statusCode: __WEBPACK_IMPORTED_MODULE_0__js_config__["a" /* default */].getStatusCode()
+            type: 'get'
+            // statusCode: config.getStatusCode()
         }).done(function (response) {
             self.departmentUsers = response.data;
         });
@@ -1613,6 +1613,7 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
 
 /* harmony default export */ __webpack_exports__["default"] = ({
     name: "task-follow-up",
+    props: ['follow-type'],
     data: function data() {
         return {
             showButton: false,
@@ -3450,7 +3451,50 @@ var render = function() {
     [
       _c("change-size-input", { on: { change: _vm.followTask } }),
       _vm._v(" "),
-      _vm._m(0)
+      _c(
+        "div",
+        {
+          staticClass: "nav-tabs-horizontal example",
+          attrs: { "data-plugin": "tabs" }
+        },
+        [
+          _c(
+            "ul",
+            {
+              staticClass: "nav nav-tabs no-nav-tab-border",
+              attrs: { role: "tablist" }
+            },
+            [
+              _vm._m(0),
+              _vm._v(" "),
+              _c(
+                "li",
+                { staticClass: "nav-item", attrs: { role: "presentation" } },
+                [
+                  _c(
+                    "a",
+                    {
+                      staticClass: "nav-link",
+                      attrs: {
+                        "data-toggle": "tab",
+                        href: "#task-follow",
+                        "aria-controls": "exampleTabsTwo",
+                        role: "tab",
+                        "aria-selected": "false"
+                      }
+                    },
+                    [_vm._v(_vm._s(this.followType) + "跟进")]
+                  )
+                ]
+              ),
+              _vm._v(" "),
+              _vm._m(1)
+            ]
+          ),
+          _vm._v(" "),
+          _vm._m(2)
+        ]
+      )
     ],
     1
   )
@@ -3461,164 +3505,127 @@ var staticRenderFns = [
     var _h = _vm.$createElement
     var _c = _vm._self._c || _h
     return _c(
-      "div",
-      {
-        staticClass: "nav-tabs-horizontal example",
-        attrs: { "data-plugin": "tabs" }
-      },
+      "li",
+      { staticClass: "nav-item", attrs: { role: "presentation" } },
       [
         _c(
-          "ul",
+          "a",
           {
-            staticClass: "nav nav-tabs no-nav-tab-border",
-            attrs: { role: "tablist" }
+            staticClass: "nav-link active",
+            attrs: {
+              "data-toggle": "tab",
+              href: "#all-task-follow-up",
+              "aria-controls": "exampleTabsOne",
+              role: "tab",
+              "aria-selected": "true"
+            }
           },
-          [
-            _c(
-              "li",
-              { staticClass: "nav-item", attrs: { role: "presentation" } },
-              [
-                _c(
-                  "a",
-                  {
-                    staticClass: "nav-link active",
-                    attrs: {
-                      "data-toggle": "tab",
-                      href: "#all-task-follow-up",
-                      "aria-controls": "exampleTabsOne",
-                      role: "tab",
-                      "aria-selected": "true"
-                    }
-                  },
-                  [_vm._v("全部")]
-                )
-              ]
-            ),
-            _vm._v(" "),
-            _c(
-              "li",
-              { staticClass: "nav-item", attrs: { role: "presentation" } },
-              [
-                _c(
-                  "a",
-                  {
-                    staticClass: "nav-link",
-                    attrs: {
-                      "data-toggle": "tab",
-                      href: "#task-follow",
-                      "aria-controls": "exampleTabsTwo",
-                      role: "tab",
-                      "aria-selected": "false"
-                    }
-                  },
-                  [_vm._v("任务跟进")]
-                )
-              ]
-            ),
-            _vm._v(" "),
-            _c(
-              "li",
-              { staticClass: "nav-item", attrs: { role: "presentation" } },
-              [
-                _c(
-                  "a",
-                  {
-                    staticClass: "nav-link",
-                    attrs: {
-                      "data-toggle": "tab",
-                      href: "#task-active",
-                      "aria-controls": "exampleTabsThree",
-                      role: "tab",
-                      "aria-selected": "false"
-                    }
-                  },
-                  [_vm._v("动态")]
-                )
-              ]
-            )
-          ]
-        ),
-        _vm._v(" "),
-        _c("div", { staticClass: "tab-content pt-20" }, [
-          _c(
-            "div",
-            {
-              staticClass: "tab-pane active",
-              attrs: { id: "all-task-follow-up", role: "tabpanel" }
-            },
-            [
-              _c("ul", { staticClass: "task-follow" }, [
-                _c("li", [
-                  _c("div", { staticClass: "change-dot bg-green-500" }),
-                  _vm._v(" "),
-                  _c("div", { staticClass: "follow-item" }, [
-                    _c("div", { staticClass: "change-time" }, [
-                      _vm._v("2018-09-78")
-                    ]),
-                    _vm._v(" "),
-                    _c("div", { staticClass: "change-text" }, [
-                      _vm._v(
-                        "张测试 添加博主跟进 博主说明天回复，是否与我们签约。"
-                      )
-                    ])
-                  ])
-                ]),
-                _vm._v(" "),
-                _c("li", [
-                  _c("div", { staticClass: "change-dot bg-green-500" }),
-                  _vm._v(" "),
-                  _c("div", { staticClass: "follow-item" }, [
-                    _c("div", { staticClass: "change-time" }, [
-                      _vm._v("2018-09-78")
-                    ]),
-                    _vm._v(" "),
-                    _c("div", { staticClass: "change-text" }, [
-                      _vm._v(
-                        "张测试 添加博主跟进 博主说明天回复，是否与我们签约。"
-                      )
-                    ])
-                  ])
-                ]),
-                _vm._v(" "),
-                _c("li", [
-                  _c("div", { staticClass: "change-dot bg-green-500" }),
-                  _vm._v(" "),
-                  _c("div", { staticClass: "follow-item" }, [
-                    _c("div", { staticClass: "change-time" }, [
-                      _vm._v("2018-09-78")
-                    ]),
-                    _vm._v(" "),
-                    _c("div", { staticClass: "change-text" }, [
-                      _vm._v(
-                        "张测试 添加博主跟进 博主说明天回复，是否与我们签约。"
-                      )
-                    ])
-                  ])
-                ])
-              ])
-            ]
-          ),
-          _vm._v(" "),
-          _c(
-            "div",
-            {
-              staticClass: "tab-pane",
-              attrs: { id: "task-follow", role: "tabpanel" }
-            },
-            [_vm._v("\n                任务跟进\n            ")]
-          ),
-          _vm._v(" "),
-          _c(
-            "div",
-            {
-              staticClass: "tab-pane",
-              attrs: { id: "task-active", role: "tabpanel" }
-            },
-            [_vm._v("\n                动态\n            ")]
-          )
-        ])
+          [_vm._v("全部")]
+        )
       ]
     )
+  },
+  function() {
+    var _vm = this
+    var _h = _vm.$createElement
+    var _c = _vm._self._c || _h
+    return _c(
+      "li",
+      { staticClass: "nav-item", attrs: { role: "presentation" } },
+      [
+        _c(
+          "a",
+          {
+            staticClass: "nav-link",
+            attrs: {
+              "data-toggle": "tab",
+              href: "#task-active",
+              "aria-controls": "exampleTabsThree",
+              role: "tab",
+              "aria-selected": "false"
+            }
+          },
+          [_vm._v("动态")]
+        )
+      ]
+    )
+  },
+  function() {
+    var _vm = this
+    var _h = _vm.$createElement
+    var _c = _vm._self._c || _h
+    return _c("div", { staticClass: "tab-content pt-20" }, [
+      _c(
+        "div",
+        {
+          staticClass: "tab-pane active",
+          attrs: { id: "all-task-follow-up", role: "tabpanel" }
+        },
+        [
+          _c("ul", { staticClass: "task-follow" }, [
+            _c("li", [
+              _c("div", { staticClass: "change-dot bg-green-500" }),
+              _vm._v(" "),
+              _c("div", { staticClass: "follow-item" }, [
+                _c("div", { staticClass: "change-time" }, [
+                  _vm._v("2018-09-78")
+                ]),
+                _vm._v(" "),
+                _c("div", { staticClass: "change-text" }, [
+                  _vm._v("张测试 添加博主跟进 博主说明天回复，是否与我们签约。")
+                ])
+              ])
+            ]),
+            _vm._v(" "),
+            _c("li", [
+              _c("div", { staticClass: "change-dot bg-green-500" }),
+              _vm._v(" "),
+              _c("div", { staticClass: "follow-item" }, [
+                _c("div", { staticClass: "change-time" }, [
+                  _vm._v("2018-09-78")
+                ]),
+                _vm._v(" "),
+                _c("div", { staticClass: "change-text" }, [
+                  _vm._v("张测试 添加博主跟进 博主说明天回复，是否与我们签约。")
+                ])
+              ])
+            ]),
+            _vm._v(" "),
+            _c("li", [
+              _c("div", { staticClass: "change-dot bg-green-500" }),
+              _vm._v(" "),
+              _c("div", { staticClass: "follow-item" }, [
+                _c("div", { staticClass: "change-time" }, [
+                  _vm._v("2018-09-78")
+                ]),
+                _vm._v(" "),
+                _c("div", { staticClass: "change-text" }, [
+                  _vm._v("张测试 添加博主跟进 博主说明天回复，是否与我们签约。")
+                ])
+              ])
+            ])
+          ])
+        ]
+      ),
+      _vm._v(" "),
+      _c(
+        "div",
+        {
+          staticClass: "tab-pane",
+          attrs: { id: "task-follow", role: "tabpanel" }
+        },
+        [_vm._v("\n                任务跟进\n            ")]
+      ),
+      _vm._v(" "),
+      _c(
+        "div",
+        {
+          staticClass: "tab-pane",
+          attrs: { id: "task-active", role: "tabpanel" }
+        },
+        [_vm._v("\n                动态\n            ")]
+      )
+    ])
   }
 ]
 render._withStripped = true
@@ -17676,7 +17683,139 @@ var config = {
                 __WEBPACK_IMPORTED_MODULE_1__bootstrap___default()('/errors/503');
             }
         };
-    }
+    },
+
+    companyType: __WEBPACK_IMPORTED_MODULE_0_js_cookie___default.a.get('companyType'),
+
+    trailOrigin: function trailOrigin() {
+        if (__WEBPACK_IMPORTED_MODULE_0_js_cookie___default.a.get('companyType') === '泰洋川禾') {
+            return [{
+                name: '请选择线索来源',
+                value: 0
+            }, {
+                name: '商务邮箱',
+                value: 1
+            }, {
+                name: '工作室邮箱',
+                value: 2
+            }, {
+                name: '微信公众号',
+                value: 3
+            }, {
+                name: '员工',
+                value: 4
+            }, {
+                name: '公司高管',
+                value: 5
+            }, {
+                name: '纯中介',
+                value: 6
+            }, {
+                name: '香港中介',
+                value: 7
+            }, {
+                name: '台湾中介',
+                value: 8
+            }, {
+                name: '复购直客',
+                value: 9
+            }, {
+                name: '媒体介绍',
+                value: 10
+            }, {
+                name: '公关or广告公司',
+                value: 11
+            }];
+        } else {
+            return [{
+                name: '请选择线索来源',
+                value: 0
+            }, {
+                name: '商务邮箱',
+                value: 1
+            }, {
+                name: '员工',
+                value: 4
+            }, {
+                name: '公司高管',
+                value: 5
+            }];
+        }
+    },
+    customizeInfo: [{
+        id: 0,
+        name: '选择条件',
+        value: 0,
+        child: [{
+            name: '选择对应关系',
+            value: 0
+        }],
+        type: 'disable'
+    }, {
+        id: 1,
+        name: '负责人',
+        value: 1,
+        child: [{
+            name: '等于',
+            value: 1
+        }],
+        type: 'person'
+    }, {
+        id: 2,
+        name: '下次跟进时间',
+        value: 2,
+        child: [{
+            name: '等于',
+            value: 1
+        }, {
+            name: '大于',
+            value: 2
+        }],
+        type: 'date'
+    }, {
+        id: 3,
+        name: '未跟进天数',
+        value: 3,
+        child: [{
+            name: '等于',
+            value: 1
+        }, {
+            name: '大于',
+            value: 2
+        }, {
+            name: '大于等于',
+            value: 2
+        }],
+        type: 'number'
+    }],
+
+    taskTypeArr: [{
+        name: '请选择任务类型',
+        value: 0
+    }, {
+        name: '跑组',
+        value: 1
+    }, {
+        name: '试戏',
+        value: 2
+    }, {
+        name: '类型1',
+        value: 3
+    }],
+
+    taskLevelArr: [{
+        name: '请选择优先级',
+        value: 0
+    }, {
+        name: '高',
+        value: 1
+    }, {
+        name: '中',
+        value: 2
+    }, {
+        name: '低',
+        value: 3
+    }]
 
 };
 

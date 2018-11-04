@@ -80,7 +80,7 @@
                             </tr>
                             <tr v-for="task in tasksInfo">
                                 <td class="pre-cell"></td>
-                                <td class="detail-content" @click="redirectTaskDetail(task.id)">@{{ task.title }}</td>
+                                <td class="pointer-content" @click="redirectTaskDetail(task.id)">@{{ task.title }}</td>
                                 <td>暂无</td>
                                 <td>暂无</td>
                                 <td>

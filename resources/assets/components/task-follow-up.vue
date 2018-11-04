@@ -10,7 +10,7 @@
                 </li>
                 <li class="nav-item" role="presentation">
                     <a class="nav-link" data-toggle="tab" href="#task-follow"
-                       aria-controls="exampleTabsTwo" role="tab" aria-selected="false">任务跟进</a>
+                       aria-controls="exampleTabsTwo" role="tab" aria-selected="false">{{ this.followType }}跟进</a>
                 </li>
                 <li class="nav-item" role="presentation">
                     <a class="nav-link" data-toggle="tab" href="#task-active"
@@ -59,6 +59,7 @@
 <script>
     export default {
         name: "task-follow-up",
+        props: ['follow-type'],
         data() {
             return {
                 showButton: false,

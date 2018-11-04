@@ -1,5 +1,6 @@
 import config from "./config";
-import redirect from './bootstrap';
+import redirect from "./bootstrap"
+import Tool from "./tool";
 
 let app = new Vue({
         el: '#root',
@@ -7,78 +8,79 @@ let app = new Vue({
             total: 0,
             current_page: 1,
             total_pages: 1,
-            memberPlaceholder: '请选择负责人',
-            participants: [],
-            multiple: false,
-            taskIntroduce: '',
-            startTime: '',
-            startMinutes: '00:00',
-            endTime: '',
-            endMinutes: '00:00',
-            tasksInfo: '',
-            taskStatus: 0,
-            newTask: {},
-            taskType: '',
+            trailId: '',
+            trailInfo: '',
+            trailOrigin: '',
             taskName: '',
-            taskLevel: '',
-            taskLevelArr: config.taskLevelArr,
-            taskTypeArr: config.taskTypeArr,
+            taskIntroduce: '',
+            multiple: false,
+            isEdit: false,
+            memberPlaceholder: '请选择负责人',
+            companyType: config.companyType,
             customizeInfo: config.customizeInfo,
-
+            taskTypeArr: config.taskTypeArr,
+            taskLevelArr: config.taskLevelArr,
+            companyLevelArr: [
+                {
+                    name: '请选择级别',
+                    value: 0,
+                },
+                {
+                    name: '直客',
+                    value: 1,
+                },
+                {
+                    name: '代理公司',
+                    value: 2,
+                },
+            ],
+            trailOriginArr: [],
+            salesProgressText: '未确定合作'
         },
 
         mounted() {
-            this.getTasks()
+            this.getTrail();
+            console.log(config.trailOrigin());
+            this.trailOriginArr = config.trailOrigin();
         },
 
         methods: {
 
-            getTasks: function (pageNum = 1) {
-                this.taskStatus = 0;
+            getTrail: function (pageNum = 1) {
+
+                this.trailId = Tool.getParameterByName('trail_id');
+
                 let data = {
                     page: pageNum,
-                    include: 'principal,pTask,tasks,resource.resourceable,resource.resource,participants',
+                    include: 'principal,client,contact,recommendations',
                 };
 
                 $.ajax({
                     type: 'get',
-                    url: config.apiUrl + '/tasks/my_all',
+                    url: config.apiUrl + '/trails/' + this.trailId,
                     headers: config.getHeaders(),
-                    statusCode: config.getStatusCode(),
+                    // statusCode: config.getStatusCode(),
                     data: data
                 }).done(function (response) {
-                    console.log(response)
-                    app.tasksInfo = response.data;
-                    app.current_page = response.meta.pagination.current_page;
-                    app.total = response.meta.pagination.total;
-                    app.total_pages = response.meta.pagination.total_pages;
+                    console.log(response.data);
+                    app.trailInfo = response.data;
                 })
             },
 
-            getMyTasks: function (pageNum = 1, status = null) {
-                if (status) {
-                    app.taskStatus = status
-                }
+            changeTrailOrigin: function (value) {
+                this.trailOrigin = value
+            },
 
-                let data = {
-                    page: pageNum,
-                    include: 'principal,pTask,tasks,resource.resourceable,resource.resource,participants',
-                    status: app.taskStatus
-                };
+            changeTrailBaseInfo: function () {
 
-                $.ajax({
-                    type: 'get',
-                    url: config.apiUrl + '/tasks/my',
-                    headers: config.getHeaders(),
-                    statusCode: config.getStatusCode(),
-                    data: data
-                }).done(function (response) {
-                    console.log(response)
-                    app.tasksInfo = response.data;
-                    app.current_page = response.meta.pagination.current_page;
-                    app.total = response.meta.pagination.total;
-                    app.total_pages = response.meta.pagination.total_pages;
-                })
+            },
+
+            editBaseInfo: function () {
+                this.isEdit = true;
+            },
+
+            cancelEdit: function () {
+                app.isEdit = false;
             },
 
             addTask: function () {
@@ -105,10 +107,6 @@ let app = new Vue({
                     $('#addTask').modal('hide');
                     redirect('detail?task_id=' + response)
                 })
-            },
-
-            customize: function (value) {
-                console.log(value)
             },
 
             changeLinkage: function (value) {
@@ -143,9 +141,7 @@ let app = new Vue({
                 app.endTime = value
             },
 
-            redirectTaskDetail: function (taskId) {
-                redirect('detail?task_id=' + taskId);
-            }
+
         }
 
     })

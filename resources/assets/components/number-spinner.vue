@@ -15,7 +15,7 @@
                         return value;
                     },
                     min: 0,
-                    max: 100,
+                    max: 100000000,
                 }
             ).on('asSpinner:@change', function (e) {
                 self.$emit('change', e.currentTarget.value)

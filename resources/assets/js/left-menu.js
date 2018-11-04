@@ -3,8 +3,7 @@ import redirect from "./bootstrap";
 
 $(function () {
     // getMenu()
-    // getUser()
-    // getBack()
+    getBack()
 })
 
 function getMenu() {
@@ -95,18 +94,5 @@ function getMenu() {
 function getBack() {
     $('#toggleMenubar').click(function () {
         window.history.back();
-    })
-}
-
-function getUser() {
-    $.ajax({
-        url: config.apiUrl + '/users/my',
-        type: 'get',
-        headers: config.getHeaders(),
-        statusCode: config.getStatusCode(),
-    }).done(function (response) {
-        let data = response.data;
-        $('#user-avatar').attr('src', data.avatar);
-        $('#user-nickname').text(data.nickname)
     })
 }

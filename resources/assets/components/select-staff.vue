@@ -90,7 +90,7 @@
                 url: config.apiUrl + '/users',
                 headers: config.getHeaders(),
                 type: 'get',
-                statusCode: config.getStatusCode()
+                // statusCode: config.getStatusCode()
             }).done(function (response) {
                 self.normalUsers = response.data
             });
@@ -99,7 +99,7 @@
                 url: config.apiUrl + '/departments',
                 headers: config.getHeaders(),
                 type: 'get',
-                statusCode: config.getStatusCode()
+                // statusCode: config.getStatusCode()
             }).done(function (response) {
                 self.departmentUsers = response.data
             })

@@ -265,7 +265,7 @@
                         </div>
                         <div class="card-block">
                             <div class="col-md-7 pl-0">
-                                <task-follow-up></task-follow-up>
+                                <task-follow-up :follow-type="'任务'"></task-follow-up>
                             </div>
                         </div>
                     </div>

@@ -31,11 +31,11 @@ Route::get('/task/detail', function () {
     return view('task.detail');
 });
 
-Route::get('/sales/index', function () {
-    return view('sales.index');
+Route::get('/trail/index', function () {
+    return view('trail.index');
 });
 
-Route::get('/sales/detail', function () {
-    return view('sales.detail');
+Route::get('/trail/detail', function () {
+    return view('trail.detail');
 });
 

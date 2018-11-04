@@ -40,6 +40,16 @@
   color: #424242;
 }
 
-.detail-content:hover {
+.pointer-content:hover {
   cursor: pointer;
+}
+
+.font-info {
+  color: #00bcd4;
+}
+
+.segmentation-line {
+  width: 100%;
+  height: 1px;
+  border-bottom: 1px dashed #E0E0E0;
 }
