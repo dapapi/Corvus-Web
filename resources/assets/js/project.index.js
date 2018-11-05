@@ -6,6 +6,20 @@ let app = new Vue({
             total: 2,
             current_page: 1,
             total_pages: 1,
+            companyArr: [
+                {
+                    name: '星巴克管理有限公司',
+                    value: 1
+                },
+                {
+                    name: '赛亚人管理有限公司',
+                    value: 2
+                },
+                {
+                    name: '孙悟空管理有限公司',
+                    value: 3
+                },
+            ],
             projectType: [
                 {
                     value: '',

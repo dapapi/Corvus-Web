@@ -228,6 +228,17 @@ let config = {
         },
     ],
 
+    companyLevelArr: [
+        {
+            name: '直客',
+            value: 1
+        },
+        {
+            name: '代理公司',
+            value: 2
+        }
+    ]
+
 
 };
 

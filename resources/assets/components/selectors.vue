@@ -1,5 +1,5 @@
 <template>
-    <select data-plugin="selectpicker">
+    <select data-plugin="selectpicker" :data-live-search="this.searchable">
         <selectorsOptions v-for="option in this.options" v-bind:id="option.id" :val="option.value" :key="option.id">
             {{option.name}}
         </selectorsOptions>
@@ -7,7 +7,7 @@
 </template>
 <script>
     export default {
-        props: ['options'],
+        props: ['options', 'searchable'],
         data() {
             return {}
         },
@@ -16,8 +16,12 @@
             let self = this;
 
             $(this.$el).selectpicker().on('hidden.bs.select', function () {
-                self.$emit('change', $(this).val(), $(this)[0].selectedOptions[0].id, $(this)[0].selectedOptions[0].label, self.n);
+                self.$emit('change', $(this).val(), $(this)[0].selectedOptions[0].label, $(this)[0].selectedOptions[0].id);
             });
+
+            if (self.searchable) {
+                $(self.$el).attr('data-live-search', 'true');
+            }
 
         },
         methods: {

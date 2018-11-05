@@ -12,7 +12,7 @@
 
 <script>
     export default {
-        props: ['placeholder', 'multiple'],
+        props: ['placeholder', 'multiple', 'selected-members'],
         data() {
             return {
                 selectMemberShow: false,

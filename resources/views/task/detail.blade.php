@@ -25,7 +25,7 @@
                    data-toggle="dropdown" aria-expanded="false"></i>
                 <div class="dropdown-menu dropdown-menu-right task-dropdown-item" aria-labelledby="taskDropdown"
                      role="menu" x-placement="bottom-end">
-                    <a class="dropdown-item" role="menuitem" @click="changeTaskStatus(3)">暂停</a>
+                    <a class="dropdown-item" role="menuitem" @click="changeTaskStatus(3)">终止</a>
                     <a class="dropdown-item" role="menuitem" @click="changeTaskStatus(2)">完成</a>
                     <a class="dropdown-item" role="menuitem" data-toggle="modal" data-target="#customizeFieldContent">自定义字段</a>
                     <a class="dropdown-item" role="menuitem" @click="privacyTask">转私密</a>
@@ -38,7 +38,7 @@
 
             <div class="panel col-md-12 col-lg-12">
                 <div class="card-block">
-                    <h4 class="card-title">组织电话会议</h4>
+                    <h4 class="card-title">@{{ taskInfo.title }}</h4>
                     <div class="card-text clearfix example">
                         <div class="float-left pl-0 pr-2 col-md-1">
                             <i class="md-plus pr-2" aria-hidden="true"></i>负责人
@@ -100,7 +100,7 @@
                         <div class="card">
                             <div class="card-header card-header-transparent card-header-bordered">
                                 <div class="float-left font-weight-bold third-title">任务详情</div>
-                                <div class="float-right">
+                                <div class="float-right pointer-content">
                                     <i class="icon md-edit" aria-hidden="true" @click="editBaseInfo"></i>
                                 </div>
                                 <div class="float-right mr-40" v-show="isEdit">
@@ -122,7 +122,8 @@
                                     <div class="col-md-1 float-left text-right pl-0">参与人</div>
                                     <div class="col-md-11 float-left font-weight-bold">
                                         <edit-add-member :content="participantsArr.join('、')" :is-edit="isEdit"
-                                                         @change="changeTaskParticipants"></edit-add-member>
+                                                         @change="changeTaskParticipants"
+                                                         :selected-members="participantsIdArr"></edit-add-member>
                                     </div>
                                 </div>
                                 <div class="card-text py-5 clearfix">
@@ -192,22 +193,22 @@
                     <div class="tab-pane animation-fade" id="forum-task-annex" role="tabpanel">
                         <div class="card">
                             <div class="card-header card-header-transparent card-header-bordered attachment-upload">
-                                <h5 class="d-inline float-left">上传附件</h5>
+                                <div class="float-left font-weight-bold third-title">上传附件</div>
                                 <div class="d-inline float-right">
                                     <i class="md-attachment-alt" aria-hidden="true"></i>
-                                    <input type="file" @change="uploadAttachment">
+                                    <file-uploader @change="uploadAttachment"></file-uploader>
                                 </div>
                             </div>
                             <div class="card-block">
                                 <ul class="file-list">
-                                    <li>
-                                        <i class="md-file pr-5"></i> 会议记要模版
-                                        <span class="float-right pl-10"
+                                    <li v-for="attachment in taskInfo.affixes.data">
+                                        <i class="md-file pr-5"></i>@{{ attachment.title }}
+                                        <span class="float-right pl-10 pointer-content"
                                               @click="deleteAttachment(attachment.id)">删除</span>
                                         <span class="float-right px-10">|</span>
-                                        <span class="float-right px-10"
+                                        <span class="float-right px-10 pointer-content"
                                               @click="downloadAttachment(attachment.id, attachment.url)">下载</span>
-                                        <span class="float-right px-10">200kb</span>
+                                        <span class="float-right px-10">@{{ attachment.size }}kb</span>
                                     </li>
                                 </ul>
                             </div>
@@ -346,6 +347,7 @@
                             <div class="d-inline float-right child-attachment-upload">
                                 <span><i class="md-upload pr-5" aria-hidden="true"></i>上传文件</span>
                                 <input type="file">
+                                {{-- todo 子任务上传完附件ui --}}
                             </div>
                         </div>
                     </div>

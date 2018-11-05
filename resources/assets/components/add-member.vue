@@ -12,7 +12,7 @@
             <div class="addMember-trigger-button" @click="showMember"><i class="md-plus"></i></div>
             <div class="addMember-trigger-dropdown">
                 <select-staff :multiple="true" @change="changeSelectMember"
-                              :alreadySelectMember="selectMemberIdArr"></select-staff>
+                              :selected-members="this.selectMemberIdArr"></select-staff>
             </div>
         </div>
     </div>
@@ -21,7 +21,7 @@
 <script>
     export default {
         name: "",
-        props: [],
+        props: ['selected-members'],
         data() {
             return {
                 isMemberShow: false,
@@ -31,11 +31,18 @@
         },
         mounted() {
             this.globalClick(this.removeSelect);
+            if (this.selectedMembers && this.selectedMembers.length > 0) {
+                this.selectMemberIdArr = this.selectedMembers;
+            }
         },
 
         watch: {
             selectMemberArr: function (newValue) {
                 this.$emit('change', newValue)
+            },
+
+            selectedMembers: function (newValue) {
+                this.selectMemberIdArr = newValue;
             }
         },
 

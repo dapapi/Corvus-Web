@@ -19,29 +19,26 @@
         </div>
 
         <div class="page-content container-fluid">
-            <div class="panel col-md-12 col-lg-12 clearfix">
-                <div class="col-md-3 example float-left">
-                    <input type="text" class="form-control" id="inputPlaceholder" placeholder="请输入项目昵称"
-                           style="width: 220px">
+            <div class="panel col-md-12 clearfix py-5">
+                <div class="clearfix">
+                    <div class="col-md-3 example float-left">
+                        <input type="text" class="form-control" id="inputPlaceholder" placeholder="请输入项目昵称"
+                               style="width: 220px">
+                    </div>
+                    <div class="col-md-3 example float-left">
+                        <selectors :options="projectType" @change="projectChange"></selectors>
+                    </div>
+                    <div class="col-md-3 example float-left">
+                        <selectors :options="projectPrincipalType" @change="projectPrincipalChange"></selectors>
+                    </div>
+                    <div class="col-md-3 example float-left">
+                        <button type="button" class="btn btn-default waves-effect waves-classic float-right"
+                                data-toggle="modal" data-target="#customizeContent"
+                                data-placement="right" title="">
+                            自定义筛选
+                        </button>
+                    </div>
                 </div>
-                <div class="col-md-3 example float-left">
-                    <selectors :options="projectType" @change="projectChange"></selectors>
-                </div>
-                <div class="col-md-3 example float-left">
-                    <selectors :options="projectPrincipalType" @change="projectPrincipalChange"></selectors>
-                </div>
-                <div class="col-md-3 example float-left">
-                    <button type="button" class="btn btn-default waves-effect waves-classic float-right"
-                            data-toggle="modal" data-target="#customizeContent"
-                            data-placement="right" title="">
-                        自定义筛选
-                    </button>
-                </div>
-
-
-            </div>
-
-            <div class="panel col-md-12 col-lg-12 clearfix py-5">
                 <table class="table is-indent example" data-plugin="animateList" data-animate="fade" data-child="tr"
                        data-selectable="selectable">
                     <tr class="animation-fade"
@@ -57,7 +54,7 @@
                     </tr>
                     <tr v-for="project in projectsInfo ">
                         <td class="pre-cell"></td>
-                        <td @click="redirectProjectPage(project.id)">@{{ project.name }}</td>
+                        <td class="pointer-content" @click="redirectProjectPage(project.id)">@{{ project.name }}</td>
                         <td>@{{ project.principal }}</td>
                         <td>@{{ project.progress }}</td>
                         <td>@{{ project.sign_time }}</td>
@@ -76,6 +73,90 @@
 
         <customize-filter :data="customizeInfo" @change="customize"></customize-filter>
 
+        <div class="site-action" data-plugin="actionBtn" data-toggle="modal" data-target="#addProject">
+            <button type="button"
+                    class="site-action-toggle btn-raised btn btn-success btn-floating waves-effect waves-classic">
+                <i class="front-icon md-plus animation-scale-up" aria-hidden="true"></i>
+                <i class="back-icon md-plus animation-scale-up" aria-hidden="true"></i>
+            </button>
+        </div>
+
+        <div class="modal fade" id="addProject" aria-hidden="true" aria-labelledby="addLabelForm"
+             role="dialog" tabindex="-1">
+            <div class="modal-dialog modal-simple">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <button type="button" class="close" aria-hidden="true" data-dismiss="modal">
+                            <i class="md-close" aria-hidden="true"></i>
+                        </button>
+                        <h4 class="modal-title">新增项目</h4>
+                    </div>
+                    <div class="modal-body">
+
+                        <div class="example">
+                            <div class="col-md-2 text-right float-left">项目类型</div>
+                            <div class="col-md-10 float-left">
+                                <selectors :options="taskTypeArr" @change="changeTaskType"></selectors>
+                            </div>
+                        </div>
+                        <div class="example">
+                            <div class="col-md-2 text-right float-left">销售线索</div>
+                            <div class="col-md-10 float-left pl-0">
+                                <selectors :options="taskTypeArr" @change="changeTaskType"></selectors>
+                            </div>
+                        </div>
+                        <div class="example">
+                            <div class="col-md-2 text-right float-left">项目名称</div>
+                            <div class="col-md-10 float-left pl-0">
+                                <input type="text" class="form-control" placeholder="请输入项目名称" v-model="taskName">
+                            </div>
+                        </div>
+                        <div class="example">
+                            <div class="col-md-2 text-right float-left">关联公司</div>
+                            <div class="col-md-10 float-left pl-0">
+                                <editable-search-box :options="companyArr"></editable-search-box>
+                            </div>
+                        </div>
+                        <div class="example">
+                            <div class="col-md-2 text-right float-left">参与人</div>
+                            <div class="col-md-10 float-left pl-0">
+                                <add-member @change="participantChange"></add-member>
+                            </div>
+                        </div>
+                        <div class="example">
+                            <div class="col-md-2 text-right float-left pl-0">任务优先级</div>
+                            <div class="col-md-10 float-left pl-0">
+                                <selectors :options="taskLevelArr" @change="changeTaskLevel"></selectors>
+                            </div>
+                        </div>
+                        <div class="example">
+                            <div class="col-md-2 text-right float-left">开始时间</div>
+                            <div class="col-md-4 float-left pl-0">
+                                <datepicker @change="changeStartTime"></datepicker>
+                            </div>
+                            <div class="col-md-2 text-right float-left">截止时间</div>
+                            <div class="col-md-4 float-left pl-0">
+                                <datepicker @change="changeEndTime"></datepicker>
+                            </div>
+                            {{-- todo 时间组件加上小时分钟 --}}
+                        </div>
+                        <div class="example">
+                            <div class="col-md-2 text-right float-left">任务说明</div>
+                            <div class="col-md-10 float-left pl-0">
+                                <textarea class="form-control" name="taskDescription" id="" cols="30"
+                                          rows="5" title="" v-model="taskIntroduce"></textarea>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="modal-footer">
+                        <button class="btn btn-sm btn-white btn-pure" data-dismiss="modal">取消</button>
+                        <button class="btn btn-primary" type="submit" @click="addTask">确定</button>
+                    </div>
+
+                </div>
+            </div>
+        </div>
+
     </div>
     <!-- End Page -->
 
@@ -88,7 +169,7 @@
 
 @section('script')
 
-    <script src="{{ mix('js/project.management.js') }}"></script>
+    <script src="{{ mix('js/project.index.js') }}"></script>
 
 @endsection
 

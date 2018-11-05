@@ -11,6 +11,8 @@ let app = new Vue({
             trailOrigin: '',
             memberPlaceholder: '请选择负责人',
             companyType: config.companyType,
+            companyArr: [],
+            starsArr: [],
             customizeInfo: config.customizeInfo,
             companyLevelArr: [
                 {
@@ -32,7 +34,8 @@ let app = new Vue({
 
         mounted() {
             this.getSales();
-            console.log(config.trailOrigin());
+            this.getClients();
+            this.getStars();
             this.trailOriginArr = config.trailOrigin();
         },
 
@@ -48,7 +51,6 @@ let app = new Vue({
                     type: 'get',
                     url: config.apiUrl + '/trails',
                     headers: config.getHeaders(),
-                    // statusCode: config.getStatusCode(),
                     data: data
                 }).done(function (response) {
                     console.log(response.data);
@@ -56,6 +58,28 @@ let app = new Vue({
                     app.total = response.meta.pagination.total;
                     app.current_page = response.meta.pagination.current_page;
                     app.total_pages = response.meta.pagination.total_pages;
+                })
+            },
+
+            getClients: function () {
+                $.ajax({
+                    type: 'get',
+                    url: config.apiUrl + '/clients/all',
+                    headers: config.getHeaders(),
+                }).done(function (response) {
+                    console.log(response.data);
+                    app.companyArr = response.data
+                })
+            },
+
+            getStars: function () {
+                $.ajax({
+                    type: 'get',
+                    url: config.apiUrl + '/stars/all',
+                    headers: config.getHeaders(),
+                }).done(function (response) {
+                    console.log(response.data);
+                    app.starsArr = response.data
                 })
             },
 

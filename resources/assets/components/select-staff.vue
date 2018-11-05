@@ -70,7 +70,7 @@
     import config from '../js/config'
 
     export default {
-        props: ['multiple', 'alreadySelectMember'],
+        props: ['multiple', 'selected-members'],
         data() {
             return {
                 normalUsers: {},
@@ -92,7 +92,13 @@
                 type: 'get',
                 // statusCode: config.getStatusCode()
             }).done(function (response) {
-                self.normalUsers = response.data
+                self.normalUsers = response.data;
+                if (self.selectedMembers && self.selectedMembers.length > 0) {
+                    setTimeout(function () {
+                        self.selectIdArr = self.selectedMembers;
+                    }, 100)
+
+                }
             });
 
             $.ajax({
@@ -114,7 +120,7 @@
                 }
                 this.$emit('change', tagArr);
             },
-            alreadySelectMember: function (newValue) {
+            selectedMembers: function (newValue) {
                 this.selectIdArr = newValue
             }
         },

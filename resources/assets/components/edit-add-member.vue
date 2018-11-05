@@ -1,7 +1,7 @@
 <template>
     <div class="">
         <template v-if="isEditAdd">
-            <add-member @change="changeMember"></add-member>
+            <add-member @change="changeMember" :selected-members="this.selectedMembers"></add-member>
         </template>
         <template v-else>
             {{ content }}
@@ -12,7 +12,7 @@
 <script>
     export default {
         name: "edit-add-member",
-        props: ['is-edit', 'content'],
+        props: ['is-edit', 'content', 'selected-members'],
         data() {
             return {
                 isEditAdd: false,

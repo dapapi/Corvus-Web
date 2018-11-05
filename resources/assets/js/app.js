@@ -20,6 +20,8 @@ Vue.component('edit-input', require('../components/edit-input.vue'));
 Vue.component('edit-input-selector', require('../components/edit-input-selector.vue'));
 Vue.component('edit-selector', require('../components/edit-selector.vue'));
 Vue.component('edit-textarea', require('../components/edit-textarea.vue'));
+Vue.component('editable-search-box', require('../components/editable-search-box.vue'));
+Vue.component('file-uploader', require('../components/file-uploader.vue'));
 Vue.component('inline-datepicker', require('../components/inline-datepicker.vue'));
 Vue.component('input-selectors', require('../components/input-selectors.vue'));
 Vue.component('normal-linkage-selectors', require('../components/normal-linkage-selectors.vue'));
