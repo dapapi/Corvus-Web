@@ -255,6 +255,10 @@ let app = new Vue({
                 });
 
                 if (app.changeInfo.participant) {
+                    let participant_ids = []
+                    for (let i = 0; i < app.changeInfo.participant.length; i++) {
+                        participant_ids.push(app.changeInfo.participant[i].id)
+                    }
                     $.ajax({
                         type: 'post',
                         url: config.apiUrl + '/tasks/' + app.taskId + '/participant',
@@ -266,7 +270,7 @@ let app = new Vue({
                             }
                         },
                         data: {
-                            participant_ids: app.changeInfo.participant
+                            participant_ids: participant_ids
                         }
                     }).done(function (response) {
                         toastr.success("修改参与人成功");

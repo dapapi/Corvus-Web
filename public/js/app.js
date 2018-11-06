@@ -785,6 +785,79 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
 
 /***/ }),
 
+/***/ "./node_modules/babel-loader/lib/index.js?{\"cacheDirectory\":true,\"presets\":[[\"env\",{\"modules\":false,\"targets\":{\"browsers\":[\"> 2%\"],\"uglify\":true}}]],\"plugins\":[\"transform-object-rest-spread\",[\"transform-runtime\",{\"polyfill\":false,\"helpers\":false}]]}!./node_modules/vue-loader/lib/selector.js?type=script&index=0!./resources/assets/components/edit-company.vue":
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__js_config__ = __webpack_require__("./resources/assets/js/config.js");
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+
+
+
+/* harmony default export */ __webpack_exports__["default"] = ({
+    name: "edit-company",
+    props: ['options'],
+    data: function data() {
+        return {
+            companyLevelArr: __WEBPACK_IMPORTED_MODULE_0__js_config__["a" /* default */].companyLevelArr,
+            selectIdArr: [],
+            isDisable: false,
+            isWrite: true,
+            emitCompany: {}
+        };
+    },
+
+
+    watch: {
+        isWrite: function isWrite(newValue) {
+            this.isDisable = !newValue;
+        }
+    },
+
+    mounted: function mounted() {},
+
+
+    methods: {
+
+        changeCompanyLevel: function changeCompanyLevel(value) {
+            this.emitCompany.grade = value;
+            this.$emit('change', this.emitCompany);
+        },
+
+        changeSelects: function changeSelects(name, id, grade) {
+            this.$refs.companyLevel.setValue(grade);
+            this.isWrite = !id;
+            if (id) {
+                this.emitCompany = {
+                    id: id
+                };
+            } else {
+                this.emitCompany = {
+                    company: name
+                };
+                this.emitCompany.grade = this.$refs.companyLevel.getValue();
+            }
+            this.$emit('change', this.emitCompany);
+        }
+
+    }
+
+});
+
+/***/ }),
+
 /***/ "./node_modules/babel-loader/lib/index.js?{\"cacheDirectory\":true,\"presets\":[[\"env\",{\"modules\":false,\"targets\":{\"browsers\":[\"> 2%\"],\"uglify\":true}}]],\"plugins\":[\"transform-object-rest-spread\",[\"transform-runtime\",{\"polyfill\":false,\"helpers\":false}]]}!./node_modules/vue-loader/lib/selector.js?type=script&index=0!./resources/assets/components/edit-datepicker.vue":
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
@@ -1009,7 +1082,6 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
 
 "use strict";
 Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__js_config__ = __webpack_require__("./resources/assets/js/config.js");
 //
 //
 //
@@ -1026,49 +1098,63 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
 //
 //
 //
-
-
+//
+//
+//
+//
+//
+//
+//
+//
 
 /* harmony default export */ __webpack_exports__["default"] = ({
     name: "editable-search-box",
-    props: ['options'],
+    props: ['options', 'multiple'],
     data: function data() {
         return {
             inputValue: '',
             selectorShow: false,
-            selectedCompany: '',
-            companyLevelArr: __WEBPACK_IMPORTED_MODULE_0__js_config__["a" /* default */].companyLevelArr
+            searchKeyWord: '',
+            selectIdArr: [],
+            isSelected: false
         };
     },
-
 
     watch: {
         inputValue: function inputValue(newValue) {
             this.selectorShow = !newValue;
+            if (this.isSelected) {
+                this.isSelected = false;
+            } else {
+                this.selectIdArr = [];
+                this.$emit('change', newValue);
+            }
         }
     },
-
     mounted: function mounted() {
         this.globalClick(this.removeSelector);
     },
 
 
     methods: {
-        changeSelectors: function changeSelectors(value, name, id) {
-            this.inputValue = name;
-            this.selectedCompany = {
-                id: id
-            };
-        },
-
         showSelector: function showSelector() {
             this.selectorShow = true;
         },
 
-        changeCompanyLevel: function changeCompanyLevel() {},
+        selectItem: function selectItem(itemId, itemName, itemGrade) {
+            this.inputValue = itemName;
+            this.isSelected = true;
+            this.$emit('change', itemName, itemId, itemGrade);
+            if (!this.multiple) {
+                this.selectorShow = false;
+                this.selectIdArr = [itemId];
+            } else {
+                this.selectIdArr.push(itemId);
+            }
+        },
 
         removeSelector: function removeSelector(event) {
-            var tag = document.getElementById("companySelector");
+            var tag = document.getElementById("editableSelector" + this._uid);
             if (tag) {
                 if (!tag.contains(event.target)) {
                     this.selectorShow = false;
@@ -1076,7 +1162,6 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
             }
         }
     }
-
 });
 
 /***/ }),
@@ -1679,9 +1764,11 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
 //
 
 /* harmony default export */ __webpack_exports__["default"] = ({
-    props: ['options', 'searchable'],
+    props: ['options', 'searchable', 'disable', 'multiple'],
     data: function data() {
-        return {};
+        return {
+            isDisable: this.disable
+        };
     },
     mounted: function mounted() {
 
@@ -1690,18 +1777,29 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
         $(this.$el).selectpicker().on('hidden.bs.select', function () {
             self.$emit('change', $(this).val(), $(this)[0].selectedOptions[0].label, $(this)[0].selectedOptions[0].id);
         });
-
-        if (self.searchable) {
-            $(self.$el).attr('data-live-search', 'true');
-        }
     },
 
+    watch: {
+        disable: function disable(newValue) {
+            this.isDisable = newValue;
+            if (newValue) {
+                $(this.$el).attr('disabled', 'disabled');
+                this.refresh();
+            } else {
+                $(this.$el).removeAttr('disabled');
+                this.refresh();
+            }
+        }
+    },
     methods: {
         destroy: function destroy() {
             $(this.$el).selectpicker('destroy');
         },
         setValue: function setValue(value) {
             $(this.$el).selectpicker('val', value);
+        },
+        getValue: function getValue() {
+            return $(this.$el).selectpicker('val');
         },
         refresh: function refresh() {
             $(this.$el).selectpicker('refresh');
@@ -1846,7 +1944,22 @@ exports = module.exports = __webpack_require__("./node_modules/css-loader/lib/cs
 
 
 // module
-exports.push([module.i, "\n.company-selectors[data-v-15bd213a] {\n    position: absolute;\n}\n.company-select-wrap[data-v-15bd213a] {\n    position: relative;\n}\n", ""]);
+exports.push([module.i, "\n.edit-selectors[data-v-15bd213a] {\n    position: absolute;\n    background: white;\n    z-index: 10;\n    border: 1px solid #e0e0e0;\n}\n.editable-select-wrap[data-v-15bd213a] {\n    position: relative;\n}\n", ""]);
+
+// exports
+
+
+/***/ }),
+
+/***/ "./node_modules/css-loader/index.js!./node_modules/vue-loader/lib/style-compiler/index.js?{\"vue\":true,\"id\":\"data-v-1d3d41bf\",\"scoped\":true,\"hasInlineConfig\":true}!./node_modules/vue-loader/lib/selector.js?type=styles&index=0!./resources/assets/components/edit-company.vue":
+/***/ (function(module, exports, __webpack_require__) {
+
+exports = module.exports = __webpack_require__("./node_modules/css-loader/lib/css-base.js")(false);
+// imports
+
+
+// module
+exports.push([module.i, "\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n", ""]);
 
 // exports
 
@@ -3510,61 +3623,172 @@ var render = function() {
   var _vm = this
   var _h = _vm.$createElement
   var _c = _vm._self._c || _h
+  return _c(
+    "div",
+    {
+      staticClass: "editable-select-wrap edit-wrap",
+      attrs: { id: "editableSelector" + this._uid }
+    },
+    [
+      _c("div", [
+        _c("input", {
+          directives: [
+            {
+              name: "model",
+              rawName: "v-model",
+              value: _vm.inputValue,
+              expression: "inputValue"
+            }
+          ],
+          staticClass: "form-control",
+          attrs: { type: "text", title: "" },
+          domProps: { value: _vm.inputValue },
+          on: {
+            focus: _vm.showSelector,
+            input: function($event) {
+              if ($event.target.composing) {
+                return
+              }
+              _vm.inputValue = $event.target.value
+            }
+          }
+        })
+      ]),
+      _vm._v(" "),
+      _c(
+        "div",
+        {
+          directives: [
+            {
+              name: "show",
+              rawName: "v-show",
+              value: _vm.selectorShow,
+              expression: "selectorShow"
+            }
+          ],
+          staticClass: "edit-selectors col-md-12 pt-10"
+        },
+        [
+          _c("div", { staticClass: "input-search" }, [
+            _vm._m(0),
+            _vm._v(" "),
+            _c("input", {
+              directives: [
+                {
+                  name: "model",
+                  rawName: "v-model",
+                  value: _vm.searchKeyWord,
+                  expression: "searchKeyWord"
+                }
+              ],
+              staticClass: "form-control",
+              attrs: { type: "text", name: "", placeholder: "" },
+              domProps: { value: _vm.searchKeyWord },
+              on: {
+                input: function($event) {
+                  if ($event.target.composing) {
+                    return
+                  }
+                  _vm.searchKeyWord = $event.target.value
+                }
+              }
+            })
+          ]),
+          _vm._v(" "),
+          _vm._l(_vm.options, function(item) {
+            return _c(
+              "div",
+              {
+                directives: [
+                  {
+                    name: "show",
+                    rawName: "v-show",
+                    value: item.name.indexOf(_vm.searchKeyWord) > -1,
+                    expression: "item.name.indexOf(searchKeyWord) > -1"
+                  }
+                ],
+                staticClass: "users my-10",
+                on: {
+                  click: function($event) {
+                    _vm.selectItem(item.id, item.name, item.grade)
+                  }
+                }
+              },
+              [
+                _c("span", { staticClass: "pl-1" }, [
+                  _vm._v(_vm._s(item.name))
+                ]),
+                _vm._v(" "),
+                _c(
+                  "span",
+                  {
+                    directives: [
+                      {
+                        name: "show",
+                        rawName: "v-show",
+                        value: _vm.selectIdArr.indexOf(item.id) > -1,
+                        expression: "selectIdArr.indexOf(item.id) > -1"
+                      }
+                    ],
+                    staticClass: "float-right"
+                  },
+                  [_c("i", { staticClass: "icon md-check" })]
+                )
+              ]
+            )
+          })
+        ],
+        2
+      )
+    ]
+  )
+}
+var staticRenderFns = [
+  function() {
+    var _vm = this
+    var _h = _vm.$createElement
+    var _c = _vm._self._c || _h
+    return _c(
+      "button",
+      { staticClass: "input-search-btn", attrs: { type: "submit" } },
+      [
+        _c("i", {
+          staticClass: "icon md-search",
+          attrs: { "aria-hidden": "true" }
+        })
+      ]
+    )
+  }
+]
+render._withStripped = true
+module.exports = { render: render, staticRenderFns: staticRenderFns }
+if (false) {
+  module.hot.accept()
+  if (module.hot.data) {
+    require("vue-hot-reload-api")      .rerender("data-v-15bd213a", module.exports)
+  }
+}
+
+/***/ }),
+
+/***/ "./node_modules/vue-loader/lib/template-compiler/index.js?{\"id\":\"data-v-1d3d41bf\",\"hasScoped\":true,\"buble\":{\"transforms\":{}}}!./node_modules/vue-loader/lib/selector.js?type=template&index=0!./resources/assets/components/edit-company.vue":
+/***/ (function(module, exports, __webpack_require__) {
+
+var render = function() {
+  var _vm = this
+  var _h = _vm.$createElement
+  var _c = _vm._self._c || _h
   return _c("div", { staticClass: "clearfix" }, [
     _c(
       "div",
-      {
-        staticClass: "float-left company-select-wrap",
-        attrs: { id: "companySelector" }
-      },
+      { staticClass: "float-left" },
       [
-        _c("div", { staticClass: "edit-wrap" }, [
-          _c("input", {
-            directives: [
-              {
-                name: "model",
-                rawName: "v-model",
-                value: _vm.inputValue,
-                expression: "inputValue"
-              }
-            ],
-            staticClass: "form-control",
-            attrs: { type: "text", title: "" },
-            domProps: { value: _vm.inputValue },
-            on: {
-              focus: _vm.showSelector,
-              input: function($event) {
-                if ($event.target.composing) {
-                  return
-                }
-                _vm.inputValue = $event.target.value
-              }
-            }
-          })
-        ]),
-        _vm._v(" "),
-        _c(
-          "div",
-          {
-            directives: [
-              {
-                name: "show",
-                rawName: "v-show",
-                value: _vm.selectorShow,
-                expression: "selectorShow"
-              }
-            ],
-            staticClass: "company-selectors"
-          },
-          [
-            _c("selectors", {
-              attrs: { options: _vm.options, searchable: true },
-              on: { change: _vm.changeSelectors }
-            })
-          ],
-          1
-        )
-      ]
+        _c("editable-search-box", {
+          attrs: { options: _vm.options },
+          on: { change: _vm.changeSelects }
+        })
+      ],
+      1
     ),
     _vm._v(" "),
     _c(
@@ -3573,7 +3797,7 @@ var render = function() {
       [
         _c("selectors", {
           ref: "companyLevel",
-          attrs: { options: _vm.companyLevelArr },
+          attrs: { options: _vm.companyLevelArr, disable: _vm.isDisable },
           on: { change: _vm.changeCompanyLevel }
         })
       ],
@@ -3587,7 +3811,7 @@ module.exports = { render: render, staticRenderFns: staticRenderFns }
 if (false) {
   module.hot.accept()
   if (module.hot.data) {
-    require("vue-hot-reload-api")      .rerender("data-v-15bd213a", module.exports)
+    require("vue-hot-reload-api")      .rerender("data-v-1d3d41bf", module.exports)
   }
 }
 
@@ -4813,7 +5037,9 @@ var render = function() {
     {
       attrs: {
         "data-plugin": "selectpicker",
-        "data-live-search": this.searchable
+        "data-live-search": _vm.searchable,
+        multiple: _vm.multiple,
+        title: "请选择"
       }
     },
     _vm._l(this.options, function(option) {
@@ -5054,6 +5280,33 @@ if(false) {
  if(!content.locals) {
    module.hot.accept("!!../../../node_modules/css-loader/index.js!../../../node_modules/vue-loader/lib/style-compiler/index.js?{\"vue\":true,\"id\":\"data-v-15bd213a\",\"scoped\":true,\"hasInlineConfig\":true}!../../../node_modules/vue-loader/lib/selector.js?type=styles&index=0!./editable-search-box.vue", function() {
      var newContent = require("!!../../../node_modules/css-loader/index.js!../../../node_modules/vue-loader/lib/style-compiler/index.js?{\"vue\":true,\"id\":\"data-v-15bd213a\",\"scoped\":true,\"hasInlineConfig\":true}!../../../node_modules/vue-loader/lib/selector.js?type=styles&index=0!./editable-search-box.vue");
+     if(typeof newContent === 'string') newContent = [[module.id, newContent, '']];
+     update(newContent);
+   });
+ }
+ // When the module is disposed, remove the <style> tags
+ module.hot.dispose(function() { update(); });
+}
+
+/***/ }),
+
+/***/ "./node_modules/vue-style-loader/index.js!./node_modules/css-loader/index.js!./node_modules/vue-loader/lib/style-compiler/index.js?{\"vue\":true,\"id\":\"data-v-1d3d41bf\",\"scoped\":true,\"hasInlineConfig\":true}!./node_modules/vue-loader/lib/selector.js?type=styles&index=0!./resources/assets/components/edit-company.vue":
+/***/ (function(module, exports, __webpack_require__) {
+
+// style-loader: Adds some css to the DOM by adding a <style> tag
+
+// load the styles
+var content = __webpack_require__("./node_modules/css-loader/index.js!./node_modules/vue-loader/lib/style-compiler/index.js?{\"vue\":true,\"id\":\"data-v-1d3d41bf\",\"scoped\":true,\"hasInlineConfig\":true}!./node_modules/vue-loader/lib/selector.js?type=styles&index=0!./resources/assets/components/edit-company.vue");
+if(typeof content === 'string') content = [[module.i, content, '']];
+if(content.locals) module.exports = content.locals;
+// add the styles to the DOM
+var update = __webpack_require__("./node_modules/vue-style-loader/lib/addStylesClient.js")("46e48430", content, false, {});
+// Hot Module Replacement
+if(false) {
+ // When the styles change, update the <style> tags
+ if(!content.locals) {
+   module.hot.accept("!!../../../node_modules/css-loader/index.js!../../../node_modules/vue-loader/lib/style-compiler/index.js?{\"vue\":true,\"id\":\"data-v-1d3d41bf\",\"scoped\":true,\"hasInlineConfig\":true}!../../../node_modules/vue-loader/lib/selector.js?type=styles&index=0!./edit-company.vue", function() {
+     var newContent = require("!!../../../node_modules/css-loader/index.js!../../../node_modules/vue-loader/lib/style-compiler/index.js?{\"vue\":true,\"id\":\"data-v-1d3d41bf\",\"scoped\":true,\"hasInlineConfig\":true}!../../../node_modules/vue-loader/lib/selector.js?type=styles&index=0!./edit-company.vue");
      if(typeof newContent === 'string') newContent = [[module.id, newContent, '']];
      update(newContent);
    });
@@ -17218,6 +17471,58 @@ module.exports = Component.exports
 
 /***/ }),
 
+/***/ "./resources/assets/components/edit-company.vue":
+/***/ (function(module, exports, __webpack_require__) {
+
+var disposed = false
+function injectStyle (ssrContext) {
+  if (disposed) return
+  __webpack_require__("./node_modules/vue-style-loader/index.js!./node_modules/css-loader/index.js!./node_modules/vue-loader/lib/style-compiler/index.js?{\"vue\":true,\"id\":\"data-v-1d3d41bf\",\"scoped\":true,\"hasInlineConfig\":true}!./node_modules/vue-loader/lib/selector.js?type=styles&index=0!./resources/assets/components/edit-company.vue")
+}
+var normalizeComponent = __webpack_require__("./node_modules/vue-loader/lib/component-normalizer.js")
+/* script */
+var __vue_script__ = __webpack_require__("./node_modules/babel-loader/lib/index.js?{\"cacheDirectory\":true,\"presets\":[[\"env\",{\"modules\":false,\"targets\":{\"browsers\":[\"> 2%\"],\"uglify\":true}}]],\"plugins\":[\"transform-object-rest-spread\",[\"transform-runtime\",{\"polyfill\":false,\"helpers\":false}]]}!./node_modules/vue-loader/lib/selector.js?type=script&index=0!./resources/assets/components/edit-company.vue")
+/* template */
+var __vue_template__ = __webpack_require__("./node_modules/vue-loader/lib/template-compiler/index.js?{\"id\":\"data-v-1d3d41bf\",\"hasScoped\":true,\"buble\":{\"transforms\":{}}}!./node_modules/vue-loader/lib/selector.js?type=template&index=0!./resources/assets/components/edit-company.vue")
+/* template functional */
+var __vue_template_functional__ = false
+/* styles */
+var __vue_styles__ = injectStyle
+/* scopeId */
+var __vue_scopeId__ = "data-v-1d3d41bf"
+/* moduleIdentifier (server only) */
+var __vue_module_identifier__ = null
+var Component = normalizeComponent(
+  __vue_script__,
+  __vue_template__,
+  __vue_template_functional__,
+  __vue_styles__,
+  __vue_scopeId__,
+  __vue_module_identifier__
+)
+Component.options.__file = "resources/assets/components/edit-company.vue"
+
+/* hot reload */
+if (false) {(function () {
+  var hotAPI = require("vue-hot-reload-api")
+  hotAPI.install(require("vue"), false)
+  if (!hotAPI.compatible) return
+  module.hot.accept()
+  if (!module.hot.data) {
+    hotAPI.createRecord("data-v-1d3d41bf", Component.options)
+  } else {
+    hotAPI.reload("data-v-1d3d41bf", Component.options)
+  }
+  module.hot.dispose(function (data) {
+    disposed = true
+  })
+})()}
+
+module.exports = Component.exports
+
+
+/***/ }),
+
 /***/ "./resources/assets/components/edit-datepicker.vue":
 /***/ (function(module, exports, __webpack_require__) {
 
@@ -18059,6 +18364,7 @@ Vue.component('customize-linkage-selectors', __webpack_require__("./resources/as
 Vue.component('datepicker', __webpack_require__("./resources/assets/components/datepicker.vue"));
 Vue.component('departments-item', __webpack_require__("./resources/assets/components/departments-item.vue"));
 Vue.component('edit-add-member', __webpack_require__("./resources/assets/components/edit-add-member.vue"));
+Vue.component('edit-company', __webpack_require__("./resources/assets/components/edit-company.vue"));
 Vue.component('edit-datepicker', __webpack_require__("./resources/assets/components/edit-datepicker.vue"));
 Vue.component('edit-input', __webpack_require__("./resources/assets/components/edit-input.vue"));
 Vue.component('edit-input-selector', __webpack_require__("./resources/assets/components/edit-input-selector.vue"));
@@ -18123,7 +18429,7 @@ module.exports = redirect;
 var config = {
     tokenString: 'CORVUS-ACCESS-TOKEN',
     apiUrl: 'https://sandbox-api-crm.papitube.com',
-    imgUrl: 'https://res.papitube.com/',
+    imgUrl: 'https://res-crm.papitube.com/',
 
     getHeaders: function getHeaders() {
         var headers = {

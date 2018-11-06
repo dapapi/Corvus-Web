@@ -40,7 +40,6 @@ let app = new Vue({
 
         mounted() {
             this.getTrail();
-            console.log(config.trailOrigin());
             this.trailOriginArr = config.trailOrigin();
         },
 

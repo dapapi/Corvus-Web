@@ -15,6 +15,7 @@ Vue.component('customize-linkage-selectors', require('../components/customize-li
 Vue.component('datepicker', require('../components/datepicker.vue'));
 Vue.component('departments-item', require('../components/departments-item.vue'));
 Vue.component('edit-add-member', require('../components/edit-add-member.vue'));
+Vue.component('edit-company', require('../components/edit-company.vue'));
 Vue.component('edit-datepicker', require('../components/edit-datepicker.vue'));
 Vue.component('edit-input', require('../components/edit-input.vue'));
 Vue.component('edit-input-selector', require('../components/edit-input-selector.vue'));

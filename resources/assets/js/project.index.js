@@ -1,4 +1,5 @@
 import config from "./config";
+import redirect from "./bootstrap"
 
 let app = new Vue({
         el: '#root',
@@ -6,20 +7,9 @@ let app = new Vue({
             total: 2,
             current_page: 1,
             total_pages: 1,
-            companyArr: [
-                {
-                    name: '星巴克管理有限公司',
-                    value: 1
-                },
-                {
-                    name: '赛亚人管理有限公司',
-                    value: 2
-                },
-                {
-                    name: '孙悟空管理有限公司',
-                    value: 3
-                },
-            ],
+            companyArr: [],
+            starsArr: [],
+            projectName: '',
             projectType: [
                 {
                     value: '',
@@ -69,7 +59,8 @@ let app = new Vue({
         },
 
         mounted() {
-
+            this.getClients();
+            this.getStars();
         },
 
         methods: {
@@ -99,6 +90,38 @@ let app = new Vue({
                 })
             },
 
+            getClients: function () {
+                $.ajax({
+                    type: 'get',
+                    url: config.apiUrl + '/clients/all',
+                    headers: config.getHeaders(),
+                }).done(function (response) {
+                    for (let i = 0; i < response.data.length; i++) {
+                        app.companyArr.push({
+                            name: response.data[i].company,
+                            id: response.data[i].id,
+                            grade: response.data[i].grade
+                        })
+                    }
+                })
+            },
+
+            getStars: function () {
+                $.ajax({
+                    type: 'get',
+                    url: config.apiUrl + '/stars/all',
+                    headers: config.getHeaders(),
+                }).done(function (response) {
+                    for (let i = 0; i < response.data.length; i++) {
+                        app.starsArr.push({
+                            name: response.data[i].name,
+                            id: response.data[i].id,
+                            value: response.data[i].id
+                        })
+                    }
+                })
+            },
+
             projectChange: function (e) {
                 console.log(e)
             },
@@ -109,6 +132,22 @@ let app = new Vue({
 
             customize: function (value) {
                 console.log(value)
+            },
+
+            addProject: function () {
+
+            },
+
+            changeLinkageCompany: function (value) {
+                console.log(value)
+            },
+
+            changeTargetArtist: function (value) {
+                console.log(value)
+            },
+
+            redirectProjectDetail: function (projectId) {
+                redirect('detail?project_id=' + projectId)
             }
 
         }

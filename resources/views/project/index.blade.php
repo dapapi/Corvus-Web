@@ -54,7 +54,7 @@
                     </tr>
                     <tr v-for="project in projectsInfo ">
                         <td class="pre-cell"></td>
-                        <td class="pointer-content" @click="redirectProjectPage(project.id)">@{{ project.name }}</td>
+                        <td class="pointer-content" @click="redirectProjectDetail(project.id)">@{{ project.name }}</td>
                         <td>@{{ project.principal }}</td>
                         <td>@{{ project.progress }}</td>
                         <td>@{{ project.sign_time }}</td>
@@ -95,62 +95,39 @@
 
                         <div class="example">
                             <div class="col-md-2 text-right float-left">项目类型</div>
-                            <div class="col-md-10 float-left">
-                                <selectors :options="taskTypeArr" @change="changeTaskType"></selectors>
+                            <div class="col-md-10 float-left pl-0">
+                                <selectors></selectors>
                             </div>
                         </div>
                         <div class="example">
                             <div class="col-md-2 text-right float-left">销售线索</div>
                             <div class="col-md-10 float-left pl-0">
-                                <selectors :options="taskTypeArr" @change="changeTaskType"></selectors>
+                                <selectors></selectors>
                             </div>
                         </div>
                         <div class="example">
                             <div class="col-md-2 text-right float-left">项目名称</div>
                             <div class="col-md-10 float-left pl-0">
-                                <input type="text" class="form-control" placeholder="请输入项目名称" v-model="taskName">
+                                <input type="text" class="form-control" placeholder="请输入项目名称" v-model="projectName">
                             </div>
                         </div>
                         <div class="example">
                             <div class="col-md-2 text-right float-left">关联公司</div>
                             <div class="col-md-10 float-left pl-0">
-                                <editable-search-box :options="companyArr"></editable-search-box>
+                                <edit-company :options="companyArr" @change="changeLinkageCompany"></edit-company>
                             </div>
                         </div>
                         <div class="example">
-                            <div class="col-md-2 text-right float-left">参与人</div>
-                            <div class="col-md-10 float-left pl-0">
-                                <add-member @change="participantChange"></add-member>
-                            </div>
-                        </div>
-                        <div class="example">
-                            <div class="col-md-2 text-right float-left pl-0">任务优先级</div>
-                            <div class="col-md-10 float-left pl-0">
-                                <selectors :options="taskLevelArr" @change="changeTaskLevel"></selectors>
-                            </div>
-                        </div>
-                        <div class="example">
-                            <div class="col-md-2 text-right float-left">开始时间</div>
-                            <div class="col-md-4 float-left pl-0">
-                                <datepicker @change="changeStartTime"></datepicker>
-                            </div>
-                            <div class="col-md-2 text-right float-left">截止时间</div>
-                            <div class="col-md-4 float-left pl-0">
-                                <datepicker @change="changeEndTime"></datepicker>
-                            </div>
-                            {{-- todo 时间组件加上小时分钟 --}}
-                        </div>
-                        <div class="example">
-                            <div class="col-md-2 text-right float-left">任务说明</div>
-                            <div class="col-md-10 float-left pl-0">
-                                <textarea class="form-control" name="taskDescription" id="" cols="30"
-                                          rows="5" title="" v-model="taskIntroduce"></textarea>
+                            <div class="col-md-2 text-right float-left">目标艺人</div>
+                            <div class="col-md-4 float-left pl-0" v-if="starsArr.length > 0">
+                                <selectors :options="starsArr" :multiple="true" :searchable="true"
+                                           @change="changeTargetArtist"></selectors>
                             </div>
                         </div>
                     </div>
                     <div class="modal-footer">
                         <button class="btn btn-sm btn-white btn-pure" data-dismiss="modal">取消</button>
-                        <button class="btn btn-primary" type="submit" @click="addTask">确定</button>
+                        <button class="btn btn-primary" type="submit" @click="addProject">确定</button>
                     </div>
 
                 </div>

@@ -4,7 +4,7 @@ import redirect from "./bootstrap";
 let config = {
     tokenString: 'CORVUS-ACCESS-TOKEN',
     apiUrl: 'https://sandbox-api-crm.papitube.com',
-    imgUrl: 'https://res.papitube.com/',
+    imgUrl: 'https://res-crm.papitube.com/',
 
     getHeaders: function () {
         let headers = {

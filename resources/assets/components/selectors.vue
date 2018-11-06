@@ -1,5 +1,5 @@
 <template>
-    <select data-plugin="selectpicker" :data-live-search="this.searchable">
+    <select data-plugin="selectpicker" :data-live-search="searchable" :multiple="multiple" title="请选择">
         <selectorsOptions v-for="option in this.options" v-bind:id="option.id" :val="option.value" :key="option.id">
             {{option.name}}
         </selectorsOptions>
@@ -7,9 +7,11 @@
 </template>
 <script>
     export default {
-        props: ['options', 'searchable'],
+        props: ['options', 'searchable', 'disable', 'multiple'],
         data() {
-            return {}
+            return {
+                isDisable: this.disable,
+            }
         },
         mounted() {
 
@@ -19,10 +21,18 @@
                 self.$emit('change', $(this).val(), $(this)[0].selectedOptions[0].label, $(this)[0].selectedOptions[0].id);
             });
 
-            if (self.searchable) {
-                $(self.$el).attr('data-live-search', 'true');
-            }
-
+        },
+        watch: {
+            disable: function (newValue) {
+                this.isDisable = newValue;
+                if (newValue) {
+                    $(this.$el).attr('disabled', 'disabled');
+                    this.refresh()
+                } else {
+                    $(this.$el).removeAttr('disabled');
+                    this.refresh()
+                }
+            },
         },
         methods: {
             destroy() {
@@ -31,6 +41,10 @@
 
             setValue(value) {
                 $(this.$el).selectpicker('val', value);
+            },
+
+            getValue() {
+                return $(this.$el).selectpicker('val');
             },
 
             refresh() {
