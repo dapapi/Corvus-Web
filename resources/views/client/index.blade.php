@@ -103,19 +103,84 @@
                         <div class="example">
                             <div class="col-md-2 text-right float-left">客户类型</div>
                             <div class="col-md-10 float-left pl-0">
-                                <selectors :options="clientTypeArr" :placeholder="'请选择客户类型'"></selectors>
+                                <selectors :options="clientTypeArr" :placeholder="'请选择客户类型'"
+                                           @change="changeClientType"></selectors>
                             </div>
                         </div>
-                    </div>
-                    <div class="modal-footer">
-                        <button class="btn btn-sm btn-white btn-pure" data-dismiss="modal">取消</button>
-                        <button class="btn btn-primary" type="submit" @click="addClient">确定</button>
-                    </div>
+                        <div class="example">
+                            <div class="col-md-2 text-right float-left">公司名称</div>
+                            <div class="col-md-5 float-left pl-0">
+                                <input type="text" class="form-control" title="" v-model="clientName">
+                            </div>
+                            <div class="col-md-5 float-left pl-0">
+                                <selectors :options="clientLevelArr" :placeholder="'请选择公司级别'"
+                                           @change="changeClientLevel"></selectors>
+                            </div>
+                        </div>
+                        <div class="example">
+                            <div class="col-md-2 text-right float-left">地区</div>
+                            <div class="col-md-10 float-left pl-0"></div>
+                        </div>
+                        <div class="example">
+                            <div class="col-md-2 text-right float-left">详细地址</div>
+                            <div class="col-md-10 float-left pl-0">
+                                <input type="text" class="form-control" title="" placeholder="请输入详细地址"
+                                       v-model="clientAddressDetail">
+                            </div>
+                        </div>
+                        <div class="example">
+                            <div class="col-md-2 text-right float-left">负责人</div>
+                            <div class="col-md-10 float-left pl-0">
+                                <input-selectors @change="changePrincipal"></input-selectors>
+                            </div>
+                        </div>
+                        <div class="example">
+                            <div class="col-md-2 text-right float-left">联系人</div>
+                            <div class="col-md-10 float-left pl-0">
+                                <input type="text" class="form-control" title="" v-model="clientContact">
+                            </div>
+                        </div>
+                        <div class="example">
+                            <div class="col-md-2 text-right float-left">联系人电话</div>
+                            <div class="col-md-10 float-left pl-0">
+                                <input type="text" class="form-control" title="" v-model="clientContactPhone">
+                            </div>
+                        </div>
+                        <div class="example">
+                            <div class="col-md-2 text-right float-left">职位</div>
+                            <div class="col-md-10 float-left pl-0">
+                                <input type="text" class="form-control" title="" v-model="clientContactPosition">
+                            </div>
+                        </div>
+                        <div class="example">
+                            <div class="col-md-2 text-right float-left">规模</div>
+                            <div class="col-md-10 float-left pl-0">
+                                <selectors :options="clientScaleArr" :placeholder="'请选择规模'"
+                                           @change="changeClientScale"></selectors>
+                            </div>
+                        </div>
+                        <div class="example">
+                            <div class="col-md-2 text-right float-left">决策关键人/部门</div>
+                            <div class="col-md-10 float-left pl-0">
+                                <input type="text" class="form-control" title="" v-model="clientDecision">
+                            </div>
+                        </div>
+                        <div class="example">
+                            <div class="col-md-2 text-right float-left">备注</div>
+                            <div class="col-md-10 float-left pl-0">
+                                <textarea name="" id="" title="" class="form-control" v-model="clientRemark"></textarea>
+                            </div>
+                        </div>
+                        <div class="modal-footer">
+                            <button class="btn btn-sm btn-white btn-pure" data-dismiss="modal">取消</button>
+                            <button class="btn btn-primary" type="submit" @click="addClient">确定</button>
+                        </div>
 
+                    </div>
                 </div>
             </div>
-        </div>
 
+        </div>
     </div>
     <!-- End Page -->
 
