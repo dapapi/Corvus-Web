@@ -684,10 +684,14 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
 
     watch: {
         selectArr: function selectArr(newValue) {
+            if (this.isParent) {
+                return;
+            }
             this.$emit('change', newValue);
         },
 
         select: function select(newValue) {
+            this.isParent = true;
             this.selectArr = newValue;
         }
     },
@@ -1641,7 +1645,8 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
             selectIdArr: [],
             searchKeyWord: '',
             componentId: '',
-            isMultiple: ''
+            isMultiple: '',
+            isParent: false
         };
     },
     mounted: function mounted() {
@@ -1677,6 +1682,10 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
         selectIdArr: function selectIdArr(newValue) {
             var _this = this;
 
+            if (this.isParent) {
+                this.isParent = false;
+                return;
+            }
             var tagArr = [];
 
             var _loop = function _loop(i) {
@@ -1691,6 +1700,7 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
             this.$emit('change', tagArr);
         },
         selectedMembers: function selectedMembers(newValue) {
+            this.isParent = true;
             this.selectIdArr = newValue;
         }
     },
@@ -1764,7 +1774,7 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
 //
 
 /* harmony default export */ __webpack_exports__["default"] = ({
-    props: ['options', 'searchable', 'disable', 'multiple'],
+    props: ['options', 'searchable', 'disable', 'multiple', 'placeholder'],
     data: function data() {
         return {
             isDisable: this.disable
@@ -5039,7 +5049,7 @@ var render = function() {
         "data-plugin": "selectpicker",
         "data-live-search": _vm.searchable,
         multiple: _vm.multiple,
-        title: "请选择"
+        title: _vm.placeholder
       }
     },
     _vm._l(this.options, function(option) {
@@ -18615,6 +18625,41 @@ var config = {
     }, {
         name: '代理公司',
         value: 2
+    }],
+    projectTypeArr: function projectTypeArr() {
+        if (__WEBPACK_IMPORTED_MODULE_0_js_cookie___default.a.get('companyType') === '泰洋川禾') {
+            return [{
+                name: '影视项目',
+                value: 1
+            }, {
+                name: '综艺项目',
+                value: 2
+            }, {
+                name: '商务项目',
+                value: 3
+            }, {
+                name: '基础项目',
+                value: 5
+            }];
+        } else {
+            return [{
+                name: 'papi项目',
+                value: 4
+            }, {
+                name: '基础项目',
+                value: 5
+            }];
+        }
+    },
+    clientTypeArr: [{
+        name: 'papi客户',
+        value: 1
+    }, {
+        name: '类型一',
+        value: 2
+    }, {
+        name: '类型二',
+        value: 3
     }]
 
 };
@@ -18662,9 +18707,9 @@ var config = {
 /***/ (function(module, exports, __webpack_require__) {
 
 __webpack_require__("./resources/assets/js/app.js");
-__webpack_require__("./resources/assets/sass/side-mask.scss");
-__webpack_require__("./resources/assets/sass/login.scss");
 __webpack_require__("./resources/assets/sass/base.scss");
+__webpack_require__("./resources/assets/sass/login.scss");
+__webpack_require__("./resources/assets/sass/side-mask.scss");
 __webpack_require__("./resources/assets/sass/task.scss");
 module.exports = __webpack_require__("./resources/assets/sass/v1.scss");
 

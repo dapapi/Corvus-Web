@@ -237,6 +237,53 @@ let config = {
             name: '代理公司',
             value: 2
         }
+    ],
+    projectTypeArr: function () {
+        if (Cookies.get('companyType') === '泰洋川禾') {
+            return [
+                {
+                    name: '影视项目',
+                    value: 1
+                },
+                {
+                    name: '综艺项目',
+                    value: 2
+                },
+                {
+                    name: '商务项目',
+                    value: 3
+                },
+                {
+                    name: '基础项目',
+                    value: 5
+                },
+            ]
+        } else {
+            return [
+                {
+                    name: 'papi项目',
+                    value: 4
+                },
+                {
+                    name: '基础项目',
+                    value: 5
+                },
+            ]
+        }
+    },
+    clientTypeArr: [
+        {
+            name: 'papi客户',
+            value: 1
+        },
+        {
+            name: '类型一',
+            value: 2
+        },
+        {
+            name: '类型二',
+            value: 3
+        },
     ]
 
 

@@ -80,6 +80,7 @@
                 searchKeyWord: '',
                 componentId: '',
                 isMultiple: '',
+                isParent: false
             }
         },
         mounted() {
@@ -114,6 +115,10 @@
 
         watch: {
             selectIdArr: function (newValue) {
+                if (this.isParent) {
+                    this.isParent = false;
+                    return
+                }
                 let tagArr = [];
                 for (let i = 0; i < newValue.length; i++) {
                     tagArr.push(this.normalUsers.find(item => item.id == newValue[i]))
@@ -121,6 +126,7 @@
                 this.$emit('change', tagArr);
             },
             selectedMembers: function (newValue) {
+                this.isParent = true;
                 this.selectIdArr = newValue
             }
         },

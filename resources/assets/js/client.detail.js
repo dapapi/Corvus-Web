@@ -5,29 +5,25 @@ import redirect from './bootstrap';
 let app = new Vue({
         el: '#root',
         data: {
-            taskId: '',
+            clientId: '',
             changeInfo: {},
             isEdit: false,
         },
 
         mounted() {
-            this.getProject()
+            this.getClient()
         },
 
         watch: {},
 
         methods: {
 
-            getProject: function () {
-                this.taskId = Tool.getParameterByName('project_id');
-
-                let data = {
-                    include: '',
-                };
+            getClient: function () {
+                this.clientId = Tool.getParameterByName('client_id');
 
                 $.ajax({
                     type: 'get',
-                    url: config.apiUrl + '/projects/' + this.taskId,
+                    url: config.apiUrl + '/clients/' + this.clientId,
                     headers: config.getHeaders(),
                     data: data
                 }).done(function (response) {

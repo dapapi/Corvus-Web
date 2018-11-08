@@ -11,18 +11,23 @@
                         </a>
                         <ul class="site-menu-sub">
                             <li class="site-menu-item">
-                                <a class="animsition-link" href="/project/management">
+                                <a class="animsition-link" href="/project/index">
                                     <span class="site-menu-title">项目管理</span>
                                 </a>
                             </li>
                             <li class="site-menu-item">
-                                <a class="animsition-link" href="/task/task">
+                                <a class="animsition-link" href="/task/index">
                                     <span class="site-menu-title">任务管理</span>
                                 </a>
                             </li>
                             <li class="site-menu-item">
                                 <a class="animsition-link" href="/trail/index">
                                     <span class="site-menu-title">销售线索</span>
+                                </a>
+                            </li>
+                            <li class="site-menu-item">
+                                <a class="animsition-link" href="/client/index">
+                                    <span class="site-menu-title">客户管理</span>
                                 </a>
                             </li>
                         </ul>

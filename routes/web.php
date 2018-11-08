@@ -19,11 +19,15 @@ Route::get('/login', function () {
     return view('auth.login');
 });
 
-Route::get('/project/management', function () {
+Route::get('/project/index', function () {
     return view('project.index');
 });
 
-Route::get('/task/task', function () {
+Route::get('/project/detail', function () {
+    return view('project.detail');
+});
+
+Route::get('/task/index', function () {
     return view('task.index');
 });
 
@@ -37,5 +41,13 @@ Route::get('/trail/index', function () {
 
 Route::get('/trail/detail', function () {
     return view('trail.detail');
+});
+
+Route::get('/client/index', function () {
+    return view('client.index');
+});
+
+Route::get('/client/detail', function () {
+    return view('client.detail');
 });
 

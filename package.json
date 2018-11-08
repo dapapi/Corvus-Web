@@ -21,6 +21,7 @@
         "vue": "^2.5.7"
     },
     "dependencies": {
-        "qiniu-js": "^2.5.1"
+        "qiniu-js": "^2.5.1",
+        "vuex": "^3.0.1"
     }
 }

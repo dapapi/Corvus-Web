@@ -1,6 +1,33 @@
 import config from "./config";
 import Tool from './tool';
 import redirect from './bootstrap';
+import Vuex from 'vuex';
+
+const store = new Vuex.Store({
+    state: {
+        participantsArr: [],
+        participantsIdArr: [],
+    },
+    mutations: {
+        changeParticipantsArr(data) {
+            console.log(this.state.participantsArr)
+            this.state.participantsArr = data
+        },
+        changeParticipantsIdArr(data) {
+            state.participantsIdArr = data
+        }
+    },
+    actions: {
+        changeParticipantsArr: context => {
+            context.commit('changeParticipantsArr');
+        },
+
+        changeParticipantsIdArr: context => {
+            context.commit('changeParticipantsIdArr');
+
+        }
+    }
+});
 
 let app = new Vue({
         el: '#root',
@@ -111,7 +138,7 @@ let app = new Vue({
             },
             'taskInfo.participants.data': {
                 handler(newValue, oldValue) {
-                    if (oldValue && oldValue.length > 0) {
+                    if (newValue && oldValue) {
                         app.changeInfo.participant = newValue
                     }
                 },
@@ -152,10 +179,14 @@ let app = new Vue({
                 }).done(function (response) {
                     console.log(response)
                     app.taskInfo = response.data;
+                    // store.commit('changeParticipantsArr', response.data);
                     for (let i = 0; i < response.data.participants.data.length; i++) {
                         app.participantsArr.push(response.data.participants.data[i].name);
                         app.participantsIdArr.push(response.data.participants.data[i].id)
                     }
+                    store.dispatch('changeParticipantsArr', app.participantsArr);
+                    // store.dispatch('changeParticipantsIdArr', app.participantsIdArr);
+
                 })
             },
 
@@ -259,6 +290,8 @@ let app = new Vue({
                     for (let i = 0; i < app.changeInfo.participant.length; i++) {
                         participant_ids.push(app.changeInfo.participant[i].id)
                     }
+                    console.log(participant_ids)
+
                     $.ajax({
                         type: 'post',
                         url: config.apiUrl + '/tasks/' + app.taskId + '/participant',
@@ -270,7 +303,7 @@ let app = new Vue({
                             }
                         },
                         data: {
-                            participant_ids: participant_ids
+                            person_ids: participant_ids
                         }
                     }).done(function (response) {
                         toastr.success("修改参与人成功");

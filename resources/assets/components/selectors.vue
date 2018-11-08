@@ -1,5 +1,5 @@
 <template>
-    <select data-plugin="selectpicker" :data-live-search="searchable" :multiple="multiple" title="请选择">
+    <select data-plugin="selectpicker" :data-live-search="searchable" :multiple="multiple" :title="placeholder">
         <selectorsOptions v-for="option in this.options" v-bind:id="option.id" :val="option.value" :key="option.id">
             {{option.name}}
         </selectorsOptions>
@@ -7,7 +7,7 @@
 </template>
 <script>
     export default {
-        props: ['options', 'searchable', 'disable', 'multiple'],
+        props: ['options', 'searchable', 'disable', 'multiple', 'placeholder'],
         data() {
             return {
                 isDisable: this.disable,

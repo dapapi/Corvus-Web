@@ -10,11 +10,10 @@ let app = new Vue({
             companyArr: [],
             starsArr: [],
             projectName: '',
-            projectType: [
-                {
-                    value: '',
-                    name: '请选择类型',
-                },
+            projectTypeArr: config.projectTypeArr(),
+            projectFieldArr: [],
+            projectType: '',
+            projectStatus: [
                 {
                     value: 1,
                     name: '未确定合作',
@@ -25,10 +24,6 @@ let app = new Vue({
                 }
             ],
             projectPrincipalType: [
-                {
-                    value: '',
-                    name: '请选择负责人'
-                },
                 {
                     value: 'test',
                     name: 'test'
@@ -61,6 +56,7 @@ let app = new Vue({
         mounted() {
             this.getClients();
             this.getStars();
+            this.getProjects();
         },
 
         methods: {
@@ -68,25 +64,16 @@ let app = new Vue({
             getProjects: function (pageNum = 1) {
                 let data = {
                     page: pageNum,
-                    include: 'user, gift, express',
                 };
-
-                if (this.searchContent) {
-                    data.search = this.searchContent
-                }
 
                 $.ajax({
                     type: 'get',
-                    url: config.apiUrl + '/portal/orders',
+                    url: config.apiUrl + '/projects',
                     headers: config.getHeaders(),
-                    statusCode: config.getStatusCode(),
                     data: data
                 }).done(function (response) {
-                    app.orderInfo = response.data;
-                    let pageInfo = response.meta.pagination;
-                    app.total = pageInfo.total;
-                    app.current_page = pageInfo.current_page;
-                    app.total_pages = pageInfo.total_pages;
+                    console.log(response)
+                    app.projectsInfo = response.data
                 })
             },
 
@@ -148,6 +135,25 @@ let app = new Vue({
 
             redirectProjectDetail: function (projectId) {
                 redirect('detail?project_id=' + projectId)
+            },
+
+            changeProjectType: function (value) {
+                app.projectType = value
+            },
+
+            selectProjectType: function () {
+                $('#selectProjectType').modal('hide');
+                $('#addProject').modal('show');
+                $.ajax({
+                    type: 'get',
+                    url: config.apiUrl + '/project_fields',
+                    headers: config.getHeaders(),
+                    data: {
+                        type: app.projectType
+                    }
+                }).done(function (response) {
+                    console.log(response)
+                })
             }
 
         }

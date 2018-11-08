@@ -61,10 +61,14 @@
 
         watch: {
             selectArr: function (newValue) {
+                if (this.isParent) {
+                    return
+                }
                 this.$emit('change', newValue)
             },
 
             select: function (newValue) {
+                this.isParent = true;
                 this.selectArr = newValue
             }
         },
