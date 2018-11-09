@@ -9,7 +9,7 @@ let app = new Vue({
             total_pages: 0,
             customizeInfo: config.customizeInfo,
             clientTypeArr: config.clientTypeArr,
-            clientLevelArr: config.companyLevelArr,
+            clientLevelArr: config.clientLevelArr,
             clientsInfo: [],
             companiesArr: [],
             clientScaleArr: config.clientScaleArr,

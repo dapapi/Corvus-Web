@@ -193,7 +193,7 @@ let config = {
         },
     ],
 
-    companyLevelArr: [
+    clientLevelArr: [
         {
             name: '直客',
             value: 1

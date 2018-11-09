@@ -266,7 +266,7 @@
                             </div>
                         </div>
                     </div>
-                    <div class="tab-pane animation-fade pb-20 child-task-content" id="forum-trail-tasks"
+                    <div class="tab-pane animation-fade pb-20 fixed-button-father" id="forum-trail-tasks"
                          role="tabpanel">
                         <table class="table is-indent example" data-plugin="animateList" data-animate="fade"
                                data-child="tr"
@@ -291,7 +291,7 @@
                             </tr>
                         </table>
 
-                        <div class="site-action add-child-task" data-plugin="actionBtn" data-toggle="modal"
+                        <div class="site-action fixed-button" data-plugin="actionBtn" data-toggle="modal"
                              data-target="#addTask">
                             <button type="button"
                                     class="site-action-toggle btn-raised btn btn-success btn-floating waves-effect waves-classic">

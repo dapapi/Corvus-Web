@@ -135,35 +135,35 @@
                             {{--</tr>--}}
                         </table>
                     </div>
-                    <div class="tab-pane animation-fade pb-20" id="forum-task" role="tabpanel">
+                    <div class="tab-pane animation-fade pb-20 fixed-button-father" id="forum-task" role="tabpanel">
                         <table class="table is-indent example" data-plugin="animateList" data-animate="fade"
                                data-child="tr"
                                data-selectable="selectable">
                             <tr class="animation-fade"
                                 style="animation-fill-mode: backwards; animation-duration: 250ms; animation-delay: 0ms;">
                                 <th class="pre-cell"></th>
-                                <th class="cell-300" scope="col">线索务名称</th>
-                                <th class="cell-300" scope="col">销售进展</th>
+                                <th class="cell-300" scope="col">任务名称</th>
+                                <th class="cell-300" scope="col">任务类型</th>
+                                <th class="cell-300" scope="col">状态</th>
                                 <th class="cell-300" scope="col">负责人</th>
-                                <th class="cell-300" scope="col">关联公司</th>
-                                <th class="cell-300" scope="col">录入日志</th>
+                                <th class="cell-300" scope="col">截止时间</th>
                                 <th class="suf-cell"></th>
                             </tr>
-                            {{--<tr v-for="task in taskInfo.tasks.data">--}}
-                            {{--<td class="pre-cell"></td>--}}
-                            {{--<td>@{{ task.title }}</td>--}}
-                            {{--<td>@{{ task.type }}</td>--}}
-                            {{--<td>--}}
-                            {{--<template v-if="task.status === 1">进行中</template>--}}
-                            {{--<template v-if="task.status === 2">已完成</template>--}}
-                            {{--<template v-if="task.status === 3">已停止</template>--}}
-                            {{--</td>--}}
-                            {{--<td>@{{ task.principal }}</td>--}}
-                            {{--<td>@{{ task.end_at }}</td>--}}
-                            {{--</tr>--}}
+                            <tr v-for="task in clientTasksInfo">
+                                <td class="pre-cell"></td>
+                                <td>@{{ task.title }}</td>
+                                <td>@{{ task.type }}</td>
+                                <td>
+                                    <template v-if="task.status === 1">进行中</template>
+                                    <template v-if="task.status === 2">已完成</template>
+                                    <template v-if="task.status === 3">已停止</template>
+                                </td>
+                                <td>@{{ task.principal }}</td>
+                                <td>@{{ task.end_at }}</td>
+                            </tr>
                         </table>
-                        <div class="site-action add-task" data-plugin="actionBtn" data-toggle="modal"
-                             data-target="#addChildTask">
+                        <div class="site-action fixed-button" data-plugin="actionBtn" data-toggle="modal"
+                             data-target="#addTask">
                             <button type="button"
                                     class="site-action-toggle btn-raised btn btn-success btn-floating waves-effect waves-classic">
                                 <i class="front-icon md-plus animation-scale-up" aria-hidden="true"></i>
@@ -188,11 +188,13 @@
                                     <div class="col-md-1 float-left text-right pl-0">客户类型</div>
                                     <div class="col-md-5 float-left font-weight-bold">
                                         <edit-selector :options="clientTypeArr" :is-edit="isEdit"
-                                                       :content="clientInfo.type"></edit-selector>
+                                                       :content="clientInfo.type"
+                                                       @change="changeClientType"></edit-selector>
                                     </div>
                                     <div class="col-md-1 float-left text-right pl-0">公司名称</div>
                                     <div class="col-md-5 float-left font-weight-bold">
-                                        <edit-input :content="clientInfo.company" :is-edit="isEdit"></edit-input>
+                                        <edit-input :content="clientInfo.company" :is-edit="isEdit"
+                                                    @change="changClientName"></edit-input>
                                     </div>
                                 </div>
                                 <div class="card-text py-5 clearfix">
@@ -209,25 +211,27 @@
                                 <div class="card-text py-5 clearfix">
                                     <div class="col-md-1 float-left text-right pl-0">级别</div>
                                     <div class="col-md-5 float-left font-weight-bold">
-                                        <edit-selector :options="clientTypeArr" :is-edit="isEdit"
-                                                       :content="clientInfo.type"></edit-selector>
+                                        <edit-selector :options="clientLevelArr" :is-edit="isEdit"
+                                                       :content="clientInfo.grade"
+                                                       @change="changeClientLevel"></edit-selector>
                                     </div>
-                                    <div class="col-md-1 float-left text-right pl-0">规模</div>
+                                    <div class="col-md-1 float-left text-right pl-0">决策关键人/部门</div>
                                     <div class="col-md-5 float-left font-weight-bold">
-                                        <edit-selector :options="clientTypeArr" :is-edit="isEdit"
-                                                       :content="clientInfo.type"></edit-selector>
+                                        <edit-input :content="clientInfo.keyman"
+                                                    :is-edit="isEdit" @change="changeClientDecision"></edit-input>
                                     </div>
                                 </div>
                                 <div class="card-text py-5 clearfix">
-                                    <div class="col-md-1 float-left text-right pl-0">决策关键人/部门</div>
+                                    <div class="col-md-1 float-left text-right pl-0">规模</div>
                                     <div class="col-md-5 float-left font-weight-bold">
-                                        <edit-input :content="clientInfo.company"
-                                                    :is-edit="isEdit"></edit-input>
+                                        <edit-selector :options="clientScaleArr" :is-edit="isEdit"
+                                                       :content="clientInfo.size"
+                                                       @change="changeClientScale"></edit-selector>
                                     </div>
                                     <div class="col-md-1 float-left text-right pl-0">备注</div>
                                     <div class="col-md-5 float-left font-weight-bold">
-                                        <edit-textarea :content="clientInfo.company"
-                                                       :is-edit="isEdit"></edit-textarea>
+                                        <edit-textarea :content="clientInfo.desc"
+                                                       :is-edit="isEdit" @change="changeClientDesc"></edit-textarea>
                                     </div>
                                 </div>
 
@@ -236,27 +240,23 @@
                                 <div class="card-text py-5 clearfix">
                                     <div class="col-md-1 float-left text-right pl-0">录入人</div>
                                     <div class="col-md-5 float-left font-weight-bold">
-                                        <edit-selector></edit-selector>
                                     </div>
                                     <div class="col-md-1 float-left text-right pl-0">录入时间</div>
                                     <div class="col-md-5 float-left font-weight-bold">
-                                        <edit-input></edit-input>
                                     </div>
                                 </div>
                                 <div class="card-text py-5 clearfix">
                                     <div class="col-md-1 float-left text-right pl-0">最近更新人</div>
                                     <div class="col-md-5 float-left font-weight-bold">
-                                        <edit-selector></edit-selector>
                                     </div>
                                     <div class="col-md-1 float-left text-right pl-0">最近更新时间</div>
                                     <div class="col-md-5 float-left font-weight-bold">
-                                        <edit-input></edit-input>
                                     </div>
                                 </div>
                             </div>
                         </div>
                     </div>
-                    <div class="tab-pane animation-fade pb-20 position-relative" id="forum-contact"
+                    <div class="tab-pane animation-fade pb-20 fixed-button-father" id="forum-contact"
                          role="tabpanel">
                         <table class="table is-indent example" data-plugin="animateList" data-animate="fade"
                                data-child="tr"
@@ -281,8 +281,8 @@
                             </tr>
                         </table>
 
-                        <div class="site-action position-absolute" data-plugin="actionBtn" data-toggle="modal"
-                             data-target="#addContact" style="bottom: 20px;right: 0;">
+                        <div class="site-action fixed-button" data-plugin="actionBtn" data-toggle="modal"
+                             data-target="#addContact">
                             <button type="button"
                                     class="site-action-toggle btn-raised btn btn-success btn-floating waves-effect waves-classic">
                                 <i class="front-icon md-plus animation-scale-up" aria-hidden="true"></i>
@@ -357,6 +357,82 @@
                         <button class="btn btn-sm btn-white btn-pure" data-dismiss="modal">取消</button>
                         <button class="btn btn-primary" @click="addContact">确定</button>
                     </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="modal fade" id="addTask" aria-hidden="true" aria-labelledby="addLabelForm"
+             role="dialog" tabindex="-1">
+            <div class="modal-dialog modal-simple">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <button type="button" class="close" aria-hidden="true" data-dismiss="modal">
+                            <i class="md-close" aria-hidden="true"></i>
+                        </button>
+                        <h4 class="modal-title">新增任务</h4>
+                    </div>
+                    <div class="modal-body">
+
+                        <div class="example">
+                            <div class="col-md-2 text-right float-left">关联资源</div>
+                            <div class="col-md-10 float-left">
+                                客户 - @{{ clientInfo.company }}
+                            </div>
+                        </div>
+                        <div class="example">
+                            <div class="col-md-2 text-right float-left">任务类型</div>
+                            <div class="col-md-10 float-left pl-0">
+                                <selectors :options="taskTypeArr" @change="changeTaskType"></selectors>
+                            </div>
+                        </div>
+                        <div class="example">
+                            <div class="col-md-2 text-right float-left">任务名称</div>
+                            <div class="col-md-10 float-left pl-0">
+                                <input type="text" class="form-control" placeholder="请输入任务名称" v-model="taskName">
+                            </div>
+                        </div>
+                        <div class="example">
+                            <div class="col-md-2 text-right float-left">负责人</div>
+                            <div class="col-md-5 float-left pl-0">
+                                <input-selectors :placeholder="'请选择负责人'" :multiple="multiple"
+                                                 @change="taskPrincipalChange"></input-selectors>
+                            </div>
+                        </div>
+                        <div class="example">
+                            <div class="col-md-2 text-right float-left">参与人</div>
+                            <div class="col-md-10 float-left pl-0">
+                                <add-member @change="taskParticipantChange"></add-member>
+                            </div>
+                        </div>
+                        <div class="example">
+                            <div class="col-md-2 text-right float-left pl-0">任务优先级</div>
+                            <div class="col-md-10 float-left pl-0">
+                                <selectors :options="taskLevelArr" @change="changeTaskLevel"></selectors>
+                            </div>
+                        </div>
+                        <div class="example">
+                            <div class="col-md-2 text-right float-left">开始时间</div>
+                            <div class="col-md-4 float-left pl-0">
+                                <datepicker @change="changeStartTime"></datepicker>
+                            </div>
+                            <div class="col-md-2 text-right float-left">截止时间</div>
+                            <div class="col-md-4 float-left pl-0">
+                                <datepicker @change="changeEndTime"></datepicker>
+                            </div>
+                        </div>
+                        <div class="example">
+                            <div class="col-md-2 text-right float-left">任务说明</div>
+                            <div class="col-md-10 float-left pl-0">
+                                <textarea class="form-control" name="taskDescription" id="" cols="30"
+                                          rows="5" title="" v-model="taskIntroduce"></textarea>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="modal-footer">
+                        <button class="btn btn-sm btn-white btn-pure" data-dismiss="modal">取消</button>
+                        <button class="btn btn-primary" type="submit" @click="addTask">确定</button>
+                    </div>
+
                 </div>
             </div>
         </div>

@@ -359,6 +359,7 @@ let app = new Vue({
                         size: size
                     }
                 }).done(function (response) {
+                    console.log(response)
                     toastr.success("上传成功");
                     // @todo 上传好附件的id没有得到
                     app.taskInfo.affixes.data.push({
@@ -419,18 +420,9 @@ let app = new Vue({
                     // statusCode: config.getStatusCode(),
                     data: data
                 }).done(function (response) {
-                    console.log(response)
                     toastr.success('添加成功');
                     $('#addChildTask').modal('hide');
-                    app.taskInfo.tasks.data.push({
-                        title: app.taskName,
-                        type: app.taskType,
-                        status: 1,
-                        principal_id: app.principal,
-                        end_at: app.endTime,
-                        id: response
-                        //    @todo 各部分新增返回id没有加
-                    })
+                    app.taskInfo.tasks.data.push(response.data)
                 })
             },
 
@@ -464,6 +456,10 @@ let app = new Vue({
 
             addLinkage: function (value) {
 
+            },
+
+            redirectTaskDetail: function (taskId) {
+                redirect('detail?task_id=' + taskId)
             }
 
         }

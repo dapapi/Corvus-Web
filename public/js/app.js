@@ -815,7 +815,7 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
     props: ['options'],
     data: function data() {
         return {
-            companyLevelArr: __WEBPACK_IMPORTED_MODULE_0__js_config__["a" /* default */].companyLevelArr,
+            clientLevelArr: __WEBPACK_IMPORTED_MODULE_0__js_config__["a" /* default */].clientLevelArr,
             selectIdArr: [],
             isDisable: false,
             isWrite: true,
@@ -977,13 +977,17 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
     props: ['content', 'is-edit'],
     data: function data() {
         return {
-            isEditInput: false
+            isEditInput: false,
+            context: this.content
         };
     },
 
     watch: {
         isEdit: function isEdit(newValue) {
             this.isEditInput = newValue;
+        },
+        context: function context(newValue) {
+            this.$emit('change', newValue);
         }
     },
     methods: {}
@@ -2074,7 +2078,7 @@ exports = module.exports = __webpack_require__("./node_modules/css-loader/lib/cs
 
 
 // module
-exports.push([module.i, "\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n", ""]);
+exports.push([module.i, "\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n", ""]);
 
 // exports
 
@@ -3807,7 +3811,7 @@ var render = function() {
       [
         _c("selectors", {
           ref: "companyLevel",
-          attrs: { options: _vm.companyLevelArr, disable: _vm.isDisable },
+          attrs: { options: _vm.clientLevelArr, disable: _vm.isDisable },
           on: { change: _vm.changeCompanyLevel }
         })
       ],
@@ -4406,24 +4410,24 @@ var render = function() {
                 {
                   name: "model",
                   rawName: "v-model",
-                  value: this.content,
-                  expression: "this.content"
+                  value: _vm.context,
+                  expression: "context"
                 }
               ],
               staticClass: "form-control",
               attrs: { type: "text" },
-              domProps: { value: this.content },
+              domProps: { value: _vm.context },
               on: {
                 input: function($event) {
                   if ($event.target.composing) {
                     return
                   }
-                  _vm.$set(this, "content", $event.target.value)
+                  _vm.context = $event.target.value
                 }
               }
             })
           ]
-        : [_vm._v("\n        " + _vm._s(_vm.content) + "\n    ")]
+        : [_vm._v("\n        " + _vm._s(_vm.context) + "\n    ")]
     ],
     2
   )
@@ -18592,7 +18596,7 @@ var config = {
         value: 3
     }],
 
-    companyLevelArr: [{
+    clientLevelArr: [{
         name: '直客',
         value: 1
     }, {

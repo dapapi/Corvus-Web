@@ -4,7 +4,7 @@
             <editable-search-box :options="options" @change="changeSelects"></editable-search-box>
         </div>
         <div class="float-left col-md-6">
-            <selectors :options="companyLevelArr" ref="companyLevel" @change="changeCompanyLevel"
+            <selectors :options="clientLevelArr" ref="companyLevel" @change="changeCompanyLevel"
                        :disable="isDisable"></selectors>
         </div>
     </div>
@@ -18,7 +18,7 @@
         props: ['options'],
         data() {
             return {
-                companyLevelArr: config.companyLevelArr,
+                clientLevelArr: config.clientLevelArr,
                 selectIdArr: [],
                 isDisable: false,
                 isWrite: true,

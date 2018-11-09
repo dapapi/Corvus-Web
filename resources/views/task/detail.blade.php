@@ -38,13 +38,18 @@
 
             <div class="panel col-md-12 col-lg-12">
                 <div class="card-block">
-                    <h4 class="card-title">@{{ taskInfo.title }}</h4>
+                    <h4 class="card-title">@{{ taskInfo.title }}
+                        <span class="font-size-14 pl-10 pointer-content hover-content" v-if="!taskInfo.task_p"
+                              @click="redirectTaskDetail(taskInfo.pTask.data.id)">
+                           <i class="icon md-chevron-left"></i>回到主任务
+                        </span>
+                    </h4>
                     <div class="card-text clearfix example">
                         <div class="float-left pl-0 pr-2 col-md-1">
                             <i class="md-plus pr-2" aria-hidden="true"></i>负责人
                         </div>
-                        <div class="font-weight-bold float-left">
-                            张测试
+                        <div class="font-weight-bold float-left" v-if="taskInfo">
+                            @{{ taskInfo.principal.data.name }}
                         </div>
                     </div>
                     <div class="card-text clearfix example">
@@ -88,7 +93,7 @@
                                aria-controls="forum-present"
                                aria-expanded="false" role="tab">附件</a>
                         </li>
-                        <li class="nav-item" role="presentation">
+                        <li class="nav-item" role="presentation" v-if="taskInfo.task_p">
                             <a class="nav-link" data-toggle="tab" href="#forum-task-subtasks"
                                aria-controls="forum-present"
                                aria-expanded="false" role="tab">子任务</a>
@@ -113,7 +118,7 @@
                                     <div class="col-md-1 float-left text-right pl-0">负责人</div>
                                     <div class="col-md-11 float-left font-weight-bold">
                                         <div class="edit-wrap">
-                                            <edit-input-selector :content="'张测试'" :is-edit="isEdit"
+                                            <edit-input-selector :content="taskInfo.principal.data.name" :is-edit="isEdit"
                                                                  @change="changeTaskPrincipal"></edit-input-selector>
                                         </div>
                                     </div>
@@ -214,7 +219,7 @@
                             </div>
                         </div>
                     </div>
-                    <div class="tab-pane animation-fade pb-20 child-task-content" id="forum-task-subtasks"
+                    <div class="tab-pane animation-fade pb-20 fixed-button-father" id="forum-task-subtasks"
                          role="tabpanel">
                         <table class="table is-indent example" data-plugin="animateList" data-animate="fade"
                                data-child="tr"
@@ -231,7 +236,7 @@
                             </tr>
                             <tr v-for="task in taskInfo.tasks.data">
                                 <td class="pre-cell"></td>
-                                <td>@{{ task.title }}</td>
+                                <td @click="redirectTaskDetail(task.id)" class="pointer-content">@{{ task.title }}</td>
                                 <td>@{{ task.type }}</td>
                                 <td>
                                     <template v-if="task.status === 1">进行中</template>
@@ -241,10 +246,9 @@
                                 <td>@{{ task.principal }}</td>
                                 <td>@{{ task.end_at }}</td>
                             </tr>
-                            {{-- todo 缺少子任务页面--}}
                         </table>
 
-                        <div class="site-action add-child-task" data-plugin="actionBtn" data-toggle="modal"
+                        <div class="site-action fixed-button" data-plugin="actionBtn" data-toggle="modal"
                              data-target="#addChildTask">
                             <button type="button"
                                     class="site-action-toggle btn-raised btn btn-success btn-floating waves-effect waves-classic">
@@ -334,7 +338,6 @@
                             <div class="col-md-4 float-left pl-0">
                                 <datepicker @change="addEndTime"></datepicker>
                             </div>
-                            {{-- todo 时间组件加上小时分钟 --}}
                         </div>
                         <div class="example">
                             <div class="col-md-2 text-right float-left">任务说明</div>

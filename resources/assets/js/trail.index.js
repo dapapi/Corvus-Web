@@ -14,7 +14,7 @@ let app = new Vue({
             companyArr: [],
             starsArr: [],
             customizeInfo: config.customizeInfo,
-            companyLevelArr: [
+            clientLevelArr: [
                 {
                     name: '请选择级别',
                     value: 0,

@@ -88,7 +88,9 @@
                                     <template v-if="task.status === 2">已完成</template>
                                     <template v-if="task.status === 3">已停止</template>
                                 </td>
-                                <td>@{{ task.principal }}</td>
+                                <td>
+                                    <template v-if="task.principal">@{{ task.principal.data.name }}</template>
+                                </td>
                                 <td>@{{ task.end_at }}</td>
                                 <td class="suf-cell"></td>
                             </tr>
@@ -177,7 +179,6 @@
                             <div class="col-md-4 float-left pl-0">
                                 <datepicker @change="changeEndTime"></datepicker>
                             </div>
-                            {{-- todo 时间组件加上小时分钟 --}}
                         </div>
                         <div class="example">
                             <div class="col-md-2 text-right float-left">任务说明</div>
