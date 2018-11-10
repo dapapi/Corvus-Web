@@ -53,3 +53,17 @@
   height: 1px;
   border-bottom: 1px dashed #E0E0E0;
 }
+
+.hover-content:hover {
+  color: #3f51b5;
+}
+
+.fixed-button-father {
+  position: relative;
+}
+
+.fixed-button {
+  position: absolute;
+  bottom: 20px;
+  right: 0;
+}

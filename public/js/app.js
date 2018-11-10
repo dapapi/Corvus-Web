@@ -910,7 +910,7 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
     props: ['options'],
     data: function data() {
         return {
-            companyLevelArr: __WEBPACK_IMPORTED_MODULE_0__js_config__["a" /* default */].companyLevelArr,
+            clientLevelArr: __WEBPACK_IMPORTED_MODULE_0__js_config__["a" /* default */].clientLevelArr,
             selectIdArr: [],
             isDisable: false,
             isWrite: true,
@@ -1072,13 +1072,17 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
     props: ['content', 'is-edit'],
     data: function data() {
         return {
-            isEditInput: false
+            isEditInput: false,
+            context: this.content
         };
     },
 
     watch: {
         isEdit: function isEdit(newValue) {
             this.isEditInput = newValue;
+        },
+        context: function context(newValue) {
+            this.$emit('change', newValue);
         }
     },
     methods: {}
@@ -2169,7 +2173,7 @@ exports = module.exports = __webpack_require__("./node_modules/css-loader/lib/cs
 
 
 // module
-exports.push([module.i, "\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n", ""]);
+exports.push([module.i, "\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n", ""]);
 
 // exports
 
@@ -3932,7 +3936,7 @@ var render = function() {
       [
         _c("selectors", {
           ref: "companyLevel",
-          attrs: { options: _vm.companyLevelArr, disable: _vm.isDisable },
+          attrs: { options: _vm.clientLevelArr, disable: _vm.isDisable },
           on: { change: _vm.changeCompanyLevel }
         })
       ],
@@ -4531,24 +4535,24 @@ var render = function() {
                 {
                   name: "model",
                   rawName: "v-model",
-                  value: this.content,
-                  expression: "this.content"
+                  value: _vm.context,
+                  expression: "context"
                 }
               ],
               staticClass: "form-control",
               attrs: { type: "text" },
-              domProps: { value: this.content },
+              domProps: { value: _vm.context },
               on: {
                 input: function($event) {
                   if ($event.target.composing) {
                     return
                   }
-                  _vm.$set(this, "content", $event.target.value)
+                  _vm.context = $event.target.value
                 }
               }
             })
           ]
-        : [_vm._v("\n        " + _vm._s(_vm.content) + "\n    ")]
+        : [_vm._v("\n        " + _vm._s(_vm.context) + "\n    ")]
     ],
     2
   )
@@ -18944,61 +18948,40 @@ var config = {
 
     companyType: __WEBPACK_IMPORTED_MODULE_0_js_cookie___default.a.get('companyType'),
 
-    trailOrigin: function trailOrigin() {
-        if (__WEBPACK_IMPORTED_MODULE_0_js_cookie___default.a.get('companyType') === '泰洋川禾') {
-            return [{
-                name: '请选择线索来源',
-                value: 0
-            }, {
-                name: '商务邮箱',
-                value: 1
-            }, {
-                name: '工作室邮箱',
-                value: 2
-            }, {
-                name: '微信公众号',
-                value: 3
-            }, {
-                name: '员工',
-                value: 4
-            }, {
-                name: '公司高管',
-                value: 5
-            }, {
-                name: '纯中介',
-                value: 6
-            }, {
-                name: '香港中介',
-                value: 7
-            }, {
-                name: '台湾中介',
-                value: 8
-            }, {
-                name: '复购直客',
-                value: 9
-            }, {
-                name: '媒体介绍',
-                value: 10
-            }, {
-                name: '公关or广告公司',
-                value: 11
-            }];
-        } else {
-            return [{
-                name: '请选择线索来源',
-                value: 0
-            }, {
-                name: '商务邮箱',
-                value: 1
-            }, {
-                name: '员工',
-                value: 4
-            }, {
-                name: '公司高管',
-                value: 5
-            }];
-        }
-    },
+    trailOrigin: [{
+        name: '商务邮箱',
+        value: 1
+    }, {
+        name: '工作室邮箱',
+        value: 2
+    }, {
+        name: '微信公众号',
+        value: 3
+    }, {
+        name: '员工',
+        value: 4
+    }, {
+        name: '公司高管',
+        value: 5
+    }, {
+        name: '纯中介',
+        value: 6
+    }, {
+        name: '香港中介',
+        value: 7
+    }, {
+        name: '台湾中介',
+        value: 8
+    }, {
+        name: '复购直客',
+        value: 9
+    }, {
+        name: '媒体介绍',
+        value: 10
+    }, {
+        name: '公关or广告公司',
+        value: 11
+    }],
     customizeInfo: [{
         id: 0,
         name: '选择条件',
@@ -19047,9 +19030,6 @@ var config = {
     }],
 
     taskTypeArr: [{
-        name: '请选择任务类型',
-        value: 0
-    }, {
         name: '跑组',
         value: 1
     }, {
@@ -19061,9 +19041,6 @@ var config = {
     }],
 
     taskLevelArr: [{
-        name: '请选择优先级',
-        value: 0
-    }, {
         name: '高',
         value: 1
     }, {
@@ -19074,47 +19051,46 @@ var config = {
         value: 3
     }],
 
-    companyLevelArr: [{
+    clientLevelArr: [{
         name: '直客',
         value: 1
     }, {
         name: '代理公司',
         value: 2
     }],
-    projectTypeArr: function projectTypeArr() {
-        if (__WEBPACK_IMPORTED_MODULE_0_js_cookie___default.a.get('companyType') === '泰洋川禾') {
-            return [{
-                name: '影视项目',
-                value: 1
-            }, {
-                name: '综艺项目',
-                value: 2
-            }, {
-                name: '商务项目',
-                value: 3
-            }, {
-                name: '基础项目',
-                value: 5
-            }];
-        } else {
-            return [{
-                name: 'papi项目',
-                value: 4
-            }, {
-                name: '基础项目',
-                value: 5
-            }];
-        }
-    },
-    clientTypeArr: [{
-        name: 'papi客户',
+    projectTypeArr: [{
+        name: '影视项目',
         value: 1
     }, {
-        name: '类型一',
+        name: '综艺项目',
         value: 2
     }, {
-        name: '类型二',
+        name: '商务项目',
         value: 3
+    }, {
+        name: 'papi项目',
+        value: 4
+    }, {
+        name: '基础项目',
+        value: 5
+    }],
+    clientScaleArr: [{
+        name: '上市公司',
+        value: 1
+    }, {
+        name: '500强',
+        value: 2
+    }],
+    clientTypeArr: [{
+        name: '影视客户',
+        value: 1
+    }, {
+        name: '综艺客户',
+        value: 2
+    }, {
+        name: '商务客户',
+        value: 3
+<<<<<<< HEAD
     }],
     // 员工状态
     staffStatus: [{
@@ -19148,6 +19124,11 @@ var config = {
     }, {
         value: 3,
         name: '管培生'
+=======
+    }, {
+        name: 'papi客户',
+        value: 4
+>>>>>>> develop
     }]
 };
 

@@ -87,7 +87,7 @@ let app = new Vue({
                     // resourceable_id: '1994731356',
                     title: app.taskName,
                     // type: app.taskType,
-                    // principal_id: app.principal,
+                    principal_id: app.principal,
                     priority: app.taskLevel,
                     start_at: app.startTime + ' ' + app.startMinutes,
                     end_at: app.endTime + ' ' + app.endMinutes,
@@ -98,12 +98,12 @@ let app = new Vue({
                     type: 'post',
                     url: config.apiUrl + '/tasks',
                     headers: config.getHeaders(),
-                    // statusCode: config.getStatusCode(),
                     data: data
                 }).done(function (response) {
+                    console.log(response);
                     toastr.success('创建成功');
                     $('#addTask').modal('hide');
-                    redirect('detail?task_id=' + response)
+                    redirect('detail?task_id=' + response.data.id)
                 })
             },
 

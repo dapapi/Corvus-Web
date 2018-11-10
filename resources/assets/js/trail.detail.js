@@ -20,7 +20,7 @@ let app = new Vue({
             customizeInfo: config.customizeInfo,
             taskTypeArr: config.taskTypeArr,
             taskLevelArr: config.taskLevelArr,
-            companyLevelArr: [
+            clientLevelArr: [
                 {
                     name: '请选择级别',
                     value: 0,

@@ -116,7 +116,7 @@
                             </div>
                             <div class="col-md-2 text-right float-left">级别</div>
                             <div class="col-md-4 float-left pr-0 row">
-                                <selectors :options="companyLevelArr"></selectors>
+                                <selectors :options="clientLevelArr"></selectors>
                             </div>
                         </div>
                         <div class="example">

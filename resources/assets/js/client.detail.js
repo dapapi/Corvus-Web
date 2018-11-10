@@ -7,14 +7,72 @@ let app = new Vue({
         data: {
             clientId: '',
             changeInfo: {},
+            clientTypeArr: config.clientTypeArr,
+            clientLevelArr: config.clientLevelArr,
+            clientScaleArr: config.clientScaleArr,
+            taskTypeArr: config.taskTypeArr,
+            taskLevelArr: config.taskLevelArr,
+            multiple: false,
+            taskType: '',
+            taskName: '',
+            taskPrincipal: '',
+            taskParticipant: '',
+            taskIntroduce: '',
+            taskLevel: '',
             isEdit: false,
+            clientInfo: '',
+            clientTasksInfo: [],
+            clientTrailsInfo: [],
+            clientContactsInfo: [],
+            contactName: '',
+            contactPhone: '',
+            contactPosition: '',
         },
 
         mounted() {
-            this.getClient()
+
+            this.getClient();
+            this.getClientTrail();
         },
 
-        watch: {},
+        watch: {
+            'clientInfo.company': function (newValue, oldValue) {
+                if (oldValue === undefined) {
+                    return
+                }
+                app.changeInfo.company = newValue
+            },
+            'clientInfo.type': function (newValue, oldValue) {
+                if (oldValue === undefined) {
+                    return
+                }
+                app.changeInfo.type = newValue
+            },
+            'clientInfo.grade': function (newValue, oldValue) {
+                if (oldValue === undefined) {
+                    return
+                }
+                app.changeInfo.grade = newValue
+            },
+            'clientInfo.keyman': function (newValue, oldValue) {
+                if (oldValue === undefined) {
+                    return
+                }
+                app.changeInfo.keyman = newValue
+            },
+            'clientInfo.size': function (newValue, oldValue) {
+                if (oldValue === undefined) {
+                    return
+                }
+                app.changeInfo.size = newValue
+            },
+            'clientInfo.desc': function (newValue, oldValue) {
+                if (oldValue === undefined) {
+                    return
+                }
+                app.changeInfo.desc = newValue
+            },
+        },
 
         methods: {
 
@@ -25,12 +83,157 @@ let app = new Vue({
                     type: 'get',
                     url: config.apiUrl + '/clients/' + this.clientId,
                     headers: config.getHeaders(),
-                    data: data
                 }).done(function (response) {
                     console.log(response)
+                    app.clientInfo = response.data
                 })
             },
 
+            getClientTrail: function () {
+                if (this.clientTrailsInfo.length > 0) {
+                    return
+                }
+
+                this.clientId = Tool.getParameterByName('client_id');
+
+                $.ajax({
+                    type: 'get',
+                    url: config.apiUrl + '/trails/search',
+                    headers: config.getHeaders(),
+                    data: {
+                        type: 'clients',
+                        id: this.clientId
+                    }
+                }).done(function (response) {
+                    app.clientTrailsInfo = response.data
+
+                })
+            },
+
+            getClientTask: function () {
+                if (this.clientTasksInfo.length > 0) {
+                    return
+                }
+                $.ajax({
+                    type: 'get',
+                    url: config.apiUrl + '/clients/' + this.clientId + '/tasks',
+                    headers: config.getHeaders(),
+                    data: {
+                        type: 'clients',
+                        id: app.clientId
+                    }
+                }).done(function (response) {
+                    app.clientTasksInfo = response.data
+                })
+            },
+
+            getClientProject: function () {
+
+            },
+
+            getClientContact: function () {
+                if (app.clientContactsInfo.length > 0) {
+                    return
+                }
+                $.ajax({
+                    type: 'get',
+                    url: config.apiUrl + '/clients/' + this.clientId + '/contacts',
+                    headers: config.getHeaders(),
+                }).done(function (response) {
+                    app.clientContactsInfo = response.data
+                })
+            },
+
+            addContact: function () {
+                $.ajax({
+                    type: 'post',
+                    url: config.apiUrl + '/clients/' + this.clientId + '/contacts',
+                    headers: config.getHeaders(),
+                    data: {
+                        name: app.contactName,
+                        phone: app.contactPhone,
+                        position: app.contactPosition
+                    }
+                }).done(function (response) {
+                    console.log(response)
+                    app.clientContactsInfo.push(response.data);
+                    $('#addContact').modal('hide')
+                })
+            },
+
+            // TODO 地区省市级联动没有做
+            changeClientBaseInfo: function () {
+                $.ajax({
+                    type: 'put',
+                    url: config.apiUrl + '/clients/' + this.clientId,
+                    headers: config.getHeaders(),
+                    data: app.changeInfo
+                }).done(function (response) {
+                    console.log(response)
+                    app.isEdit = false;
+                    toastr.success('修改成功')
+                })
+            },
+
+            editBaseInfo: function () {
+                app.isEdit = true
+            },
+
+            cancelEdit: function () {
+                app.isEdit = false
+            },
+
+            changeClientType: function (value) {
+                app.clientInfo.type = value
+            },
+
+            changClientName: function (value) {
+                app.clientInfo.company = value
+            },
+
+            changeClientLevel: function (value) {
+                app.clientInfo.grade = value
+            },
+
+            changeClientDecision: function (value) {
+                app.clientInfo.keyman = value
+            },
+
+            changeClientScale: function (value) {
+                app.clientInfo.size = value
+            },
+
+            changeClientDesc: function (value) {
+                app.clientInfo.desc = value
+            },
+
+            addTask: function () {
+
+            },
+
+            changeTaskType: function (value) {
+                app.taskType = value
+            },
+
+            taskPrincipalChange: function (value) {
+                app.taskPrincipal = value
+            },
+
+            taskParticipantChange: function (value) {
+                app.taskParticipant = value
+            },
+
+            changeStartTime: function (value) {
+
+            },
+
+            changeEndTime: function (value) {
+
+            },
+
+            changeTaskLevel: function (value) {
+                app.taskLevel = value
+            }
 
         }
 
