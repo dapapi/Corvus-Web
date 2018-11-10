@@ -32,6 +32,8 @@ Vue.component('select-staff', require('../components/select-staff.vue'));
 Vue.component('selectors', require('../components/selectors.vue'));
 Vue.component('selectorsOptions', require('../components/selectors-options.vue'));
 Vue.component('task-follow-up', require('../components/task-follow-up.vue'));
+Vue.component('Modal', require('../components/Modal.vue'))
+Vue.component('checkbox-group', require('../components/checkboxGroup.vue'))
 
 Vue.prototype.globalClick = function (callback) {
     document.getElementById('root').addEventListener('click', function () {

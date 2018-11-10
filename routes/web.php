@@ -51,3 +51,11 @@ Route::get('/client/detail', function () {
     return view('client.detail');
 });
 
+Route::get('/staff/index', function () {
+    return view('staff.index');
+});
+
+Route::get('/staff/detail', function () {
+    return view('staff.detail');
+});
+

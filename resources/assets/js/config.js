@@ -284,9 +284,52 @@ let config = {
             name: '类型二',
             value: 3
         },
+    ],
+    // 员工状态
+    staffStatus: [
+        {
+            value: 1,
+            name: '在职',
+        },
+        {
+            value: 2,
+            name: '离职',
+        },
+        {
+            value: 3,
+            name: '全部',
+        }
+    ],
+    // 年月
+    dateArr: [
+        {
+            value: 1,
+            name: '10月（10.01-10.31）',
+        },
+        {
+            value: 2,
+            name: '11月（11.01-11.30）',
+        },
+        {
+            value: 3,
+            name: '12月（12.01-12.31）',
+        }
+    ],
+    // 员工类型
+    stuffType: [
+        {
+            value: 1,
+            name: '正式员工'
+        },
+        {
+            value: 2,
+            name: '实习生'
+        },
+        {
+            value: 3,
+            name: '管培生'
+        }
     ]
-
-
 };
 
 export default config
