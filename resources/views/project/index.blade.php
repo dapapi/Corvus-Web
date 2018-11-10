@@ -45,15 +45,15 @@
                         <th class="pre-cell"></th>
                         <th class="cell-300" scope="col">项目名称</th>
                         <th class="cell-300" scope="col">负责人</th>
-                        <th class="cell-300" scope="col">项目进展</th>
-                        <th class="cell-300" scope="col">签单时间</th>
-                        <th class="cell-300" scope="col">投放方式</th>
+                        <th class="cell-300" scope="col">目标艺人</th>
+                        <th class="cell-300" scope="col">预计订单收入</th>
+                        <th class="cell-300" scope="col">优先级</th>
                         <th class="cell-300" scope="col">跟进时间</th>
                         <th class="suf-cell"></th>
                     </tr>
                     <tr v-for="project in projectsInfo ">
                         <td class="pre-cell"></td>
-                        <td class="pointer-content" @click="redirectProjectDetail(project.id)">@{{ project.name }}</td>
+                        <td class="pointer-content" @click="redirectProjectDetail(project.id)">@{{ project.title }}</td>
                         <td>@{{ project.principal }}</td>
                         <td>@{{ project.progress }}</td>
                         <td>@{{ project.sign_time }}</td>
@@ -120,11 +120,12 @@
                         <h4 class="modal-title">新增项目</h4>
                     </div>
                     <div class="modal-body">
-                        <div class="example" v-for="field in projectFieldArr">
-                            {{--<div class="col-md-2 text-right float-left">销售线索</div>--}}
-                            {{--<div class="col-md-10 float-left pl-0">--}}
-                            {{--<selectors></selectors>--}}
-                            {{--</div>--}}
+                        <div class="example" v-for="field in projectFields">
+                            <div class="col-md-2 text-right float-left">@{{ field.key }}</div>
+                            <div class="col-md-10 float-left pl-0">
+                                <template v-if="field.field_type === 1"></template>
+                                <template v-else-if="field.field_type === 2"></template>
+                            </div>
                         </div>
                     </div>
                     <div class="modal-footer">

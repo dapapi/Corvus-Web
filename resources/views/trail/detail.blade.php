@@ -25,7 +25,7 @@
             </div>
         </div>
 
-        <div class="page-content container-fluid">
+        <div class="page-content container-fluid" v-if="trailInfo">
 
             <div class="panel col-md-12 pb-20">
                 <div class="card-block">
@@ -54,20 +54,20 @@
                         <div class="float-left pl-0 pr-2 col-md-3">
                             <i class="md-plus pr-2" aria-hidden="true"></i>目标艺人
                         </div>
-                        <div class="font-weight-bold float-left">
-                            {{--<span v-for="expectation in trailInfo.expectations.data">--}}
-                            {{--@{{ expectation.name }}--}}
-                            {{--</span>--}}
+                        <div class="font-weight-bold float-left" v-if="trailInfo.expectations">
+                            <span v-for="expectation in trailInfo.expectations.data">
+                                @{{ expectation.name }}
+                            </span>
                         </div>
                     </div>
                     <div class="col-md-6 float-left">
                         <div class="float-left pl-0 pr-2 col-md-3">
                             <i class="md-plus pr-2" aria-hidden="true"></i>推荐艺人
                         </div>
-                        <div class="font-weight-bold float-left">
-                                <span v-for="recommendation in trailInfo.recommendations.data">
-                                    @{{ recommendation.name }}
-                                </span>
+                        <div class="font-weight-bold float-left" v-if="trailInfo.recommendations">
+                            <span v-for="recommendation in trailInfo.recommendations.data">
+                                @{{ recommendation.name }}
+                            </span>
                         </div>
                     </div>
                 </div>
@@ -134,7 +134,7 @@
                            aria-controls="forum-base"
                            aria-expanded="true" role="tab">概况</a>
                     </li>
-                    <li class="nav-item" role="presentation">
+                    <li class="nav-item" role="presentation" @click="getClientTask">
                         <a class="nav-link" data-toggle="tab" href="#forum-trail-tasks"
                            aria-controls="forum-present"
                            aria-expanded="false" role="tab">任务</a>
@@ -167,77 +167,66 @@
                                 <div class="card-text py-5 clearfix">
                                     <div class="col-md-1 float-left text-right pl-0">负责人</div>
                                     <div class="col-md-5 float-left font-weight-bold">
-                                        <edit-selector></edit-selector>
+                                        <edit-input-selector :content="trailInfo.principal.data.name"
+                                                             :is-edit="isEdit"></edit-input-selector>
                                     </div>
                                     <div class="col-md-1 float-left text-right pl-0">预计费用</div>
                                     <div class="col-md-5 float-left font-weight-bold">
-                                        <edit-input></edit-input>
+                                        <edit-number-spinner :content="trailInfo.fee"
+                                                             :is-edit="isEdit"></edit-number-spinner>
                                     </div>
                                 </div>
                                 <div class="card-text py-5 clearfix">
                                     <div class="col-md-1 float-left text-right pl-0">品牌名称</div>
                                     <div class="col-md-5 float-left font-weight-bold">
-                                        <edit-selector></edit-selector>
                                     </div>
                                     <div class="col-md-1 float-left text-right pl-0">公司名称</div>
                                     <div class="col-md-5 float-left font-weight-bold">
-                                        <edit-input></edit-input>
                                     </div>
                                 </div>
                                 <div class="card-text py-5 clearfix">
                                     <div class="col-md-1 float-left text-right pl-0">目标艺人</div>
                                     <div class="col-md-5 float-left font-weight-bold">
-                                        <edit-selector></edit-selector>
                                     </div>
                                     <div class="col-md-1 float-left text-right pl-0">推荐艺人</div>
                                     <div class="col-md-5 float-left font-weight-bold">
-                                        <edit-input></edit-input>
                                     </div>
                                 </div>
                                 <div class="card-text py-5 clearfix">
                                     <div class="col-md-1 float-left text-right pl-0">级别</div>
                                     <div class="col-md-5 float-left font-weight-bold">
-                                        <edit-selector></edit-selector>
                                     </div>
                                     <div class="col-md-1 float-left text-right pl-0">联系人</div>
                                     <div class="col-md-5 float-left font-weight-bold">
-                                        <edit-input></edit-input>
                                     </div>
                                 </div>
                                 <div class="card-text py-5 clearfix">
                                     <div class="col-md-1 float-left text-right pl-0">联系电话</div>
                                     <div class="col-md-5 float-left font-weight-bold">
-                                        <edit-selector></edit-selector>
                                     </div>
                                     <div class="col-md-1 float-left text-right pl-0">是否锁价</div>
                                     <div class="col-md-5 float-left font-weight-bold">
-                                        <edit-input></edit-input>
                                     </div>
                                 </div>
                                 <div class="card-text py-5 clearfix">
                                     <div class="col-md-1 float-left text-right pl-0">备注</div>
                                     <div class="col-md-5 float-left font-weight-bold">
-                                        <edit-selector></edit-selector>
                                     </div>
                                 </div>
                                 <div class="card-text py-5 clearfix">
                                     <div class="col-md-1 float-left text-right pl-0">销售进展</div>
                                     <div class="col-md-5 float-left font-weight-bold">
-                                        <edit-selector></edit-selector>
                                     </div>
                                     <div class="col-md-1 float-left text-right pl-0">保护截止日期</div>
                                     <div class="col-md-5 float-left font-weight-bold">
-                                        <edit-input></edit-input>
                                     </div>
                                 </div>
                                 <div class="card-text py-5 clearfix">
                                     <div class="col-md-1 float-left text-right pl-0">锁价人</div>
                                     <div class="col-md-5 float-left font-weight-bold">
-                                        <edit-selector></edit-selector>
                                     </div>
                                     <div class="col-md-1 float-left text-right pl-0">锁价日期</div>
                                     <div class="col-md-5 float-left font-weight-bold">
-                                        <edit-input></edit-input>
                                     </div>
                                 </div>
 
@@ -246,21 +235,17 @@
                                 <div class="card-text py-5 clearfix">
                                     <div class="col-md-1 float-left text-right pl-0">录入人</div>
                                     <div class="col-md-5 float-left font-weight-bold">
-                                        <edit-selector></edit-selector>
                                     </div>
                                     <div class="col-md-1 float-left text-right pl-0">录入时间</div>
                                     <div class="col-md-5 float-left font-weight-bold">
-                                        <edit-input></edit-input>
                                     </div>
                                 </div>
                                 <div class="card-text py-5 clearfix">
                                     <div class="col-md-1 float-left text-right pl-0">最近更新人</div>
                                     <div class="col-md-5 float-left font-weight-bold">
-                                        <edit-selector></edit-selector>
                                     </div>
                                     <div class="col-md-1 float-left text-right pl-0">最近更新时间</div>
                                     <div class="col-md-5 float-left font-weight-bold">
-                                        <edit-input></edit-input>
                                     </div>
                                 </div>
                             </div>
@@ -281,13 +266,17 @@
                                 <th class="cell-300" scope="col">截止日期</th>
                                 <th class="suf-cell"></th>
                             </tr>
-                            <tr>
+                            <tr v-for="task in clientTasksInfo">
                                 <td class="pre-cell"></td>
-                                <td>电话组织会议</td>
-                                <td>类型一</td>
-                                <td>进行中</td>
-                                <td>张测试</td>
-                                <td>2018-09-23 10:23</td>
+                                <td>@{{ task.title }}</td>
+                                <td>@{{ task.type }}</td>
+                                <td>
+                                    <template v-if="task.status === 1">进行中</template>
+                                    <template v-else-if="task.status === 2">已完成</template>
+                                    <template v-else-if="task.status === 3">已停止</template>
+                                </td>
+                                <td>@{{ task.principal.data.name }}</td>
+                                <td>@{{ task.end_at }}</td>
                             </tr>
                         </table>
 
@@ -356,14 +345,14 @@
                     <div class="example">
                         <div class="col-md-2 text-right float-left">负责人</div>
                         <div class="col-md-5 float-left pl-0">
-                            <input-selectors :placeholder="memberPlaceholder" :multiple="multiple"
-                                             @change="principalChange"></input-selectors>
+                            <input-selectors :placeholder="'请选择负责人'" :multiple="multiple"
+                                             @change="taskPrincipalChange"></input-selectors>
                         </div>
                     </div>
                     <div class="example">
                         <div class="col-md-2 text-right float-left">参与人</div>
                         <div class="col-md-10 float-left pl-0">
-                            <add-member @change="participantChange"></add-member>
+                            <add-member @change="taskParticipantChange"></add-member>
                         </div>
                     </div>
                     <div class="example">

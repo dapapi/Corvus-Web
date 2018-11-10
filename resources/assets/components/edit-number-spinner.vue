@@ -1,0 +1,49 @@
+<template>
+    <div>
+        <template v-if="isEditNumberSpinner">
+            <number-spinner ref="number" @change="changeNumber"></number-spinner>
+        </template>
+        <template v-else>
+            {{ content }}
+        </template>
+    </div>
+</template>
+
+<script>
+    export default {
+        name: "edit-number-spinner",
+        props: ['is-edit', 'content'],
+        data() {
+            return {
+                isEditNumberSpinner: false,
+            }
+        },
+
+        mounted() {
+        },
+
+        watch: {
+            isEdit(newValue) {
+                this.isEditNumberSpinner = newValue;
+                if (newValue) {
+                    let _this = this;
+                    setTimeout(function () {
+                        console.log(_this.content);
+                        _this.$refs.number.setValue(_this.content)
+                    }, 0)
+                } else {
+                    this.$refs.number.destroy()
+                }
+            }
+        },
+        methods: {
+            changeNumber: function (value) {
+                this.$emit('change', value);
+            }
+        }
+    }
+</script>
+
+<style scoped>
+
+</style>

@@ -243,7 +243,8 @@
                                     <template v-if="task.status === 2">已完成</template>
                                     <template v-if="task.status === 3">已停止</template>
                                 </td>
-                                <td>@{{ task.principal }}</td>
+                                <td></td>
+                                {{--<td>@{{ task.principal.data.name }}</td>--}}
                                 <td>@{{ task.end_at }}</td>
                             </tr>
                         </table>

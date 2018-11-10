@@ -10,9 +10,10 @@ let app = new Vue({
             companyArr: [],
             starsArr: [],
             projectName: '',
-            projectTypeArr: config.projectTypeArr(),
+            projectTypeArr: config.projectTypeArr,
             projectFieldArr: [],
             projectType: '',
+            projectFields: '',
             projectStatus: [
                 {
                     value: 1,
@@ -29,26 +30,7 @@ let app = new Vue({
                     name: 'test'
                 }
             ],
-            projectsInfo: [
-                {
-                    id: '123',
-                    name: '星巴克代言',
-                    principal: '测试',
-                    progress: '正在跟进',
-                    sign_time: '2018-09-23',
-                    delivery: '直播',
-                    follow_time: '2018-09-23'
-                },
-                {
-                    id: '123',
-                    name: 'bigger研究所',
-                    principal: '测试',
-                    progress: '正在跟进',
-                    sign_time: '2018-09-23',
-                    delivery: '直播',
-                    follow_time: '2018-09-23'
-                },
-            ],
+            projectsInfo: '',
             customizeInfo: config.customizeInfo,
 
         },
@@ -57,6 +39,7 @@ let app = new Vue({
             this.getClients();
             this.getStars();
             this.getProjects();
+            this.getProjectFields();
         },
 
         methods: {
@@ -74,6 +57,21 @@ let app = new Vue({
                 }).done(function (response) {
                     console.log(response)
                     app.projectsInfo = response.data
+                })
+            },
+
+            getProjectFields: function () {
+                $.ajax({
+                    type: 'get',
+                    url: config.apiUrl + '/project_fields',
+                    headers: config.getHeaders(),
+                    data: {
+                        type: 1
+                    }
+                }).done(function (response) {
+                    console.log('fields')
+                    console.log(response)
+                    app.projectFields = response.data
                 })
             },
 

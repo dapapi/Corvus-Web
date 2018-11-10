@@ -1,7 +1,7 @@
 <template>
     <div class="clearfix">
         <div class="float-left">
-            <editable-search-box :options="options" @change="changeSelects"></editable-search-box>
+            <editable-search-box :options="clientArr" @change="changeSelects"></editable-search-box>
         </div>
         <div class="float-left col-md-6">
             <selectors :options="clientLevelArr" ref="companyLevel" @change="changeCompanyLevel"
@@ -22,7 +22,8 @@
                 selectIdArr: [],
                 isDisable: false,
                 isWrite: true,
-                emitCompany: {}
+                emitCompany: {},
+                clientArr: []
             }
         },
 
@@ -33,9 +34,26 @@
         },
 
         mounted() {
+            this.getClients();
         },
 
         methods: {
+            getClients: function () {
+                let _this = this;
+                $.ajax({
+                    type: 'get',
+                    url: config.apiUrl + '/clients/all',
+                    headers: config.getHeaders(),
+                }).done(function (response) {
+                    for (let i = 0; i < response.data.length; i++) {
+                        _this.clientArr.push({
+                            name: response.data[i].company,
+                            value: response.data[i].id,
+                            grade: response.data[i].grade
+                        })
+                    }
+                })
+            },
 
             changeCompanyLevel: function (value) {
                 this.emitCompany.grade = value;

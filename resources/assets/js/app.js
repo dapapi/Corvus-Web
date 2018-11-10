@@ -19,6 +19,7 @@ Vue.component('edit-company', require('../components/edit-company.vue'));
 Vue.component('edit-datepicker', require('../components/edit-datepicker.vue'));
 Vue.component('edit-input', require('../components/edit-input.vue'));
 Vue.component('edit-input-selector', require('../components/edit-input-selector.vue'));
+Vue.component('edit-number-spinner', require('../components/edit-number-spinner.vue'));
 Vue.component('edit-selector', require('../components/edit-selector.vue'));
 Vue.component('edit-textarea', require('../components/edit-textarea.vue'));
 Vue.component('editable-search-box', require('../components/editable-search-box.vue'));

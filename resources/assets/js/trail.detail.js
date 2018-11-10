@@ -20,6 +20,7 @@ let app = new Vue({
             customizeInfo: config.customizeInfo,
             taskTypeArr: config.taskTypeArr,
             taskLevelArr: config.taskLevelArr,
+            clientTasksInfo: [],
             clientLevelArr: [
                 {
                     name: '请选择级别',
@@ -34,13 +35,13 @@ let app = new Vue({
                     value: 2,
                 },
             ],
-            trailOriginArr: [],
-            salesProgressText: '未确定合作'
+            trailOriginArr: config.trailOrigin,
+            salesProgressText: '未确定合作',
+
         },
 
         mounted() {
             this.getTrail();
-            this.trailOriginArr = config.trailOrigin();
         },
 
         methods: {
@@ -82,13 +83,28 @@ let app = new Vue({
                 app.isEdit = false;
             },
 
+            getClientTask: function () {
+                if (app.clientTasksInfo.length > 0) {
+                    return
+                }
+                $.ajax({
+                    type: 'get',
+                    url: config.apiUrl + '/clients/' + app.trailId + '/tasks',
+                    headers: config.getHeaders(),
+                    data: data
+                }).done(function (response) {
+                    console.log(response)
+                    app.clientTasksInfo = response.data
+                })
+            },
+
             addTask: function () {
                 let data = {
-                    // resource_id: '1718463094',
-                    // resourceable_id: '1994731356',
+                    resource_type: 5,
+                    resourceable_id: app.trailId,
                     title: app.taskName,
                     // type: app.taskType,
-                    // principal_id: app.principal,
+                    principal_id: app.principal,
                     priority: app.taskLevel,
                     start_at: app.startTime + ' ' + app.startMinutes,
                     end_at: app.endTime + ' ' + app.endMinutes,
@@ -99,12 +115,11 @@ let app = new Vue({
                     type: 'post',
                     url: config.apiUrl + '/tasks',
                     headers: config.getHeaders(),
-                    // statusCode: config.getStatusCode(),
                     data: data
                 }).done(function (response) {
                     toastr.success('创建成功');
                     $('#addTask').modal('hide');
-                    redirect('detail?task_id=' + response)
+                    app.clientTasksInfo.push(response.data);
                 })
             },
 

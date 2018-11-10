@@ -18,6 +18,10 @@ let app = new Vue({
             taskPrincipal: '',
             taskParticipant: '',
             taskIntroduce: '',
+            taskStartTime: '',
+            startMinutes: '00:00',
+            endMinutes: '00:00',
+            taskEndTime: '',
             taskLevel: '',
             isEdit: false,
             clientInfo: '',
@@ -208,7 +212,30 @@ let app = new Vue({
             },
 
             addTask: function () {
-
+                let data = {
+                    resource_type: 4,
+                    resourceable_id: app.clientId,
+                    title: app.taskName,
+                    // type: 4,
+                    principal_id: app.principal,
+                    priority: app.taskLevel,
+                    start_at: app.taskStartTime + ' ' + app.startMinutes,
+                    end_at: app.taskEndTime + ' ' + app.endMinutes,
+                    desc: app.taskIntroduce,
+                    participant_ids: app.participants
+                };
+                $.ajax({
+                    type: 'post',
+                    url: config.apiUrl + '/tasks',
+                    headers: config.getHeaders(),
+                    data: data
+                }).done(function (response) {
+                    console.log(response);
+                    toastr.success('创建成功');
+                    $('#addTask').modal('hide');
+                    app.clientTasksInfo.push(response.data)
+                })
+            //    @todo 列表请求回来的数据为空，不知道是没添加上还是接口有问题
             },
 
             changeTaskType: function (value) {
@@ -224,11 +251,11 @@ let app = new Vue({
             },
 
             changeStartTime: function (value) {
-
+                app.taskStartTime = value
             },
 
             changeEndTime: function (value) {
-
+                app.taskEndTime = value
             },
 
             changeTaskLevel: function (value) {

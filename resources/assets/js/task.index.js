@@ -44,7 +44,6 @@ let app = new Vue({
                     type: 'get',
                     url: config.apiUrl + '/tasks/my_all',
                     headers: config.getHeaders(),
-                    statusCode: config.getStatusCode(),
                     data: data
                 }).done(function (response) {
                     console.log(response)
@@ -70,7 +69,6 @@ let app = new Vue({
                     type: 'get',
                     url: config.apiUrl + '/tasks/my',
                     headers: config.getHeaders(),
-                    statusCode: config.getStatusCode(),
                     data: data
                 }).done(function (response) {
                     console.log(response)
