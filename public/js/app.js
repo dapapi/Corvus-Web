@@ -1048,7 +1048,6 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
             if (newValue) {
                 var _this = this;
                 setTimeout(function () {
-                    console.log(_this.content);
                     _this.$refs.number.setValue(_this.content);
                 }, 0);
             } else {
@@ -2293,7 +2292,7 @@ exports = module.exports = __webpack_require__("./node_modules/css-loader/lib/cs
 
 
 // module
-exports.push([module.i, "\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n", ""]);
+exports.push([module.i, "\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n", ""]);
 
 // exports
 

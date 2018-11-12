@@ -120,11 +120,14 @@
                         <h4 class="modal-title">新增项目</h4>
                     </div>
                     <div class="modal-body">
-                        <div class="example" v-for="field in projectFields">
-                            <div class="col-md-2 text-right float-left">@{{ field.key }}</div>
-                            <div class="col-md-10 float-left pl-0">
+                        <div class="col-md-6 float-left pb-10" v-for="field in projectFields">
+                            <div class="col-md-5 text-right float-left pl-0">@{{ field.key }}</div>
+                            <div class="col-md-7 float-left pl-0">
                                 <template v-if="field.field_type === 1"></template>
                                 <template v-else-if="field.field_type === 2"></template>
+                                <template v-else-if="field.field_type === 3"></template>
+                                <template v-else-if="field.field_type === 4"></template>
+                                <template v-else-if="field.field_type === 5"></template>
                             </div>
                         </div>
                     </div>

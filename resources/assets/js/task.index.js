@@ -81,7 +81,7 @@ let app = new Vue({
 
             addTask: function () {
                 let data = {
-                    // resource_id: '1718463094',
+                    // resource_type: '1718463094',
                     // resourceable_id: '1994731356',
                     title: app.taskName,
                     // type: app.taskType,

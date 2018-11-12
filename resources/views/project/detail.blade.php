@@ -1,10 +1,6 @@
 @extends('layouts.master')
 
-@section('title','销售线索')
-
-@section('style')
-    <link rel="stylesheet" href="{{ mix('css/task.css') }}">
-@endsection
+@section('title','项目详情')
 
 @section('body-class','dashboard')
 
@@ -18,7 +14,7 @@
     <div class="page" id="root">
 
         <div class="page-header page-header-bordered">
-            <h1 class="page-title d-inline">销售线索</h1>
+            <h1 class="page-title d-inline">项目详情</h1>
 
             <div class="page-header-actions dropdown show task-dropdown float-right">
                 <div class="font-info pointer-content">拒绝</div>
@@ -320,7 +316,6 @@
                 </div>
             </div>
         </div>
-
     </div>
 
     <div class="modal fade" id="addTask" aria-hidden="true" aria-labelledby="addLabelForm"

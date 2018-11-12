@@ -6,8 +6,8 @@ let app = new Vue({
         el: '#root',
         data: {
             total: 0,
-            current_page: 1,
-            total_pages: 1,
+            current_page: 0,
+            total_pages: 0,
             trailId: '',
             trailInfo: '',
             trailOrigin: '',
@@ -20,28 +20,74 @@ let app = new Vue({
             customizeInfo: config.customizeInfo,
             taskTypeArr: config.taskTypeArr,
             taskLevelArr: config.taskLevelArr,
-            clientTasksInfo: [],
-            clientLevelArr: [
-                {
-                    name: '请选择级别',
-                    value: 0,
-                },
-                {
-                    name: '直客',
-                    value: 1,
-                },
-                {
-                    name: '代理公司',
-                    value: 2,
-                },
-            ],
+            startMinutes: '00:00',
+            endMinutes: '00:00',
+            trailTasksInfo: [],
+            clientLevelArr: config.clientLevelArr,
             trailOriginArr: config.trailOrigin,
             salesProgressText: '未确定合作',
+            changeInfo: {},
 
         },
 
         mounted() {
             this.getTrail();
+        },
+        watch: {
+            'trailInfo.title': function (newValue) {
+                app.changeInfo.title = newValue
+            },
+            'trailInfo.principal.data': {
+                handler(newValue, oldValue) {
+                    if (newValue && oldValue) {
+                        app.changeInfo.principal = newValue
+                    }
+                },
+                deep: true
+            },
+            'trailInfo.fee': function (newValue) {
+                app.changeInfo.fee = newValue
+            },
+            'trailInfo.brand': function (newValue) {
+                app.changeInfo.brand = newValue
+            },
+            'trailInfo.client.data.company': function (newValue) {
+                if (app.changeInfo.client) {
+                    app.changeInfo.client.data.company = newValue
+                } else {
+                    app.changeInfo.client = {
+                        data: {
+                            company: newValue
+                        }
+                    }
+                }
+
+            },
+            'trailInfo.contact.data.name': function (newValue) {
+                if (app.changeInfo.contact) {
+                    app.changeInfo.contact.data.name = newValue
+                } else {
+                    app.changeInfo.contact = {
+                        data: {
+                            name: newValue
+                        }
+                    }
+                }
+            },
+            'trailInfo.contact.data.phone': function (newValue) {
+                if (app.changeInfo.contact) {
+                    app.changeInfo.contact.data.phone = newValue
+                } else {
+                    app.changeInfo.contact = {
+                        data: {
+                            phone: newValue
+                        }
+                    }
+                }},
+            'trailInfo.desc': function (newValue) {
+                app.changeInfo.desc = newValue
+            },
+            //    @todo 修改目标艺人、推荐艺人
         },
 
         methods: {
@@ -59,7 +105,6 @@ let app = new Vue({
                     type: 'get',
                     url: config.apiUrl + '/trails/' + this.trailId,
                     headers: config.getHeaders(),
-                    // statusCode: config.getStatusCode(),
                     data: data
                 }).done(function (response) {
                     console.log(response.data);
@@ -72,7 +117,14 @@ let app = new Vue({
             },
 
             changeTrailBaseInfo: function () {
-
+                $.ajax({
+                    type: 'put',
+                    url: config.apiUrl + '/trails/' + this.trailId,
+                    headers: config.getHeaders(),
+                    data: app.changeInfo
+                }).done(function (response) {
+                    console.log(response.data);
+                })
             },
 
             editBaseInfo: function () {
@@ -83,18 +135,17 @@ let app = new Vue({
                 app.isEdit = false;
             },
 
-            getClientTask: function () {
-                if (app.clientTasksInfo.length > 0) {
+            getTrailTask: function () {
+                if (app.trailTasksInfo.length > 0) {
                     return
                 }
                 $.ajax({
                     type: 'get',
-                    url: config.apiUrl + '/clients/' + app.trailId + '/tasks',
+                    url: config.apiUrl + '/trails/' + app.trailId + '/tasks',
                     headers: config.getHeaders(),
-                    data: data
                 }).done(function (response) {
                     console.log(response)
-                    app.clientTasksInfo = response.data
+                    app.trailTasksInfo = response.data
                 })
             },
 
@@ -119,7 +170,7 @@ let app = new Vue({
                 }).done(function (response) {
                     toastr.success('创建成功');
                     $('#addTask').modal('hide');
-                    app.clientTasksInfo.push(response.data);
+                    app.trailTasksInfo.push(response.data);
                 })
             },
 
@@ -153,6 +204,59 @@ let app = new Vue({
 
             changeEndTime: function (value) {
                 app.endTime = value
+            },
+
+            taskPrincipalChange: function (value) {
+                app.taskPrincipal.data = value
+            },
+
+            taskParticipantChange: function (value) {
+                app.taskParticipant.data = value
+            },
+
+            changeTrailName: function (value) {
+                app.trailInfo.title = value
+            },
+
+            changeTrailPrincipal: function (value) {
+                console.log(value);
+                app.trailInfo.principal.data = value
+            },
+
+            changeTrailFee: function (value) {
+                app.trailInfo.fee = value
+            },
+
+            changeTrailBrand: function (value) {
+                app.trailInfo.brand = value
+            },
+
+            changeTrailCompany: function (value) {
+                app.trailInfo.client.data.company = value
+            },
+
+            changeTrailCompanyLevel: function (value) {
+                app.trailInfo.client.data.grade = value
+            },
+
+            changeTrailContact: function (value) {
+                app.trailInfo.contact.data.name = value
+            },
+
+            changeTrailContactPhone: function (value) {
+                app.trailInfo.contact.data.phone = value
+            },
+
+            changeTrailExpectations: function (value) {
+
+            },
+
+            changeTrailRecommend: function (value) {
+
+            },
+
+            changeTrailDesc: function (value) {
+                app.trailInfo.desc = value
             },
 
 
