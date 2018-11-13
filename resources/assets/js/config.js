@@ -297,6 +297,17 @@ let config = {
             value: 3,
             name: '管培生'
         }
+    ],
+    // 性别
+    sex: [
+        {
+            value: 1,
+            name: '男'
+        },
+        {
+            value: 2,
+            name: '女'
+        }
     ]
 };
 

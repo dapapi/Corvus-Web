@@ -55,7 +55,10 @@ Route::get('/staff/index', function () {
     return view('staff.index');
 });
 
-Route::get('/staff/detail', function () {
-    return view('staff.detail');
+Route::get('/staff/history', function () {
+    return view('staff.history');
 });
 
+Route::get('/staff/add', function () {
+    return view('staff.add');
+});

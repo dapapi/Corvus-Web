@@ -14,7 +14,7 @@
         <div class="page-header page-header-bordered">
             <h1 class="page-title">员工档案</h1>
             <div class="page-header-actions">
-                历史归档
+                <a href="/staff/history">历史归档</a>
             </div>
         </div>
 
@@ -107,7 +107,15 @@
                 <pagination :current_page="current_page" :method="getProjects" :total_pages="total_pages"
                             :total="total"></pagination>
             </div>
-
+            <div class="site-action">
+                <a href="/staff/add">
+                    <button type="button"
+                            class="site-action-toggle btn-raised btn btn-success btn-floating waves-effect waves-classic">
+                        <i class="front-icon md-plus animation-scale-up" aria-hidden="true"></i>
+                        <!-- <i class="back-icon md-plus animation-scale-up" aria-hidden="true"></i> -->
+                    </button>
+                </a>
+            </div>
         </div>
 
         <!-- <customize-filter :data="customizeInfo" @change="customize"></customize-filter> -->

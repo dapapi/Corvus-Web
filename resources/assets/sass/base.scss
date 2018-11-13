@@ -67,3 +67,28 @@
   bottom: 20px;
   right: 0;
 }
+// form表单样式
+.require {
+  position: relative;
+}
+.require:before {
+  content: '';
+  position: absolute;
+  width: 8px;
+  height: 8px;
+  border-radius: 50%;
+  background: #F44336;
+  right: -4px;
+  top: 50%;
+  transform: translateY(-50%);
+}
+.point {
+  display: inline-block;
+  width: 8px;
+  height: 8px;
+  border-radius: 50%;
+  background: #F44336;
+  margin: 0 4px;
+  position: relative;
+  top: -1px;
+}

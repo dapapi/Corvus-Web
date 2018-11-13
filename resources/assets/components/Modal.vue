@@ -12,8 +12,8 @@
                     <slot></slot>
                 </div>
                 <div class="modal-footer">
-                    <button type="button" class="btn btn-primary" @click="handleOk">确认</button>
-                    <button type="button" class="btn btn-default" data-dismiss="modal" @click="handleCancel">取消</button>
+                    <button class="btn btn-sm btn-white btn-pure waves-effect waves-classic" data-dismiss="modal"  @click="handleCancel">取消</button>
+                    <button class="btn btn-primary waves-effect waves-classic" type="submit" @click="handleOk">确定</button>
                 </div>
             </div>
         </div>
@@ -45,10 +45,10 @@ export default {
 </script>
 
 <style lang="scss" scoped>
-.modal-header {
-    margin: 0px 20px;
-    padding: 12px 0;
-    border-bottom: 1px solid #d8d8d8;
-}
+// .modal-header {
+//     margin: 0px 20px;
+//     padding: 12px 0;
+//     border-bottom: 1px solid #d8d8d8;
+// }
 </style>
 
