@@ -30,6 +30,11 @@
                                     <span class="site-menu-title">客户管理</span>
                                 </a>
                             </li>
+                            <li class="site-menu-item">
+                                <a class="animsition-link" href="/artist/index">
+                                    <span class="site-menu-title">博主管理</span>
+                                </a>
+                            </li>
                         </ul>
                     </li>
 

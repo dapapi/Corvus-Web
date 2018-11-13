@@ -51,3 +51,12 @@ Route::get('/client/detail', function () {
     return view('client.detail');
 });
 
+Route::get('/artist/index', function () {
+    return view('artist.papi-index');
+});
+Route::get('/artist/detail', function () {
+    return view('artist.papi-detail');
+});
+
+//Route::get('/artist/index', 'ClientController@detail');
+

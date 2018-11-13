@@ -41,14 +41,23 @@
                         <div v-show="teamShow">
                             <div class="users" v-for="user in this.normalUsers"
                                  v-show="user.name.indexOf(searchKeyWord) > -1"
-                                 @click="selectMember(user.id)">
+                                 @click="selectMember(user)">
                                 <a class="avatar" href="javascript:void(0)">
                                     <img src="https://res.papitube.com/no-icon.png" alt="...">
                                 </a>
                                 <span class="pl-1">{{ user.name }}</span>
-                                <span class="float-right" v-show="selectIdArr.indexOf(user.id) > -1">
-                                    <i class="icon md-check"></i>
-                                </span>
+                                <template v-if="memberType === 'principal'">
+                                    <span class="float-right"
+                                          v-show="principalInfo.id == user.id">
+                                        <i class="icon md-check"></i>
+                                    </span>
+                                </template>
+                                <template v-else-if="memberType === 'participant'">
+                                    <span class="float-right"
+                                          v-show="participantsInfo.find(item => item.id == user.id)">
+                                        <i class="icon md-check"></i>
+                                    </span>
+                                </template>
                             </div>
                         </div>
                     </div>
@@ -56,8 +65,8 @@
                 </div>
                 <div class="tab-pane animation-fade" :id="'forum-department' + this.componentId" role="tabpanel">
                     <div v-for="department in departmentUsers">
-                        <departments-item :data="department" :select="selectIdArr"
-                                          @change="memberChange" :multiple="isMultiple"></departments-item>
+                        <departments-item :data="department" @change="memberChange"
+                                          :multiple="isMultiple" :member-type="memberType"></departments-item>
                     </div>
                 </div>
             </div>
@@ -70,7 +79,7 @@
     import config from '../js/config'
 
     export default {
-        props: ['multiple', 'selected-members'],
+        props: ['multiple', 'member-type'],
         data() {
             return {
                 normalUsers: {},
@@ -80,9 +89,20 @@
                 searchKeyWord: '',
                 componentId: '',
                 isMultiple: '',
-                isParent: false
+                isParent: false,
             }
         },
+
+        computed: {
+            principalInfo: function () {
+                return this.$store.state.principalInfo
+            },
+
+            participantsInfo: function () {
+                return this.$store.state.participantsInfo
+            }
+        },
+
         mounted() {
             let self = this;
             self.componentId = self._uid;
@@ -91,7 +111,6 @@
                 url: config.apiUrl + '/users',
                 headers: config.getHeaders(),
                 type: 'get',
-                // statusCode: config.getStatusCode()
             }).done(function (response) {
                 self.normalUsers = response.data;
                 if (self.selectedMembers && self.selectedMembers.length > 0) {
@@ -106,29 +125,18 @@
                 url: config.apiUrl + '/departments',
                 headers: config.getHeaders(),
                 type: 'get',
-                // statusCode: config.getStatusCode()
             }).done(function (response) {
                 self.departmentUsers = response.data
-            })
+            });
 
-        },
-
-        watch: {
-            selectIdArr: function (newValue) {
-                if (this.isParent) {
-                    this.isParent = false;
-                    return
+            if (this.memberType === 'principal') {
+                this.selectIdArr = [this.$store.state.principalInfo.id];
+            } else if (this.memberType === 'participant') {
+                for (let i = 0; i < this.$store.state.participantsInfo.length; i++) {
+                    this.selectIdArr.push(this.$store.state.participantsInfo[i].id)
                 }
-                let tagArr = [];
-                for (let i = 0; i < newValue.length; i++) {
-                    tagArr.push(this.normalUsers.find(item => item.id == newValue[i]))
-                }
-                this.$emit('change', tagArr);
-            },
-            selectedMembers: function (newValue) {
-                this.isParent = true;
-                this.selectIdArr = newValue
             }
+
         },
 
         methods: {
@@ -137,29 +145,35 @@
             },
 
             selectAllMember: function () {
-                for (let i = 0; i < this.normalUsers.length; i++) {
-                    let userId = this.normalUsers[i].id;
-                    let index = this.selectIdArr.indexOf(userId);
-                    if (index === -1) {
-                        this.selectIdArr.push(userId)
+                // for (let i = 0; i < this.normalUsers.length; i++) {
+                //     let userId = this.normalUsers[i].id;
+                //     let index = this.selectIdArr.indexOf(userId);
+                //     if (index === -1) {
+                //         this.selectIdArr.push(userId)
+                //     }
+                // }
+            },
+
+            selectMember: function (user) {
+                if (this.memberType === 'principal') {
+                    this.$store.commit('changePrincipal', user);
+                    this.$emit('change', false)
+                } else if (this.memberType === 'participant') {
+                    let participantInfo = this.$store.state.participantsInfo;
+                    console.log(participantInfo);
+                    if (participantInfo.find(item => item.id == user.id)) {
+                        participantInfo.splice(participantInfo.map(item => item.id).indexOf(user.id), 1)
+                    } else {
+                        participantInfo.push(user)
                     }
+                    this.$store.commit('changePrincipal', participantInfo);
                 }
             },
 
-            selectMember: function (userId) {
-                let index = this.selectIdArr.indexOf(userId);
-                if (index > -1) {
-                    this.selectIdArr.splice(index, 1)
-                } else {
-                    if (!this.isMultiple && this.selectIdArr.length > 0) {
-                        this.selectIdArr = []
-                    }
-                    this.selectIdArr.push(userId)
+            memberChange: function () {
+                if (this.memberType === 'principal') {
+                    this.$emit('change', false)
                 }
-            },
-
-            memberChange: function (value) {
-                this.selectIdArr = value
             }
         }
     }

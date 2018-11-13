@@ -12,7 +12,7 @@
             <div class="addMember-trigger-button" @click="showMember"><i class="md-plus"></i></div>
             <div class="addMember-trigger-dropdown">
                 <select-staff :multiple="true" @change="changeSelectMember"
-                              :selected-members="this.selectMemberIdArr"></select-staff>
+                              member-type="participant"></select-staff>
             </div>
         </div>
     </div>
@@ -25,24 +25,15 @@
         data() {
             return {
                 isMemberShow: false,
-                selectMemberArr: [],
-                selectMemberIdArr: [],
             }
         },
         mounted() {
             this.globalClick(this.removeSelect);
-            if (this.selectedMembers && this.selectedMembers.length > 0) {
-                this.selectMemberIdArr = this.selectedMembers;
-            }
         },
 
-        watch: {
-            selectMemberArr: function (newValue) {
-                this.$emit('change', newValue)
-            },
-
-            selectedMembers: function (newValue) {
-                this.selectMemberIdArr = newValue;
+        computed: {
+            selectMemberArr: function () {
+                return this.$store.state.participantsInfo
             }
         },
 
@@ -62,17 +53,17 @@
             },
 
             changeSelectMember: function (value) {
-                this.selectMemberArr = value
+                // this.selectMemberArr = value
             },
 
             removeMember: function (userId) {
-                let data = this.selectMemberArr.find(item => item.id == userId);
-                let index = this.selectMemberArr.indexOf(data);
-                this.selectMemberArr.splice(index, 1);
-                this.selectMemberIdArr = [];
-                for (let i = 0; i < this.selectMemberArr.length; i++) {
-                    this.selectMemberIdArr.push(this.selectMemberArr[i].id)
-                }
+                // let data = this.selectMemberArr.find(item => item.id == userId);
+                // let index = this.selectMemberArr.indexOf(data);
+                // this.selectMemberArr.splice(index, 1);
+                // this.selectMemberIdArr = [];
+                // for (let i = 0; i < this.selectMemberArr.length; i++) {
+                //     this.selectMemberIdArr.push(this.selectMemberArr[i].id)
+                // }
             }
 
         }

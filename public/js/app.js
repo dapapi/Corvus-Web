@@ -96,26 +96,17 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
     props: ['selected-members'],
     data: function data() {
         return {
-            isMemberShow: false,
-            selectMemberArr: [],
-            selectMemberIdArr: []
+            isMemberShow: false
         };
     },
     mounted: function mounted() {
         this.globalClick(this.removeSelect);
-        if (this.selectedMembers && this.selectedMembers.length > 0) {
-            this.selectMemberIdArr = this.selectedMembers;
-        }
     },
 
 
-    watch: {
-        selectMemberArr: function selectMemberArr(newValue) {
-            this.$emit('change', newValue);
-        },
-
-        selectedMembers: function selectedMembers(newValue) {
-            this.selectMemberIdArr = newValue;
+    computed: {
+        selectMemberArr: function selectMemberArr() {
+            return this.$store.state.participantsInfo;
         }
     },
 
@@ -135,19 +126,17 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
         },
 
         changeSelectMember: function changeSelectMember(value) {
-            this.selectMemberArr = value;
+            // this.selectMemberArr = value
         },
 
         removeMember: function removeMember(userId) {
-            var data = this.selectMemberArr.find(function (item) {
-                return item.id == userId;
-            });
-            var index = this.selectMemberArr.indexOf(data);
-            this.selectMemberArr.splice(index, 1);
-            this.selectMemberIdArr = [];
-            for (var i = 0; i < this.selectMemberArr.length; i++) {
-                this.selectMemberIdArr.push(this.selectMemberArr[i].id);
-            }
+            // let data = this.selectMemberArr.find(item => item.id == userId);
+            // let index = this.selectMemberArr.indexOf(data);
+            // this.selectMemberArr.splice(index, 1);
+            // this.selectMemberIdArr = [];
+            // for (let i = 0; i < this.selectMemberArr.length; i++) {
+            //     this.selectMemberIdArr.push(this.selectMemberArr[i].id)
+            // }
         }
 
     }
@@ -663,10 +652,18 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
 //
 //
 //
+//
+//
+//
+//
+//
+//
+//
+//
 
 /* harmony default export */ __webpack_exports__["default"] = ({
     name: "departments-item",
-    props: ['data', 'select', 'multiple'],
+    props: ['data', 'select', 'multiple', 'member-type'],
     data: function data() {
         return {
             departmentsShow: false,
@@ -675,26 +672,34 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
             isMultiple: ''
         };
     },
+
+
+    computed: {
+        principalInfo: function principalInfo() {
+            return this.$store.state.principalInfo;
+        }
+    },
+
     mounted: function mounted() {
         this.total = this.memberNum(this.data);
         this.isMultiple = this.multiple;
-        this.selectArr = this.select;
+        // this.selectArr = this.select;
     },
 
 
-    watch: {
-        selectArr: function selectArr(newValue) {
-            if (this.isParent) {
-                return;
-            }
-            this.$emit('change', newValue);
-        },
-
-        select: function select(newValue) {
-            this.isParent = true;
-            this.selectArr = newValue;
-        }
-    },
+    // watch: {
+    //     selectArr: function (newValue) {
+    //         if (this.isParent) {
+    //             return
+    //         }
+    //         this.$emit('change', newValue)
+    //     },
+    //
+    //     select: function (newValue) {
+    //         this.isParent = true;
+    //         this.selectArr = newValue
+    //     }
+    // },
 
     methods: {
         departmentClose: function departmentClose() {
@@ -702,18 +707,28 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
         },
 
         memberChange: function memberChange(value) {
-            this.selectArr = value;
+            if (this.memberType === 'principal') {
+                this.$emit('change', false);
+            } else {
+                console.log(value);
+            }
         },
 
-        selectMember: function selectMember(userId) {
-            var index = this.selectArr.indexOf(userId);
-            if (index > -1) {
-                this.selectArr.splice(index, 1);
+        selectMember: function selectMember(user) {
+            if (this.memberType === 'principal') {
+                this.$store.commit('changePrincipal', user);
+                this.$emit('change', false);
             } else {
-                if (!this.multiple && this.selectArr.length > 0) {
-                    this.selectArr = [];
+                var userId = user.id;
+                var index = this.selectArr.indexOf(userId);
+                if (index > -1) {
+                    this.selectArr.splice(index, 1);
+                } else {
+                    if (!this.multiple && this.selectArr.length > 0) {
+                        this.selectArr = [];
+                    }
+                    this.selectArr.push(userId);
                 }
-                this.selectArr.push(userId);
             }
         },
 
@@ -721,18 +736,18 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
             this.checkMember(this.data);
         },
 
-        checkMember: function checkMember(data) {
-            for (var i = 0; i < data.users.data.length; i++) {
-                var userId = data.users.data[i].id;
-                var index = this.selectArr.indexOf(userId);
-                if (index === -1) {
-                    this.selectArr.push(userId);
-                }
-            }
-            for (var _i = 0; _i < data.departments.data.length; _i++) {
-                this.checkMember(data.departments.data[_i]);
-            }
-        },
+        // checkMember: function (data) {
+        //     for (let i = 0; i < data.users.data.length; i++) {
+        //         let userId = data.users.data[i].id;
+        //         let index = this.selectArr.indexOf(userId);
+        //         if (index === -1) {
+        //             this.selectArr.push(userId)
+        //         }
+        //     }
+        //     for (let i = 0; i < data.departments.data.length; i++) {
+        //         this.checkMember(data.departments.data[i])
+        //     }
+        // },
 
         memberNum: function memberNum(data) {
             var firstLevelUsers = data.users.data.length;
@@ -766,7 +781,7 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
 
 /* harmony default export */ __webpack_exports__["default"] = ({
     name: "edit-add-member",
-    props: ['is-edit', 'content', 'selected-members'],
+    props: ['is-edit'],
     data: function data() {
         return {
             isEditAdd: false
@@ -774,6 +789,16 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
     },
     mounted: function mounted() {},
 
+
+    computed: {
+        selectedMember: function selectedMember() {
+            var flagArr = [];
+            for (var i = 0; i < this.$store.state.participantsInfo.length; i++) {
+                flagArr.push(this.$store.state.participantsInfo[i].name);
+            }
+            return flagArr;
+        }
+    },
 
     watch: {
         isEdit: function isEdit(newValue) {
@@ -915,7 +940,6 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
             if (newValue) {
                 var _this = this;
                 setTimeout(function () {
-                    console.log(_this.content);
                     _this.$refs.datepicker.setValue(_this.content);
                 }, 0);
             } else {
@@ -948,10 +972,11 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
 //
 //
 //
+//
 
 /* harmony default export */ __webpack_exports__["default"] = ({
     name: "edit-input-selector",
-    props: ['is-edit', 'content'],
+    props: ['is-edit', 'selectType'],
     data: function data() {
         return {
             isEditSelect: false
@@ -1272,13 +1297,14 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
                 type[type.length - 1] = 'pptx';
             } else if (type[type.length - 1] === 'vnd.openxmlformats-officedocument.spreadsheetml.sheet') {
                 type[type.length - 1] = 'xlsx';
+            } else if (type[type.length - 1] === 'plain') {
+                type[type.length - 1] = 'txt';
             }
             var key = this.guid() + '.' + type[type.length - 1];
             var conf = null;
             var fileSize = file.size;
             var _this = this;
             this.getQiniuAccessToken(function (token) {
-                console.log(token);
                 var observable = __WEBPACK_IMPORTED_MODULE_1_qiniu_js__["upload"](file, key, token, putExtra, conf);
                 var subscription = observable.subscribe(function (res) {}, function (error) {
                     console.log(error);
@@ -1366,25 +1392,25 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
 //
 //
 //
+//
 
 /* harmony default export */ __webpack_exports__["default"] = ({
-    props: ['placeholder', 'multiple', 'selected-members'],
+    props: ['placeholder'],
     data: function data() {
         return {
-            selectMemberShow: false,
-            randomId: '',
-            inputContent: '',
-            selectMember: []
+            selectMemberShow: false
         };
     },
     mounted: function mounted() {
         this.globalClick(this.removeInputSelect);
-        this.randomId = this._uid;
     },
 
 
-    watch: {
-        selectMember: function selectMember(newValue) {}
+    computed: {
+        selectedMemberName: function selectedMemberName() {
+            return this.$store.state.principalInfo.name;
+        }
+
     },
 
     methods: {
@@ -1402,17 +1428,9 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
         },
 
 
-        changeSelectMember: function changeSelectMember(value) {
-            if (value.length <= 0) {
-                return;
-            }
-            if (!this.multiple) {
-                this.selectMemberShow = false;
-                this.inputContent = value[0].name;
-                this.$emit('change', value[0].id);
-            } else {
-                // @todo 多选显示与返回
-            }
+        changeSelectMember: function changeSelectMember() {
+            this.selectMemberShow = false;
+            this.$emit('change', false);
         }
     }
 });
@@ -1711,11 +1729,20 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
 //
 //
 //
+//
+//
+//
+//
+//
+//
+//
+//
+//
 
 
 
 /* harmony default export */ __webpack_exports__["default"] = ({
-    props: ['multiple', 'selected-members'],
+    props: ['multiple', 'member-type'],
     data: function data() {
         return {
             normalUsers: {},
@@ -1728,6 +1755,18 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
             isParent: false
         };
     },
+
+
+    computed: {
+        principalInfo: function principalInfo() {
+            return this.$store.state.principalInfo;
+        },
+
+        participantsInfo: function participantsInfo() {
+            return this.$store.state.participantsInfo;
+        }
+    },
+
     mounted: function mounted() {
         var self = this;
         self.componentId = self._uid;
@@ -1736,7 +1775,6 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
             url: __WEBPACK_IMPORTED_MODULE_0__js_config__["a" /* default */].apiUrl + '/users',
             headers: __WEBPACK_IMPORTED_MODULE_0__js_config__["a" /* default */].getHeaders(),
             type: 'get'
-            // statusCode: config.getStatusCode()
         }).done(function (response) {
             self.normalUsers = response.data;
             if (self.selectedMembers && self.selectedMembers.length > 0) {
@@ -1750,39 +1788,19 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
             url: __WEBPACK_IMPORTED_MODULE_0__js_config__["a" /* default */].apiUrl + '/departments',
             headers: __WEBPACK_IMPORTED_MODULE_0__js_config__["a" /* default */].getHeaders(),
             type: 'get'
-            // statusCode: config.getStatusCode()
         }).done(function (response) {
             self.departmentUsers = response.data;
         });
-    },
 
-
-    watch: {
-        selectIdArr: function selectIdArr(newValue) {
-            var _this = this;
-
-            if (this.isParent) {
-                this.isParent = false;
-                return;
+        if (this.memberType === 'principal') {
+            this.selectIdArr = [this.$store.state.principalInfo.id];
+        } else if (this.memberType === 'participant') {
+            for (var i = 0; i < this.$store.state.participantsInfo.length; i++) {
+                this.selectIdArr.push(this.$store.state.participantsInfo[i].id);
             }
-            var tagArr = [];
-
-            var _loop = function _loop(i) {
-                tagArr.push(_this.normalUsers.find(function (item) {
-                    return item.id == newValue[i];
-                }));
-            };
-
-            for (var i = 0; i < newValue.length; i++) {
-                _loop(i);
-            }
-            this.$emit('change', tagArr);
-        },
-        selectedMembers: function selectedMembers(newValue) {
-            this.isParent = true;
-            this.selectIdArr = newValue;
         }
     },
+
 
     methods: {
         closeTeam: function closeTeam() {
@@ -1790,29 +1808,39 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
         },
 
         selectAllMember: function selectAllMember() {
-            for (var i = 0; i < this.normalUsers.length; i++) {
-                var userId = this.normalUsers[i].id;
-                var index = this.selectIdArr.indexOf(userId);
-                if (index === -1) {
-                    this.selectIdArr.push(userId);
+            // for (let i = 0; i < this.normalUsers.length; i++) {
+            //     let userId = this.normalUsers[i].id;
+            //     let index = this.selectIdArr.indexOf(userId);
+            //     if (index === -1) {
+            //         this.selectIdArr.push(userId)
+            //     }
+            // }
+        },
+
+        selectMember: function selectMember(user) {
+            if (this.memberType === 'principal') {
+                this.$store.commit('changePrincipal', user);
+                this.$emit('change', false);
+            } else if (this.memberType === 'participant') {
+                var participantInfo = this.$store.state.participantsInfo;
+                console.log(participantInfo);
+                if (participantInfo.find(function (item) {
+                    return item.id == user.id;
+                })) {
+                    participantInfo.splice(participantInfo.map(function (item) {
+                        return item.id;
+                    }).indexOf(user.id), 1);
+                } else {
+                    participantInfo.push(user);
                 }
+                this.$store.commit('changePrincipal', participantInfo);
             }
         },
 
-        selectMember: function selectMember(userId) {
-            var index = this.selectIdArr.indexOf(userId);
-            if (index > -1) {
-                this.selectIdArr.splice(index, 1);
-            } else {
-                if (!this.isMultiple && this.selectIdArr.length > 0) {
-                    this.selectIdArr = [];
-                }
-                this.selectIdArr.push(userId);
+        memberChange: function memberChange() {
+            if (this.memberType === 'principal') {
+                this.$emit('change', false);
             }
-        },
-
-        memberChange: function memberChange(value) {
-            this.selectIdArr = value;
         }
     }
 });
@@ -2112,7 +2140,7 @@ exports = module.exports = __webpack_require__("./node_modules/css-loader/lib/cs
 
 
 // module
-exports.push([module.i, "\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n", ""]);
+exports.push([module.i, "\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n", ""]);
 
 // exports
 
@@ -2142,7 +2170,7 @@ exports = module.exports = __webpack_require__("./node_modules/css-loader/lib/cs
 
 
 // module
-exports.push([module.i, "\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n", ""]);
+exports.push([module.i, "\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n", ""]);
 
 // exports
 
@@ -2202,7 +2230,7 @@ exports = module.exports = __webpack_require__("./node_modules/css-loader/lib/cs
 
 
 // module
-exports.push([module.i, "\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n", ""]);
+exports.push([module.i, "\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n", ""]);
 
 // exports
 
@@ -2232,7 +2260,7 @@ exports = module.exports = __webpack_require__("./node_modules/css-loader/lib/cs
 
 
 // module
-exports.push([module.i, "\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n", ""]);
+exports.push([module.i, "\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n", ""]);
 
 // exports
 
@@ -2247,7 +2275,7 @@ exports = module.exports = __webpack_require__("./node_modules/css-loader/lib/cs
 
 
 // module
-exports.push([module.i, "\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n", ""]);
+exports.push([module.i, "\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n", ""]);
 
 // exports
 
@@ -3511,7 +3539,7 @@ var render = function() {
                         staticClass: "users",
                         on: {
                           click: function($event) {
-                            _vm.selectMember(user.id)
+                            _vm.selectMember(user)
                           }
                         }
                       },
@@ -3522,22 +3550,50 @@ var render = function() {
                           _vm._v(_vm._s(user.name))
                         ]),
                         _vm._v(" "),
-                        _c(
-                          "span",
-                          {
-                            directives: [
-                              {
-                                name: "show",
-                                rawName: "v-show",
-                                value: _vm.selectIdArr.indexOf(user.id) > -1,
-                                expression: "selectIdArr.indexOf(user.id) > -1"
-                              }
-                            ],
-                            staticClass: "float-right"
-                          },
-                          [_c("i", { staticClass: "icon md-check" })]
-                        )
-                      ]
+                        _vm.memberType === "principal"
+                          ? [
+                              _c(
+                                "span",
+                                {
+                                  directives: [
+                                    {
+                                      name: "show",
+                                      rawName: "v-show",
+                                      value: _vm.principalInfo.id == user.id,
+                                      expression: "principalInfo.id == user.id"
+                                    }
+                                  ],
+                                  staticClass: "float-right"
+                                },
+                                [_c("i", { staticClass: "icon md-check" })]
+                              )
+                            ]
+                          : _vm.memberType === "participant"
+                            ? [
+                                _c(
+                                  "span",
+                                  {
+                                    directives: [
+                                      {
+                                        name: "show",
+                                        rawName: "v-show",
+                                        value: _vm.participantsInfo.find(
+                                          function(item) {
+                                            return item.id == user.id
+                                          }
+                                        ),
+                                        expression:
+                                          "participantsInfo.find(item => item.id == user.id)"
+                                      }
+                                    ],
+                                    staticClass: "float-right"
+                                  },
+                                  [_c("i", { staticClass: "icon md-check" })]
+                                )
+                              ]
+                            : _vm._e()
+                      ],
+                      2
                     )
                   })
                 )
@@ -3561,8 +3617,8 @@ var render = function() {
                   _c("departments-item", {
                     attrs: {
                       data: department,
-                      select: _vm.selectIdArr,
-                      multiple: _vm.isMultiple
+                      multiple: _vm.isMultiple,
+                      "member-type": _vm.memberType
                     },
                     on: { change: _vm.memberChange }
                   })
@@ -4461,10 +4517,7 @@ var render = function() {
           { staticClass: "addMember-trigger-dropdown" },
           [
             _c("select-staff", {
-              attrs: {
-                multiple: true,
-                "selected-members": this.selectMemberIdArr
-              },
+              attrs: { multiple: true, "member-type": "participant" },
               on: { change: _vm.changeSelectMember }
             })
           ],
@@ -4579,20 +4632,20 @@ var render = function() {
             {
               name: "model",
               rawName: "v-model",
-              value: _vm.inputContent,
-              expression: "inputContent"
+              value: _vm.selectedMemberName,
+              expression: "selectedMemberName"
             }
           ],
           staticClass: "form-control",
           attrs: { type: "text", title: "", placeholder: this.placeholder },
-          domProps: { value: _vm.inputContent },
+          domProps: { value: _vm.selectedMemberName },
           on: {
             focus: _vm.showMember,
             input: function($event) {
               if ($event.target.composing) {
                 return
               }
-              _vm.inputContent = $event.target.value
+              _vm.selectedMemberName = $event.target.value
             }
           }
         })
@@ -4614,7 +4667,7 @@ var render = function() {
         [
           _c("select-staff", {
             staticClass: "selector",
-            attrs: { multiple: this.multiple },
+            attrs: { "member-type": "principal" },
             on: { change: _vm.changeSelectMember }
           })
         ],
@@ -4723,7 +4776,7 @@ var render = function() {
                 staticClass: "users",
                 on: {
                   click: function($event) {
-                    _vm.selectMember(user.id)
+                    _vm.selectMember(user)
                   }
                 }
               },
@@ -4734,22 +4787,43 @@ var render = function() {
                   _vm._v(_vm._s(user.name))
                 ]),
                 _vm._v(" "),
-                _c(
-                  "span",
-                  {
-                    directives: [
-                      {
-                        name: "show",
-                        rawName: "v-show",
-                        value: _vm.selectArr.indexOf(user.id) > -1,
-                        expression: "selectArr.indexOf(user.id) > -1"
-                      }
-                    ],
-                    staticClass: "float-right"
-                  },
-                  [_c("i", { staticClass: "icon md-check" })]
-                )
-              ]
+                _vm.memberType === "principal"
+                  ? [
+                      _c(
+                        "span",
+                        {
+                          directives: [
+                            {
+                              name: "show",
+                              rawName: "v-show",
+                              value: _vm.principalInfo.id == user.id,
+                              expression: "principalInfo.id == user.id"
+                            }
+                          ],
+                          staticClass: "float-right"
+                        },
+                        [_c("i", { staticClass: "icon md-check" })]
+                      )
+                    ]
+                  : [
+                      _c(
+                        "span",
+                        {
+                          directives: [
+                            {
+                              name: "show",
+                              rawName: "v-show",
+                              value: _vm.selectArr.indexOf(user.id) > -1,
+                              expression: "selectArr.indexOf(user.id) > -1"
+                            }
+                          ],
+                          staticClass: "float-right"
+                        },
+                        [_c("i", { staticClass: "icon md-check" })]
+                      )
+                    ]
+              ],
+              2
             )
           })
         ),
@@ -4764,7 +4838,7 @@ var render = function() {
                     _c("departments-item", {
                       attrs: {
                         data: departmentData,
-                        select: _vm.selectArr,
+                        "member-type": _vm.memberType,
                         multiple: _vm.isMultiple
                       },
                       on: { change: _vm.memberChange }
@@ -4818,13 +4892,12 @@ var render = function() {
     {},
     [
       _vm.isEditAdd
-        ? [
-            _c("add-member", {
-              attrs: { "selected-members": this.selectedMembers },
-              on: { change: _vm.changeMember }
-            })
+        ? [_c("add-member", { on: { change: _vm.changeMember } })]
+        : [
+            _vm._v(
+              "\n        " + _vm._s(_vm.selectedMember.join("、")) + "\n    "
+            )
           ]
-        : [_vm._v("\n        " + _vm._s(_vm.content) + "\n    ")]
     ],
     2
   )
@@ -4914,7 +4987,13 @@ var render = function() {
     [
       _vm.isEditSelect
         ? [_c("input-selectors", { on: { change: _vm.changeMember } })]
-        : [_vm._v("\n        " + _vm._s(_vm.content) + "\n    ")]
+        : [
+            _vm._v(
+              "\n        " +
+                _vm._s(this.$store.state.principalInfo.name) +
+                "\n    "
+            )
+          ]
     ],
     2
   )
@@ -18846,6 +18925,28 @@ var config = {
     }, {
         name: 'papi客户',
         value: 4
+    }],
+    artistStatusArr: [{
+        name: '已签约',
+        value: 1
+    }, {
+        name: '经理人沟通中',
+        value: 2
+    }, {
+        name: '兼职星探沟通中',
+        value: 3
+    }, {
+        name: '待定',
+        value: 4
+    }, {
+        name: '淘汰',
+        value: 5
+    }, {
+        name: '合同中',
+        value: 6
+    }, {
+        name: '联系但无回复',
+        value: 7
     }]
 
 };

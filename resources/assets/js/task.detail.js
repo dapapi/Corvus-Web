@@ -5,32 +5,40 @@ import Vuex from 'vuex';
 
 const store = new Vuex.Store({
     state: {
-        participantsArr: [],
+        participantsInfo: [],
         participantsIdArr: [],
+        principalInfo: {},
     },
     mutations: {
-        changeParticipantsArr(data) {
-            console.log(this.state.participantsArr)
-            this.state.participantsArr = data
+        changeParticipantsArr(state, data) {
+            state.participantsInfo = data
         },
-        changeParticipantsIdArr(data) {
+        changeParticipantsIdArr(state, data) {
             state.participantsIdArr = data
+        },
+
+        changePrincipal(state, data) {
+            state.principalInfo = data
         }
     },
     actions: {
-        changeParticipantsArr: context => {
-            context.commit('changeParticipantsArr');
+        changeParticipantsArr: function (data, params) {
+            data.commit('changeParticipantsArr', params);
         },
 
-        changeParticipantsIdArr: context => {
-            context.commit('changeParticipantsIdArr');
+        changeParticipantsIdArr: function (data, params) {
+            data.commit('changeParticipantsIdArr', params);
+        },
 
+        changePrincipal: function (data, params) {
+            data.commit('changePrincipal', params)
         }
     }
 });
 
 let app = new Vue({
         el: '#root',
+        store,
         data: {
             taskId: '',
             changeInfo: {},
@@ -39,8 +47,6 @@ let app = new Vue({
             current_page: 1,
             total_pages: 1,
             showChildTask: false,
-            memberPlaceholder: '请选择负责人',
-            multiple: false,
             taskInfo: '',
             participantsArr: [],
             participantsIdArr: [],
@@ -170,6 +176,8 @@ let app = new Vue({
                     include: 'creator,principal,pTask,tasks,resource.resourceable,resource.resource,affixes,participants',
                 };
 
+                let _this = this;
+
                 $.ajax({
                     type: 'get',
                     url: config.apiUrl + '/tasks/' + this.taskId,
@@ -177,15 +185,16 @@ let app = new Vue({
                     statusCode: config.getStatusCode(),
                     data: data
                 }).done(function (response) {
-                    console.log(response)
-                    app.taskInfo = response.data;
-                    // store.commit('changeParticipantsArr', response.data);
-                    for (let i = 0; i < response.data.participants.data.length; i++) {
-                        app.participantsArr.push(response.data.participants.data[i].name);
-                        app.participantsIdArr.push(response.data.participants.data[i].id)
+                    if (response.data.affixes) {
+                        for (let i = 0; i < response.data.affixes.data.length; i++) {
+                            let size = response.data.affixes.data[i].size;
+                            response.data.affixes.data[i].size = _this.unitConversion(size)
+                        }
                     }
-                    store.dispatch('changeParticipantsArr', app.participantsArr);
-                    // store.dispatch('changeParticipantsIdArr', app.participantsIdArr);
+
+                    app.taskInfo = response.data;
+                    store.dispatch('changeParticipantsArr', response.data.participants.data);
+                    store.dispatch('changePrincipal', response.data.principal.data)
 
                 })
             },
@@ -214,7 +223,6 @@ let app = new Vue({
                     headers: config.getHeaders(),
                     statusCode: {
                         400: function (response) {
-                            console.log(response);
                             toastr.error(response.responseJSON.message);
                         }
                     },
@@ -229,7 +237,6 @@ let app = new Vue({
                     } else if (status === 3) {
                         toastr.success("暂停任务成功");
                     }
-                    console.log(response)
                 })
             },
 
@@ -240,7 +247,6 @@ let app = new Vue({
                     headers: config.getHeaders(),
                     statusCode: {
                         400: function (response) {
-                            console.log(response);
                             toastr.error(response.responseJSON.message);
                         }
                     }
@@ -262,10 +268,29 @@ let app = new Vue({
                             toastr.error(response.responseJSON.message);
                         }
                     }
-                }).done(function (response) {
+                }).done(function () {
                     toastr.success("删除任务成功");
                     redirect('index')
                 })
+            },
+
+            unitConversion: function (size) {
+                if (size < 1024) {
+                    size = size + "B"
+                } else if (size < 1024 * 1024) {
+                    size = (size / 1024).toFixed(2) + "KB"
+                } else if (size < 1024 * 1024 * 1024) {
+                    size = (size / (1024 * 1024)).toFixed(2) + "MB"
+                } else {
+                    size = (size / (1024 * 1024 * 1024)).toFixed(2) + "GB"
+                }
+                let sizeStr = size + "";
+                let index = sizeStr.indexOf(".");
+                let dou = sizeStr.substr(index + 1, 2);
+                if (dou === "00") {
+                    size = sizeStr.substring(0, index) + sizeStr.substr(index + 3, 2)
+                }
+                return size
             },
 
             changeTaskBaseInfo: function () {
@@ -275,22 +300,20 @@ let app = new Vue({
                     headers: config.getHeaders(),
                     statusCode: {
                         400: function (response) {
-                            console.log(response);
                             toastr.error(response.responseJSON.message);
                         }
                     },
                     data: app.changeInfo
-                }).done(function (response) {
+                }).done(function () {
                     toastr.success("修改成功");
                     app.isEdit = false;
                 });
 
                 if (app.changeInfo.participant) {
-                    let participant_ids = []
+                    let participant_ids = [];
                     for (let i = 0; i < app.changeInfo.participant.length; i++) {
                         participant_ids.push(app.changeInfo.participant[i].id)
                     }
-                    console.log(participant_ids)
 
                     $.ajax({
                         type: 'post',
@@ -298,14 +321,13 @@ let app = new Vue({
                         headers: config.getHeaders(),
                         statusCode: {
                             400: function (response) {
-                                console.log(response);
                                 toastr.error(response.responseJSON.message);
                             }
                         },
                         data: {
                             person_ids: participant_ids
                         }
-                    }).done(function (response) {
+                    }).done(function () {
                         toastr.success("修改参与人成功");
                     })
                 }
@@ -343,6 +365,7 @@ let app = new Vue({
             },
 
             uploadAttachment: function (url, name, size) {
+                let _this = this;
                 $.ajax({
                     type: 'post',
                     url: config.apiUrl + '/tasks/' + app.taskId + '/affix',
@@ -356,18 +379,13 @@ let app = new Vue({
                     data: {
                         title: name,
                         url: url,
-                        size: size
+                        size: size,
+                        type: 1
                     }
                 }).done(function (response) {
-                    console.log(response)
                     toastr.success("上传成功");
-                    // @todo 上传好附件的id没有得到
-                    app.taskInfo.affixes.data.push({
-                        id: response,
-                        size: size,
-                        title: name,
-                        url: url
-                    })
+                    response.data.size = _this.unitConversion(response.data.size);
+                    app.taskInfo.affixes.data.push(response.data)
                 })
             },
 
@@ -378,7 +396,6 @@ let app = new Vue({
                     headers: config.getHeaders(),
                     statusCode: {
                         400: function (response) {
-                            console.log(response);
                             toastr.error(response.responseJSON.message);
                         }
                     },
@@ -406,7 +423,7 @@ let app = new Vue({
                     // resourceable_id: '1994731356',
                     title: app.taskName,
                     // type: app.taskType,
-                    // principal_id: app.principal,
+                    principal_id: app.principal,
                     priority: app.taskLevel,
                     start_at: app.startTime + ' ' + app.startMinutes,
                     end_at: app.endTime + ' ' + app.endMinutes,
@@ -417,7 +434,6 @@ let app = new Vue({
                     type: 'post',
                     url: config.apiUrl + '/tasks/' + app.taskId + '/subtask',
                     headers: config.getHeaders(),
-                    // statusCode: config.getStatusCode(),
                     data: data
                 }).done(function (response) {
                     toastr.success('添加成功');

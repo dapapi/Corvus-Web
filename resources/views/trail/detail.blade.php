@@ -170,8 +170,7 @@
                                 <div class="card-text py-5 clearfix">
                                     <div class="col-md-1 float-left text-right pl-0">负责人</div>
                                     <div class="col-md-5 float-left font-weight-bold">
-                                        <edit-input-selector :content="trailInfo.principal.data.name"
-                                                             :is-edit="isEdit"
+                                        <edit-input-selector :is-edit="isEdit"
                                                              @change="changeTrailPrincipal"></edit-input-selector>
                                     </div>
                                     <div class="col-md-1 float-left text-right pl-0">预计费用</div>
@@ -196,13 +195,11 @@
                                 <div class="card-text py-5 clearfix">
                                     <div class="col-md-1 float-left text-right pl-0">目标艺人</div>
                                     <div class="col-md-5 float-left font-weight-bold">
-                                        <edit-input-selector :is-edit="isEdit"
-                                                             @change="changeTrailExpectations"></edit-input-selector>
+
                                     </div>
                                     <div class="col-md-1 float-left text-right pl-0">推荐艺人</div>
+
                                     <div class="col-md-5 float-left font-weight-bold">
-                                        <edit-add-member :is-edit="isEdit" :selected-members="trailInfo.recommendations.data"
-                                                         @change="changeTrailRecommend"></edit-add-member>
                                     </div>
                                 </div>
                                 <div class="card-text py-5 clearfix">
@@ -365,7 +362,7 @@
                         <div class="example">
                             <div class="col-md-2 text-right float-left">负责人</div>
                             <div class="col-md-5 float-left pl-0">
-                                <input-selectors :placeholder="'请选择负责人'" :multiple="multiple"
+                                <input-selectors :placeholder="'请选择负责人'"
                                                  @change="taskPrincipalChange"></input-selectors>
                             </div>
                         </div>

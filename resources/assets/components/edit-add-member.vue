@@ -1,10 +1,10 @@
 <template>
     <div class="">
         <template v-if="isEditAdd">
-            <add-member @change="changeMember" :selected-members="this.selectedMembers"></add-member>
+            <add-member @change="changeMember"></add-member>
         </template>
         <template v-else>
-            {{ content }}
+            {{ selectedMember.join('、') }}
         </template>
     </div>
 </template>
@@ -12,7 +12,7 @@
 <script>
     export default {
         name: "edit-add-member",
-        props: ['is-edit', 'content', 'selected-members'],
+        props: ['is-edit'],
         data() {
             return {
                 isEditAdd: false,
@@ -20,6 +20,16 @@
         },
 
         mounted() {
+        },
+
+        computed: {
+            selectedMember: function () {
+                let flagArr = [];
+                for (let i = 0; i < this.$store.state.participantsInfo.length; i++) {
+                    flagArr.push(this.$store.state.participantsInfo[i].name)
+                }
+                return flagArr
+            }
         },
 
         watch: {

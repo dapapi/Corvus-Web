@@ -38,33 +38,61 @@
                         </button>
                     </div>
                 </div>
-                <table class="table is-indent example" data-plugin="animateList" data-animate="fade" data-child="tr"
-                       data-selectable="selectable">
-                    <tr class="animation-fade"
-                        style="animation-fill-mode: backwards; animation-duration: 250ms; animation-delay: 0ms;">
-                        <th class="pre-cell"></th>
-                        <th class="cell-300" scope="col">项目名称</th>
-                        <th class="cell-300" scope="col">负责人</th>
-                        <th class="cell-300" scope="col">目标艺人</th>
-                        <th class="cell-300" scope="col">预计订单收入</th>
-                        <th class="cell-300" scope="col">优先级</th>
-                        <th class="cell-300" scope="col">跟进时间</th>
-                        <th class="suf-cell"></th>
-                    </tr>
-                    <tr v-for="project in projectsInfo ">
-                        <td class="pre-cell"></td>
-                        <td class="pointer-content" @click="redirectProjectDetail(project.id)">@{{ project.title }}</td>
-                        <td>@{{ project.principal }}</td>
-                        <td>@{{ project.progress }}</td>
-                        <td>@{{ project.sign_time }}</td>
-                        <td>@{{ project.delivery }}</td>
-                        <td>@{{ project.follow_time }}</td>
-                        <td class="suf-cell"></td>
-                    </tr>
-                </table>
 
-                <pagination :current_page="current_page" :method="getProjects" :total_pages="total_pages"
-                            :total="total"></pagination>
+                <div class="col-md-12">
+                    <ul class="nav nav-tabs nav-tabs-line" role="tablist">
+                        <li class="nav-item" role="presentation" @click="getProjects(1)">
+                            <a class="nav-link active" data-toggle="tab" href="#forum-project"
+                               aria-controls="forum-base"
+                               aria-expanded="true" role="tab">所有项目</a>
+                        </li>
+                        <li class="nav-item" role="presentation" @click="getProjects(1)">
+                            <a class="nav-link" data-toggle="tab" href="#forum-project"
+                               aria-controls="forum-present"
+                               aria-expanded="false" role="tab">我负责的</a>
+                        </li>
+                        <li class="nav-item" role="presentation" @click="getProjects(1)">
+                            <a class="nav-link" data-toggle="tab" href="#forum-project"
+                               aria-controls="forum-present"
+                               aria-expanded="false" role="tab">我参与的</a>
+                        </li>
+                    </ul>
+                </div>
+
+                <div class="page-content tab-content nav-tabs-animate bg-white">
+                    <div class="tab-pane animation-fade active" id="forum-project" role="tabpanel">
+                        <table class="table is-indent example" data-plugin="animateList" data-animate="fade"
+                               data-child="tr"
+                               data-selectable="selectable">
+                            <tr class="animation-fade"
+                                style="animation-fill-mode: backwards; animation-duration: 250ms; animation-delay: 0ms;">
+                                <th class="pre-cell"></th>
+                                <th class="cell-300" scope="col">项目名称</th>
+                                <th class="cell-300" scope="col">负责人</th>
+                                <th class="cell-300" scope="col">目标艺人</th>
+                                <th class="cell-300" scope="col">预计订单收入</th>
+                                <th class="cell-300" scope="col">优先级</th>
+                                <th class="cell-300" scope="col">跟进时间</th>
+                                <th class="suf-cell"></th>
+                            </tr>
+                            <tr v-for="project in projectsInfo ">
+                                <td class="pre-cell"></td>
+                                <td class="pointer-content" @click="redirectProjectDetail(project.id)">@{{ project.title
+                                    }}
+                                </td>
+                                <td>@{{ project.principal }}</td>
+                                <td>@{{ project.progress }}</td>
+                                <td>@{{ project.sign_time }}</td>
+                                <td>@{{ project.delivery }}</td>
+                                <td>@{{ project.follow_time }}</td>
+                                <td class="suf-cell"></td>
+                            </tr>
+                        </table>
+                        <pagination :current_page="current_page" :method="getProjects" :total_pages="total_pages"
+                                    :total="total"></pagination>
+                    </div>
+                </div>
+
 
             </div>
 

@@ -25,7 +25,7 @@
 
             <div class="panel col-md-12 pb-20">
                 <div class="card-block">
-                    <h4 class="card-title">@{{ trailInfo.title }}</h4>
+                    <h4 class="card-title">@{{ projectInfo.title }}</h4>
                 </div>
                 <div class="card-text clearfix mb-20">
                     <div class="col-md-6 float-left">
@@ -33,7 +33,7 @@
                             <i class="md-plus pr-2" aria-hidden="true"></i>负责人
                         </div>
                         <div class="font-weight-bold float-left">
-                            @{{ trailInfo.principal.data.name }}
+                            @{{ projectInfo.principal.data.name }}
                         </div>
                     </div>
                     <div class="col-md-6 float-left">
@@ -41,7 +41,7 @@
                             <i class="md-plus pr-2" aria-hidden="true"></i>预计费用
                         </div>
                         <div class="font-weight-bold float-left">
-                            @{{ trailInfo.fee }} /元
+                            {{--@{{ projectInfo.fee }} /元--}}
                         </div>
                     </div>
                 </div>
@@ -56,79 +56,23 @@
                             {{--</span>--}}
                         </div>
                     </div>
-                    <div class="col-md-6 float-left">
-                        <div class="float-left pl-0 pr-2 col-md-3">
-                            <i class="md-plus pr-2" aria-hidden="true"></i>推荐艺人
-                        </div>
-                        <div class="font-weight-bold float-left">
-                                <span v-for="recommendation in trailInfo.recommendations.data">
-                                    @{{ recommendation.name }}
-                                </span>
-                        </div>
-                    </div>
+                    {{--<div class="col-md-6 float-left">--}}
+                        {{--<div class="float-left pl-0 pr-2 col-md-3">--}}
+                            {{--<i class="md-plus pr-2" aria-hidden="true"></i>推荐艺人--}}
+                        {{--</div>--}}
+                        {{--<div class="font-weight-bold float-left">--}}
+                                {{--<span v-for="recommendation in trailInfo.recommendations.data">--}}
+                                    {{--@{{ recommendation.name }}--}}
+                                {{--</span>--}}
+                        {{--</div>--}}
+                    {{--</div>--}}
                 </div>
-                <div class="card-text clearfix example">
-                    <div class="col-md-6 float-left">
-                        <div class="float-left pl-0 pr-2 col-md-3">
-                            <i class="md-plus pr-2" aria-hidden="true"></i>销售进展
-                        </div>
-                        <div class="font-weight-bold float-left">
-                            <template v-if="trailInfo.progress_status === 1">未确定合作</template>
-                            <template v-else-if="trailInfo.progress_status === 2">确定合作</template>
-                            <template v-else-if="trailInfo.progress_status === 0">已拒绝</template>
-                        </div>
-                    </div>
-                    <div class="col-md-6 float-left">
-                        <div class="float-left pl-0 pr-2 col-md-3">
-                            <i class="md-plus pr-2" aria-hidden="true"></i>级别
-                        </div>
-                        <div class="font-weight-bold float-left">
-                            <template v-if="trailInfo.client.data.grade === 1">直客</template>
-                            <template v-if="trailInfo.client.data.grade === 2">代理公司</template>
-                        </div>
-                    </div>
-                </div>
-                <div class="card-text clearfix example">
-                    <div class="col-md-6 float-left">
-                        <div class="float-left pl-0 pr-2 col-md-3">
-                            <i class="md-plus pr-2" aria-hidden="true"></i>线索来源
-                        </div>
-                        <div class="font-weight-bold float-left">
-                            <template v-if="trailInfo.resource_type === 1">
-                                @{{ trailInfo.resource.name }}
-                            </template>
-                            <template v-else>
-                                @{{ trailInfo.resource }}
-                            </template>
-                        </div>
-                    </div>
-                </div>
-                <div class="card-text clearfix example">
-                    <div class="col-md-6 float-left">
-                        <div class="float-left pl-0 pr-2 col-md-3">
-                            <i class="md-plus pr-2" aria-hidden="true"></i>公司
-                        </div>
-                        <div class="font-weight-bold float-left">
-                            @{{ trailInfo.client.data.company }}
-                        </div>
-                    </div>
-                    <div class="col-md-6 float-left">
-                        <div class="float-left pl-0 pr-2 col-md-3">
-                            <i class="md-plus pr-2" aria-hidden="true"></i>项目
-                        </div>
-                        <div class="font-weight-bold float-left">
-                            暂无
-                        </div>
-                    </div>
-                </div>
-            </div>
             <div class="col-md-12 panel">
-
                 <ul class="nav nav-tabs nav-tabs-line" role="tablist">
                     <li class="nav-item" role="presentation">
                         <a class="nav-link active" data-toggle="tab" href="#forum-trail-base"
                            aria-controls="forum-base"
-                           aria-expanded="true" role="tab">概况</a>
+                           aria-expanded="true" role="tab">项目跟进</a>
                     </li>
                     <li class="nav-item" role="presentation">
                         <a class="nav-link" data-toggle="tab" href="#forum-trail-tasks"
@@ -351,7 +295,7 @@
                     <div class="example">
                         <div class="col-md-2 text-right float-left">负责人</div>
                         <div class="col-md-5 float-left pl-0">
-                            <input-selectors :placeholder="memberPlaceholder" :multiple="multiple"
+                            <input-selectors :placeholder="'请选择负责人'"
                                              @change="principalChange"></input-selectors>
                         </div>
                     </div>

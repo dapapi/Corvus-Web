@@ -39,10 +39,12 @@
             <div class="panel col-md-12 col-lg-12">
                 <div class="card-block">
                     <h4 class="card-title">@{{ taskInfo.title }}
-                        <span class="font-size-14 pl-10 pointer-content hover-content" v-if="!taskInfo.task_p"
-                              @click="redirectTaskDetail(taskInfo.pTask.data.id)">
+                        <template v-if="!taskInfo.task_p">
+                           <span class="font-size-14 pl-10 pointer-content hover-content"
+                                 @click="redirectTaskDetail(taskInfo.pTask.data.id)">
                            <i class="icon md-chevron-left"></i>回到主任务
-                        </span>
+                            </span>
+                        </template>
                     </h4>
                     <div class="card-text clearfix example">
                         <div class="float-left pl-0 pr-2 col-md-1">
@@ -118,7 +120,7 @@
                                     <div class="col-md-1 float-left text-right pl-0">负责人</div>
                                     <div class="col-md-11 float-left font-weight-bold">
                                         <div class="edit-wrap">
-                                            <edit-input-selector :content="taskInfo.principal.data.name" :is-edit="isEdit"
+                                            <edit-input-selector :is-edit="isEdit" :select-type="'principal'"
                                                                  @change="changeTaskPrincipal"></edit-input-selector>
                                         </div>
                                     </div>
@@ -213,7 +215,7 @@
                                         <span class="float-right px-10">|</span>
                                         <span class="float-right px-10 pointer-content"
                                               @click="downloadAttachment(attachment.id, attachment.url)">下载</span>
-                                        <span class="float-right px-10">@{{ attachment.size }}kb</span>
+                                        <span class="float-right px-10">@{{ attachment.size }}</span>
                                     </li>
                                 </ul>
                             </div>
@@ -314,14 +316,14 @@
                         <div class="example">
                             <div class="col-md-2 text-right float-left">负责人</div>
                             <div class="col-md-5 float-left pl-0">
-                                <input-selectors :placeholder="memberPlaceholder" :multiple="multiple"
+                                <input-selectors :placeholder="'请选择负责人'"
                                                  @change="addPrincipal"></input-selectors>
                             </div>
                         </div>
                         <div class="example">
                             <div class="col-md-2 text-right float-left">参与人</div>
                             <div class="col-md-10 float-left pl-0">
-                                <add-member @change="addParticipant"></add-member>
+                                {{--<add-member @change="addParticipant"></add-member>--}}
                             </div>
                         </div>
                         <div class="example">

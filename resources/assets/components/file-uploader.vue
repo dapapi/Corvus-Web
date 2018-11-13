@@ -20,13 +20,14 @@
                     type[type.length - 1] = 'pptx';
                 } else if (type[type.length - 1] === 'vnd.openxmlformats-officedocument.spreadsheetml.sheet') {
                     type[type.length - 1] = 'xlsx';
+                } else if (type[type.length - 1] === 'plain') {
+                    type[type.length - 1] = 'txt';
                 }
                 let key = this.guid() + '.' + type[type.length - 1];
                 let conf = null;
                 let fileSize = file.size;
                 let _this = this;
                 this.getQiniuAccessToken((token) => {
-                    console.log(token);
                     let observable = qiniu.upload(file, key, token, putExtra, conf);
                     let subscription = observable.subscribe(function (res) {
                     }, function (error) {

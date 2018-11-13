@@ -252,7 +252,37 @@ let config = {
             name: 'papi客户',
             value: 4
         },
-    ]
+    ],
+    artistStatusArr: [
+        {
+            name: '已签约',
+            value: 1
+        },
+        {
+            name: '经理人沟通中',
+            value: 2
+        },
+        {
+            name: '兼职星探沟通中',
+            value: 3
+        },
+        {
+            name: '待定',
+            value: 4
+        },
+        {
+            name: '淘汰',
+            value: 5
+        },
+        {
+            name: '合同中',
+            value: 6
+        },
+        {
+            name: '联系但无回复',
+            value: 7
+        },
+    ],
 
 
 };

@@ -394,7 +394,7 @@
                         <div class="example">
                             <div class="col-md-2 text-right float-left">负责人</div>
                             <div class="col-md-5 float-left pl-0">
-                                <input-selectors :placeholder="'请选择负责人'" :multiple="multiple"
+                                <input-selectors :placeholder="'请选择负责人'"
                                                  @change="taskPrincipalChange"></input-selectors>
                             </div>
                         </div>

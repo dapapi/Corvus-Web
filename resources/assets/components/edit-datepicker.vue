@@ -28,7 +28,6 @@
                 if (newValue) {
                     let _this = this;
                     setTimeout(function () {
-                        console.log(_this.content);
                         _this.$refs.datepicker.setValue(_this.content)
                     }, 0)
                 } else {
