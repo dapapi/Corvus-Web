@@ -128,9 +128,8 @@
                                 <div class="card-text py-5 clearfix">
                                     <div class="col-md-1 float-left text-right pl-0">参与人</div>
                                     <div class="col-md-11 float-left font-weight-bold">
-                                        <edit-add-member :content="participantsArr.join('、')" :is-edit="isEdit"
-                                                         @change="changeTaskParticipants"
-                                                         :selected-members="participantsIdArr"></edit-add-member>
+                                        <edit-add-member :content="participantsArr.join('、')"
+                                                         :is-edit="isEdit"></edit-add-member>
                                     </div>
                                 </div>
                                 <div class="card-text py-5 clearfix">
@@ -139,6 +138,15 @@
                                         <div class="edit-wrap">
                                             <edit-datepicker :content="taskInfo.start_at" :is-edit="isEdit"
                                                              @change="changeTaskStartTime"></edit-datepicker>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="card-text py-5 clearfix">
+                                    <div class="col-md-1 float-left text-right pl-0">结束时间</div>
+                                    <div class="col-md-11 float-left font-weight-bold">
+                                        <div class="edit-wrap">
+                                            <edit-datepicker :content="taskInfo.end_at" :is-edit="isEdit"
+                                                             @change="changeEndTime"></edit-datepicker>
                                         </div>
                                     </div>
                                 </div>
@@ -167,15 +175,7 @@
                                         </div>
                                     </div>
                                 </div>
-                                <div class="card-text py-5 clearfix">
-                                    <div class="col-md-1 float-left text-right pl-0">结束时间</div>
-                                    <div class="col-md-11 float-left font-weight-bold">
-                                        <div class="edit-wrap">
-                                            <edit-datepicker :content="taskInfo.end_at" :is-edit="isEdit"
-                                                             @change="changeEndTime"></edit-datepicker>
-                                        </div>
-                                    </div>
-                                </div>
+
                                 <div class="card-text py-5 clearfix">
                                     <div class="col-md-1 float-left text-right pl-0">完成时间</div>
                                     <div class="col-md-11 float-left font-weight-bold">

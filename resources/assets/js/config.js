@@ -193,6 +193,21 @@ let config = {
         },
     ],
 
+    taskStatusArr: [
+        {
+            name: '进行中',
+            value: 1
+        },
+        {
+            name: '已完成',
+            value: 2
+        },
+        {
+            name: '已停止',
+            value: 3
+        }
+    ],
+
     clientLevelArr: [
         {
             name: '直客',
@@ -282,6 +297,21 @@ let config = {
             name: '联系但无回复',
             value: 7
         },
+    ],
+
+    priorityArr: [
+        {
+            name: '高',
+            value: 1
+        },
+        {
+            name: '中',
+            value: 2
+        },
+        {
+            name: '低',
+            value: 3
+        }
     ],
 
 

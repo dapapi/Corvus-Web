@@ -1,8 +1,35 @@
 import config from "./config";
 import redirect from './bootstrap';
+import Vuex from 'vuex';
+
+const store = new Vuex.Store({
+    state: {
+        participantsInfo: [],
+        principalInfo: {},
+    },
+    mutations: {
+        changeParticipantsInfo(state, data) {
+            state.participantsInfo = data
+        },
+
+        changePrincipal(state, data) {
+            state.principalInfo = data
+        }
+    },
+    actions: {
+        changeParticipantsInfo: function (data, params) {
+            data.commit('changeParticipantsInfo', params);
+        },
+
+        changePrincipal: function (data, params) {
+            data.commit('changePrincipal', params)
+        }
+    }
+});
 
 let app = new Vue({
         el: '#root',
+        store,
         data: {
             total: 0,
             current_page: 1,
@@ -80,17 +107,21 @@ let app = new Vue({
             },
 
             addTask: function () {
+                let participant_ids = [];
+                for (let i = 0; i < this.$store.state.participantsInfo.length; i++) {
+                    participant_ids.push(this.$store.state.participantsInfo[i].id)
+                }
                 let data = {
                     // resource_type: '1718463094',
                     // resourceable_id: '1994731356',
-                    title: app.taskName,
                     // type: app.taskType,
-                    principal_id: app.principal,
+                    title: app.taskName,
+                    principal_id: this.$store.state.principalInfo.id,
+                    participant_ids: participant_ids,
                     priority: app.taskLevel,
                     start_at: app.startTime + ' ' + app.startMinutes,
                     end_at: app.endTime + ' ' + app.endMinutes,
-                    desc: app.taskIntroduce,
-                    participant_ids: app.participants
+                    desc: app.taskIntroduce
                 };
                 $.ajax({
                     type: 'post',

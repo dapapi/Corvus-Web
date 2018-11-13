@@ -11,8 +11,7 @@
         <div class="addMember-trigger" :class="this.isMemberShow ? 'addMember-active': ''" id="selectStaff">
             <div class="addMember-trigger-button" @click="showMember"><i class="md-plus"></i></div>
             <div class="addMember-trigger-dropdown">
-                <select-staff :multiple="true" @change="changeSelectMember"
-                              member-type="participant"></select-staff>
+                <select-staff :multiple="true" member-type="participant" @change="changeSelectedMember"></select-staff>
             </div>
         </div>
     </div>
@@ -52,18 +51,14 @@
                 }
             },
 
-            changeSelectMember: function (value) {
-                // this.selectMemberArr = value
+            removeMember: function (userId) {
+                let participantInfo = this.$store.state.participantsInfo;
+                participantInfo.splice(participantInfo.map(item => item.id).indexOf(userId), 1);
+                this.$store.commit('changeParticipantsInfo', participantInfo);
             },
 
-            removeMember: function (userId) {
-                // let data = this.selectMemberArr.find(item => item.id == userId);
-                // let index = this.selectMemberArr.indexOf(data);
-                // this.selectMemberArr.splice(index, 1);
-                // this.selectMemberIdArr = [];
-                // for (let i = 0; i < this.selectMemberArr.length; i++) {
-                //     this.selectMemberIdArr.push(this.selectMemberArr[i].id)
-                // }
+            changeSelectedMember: function () {
+                this.$emit('change', false)
             }
 
         }

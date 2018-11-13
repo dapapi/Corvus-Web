@@ -34,7 +34,7 @@
                                  <i class="icon md-account pl-2"></i>
                             泰洋系（{{ this.normalUsers.length }}人)
                             </span>
-                            <span class="team-add-all pl-2" @click="selectAllMember" v-if="isMultiple">
+                            <span class="team-add-all pl-2" @click="selectAllMember" v-if="multiple">
                                 <i class="icon md-plus"></i>
                             </span>
                         </div>
@@ -66,7 +66,7 @@
                 <div class="tab-pane animation-fade" :id="'forum-department' + this.componentId" role="tabpanel">
                     <div v-for="department in departmentUsers">
                         <departments-item :data="department" @change="memberChange"
-                                          :multiple="isMultiple" :member-type="memberType"></departments-item>
+                                          :multiple="multiple" :member-type="memberType"></departments-item>
                     </div>
                 </div>
             </div>
@@ -88,7 +88,6 @@
                 selectIdArr: [],
                 searchKeyWord: '',
                 componentId: '',
-                isMultiple: '',
                 isParent: false,
             }
         },
@@ -106,7 +105,6 @@
         mounted() {
             let self = this;
             self.componentId = self._uid;
-            self.isMultiple = self.multiple;
             $.ajax({
                 url: config.apiUrl + '/users',
                 headers: config.getHeaders(),
@@ -145,35 +143,33 @@
             },
 
             selectAllMember: function () {
-                // for (let i = 0; i < this.normalUsers.length; i++) {
-                //     let userId = this.normalUsers[i].id;
-                //     let index = this.selectIdArr.indexOf(userId);
-                //     if (index === -1) {
-                //         this.selectIdArr.push(userId)
-                //     }
-                // }
+                let participantInfo = this.$store.state.participantsInfo;
+                for (let i = 0; i < this.normalUsers.length; i++) {
+                    if (!participantInfo.find(item => item.id == this.normalUsers[i].id)) {
+                        participantInfo.push(this.normalUsers[i])
+                    }
+                }
+                this.$store.commit('changeParticipantsInfo', participantInfo);
+                this.$emit('change', false)
             },
 
             selectMember: function (user) {
                 if (this.memberType === 'principal') {
                     this.$store.commit('changePrincipal', user);
-                    this.$emit('change', false)
                 } else if (this.memberType === 'participant') {
                     let participantInfo = this.$store.state.participantsInfo;
-                    console.log(participantInfo);
                     if (participantInfo.find(item => item.id == user.id)) {
                         participantInfo.splice(participantInfo.map(item => item.id).indexOf(user.id), 1)
                     } else {
                         participantInfo.push(user)
                     }
-                    this.$store.commit('changePrincipal', participantInfo);
+                    this.$store.commit('changeParticipantsInfo', participantInfo);
                 }
+                this.$emit('change', false)
             },
 
             memberChange: function () {
-                if (this.memberType === 'principal') {
-                    this.$emit('change', false)
-                }
+                this.$emit('change', false)
             }
         }
     }

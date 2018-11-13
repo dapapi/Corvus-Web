@@ -23,13 +23,12 @@
                     </a>
                     <span class="pl-1">{{ user.name }}</span>
                     <template v-if="memberType === 'principal'">
-                        <span class="float-right"
-                              v-show="principalInfo.id == user.id">
-                        <i class="icon md-check"></i>
+                        <span class="float-right" v-show="principalInfo.id == user.id">
+                            <i class="icon md-check"></i>
                         </span>
                     </template>
-                    <template v-else>
-                        <span class="float-right" v-show="selectArr.indexOf(user.id) > -1">
+                    <template v-else-if="memberType === 'participant'">
+                        <span class="float-right" v-show="participantsInfo.find(item => item.id == user.id)">
                             <i class="icon md-check"></i>
                         </span>
                     </template>
@@ -39,7 +38,7 @@
             <div v-if="this.data.departments.data.length > 0">
                 <div v-for="departmentData in this.data.departments.data">
                     <departments-item :data="departmentData" :member-type="memberType"
-                                      @change="memberChange" :multiple="isMultiple"></departments-item>
+                                      :multiple="multiple" @change="memberChange"></departments-item>
                 </div>
             </div>
         </div>
@@ -57,7 +56,6 @@
                 departmentsShow: false,
                 total: 0,
                 selectArr: [],
-                isMultiple: '',
             }
         },
 
@@ -65,27 +63,15 @@
             principalInfo: function () {
                 return this.$store.state.principalInfo
             },
+
+            participantsInfo: function () {
+                return this.$store.state.participantsInfo
+            }
         },
 
         mounted() {
             this.total = this.memberNum(this.data);
-            this.isMultiple = this.multiple;
-            // this.selectArr = this.select;
         },
-
-        // watch: {
-        //     selectArr: function (newValue) {
-        //         if (this.isParent) {
-        //             return
-        //         }
-        //         this.$emit('change', newValue)
-        //     },
-        //
-        //     select: function (newValue) {
-        //         this.isParent = true;
-        //         this.selectArr = newValue
-        //     }
-        // },
 
         methods: {
             departmentClose: function () {
@@ -95,8 +81,6 @@
             memberChange: function (value) {
                 if (this.memberType === 'principal') {
                     this.$emit('change', false)
-                } else {
-                    console.log(value);
                 }
             },
 
@@ -104,37 +88,34 @@
                 if (this.memberType === 'principal') {
                     this.$store.commit('changePrincipal', user);
                     this.$emit('change', false)
-                } else {
-                    let userId = user.id;
-                    let index = this.selectArr.indexOf(userId);
-                    if (index > -1) {
-                        this.selectArr.splice(index, 1)
+                } else if (this.memberType === 'participant') {
+                    let participantInfo = this.$store.state.participantsInfo;
+                    if (participantInfo.find(item => item.id == user.id)) {
+                        participantInfo.splice(participantInfo.map(item => item.id).indexOf(user.id), 1)
                     } else {
-                        if (!this.multiple && this.selectArr.length > 0) {
-                            this.selectArr = []
-                        }
-                        this.selectArr.push(userId)
+                        participantInfo.push(user)
                     }
+                    this.$store.commit('changeParticipantsInfo', participantInfo);
                 }
-
             },
 
             selectAllMember: function () {
                 this.checkMember(this.data)
             },
 
-            // checkMember: function (data) {
-            //     for (let i = 0; i < data.users.data.length; i++) {
-            //         let userId = data.users.data[i].id;
-            //         let index = this.selectArr.indexOf(userId);
-            //         if (index === -1) {
-            //             this.selectArr.push(userId)
-            //         }
-            //     }
-            //     for (let i = 0; i < data.departments.data.length; i++) {
-            //         this.checkMember(data.departments.data[i])
-            //     }
-            // },
+            checkMember: function (data) {
+                for (let i = 0; i < data.users.data.length; i++) {
+                    let userId = data.users.data[i].id;
+                    let participantInfo = this.$store.state.participantsInfo;
+
+                    if (!participantInfo.find(item => item.id == userId)) {
+                        participantInfo.push(user)
+                    }
+                }
+                for (let i = 0; i < data.departments.data.length; i++) {
+                    this.checkMember(data.departments.data[i])
+                }
+            },
 
             memberNum: function (data) {
                 let firstLevelUsers = data.users.data.length;

@@ -89,7 +89,6 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
 //
 //
 //
-//
 
 /* harmony default export */ __webpack_exports__["default"] = ({
     name: "",
@@ -125,18 +124,16 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
             }
         },
 
-        changeSelectMember: function changeSelectMember(value) {
-            // this.selectMemberArr = value
+        removeMember: function removeMember(userId) {
+            var participantInfo = this.$store.state.participantsInfo;
+            participantInfo.splice(participantInfo.map(function (item) {
+                return item.id;
+            }).indexOf(userId), 1);
+            this.$store.commit('changeParticipantsInfo', participantInfo);
         },
 
-        removeMember: function removeMember(userId) {
-            // let data = this.selectMemberArr.find(item => item.id == userId);
-            // let index = this.selectMemberArr.indexOf(data);
-            // this.selectMemberArr.splice(index, 1);
-            // this.selectMemberIdArr = [];
-            // for (let i = 0; i < this.selectMemberArr.length; i++) {
-            //     this.selectMemberIdArr.push(this.selectMemberArr[i].id)
-            // }
+        changeSelectedMember: function changeSelectedMember() {
+            this.$emit('change', false);
         }
 
     }
@@ -659,7 +656,6 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
 //
 //
 //
-//
 
 /* harmony default export */ __webpack_exports__["default"] = ({
     name: "departments-item",
@@ -668,8 +664,7 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
         return {
             departmentsShow: false,
             total: 0,
-            selectArr: [],
-            isMultiple: ''
+            selectArr: []
         };
     },
 
@@ -677,29 +672,17 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
     computed: {
         principalInfo: function principalInfo() {
             return this.$store.state.principalInfo;
+        },
+
+        participantsInfo: function participantsInfo() {
+            return this.$store.state.participantsInfo;
         }
     },
 
     mounted: function mounted() {
         this.total = this.memberNum(this.data);
-        this.isMultiple = this.multiple;
-        // this.selectArr = this.select;
     },
 
-
-    // watch: {
-    //     selectArr: function (newValue) {
-    //         if (this.isParent) {
-    //             return
-    //         }
-    //         this.$emit('change', newValue)
-    //     },
-    //
-    //     select: function (newValue) {
-    //         this.isParent = true;
-    //         this.selectArr = newValue
-    //     }
-    // },
 
     methods: {
         departmentClose: function departmentClose() {
@@ -709,8 +692,6 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
         memberChange: function memberChange(value) {
             if (this.memberType === 'principal') {
                 this.$emit('change', false);
-            } else {
-                console.log(value);
             }
         },
 
@@ -718,17 +699,18 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
             if (this.memberType === 'principal') {
                 this.$store.commit('changePrincipal', user);
                 this.$emit('change', false);
-            } else {
-                var userId = user.id;
-                var index = this.selectArr.indexOf(userId);
-                if (index > -1) {
-                    this.selectArr.splice(index, 1);
+            } else if (this.memberType === 'participant') {
+                var participantInfo = this.$store.state.participantsInfo;
+                if (participantInfo.find(function (item) {
+                    return item.id == user.id;
+                })) {
+                    participantInfo.splice(participantInfo.map(function (item) {
+                        return item.id;
+                    }).indexOf(user.id), 1);
                 } else {
-                    if (!this.multiple && this.selectArr.length > 0) {
-                        this.selectArr = [];
-                    }
-                    this.selectArr.push(userId);
+                    participantInfo.push(user);
                 }
+                this.$store.commit('changeParticipantsInfo', participantInfo);
             }
         },
 
@@ -736,18 +718,27 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
             this.checkMember(this.data);
         },
 
-        // checkMember: function (data) {
-        //     for (let i = 0; i < data.users.data.length; i++) {
-        //         let userId = data.users.data[i].id;
-        //         let index = this.selectArr.indexOf(userId);
-        //         if (index === -1) {
-        //             this.selectArr.push(userId)
-        //         }
-        //     }
-        //     for (let i = 0; i < data.departments.data.length; i++) {
-        //         this.checkMember(data.departments.data[i])
-        //     }
-        // },
+        checkMember: function checkMember(data) {
+            var _this = this;
+
+            var _loop = function _loop(i) {
+                var userId = data.users.data[i].id;
+                var participantInfo = _this.$store.state.participantsInfo;
+
+                if (!participantInfo.find(function (item) {
+                    return item.id == userId;
+                })) {
+                    participantInfo.push(user);
+                }
+            };
+
+            for (var i = 0; i < data.users.data.length; i++) {
+                _loop(i);
+            }
+            for (var i = 0; i < data.departments.data.length; i++) {
+                this.checkMember(data.departments.data[i]);
+            }
+        },
 
         memberNum: function memberNum(data) {
             var firstLevelUsers = data.users.data.length;
@@ -1751,7 +1742,6 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
             selectIdArr: [],
             searchKeyWord: '',
             componentId: '',
-            isMultiple: '',
             isParent: false
         };
     },
@@ -1770,7 +1760,6 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
     mounted: function mounted() {
         var self = this;
         self.componentId = self._uid;
-        self.isMultiple = self.multiple;
         $.ajax({
             url: __WEBPACK_IMPORTED_MODULE_0__js_config__["a" /* default */].apiUrl + '/users',
             headers: __WEBPACK_IMPORTED_MODULE_0__js_config__["a" /* default */].getHeaders(),
@@ -1808,22 +1797,30 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
         },
 
         selectAllMember: function selectAllMember() {
-            // for (let i = 0; i < this.normalUsers.length; i++) {
-            //     let userId = this.normalUsers[i].id;
-            //     let index = this.selectIdArr.indexOf(userId);
-            //     if (index === -1) {
-            //         this.selectIdArr.push(userId)
-            //     }
-            // }
+            var _this = this;
+
+            var participantInfo = this.$store.state.participantsInfo;
+
+            var _loop = function _loop(i) {
+                if (!participantInfo.find(function (item) {
+                    return item.id == _this.normalUsers[i].id;
+                })) {
+                    participantInfo.push(_this.normalUsers[i]);
+                }
+            };
+
+            for (var i = 0; i < this.normalUsers.length; i++) {
+                _loop(i);
+            }
+            this.$store.commit('changeParticipantsInfo', participantInfo);
+            this.$emit('change', false);
         },
 
         selectMember: function selectMember(user) {
             if (this.memberType === 'principal') {
                 this.$store.commit('changePrincipal', user);
-                this.$emit('change', false);
             } else if (this.memberType === 'participant') {
                 var participantInfo = this.$store.state.participantsInfo;
-                console.log(participantInfo);
                 if (participantInfo.find(function (item) {
                     return item.id == user.id;
                 })) {
@@ -1833,14 +1830,13 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
                 } else {
                     participantInfo.push(user);
                 }
-                this.$store.commit('changePrincipal', participantInfo);
+                this.$store.commit('changeParticipantsInfo', participantInfo);
             }
+            this.$emit('change', false);
         },
 
         memberChange: function memberChange() {
-            if (this.memberType === 'principal') {
-                this.$emit('change', false);
-            }
+            this.$emit('change', false);
         }
     }
 });
@@ -2170,7 +2166,7 @@ exports = module.exports = __webpack_require__("./node_modules/css-loader/lib/cs
 
 
 // module
-exports.push([module.i, "\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n", ""]);
+exports.push([module.i, "\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n", ""]);
 
 // exports
 
@@ -3500,7 +3496,7 @@ var render = function() {
                     )
                   ]),
                   _vm._v(" "),
-                  _vm.isMultiple
+                  _vm.multiple
                     ? _c(
                         "span",
                         {
@@ -3617,7 +3613,7 @@ var render = function() {
                   _c("departments-item", {
                     attrs: {
                       data: department,
-                      multiple: _vm.isMultiple,
+                      multiple: _vm.multiple,
                       "member-type": _vm.memberType
                     },
                     on: { change: _vm.memberChange }
@@ -4518,7 +4514,7 @@ var render = function() {
           [
             _c("select-staff", {
               attrs: { multiple: true, "member-type": "participant" },
-              on: { change: _vm.changeSelectMember }
+              on: { change: _vm.changeSelectedMember }
             })
           ],
           1
@@ -4805,23 +4801,30 @@ var render = function() {
                         [_c("i", { staticClass: "icon md-check" })]
                       )
                     ]
-                  : [
-                      _c(
-                        "span",
-                        {
-                          directives: [
-                            {
-                              name: "show",
-                              rawName: "v-show",
-                              value: _vm.selectArr.indexOf(user.id) > -1,
-                              expression: "selectArr.indexOf(user.id) > -1"
-                            }
-                          ],
-                          staticClass: "float-right"
-                        },
-                        [_c("i", { staticClass: "icon md-check" })]
-                      )
-                    ]
+                  : _vm.memberType === "participant"
+                    ? [
+                        _c(
+                          "span",
+                          {
+                            directives: [
+                              {
+                                name: "show",
+                                rawName: "v-show",
+                                value: _vm.participantsInfo.find(function(
+                                  item
+                                ) {
+                                  return item.id == user.id
+                                }),
+                                expression:
+                                  "participantsInfo.find(item => item.id == user.id)"
+                              }
+                            ],
+                            staticClass: "float-right"
+                          },
+                          [_c("i", { staticClass: "icon md-check" })]
+                        )
+                      ]
+                    : _vm._e()
               ],
               2
             )
@@ -4839,7 +4842,7 @@ var render = function() {
                       attrs: {
                         data: departmentData,
                         "member-type": _vm.memberType,
-                        multiple: _vm.isMultiple
+                        multiple: _vm.multiple
                       },
                       on: { change: _vm.memberChange }
                     })
@@ -18883,6 +18886,17 @@ var config = {
         value: 3
     }],
 
+    taskStatusArr: [{
+        name: '进行中',
+        value: 1
+    }, {
+        name: '已完成',
+        value: 2
+    }, {
+        name: '已停止',
+        value: 3
+    }],
+
     clientLevelArr: [{
         name: '直客',
         value: 1
@@ -18947,6 +18961,17 @@ var config = {
     }, {
         name: '联系但无回复',
         value: 7
+    }],
+
+    priorityArr: [{
+        name: '高',
+        value: 1
+    }, {
+        name: '中',
+        value: 2
+    }, {
+        name: '低',
+        value: 3
     }]
 
 };
