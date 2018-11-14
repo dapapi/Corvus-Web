@@ -186,8 +186,118 @@
                         </div>
 
                         <div class="formName">教育背景</div>
+                        <div class="example table-responsive padding15">
+                            <!-- <mtp-table :data-source="education" :columns="eduColumns" /> -->
+                            <table class="table table-bordered">
+                                <thead>
+                                    <tr>
+                                        <th v-for="(item, index) in education.tHead" :key="index">@{{ item.value }}</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    <tr v-for="(items, index) in education.tBody" :key="index">
+                                        <td v-for="(item, _index) in items" :key="_index">
+                                            <!-- @{{item}} -->
+                                            <input type="text" v-model="education.tBody[index][_index]" />
+                                        </td>
+                                    </tr>
+                                </tbody>
+                            </table>
+                        </div>
+
+                        <div class="formName">培训经历</div>
                         <div class="example table-responsive">
-                            <mtp-table :data-source="education" :columns="eduColumns" />
+                            <table class="table table-bordered padding15">
+                                <thead>
+                                    <tr>
+                                        <th v-for="(item, index) in train.tHead" :key="index">@{{ item.value }}</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    <tr v-for="(items, index) in train.tBody" :key="index">
+                                        <td v-for="(item, _index) in items" :key="_index">
+                                            <input type="text" v-model="train.tBody[index][_index]" />
+                                        </td>
+                                    </tr>
+                                </tbody>
+                            </table>
+                        </div>
+
+                        <div class="formName">任职履历<span class="note" style="margin-left: 16px;">从最近的任职单位开始填写</span></div>
+                        <div class="example table-responsive padding15">
+                            <table class="table table-bordered">
+                                <thead>
+                                    <tr>
+                                        <th v-for="(item, index) in work.tHead" :key="index">@{{ item.value }}</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    <tr v-for="(items, index) in work.tBody" :key="index">
+                                        <td v-for="(item, _index) in items" :key="_index">
+                                            <input type="text" v-model="work.tBody[index][_index]" />
+                                        </td>
+                                    </tr>
+                                </tbody>
+                            </table>
+                        </div>
+
+                        <div class="formName">家庭资料<span class="note" style="margin-left: 16px;">请列出直系亲属资料和紧急联系人信息</span></div>
+                        <div class="example table-responsive padding15">
+                            <table class="table table-bordered">
+                                <thead>
+                                    <tr>
+                                        <th v-for="(item, index) in home.tHead" :key="index">@{{ item.value }}</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    <tr v-for="(items, index) in home.tBody" :key="index">
+                                        <td v-for="(item, _index) in items" :key="_index">
+                                            <input type="text" v-model="home.tBody[index][_index]" />
+                                        </td>
+                                    </tr>
+                                </tbody>
+                            </table>
+                        </div>
+
+                        <div class="formName"></div>
+                        <div class="row example padding15">
+                            <div class="col-md-7" style="margin-top: 4px;">1、现在或以前是否患有任何的身体缺陷或疾病，包括心脏病、肝炎、神经衰弱等</div>
+                            <div class="col-md-5">
+                                <div class="checkbox-custom checkbox-primary staff-radio">
+                                    <input type="radio" id="inputRadiosCheckedOne" value="否" name="inputRadioOne" v-model="isIll">
+                                    <label for="inputRadiosCheckedOne">是</label>&nbsp;&nbsp;
+                                    <input type="radio" id="inputRadiosUncheckedOne" value="是" name="inputRadioOne" v-model="isIll">
+                                    <label for="inputRadiosUncheckedOne">否</label>
+                                </div>
+                            </div>
+                            <div class="col-md-7" style="margin-top: 4px;">2、如属女性，请说明是否怀孕？</div>
+                            <div class="col-md-5">
+                                <div class="checkbox-custom checkbox-primary staff-radio">
+                                    <input type="radio" id="inputRadiosCheckedTwo" value="否" name="inputRadioTwo" v-model="isPregnancy">
+                                    <label for="inputRadiosCheckedTwo">是</label>&nbsp;&nbsp;
+                                    <input type="radio" id="inputRadiosUncheckedTwo" value="是" name="inputRadioTwo" v-model="isPregnancy">
+                                    <label for="inputRadiosUncheckedTwo">否</label>
+                                </div>
+                            </div>
+                            <div class="col-md-7" style="margin-top: 4px;">3、是否同意工作迁移到集团其他城市</div>
+                            <div class="col-md-5">
+                                <div class="checkbox-custom checkbox-primary staff-radio">
+                                    <input type="radio" id="inputRadiosCheckedThree" value="否" name="inputRadioThree" v-model="agreeMove">
+                                    <label for="inputRadiosCheckedThree">是</label>&nbsp;&nbsp;
+                                    <input type="radio" id="inputRadiosUncheckedThree" value="是" name="inputRadioThree" v-model="agreeMove">
+                                    <label for="inputRadiosUncheckedThree">否</label>
+                                </div>
+                            </div>
+                        </div>
+                        
+                        <div class="formName">其他备注</div>
+                        <div class="example padding15">
+                            <textarea class="form-control" rows="4" v-model="remarks"></textarea>
+                        </div>
+                        
+                        <div class="modal-footer">
+                            <button type="button" class="btn btn-default">取消</button>
+                            <button type="button" class="btn btn-primary">提交</button>
                         </div>
                     </div>
 
