@@ -78,7 +78,7 @@ let app = new Vue({
                     grade: app.clientLevel,
                     // region_id: '',
                     address: 'test',
-                    principal_id: this.$store.state.principalInfo.id,
+                    principal_id: this.$store.state.newPrincipalInfo.id,
                     contact: {
                         name: app.clientContact,
                         phone: app.clientContactPhone,

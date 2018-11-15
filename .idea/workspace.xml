@@ -3,15 +3,7 @@
   <component name="ChangeListManager">
     <list default="true" id="1a3725e8-6f08-4917-871f-ddbfb9d5b08f" name="Default" comment="">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/public/js/app.js" beforeDir="false" afterPath="$PROJECT_DIR$/public/js/app.js" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/resources/assets/components/edit-selector.vue" beforeDir="false" afterPath="$PROJECT_DIR$/resources/assets/components/edit-selector.vue" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/resources/assets/components/selectors.vue" beforeDir="false" afterPath="$PROJECT_DIR$/resources/assets/components/selectors.vue" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/resources/assets/js/config.js" beforeDir="false" afterPath="$PROJECT_DIR$/resources/assets/js/config.js" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/resources/assets/js/trail.detail.js" beforeDir="false" afterPath="$PROJECT_DIR$/resources/assets/js/trail.detail.js" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/resources/assets/js/trail.index.js" beforeDir="false" afterPath="$PROJECT_DIR$/resources/assets/js/trail.index.js" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/resources/assets/sass/base.scss" beforeDir="false" afterPath="$PROJECT_DIR$/resources/assets/sass/base.scss" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/resources/views/trail/detail.blade.php" beforeDir="false" afterPath="$PROJECT_DIR$/resources/views/trail/detail.blade.php" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/resources/views/trail/index.blade.php" beforeDir="false" afterPath="$PROJECT_DIR$/resources/views/trail/index.blade.php" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/resources/assets/js/client.index.js" beforeDir="false" afterPath="$PROJECT_DIR$/resources/assets/js/client.index.js" afterDir="false" />
     </list>
     <option name="EXCLUDED_CONVERTED_TO_IGNORED" value="true" />
     <option name="TRACKING_ENABLED" value="true" />
@@ -25,71 +17,22 @@
   </component>
   <component name="FileEditorManager">
     <leaf SIDE_TABS_SIZE_LIMIT_KEY="300">
-      <file leaf-file-name="detail.blade.php" pinned="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/resources/views/trail/detail.blade.php">
-          <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="524">
-              <caret line="254" selection-start-line="254" selection-end-line="254" />
-            </state>
-          </provider>
-        </entry>
-      </file>
       <file leaf-file-name="index.blade.php" pinned="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/resources/views/trail/index.blade.php">
+        <entry file="file://$PROJECT_DIR$/resources/views/client/index.blade.php">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="257">
-              <caret line="176" column="100" selection-start-line="176" selection-start-column="79" selection-end-line="176" selection-end-column="100" />
+            <state relative-caret-position="356">
+              <caret line="63" column="58" selection-start-line="63" selection-start-column="58" selection-end-line="63" selection-end-column="58" />
             </state>
           </provider>
         </entry>
       </file>
-      <file leaf-file-name="trail.index.js" pinned="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/resources/assets/js/trail.index.js">
+      <file leaf-file-name="client.index.js" pinned="false" current-in-tab="true">
+        <entry file="file://$PROJECT_DIR$/resources/assets/js/client.index.js">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="464">
-              <caret line="223" column="32" selection-start-line="223" selection-start-column="32" selection-end-line="223" selection-end-column="32" />
+            <state relative-caret-position="375">
+              <caret line="84" column="59" lean-forward="true" selection-start-line="84" selection-start-column="59" selection-end-line="84" selection-end-column="59" />
               <folding>
                 <element signature="e#0#30#0" expanded="true" />
-              </folding>
-            </state>
-          </provider>
-        </entry>
-      </file>
-      <file leaf-file-name="selectors.vue" pinned="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/resources/assets/components/selectors.vue">
-          <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="495">
-              <caret line="33" column="17" selection-start-line="33" selection-start-column="17" selection-end-line="33" selection-end-column="17" />
-            </state>
-          </provider>
-        </entry>
-      </file>
-      <file leaf-file-name="edit-selector.vue" pinned="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/resources/assets/components/edit-selector.vue">
-          <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="450">
-              <caret line="30" column="10" selection-start-line="30" selection-start-column="10" selection-end-line="30" selection-end-column="10" />
-            </state>
-          </provider>
-        </entry>
-      </file>
-      <file leaf-file-name="config.js" pinned="false" current-in-tab="true">
-        <entry file="file://$PROJECT_DIR$/resources/assets/js/config.js">
-          <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="616">
-              <caret line="378" lean-forward="true" selection-start-line="378" selection-end-line="378" />
-            </state>
-          </provider>
-        </entry>
-      </file>
-      <file leaf-file-name="trail.detail.js" pinned="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/resources/assets/js/trail.detail.js">
-          <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="510">
-              <caret line="35" column="34" selection-start-line="35" selection-start-column="34" selection-end-line="35" selection-end-column="34" />
-              <folding>
-                <element signature="e#0#30#0" expanded="true" />
-                <element signature="e#1056#3058#0" />
               </folding>
             </state>
           </provider>
@@ -134,9 +77,9 @@
       <find>industryArr</find>
       <find>changeTrailStatus</find>
       <find>trailStatus</find>
-      <find>changePriority</find>
       <find>cooperation</find>
       <find>changeCooperationType</find>
+      <find>changePriority</find>
     </findStrings>
     <replaceStrings>
       <replace>clientLevelArr</replace>
@@ -188,7 +131,6 @@
         <option value="$PROJECT_DIR$/resources/assets/components/departments-item.vue" />
         <option value="$PROJECT_DIR$/resources/views/task/index.blade.php" />
         <option value="$PROJECT_DIR$/resources/assets/js/task.index.js" />
-        <option value="$PROJECT_DIR$/resources/assets/js/client.index.js" />
         <option value="$PROJECT_DIR$/resources/views/client/index.blade.php" />
         <option value="$PROJECT_DIR$/resources/assets/js/task.detail.js" />
         <option value="$PROJECT_DIR$/resources/views/client/detail.blade.php" />
@@ -201,13 +143,14 @@
         <option value="$PROJECT_DIR$/resources/assets/components/edit-company.vue" />
         <option value="$PROJECT_DIR$/resources/views/task/detail.blade.php" />
         <option value="$PROJECT_DIR$/resources/assets/sass/base.scss" />
-        <option value="$PROJECT_DIR$/resources/assets/components/selectors.vue" />
         <option value="$PROJECT_DIR$/resources/assets/components/edit-selector.vue" />
         <option value="$PROJECT_DIR$/resources/assets/js/trail.detail.js" />
         <option value="$PROJECT_DIR$/resources/views/trail/detail.blade.php" />
         <option value="$PROJECT_DIR$/resources/assets/js/config.js" />
         <option value="$PROJECT_DIR$/resources/views/trail/index.blade.php" />
         <option value="$PROJECT_DIR$/resources/assets/js/trail.index.js" />
+        <option value="$PROJECT_DIR$/resources/assets/components/selectors.vue" />
+        <option value="$PROJECT_DIR$/resources/assets/js/client.index.js" />
       </list>
     </option>
   </component>
@@ -390,7 +333,7 @@
               <item name="Corvus-Web" type="462c0819:PsiDirectoryNode" />
               <item name="resources" type="462c0819:PsiDirectoryNode" />
               <item name="views" type="462c0819:PsiDirectoryNode" />
-              <item name="task" type="462c0819:PsiDirectoryNode" />
+              <item name="client" type="462c0819:PsiDirectoryNode" />
             </path>
             <path>
               <item name="Corvus-Web" type="b2602c69:ProjectViewProjectNode" />
@@ -446,12 +389,12 @@
       <updated>1539575777001</updated>
       <workItem from="1539575778530" duration="280000" />
       <workItem from="1541581078044" duration="39906000" />
-      <workItem from="1541991954629" duration="93235000" />
+      <workItem from="1541991954629" duration="93604000" />
     </task>
     <servers />
   </component>
   <component name="TimeTrackingManager">
-    <option name="totallyTimeSpent" value="154520000" />
+    <option name="totallyTimeSpent" value="154889000" />
   </component>
   <component name="TodoView">
     <todo-panel id="selected-file">
@@ -705,23 +648,6 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/resources/views/client/index.blade.php">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="356">
-          <caret line="63" column="58" selection-start-line="63" selection-start-column="58" selection-end-line="63" selection-end-column="58" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/resources/assets/js/client.index.js">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="320">
-          <caret line="39" column="38" selection-start-line="39" selection-start-column="38" selection-end-line="39" selection-end-column="38" />
-          <folding>
-            <element signature="e#0#30#0" expanded="true" />
-          </folding>
-        </state>
-      </provider>
-    </entry>
     <entry file="file://$PROJECT_DIR$/resources/assets/js/task.detail.js">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="329">
@@ -829,35 +755,17 @@
         </state>
       </provider>
     </entry>
+    <entry file="file://$PROJECT_DIR$/resources/assets/js/config.js">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="271">
+          <caret line="355" column="20" lean-forward="true" selection-start-line="355" selection-start-column="20" selection-end-line="355" selection-end-column="20" />
+        </state>
+      </provider>
+    </entry>
     <entry file="file://$PROJECT_DIR$/resources/assets/components/selectors.vue">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="495">
-          <caret line="33" column="17" selection-start-line="33" selection-start-column="17" selection-end-line="33" selection-end-column="17" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/resources/assets/components/edit-selector.vue">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="450">
-          <caret line="30" column="10" selection-start-line="30" selection-start-column="10" selection-end-line="30" selection-end-column="10" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/resources/assets/js/trail.detail.js">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="510">
-          <caret line="35" column="34" selection-start-line="35" selection-start-column="34" selection-end-line="35" selection-end-column="34" />
-          <folding>
-            <element signature="e#0#30#0" expanded="true" />
-            <element signature="e#1056#3058#0" />
-          </folding>
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/resources/views/trail/detail.blade.php">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="524">
-          <caret line="254" selection-start-line="254" selection-end-line="254" />
+        <state relative-caret-position="225">
+          <caret line="15" column="19" lean-forward="true" selection-start-line="15" selection-start-column="19" selection-end-line="15" selection-end-column="19" />
         </state>
       </provider>
     </entry>
@@ -878,10 +786,45 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/resources/assets/js/config.js">
+    <entry file="file://$PROJECT_DIR$/resources/views/trail/detail.blade.php">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="616">
-          <caret line="378" lean-forward="true" selection-start-line="378" selection-end-line="378" />
+        <state relative-caret-position="524">
+          <caret line="254" selection-start-line="254" selection-end-line="254" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/resources/assets/components/edit-selector.vue">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="420">
+          <caret line="28" lean-forward="true" selection-start-line="28" selection-end-line="28" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/resources/assets/js/trail.detail.js">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="510">
+          <caret line="35" column="34" selection-start-line="35" selection-start-column="34" selection-end-line="35" selection-end-column="34" />
+          <folding>
+            <element signature="e#0#30#0" expanded="true" />
+            <element signature="e#1056#3058#0" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/resources/views/client/index.blade.php">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="356">
+          <caret line="63" column="58" selection-start-line="63" selection-start-column="58" selection-end-line="63" selection-end-column="58" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/resources/assets/js/client.index.js">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="375">
+          <caret line="84" column="59" lean-forward="true" selection-start-line="84" selection-start-column="59" selection-end-line="84" selection-end-column="59" />
+          <folding>
+            <element signature="e#0#30#0" expanded="true" />
+          </folding>
         </state>
       </provider>
     </entry>
