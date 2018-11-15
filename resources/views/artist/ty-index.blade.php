@@ -114,14 +114,24 @@
                         <button type="button" class="close" aria-hidden="true" data-dismiss="modal">
                             <i class="md-close" aria-hidden="true"></i>
                         </button>
-                        <h4 class="modal-title">新增博主</h4>
+                        <h4 class="modal-title">新增艺人</h4>
                     </div>
                     <div class="modal-body">
                         {{-- todo 复选框单选 --}}
                         <div class="example">
-                            <div class="col-md-2 text-right float-left">昵称</div>
+                            <div class="col-md-2 text-right float-left">姓名</div>
                             <div class="col-md-10 float-left pl-0">
                                 <input type="text" class="form-control" placeholder="请输入昵称" v-model="artistName">
+                            </div>
+                        </div>
+                        <div class="example">
+                            <div class="col-md-2 text-right float-left">性别</div>
+                            <div class="col-md-4 float-left pl-0">
+                                <selectors :options="genderArr"></selectors>
+                            </div>
+                            <div class="col-md-2 text-right float-left">出生日期</div>
+                            <div class="col-md-4 float-left pl-0">
+                                <datepicker></datepicker>
                             </div>
                         </div>
                         <div class="example">
@@ -238,7 +248,7 @@
 
 @section('script')
 
-    <script src="{{ mix('papi.artist.index.js') }}"></script>
+    <script src="{{ mix('ty.artist.index.js') }}"></script>
 
 @endsection
 

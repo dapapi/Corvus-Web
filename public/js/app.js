@@ -19543,6 +19543,33 @@ var config = {
     }, {
         name: '未确定',
         value: 8
+    }],
+    papiCommunicationStatusArr: [{
+        name: '初步接触',
+        value: 1
+    }, {
+        name: '沟通中',
+        value: 2
+    }, {
+        name: '合同中',
+        value: 3
+    }, {
+        name: '沟通完成',
+        value: 4
+    }],
+    yesOrNoArr: [{
+        name: '是',
+        value: 1
+    }, {
+        name: '否',
+        value: 0
+    }],
+    genderArr: [{
+        name: '男',
+        value: 1
+    }, {
+        name: '女',
+        value: 2
     }]
 
 };
