@@ -11,7 +11,7 @@
         <div class="addMember-trigger" :class="this.isMemberShow ? 'addMember-active': ''" id="selectStaff">
             <div class="addMember-trigger-button" @click="showMember"><i class="md-plus"></i></div>
             <div class="addMember-trigger-dropdown">
-                <select-staff :multiple="true" member-type="participant" @change="changeSelectedMember"></select-staff>
+                <select-staff :multiple="true" :member-type="'participant'" :type="type" @change="changeSelectedMember"></select-staff>
             </div>
         </div>
     </div>
@@ -20,7 +20,7 @@
 <script>
     export default {
         name: "",
-        props: ['selected-members'],
+        props: ['type'],
         data() {
             return {
                 isMemberShow: false,
@@ -32,7 +32,11 @@
 
         computed: {
             selectMemberArr: function () {
-                return this.$store.state.participantsInfo
+                if (this.type === 'change') {
+                    return this.$store.state.participantsInfo
+                } else {
+                    return this.$store.state.newParticipantsInfo
+                }
             }
         },
 
@@ -52,7 +56,12 @@
             },
 
             removeMember: function (userId) {
-                let participantInfo = this.$store.state.participantsInfo;
+                let participantInfo = '';
+                if (this.type === 'add') {
+                    participantInfo = this.$store.state.newParticipantsInfo;
+                } else {
+                    participantInfo = this.$store.state.participantsInfo;
+                }
                 participantInfo.splice(participantInfo.map(item => item.id).indexOf(userId), 1);
                 this.$store.commit('changeParticipantsInfo', participantInfo);
             },

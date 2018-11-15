@@ -37,7 +37,7 @@
 
             <div v-if="this.data.departments.data.length > 0">
                 <div v-for="departmentData in this.data.departments.data">
-                    <departments-item :data="departmentData" :member-type="memberType"
+                    <departments-item :data="departmentData" :member-type="memberType" :type="type"
                                       :multiple="multiple" @change="memberChange"></departments-item>
                 </div>
             </div>
@@ -50,22 +50,33 @@
 <script>
     export default {
         name: "departments-item",
-        props: ['data', 'select', 'multiple', 'member-type'],
+        props: ['data', 'select', 'multiple', 'member-type', 'type'],
         data() {
             return {
                 departmentsShow: false,
                 total: 0,
-                selectArr: [],
+                params: {
+                    type: this.type,
+                    data: ''
+                }
             }
         },
 
         computed: {
             principalInfo: function () {
-                return this.$store.state.principalInfo
+                if (this.type === 'change') {
+                    return this.$store.state.principalInfo
+                } else {
+                    return this.$store.state.newPrincipalInfo
+                }
             },
 
             participantsInfo: function () {
-                return this.$store.state.participantsInfo
+                if (this.type === 'change') {
+                    return this.$store.state.participantsInfo
+                } else {
+                    return this.$store.state.newParticipantsInfo
+                }
             }
         },
 
@@ -86,16 +97,23 @@
 
             selectMember: function (user) {
                 if (this.memberType === 'principal') {
-                    this.$store.commit('changePrincipal', user);
+                    this.params.data = user;
+                    this.$store.dispatch('changePrincipal', this.params);
                     this.$emit('change', false)
                 } else if (this.memberType === 'participant') {
-                    let participantInfo = this.$store.state.participantsInfo;
-                    if (participantInfo.find(item => item.id == user.id)) {
-                        participantInfo.splice(participantInfo.map(item => item.id).indexOf(user.id), 1)
+                    let participantInfo = '';
+                    if (this.type === 'change') {
+                        participantInfo = this.$store.state.participantsInfo;
                     } else {
-                        participantInfo.push(user)
+                        participantInfo = this.$store.state.newParticipantsInfo;
                     }
-                    this.$store.commit('changeParticipantsInfo', participantInfo);
+                    if (!participantInfo.find(item => item.id == user.id)) {
+                        participantInfo.push(user)
+                    } else {
+                        participantInfo.splice(participantInfo.map(item => item.id).indexOf(user.id), 1)
+                    }
+                    this.params.data = participantInfo;
+                    this.$store.dispatch('changeParticipantsInfo', this.params);
                 }
             },
 
@@ -104,17 +122,23 @@
             },
 
             checkMember: function (data) {
+                let participantInfo = '';
+                if (this.type === 'change') {
+                    participantInfo = this.$store.state.participantsInfo;
+                } else {
+                    participantInfo = this.$store.state.newParticipantsInfo;
+                }
                 for (let i = 0; i < data.users.data.length; i++) {
-                    let userId = data.users.data[i].id;
-                    let participantInfo = this.$store.state.participantsInfo;
-
-                    if (!participantInfo.find(item => item.id == userId)) {
+                    let user = data.users.data[i];
+                    if (!participantInfo.find(item => item.id == user.id)) {
                         participantInfo.push(user)
                     }
                 }
                 for (let i = 0; i < data.departments.data.length; i++) {
                     this.checkMember(data.departments.data[i])
                 }
+                this.params.data = participantInfo;
+                this.$store.dispatch('changeParticipantsInfo', this.params);
             },
 
             memberNum: function (data) {

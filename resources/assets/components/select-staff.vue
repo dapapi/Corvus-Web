@@ -4,12 +4,12 @@
             <div class="page-nav-tabs">
                 <ul class="nav nav-tabs nav-tabs-line" role="tablist">
                     <li class="nav-item col-md-6" role="presentation">
-                        <a class="nav-link active" data-toggle="tab" :href="'#forum-team' + this.componentId"
+                        <a class="nav-link active" data-toggle="tab" :href="'#forum-team' + this._uid"
                            aria-controls="forum-base"
                            aria-expanded="true" role="tab"> 团队 </a>
                     </li>
                     <li class="nav-item col-md-6" role="presentation">
-                        <a class="nav-link" data-toggle="tab" :href="'#forum-department' + this.componentId"
+                        <a class="nav-link" data-toggle="tab" :href="'#forum-department' + this._uid"
                            aria-controls="forum-present"
                            aria-expanded="false" role="tab"> 部门 </a>
                     </li>
@@ -17,7 +17,7 @@
             </div>
 
             <div class="page-content tab-content nav-tabs-animate bg-white selector-page-content">
-                <div class="tab-pane animation-fade active" :id="'forum-team' + this.componentId" role="tabpanel">
+                <div class="tab-pane animation-fade active" :id="'forum-team' + this._uid" role="tabpanel">
                     <div class="input-search example">
                         <button type="submit" class="input-search-btn"><i class="icon md-search" aria-hidden="true"></i>
                         </button>
@@ -63,9 +63,9 @@
                     </div>
 
                 </div>
-                <div class="tab-pane animation-fade" :id="'forum-department' + this.componentId" role="tabpanel">
+                <div class="tab-pane animation-fade" :id="'forum-department' + this._uid" role="tabpanel">
                     <div v-for="department in departmentUsers">
-                        <departments-item :data="department" @change="memberChange"
+                        <departments-item :data="department" @change="memberChange" :type="type"
                                           :multiple="multiple" :member-type="memberType"></departments-item>
                     </div>
                 </div>
@@ -79,44 +79,46 @@
     import config from '../js/config'
 
     export default {
-        props: ['multiple', 'member-type'],
+        props: ['multiple', 'member-type', 'type'],
         data() {
             return {
                 normalUsers: {},
                 departmentUsers: {},
                 teamShow: true,
-                selectIdArr: [],
                 searchKeyWord: '',
-                componentId: '',
-                isParent: false,
+                params: {
+                    type: this.type,
+                    data: ''
+                }
             }
         },
 
         computed: {
             principalInfo: function () {
-                return this.$store.state.principalInfo
+                if (this.type === 'change') {
+                    return this.$store.state.principalInfo
+                } else {
+                    return this.$store.state.newPrincipalInfo
+                }
             },
 
             participantsInfo: function () {
-                return this.$store.state.participantsInfo
+                if (this.type === 'change') {
+                    return this.$store.state.participantsInfo
+                } else {
+                    return this.$store.state.newParticipantsInfo
+                }
             }
         },
 
         mounted() {
             let self = this;
-            self.componentId = self._uid;
             $.ajax({
                 url: config.apiUrl + '/users',
                 headers: config.getHeaders(),
                 type: 'get',
             }).done(function (response) {
                 self.normalUsers = response.data;
-                if (self.selectedMembers && self.selectedMembers.length > 0) {
-                    setTimeout(function () {
-                        self.selectIdArr = self.selectedMembers;
-                    }, 100)
-
-                }
             });
 
             $.ajax({
@@ -126,15 +128,6 @@
             }).done(function (response) {
                 self.departmentUsers = response.data
             });
-
-            if (this.memberType === 'principal') {
-                this.selectIdArr = [this.$store.state.principalInfo.id];
-            } else if (this.memberType === 'participant') {
-                for (let i = 0; i < this.$store.state.participantsInfo.length; i++) {
-                    this.selectIdArr.push(this.$store.state.participantsInfo[i].id)
-                }
-            }
-
         },
 
         methods: {
@@ -143,27 +136,41 @@
             },
 
             selectAllMember: function () {
-                let participantInfo = this.$store.state.participantsInfo;
+                let participantInfo = '';
+                if (this.type === 'change') {
+                    participantInfo = this.$store.state.participantsInfo;
+                } else {
+                    participantInfo = this.$store.state.newParticipantsInfo;
+                }
                 for (let i = 0; i < this.normalUsers.length; i++) {
                     if (!participantInfo.find(item => item.id == this.normalUsers[i].id)) {
                         participantInfo.push(this.normalUsers[i])
                     }
                 }
-                this.$store.commit('changeParticipantsInfo', participantInfo);
+                this.params.data = participantInfo;
+                this.$store.dispatch('changeParticipantsInfo', this.params);
                 this.$emit('change', false)
             },
 
             selectMember: function (user) {
                 if (this.memberType === 'principal') {
-                    this.$store.commit('changePrincipal', user);
+                    this.params.data = user;
+                    this.$store.dispatch('changePrincipal', this.params);
                 } else if (this.memberType === 'participant') {
-                    let participantInfo = this.$store.state.participantsInfo;
+                    let participantInfo = '';
+                    if (this.type === 'change') {
+                        participantInfo = this.$store.state.participantsInfo;
+                    } else {
+                        participantInfo = this.$store.state.newParticipantsInfo;
+                    }
+
                     if (participantInfo.find(item => item.id == user.id)) {
                         participantInfo.splice(participantInfo.map(item => item.id).indexOf(user.id), 1)
                     } else {
                         participantInfo.push(user)
                     }
-                    this.$store.commit('changeParticipantsInfo', participantInfo);
+                    this.params.data = participantInfo;
+                    this.$store.dispatch('changeParticipantsInfo', this.params);
                 }
                 this.$emit('change', false)
             },

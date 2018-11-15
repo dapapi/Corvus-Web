@@ -144,7 +144,8 @@
                         <div class="example">
                             <div class="col-md-2 text-right float-left">任务类型</div>
                             <div class="col-md-10 float-left pl-0">
-                                <selectors :options="taskTypeArr" @change="changeTaskType"></selectors>
+                                <selectors :options="taskTypeArr" :placeholder="'请选择任务类型'"
+                                           @change="changeTaskType"></selectors>
                             </div>
                         </div>
                         <div class="example">
@@ -169,17 +170,26 @@
                         <div class="example">
                             <div class="col-md-2 text-right float-left pl-0">任务优先级</div>
                             <div class="col-md-10 float-left pl-0">
-                                <selectors :options="taskLevelArr" @change="changeTaskLevel"></selectors>
+                                <selectors :options="taskLevelArr" :placeholder="'请选择任务优先级'"
+                                           @change="changeTaskLevel"></selectors>
                             </div>
                         </div>
                         <div class="example">
                             <div class="col-md-2 text-right float-left">开始时间</div>
-                            <div class="col-md-4 float-left pl-0">
+                            <div class="col-md-5 float-left pl-0">
                                 <datepicker @change="changeStartTime"></datepicker>
                             </div>
+                            <div class="col-md-5 float-left pl-0">
+                                <timepicker :default="startMinutes" @change="changeStartMinutes"></timepicker>
+                            </div>
+                        </div>
+                        <div class="example">
                             <div class="col-md-2 text-right float-left">截止时间</div>
-                            <div class="col-md-4 float-left pl-0">
+                            <div class="col-md-5 float-left pl-0">
                                 <datepicker @change="changeEndTime"></datepicker>
+                            </div>
+                            <div class="col-md-5 float-left pl-0">
+                                <timepicker :default="endMinutes" @change="changeEndMinutes"></timepicker>
                             </div>
                         </div>
                         <div class="example">

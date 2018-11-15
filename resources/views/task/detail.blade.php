@@ -128,8 +128,7 @@
                                 <div class="card-text py-5 clearfix">
                                     <div class="col-md-1 float-left text-right pl-0">参与人</div>
                                     <div class="col-md-11 float-left font-weight-bold">
-                                        <edit-add-member :content="participantsArr.join('、')"
-                                                         :is-edit="isEdit"></edit-add-member>
+                                        <edit-add-member :is-edit="isEdit"></edit-add-member>
                                     </div>
                                 </div>
                                 <div class="card-text py-5 clearfix">
@@ -246,7 +245,7 @@
                                     <template v-if="task.status === 3">已停止</template>
                                 </td>
                                 <td></td>
-                                {{--<td>@{{ task.principal.data.name }}</td>--}}
+                                <td>@{{ task.principal.data.name }}</td>
                                 <td>@{{ task.end_at }}</td>
                             </tr>
                         </table>
@@ -323,7 +322,7 @@
                         <div class="example">
                             <div class="col-md-2 text-right float-left">参与人</div>
                             <div class="col-md-10 float-left pl-0">
-                                {{--<add-member @change="addParticipant"></add-member>--}}
+                                <add-member @change="addParticipant"></add-member>
                             </div>
                         </div>
                         <div class="example">
@@ -334,12 +333,20 @@
                         </div>
                         <div class="example">
                             <div class="col-md-2 text-right float-left">开始时间</div>
-                            <div class="col-md-4 float-left pl-0">
+                            <div class="col-md-5 float-left pl-0">
                                 <datepicker @change="addStartTime"></datepicker>
                             </div>
+                            <div class="col-md-5 float-left pl-0">
+                                <timepicker :default="startMinutes" @change="addStartMinutes"></timepicker>
+                            </div>
+                        </div>
+                        <div class="example">
                             <div class="col-md-2 text-right float-left">截止时间</div>
-                            <div class="col-md-4 float-left pl-0">
+                            <div class="col-md-5 float-left pl-0">
                                 <datepicker @change="addEndTime"></datepicker>
+                            </div>
+                            <div class="col-md-5 float-left pl-0">
+                                <timepicker :default="endMinutes" @change="addEndMinutes"></timepicker>
                             </div>
                         </div>
                         <div class="example">
@@ -347,13 +354,6 @@
                             <div class="col-md-10 float-left pl-0">
                                 <textarea class="form-control" name="taskDescription" id="" cols="30"
                                           rows="5" title="" v-model="taskIntroduce"></textarea>
-                            </div>
-                        </div>
-                        <div class="col-md-12">
-                            <div class="d-inline float-right child-attachment-upload">
-                                <span><i class="md-upload pr-5" aria-hidden="true"></i>上传文件</span>
-                                <input type="file">
-                                {{-- todo 子任务上传完附件ui --}}
                             </div>
                         </div>
                     </div>

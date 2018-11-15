@@ -1,32 +1,7 @@
 import config from "./config";
 import Tool from './tool';
 import redirect from './bootstrap';
-import Vuex from 'vuex';
-
-const store = new Vuex.Store({
-    state: {
-        participantsInfo: [],
-        principalInfo: {},
-    },
-    mutations: {
-        changeParticipantsInfo(state, data) {
-            state.participantsInfo = data
-        },
-
-        changePrincipal(state, data) {
-            state.principalInfo = data
-        }
-    },
-    actions: {
-        changeParticipantsInfo: function (data, params) {
-            data.commit('changeParticipantsInfo', params);
-        },
-
-        changePrincipal: function (data, params) {
-            data.commit('changePrincipal', params)
-        }
-    }
-});
+import store from '../store/index.js';
 
 let app = new Vue({
         el: '#root',
@@ -100,6 +75,12 @@ let app = new Vue({
             },
         },
 
+        computed: {
+            principalName: function () {
+                return this.$store.state.principalInfo.name
+            }
+        },
+
         methods: {
 
             getTask: function () {
@@ -129,8 +110,13 @@ let app = new Vue({
                     for (let i = 0; i < response.data.participants.data.length; i++) {
                         app.flagParticipantsIdArr.push(response.data.participants.data[i].id)
                     }
-                    store.dispatch('changeParticipantsInfo', response.data.participants.data);
-                    store.dispatch('changePrincipal', response.data.principal.data)
+                    let params = {
+                        type: 'change',
+                        data: response.data.participants.data
+                    };
+                    store.dispatch('changeParticipantsInfo', params);
+                    params.data = response.data.principal.data;
+                    store.dispatch('changePrincipal', params)
 
                 })
             },
@@ -230,7 +216,7 @@ let app = new Vue({
             },
 
             changeTaskBaseInfo: function () {
-                let flag = 0;
+                let _this = this;
                 if (app.changeInfo) {
                     $.ajax({
                         type: 'put',
@@ -244,8 +230,12 @@ let app = new Vue({
                         data: app.changeInfo
                     }).done(function () {
                         app.isEdit = false;
+                        if (app.changeInfo.principal_id) {
+                            app.taskInfo.principal.data = _this.$store.state.principalInfo
+                        }
                     });
                 }
+                // @todo 修改时间组件
 
                 if (app.changeParticipantInfo) {
                     let changeInfo = app.changeParticipantInfo;
@@ -257,8 +247,6 @@ let app = new Vue({
                     let flagInfo = app.flagParticipantsIdArr;
                     let del_participant_ids = [];
                     for (let j = 0; j < flagInfo.length; j++) {
-                        console.log(changeInfo.map(item => item.id).indexOf(flagInfo[j]));
-                        console.log(flagInfo[j]);
                         if (changeInfo.map(item => item.id).indexOf(flagInfo[j]) === -1) {
                             del_participant_ids.push(flagInfo[j])
                         }
@@ -360,17 +348,21 @@ let app = new Vue({
             },
 
             addChildTask: function () {
+                let participant_ids = [];
+                for (let i = 0; i < this.$store.state.newParticipantsInfo.length; i++) {
+                    participant_ids.push(this.$store.state.newParticipantsInfo[i].id)
+                }
                 let data = {
                     // resource_id: '1718463094',
                     // resourceable_id: '1994731356',
                     title: app.taskName,
                     // type: app.taskType,
-                    principal_id: app.principal,
+                    principal_id: this.$store.state.newPrincipalInfo.id,
+                    participant_ids: participant_ids,
                     priority: app.taskLevel,
                     start_at: app.startTime + ' ' + app.startMinutes,
                     end_at: app.endTime + ' ' + app.endMinutes,
                     desc: app.taskIntroduce,
-                    participant_ids: app.participants
                 };
                 $.ajax({
                     type: 'post',
@@ -416,6 +408,13 @@ let app = new Vue({
 
             },
 
+            addStartMinutes: function (value) {
+                app.startMinutes = value
+            },
+
+            addEndMinutes: function (value) {
+                app.endMinutes = value
+            },
             redirectTaskDetail: function (taskId) {
                 redirect('detail?task_id=' + taskId)
             }

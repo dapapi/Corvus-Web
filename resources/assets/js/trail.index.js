@@ -1,14 +1,18 @@
 import config from "./config";
-import redirect from "./bootstrap"
+import redirect from "./bootstrap";
+import store from '../store/index.js';
 
 let app = new Vue({
         el: '#root',
+        store,
         data: {
             total: 0,
             current_page: 1,
             total_pages: 1,
             trailsInfo: '',
             trailOrigin: '',
+            trailType: '',
+            trailTypeArr: config.trailTypeArr,
             companyType: config.companyType,
             companyArr: [],
             starsArr: [],
@@ -124,7 +128,8 @@ let app = new Vue({
                     },
                     fee: app.trailFee,
                     desc: app.trailDesc,
-                    industry_id: app.industry
+                    industry_id: app.industry,
+                    type: app.trailType
                 };
                 if (app.trailOrigin == 1 || app.trailOrigin == 2 || app.trailOrigin == 3) {
                     data.resource = app.email
@@ -166,7 +171,6 @@ let app = new Vue({
 
             changePrincipal: function (value) {
                 app.trailPrincipal = value
-                console.log(value)
             },
 
             changeTargetStars: function (value) {

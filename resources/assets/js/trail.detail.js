@@ -1,9 +1,11 @@
 import config from "./config";
 import redirect from "./bootstrap"
 import Tool from "./tool";
+import store from '../store/index'
 
 let app = new Vue({
         el: '#root',
+        store,
         data: {
             total: 0,
             current_page: 0,
@@ -83,7 +85,8 @@ let app = new Vue({
                             phone: newValue
                         }
                     }
-                }},
+                }
+            },
             'trailInfo.desc': function (newValue) {
                 app.changeInfo.desc = newValue
             },
@@ -98,7 +101,7 @@ let app = new Vue({
 
                 let data = {
                     page: pageNum,
-                    include: 'principal,client,contact,recommendations',
+                    include: 'principal,client,contact,recommendations,expectations',
                 };
 
                 $.ajax({

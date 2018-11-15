@@ -6,14 +6,15 @@
                    v-model="selectedMemberName">
         </div>
         <div class="float-left" v-show="selectMemberShow">
-            <select-staff class="selector" @change="changeSelectMember" :member-type="'principal'"></select-staff>
+            <select-staff class="selector" @change="changeSelectMember" :member-type="'principal'"
+                          :type="type"></select-staff>
         </div>
     </div>
 </template>
 
 <script>
     export default {
-        props: ['placeholder'],
+        props: ['placeholder', 'type'],
         data() {
             return {
                 selectMemberShow: false,
@@ -26,7 +27,11 @@
 
         computed: {
             selectedMemberName: function () {
-                return this.$store.state.principalInfo.name
+                if (this.type === 'change') {
+                    return this.$store.state.principalInfo.name
+                } else {
+                    return this.$store.state.newPrincipalInfo.name
+                }
             }
 
         },

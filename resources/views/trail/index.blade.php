@@ -23,7 +23,7 @@
             <div class="panel col-md-12 col-lg-12 py-5">
                 <div class="clearfix">
                     <div class="col-md-3 example float-left">
-                        <input type="text" class="form-control" id="inputPlaceholder" placeholder="请输入昵称"
+                        <input type="text" class="form-control" id="inputPlaceholder" placeholder="请输入销售线索名称"
                                style="width: 220px">
                     </div>
                     <div class="col-md-3 example float-left">
@@ -49,34 +49,23 @@
                             style="animation-fill-mode: backwards; animation-duration: 250ms; animation-delay: 0ms;">
                             <th class="pre-cell"></th>
                             <th class="cell-300" scope="col">线索名称</th>
-                            <th class="cell-300" scope="col">线索来源</th>
-                            <th class="cell-300" scope="col">销售进展</th>
                             <th class="cell-300" scope="col">公司名称</th>
                             <th class="cell-300" scope="col">级别</th>
+                            <th class="cell-300" scope="col">目标艺人</th>
+                            <th class="cell-300" scope="col">预计费用</th>
                             <th class="cell-300" scope="col">负责人</th>
                             <th class="suf-cell"></th>
                         </tr>
                         <tr v-for="trail in trailsInfo ">
                             <td class="pre-cell"></td>
                             <td class="pointer-content" @click="redirectTrailDetail(trail.id)">@{{ trail.title }}</td>
-                            <td>
-                                <template v-if="trail.resource.name">
-                                    @{{ trail.resource.name }}
-                                </template>
-                                <template v-else>
-                                    @{{ trail.resource }}
-                                </template>
-                            </td>
-                            <td>
-                                <template v-if="trail.progress_status === 1">未确定合作</template>
-                                <template v-if="trail.progress_status === 2">已确定合作</template>
-                                <template v-if="trail.progress_status === 0">已拒绝</template>
-                            </td>
-                            <td>@{{ trail.brand }}</td>
+                            <td>@{{ trail.client.data.company }}</td>
                             <td>
                                 <template v-if="trail.client.data.grade === 1">直客</template>
                                 <template v-if="trail.client.data.grade === 2">代理公司</template>
                             </td>
+                            <td>目标艺人</td>
+                            <td>@{{ trail.fee }}</td>
                             <td v-if="trail.principal">@{{ trail.principal.data.name }}</td>
                             <td class="suf-cell"></td>
                         </tr>
@@ -109,7 +98,12 @@
                         <h4 class="modal-title">新增销售线索</h4>
                     </div>
                     <div class="modal-body">
-
+                        <div class="example">
+                            <div class="col-md-2 text-right float-left">线索类型</div>
+                            <div class="col-md-10 float-left pl-0">
+                                <selectors :placeholder="'请选择销售线索'" :options="trailTypeArr"></selectors>
+                            </div>
+                        </div>
                         <div class="example">
                             <div class="col-md-2 text-right float-left">品牌名称</div>
                             <div class="col-md-10 float-left pl-0">
@@ -158,7 +152,8 @@
                         <div class="example">
                             <div class="col-md-2 text-right float-left">负责人</div>
                             <div class="col-md-10 float-left pl-0">
-                                <input-selectors :placeholder="'请选择负责人'" @change="changePrincipal"></input-selectors>
+                                <input-selectors :placeholder="'请选择负责人'"
+                                                 @change="changePrincipal"></input-selectors>
                             </div>
                         </div>
                         <div class="example">

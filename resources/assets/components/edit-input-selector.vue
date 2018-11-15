@@ -2,7 +2,7 @@
 <template>
     <div class="">
         <template v-if="isEditSelect">
-            <input-selectors @change="changeMember"></input-selectors>
+            <input-selectors @change="changeMember" :type="'change'"></input-selectors>
         </template>
         <template v-else>
             {{ this.$store.state.principalInfo.name }}

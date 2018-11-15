@@ -100,6 +100,24 @@ let config = {
             value: 11
         }
     ],
+    trailTypeArr: [
+        {
+            name: '影视线索',
+            value: 1
+        },
+        {
+            name: '综艺线索',
+            value: 2
+        },
+        {
+            name: '商务线索',
+            value: 3
+        },
+        {
+            name: 'papi线索',
+            value: 4
+        },
+    ],
     customizeInfo: [
         {
             id: 0,

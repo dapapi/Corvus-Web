@@ -14,7 +14,6 @@ const mix = require('laravel-mix');
 mix.js('resources/assets/js/app.js', 'public/js')
     .js('resources/assets/js/client.index.js', 'public/js')
     .js('resources/assets/js/client.detail.js', 'public/js')
-    .js('resources/assets/js/common.js', 'public/js')
     .js('resources/assets/js/left-menu.js', 'public/js')
     .js('resources/assets/js/login.js', 'public/js')
     .js('resources/assets/js/moe.js', 'public/js')

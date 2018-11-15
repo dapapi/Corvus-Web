@@ -1,9 +1,10 @@
 import config from "./config";
 import Tool from './tool';
-import redirect from './bootstrap';
+import store from '../store/index.js';
 
 let app = new Vue({
         el: '#root',
+        store,
         data: {
             clientId: '',
             changeInfo: {},
@@ -31,6 +32,7 @@ let app = new Vue({
             contactName: '',
             contactPhone: '',
             contactPosition: '',
+            clientProjectsInfo: '',
         },
 
         mounted() {
@@ -87,9 +89,16 @@ let app = new Vue({
                     type: 'get',
                     url: config.apiUrl + '/clients/' + this.clientId,
                     headers: config.getHeaders(),
+                    data: {
+                        include: 'principal'
+                    }
                 }).done(function (response) {
-                    console.log(response)
-                    app.clientInfo = response.data
+                    app.clientInfo = response.data;
+                    let params = {
+                        type: 'change',
+                        data: response.data.principal.data
+                    };
+                    store.dispatch('changePrincipal', params);
                 })
             },
 
@@ -106,7 +115,8 @@ let app = new Vue({
                     headers: config.getHeaders(),
                     data: {
                         type: 'clients',
-                        id: this.clientId
+                        id: this.clientId,
+                        include: 'principal,client'
                     }
                 }).done(function (response) {
                     app.clientTrailsInfo = response.data
@@ -124,15 +134,35 @@ let app = new Vue({
                     headers: config.getHeaders(),
                     data: {
                         type: 'clients',
-                        id: app.clientId
+                        id: app.clientId,
+                        include: 'principal'
                     }
                 }).done(function (response) {
-                    app.clientTasksInfo = response.data
+                    app.clientTasksInfo = response.data;
                 })
             },
 
             getClientProject: function () {
+                if (this.clientProjectsInfo.length > 0) {
+                    return
+                }
 
+                this.clientId = Tool.getParameterByName('client_id');
+
+                $.ajax({
+                    type: 'get',
+                    url: config.apiUrl + '/trails/search',
+                    headers: config.getHeaders(),
+                    data: {
+                        type: 'projects',
+                        id: this.clientId,
+                        include: 'principal,client'
+                    }
+                }).done(function (response) {
+                    console.log(response);
+                    app.clientProjectsInfo = response.data
+
+                })
             },
 
             getClientContact: function () {
@@ -159,7 +189,6 @@ let app = new Vue({
                         position: app.contactPosition
                     }
                 }).done(function (response) {
-                    console.log(response)
                     app.clientContactsInfo.push(response.data);
                     $('#addContact').modal('hide')
                 })
@@ -173,14 +202,14 @@ let app = new Vue({
                     headers: config.getHeaders(),
                     data: app.changeInfo
                 }).done(function (response) {
-                    console.log(response)
                     app.isEdit = false;
                     toastr.success('修改成功')
                 })
             },
 
             editBaseInfo: function () {
-                app.isEdit = true
+                app.isEdit = true;
+                app.changeInfo = {};
             },
 
             cancelEdit: function () {
@@ -235,7 +264,7 @@ let app = new Vue({
                     $('#addTask').modal('hide');
                     app.clientTasksInfo.push(response.data)
                 })
-            //    @todo 列表请求回来的数据为空，不知道是没添加上还是接口有问题
+                //    @todo 列表请求回来的数据为空，不知道是没添加上还是接口有问题
             },
 
             changeTaskType: function (value) {

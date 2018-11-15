@@ -92,7 +92,7 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
 
 /* harmony default export */ __webpack_exports__["default"] = ({
     name: "",
-    props: ['selected-members'],
+    props: ['type'],
     data: function data() {
         return {
             isMemberShow: false
@@ -105,7 +105,11 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
 
     computed: {
         selectMemberArr: function selectMemberArr() {
-            return this.$store.state.participantsInfo;
+            if (this.type === 'change') {
+                return this.$store.state.participantsInfo;
+            } else {
+                return this.$store.state.newParticipantsInfo;
+            }
         }
     },
 
@@ -125,7 +129,12 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
         },
 
         removeMember: function removeMember(userId) {
-            var participantInfo = this.$store.state.participantsInfo;
+            var participantInfo = '';
+            if (this.type === 'add') {
+                participantInfo = this.$store.state.newParticipantsInfo;
+            } else {
+                participantInfo = this.$store.state.participantsInfo;
+            }
             participantInfo.splice(participantInfo.map(function (item) {
                 return item.id;
             }).indexOf(userId), 1);
@@ -659,23 +668,34 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
 
 /* harmony default export */ __webpack_exports__["default"] = ({
     name: "departments-item",
-    props: ['data', 'select', 'multiple', 'member-type'],
+    props: ['data', 'select', 'multiple', 'member-type', 'type'],
     data: function data() {
         return {
             departmentsShow: false,
             total: 0,
-            selectArr: []
+            params: {
+                type: this.type,
+                data: ''
+            }
         };
     },
 
 
     computed: {
         principalInfo: function principalInfo() {
-            return this.$store.state.principalInfo;
+            if (this.type === 'change') {
+                return this.$store.state.principalInfo;
+            } else {
+                return this.$store.state.newPrincipalInfo;
+            }
         },
 
         participantsInfo: function participantsInfo() {
-            return this.$store.state.participantsInfo;
+            if (this.type === 'change') {
+                return this.$store.state.participantsInfo;
+            } else {
+                return this.$store.state.newParticipantsInfo;
+            }
         }
     },
 
@@ -697,20 +717,27 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
 
         selectMember: function selectMember(user) {
             if (this.memberType === 'principal') {
-                this.$store.commit('changePrincipal', user);
+                this.params.data = user;
+                this.$store.dispatch('changePrincipal', this.params);
                 this.$emit('change', false);
             } else if (this.memberType === 'participant') {
-                var participantInfo = this.$store.state.participantsInfo;
-                if (participantInfo.find(function (item) {
+                var participantInfo = '';
+                if (this.type === 'change') {
+                    participantInfo = this.$store.state.participantsInfo;
+                } else {
+                    participantInfo = this.$store.state.newParticipantsInfo;
+                }
+                if (!participantInfo.find(function (item) {
                     return item.id == user.id;
                 })) {
+                    participantInfo.push(user);
+                } else {
                     participantInfo.splice(participantInfo.map(function (item) {
                         return item.id;
                     }).indexOf(user.id), 1);
-                } else {
-                    participantInfo.push(user);
                 }
-                this.$store.commit('changeParticipantsInfo', participantInfo);
+                this.params.data = participantInfo;
+                this.$store.dispatch('changeParticipantsInfo', this.params);
             }
         },
 
@@ -719,14 +746,17 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
         },
 
         checkMember: function checkMember(data) {
-            var _this = this;
+            var participantInfo = '';
+            if (this.type === 'change') {
+                participantInfo = this.$store.state.participantsInfo;
+            } else {
+                participantInfo = this.$store.state.newParticipantsInfo;
+            }
 
             var _loop = function _loop(i) {
-                var userId = data.users.data[i].id;
-                var participantInfo = _this.$store.state.participantsInfo;
-
+                var user = data.users.data[i];
                 if (!participantInfo.find(function (item) {
-                    return item.id == userId;
+                    return item.id == user.id;
                 })) {
                     participantInfo.push(user);
                 }
@@ -738,6 +768,8 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
             for (var i = 0; i < data.departments.data.length; i++) {
                 this.checkMember(data.departments.data[i]);
             }
+            this.params.data = participantInfo;
+            this.$store.dispatch('changeParticipantsInfo', this.params);
         },
 
         memberNum: function memberNum(data) {
@@ -1384,9 +1416,10 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
 //
 //
 //
+//
 
 /* harmony default export */ __webpack_exports__["default"] = ({
-    props: ['placeholder'],
+    props: ['placeholder', 'type'],
     data: function data() {
         return {
             selectMemberShow: false
@@ -1399,7 +1432,11 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
 
     computed: {
         selectedMemberName: function selectedMemberName() {
-            return this.$store.state.principalInfo.name;
+            if (this.type === 'change') {
+                return this.$store.state.principalInfo.name;
+            } else {
+                return this.$store.state.newPrincipalInfo.name;
+            }
         }
 
     },
@@ -1733,44 +1770,47 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
 
 
 /* harmony default export */ __webpack_exports__["default"] = ({
-    props: ['multiple', 'member-type'],
+    props: ['multiple', 'member-type', 'type'],
     data: function data() {
         return {
             normalUsers: {},
             departmentUsers: {},
             teamShow: true,
-            selectIdArr: [],
             searchKeyWord: '',
-            componentId: '',
-            isParent: false
+            params: {
+                type: this.type,
+                data: ''
+            }
         };
     },
 
 
     computed: {
         principalInfo: function principalInfo() {
-            return this.$store.state.principalInfo;
+            if (this.type === 'change') {
+                return this.$store.state.principalInfo;
+            } else {
+                return this.$store.state.newPrincipalInfo;
+            }
         },
 
         participantsInfo: function participantsInfo() {
-            return this.$store.state.participantsInfo;
+            if (this.type === 'change') {
+                return this.$store.state.participantsInfo;
+            } else {
+                return this.$store.state.newParticipantsInfo;
+            }
         }
     },
 
     mounted: function mounted() {
         var self = this;
-        self.componentId = self._uid;
         $.ajax({
             url: __WEBPACK_IMPORTED_MODULE_0__js_config__["a" /* default */].apiUrl + '/users',
             headers: __WEBPACK_IMPORTED_MODULE_0__js_config__["a" /* default */].getHeaders(),
             type: 'get'
         }).done(function (response) {
             self.normalUsers = response.data;
-            if (self.selectedMembers && self.selectedMembers.length > 0) {
-                setTimeout(function () {
-                    self.selectIdArr = self.selectedMembers;
-                }, 100);
-            }
         });
 
         $.ajax({
@@ -1780,14 +1820,6 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
         }).done(function (response) {
             self.departmentUsers = response.data;
         });
-
-        if (this.memberType === 'principal') {
-            this.selectIdArr = [this.$store.state.principalInfo.id];
-        } else if (this.memberType === 'participant') {
-            for (var i = 0; i < this.$store.state.participantsInfo.length; i++) {
-                this.selectIdArr.push(this.$store.state.participantsInfo[i].id);
-            }
-        }
     },
 
 
@@ -1799,7 +1831,12 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
         selectAllMember: function selectAllMember() {
             var _this = this;
 
-            var participantInfo = this.$store.state.participantsInfo;
+            var participantInfo = '';
+            if (this.type === 'change') {
+                participantInfo = this.$store.state.participantsInfo;
+            } else {
+                participantInfo = this.$store.state.newParticipantsInfo;
+            }
 
             var _loop = function _loop(i) {
                 if (!participantInfo.find(function (item) {
@@ -1812,15 +1849,23 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
             for (var i = 0; i < this.normalUsers.length; i++) {
                 _loop(i);
             }
-            this.$store.commit('changeParticipantsInfo', participantInfo);
+            this.params.data = participantInfo;
+            this.$store.dispatch('changeParticipantsInfo', this.params);
             this.$emit('change', false);
         },
 
         selectMember: function selectMember(user) {
             if (this.memberType === 'principal') {
-                this.$store.commit('changePrincipal', user);
+                this.params.data = user;
+                this.$store.dispatch('changePrincipal', this.params);
             } else if (this.memberType === 'participant') {
-                var participantInfo = this.$store.state.participantsInfo;
+                var participantInfo = '';
+                if (this.type === 'change') {
+                    participantInfo = this.$store.state.participantsInfo;
+                } else {
+                    participantInfo = this.$store.state.newParticipantsInfo;
+                }
+
                 if (participantInfo.find(function (item) {
                     return item.id == user.id;
                 })) {
@@ -1830,7 +1875,8 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
                 } else {
                     participantInfo.push(user);
                 }
-                this.$store.commit('changeParticipantsInfo', participantInfo);
+                this.params.data = participantInfo;
+                this.$store.dispatch('changeParticipantsInfo', this.params);
             }
             this.$emit('change', false);
         },
@@ -2008,6 +2054,323 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
 
 /***/ }),
 
+/***/ "./node_modules/babel-loader/lib/index.js?{\"cacheDirectory\":true,\"presets\":[[\"env\",{\"modules\":false,\"targets\":{\"browsers\":[\"> 2%\"],\"uglify\":true}}]],\"plugins\":[\"transform-object-rest-spread\",[\"transform-runtime\",{\"polyfill\":false,\"helpers\":false}]]}!./node_modules/vue-loader/lib/selector.js?type=script&index=0!./resources/assets/components/timepicker.vue":
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
+//
+//
+//
+
+/* harmony default export */ __webpack_exports__["default"] = ({
+    props: ['placeholder', 'default'],
+    data: function data() {
+        return {
+            option: [{
+                name: '08:00',
+                value: '08:00'
+            }, {
+                name: '08:15',
+                value: '08:15'
+            }, {
+                name: '08:30',
+                value: '08:30'
+            }, {
+                name: '08:45',
+                value: '08:45'
+            }, {
+                name: '09:00',
+                value: '09:00'
+            }, {
+                name: '09:15',
+                value: '09:15'
+            }, {
+                name: '09:30',
+                value: '09:30'
+            }, {
+                name: '09:45',
+                value: '09:45'
+            }, {
+                name: '10:00',
+                value: '10:00'
+            }, {
+                name: '10:15',
+                value: '10:15'
+            }, {
+                name: '10:30',
+                value: '10:30'
+            }, {
+                name: '10:45',
+                value: '10:45'
+            }, {
+                name: '11:00',
+                value: '11:00'
+            }, {
+                name: '11:15',
+                value: '11:15'
+            }, {
+                name: '11:30',
+                value: '11:30'
+            }, {
+                name: '11:45',
+                value: '11:45'
+            }, {
+                name: '12:00',
+                value: '12:00'
+            }, {
+                name: '12:15',
+                value: '12:15'
+            }, {
+                name: '12:30',
+                value: '12:30'
+            }, {
+                name: '12:45',
+                value: '12:45'
+            }, {
+                name: '13:00',
+                value: '13:00'
+            }, {
+                name: '13:15',
+                value: '13:15'
+            }, {
+                name: '13:30',
+                value: '13:30'
+            }, {
+                name: '13:45',
+                value: '13:45'
+            }, {
+                name: '14:00',
+                value: '14:00'
+            }, {
+                name: '14:15',
+                value: '14:15'
+            }, {
+                name: '14:30',
+                value: '14:30'
+            }, {
+                name: '14:45',
+                value: '14:45'
+            }, {
+                name: '15:00',
+                value: '15:00'
+            }, {
+                name: '15:15',
+                value: '15:15'
+            }, {
+                name: '15:30',
+                value: '15:30'
+            }, {
+                name: '15:45',
+                value: '15:45'
+            }, {
+                name: '16:00',
+                value: '16:00'
+            }, {
+                name: '16:15',
+                value: '16:15'
+            }, {
+                name: '16:30',
+                value: '16:30'
+            }, {
+                name: '16:45',
+                value: '16:45'
+            }, {
+                name: '17:00',
+                value: '17:00'
+            }, {
+                name: '17:15',
+                value: '17:15'
+            }, {
+                name: '17:30',
+                value: '17:30'
+            }, {
+                name: '17:45',
+                value: '17:45'
+            }, {
+                name: '18:00',
+                value: '18:00'
+            }, {
+                name: '18:15',
+                value: '18:15'
+            }, {
+                name: '18:30',
+                value: '18:30'
+            }, {
+                name: '18:45',
+                value: '18:45'
+            }, {
+                name: '19:00',
+                value: '19:00'
+            }, {
+                name: '19:15',
+                value: '19:15'
+            }, {
+                name: '19:30',
+                value: '19:30'
+            }, {
+                name: '19:45',
+                value: '19:45'
+            }, {
+                name: '20:00',
+                value: '20:00'
+            }, {
+                name: '20:15',
+                value: '20:15'
+            }, {
+                name: '20:30',
+                value: '20:30'
+            }, {
+                name: '20:45',
+                value: '20:45'
+            }, {
+                name: '21:00',
+                value: '21:00'
+            }, {
+                name: '21:15',
+                value: '21:15'
+            }, {
+                name: '21:30',
+                value: '21:30'
+            }, {
+                name: '21:45',
+                value: '21:45'
+            }, {
+                name: '22:00',
+                value: '22:00'
+            }, {
+                name: '22:15',
+                value: '22:15'
+            }, {
+                name: '22:30',
+                value: '22:30'
+            }, {
+                name: '22:45',
+                value: '22:45'
+            }, {
+                name: '23:00',
+                value: '23:00'
+            }, {
+                name: '23:15',
+                value: '23:15'
+            }, {
+                name: '23:30',
+                value: '23:30'
+            }, {
+                name: '23:45',
+                value: '23:45'
+            }, {
+                name: '00:00',
+                value: '00:00'
+            }, {
+                name: '00:15',
+                value: '00:15'
+            }, {
+                name: '00:30',
+                value: '00:30'
+            }, {
+                name: '00:45',
+                value: '00:45'
+            }, {
+                name: '01:00',
+                value: '01:00'
+            }, {
+                name: '01:15',
+                value: '01:15'
+            }, {
+                name: '01:30',
+                value: '01:30'
+            }, {
+                name: '01:45',
+                value: '01:45'
+            }, {
+                name: '02:00',
+                value: '02:00'
+            }, {
+                name: '02:15',
+                value: '02:15'
+            }, {
+                name: '02:30',
+                value: '02:30'
+            }, {
+                name: '02:45',
+                value: '02:45'
+            }, {
+                name: '03:00',
+                value: '03:00'
+            }, {
+                name: '03:15',
+                value: '03:15'
+            }, {
+                name: '03:30',
+                value: '03:30'
+            }, {
+                name: '03:45',
+                value: '03:45'
+            }, {
+                name: '04:00',
+                value: '04:00'
+            }, {
+                name: '04:15',
+                value: '04:15'
+            }, {
+                name: '04:30',
+                value: '04:30'
+            }, {
+                name: '04:45',
+                value: '04:45'
+            }, {
+                name: '05:00',
+                value: '05:00'
+            }, {
+                name: '05:15',
+                value: '05:15'
+            }, {
+                name: '05:30',
+                value: '05:30'
+            }, {
+                name: '05:45',
+                value: '05:45'
+            }, {
+                name: '06:00',
+                value: '06:00'
+            }, {
+                name: '06:15',
+                value: '06:15'
+            }, {
+                name: '06:30',
+                value: '06:30'
+            }, {
+                name: '06:45',
+                value: '06:45'
+            }, {
+                name: '07:00',
+                value: '07:00'
+            }, {
+                name: '07:15',
+                value: '07:15'
+            }, {
+                name: '07:30',
+                value: '07:30'
+            }, {
+                name: '07:45',
+                value: '07:45'
+            }]
+        };
+    },
+    mounted: function mounted() {
+        this.$refs.timepicker.setValue(this.default);
+    },
+
+    methods: {
+        changeTime: function changeTime(value) {
+            this.$emit('change', value);
+        }
+    }
+});
+
+/***/ }),
+
 /***/ "./node_modules/css-loader/index.js!./node_modules/vue-loader/lib/style-compiler/index.js?{\"vue\":true,\"id\":\"data-v-022dc3c7\",\"scoped\":false,\"hasInlineConfig\":true}!./node_modules/vue-loader/lib/selector.js?type=styles&index=0!./resources/assets/components/customize-filter.vue":
 /***/ (function(module, exports, __webpack_require__) {
 
@@ -2166,7 +2529,7 @@ exports = module.exports = __webpack_require__("./node_modules/css-loader/lib/cs
 
 
 // module
-exports.push([module.i, "\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n", ""]);
+exports.push([module.i, "\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n", ""]);
 
 // exports
 
@@ -3374,7 +3737,7 @@ var render = function() {
                     staticClass: "nav-link active",
                     attrs: {
                       "data-toggle": "tab",
-                      href: "#forum-team" + this.componentId,
+                      href: "#forum-team" + this._uid,
                       "aria-controls": "forum-base",
                       "aria-expanded": "true",
                       role: "tab"
@@ -3398,7 +3761,7 @@ var render = function() {
                     staticClass: "nav-link",
                     attrs: {
                       "data-toggle": "tab",
-                      href: "#forum-department" + this.componentId,
+                      href: "#forum-department" + this._uid,
                       "aria-controls": "forum-present",
                       "aria-expanded": "false",
                       role: "tab"
@@ -3423,7 +3786,7 @@ var render = function() {
             "div",
             {
               staticClass: "tab-pane animation-fade active",
-              attrs: { id: "forum-team" + this.componentId, role: "tabpanel" }
+              attrs: { id: "forum-team" + this._uid, role: "tabpanel" }
             },
             [
               _c("div", { staticClass: "input-search example" }, [
@@ -3601,10 +3964,7 @@ var render = function() {
             "div",
             {
               staticClass: "tab-pane animation-fade",
-              attrs: {
-                id: "forum-department" + this.componentId,
-                role: "tabpanel"
-              }
+              attrs: { id: "forum-department" + this._uid, role: "tabpanel" }
             },
             _vm._l(_vm.departmentUsers, function(department) {
               return _c(
@@ -3613,6 +3973,7 @@ var render = function() {
                   _c("departments-item", {
                     attrs: {
                       data: department,
+                      type: _vm.type,
                       multiple: _vm.multiple,
                       "member-type": _vm.memberType
                     },
@@ -4513,7 +4874,11 @@ var render = function() {
           { staticClass: "addMember-trigger-dropdown" },
           [
             _c("select-staff", {
-              attrs: { multiple: true, "member-type": "participant" },
+              attrs: {
+                multiple: true,
+                "member-type": "participant",
+                type: _vm.type
+              },
               on: { change: _vm.changeSelectedMember }
             })
           ],
@@ -4663,7 +5028,7 @@ var render = function() {
         [
           _c("select-staff", {
             staticClass: "selector",
-            attrs: { "member-type": "principal" },
+            attrs: { "member-type": "principal", type: _vm.type },
             on: { change: _vm.changeSelectMember }
           })
         ],
@@ -4842,6 +5207,7 @@ var render = function() {
                       attrs: {
                         data: departmentData,
                         "member-type": _vm.memberType,
+                        type: _vm.type,
                         multiple: _vm.multiple
                       },
                       on: { change: _vm.memberChange }
@@ -4895,7 +5261,12 @@ var render = function() {
     {},
     [
       _vm.isEditAdd
-        ? [_c("add-member", { on: { change: _vm.changeMember } })]
+        ? [
+            _c("add-member", {
+              attrs: { type: "change" },
+              on: { change: _vm.changeMember }
+            })
+          ]
         : [
             _vm._v(
               "\n        " + _vm._s(_vm.selectedMember.join("、")) + "\n    "
@@ -4989,7 +5360,12 @@ var render = function() {
     {},
     [
       _vm.isEditSelect
-        ? [_c("input-selectors", { on: { change: _vm.changeMember } })]
+        ? [
+            _c("input-selectors", {
+              attrs: { type: "change" },
+              on: { change: _vm.changeMember }
+            })
+          ]
         : [
             _vm._v(
               "\n        " +
@@ -5032,6 +5408,31 @@ if (false) {
   module.hot.accept()
   if (module.hot.data) {
     require("vue-hot-reload-api")      .rerender("data-v-7bd457ea", module.exports)
+  }
+}
+
+/***/ }),
+
+/***/ "./node_modules/vue-loader/lib/template-compiler/index.js?{\"id\":\"data-v-7c720a60\",\"hasScoped\":false,\"buble\":{\"transforms\":{}}}!./node_modules/vue-loader/lib/selector.js?type=template&index=0!./resources/assets/components/timepicker.vue":
+/***/ (function(module, exports, __webpack_require__) {
+
+var render = function() {
+  var _vm = this
+  var _h = _vm.$createElement
+  var _c = _vm._self._c || _h
+  return _c("selectors", {
+    ref: "timepicker",
+    attrs: { options: _vm.option },
+    on: { change: _vm.changeTime }
+  })
+}
+var staticRenderFns = []
+render._withStripped = true
+module.exports = { render: render, staticRenderFns: staticRenderFns }
+if (false) {
+  module.hot.accept()
+  if (module.hot.data) {
+    require("vue-hot-reload-api")      .rerender("data-v-7c720a60", module.exports)
   }
 }
 
@@ -18642,6 +19043,54 @@ module.exports = Component.exports
 
 /***/ }),
 
+/***/ "./resources/assets/components/timepicker.vue":
+/***/ (function(module, exports, __webpack_require__) {
+
+var disposed = false
+var normalizeComponent = __webpack_require__("./node_modules/vue-loader/lib/component-normalizer.js")
+/* script */
+var __vue_script__ = __webpack_require__("./node_modules/babel-loader/lib/index.js?{\"cacheDirectory\":true,\"presets\":[[\"env\",{\"modules\":false,\"targets\":{\"browsers\":[\"> 2%\"],\"uglify\":true}}]],\"plugins\":[\"transform-object-rest-spread\",[\"transform-runtime\",{\"polyfill\":false,\"helpers\":false}]]}!./node_modules/vue-loader/lib/selector.js?type=script&index=0!./resources/assets/components/timepicker.vue")
+/* template */
+var __vue_template__ = __webpack_require__("./node_modules/vue-loader/lib/template-compiler/index.js?{\"id\":\"data-v-7c720a60\",\"hasScoped\":false,\"buble\":{\"transforms\":{}}}!./node_modules/vue-loader/lib/selector.js?type=template&index=0!./resources/assets/components/timepicker.vue")
+/* template functional */
+var __vue_template_functional__ = false
+/* styles */
+var __vue_styles__ = null
+/* scopeId */
+var __vue_scopeId__ = null
+/* moduleIdentifier (server only) */
+var __vue_module_identifier__ = null
+var Component = normalizeComponent(
+  __vue_script__,
+  __vue_template__,
+  __vue_template_functional__,
+  __vue_styles__,
+  __vue_scopeId__,
+  __vue_module_identifier__
+)
+Component.options.__file = "resources/assets/components/timepicker.vue"
+
+/* hot reload */
+if (false) {(function () {
+  var hotAPI = require("vue-hot-reload-api")
+  hotAPI.install(require("vue"), false)
+  if (!hotAPI.compatible) return
+  module.hot.accept()
+  if (!module.hot.data) {
+    hotAPI.createRecord("data-v-7c720a60", Component.options)
+  } else {
+    hotAPI.reload("data-v-7c720a60", Component.options)
+  }
+  module.hot.dispose(function (data) {
+    disposed = true
+  })
+})()}
+
+module.exports = Component.exports
+
+
+/***/ }),
+
 /***/ "./resources/assets/js/app.js":
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
@@ -18685,6 +19134,7 @@ Vue.component('select-staff', __webpack_require__("./resources/assets/components
 Vue.component('selectors', __webpack_require__("./resources/assets/components/selectors.vue"));
 Vue.component('selectorsOptions', __webpack_require__("./resources/assets/components/selectors-options.vue"));
 Vue.component('task-follow-up', __webpack_require__("./resources/assets/components/task-follow-up.vue"));
+Vue.component('timepicker', __webpack_require__("./resources/assets/components/timepicker.vue"));
 
 Vue.prototype.globalClick = function (callback) {
     document.getElementById('root').addEventListener('click', function () {
@@ -18816,6 +19266,19 @@ var config = {
     }, {
         name: '公关or广告公司',
         value: 11
+    }],
+    trailTypeArr: [{
+        name: '影视线索',
+        value: 1
+    }, {
+        name: '综艺线索',
+        value: 2
+    }, {
+        name: '商务线索',
+        value: 3
+    }, {
+        name: 'papi线索',
+        value: 4
     }],
     customizeInfo: [{
         id: 0,

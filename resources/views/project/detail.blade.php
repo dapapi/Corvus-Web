@@ -313,14 +313,19 @@
                     </div>
                     <div class="example">
                         <div class="col-md-2 text-right float-left">开始时间</div>
-                        <div class="col-md-4 float-left pl-0">
+                        <div class="col-md-5 float-left pl-0">
                             <datepicker @change="changeStartTime"></datepicker>
                         </div>
+                        <div class="col-md-5 float-left pl-0">
+                            <timepicker></timepicker>
+                        </div>
                         <div class="col-md-2 text-right float-left">截止时间</div>
-                        <div class="col-md-4 float-left pl-0">
+                        <div class="col-md-5 float-left pl-0">
                             <datepicker @change="changeEndTime"></datepicker>
                         </div>
-                        {{-- todo 时间组件加上小时分钟 --}}
+                        <div class="col-md-5 float-left pl-0">
+                            <timepicker></timepicker>
+                        </div>
                     </div>
                     <div class="example">
                         <div class="col-md-2 text-right float-left">任务说明</div>
