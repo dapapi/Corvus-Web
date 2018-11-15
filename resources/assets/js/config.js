@@ -332,6 +332,51 @@ let config = {
         }
     ],
 
+    lockArr: [
+        {
+            name: '否',
+            value: 0
+        },
+        {
+            name: '是',
+            value: 1
+        }
+    ],
+    cooperationType: [
+        {
+            name: '代言',
+            value: 1
+        },
+        {
+            name: '合作',
+            value: 2
+        },
+        {
+            name: '活动',
+            value: 3
+        },
+        {
+            name: '微博',
+            value: 4
+        },
+        {
+            name: '抖音',
+            value: 5
+        },
+        {
+            name: '短期代言',
+            value: 6
+        },
+        {
+            name: '时装周',
+            value: 7
+        },
+        {
+            name: '未确定',
+            value: 8
+        }
+    ]
+
 
 };
 

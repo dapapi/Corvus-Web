@@ -101,7 +101,8 @@
                         <div class="example">
                             <div class="col-md-2 text-right float-left">线索类型</div>
                             <div class="col-md-10 float-left pl-0">
-                                <selectors :placeholder="'请选择销售线索'" :options="trailTypeArr" @change="changeTrailType"></selectors>
+                                <selectors :placeholder="'请选择销售线索'" :options="trailTypeArr"
+                                           @change="changeTrailType"></selectors>
                             </div>
                         </div>
                         <div class="example">
@@ -171,9 +172,17 @@
                             </div>
                         </div>
                         <div class="example">
+                            <div class="col-md-2 text-right float-left">合作类型</div>
+                            <div class="col-md-10 float-left pl-0" v-if="trailType != 4">
+                                <selectors :options="cooperationType" @change="changeCooperationType"
+                                           :placeholder="'请选择合作类型'"></selectors>
+                            </div>
+                        </div>
+                        <div class="example">
                             <div class="col-md-2 text-right float-left">优先级</div>
                             <div class="col-md-10 float-left pl-0">
-                                <selectors :options="priorityArr" :placeholder="'请选择优先级'" @change="changePriority"></selectors>
+                                <selectors :options="priorityArr" :placeholder="'请选择优先级'"
+                                           @change="changePriority"></selectors>
                             </div>
                         </div>
                         <div class="example">
@@ -188,6 +197,13 @@
                             <div class="col-md-10 float-left pl-0">
                                 <input type="text" class="form-control" title="" placeholder="请输入联系电话"
                                        v-model="trailContactPhone">
+                            </div>
+                        </div>
+                        <div class="example" v-if="trailType != 4">
+                            <div class="col-md-2 text-right float-left">线索状态</div>
+                            <div class="col-md-10 float-left pl-0">
+                                <selectors :options="priorityArr" :placeholder="'请选择线索状态'"
+                                           @change="changeTrailStatus"></selectors>
                             </div>
                         </div>
                         <div class="example">

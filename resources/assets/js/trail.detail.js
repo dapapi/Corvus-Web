@@ -17,6 +17,8 @@ let app = new Vue({
             taskIntroduce: '',
             multiple: false,
             isEdit: false,
+            starsArr: [],
+            industriesArr: [],
             memberPlaceholder: '请选择负责人',
             companyType: config.companyType,
             customizeInfo: config.customizeInfo,
@@ -29,11 +31,15 @@ let app = new Vue({
             trailOriginArr: config.trailOrigin,
             salesProgressText: '未确定合作',
             changeInfo: {},
-
+            selectedExpectationsArr: [],
+            selectedRecommendationsArr: [],
+            lockArr: config.lockArr,
         },
 
         mounted() {
             this.getTrail();
+            this.getStars();
+            this.getIndustries();
         },
         watch: {
             'trailInfo.title': function (newValue) {
@@ -95,23 +101,49 @@ let app = new Vue({
 
         methods: {
 
-            getTrail: function (pageNum = 1) {
+            getTrail: function () {
 
                 this.trailId = Tool.getParameterByName('trail_id');
-
-                let data = {
-                    page: pageNum,
-                    include: 'principal,client,contact,recommendations,expectations',
-                };
 
                 $.ajax({
                     type: 'get',
                     url: config.apiUrl + '/trails/' + this.trailId,
                     headers: config.getHeaders(),
-                    data: data
+                    data: {
+                        include: 'principal,client,contact,recommendations,expectations,project',
+                    }
                 }).done(function (response) {
                     console.log(response.data);
                     app.trailInfo = response.data;
+                    for (let i = 0; i < app.trailInfo.expectations.data.length; i++) {
+                        app.selectedExpectationsArr.push(app.trailInfo.expectations.data[i].id)
+                    }
+                    for (let i = 0; i < app.trailInfo.recommendations.data.length; i++) {
+                        app.selectedRecommendationsArr.push(app.trailInfo.recommendations.data[i].id)
+                    }
+                    if (response.data.principal) {
+                        let params = {
+                            type: 'change',
+                            data: response.data.principal.data
+                        };
+                        store.dispatch('changePrincipal', params);
+                    }
+                })
+            },
+
+            getIndustries: function () {
+                $.ajax({
+                    type: 'get',
+                    url: config.apiUrl + '/industries/all',
+                    headers: config.getHeaders(),
+                }).done(function (response) {
+                    for (let i = 0; i < response.data.length; i++) {
+                        app.industriesArr.push({
+                            id: response.data[i].id,
+                            name: response.data[i].name,
+                            value: response.data[i].id
+                        })
+                    }
                 })
             },
 
@@ -127,6 +159,23 @@ let app = new Vue({
                     data: app.changeInfo
                 }).done(function (response) {
                     console.log(response.data);
+                    toastr.success('修改成功');
+                })
+            },
+
+            getStars: function () {
+                $.ajax({
+                    type: 'get',
+                    url: config.apiUrl + '/stars/all',
+                    headers: config.getHeaders(),
+                }).done(function (response) {
+                    for (let i = 0; i < response.data.length; i++) {
+                        app.starsArr.push({
+                            id: response.data[i].id,
+                            name: response.data[i].name,
+                            value: response.data[i].id
+                        })
+                    }
                 })
             },
 
@@ -175,6 +224,10 @@ let app = new Vue({
                     $('#addTask').modal('hide');
                     app.trailTasksInfo.push(response.data);
                 })
+            },
+
+            redirectCompany: function (companyId) {
+                redirect('../client/detail?client_id=' + companyId)
             },
 
             changeLinkage: function (value) {
@@ -261,6 +314,18 @@ let app = new Vue({
             changeTrailDesc: function (value) {
                 app.trailInfo.desc = value
             },
+
+            changeExpectations: function (value) {
+                console.log(value)
+            },
+
+            changeRecommendations: function (value) {
+                console.log(value)
+            },
+
+            changePriority: function (value) {
+                console.log(value)
+            }
 
 
         }

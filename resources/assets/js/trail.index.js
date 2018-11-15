@@ -36,6 +36,8 @@ let app = new Vue({
             industry: '',
             priority: '',
             priorityArr: config.priorityArr,
+            trailStatus: '',
+            cooperation: '',
 
         },
 
@@ -134,6 +136,9 @@ let app = new Vue({
                     type: app.trailType,
                     priority: app.priority
                 };
+                if (app.trailType != 4) {
+                    //    todo 添加线索状态
+                }
                 if (app.trailOrigin == 1 || app.trailOrigin == 2 || app.trailOrigin == 3) {
                     data.resource = app.email
                 } else if (app.trailOrigin == 4 || app.trailOrigin == 5) {
@@ -210,6 +215,14 @@ let app = new Vue({
 
             changeTrailType: function (value) {
                 app.trailType = value
+            },
+
+            changeTrailStatus: function (value) {
+                app.trailStatus = value
+            },
+
+            changeCooperationType: function (value) {
+                app.cooperation = value
             }
 
 

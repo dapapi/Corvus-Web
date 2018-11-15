@@ -1139,10 +1139,17 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
 //
 //
 //
+//
+//
+//
+//
+//
+//
+//
 
 /* harmony default export */ __webpack_exports__["default"] = ({
     name: "edit-selector",
-    props: ['options', 'is-edit', 'content'],
+    props: ['options', 'is-edit', 'content', 'multiple'],
     data: function data() {
         return {
             isEditSelect: false
@@ -2542,7 +2549,7 @@ exports = module.exports = __webpack_require__("./node_modules/css-loader/lib/cs
 
 
 // module
-exports.push([module.i, "\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n", ""]);
+exports.push([module.i, "\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n", ""]);
 
 // exports
 
@@ -4820,35 +4827,54 @@ if (false) {
 /***/ (function(module, exports, __webpack_require__) {
 
 var render = function() {
-  var this$1 = this
   var _vm = this
   var _h = _vm.$createElement
   var _c = _vm._self._c || _h
-  return _c(
-    "div",
-    [
-      _vm.isEditSelect
-        ? [
-            _c("selectors", {
-              ref: "selector",
-              attrs: { options: this.options },
-              on: { change: _vm.changeSelect }
-            })
-          ]
-        : [
-            _vm._v(
-              "\n        " +
-                _vm._s(
-                  this.options.find(function(item) {
-                    return item.value == this$1.content
-                  }).name
-                ) +
-                "\n    "
-            )
-          ]
-    ],
-    2
-  )
+  return _vm.options.length > 0
+    ? _c(
+        "div",
+        [
+          _vm.isEditSelect
+            ? [
+                _c("selectors", {
+                  ref: "selector",
+                  attrs: { options: this.options, multiple: _vm.multiple },
+                  on: { change: _vm.changeSelect }
+                })
+              ]
+            : [
+                _vm.multiple
+                  ? [
+                      _vm._l(_vm.content, function(cont) {
+                        return [
+                          _vm._v(
+                            "\n                " +
+                              _vm._s(
+                                _vm.options.find(function(item) {
+                                  return item.value == cont
+                                }).name
+                              ) +
+                              "\n            "
+                          )
+                        ]
+                      })
+                    ]
+                  : [
+                      _vm._v(
+                        "\n            " +
+                          _vm._s(
+                            _vm.options.find(function(item) {
+                              return item.value == _vm.content
+                            }).name
+                          ) +
+                          "\n        "
+                      )
+                    ]
+              ]
+        ],
+        2
+      )
+    : _vm._e()
 }
 var staticRenderFns = []
 render._withStripped = true
@@ -19484,6 +19510,39 @@ var config = {
     }, {
         name: '低',
         value: 3
+    }],
+
+    lockArr: [{
+        name: '否',
+        value: 0
+    }, {
+        name: '是',
+        value: 1
+    }],
+    cooperationType: [{
+        name: '代言',
+        value: 1
+    }, {
+        name: '合作',
+        value: 2
+    }, {
+        name: '活动',
+        value: 3
+    }, {
+        name: '微博',
+        value: 4
+    }, {
+        name: '抖音',
+        value: 5
+    }, {
+        name: '短期代言',
+        value: 6
+    }, {
+        name: '时装周',
+        value: 7
+    }, {
+        name: '未确定',
+        value: 8
     }]
 
 };

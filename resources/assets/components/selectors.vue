@@ -34,7 +34,7 @@
                 }
             },
             options: function (newValue) {
-            console.log(newValue)
+                console.log(newValue);
                 this.refresh()
             }
         },
