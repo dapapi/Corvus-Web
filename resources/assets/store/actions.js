@@ -14,4 +14,8 @@ export default {
             data.commit('changeNewPrincipal', params.data)
         }
     },
+
+    changeCompany: function (data, params) {
+        data.commit('changeCompany', params)
+    }
 }

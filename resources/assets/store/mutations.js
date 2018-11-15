@@ -13,5 +13,9 @@ export default {
 
     changeNewPrincipal(state, data) {
         state.newPrincipalInfo = data
+    },
+
+    changeCompany(state, data) {
+        state.companyInfo = data
     }
 }

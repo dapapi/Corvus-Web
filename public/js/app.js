@@ -89,6 +89,7 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
 //
 //
 //
+//
 
 /* harmony default export */ __webpack_exports__["default"] = ({
     name: "",
@@ -138,7 +139,11 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
             participantInfo.splice(participantInfo.map(function (item) {
                 return item.id;
             }).indexOf(userId), 1);
-            this.$store.commit('changeParticipantsInfo', participantInfo);
+            var params = {
+                type: this.type,
+                data: participantInfo
+            };
+            this.$store.dispatch('changeParticipantsInfo', params);
         },
 
         changeSelectedMember: function changeSelectedMember() {
@@ -855,6 +860,7 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
 //
 //
 //
+//
 
 
 
@@ -876,6 +882,12 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
     watch: {
         isWrite: function isWrite(newValue) {
             this.isDisable = !newValue;
+        }
+    },
+
+    computed: {
+        getCompanyInfo: function getCompanyInfo() {
+            return this.$store.state.companyInfo;
         }
     },
 
@@ -904,23 +916,21 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
 
         changeCompanyLevel: function changeCompanyLevel(value) {
             this.emitCompany.grade = value;
-            this.$emit('change', this.emitCompany);
+            var companyInfo = this.$store.state.companyInfo;
+            companyInfo.grade = value;
+            this.$store.commit('changeCompany', companyInfo);
+            this.$emit('change', true);
         },
 
-        changeSelects: function changeSelects(name, id, grade) {
-            this.$refs.companyLevel.setValue(grade);
-            this.isWrite = !id;
-            if (id) {
-                this.emitCompany = {
-                    id: id
-                };
+        changeSelects: function changeSelects() {
+            var companyInfo = this.$store.state.companyInfo;
+            if (companyInfo.grade) {
+                this.$refs.companyLevel.setValue(companyInfo.grade);
+                this.isWrite = false;
             } else {
-                this.emitCompany = {
-                    company: name
-                };
-                this.emitCompany.grade = this.$refs.companyLevel.getValue();
+                this.isWrite = true;
             }
-            this.$emit('change', this.emitCompany);
+            this.$emit('change', true);
         }
 
     }
@@ -1231,10 +1241,18 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
 //
 //
 //
+//
+//
+//
+//
+//
+//
+//
+//
 
 /* harmony default export */ __webpack_exports__["default"] = ({
     name: "editable-search-box",
-    props: ['options', 'multiple'],
+    props: ['options', 'multiple', 'type'],
     data: function data() {
         return {
             inputValue: '',
@@ -1252,10 +1270,21 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
                 this.isSelected = false;
             } else {
                 this.selectIdArr = [];
-                this.$emit('change', newValue);
+                var data = {
+                    name: newValue
+                };
+                this.$store.dispatch(this.type, data);
             }
+            this.$emit('change', true);
         }
     },
+
+    computed: {
+        getCompanyInfo: function getCompanyInfo() {
+            return this.$store.state.companyInfo;
+        }
+    },
+
     mounted: function mounted() {
         this.globalClick(this.removeSelector);
     },
@@ -1266,15 +1295,14 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
             this.selectorShow = true;
         },
 
-        selectItem: function selectItem(itemId, itemName, itemGrade) {
-            this.inputValue = itemName;
+        selectItem: function selectItem(item) {
+            this.$store.dispatch(this.type, item);
+            this.inputValue = item.name;
             this.isSelected = true;
-            this.$emit('change', itemName, itemId, itemGrade);
             if (!this.multiple) {
                 this.selectorShow = false;
-                this.selectIdArr = [itemId];
             } else {
-                this.selectIdArr.push(itemId);
+                this.selectIdArr.push(item.value);
             }
         },
 
@@ -2439,7 +2467,7 @@ exports = module.exports = __webpack_require__("./node_modules/css-loader/lib/cs
 
 
 // module
-exports.push([module.i, "\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n", ""]);
+exports.push([module.i, "\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n", ""]);
 
 // exports
 
@@ -2529,7 +2557,7 @@ exports = module.exports = __webpack_require__("./node_modules/css-loader/lib/cs
 
 
 // module
-exports.push([module.i, "\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n", ""]);
+exports.push([module.i, "\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n", ""]);
 
 // exports
 
@@ -4231,7 +4259,7 @@ var render = function() {
                 staticClass: "users my-10",
                 on: {
                   click: function($event) {
-                    _vm.selectItem(item.id, item.name, item.grade)
+                    _vm.selectItem(item)
                   }
                 }
               },
@@ -4240,22 +4268,43 @@ var render = function() {
                   _vm._v(_vm._s(item.name))
                 ]),
                 _vm._v(" "),
-                _c(
-                  "span",
-                  {
-                    directives: [
-                      {
-                        name: "show",
-                        rawName: "v-show",
-                        value: _vm.selectIdArr.indexOf(item.id) > -1,
-                        expression: "selectIdArr.indexOf(item.id) > -1"
-                      }
-                    ],
-                    staticClass: "float-right"
-                  },
-                  [_c("i", { staticClass: "icon md-check" })]
-                )
-              ]
+                _vm.type === "changeCompany"
+                  ? [
+                      _c(
+                        "span",
+                        {
+                          directives: [
+                            {
+                              name: "show",
+                              rawName: "v-show",
+                              value: _vm.getCompanyInfo.value == item.value,
+                              expression: "getCompanyInfo.value == item.value"
+                            }
+                          ],
+                          staticClass: "float-right"
+                        },
+                        [_c("i", { staticClass: "icon md-check" })]
+                      )
+                    ]
+                  : [
+                      _c(
+                        "span",
+                        {
+                          directives: [
+                            {
+                              name: "show",
+                              rawName: "v-show",
+                              value: _vm.selectIdArr.indexOf(item.id) > -1,
+                              expression: "selectIdArr.indexOf(item.id) > -1"
+                            }
+                          ],
+                          staticClass: "float-right"
+                        },
+                        [_c("i", { staticClass: "icon md-check" })]
+                      )
+                    ]
+              ],
+              2
             )
           })
         ],
@@ -4305,7 +4354,7 @@ var render = function() {
       { staticClass: "float-left" },
       [
         _c("editable-search-box", {
-          attrs: { options: _vm.clientArr },
+          attrs: { options: _vm.clientArr, type: "changeCompany" },
           on: { change: _vm.changeSelects }
         })
       ],

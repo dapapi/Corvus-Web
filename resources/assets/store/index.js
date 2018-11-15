@@ -8,6 +8,7 @@ const state = {
     newParticipantsInfo: [],
     principalInfo: {},
     newPrincipalInfo: {},
+    companyInfo: {},
 };
 
 export default new Vuex.Store({

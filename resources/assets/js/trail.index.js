@@ -34,6 +34,8 @@ let app = new Vue({
             trailOriginPerson: '',
             industriesArr: [],
             industry: '',
+            priority: '',
+            priorityArr: config.priorityArr,
 
         },
 
@@ -119,7 +121,7 @@ let app = new Vue({
                     brand: app.brandName,
                     client: app.selectCompany,
                     resource_type: app.trailOrigin,
-                    principal_id: app.trailPrincipal,
+                    principal_id: this.$store.state.newPrincipalInfo.id,
                     recommendations: app.recommendStars,
                     expectations: app.targetStars,
                     contact: {
@@ -129,7 +131,8 @@ let app = new Vue({
                     fee: app.trailFee,
                     desc: app.trailDesc,
                     industry_id: app.industry,
-                    type: app.trailType
+                    type: app.trailType,
+                    priority: app.priority
                 };
                 if (app.trailOrigin == 1 || app.trailOrigin == 2 || app.trailOrigin == 3) {
                     data.resource = app.email
@@ -147,7 +150,6 @@ let app = new Vue({
                     headers: config.getHeaders(),
                     data: data
                 }).done(function (response) {
-                    console.log(response)
                     redirect('detail?trail_id=' + response.data.id)
                 })
             },
@@ -164,9 +166,18 @@ let app = new Vue({
                 app.trailOrigin = value
             },
 
-            changeCompanyName: function (value) {
-                app.selectCompany = value
-                //    todo 不知名原因数据错误
+            changeCompanyName: function () {
+                let companyInfo = this.$store.state.companyInfo;
+                if (companyInfo.value) {
+                    app.selectCompany = {
+                        id: companyInfo.value
+                    }
+                } else {
+                    app.selectCompany = {
+                        grade: companyInfo.grade,
+                        company: companyInfo.name
+                    }
+                }
             },
 
             changePrincipal: function (value) {
@@ -191,6 +202,14 @@ let app = new Vue({
 
             changeIndustry: function (value) {
                 app.industry = value
+            },
+
+            changePriority: function (value) {
+                app.priority = value
+            },
+
+            changeTrailType: function (value) {
+                app.trailType = value
             }
 
 

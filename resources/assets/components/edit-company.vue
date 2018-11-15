@@ -1,7 +1,8 @@
 <template>
     <div class="clearfix">
         <div class="float-left">
-            <editable-search-box :options="clientArr" @change="changeSelects"></editable-search-box>
+            <editable-search-box :options="clientArr" :type="'changeCompany'"
+                                 @change="changeSelects"></editable-search-box>
         </div>
         <div class="float-left col-md-6">
             <selectors :options="clientLevelArr" ref="companyLevel" @change="changeCompanyLevel"
@@ -33,6 +34,12 @@
             },
         },
 
+        computed: {
+            getCompanyInfo: function () {
+                return this.$store.state.companyInfo
+            }
+        },
+
         mounted() {
             this.getClients();
         },
@@ -57,23 +64,21 @@
 
             changeCompanyLevel: function (value) {
                 this.emitCompany.grade = value;
-                this.$emit('change', this.emitCompany)
+                let companyInfo = this.$store.state.companyInfo;
+                companyInfo.grade = value;
+                this.$store.commit('changeCompany', companyInfo);
+                this.$emit('change', true)
             },
 
-            changeSelects: function (name, id, grade,) {
-                this.$refs.companyLevel.setValue(grade);
-                this.isWrite = !id;
-                if (id) {
-                    this.emitCompany = {
-                        id: id
-                    }
+            changeSelects: function () {
+                let companyInfo = this.$store.state.companyInfo;
+                if (companyInfo.grade) {
+                    this.$refs.companyLevel.setValue(companyInfo.grade);
+                    this.isWrite = false;
                 } else {
-                    this.emitCompany = {
-                        company: name,
-                    };
-                    this.emitCompany.grade = this.$refs.companyLevel.getValue()
+                    this.isWrite = true;
                 }
-                this.$emit('change', this.emitCompany)
+                this.$emit('change', true)
             }
 
         },

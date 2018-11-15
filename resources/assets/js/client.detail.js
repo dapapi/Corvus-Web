@@ -151,15 +151,14 @@ let app = new Vue({
 
                 $.ajax({
                     type: 'get',
-                    url: config.apiUrl + '/trails/search',
+                    url: config.apiUrl + '/projects/search',
                     headers: config.getHeaders(),
                     data: {
-                        type: 'projects',
+                        type: 'clients',
                         id: this.clientId,
-                        include: 'principal,client'
+                        include: 'principal,trail.expectations'
                     }
                 }).done(function (response) {
-                    console.log(response);
                     app.clientProjectsInfo = response.data
 
                 })

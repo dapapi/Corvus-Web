@@ -11,7 +11,8 @@
         <div class="addMember-trigger" :class="this.isMemberShow ? 'addMember-active': ''" id="selectStaff">
             <div class="addMember-trigger-button" @click="showMember"><i class="md-plus"></i></div>
             <div class="addMember-trigger-dropdown">
-                <select-staff :multiple="true" :member-type="'participant'" :type="type" @change="changeSelectedMember"></select-staff>
+                <select-staff :multiple="true" :member-type="'participant'" :type="type"
+                              @change="changeSelectedMember"></select-staff>
             </div>
         </div>
     </div>
@@ -63,7 +64,11 @@
                     participantInfo = this.$store.state.participantsInfo;
                 }
                 participantInfo.splice(participantInfo.map(item => item.id).indexOf(userId), 1);
-                this.$store.commit('changeParticipantsInfo', participantInfo);
+                let params = {
+                    type: this.type,
+                    data: participantInfo
+                };
+                this.$store.dispatch('changeParticipantsInfo', params);
             },
 
             changeSelectedMember: function () {

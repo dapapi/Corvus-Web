@@ -101,7 +101,7 @@
                         <div class="example">
                             <div class="col-md-2 text-right float-left">线索类型</div>
                             <div class="col-md-10 float-left pl-0">
-                                <selectors :placeholder="'请选择销售线索'" :options="trailTypeArr"></selectors>
+                                <selectors :placeholder="'请选择销售线索'" :options="trailTypeArr" @change="changeTrailType"></selectors>
                             </div>
                         </div>
                         <div class="example">
@@ -168,6 +168,12 @@
                             <div class="col-md-10 float-left pl-0" v-if="starsArr.length > 0">
                                 <selectors :options="starsArr" @change="changeRecommendStars" :multiple="true"
                                            :placeholder="'请选择推荐艺人'"></selectors>
+                            </div>
+                        </div>
+                        <div class="example">
+                            <div class="col-md-2 text-right float-left">优先级</div>
+                            <div class="col-md-10 float-left pl-0">
+                                <selectors :options="priorityArr" :placeholder="'请选择优先级'" @change="changePriority"></selectors>
                             </div>
                         </div>
                         <div class="example">
