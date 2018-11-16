@@ -21,7 +21,11 @@ let app = new Vue({
             artistsInfo: '',
             artistStatus: '',
             artistName: '',
+            artistGender: '',
+            artistBirthday: '',
+            artistSource: '',
             artistType: '',
+            communicationStatus: '',
             weiboUrl: '',
             weiboFansNum: '',
             douyinId: '',
@@ -38,6 +42,7 @@ let app = new Vue({
             qitaFansNum: '',
             artistScoutName: '',
             artistLocation: '',
+            notSignReason: '',
 
         },
 
@@ -80,7 +85,7 @@ let app = new Vue({
             },
 
             changeCommunicationType: function (value) {
-                console.log(value)
+                app.communicationStatus = value
             },
 
             changeSignIntention: function (value) {
@@ -91,8 +96,48 @@ let app = new Vue({
                 app.signCompany = value
             },
 
-            addArtist: function () {
+            changeGender: function (value) {
+                app.artistGender = value
+            },
 
+            changeBirthday: function (value) {
+                app.artistBirthday = value
+            },
+
+            changeSource: function (value) {
+                app.artistSource = value
+            },
+
+            addArtist: function () {
+                let data = {
+                    name: app.artistName,
+                    gender: app.artistGender,
+                    birthday: app.artistBirthday,
+                    source: app.artistSource,
+                    email: app.artistEmail,
+                    phone: app.artistPhone,
+                    wechat: app.artistWeiXin,
+                    //TODO 页面和数据很多对不上
+                    communication_status: app.communicationStatus,
+                    intention: app.signIntention,
+                    intention_desc: app.notSignReason,
+                    sign_contract_other: app.signCompany,
+                };
+                $.ajax({
+                    type: 'post',
+                    url: config.apiUrl + '/stars',
+                    headers: config.getHeaders(),
+                    data: data,
+                    statusCode: {
+                        400: function (response) {
+                            toastr.error(response.responseJSON.message);
+                        },
+                    }
+                }).done(function (response) {
+                    console.log(response);
+                    toastr.success('创建成功');
+                    $('#addArtist').modal('hide');
+                })
             },
 
             changeAttachmentType: function (value) {

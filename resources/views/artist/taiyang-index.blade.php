@@ -127,17 +127,17 @@
                         <div class="example">
                             <div class="col-md-2 text-right float-left">性别</div>
                             <div class="col-md-4 float-left row">
-                                <selectors :options="genderArr"></selectors>
+                                <selectors :options="genderArr" placeholder="请选择性别" @change="changeGender"></selectors>
                             </div>
                             <div class="col-md-2 text-right float-left pr-0">出生日期</div>
                             <div class="col-md-4 float-left pr-0">
-                                <datepicker></datepicker>
+                                <datepicker @change="changeBirthday"></datepicker>
                             </div>
                         </div>
                         <div class="example">
                             <div class="col-md-2 text-right float-left">艺人来源</div>
                             <div class="col-md-4 float-left row">
-                                <selectors :options="artistOriginArr" :placeholder="请选择艺人来源"></selectors>
+                                <selectors :options="artistOriginArr" placeholder="请选择艺人来源" @change="changeSource"></selectors>
                             </div>
                             <div class="col-md-2 text-right float-left pr-0">邮箱</div>
                             <div class="col-md-4 float-left pr-0">
@@ -249,7 +249,7 @@
                                            @change="changeSignIntention"></selectors>
                             </div>
                             <div class="col-md-5 float-left pl-0" v-if="!signIntention">
-                                <textarea name="" class="form-control" rows="1" placeholder="请填写不签约理由"></textarea>
+                                <textarea name="" class="form-control" rows="1" placeholder="请填写不签约理由" v-model="notSignReason"></textarea>
                             </div>
                         </div>
                         <div class="example">

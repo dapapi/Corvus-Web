@@ -91,7 +91,6 @@ let app = new Vue({
             },
 
             addArtist: function () {
-
             }
         }
     })
