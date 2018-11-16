@@ -47,25 +47,25 @@
                             <div class="col-md-6">
                                 <div class="example">
                                     <div class="col-md-3 text-right float-left">姓名(中文)</div>
-                                    <div class="col-md-9 float-left pl-0 require">
+                                    <div class="col-md-8 float-left pl-0 require">
                                         <input type="text" placeholder="1-30个字符" class="form-control">
                                     </div>
                                 </div>
                                 <div class="example">
                                     <div class="col-md-3 text-right float-left">姓名(英文)</div>
-                                    <div class="col-md-9 float-left pl-0">
+                                    <div class="col-md-8 float-left pl-0">
                                         <input type="text" placeholder="1-30个字符" class="form-control">
                                     </div>
                                 </div>
                                 <div class="example">
                                     <div class="col-md-3 text-right float-left">性别</div>
-                                    <div class="col-md-9 float-left pl-0 require">
+                                    <div class="col-md-8 float-left pl-0 require">
                                         <selectors :options="sexArr" placeholder="请选择" @change="" :defaultValue="0"></selectors>
                                     </div>
                                 </div>
                                 <div class="example">
                                     <div class="col-md-3 text-right float-left">身份证号</div>
-                                    <div class="col-md-9 float-left pl-0 require">
+                                    <div class="col-md-8 float-left pl-0 require">
                                         <input type="text" placeholder="" class="form-control">
                                     </div>
                                 </div>
@@ -73,7 +73,7 @@
                             <div class="col-md-6">
                             <div class="example">
                                 <div class="col-md-3 text-right float-left"></div>
-                                <div class="col-md-9 float-left pl-0">
+                                <div class="col-md-8 float-left pl-0">
                                     <upload>
                                         <div class="upload-head">
                                             上传头像
@@ -87,7 +87,7 @@
                             <div class="col-md-6">
                                 <div class="example">
                                     <div class="col-md-3 text-right float-left">手机号</div>
-                                    <div class="col-md-9 float-left pl-0 require">
+                                    <div class="col-md-8 float-left pl-0 require">
                                         <input type="text" placeholder="" class="form-control">
                                     </div>
                                 </div>
@@ -95,7 +95,7 @@
                             <div class="col-md-6">
                                 <div class="example">
                                     <div class="col-md-3 text-right float-left">出生日期</div>
-                                    <div class="col-md-9 float-left pl-0 require">
+                                    <div class="col-md-8 float-left pl-0 require">
                                         <input type="text" placeholder="" class="form-control">
                                     </div>
                                 </div>
@@ -103,7 +103,7 @@
                             <div class="col-md-6">
                                 <div class="example">
                                     <div class="col-md-3 text-right float-left">入职时间</div>
-                                    <div class="col-md-9 float-left pl-0 require">
+                                    <div class="col-md-8 float-left pl-0 require">
                                         <input type="text" placeholder="" class="form-control">
                                     </div>
                                 </div>
@@ -111,7 +111,7 @@
                             <div class="col-md-6">
                                 <div class="example">
                                     <div class="col-md-3 text-right float-left">户籍所在地详细地址</div>
-                                    <div class="col-md-9 float-left pl-0 require">
+                                    <div class="col-md-8 float-left pl-0 require">
                                         <input type="text" placeholder="" class="form-control">
                                     </div>
                                 </div>
@@ -119,7 +119,7 @@
                             <div class="col-md-6">
                                 <div class="example">
                                     <div class="col-md-3 text-right float-left">政治面目</div>
-                                    <div class="col-md-9 float-left pl-0 require">
+                                    <div class="col-md-8 float-left pl-0 require">
                                         <input type="text" placeholder="" class="form-control">
                                     </div>
                                 </div>
@@ -127,7 +127,7 @@
                             <div class="col-md-6">
                                 <div class="example">
                                     <div class="col-md-3 text-right float-left">民族</div>
-                                    <div class="col-md-9 float-left pl-0 require">
+                                    <div class="col-md-8 float-left pl-0 require">
                                         <input type="text" placeholder="" class="form-control">
                                     </div>
                                 </div>
@@ -135,7 +135,7 @@
                             <div class="col-md-6">
                                 <div class="example">
                                     <div class="col-md-3 text-right float-left">婚姻状况</div>
-                                    <div class="col-md-9 float-left pl-0 require">
+                                    <div class="col-md-8 float-left pl-0 require">
                                         <input type="text" placeholder="" class="form-control">
                                     </div>
                                 </div>
@@ -143,7 +143,7 @@
                             <div class="col-md-6">
                                 <div class="example">
                                     <div class="col-md-3 text-right float-left">血型</div>
-                                    <div class="col-md-9 float-left pl-0 require">
+                                    <div class="col-md-8 float-left pl-0 require">
                                         <input type="text" placeholder="" class="form-control">
                                     </div>
                                 </div>
@@ -151,7 +151,7 @@
                             <div class="col-md-6">
                                 <div class="example">
                                     <div class="col-md-3 text-right float-left">电子邮件</div>
-                                    <div class="col-md-9 float-left pl-0 require">
+                                    <div class="col-md-8 float-left pl-0 require">
                                         <input type="text" placeholder="" class="form-control">
                                     </div>
                                 </div>
@@ -159,7 +159,7 @@
                             <div class="col-md-6">
                                 <div class="example">
                                     <div class="col-md-3 text-right float-left">现居住地址</div>
-                                    <div class="col-md-9 float-left pl-0 require">
+                                    <div class="col-md-8 float-left pl-0 require">
                                         <input type="text" placeholder="" class="form-control">
                                     </div>
                                 </div>
@@ -171,7 +171,7 @@
                             <div class="col-md-6">
                                 <div class="example">
                                     <div class="col-md-3 text-right float-left">外语水平</div>
-                                    <div class="col-md-9 float-left pl-0">
+                                    <div class="col-md-8 float-left pl-0">
                                         <input type="text" placeholder="" class="form-control" />
                                     </div>
                                 </div>
@@ -179,7 +179,7 @@
                             <div class="col-md-6">
                                 <div class="example">
                                     <div class="col-md-3 text-right float-left">计算机水平</div>
-                                    <div class="col-md-9 float-left pl-0">
+                                    <div class="col-md-8 float-left pl-0">
                                         <input type="text" placeholder="" class="form-control" />
                                     </div>
                                 </div>
@@ -187,7 +187,7 @@
                             <div class="col-md-6">
                                 <div class="example">
                                     <div class="col-md-3 text-right float-left">所获证书</div>
-                                    <div class="col-md-9 float-left pl-0">
+                                    <div class="col-md-8 float-left pl-0">
                                         <input type="text" placeholder="" class="form-control" />
                                     </div>
                                 </div>
@@ -195,7 +195,7 @@
                             <div class="col-md-6">
                                 <div class="example">
                                     <div class="col-md-3 text-right float-left">个人特长</div>
-                                    <div class="col-md-9 float-left pl-0">
+                                    <div class="col-md-8 float-left pl-0">
                                         <input type="text" placeholder="" class="form-control" />
                                     </div>
                                 </div>

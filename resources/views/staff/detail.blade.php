@@ -139,17 +139,17 @@
 
                     <div class="tab-content pt-20">
                         <div class="tab-pane active" id="infoTab" role="tabpanel">
-                            <div class="col-md-7 example">
+                            <div class="col-md-8 example">
                                 <!-- <div class="example"> -->
-                                    <div class="col-md-4 text-right float-left">身份证号</div>
-                                    <div class="col-md-8 float-left pl-0">
+                                    <div class="col-md-2 text-right float-left pl-0">身份证号</div>
+                                    <div class="col-md-6 float-left pl-0">
                                         <input type="text" placeholder="" class="form-control">
                                     </div>
                                 <!-- </div> -->
                             </div>
-                            <div class="col-md-7 example">
-                                <div class="col-md-4 text-right float-left">身份证照</div>
-                                <div class="col-md-8 float-left pl-0">
+                            <div class="col-md-8 example">
+                                <div class="col-md-2 text-right float-left">身份证照</div>
+                                <div class="col-md-6 float-left pl-0">
                                     <upload>
                                         <div class="id-upload">
                                             <!-- <i class="icon md-plus" style="font-size: 50px" aria-hidden="true"></i> -->
@@ -159,93 +159,93 @@
                                     <small style="color: #F44336;">图片格式为JPG/JPEG/PNG/PDF 大小在2MB内</small>
                                 </div>
                             </div>
-                            <div class="col-md-7 example">
-                                <div class="col-md-4 text-right float-left">护照号</div>
-                                <div class="col-md-8 float-left pl-0">
+                            <div class="col-md-8 example">
+                                <div class="col-md-2 text-right float-left">护照号</div>
+                                <div class="col-md-6 float-left pl-0">
                                     <input type="text" placeholder="" class="form-control">
                                 </div>
                             </div>
-                            <div class="col-md-7 example">
-                                <div class="col-md-4 text-right float-left">地址</div>
-                                <div class="col-md-8 float-left pl-0">
+                            <div class="col-md-8 example">
+                                <div class="col-md-2 text-right float-left">地址</div>
+                                <div class="col-md-6 float-left pl-0">
                                     <input type="text" placeholder="" class="form-control">
                                 </div>
                             </div>
-                            <div class="col-md-7 example">
-                                <div class="col-md-4 text-right float-left">个人邮箱</div>
-                                <div class="col-md-8 float-left pl-0">
+                            <div class="col-md-8 example">
+                                <div class="col-md-2 text-right float-left">个人邮箱</div>
+                                <div class="col-md-6 float-left pl-0">
                                     <input type="text" placeholder="" class="form-control">
                                 </div>
                             </div>
-                            <div class="col-md-7 example">
-                                <div class="col-md-4 text-right float-left">工资银行卡号1</div>
-                                <div class="col-md-8 float-left pl-0">
+                            <div class="col-md-8 example">
+                                <div class="col-md-2 text-right float-left">工资银行卡号1</div>
+                                <div class="col-md-6 float-left pl-0">
                                     <input type="text" placeholder="" class="form-control">
                                 </div>
                             </div>
-                            <div class="col-md-7 example">
-                                <div class="col-md-4 text-right float-left">工资银行卡号2</div>
-                                <div class="col-md-8 float-left pl-0">
+                            <div class="col-md-8 example">
+                                <div class="col-md-2 text-right float-left">工资银行卡号2</div>
+                                <div class="col-md-6 float-left pl-0">
                                     <input type="text" placeholder="" class="form-control">
                                 </div>
                             </div>
-                            <div class="col-md-7 example">
-                                <div class="col-md-4 text-right float-left">信用卡号</div>
-                                <div class="col-md-8 float-left pl-0">
+                            <div class="col-md-8 example">
+                                <div class="col-md-2 text-right float-left">信用卡号</div>
+                                <div class="col-md-6 float-left pl-0">
                                     <input type="text" placeholder="" class="form-control">
                                 </div>
                             </div>
-                            <div class="col-md-7 example">
-                                <div class="col-md-4 text-right float-left">公积金号</div>
-                                <div class="col-md-8 float-left pl-0">
+                            <div class="col-md-8 example">
+                                <div class="col-md-2 text-right float-left">公积金号</div>
+                                <div class="col-md-6 float-left pl-0">
                                     <input type="text" placeholder="" class="form-control">
                                 </div>
                             </div>
-                            <div class="col-md-7 example">
-                                <div class="col-md-4 text-right float-left">开户行</div>
-                                <div class="col-md-8 float-left pl-0">
+                            <div class="col-md-8 example">
+                                <div class="col-md-2 text-right float-left">开户行</div>
+                                <div class="col-md-6 float-left pl-0">
                                     <input type="text" placeholder="" class="form-control">
                                 </div>
                             </div>
-                            <div class="col-md-7 example">
-                                <div class="col-md-4 text-right float-left">上家公司</div>
-                                <div class="col-md-8 float-left pl-0">
+                            <div class="col-md-8 example">
+                                <div class="col-md-2 text-right float-left">上家公司</div>
+                                <div class="col-md-6 float-left pl-0">
                                     <input type="text" placeholder="" class="form-control">
                                 </div>
                             </div>
-                            <div class="col-md-7 example">
-                                <div class="col-md-4 text-right float-left">岗位离职</div>
-                                <div class="col-md-8 float-left pl-0">
+                            <div class="col-md-8 example">
+                                <div class="col-md-2 text-right float-left">岗位离职</div>
+                                <div class="col-md-6 float-left pl-0">
                                     <input type="text" placeholder="" class="form-control">
                                 </div>
                             </div>
-                            <div class="col-md-7 example">
-                                <div class="col-md-4 text-right float-left">签署合同</div>
-                                <div class="col-md-8 float-left pl-0">
+                            <div class="col-md-8 example">
+                                <div class="col-md-2 text-right float-left">签署合同</div>
+                                <div class="col-md-6 float-left pl-0">
                                     <input type="text" placeholder="" class="form-control">
                                 </div>
                             </div>
-                            <div class="col-md-7 example">
-                                <div class="col-md-4 text-right float-left">工作地点</div>
-                                <div class="col-md-8 float-left pl-0">
+                            <div class="col-md-8 example">
+                                <div class="col-md-2 text-right float-left">工作地点</div>
+                                <div class="col-md-6 float-left pl-0">
                                     <input type="text" placeholder="" class="form-control">
                                 </div>
                             </div>
-                            <div class="col-md-7 example">
-                                <div class="col-md-4 text-right float-left">聘用形式</div>
-                                <div class="col-md-8 float-left pl-0">
+                            <div class="col-md-8 example">
+                                <div class="col-md-2 text-right float-left">聘用形式</div>
+                                <div class="col-md-6 float-left pl-0">
                                     <input type="text" placeholder="" class="form-control">
                                 </div>
                             </div>
-                            <div class="col-md-7 example">
-                                <div class="col-md-4 text-right float-left">部门</div>
-                                <div class="col-md-8 float-left pl-0">
+                            <div class="col-md-8 example">
+                                <div class="col-md-2 text-right float-left">部门</div>
+                                <div class="col-md-6 float-left pl-0">
                                     <input type="text" placeholder="" class="form-control">
                                 </div>
                             </div>
-                            <div class="col-md-7 example">
-                                <div class="col-md-4 text-right float-left">入职日期</div>
-                                <div class="col-md-8 float-left pl-0">
+                            <div class="col-md-8 example">
+                                <div class="col-md-2 text-right float-left">入职日期</div>
+                                <div class="col-md-6 float-left pl-0">
                                     <input type="text" placeholder="" class="form-control">
                                 </div>
                             </div>
@@ -253,150 +253,150 @@
                         </div>
 
                         <div class="tab-pane" id="workTab" role="tabpanel">
-                            <div class="col-md-7 example">
-                                <div class="col-md-4 text-right float-left">汇报对象</div>
-                                <div class="col-md-8 float-left pl-0">
+                            <div class="col-md-8 example">
+                                <div class="col-md-2 text-right float-left">汇报对象</div>
+                                <div class="col-md-6 float-left pl-0">
                                     <input type="text" placeholder="" class="form-control">
                                 </div>
                             </div>
-                            <div class="col-md-7 example">
-                                <div class="col-md-4 text-right float-left">转正状态</div>
-                                <div class="col-md-8 float-left pl-0">
+                            <div class="col-md-8 example">
+                                <div class="col-md-2 text-right float-left">转正状态</div>
+                                <div class="col-md-6 float-left pl-0">
                                     <input type="text" placeholder="" class="form-control">
                                 </div>
                             </div>
-                            <div class="col-md-7 example">
-                                <div class="col-md-4 text-right float-left">转正日期</div>
-                                <div class="col-md-8 float-left pl-0">
+                            <div class="col-md-8 example">
+                                <div class="col-md-2 text-right float-left">转正日期</div>
+                                <div class="col-md-6 float-left pl-0">
                                     <input type="text" placeholder="" class="form-control">
                                 </div>
                             </div>
-                            <div class="col-md-7 example">
-                                <div class="col-md-4 text-right float-left">职级</div>
-                                <div class="col-md-8 float-left pl-0">
+                            <div class="col-md-8 example">
+                                <div class="col-md-2 text-right float-left">职级</div>
+                                <div class="col-md-6 float-left pl-0">
                                     <input type="text" placeholder="" class="form-control">
                                 </div>
                             </div>
-                            <div class="col-md-7 example">
-                                <div class="col-md-4 text-right float-left">聘用形式</div>
-                                <div class="col-md-8 float-left pl-0">
+                            <div class="col-md-8 example">
+                                <div class="col-md-2 text-right float-left">聘用形式</div>
+                                <div class="col-md-6 float-left pl-0">
                                     <input type="text" placeholder="" class="form-control">
                                 </div>
                             </div>
-                            <div class="col-md-7 example">
-                                <div class="col-md-4 text-right float-left">管理形式</div>
-                                <div class="col-md-8 float-left pl-0">
+                            <div class="col-md-8 example">
+                                <div class="col-md-2 text-right float-left">管理形式</div>
+                                <div class="col-md-6 float-left pl-0">
                                     <input type="text" placeholder="" class="form-control">
                                 </div>
                             </div>
-                            <div class="col-md-7 example">
-                                <div class="col-md-4 text-right float-left">司龄</div>
-                                <div class="col-md-8 float-left pl-0">
+                            <div class="col-md-8 example">
+                                <div class="col-md-2 text-right float-left">司龄</div>
+                                <div class="col-md-6 float-left pl-0">
                                     <input type="text" placeholder="" class="form-control">
                                 </div>
                             </div>
-                            <div class="col-md-7 example">
-                                <div class="col-md-4 text-right float-left">首次参加工作时间</div>
-                                <div class="col-md-8 float-left pl-0">
+                            <div class="col-md-8 example">
+                                <div class="col-md-2 text-right float-left">首次参加工作时间</div>
+                                <div class="col-md-6 float-left pl-0">
                                     <input type="text" placeholder="" class="form-control">
                                 </div>
                             </div>
-                            <div class="col-md-7 example">
-                                <div class="col-md-4 text-right float-left">调整司龄</div>
-                                <div class="col-md-8 float-left pl-0">
+                            <div class="col-md-8 example">
+                                <div class="col-md-2 text-right float-left">调整司龄</div>
+                                <div class="col-md-6 float-left pl-0">
                                     <input type="text" placeholder="" class="form-control">
                                 </div>
                             </div>
-                            <div class="col-md-7 example">
-                                <div class="col-md-4 text-right float-left">工龄</div>
-                                <div class="col-md-8 float-left pl-0">
+                            <div class="col-md-8 example">
+                                <div class="col-md-2 text-right float-left">工龄</div>
+                                <div class="col-md-6 float-left pl-0">
                                     <input type="text" placeholder="" class="form-control">
                                 </div>
                             </div>
-                            <div class="col-md-7 example">
-                                <div class="col-md-4 text-right float-left">调整工龄(天)</div>
-                                <div class="col-md-8 float-left pl-0">
+                            <div class="col-md-8 example">
+                                <div class="col-md-2 text-right float-left">调整工龄(天)</div>
+                                <div class="col-md-6 float-left pl-0">
                                     <input type="text" placeholder="" class="form-control">
                                 </div>
                             </div>
-                            <div class="col-md-7 example">
-                                <div class="col-md-4 text-right float-left">直接下属数量</div>
-                                <div class="col-md-8 float-left pl-0">
+                            <div class="col-md-8 example">
+                                <div class="col-md-2 text-right float-left">直接下属数量</div>
+                                <div class="col-md-6 float-left pl-0">
                                     <input type="text" placeholder="" class="form-control">
                                 </div>
                             </div>
-                            <div class="col-md-7 example">
-                                <div class="col-md-4 text-right float-left">工作城市</div>
-                                <div class="col-md-8 float-left pl-0">
+                            <div class="col-md-8 example">
+                                <div class="col-md-2 text-right float-left">工作城市</div>
+                                <div class="col-md-6 float-left pl-0">
                                     <input type="text" placeholder="" class="form-control">
                                 </div>
                             </div>
-                            <div class="col-md-7 example">
-                                <div class="col-md-4 text-right float-left">缴纳城市</div>
-                                <div class="col-md-8 float-left pl-0">
+                            <div class="col-md-8 example">
+                                <div class="col-md-2 text-right float-left">缴纳城市</div>
+                                <div class="col-md-6 float-left pl-0">
                                     <input type="text" placeholder="" class="form-control">
                                 </div>
                             </div>
-                            <div class="col-md-7 example">
-                                <div class="col-md-4 text-right float-left">现合同开始时间</div>
-                                <div class="col-md-8 float-left pl-0">
+                            <div class="col-md-8 example">
+                                <div class="col-md-2 text-right float-left">现合同开始时间</div>
+                                <div class="col-md-6 float-left pl-0">
                                     <input type="text" placeholder="" class="form-control">
                                 </div>
                             </div>
-                            <div class="col-md-7 example">
-                                <div class="col-md-4 text-right float-left">现合同结束时间</div>
-                                <div class="col-md-8 float-left pl-0">
+                            <div class="col-md-8 example">
+                                <div class="col-md-2 text-right float-left">现合同结束时间</div>
+                                <div class="col-md-6 float-left pl-0">
                                     <input type="text" placeholder="" class="form-control">
                                 </div>
                             </div>
-                            <div class="col-md-7 example">
-                                <div class="col-md-4 text-right float-left">招聘渠道</div>
-                                <div class="col-md-8 float-left pl-0">
+                            <div class="col-md-8 example">
+                                <div class="col-md-2 text-right float-left">招聘渠道</div>
+                                <div class="col-md-6 float-left pl-0">
                                     <input type="text" placeholder="" class="form-control">
                                 </div>
                             </div>
                         </div>
 
                         <div class="tab-pane" id="salaryTab" role="tabpanel">
-                            <div class="col-md-7 example">
-                                <div class="col-md-4 text-right float-left">入职日期</div>
-                                <div class="col-md-8 float-left pl-0">
+                            <div class="col-md-8 example">
+                                <div class="col-md-2 text-right float-left">入职日期</div>
+                                <div class="col-md-6 float-left pl-0">
                                     <input type="text" placeholder="" class="form-control">
                                 </div>
                             </div>
-                            <div class="col-md-7 example">
-                                <div class="col-md-4 text-right float-left">试用期截止日期</div>
-                                <div class="col-md-8 float-left pl-0">
+                            <div class="col-md-8 example">
+                                <div class="col-md-2 text-right float-left">试用期截止日期</div>
+                                <div class="col-md-6 float-left pl-0">
                                     <input type="text" placeholder="" class="form-control">
                                 </div>
                             </div>
-                            <div class="col-md-7 example">
-                                <div class="col-md-4 text-right float-left">离职日期</div>
-                                <div class="col-md-8 float-left pl-0">
+                            <div class="col-md-8 example">
+                                <div class="col-md-2 text-right float-left">离职日期</div>
+                                <div class="col-md-6 float-left pl-0">
                                     <input type="text" placeholder="" class="form-control">
                                 </div>
                             </div>
-                            <div class="col-md-7 example">
-                                <div class="col-md-4 text-right float-left">分摊部门</div>
-                                <div class="col-md-8 float-left pl-0">
+                            <div class="col-md-8 example">
+                                <div class="col-md-2 text-right float-left">分摊部门</div>
+                                <div class="col-md-6 float-left pl-0">
                                     <input type="text" placeholder="" class="form-control">
                                 </div>
                             </div>
-                            <div class="col-md-7 example">
-                                <div class="col-md-4 text-right float-left">岗位</div>
-                                <div class="col-md-8 float-left pl-0">
+                            <div class="col-md-8 example">
+                                <div class="col-md-2 text-right float-left">岗位</div>
+                                <div class="col-md-6 float-left pl-0">
                                     <input type="text" placeholder="" class="form-control">
                                 </div>
                             </div>
-                            <div class="col-md-7 example">
-                                <div class="col-md-4 text-right float-left">个税缴纳方式</div>
-                                <div class="col-md-8 float-left pl-0">
+                            <div class="col-md-8 example">
+                                <div class="col-md-2 text-right float-left">个税缴纳方式</div>
+                                <div class="col-md-6 float-left pl-0">
                                     <input type="text" placeholder="" class="form-control">
                                 </div>
                             </div>
-                            <div class="col-md-7 example">
-                                <div class="col-md-4 text-right float-left">人员类别</div>
-                                <div class="col-md-8 float-left pl-0">
+                            <div class="col-md-8 example">
+                                <div class="col-md-2 text-right float-left">人员类别</div>
+                                <div class="col-md-6 float-left pl-0">
                                     <input type="text" placeholder="" class="form-control">
                                 </div>
                             </div>
