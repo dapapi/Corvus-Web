@@ -45,28 +45,34 @@
                         <div class="formName">个人资料 <span class="point"></span><span class="note">为必填项</span></div>
                         <div class="row">
                             <div class="col-md-6">
-                                <div class="example">
+                                <div class="example" style="overflow: hidden;">
                                     <div class="col-md-3 text-right float-left">姓名(中文)</div>
                                     <div class="col-md-8 float-left pl-0 require">
                                         <input type="text" placeholder="1-30个字符" class="form-control">
                                     </div>
                                 </div>
-                                <div class="example">
-                                    <div class="col-md-3 text-right float-left">姓名(英文)</div>
-                                    <div class="col-md-8 float-left pl-0">
-                                        <input type="text" placeholder="1-30个字符" class="form-control">
+                                <div style="overflow: hidden;">
+                                    <div class="example">
+                                        <div class="col-md-3 text-right float-left">姓名(英文)</div>
+                                        <div class="col-md-8 float-left pl-0">
+                                            <input type="text" placeholder="1-30个字符" class="form-control">
+                                        </div>
                                     </div>
                                 </div>
-                                <div class="example">
-                                    <div class="col-md-3 text-right float-left">性别</div>
-                                    <div class="col-md-8 float-left pl-0 require">
-                                        <selectors :options="sexArr" placeholder="请选择" @change="" :defaultValue="0"></selectors>
+                                <div style="overflow: hidden;">
+                                    <div class="example">
+                                        <div class="col-md-3 text-right float-left">性别</div>
+                                        <div class="col-md-8 float-left pl-0 require">
+                                            <selectors :options="sexArr" placeholder="请选择" @change="" :defaultValue="0"></selectors>
+                                        </div>
                                     </div>
                                 </div>
-                                <div class="example">
-                                    <div class="col-md-3 text-right float-left">身份证号</div>
-                                    <div class="col-md-8 float-left pl-0 require">
-                                        <input type="text" placeholder="" class="form-control">
+                                <div style="overflow: hidden;">
+                                    <div class="example">
+                                        <div class="col-md-3 text-right float-left">身份证号</div>
+                                        <div class="col-md-8 float-left pl-0 require">
+                                            <input type="text" placeholder="" class="form-control">
+                                        </div>
                                     </div>
                                 </div>
                             </div>
