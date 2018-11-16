@@ -8,11 +8,16 @@ let app = new Vue({
             current_page: 1,
             total_pages: 1,
             genderArr: config.genderArr,
+            artistOriginArr: config.artistOriginArr,
             customizeInfo: config.customizeInfo,
             projectStatus: config.projectStatus,
             yesOrNoArr: config.yesOrNoArr,
             artistStatusArr: config.artistStatusArr,
             papiCommunicationStatusArr: config.papiCommunicationStatusArr,
+            attachmentTypeArr: config.attachmentTypeArr,
+            artistEmail: '',
+            artistPhone: '',
+            artistWeiXin: '',
             artistsInfo: '',
             artistStatus: '',
             artistName: '',
@@ -27,6 +32,13 @@ let app = new Vue({
             signIntention: '',
             signCompany: '',
             artistDesc: '',
+            baikeUrl: '',
+            baikeFansNum: '',
+            qitaUrl: '',
+            qitaFansNum: '',
+            artistScoutName: '',
+            artistLocation: '',
+
         },
 
         mounted() {
@@ -81,7 +93,11 @@ let app = new Vue({
 
             addArtist: function () {
 
-            }
+            },
+
+            changeAttachmentType: function (value) {
+
+            },
         }
     })
 ;

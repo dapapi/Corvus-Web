@@ -54,8 +54,13 @@ Route::get('/client/detail', function () {
 Route::get('/artist/index', function () {
     return view('artist.papi-index');
 });
+
 Route::get('/artist/detail', function () {
     return view('artist.papi-detail');
+});
+
+Route::get('/artist/taiyang', function () {
+    return view('artist.taiyang-index');
 });
 
 //Route::get('/artist/index', 'ClientController@detail');

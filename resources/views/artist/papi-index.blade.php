@@ -117,7 +117,6 @@
                         <h4 class="modal-title">新增博主</h4>
                     </div>
                     <div class="modal-body">
-                        {{-- todo 复选框单选 --}}
                         <div class="example">
                             <div class="col-md-2 text-right float-left">昵称</div>
                             <div class="col-md-10 float-left pl-0">
@@ -127,22 +126,22 @@
                         <div class="example">
                             <div class="col-md-2 text-right float-left">平台</div>
                             <div class="col-md-10 float-left pl-0">
-                                <div class="checkbox-custom checkbox-primary d-inline pr-20">
-                                    <input type="checkbox" name="platform" id="platformAll" @change="changeCheckbox(1)">
+                                <div class="checkbox-custom checkbox-primary d-inline pr-20 pl-0">
+                                    <input type="radio" name="platform" id="platformAll" @change="changeCheckbox(1)">
                                     <label for="platformAll">全选</label>
                                 </div>
                                 <div class="checkbox-custom checkbox-primary d-inline pr-20">
-                                    <input type="checkbox" name="platform" id="platformWeibo"
+                                    <input type="radio" name="platform" id="platformWeibo"
                                            @change="changeCheckbox(2)">
                                     <label for="platformWeibo">微博</label>
                                 </div>
                                 <div class="checkbox-custom checkbox-primary d-inline pr-20">
-                                    <input type="checkbox" name="platform" id="platformDouyin"
+                                    <input type="radio" name="platform" id="platformDouyin"
                                            @change="changeCheckbox(3)">
                                     <label for="platformDouyin">抖音</label>
                                 </div>
                                 <div class="checkbox-custom checkbox-primary d-inline pr-20">
-                                    <input type="checkbox" name="platform" id="platformXHS" @change="changeCheckbox(4)">
+                                    <input type="radio" name="platform" id="platformXHS" @change="changeCheckbox(4)">
                                     <label for="platformXHS">小红书</label>
                                 </div>
                             </div>
@@ -158,9 +157,9 @@
                             <div class="col-md-4 float-left pl-0">
                                 <input type="text" class="form-control" v-model="weiboUrl">
                             </div>
-                            <div class="col-md-3 text-right float-left">签约时微博粉丝数量</div>
-                            <div class="col-md-3 float-left pl-0">
-                                <input type="text" class="form-control" v-model="weiboFansNum">
+                            <div class="col-md-2 text-right float-left">签约时微博粉丝数</div>
+                            <div class="col-md-4 float-left pl-0">
+                                <number-spinner @change="changeWeiboFansNum"></number-spinner>
                             </div>
                         </div>
                         <div class="example">
@@ -168,9 +167,9 @@
                             <div class="col-md-4 float-left pl-0">
                                 <input type="text" class="form-control" v-model="douyinId">
                             </div>
-                            <div class="col-md-3 text-right float-left">签约时抖音粉丝数量</div>
-                            <div class="col-md-3 float-left pl-0">
-                                <input type="text" class="form-control" v-model="douyinFansNum">
+                            <div class="col-md-2 text-right float-left">签约时抖音粉丝数</div>
+                            <div class="col-md-4 float-left pl-0">
+                                <number-spinner @change="changeDouyinFansNum"></number-spinner>
                             </div>
                         </div>
                         <div class="example">
@@ -178,9 +177,9 @@
                             <div class="col-md-4 float-left pl-0">
                                 <input type="text" class="form-control" v-model="xhsUrl">
                             </div>
-                            <div class="col-md-3 text-right float-left">签约时小红书粉丝数量</div>
-                            <div class="col-md-3 float-left pl-0">
-                                <input type="text" class="form-control" v-model="xhsFansNum">
+                            <div class="col-md-2 text-right float-left pl-0">签约时小红书粉丝数</div>
+                            <div class="col-md-4 float-left pl-0">
+                                <number-spinner @change="changeXHSFansNum"></number-spinner>
                             </div>
                         </div>
                         <div class="example">
@@ -197,7 +196,7 @@
                                            @change="changeSignIntention"></selectors>
                             </div>
                             <div class="col-md-5 float-left pl-0" v-if="!signIntention">
-                                <textarea name="" class="form-control" placeholder="请填写不签约理由"></textarea>
+                                <textarea name="" rows="1" class="form-control" placeholder="请填写不签约理由"></textarea>
                             </div>
                         </div>
                         <div class="example">
@@ -238,7 +237,7 @@
 
 @section('script')
 
-    <script src="{{ mix('papi.artist.index.js') }}"></script>
+    <script src="{{ mix('js/papi.index.js') }}"></script>
 
 @endsection
 

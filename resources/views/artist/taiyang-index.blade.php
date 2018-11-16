@@ -66,13 +66,13 @@
                             <tr class="animation-fade"
                                 style="animation-fill-mode: backwards; animation-duration: 250ms; animation-delay: 0ms;">
                                 <th class="pre-cell"></th>
-                                <th class="cell-300" scope="col">昵称</th>
-                                <th class="cell-300" scope="col">类型</th>
-                                <th class="cell-300" scope="col">微博平台粉丝数</th>
-                                <th class="cell-300" scope="col">与我司签约意向</th>
+                                <th class="cell-300" scope="col">姓名</th>
+                                <th class="cell-300" scope="col">年龄</th>
+                                <th class="cell-300" scope="col">艺人来源</th>
                                 <th class="cell-300" scope="col">沟通状态</th>
-                                <th class="cell-300" scope="col">制作人</th>
+                                <th class="cell-300" scope="col">签约状态</th>
                                 <th class="cell-300" scope="col">录入时间</th>
+                                <th class="cell-300" scope="col">最后跟进时间</th>
                                 <th class="suf-cell"></th>
                             </tr>
                             <tr v-for="artist in artistsInfo">
@@ -126,41 +126,73 @@
                         </div>
                         <div class="example">
                             <div class="col-md-2 text-right float-left">性别</div>
-                            <div class="col-md-4 float-left pl-0">
+                            <div class="col-md-4 float-left row">
                                 <selectors :options="genderArr"></selectors>
                             </div>
-                            <div class="col-md-2 text-right float-left">出生日期</div>
-                            <div class="col-md-4 float-left pl-0">
+                            <div class="col-md-2 text-right float-left pr-0">出生日期</div>
+                            <div class="col-md-4 float-left pr-0">
                                 <datepicker></datepicker>
                             </div>
                         </div>
                         <div class="example">
-                            <div class="col-md-2 text-right float-left">平台</div>
-                            <div class="col-md-10 float-left pl-0">
-                                <div class="checkbox-custom checkbox-primary d-inline pr-20">
-                                    <input type="checkbox" name="platform" id="platformAll" @change="changeCheckbox(1)">
-                                    <label for="platformAll">全选</label>
-                                </div>
-                                <div class="checkbox-custom checkbox-primary d-inline pr-20">
-                                    <input type="checkbox" name="platform" id="platformWeibo"
-                                           @change="changeCheckbox(2)">
-                                    <label for="platformWeibo">微博</label>
-                                </div>
-                                <div class="checkbox-custom checkbox-primary d-inline pr-20">
-                                    <input type="checkbox" name="platform" id="platformDouyin"
-                                           @change="changeCheckbox(3)">
-                                    <label for="platformDouyin">抖音</label>
-                                </div>
-                                <div class="checkbox-custom checkbox-primary d-inline pr-20">
-                                    <input type="checkbox" name="platform" id="platformXHS" @change="changeCheckbox(4)">
-                                    <label for="platformXHS">小红书</label>
-                                </div>
+                            <div class="col-md-2 text-right float-left">艺人来源</div>
+                            <div class="col-md-4 float-left row">
+                                <selectors :options="artistOriginArr" :placeholder="请选择艺人来源"></selectors>
+                            </div>
+                            <div class="col-md-2 text-right float-left pr-0">邮箱</div>
+                            <div class="col-md-4 float-left pr-0">
+                                <input type="text" class="form-control" title="" v-model="artistEmail"
+                                       placeholder="请输入邮箱">
                             </div>
                         </div>
                         <div class="example">
-                            <div class="col-md-2 text-right float-left">类型</div>
-                            <div class="col-md-10 float-left pl-0">
-                                <input type="text" class="form-control" placeholder="请输入类型" v-model="artistType">
+                            <div class="col-md-2 text-right float-left">手机号</div>
+                            <div class="col-md-4 float-left row">
+                                <input type="text" class="form-control" title="" v-model="artistPhone"
+                                       placeholder="请输入手机号">
+                            </div>
+                            <div class="col-md-2 text-right float-left pr-0">微信</div>
+                            <div class="col-md-4 float-left pr-0">
+                                <input type="text" class="form-control" title="" v-model="artistWeiXin"
+                                       placeholder="请输入微信号码">
+                            </div>
+                        </div>
+                        <div class="example">
+                            <div class="col-md-2 text-right float-left">星探</div>
+                            <div class="col-md-4 float-left row">
+                                <input type="text" class="form-control" title="" v-model="artistScoutName"
+                                       placeholder="请输入星探姓名">
+                            </div>
+                            <div class="col-md-2 text-right float-left pr-0">地区</div>
+                            <div class="col-md-4 float-left pr-0">
+                                <input type="text" class="form-control" title="" v-model="artistLocation"
+                                       placeholder="请输入地区">
+                            </div>
+                        </div>
+                        <div class="example">
+                            <div class="col-md-2 text-right float-left">平台</div>
+                            <div class="col-md-10 float-left pl-0 ">
+                                {{-- @todo 全选checkbox--}}
+                                <div class="checkbox-custom checkbox-primary d-inline pr-20">
+                                    <input type="checkbox" name="platform" title="" @change="changeCheckbox(1)">
+                                    <label for="platformAll">全选</label>
+                                </div>
+                                <div class="checkbox-custom checkbox-primary d-inline pr-20">
+                                    <input type="checkbox" name="platform" title="" @change="changeCheckbox(2)">
+                                    <label for="platformWeibo">微博</label>
+                                </div>
+                                <div class="checkbox-custom checkbox-primary d-inline pr-20">
+                                    <input type="checkbox" name="platform" title="" @change="changeCheckbox(3)">
+                                    <label for="platformDouyin">抖音</label>
+                                </div>
+                                <div class="checkbox-custom checkbox-primary d-inline pr-20">
+                                    <input type="checkbox" name="platform" title="" @change="changeCheckbox(4)">
+                                    <label for="platformXHS">百科</label>
+                                </div>
+                                <div class="checkbox-custom checkbox-primary d-inline pr-20">
+                                    <input type="checkbox" name="platform" title="" @change="changeCheckbox(5)">
+                                    <label for="platformXHS">其他</label>
+                                </div>
                             </div>
                         </div>
                         <div class="example">
@@ -168,9 +200,19 @@
                             <div class="col-md-4 float-left pl-0">
                                 <input type="text" class="form-control" v-model="weiboUrl">
                             </div>
-                            <div class="col-md-3 text-right float-left">签约时微博粉丝数量</div>
+                            <div class="col-md-3 text-right float-left">微博粉丝数</div>
                             <div class="col-md-3 float-left pl-0">
                                 <input type="text" class="form-control" v-model="weiboFansNum">
+                            </div>
+                        </div>
+                        <div class="example">
+                            <div class="col-md-2 text-right float-left">百科地址</div>
+                            <div class="col-md-4 float-left pl-0">
+                                <input type="text" class="form-control" v-model="baikeUrl">
+                            </div>
+                            <div class="col-md-3 text-right float-left">百科粉丝数</div>
+                            <div class="col-md-3 float-left pl-0">
+                                <input type="text" class="form-control" v-model="baikeFansNum">
                             </div>
                         </div>
                         <div class="example">
@@ -178,19 +220,19 @@
                             <div class="col-md-4 float-left pl-0">
                                 <input type="text" class="form-control" v-model="douyinId">
                             </div>
-                            <div class="col-md-3 text-right float-left">签约时抖音粉丝数量</div>
+                            <div class="col-md-3 text-right float-left">抖音粉丝数</div>
                             <div class="col-md-3 float-left pl-0">
                                 <input type="text" class="form-control" v-model="douyinFansNum">
                             </div>
                         </div>
                         <div class="example">
-                            <div class="col-md-2 text-right float-left">小红书链接</div>
+                            <div class="col-md-2 text-right float-left">其他地址</div>
                             <div class="col-md-4 float-left pl-0">
-                                <input type="text" class="form-control" v-model="xhsUrl">
+                                <input type="text" class="form-control" v-model="qitaUrl">
                             </div>
-                            <div class="col-md-3 text-right float-left">签约时小红书粉丝数量</div>
+                            <div class="col-md-3 text-right float-left">其他地址粉丝数</div>
                             <div class="col-md-3 float-left pl-0">
-                                <input type="text" class="form-control" v-model="xhsFansNum">
+                                <input type="text" class="form-control" v-model="qitaFansNum">
                             </div>
                         </div>
                         <div class="example">
@@ -207,7 +249,7 @@
                                            @change="changeSignIntention"></selectors>
                             </div>
                             <div class="col-md-5 float-left pl-0" v-if="!signIntention">
-                                <textarea name="" class="form-control" placeholder="请填写不签约理由"></textarea>
+                                <textarea name="" class="form-control" rows="1" placeholder="请填写不签约理由"></textarea>
                             </div>
                         </div>
                         <div class="example">
@@ -218,6 +260,13 @@
                             </div>
                             <div class="col-md-5 float-left pl-0" v-if="signCompany == 1">
                                 <input type="text" class="form-control" placeholder="请输入已签约公司名称">
+                            </div>
+                        </div>
+                        <div class="example">
+                            <div class="col-md-2 text-right float-left">上传附件</div>
+                            <div class="col-md-5 float-left pl-0">
+                                <selectors :options="attachmentTypeArr" :placeholder="'请选择附件类型'"
+                                           @change="changeAttachmentType"></selectors>
                             </div>
                         </div>
                         <div class="example">
@@ -248,7 +297,7 @@
 
 @section('script')
 
-    <script src="{{ mix('ty.artist.index.js') }}"></script>
+    <script src="{{ mix('js/taiyang.index.js') }}"></script>
 
 @endsection
 

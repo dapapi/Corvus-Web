@@ -413,6 +413,71 @@ let config = {
             name: '女',
             value: 2
         }
+    ],
+    artistOriginArr: [
+        {
+            name: '线上',
+            value: 1
+        },
+        {
+            name: '线下',
+            value: 2
+        },
+        {
+            name: '抖音',
+            value: 3
+        },
+        {
+            name: '微博',
+            value: 4
+        },
+        {
+            name: '陈赫',
+            value: 5
+        },
+        {
+            name: '北电',
+            value: 6
+        },
+        {
+            name: '杨光',
+            value: 7
+        },
+        {
+            name: '中戏',
+            value: 8
+        },
+        {
+            name: 'papitube推荐',
+            value: 9
+        },
+        {
+            name: '地标商圈',
+            value: 10
+        },
+    ],
+    attachmentTypeArr: [
+        {
+            name: '艺人简报',
+            value: 1
+        },
+        {
+            name: '独白视频',
+            value: 1
+        },
+        {
+            name: '艺人规划',
+            value: 1
+        },
+        {
+            name: '自我介绍视频',
+            value: 1
+        },
+        {
+            name: '其他',
+            value: 1
+        },
+
     ]
 
 

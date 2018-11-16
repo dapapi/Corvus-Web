@@ -23,7 +23,7 @@ let app = new Vue({
             xhsUrl: '',
             xhsFansNum: '',
             platformType: '',
-            signIntention: '',
+            signIntention: 1,
             signCompany: '',
             artistDesc: '',
         },
@@ -76,6 +76,18 @@ let app = new Vue({
 
             isSignCompany: function (value) {
                 app.signCompany = value
+            },
+
+            changeWeiboFansNum: function(value) {
+              app.weiboFansNum = value
+            },
+
+            changeDouyinFansNum: function(value) {
+                app.douyinFansNum = value
+            },
+
+            changeXHSFansNum: function(value) {
+                app.xhsFansNum = value
             },
 
             addArtist: function () {
