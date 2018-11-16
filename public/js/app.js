@@ -2609,6 +2609,35 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
 
 /***/ }),
 
+/***/ "./node_modules/babel-loader/lib/index.js?{\"cacheDirectory\":true,\"presets\":[[\"env\",{\"modules\":false,\"targets\":{\"browsers\":[\"> 2%\"],\"uglify\":true}}]],\"plugins\":[\"transform-object-rest-spread\",[\"transform-runtime\",{\"polyfill\":false,\"helpers\":false}]]}!./node_modules/vue-loader/lib/selector.js?type=script&index=0!./resources/assets/components/upload.vue":
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
+//
+//
+//
+//
+//
+//
+//
+
+/* harmony default export */ __webpack_exports__["default"] = ({
+    props: ['title', 'href'],
+
+    data: function data() {
+        return {
+            // visible: false,
+        };
+    },
+    mounted: function mounted() {},
+
+
+    methods: {}
+});
+
+/***/ }),
+
 /***/ "./node_modules/css-loader/index.js!./node_modules/vue-loader/lib/style-compiler/index.js?{\"vue\":true,\"id\":\"data-v-022dc3c7\",\"scoped\":false,\"hasInlineConfig\":true}!./node_modules/vue-loader/lib/selector.js?type=styles&index=0!./resources/assets/components/customize-filter.vue":
 /***/ (function(module, exports, __webpack_require__) {
 
@@ -2963,6 +2992,21 @@ exports = module.exports = __webpack_require__("./node_modules/css-loader/lib/cs
 
 // module
 exports.push([module.i, "\n.btn-default {\n    background: white;\n}\n", ""]);
+
+// exports
+
+
+/***/ }),
+
+/***/ "./node_modules/css-loader/index.js!./node_modules/vue-loader/lib/style-compiler/index.js?{\"vue\":true,\"id\":\"data-v-c80a5372\",\"scoped\":true,\"hasInlineConfig\":true}!./node_modules/sass-loader/lib/loader.js!./node_modules/vue-loader/lib/selector.js?type=styles&index=0!./resources/assets/components/checkboxGroup.vue":
+/***/ (function(module, exports, __webpack_require__) {
+
+exports = module.exports = __webpack_require__("./node_modules/css-loader/lib/css-base.js")(false);
+// imports
+
+
+// module
+exports.push([module.i, "", ""]);
 
 // exports
 
@@ -6184,6 +6228,87 @@ if (false) {
   module.hot.accept()
   if (module.hot.data) {
     require("vue-hot-reload-api")      .rerender("data-v-b23f3082", module.exports)
+  }
+}
+
+/***/ }),
+
+/***/ "./node_modules/vue-loader/lib/template-compiler/index.js?{\"id\":\"data-v-c80a5372\",\"hasScoped\":true,\"buble\":{\"transforms\":{}}}!./node_modules/vue-loader/lib/selector.js?type=template&index=0!./resources/assets/components/checkboxGroup.vue":
+/***/ (function(module, exports, __webpack_require__) {
+
+var render = function() {
+  var _vm = this
+  var _h = _vm.$createElement
+  var _c = _vm._self._c || _h
+  return _c(
+    "div",
+    { staticClass: "checkbox-group" },
+    [
+      _vm._l(_vm.optionData, function(item, index) {
+        return _c(
+          "div",
+          {
+            key: index,
+            staticClass: "checkbox-custom checkbox-primary",
+            staticStyle: { display: "inline-block", margin: "10px 10px" }
+          },
+          [
+            _c("input", {
+              directives: [
+                {
+                  name: "model",
+                  rawName: "v-model",
+                  value: _vm.checkeData,
+                  expression: "checkeData"
+                }
+              ],
+              attrs: { type: "checkbox", id: item.id },
+              domProps: {
+                value: item.value,
+                checked: Array.isArray(_vm.checkeData)
+                  ? _vm._i(_vm.checkeData, item.value) > -1
+                  : _vm.checkeData
+              },
+              on: {
+                change: function($event) {
+                  var $$a = _vm.checkeData,
+                    $$el = $event.target,
+                    $$c = $$el.checked ? true : false
+                  if (Array.isArray($$a)) {
+                    var $$v = item.value,
+                      $$i = _vm._i($$a, $$v)
+                    if ($$el.checked) {
+                      $$i < 0 && (_vm.checkeData = $$a.concat([$$v]))
+                    } else {
+                      $$i > -1 &&
+                        (_vm.checkeData = $$a
+                          .slice(0, $$i)
+                          .concat($$a.slice($$i + 1)))
+                    }
+                  } else {
+                    _vm.checkeData = $$c
+                  }
+                }
+              }
+            }),
+            _vm._v(" "),
+            _c("label", { attrs: { for: item.id } }, [
+              _vm._v(_vm._s(item.name))
+            ])
+          ]
+        )
+      })
+    ],
+    2
+  )
+}
+var staticRenderFns = []
+render._withStripped = true
+module.exports = { render: render, staticRenderFns: staticRenderFns }
+if (false) {
+  module.hot.accept()
+  if (module.hot.data) {
+    require("vue-hot-reload-api")      .rerender("data-v-c80a5372", module.exports)
   }
 }
 
@@ -19969,6 +20094,58 @@ module.exports = Component.exports
 
 /***/ }),
 
+/***/ "./resources/assets/components/upload.vue":
+/***/ (function(module, exports, __webpack_require__) {
+
+var disposed = false
+function injectStyle (ssrContext) {
+  if (disposed) return
+  __webpack_require__("./node_modules/vue-style-loader/index.js!./node_modules/css-loader/index.js!./node_modules/vue-loader/lib/style-compiler/index.js?{\"vue\":true,\"id\":\"data-v-745d0646\",\"scoped\":true,\"hasInlineConfig\":true}!./node_modules/sass-loader/lib/loader.js!./node_modules/vue-loader/lib/selector.js?type=styles&index=0!./resources/assets/components/upload.vue")
+}
+var normalizeComponent = __webpack_require__("./node_modules/vue-loader/lib/component-normalizer.js")
+/* script */
+var __vue_script__ = __webpack_require__("./node_modules/babel-loader/lib/index.js?{\"cacheDirectory\":true,\"presets\":[[\"env\",{\"modules\":false,\"targets\":{\"browsers\":[\"> 2%\"],\"uglify\":true}}]],\"plugins\":[\"transform-object-rest-spread\",[\"transform-runtime\",{\"polyfill\":false,\"helpers\":false}]]}!./node_modules/vue-loader/lib/selector.js?type=script&index=0!./resources/assets/components/upload.vue")
+/* template */
+var __vue_template__ = __webpack_require__("./node_modules/vue-loader/lib/template-compiler/index.js?{\"id\":\"data-v-745d0646\",\"hasScoped\":true,\"buble\":{\"transforms\":{}}}!./node_modules/vue-loader/lib/selector.js?type=template&index=0!./resources/assets/components/upload.vue")
+/* template functional */
+var __vue_template_functional__ = false
+/* styles */
+var __vue_styles__ = injectStyle
+/* scopeId */
+var __vue_scopeId__ = "data-v-745d0646"
+/* moduleIdentifier (server only) */
+var __vue_module_identifier__ = null
+var Component = normalizeComponent(
+  __vue_script__,
+  __vue_template__,
+  __vue_template_functional__,
+  __vue_styles__,
+  __vue_scopeId__,
+  __vue_module_identifier__
+)
+Component.options.__file = "resources/assets/components/upload.vue"
+
+/* hot reload */
+if (false) {(function () {
+  var hotAPI = require("vue-hot-reload-api")
+  hotAPI.install(require("vue"), false)
+  if (!hotAPI.compatible) return
+  module.hot.accept()
+  if (!module.hot.data) {
+    hotAPI.createRecord("data-v-745d0646", Component.options)
+  } else {
+    hotAPI.reload("data-v-745d0646", Component.options)
+  }
+  module.hot.dispose(function (data) {
+    disposed = true
+  })
+})()}
+
+module.exports = Component.exports
+
+
+/***/ }),
+
 /***/ "./resources/assets/js/app.js":
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
@@ -20012,6 +20189,11 @@ Vue.component('select-staff', __webpack_require__("./resources/assets/components
 Vue.component('selectors', __webpack_require__("./resources/assets/components/selectors.vue"));
 Vue.component('selectorsOptions', __webpack_require__("./resources/assets/components/selectors-options.vue"));
 Vue.component('task-follow-up', __webpack_require__("./resources/assets/components/task-follow-up.vue"));
+Vue.component('Modal', __webpack_require__("./resources/assets/components/Modal.vue"));
+Vue.component('checkbox-group', __webpack_require__("./resources/assets/components/checkboxGroup.vue"));
+Vue.component('nav-back', __webpack_require__("./resources/assets/components/navBack.vue"));
+Vue.component('upload', __webpack_require__("./resources/assets/components/upload.vue"));
+Vue.component('mtp-table', __webpack_require__("./resources/assets/components/Table.vue"));
 Vue.component('timepicker', __webpack_require__("./resources/assets/components/timepicker.vue"));
 
 Vue.prototype.globalClick = function (callback) {
@@ -20280,6 +20462,47 @@ var config = {
     }, {
         name: 'papi客户',
         value: 4
+    }],
+    // 员工状态
+    staffStatus: [{
+        value: 1,
+        name: '在职'
+    }, {
+        value: 2,
+        name: '离职'
+    }, {
+        value: 3,
+        name: '全部'
+    }],
+    // 年月
+    dateArr: [{
+        value: 1,
+        name: '10月（10.01-10.31）'
+    }, {
+        value: 2,
+        name: '11月（11.01-11.30）'
+    }, {
+        value: 3,
+        name: '12月（12.01-12.31）'
+    }],
+    // 员工类型
+    stuffType: [{
+        value: 1,
+        name: '正式员工'
+    }, {
+        value: 2,
+        name: '实习生'
+    }, {
+        value: 3,
+        name: '管培生'
+    }],
+    // 性别
+    sex: [{
+        value: 1,
+        name: '男'
+    }, {
+        value: 2,
+        name: '女'
     }],
     artistStatusArr: [{
         name: '已签约',

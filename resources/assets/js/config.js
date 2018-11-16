@@ -286,7 +286,6 @@ let config = {
             value: 4
         },
     ],
-<<<<<<< HEAD
     // 员工状态
     staffStatus: [
         {
