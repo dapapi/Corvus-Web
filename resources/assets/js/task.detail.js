@@ -1,49 +1,23 @@
 import config from "./config";
 import Tool from './tool';
 import redirect from './bootstrap';
-import Vuex from 'vuex';
-
-const store = new Vuex.Store({
-    state: {
-        participantsArr: [],
-        participantsIdArr: [],
-    },
-    mutations: {
-        changeParticipantsArr(data) {
-            console.log(this.state.participantsArr)
-            this.state.participantsArr = data
-        },
-        changeParticipantsIdArr(data) {
-            state.participantsIdArr = data
-        }
-    },
-    actions: {
-        changeParticipantsArr: context => {
-            context.commit('changeParticipantsArr');
-        },
-
-        changeParticipantsIdArr: context => {
-            context.commit('changeParticipantsIdArr');
-
-        }
-    }
-});
+import store from '../store/index.js';
 
 let app = new Vue({
         el: '#root',
+        store,
         data: {
             taskId: '',
             changeInfo: {},
             isEdit: false,
             total: 0,
-            current_page: 1,
-            total_pages: 1,
+            current_page: 0,
+            total_pages: 0,
             showChildTask: false,
-            memberPlaceholder: '请选择负责人',
-            multiple: false,
             taskInfo: '',
             participantsArr: [],
-            participantsIdArr: [],
+            flagParticipantsIdArr: [],
+            changeParticipantInfo: '',
             newChildTask: {},
             taskName: '',
             taskIntroduce: '',
@@ -55,71 +29,11 @@ let app = new Vue({
             endTime: '',
             startMinutes: '00:00',
             endMinutes: '00:00',
-            taskLevelArr: [
-                {
-                    name: '请选择优先级',
-                    value: 0
-                },
-                {
-                    name: '高',
-                    value: 1
-                },
-                {
-                    name: '中',
-                    value: 2
-                },
-                {
-                    name: '低',
-                    value: 3
-                },
-            ],
-            taskTypeArr: [
-                {
-                    name: '请选择任务类型',
-                    value: 0
-                },
-                {
-                    name: '跑组',
-                    value: 1
-                },
-                {
-                    name: '试戏',
-                    value: 2
-                },
-                {
-                    name: '类型1',
-                    value: 3
-                },
-            ],
+            taskLevelArr: config.taskLevelArr,
+            taskTypeArr: config.taskTypeArr,
             customizeInfo: config.customizeInfo,
-            priorityArr: [
-                {
-                    name: '高',
-                    value: 1
-                },
-                {
-                    name: '中',
-                    value: 2
-                },
-                {
-                    name: '低',
-                    value: 3
-                },
-            ],
-            taskStatusArr: [
-                {
-                    name: '进行中',
-                    value: 1
-                },
-                {
-                    name: '已完成',
-                    value: 2
-                },
-                {
-                    name: '已停止',
-                    value: 3
-                },
-            ]
+            priorityArr: config.priorityArr,
+            taskStatusArr: config.taskStatusArr
         },
 
         mounted() {
@@ -139,7 +53,7 @@ let app = new Vue({
             'taskInfo.participants.data': {
                 handler(newValue, oldValue) {
                     if (newValue && oldValue) {
-                        app.changeInfo.participant = newValue
+                        app.changeParticipantInfo = newValue
                     }
                 },
                 deep: true
@@ -161,6 +75,12 @@ let app = new Vue({
             },
         },
 
+        computed: {
+            principalName: function () {
+                return this.$store.state.principalInfo.name
+            }
+        },
+
         methods: {
 
             getTask: function () {
@@ -170,6 +90,8 @@ let app = new Vue({
                     include: 'creator,principal,pTask,tasks,resource.resourceable,resource.resource,affixes,participants',
                 };
 
+                let _this = this;
+
                 $.ajax({
                     type: 'get',
                     url: config.apiUrl + '/tasks/' + this.taskId,
@@ -177,15 +99,24 @@ let app = new Vue({
                     statusCode: config.getStatusCode(),
                     data: data
                 }).done(function (response) {
-                    console.log(response)
-                    app.taskInfo = response.data;
-                    // store.commit('changeParticipantsArr', response.data);
-                    for (let i = 0; i < response.data.participants.data.length; i++) {
-                        app.participantsArr.push(response.data.participants.data[i].name);
-                        app.participantsIdArr.push(response.data.participants.data[i].id)
+                    if (response.data.affixes) {
+                        for (let i = 0; i < response.data.affixes.data.length; i++) {
+                            let size = response.data.affixes.data[i].size;
+                            response.data.affixes.data[i].size = _this.unitConversion(size)
+                        }
                     }
-                    store.dispatch('changeParticipantsArr', app.participantsArr);
-                    // store.dispatch('changeParticipantsIdArr', app.participantsIdArr);
+
+                    app.taskInfo = response.data;
+                    for (let i = 0; i < response.data.participants.data.length; i++) {
+                        app.flagParticipantsIdArr.push(response.data.participants.data[i].id)
+                    }
+                    let params = {
+                        type: 'change',
+                        data: response.data.participants.data
+                    };
+                    store.dispatch('changeParticipantsInfo', params);
+                    params.data = response.data.principal.data;
+                    store.dispatch('changePrincipal', params)
 
                 })
             },
@@ -214,7 +145,6 @@ let app = new Vue({
                     headers: config.getHeaders(),
                     statusCode: {
                         400: function (response) {
-                            console.log(response);
                             toastr.error(response.responseJSON.message);
                         }
                     },
@@ -229,7 +159,6 @@ let app = new Vue({
                     } else if (status === 3) {
                         toastr.success("暂停任务成功");
                     }
-                    console.log(response)
                 })
             },
 
@@ -240,7 +169,6 @@ let app = new Vue({
                     headers: config.getHeaders(),
                     statusCode: {
                         400: function (response) {
-                            console.log(response);
                             toastr.error(response.responseJSON.message);
                         }
                     }
@@ -262,53 +190,88 @@ let app = new Vue({
                             toastr.error(response.responseJSON.message);
                         }
                     }
-                }).done(function (response) {
+                }).done(function () {
                     toastr.success("删除任务成功");
                     redirect('index')
                 })
             },
 
+            unitConversion: function (size) {
+                if (size < 1024) {
+                    size = size + "B"
+                } else if (size < 1024 * 1024) {
+                    size = (size / 1024).toFixed(2) + "KB"
+                } else if (size < 1024 * 1024 * 1024) {
+                    size = (size / (1024 * 1024)).toFixed(2) + "MB"
+                } else {
+                    size = (size / (1024 * 1024 * 1024)).toFixed(2) + "GB"
+                }
+                let sizeStr = size + "";
+                let index = sizeStr.indexOf(".");
+                let dou = sizeStr.substr(index + 1, 2);
+                if (dou === "00") {
+                    size = sizeStr.substring(0, index) + sizeStr.substr(index + 3, 2)
+                }
+                return size
+            },
+
             changeTaskBaseInfo: function () {
-                $.ajax({
-                    type: 'put',
-                    url: config.apiUrl + '/tasks/' + app.taskId,
-                    headers: config.getHeaders(),
-                    statusCode: {
-                        400: function (response) {
-                            console.log(response);
-                            toastr.error(response.responseJSON.message);
+                let _this = this;
+                if (app.changeInfo) {
+                    $.ajax({
+                        type: 'put',
+                        url: config.apiUrl + '/tasks/' + app.taskId,
+                        headers: config.getHeaders(),
+                        statusCode: {
+                            400: function (response) {
+                                toastr.error(response.responseJSON.message);
+                            }
+                        },
+                        data: app.changeInfo
+                    }).done(function () {
+                        app.isEdit = false;
+                        if (app.changeInfo.principal_id) {
+                            app.taskInfo.principal.data = _this.$store.state.principalInfo
                         }
-                    },
-                    data: app.changeInfo
-                }).done(function (response) {
-                    toastr.success("修改成功");
-                    app.isEdit = false;
-                });
+                    });
+                }
+                // @todo 修改时间组件
 
-                if (app.changeInfo.participant) {
-                    let participant_ids = []
-                    for (let i = 0; i < app.changeInfo.participant.length; i++) {
-                        participant_ids.push(app.changeInfo.participant[i].id)
+                if (app.changeParticipantInfo) {
+                    let changeInfo = app.changeParticipantInfo;
+                    let participant_ids = [];
+                    for (let i = 0; i < changeInfo.length; i++) {
+                        participant_ids.push(changeInfo[i].id)
                     }
-                    console.log(participant_ids)
 
+                    let flagInfo = app.flagParticipantsIdArr;
+                    let del_participant_ids = [];
+                    for (let j = 0; j < flagInfo.length; j++) {
+                        if (changeInfo.map(item => item.id).indexOf(flagInfo[j]) === -1) {
+                            del_participant_ids.push(flagInfo[j])
+                        }
+                    }
+                    let data = {
+                        person_ids: participant_ids,
+                        del_person_ids: del_participant_ids
+                    };
                     $.ajax({
                         type: 'post',
                         url: config.apiUrl + '/tasks/' + app.taskId + '/participant',
                         headers: config.getHeaders(),
                         statusCode: {
                             400: function (response) {
-                                console.log(response);
                                 toastr.error(response.responseJSON.message);
                             }
                         },
-                        data: {
-                            person_ids: participant_ids
-                        }
-                    }).done(function (response) {
-                        toastr.success("修改参与人成功");
+                        data: data
+                    }).done(function () {
+                        app.isEdit = false;
                     })
                 }
+
+                toastr.success('修改成功')
+
             },
 
             changeEndTime: function (value) {
@@ -327,22 +290,12 @@ let app = new Vue({
                 app.taskInfo.start_at = value
             },
 
-            changeTaskParticipants: function (value) {
-                app.participantsArr = [];
-                for (let i = 0; i < value.length; i++) {
-                    app.participantsArr.push(value[i].name)
-                }
-                if (app.taskInfo.participants) {
-                    app.taskInfo.participants.data = value
-                }
-            },
-
-            changeTaskPrincipal: function (value) {
-                app.taskInfo.principal_id = value
-                //    @todo 修改负责人  返回参数没有负责人
+            changeTaskPrincipal: function () {
+                app.taskInfo.principal_id = this.$store.state.principalInfo.id;
             },
 
             uploadAttachment: function (url, name, size) {
+                let _this = this;
                 $.ajax({
                     type: 'post',
                     url: config.apiUrl + '/tasks/' + app.taskId + '/affix',
@@ -356,18 +309,13 @@ let app = new Vue({
                     data: {
                         title: name,
                         url: url,
-                        size: size
+                        size: size,
+                        type: 1
                     }
                 }).done(function (response) {
-                    console.log(response)
                     toastr.success("上传成功");
-                    // @todo 上传好附件的id没有得到
-                    app.taskInfo.affixes.data.push({
-                        id: response,
-                        size: size,
-                        title: name,
-                        url: url
-                    })
+                    response.data.size = _this.unitConversion(response.data.size);
+                    app.taskInfo.affixes.data.push(response.data)
                 })
             },
 
@@ -378,7 +326,6 @@ let app = new Vue({
                     headers: config.getHeaders(),
                     statusCode: {
                         400: function (response) {
-                            console.log(response);
                             toastr.error(response.responseJSON.message);
                         }
                     },
@@ -401,23 +348,26 @@ let app = new Vue({
             },
 
             addChildTask: function () {
+                let participant_ids = [];
+                for (let i = 0; i < this.$store.state.newParticipantsInfo.length; i++) {
+                    participant_ids.push(this.$store.state.newParticipantsInfo[i].id)
+                }
                 let data = {
                     // resource_id: '1718463094',
                     // resourceable_id: '1994731356',
                     title: app.taskName,
                     // type: app.taskType,
-                    // principal_id: app.principal,
+                    principal_id: this.$store.state.newPrincipalInfo.id,
+                    participant_ids: participant_ids,
                     priority: app.taskLevel,
                     start_at: app.startTime + ' ' + app.startMinutes,
                     end_at: app.endTime + ' ' + app.endMinutes,
                     desc: app.taskIntroduce,
-                    participant_ids: app.participants
                 };
                 $.ajax({
                     type: 'post',
                     url: config.apiUrl + '/tasks/' + app.taskId + '/subtask',
                     headers: config.getHeaders(),
-                    // statusCode: config.getStatusCode(),
                     data: data
                 }).done(function (response) {
                     toastr.success('添加成功');
@@ -458,6 +408,13 @@ let app = new Vue({
 
             },
 
+            addStartMinutes: function (value) {
+                app.startMinutes = value
+            },
+
+            addEndMinutes: function (value) {
+                app.endMinutes = value
+            },
             redirectTaskDetail: function (taskId) {
                 redirect('detail?task_id=' + taskId)
             }

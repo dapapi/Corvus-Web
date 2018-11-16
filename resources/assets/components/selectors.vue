@@ -33,6 +33,10 @@
                     this.refresh()
                 }
             },
+            options: function (newValue) {
+                console.log(newValue);
+                this.refresh()
+            }
         },
         methods: {
             destroy() {

@@ -1,8 +1,10 @@
 import config from "./config";
 import redirect from './bootstrap';
+import store from '../store/index.js';
 
 let app = new Vue({
         el: '#root',
+        store,
         data: {
             total: 0,
             current_page: 1,
@@ -19,6 +21,7 @@ let app = new Vue({
             taskStatus: 0,
             newTask: {},
             taskType: '',
+            taskFinishType: '',
             taskName: '',
             taskLevel: '',
             taskLevelArr: config.taskLevelArr,
@@ -34,7 +37,6 @@ let app = new Vue({
         methods: {
 
             getTasks: function (pageNum = 1) {
-                this.taskStatus = 0;
                 let data = {
                     page: pageNum,
                     include: 'principal,pTask,tasks,resource.resourceable,resource.resource,participants',
@@ -44,10 +46,8 @@ let app = new Vue({
                     type: 'get',
                     url: config.apiUrl + '/tasks/my_all',
                     headers: config.getHeaders(),
-                    statusCode: config.getStatusCode(),
                     data: data
                 }).done(function (response) {
-                    console.log(response)
                     app.tasksInfo = response.data;
                     app.current_page = response.meta.pagination.current_page;
                     app.total = response.meta.pagination.total;
@@ -55,25 +55,24 @@ let app = new Vue({
                 })
             },
 
-            getMyTasks: function (pageNum = 1, status = null) {
-                if (status) {
-                    app.taskStatus = status
+            getMyTasks: function (pageNum = 1, type = null) {
+                if (type) {
+                    app.taskFinishType = type
                 }
 
                 let data = {
                     page: pageNum,
                     include: 'principal,pTask,tasks,resource.resourceable,resource.resource,participants',
-                    status: app.taskStatus
+                    type: app.taskFinishType,
+                    status: 0
                 };
 
                 $.ajax({
                     type: 'get',
                     url: config.apiUrl + '/tasks/my',
                     headers: config.getHeaders(),
-                    statusCode: config.getStatusCode(),
                     data: data
                 }).done(function (response) {
-                    console.log(response)
                     app.tasksInfo = response.data;
                     app.current_page = response.meta.pagination.current_page;
                     app.total = response.meta.pagination.total;
@@ -82,23 +81,33 @@ let app = new Vue({
             },
 
             addTask: function () {
+                let participant_ids = [];
+                for (let i = 0; i < this.$store.state.newParticipantsInfo.length; i++) {
+                    participant_ids.push(this.$store.state.newParticipantsInfo[i].id)
+                }
                 let data = {
-                    // resource_id: '1718463094',
+                    // resource_type: '1718463094',
                     // resourceable_id: '1994731356',
-                    title: app.taskName,
                     // type: app.taskType,
-                    principal_id: app.principal,
+                    // @todo 任务类型前端维护
+                    title: app.taskName,
+                    principal_id: this.$store.state.newPrincipalInfo.id,
+                    participant_ids: participant_ids,
                     priority: app.taskLevel,
                     start_at: app.startTime + ' ' + app.startMinutes,
                     end_at: app.endTime + ' ' + app.endMinutes,
-                    desc: app.taskIntroduce,
-                    participant_ids: app.participants
+                    desc: app.taskIntroduce
                 };
                 $.ajax({
                     type: 'post',
                     url: config.apiUrl + '/tasks',
                     headers: config.getHeaders(),
-                    data: data
+                    data: data,
+                    statusCode: {
+                        400: function (response) {
+                            toastr.error(response.responseJSON.message);
+                        },
+                    }
                 }).done(function (response) {
                     console.log(response);
                     toastr.success('创建成功');
@@ -139,8 +148,17 @@ let app = new Vue({
                 app.startTime = value
             },
 
+            changeStartMinutes: function (value) {
+                console.log(value);
+                app.startMinutes = value
+            },
+
             changeEndTime: function (value) {
                 app.endTime = value
+            },
+
+            changeEndMinutes: function (value) {
+                app.endMinutes = value
             },
 
             redirectTaskDetail: function (taskId) {

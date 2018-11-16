@@ -19,14 +19,15 @@
             <div class="panel col-md-12 col-lg-12 py-5">
                 <div class="clearfix">
                     <div class="col-md-3 example float-left">
-                        <input type="text" class="form-control" id="inputPlaceholder" placeholder="请输入昵称"
+                        <input type="text" class="form-control" id="inputPlaceholder" placeholder="请输入任务名称"
                                style="width: 220px">
                     </div>
                     <div class="col-md-3 example float-left">
-                        <selectors></selectors>
+                        <selectors :placeholder="'请选择任务类型'"></selectors>
                     </div>
+                    {{-- todo 任务类型暂无--}}
                     <div class="col-md-3 example float-left">
-                        <selectors></selectors>
+                        <selectors :placeholder="'请选择任务状态'"></selectors>
                     </div>
                     <div class="col-md-3 example float-left">
                         <button type="button" class="btn btn-default waves-effect waves-classic float-right"
@@ -136,13 +137,15 @@
                         <div class="example">
                             <div class="col-md-2 text-right float-left">关联资源</div>
                             <div class="col-md-10 float-left">
-                                <normal-linkage-selectors @change="changeLinkage"></normal-linkage-selectors>
+                                {{-- todo 资源未关联--}}
+                                {{--<normal-linkage-selectors @change="changeLinkage"></normal-linkage-selectors>--}}
                             </div>
                         </div>
                         <div class="example">
                             <div class="col-md-2 text-right float-left">任务类型</div>
                             <div class="col-md-10 float-left pl-0">
-                                <selectors :options="taskTypeArr" @change="changeTaskType"></selectors>
+                                <selectors :options="taskTypeArr" :placeholder="'请选择任务类型'"
+                                           @change="changeTaskType"></selectors>
                             </div>
                         </div>
                         <div class="example">
@@ -154,7 +157,7 @@
                         <div class="example">
                             <div class="col-md-2 text-right float-left">负责人</div>
                             <div class="col-md-5 float-left pl-0">
-                                <input-selectors :placeholder="memberPlaceholder" :multiple="multiple"
+                                <input-selectors :placeholder="'请选择负责人'"
                                                  @change="principalChange"></input-selectors>
                             </div>
                         </div>
@@ -167,17 +170,26 @@
                         <div class="example">
                             <div class="col-md-2 text-right float-left pl-0">任务优先级</div>
                             <div class="col-md-10 float-left pl-0">
-                                <selectors :options="taskLevelArr" @change="changeTaskLevel"></selectors>
+                                <selectors :options="taskLevelArr" :placeholder="'请选择任务优先级'"
+                                           @change="changeTaskLevel"></selectors>
                             </div>
                         </div>
                         <div class="example">
                             <div class="col-md-2 text-right float-left">开始时间</div>
-                            <div class="col-md-4 float-left pl-0">
+                            <div class="col-md-5 float-left pl-0">
                                 <datepicker @change="changeStartTime"></datepicker>
                             </div>
+                            <div class="col-md-5 float-left pl-0">
+                                <timepicker :default="startMinutes" @change="changeStartMinutes"></timepicker>
+                            </div>
+                        </div>
+                        <div class="example">
                             <div class="col-md-2 text-right float-left">截止时间</div>
-                            <div class="col-md-4 float-left pl-0">
+                            <div class="col-md-5 float-left pl-0">
                                 <datepicker @change="changeEndTime"></datepicker>
+                            </div>
+                            <div class="col-md-5 float-left pl-0">
+                                <timepicker :default="endMinutes" @change="changeEndMinutes"></timepicker>
                             </div>
                         </div>
                         <div class="example">

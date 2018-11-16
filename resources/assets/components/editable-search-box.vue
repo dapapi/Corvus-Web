@@ -12,11 +12,19 @@
 
             <div class="users my-10" v-for="item in options"
                  v-show="item.name.indexOf(searchKeyWord) > -1"
-                 @click="selectItem(item.id, item.name, item.grade)">
+                 @click="selectItem(item)">
                 <span class="pl-1">{{ item.name }}</span>
-                <span class="float-right" v-show="selectIdArr.indexOf(item.id) > -1">
+                <template v-if="type === 'changeCompany'">
+                    <span class="float-right" v-show="getCompanyInfo.value == item.value">
                     <i class="icon md-check"></i>
                 </span>
+                </template>
+                <template v-else>
+                    <span class="float-right" v-show="selectIdArr.indexOf(item.id) > -1">
+                    <i class="icon md-check"></i>
+                </span>
+                </template>
+
             </div>
         </div>
     </div>
@@ -25,7 +33,7 @@
 <script>
     export default {
         name: "editable-search-box",
-        props: ['options', 'multiple'],
+        props: ['options', 'multiple', 'type'],
         data() {
             return {
                 inputValue: '',
@@ -42,10 +50,21 @@
                     this.isSelected = false;
                 } else {
                     this.selectIdArr = [];
-                    this.$emit('change', newValue)
+                    let data = {
+                        name: newValue
+                    };
+                    this.$store.dispatch(this.type, data);
                 }
+                this.$emit('change', true)
             },
         },
+
+        computed: {
+            getCompanyInfo: function () {
+                return this.$store.state.companyInfo
+            }
+        },
+
         mounted() {
             this.globalClick(this.removeSelector);
         },
@@ -55,15 +74,14 @@
                 this.selectorShow = true
             },
 
-            selectItem: function (itemId, itemName, itemGrade) {
-                this.inputValue = itemName;
+            selectItem: function (item) {
+                this.$store.dispatch(this.type, item);
+                this.inputValue = item.name;
                 this.isSelected = true;
-                this.$emit('change', itemName, itemId, itemGrade);
                 if (!this.multiple) {
                     this.selectorShow = false;
-                    this.selectIdArr = [itemId];
                 } else {
-                    this.selectIdArr.push(itemId);
+                    this.selectIdArr.push(item.value);
                 }
             },
 

@@ -27,8 +27,8 @@
                             <div class="float-left pl-0 pr-2">
                                 <i class="md-plus pr-2" aria-hidden="true"></i>负责人
                             </div>
-                            <div class="font-weight-bold float-left">
-                                @{{ clientInfo.principal }}
+                            <div class="font-weight-bold float-left" v-if="clientInfo.principal">
+                                @{{ clientInfo.principal.data.name }}
                             </div>
                         </div>
                         <div class="col-md-6 float-left clearfix"></div>
@@ -101,8 +101,8 @@
                                     <template v-if="trail.progress_status === 2">已确定合作</template>
                                     <template v-if="trail.progress_status === 0">已拒绝</template>
                                 </td>
-                                <td>@{{ trail.principal }}</td>
-                                <td>@{{ trail.principal }}</td>
+                                <td>@{{ trail.principal.data.name }}</td>
+                                <td>@{{ trail.client.data.company }}</td>
                                 <td>@{{ trail.end_at }}</td>
                             </tr>
                         </table>
@@ -158,7 +158,7 @@
                                     <template v-if="task.status === 2">已完成</template>
                                     <template v-if="task.status === 3">已停止</template>
                                 </td>
-                                <td>@{{ task.principal }}</td>
+                                <td>@{{ task.principal.data.name }}</td>
                                 <td>@{{ task.end_at }}</td>
                             </tr>
                         </table>
@@ -185,16 +185,28 @@
                             </div>
                             <div class="card-block">
                                 <div class="card-text py-5 clearfix">
-                                    <div class="col-md-1 float-left text-right pl-0">客户类型</div>
-                                    <div class="col-md-5 float-left font-weight-bold">
-                                        <edit-selector :options="clientTypeArr" :is-edit="isEdit"
-                                                       :content="clientInfo.type"
-                                                       @change="changeClientType"></edit-selector>
-                                    </div>
                                     <div class="col-md-1 float-left text-right pl-0">公司名称</div>
                                     <div class="col-md-5 float-left font-weight-bold">
                                         <edit-input :content="clientInfo.company" :is-edit="isEdit"
                                                     @change="changClientName"></edit-input>
+                                    </div>
+                                    <div class="col-md-1 float-left text-right pl-0">级别</div>
+                                    <div class="col-md-5 float-left font-weight-bold">
+                                        <edit-selector :options="clientLevelArr" :is-edit="isEdit"
+                                                       :content="clientInfo.grade"
+                                                       @change="changeClientLevel"></edit-selector>
+                                    </div>
+                                </div>
+                                <div class="card-text py-5 clearfix">
+                                    <div class="col-md-1 float-left text-right pl-0">决策关键人/部门</div>
+                                    <div class="col-md-5 float-left font-weight-bold">
+                                        <edit-input :content="clientInfo.keyman"
+                                                    :is-edit="isEdit" @change="changeClientDecision"></edit-input>
+                                    </div>
+                                    <div class="col-md-1 float-left text-right pl-0">负责人</div>
+                                    <div class="col-md-5 float-left font-weight-bold">
+                                        <edit-input-selector :is-edit="isEdit"
+                                                             :select-type="'principal'"></edit-input-selector>
                                     </div>
                                 </div>
                                 <div class="card-text py-5 clearfix">
@@ -208,19 +220,7 @@
                                         <edit-input :content="clientInfo.company" :is-edit="isEdit"></edit-input>
                                     </div>
                                 </div>
-                                <div class="card-text py-5 clearfix">
-                                    <div class="col-md-1 float-left text-right pl-0">级别</div>
-                                    <div class="col-md-5 float-left font-weight-bold">
-                                        <edit-selector :options="clientLevelArr" :is-edit="isEdit"
-                                                       :content="clientInfo.grade"
-                                                       @change="changeClientLevel"></edit-selector>
-                                    </div>
-                                    <div class="col-md-1 float-left text-right pl-0">决策关键人/部门</div>
-                                    <div class="col-md-5 float-left font-weight-bold">
-                                        <edit-input :content="clientInfo.keyman"
-                                                    :is-edit="isEdit" @change="changeClientDecision"></edit-input>
-                                    </div>
-                                </div>
+
                                 <div class="card-text py-5 clearfix">
                                     <div class="col-md-1 float-left text-right pl-0">规模</div>
                                     <div class="col-md-5 float-left font-weight-bold">
@@ -269,6 +269,7 @@
                                 <th class="cell-300" scope="col">联系人电话</th>
                                 <th class="cell-300" scope="col">职位</th>
                                 <th class="cell-300" scope="col">负责人</th>
+                                <th class="cell-300" scope="col">操作</th>
                                 <th class="suf-cell"></th>
                             </tr>
                             <tr v-for="contact in clientContactsInfo">
@@ -277,7 +278,18 @@
                                 <td>@{{ clientInfo.company }}</td>
                                 <td>@{{ contact.phone }}</td>
                                 <td>@{{ contact.position }}</td>
-                                <td>@{{ clientInfo.principal }}</td>
+                                <td>@{{ clientInfo.principal.data.name }}</td>
+                                <td>
+                                    <span class="pr-20 d-block float-left pointer-content"
+                                          style="color: #b9b9b9;">
+                                        <i class="icon md-edit" aria-hidden="true"></i>
+                                    </span>
+                                    <span class="d-block float-left"
+                                          style="width: 1px; height: 14px;border-right: 1px solid #b9b9b9;margin: 3px;"></span>
+                                    <span class="pl-20 d-block float-left pointer-content" style="color: #b9b9b9">
+                                        <i class="icon md-delete" aria-hidden="true"></i>
+                                    </span>
+                                </td>
                             </tr>
                         </table>
 
@@ -394,7 +406,7 @@
                         <div class="example">
                             <div class="col-md-2 text-right float-left">负责人</div>
                             <div class="col-md-5 float-left pl-0">
-                                <input-selectors :placeholder="'请选择负责人'" :multiple="multiple"
+                                <input-selectors :placeholder="'请选择负责人'"
                                                  @change="taskPrincipalChange"></input-selectors>
                             </div>
                         </div>

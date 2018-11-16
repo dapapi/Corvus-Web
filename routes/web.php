@@ -66,3 +66,13 @@ Route::get('/staff/add', function () {
 Route::get('/staff/detail', function () {
     return view('staff.detail');
 });
+
+Route::get('/artist/index', function () {
+    return view('artist.papi-index');
+});
+
+Route::get('/artist/detail', function () {
+    return view('artist.papi-detail');
+});
+
+//Route::get('/artist/index', 'ClientController@detail');

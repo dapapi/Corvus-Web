@@ -17,21 +17,28 @@
 
         <div class="items" v-show="departmentsShow">
             <div>
-                <div class="users" v-for="user in this.data.users.data" @click="selectMember(user.id)">
+                <div class="users" v-for="user in this.data.users.data" @click="selectMember(user)">
                     <a class="avatar" href="javascript:void(0)">
                         <img src="https://res.papitube.com/no-icon.png" alt="...">
                     </a>
                     <span class="pl-1">{{ user.name }}</span>
-                    <span class="float-right" v-show="selectArr.indexOf(user.id) > -1">
-                        <i class="icon md-check"></i>
-                    </span>
+                    <template v-if="memberType === 'principal'">
+                        <span class="float-right" v-show="principalInfo.id == user.id">
+                            <i class="icon md-check"></i>
+                        </span>
+                    </template>
+                    <template v-else-if="memberType === 'participant'">
+                        <span class="float-right" v-show="participantsInfo.find(item => item.id == user.id)">
+                            <i class="icon md-check"></i>
+                        </span>
+                    </template>
                 </div>
             </div>
 
             <div v-if="this.data.departments.data.length > 0">
                 <div v-for="departmentData in this.data.departments.data">
-                    <departments-item :data="departmentData" :select="selectArr"
-                                      @change="memberChange" :multiple="isMultiple"></departments-item>
+                    <departments-item :data="departmentData" :member-type="memberType" :type="type"
+                                      :multiple="multiple" @change="memberChange"></departments-item>
                 </div>
             </div>
         </div>
@@ -43,34 +50,38 @@
 <script>
     export default {
         name: "departments-item",
-        props: ['data', 'select', 'multiple'],
+        props: ['data', 'select', 'multiple', 'member-type', 'type'],
         data() {
             return {
                 departmentsShow: false,
                 total: 0,
-                selectArr: [],
-                isMultiple: '',
+                params: {
+                    type: this.type,
+                    data: ''
+                }
+            }
+        },
+
+        computed: {
+            principalInfo: function () {
+                if (this.type === 'change') {
+                    return this.$store.state.principalInfo
+                } else {
+                    return this.$store.state.newPrincipalInfo
+                }
+            },
+
+            participantsInfo: function () {
+                if (this.type === 'change') {
+                    return this.$store.state.participantsInfo
+                } else {
+                    return this.$store.state.newParticipantsInfo
+                }
             }
         },
 
         mounted() {
             this.total = this.memberNum(this.data);
-            this.isMultiple = this.multiple;
-            this.selectArr = this.select;
-        },
-
-        watch: {
-            selectArr: function (newValue) {
-                if (this.isParent) {
-                    return
-                }
-                this.$emit('change', newValue)
-            },
-
-            select: function (newValue) {
-                this.isParent = true;
-                this.selectArr = newValue
-            }
         },
 
         methods: {
@@ -79,18 +90,30 @@
             },
 
             memberChange: function (value) {
-                this.selectArr = value
+                if (this.memberType === 'principal') {
+                    this.$emit('change', false)
+                }
             },
 
-            selectMember: function (userId) {
-                let index = this.selectArr.indexOf(userId);
-                if (index > -1) {
-                    this.selectArr.splice(index, 1)
-                } else {
-                    if (!this.multiple && this.selectArr.length > 0) {
-                        this.selectArr = []
+            selectMember: function (user) {
+                if (this.memberType === 'principal') {
+                    this.params.data = user;
+                    this.$store.dispatch('changePrincipal', this.params);
+                    this.$emit('change', false)
+                } else if (this.memberType === 'participant') {
+                    let participantInfo = '';
+                    if (this.type === 'change') {
+                        participantInfo = this.$store.state.participantsInfo;
+                    } else {
+                        participantInfo = this.$store.state.newParticipantsInfo;
                     }
-                    this.selectArr.push(userId)
+                    if (!participantInfo.find(item => item.id == user.id)) {
+                        participantInfo.push(user)
+                    } else {
+                        participantInfo.splice(participantInfo.map(item => item.id).indexOf(user.id), 1)
+                    }
+                    this.params.data = participantInfo;
+                    this.$store.dispatch('changeParticipantsInfo', this.params);
                 }
             },
 
@@ -99,16 +122,23 @@
             },
 
             checkMember: function (data) {
+                let participantInfo = '';
+                if (this.type === 'change') {
+                    participantInfo = this.$store.state.participantsInfo;
+                } else {
+                    participantInfo = this.$store.state.newParticipantsInfo;
+                }
                 for (let i = 0; i < data.users.data.length; i++) {
-                    let userId = data.users.data[i].id;
-                    let index = this.selectArr.indexOf(userId);
-                    if (index === -1) {
-                        this.selectArr.push(userId)
+                    let user = data.users.data[i];
+                    if (!participantInfo.find(item => item.id == user.id)) {
+                        participantInfo.push(user)
                     }
                 }
                 for (let i = 0; i < data.departments.data.length; i++) {
                     this.checkMember(data.departments.data[i])
                 }
+                this.params.data = participantInfo;
+                this.$store.dispatch('changeParticipantsInfo', this.params);
             },
 
             memberNum: function (data) {

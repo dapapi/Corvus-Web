@@ -17,12 +17,18 @@
                     min: 0,
                     max: 100000000,
                 }
-            ).on('asSpinner:@change', function (e) {
+            ).on('asSpinner::change', function (e) {
                 self.$emit('change', e.currentTarget.value)
             })
         },
 
         methods: {
+            setValue(value) {
+                $(this.$el).asSpinner('val', value);
+            },
+            refresh() {
+                $(this.$el).asSpinner('refresh');
+            },
             destroy() {
                 $(this.$el).asSpinner('destroy');
             }

@@ -4,12 +4,12 @@
             <div class="page-nav-tabs">
                 <ul class="nav nav-tabs nav-tabs-line" role="tablist">
                     <li class="nav-item col-md-6" role="presentation">
-                        <a class="nav-link active" data-toggle="tab" :href="'#forum-team' + this.componentId"
+                        <a class="nav-link active" data-toggle="tab" :href="'#forum-team' + this._uid"
                            aria-controls="forum-base"
                            aria-expanded="true" role="tab"> 团队 </a>
                     </li>
                     <li class="nav-item col-md-6" role="presentation">
-                        <a class="nav-link" data-toggle="tab" :href="'#forum-department' + this.componentId"
+                        <a class="nav-link" data-toggle="tab" :href="'#forum-department' + this._uid"
                            aria-controls="forum-present"
                            aria-expanded="false" role="tab"> 部门 </a>
                     </li>
@@ -17,7 +17,7 @@
             </div>
 
             <div class="page-content tab-content nav-tabs-animate bg-white selector-page-content">
-                <div class="tab-pane animation-fade active" :id="'forum-team' + this.componentId" role="tabpanel">
+                <div class="tab-pane animation-fade active" :id="'forum-team' + this._uid" role="tabpanel">
                     <div class="input-search example">
                         <button type="submit" class="input-search-btn"><i class="icon md-search" aria-hidden="true"></i>
                         </button>
@@ -34,30 +34,39 @@
                                  <i class="icon md-account pl-2"></i>
                             泰洋系（{{ this.normalUsers.length }}人)
                             </span>
-                            <span class="team-add-all pl-2" @click="selectAllMember" v-if="isMultiple">
+                            <span class="team-add-all pl-2" @click="selectAllMember" v-if="multiple">
                                 <i class="icon md-plus"></i>
                             </span>
                         </div>
                         <div v-show="teamShow">
                             <div class="users" v-for="user in this.normalUsers"
                                  v-show="user.name.indexOf(searchKeyWord) > -1"
-                                 @click="selectMember(user.id)">
+                                 @click="selectMember(user)">
                                 <a class="avatar" href="javascript:void(0)">
                                     <img src="https://res.papitube.com/no-icon.png" alt="...">
                                 </a>
                                 <span class="pl-1">{{ user.name }}</span>
-                                <span class="float-right" v-show="selectIdArr.indexOf(user.id) > -1">
-                                    <i class="icon md-check"></i>
-                                </span>
+                                <template v-if="memberType === 'principal'">
+                                    <span class="float-right"
+                                          v-show="principalInfo.id == user.id">
+                                        <i class="icon md-check"></i>
+                                    </span>
+                                </template>
+                                <template v-else-if="memberType === 'participant'">
+                                    <span class="float-right"
+                                          v-show="participantsInfo.find(item => item.id == user.id)">
+                                        <i class="icon md-check"></i>
+                                    </span>
+                                </template>
                             </div>
                         </div>
                     </div>
 
                 </div>
-                <div class="tab-pane animation-fade" :id="'forum-department' + this.componentId" role="tabpanel">
+                <div class="tab-pane animation-fade" :id="'forum-department' + this._uid" role="tabpanel">
                     <div v-for="department in departmentUsers">
-                        <departments-item :data="department" :select="selectIdArr"
-                                          @change="memberChange" :multiple="isMultiple"></departments-item>
+                        <departments-item :data="department" @change="memberChange" :type="type"
+                                          :multiple="multiple" :member-type="memberType"></departments-item>
                     </div>
                 </div>
             </div>
@@ -70,65 +79,55 @@
     import config from '../js/config'
 
     export default {
-        props: ['multiple', 'selected-members'],
+        props: ['multiple', 'member-type', 'type'],
         data() {
             return {
                 normalUsers: {},
                 departmentUsers: {},
                 teamShow: true,
-                selectIdArr: [],
                 searchKeyWord: '',
-                componentId: '',
-                isMultiple: '',
-                isParent: false
+                params: {
+                    type: this.type,
+                    data: ''
+                }
             }
         },
+
+        computed: {
+            principalInfo: function () {
+                if (this.type === 'change') {
+                    return this.$store.state.principalInfo
+                } else {
+                    return this.$store.state.newPrincipalInfo
+                }
+            },
+
+            participantsInfo: function () {
+                if (this.type === 'change') {
+                    return this.$store.state.participantsInfo
+                } else {
+                    return this.$store.state.newParticipantsInfo
+                }
+            }
+        },
+
         mounted() {
             let self = this;
-            self.componentId = self._uid;
-            self.isMultiple = self.multiple;
             $.ajax({
                 url: config.apiUrl + '/users',
                 headers: config.getHeaders(),
                 type: 'get',
-                // statusCode: config.getStatusCode()
             }).done(function (response) {
                 self.normalUsers = response.data;
-                if (self.selectedMembers && self.selectedMembers.length > 0) {
-                    setTimeout(function () {
-                        self.selectIdArr = self.selectedMembers;
-                    }, 100)
-
-                }
             });
 
             $.ajax({
                 url: config.apiUrl + '/departments',
                 headers: config.getHeaders(),
                 type: 'get',
-                // statusCode: config.getStatusCode()
             }).done(function (response) {
                 self.departmentUsers = response.data
-            })
-
-        },
-
-        watch: {
-            selectIdArr: function (newValue) {
-                if (this.isParent) {
-                    this.isParent = false;
-                    return
-                }
-                let tagArr = [];
-                for (let i = 0; i < newValue.length; i++) {
-                    tagArr.push(this.normalUsers.find(item => item.id == newValue[i]))
-                }
-                this.$emit('change', tagArr);
-            },
-            selectedMembers: function (newValue) {
-                this.isParent = true;
-                this.selectIdArr = newValue
-            }
+            });
         },
 
         methods: {
@@ -137,29 +136,47 @@
             },
 
             selectAllMember: function () {
-                for (let i = 0; i < this.normalUsers.length; i++) {
-                    let userId = this.normalUsers[i].id;
-                    let index = this.selectIdArr.indexOf(userId);
-                    if (index === -1) {
-                        this.selectIdArr.push(userId)
-                    }
-                }
-            },
-
-            selectMember: function (userId) {
-                let index = this.selectIdArr.indexOf(userId);
-                if (index > -1) {
-                    this.selectIdArr.splice(index, 1)
+                let participantInfo = '';
+                if (this.type === 'change') {
+                    participantInfo = this.$store.state.participantsInfo;
                 } else {
-                    if (!this.isMultiple && this.selectIdArr.length > 0) {
-                        this.selectIdArr = []
-                    }
-                    this.selectIdArr.push(userId)
+                    participantInfo = this.$store.state.newParticipantsInfo;
                 }
+                for (let i = 0; i < this.normalUsers.length; i++) {
+                    if (!participantInfo.find(item => item.id == this.normalUsers[i].id)) {
+                        participantInfo.push(this.normalUsers[i])
+                    }
+                }
+                this.params.data = participantInfo;
+                this.$store.dispatch('changeParticipantsInfo', this.params);
+                this.$emit('change', false)
             },
 
-            memberChange: function (value) {
-                this.selectIdArr = value
+            selectMember: function (user) {
+                if (this.memberType === 'principal') {
+                    this.params.data = user;
+                    this.$store.dispatch('changePrincipal', this.params);
+                } else if (this.memberType === 'participant') {
+                    let participantInfo = '';
+                    if (this.type === 'change') {
+                        participantInfo = this.$store.state.participantsInfo;
+                    } else {
+                        participantInfo = this.$store.state.newParticipantsInfo;
+                    }
+
+                    if (participantInfo.find(item => item.id == user.id)) {
+                        participantInfo.splice(participantInfo.map(item => item.id).indexOf(user.id), 1)
+                    } else {
+                        participantInfo.push(user)
+                    }
+                    this.params.data = participantInfo;
+                    this.$store.dispatch('changeParticipantsInfo', this.params);
+                }
+                this.$emit('change', false)
+            },
+
+            memberChange: function () {
+                this.$emit('change', false)
             }
         }
     }

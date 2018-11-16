@@ -219,29 +219,24 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
 
 /* harmony default export */ __webpack_exports__["default"] = ({
     name: "",
-    props: ['selected-members'],
+    props: ['type'],
     data: function data() {
         return {
-            isMemberShow: false,
-            selectMemberArr: [],
-            selectMemberIdArr: []
+            isMemberShow: false
         };
     },
     mounted: function mounted() {
         this.globalClick(this.removeSelect);
-        if (this.selectedMembers && this.selectedMembers.length > 0) {
-            this.selectMemberIdArr = this.selectedMembers;
-        }
     },
 
 
-    watch: {
-        selectMemberArr: function selectMemberArr(newValue) {
-            this.$emit('change', newValue);
-        },
-
-        selectedMembers: function selectedMembers(newValue) {
-            this.selectMemberIdArr = newValue;
+    computed: {
+        selectMemberArr: function selectMemberArr() {
+            if (this.type === 'change') {
+                return this.$store.state.participantsInfo;
+            } else {
+                return this.$store.state.newParticipantsInfo;
+            }
         }
     },
 
@@ -260,20 +255,25 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
             }
         },
 
-        changeSelectMember: function changeSelectMember(value) {
-            this.selectMemberArr = value;
+        removeMember: function removeMember(userId) {
+            var participantInfo = '';
+            if (this.type === 'add') {
+                participantInfo = this.$store.state.newParticipantsInfo;
+            } else {
+                participantInfo = this.$store.state.participantsInfo;
+            }
+            participantInfo.splice(participantInfo.map(function (item) {
+                return item.id;
+            }).indexOf(userId), 1);
+            var params = {
+                type: this.type,
+                data: participantInfo
+            };
+            this.$store.dispatch('changeParticipantsInfo', params);
         },
 
-        removeMember: function removeMember(userId) {
-            var data = this.selectMemberArr.find(function (item) {
-                return item.id == userId;
-            });
-            var index = this.selectMemberArr.indexOf(data);
-            this.selectMemberArr.splice(index, 1);
-            this.selectMemberIdArr = [];
-            for (var i = 0; i < this.selectMemberArr.length; i++) {
-                this.selectMemberIdArr.push(this.selectMemberArr[i].id);
-            }
+        changeSelectedMember: function changeSelectedMember() {
+            this.$emit('change', false);
         }
 
     }
@@ -831,38 +831,51 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
 //
 //
 //
+//
+//
+//
+//
+//
+//
+//
 
 /* harmony default export */ __webpack_exports__["default"] = ({
     name: "departments-item",
-    props: ['data', 'select', 'multiple'],
+    props: ['data', 'select', 'multiple', 'member-type', 'type'],
     data: function data() {
         return {
             departmentsShow: false,
             total: 0,
-            selectArr: [],
-            isMultiple: ''
+            params: {
+                type: this.type,
+                data: ''
+            }
         };
     },
-    mounted: function mounted() {
-        this.total = this.memberNum(this.data);
-        this.isMultiple = this.multiple;
-        this.selectArr = this.select;
-    },
 
 
-    watch: {
-        selectArr: function selectArr(newValue) {
-            if (this.isParent) {
-                return;
+    computed: {
+        principalInfo: function principalInfo() {
+            if (this.type === 'change') {
+                return this.$store.state.principalInfo;
+            } else {
+                return this.$store.state.newPrincipalInfo;
             }
-            this.$emit('change', newValue);
         },
 
-        select: function select(newValue) {
-            this.isParent = true;
-            this.selectArr = newValue;
+        participantsInfo: function participantsInfo() {
+            if (this.type === 'change') {
+                return this.$store.state.participantsInfo;
+            } else {
+                return this.$store.state.newParticipantsInfo;
+            }
         }
     },
+
+    mounted: function mounted() {
+        this.total = this.memberNum(this.data);
+    },
+
 
     methods: {
         departmentClose: function departmentClose() {
@@ -870,18 +883,34 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
         },
 
         memberChange: function memberChange(value) {
-            this.selectArr = value;
+            if (this.memberType === 'principal') {
+                this.$emit('change', false);
+            }
         },
 
-        selectMember: function selectMember(userId) {
-            var index = this.selectArr.indexOf(userId);
-            if (index > -1) {
-                this.selectArr.splice(index, 1);
-            } else {
-                if (!this.multiple && this.selectArr.length > 0) {
-                    this.selectArr = [];
+        selectMember: function selectMember(user) {
+            if (this.memberType === 'principal') {
+                this.params.data = user;
+                this.$store.dispatch('changePrincipal', this.params);
+                this.$emit('change', false);
+            } else if (this.memberType === 'participant') {
+                var participantInfo = '';
+                if (this.type === 'change') {
+                    participantInfo = this.$store.state.participantsInfo;
+                } else {
+                    participantInfo = this.$store.state.newParticipantsInfo;
                 }
-                this.selectArr.push(userId);
+                if (!participantInfo.find(function (item) {
+                    return item.id == user.id;
+                })) {
+                    participantInfo.push(user);
+                } else {
+                    participantInfo.splice(participantInfo.map(function (item) {
+                        return item.id;
+                    }).indexOf(user.id), 1);
+                }
+                this.params.data = participantInfo;
+                this.$store.dispatch('changeParticipantsInfo', this.params);
             }
         },
 
@@ -890,16 +919,30 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
         },
 
         checkMember: function checkMember(data) {
-            for (var i = 0; i < data.users.data.length; i++) {
-                var userId = data.users.data[i].id;
-                var index = this.selectArr.indexOf(userId);
-                if (index === -1) {
-                    this.selectArr.push(userId);
+            var participantInfo = '';
+            if (this.type === 'change') {
+                participantInfo = this.$store.state.participantsInfo;
+            } else {
+                participantInfo = this.$store.state.newParticipantsInfo;
+            }
+
+            var _loop = function _loop(i) {
+                var user = data.users.data[i];
+                if (!participantInfo.find(function (item) {
+                    return item.id == user.id;
+                })) {
+                    participantInfo.push(user);
                 }
+            };
+
+            for (var i = 0; i < data.users.data.length; i++) {
+                _loop(i);
             }
-            for (var _i = 0; _i < data.departments.data.length; _i++) {
-                this.checkMember(data.departments.data[_i]);
+            for (var i = 0; i < data.departments.data.length; i++) {
+                this.checkMember(data.departments.data[i]);
             }
+            this.params.data = participantInfo;
+            this.$store.dispatch('changeParticipantsInfo', this.params);
         },
 
         memberNum: function memberNum(data) {
@@ -934,7 +977,7 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
 
 /* harmony default export */ __webpack_exports__["default"] = ({
     name: "edit-add-member",
-    props: ['is-edit', 'content', 'selected-members'],
+    props: ['is-edit'],
     data: function data() {
         return {
             isEditAdd: false
@@ -942,6 +985,16 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
     },
     mounted: function mounted() {},
 
+
+    computed: {
+        selectedMember: function selectedMember() {
+            var flagArr = [];
+            for (var i = 0; i < this.$store.state.participantsInfo.length; i++) {
+                flagArr.push(this.$store.state.participantsInfo[i].name);
+            }
+            return flagArr;
+        }
+    },
 
     watch: {
         isEdit: function isEdit(newValue) {
@@ -975,6 +1028,7 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
 //
 //
 //
+//
 
 
 
@@ -987,7 +1041,8 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
             selectIdArr: [],
             isDisable: false,
             isWrite: true,
-            emitCompany: {}
+            emitCompany: {},
+            clientArr: []
         };
     },
 
@@ -998,30 +1053,52 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
         }
     },
 
-    mounted: function mounted() {},
+    computed: {
+        getCompanyInfo: function getCompanyInfo() {
+            return this.$store.state.companyInfo;
+        }
+    },
+
+    mounted: function mounted() {
+        this.getClients();
+    },
 
 
     methods: {
+        getClients: function getClients() {
+            var _this = this;
+            $.ajax({
+                type: 'get',
+                url: __WEBPACK_IMPORTED_MODULE_0__js_config__["a" /* default */].apiUrl + '/clients/all',
+                headers: __WEBPACK_IMPORTED_MODULE_0__js_config__["a" /* default */].getHeaders()
+            }).done(function (response) {
+                for (var i = 0; i < response.data.length; i++) {
+                    _this.clientArr.push({
+                        name: response.data[i].company,
+                        value: response.data[i].id,
+                        grade: response.data[i].grade
+                    });
+                }
+            });
+        },
 
         changeCompanyLevel: function changeCompanyLevel(value) {
             this.emitCompany.grade = value;
-            this.$emit('change', this.emitCompany);
+            var companyInfo = this.$store.state.companyInfo;
+            companyInfo.grade = value;
+            this.$store.commit('changeCompany', companyInfo);
+            this.$emit('change', true);
         },
 
-        changeSelects: function changeSelects(name, id, grade) {
-            this.$refs.companyLevel.setValue(grade);
-            this.isWrite = !id;
-            if (id) {
-                this.emitCompany = {
-                    id: id
-                };
+        changeSelects: function changeSelects() {
+            var companyInfo = this.$store.state.companyInfo;
+            if (companyInfo.grade) {
+                this.$refs.companyLevel.setValue(companyInfo.grade);
+                this.isWrite = false;
             } else {
-                this.emitCompany = {
-                    company: name
-                };
-                this.emitCompany.grade = this.$refs.companyLevel.getValue();
+                this.isWrite = true;
             }
-            this.$emit('change', this.emitCompany);
+            this.$emit('change', true);
         }
 
     }
@@ -1064,7 +1141,6 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
             if (newValue) {
                 var _this = this;
                 setTimeout(function () {
-                    console.log(_this.content);
                     _this.$refs.datepicker.setValue(_this.content);
                 }, 0);
             } else {
@@ -1097,10 +1173,11 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
 //
 //
 //
+//
 
 /* harmony default export */ __webpack_exports__["default"] = ({
     name: "edit-input-selector",
-    props: ['is-edit', 'content'],
+    props: ['is-edit', 'selectType'],
     data: function data() {
         return {
             isEditSelect: false
@@ -1163,6 +1240,56 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
 
 /***/ }),
 
+/***/ "./node_modules/babel-loader/lib/index.js?{\"cacheDirectory\":true,\"presets\":[[\"env\",{\"modules\":false,\"targets\":{\"browsers\":[\"> 2%\"],\"uglify\":true}}]],\"plugins\":[\"transform-object-rest-spread\",[\"transform-runtime\",{\"polyfill\":false,\"helpers\":false}]]}!./node_modules/vue-loader/lib/selector.js?type=script&index=0!./resources/assets/components/edit-number-spinner.vue":
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+
+/* harmony default export */ __webpack_exports__["default"] = ({
+    name: "edit-number-spinner",
+    props: ['is-edit', 'content'],
+    data: function data() {
+        return {
+            isEditNumberSpinner: false
+        };
+    },
+    mounted: function mounted() {},
+
+
+    watch: {
+        isEdit: function isEdit(newValue) {
+            this.isEditNumberSpinner = newValue;
+            if (newValue) {
+                var _this = this;
+                setTimeout(function () {
+                    _this.$refs.number.setValue(_this.content);
+                }, 0);
+            } else {
+                this.$refs.number.destroy();
+            }
+        }
+    },
+    methods: {
+        changeNumber: function changeNumber(value) {
+            this.$emit('change', value);
+        }
+    }
+});
+
+/***/ }),
+
 /***/ "./node_modules/babel-loader/lib/index.js?{\"cacheDirectory\":true,\"presets\":[[\"env\",{\"modules\":false,\"targets\":{\"browsers\":[\"> 2%\"],\"uglify\":true}}]],\"plugins\":[\"transform-object-rest-spread\",[\"transform-runtime\",{\"polyfill\":false,\"helpers\":false}]]}!./node_modules/vue-loader/lib/selector.js?type=script&index=0!./resources/assets/components/edit-selector.vue":
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
@@ -1180,10 +1307,17 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
 //
 //
 //
+//
+//
+//
+//
+//
+//
+//
 
 /* harmony default export */ __webpack_exports__["default"] = ({
     name: "edit-selector",
-    props: ['options', 'is-edit', 'content'],
+    props: ['options', 'is-edit', 'content', 'multiple'],
     data: function data() {
         return {
             isEditSelect: false
@@ -1282,10 +1416,18 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
 //
 //
 //
+//
+//
+//
+//
+//
+//
+//
+//
 
 /* harmony default export */ __webpack_exports__["default"] = ({
     name: "editable-search-box",
-    props: ['options', 'multiple'],
+    props: ['options', 'multiple', 'type'],
     data: function data() {
         return {
             inputValue: '',
@@ -1303,10 +1445,21 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
                 this.isSelected = false;
             } else {
                 this.selectIdArr = [];
-                this.$emit('change', newValue);
+                var data = {
+                    name: newValue
+                };
+                this.$store.dispatch(this.type, data);
             }
+            this.$emit('change', true);
         }
     },
+
+    computed: {
+        getCompanyInfo: function getCompanyInfo() {
+            return this.$store.state.companyInfo;
+        }
+    },
+
     mounted: function mounted() {
         this.globalClick(this.removeSelector);
     },
@@ -1317,15 +1470,14 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
             this.selectorShow = true;
         },
 
-        selectItem: function selectItem(itemId, itemName, itemGrade) {
-            this.inputValue = itemName;
+        selectItem: function selectItem(item) {
+            this.$store.dispatch(this.type, item);
+            this.inputValue = item.name;
             this.isSelected = true;
-            this.$emit('change', itemName, itemId, itemGrade);
             if (!this.multiple) {
                 this.selectorShow = false;
-                this.selectIdArr = [itemId];
             } else {
-                this.selectIdArr.push(itemId);
+                this.selectIdArr.push(item.value);
             }
         },
 
@@ -1371,13 +1523,14 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
                 type[type.length - 1] = 'pptx';
             } else if (type[type.length - 1] === 'vnd.openxmlformats-officedocument.spreadsheetml.sheet') {
                 type[type.length - 1] = 'xlsx';
+            } else if (type[type.length - 1] === 'plain') {
+                type[type.length - 1] = 'txt';
             }
             var key = this.guid() + '.' + type[type.length - 1];
             var conf = null;
             var fileSize = file.size;
             var _this = this;
             this.getQiniuAccessToken(function (token) {
-                console.log(token);
                 var observable = __WEBPACK_IMPORTED_MODULE_1_qiniu_js__["upload"](file, key, token, putExtra, conf);
                 var subscription = observable.subscribe(function (res) {}, function (error) {
                     console.log(error);
@@ -1465,25 +1618,30 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
 //
 //
 //
+//
+//
 
 /* harmony default export */ __webpack_exports__["default"] = ({
-    props: ['placeholder', 'multiple', 'selected-members'],
+    props: ['placeholder', 'type'],
     data: function data() {
         return {
-            selectMemberShow: false,
-            randomId: '',
-            inputContent: '',
-            selectMember: []
+            selectMemberShow: false
         };
     },
     mounted: function mounted() {
         this.globalClick(this.removeInputSelect);
-        this.randomId = this._uid;
     },
 
 
-    watch: {
-        selectMember: function selectMember(newValue) {}
+    computed: {
+        selectedMemberName: function selectedMemberName() {
+            if (this.type === 'change') {
+                return this.$store.state.principalInfo.name;
+            } else {
+                return this.$store.state.newPrincipalInfo.name;
+            }
+        }
+
     },
 
     methods: {
@@ -1501,17 +1659,9 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
         },
 
 
-        changeSelectMember: function changeSelectMember(value) {
-            if (value.length <= 0) {
-                return;
-            }
-            if (!this.multiple) {
-                this.selectMemberShow = false;
-                this.inputContent = value[0].name;
-                this.$emit('change', value[0].id);
-            } else {
-                // @todo 多选显示与返回
-            }
+        changeSelectMember: function changeSelectMember() {
+            this.selectMemberShow = false;
+            this.$emit('change', false);
         }
     }
 });
@@ -1654,13 +1804,19 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
             },
             min: 0,
             max: 100000000
-        }).on('asSpinner:@change', function (e) {
+        }).on('asSpinner::change', function (e) {
             self.$emit('change', e.currentTarget.value);
         });
     },
 
 
     methods: {
+        setValue: function setValue(value) {
+            $(this.$el).asSpinner('val', value);
+        },
+        refresh: function refresh() {
+            $(this.$el).asSpinner('refresh');
+        },
         destroy: function destroy() {
             $(this.$el).asSpinner('destroy');
         }
@@ -1839,78 +1995,71 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
 //
 //
 //
+//
+//
+//
+//
+//
+//
+//
+//
+//
 
 
 
 /* harmony default export */ __webpack_exports__["default"] = ({
-    props: ['multiple', 'selected-members'],
+    props: ['multiple', 'member-type', 'type'],
     data: function data() {
         return {
             normalUsers: {},
             departmentUsers: {},
             teamShow: true,
-            selectIdArr: [],
             searchKeyWord: '',
-            componentId: '',
-            isMultiple: '',
-            isParent: false
+            params: {
+                type: this.type,
+                data: ''
+            }
         };
     },
+
+
+    computed: {
+        principalInfo: function principalInfo() {
+            if (this.type === 'change') {
+                return this.$store.state.principalInfo;
+            } else {
+                return this.$store.state.newPrincipalInfo;
+            }
+        },
+
+        participantsInfo: function participantsInfo() {
+            if (this.type === 'change') {
+                return this.$store.state.participantsInfo;
+            } else {
+                return this.$store.state.newParticipantsInfo;
+            }
+        }
+    },
+
     mounted: function mounted() {
         var self = this;
-        self.componentId = self._uid;
-        self.isMultiple = self.multiple;
         $.ajax({
             url: __WEBPACK_IMPORTED_MODULE_0__js_config__["a" /* default */].apiUrl + '/users',
             headers: __WEBPACK_IMPORTED_MODULE_0__js_config__["a" /* default */].getHeaders(),
             type: 'get'
-            // statusCode: config.getStatusCode()
         }).done(function (response) {
             self.normalUsers = response.data;
-            if (self.selectedMembers && self.selectedMembers.length > 0) {
-                setTimeout(function () {
-                    self.selectIdArr = self.selectedMembers;
-                }, 100);
-            }
         });
 
         $.ajax({
             url: __WEBPACK_IMPORTED_MODULE_0__js_config__["a" /* default */].apiUrl + '/departments',
             headers: __WEBPACK_IMPORTED_MODULE_0__js_config__["a" /* default */].getHeaders(),
             type: 'get'
-            // statusCode: config.getStatusCode()
         }).done(function (response) {
             self.departmentUsers = response.data;
         });
     },
 
-
-    watch: {
-        selectIdArr: function selectIdArr(newValue) {
-            var _this = this;
-
-            if (this.isParent) {
-                this.isParent = false;
-                return;
-            }
-            var tagArr = [];
-
-            var _loop = function _loop(i) {
-                tagArr.push(_this.normalUsers.find(function (item) {
-                    return item.id == newValue[i];
-                }));
-            };
-
-            for (var i = 0; i < newValue.length; i++) {
-                _loop(i);
-            }
-            this.$emit('change', tagArr);
-        },
-        selectedMembers: function selectedMembers(newValue) {
-            this.isParent = true;
-            this.selectIdArr = newValue;
-        }
-    },
 
     methods: {
         closeTeam: function closeTeam() {
@@ -1918,29 +2067,60 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
         },
 
         selectAllMember: function selectAllMember() {
-            for (var i = 0; i < this.normalUsers.length; i++) {
-                var userId = this.normalUsers[i].id;
-                var index = this.selectIdArr.indexOf(userId);
-                if (index === -1) {
-                    this.selectIdArr.push(userId);
-                }
-            }
-        },
+            var _this = this;
 
-        selectMember: function selectMember(userId) {
-            var index = this.selectIdArr.indexOf(userId);
-            if (index > -1) {
-                this.selectIdArr.splice(index, 1);
+            var participantInfo = '';
+            if (this.type === 'change') {
+                participantInfo = this.$store.state.participantsInfo;
             } else {
-                if (!this.isMultiple && this.selectIdArr.length > 0) {
-                    this.selectIdArr = [];
-                }
-                this.selectIdArr.push(userId);
+                participantInfo = this.$store.state.newParticipantsInfo;
             }
+
+            var _loop = function _loop(i) {
+                if (!participantInfo.find(function (item) {
+                    return item.id == _this.normalUsers[i].id;
+                })) {
+                    participantInfo.push(_this.normalUsers[i]);
+                }
+            };
+
+            for (var i = 0; i < this.normalUsers.length; i++) {
+                _loop(i);
+            }
+            this.params.data = participantInfo;
+            this.$store.dispatch('changeParticipantsInfo', this.params);
+            this.$emit('change', false);
         },
 
-        memberChange: function memberChange(value) {
-            this.selectIdArr = value;
+        selectMember: function selectMember(user) {
+            if (this.memberType === 'principal') {
+                this.params.data = user;
+                this.$store.dispatch('changePrincipal', this.params);
+            } else if (this.memberType === 'participant') {
+                var participantInfo = '';
+                if (this.type === 'change') {
+                    participantInfo = this.$store.state.participantsInfo;
+                } else {
+                    participantInfo = this.$store.state.newParticipantsInfo;
+                }
+
+                if (participantInfo.find(function (item) {
+                    return item.id == user.id;
+                })) {
+                    participantInfo.splice(participantInfo.map(function (item) {
+                        return item.id;
+                    }).indexOf(user.id), 1);
+                } else {
+                    participantInfo.push(user);
+                }
+                this.params.data = participantInfo;
+                this.$store.dispatch('changeParticipantsInfo', this.params);
+            }
+            this.$emit('change', false);
+        },
+
+        memberChange: function memberChange() {
+            this.$emit('change', false);
         }
     }
 });
@@ -2006,6 +2186,10 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
                 $(this.$el).removeAttr('disabled');
                 this.refresh();
             }
+        },
+        options: function options(newValue) {
+            console.log(newValue);
+            this.refresh();
         }
     },
     methods: {
@@ -2108,7 +2292,7 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
 
 /***/ }),
 
-/***/ "./node_modules/babel-loader/lib/index.js?{\"cacheDirectory\":true,\"presets\":[[\"env\",{\"modules\":false,\"targets\":{\"browsers\":[\"> 2%\"],\"uglify\":true}}]],\"plugins\":[\"transform-object-rest-spread\",[\"transform-runtime\",{\"polyfill\":false,\"helpers\":false}]]}!./node_modules/vue-loader/lib/selector.js?type=script&index=0!./resources/assets/components/upload.vue":
+/***/ "./node_modules/babel-loader/lib/index.js?{\"cacheDirectory\":true,\"presets\":[[\"env\",{\"modules\":false,\"targets\":{\"browsers\":[\"> 2%\"],\"uglify\":true}}]],\"plugins\":[\"transform-object-rest-spread\",[\"transform-runtime\",{\"polyfill\":false,\"helpers\":false}]]}!./node_modules/vue-loader/lib/selector.js?type=script&index=0!./resources/assets/components/timepicker.vue":
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
@@ -2116,23 +2300,311 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
 //
 //
 //
-//
-//
-//
-//
 
 /* harmony default export */ __webpack_exports__["default"] = ({
-    props: ['title', 'href'],
-
+    props: ['placeholder', 'default'],
     data: function data() {
         return {
-            // visible: false,
+            option: [{
+                name: '08:00',
+                value: '08:00'
+            }, {
+                name: '08:15',
+                value: '08:15'
+            }, {
+                name: '08:30',
+                value: '08:30'
+            }, {
+                name: '08:45',
+                value: '08:45'
+            }, {
+                name: '09:00',
+                value: '09:00'
+            }, {
+                name: '09:15',
+                value: '09:15'
+            }, {
+                name: '09:30',
+                value: '09:30'
+            }, {
+                name: '09:45',
+                value: '09:45'
+            }, {
+                name: '10:00',
+                value: '10:00'
+            }, {
+                name: '10:15',
+                value: '10:15'
+            }, {
+                name: '10:30',
+                value: '10:30'
+            }, {
+                name: '10:45',
+                value: '10:45'
+            }, {
+                name: '11:00',
+                value: '11:00'
+            }, {
+                name: '11:15',
+                value: '11:15'
+            }, {
+                name: '11:30',
+                value: '11:30'
+            }, {
+                name: '11:45',
+                value: '11:45'
+            }, {
+                name: '12:00',
+                value: '12:00'
+            }, {
+                name: '12:15',
+                value: '12:15'
+            }, {
+                name: '12:30',
+                value: '12:30'
+            }, {
+                name: '12:45',
+                value: '12:45'
+            }, {
+                name: '13:00',
+                value: '13:00'
+            }, {
+                name: '13:15',
+                value: '13:15'
+            }, {
+                name: '13:30',
+                value: '13:30'
+            }, {
+                name: '13:45',
+                value: '13:45'
+            }, {
+                name: '14:00',
+                value: '14:00'
+            }, {
+                name: '14:15',
+                value: '14:15'
+            }, {
+                name: '14:30',
+                value: '14:30'
+            }, {
+                name: '14:45',
+                value: '14:45'
+            }, {
+                name: '15:00',
+                value: '15:00'
+            }, {
+                name: '15:15',
+                value: '15:15'
+            }, {
+                name: '15:30',
+                value: '15:30'
+            }, {
+                name: '15:45',
+                value: '15:45'
+            }, {
+                name: '16:00',
+                value: '16:00'
+            }, {
+                name: '16:15',
+                value: '16:15'
+            }, {
+                name: '16:30',
+                value: '16:30'
+            }, {
+                name: '16:45',
+                value: '16:45'
+            }, {
+                name: '17:00',
+                value: '17:00'
+            }, {
+                name: '17:15',
+                value: '17:15'
+            }, {
+                name: '17:30',
+                value: '17:30'
+            }, {
+                name: '17:45',
+                value: '17:45'
+            }, {
+                name: '18:00',
+                value: '18:00'
+            }, {
+                name: '18:15',
+                value: '18:15'
+            }, {
+                name: '18:30',
+                value: '18:30'
+            }, {
+                name: '18:45',
+                value: '18:45'
+            }, {
+                name: '19:00',
+                value: '19:00'
+            }, {
+                name: '19:15',
+                value: '19:15'
+            }, {
+                name: '19:30',
+                value: '19:30'
+            }, {
+                name: '19:45',
+                value: '19:45'
+            }, {
+                name: '20:00',
+                value: '20:00'
+            }, {
+                name: '20:15',
+                value: '20:15'
+            }, {
+                name: '20:30',
+                value: '20:30'
+            }, {
+                name: '20:45',
+                value: '20:45'
+            }, {
+                name: '21:00',
+                value: '21:00'
+            }, {
+                name: '21:15',
+                value: '21:15'
+            }, {
+                name: '21:30',
+                value: '21:30'
+            }, {
+                name: '21:45',
+                value: '21:45'
+            }, {
+                name: '22:00',
+                value: '22:00'
+            }, {
+                name: '22:15',
+                value: '22:15'
+            }, {
+                name: '22:30',
+                value: '22:30'
+            }, {
+                name: '22:45',
+                value: '22:45'
+            }, {
+                name: '23:00',
+                value: '23:00'
+            }, {
+                name: '23:15',
+                value: '23:15'
+            }, {
+                name: '23:30',
+                value: '23:30'
+            }, {
+                name: '23:45',
+                value: '23:45'
+            }, {
+                name: '00:00',
+                value: '00:00'
+            }, {
+                name: '00:15',
+                value: '00:15'
+            }, {
+                name: '00:30',
+                value: '00:30'
+            }, {
+                name: '00:45',
+                value: '00:45'
+            }, {
+                name: '01:00',
+                value: '01:00'
+            }, {
+                name: '01:15',
+                value: '01:15'
+            }, {
+                name: '01:30',
+                value: '01:30'
+            }, {
+                name: '01:45',
+                value: '01:45'
+            }, {
+                name: '02:00',
+                value: '02:00'
+            }, {
+                name: '02:15',
+                value: '02:15'
+            }, {
+                name: '02:30',
+                value: '02:30'
+            }, {
+                name: '02:45',
+                value: '02:45'
+            }, {
+                name: '03:00',
+                value: '03:00'
+            }, {
+                name: '03:15',
+                value: '03:15'
+            }, {
+                name: '03:30',
+                value: '03:30'
+            }, {
+                name: '03:45',
+                value: '03:45'
+            }, {
+                name: '04:00',
+                value: '04:00'
+            }, {
+                name: '04:15',
+                value: '04:15'
+            }, {
+                name: '04:30',
+                value: '04:30'
+            }, {
+                name: '04:45',
+                value: '04:45'
+            }, {
+                name: '05:00',
+                value: '05:00'
+            }, {
+                name: '05:15',
+                value: '05:15'
+            }, {
+                name: '05:30',
+                value: '05:30'
+            }, {
+                name: '05:45',
+                value: '05:45'
+            }, {
+                name: '06:00',
+                value: '06:00'
+            }, {
+                name: '06:15',
+                value: '06:15'
+            }, {
+                name: '06:30',
+                value: '06:30'
+            }, {
+                name: '06:45',
+                value: '06:45'
+            }, {
+                name: '07:00',
+                value: '07:00'
+            }, {
+                name: '07:15',
+                value: '07:15'
+            }, {
+                name: '07:30',
+                value: '07:30'
+            }, {
+                name: '07:45',
+                value: '07:45'
+            }]
         };
     },
-    mounted: function mounted() {},
+    mounted: function mounted() {
+        this.$refs.timepicker.setValue(this.default);
+    },
 
-
-    methods: {}
+    methods: {
+        changeTime: function changeTime(value) {
+            this.$emit('change', value);
+        }
+    }
 });
 
 /***/ }),
@@ -2205,7 +2677,7 @@ exports = module.exports = __webpack_require__("./node_modules/css-loader/lib/cs
 
 
 // module
-exports.push([module.i, "\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n", ""]);
+exports.push([module.i, "\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n", ""]);
 
 // exports
 
@@ -2265,7 +2737,7 @@ exports = module.exports = __webpack_require__("./node_modules/css-loader/lib/cs
 
 
 // module
-exports.push([module.i, "\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n", ""]);
+exports.push([module.i, "\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n", ""]);
 
 // exports
 
@@ -2280,7 +2752,7 @@ exports = module.exports = __webpack_require__("./node_modules/css-loader/lib/cs
 
 
 // module
-exports.push([module.i, "\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n", ""]);
+exports.push([module.i, "\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n", ""]);
 
 // exports
 
@@ -2385,7 +2857,7 @@ exports = module.exports = __webpack_require__("./node_modules/css-loader/lib/cs
 
 
 // module
-exports.push([module.i, "\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n", ""]);
+exports.push([module.i, "\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n", ""]);
 
 // exports
 
@@ -2430,7 +2902,7 @@ exports = module.exports = __webpack_require__("./node_modules/css-loader/lib/cs
 
 
 // module
-exports.push([module.i, "\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n", ""]);
+exports.push([module.i, "\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n", ""]);
 
 // exports
 
@@ -2460,7 +2932,7 @@ exports = module.exports = __webpack_require__("./node_modules/css-loader/lib/cs
 
 
 // module
-exports.push([module.i, "\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n", ""]);
+exports.push([module.i, "\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n", ""]);
 
 // exports
 
@@ -2497,7 +2969,7 @@ exports.push([module.i, "\n.btn-default {\n    background: white;\n}\n", ""]);
 
 /***/ }),
 
-/***/ "./node_modules/css-loader/index.js!./node_modules/vue-loader/lib/style-compiler/index.js?{\"vue\":true,\"id\":\"data-v-c80a5372\",\"scoped\":true,\"hasInlineConfig\":true}!./node_modules/sass-loader/lib/loader.js!./node_modules/vue-loader/lib/selector.js?type=styles&index=0!./resources/assets/components/checkboxGroup.vue":
+/***/ "./node_modules/css-loader/index.js!./node_modules/vue-loader/lib/style-compiler/index.js?{\"vue\":true,\"id\":\"data-v-e059497a\",\"scoped\":true,\"hasInlineConfig\":true}!./node_modules/vue-loader/lib/selector.js?type=styles&index=0!./resources/assets/components/edit-number-spinner.vue":
 /***/ (function(module, exports, __webpack_require__) {
 
 exports = module.exports = __webpack_require__("./node_modules/css-loader/lib/css-base.js")(false);
@@ -2505,7 +2977,7 @@ exports = module.exports = __webpack_require__("./node_modules/css-loader/lib/cs
 
 
 // module
-exports.push([module.i, "", ""]);
+exports.push([module.i, "\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n", ""]);
 
 // exports
 
@@ -3563,7 +4035,7 @@ var render = function() {
                     staticClass: "nav-link active",
                     attrs: {
                       "data-toggle": "tab",
-                      href: "#forum-team" + this.componentId,
+                      href: "#forum-team" + this._uid,
                       "aria-controls": "forum-base",
                       "aria-expanded": "true",
                       role: "tab"
@@ -3587,7 +4059,7 @@ var render = function() {
                     staticClass: "nav-link",
                     attrs: {
                       "data-toggle": "tab",
-                      href: "#forum-department" + this.componentId,
+                      href: "#forum-department" + this._uid,
                       "aria-controls": "forum-present",
                       "aria-expanded": "false",
                       role: "tab"
@@ -3612,7 +4084,7 @@ var render = function() {
             "div",
             {
               staticClass: "tab-pane animation-fade active",
-              attrs: { id: "forum-team" + this.componentId, role: "tabpanel" }
+              attrs: { id: "forum-team" + this._uid, role: "tabpanel" }
             },
             [
               _c("div", { staticClass: "input-search example" }, [
@@ -3685,7 +4157,7 @@ var render = function() {
                     )
                   ]),
                   _vm._v(" "),
-                  _vm.isMultiple
+                  _vm.multiple
                     ? _c(
                         "span",
                         {
@@ -3724,7 +4196,7 @@ var render = function() {
                         staticClass: "users",
                         on: {
                           click: function($event) {
-                            _vm.selectMember(user.id)
+                            _vm.selectMember(user)
                           }
                         }
                       },
@@ -3735,22 +4207,50 @@ var render = function() {
                           _vm._v(_vm._s(user.name))
                         ]),
                         _vm._v(" "),
-                        _c(
-                          "span",
-                          {
-                            directives: [
-                              {
-                                name: "show",
-                                rawName: "v-show",
-                                value: _vm.selectIdArr.indexOf(user.id) > -1,
-                                expression: "selectIdArr.indexOf(user.id) > -1"
-                              }
-                            ],
-                            staticClass: "float-right"
-                          },
-                          [_c("i", { staticClass: "icon md-check" })]
-                        )
-                      ]
+                        _vm.memberType === "principal"
+                          ? [
+                              _c(
+                                "span",
+                                {
+                                  directives: [
+                                    {
+                                      name: "show",
+                                      rawName: "v-show",
+                                      value: _vm.principalInfo.id == user.id,
+                                      expression: "principalInfo.id == user.id"
+                                    }
+                                  ],
+                                  staticClass: "float-right"
+                                },
+                                [_c("i", { staticClass: "icon md-check" })]
+                              )
+                            ]
+                          : _vm.memberType === "participant"
+                            ? [
+                                _c(
+                                  "span",
+                                  {
+                                    directives: [
+                                      {
+                                        name: "show",
+                                        rawName: "v-show",
+                                        value: _vm.participantsInfo.find(
+                                          function(item) {
+                                            return item.id == user.id
+                                          }
+                                        ),
+                                        expression:
+                                          "participantsInfo.find(item => item.id == user.id)"
+                                      }
+                                    ],
+                                    staticClass: "float-right"
+                                  },
+                                  [_c("i", { staticClass: "icon md-check" })]
+                                )
+                              ]
+                            : _vm._e()
+                      ],
+                      2
                     )
                   })
                 )
@@ -3762,10 +4262,7 @@ var render = function() {
             "div",
             {
               staticClass: "tab-pane animation-fade",
-              attrs: {
-                id: "forum-department" + this.componentId,
-                role: "tabpanel"
-              }
+              attrs: { id: "forum-department" + this._uid, role: "tabpanel" }
             },
             _vm._l(_vm.departmentUsers, function(department) {
               return _c(
@@ -3774,8 +4271,9 @@ var render = function() {
                   _c("departments-item", {
                     attrs: {
                       data: department,
-                      select: _vm.selectIdArr,
-                      multiple: _vm.isMultiple
+                      type: _vm.type,
+                      multiple: _vm.multiple,
+                      "member-type": _vm.memberType
                     },
                     on: { change: _vm.memberChange }
                   })
@@ -4031,7 +4529,7 @@ var render = function() {
                 staticClass: "users my-10",
                 on: {
                   click: function($event) {
-                    _vm.selectItem(item.id, item.name, item.grade)
+                    _vm.selectItem(item)
                   }
                 }
               },
@@ -4040,22 +4538,43 @@ var render = function() {
                   _vm._v(_vm._s(item.name))
                 ]),
                 _vm._v(" "),
-                _c(
-                  "span",
-                  {
-                    directives: [
-                      {
-                        name: "show",
-                        rawName: "v-show",
-                        value: _vm.selectIdArr.indexOf(item.id) > -1,
-                        expression: "selectIdArr.indexOf(item.id) > -1"
-                      }
-                    ],
-                    staticClass: "float-right"
-                  },
-                  [_c("i", { staticClass: "icon md-check" })]
-                )
-              ]
+                _vm.type === "changeCompany"
+                  ? [
+                      _c(
+                        "span",
+                        {
+                          directives: [
+                            {
+                              name: "show",
+                              rawName: "v-show",
+                              value: _vm.getCompanyInfo.value == item.value,
+                              expression: "getCompanyInfo.value == item.value"
+                            }
+                          ],
+                          staticClass: "float-right"
+                        },
+                        [_c("i", { staticClass: "icon md-check" })]
+                      )
+                    ]
+                  : [
+                      _c(
+                        "span",
+                        {
+                          directives: [
+                            {
+                              name: "show",
+                              rawName: "v-show",
+                              value: _vm.selectIdArr.indexOf(item.id) > -1,
+                              expression: "selectIdArr.indexOf(item.id) > -1"
+                            }
+                          ],
+                          staticClass: "float-right"
+                        },
+                        [_c("i", { staticClass: "icon md-check" })]
+                      )
+                    ]
+              ],
+              2
             )
           })
         ],
@@ -4105,7 +4624,7 @@ var render = function() {
       { staticClass: "float-left" },
       [
         _c("editable-search-box", {
-          attrs: { options: _vm.options },
+          attrs: { options: _vm.clientArr, type: "changeCompany" },
           on: { change: _vm.changeSelects }
         })
       ],
@@ -4571,35 +5090,54 @@ if (false) {
 /***/ (function(module, exports, __webpack_require__) {
 
 var render = function() {
-  var this$1 = this
   var _vm = this
   var _h = _vm.$createElement
   var _c = _vm._self._c || _h
-  return _c(
-    "div",
-    [
-      _vm.isEditSelect
-        ? [
-            _c("selectors", {
-              ref: "selector",
-              attrs: { options: this.options },
-              on: { change: _vm.changeSelect }
-            })
-          ]
-        : [
-            _vm._v(
-              "\n        " +
-                _vm._s(
-                  this.options.find(function(item) {
-                    return item.value == this$1.content
-                  }).name
-                ) +
-                "\n    "
-            )
-          ]
-    ],
-    2
-  )
+  return _vm.options.length > 0
+    ? _c(
+        "div",
+        [
+          _vm.isEditSelect
+            ? [
+                _c("selectors", {
+                  ref: "selector",
+                  attrs: { options: this.options, multiple: _vm.multiple },
+                  on: { change: _vm.changeSelect }
+                })
+              ]
+            : [
+                _vm.multiple
+                  ? [
+                      _vm._l(_vm.content, function(cont) {
+                        return [
+                          _vm._v(
+                            "\n                " +
+                              _vm._s(
+                                _vm.options.find(function(item) {
+                                  return item.value == cont
+                                }).name
+                              ) +
+                              "\n            "
+                          )
+                        ]
+                      })
+                    ]
+                  : [
+                      _vm._v(
+                        "\n            " +
+                          _vm._s(
+                            _vm.options.find(function(item) {
+                              return item.value == _vm.content
+                            }).name
+                          ) +
+                          "\n        "
+                      )
+                    ]
+              ]
+        ],
+        2
+      )
+    : _vm._e()
 }
 var staticRenderFns = []
 render._withStripped = true
@@ -4676,9 +5214,10 @@ var render = function() {
             _c("select-staff", {
               attrs: {
                 multiple: true,
-                "selected-members": this.selectMemberIdArr
+                "member-type": "participant",
+                type: _vm.type
               },
-              on: { change: _vm.changeSelectMember }
+              on: { change: _vm.changeSelectedMember }
             })
           ],
           1
@@ -4820,20 +5359,20 @@ var render = function() {
             {
               name: "model",
               rawName: "v-model",
-              value: _vm.inputContent,
-              expression: "inputContent"
+              value: _vm.selectedMemberName,
+              expression: "selectedMemberName"
             }
           ],
           staticClass: "form-control",
           attrs: { type: "text", title: "", placeholder: this.placeholder },
-          domProps: { value: _vm.inputContent },
+          domProps: { value: _vm.selectedMemberName },
           on: {
             focus: _vm.showMember,
             input: function($event) {
               if ($event.target.composing) {
                 return
               }
-              _vm.inputContent = $event.target.value
+              _vm.selectedMemberName = $event.target.value
             }
           }
         })
@@ -4855,7 +5394,7 @@ var render = function() {
         [
           _c("select-staff", {
             staticClass: "selector",
-            attrs: { multiple: this.multiple },
+            attrs: { "member-type": "principal", type: _vm.type },
             on: { change: _vm.changeSelectMember }
           })
         ],
@@ -4964,7 +5503,7 @@ var render = function() {
                 staticClass: "users",
                 on: {
                   click: function($event) {
-                    _vm.selectMember(user.id)
+                    _vm.selectMember(user)
                   }
                 }
               },
@@ -4975,22 +5514,50 @@ var render = function() {
                   _vm._v(_vm._s(user.name))
                 ]),
                 _vm._v(" "),
-                _c(
-                  "span",
-                  {
-                    directives: [
-                      {
-                        name: "show",
-                        rawName: "v-show",
-                        value: _vm.selectArr.indexOf(user.id) > -1,
-                        expression: "selectArr.indexOf(user.id) > -1"
-                      }
-                    ],
-                    staticClass: "float-right"
-                  },
-                  [_c("i", { staticClass: "icon md-check" })]
-                )
-              ]
+                _vm.memberType === "principal"
+                  ? [
+                      _c(
+                        "span",
+                        {
+                          directives: [
+                            {
+                              name: "show",
+                              rawName: "v-show",
+                              value: _vm.principalInfo.id == user.id,
+                              expression: "principalInfo.id == user.id"
+                            }
+                          ],
+                          staticClass: "float-right"
+                        },
+                        [_c("i", { staticClass: "icon md-check" })]
+                      )
+                    ]
+                  : _vm.memberType === "participant"
+                    ? [
+                        _c(
+                          "span",
+                          {
+                            directives: [
+                              {
+                                name: "show",
+                                rawName: "v-show",
+                                value: _vm.participantsInfo.find(function(
+                                  item
+                                ) {
+                                  return item.id == user.id
+                                }),
+                                expression:
+                                  "participantsInfo.find(item => item.id == user.id)"
+                              }
+                            ],
+                            staticClass: "float-right"
+                          },
+                          [_c("i", { staticClass: "icon md-check" })]
+                        )
+                      ]
+                    : _vm._e()
+              ],
+              2
             )
           })
         ),
@@ -5005,8 +5572,9 @@ var render = function() {
                     _c("departments-item", {
                       attrs: {
                         data: departmentData,
-                        select: _vm.selectArr,
-                        multiple: _vm.isMultiple
+                        "member-type": _vm.memberType,
+                        type: _vm.type,
+                        multiple: _vm.multiple
                       },
                       on: { change: _vm.memberChange }
                     })
@@ -5151,11 +5719,15 @@ var render = function() {
       _vm.isEditAdd
         ? [
             _c("add-member", {
-              attrs: { "selected-members": this.selectedMembers },
+              attrs: { type: "change" },
               on: { change: _vm.changeMember }
             })
           ]
-        : [_vm._v("\n        " + _vm._s(_vm.content) + "\n    ")]
+        : [
+            _vm._v(
+              "\n        " + _vm._s(_vm.selectedMember.join("、")) + "\n    "
+            )
+          ]
     ],
     2
   )
@@ -5297,8 +5869,19 @@ var render = function() {
     {},
     [
       _vm.isEditSelect
-        ? [_c("input-selectors", { on: { change: _vm.changeMember } })]
-        : [_vm._v("\n        " + _vm._s(_vm.content) + "\n    ")]
+        ? [
+            _c("input-selectors", {
+              attrs: { type: "change" },
+              on: { change: _vm.changeMember }
+            })
+          ]
+        : [
+            _vm._v(
+              "\n        " +
+                _vm._s(this.$store.state.principalInfo.name) +
+                "\n    "
+            )
+          ]
     ],
     2
   )
@@ -5360,6 +5943,31 @@ if (false) {
   module.hot.accept()
   if (module.hot.data) {
     require("vue-hot-reload-api")      .rerender("data-v-7bd457ea", module.exports)
+  }
+}
+
+/***/ }),
+
+/***/ "./node_modules/vue-loader/lib/template-compiler/index.js?{\"id\":\"data-v-7c720a60\",\"hasScoped\":false,\"buble\":{\"transforms\":{}}}!./node_modules/vue-loader/lib/selector.js?type=template&index=0!./resources/assets/components/timepicker.vue":
+/***/ (function(module, exports, __webpack_require__) {
+
+var render = function() {
+  var _vm = this
+  var _h = _vm.$createElement
+  var _c = _vm._self._c || _h
+  return _c("selectors", {
+    ref: "timepicker",
+    attrs: { options: _vm.option },
+    on: { change: _vm.changeTime }
+  })
+}
+var staticRenderFns = []
+render._withStripped = true
+module.exports = { render: render, staticRenderFns: staticRenderFns }
+if (false) {
+  module.hot.accept()
+  if (module.hot.data) {
+    require("vue-hot-reload-api")      .rerender("data-v-7c720a60", module.exports)
   }
 }
 
@@ -5581,7 +6189,7 @@ if (false) {
 
 /***/ }),
 
-/***/ "./node_modules/vue-loader/lib/template-compiler/index.js?{\"id\":\"data-v-c80a5372\",\"hasScoped\":true,\"buble\":{\"transforms\":{}}}!./node_modules/vue-loader/lib/selector.js?type=template&index=0!./resources/assets/components/checkboxGroup.vue":
+/***/ "./node_modules/vue-loader/lib/template-compiler/index.js?{\"id\":\"data-v-e059497a\",\"hasScoped\":true,\"buble\":{\"transforms\":{}}}!./node_modules/vue-loader/lib/selector.js?type=template&index=0!./resources/assets/components/edit-number-spinner.vue":
 /***/ (function(module, exports, __webpack_require__) {
 
 var render = function() {
@@ -5590,62 +6198,15 @@ var render = function() {
   var _c = _vm._self._c || _h
   return _c(
     "div",
-    { staticClass: "checkbox-group" },
     [
-      _vm._l(_vm.optionData, function(item, index) {
-        return _c(
-          "div",
-          {
-            key: index,
-            staticClass: "checkbox-custom checkbox-primary",
-            staticStyle: { display: "inline-block", margin: "10px 10px" }
-          },
-          [
-            _c("input", {
-              directives: [
-                {
-                  name: "model",
-                  rawName: "v-model",
-                  value: _vm.checkeData,
-                  expression: "checkeData"
-                }
-              ],
-              attrs: { type: "checkbox", id: item.id },
-              domProps: {
-                value: item.value,
-                checked: Array.isArray(_vm.checkeData)
-                  ? _vm._i(_vm.checkeData, item.value) > -1
-                  : _vm.checkeData
-              },
-              on: {
-                change: function($event) {
-                  var $$a = _vm.checkeData,
-                    $$el = $event.target,
-                    $$c = $$el.checked ? true : false
-                  if (Array.isArray($$a)) {
-                    var $$v = item.value,
-                      $$i = _vm._i($$a, $$v)
-                    if ($$el.checked) {
-                      $$i < 0 && (_vm.checkeData = $$a.concat([$$v]))
-                    } else {
-                      $$i > -1 &&
-                        (_vm.checkeData = $$a
-                          .slice(0, $$i)
-                          .concat($$a.slice($$i + 1)))
-                    }
-                  } else {
-                    _vm.checkeData = $$c
-                  }
-                }
-              }
-            }),
-            _vm._v(" "),
-            _c("label", { attrs: { for: item.id } }, [
-              _vm._v(_vm._s(item.name))
-            ])
+      _vm.isEditNumberSpinner
+        ? [
+            _c("number-spinner", {
+              ref: "number",
+              on: { change: _vm.changeNumber }
+            })
           ]
-        )
-      })
+        : [_vm._v("\n        " + _vm._s(_vm.content) + "\n    ")]
     ],
     2
   )
@@ -5656,7 +6217,7 @@ module.exports = { render: render, staticRenderFns: staticRenderFns }
 if (false) {
   module.hot.accept()
   if (module.hot.data) {
-    require("vue-hot-reload-api")      .rerender("data-v-c80a5372", module.exports)
+    require("vue-hot-reload-api")      .rerender("data-v-e059497a", module.exports)
   }
 }
 
@@ -6446,6 +7007,33 @@ if(false) {
  if(!content.locals) {
    module.hot.accept("!!../../../node_modules/css-loader/index.js!../../../node_modules/vue-loader/lib/style-compiler/index.js?{\"vue\":true,\"id\":\"data-v-c80a5372\",\"scoped\":true,\"hasInlineConfig\":true}!../../../node_modules/sass-loader/lib/loader.js!../../../node_modules/vue-loader/lib/selector.js?type=styles&index=0!./checkboxGroup.vue", function() {
      var newContent = require("!!../../../node_modules/css-loader/index.js!../../../node_modules/vue-loader/lib/style-compiler/index.js?{\"vue\":true,\"id\":\"data-v-c80a5372\",\"scoped\":true,\"hasInlineConfig\":true}!../../../node_modules/sass-loader/lib/loader.js!../../../node_modules/vue-loader/lib/selector.js?type=styles&index=0!./checkboxGroup.vue");
+     if(typeof newContent === 'string') newContent = [[module.id, newContent, '']];
+     update(newContent);
+   });
+ }
+ // When the module is disposed, remove the <style> tags
+ module.hot.dispose(function() { update(); });
+}
+
+/***/ }),
+
+/***/ "./node_modules/vue-style-loader/index.js!./node_modules/css-loader/index.js!./node_modules/vue-loader/lib/style-compiler/index.js?{\"vue\":true,\"id\":\"data-v-e059497a\",\"scoped\":true,\"hasInlineConfig\":true}!./node_modules/vue-loader/lib/selector.js?type=styles&index=0!./resources/assets/components/edit-number-spinner.vue":
+/***/ (function(module, exports, __webpack_require__) {
+
+// style-loader: Adds some css to the DOM by adding a <style> tag
+
+// load the styles
+var content = __webpack_require__("./node_modules/css-loader/index.js!./node_modules/vue-loader/lib/style-compiler/index.js?{\"vue\":true,\"id\":\"data-v-e059497a\",\"scoped\":true,\"hasInlineConfig\":true}!./node_modules/vue-loader/lib/selector.js?type=styles&index=0!./resources/assets/components/edit-number-spinner.vue");
+if(typeof content === 'string') content = [[module.i, content, '']];
+if(content.locals) module.exports = content.locals;
+// add the styles to the DOM
+var update = __webpack_require__("./node_modules/vue-style-loader/lib/addStylesClient.js")("258ef265", content, false, {});
+// Hot Module Replacement
+if(false) {
+ // When the styles change, update the <style> tags
+ if(!content.locals) {
+   module.hot.accept("!!../../../node_modules/css-loader/index.js!../../../node_modules/vue-loader/lib/style-compiler/index.js?{\"vue\":true,\"id\":\"data-v-e059497a\",\"scoped\":true,\"hasInlineConfig\":true}!../../../node_modules/vue-loader/lib/selector.js?type=styles&index=0!./edit-number-spinner.vue", function() {
+     var newContent = require("!!../../../node_modules/css-loader/index.js!../../../node_modules/vue-loader/lib/style-compiler/index.js?{\"vue\":true,\"id\":\"data-v-e059497a\",\"scoped\":true,\"hasInlineConfig\":true}!../../../node_modules/vue-loader/lib/selector.js?type=styles&index=0!./edit-number-spinner.vue");
      if(typeof newContent === 'string') newContent = [[module.id, newContent, '']];
      update(newContent);
    });
@@ -18569,6 +19157,58 @@ module.exports = Component.exports
 
 /***/ }),
 
+/***/ "./resources/assets/components/edit-number-spinner.vue":
+/***/ (function(module, exports, __webpack_require__) {
+
+var disposed = false
+function injectStyle (ssrContext) {
+  if (disposed) return
+  __webpack_require__("./node_modules/vue-style-loader/index.js!./node_modules/css-loader/index.js!./node_modules/vue-loader/lib/style-compiler/index.js?{\"vue\":true,\"id\":\"data-v-e059497a\",\"scoped\":true,\"hasInlineConfig\":true}!./node_modules/vue-loader/lib/selector.js?type=styles&index=0!./resources/assets/components/edit-number-spinner.vue")
+}
+var normalizeComponent = __webpack_require__("./node_modules/vue-loader/lib/component-normalizer.js")
+/* script */
+var __vue_script__ = __webpack_require__("./node_modules/babel-loader/lib/index.js?{\"cacheDirectory\":true,\"presets\":[[\"env\",{\"modules\":false,\"targets\":{\"browsers\":[\"> 2%\"],\"uglify\":true}}]],\"plugins\":[\"transform-object-rest-spread\",[\"transform-runtime\",{\"polyfill\":false,\"helpers\":false}]]}!./node_modules/vue-loader/lib/selector.js?type=script&index=0!./resources/assets/components/edit-number-spinner.vue")
+/* template */
+var __vue_template__ = __webpack_require__("./node_modules/vue-loader/lib/template-compiler/index.js?{\"id\":\"data-v-e059497a\",\"hasScoped\":true,\"buble\":{\"transforms\":{}}}!./node_modules/vue-loader/lib/selector.js?type=template&index=0!./resources/assets/components/edit-number-spinner.vue")
+/* template functional */
+var __vue_template_functional__ = false
+/* styles */
+var __vue_styles__ = injectStyle
+/* scopeId */
+var __vue_scopeId__ = "data-v-e059497a"
+/* moduleIdentifier (server only) */
+var __vue_module_identifier__ = null
+var Component = normalizeComponent(
+  __vue_script__,
+  __vue_template__,
+  __vue_template_functional__,
+  __vue_styles__,
+  __vue_scopeId__,
+  __vue_module_identifier__
+)
+Component.options.__file = "resources/assets/components/edit-number-spinner.vue"
+
+/* hot reload */
+if (false) {(function () {
+  var hotAPI = require("vue-hot-reload-api")
+  hotAPI.install(require("vue"), false)
+  if (!hotAPI.compatible) return
+  module.hot.accept()
+  if (!module.hot.data) {
+    hotAPI.createRecord("data-v-e059497a", Component.options)
+  } else {
+    hotAPI.reload("data-v-e059497a", Component.options)
+  }
+  module.hot.dispose(function (data) {
+    disposed = true
+  })
+})()}
+
+module.exports = Component.exports
+
+
+/***/ }),
+
 /***/ "./resources/assets/components/edit-selector.vue":
 /***/ (function(module, exports, __webpack_require__) {
 
@@ -19281,25 +19921,21 @@ module.exports = Component.exports
 
 /***/ }),
 
-/***/ "./resources/assets/components/upload.vue":
+/***/ "./resources/assets/components/timepicker.vue":
 /***/ (function(module, exports, __webpack_require__) {
 
 var disposed = false
-function injectStyle (ssrContext) {
-  if (disposed) return
-  __webpack_require__("./node_modules/vue-style-loader/index.js!./node_modules/css-loader/index.js!./node_modules/vue-loader/lib/style-compiler/index.js?{\"vue\":true,\"id\":\"data-v-745d0646\",\"scoped\":true,\"hasInlineConfig\":true}!./node_modules/sass-loader/lib/loader.js!./node_modules/vue-loader/lib/selector.js?type=styles&index=0!./resources/assets/components/upload.vue")
-}
 var normalizeComponent = __webpack_require__("./node_modules/vue-loader/lib/component-normalizer.js")
 /* script */
-var __vue_script__ = __webpack_require__("./node_modules/babel-loader/lib/index.js?{\"cacheDirectory\":true,\"presets\":[[\"env\",{\"modules\":false,\"targets\":{\"browsers\":[\"> 2%\"],\"uglify\":true}}]],\"plugins\":[\"transform-object-rest-spread\",[\"transform-runtime\",{\"polyfill\":false,\"helpers\":false}]]}!./node_modules/vue-loader/lib/selector.js?type=script&index=0!./resources/assets/components/upload.vue")
+var __vue_script__ = __webpack_require__("./node_modules/babel-loader/lib/index.js?{\"cacheDirectory\":true,\"presets\":[[\"env\",{\"modules\":false,\"targets\":{\"browsers\":[\"> 2%\"],\"uglify\":true}}]],\"plugins\":[\"transform-object-rest-spread\",[\"transform-runtime\",{\"polyfill\":false,\"helpers\":false}]]}!./node_modules/vue-loader/lib/selector.js?type=script&index=0!./resources/assets/components/timepicker.vue")
 /* template */
-var __vue_template__ = __webpack_require__("./node_modules/vue-loader/lib/template-compiler/index.js?{\"id\":\"data-v-745d0646\",\"hasScoped\":true,\"buble\":{\"transforms\":{}}}!./node_modules/vue-loader/lib/selector.js?type=template&index=0!./resources/assets/components/upload.vue")
+var __vue_template__ = __webpack_require__("./node_modules/vue-loader/lib/template-compiler/index.js?{\"id\":\"data-v-7c720a60\",\"hasScoped\":false,\"buble\":{\"transforms\":{}}}!./node_modules/vue-loader/lib/selector.js?type=template&index=0!./resources/assets/components/timepicker.vue")
 /* template functional */
 var __vue_template_functional__ = false
 /* styles */
-var __vue_styles__ = injectStyle
+var __vue_styles__ = null
 /* scopeId */
-var __vue_scopeId__ = "data-v-745d0646"
+var __vue_scopeId__ = null
 /* moduleIdentifier (server only) */
 var __vue_module_identifier__ = null
 var Component = normalizeComponent(
@@ -19310,7 +19946,7 @@ var Component = normalizeComponent(
   __vue_scopeId__,
   __vue_module_identifier__
 )
-Component.options.__file = "resources/assets/components/upload.vue"
+Component.options.__file = "resources/assets/components/timepicker.vue"
 
 /* hot reload */
 if (false) {(function () {
@@ -19319,9 +19955,9 @@ if (false) {(function () {
   if (!hotAPI.compatible) return
   module.hot.accept()
   if (!module.hot.data) {
-    hotAPI.createRecord("data-v-745d0646", Component.options)
+    hotAPI.createRecord("data-v-7c720a60", Component.options)
   } else {
-    hotAPI.reload("data-v-745d0646", Component.options)
+    hotAPI.reload("data-v-7c720a60", Component.options)
   }
   module.hot.dispose(function (data) {
     disposed = true
@@ -19362,6 +19998,7 @@ Vue.component('edit-company', __webpack_require__("./resources/assets/components
 Vue.component('edit-datepicker', __webpack_require__("./resources/assets/components/edit-datepicker.vue"));
 Vue.component('edit-input', __webpack_require__("./resources/assets/components/edit-input.vue"));
 Vue.component('edit-input-selector', __webpack_require__("./resources/assets/components/edit-input-selector.vue"));
+Vue.component('edit-number-spinner', __webpack_require__("./resources/assets/components/edit-number-spinner.vue"));
 Vue.component('edit-selector', __webpack_require__("./resources/assets/components/edit-selector.vue"));
 Vue.component('edit-textarea', __webpack_require__("./resources/assets/components/edit-textarea.vue"));
 Vue.component('editable-search-box', __webpack_require__("./resources/assets/components/editable-search-box.vue"));
@@ -19375,11 +20012,7 @@ Vue.component('select-staff', __webpack_require__("./resources/assets/components
 Vue.component('selectors', __webpack_require__("./resources/assets/components/selectors.vue"));
 Vue.component('selectorsOptions', __webpack_require__("./resources/assets/components/selectors-options.vue"));
 Vue.component('task-follow-up', __webpack_require__("./resources/assets/components/task-follow-up.vue"));
-Vue.component('Modal', __webpack_require__("./resources/assets/components/Modal.vue"));
-Vue.component('checkbox-group', __webpack_require__("./resources/assets/components/checkboxGroup.vue"));
-Vue.component('nav-back', __webpack_require__("./resources/assets/components/navBack.vue"));
-Vue.component('upload', __webpack_require__("./resources/assets/components/upload.vue"));
-Vue.component('mtp-table', __webpack_require__("./resources/assets/components/Table.vue"));
+Vue.component('timepicker', __webpack_require__("./resources/assets/components/timepicker.vue"));
 
 Vue.prototype.globalClick = function (callback) {
     document.getElementById('root').addEventListener('click', function () {
@@ -19512,6 +20145,19 @@ var config = {
         name: '公关or广告公司',
         value: 11
     }],
+    trailTypeArr: [{
+        name: '影视线索',
+        value: 1
+    }, {
+        name: '综艺线索',
+        value: 2
+    }, {
+        name: '商务线索',
+        value: 3
+    }, {
+        name: 'papi线索',
+        value: 4
+    }],
     customizeInfo: [{
         id: 0,
         name: '选择条件',
@@ -19581,6 +20227,17 @@ var config = {
         value: 3
     }],
 
+    taskStatusArr: [{
+        name: '进行中',
+        value: 1
+    }, {
+        name: '已完成',
+        value: 2
+    }, {
+        name: '已停止',
+        value: 3
+    }],
+
     clientLevelArr: [{
         name: '直客',
         value: 1
@@ -19624,46 +20281,71 @@ var config = {
         name: 'papi客户',
         value: 4
     }],
-    // 员工状态
-    staffStatus: [{
-        value: 1,
-        name: '在职'
+    artistStatusArr: [{
+        name: '已签约',
+        value: 1
     }, {
-        value: 2,
-        name: '离职'
+        name: '经理人沟通中',
+        value: 2
     }, {
-        value: 3,
-        name: '全部'
+        name: '兼职星探沟通中',
+        value: 3
+    }, {
+        name: '待定',
+        value: 4
+    }, {
+        name: '淘汰',
+        value: 5
+    }, {
+        name: '合同中',
+        value: 6
+    }, {
+        name: '联系但无回复',
+        value: 7
     }],
-    // 年月
-    dateArr: [{
-        value: 1,
-        name: '10月（10.01-10.31）'
+
+    priorityArr: [{
+        name: '高',
+        value: 1
     }, {
-        value: 2,
-        name: '11月（11.01-11.30）'
+        name: '中',
+        value: 2
     }, {
-        value: 3,
-        name: '12月（12.01-12.31）'
+        name: '低',
+        value: 3
     }],
-    // 员工类型
-    stuffType: [{
-        value: 1,
-        name: '正式员工'
+
+    lockArr: [{
+        name: '否',
+        value: 0
     }, {
-        value: 2,
-        name: '实习生'
-    }, {
-        value: 3,
-        name: '管培生'
+        name: '是',
+        value: 1
     }],
-    // 性别
-    sex: [{
-        value: 1,
-        name: '男'
+    cooperationType: [{
+        name: '代言',
+        value: 1
     }, {
-        value: 2,
-        name: '女'
+        name: '合作',
+        value: 2
+    }, {
+        name: '活动',
+        value: 3
+    }, {
+        name: '微博',
+        value: 4
+    }, {
+        name: '抖音',
+        value: 5
+    }, {
+        name: '短期代言',
+        value: 6
+    }, {
+        name: '时装周',
+        value: 7
+    }, {
+        name: '未确定',
+        value: 8
     }]
 };
 

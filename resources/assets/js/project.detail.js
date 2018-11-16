@@ -8,6 +8,7 @@ let app = new Vue({
             taskId: '',
             changeInfo: {},
             isEdit: false,
+            projectInfo: '',
         },
 
         mounted() {
@@ -19,21 +20,26 @@ let app = new Vue({
         methods: {
 
             getProject: function () {
-                this.taskId = Tool.getParameterByName('project_id');
+                this.projectId = Tool.getParameterByName('project_id');
 
                 let data = {
-                    include: '',
+                    include: 'principal',
                 };
 
                 $.ajax({
                     type: 'get',
-                    url: config.apiUrl + '/projects/' + this.taskId,
+                    url: config.apiUrl + '/projects/' + this.projectId,
                     headers: config.getHeaders(),
                     data: data
                 }).done(function (response) {
                     console.log(response)
+                    app.projectInfo = response.data
                 })
             },
+
+            addTask: function () {
+
+            }
 
 
         }

@@ -156,7 +156,6 @@
 <script src="https://res.papitube.com/vendors/fullcalendar/fullcalendar.js"></script>
 
 <script src="{{ mix('js/app.js') }}"></script>
-<script src="{{ mix('js/common.js') }}"></script>
 <script src="{{ mix('js/left-menu.js') }}"></script>
 
 <script>

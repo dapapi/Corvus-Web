@@ -100,6 +100,24 @@ let config = {
             value: 11
         }
     ],
+    trailTypeArr: [
+        {
+            name: '影视线索',
+            value: 1
+        },
+        {
+            name: '综艺线索',
+            value: 2
+        },
+        {
+            name: '商务线索',
+            value: 3
+        },
+        {
+            name: 'papi线索',
+            value: 4
+        },
+    ],
     customizeInfo: [
         {
             id: 0,
@@ -193,6 +211,21 @@ let config = {
         },
     ],
 
+    taskStatusArr: [
+        {
+            name: '进行中',
+            value: 1
+        },
+        {
+            name: '已完成',
+            value: 2
+        },
+        {
+            name: '已停止',
+            value: 3
+        }
+    ],
+
     clientLevelArr: [
         {
             name: '直客',
@@ -253,6 +286,7 @@ let config = {
             value: 4
         },
     ],
+<<<<<<< HEAD
     // 员工状态
     staffStatus: [
         {
@@ -307,6 +341,96 @@ let config = {
         {
             value: 2,
             name: '女'
+        }
+    ],
+    artistStatusArr: [
+        {
+            name: '已签约',
+            value: 1
+        },
+        {
+            name: '经理人沟通中',
+            value: 2
+        },
+        {
+            name: '兼职星探沟通中',
+            value: 3
+        },
+        {
+            name: '待定',
+            value: 4
+        },
+        {
+            name: '淘汰',
+            value: 5
+        },
+        {
+            name: '合同中',
+            value: 6
+        },
+        {
+            name: '联系但无回复',
+            value: 7
+        },
+    ],
+
+    priorityArr: [
+        {
+            name: '高',
+            value: 1
+        },
+        {
+            name: '中',
+            value: 2
+        },
+        {
+            name: '低',
+            value: 3
+        }
+    ],
+
+    lockArr: [
+        {
+            name: '否',
+            value: 0
+        },
+        {
+            name: '是',
+            value: 1
+        }
+    ],
+    cooperationType: [
+        {
+            name: '代言',
+            value: 1
+        },
+        {
+            name: '合作',
+            value: 2
+        },
+        {
+            name: '活动',
+            value: 3
+        },
+        {
+            name: '微博',
+            value: 4
+        },
+        {
+            name: '抖音',
+            value: 5
+        },
+        {
+            name: '短期代言',
+            value: 6
+        },
+        {
+            name: '时装周',
+            value: 7
+        },
+        {
+            name: '未确定',
+            value: 8
         }
     ]
 };

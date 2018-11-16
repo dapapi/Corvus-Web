@@ -1,10 +1,11 @@
+<!-- 选择负责人 -->
 <template>
     <div class="">
         <template v-if="isEditSelect">
-            <input-selectors @change="changeMember"></input-selectors>
+            <input-selectors @change="changeMember" :type="'change'"></input-selectors>
         </template>
         <template v-else>
-            {{ content }}
+            {{ this.$store.state.principalInfo.name }}
         </template>
     </div>
 </template>
@@ -12,7 +13,7 @@
 <script>
     export default {
         name: "edit-input-selector",
-        props: ['is-edit', 'content'],
+        props: ['is-edit', 'selectType'],
         data() {
             return {
                 isEditSelect: false,

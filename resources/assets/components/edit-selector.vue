@@ -1,11 +1,18 @@
 <template>
-    <div>
+    <div v-if="options.length > 0">
         <template v-if="isEditSelect">
             <selectors :options="this.options" @change="changeSelect"
-                       ref="selector"></selectors>
+                       ref="selector" :multiple="multiple"></selectors>
         </template>
         <template v-else>
-            {{ this.options.find(item => item.value == this.content).name }}
+            <template v-if="multiple">
+                <template v-for="cont in content">
+                    {{ options.find(item => item.value == cont).name }}
+                </template>
+            </template>
+            <template v-else>
+                {{ options.find(item => item.value == content).name }}
+            </template>
         </template>
     </div>
 </template>
@@ -13,7 +20,7 @@
 <script>
     export default {
         name: "edit-selector",
-        props: ['options', 'is-edit', 'content'],
+        props: ['options', 'is-edit', 'content', 'multiple'],
         data() {
             return {
                 isEditSelect: false,

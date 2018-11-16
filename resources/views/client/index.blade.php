@@ -28,7 +28,7 @@
                     </div>
                     <div class="col-md-3 example float-left">
                         <selectors @change=""
-                                   :placeholder="'请选择行业'"></selectors>
+                                   :placeholder="'请选择负责人'"></selectors>
                     </div>
                     <div class="col-md-3 example float-left">
                         <selectors @change=""
@@ -49,7 +49,6 @@
                         <th class="pre-cell"></th>
                         <th class="cell-300" scope="col">公司名称</th>
                         <th class="cell-300" scope="col">级别</th>
-                        <th class="cell-300" scope="col">行业</th>
                         <th class="cell-300" scope="col">负责人</th>
                         <th class="cell-300" scope="col">录入时间</th>
                         <th class="cell-300" scope="col">跟进时间</th>
@@ -62,11 +61,9 @@
                             <template v-if="client.grade === 1">直客</template>
                             <template v-if="client.grade === 2">代理公司</template>
                         </td>
-                        <td>@{{ client.industry }}</td>
-                        <td>@{{ client.principal }}</td>
+                        <td>@{{ client.principal.data.name }}</td>
                         <td>@{{ client.delivery }}</td>
                         <td>@{{ client.follow_time }}</td>
-                        {{-- @todo 录入时间、跟进时间没有 --}}
                         <td class="suf-cell"></td>
                     </tr>
                 </table>
@@ -131,7 +128,7 @@
                         <div class="example">
                             <div class="col-md-2 text-right float-left">负责人</div>
                             <div class="col-md-10 float-left pl-0">
-                                <input-selectors @change="changePrincipal"></input-selectors>
+                                <input-selectors :placeholder="'请选择负责人'" @change="changePrincipal"></input-selectors>
                             </div>
                         </div>
                         <div class="example">

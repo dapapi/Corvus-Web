@@ -1,7 +1,7 @@
 <template>
     <div>
-        <template v-if="isEditDatePicker">
-            <datepicker ref="datepicker" @change="changeDate"></datepicker>
+        <template v-if="isEditNumberSpinner">
+            <number-spinner ref="number" @change="changeNumber"></number-spinner>
         </template>
         <template v-else>
             {{ content }}
@@ -11,11 +11,11 @@
 
 <script>
     export default {
-        name: "edit-datepicker",
+        name: "edit-number-spinner",
         props: ['is-edit', 'content'],
         data() {
             return {
-                isEditDatePicker: false,
+                isEditNumberSpinner: false,
             }
         },
 
@@ -24,19 +24,19 @@
 
         watch: {
             isEdit(newValue) {
-                this.isEditDatePicker = newValue;
+                this.isEditNumberSpinner = newValue;
                 if (newValue) {
                     let _this = this;
                     setTimeout(function () {
-                        _this.$refs.datepicker.setValue(_this.content)
+                        _this.$refs.number.setValue(_this.content)
                     }, 0)
                 } else {
-                    this.$refs.datepicker.destroy()
+                    this.$refs.number.destroy()
                 }
             }
         },
         methods: {
-            changeDate: function (value) {
+            changeNumber: function (value) {
                 this.$emit('change', value);
             }
         }

@@ -11,8 +11,8 @@
         <div class="addMember-trigger" :class="this.isMemberShow ? 'addMember-active': ''" id="selectStaff">
             <div class="addMember-trigger-button" @click="showMember"><i class="md-plus"></i></div>
             <div class="addMember-trigger-dropdown">
-                <select-staff :multiple="true" @change="changeSelectMember"
-                              :selected-members="this.selectMemberIdArr"></select-staff>
+                <select-staff :multiple="true" :member-type="'participant'" :type="type"
+                              @change="changeSelectedMember"></select-staff>
             </div>
         </div>
     </div>
@@ -21,28 +21,23 @@
 <script>
     export default {
         name: "",
-        props: ['selected-members'],
+        props: ['type'],
         data() {
             return {
                 isMemberShow: false,
-                selectMemberArr: [],
-                selectMemberIdArr: [],
             }
         },
         mounted() {
             this.globalClick(this.removeSelect);
-            if (this.selectedMembers && this.selectedMembers.length > 0) {
-                this.selectMemberIdArr = this.selectedMembers;
-            }
         },
 
-        watch: {
-            selectMemberArr: function (newValue) {
-                this.$emit('change', newValue)
-            },
-
-            selectedMembers: function (newValue) {
-                this.selectMemberIdArr = newValue;
+        computed: {
+            selectMemberArr: function () {
+                if (this.type === 'change') {
+                    return this.$store.state.participantsInfo
+                } else {
+                    return this.$store.state.newParticipantsInfo
+                }
             }
         },
 
@@ -61,18 +56,23 @@
                 }
             },
 
-            changeSelectMember: function (value) {
-                this.selectMemberArr = value
+            removeMember: function (userId) {
+                let participantInfo = '';
+                if (this.type === 'add') {
+                    participantInfo = this.$store.state.newParticipantsInfo;
+                } else {
+                    participantInfo = this.$store.state.participantsInfo;
+                }
+                participantInfo.splice(participantInfo.map(item => item.id).indexOf(userId), 1);
+                let params = {
+                    type: this.type,
+                    data: participantInfo
+                };
+                this.$store.dispatch('changeParticipantsInfo', params);
             },
 
-            removeMember: function (userId) {
-                let data = this.selectMemberArr.find(item => item.id == userId);
-                let index = this.selectMemberArr.indexOf(data);
-                this.selectMemberArr.splice(index, 1);
-                this.selectMemberIdArr = [];
-                for (let i = 0; i < this.selectMemberArr.length; i++) {
-                    this.selectMemberIdArr.push(this.selectMemberArr[i].id)
-                }
+            changeSelectedMember: function () {
+                this.$emit('change', false)
             }
 
         }

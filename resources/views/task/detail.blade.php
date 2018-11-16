@@ -39,10 +39,12 @@
             <div class="panel col-md-12 col-lg-12">
                 <div class="card-block">
                     <h4 class="card-title">@{{ taskInfo.title }}
-                        <span class="font-size-14 pl-10 pointer-content hover-content" v-if="!taskInfo.task_p"
-                              @click="redirectTaskDetail(taskInfo.pTask.data.id)">
+                        <template v-if="!taskInfo.task_p">
+                           <span class="font-size-14 pl-10 pointer-content hover-content"
+                                 @click="redirectTaskDetail(taskInfo.pTask.data.id)">
                            <i class="icon md-chevron-left"></i>回到主任务
-                        </span>
+                            </span>
+                        </template>
                     </h4>
                     <div class="card-text clearfix example">
                         <div class="float-left pl-0 pr-2 col-md-1">
@@ -118,7 +120,7 @@
                                     <div class="col-md-1 float-left text-right pl-0">负责人</div>
                                     <div class="col-md-11 float-left font-weight-bold">
                                         <div class="edit-wrap">
-                                            <edit-input-selector :content="taskInfo.principal.data.name" :is-edit="isEdit"
+                                            <edit-input-selector :is-edit="isEdit" :select-type="'principal'"
                                                                  @change="changeTaskPrincipal"></edit-input-selector>
                                         </div>
                                     </div>
@@ -126,9 +128,7 @@
                                 <div class="card-text py-5 clearfix">
                                     <div class="col-md-1 float-left text-right pl-0">参与人</div>
                                     <div class="col-md-11 float-left font-weight-bold">
-                                        <edit-add-member :content="participantsArr.join('、')" :is-edit="isEdit"
-                                                         @change="changeTaskParticipants"
-                                                         :selected-members="participantsIdArr"></edit-add-member>
+                                        <edit-add-member :is-edit="isEdit"></edit-add-member>
                                     </div>
                                 </div>
                                 <div class="card-text py-5 clearfix">
@@ -137,6 +137,15 @@
                                         <div class="edit-wrap">
                                             <edit-datepicker :content="taskInfo.start_at" :is-edit="isEdit"
                                                              @change="changeTaskStartTime"></edit-datepicker>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="card-text py-5 clearfix">
+                                    <div class="col-md-1 float-left text-right pl-0">结束时间</div>
+                                    <div class="col-md-11 float-left font-weight-bold">
+                                        <div class="edit-wrap">
+                                            <edit-datepicker :content="taskInfo.end_at" :is-edit="isEdit"
+                                                             @change="changeEndTime"></edit-datepicker>
                                         </div>
                                     </div>
                                 </div>
@@ -165,15 +174,7 @@
                                         </div>
                                     </div>
                                 </div>
-                                <div class="card-text py-5 clearfix">
-                                    <div class="col-md-1 float-left text-right pl-0">结束时间</div>
-                                    <div class="col-md-11 float-left font-weight-bold">
-                                        <div class="edit-wrap">
-                                            <edit-datepicker :content="taskInfo.end_at" :is-edit="isEdit"
-                                                             @change="changeEndTime"></edit-datepicker>
-                                        </div>
-                                    </div>
-                                </div>
+
                                 <div class="card-text py-5 clearfix">
                                     <div class="col-md-1 float-left text-right pl-0">完成时间</div>
                                     <div class="col-md-11 float-left font-weight-bold">
@@ -213,7 +214,7 @@
                                         <span class="float-right px-10">|</span>
                                         <span class="float-right px-10 pointer-content"
                                               @click="downloadAttachment(attachment.id, attachment.url)">下载</span>
-                                        <span class="float-right px-10">@{{ attachment.size }}kb</span>
+                                        <span class="float-right px-10">@{{ attachment.size }}</span>
                                     </li>
                                 </ul>
                             </div>
@@ -243,7 +244,7 @@
                                     <template v-if="task.status === 2">已完成</template>
                                     <template v-if="task.status === 3">已停止</template>
                                 </td>
-                                <td>@{{ task.principal }}</td>
+                                <td>@{{ task.principal.data.name }}</td>
                                 <td>@{{ task.end_at }}</td>
                             </tr>
                         </table>
@@ -313,7 +314,7 @@
                         <div class="example">
                             <div class="col-md-2 text-right float-left">负责人</div>
                             <div class="col-md-5 float-left pl-0">
-                                <input-selectors :placeholder="memberPlaceholder" :multiple="multiple"
+                                <input-selectors :placeholder="'请选择负责人'"
                                                  @change="addPrincipal"></input-selectors>
                             </div>
                         </div>
@@ -331,12 +332,20 @@
                         </div>
                         <div class="example">
                             <div class="col-md-2 text-right float-left">开始时间</div>
-                            <div class="col-md-4 float-left pl-0">
+                            <div class="col-md-5 float-left pl-0">
                                 <datepicker @change="addStartTime"></datepicker>
                             </div>
+                            <div class="col-md-5 float-left pl-0">
+                                <timepicker :default="startMinutes" @change="addStartMinutes"></timepicker>
+                            </div>
+                        </div>
+                        <div class="example">
                             <div class="col-md-2 text-right float-left">截止时间</div>
-                            <div class="col-md-4 float-left pl-0">
+                            <div class="col-md-5 float-left pl-0">
                                 <datepicker @change="addEndTime"></datepicker>
+                            </div>
+                            <div class="col-md-5 float-left pl-0">
+                                <timepicker :default="endMinutes" @change="addEndMinutes"></timepicker>
                             </div>
                         </div>
                         <div class="example">
@@ -344,13 +353,6 @@
                             <div class="col-md-10 float-left pl-0">
                                 <textarea class="form-control" name="taskDescription" id="" cols="30"
                                           rows="5" title="" v-model="taskIntroduce"></textarea>
-                            </div>
-                        </div>
-                        <div class="col-md-12">
-                            <div class="d-inline float-right child-attachment-upload">
-                                <span><i class="md-upload pr-5" aria-hidden="true"></i>上传文件</span>
-                                <input type="file">
-                                {{-- todo 子任务上传完附件ui --}}
                             </div>
                         </div>
                     </div>

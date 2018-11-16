@@ -1,8 +1,10 @@
 import config from "./config";
-import redirect from "./bootstrap"
+import redirect from "./bootstrap";
+import store from '../store/index.js';
 
 let app = new Vue({
         el: '#root',
+        store,
         data: {
             total: 0,
             current_page: 0,
@@ -35,6 +37,7 @@ let app = new Vue({
             getClients: function (pageNum = 1) {
                 let data = {
                     page: pageNum,
+                    include: 'principal',
                 };
 
                 $.ajax({
@@ -75,7 +78,7 @@ let app = new Vue({
                     grade: app.clientLevel,
                     // region_id: '',
                     address: 'test',
-                    principal_id: app.clientPrincipal,
+                    principal_id: this.$store.state.principalInfo.id,
                     contact: {
                         name: app.clientContact,
                         phone: app.clientContactPhone,
