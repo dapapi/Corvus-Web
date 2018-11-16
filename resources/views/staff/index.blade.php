@@ -20,7 +20,7 @@
 
         <div class="page-content container-fluid">
             <div class="panel col-md-12 clearfix py-5">
-                <div class="col-md-12 clearfix py-5">
+                <div class="clearfix">
                     <div class="col-md-2 example float-left">
                         <selectors :options="staffStatus" @change="projectChange" :defaultValue="0"></selectors>
                     </div>
@@ -50,7 +50,7 @@
                         <checkbox-group :option-data="filterConditions" @onchange="changeSelectOption" />
                     </Modal>
                 </div>
-                <div>&nbsp;&nbsp;&nbsp;在职 23    入职 8     离职 2</div>
+                <div class="example" style="padding: 0 15px;">在职 23    入职 8     离职 2</div>
                 <table class="table is-indent example" data-plugin="animateList" data-animate="fade" data-child="tr"
                        data-selectable="selectable">
                     <tr class="animation-fade"
@@ -70,7 +70,7 @@
                     <tr>
                         <th class="pre-cell"></th>
                         <th scope="row">1</th>
-                        <td>bqx</td>
+                        <td><a href="/staff/detail">bqx</a></td>
                         <td>1871111222</td>
                         <td>0086</td>
                         <td>正式</td>

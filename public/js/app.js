@@ -2445,7 +2445,7 @@ exports = module.exports = __webpack_require__("./node_modules/css-loader/lib/cs
 
 
 // module
-exports.push([module.i, "\n.upload[data-v-745d0646] {\n  position: relative;\n  display: inline-block;\n}\n.upload input[type=\"file\"][data-v-745d0646] {\n    opacity: 0;\n    position: absolute;\n    width: 100%;\n    height: 100%;\n    min-height: 10px;\n    left: 0;\n    top: 0;\n    cursor: pointer;\n}\n", ""]);
+exports.push([module.i, "\n.upload[data-v-745d0646] {\n  position: relative;\n  display: inline-block;\n}\n.upload input[type=\"file\"][data-v-745d0646] {\n    opacity: 0;\n    position: absolute;\n    width: 100%;\n    height: 100%;\n    min-height: 10px;\n    left: 0;\n    top: 0;\n    cursor: pointer;\n}\n.upload[data-v-745d0646]:before {\n    width: 100%;\n    height: 100%;\n}\n", ""]);
 
 // exports
 

@@ -17,9 +17,26 @@
             <div class="panel col-md-12 clearfix py-5">
                 <div class="nav-tabs-horizontal" data-plugin="tabs">
 
-                    <ul class="nav nav-tabs" role="tablist">
-                      <li class="nav-item" role="presentation"><a class="nav-link active" data-toggle="tab" href="#exampleTabsOne" aria-controls="exampleTabsOne" role="tab" aria-selected="true">添加员工</a></li>
-                      <li class="nav-item" role="presentation"><a class="nav-link" data-toggle="tab" href="#exampleTabsTwo" aria-controls="exampleTabsTwo" role="tab" aria-selected="false">邀请员工</a></li>
+                    <ul class="nav nav-tabs nav-tabs-line" role="tablist">
+                        <li class="nav-item" role="presentation">
+                            <a class="nav-link active" 
+                                data-toggle="tab" 
+                                href="#exampleTabsOne" 
+                                aria-controls="exampleTabsOne" 
+                                role="tab" aria-selected="true">
+                                添加员工
+                            </a>
+                        </li>
+                        <li class="nav-item" role="presentation">
+                            <a class="nav-link" 
+                                data-toggle="tab" 
+                                href="#exampleTabsTwo" 
+                                aria-controls="exampleTabsTwo" 
+                                role="tab" 
+                                aria-selected="false">
+                                邀请员工
+                            </a>
+                        </li>
                     </ul>
 
                     <div class="tab-content pt-20">
@@ -206,8 +223,8 @@
                         </div>
 
                         <div class="formName">培训经历</div>
-                        <div class="example table-responsive">
-                            <table class="table table-bordered padding15">
+                        <div class="example table-responsive padding15">
+                            <table class="table table-bordered">
                                 <thead>
                                     <tr>
                                         <th v-for="(item, index) in train.tHead" :key="index">@{{ item.value }}</th>

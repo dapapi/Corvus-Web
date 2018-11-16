@@ -62,3 +62,7 @@ Route::get('/staff/history', function () {
 Route::get('/staff/add', function () {
     return view('staff.add');
 });
+
+Route::get('/staff/detail', function () {
+    return view('staff.detail');
+});

@@ -37,6 +37,10 @@ export default {
         top: 0;
         cursor: pointer;
     }
+    &:before {
+        width: 100%;
+        height: 100%;
+    }
 }
 </style>
 
