@@ -111,7 +111,7 @@
                                 <td>根据日期生成年龄</td>
                                 <td>
                                     <template v-if="artist.source">
-                                        @{{ artistOriginArr.find(item => item.value == artist.source).name}}
+                                        @{{ artistSourceArr.find(item => item.value == artist.source).name}}
                                     </template>
                                 </td>
                                 <td>
@@ -177,7 +177,7 @@
                         <div class="example">
                             <div class="col-md-2 text-right float-left">艺人来源</div>
                             <div class="col-md-4 float-left row">
-                                <selectors :options="artistOriginArr" placeholder="请选择艺人来源"
+                                <selectors :options="artistSourceArr" placeholder="请选择艺人来源"
                                            @change="changeSource"></selectors>
                             </div>
                             <div class="col-md-2 text-right float-left pr-0">邮箱</div>

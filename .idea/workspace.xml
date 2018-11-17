@@ -2,28 +2,13 @@
 <project version="4">
   <component name="ChangeListManager">
     <list default="true" id="1a3725e8-6f08-4917-871f-ddbfb9d5b08f" name="Default" comment="">
-      <change afterPath="$PROJECT_DIR$/resources/assets/js/papi.detail.js" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/resources/assets/js/taiyang.detail.js" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/resources/views/artist/taiyang-detail.blade.php" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/resources/assets/js/config.js" beforeDir="false" afterPath="$PROJECT_DIR$/resources/assets/js/config.js" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/resources/assets/js/papi.index.js" beforeDir="false" afterPath="$PROJECT_DIR$/resources/assets/js/papi.index.js" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/resources/assets/js/papi.detail.js" beforeDir="false" afterPath="$PROJECT_DIR$/resources/assets/js/papi.detail.js" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/resources/assets/js/taiyang.detail.js" beforeDir="false" afterPath="$PROJECT_DIR$/resources/assets/js/taiyang.detail.js" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/resources/assets/js/taiyang.index.js" beforeDir="false" afterPath="$PROJECT_DIR$/resources/assets/js/taiyang.index.js" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/resources/assets/sass/task.scss" beforeDir="false" afterPath="$PROJECT_DIR$/resources/assets/sass/task.scss" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/resources/views/artist/papi-detail.blade.php" beforeDir="false" afterPath="$PROJECT_DIR$/resources/views/artist/papi-detail.blade.php" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/resources/views/artist/papi-index.blade.php" beforeDir="false" afterPath="$PROJECT_DIR$/resources/views/artist/papi-index.blade.php" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/resources/views/artist/taiyang-detail.blade.php" beforeDir="false" afterPath="$PROJECT_DIR$/resources/views/artist/taiyang-detail.blade.php" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/resources/views/artist/taiyang-index.blade.php" beforeDir="false" afterPath="$PROJECT_DIR$/resources/views/artist/taiyang-index.blade.php" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/resources/views/client/detail.blade.php" beforeDir="false" afterPath="$PROJECT_DIR$/resources/views/client/detail.blade.php" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/resources/views/client/index.blade.php" beforeDir="false" afterPath="$PROJECT_DIR$/resources/views/client/index.blade.php" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/resources/views/layouts/master.blade.php" beforeDir="false" afterPath="$PROJECT_DIR$/resources/views/layouts/master.blade.php" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/resources/views/project/detail.blade.php" beforeDir="false" afterPath="$PROJECT_DIR$/resources/views/project/detail.blade.php" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/resources/views/project/index.blade.php" beforeDir="false" afterPath="$PROJECT_DIR$/resources/views/project/index.blade.php" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/resources/views/task/detail.blade.php" beforeDir="false" afterPath="$PROJECT_DIR$/resources/views/task/detail.blade.php" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/resources/views/task/index.blade.php" beforeDir="false" afterPath="$PROJECT_DIR$/resources/views/task/index.blade.php" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/resources/views/trail/detail.blade.php" beforeDir="false" afterPath="$PROJECT_DIR$/resources/views/trail/detail.blade.php" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/resources/views/trail/index.blade.php" beforeDir="false" afterPath="$PROJECT_DIR$/resources/views/trail/index.blade.php" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/routes/web.php" beforeDir="false" afterPath="$PROJECT_DIR$/routes/web.php" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/webpack.mix.js" beforeDir="false" afterPath="$PROJECT_DIR$/webpack.mix.js" afterDir="false" />
     </list>
     <option name="EXCLUDED_CONVERTED_TO_IGNORED" value="true" />
     <option name="TRACKING_ENABLED" value="true" />
@@ -40,23 +25,46 @@
       <file leaf-file-name="detail.blade.php" pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/resources/views/trail/detail.blade.php">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="595">
-              <caret line="301" column="41" selection-start-line="301" selection-start-column="41" selection-end-line="301" selection-end-column="41" />
+            <state relative-caret-position="89">
+              <caret line="341" column="45" lean-forward="true" selection-start-line="341" selection-start-column="45" selection-end-line="341" selection-end-column="45" />
             </state>
           </provider>
         </entry>
       </file>
-      <file leaf-file-name="taiyang-detail.blade.php" pinned="false" current-in-tab="true">
+      <file leaf-file-name="taiyang-detail.blade.php" pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/resources/views/artist/taiyang-detail.blade.php">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="453">
-              <caret line="288" column="46" lean-forward="true" selection-start-line="288" selection-start-column="46" selection-end-line="288" selection-end-column="46" />
+            <state relative-caret-position="375">
+              <caret line="25" column="94" selection-start-line="25" selection-start-column="94" selection-end-line="25" selection-end-column="94" />
               <folding>
-                <element signature="e#5528#6651#0#HTML" />
-                <element signature="e#6672#8408#0#HTML" />
-                <element signature="e#8429#8603#0#HTML" />
-                <element signature="e#8820#8995#0#HTML" />
-                <element signature="e#10649#15652#0#HTML" />
+                <element signature="e#38207#41824#0#HTML" />
+              </folding>
+            </state>
+          </provider>
+        </entry>
+      </file>
+      <file leaf-file-name="add-member.vue" pinned="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/resources/assets/components/add-member.vue">
+          <provider selected="true" editor-type-id="text-editor">
+            <state relative-caret-position="315">
+              <caret line="21" column="19" selection-start-line="21" selection-start-column="19" selection-end-line="21" selection-end-column="19" />
+            </state>
+          </provider>
+        </entry>
+      </file>
+      <file leaf-file-name="papi-detail.blade.php" pinned="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/resources/views/artist/papi-detail.blade.php">
+          <provider selected="true" editor-type-id="text-editor">
+            <state relative-caret-position="384">
+              <caret line="30" column="74" selection-start-line="30" selection-start-column="74" selection-end-line="30" selection-end-column="74" />
+              <folding>
+                <element signature="e#6134#6448#0#HTML" />
+                <element signature="e#6473#7695#0#HTML" />
+                <element signature="e#7720#9587#0#HTML" />
+                <element signature="e#9612#9798#0#HTML" />
+                <element signature="e#10035#10222#0#HTML" />
+                <element signature="e#11163#16056#0#HTML" />
+                <element signature="e#30936#33805#0#HTML" />
               </folding>
             </state>
           </provider>
@@ -65,8 +73,8 @@
       <file leaf-file-name="taiyang.detail.js" pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/resources/assets/js/taiyang.detail.js">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="479">
-              <caret line="198" column="29" selection-start-line="198" selection-start-column="29" selection-end-line="198" selection-end-column="29" />
+            <state relative-caret-position="347">
+              <caret line="180" column="18" lean-forward="true" selection-start-line="180" selection-start-column="18" selection-end-line="180" selection-end-column="18" />
               <folding>
                 <element signature="e#0#30#0" expanded="true" />
               </folding>
@@ -74,20 +82,11 @@
           </provider>
         </entry>
       </file>
-      <file leaf-file-name="config.js" pinned="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/resources/assets/js/config.js">
+      <file leaf-file-name="papi.detail.js" pinned="false" current-in-tab="true">
+        <entry file="file://$PROJECT_DIR$/resources/assets/js/papi.detail.js">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="209">
-              <caret line="435" column="6" lean-forward="true" selection-start-line="435" selection-start-column="6" selection-end-line="435" selection-end-column="6" />
-            </state>
-          </provider>
-        </entry>
-      </file>
-      <file leaf-file-name="task.index.js" pinned="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/resources/assets/js/task.index.js">
-          <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="555">
-              <caret line="116" column="13" selection-start-line="116" selection-start-column="13" selection-end-line="116" selection-end-column="13" />
+            <state relative-caret-position="583">
+              <caret line="85" column="14" selection-start-line="85" selection-start-column="14" selection-end-line="85" selection-end-column="14" />
               <folding>
                 <element signature="e#0#30#0" expanded="true" />
               </folding>
@@ -107,36 +106,36 @@
   </component>
   <component name="FindInProjectRecents">
     <findStrings>
-      <find>industry</find>
-      <find>industryArr</find>
-      <find>changeTrailStatus</find>
-      <find>trailStatus</find>
-      <find>cooperation</find>
-      <find>changeCooperationType</find>
-      <find>changePriority</find>
-      <find>checkbox</find>
-      <find>projectStatus</find>
-      <find>changeTaskType</find>
-      <find>artistStatusArr</find>
-      <find>papiCommunicationStatusArr</find>
-      <find>taskPrincipalChange</find>
-      <find>signIntention</find>
-      <find>artistsInfo</find>
-      <find>artistOrigin</find>
-      <find>沟通状态</find>
-      <find>artistSource</find>
-      <find>changeCommunicationType</find>
-      <find>selectable</find>
-      <find>&lt;table</find>
-      <find>papicom</find>
-      <find>changeArtistType</find>
-      <find>artistTypeArr</find>
-      <find>weiboUrl</find>
-      <find>sign_contract_other_name</find>
-      <find>asspinner</find>
-      <find>addWork</find>
+      <find>fee</find>
+      <find>artistOriginArr</find>
       <find>gender</find>
+      <find>changeArtistSource</find>
+      <find>yesOrNoArr</find>
+      <find>button</find>
+      <find>addWork</find>
+      <find>changeArtistWeixin</find>
+      <find>artistWorksInfo</find>
+      <find>taskTypeArr</find>
+      <find>changeTaskType</find>
+      <find>taskName</find>
+      <find>principalChange</find>
+      <find>participantChange</find>
+      <find>taskLevelArr</find>
+      <find>changeTaskLevel</find>
+      <find>changeStartTime</find>
+      <find>artistWorkName</find>
+      <find>editBaseInfo</find>
+      <find>cancelEdit</find>
+      <find>changeWorkReleaseTime</find>
+      <find>changeArtistCommunication</find>
       <find>changArtistName</find>
+      <find>changeArtistIntention</find>
+      <find>CommunicationStatusArr</find>
+      <find>changeArtistDesc</find>
+      <find>papiCommunicationStatusArr</find>
+      <find>taskIntroduce</find>
+      <find>edit-selector</find>
+      <find>changeArtistSignStatus</find>
     </findStrings>
     <replaceStrings>
       <replace>clientLevelArr</replace>
@@ -144,6 +143,7 @@
       <replace>fixed-button</replace>
       <replace>participantInfo</replace>
       <replace>changeParticipantsInfo</replace>
+      <replace>artistSourceArr</replace>
       <replace>_uid</replace>
     </replaceStrings>
     <dirStrings>
@@ -200,14 +200,14 @@
         <option value="$PROJECT_DIR$/webpack.mix.js" />
         <option value="$PROJECT_DIR$/resources/views/artist/papi-index.blade.php" />
         <option value="$PROJECT_DIR$/resources/assets/js/papi.index.js" />
-        <option value="$PROJECT_DIR$/resources/assets/js/papi.detail.js" />
         <option value="$PROJECT_DIR$/resources/views/trail/detail.blade.php" />
-        <option value="$PROJECT_DIR$/resources/views/artist/papi-detail.blade.php" />
         <option value="$PROJECT_DIR$/resources/views/layouts/master.blade.php" />
         <option value="$PROJECT_DIR$/resources/views/client/detail.blade.php" />
         <option value="$PROJECT_DIR$/resources/assets/js/config.js" />
-        <option value="$PROJECT_DIR$/resources/assets/js/taiyang.detail.js" />
         <option value="$PROJECT_DIR$/resources/views/artist/taiyang-detail.blade.php" />
+        <option value="$PROJECT_DIR$/resources/views/artist/papi-detail.blade.php" />
+        <option value="$PROJECT_DIR$/resources/assets/js/taiyang.detail.js" />
+        <option value="$PROJECT_DIR$/resources/assets/js/papi.detail.js" />
       </list>
     </option>
   </component>
@@ -444,7 +444,7 @@
     <servers />
   </component>
   <component name="TimeTrackingManager">
-    <option name="totallyTimeSpent" value="181352000" />
+    <option name="totallyTimeSpent" value="186135000" />
   </component>
   <component name="TodoView">
     <todo-panel id="selected-file">
@@ -520,9 +520,6 @@
     </breakpoint-manager>
   </component>
   <component name="editorHistoryManager">
-    <entry file="file://$PROJECT_DIR$/resources/assets/js/user.js">
-      <provider selected="true" editor-type-id="text-editor" />
-    </entry>
     <entry file="file://$PROJECT_DIR$/resources/assets/components/select-staff.vue">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="225">
@@ -618,13 +615,6 @@
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="180">
           <caret line="12" column="19" selection-start-line="12" selection-start-column="19" selection-end-line="12" selection-end-column="19" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/resources/assets/components/edit-selector.vue">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="135">
-          <caret line="9" column="9" selection-start-line="9" selection-start-column="9" selection-end-line="9" selection-end-column="9" />
         </state>
       </provider>
     </entry>
@@ -789,16 +779,6 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/resources/assets/js/papi.detail.js">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="165">
-          <caret line="11" lean-forward="true" selection-start-line="11" selection-end-line="11" />
-          <folding>
-            <element signature="e#0#30#0" expanded="true" />
-          </folding>
-        </state>
-      </provider>
-    </entry>
     <entry file="file://$PROJECT_DIR$/resources/views/client/index.blade.php">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="15">
@@ -812,17 +792,6 @@
           <caret line="13" column="18" selection-start-line="13" selection-start-column="18" selection-end-line="13" selection-end-column="18" />
           <folding>
             <element signature="e#0#30#0" expanded="true" />
-          </folding>
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/resources/views/artist/papi-detail.blade.php">
-      <provider selected="true" editor-type-id="text-editor">
-        <state>
-          <caret line="115" column="2" selection-start-line="115" selection-start-column="2" selection-end-line="115" selection-end-column="2" />
-          <folding>
-            <element signature="e#6473#7695#0#HTML" />
-            <element signature="e#7720#9587#0#HTML" />
           </folding>
         </state>
       </provider>
@@ -853,16 +822,6 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/resources/assets/js/task.index.js">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="555">
-          <caret line="116" column="13" selection-start-line="116" selection-start-column="13" selection-end-line="116" selection-end-column="13" />
-          <folding>
-            <element signature="e#0#30#0" expanded="true" />
-          </folding>
-        </state>
-      </provider>
-    </entry>
     <entry file="file://$PROJECT_DIR$/resources/views/layouts/master.blade.php">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="441">
@@ -877,40 +836,86 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/resources/views/trail/detail.blade.php">
+    <entry file="file://$PROJECT_DIR$/resources/assets/components/edit-selector.vue">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="595">
-          <caret line="301" column="41" selection-start-line="301" selection-start-column="41" selection-end-line="301" selection-end-column="41" />
+        <state relative-caret-position="135">
+          <caret line="9" column="9" selection-start-line="9" selection-start-column="9" selection-end-line="9" selection-end-column="9" />
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/resources/assets/js/config.js">
+    <entry file="file://$PROJECT_DIR$/resources/assets/js/task.index.js">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="209">
-          <caret line="435" column="6" lean-forward="true" selection-start-line="435" selection-start-column="6" selection-end-line="435" selection-end-column="6" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/resources/assets/js/taiyang.detail.js">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="479">
-          <caret line="198" column="29" selection-start-line="198" selection-start-column="29" selection-end-line="198" selection-end-column="29" />
+        <state relative-caret-position="555">
+          <caret line="116" column="13" selection-start-line="116" selection-start-column="13" selection-end-line="116" selection-end-column="13" />
           <folding>
             <element signature="e#0#30#0" expanded="true" />
           </folding>
         </state>
       </provider>
     </entry>
+    <entry file="file://$PROJECT_DIR$/resources/assets/js/config.js">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="560">
+          <caret line="426" column="14" selection-start-line="426" selection-start-column="4" selection-end-line="426" selection-end-column="14" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/resources/views/trail/detail.blade.php">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="89">
+          <caret line="341" column="45" lean-forward="true" selection-start-line="341" selection-start-column="45" selection-end-line="341" selection-end-column="45" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/resources/assets/components/add-member.vue">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="315">
+          <caret line="21" column="19" selection-start-line="21" selection-start-column="19" selection-end-line="21" selection-end-column="19" />
+        </state>
+      </provider>
+    </entry>
     <entry file="file://$PROJECT_DIR$/resources/views/artist/taiyang-detail.blade.php">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="453">
-          <caret line="288" column="46" lean-forward="true" selection-start-line="288" selection-start-column="46" selection-end-line="288" selection-end-column="46" />
+        <state relative-caret-position="375">
+          <caret line="25" column="94" selection-start-line="25" selection-start-column="94" selection-end-line="25" selection-end-column="94" />
           <folding>
-            <element signature="e#5528#6651#0#HTML" />
-            <element signature="e#6672#8408#0#HTML" />
-            <element signature="e#8429#8603#0#HTML" />
-            <element signature="e#8820#8995#0#HTML" />
-            <element signature="e#10649#15652#0#HTML" />
+            <element signature="e#38207#41824#0#HTML" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/resources/views/artist/papi-detail.blade.php">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="384">
+          <caret line="30" column="74" selection-start-line="30" selection-start-column="74" selection-end-line="30" selection-end-column="74" />
+          <folding>
+            <element signature="e#6134#6448#0#HTML" />
+            <element signature="e#6473#7695#0#HTML" />
+            <element signature="e#7720#9587#0#HTML" />
+            <element signature="e#9612#9798#0#HTML" />
+            <element signature="e#10035#10222#0#HTML" />
+            <element signature="e#11163#16056#0#HTML" />
+            <element signature="e#30936#33805#0#HTML" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/resources/assets/js/taiyang.detail.js">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="347">
+          <caret line="180" column="18" lean-forward="true" selection-start-line="180" selection-start-column="18" selection-end-line="180" selection-end-column="18" />
+          <folding>
+            <element signature="e#0#30#0" expanded="true" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/resources/assets/js/papi.detail.js">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="583">
+          <caret line="85" column="14" selection-start-line="85" selection-start-column="14" selection-end-line="85" selection-end-column="14" />
+          <folding>
+            <element signature="e#0#30#0" expanded="true" />
           </folding>
         </state>
       </provider>

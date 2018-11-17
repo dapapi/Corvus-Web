@@ -444,7 +444,7 @@ let config = {
             value: 2
         }
     ],
-    artistOriginArr: [
+    artistSourceArr: [
         {
             name: '线上',
             value: 1

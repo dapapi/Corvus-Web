@@ -29,7 +29,7 @@
                     <a class="dropdown-item" role="menuitem" @click="">分配制作人</a>
                     <a class="dropdown-item" role="menuitem" @click="">分配宣传人</a>
                     <a class="dropdown-item" role="menuitem" @click="">自定义字段</a>
-                    <a class="dropdown-item" role="menuitem" @click="">隐私设置</a>
+                    <a class="dropdown-item" role="menuitem" @click="" data-toggle="modal" data-target="#addPrivacy">隐私设置</a>
                 </div>
             </div>
         </div>
@@ -205,15 +205,15 @@
                                     <i class="back-icon md-close animation-scale-up" aria-hidden="true"></i>
                                 </button>
                                 <div class="site-action-buttons">
-                                    <button type="button" data-action="trash" id="artist-del"
+                                    <button type="button" data-action="trash"
                                             class="btn-raised btn btn-success btn-floating animation-slide-bottom waves-effect waves-classic">
                                         <i class="icon md-download" aria-hidden="true"></i>
                                     </button>
-                                    <button type="button" data-action="trash" id="artist-del"
+                                    <button type="button" data-action="trash"
                                             class="btn-raised btn btn-success btn-floating animation-slide-bottom waves-effect waves-classic">
                                         <i class="icon md-upload" aria-hidden="true"></i>
                                     </button>
-                                    <button type="button" data-action="trash" id="artist-del" data-toggle="modal"
+                                    <button type="button" data-action="trash" data-toggle="modal"
                                             data-target="#addWork"
                                             class="btn-raised btn btn-success btn-floating animation-slide-bottom waves-effect waves-classic">
                                         <i class="icon md-plus" aria-hidden="true"></i>
@@ -260,7 +260,6 @@
                         </div>
                         <div class="tab-pane animation-fade  pb-20 fixed-button-father" id="forum-artist-base"
                              role="tabpanel">
-
                             <div class="card">
                                 <div class="card-header card-header-transparent card-header-bordered">
                                     <div class="float-left font-weight-bold third-title">艺人信息</div>
@@ -272,136 +271,146 @@
                                         <button class="btn btn-primary" @click="changeArtistBaseInfo">确定</button>
                                     </div>
                                 </div>
-                                <div class="card-block">
+                                <div class="card-block" v-if="artistInfo">
                                     <div class="clearfix">
                                         <div class="card-text py-10 px-0 clearfix col-md-6 float-left">
                                             <div class="col-md-2 float-left text-right pl-0">姓名</div>
                                             <div class="col-md-10 float-left font-weight-bold">
-                                                <edit-input :content="artistsInfo.name" :is-edit="isEdit"
+                                                <edit-input :content="artistInfo.name" :is-edit="isEdit"
                                                             @change="changArtistName"></edit-input>
                                             </div>
                                         </div>
                                         <div class="card-text py-10 px-0 clearfix col-md-6 float-left">
                                             <div class="col-md-2 float-left text-right pl-0">性别</div>
                                             <div class="col-md-10 float-left font-weight-bold">
-                                                <edit-selector :options="genderArr"
+                                                <edit-selector :options="genderArr" :content="artistInfo.gender"
+                                                               :is-edit="isEdit"
                                                                @change="changeArtistGender"></edit-selector>
                                             </div>
                                         </div>
                                         <div class="card-text py-10 px-0 clearfix col-md-6 float-left">
                                             <div class="col-md-2 float-left text-right pl-0">出生日期</div>
                                             <div class="col-md-10 float-left font-weight-bold">
-                                                <edit-datepicker :content="artistsInfo."></edit-datepicker>
+                                                <edit-datepicker :content="artistInfo.birthday"
+                                                                 :is-edit="isEdit"></edit-datepicker>
                                             </div>
+                                        </div>
+                                        <div class="card-text py-10 px-0 clearfix col-md-6 float-left">
+                                            <div class="col-md-2 float-left text-right pl-0">年龄？</div>
+                                            <div class="col-md-10 float-left font-weight-bold">
+                                                <edit-input :content="artistInfo.name" :is-edit="isEdit"
+                                                            @change="changArtistName"></edit-input>
+                                            </div>
+                                        </div>
+                                        <div class="card-text py-10 px-0 clearfix col-md-6 float-left">
+                                            <div class="col-md-2 float-left text-right pl-0">艺人来源</div>
+                                            <div class="col-md-10 float-left font-weight-bold">
+                                                <edit-selector :content="artistInfo.source" :options="artistSourceArr"
+                                                               :is-edit="isEdit"
+                                                               @change="changeArtistSource"></edit-selector>
+                                            </div>
+                                        </div>
+                                        <div class="card-text py-10 px-0 clearfix col-md-6 float-left">
+                                            <div class="col-md-2 float-left text-right pl-0">沟通状态</div>
+                                            <div class="col-md-10 float-left font-weight-bold">
+                                                <edit-selector :content="artistInfo.communication_status"
+                                                               :options="taiyangCommunicationStatusArr"
+                                                               :is-edit="isEdit"
+                                                               @change="changeArtistCommunication"></edit-selector>
+                                            </div>
+                                        </div>
+                                        <div class="card-text py-10 px-0 clearfix col-md-6 float-left">
+                                            <div class="col-md-2 float-left text-right pl-0">与我司签约意向</div>
+                                            <div class="col-md-10 float-left font-weight-bold">
+                                                <edit-selector :content="artistInfo.intention" :options="yesOrNoArr"
+                                                               :is-edit="isEdit"
+                                                               @change="changeArtistIntention"></edit-selector>
+                                            </div>
+                                        </div>
+                                        <div class="card-text py-10 px-0 clearfix col-md-6 float-left">
+                                            <div class="col-md-2 float-left text-right pl-0">是否签约其他公司</div>
+                                            <div class="col-md-10 float-left font-weight-bold">
+                                                <edit-selector :content="artistInfo.sign_contract_other"
+                                                               :options="yesOrNoArr"
+                                                               :is-edit="isEdit"
+                                                               @change="changeArtistSignStatus"></edit-selector>
+                                            </div>
+                                        </div>
+                                        <div class="card-text py-10 px-0 clearfix col-md-6 float-left">
+                                            <div class="col-md-2 float-left text-right pl-0">星探</div>
+                                            <div class="col-md-10 float-left font-weight-bold">
 
-                                        </div>
-                                        <div class="card-text py-10 px-0 clearfix col-md-6 float-left">
-                                            <div class="col-md-2 float-left text-right pl-0">预计费用</div>
-                                            <div class="col-md-10 float-left font-weight-bold">
-                                                <edit-number-spinner :content="trailInfo.fee" :is-edit="isEdit"
-                                                                     @change="changeTrailFee"></edit-number-spinner>
                                             </div>
                                         </div>
                                         <div class="card-text py-10 px-0 clearfix col-md-6 float-left">
-                                            <div class="col-md-2 float-left text-right pl-0">目标艺人</div>
+                                            <div class="col-md-2 float-left text-right pl-0">地区</div>
                                             <div class="col-md-10 float-left font-weight-bold">
-                                                <edit-selector :options="starsArr" :is-edit="isEdit"
-                                                               :content="selectedExpectationsArr"
-                                                               :multiple="true"
-                                                               @change="changeExpectations"></edit-selector>
-                                            </div>
 
+                                            </div>
                                         </div>
                                         <div class="card-text py-10 px-0 clearfix col-md-6 float-left">
-                                            <div class="col-md-2 float-left text-right pl-0">推荐艺人</div>
+                                            <div class="col-md-2 float-left text-right pl-0">艺人规划</div>
                                             <div class="col-md-10 float-left font-weight-bold">
-                                                <edit-selector :options="starsArr" :is-edit="isEdit"
-                                                               :content="selectedRecommendationsArr"
-                                                               :multiple="true"
-                                                               @change="changeRecommendations"></edit-selector>
-                                            </div>
 
-                                        </div>
-                                        <div class="card-text py-10 px-0 clearfix col-md-6 float-left">
-                                            <div class="col-md-2 float-left text-right pl-0">行业</div>
-                                            <div class="col-md-10 float-left font-weight-bold">
-                                                <edit-selector :is-edit="isEdit" :options="industriesArr"
-                                                               :content="trailInfo.industry_id"></edit-selector>
                                             </div>
                                         </div>
                                         <div class="card-text py-10 px-0 clearfix col-md-6 float-left">
-                                            <div class="col-md-2 float-left text-right pl-0">优先级</div>
+                                            <div class="col-md-2 float-left text-right pl-0">手机号</div>
                                             <div class="col-md-10 float-left font-weight-bold">
-                                                {{--<edit-selector :is-edit="isEdit" :options="clientLevelArr"></edit-selector>--}}
-                                            </div>
-                                        </div>
-                                        <div class="card-text py-10 px-0 clearfix col-md-6 float-left"
-                                             v-if="trailInfo.type === 4">
-                                            <div class="col-md-2 float-left text-right pl-0">是否锁价</div>
-                                            <div class="col-md-10 float-left font-weight-bold">
-                                                <edit-selector :is-edit="isEdit" :options="lockArr"
-                                                               :content="trailInfo.lock_status"></edit-selector>
-                                            </div>
-                                        </div>
-                                        <div class="card-text py-10 px-0 clearfix col-md-6 float-left"
-                                             v-if="trailInfo.type !== 4">
-                                            <div class="col-md-2 float-left text-right pl-0">线索状态</div>
-                                            <div class="col-md-10 float-left font-weight-bold">
-                                                {{--<edit-selector :is-edit="isEdit" :options="clientLevelArr"></edit-selector>--}}
+                                                <edit-input :content="artistInfo.phone" :is-edit="isEdit"
+                                                            @change="changeArtistPhone"></edit-input>
                                             </div>
                                         </div>
                                         <div class="card-text py-10 px-0 clearfix col-md-6 float-left">
-                                            <div class="col-md-2 float-left text-right pl-0">合作类型</div>
+                                            <div class="col-md-2 float-left text-right pl-0">微信</div>
                                             <div class="col-md-10 float-left font-weight-bold">
-                                                <edit-selector :is-edit="isEdit"
-                                                               :options="clientLevelArr"></edit-selector>
+                                                <edit-input :content="artistInfo.wechat" :is-edit="isEdit"
+                                                            @change="changeArtistWeixin"></edit-input>
                                             </div>
                                         </div>
                                         <div class="card-text py-10 px-0 clearfix col-md-6 float-left">
-                                            <div class="col-md-2 float-left text-right pl-0">品牌名称</div>
+                                            <div class="col-md-2 float-left text-right pl-0">邮箱</div>
                                             <div class="col-md-10 float-left font-weight-bold">
-                                                <edit-input :content="trailInfo.brand" :is-edit="isEdit"
-                                                            @change="changeTrailBrand"></edit-input>
+                                                <edit-input :content="artistInfo.email" :is-edit="isEdit"
+                                                            @change="changeArtistEmail"></edit-input>
                                             </div>
+                                        </div>
+                                        <div class="card-text py-10 px-0 clearfix col-md-6 float-left">
+                                            <div class="col-md-2 float-left text-right pl-0">社交平台</div>
+                                            <div class="col-md-10 float-left font-weight-bold">
 
+                                            </div>
                                         </div>
                                         <div class="card-text py-10 px-0 clearfix col-md-6 float-left">
-                                            <div class="col-md-2 float-left text-right pl-0">公司名称</div>
+                                            <div class="col-md-2 float-left text-right pl-0">微博主页地址</div>
                                             <div class="col-md-10 float-left font-weight-bold">
-                                                <edit-input :content="trailInfo.client.data.company" :is-edit="isEdit"
-                                                            @change="changeTrailCompany"></edit-input>
-                                            </div>
 
+                                            </div>
                                         </div>
                                         <div class="card-text py-10 px-0 clearfix col-md-6 float-left">
-                                            <div class="col-md-2 float-left text-right pl-0">级别</div>
+                                            <div class="col-md-2 float-left text-right pl-0">微博粉丝数</div>
                                             <div class="col-md-10 float-left font-weight-bold">
-                                                <edit-selector :content="trailInfo.client.data.grade" :is-edit="isEdit"
-                                                               @change="changeTrailCompanyLevel"
-                                                               :options="clientLevelArr"></edit-selector>
-                                            </div>
 
-                                        </div>
-                                        <div class="card-text py-10 px-0 clearfix col-md-6 float-left">
-                                            <div class="col-md-2 float-left text-right pl-0">联系人</div>
-                                            <div class="col-md-10 float-left font-weight-bold">
-                                                <edit-input :content="trailInfo.contact.data.name" :is-edit="isEdit"
-                                                            @change="changeTrailContact"></edit-input>
                                             </div>
                                         </div>
                                         <div class="card-text py-10 px-0 clearfix col-md-6 float-left">
-                                            <div class="col-md-2 float-left text-right pl-0">联系人电话</div>
+                                            <div class="col-md-2 float-left text-right pl-0">抖音Id</div>
                                             <div class="col-md-10 float-left font-weight-bold">
-                                                <edit-input :content="trailInfo.contact.data.phone" :is-edit="isEdit"
-                                                            @change="changeTrailContactPhone"></edit-input>
-                                            </div>
 
+                                            </div>
                                         </div>
+                                        <div class="card-text py-10 px-0 clearfix col-md-6 float-left">
+                                            <div class="col-md-2 float-left text-right pl-0">抖音粉丝数</div>
+                                            <div class="col-md-10 float-left font-weight-bold">
+
+                                            </div>
+                                        </div>
+
                                         <div class="card-text py-10 px-0 clearfix col-md-6 float-left">
                                             <div class="col-md-2 float-left text-right pl-0">备注</div>
                                             <div class="col-md-10 float-left font-weight-bold">
-                                                <edit-textarea :content="trailInfo.desc" :is-edit="isEdit"
-                                                               @change="changeTrailDesc"></edit-textarea>
+                                                <edit-textarea :content="artistInfo.desc" :is-edit="isEdit"
+                                                               @change="changeArtistDesc"></edit-textarea>
                                             </div>
 
                                         </div>
@@ -597,6 +606,64 @@
                         <button class="btn btn-primary" type="submit" @click="addWork">确定</button>
                     </div>
 
+                </div>
+            </div>
+        </div>
+
+        <div class="modal fade" id="addPrivacy" aria-hidden="true" aria-labelledby="addLabelForm"
+             role="dialog" tabindex="-1">
+            <div class="modal-dialog modal-simple">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <button type="button" class="close" aria-hidden="true" data-dismiss="modal">
+                            <i class="md-close" aria-hidden="true"></i>
+                        </button>
+                        <h4 class="modal-title">隐私设置</h4>
+                    </div>
+                    <div class="modal-body">
+                        <div class="example">
+                            <div class="col-md-2 text-right float-left">收款金额</div>
+                            <div class="col-md-10 float-left">
+                                <add-member></add-member>
+                            </div>
+                        </div>
+                        <div class="example">
+                            <div class="col-md-2 text-right float-left">付款金额</div>
+                            <div class="col-md-10 float-left">
+                                <add-member></add-member>
+
+                            </div>
+                        </div>
+                        <div class="example">
+                            <div class="col-md-2 text-right float-left">合同类型</div>
+                            <div class="col-md-10 float-left">
+                                <add-member></add-member>
+
+                            </div>
+                        </div>
+                        <div class="example">
+                            <div class="col-md-2 text-right float-left">分成比例</div>
+                            <div class="col-md-10 float-left">
+                                <add-member></add-member>
+                            </div>
+                        </div>
+                        <div class="example">
+                            <div class="col-md-2 text-right float-left">孵化期</div>
+                            <div class="col-md-10 float-left">
+                                <add-member></add-member>
+                            </div>
+                        </div>
+                        <div class="example">
+                            <div class="col-md-2 text-right float-left">账单</div>
+                            <div class="col-md-10 float-left">
+                                <add-member></add-member>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="modal-footer">
+                        <button class="btn btn-sm btn-white btn-pure" data-dismiss="modal">取消</button>
+                        <button class="btn btn-primary" type="submit" @click="addPrivacy">确定</button>
+                    </div>
                 </div>
             </div>
         </div>

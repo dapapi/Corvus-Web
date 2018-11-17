@@ -8,7 +8,7 @@ let app = new Vue({
             current_page: 1,
             total_pages: 1,
             genderArr: config.genderArr,
-            artistOriginArr: config.artistOriginArr,
+            artistSourceArr: config.artistSourceArr,
             customizeInfo: config.customizeInfo,
             projectStatus: config.projectStatus,
             yesOrNoArr: config.yesOrNoArr,

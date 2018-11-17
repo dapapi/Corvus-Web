@@ -30,6 +30,11 @@ let app = new Vue({
             coActor: '',
             isEdit: '',
             genderArr: config.genderArr,
+            artistDesc: '',
+            artistSourceArr: config.artistSourceArr,
+            taiyangCommunicationStatusArr: config.taiyangCommunicationStatusArr,
+            yesOrNoArr: config.yesOrNoArr,
+
 
         },
 
@@ -176,6 +181,10 @@ let app = new Vue({
                 })
             },
 
+            addPrivacy: function () {
+
+            },
+
             changeWorkReleaseTime: function (value) {
                 app.workReleaseTime = value
             },
@@ -185,7 +194,12 @@ let app = new Vue({
             },
 
             editBaseInfo: function () {
-                app.isEdit = true
+                app.isEdit = true;
+                app.changeInfo = [];
+            },
+
+            cancelEdit: function () {
+                app.isEdit = false
             },
 
             changeArtistBaseInfo: function () {
@@ -198,8 +212,39 @@ let app = new Vue({
 
             changeArtistGender: function (value) {
                 app.artistInfo.gender = value
-            }
+            },
 
+            changeArtistDesc: function (value) {
+                app.artistInfo.desc = value
+            },
+
+            changeArtistSource: function (value) {
+                app.artistInfo.source = value
+            },
+
+            changeArtistCommunication: function (value) {
+                app.artistInfo.communication_status = value
+            },
+
+            changeArtistIntention: function (value) {
+                app.artistInfo.intention = value
+            },
+
+            changeArtistSignStatus: function (value) {
+                app.artistInfo.sign_contract_other = value
+            },
+
+            changeArtistPhone: function (value) {
+                app.artistInfo.phone = value
+            },
+
+            changeArtistWeixin: function (value) {
+                app.artistInfo.wechat = value
+            },
+
+            changeArtistEmail: function (value) {
+                app.artistInfo.email = value
+            },
 
         }
     })
