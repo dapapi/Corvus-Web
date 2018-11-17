@@ -42,7 +42,7 @@
                         </button>
                     </div>
                 </div>
-                <table class="table is-indent example" data-plugin="animateList" data-animate="fade" data-child="tr"
+                <table class="table table-hover is-indent example" data-plugin="animateList" data-animate="fade" data-child="tr"
                        data-selectable="selectable">
                     <tr class="animation-fade"
                         style="animation-fill-mode: backwards; animation-duration: 250ms; animation-delay: 0ms;">

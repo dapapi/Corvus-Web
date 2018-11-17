@@ -1,6 +1,6 @@
 @extends('layouts.master')
 
-@section('title','艺人管理')
+@section('title','博主管理')
 @section('body-class','dashboard')
 
 @section('body')
@@ -12,7 +12,18 @@
     <div class="page" id="root">
 
         <div class="page-header page-header-bordered">
-            <h1 class="page-title">艺人管理</h1>
+            <h1 class="page-title">博主管理</h1>
+
+            <div class="page-header-actions dropdown show task-dropdown float-right">
+                <i class="icon md-more font-size-24" aria-hidden="true" id="taskDropdown"
+                   data-toggle="dropdown" aria-expanded="false"></i>
+                <div class="dropdown-menu dropdown-menu-right task-dropdown-item" aria-labelledby="taskDropdown"
+                     role="menu" x-placement="bottom-end">
+                    <a class="dropdown-item" role="menuitem" @click="">导入</a>
+                    <a class="dropdown-item" role="menuitem" @click="">导出</a>
+                    <a class="dropdown-item" role="menuitem" @click="">分配制作人</a>
+                </div>
+            </div>
         </div>
 
         <div class="page-content container-fluid">
@@ -60,12 +71,16 @@
 
                 <div class="page-content tab-content nav-tabs-animate bg-white">
                     <div class="tab-pane animation-fade active" id="forum-artist" role="tabpanel">
-                        <table class="table is-indent" data-plugin="animateList" data-animate="fade"
-                               data-child="tr"
+                        <table class="table table-hover is-indent" data-plugin="selectable"
                                data-selectable="selectable">
-                            <tr class="animation-fade"
-                                style="animation-fill-mode: backwards; animation-duration: 250ms; animation-delay: 0ms;">
-                                <th class="pre-cell"></th>
+                            <tr>
+                                <th class="w-50">
+                                        <span class="checkbox-custom checkbox-primary">
+                                            <input class="selectable-all" type="checkbox"
+                                                   @change="selectArtists('all')">
+                                            <label></label>
+                                        </span>
+                                </th>
                                 <th class="cell-300" scope="col">昵称</th>
                                 <th class="cell-300" scope="col">类型</th>
                                 <th class="cell-300" scope="col">微博平台粉丝数</th>
@@ -76,13 +91,31 @@
                                 <th class="suf-cell"></th>
                             </tr>
                             <tr v-for="artist in artistsInfo">
-                                <td class="pre-cell"></td>
+                                <td>
+                                    <span class="checkbox-custom checkbox-primary">
+                                        <input class="selectable-item" type="checkbox" :id="'row-' + artist.id"
+                                               :value="artist.id" @change="selectArtists(artist.id)">
+                                        <label :for="'row-' + artist.id"></label>
+                                    </span>
+                                </td>
+                                <td class="pointer-content" @click="redirectArtistDetail(artist.id)">@{{ artist.nickname }}</td>
+                                <td>@{{ artist.type.data.name }}</td>
                                 <td>暂无</td>
-                                <td>暂无</td>
-                                <td>暂无</td>
-                                <td>暂无</td>
-                                <td>暂无</td>
-                                <td>暂无</td>
+                                <td>
+                                    <template v-if="artist.intention">是</template>
+                                    <template v-else>否</template>
+                                </td>
+                                <td>
+                                    <template v-if="artist.communication_status">
+                                        @{{ papiCommunicationStatusArr.find(item => item.value ==
+                                        artist.communication_status).name}}
+                                    </template>
+                                </td>
+                                <td>
+                                    <template v-if="artist.producer">
+                                        @{{ artist.producer.data.name }}
+                                    </template>
+                                </td>
                                 <td>暂无</td>
                                 <td class="suf-cell"></td>
                             </tr>
@@ -126,22 +159,22 @@
                         <div class="example">
                             <div class="col-md-2 text-right float-left">平台</div>
                             <div class="col-md-10 float-left pl-0">
-                                <div class="checkbox-custom checkbox-primary d-inline pr-20 pl-0">
-                                    <input type="radio" name="platform" id="platformAll" @change="changeCheckbox(1)">
+                                <div class="checkbox-custom checkbox-primary d-inline pr-20">
+                                    <input type="checkbox" name="platform" id="platformAll" @change="changeCheckbox(1)">
                                     <label for="platformAll">全选</label>
                                 </div>
                                 <div class="checkbox-custom checkbox-primary d-inline pr-20">
-                                    <input type="radio" name="platform" id="platformWeibo"
+                                    <input type="checkbox" name="platform" id="platformWeibo"
                                            @change="changeCheckbox(2)">
                                     <label for="platformWeibo">微博</label>
                                 </div>
                                 <div class="checkbox-custom checkbox-primary d-inline pr-20">
-                                    <input type="radio" name="platform" id="platformDouyin"
+                                    <input type="checkbox" name="platform" id="platformDouyin"
                                            @change="changeCheckbox(3)">
                                     <label for="platformDouyin">抖音</label>
                                 </div>
                                 <div class="checkbox-custom checkbox-primary d-inline pr-20">
-                                    <input type="radio" name="platform" id="platformXHS" @change="changeCheckbox(4)">
+                                    <input type="checkbox" name="platform" id="platformXHS" @change="changeCheckbox(4)">
                                     <label for="platformXHS">小红书</label>
                                 </div>
                             </div>
@@ -149,7 +182,8 @@
                         <div class="example">
                             <div class="col-md-2 text-right float-left">类型</div>
                             <div class="col-md-10 float-left pl-0">
-                                <input type="text" class="form-control" placeholder="请输入类型" v-model="artistType">
+                                <selectors :options="artistTypeArr" :placeholder="'请选择类型'"
+                                           @change="changeArtistType"></selectors>
                             </div>
                         </div>
                         <div class="example">
@@ -196,7 +230,8 @@
                                            @change="changeSignIntention"></selectors>
                             </div>
                             <div class="col-md-5 float-left pl-0" v-if="!signIntention">
-                                <textarea name="" rows="1" class="form-control" placeholder="请填写不签约理由"></textarea>
+                                <textarea name="" rows="1" class="form-control" placeholder="请填写不签约理由"
+                                          v-model="intention_desc"></textarea>
                             </div>
                         </div>
                         <div class="example">
@@ -206,7 +241,8 @@
                                            @change="isSignCompany"></selectors>
                             </div>
                             <div class="col-md-5 float-left pl-0" v-if="signCompany == 1">
-                                <input type="text" class="form-control" placeholder="请输入已签约公司名称">
+                                <input type="text" class="form-control" placeholder="请输入已签约公司名称"
+                                       v-model="signCompanyName">
                             </div>
                         </div>
                         <div class="example">

@@ -42,7 +42,7 @@
                 </div>
 
                 <div class="col-md-12">
-                    <table class="table is-indent" data-plugin="animateList" data-animate="fade"
+                    <table class="table table-hover is-indent" data-plugin="animateList" data-animate="fade"
                            data-child="tr"
                            data-selectable="selectable">
                         <tr class="animation-fade"

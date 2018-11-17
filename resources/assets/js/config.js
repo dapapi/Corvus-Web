@@ -394,6 +394,36 @@ let config = {
             value: 4
         },
     ],
+    taiyangCommunicationStatusArr: [
+        {
+            name: '已签约',
+            value: 1
+        },
+        {
+            name: '经理人沟通中',
+            value: 2
+        },
+        {
+            name: '兼职星探沟通中',
+            value: 3
+        },
+        {
+            name: '待定',
+            value: 4
+        },
+        {
+            name: '淘汰',
+            value: 5
+        },
+        {
+            name: '合同中',
+            value: 6
+        },
+        {
+            name: '联系但无回复',
+            value: 7
+        },
+    ],
     yesOrNoArr: [
         {
             name: '是',
@@ -478,7 +508,25 @@ let config = {
             value: 1
         },
 
-    ]
+    ],
+    workTypeArr: [
+        {
+            name: '电影',
+            value: 1
+        },
+        {
+            name: '电视剧',
+            value: 2
+        },
+        {
+            name: '综艺',
+            value: 3
+        },
+        {
+            name: '网剧',
+            value: 4
+        }
+    ],
 
 
 };

@@ -23,335 +23,341 @@
 
         <div class="page-content container-fluid" v-if="trailInfo">
 
-            <div class="panel col-md-12 pb-20">
+            <div class="panel col-md-12">
                 <div class="card-block">
                     <h4 class="card-title">@{{ trailInfo.title }}</h4>
-                </div>
-                <div class="card-text clearfix mb-20">
-                    <div class="col-md-6 float-left">
-                        <div class="float-left pl-0 pr-2 col-md-3">
-                            <i class="md-plus pr-2" aria-hidden="true"></i>线索类型
+
+                    <div class="card-text clearfix example">
+                        <div class="col-md-6 float-left pl-0">
+                            <div class="float-left pl-0 pr-2 col-md-2">
+                                <i class="md-plus pr-2" aria-hidden="true"></i>线索类型
+                            </div>
+                            <div class="font-weight-bold float-left">
+                                <template v-if="trailInfo.type === 1">影视线索</template>
+                                <template v-if="trailInfo.type === 2">综艺线索</template>
+                                <template v-if="trailInfo.type === 3">商务线索</template>
+                                <template v-if="trailInfo.type === 4">papi线索</template>
+                            </div>
                         </div>
-                        <div class="font-weight-bold float-left">
-                            <template v-if="trailInfo.type === 1">影视线索</template>
-                            <template v-if="trailInfo.type === 2">综艺线索</template>
-                            <template v-if="trailInfo.type === 3">商务线索</template>
-                            <template v-if="trailInfo.type === 4">papi线索</template>
-                        </div>
-                    </div>
-                    <div class="col-md-6 float-left">
-                        <div class="float-left pl-0 pr-2 col-md-3">
-                            <i class="md-plus pr-2" aria-hidden="true"></i>负责人
-                        </div>
-                        <div class="font-weight-bold float-left" v-if="trailInfo.principal">
-                            @{{ trailInfo.principal.data.name }}
-                        </div>
-                    </div>
-                </div>
-                <div class="card-text clearfix mb-20">
-                    <div class="col-md-6 float-left">
-                        <div class="float-left pl-0 pr-2 col-md-3">
-                            <i class="md-plus pr-2" aria-hidden="true"></i>销售进展
-                        </div>
-                        <div class="font-weight-bold float-left">
-                            <template v-if="trailInfo.progress_status === 1">未确定合作</template>
-                            <template v-else-if="trailInfo.progress_status === 2">确定合作</template>
-                            <template v-else-if="trailInfo.progress_status === 0">已拒绝</template>
+                        <div class="col-md-6 float-left pl-0">
+                            <div class="float-left pl-0 pr-2 col-md-2">
+                                <i class="md-plus pr-2" aria-hidden="true"></i>负责人
+                            </div>
+                            <div class="font-weight-bold float-left" v-if="trailInfo.principal">
+                                @{{ trailInfo.principal.data.name }}
+                            </div>
                         </div>
                     </div>
-                    <div class="col-md-6 float-left">
-                        <div class="float-left pl-0 pr-2 col-md-3">
-                            <i class="md-plus pr-2" aria-hidden="true"></i>预计费用
+                    <div class="card-text clearfix example">
+                        <div class="col-md-6 float-left pl-0">
+                            <div class="float-left pl-0 pr-2 col-md-2">
+                                <i class="md-plus pr-2" aria-hidden="true"></i>销售进展
+                            </div>
+                            <div class="font-weight-bold float-left">
+                                <template v-if="trailInfo.progress_status === 1">未确定合作</template>
+                                <template v-else-if="trailInfo.progress_status === 2">确定合作</template>
+                                <template v-else-if="trailInfo.progress_status === 0">已拒绝</template>
+                            </div>
                         </div>
-                        <div class="font-weight-bold float-left">
-                            <template v-if="trailInfo.fee">
-                                @{{ trailInfo.fee }}
-                            </template>
-                            <template v-else>
-                                0
-                            </template>
-                            /元
+                        <div class="col-md-6 float-left pl-0">
+                            <div class="float-left pl-0 pr-2 col-md-2">
+                                <i class="md-plus pr-2" aria-hidden="true"></i>预计费用
+                            </div>
+                            <div class="font-weight-bold float-left">
+                                <template v-if="trailInfo.fee">
+                                    @{{ trailInfo.fee }}
+                                </template>
+                                <template v-else>
+                                    0
+                                </template>
+                                /元
+                            </div>
                         </div>
                     </div>
-                </div>
-                <div class="card-text clearfix mb-20">
-                    <div class="col-md-6 float-left">
-                        <div class="float-left pl-0 pr-2 col-md-3">
-                            <i class="md-plus pr-2" aria-hidden="true"></i>目标艺人
-                        </div>
-                        <div class="font-weight-bold float-left" v-if="trailInfo.expectations">
+                    <div class="card-text clearfix example">
+                        <div class="col-md-6 float-left pl-0">
+                            <div class="float-left pl-0 pr-2 col-md-2">
+                                <i class="md-plus pr-2" aria-hidden="true"></i>目标艺人
+                            </div>
+                            <div class="font-weight-bold float-left" v-if="trailInfo.expectations">
                             <span v-for="expectation in trailInfo.expectations.data">
                                 @{{ expectation.name }}
                             </span>
+                            </div>
                         </div>
-                    </div>
-                    <div class="col-md-6 float-left">
-                        <div class="float-left pl-0 pr-2 col-md-3">
-                            <i class="md-plus pr-2" aria-hidden="true"></i>推荐艺人
-                        </div>
-                        <div class="font-weight-bold float-left" v-if="trailInfo.recommendations">
+                        <div class="col-md-6 float-left pl-0">
+                            <div class="float-left pl-0 pr-2 col-md-2">
+                                <i class="md-plus pr-2" aria-hidden="true"></i>推荐艺人
+                            </div>
+                            <div class="font-weight-bold float-left" v-if="trailInfo.recommendations">
                             <span v-for="recommendation in trailInfo.recommendations.data">
                                 @{{ recommendation.name }}
                             </span>
+                            </div>
                         </div>
                     </div>
-                </div>
 
-                <div class="card-text clearfix mb-20">
-                    <div class="col-md-6 float-left">
-                        <div class="float-left pl-0 pr-2 col-md-3">
-                            <i class="md-plus pr-2" aria-hidden="true"></i>公司
+                    <div class="card-text clearfix example">
+                        <div class="col-md-6 float-left pl-0">
+                            <div class="float-left pl-0 pr-2 col-md-2">
+                                <i class="md-plus pr-2" aria-hidden="true"></i>公司
+                            </div>
+                            <div class="font-weight-bold float-left pointer-content hover-content"
+                                 @click="redirectCompany(trailInfo.client.data.id)">
+                                @{{ trailInfo.client.data.company }}
+                            </div>
                         </div>
-                        <div class="font-weight-bold float-left pointer-content hover-content"
-                             @click="redirectCompany(trailInfo.client.data.id)">
-                            @{{ trailInfo.client.data.company }}
+                        <div class="col-md-6 float-left pl-0">
+                            <div class="float-left pl-0 pr-2 col-md-2">
+                                <i class="md-plus pr-2" aria-hidden="true"></i>项目
+                            </div>
+                            <div class="font-weight-bold float-left pointer-content hover-content"
+                                 @click="redirectProject(trailInfo.project.data.id)" v-if="trailInfo.project">
+                                @{{ trailInfo.project.data.title }}
+                            </div>
                         </div>
                     </div>
-                    <div class="col-md-6 float-left">
-                        <div class="float-left pl-0 pr-2 col-md-3">
-                            <i class="md-plus pr-2" aria-hidden="true"></i>项目
-                        </div>
-                        <div class="font-weight-bold float-left pointer-content hover-content"
-                             @click="redirectProject(trailInfo.project.data.id)" v-if="trailInfo.project">
-                            @{{ trailInfo.project.data.title }}
-                        </div>
-                    </div>
+
                 </div>
             </div>
             <div class="col-md-12 panel">
 
-                <ul class="nav nav-tabs nav-tabs-line" role="tablist">
-                    <li class="nav-item" role="presentation">
-                        <a class="nav-link active" data-toggle="tab" href="#forum-trail-base"
-                           aria-controls="forum-base"
-                           aria-expanded="true" role="tab">概况</a>
-                    </li>
-                    <li class="nav-item" role="presentation" @click="getTrailTask">
-                        <a class="nav-link" data-toggle="tab" href="#forum-trail-tasks"
-                           aria-controls="forum-present"
-                           aria-expanded="false" role="tab">任务</a>
-                    </li>
-                </ul>
-                <div class="tab-content nav-tabs-animate bg-white col-md-12">
-                    <div class="tab-pane animation-fade active" id="forum-trail-base" role="tabpanel">
-                        <div class="card">
-                            <div class="card-header card-header-transparent card-header-bordered">
-                                <div class="float-left font-weight-bold third-title">销售线索信息</div>
-                                <div class="float-right">
-                                    <i class="icon md-edit" aria-hidden="true" @click="editBaseInfo"></i>
-                                </div>
-                                <div class="float-right mr-40" v-show="isEdit">
-                                    <button class="btn btn-sm btn-white btn-pure" @click="cancelEdit">取消</button>
-                                    <button class="btn btn-primary" @click="changeTrailBaseInfo">确定</button>
-                                </div>
-                            </div>
-                            <div class="card-block">
-                                <div class="clearfix">
-                                    <div class="card-text py-10 px-0 clearfix col-md-6 float-left">
-                                        <div class="col-md-2 float-left text-right pl-0">线索名称</div>
-                                        <div class="col-md-10 float-left font-weight-bold">
-                                            <edit-input :content="trailInfo.title" :is-edit="isEdit"
-                                                        @change="changeTrailName"></edit-input>
-                                        </div>
+                <div class="col-md-12">
+                    <ul class="nav nav-tabs nav-tabs-line" role="tablist">
+                        <li class="nav-item" role="presentation">
+                            <a class="nav-link active" data-toggle="tab" href="#forum-trail-base"
+                               aria-controls="forum-base"
+                               aria-expanded="true" role="tab">概况</a>
+                        </li>
+                        <li class="nav-item" role="presentation" @click="getTrailTask">
+                            <a class="nav-link" data-toggle="tab" href="#forum-trail-tasks"
+                               aria-controls="forum-present"
+                               aria-expanded="false" role="tab">任务</a>
+                        </li>
+                    </ul>
+                    <div class="tab-content nav-tabs-animate bg-white col-md-12">
+                        <div class="tab-pane animation-fade active" id="forum-trail-base" role="tabpanel">
+                            <div class="card">
+                                <div class="card-header card-header-transparent card-header-bordered">
+                                    <div class="float-left font-weight-bold third-title">销售线索信息</div>
+                                    <div class="float-right">
+                                        <i class="icon md-edit" aria-hidden="true" @click="editBaseInfo"></i>
                                     </div>
-                                    <div class="card-text py-10 px-0 clearfix col-md-6 float-left">
-                                        <div class="col-md-2 float-left text-right pl-0">线索来源</div>
-                                        <div class="col-md-10 float-left font-weight-bold">
-
-                                        </div>
-                                    </div>
-                                    <div class="card-text py-10 px-0 clearfix col-md-6 float-left">
-                                        <div class="col-md-2 float-left text-right pl-0">负责人</div>
-                                        <div class="col-md-10 float-left font-weight-bold">
-                                            <edit-input-selector :is-edit="isEdit"
-                                                                 @change="changeTrailPrincipal"></edit-input-selector>
-                                        </div>
-
-                                    </div>
-                                    <div class="card-text py-10 px-0 clearfix col-md-6 float-left">
-                                        <div class="col-md-2 float-left text-right pl-0">预计费用</div>
-                                        <div class="col-md-10 float-left font-weight-bold">
-                                            <edit-number-spinner :content="trailInfo.fee" :is-edit="isEdit"
-                                                                 @change="changeTrailFee"></edit-number-spinner>
-                                        </div>
-                                    </div>
-                                    <div class="card-text py-10 px-0 clearfix col-md-6 float-left">
-                                        <div class="col-md-2 float-left text-right pl-0">目标艺人</div>
-                                        <div class="col-md-10 float-left font-weight-bold">
-                                            <edit-selector :options="starsArr" :is-edit="isEdit"
-                                                           :content="selectedExpectationsArr"
-                                                           :multiple="true"
-                                                           @change="changeExpectations"></edit-selector>
-                                        </div>
-
-                                    </div>
-                                    <div class="card-text py-10 px-0 clearfix col-md-6 float-left">
-                                        <div class="col-md-2 float-left text-right pl-0">推荐艺人</div>
-                                        <div class="col-md-10 float-left font-weight-bold">
-                                            <edit-selector :options="starsArr" :is-edit="isEdit"
-                                                           :content="selectedRecommendationsArr"
-                                                           :multiple="true"
-                                                           @change="changeRecommendations"></edit-selector>
-                                        </div>
-
-                                    </div>
-                                    <div class="card-text py-10 px-0 clearfix col-md-6 float-left">
-                                        <div class="col-md-2 float-left text-right pl-0">行业</div>
-                                        <div class="col-md-10 float-left font-weight-bold">
-                                            <edit-selector :is-edit="isEdit" :options="industriesArr"
-                                                           :content="trailInfo.industry_id"></edit-selector>
-                                        </div>
-                                    </div>
-                                    <div class="card-text py-10 px-0 clearfix col-md-6 float-left">
-                                        <div class="col-md-2 float-left text-right pl-0">优先级</div>
-                                        <div class="col-md-10 float-left font-weight-bold">
-                                            {{--<edit-selector :is-edit="isEdit" :options="clientLevelArr"></edit-selector>--}}
-                                        </div>
-                                    </div>
-                                    <div class="card-text py-10 px-0 clearfix col-md-6 float-left"
-                                         v-if="trailInfo.type === 4">
-                                        <div class="col-md-2 float-left text-right pl-0">是否锁价</div>
-                                        <div class="col-md-10 float-left font-weight-bold">
-                                            <edit-selector :is-edit="isEdit" :options="lockArr"
-                                                           :content="trailInfo.lock_status"></edit-selector>
-                                        </div>
-                                    </div>
-                                    <div class="card-text py-10 px-0 clearfix col-md-6 float-left"
-                                         v-if="trailInfo.type !== 4">
-                                        <div class="col-md-2 float-left text-right pl-0">线索状态</div>
-                                        <div class="col-md-10 float-left font-weight-bold">
-                                            {{--<edit-selector :is-edit="isEdit" :options="clientLevelArr"></edit-selector>--}}
-                                        </div>
-                                    </div>
-                                    <div class="card-text py-10 px-0 clearfix col-md-6 float-left">
-                                        <div class="col-md-2 float-left text-right pl-0">合作类型</div>
-                                        <div class="col-md-10 float-left font-weight-bold">
-                                            <edit-selector :is-edit="isEdit" :options="clientLevelArr"></edit-selector>
-                                        </div>
-                                    </div>
-                                    <div class="card-text py-10 px-0 clearfix col-md-6 float-left">
-                                        <div class="col-md-2 float-left text-right pl-0">品牌名称</div>
-                                        <div class="col-md-10 float-left font-weight-bold">
-                                            <edit-input :content="trailInfo.brand" :is-edit="isEdit"
-                                                        @change="changeTrailBrand"></edit-input>
-                                        </div>
-
-                                    </div>
-                                    <div class="card-text py-10 px-0 clearfix col-md-6 float-left">
-                                        <div class="col-md-2 float-left text-right pl-0">公司名称</div>
-                                        <div class="col-md-10 float-left font-weight-bold">
-                                            <edit-input :content="trailInfo.client.data.company" :is-edit="isEdit"
-                                                        @change="changeTrailCompany"></edit-input>
-                                        </div>
-
-                                    </div>
-                                    <div class="card-text py-10 px-0 clearfix col-md-6 float-left">
-                                        <div class="col-md-2 float-left text-right pl-0">级别</div>
-                                        <div class="col-md-10 float-left font-weight-bold">
-                                            <edit-selector :content="trailInfo.client.data.grade" :is-edit="isEdit"
-                                                           @change="changeTrailCompanyLevel"
-                                                           :options="clientLevelArr"></edit-selector>
-                                        </div>
-
-                                    </div>
-                                    <div class="card-text py-10 px-0 clearfix col-md-6 float-left">
-                                        <div class="col-md-2 float-left text-right pl-0">联系人</div>
-                                        <div class="col-md-10 float-left font-weight-bold">
-                                            <edit-input :content="trailInfo.contact.data.name" :is-edit="isEdit"
-                                                        @change="changeTrailContact"></edit-input>
-                                        </div>
-                                    </div>
-                                    <div class="card-text py-10 px-0 clearfix col-md-6 float-left">
-                                        <div class="col-md-2 float-left text-right pl-0">联系人电话</div>
-                                        <div class="col-md-10 float-left font-weight-bold">
-                                            <edit-input :content="trailInfo.contact.data.phone" :is-edit="isEdit"
-                                                        @change="changeTrailContactPhone"></edit-input>
-                                        </div>
-
-                                    </div>
-                                    <div class="card-text py-10 px-0 clearfix col-md-6 float-left">
-                                        <div class="col-md-2 float-left text-right pl-0">备注</div>
-                                        <div class="col-md-10 float-left font-weight-bold">
-                                            <edit-textarea :content="trailInfo.desc" :is-edit="isEdit"
-                                                           @change="changeTrailDesc"></edit-textarea>
-                                        </div>
-
+                                    <div class="float-right mr-40" v-show="isEdit">
+                                        <button class="btn btn-sm btn-white btn-pure" @click="cancelEdit">取消</button>
+                                        <button class="btn btn-primary" @click="changeTrailBaseInfo">确定</button>
                                     </div>
                                 </div>
+                                <div class="card-block">
+                                    <div class="clearfix">
+                                        <div class="card-text py-10 px-0 clearfix col-md-6 float-left">
+                                            <div class="col-md-2 float-left text-right pl-0">线索名称</div>
+                                            <div class="col-md-10 float-left font-weight-bold">
+                                                <edit-input :content="trailInfo.title" :is-edit="isEdit"
+                                                            @change="changeTrailName"></edit-input>
+                                            </div>
+                                        </div>
+                                        <div class="card-text py-10 px-0 clearfix col-md-6 float-left">
+                                            <div class="col-md-2 float-left text-right pl-0">线索来源</div>
+                                            <div class="col-md-10 float-left font-weight-bold">
 
-                                <div class="segmentation-line example"></div>
-                                <div class="card-text py-5 clearfix">
-                                    <div class="col-md-1 float-left text-right pl-0">录入人</div>
-                                    <div class="col-md-5 float-left font-weight-bold">
+                                            </div>
+                                        </div>
+                                        <div class="card-text py-10 px-0 clearfix col-md-6 float-left">
+                                            <div class="col-md-2 float-left text-right pl-0">负责人</div>
+                                            <div class="col-md-10 float-left font-weight-bold">
+                                                <edit-input-selector :is-edit="isEdit"
+                                                                     @change="changeTrailPrincipal"></edit-input-selector>
+                                            </div>
+
+                                        </div>
+                                        <div class="card-text py-10 px-0 clearfix col-md-6 float-left">
+                                            <div class="col-md-2 float-left text-right pl-0">预计费用</div>
+                                            <div class="col-md-10 float-left font-weight-bold">
+                                                <edit-number-spinner :content="trailInfo.fee" :is-edit="isEdit"
+                                                                     @change="changeTrailFee"></edit-number-spinner>
+                                            </div>
+                                        </div>
+                                        <div class="card-text py-10 px-0 clearfix col-md-6 float-left">
+                                            <div class="col-md-2 float-left text-right pl-0">目标艺人</div>
+                                            <div class="col-md-10 float-left font-weight-bold">
+                                                <edit-selector :options="starsArr" :is-edit="isEdit"
+                                                               :content="selectedExpectationsArr"
+                                                               :multiple="true"
+                                                               @change="changeExpectations"></edit-selector>
+                                            </div>
+
+                                        </div>
+                                        <div class="card-text py-10 px-0 clearfix col-md-6 float-left">
+                                            <div class="col-md-2 float-left text-right pl-0">推荐艺人</div>
+                                            <div class="col-md-10 float-left font-weight-bold">
+                                                <edit-selector :options="starsArr" :is-edit="isEdit"
+                                                               :content="selectedRecommendationsArr"
+                                                               :multiple="true"
+                                                               @change="changeRecommendations"></edit-selector>
+                                            </div>
+
+                                        </div>
+                                        <div class="card-text py-10 px-0 clearfix col-md-6 float-left">
+                                            <div class="col-md-2 float-left text-right pl-0">行业</div>
+                                            <div class="col-md-10 float-left font-weight-bold">
+                                                <edit-selector :is-edit="isEdit" :options="industriesArr"
+                                                               :content="trailInfo.industry_id"></edit-selector>
+                                            </div>
+                                        </div>
+                                        <div class="card-text py-10 px-0 clearfix col-md-6 float-left">
+                                            <div class="col-md-2 float-left text-right pl-0">优先级</div>
+                                            <div class="col-md-10 float-left font-weight-bold">
+                                                {{--<edit-selector :is-edit="isEdit" :options="clientLevelArr"></edit-selector>--}}
+                                            </div>
+                                        </div>
+                                        <div class="card-text py-10 px-0 clearfix col-md-6 float-left"
+                                             v-if="trailInfo.type === 4">
+                                            <div class="col-md-2 float-left text-right pl-0">是否锁价</div>
+                                            <div class="col-md-10 float-left font-weight-bold">
+                                                <edit-selector :is-edit="isEdit" :options="lockArr"
+                                                               :content="trailInfo.lock_status"></edit-selector>
+                                            </div>
+                                        </div>
+                                        <div class="card-text py-10 px-0 clearfix col-md-6 float-left"
+                                             v-if="trailInfo.type !== 4">
+                                            <div class="col-md-2 float-left text-right pl-0">线索状态</div>
+                                            <div class="col-md-10 float-left font-weight-bold">
+                                                {{--<edit-selector :is-edit="isEdit" :options="clientLevelArr"></edit-selector>--}}
+                                            </div>
+                                        </div>
+                                        <div class="card-text py-10 px-0 clearfix col-md-6 float-left">
+                                            <div class="col-md-2 float-left text-right pl-0">合作类型</div>
+                                            <div class="col-md-10 float-left font-weight-bold">
+                                                <edit-selector :is-edit="isEdit"
+                                                               :options="clientLevelArr"></edit-selector>
+                                            </div>
+                                        </div>
+                                        <div class="card-text py-10 px-0 clearfix col-md-6 float-left">
+                                            <div class="col-md-2 float-left text-right pl-0">品牌名称</div>
+                                            <div class="col-md-10 float-left font-weight-bold">
+                                                <edit-input :content="trailInfo.brand" :is-edit="isEdit"
+                                                            @change="changeTrailBrand"></edit-input>
+                                            </div>
+
+                                        </div>
+                                        <div class="card-text py-10 px-0 clearfix col-md-6 float-left">
+                                            <div class="col-md-2 float-left text-right pl-0">公司名称</div>
+                                            <div class="col-md-10 float-left font-weight-bold">
+                                                <edit-input :content="trailInfo.client.data.company" :is-edit="isEdit"
+                                                            @change="changeTrailCompany"></edit-input>
+                                            </div>
+
+                                        </div>
+                                        <div class="card-text py-10 px-0 clearfix col-md-6 float-left">
+                                            <div class="col-md-2 float-left text-right pl-0">级别</div>
+                                            <div class="col-md-10 float-left font-weight-bold">
+                                                <edit-selector :content="trailInfo.client.data.grade" :is-edit="isEdit"
+                                                               @change="changeTrailCompanyLevel"
+                                                               :options="clientLevelArr"></edit-selector>
+                                            </div>
+
+                                        </div>
+                                        <div class="card-text py-10 px-0 clearfix col-md-6 float-left">
+                                            <div class="col-md-2 float-left text-right pl-0">联系人</div>
+                                            <div class="col-md-10 float-left font-weight-bold">
+                                                <edit-input :content="trailInfo.contact.data.name" :is-edit="isEdit"
+                                                            @change="changeTrailContact"></edit-input>
+                                            </div>
+                                        </div>
+                                        <div class="card-text py-10 px-0 clearfix col-md-6 float-left">
+                                            <div class="col-md-2 float-left text-right pl-0">联系人电话</div>
+                                            <div class="col-md-10 float-left font-weight-bold">
+                                                <edit-input :content="trailInfo.contact.data.phone" :is-edit="isEdit"
+                                                            @change="changeTrailContactPhone"></edit-input>
+                                            </div>
+
+                                        </div>
+                                        <div class="card-text py-10 px-0 clearfix col-md-6 float-left">
+                                            <div class="col-md-2 float-left text-right pl-0">备注</div>
+                                            <div class="col-md-10 float-left font-weight-bold">
+                                                <edit-textarea :content="trailInfo.desc" :is-edit="isEdit"
+                                                               @change="changeTrailDesc"></edit-textarea>
+                                            </div>
+
+                                        </div>
                                     </div>
-                                    <div class="col-md-1 float-left text-right pl-0">录入时间</div>
-                                    <div class="col-md-5 float-left font-weight-bold">
-                                    </div>
-                                </div>
-                                <div class="card-text py-5 clearfix">
-                                    <div class="col-md-1 float-left text-right pl-0">最近更新人</div>
-                                    <div class="col-md-5 float-left font-weight-bold">
-                                    </div>
-                                    <div class="col-md-1 float-left text-right pl-0">最近更新时间</div>
-                                    <div class="col-md-5 float-left font-weight-bold">
-                                    </div>
-                                </div>
-                                <div v-if="trailInfo.type === 4">
+
+                                    <div class="segmentation-line example"></div>
                                     <div class="card-text py-5 clearfix">
-                                        <div class="col-md-1 float-left text-right pl-0">锁价人</div>
+                                        <div class="col-md-1 float-left text-right pl-0">录入人</div>
                                         <div class="col-md-5 float-left font-weight-bold">
                                         </div>
-                                        <div class="col-md-1 float-left text-right pl-0">锁价日期</div>
+                                        <div class="col-md-1 float-left text-right pl-0">录入时间</div>
                                         <div class="col-md-5 float-left font-weight-bold">
                                         </div>
                                     </div>
                                     <div class="card-text py-5 clearfix">
-                                        <div class="col-md-1 float-left text-right pl-0">保护截止日期</div>
+                                        <div class="col-md-1 float-left text-right pl-0">最近更新人</div>
                                         <div class="col-md-5 float-left font-weight-bold">
+                                        </div>
+                                        <div class="col-md-1 float-left text-right pl-0">最近更新时间</div>
+                                        <div class="col-md-5 float-left font-weight-bold">
+                                        </div>
+                                    </div>
+                                    <div v-if="trailInfo.type === 4">
+                                        <div class="card-text py-5 clearfix">
+                                            <div class="col-md-1 float-left text-right pl-0">锁价人</div>
+                                            <div class="col-md-5 float-left font-weight-bold">
+                                            </div>
+                                            <div class="col-md-1 float-left text-right pl-0">锁价日期</div>
+                                            <div class="col-md-5 float-left font-weight-bold">
+                                            </div>
+                                        </div>
+                                        <div class="card-text py-5 clearfix">
+                                            <div class="col-md-1 float-left text-right pl-0">保护截止日期</div>
+                                            <div class="col-md-5 float-left font-weight-bold">
+                                            </div>
                                         </div>
                                     </div>
                                 </div>
                             </div>
                         </div>
-                    </div>
-                    <div class="tab-pane animation-fade pb-20 fixed-button-father" id="forum-trail-tasks"
-                         role="tabpanel">
-                        <table class="table is-indent example" data-plugin="animateList" data-animate="fade"
-                               data-child="tr"
-                               data-selectable="selectable">
-                            <tr class="animation-fade"
-                                style="animation-fill-mode: backwards; animation-duration: 250ms; animation-delay: 0ms;">
-                                <th class="pre-cell"></th>
-                                <th class="cell-300" scope="col">任务名称</th>
-                                <th class="cell-300" scope="col">任务类型</th>
-                                <th class="cell-300" scope="col">状态</th>
-                                <th class="cell-300" scope="col">负责人</th>
-                                <th class="cell-300" scope="col">截止日期</th>
-                                <th class="suf-cell"></th>
-                            </tr>
-                            <tr v-for="task in trailTasksInfo">
-                                <td class="pre-cell"></td>
-                                <td>@{{ task.title }}</td>
-                                <td>@{{ task.type }}</td>
-                                <td>
-                                    <template v-if="task.status === 1">进行中</template>
-                                    <template v-else-if="task.status === 2">已完成</template>
-                                    <template v-else-if="task.status === 3">已停止</template>
-                                </td>
-                                <td>@{{ task.principal.data.name }}</td>
-                                <td>@{{ task.end_at }}</td>
-                            </tr>
-                        </table>
+                        <div class="tab-pane animation-fade pb-20 fixed-button-father" id="forum-trail-tasks"
+                             role="tabpanel">
+                            <table class="table table-hover is-indent example" data-plugin="animateList"
+                                   data-animate="fade"
+                                   data-child="tr"
+                                   data-selectable="selectable">
+                                <tr class="animation-fade"
+                                    style="animation-fill-mode: backwards; animation-duration: 250ms; animation-delay: 0ms;">
+                                    <th class="pre-cell"></th>
+                                    <th class="cell-300" scope="col">任务名称</th>
+                                    <th class="cell-300" scope="col">任务类型</th>
+                                    <th class="cell-300" scope="col">状态</th>
+                                    <th class="cell-300" scope="col">负责人</th>
+                                    <th class="cell-300" scope="col">截止日期</th>
+                                    <th class="suf-cell"></th>
+                                </tr>
+                                <tr v-for="task in trailTasksInfo">
+                                    <td class="pre-cell"></td>
+                                    <td>@{{ task.title }}</td>
+                                    <td>@{{ task.type }}</td>
+                                    <td>
+                                        <template v-if="task.status === 1">进行中</template>
+                                        <template v-else-if="task.status === 2">已完成</template>
+                                        <template v-else-if="task.status === 3">已停止</template>
+                                    </td>
+                                    <td>@{{ task.principal.data.name }}</td>
+                                    <td>@{{ task.end_at }}</td>
+                                </tr>
+                            </table>
 
-                        <div class="site-action fixed-button" data-plugin="actionBtn" data-toggle="modal"
-                             data-target="#addTask">
-                            <button type="button"
-                                    class="site-action-toggle btn-raised btn btn-success btn-floating waves-effect waves-classic">
-                                <i class="front-icon md-plus animation-scale-up" aria-hidden="true"></i>
-                                <i class="back-icon md-plus animation-scale-up" aria-hidden="true"></i>
-                            </button>
+                            <div class="site-action fixed-button" data-plugin="actionBtn" data-toggle="modal"
+                                 data-target="#addTask">
+                                <button type="button"
+                                        class="site-action-toggle btn-raised btn btn-success btn-floating waves-effect waves-classic">
+                                    <i class="front-icon md-plus animation-scale-up" aria-hidden="true"></i>
+                                    <i class="back-icon md-plus animation-scale-up" aria-hidden="true"></i>
+                                </button>
+                            </div>
+
                         </div>
-
                     </div>
                 </div>
 

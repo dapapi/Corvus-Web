@@ -1,6 +1,12 @@
 @extends('layouts.master')
 
 @section('title','艺人管理')
+
+@section('style')
+    <link rel="stylesheet" href="{{ mix('css/task.css') }}">
+@endsection
+
+
 @section('body-class','dashboard')
 
 @section('body')
@@ -13,6 +19,19 @@
 
         <div class="page-header page-header-bordered">
             <h1 class="page-title">艺人管理</h1>
+
+            <div class="page-header-actions dropdown show task-dropdown float-right">
+                <i class="icon md-more font-size-24" aria-hidden="true" id="taskDropdown"
+                   data-toggle="dropdown" aria-expanded="false"></i>
+                <div class="dropdown-menu dropdown-menu-right task-dropdown-item" aria-labelledby="taskDropdown"
+                     role="menu" x-placement="bottom-end">
+                    <a class="dropdown-item" role="menuitem" @click="">导入</a>
+                    <a class="dropdown-item" role="menuitem" @click="">导出</a>
+                    <a class="dropdown-item" role="menuitem" @click="">分配制作人</a>
+                    <a class="dropdown-item" role="menuitem" @click="">分配宣传人</a>
+                </div>
+            </div>
+
         </div>
 
         <div class="page-content container-fluid">
@@ -60,12 +79,15 @@
 
                 <div class="page-content tab-content nav-tabs-animate bg-white">
                     <div class="tab-pane animation-fade active" id="forum-artist" role="tabpanel">
-                        <table class="table is-indent" data-plugin="animateList" data-animate="fade"
-                               data-child="tr"
-                               data-selectable="selectable">
-                            <tr class="animation-fade"
-                                style="animation-fill-mode: backwards; animation-duration: 250ms; animation-delay: 0ms;">
-                                <th class="pre-cell"></th>
+                        <table class="table table-hover" data-plugin="selectable"
+                               data-row-selectable="true">
+                            <tr>
+                                <th class="w-50">
+                                        <span class="checkbox-custom checkbox-primary">
+                                            <input class="selectable-all" type="checkbox" @change="selectArtists('all')">
+                                            <label></label>
+                                        </span>
+                                </th>
                                 <th class="cell-300" scope="col">姓名</th>
                                 <th class="cell-300" scope="col">年龄</th>
                                 <th class="cell-300" scope="col">艺人来源</th>
@@ -76,16 +98,34 @@
                                 <th class="suf-cell"></th>
                             </tr>
                             <tr v-for="artist in artistsInfo">
-                                <td class="pre-cell"></td>
-                                <td>暂无</td>
-                                <td>暂无</td>
-                                <td>暂无</td>
-                                <td>暂无</td>
-                                <td>暂无</td>
+                                <td>
+                                    <span class="checkbox-custom checkbox-primary">
+                                        <input class="selectable-item" type="checkbox" :id="'row-' + artist.id"
+                                               :value="artist.id" @change="selectArtists(artist.id)">
+                                        <label :for="'row-' + artist.id"></label>
+                                    </span>
+                                </td>
+                                <td class="pointer-content" @click="redirectArtistDetail(artist.id)">
+                                    @{{ artist.name }}
+                                </td>
+                                <td>根据日期生成年龄</td>
+                                <td>
+                                    <template v-if="artist.source">
+                                        @{{ artistOriginArr.find(item => item.value == artist.source).name}}
+                                    </template>
+                                </td>
+                                <td>
+                                    <template v-if="artist.communication_status">
+                                        @{{ taiyangCommunicationStatusArr.find(item => item.value ==
+                                        artist.communication_status).name}}
+                                    </template>
+                                </td>
+                                <td>不知道那个字段</td>
                                 <td>暂无</td>
                                 <td>暂无</td>
                                 <td class="suf-cell"></td>
                             </tr>
+                            </tbody>
                         </table>
                         <pagination :current_page="current_page" :method="getArtists" :total_pages="total_pages"
                                     :total="total"></pagination>
@@ -137,7 +177,8 @@
                         <div class="example">
                             <div class="col-md-2 text-right float-left">艺人来源</div>
                             <div class="col-md-4 float-left row">
-                                <selectors :options="artistOriginArr" placeholder="请选择艺人来源" @change="changeSource"></selectors>
+                                <selectors :options="artistOriginArr" placeholder="请选择艺人来源"
+                                           @change="changeSource"></selectors>
                             </div>
                             <div class="col-md-2 text-right float-left pr-0">邮箱</div>
                             <div class="col-md-4 float-left pr-0">
@@ -238,7 +279,7 @@
                         <div class="example">
                             <div class="col-md-2 text-right float-left">沟通状态</div>
                             <div class="col-md-3 float-left pl-0">
-                                <selectors :options="papiCommunicationStatusArr"
+                                <selectors :options="taiyangCommunicationStatusArr"
                                            @change="changeCommunicationType"></selectors>
                             </div>
                         </div>
@@ -249,7 +290,8 @@
                                            @change="changeSignIntention"></selectors>
                             </div>
                             <div class="col-md-5 float-left pl-0" v-if="!signIntention">
-                                <textarea name="" class="form-control" rows="1" placeholder="请填写不签约理由" v-model="notSignReason"></textarea>
+                                <textarea name="" class="form-control" rows="1" placeholder="请填写不签约理由"
+                                          v-model="notSignReason"></textarea>
                             </div>
                         </div>
                         <div class="example">

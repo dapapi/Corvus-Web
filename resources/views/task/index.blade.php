@@ -65,7 +65,7 @@
 
                 <div class="page-content tab-content nav-tabs-animate bg-white">
                     <div class="tab-pane animation-fade active" id="forum-task" role="tabpanel">
-                        <table class="table is-indent" data-plugin="animateList" data-animate="fade"
+                        <table class="table table-hover is-indent" data-plugin="animateList" data-animate="fade"
                                data-child="tr"
                                data-selectable="selectable">
                             <tr class="animation-fade"

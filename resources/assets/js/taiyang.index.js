@@ -13,7 +13,7 @@ let app = new Vue({
             projectStatus: config.projectStatus,
             yesOrNoArr: config.yesOrNoArr,
             artistStatusArr: config.artistStatusArr,
-            papiCommunicationStatusArr: config.papiCommunicationStatusArr,
+            taiyangCommunicationStatusArr: config.taiyangCommunicationStatusArr,
             attachmentTypeArr: config.attachmentTypeArr,
             artistEmail: '',
             artistPhone: '',
@@ -33,7 +33,7 @@ let app = new Vue({
             xhsUrl: '',
             xhsFansNum: '',
             platformType: '',
-            signIntention: '',
+            signIntention: 1,
             signCompany: '',
             artistDesc: '',
             baikeUrl: '',
@@ -43,6 +43,7 @@ let app = new Vue({
             artistScoutName: '',
             artistLocation: '',
             notSignReason: '',
+            selectedArtistsArr: [],
 
         },
 
@@ -64,7 +65,7 @@ let app = new Vue({
                     data: data
                 }).done(function (response) {
                     console.log(response)
-                    app.clientsInfo = response.data;
+                    app.artistsInfo = response.data;
                     app.current_page = response.meta.pagination.current_page;
                     app.total = response.meta.pagination.total;
                     app.total_pages = response.meta.pagination.total_pages;
@@ -117,7 +118,6 @@ let app = new Vue({
                     email: app.artistEmail,
                     phone: app.artistPhone,
                     wechat: app.artistWeiXin,
-                    //TODO 页面和数据很多对不上
                     communication_status: app.communicationStatus,
                     intention: app.signIntention,
                     intention_desc: app.notSignReason,
@@ -134,15 +134,35 @@ let app = new Vue({
                         },
                     }
                 }).done(function (response) {
-                    console.log(response);
                     toastr.success('创建成功');
                     $('#addArtist').modal('hide');
+                    redirect('taiyang/detail?artist_id=' + response.data.id)
                 })
             },
 
             changeAttachmentType: function (value) {
 
             },
+
+            redirectArtistDetail: function (artistId) {
+                redirect('taiyang/detail?artist_id=' + artistId)
+            },
+
+            selectArtists: function (value) {
+                if (value === 'all') {
+                    app.selectedArtistsArr = [];
+                    for (let i = 0; i < app.artistsInfo.length; i++) {
+                        app.selectedArtistsArr.push(app.artistsInfo[i].id)
+                    }
+                } else {
+                    let index = app.selectedArtistsArr.indexOf(value);
+                    if (index > -1) {
+                        app.selectedArtistsArr.splice(index, 1)
+                    } else {
+                        app.selectedArtistsArr.push(value)
+                    }
+                }
+            }
         }
     })
 ;

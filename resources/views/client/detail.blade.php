@@ -19,32 +19,29 @@
 
         <div class="page-content container-fluid">
 
-            <div class="panel col-md-12 col-lg-12">
+            <div class="panel col-md-12">
                 <div class="card-block">
                     <h4 class="card-title">@{{ clientInfo.company }}</h4>
                     <div class="card-text clearfix example">
-                        <div class="col-md-6 float-left clearfix">
-                            <div class="float-left pl-0 pr-2">
+                        <div class="col-md-6 float-left clearfix pl-0">
+                            <div class="float-left pl-0 pr-2 col-md-2">
                                 <i class="md-plus pr-2" aria-hidden="true"></i>负责人
                             </div>
                             <div class="font-weight-bold float-left" v-if="clientInfo.principal">
                                 @{{ clientInfo.principal.data.name }}
                             </div>
                         </div>
-                        <div class="col-md-6 float-left clearfix"></div>
-
-                        <div class="float-left pl-0 pr-2">
-                            <i class="md-plus pr-2" aria-hidden="true"></i>决策关键人/部门
+                        <div class="col-md-6 float-left clearfix pl-0">
+                            <div class="float-left pl-0 pr-2 col-md-2">
+                                <i class="md-plus pr-2" aria-hidden="true"></i>决策关键人/部门
+                            </div>
+                            <div class="font-weight-bold float-left">
+                                @{{ clientInfo.keyman }}
+                            </div>
                         </div>
-                        <div class="font-weight-bold float-left">
-                            @{{ clientInfo.keyman }}
-                        </div>
-                    </div>
-                    <div class="card-text clearfix example">
-                        <div class="col-md-6 float-left"></div>
-                        <div class="col-md-6 float-left"></div>
                     </div>
                 </div>
+
             </div>
 
             <div class="panel col-md-12 col-lg-12">
@@ -80,7 +77,7 @@
                 </div>
                 <div class="tab-content nav-tabs-animate bg-white col-md-12" v-if="clientInfo">
                     <div class="tab-pane animation-fade pb-20 active" id="forum-trail" role="tabpanel">
-                        <table class="table is-indent example" data-plugin="animateList" data-animate="fade"
+                        <table class="table table-hover is-indent example" data-plugin="animateList" data-animate="fade"
                                data-child="tr"
                                data-selectable="selectable">
                             <tr class="animation-fade"
@@ -108,7 +105,7 @@
                         </table>
                     </div>
                     <div class="tab-pane animation-fade pb-20" id="forum-project" role="tabpanel">
-                        <table class="table is-indent example" data-plugin="animateList" data-animate="fade"
+                        <table class="table table-hover is-indent example" data-plugin="animateList" data-animate="fade"
                                data-child="tr"
                                data-selectable="selectable">
                             <tr class="animation-fade"
@@ -136,7 +133,7 @@
                         </table>
                     </div>
                     <div class="tab-pane animation-fade pb-20 fixed-button-father" id="forum-task" role="tabpanel">
-                        <table class="table is-indent example" data-plugin="animateList" data-animate="fade"
+                        <table class="table table-hover is-indent example" data-plugin="animateList" data-animate="fade"
                                data-child="tr"
                                data-selectable="selectable">
                             <tr class="animation-fade"
@@ -174,7 +171,7 @@
                     <div class="tab-pane animation-fade pb-20" id="forum-base" role="tabpanel">
                         <div class="card">
                             <div class="card-header card-header-transparent card-header-bordered">
-                                <div class="float-left font-weight-bold third-title">任务详情</div>
+                                <div class="float-left font-weight-bold third-title">客户详情</div>
                                 <div class="float-right pointer-content">
                                     <i class="icon md-edit" aria-hidden="true" @click="editBaseInfo"></i>
                                 </div>
@@ -258,7 +255,7 @@
                     </div>
                     <div class="tab-pane animation-fade pb-20 fixed-button-father" id="forum-contact"
                          role="tabpanel">
-                        <table class="table is-indent example" data-plugin="animateList" data-animate="fade"
+                        <table class="table table-hover is-indent example" data-plugin="animateList" data-animate="fade"
                                data-child="tr"
                                data-selectable="selectable">
                             <tr class="animation-fade"

@@ -208,7 +208,7 @@
                     </div>
                     <div class="tab-pane animation-fade pb-20 fixed-button-father" id="forum-trail-tasks"
                          role="tabpanel">
-                        <table class="table is-indent example" data-plugin="animateList" data-animate="fade"
+                        <table class="table table-hover is-indent example" data-plugin="animateList" data-animate="fade"
                                data-child="tr"
                                data-selectable="selectable">
                             <tr class="animation-fade"
