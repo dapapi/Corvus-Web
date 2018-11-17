@@ -95,7 +95,6 @@
                                 <th class="cell-300" scope="col">签约状态</th>
                                 <th class="cell-300" scope="col">录入时间</th>
                                 <th class="cell-300" scope="col">最后跟进时间</th>
-                                <th class="suf-cell"></th>
                             </tr>
                             <tr v-for="artist in artistsInfo">
                                 <td>
@@ -123,7 +122,6 @@
                                 <td>不知道那个字段</td>
                                 <td>暂无</td>
                                 <td>暂无</td>
-                                <td class="suf-cell"></td>
                             </tr>
                             </tbody>
                         </table>

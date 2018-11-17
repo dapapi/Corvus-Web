@@ -47,17 +47,14 @@
                            data-selectable="selectable">
                         <tr class="animation-fade"
                             style="animation-fill-mode: backwards; animation-duration: 250ms; animation-delay: 0ms;">
-                            <th class="pre-cell"></th>
                             <th class="cell-300" scope="col">线索名称</th>
                             <th class="cell-300" scope="col">公司名称</th>
                             <th class="cell-300" scope="col">级别</th>
                             <th class="cell-300" scope="col">目标艺人</th>
                             <th class="cell-300" scope="col">预计费用</th>
                             <th class="cell-300" scope="col">负责人</th>
-                            <th class="suf-cell"></th>
                         </tr>
                         <tr v-for="trail in trailsInfo ">
-                            <td class="pre-cell"></td>
                             <td class="pointer-content" @click="redirectTrailDetail(trail.id)">@{{ trail.title }}</td>
                             <td>@{{ trail.client.data.company }}</td>
                             <td>
@@ -67,7 +64,6 @@
                             <td>目标艺人</td>
                             <td>@{{ trail.fee }}</td>
                             <td v-if="trail.principal">@{{ trail.principal.data.name }}</td>
-                            <td class="suf-cell"></td>
                         </tr>
                     </table>
                     <pagination :current_page="current_page" :method="getSales" :total_pages="total_pages"

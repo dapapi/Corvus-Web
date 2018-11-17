@@ -227,16 +227,13 @@
                                data-selectable="selectable">
                             <tr class="animation-fade"
                                 style="animation-fill-mode: backwards; animation-duration: 250ms; animation-delay: 0ms;">
-                                <th class="pre-cell"></th>
                                 <th class="cell-300" scope="col">任务名称</th>
                                 <th class="cell-300" scope="col">任务类型</th>
                                 <th class="cell-300" scope="col">状态</th>
                                 <th class="cell-300" scope="col">负责人</th>
                                 <th class="cell-300" scope="col">截止日期</th>
-                                <th class="suf-cell"></th>
                             </tr>
                             <tr v-for="task in taskInfo.tasks.data">
-                                <td class="pre-cell"></td>
                                 <td @click="redirectTaskDetail(task.id)" class="pointer-content">@{{ task.title }}</td>
                                 <td>@{{ task.type }}</td>
                                 <td>

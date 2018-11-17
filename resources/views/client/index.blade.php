@@ -42,20 +42,17 @@
                         </button>
                     </div>
                 </div>
-                <table class="table table-hover is-indent example" data-plugin="animateList" data-animate="fade" data-child="tr"
+                <table class="table table-hover is-indent mb-20" data-plugin="animateList" data-animate="fade" data-child="tr"
                        data-selectable="selectable">
                     <tr class="animation-fade"
                         style="animation-fill-mode: backwards; animation-duration: 250ms; animation-delay: 0ms;">
-                        <th class="pre-cell"></th>
                         <th class="cell-300" scope="col">公司名称</th>
                         <th class="cell-300" scope="col">级别</th>
                         <th class="cell-300" scope="col">负责人</th>
                         <th class="cell-300" scope="col">录入时间</th>
                         <th class="cell-300" scope="col">跟进时间</th>
-                        <th class="suf-cell"></th>
                     </tr>
                     <tr v-for="client in clientsInfo ">
-                        <td class="pre-cell"></td>
                         <td class="pointer-content" @click="redirectClientDetail(client.id)">@{{ client.company }}</td>
                         <td>
                             <template v-if="client.grade === 1">直客</template>
@@ -64,7 +61,6 @@
                         <td>@{{ client.principal.data.name }}</td>
                         <td>@{{ client.delivery }}</td>
                         <td>@{{ client.follow_time }}</td>
-                        <td class="suf-cell"></td>
                     </tr>
                 </table>
 

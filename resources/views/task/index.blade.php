@@ -70,17 +70,14 @@
                                data-selectable="selectable">
                             <tr class="animation-fade"
                                 style="animation-fill-mode: backwards; animation-duration: 250ms; animation-delay: 0ms;">
-                                <th class="pre-cell"></th>
                                 <th class="cell-300" scope="col">任务名称</th>
                                 <th class="cell-300" scope="col">关联资源</th>
                                 <th class="cell-300" scope="col">任务类型</th>
                                 <th class="cell-300" scope="col">任务状态</th>
                                 <th class="cell-300" scope="col">负责人</th>
                                 <th class="cell-300" scope="col">截止时间</th>
-                                <th class="suf-cell"></th>
                             </tr>
                             <tr v-for="task in tasksInfo">
-                                <td class="pre-cell"></td>
                                 <td class="pointer-content" @click="redirectTaskDetail(task.id)">@{{ task.title }}</td>
                                 <td>暂无</td>
                                 <td>暂无</td>
@@ -93,7 +90,6 @@
                                     <template v-if="task.principal">@{{ task.principal.data.name }}</template>
                                 </td>
                                 <td>@{{ task.end_at }}</td>
-                                <td class="suf-cell"></td>
                             </tr>
                         </table>
                         <template v-if="!taskStatus">

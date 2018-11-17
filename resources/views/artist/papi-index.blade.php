@@ -88,7 +88,6 @@
                                 <th class="cell-300" scope="col">沟通状态</th>
                                 <th class="cell-300" scope="col">制作人</th>
                                 <th class="cell-300" scope="col">录入时间</th>
-                                <th class="suf-cell"></th>
                             </tr>
                             <tr v-for="artist in artistsInfo">
                                 <td>
@@ -117,7 +116,6 @@
                                     </template>
                                 </td>
                                 <td>暂无</td>
-                                <td class="suf-cell"></td>
                             </tr>
                         </table>
                         <pagination :current_page="current_page" :method="getArtists" :total_pages="total_pages"

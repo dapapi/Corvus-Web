@@ -39,7 +39,6 @@ let app = new Vue({
             this.getClients();
             this.getStars();
             this.getProjects();
-            this.getProjectFields();
         },
 
         methods: {
@@ -55,23 +54,7 @@ let app = new Vue({
                     headers: config.getHeaders(),
                     data: data
                 }).done(function (response) {
-                    console.log(response)
                     app.projectsInfo = response.data
-                })
-            },
-
-            getProjectFields: function () {
-                $.ajax({
-                    type: 'get',
-                    url: config.apiUrl + '/project_fields',
-                    headers: config.getHeaders(),
-                    data: {
-                        type: 1
-                    }
-                }).done(function (response) {
-                    console.log('fields')
-                    console.log(response)
-                    app.projectFields = response.data
                 })
             },
 

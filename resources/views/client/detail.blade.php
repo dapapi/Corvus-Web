@@ -82,16 +82,13 @@
                                data-selectable="selectable">
                             <tr class="animation-fade"
                                 style="animation-fill-mode: backwards; animation-duration: 250ms; animation-delay: 0ms;">
-                                <th class="pre-cell"></th>
                                 <th class="cell-300" scope="col">线索务名称</th>
                                 <th class="cell-300" scope="col">销售进展</th>
                                 <th class="cell-300" scope="col">负责人</th>
                                 <th class="cell-300" scope="col">关联公司</th>
                                 <th class="cell-300" scope="col">录入日期</th>
-                                <th class="suf-cell"></th>
                             </tr>
                             <tr v-for="trail in clientTrailsInfo">
-                                <td class="pre-cell"></td>
                                 <td>@{{ trail.title }}</td>
                                 <td>
                                     <template v-if="trail.progress_status === 1">未确定合作</template>
@@ -110,16 +107,13 @@
                                data-selectable="selectable">
                             <tr class="animation-fade"
                                 style="animation-fill-mode: backwards; animation-duration: 250ms; animation-delay: 0ms;">
-                                <th class="pre-cell"></th>
                                 <th class="cell-300" scope="col">项目名称</th>
                                 <th class="cell-300" scope="col">项目状态</th>
                                 <th class="cell-300" scope="col">负责人</th>
                                 <th class="cell-300" scope="col">关联公司</th>
                                 <th class="cell-300" scope="col">录入日期</th>
-                                <th class="suf-cell"></th>
                             </tr>
                             {{--<tr v-for="task in taskInfo.tasks.data">--}}
-                            {{--<td class="pre-cell"></td>--}}
                             {{--<td>@{{ task.title }}</td>--}}
                             {{--<td>@{{ task.type }}</td>--}}
                             {{--<td>--}}
@@ -138,16 +132,13 @@
                                data-selectable="selectable">
                             <tr class="animation-fade"
                                 style="animation-fill-mode: backwards; animation-duration: 250ms; animation-delay: 0ms;">
-                                <th class="pre-cell"></th>
                                 <th class="cell-300" scope="col">任务名称</th>
                                 <th class="cell-300" scope="col">任务类型</th>
                                 <th class="cell-300" scope="col">状态</th>
                                 <th class="cell-300" scope="col">负责人</th>
                                 <th class="cell-300" scope="col">截止时间</th>
-                                <th class="suf-cell"></th>
                             </tr>
                             <tr v-for="task in clientTasksInfo">
-                                <td class="pre-cell"></td>
                                 <td>@{{ task.title }}</td>
                                 <td>@{{ task.type }}</td>
                                 <td>
@@ -260,17 +251,14 @@
                                data-selectable="selectable">
                             <tr class="animation-fade"
                                 style="animation-fill-mode: backwards; animation-duration: 250ms; animation-delay: 0ms;">
-                                <th class="pre-cell"></th>
                                 <th class="cell-300" scope="col">联系人</th>
                                 <th class="cell-300" scope="col">关联公司</th>
                                 <th class="cell-300" scope="col">联系人电话</th>
                                 <th class="cell-300" scope="col">职位</th>
                                 <th class="cell-300" scope="col">负责人</th>
                                 <th class="cell-300" scope="col">操作</th>
-                                <th class="suf-cell"></th>
                             </tr>
                             <tr v-for="contact in clientContactsInfo">
-                                <td class="pre-cell"></td>
                                 <td>@{{ contact.name }}</td>
                                 <td>@{{ clientInfo.company }}</td>
                                 <td>@{{ contact.phone }}</td>

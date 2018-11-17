@@ -106,13 +106,11 @@
                                    data-selectable="selectable">
                                 <tr class="animation-fade"
                                     style="animation-fill-mode: backwards; animation-duration: 250ms; animation-delay: 0ms;">
-                                    <th class="pre-cell"></th>
                                     <th class="cell-300" scope="col">项目名称</th>
                                     <th class="cell-300" scope="col">项目状态</th>
                                     <th class="cell-300" scope="col">负责人</th>
                                     <th class="cell-300" scope="col">关联公司</th>
                                     <th class="cell-300" scope="col">录入日期</th>
-                                    <th class="suf-cell"></th>
                                 </tr>
                             </table>
                         </div>
@@ -124,13 +122,11 @@
                                    data-selectable="selectable">
                                 <tr class="animation-fade"
                                     style="animation-fill-mode: backwards; animation-duration: 250ms; animation-delay: 0ms;">
-                                    <th class="pre-cell"></th>
                                     <th class="cell-300" scope="col">任务名称</th>
                                     <th class="cell-300" scope="col">任务类型</th>
                                     <th class="cell-300" scope="col">状态</th>
                                     <th class="cell-300" scope="col">负责人</th>
                                     <th class="cell-300" scope="col">截止日期</th>
-                                    <th class="suf-cell"></th>
                                 </tr>
                             </table>
                             <div class="site-action fixed-button" data-plugin="actionBtn" data-toggle="modal"
@@ -148,17 +144,14 @@
                                    data-animate="fade" data-child="tr">
                                 <tr class="animation-fade"
                                     style="animation-fill-mode: backwards; animation-duration: 250ms; animation-delay: 0ms;">
-                                    <th class="pre-cell"></th>
                                     <th class="cell-300" scope="col">昵称</th>
                                     <th class="cell-300" scope="col">视频名称</th>
                                     <th class="cell-300" scope="col">视频发布时间</th>
                                     <th class="cell-300" scope="col">阅转比</th>
                                     <th class="cell-300" scope="col">视频链接</th>
                                     <th class="cell-300" scope="col">是否广告</th>
-                                    <th class="suf-cell"></th>
                                 </tr>
                                 <tr v-for="work in artistWorksInfo">
-                                    <td class="pre-cell"></td>
                                     <td>暂无</td>
                                     <td>暂无</td>
                                     <td>暂无</td>
@@ -194,16 +187,13 @@
                                    data-animate="fade" data-child="tr">
                                 <tr class="animation-fade"
                                     style="animation-fill-mode: backwards; animation-duration: 250ms; animation-delay: 0ms;">
-                                    <th class="pre-cell"></th>
                                     <th class="cell-300" scope="col">科目类别</th>
                                     <th class="cell-300" scope="col">金额</th>
                                     <th class="cell-300" scope="col">收款时间</th>
                                     <th class="cell-300" scope="col">付款时间</th>
                                     <th class="cell-300" scope="col">操作人</th>
-                                    <th class="suf-cell"></th>
                                 </tr>
                                 <tr v-for="work in artistWorksInfo">
-                                    <td class="pre-cell"></td>
                                     <td>暂无</td>
                                     <td>暂无</td>
                                     <td>暂无</td>
