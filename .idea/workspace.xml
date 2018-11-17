@@ -2,18 +2,7 @@
 <project version="4">
   <component name="ChangeListManager">
     <list default="true" id="1a3725e8-6f08-4917-871f-ddbfb9d5b08f" name="Default" comment="">
-      <change beforePath="$PROJECT_DIR$/resources/assets/js/project.index.js" beforeDir="false" afterPath="$PROJECT_DIR$/resources/assets/js/project.index.js" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/resources/views/artist/papi-detail.blade.php" beforeDir="false" afterPath="$PROJECT_DIR$/resources/views/artist/papi-detail.blade.php" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/resources/views/artist/papi-index.blade.php" beforeDir="false" afterPath="$PROJECT_DIR$/resources/views/artist/papi-index.blade.php" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/resources/views/artist/taiyang-detail.blade.php" beforeDir="false" afterPath="$PROJECT_DIR$/resources/views/artist/taiyang-detail.blade.php" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/resources/views/artist/taiyang-index.blade.php" beforeDir="false" afterPath="$PROJECT_DIR$/resources/views/artist/taiyang-index.blade.php" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/resources/views/client/detail.blade.php" beforeDir="false" afterPath="$PROJECT_DIR$/resources/views/client/detail.blade.php" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/resources/views/client/index.blade.php" beforeDir="false" afterPath="$PROJECT_DIR$/resources/views/client/index.blade.php" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/resources/views/project/detail.blade.php" beforeDir="false" afterPath="$PROJECT_DIR$/resources/views/project/detail.blade.php" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/resources/views/project/index.blade.php" beforeDir="false" afterPath="$PROJECT_DIR$/resources/views/project/index.blade.php" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/resources/views/task/detail.blade.php" beforeDir="false" afterPath="$PROJECT_DIR$/resources/views/task/detail.blade.php" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/resources/views/task/index.blade.php" beforeDir="false" afterPath="$PROJECT_DIR$/resources/views/task/index.blade.php" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/resources/views/trail/detail.blade.php" beforeDir="false" afterPath="$PROJECT_DIR$/resources/views/trail/detail.blade.php" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/resources/views/trail/index.blade.php" beforeDir="false" afterPath="$PROJECT_DIR$/resources/views/trail/index.blade.php" afterDir="false" />
     </list>
     <option name="EXCLUDED_CONVERTED_TO_IGNORED" value="true" />
@@ -28,29 +17,20 @@
   </component>
   <component name="FileEditorManager">
     <leaf SIDE_TABS_SIZE_LIMIT_KEY="300">
-      <file leaf-file-name="index.blade.php" pinned="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/resources/views/project/index.blade.php">
-          <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="414">
-              <caret line="67" column="121" lean-forward="true" selection-start-line="67" selection-start-column="121" selection-end-line="67" selection-end-column="121" />
-            </state>
-          </provider>
-        </entry>
-      </file>
       <file leaf-file-name="index.blade.php" pinned="false" current-in-tab="true">
         <entry file="file://$PROJECT_DIR$/resources/views/client/index.blade.php">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="328">
-              <caret line="36" column="58" lean-forward="true" selection-start-line="36" selection-start-column="58" selection-end-line="36" selection-end-column="58" />
+            <state relative-caret-position="214">
+              <caret line="44" column="39" lean-forward="true" selection-start-line="44" selection-start-column="39" selection-end-line="44" selection-end-column="39" />
             </state>
           </provider>
         </entry>
       </file>
-      <file leaf-file-name="project.index.js" pinned="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/resources/assets/js/project.index.js">
+      <file leaf-file-name="index.blade.php" pinned="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/resources/views/trail/index.blade.php">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="391">
-              <caret line="126" column="47" lean-forward="true" selection-start-line="126" selection-start-column="47" selection-end-line="126" selection-end-column="47" />
+            <state relative-caret-position="-114">
+              <caret line="22" column="46" lean-forward="true" selection-start-line="22" selection-start-column="46" selection-end-line="22" selection-end-column="46" />
             </state>
           </provider>
         </entry>
@@ -95,8 +75,8 @@
       <find>edit-selector</find>
       <find>taskIntroduce</find>
       <find>button</find>
-      <find>projectType</find>
       <find>&lt;table</find>
+      <find>projectType</find>
     </findStrings>
     <replaceStrings>
       <replace>clientLevelArr</replace>
@@ -138,7 +118,6 @@
         <option value="$PROJECT_DIR$/resources/assets/components/selectors.vue" />
         <option value="$PROJECT_DIR$/resources/assets/js/client.index.js" />
         <option value="$PROJECT_DIR$/resources/assets/js/trail.index.js" />
-        <option value="$PROJECT_DIR$/resources/views/trail/index.blade.php" />
         <option value="$PROJECT_DIR$/resources/assets/js/app.js" />
         <option value="$PROJECT_DIR$/resources/assets/components/number-spinner.vue" />
         <option value="$PROJECT_DIR$/resources/views/task/detail.blade.php" />
@@ -168,6 +147,7 @@
         <option value="$PROJECT_DIR$/resources/assets/js/papi.detail.js" />
         <option value="$PROJECT_DIR$/resources/assets/js/project.index.js" />
         <option value="$PROJECT_DIR$/resources/views/project/index.blade.php" />
+        <option value="$PROJECT_DIR$/resources/views/trail/index.blade.php" />
         <option value="$PROJECT_DIR$/resources/views/client/index.blade.php" />
       </list>
     </option>
@@ -339,6 +319,13 @@
               <item name="views" type="462c0819:PsiDirectoryNode" />
               <item name="project" type="462c0819:PsiDirectoryNode" />
             </path>
+            <path>
+              <item name="Corvus-Web" type="b2602c69:ProjectViewProjectNode" />
+              <item name="Corvus-Web" type="462c0819:PsiDirectoryNode" />
+              <item name="resources" type="462c0819:PsiDirectoryNode" />
+              <item name="views" type="462c0819:PsiDirectoryNode" />
+              <item name="trail" type="462c0819:PsiDirectoryNode" />
+            </path>
           </expand>
           <select />
         </subPane>
@@ -386,7 +373,7 @@
     <servers />
   </component>
   <component name="TimeTrackingManager">
-    <option name="totallyTimeSpent" value="187140000" />
+    <option name="totallyTimeSpent" value="187334000" />
   </component>
   <component name="TodoView">
     <todo-panel id="selected-file">
@@ -584,13 +571,6 @@
           <folding>
             <element signature="e#0#30#0" expanded="true" />
           </folding>
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/resources/views/trail/index.blade.php">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="213">
-          <caret line="226" column="29" selection-start-line="226" selection-start-column="29" selection-end-line="226" selection-end-column="29" />
         </state>
       </provider>
     </entry>
@@ -841,13 +821,6 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/resources/assets/js/project.index.js">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="391">
-          <caret line="126" column="47" lean-forward="true" selection-start-line="126" selection-start-column="47" selection-end-line="126" selection-end-column="47" />
-        </state>
-      </provider>
-    </entry>
     <entry file="file://$PROJECT_DIR$/resources/views/project/index.blade.php">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="414">
@@ -855,10 +828,24 @@
         </state>
       </provider>
     </entry>
+    <entry file="file://$PROJECT_DIR$/resources/assets/js/project.index.js">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="391">
+          <caret line="126" column="47" lean-forward="true" selection-start-line="126" selection-start-column="47" selection-end-line="126" selection-end-column="47" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/resources/views/trail/index.blade.php">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="-114">
+          <caret line="22" column="46" lean-forward="true" selection-start-line="22" selection-start-column="46" selection-end-line="22" selection-end-column="46" />
+        </state>
+      </provider>
+    </entry>
     <entry file="file://$PROJECT_DIR$/resources/views/client/index.blade.php">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="328">
-          <caret line="36" column="58" lean-forward="true" selection-start-line="36" selection-start-column="58" selection-end-line="36" selection-end-column="58" />
+        <state relative-caret-position="214">
+          <caret line="44" column="39" lean-forward="true" selection-start-line="44" selection-start-column="39" selection-end-line="44" selection-end-column="39" />
         </state>
       </provider>
     </entry>

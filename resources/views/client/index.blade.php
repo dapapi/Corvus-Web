@@ -20,7 +20,7 @@
         </div>
 
         <div class="page-content container-fluid">
-            <div class="panel col-md-12 clearfix py-5">
+            <div class="panel col-md-12 py-5">
                 <div class="clearfix">
                     <div class="col-md-3 example float-left">
                         <input type="text" class="form-control" id="inputPlaceholder" placeholder="请输入项目昵称"
@@ -42,30 +42,34 @@
                         </button>
                     </div>
                 </div>
-                <table class="table table-hover is-indent mb-20" data-plugin="animateList" data-animate="fade" data-child="tr"
-                       data-selectable="selectable">
-                    <tr class="animation-fade"
-                        style="animation-fill-mode: backwards; animation-duration: 250ms; animation-delay: 0ms;">
-                        <th class="cell-300" scope="col">公司名称</th>
-                        <th class="cell-300" scope="col">级别</th>
-                        <th class="cell-300" scope="col">负责人</th>
-                        <th class="cell-300" scope="col">录入时间</th>
-                        <th class="cell-300" scope="col">跟进时间</th>
-                    </tr>
-                    <tr v-for="client in clientsInfo ">
-                        <td class="pointer-content" @click="redirectClientDetail(client.id)">@{{ client.company }}</td>
-                        <td>
-                            <template v-if="client.grade === 1">直客</template>
-                            <template v-if="client.grade === 2">代理公司</template>
-                        </td>
-                        <td>@{{ client.principal.data.name }}</td>
-                        <td>@{{ client.delivery }}</td>
-                        <td>@{{ client.follow_time }}</td>
-                    </tr>
-                </table>
+                <div class="col-md-12">
+                    <table class="table table-hover is-indent mb-20" data-plugin="animateList" data-animate="fade"
+                           data-child="tr"
+                           data-selectable="selectable">
+                        <tr class="animation-fade"
+                            style="animation-fill-mode: backwards; animation-duration: 250ms; animation-delay: 0ms;">
+                            <th class="cell-300" scope="col">公司名称</th>
+                            <th class="cell-300" scope="col">级别</th>
+                            <th class="cell-300" scope="col">负责人</th>
+                            <th class="cell-300" scope="col">录入时间</th>
+                            <th class="cell-300" scope="col">跟进时间</th>
+                        </tr>
+                        <tr v-for="client in clientsInfo ">
+                            <td class="pointer-content" @click="redirectClientDetail(client.id)">@{{ client.company }}
+                            </td>
+                            <td>
+                                <template v-if="client.grade === 1">直客</template>
+                                <template v-if="client.grade === 2">代理公司</template>
+                            </td>
+                            <td>@{{ client.principal.data.name }}</td>
+                            <td>@{{ client.delivery }}</td>
+                            <td>@{{ client.follow_time }}</td>
+                        </tr>
+                    </table>
 
-                <pagination :current_page="current_page" :method="getClients" :total_pages="total_pages"
-                            :total="total"></pagination>
+                    <pagination :current_page="current_page" :method="getClients" :total_pages="total_pages"
+                                :total="total"></pagination>
+                </div>
 
             </div>
 
