@@ -95,7 +95,7 @@
 
                 <div class="nav-tabs-horizontal" data-plugin="tabs">
 
-                    <ul class="nav nav-tabs nav-tabs-line" role="tablist">
+                    <ul class="nav nav-tabs nav-tabs-line" role="tablist" style="margin: 0 30px">
                         <li class="nav-item" role="presentation">
                             <a class="nav-link active" 
                                 data-toggle="tab" 
@@ -488,9 +488,3 @@
     <script src="{{ mix('js/staff.detail.js') }}"></script>
 
 @endsection
-
-
-
-
-
-

@@ -24,6 +24,7 @@
     font-size: 18px;
     color: #333;
     border-bottom: 1px solid #e0e0e0;
+    // padding: 0 15px 15px;
     padding: 0 15px;
     font-weight: bolder;
     .note {
@@ -31,6 +32,9 @@
         color: #999;
         font-weight: 300;
     }
+}
+.pd-b-15 {
+    padding-bottom: 15px;
 }
 
 .table input {
@@ -72,9 +76,16 @@
     border-left: 1px solid #E0E0E0;
 }
 
-// // .change-time {
-// // }
+// .change-time {
+// }
 
 .change-text {
     line-height: 40px;
+}
+
+.add-icon {
+    float: right;
+    margin: 6px 4px 0 0;
+    color: #838383;
+    cursor: pointer;
 }
