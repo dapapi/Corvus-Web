@@ -1,3 +1,31 @@
+.page-title{
+  font-size: 20px;
+  font-weight: 0;
+}
+.home-title{
+  padding-left: 20px;
+  h6{
+    margin: 20px
+  }
+}
+.cont-nav{
+  display: flex;
+  flex-wrap: wrap;
+  dl{
+    width: 30%;
+    height: 80px;
+    line-height: 80px;
+    background: #fff;
+    margin-left: 3%;
+    display: flex;
+    dt{
+      margin:0 10px 0 30px;
+    }
+    dd{
+      font-weight: 600;
+    }
+  }
+}
 .dashboard .card {
   height: calc(100% - 30px);
 }
