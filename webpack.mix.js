@@ -38,5 +38,5 @@ mix.js('resources/assets/js/app.js', 'public/js')
     .sass('resources/assets/sass/login.scss', 'public/css')
     .sass('resources/assets/sass/side-mask.scss', 'public/css')
     .sass('resources/assets/sass/task.scss', 'public/css')
-    .sass('resources/assets/sass/v1.scss', 'public/css').version()
+    .sass('resources/assets/sass/v1.scss', 'public/css')
     .sass('resources/assets/sass/staff.scss', 'public/css').version();
