@@ -2,11 +2,13 @@
 <project version="4">
   <component name="BookmarkManager">
     <bookmark url="file://$PROJECT_DIR$/resources/views/project/index.blade.php" line="164" />
-    <bookmark url="file://$PROJECT_DIR$/resources/views/calendar/index.blade.php" line="41" />
+    <bookmark url="file://$PROJECT_DIR$/resources/views/calendar/index.blade.php" line="44" />
   </component>
   <component name="ChangeListManager">
     <list default="true" id="1a3725e8-6f08-4917-871f-ddbfb9d5b08f" name="Default" comment="">
-      <change beforePath="$PROJECT_DIR$/resources/views/layouts/top-nav.blade.php" beforeDir="false" afterPath="$PROJECT_DIR$/resources/views/layouts/top-nav.blade.php" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/resources/assets/components/calendar.vue" beforeDir="false" afterPath="$PROJECT_DIR$/resources/assets/components/calendar.vue" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/resources/assets/js/calendar.index.js" beforeDir="false" afterPath="$PROJECT_DIR$/resources/assets/js/calendar.index.js" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/resources/views/calendar/index.blade.php" beforeDir="false" afterPath="$PROJECT_DIR$/resources/views/calendar/index.blade.php" afterDir="false" />
     </list>
     <option name="EXCLUDED_CONVERTED_TO_IGNORED" value="true" />
     <option name="TRACKING_ENABLED" value="true" />
@@ -20,11 +22,32 @@
   </component>
   <component name="FileEditorManager">
     <leaf SIDE_TABS_SIZE_LIMIT_KEY="300">
-      <file leaf-file-name="top-nav.blade.php" pinned="false" current-in-tab="true">
-        <entry file="file://$PROJECT_DIR$/resources/views/layouts/top-nav.blade.php">
+      <file leaf-file-name="calendar.vue" pinned="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/resources/assets/components/calendar.vue">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="120">
-              <caret line="8" column="96" selection-start-line="8" selection-start-column="96" selection-end-line="8" selection-end-column="96" />
+            <state relative-caret-position="260">
+              <caret line="119" column="18" lean-forward="true" selection-start-line="119" selection-start-column="18" selection-end-line="119" selection-end-column="18" />
+            </state>
+          </provider>
+        </entry>
+      </file>
+      <file leaf-file-name="index.blade.php" pinned="false" current-in-tab="true">
+        <entry file="file://$PROJECT_DIR$/resources/views/calendar/index.blade.php">
+          <provider selected="true" editor-type-id="text-editor">
+            <state relative-caret-position="240">
+              <caret line="16" column="39" selection-start-line="16" selection-start-column="39" selection-end-line="16" selection-end-column="39" />
+            </state>
+          </provider>
+        </entry>
+      </file>
+      <file leaf-file-name="calendar.index.js" pinned="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/resources/assets/js/calendar.index.js">
+          <provider selected="true" editor-type-id="text-editor">
+            <state relative-caret-position="420">
+              <caret line="28" selection-start-line="28" selection-end-line="28" />
+              <folding>
+                <element signature="e#0#30#0" expanded="true" />
+              </folding>
             </state>
           </provider>
         </entry>
@@ -49,7 +72,6 @@
       <find>isEdit</find>
       <find>title</find>
       <find>type</find>
-      <find>addPrivacy</find>
       <find>销售进展</find>
       <find>线索状态</find>
       <find>fullc</find>
@@ -71,6 +93,7 @@
       <find>泰洋系</find>
       <find>https://work.mttop.cn/worktile-seaweed/3,2b1cf0df45</find>
       <find>app_name</find>
+      <find>addPrivacy</find>
     </findStrings>
     <replaceStrings>
       <replace>clientLevelArr</replace>
@@ -134,17 +157,17 @@
         <option value="$PROJECT_DIR$/resources/views/project/detail.blade.php" />
         <option value="$PROJECT_DIR$/resources/assets/js/project.detail.js" />
         <option value="$PROJECT_DIR$/routes/web.php" />
-        <option value="$PROJECT_DIR$/resources/assets/components/calendar.vue" />
         <option value="$PROJECT_DIR$/resources/assets/js/config.js" />
         <option value="$PROJECT_DIR$/resources/assets/js/calender.index.js" />
         <option value="$PROJECT_DIR$/webpack.mix.js" />
-        <option value="$PROJECT_DIR$/resources/assets/js/calendar.index.js" />
-        <option value="$PROJECT_DIR$/resources/views/calendar/index.blade.php" />
         <option value="$PROJECT_DIR$/resources/views/layouts/master.blade.php" />
         <option value="$PROJECT_DIR$/resources/assets/sass/base.scss" />
         <option value="$PROJECT_DIR$/resources/views/layouts/left-nav.blade.php" />
         <option value="$PROJECT_DIR$/resources/views/task/index.blade.php" />
         <option value="$PROJECT_DIR$/resources/views/layouts/top-nav.blade.php" />
+        <option value="$PROJECT_DIR$/resources/assets/js/calendar.index.js" />
+        <option value="$PROJECT_DIR$/resources/assets/components/calendar.vue" />
+        <option value="$PROJECT_DIR$/resources/views/calendar/index.blade.php" />
       </list>
     </option>
   </component>
@@ -273,23 +296,6 @@
             <path>
               <item name="Corvus-Web" type="b2602c69:ProjectViewProjectNode" />
               <item name="Corvus-Web" type="462c0819:PsiDirectoryNode" />
-              <item name="public" type="462c0819:PsiDirectoryNode" />
-            </path>
-            <path>
-              <item name="Corvus-Web" type="b2602c69:ProjectViewProjectNode" />
-              <item name="Corvus-Web" type="462c0819:PsiDirectoryNode" />
-              <item name="public" type="462c0819:PsiDirectoryNode" />
-              <item name="css" type="462c0819:PsiDirectoryNode" />
-            </path>
-            <path>
-              <item name="Corvus-Web" type="b2602c69:ProjectViewProjectNode" />
-              <item name="Corvus-Web" type="462c0819:PsiDirectoryNode" />
-              <item name="public" type="462c0819:PsiDirectoryNode" />
-              <item name="js" type="462c0819:PsiDirectoryNode" />
-            </path>
-            <path>
-              <item name="Corvus-Web" type="b2602c69:ProjectViewProjectNode" />
-              <item name="Corvus-Web" type="462c0819:PsiDirectoryNode" />
               <item name="resources" type="462c0819:PsiDirectoryNode" />
             </path>
             <path>
@@ -330,7 +336,7 @@
               <item name="Corvus-Web" type="462c0819:PsiDirectoryNode" />
               <item name="resources" type="462c0819:PsiDirectoryNode" />
               <item name="views" type="462c0819:PsiDirectoryNode" />
-              <item name="layouts" type="462c0819:PsiDirectoryNode" />
+              <item name="client" type="462c0819:PsiDirectoryNode" />
             </path>
           </expand>
           <select />
@@ -380,7 +386,7 @@
     <servers />
   </component>
   <component name="TimeTrackingManager">
-    <option name="totallyTimeSpent" value="212543000" />
+    <option name="totallyTimeSpent" value="213130000" />
   </component>
   <component name="TodoView">
     <todo-panel id="selected-file">
@@ -400,8 +406,8 @@
       <window_info anchor="bottom" id="Database Changes" show_stripe_button="false" />
       <window_info anchor="bottom" id="Version Control" order="7" weight="0.32935324" />
       <window_info anchor="bottom" id="Run" order="2" />
-      <window_info active="true" anchor="bottom" id="Terminal" order="7" visible="true" weight="0.25671643" />
-      <window_info content_ui="combo" id="Project" order="0" visible="true" weight="0.15814696" />
+      <window_info anchor="bottom" id="Terminal" order="7" visible="true" weight="0.25671643" />
+      <window_info active="true" content_ui="combo" id="Project" order="0" visible="true" weight="0.15814696" />
       <window_info anchor="bottom" id="Docker" show_stripe_button="false" />
       <window_info anchor="right" id="Database" order="3" />
       <window_info anchor="bottom" id="Find" order="1" />
@@ -583,13 +589,6 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/resources/views/client/index.blade.php">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="469">
-          <caret line="61" column="83" lean-forward="true" selection-start-line="61" selection-start-column="83" selection-end-line="61" selection-end-column="83" />
-        </state>
-      </provider>
-    </entry>
     <entry file="file://$PROJECT_DIR$/resources/assets/components/group-datepicker.vue">
       <provider selected="true" editor-type-id="text-editor" />
     </entry>
@@ -700,13 +699,6 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/resources/assets/components/calendar.vue">
-      <provider selected="true" editor-type-id="text-editor">
-        <state>
-          <caret column="10" selection-start-column="10" selection-end-column="10" />
-        </state>
-      </provider>
-    </entry>
     <entry file="file://$PROJECT_DIR$/resources/views/project/detail.blade.php">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="414">
@@ -714,13 +706,6 @@
           <folding>
             <element signature="e#11875#13833#0#HTML" />
           </folding>
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/resources/assets/js/calendar.index.js">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="255">
-          <caret line="17" selection-start-line="17" selection-end-line="17" />
         </state>
       </provider>
     </entry>
@@ -825,13 +810,6 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/resources/views/calendar/index.blade.php">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="-272">
-          <caret line="8" selection-start-line="8" selection-end-line="8" />
-        </state>
-      </provider>
-    </entry>
     <entry file="file://$PROJECT_DIR$/resources/assets/js/client.detail.js">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="304">
@@ -851,8 +829,39 @@
     </entry>
     <entry file="file://$PROJECT_DIR$/resources/views/layouts/top-nav.blade.php">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="120">
-          <caret line="8" column="96" selection-start-line="8" selection-start-column="96" selection-end-line="8" selection-end-column="96" />
+        <state relative-caret-position="225">
+          <caret line="15" column="73" selection-start-line="15" selection-start-column="73" selection-end-line="15" selection-end-column="73" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/resources/assets/js/calendar.index.js">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="420">
+          <caret line="28" selection-start-line="28" selection-end-line="28" />
+          <folding>
+            <element signature="e#0#30#0" expanded="true" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/resources/assets/components/calendar.vue">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="260">
+          <caret line="119" column="18" lean-forward="true" selection-start-line="119" selection-start-column="18" selection-end-line="119" selection-end-column="18" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/resources/views/client/index.blade.php">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="270">
+          <caret line="18" column="13" selection-start-line="18" selection-start-column="13" selection-end-line="18" selection-end-column="13" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/resources/views/calendar/index.blade.php">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="240">
+          <caret line="16" column="39" selection-start-line="16" selection-start-column="39" selection-end-line="16" selection-end-column="39" />
         </state>
       </provider>
     </entry>

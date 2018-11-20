@@ -25,6 +25,10 @@ let app = new Vue({
                 })
             },
 
+            addSchedule: function () {
+
+            }
+
 
         }
 

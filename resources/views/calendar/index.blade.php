@@ -13,6 +13,9 @@
 
         <div class="page-header page-header-bordered">
             <h1 class="page-title">日历</h1>
+            <div class="page-header-actions">
+                <i class="icon md-plus font-size-20" aria-hidden="true"></i>
+            </div>
         </div>
 
         <div class="page-content container-fluid">
@@ -23,7 +26,7 @@
             </div>
         </div>
 
-        <div class="modal fade" id="addPrivacy" aria-hidden="true" aria-labelledby="addLabelForm"
+        <div class="modal fade" id="addSchedule" aria-hidden="true" aria-labelledby="addLabelForm"
              role="dialog" tabindex="-1">
             <div class="modal-dialog modal-simple">
                 <div class="modal-content">
@@ -44,7 +47,7 @@
                     </div>
                     <div class="modal-footer">
                         <button class="btn btn-sm btn-white btn-pure" data-dismiss="modal">取消</button>
-                        <button class= "btn btn-primary" type="submit" @click="addPrivacy">确定</button>
+                        <button class="btn btn-primary" type="submit" @click="addSchedule">确定</button>
                     </div>
                 </div>
             </div>
