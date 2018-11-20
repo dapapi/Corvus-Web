@@ -83,4 +83,8 @@ Route::get('/artist/taiyang/detail', function () {
     return view('artist.taiyang-detail');
 });
 
+Route::get('/calendar/index', function () {
+    return view('calendar.index');
+});
+
 //Route::get('/artist/index', 'ClientController@detail');

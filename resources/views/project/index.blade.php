@@ -6,7 +6,7 @@
 @section('body')
     @include('layouts.top-nav')
     @include('layouts.left-nav')
-    @include('layouts.grid-menu')
+
 
     <!-- Page -->
     <div class="page" id="root">
@@ -23,11 +23,11 @@
                                style="width: 220px">
                     </div>
                     <div class="col-md-3 example float-left">
-                        <selectors :options="projectStatus" @change="projectChange"
+                        <selectors @change="projectChange"
                                    :placeholder="'请选择项目状态'"></selectors>
                     </div>
                     <div class="col-md-3 example float-left">
-                        <selectors :options="projectPrincipalType" @change="projectPrincipalChange"
+                        <selectors @change="projectPrincipalChange"
                                    :placeholder="'请选择负责人'"></selectors>
                     </div>
                     <div class="col-md-3 example float-left">
@@ -126,7 +126,9 @@
                     </div>
                     <div class="modal-footer">
                         <button class="btn btn-sm btn-white btn-pure" data-dismiss="modal">取消</button>
-                        <button class="btn btn-primary" type="submit" @click="selectProjectType">确定</button>
+                        <button class="btn btn-primary" type="submit" @click="selectProjectType" data-toggle="modal"
+                                data-target="#addProject">确定
+                        </button>
                     </div>
 
                 </div>
@@ -144,14 +146,91 @@
                         <h4 class="modal-title">新增项目</h4>
                     </div>
                     <div class="modal-body">
-                        <div class="col-md-6 float-left pb-10" v-for="field in projectFields">
-                            <div class="col-md-5 text-right float-left pl-0">@{{ field.key }}</div>
-                            <div class="col-md-7 float-left pl-0">
-                                <template v-if="field.field_type === 1"></template>
-                                <template v-else-if="field.field_type === 2"></template>
-                                <template v-else-if="field.field_type === 3"></template>
-                                <template v-else-if="field.field_type === 4"></template>
-                                <template v-else-if="field.field_type === 5"></template>
+                        <div class="col-md-12 example clearfix">
+                            <div class="col-md-2 text-right float-left pl-0">销售线索</div>
+                            <div class="col-md-10 float-left">
+                                <selectors @change="(value) => addInfo(value, 'name')"></selectors>
+                            </div>
+                        </div>
+                        <div class="col-md-12 example clearfix">
+                            <div class="col-md-2 text-right float-left pl-0">项目名称</div>
+                            <div class="col-md-10 float-left">
+                                <emit-input @change="(value) => addInfo(value, 'name')"></emit-input>
+                            </div>
+                        </div>
+                        <div class="col-md-12 example clearfix">
+                            <div class="col-md-2 text-right float-left pl-0">项目负责人</div>
+                            <div class="col-md-10 float-left">
+                                <input-selectors @change="(value) => addInfo(value, 'principal_id')"></input-selectors>
+                            </div>
+                        </div>
+                        <div class="col-md-12 example clearfix">
+                            <div class="col-md-2 text-right float-left pl-0">优先级</div>
+                            <div class="col-md-10 float-left">
+                                <selectors :options="levelArr"
+                                           @change="(value) => addInfo(value, 'priority')"></selectors>
+                            </div>
+                        </div>
+                        <div class="col-md-12 example clearfix">
+                            <div class="col-md-2 text-right float-left pl-0">可见范围</div>
+                            <div class="col-md-10 float-left">
+                                <selectors :options="visibleRange"
+                                           @change="(value) => addInfo(value, 'name')"></selectors>
+                            </div>
+                        </div>
+                        <div class="col-md-12 example clearfix">
+                            <div class="col-md-2 text-right float-left pl-0">开始时间</div>
+                            <div class="col-md-10 float-left">
+                                <datepicker @change="(value) => addInfo(value, 'start_at')"></datepicker>
+                            </div>
+                        </div>
+                        <div class="col-md-12 example clearfix">
+                            <div class="col-md-2 text-right float-left pl-0">截止时间</div>
+                            <div class="col-md-10 float-left">
+                                <datepicker @change="(value) => addInfo(value, 'end_at')"></datepicker>
+                            </div>
+                        </div>
+                        <div class="col-md-12 example clearfix" v-for="field in projectFieldsArr">
+                            <div class="col-md-2 text-right float-left pl-0">@{{ field.key }}</div>
+                            <div class="col-md-10 float-left">
+                                <template v-if="field.field_type === 1">
+                                    <emit-input @change="(value) => addInfo(value, field.key )"></emit-input>
+                                </template>
+                                <template v-else-if="field.field_type === 2">
+                                    <selectors :options="field.contentArr"
+                                               @change="(value) => addInfo(value, field.key )"></selectors>
+                                </template>
+                                <template v-else-if="field.field_type === 3">
+                                    <editable-search-box :options="starsArr" :multiple="true"
+                                                         @change="(value) => addInfo(value, field.key )"></editable-search-box>
+                                </template>
+                                <template v-else-if="field.field_type === 4">
+                                    <datepicker @change="(value) => addInfo(value, field.key )"></datepicker>
+                                </template>
+                                <template v-else-if="field.field_type === 5">
+                                    <textarea title="" class="form-control"
+                                              @change="(value) => addInfo(value, field.key )"></textarea>
+                                </template>
+                                <template v-else-if="field.field_type === 6">
+                                    <selectors :options="field.contentArr" :multiple="true"
+                                               @change="(value) => addInfo(value, field.key )"></selectors>
+                                </template>
+                                <template v-else-if="field.field_type === 8">
+                                    <group-datepicker
+                                            @change="(value) => addInfo(value, field.key )"></group-datepicker>
+                                </template>
+                                <template v-else-if="field.field_type === 10">
+                                    <input-selectors @change="(value) => addInfo(value, field.key )"></input-selectors>
+                                </template>
+                                <template v-else-if="field.field_type === 11">
+                                    <number-spinner @change="(value) => addInfo(value, field.key )"></number-spinner>
+                                </template>
+                            </div>
+                        </div>
+                        <div class="col-md-12 example clearfix">
+                            <div class="col-md-2 text-right float-left pl-0">备注</div>
+                            <div class="col-md-10 float-left">
+                                <emit-input @change="(value) => addInfo(value, 'desc')"></emit-input>
                             </div>
                         </div>
                     </div>

@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html class="no-js css-menubar" lang="en">
+<html class="no-js js-menubar" lang="en">
 <head>
     <meta charset="utf-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
@@ -59,11 +59,11 @@
     <!-- Scripts -->
     <script src="https://res.papitube.com/vendors/breakpoints/breakpoints.js"></script>
     <script>
-        Breakpoints();
+        // Breakpoints();
 
     </script>
 </head>
-<body class="animsition page-aside-left @yield('body-class')">
+<body class="animsition">
 <!--[if lt IE 8]>
 <p class="browserupgrade">
     You are using an <strong>outdated</strong> browser. Please <a href="http://browsehappy.com/">upgrade your
@@ -151,13 +151,14 @@
 <script src="https://res.papitube.com/vendors/formvalidation/formValidation.js"></script>
 <script src="https://res.papitube.com/vendors/sortable/sortable.min.js"></script>
 <script src="https://res.papitube.com/vendors/asspinner/jquery-asSpinner.min.js"></script>
+<script src="https://res.papitube.com/remark/js/Plugin/asspinner.js"></script>
 <script src="https://res.papitube.com/vendors/moment.min.js"></script>
 <script src="https://res.papitube.com/remark/js/Plugin/bootstrap-treeview.js"></script>
 <script src="https://res.papitube.com/remark/js/Plugin/jstree.js"></script>
 <script src="https://res.papitube.com/vendors/fullcalendar/fullcalendar.js"></script>
 
 <script src="{{ mix('js/app.js') }}"></script>
-<script src="{{ mix('js/left-menu.js') }}"></script>
+{{--<script src="{{ mix('js/left-menu.js') }}"></script>--}}
 
 <script>
     (function (document, window, $) {
