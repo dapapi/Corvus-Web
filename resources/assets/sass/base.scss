@@ -71,11 +71,16 @@
   bottom: 20px;
   right: 0;
 }
-<<<<<<< HEAD
+
+.page {
+  margin-left: 100px !important;
+}
+
 // form表单样式
 .require {
   position: relative;
 }
+
 .require:before {
   content: '';
   position: absolute;
@@ -87,6 +92,7 @@
   top: 50%;
   transform: translateY(-50%);
 }
+
 .point {
   display: inline-block;
   width: 8px;
@@ -96,9 +102,4 @@
   margin: 0 4px;
   position: relative;
   top: -1px;
-=======
-
-.page {
-  margin-left: 100px !important;
->>>>>>> cxy
 }
