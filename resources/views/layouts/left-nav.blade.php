@@ -8,7 +8,6 @@
                             <i class="site-menu-icon md-view-dashboard" aria-hidden="true"></i>
                             <span class="site-menu-title">项目</span>
                         </a>
-<<<<<<< HEAD
                         <ul class="site-menu-sub">
                             <li class="site-menu-item">
                                 <a class="animsition-link" href="/project/index">
@@ -44,8 +43,6 @@
                                 </a>
                             </li>
                         </ul>
-=======
->>>>>>> cxy
                     </li>
                     <li class="site-menu-item">
                         <a class="animsition-link waves-effect waves-classic" href="/task/index">
