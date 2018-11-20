@@ -332,6 +332,25 @@ let config = {
         }
     ],
 
+    levelArr: [
+        {
+            name: 'S',
+            value: 'S'
+        },
+        {
+            name: 'A',
+            value: 'A'
+        },
+        {
+            name: 'B',
+            value: 'B'
+        },
+        {
+            name: 'C',
+            value: 'C'
+        }
+    ],
+
     lockArr: [
         {
             name: '否',
@@ -527,6 +546,16 @@ let config = {
             value: 4
         }
     ],
+    visibleRangeArr: [
+        {
+            name: '私有',
+            value: 1
+        },
+        {
+            name: '共有',
+            value: 2
+        }
+    ]
 
 
 };

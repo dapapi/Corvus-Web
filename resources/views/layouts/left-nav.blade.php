@@ -2,97 +2,50 @@
     <div class="site-menubar-body">
         <div>
             <div>
-                <ul class="site-menu" id="left-menu" data-plugin="menu">
-                    <li class="site-menu-item has-sub">
-                        <a href="javascript:void(0)">
-                            <i class="site-menu-icon md-widgets" aria-hidden="true"></i>
-                            <span class="site-menu-title">常用工具</span>
-                            <span class="site-menu-arrow"></span>
+                <ul class="site-menu" data-plugin="menu" style="transform: translate3d(0px, -1.03409px, 0px);">
+                    <li class="site-menu-item">
+                        <a class="animsition-link waves-effect waves-classic" href="/project/index">
+                            <i class="site-menu-icon md-view-dashboard" aria-hidden="true"></i>
+                            <span class="site-menu-title">项目</span>
                         </a>
-                        <ul class="site-menu-sub">
-                            <li class="site-menu-item">
-                                <a class="animsition-link" href="/project/index">
-                                    <span class="site-menu-title">项目管理</span>
-                                </a>
-                            </li>
-                            <li class="site-menu-item">
-                                <a class="animsition-link" href="/task/index">
-                                    <span class="site-menu-title">任务管理</span>
-                                </a>
-                            </li>
-                            <li class="site-menu-item">
-                                <a class="animsition-link" href="/trail/index">
-                                    <span class="site-menu-title">销售线索</span>
-                                </a>
-                            </li>
-                            <li class="site-menu-item">
-                                <a class="animsition-link" href="/client/index">
-                                    <span class="site-menu-title">客户管理</span>
-                                </a>
-                            </li>
-                            <li class="site-menu-item">
-                                <a class="animsition-link" href="/artist/index">
-                                    <span class="site-menu-title">博主管理</span>
-                                </a>
-                            </li>
-                            <li class="site-menu-item">
-                                <a class="animsition-link" href="/artist/taiyang">
-                                    <span class="site-menu-title">艺人管理</span>
-                                </a>
-                            </li>
-                        </ul>
                     </li>
-
-                    <li class="site-menu-item has-sub">
-                        <a href="javascript:void(0)">
-                            <i class="site-menu-icon md-email" aria-hidden="true"></i>
-                            <span class="site-menu-title">邮箱</span>
-                            <span class="site-menu-arrow"></span>
+                    <li class="site-menu-item">
+                        <a class="animsition-link waves-effect waves-classic" href="/task/index">
+                            <i class="site-menu-icon md-view-dashboard" aria-hidden="true"></i>
+                            <span class="site-menu-title">任务</span>
                         </a>
-                        <ul class="site-menu-sub">
-                            <li class="site-menu-item">
-                                <a class="animsition-link" href="layouts/menu-collapsed.html">
-                                    <span class="site-menu-title">收件箱</span>
-                                </a>
-                            </li>
-                            <li class="site-menu-item">
-                                <a class="animsition-link" href="layouts/menu-collapsed.html">
-                                    <span class="site-menu-title">发件箱</span>
-                                </a>
-                            </li>
-                            <li class="site-menu-item">
-                                <a class="animsition-link" href="layouts/menu-collapsed.html">
-                                    <span class="site-menu-title">废纸篓</span>
-                                </a>
-                            </li>
-                            <li class="site-menu-item">
-                                <a class="animsition-link" href="layouts/menu-collapsed.html">
-                                    <span class="site-menu-title">垃圾邮件</span>
-                                </a>
-                            </li>
-                            <li class="site-menu-item has-sub">
-                                <a href="javascript:void(0)">
-                                    <span class="site-menu-title">所有邮箱</span>
-                                    <span class="site-menu-arrow"></span>
-                                </a>
-                                <ul class="site-menu-sub">
-                                    <li class="site-menu-item">
-                                        <a class="animsition-link" href="uikit/panel-structure.html">
-                                            <span class="site-menu-title">dongkaipo@126.com</span>
-                                        </a>
-                                    </li>
-                                    <li class="site-menu-item">
-                                        <a class="animsition-link" href="uikit/panel-actions.html">
-                                            <span class="site-menu-title">jack.d@papitube.com</span>
-                                        </a>
-                                    </li>
-                                </ul>
-                            </li>
-                        </ul>
                     </li>
-
+                    <li class="site-menu-item">
+                        <a class="animsition-link waves-effect waves-classic" href="/trail/index">
+                            <i class="site-menu-icon md-view-dashboard" aria-hidden="true"></i>
+                            <span class="site-menu-title">销售</span>
+                        </a>
+                    </li>
+                    <li class="site-menu-item">
+                        <a class="animsition-link waves-effect waves-classic" href="/client/index">
+                            <i class="site-menu-icon md-view-dashboard" aria-hidden="true"></i>
+                            <span class="site-menu-title">客户</span>
+                        </a>
+                    </li>
+                    <li class="site-menu-item">
+                        <a class="animsition-link waves-effect waves-classic" href="/artist/index">
+                            <i class="site-menu-icon md-view-dashboard" aria-hidden="true"></i>
+                            <span class="site-menu-title">博主</span>
+                        </a>
+                    </li>
+                    <li class="site-menu-item">
+                        <a class="animsition-link waves-effect waves-classic" href="/artist/taiyang">
+                            <i class="site-menu-icon md-view-dashboard" aria-hidden="true"></i>
+                            <span class="site-menu-title">艺人</span>
+                        </a>
+                    </li>
+                    <li class="site-menu-item">
+                        <a class="animsition-link waves-effect waves-classic" href="/calendar/index">
+                            <i class="site-menu-icon md-view-dashboard" aria-hidden="true"></i>
+                            <span class="site-menu-title">日历</span>
+                        </a>
+                    </li>
                 </ul>
-
             </div>
         </div>
     </div>
