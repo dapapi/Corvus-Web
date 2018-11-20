@@ -51,6 +51,22 @@ Route::get('/client/detail', function () {
     return view('client.detail');
 });
 
+Route::get('/staff/index', function () {
+    return view('staff.index');
+});
+
+Route::get('/staff/history', function () {
+    return view('staff.history');
+});
+
+Route::get('/staff/add', function () {
+    return view('staff.add');
+});
+
+Route::get('/staff/detail', function () {
+    return view('staff.detail');
+});
+
 Route::get('/artist/index', function () {
     return view('artist.papi-index');
 });
@@ -68,4 +84,3 @@ Route::get('/artist/taiyang/detail', function () {
 });
 
 //Route::get('/artist/index', 'ClientController@detail');
-

@@ -31,6 +31,9 @@
                                 </a>
                             </li>
                             <li class="site-menu-item">
+                                <a class="animsition-link" href="/staff/index">
+                                    <span class="site-menu-title">员工管理</span>
+                                </a>
                                 <a class="animsition-link" href="/artist/index">
                                     <span class="site-menu-title">博主管理</span>
                                 </a>

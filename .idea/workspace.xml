@@ -2,11 +2,18 @@
 <project version="4">
   <component name="ChangeListManager">
     <list default="true" id="1a3725e8-6f08-4917-871f-ddbfb9d5b08f" name="Default" comment="">
+<<<<<<< HEAD
       <change beforePath="$PROJECT_DIR$/resources/views/client/index.blade.php" beforeDir="false" afterPath="$PROJECT_DIR$/resources/views/client/index.blade.php" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/resources/views/trail/index.blade.php" beforeDir="false" afterPath="$PROJECT_DIR$/resources/views/trail/index.blade.php" afterDir="false" />
+=======
+      <change beforePath="$PROJECT_DIR$/public/js/app.js" beforeDir="false" afterPath="$PROJECT_DIR$/public/js/app.js" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/resources/assets/js/config.js" beforeDir="false" afterPath="$PROJECT_DIR$/resources/assets/js/config.js" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/resources/assets/js/staff.add.js" beforeDir="false" afterPath="$PROJECT_DIR$/resources/assets/js/staff.add.js" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/resources/assets/sass/staff.scss" beforeDir="false" afterPath="$PROJECT_DIR$/resources/assets/sass/staff.scss" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/resources/views/staff/add.blade.php" beforeDir="false" afterPath="$PROJECT_DIR$/resources/views/staff/add.blade.php" afterDir="false" />
+>>>>>>> bruce
     </list>
     <option name="EXCLUDED_CONVERTED_TO_IGNORED" value="true" />
-    <option name="TRACKING_ENABLED" value="true" />
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
     <option name="HIGHLIGHT_NON_ACTIVE_CHANGELIST" value="false" />
@@ -15,22 +22,100 @@
   <component name="ComposerSettings" synchronizationState="SYNCHRONIZE">
     <pharConfigPath>$PROJECT_DIR$/composer.json</pharConfigPath>
   </component>
+  <component name="FUSProjectUsageTrigger">
+    <session id="584109069">
+      <usages-collector id="statistics.lifecycle.project">
+        <counts>
+          <entry key="project.closed" value="1" />
+          <entry key="project.open.time.8" value="1" />
+          <entry key="project.opened" value="1" />
+        </counts>
+      </usages-collector>
+    </session>
+  </component>
+  <component name="FavoritesManager">
+    <favorites_list name="Corvus-Web" />
+  </component>
   <component name="FileEditorManager">
     <leaf SIDE_TABS_SIZE_LIMIT_KEY="300">
+<<<<<<< HEAD
       <file leaf-file-name="index.blade.php" pinned="false" current-in-tab="true">
         <entry file="file://$PROJECT_DIR$/resources/views/client/index.blade.php">
           <provider selected="true" editor-type-id="text-editor">
             <state relative-caret-position="214">
               <caret line="44" column="39" lean-forward="true" selection-start-line="44" selection-start-column="39" selection-end-line="44" selection-end-column="39" />
+=======
+      <file pinned="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/resources/views/trail/detail.blade.php">
+          <provider selected="true" editor-type-id="text-editor">
+            <state relative-caret-position="3810">
+              <caret line="254" selection-start-line="254" selection-end-line="254" />
+>>>>>>> bruce
             </state>
           </provider>
         </entry>
       </file>
-      <file leaf-file-name="index.blade.php" pinned="false" current-in-tab="false">
+      <file pinned="false" current-in-tab="true">
         <entry file="file://$PROJECT_DIR$/resources/views/trail/index.blade.php">
           <provider selected="true" editor-type-id="text-editor">
+<<<<<<< HEAD
             <state relative-caret-position="-114">
               <caret line="22" column="46" lean-forward="true" selection-start-line="22" selection-start-column="46" selection-end-line="22" selection-end-column="46" />
+=======
+            <state relative-caret-position="135">
+              <caret line="9" lean-forward="true" selection-start-line="9" selection-end-line="9" />
+            </state>
+          </provider>
+        </entry>
+      </file>
+      <file pinned="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/resources/assets/js/trail.index.js">
+          <provider selected="true" editor-type-id="text-editor">
+            <state relative-caret-position="3315">
+              <caret line="223" column="32" selection-start-line="223" selection-start-column="32" selection-end-line="223" selection-end-column="32" />
+              <folding>
+                <element signature="e#0#30#0" expanded="true" />
+              </folding>
+            </state>
+          </provider>
+        </entry>
+      </file>
+      <file pinned="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/resources/assets/components/selectors.vue">
+          <provider selected="true" editor-type-id="text-editor">
+            <state relative-caret-position="495">
+              <caret line="33" column="17" selection-start-line="33" selection-start-column="17" selection-end-line="33" selection-end-column="17" />
+            </state>
+          </provider>
+        </entry>
+      </file>
+      <file pinned="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/resources/assets/components/edit-selector.vue">
+          <provider selected="true" editor-type-id="text-editor">
+            <state relative-caret-position="450">
+              <caret line="30" column="10" selection-start-line="30" selection-start-column="10" selection-end-line="30" selection-end-column="10" />
+            </state>
+          </provider>
+        </entry>
+      </file>
+      <file pinned="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/resources/assets/js/config.js">
+          <provider selected="true" editor-type-id="text-editor">
+            <state relative-caret-position="-2280">
+              <caret line="31" column="40" selection-start-line="31" selection-start-column="40" selection-end-line="31" selection-end-column="40" />
+            </state>
+          </provider>
+        </entry>
+      </file>
+      <file pinned="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/resources/assets/js/trail.detail.js">
+          <provider selected="true" editor-type-id="text-editor">
+            <state relative-caret-position="480">
+              <caret line="35" column="34" selection-start-line="35" selection-start-column="34" selection-end-line="35" selection-end-column="34" />
+              <folding>
+                <element signature="e#0#30#0" expanded="true" />
+              </folding>
+>>>>>>> bruce
             </state>
           </provider>
         </entry>
@@ -243,9 +328,17 @@
       <path value="$PROJECT_DIR$/vendor/paragonie/random_compat" />
     </include_path>
   </component>
+<<<<<<< HEAD
   <component name="ProjectFrameBounds" extendedState="6" fullScreen="true">
     <option name="width" value="1920" />
     <option name="height" value="1080" />
+=======
+  <component name="ProjectFrameBounds" extendedState="6">
+    <option name="x" value="1621" />
+    <option name="y" value="97" />
+    <option name="width" value="1440" />
+    <option name="height" value="877" />
+>>>>>>> bruce
   </component>
   <component name="ProjectLevelVcsManager">
     <ConfirmationsSetting value="2" id="Add" />
@@ -255,7 +348,6 @@
       <foldersAlwaysOnTop value="true" />
     </navigator>
     <panes>
-      <pane id="Scope" />
       <pane id="ProjectPane">
         <subPane>
           <expand>
@@ -330,7 +422,11 @@
           <select />
         </subPane>
       </pane>
+<<<<<<< HEAD
       <pane id="Scratches" />
+=======
+      <pane id="Scope" />
+>>>>>>> bruce
     </panes>
   </component>
   <component name="PropertiesComponent">
@@ -369,11 +465,20 @@
       <updated>1539575777001</updated>
       <workItem from="1539575778530" duration="280000" />
       <workItem from="1541581078044" duration="39906000" />
+<<<<<<< HEAD
+=======
+      <workItem from="1541991954629" duration="93235000" />
+      <workItem from="1542438396262" duration="229000" />
+>>>>>>> bruce
     </task>
     <servers />
   </component>
   <component name="TimeTrackingManager">
+<<<<<<< HEAD
     <option name="totallyTimeSpent" value="187334000" />
+=======
+    <option name="totallyTimeSpent" value="154749000" />
+>>>>>>> bruce
   </component>
   <component name="TodoView">
     <todo-panel id="selected-file">
@@ -385,6 +490,7 @@
     </todo-panel>
   </component>
   <component name="ToolWindowManager">
+<<<<<<< HEAD
     <frame x="0" y="0" width="1920" height="1080" extended-state="6" />
     <editor active="true" />
     <layout>
@@ -397,18 +503,38 @@
       <window_info active="true" content_ui="combo" id="Project" order="0" visible="true" weight="0.15814696" />
       <window_info anchor="bottom" id="Docker" show_stripe_button="false" />
       <window_info anchor="right" id="Database" order="3" />
+=======
+    <frame x="1440" y="23" width="1920" height="1057" extended-state="6" />
+    <layout>
+      <window_info content_ui="combo" id="Project" order="0" sideWeight="0.49825174" visible="true" weight="0.14428647" />
+      <window_info id="Structure" order="1" sideWeight="0.50174826" side_tool="true" weight="0.19309373" />
+      <window_info id="Favorites" order="2" sideWeight="0.50174826" side_tool="true" weight="0.19309373" />
+      <window_info anchor="bottom" id="Message" order="0" />
+>>>>>>> bruce
       <window_info anchor="bottom" id="Find" order="1" />
-      <window_info id="Structure" order="1" side_tool="true" weight="0.25" />
-      <window_info id="Favorites" order="2" side_tool="true" />
+      <window_info anchor="bottom" id="Run" order="2" />
       <window_info anchor="bottom" id="Debug" order="3" weight="0.4" />
-      <window_info anchor="right" content_ui="combo" id="Hierarchy" order="2" weight="0.25" />
+      <window_info anchor="bottom" id="Cvs" order="4" weight="0.25" />
       <window_info anchor="bottom" id="Inspection" order="5" weight="0.4" />
+<<<<<<< HEAD
       <window_info content_ui="combo" id="Project" order="0" visible="true" weight="0.24959612" />
       <window_info anchor="right" id="Commander" order="0" weight="0.4" />
       <window_info anchor="right" id="Ant Build" order="1" weight="0.25" />
       <window_info anchor="bottom" id="TODO" order="6" />
       <window_info anchor="bottom" id="Message" order="0" />
       <window_info anchor="bottom" id="Cvs" order="4" weight="0.25" />
+=======
+      <window_info anchor="bottom" id="TODO" order="6" weight="0.32848486" />
+      <window_info active="true" anchor="bottom" id="Terminal" order="7" visible="true" weight="0.22072539" />
+      <window_info anchor="bottom" id="Version Control" order="8" />
+      <window_info anchor="bottom" id="Event Log" order="9" side_tool="true" />
+      <window_info anchor="bottom" id="Docker" order="10" show_stripe_button="false" />
+      <window_info anchor="bottom" id="Database Changes" order="11" show_stripe_button="false" />
+      <window_info anchor="right" id="Commander" order="0" weight="0.4" />
+      <window_info anchor="right" id="Ant Build" order="1" weight="0.25" />
+      <window_info anchor="right" content_ui="combo" id="Hierarchy" order="2" weight="0.25" />
+      <window_info anchor="right" id="Database" order="3" />
+>>>>>>> bruce
     </layout>
   </component>
   <component name="TypeScriptGeneratedFilesManager">
@@ -443,16 +569,24 @@
   <component name="VcsContentAnnotationSettings">
     <option name="myLimit" value="2678400000" />
   </component>
+<<<<<<< HEAD
   <component name="XDebuggerManager">
     <breakpoint-manager>
       <option name="time" value="2" />
     </breakpoint-manager>
   </component>
+=======
+>>>>>>> bruce
   <component name="editorHistoryManager">
     <entry file="file://$PROJECT_DIR$/resources/assets/components/select-staff.vue">
       <provider selected="true" editor-type-id="text-editor">
+<<<<<<< HEAD
         <state relative-caret-position="225">
           <caret line="15" column="20" selection-start-line="15" selection-start-column="20" selection-end-line="15" selection-end-column="20" />
+=======
+        <state relative-caret-position="180">
+          <caret line="12" column="16" selection-start-line="12" selection-start-column="16" selection-end-line="12" selection-end-column="16" />
+>>>>>>> bruce
         </state>
       </provider>
     </entry>
@@ -533,6 +667,7 @@
         </state>
       </provider>
     </entry>
+<<<<<<< HEAD
     <entry file="file://$PROJECT_DIR$/resources/assets/components/edit-number-spinner.vue">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="304">
@@ -548,6 +683,12 @@
       </provider>
     </entry>
     <entry file="file://$PROJECT_DIR$/resources/assets/sass/base.scss">
+=======
+    <entry file="file://$PROJECT_DIR$/resources/assets/store/index.vue" />
+    <entry file="file://$PROJECT_DIR$/resources/assets/store/states.js" />
+    <entry file="file://$PROJECT_DIR$/resources/assets/js/common.js" />
+    <entry file="file://$PROJECT_DIR$/webpack.mix.js">
+>>>>>>> bruce
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="65">
           <caret line="51" column="14" selection-start-line="51" selection-start-column="14" selection-end-line="51" selection-end-column="14" />
@@ -556,11 +697,16 @@
     </entry>
     <entry file="file://$PROJECT_DIR$/resources/views/project/detail.blade.php">
       <provider selected="true" editor-type-id="text-editor">
+<<<<<<< HEAD
         <state relative-caret-position="298">
           <caret line="34" column="33" selection-start-line="34" selection-start-column="33" selection-end-line="34" selection-end-column="33" />
           <folding>
             <element signature="e#12751#12839#0#HTML" expanded="true" />
           </folding>
+=======
+        <state relative-caret-position="510">
+          <caret line="34" column="76" lean-forward="true" selection-start-line="34" selection-start-column="76" selection-end-line="34" selection-end-column="76" />
+>>>>>>> bruce
         </state>
       </provider>
     </entry>
@@ -593,11 +739,16 @@
     </entry>
     <entry file="file://$PROJECT_DIR$/resources/assets/js/client.detail.js">
       <provider selected="true" editor-type-id="text-editor">
+<<<<<<< HEAD
         <state relative-caret-position="304">
           <caret line="256" column="49" selection-start-line="256" selection-start-column="49" selection-end-line="256" selection-end-column="49" />
           <folding>
             <element signature="e#0#30#0" expanded="true" />
           </folding>
+=======
+        <state relative-caret-position="180">
+          <caret line="397" column="56" lean-forward="true" selection-start-line="397" selection-start-column="56" selection-end-line="397" selection-end-column="56" />
+>>>>>>> bruce
         </state>
       </provider>
     </entry>
@@ -624,8 +775,13 @@
     </entry>
     <entry file="file://$PROJECT_DIR$/resources/assets/sass/task.scss">
       <provider selected="true" editor-type-id="text-editor">
+<<<<<<< HEAD
         <state relative-caret-position="120">
           <caret line="8" column="21" lean-forward="true" selection-start-line="8" selection-start-column="21" selection-end-line="8" selection-end-column="21" />
+=======
+        <state relative-caret-position="195">
+          <caret line="13" column="44" lean-forward="true" selection-start-line="13" selection-start-column="44" selection-end-line="13" selection-end-column="44" />
+>>>>>>> bruce
         </state>
       </provider>
     </entry>
@@ -638,11 +794,16 @@
     </entry>
     <entry file="file://$PROJECT_DIR$/resources/assets/js/papi.index.js">
       <provider selected="true" editor-type-id="text-editor">
+<<<<<<< HEAD
         <state relative-caret-position="66">
           <caret line="107" column="49" lean-forward="true" selection-start-line="107" selection-start-column="49" selection-end-line="107" selection-end-column="49" />
           <folding>
             <element signature="e#0#30#0" expanded="true" />
           </folding>
+=======
+        <state relative-caret-position="284">
+          <caret line="41" column="38" selection-start-line="41" selection-start-column="38" selection-end-line="41" selection-end-column="38" />
+>>>>>>> bruce
         </state>
       </provider>
     </entry>
@@ -655,18 +816,28 @@
     </entry>
     <entry file="file://$PROJECT_DIR$/resources/views/artist/taiyang-index.blade.php">
       <provider selected="true" editor-type-id="text-editor">
+<<<<<<< HEAD
         <state relative-caret-position="285">
           <caret line="19" column="43" selection-start-line="19" selection-start-column="43" selection-end-line="19" selection-end-column="43" />
           <folding>
             <element signature="e#5334#5604#0#HTML" />
           </folding>
+=======
+        <state relative-caret-position="320">
+          <caret line="39" column="38" selection-start-line="39" selection-start-column="38" selection-end-line="39" selection-end-column="38" />
+>>>>>>> bruce
         </state>
       </provider>
     </entry>
     <entry file="file://$PROJECT_DIR$/webpack.mix.js">
       <provider selected="true" editor-type-id="text-editor">
+<<<<<<< HEAD
         <state relative-caret-position="450">
           <caret line="30" selection-start-line="30" selection-end-line="30" />
+=======
+        <state relative-caret-position="329">
+          <caret line="412" column="14" lean-forward="true" selection-start-line="412" selection-start-column="14" selection-end-line="412" selection-end-column="14" />
+>>>>>>> bruce
         </state>
       </provider>
     </entry>
@@ -699,6 +870,7 @@
     </entry>
     <entry file="file://$PROJECT_DIR$/resources/views/task/detail.blade.php">
       <provider selected="true" editor-type-id="text-editor">
+<<<<<<< HEAD
         <state relative-caret-position="428">
           <caret line="105" selection-start-line="105" selection-end-line="105" />
           <folding>
@@ -706,6 +878,10 @@
             <element signature="e#11803#13488#0#HTML" />
             <element signature="e#13509#16059#0#HTML" />
           </folding>
+=======
+        <state relative-caret-position="135">
+          <caret line="9" column="25" lean-forward="true" selection-start-line="9" selection-start-column="25" selection-end-line="9" selection-end-column="25" />
+>>>>>>> bruce
         </state>
       </provider>
     </entry>
@@ -773,8 +949,27 @@
     </entry>
     <entry file="file://$PROJECT_DIR$/resources/assets/js/taiyang.detail.js">
       <provider selected="true" editor-type-id="text-editor">
+<<<<<<< HEAD
         <state relative-caret-position="347">
           <caret line="180" column="18" lean-forward="true" selection-start-line="180" selection-start-column="18" selection-end-line="180" selection-end-column="18" />
+=======
+        <state relative-caret-position="466">
+          <caret line="95" column="50" selection-start-line="95" selection-start-column="50" selection-end-line="95" selection-end-column="50" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/resources/views/trail/detail.blade.php">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="3810">
+          <caret line="254" selection-start-line="254" selection-end-line="254" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/resources/assets/js/trail.index.js">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="3315">
+          <caret line="223" column="32" selection-start-line="223" selection-start-column="32" selection-end-line="223" selection-end-column="32" />
+>>>>>>> bruce
           <folding>
             <element signature="e#0#30#0" expanded="true" />
           </folding>
@@ -806,16 +1001,24 @@
     </entry>
     <entry file="file://$PROJECT_DIR$/resources/views/artist/taiyang-detail.blade.php">
       <provider selected="true" editor-type-id="text-editor">
+<<<<<<< HEAD
         <state relative-caret-position="375">
           <caret line="25" column="94" selection-start-line="25" selection-start-column="94" selection-end-line="25" selection-end-column="94" />
           <folding>
             <element signature="e#38207#41824#0#HTML" />
+=======
+        <state relative-caret-position="480">
+          <caret line="35" column="34" selection-start-line="35" selection-start-column="34" selection-end-line="35" selection-end-column="34" />
+          <folding>
+            <element signature="e#0#30#0" expanded="true" />
+>>>>>>> bruce
           </folding>
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/resources/views/trail/detail.blade.php">
+    <entry file="file://$PROJECT_DIR$/resources/assets/js/config.js">
       <provider selected="true" editor-type-id="text-editor">
+<<<<<<< HEAD
         <state relative-caret-position="89">
           <caret line="341" column="45" lean-forward="true" selection-start-line="341" selection-start-column="45" selection-end-line="341" selection-end-column="45" />
         </state>
@@ -832,11 +1035,16 @@
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="391">
           <caret line="126" column="47" lean-forward="true" selection-start-line="126" selection-start-column="47" selection-end-line="126" selection-end-column="47" />
+=======
+        <state relative-caret-position="-2280">
+          <caret line="31" column="40" selection-start-line="31" selection-start-column="40" selection-end-line="31" selection-end-column="40" />
+>>>>>>> bruce
         </state>
       </provider>
     </entry>
     <entry file="file://$PROJECT_DIR$/resources/views/trail/index.blade.php">
       <provider selected="true" editor-type-id="text-editor">
+<<<<<<< HEAD
         <state relative-caret-position="-114">
           <caret line="22" column="46" lean-forward="true" selection-start-line="22" selection-start-column="46" selection-end-line="22" selection-end-column="46" />
         </state>
@@ -846,6 +1054,10 @@
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="214">
           <caret line="44" column="39" lean-forward="true" selection-start-line="44" selection-start-column="39" selection-end-line="44" selection-end-column="39" />
+=======
+        <state relative-caret-position="135">
+          <caret line="9" lean-forward="true" selection-start-line="9" selection-end-line="9" />
+>>>>>>> bruce
         </state>
       </provider>
     </entry>

@@ -33,6 +33,11 @@ Vue.component('select-staff', require('../components/select-staff.vue'));
 Vue.component('selectors', require('../components/selectors.vue'));
 Vue.component('selectorsOptions', require('../components/selectors-options.vue'));
 Vue.component('task-follow-up', require('../components/task-follow-up.vue'));
+Vue.component('Modal', require('../components/Modal.vue'));
+Vue.component('checkbox-group', require('../components/checkboxGroup.vue'));
+Vue.component('nav-back', require('../components/navBack.vue'))
+Vue.component('upload', require('../components/upload.vue'))
+Vue.component('mtp-table', require('../components/Table.vue'))
 Vue.component('timepicker', require('../components/timepicker.vue'));
 
 Vue.prototype.globalClick = function (callback) {

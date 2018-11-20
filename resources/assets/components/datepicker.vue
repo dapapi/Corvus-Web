@@ -8,7 +8,7 @@
 </template>
 <script>
     export default {
-        props: ['placeholder'],
+        props: ['placeholder', 'changeKey'],
         data() {
             return {}
         },
@@ -21,6 +21,9 @@
                 language: "zh-CN",
             }).on("changeDate", function () {
                 self.$emit('change', $(this)[0].children[0].value);
+                if (self.changeKey) {
+                    self.$emit('select', self.changeKey, $(this)[0].children[0].value)
+                }
             });
 
         },
