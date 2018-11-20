@@ -8,7 +8,7 @@
 @section('body')
     @include('layouts.top-nav')
     @include('layouts.left-nav')
-    @include('layouts.grid-menu')
+
 
     <!-- Page -->
     <div class="page" id="root">

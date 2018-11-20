@@ -1,8 +1,10 @@
 import config from "./config";
-import redirect from "./bootstrap"
+import redirect from "./bootstrap";
+import store from '../store/index.js';
 
 let app = new Vue({
         el: '#root',
+        store,
         data: {
             total: 2,
             current_page: 1,
@@ -11,27 +13,14 @@ let app = new Vue({
             starsArr: [],
             projectName: '',
             projectTypeArr: config.projectTypeArr,
-            projectFieldArr: [],
+            projectFieldsArr: [],
             projectType: '',
             projectFields: '',
-            projectStatus: [
-                {
-                    value: 1,
-                    name: '未确定合作',
-                },
-                {
-                    value: 2,
-                    name: '已确定合作',
-                }
-            ],
-            projectPrincipalType: [
-                {
-                    value: 'test',
-                    name: 'test'
-                }
-            ],
             projectsInfo: '',
             customizeInfo: config.customizeInfo,
+            addInfoArr: {},
+            levelArr: config.levelArr,
+            visibleRangeArr: config.visibleRangeArr,
 
         },
 
@@ -123,8 +112,6 @@ let app = new Vue({
             },
 
             selectProjectType: function () {
-                $('#selectProjectType').modal('hide');
-                $('#addProject').modal('show');
                 $.ajax({
                     type: 'get',
                     url: config.apiUrl + '/project_fields',
@@ -133,8 +120,41 @@ let app = new Vue({
                         type: app.projectType
                     }
                 }).done(function (response) {
-                    console.log(response)
+                    for (let i = 0; i < response.data.length; i++) {
+                        if (response.data[i].field_type === 2) {
+                            response.data[i].contentArr = [];
+                            for (let j = 0; j < response.data[i].content.length; j++) {
+                                response.data[i].contentArr.push({
+                                    value: response.data[i].content[j],
+                                    name: response.data[i].content[j]
+                                })
+                            }
+                        }
+                    }
+                    app.projectFieldsArr = response.data
                 })
+                if (app.projectType !== 5) {
+                    this.getTrail()
+                }
+            },
+
+            getTrail: function () {
+                //获取类型下的销售线索
+                $.ajax({
+                    type: 'get',
+                    url: config.apiUrl + '/trails',
+                    headers: config.getHeaders(),
+                    data: {
+                        type: app.projectType
+                    }
+                }).done(function (response) {
+
+                })
+            },
+
+
+            addInfo: function (value, name) {
+                app.addInfoArr[name] = value
             }
 
         }

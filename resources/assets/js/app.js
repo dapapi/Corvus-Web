@@ -23,7 +23,9 @@ Vue.component('edit-number-spinner', require('../components/edit-number-spinner.
 Vue.component('edit-selector', require('../components/edit-selector.vue'));
 Vue.component('edit-textarea', require('../components/edit-textarea.vue'));
 Vue.component('editable-search-box', require('../components/editable-search-box.vue'));
+Vue.component('emit-input', require('../components/emit-input.vue'));
 Vue.component('file-uploader', require('../components/file-uploader.vue'));
+Vue.component('group-datepicker', require('../components/group-datepicker.vue'));
 Vue.component('inline-datepicker', require('../components/inline-datepicker.vue'));
 Vue.component('input-selectors', require('../components/input-selectors.vue'));
 Vue.component('normal-linkage-selectors', require('../components/normal-linkage-selectors.vue'));
@@ -33,6 +35,11 @@ Vue.component('select-staff', require('../components/select-staff.vue'));
 Vue.component('selectors', require('../components/selectors.vue'));
 Vue.component('selectorsOptions', require('../components/selectors-options.vue'));
 Vue.component('task-follow-up', require('../components/task-follow-up.vue'));
+Vue.component('Modal', require('../components/Modal.vue'));
+Vue.component('checkbox-group', require('../components/checkboxGroup.vue'));
+Vue.component('nav-back', require('../components/navBack.vue'))
+Vue.component('upload', require('../components/upload.vue'))
+Vue.component('mtp-table', require('../components/Table.vue'))
 Vue.component('timepicker', require('../components/timepicker.vue'));
 
 Vue.prototype.globalClick = function (callback) {

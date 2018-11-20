@@ -51,7 +51,31 @@
                     {
                         id: 999,
                         title: 'Repeating Event',
-                        start: '2018-10-09T16:00:00'
+                        start: '2018-11-19T16:00:00'
+                    },
+                    {
+                        title: 'Repeating Event',
+                        start: '2018-11-19T15:00:00'
+                    },
+                    {
+                        title: 'Repeating Event',
+                        start: '2018-11-19T14:00:00'
+                    },
+                    {
+                        title: 'Repeating Event',
+                        start: '2018-11-19T13:00:00'
+                    },
+                    {
+                        title: 'Repeating Event',
+                        start: '2018-11-19T12:00:00'
+                    },
+                    {
+                        title: 'Repeating Event',
+                        start: '2018-11-19T11:00:00'
+                    },
+                    {
+                        title: 'Repeating Event',
+                        start: '2018-11-19T10:00:00'
                     },
                     {
                         id: 999,
@@ -93,7 +117,17 @@
                         url: 'http://google.com/',
                         start: '2018-03-28'
                     }
-                ]
+                ],
+                dayClick: function (date, allDay, jsEvent) {
+                    console.log(date)
+                    console.log(allDay)
+                    console.log(jsEvent)
+                },
+                eventClick: function (event, jsEvent, view) {
+                    console.log(event)
+                    console.log(jsEvent)
+                    console.log(view)
+                },
             });
 
         },
