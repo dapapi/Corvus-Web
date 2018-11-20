@@ -2,13 +2,12 @@ import axios from 'axios'
 import qs from 'qs'
 import config from '../js/config'
 
-// import * as _ from '../util/tool'
-
 // axios 配置
 axios.defaults.timeout = 10000;
 axios.defaults.headers.common['Accept'] = 'application/vnd.Corvus.v1+json';
 axios.defaults.headers.common['Access-Control-Expose-Headers'] = 'Location';
 axios.defaults.headers.common['Access-Control-Allow-Headers'] = 'Authorization';
+axios.defaults.headers.common['Authorization'] = 'Bearer ' + config.getAccessToken() || '';
 axios.defaults.headers.post['Content-Type'] = 'application/x-www-form-urlencoded;charset=UTF-8';
 axios.defaults.baseURL = config.apiUrl;
 
@@ -19,27 +18,32 @@ axios.interceptors.request.use((config) => {
 	}
 	return config;
 }, (error) => {
-    // _.toast("错误的传参", 'fail');
-    toastr.error("错误的传参", 'fail')
+	// toastr.error("错误的传参", 'fail')
+	const { response } = error
+	// toastr.error(response.responseJSON.message);
+	toastr.error(response.data.message);
 	return Promise.reject(error);
 });
 
 //返回状态判断
 axios.interceptors.response.use((res) => {
-	if (!res.data.success) {
-		// _.toast(res.data.msg);
+    if (res.status < 200 && res.status > 300) {
 		return Promise.reject(res);
 	}
 	return res;
 }, (error) => {
-    // _.toast("网络异常", 'fail');
-    toastr.error("错误的传参", 'fail')
+	const { response: { status } } = error
+	const { response } = error
+	if (status === 401) {
+		config.getStatusCode()[401]()
+	} else {
+		toastr.error(response.data.message);
+	}
 	return Promise.reject(error);
 });
 
 export default function fetch(method = 'post', url, params) {
 	return new Promise((resolve, reject) => {
-		// axios.post(url, params)
 		axios[method](url, params)
 			.then(response => {
 				resolve(response.data);

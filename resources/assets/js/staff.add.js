@@ -208,7 +208,7 @@ let app = new Vue({
 				current_address: this.householdAddress,
 				birty_time: this.birthDay,
 				entty_time: this.entryTime,
-				bloodType: this.bloodType,
+				blood_type: this.bloodType,
 				email: this.email,
 				language_level: this.foreignLanguageLevel,
 				certificate: this.certificate,
@@ -217,10 +217,52 @@ let app = new Vue({
 				remark: this.remarks,
 				disease: this.isIll,
 				pregnancy: this.isPregnancy,
-				migration: this.agreeMove
+				migration: this.agreeMove,
+				status_type: 1, // 默认
+				education: [
+					// {
+					// 	school: 'xx',
+					// 	specialty: '',
+					// 	start_time: '',
+					// 	end_time: '',
+					// 	graduate: '',
+					// 	degree: '',
+					// }
+				],
+				training: [
+					// {
+					// 	address: '',
+					// 	course_name: '',
+					// 	certificate: '',
+					// 	trained_time: '',
+					// }
+				],
+				record: [
+					// {
+					// 	unit_name: '',
+					// 	department: '',
+					// 	position: '',
+					// 	entry_time: '',
+					// 	departure_time: '',
+					// 	monthly_pay: '',
+					// 	departure_why: ''
+					// }
+				],
+				family: [
+					// {
+					// 	name: '',
+					// 	relation: '',
+					// 	birth_time: '',
+					// 	work_units: '',
+					// 	position: '',
+					// 	contact_phone: ''
+					// }
+				]
 			}
+	
 			fetch('post', '/personnel' ,params).then(result => {
-				console.log(result)
+				// 
+				alert('添加成功')
 			})
 		}
 	}
