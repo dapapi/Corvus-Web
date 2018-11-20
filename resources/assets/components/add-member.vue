@@ -8,7 +8,7 @@
                 </span>
             </li>
         </ul>
-        <div class="addMember-trigger" :class="this.isMemberShow ? 'addMember-active': ''" id="selectStaff">
+        <div class="addMember-trigger" :class="isMemberShow ? 'addMember-active': ''" :id="'selectStaff' + this._uid">
             <div class="addMember-trigger-button" @click="showMember"><i class="md-plus"></i></div>
             <div class="addMember-trigger-dropdown">
                 <select-staff :multiple="true" :member-type="'participant'" :type="type"
@@ -44,11 +44,12 @@
         methods: {
 
             showMember: function () {
+                console.log('true');
                 this.isMemberShow = true;
             },
 
             removeSelect: function (event) {
-                let tag = document.getElementById("selectStaff");
+                let tag = document.getElementById("selectStaff" + this._uid);
                 if (tag) {
                     if (!tag.contains(event.target)) {
                         this.isMemberShow = false;

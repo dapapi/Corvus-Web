@@ -63,7 +63,7 @@
 
     </script>
 </head>
-<body class="animsition">
+<body class="animsition" style="padding: 0">
 <!--[if lt IE 8]>
 <p class="browserupgrade">
     You are using an <strong>outdated</strong> browser. Please <a href="http://browsehappy.com/">upgrade your
@@ -158,7 +158,6 @@
 <script src="https://res.papitube.com/vendors/fullcalendar/fullcalendar.js"></script>
 
 <script src="{{ mix('js/app.js') }}"></script>
-{{--<script src="{{ mix('js/left-menu.js') }}"></script>--}}
 
 <script>
     (function (document, window, $) {

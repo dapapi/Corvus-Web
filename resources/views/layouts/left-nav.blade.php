@@ -1,4 +1,4 @@
-<div class="site-menubar">
+<div class="site-menubar" style="height: 100%!important;top: 0;width: 100px">
     <div class="site-menubar-body">
         <div>
             <div>

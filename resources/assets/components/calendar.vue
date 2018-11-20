@@ -122,6 +122,7 @@
                     console.log(date)
                     console.log(allDay)
                     console.log(jsEvent)
+                    $('#addSchedule').modal('show')
                 },
                 eventClick: function (event, jsEvent, view) {
                     console.log(event)

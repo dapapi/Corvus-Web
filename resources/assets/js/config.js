@@ -622,10 +622,84 @@ let config = {
             value: 1
         },
         {
-            name: '共有',
+            name: '公开',
             value: 2
         }
-    ]
+    ],
+    remindArr: [
+        {
+            name: '无',
+            value: 0
+        },
+        {
+            name: '日程发生时',
+            value: 1
+        },
+        {
+            name: '5分钟前',
+            value: 2
+        },
+        {
+            name: '10分钟给前',
+            value: 3
+        },
+        {
+            name: '15分钟前',
+            value: 4
+        },
+        {
+            name: '30分钟前',
+            value: 5
+        },
+        {
+            name: '1小时前',
+            value: 6
+        },
+        {
+            name: '2小时前',
+            value: 7
+        },
+        {
+            name: '1天前',
+            value: 8
+        },
+        {
+            name: '2天前',
+            value: 9
+        }
+    ],
+    meetingRomeArr: [
+        {
+            name: '1801会议室',
+            value: 1
+        },
+        {
+            name: '1802会议室',
+            value: 2
+        },
+        {
+            name: '1803会议室',
+            value: 3
+        },
+    ],
+    repeatArr: [
+        {
+            name: '从不重复',
+            value: 1
+        },
+        {
+            name: '每天',
+            value: 2
+        },
+        {
+            name: '每周',
+            value: 3
+        },
+        {
+            name: '每月',
+            value: 4
+        },
+    ],
 
 };
 
