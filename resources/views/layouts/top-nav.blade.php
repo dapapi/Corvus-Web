@@ -1,55 +1,12 @@
 <nav class="site-navbar navbar navbar-default navbar-fixed-top navbar-mega" role="navigation">
 
-    <div class="navbar-header">
-        <button type="button" class="navbar-toggler hamburger hamburger-close navbar-toggler-left hided"
-                data-toggle="menubar">
-            <span class="sr-only">切换菜单</span>
-            <span class="hamburger-bar"></span>
-        </button>
-        <button type="button" class="navbar-toggler collapsed" data-target="#site-navbar-collapse"
-                data-toggle="collapse">
-            <i class="icon md-more" aria-hidden="true"></i>
-        </button>
-        <div class="navbar-brand navbar-brand-center" data-toggle="gridmenu">
-            <img class="navbar-brand-logo bg-white" src="https://work.mttop.cn/worktile-seaweed/3,2b1cf0df45"
-                 title="Remark">
-            <span class="navbar-brand-text hidden-xs-down"> {{ env('APP_NAME') }}</span>
-        </div>
-
-        <button type="button" class="navbar-toggler collapsed" data-target="#site-navbar-search"
-                data-toggle="collapse">
-            <span class="sr-only">切换搜索</span>
-            <i class="icon md-search" aria-hidden="true"></i>
-        </button>
+    <div class="navbar-header text-center">
+        <span class="hidden-xs-down font-weight-bold font-size-24">{{ env('APP_NAME') }}</span>
     </div>
 
     <div class="navbar-container container-fluid">
         <!-- Navbar Collapse -->
         <div class="collapse navbar-collapse navbar-collapse-toolbar" id="site-navbar-collapse">
-            <!-- Navbar Toolbar -->
-            <ul class="nav navbar-toolbar">
-                <li class="nav-item hidden-float">
-                    <a class="nav-link" data-toggle="menubar" href="#" role="button"">
-                    <i class="icon hamburger">
-                        <span class="sr-only">切换左侧菜单</span>
-                        <span class="hamburger-bar"></span>
-                    </i>
-                    </a>
-                </li>
-                <li class="nav-item hidden-sm-down" id="toggleFullscreen">
-                    <a class="nav-link icon icon-fullscreen" data-toggle="fullscreen" href="#" role="button">
-                        <span class="sr-only">切换全屏</span>
-                    </a>
-                </li>
-                <li class="nav-item hidden-float">
-                    <a class="nav-link icon md-search" data-toggle="collapse" href="#" data-target="#site-navbar-search"
-                       role="button">
-                        <span class="sr-only">切换搜索</span>
-                    </a>
-                </li>
-            </ul>
-            <!-- End Navbar Toolbar -->
-
             <!-- Navbar Toolbar Right -->
             <ul class="nav navbar-toolbar navbar-right navbar-toolbar-right">
                 <li class="nav-item dropdown">
