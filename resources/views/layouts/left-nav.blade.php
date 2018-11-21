@@ -2,31 +2,33 @@
     <div class="site-menubar-body">
         <div>
             <div>
-                <ul class="site-menu" data-plugin="menu" style="transform: translate3d(0px, -1.03409px, 0px);">
-                    <li class="site-menu-item">
-                        <a class="animsition-link waves-effect waves-classic" href="/project/index">
-                            <i class="site-menu-icon md-view-dashboard" aria-hidden="true"></i>
-                            <span class="site-menu-title">项目</span>
+                <ul class="site-menu" id="left-menu" data-plugin="menu">
+                    <li class="site-menu-item has-sub">
+                        <a href="javascript:void(0)">
+                            <i class="site-menu-icon md-widgets" aria-hidden="true"></i>
+                            <span class="site-menu-title">审批</span>
+                            <span class="site-menu-arrow"></span>
+
                         </a>
                         <ul class="site-menu-sub">
                             <li class="site-menu-item">
                                 <a class="animsition-link" href="/project/index">
-                                    <span class="site-menu-title">项目管理</span>
+                                    <span class="site-menu-title">发起审批</span>
                                 </a>
                             </li>
                             <li class="site-menu-item">
                                 <a class="animsition-link" href="/task/index">
-                                    <span class="site-menu-title">任务管理</span>
+                                    <span class="site-menu-title">我的申请</span>
                                 </a>
                             </li>
                             <li class="site-menu-item">
                                 <a class="animsition-link" href="/trail/index">
-                                    <span class="site-menu-title">销售线索</span>
+                                    <span class="site-menu-title">我的审批</span>
                                 </a>
                             </li>
                             <li class="site-menu-item">
                                 <a class="animsition-link" href="/client/index">
-                                    <span class="site-menu-title">客户管理</span>
+                                    <span class="site-menu-title">知会我的</span>
                                 </a>
                             </li>
                             <li class="site-menu-item">
@@ -34,7 +36,7 @@
                                     <span class="site-menu-title">员工管理</span>
                                 </a>
                                 <a class="animsition-link" href="/artist/index">
-                                    <span class="site-menu-title">博主管理</span>
+                                    <span class="site-menu-title">审批报表</span>
                                 </a>
                             </li>
                             <li class="site-menu-item">

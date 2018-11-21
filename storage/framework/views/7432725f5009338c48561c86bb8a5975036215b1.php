@@ -1,0 +1,143 @@
+<?php $__env->startSection('title','员工管理'); ?>
+<?php $__env->startSection('body-class','dashboard'); ?>
+
+<?php $__env->startSection('body'); ?>
+    <?php echo $__env->make('layouts.top-nav', \Illuminate\Support\Arr::except(get_defined_vars(), array('__data', '__path')))->render(); ?>
+    <?php echo $__env->make('layouts.left-nav', \Illuminate\Support\Arr::except(get_defined_vars(), array('__data', '__path')))->render(); ?>
+
+    <!-- Page -->
+    <div class="page" id="root">
+
+        <div class="page-header page-header-bordered">
+            <h1 class="page-title">员工档案</h1>
+            <div class="page-header-actions">
+                <a href="/staff/history">历史归档</a>
+            </div>
+        </div>
+
+        <div class="page-content container-fluid">
+            <div class="panel col-md-12 clearfix py-5">
+                <div class="clearfix">
+                    <div class="col-md-2 example float-left">
+                        <selectors :options="staffStatus" @change="projectChange" :defaultValue="0"></selectors>
+                    </div>
+                    <div class="col-md-3 example float-left">
+                        <selectors :options="dateArr" @change="projectChange"></selectors>
+                    </div>
+                    <div class="col-md-2 example float-left">
+                        <selectors :options="stuffType" @change="projectChange"></selectors>
+                    </div>
+                    <div class="col-md-4 example float-left">
+                        <div class="input-search">
+                            <button type="submit" class="input-search-btn"><i class="icon md-search" aria-hidden="true"></i>
+                            </button>
+                            <input type="text" class="form-control" name="" placeholder="请搜索姓名/手机号/职位">
+                        </div>
+                    </div>
+                    <div class="col-md-1 example float-left" 
+                        style="height: 36px; line-height: 36px; text-align: right;"
+                    >
+                        <span style="cursor: pointer" data-target="#examplePositionCenter" data-toggle="modal">报表</span>
+                        <!-- <button class="btn btn-primary" data-target="#examplePositionCenter"  type="button">Generate</button> -->
+                    </div>
+                    <Modal 
+                        id="examplePositionCenter"
+                        title="选择报表字段"
+                    >
+                        <checkbox-group :option-data="filterConditions" @onchange="changeSelectOption" />
+                    </Modal>
+                </div>
+                <div class="example" style="padding: 0 15px;">在职 23    入职 8     离职 2</div>
+                <table class="table is-indent example" data-plugin="animateList" data-animate="fade" data-child="tr"
+                       data-selectable="selectable">
+                    <tr class="animation-fade"
+                        style="animation-fill-mode: backwards; animation-duration: 250ms; animation-delay: 0ms;">
+                        <th class="pre-cell"></th>
+                        <th class="cell-300" scope="col">序号</th>
+                        <th class="cell-300" scope="col">姓名</th>
+                        <th class="cell-300" scope="col">手机</th>
+                        <th class="cell-300" scope="col">工号</th>
+                        <th class="cell-300" scope="col">状态</th>
+                        <th class="cell-300" scope="col">部门</th>
+                        <th class="cell-300" scope="col">入职日期</th>
+                        <th class="cell-300" scope="col">绑定状态</th>
+                        <th class="cell-300" scope="col">操作</th>
+                        <th class="suf-cell"></th>
+                    </tr>
+                    <tr>
+                        <th class="pre-cell"></th>
+                        <th scope="row">1</th>
+                        <td><a href="/staff/detail">bqx</a></td>
+                        <td>1871111222</td>
+                        <td>0086</td>
+                        <td>正式</td>
+                        <td>财务</td>
+                        <td>2018-01-02</td>
+                        <td>未绑定</td>
+                        <td>
+                            <div class="dropdown show task-dropdown">
+                                <i class="icon md-more font-size-24" aria-hidden="true" id="taskDropdown"
+                                data-toggle="dropdown" aria-expanded="false"></i>
+                                <div class="dropdown-menu dropdown-menu-left task-dropdown-item" aria-labelledby="taskDropdown"
+                                    role="menu" x-placement="bottom-end" style="min-width: 0;">
+                                    <a class="dropdown-item" role="menuitem" @click="">转正</a>
+                                    <a class="dropdown-item" role="menuitem" @click="">调岗</a>
+                                    <a class="dropdown-item" role="menuitem" @click="">离职</a>
+                                    <a class="dropdown-item" role="menuitem" @click="">归档</a>
+                                </div>
+                            </div>
+                        </td>
+                        <td class="suf-cell"></td>
+                    </tr>
+                    <!-- <tr v-for="project in projectsInfo ">
+                        <td class="pre-cell"></td>
+                        <td class="pointer-content" @click="redirectProjectDetail(project.id)">{{ project.name }}</td>
+                        <td>{{ project.principal }}</td>
+                        <td>{{ project.progress }}</td>
+                        <td>{{ project.sign_time }}</td>
+                        <td>{{ project.delivery }}</td>
+                        <td>{{ project.follow_time }}</td>
+                        <td class="suf-cell"></td>
+                    </tr> -->
+                </table>
+
+                <pagination :current_page="current_page" :method="getProjects" :total_pages="total_pages"
+                            :total="total"></pagination>
+            </div>
+            <div class="site-action">
+                <a href="/staff/add">
+                    <button type="button"
+                            class="site-action-toggle btn-raised btn btn-success btn-floating waves-effect waves-classic">
+                        <i class="front-icon md-plus animation-scale-up" aria-hidden="true"></i>
+                        <!-- <i class="back-icon md-plus animation-scale-up" aria-hidden="true"></i> -->
+                    </button>
+                </a>
+            </div>
+        </div>
+
+        <!-- <customize-filter :data="customizeInfo" @change="customize"></customize-filter> -->
+        <!-- <Modal /> -->
+    </div>
+    <!-- End Page -->
+
+<?php $__env->stopSection(); ?>
+
+
+<?php $__env->startSection('style'); ?>
+    <link rel="stylesheet" href="<?php echo e(mix('css/v1.css')); ?>">
+    <link rel="stylesheet" href="<?php echo e(mix('css/staff.css')); ?>">
+<?php $__env->stopSection(); ?>
+
+<?php $__env->startSection('script'); ?>
+
+    <script src="<?php echo e(mix('js/staff.index.js')); ?>"></script>
+
+<?php $__env->stopSection(); ?>
+
+
+
+
+
+
+
+<?php echo $__env->make('layouts.master', \Illuminate\Support\Arr::except(get_defined_vars(), array('__data', '__path')))->render(); ?>
