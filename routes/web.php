@@ -86,5 +86,31 @@ Route::get('/artist/taiyang/detail', function () {
 Route::get('/calendar/index', function () {
     return view('calendar.index');
 });
-
+Route::get('/InitiateApproval/index', function () {
+    return view('InitiateApproval.index');
+});
+Route::get('/InitiateApproval/detail', function () {
+    return view('InitiateApproval.detail');
+});
+Route::get('/myApplication/index', function () {
+    return view('myApplication.index');
+});
+Route::get('/myApplication／detail', function () {
+    return view('myApplication.detail');
+});
+Route::get('/calendar/index', function () {
+    return view('calendar.index');
+});
+Route::get('/myApproval/index', function () {
+    return view('myApproval.index');
+});
+Route::get('/myApproval/detail', function () {
+    return view('myApproval.detail');
+});
+Route::get('/onlyMy/index', function () {
+    return view('onlyMy.index');
+});
+Route::get('/onlyMy／detail', function () {
+    return view('onlyMy.detail');
+});
 //Route::get('/artist/index', 'ClientController@detail');

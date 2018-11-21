@@ -21077,6 +21077,13 @@ var config = {
 
 /***/ }),
 
+/***/ "./resources/assets/sass/Inapproval.scss":
+/***/ (function(module, exports) {
+
+// removed by extract-text-webpack-plugin
+
+/***/ }),
+
 /***/ "./resources/assets/sass/base.scss":
 /***/ (function(module, exports) {
 
@@ -21085,6 +21092,13 @@ var config = {
 /***/ }),
 
 /***/ "./resources/assets/sass/login.scss":
+/***/ (function(module, exports) {
+
+// removed by extract-text-webpack-plugin
+
+/***/ }),
+
+/***/ "./resources/assets/sass/myApplication.scss":
 /***/ (function(module, exports) {
 
 // removed by extract-text-webpack-plugin
@@ -21128,6 +21142,8 @@ __webpack_require__("./resources/assets/sass/login.scss");
 __webpack_require__("./resources/assets/sass/side-mask.scss");
 __webpack_require__("./resources/assets/sass/task.scss");
 __webpack_require__("./resources/assets/sass/v1.scss");
+__webpack_require__("./resources/assets/sass/Inapproval.scss");
+__webpack_require__("./resources/assets/sass/myApplication.scss");
 module.exports = __webpack_require__("./resources/assets/sass/staff.scss");
 
 

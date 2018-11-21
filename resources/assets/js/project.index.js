@@ -21,7 +21,7 @@ let app = new Vue({
             addInfoArr: {},
             levelArr: config.levelArr,
             visibleRangeArr: config.visibleRangeArr,
-
+             
         },
 
         mounted() {
@@ -90,7 +90,6 @@ let app = new Vue({
             customize: function (value) {
                 console.log(value)
             },
-
             addProject: function () {
 
             },
@@ -137,7 +136,6 @@ let app = new Vue({
                     this.getTrail()
                 }
             },
-
             getTrail: function () {
                 //获取类型下的销售线索
                 $.ajax({
@@ -156,7 +154,6 @@ let app = new Vue({
             addInfo: function (value, name) {
                 app.addInfoArr[name] = value
             }
-
         }
 
     })

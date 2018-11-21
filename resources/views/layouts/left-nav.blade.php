@@ -80,6 +80,44 @@
                             <span class="site-menu-title">日历</span>
                         </a>
                     </li>
+                    <li class="site-menu-item ">
+                        <a class="animsition-link waves-effect waves-classic" href="/calendar/index">
+                            <i class="site-menu-icon md-view-dashboard" aria-hidden="true"></i>
+                            <span class="site-menu-title">审批</span>
+                        </a>
+                        <ul class="site-menu-sub" style="top:-150px">
+                            <li class="site-menu-item" >
+                                <a class="animsition-link" href="/InitiateApproval/index">
+                                    <span class="site-menu-title">发起审批</span>
+                                </a>
+                            </li>
+                            <li class="site-menu-item">
+                                <a class="animsition-link" href="/myApplication/index">
+                                    <span class="site-menu-title">我的申请</span>
+                                </a>
+                            </li>
+                            <li class="site-menu-item">
+                                <a class="animsition-link" href="/myApproval/index">
+                                    <span class="site-menu-title">我的审批</span>
+                                </a>
+                            </li>
+                            <li class="site-menu-item">
+                                <a class="animsition-link" href="/onlyMy/index">
+                                    <span class="site-menu-title">只会我的</span>
+                                </a>
+                            </li>
+                            <li class="site-menu-item">
+                                <a class="animsition-link" href="/client/index">
+                                    <span class="site-menu-title">审批报表</span>
+                                </a>
+                            </li>
+                            <li class="site-menu-item">
+                                <a class="animsition-link" href="/client/index">
+                                    <span class="site-menu-title">审批汇总</span>
+                                </a>
+                            </li>
+                        </ul>
+                    </li>
                 </ul>
             </div>
         </div>
