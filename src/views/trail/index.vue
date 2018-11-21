@@ -1,15 +1,5 @@
-@extends('layouts.master')
-
-@section('title','销售线索管理')
-@section('body-class','dashboard')
-
-@section('body')
-    @include('layouts.top-nav')
-    @include('layouts.left-nav')
-
-
-    <!-- Page -->
-    <div class="page" id="root">
+<template>
+    <div class="page">
 
         <div class="page-header page-header-bordered">
             <h1 class="page-title">销售线索管理</h1>
@@ -55,15 +45,15 @@
                             <th class="cell-300" scope="col">负责人</th>
                         </tr>
                         <tr v-for="trail in trailsInfo ">
-                            <td class="pointer-content" @click="redirectTrailDetail(trail.id)">@{{ trail.title }}</td>
-                            <td>@{{ trail.client.data.company }}</td>
+                            <td class="pointer-content" @click="redirectTrailDetail(trail.id)">{{ trail.title }}</td>
+                            <td>{{ trail.client.data.company }}</td>
                             <td>
                                 <template v-if="trail.client.data.grade === 1">直客</template>
                                 <template v-if="trail.client.data.grade === 2">代理公司</template>
                             </td>
                             <td>目标艺人</td>
-                            <td>@{{ trail.fee }}</td>
-                            <td v-if="trail.principal">@{{ trail.principal.data.name }}</td>
+                            <td>{{ trail.fee }}</td>
+                            <td v-if="trail.principal">{{ trail.principal.data.name }}</td>
                         </tr>
                     </table>
                     <pagination :current_page="current_page" :method="getSales" :total_pages="total_pages"
@@ -238,20 +228,218 @@
         </div>
 
     </div>
-    <!-- End Page -->
 
-@endsection
+</template>
+
+<script>
+    import fetch from '../../assets/utils/fetch.js'
+    import config from '../../assets/js/config'
+
+    export default {
+        data: function () {
+            return {
+                total: 0,
+                current_page: 1,
+                total_pages: 1,
+                trailsInfo: '',
+                trailOrigin: '',
+                trailType: '',
+                trailTypeArr: config.trailTypeArr,
+                companyType: config.companyType,
+                companyArr: [],
+                starsArr: [],
+                customizeInfo: config.customizeInfo,
+                clientLevelArr: config.clientLevelArr,
+                trailOriginArr: config.trailOrigin,
+                salesProgressText: '未确定合作',
+                selectCompany: '',
+                trailName: '',
+                targetStars: '',
+                recommendStars: '',
+                trailPrincipal: '',
+                trailContact: '',
+                trailContactPhone: '',
+                email: '',
+                trailFee: '',
+                trailDesc: '',
+                brandName: '',
+                trailOriginPerson: '',
+                industriesArr: [],
+                industry: '',
+                priority: '',
+                priorityArr: config.priorityArr,
+                trailStatus: '',
+                cooperation: '',
+            }
+        },
+
+        mounted() {
+            this.getSales();
+            this.getClients();
+            this.getStars();
+            this.getIndustries();
+        },
+
+        methods: {
+
+            getSales: function (pageNum = 1) {
+                let _this = this;
+                let data = {
+                    page: pageNum,
+                    include: 'principal,client',
+                };
+                fetch('get', '/trails', data).then(function (response) {
+                    _this.trailsInfo = response.data;
+                    _this.total = response.meta.pagination.total;
+                    _this.current_page = response.meta.pagination.current_page;
+                    _this.total_pages = response.meta.pagination.total_pages;
+                })
+            },
 
 
-@section('style')
-    <link rel="stylesheet" href="{{ mix('css/v1.css') }}">
-@endsection
+            getIndustries: function () {
+                let _this = this;
+                fetch('get', '/industries/all').then(function (response) {
+                    for (let i = 0; i < response.data.length; i++) {
+                        _this.industriesArr.push({
+                            id: response.data[i].id,
+                            name: response.data[i].name,
+                            value: response.data[i].id
+                        })
+                    }
+                })
+            },
 
-@section('script')
+            getClients: function () {
+                fetch('get', '/clients/all').then(function (response) {
+                    this.companyArr = response.data
+                })
+            },
 
-    <script src="{{ mix('js/trail.index.js') }}"></script>
+            getStars: function () {
+                fetch('get', '/stars/all').then(function (response) {
+                    for (let i = 0; i < response.data.length; i++) {
+                        this.starsArr.push({
+                            id: response.data[i].id,
+                            name: response.data[i].name,
+                            value: response.data[i].id
+                        })
+                    }
+                })
+            },
 
-@endsection
+            customize: function () {
+
+            },
+
+            addTrail: function () {
+                let data = {
+                    title: this.trailName,
+                    brand: this.brandName,
+                    client: this.selectCompany,
+                    resource_type: this.trailOrigin,
+                    principal_id: this.$store.state.newPrincipalInfo.id,
+                    recommendations: this.recommendStars,
+                    expectations: this.targetStars,
+                    contact: {
+                        name: this.trailContact,
+                        phone: this.trailContactPhone
+                    },
+                    fee: this.trailFee,
+                    desc: this.trailDesc,
+                    industry_id: this.industry,
+                    type: this.trailType,
+                    priority: this.priority
+                };
+                if (this.trailType != 4) {
+                    //    todo 添加线索状态
+                }
+                if (this.trailOrigin == 1 || this.trailOrigin == 2 || this.trailOrigin == 3) {
+                    data.resource = this.email
+                } else if (this.trailOrigin == 4 || this.trailOrigin == 5) {
+                    data.resource = this.trailOriginPerson
+                } else {
+                    data.resource = ''
+                }
+                if (this.companyType !== '泰洋川禾') {
+                    data.lock = this.trailIsLocked
+                }
+                let _this = this;
+                fetch('post', '/trails', data).then(function (response) {
+                    _this.$router.push({path: '/trails/' + response.data.id})
+                })
+            },
+
+            redirectTrailDetail: function (trailId) {
+                this.$router.push({path: '/trails/' + trailId})
+            },
+
+            changeTrailOrigin: function (value) {
+                this.trailOriginPerson = value
+            },
+
+            changeTrailOriginType: function (value) {
+                this.trailOrigin = value
+            },
+
+            changeCompanyName: function () {
+                let companyInfo = this.$store.state.companyInfo;
+                if (companyInfo.value) {
+                    this.selectCompany = {
+                        id: companyInfo.value
+                    }
+                } else {
+                    this.selectCompany = {
+                        grade: companyInfo.grade,
+                        company: companyInfo.name
+                    }
+                }
+            },
+
+            changePrincipal: function (value) {
+                this.trailPrincipal = value
+            },
+
+            changeTargetStars: function (value) {
+                this.targetStars = value
+            },
+
+            changeRecommendStars: function (value) {
+                this.recommendStars = value
+            },
+
+            changeTrailFee: function (value) {
+                this.trailFee = value
+            },
+
+            changeCheckbox: function (e) {
+                this.trailIsLocked = e.target.checked
+            },
+
+            changeIndustry: function (value) {
+                this.industry = value
+            },
+
+            changePriority: function (value) {
+                this.priority = value
+            },
+
+            changeTrailType: function (value) {
+                this.trailType = value
+            },
+
+            changeTrailStatus: function (value) {
+                this.trailStatus = value
+            },
+
+            changeCooperationType: function (value) {
+                this.cooperation = value
+            }
+
+
+        }
+    }
+</script>
 
 
 
