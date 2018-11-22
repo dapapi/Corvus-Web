@@ -185,7 +185,7 @@
                             <table class="table table-bordered">
                                 <thead>
                                     <tr>
-                                        <th v-for="(item, index) in education.tHead" :key="index">@{{ item.value }}</th>
+                                        <th v-for="(item, index) in education.tHead" :key="index">{{ item.value }}</th>
                                     </tr>
                                 </thead>
                                 <tbody>
@@ -193,7 +193,7 @@
                                         <td v-for="(item, key, _index) in items" :key="index + '_' + _index">
                                             <!-- <input type="text" v-model="education.tBody[index]" /> -->
                                             <input type="text" v-model="education.tBody[index][key]" />
-                                            <!-- @{{ item }} -->
+                                            <!-- {{ item }} -->
                                         </td>
                                     </tr>
                                 </tbody>
@@ -205,7 +205,7 @@
                             <table class="table table-bordered">
                                 <thead>
                                     <tr>
-                                        <th v-for="(item, index) in train.tHead" :key="index">@{{ item.value }}</th>
+                                        <th v-for="(item, index) in train.tHead" :key="index">{{ item.value }}</th>
                                     </tr>
                                 </thead>
                                 <tbody>
@@ -226,7 +226,7 @@
                             <table class="table table-bordered">
                                 <thead>
                                     <tr>
-                                        <th v-for="(item, index) in work.tHead" :key="index">@{{ item.value }}</th>
+                                        <th v-for="(item, index) in work.tHead" :key="index">{{ item.value }}</th>
                                     </tr>
                                 </thead>
                                 <tbody>
@@ -247,7 +247,7 @@
                             <table class="table table-bordered">
                                 <thead>
                                     <tr>
-                                        <th v-for="(item, index) in home.tHead" :key="index">@{{ item.value }}</th>
+                                        <th v-for="(item, index) in home.tHead" :key="index">{{ item.value }}</th>
                                     </tr>
                                 </thead>
                                 <tbody>

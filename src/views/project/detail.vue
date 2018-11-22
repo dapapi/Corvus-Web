@@ -1,21 +1,5 @@
-@extends('layouts.master')
-
-@section('title','项目详情')
-
-@section('style')
-    <link rel="stylesheet" href="{{ mix('css/task.css') }}">
-@endsection
-
-@section('body-class','dashboard')
-
-
-@section('body')
-    @include('layouts.top-nav')
-    @include('layouts.left-nav')
-
-
-    <!-- Page -->
-    <div class="page" id="root">
+<template>
+    <div class="page">
 
         <div class="page-header page-header-bordered">
             <h1 class="page-title d-inline">项目详情</h1>
@@ -37,7 +21,7 @@
 
             <div class="panel col-md-12">
                 <div class="card-block">
-                    <h4 class="card-title">@{{ projectInfo.title }}</h4>
+                    <h4 class="card-title">{{ projectInfo.title }}</h4>
 
                     <div class="card-text clearfix example">
                         <div class="col-md-6 float-left pl-0">
@@ -45,7 +29,7 @@
                                 <i class="md-plus pr-2" aria-hidden="true"></i>负责人
                             </div>
                             <div class="font-weight-bold float-left">
-                                @{{ projectInfo.principal.data.name }}
+                                {{ projectInfo.principal.data.name }}
                             </div>
                         </div>
                         <div class="col-md-6 float-left pl-0">
@@ -63,7 +47,7 @@
                                 <i class="md-plus pr-2" aria-hidden="true"></i>组别
                             </div>
                             <div class="font-weight-bold float-left">
-                                @{{ projectInfo.principal.data.name }}
+                                {{ projectInfo.principal.data.name }}
                             </div>
                         </div>
                         <div class="col-md-6 float-left pl-0">
@@ -114,7 +98,8 @@
                         </li>
                     </ul>
                     <div class="tab-content nav-tabs-animate bg-white col-md-12">
-                        <div class="tab-pane animation-fade active" v-if="projectInfo.type != 5" id="forum-project-follow" role="tabpanel">
+                        <div class="tab-pane animation-fade active" v-if="projectInfo.type != 5"
+                             id="forum-project-follow" role="tabpanel">
                             跟进
                         </div>
                         <div class="tab-pane animation-fade pb-20 fixed-button-father" id="forum-project-tasks"
@@ -150,16 +135,20 @@
                             </div>
 
                         </div>
-                        <div class="tab-pane animation-fade" v-if="projectInfo.type != 5" id="forum-project-contract" role="tabpanel">
+                        <div class="tab-pane animation-fade" v-if="projectInfo.type != 5" id="forum-project-contract"
+                             role="tabpanel">
                             合同
                         </div>
-                        <div class="tab-pane animation-fade" v-if="projectInfo.type != 5" id="forum-project-bill" role="tabpanel">
+                        <div class="tab-pane animation-fade" v-if="projectInfo.type != 5" id="forum-project-bill"
+                             role="tabpanel">
                             账单
                         </div>
-                        <div class="tab-pane animation-fade" v-if="projectInfo.type != 5" id="forum-project-payback" role="tabpanel">
+                        <div class="tab-pane animation-fade" v-if="projectInfo.type != 5" id="forum-project-payback"
+                             role="tabpanel">
                             回款
                         </div>
-                        <div class="tab-pane animation-fade" :class="projectInfo.type == 5 ? '' : 'active'" id="forum-project-base"
+                        <div class="tab-pane animation-fade" :class="projectInfo.type == 5 ? '' : 'active'"
+                             id="forum-project-base"
                              role="tabpanel">
                             <div class="card">
                                 <div class="card-header card-header-transparent card-header-bordered">
@@ -276,7 +265,7 @@
                         <div class="example">
                             <div class="col-md-2 text-right float-left">关联资源</div>
                             <div class="col-md-10 float-left pl-0">
-                                项目 - @{{ projectInfo.title }}
+                                项目 - {{ projectInfo.title }}
                             </div>
                         </div>
                         <div class="example">
@@ -411,23 +400,147 @@
         </div>
 
     </div>
-    <!-- End Page -->
+</template>
 
-@endsection
+<script>
+    import fetch from '../../assets/utils/fetch.js'
+    import config from '../../assets/js/config'
+
+    export default {
+        data: function () {
+            return {
+                taskId: '',
+                changeInfo: {},
+                isEdit: false,
+                projectInfo: '',
+                trailInfo: {},
+                taskTypeArr: config.taskTypeArr,
+                taskLevelArr: config.taskLevelArr,
+                taskLevel: '',
+                taskName: '',
+                startTime: '',
+                endTime: '',
+                startMinutes: '00:00',
+                endMinutes: '00:00',
+                taskIntroduce: '',
+                projectTasksInfo: [],
+
+            }
+        },
+
+        mounted() {
+            this.getProject()
+        },
+
+        watch: {},
+
+        methods: {
+
+            getProject: function () {
+                this.projectId = this.$route.params.id;
+                let _this = this;
+                let data = {
+                    include: 'principal',
+                };
+                fetch('get', '/projects/' + this.projectId, data).then(function (response) {
+                    _this.projectInfo = response.data
+                })
+            },
+
+            addTask: function () {
+                let participant_ids = [];
+                for (let i = 0; i < this.$store.state.newParticipantsInfo.length; i++) {
+                    participant_ids.push(this.$store.state.newParticipantsInfo[i].id)
+                }
+                let _this = this;
+                let data = {
+                    // resource_type: '1718463094',
+                    // resourceable_id: '1994731356',
+                    // type: app.taskType,
+                    // @todo 任务类型前端维护
+                    title: app.taskName,
+                    principal_id: this.$store.state.newPrincipalInfo.id,
+                    participant_ids: participant_ids,
+                    priority: app.taskLevel,
+                    start_at: app.startTime + ' ' + app.startMinutes,
+                    end_at: app.endTime + ' ' + app.endMinutes,
+                    desc: app.taskIntroduce
+                };
+                fetch('post', '/tasks', data).then(function (response) {
+                    toastr.success('创建成功');
+                    $('#addTask').modal('hide');
+                    _this.projectTasksInfo.push(response.data)
+                })
+            },
+
+            addPrivacy: function () {
+
+            },
+
+            editBaseInfo: function () {
+
+            },
+
+            changeProjectBaseInfo: function () {
+
+            },
+
+            cancelEdit: function () {
+                this.isEdit = false;
+                this.changeInfo = {};
+            },
+
+            changeTaskType: function (value) {
+                this.taskType = value
+            },
+
+            principalChange: function (value) {
+
+            },
+
+            participantChange: function (value) {
+
+            },
+
+            changeTaskLevel: function (value) {
+                this.taskLevel = value
+            },
+
+            changeStartTime: function (value) {
+                this.startTime = value
+            },
+
+            changeStartMinutes: function (value) {
+                this.startMinutes = value
+            },
+
+            changeEndMinutes: function (value) {
+                this.endMinutes = value
+            },
+
+            changeEndTime: function (value) {
+                this.endTime = value
+            },
 
 
-@section('style')
-    <link rel="stylesheet" href="{{ mix('css/v1.css') }}">
-@endsection
+        }
+    }
+</script>
 
-@section('script')
+<style>
+    .task-dropdown {
+        -moz-user-select: none;
+        -webkit-user-select: none;
+        -ms-user-select: none;
+        user-select: none;
+        z-index: 2;
+    }
 
-    <script src="{{ mix('js/project.detail.js') }}"></script>
-
-@endsection
-
-
-
-
-
-
+    .task-dropdown-item {
+        position: absolute;
+        transform: translate3d(299px, 36px, 0px);
+        top: 0;
+        left: 0;
+        will-change: transform;
+    }
+</style>

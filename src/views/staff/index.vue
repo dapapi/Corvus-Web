@@ -93,12 +93,12 @@
                     </tr>
                     <!-- <tr v-for="project in projectsInfo ">
                         <td class="pre-cell"></td>
-                        <td class="pointer-content" @click="redirectProjectDetail(project.id)">@{{ project.name }}</td>
-                        <td>@{{ project.principal }}</td>
-                        <td>@{{ project.progress }}</td>
-                        <td>@{{ project.sign_time }}</td>
-                        <td>@{{ project.delivery }}</td>
-                        <td>@{{ project.follow_time }}</td>
+                        <td class="pointer-content" @click="redirectProjectDetail(project.id)">{{ project.name }}</td>
+                        <td>{{ project.principal }}</td>
+                        <td>{{ project.progress }}</td>
+                        <td>{{ project.sign_time }}</td>
+                        <td>{{ project.delivery }}</td>
+                        <td>{{ project.follow_time }}</td>
                         <td class="suf-cell"></td>
                     </tr> -->
                 </table>

@@ -1,16 +1,5 @@
-@extends('layouts.master')
-
-@section('title','客户')
-
-@section('body-class','dashboard')
-
-
-@section('body')
-    @include('layouts.top-nav')
-    @include('layouts.left-nav')
-
-    <!-- Page -->
-    <div class="page" id="root">
+<template>
+    <div class="page">
 
         <div class="page-header page-header-bordered">
             <h1 class="page-title d-inline">客户</h1>
@@ -20,14 +9,14 @@
 
             <div class="panel col-md-12">
                 <div class="card-block">
-                    <h4 class="card-title">@{{ clientInfo.company }}</h4>
+                    <h4 class="card-title">{{ clientInfo.company }}</h4>
                     <div class="card-text clearfix example">
                         <div class="col-md-6 float-left clearfix pl-0">
                             <div class="float-left pl-0 pr-2 col-md-2">
                                 <i class="md-plus pr-2" aria-hidden="true"></i>负责人
                             </div>
                             <div class="font-weight-bold float-left" v-if="clientInfo.principal">
-                                @{{ clientInfo.principal.data.name }}
+                                {{ clientInfo.principal.data.name }}
                             </div>
                         </div>
                         <div class="col-md-6 float-left clearfix pl-0">
@@ -35,7 +24,7 @@
                                 <i class="md-plus pr-2" aria-hidden="true"></i>决策关键人/部门
                             </div>
                             <div class="font-weight-bold float-left">
-                                @{{ clientInfo.keyman }}
+                                {{ clientInfo.keyman }}
                             </div>
                         </div>
                     </div>
@@ -88,15 +77,15 @@
                                 <th class="cell-300" scope="col">录入日期</th>
                             </tr>
                             <tr v-for="trail in clientTrailsInfo">
-                                <td>@{{ trail.title }}</td>
+                                <td>{{ trail.title }}</td>
                                 <td>
                                     <template v-if="trail.progress_status === 1">未确定合作</template>
                                     <template v-if="trail.progress_status === 2">已确定合作</template>
                                     <template v-if="trail.progress_status === 0">已拒绝</template>
                                 </td>
-                                <td>@{{ trail.principal.data.name }}</td>
-                                <td>@{{ trail.client.data.company }}</td>
-                                <td>@{{ trail.end_at }}</td>
+                                <td>{{ trail.principal.data.name }}</td>
+                                <td>{{ trail.client.data.company }}</td>
+                                <td>{{ trail.end_at }}</td>
                             </tr>
                         </table>
                     </div>
@@ -112,17 +101,17 @@
                                 <th class="cell-300" scope="col">关联公司</th>
                                 <th class="cell-300" scope="col">录入日期</th>
                             </tr>
-                            {{--<tr v-for="task in taskInfo.tasks.data">--}}
-                            {{--<td>@{{ task.title }}</td>--}}
-                            {{--<td>@{{ task.type }}</td>--}}
-                            {{--<td>--}}
-                            {{--<template v-if="task.status === 1">进行中</template>--}}
-                            {{--<template v-if="task.status === 2">已完成</template>--}}
-                            {{--<template v-if="task.status === 3">已停止</template>--}}
-                            {{--</td>--}}
-                            {{--<td>@{{ task.principal }}</td>--}}
-                            {{--<td>@{{ task.end_at }}</td>--}}
-                            {{--</tr>--}}
+                            <!--<tr v-for="task in taskInfo.tasks.data">-->
+                            <!--<td>{{ task.title }}</td>-->
+                            <!--<td>{{ task.type }}</td>-->
+                            <!--<td>-->
+                            <!--<template v-if="task.status === 1">进行中</template>-->
+                            <!--<template v-if="task.status === 2">已完成</template>-->
+                            <!--<template v-if="task.status === 3">已停止</template>-->
+                            <!--</td>-->
+                            <!--<td>{{ task.principal }}</td>-->
+                            <!--<td>{{ task.end_at }}</td>-->
+                            <!--</tr>-->
                         </table>
                     </div>
                     <div class="tab-pane animation-fade pb-20 fixed-button-father" id="forum-task" role="tabpanel">
@@ -138,15 +127,15 @@
                                 <th class="cell-300" scope="col">截止时间</th>
                             </tr>
                             <tr v-for="task in clientTasksInfo">
-                                <td>@{{ task.title }}</td>
-                                <td>@{{ task.type }}</td>
+                                <td>{{ task.title }}</td>
+                                <td>{{ task.type }}</td>
                                 <td>
                                     <template v-if="task.status === 1">进行中</template>
                                     <template v-if="task.status === 2">已完成</template>
                                     <template v-if="task.status === 3">已停止</template>
                                 </td>
-                                <td>@{{ task.principal.data.name }}</td>
-                                <td>@{{ task.end_at }}</td>
+                                <td>{{ task.principal.data.name }}</td>
+                                <td>{{ task.end_at }}</td>
                             </tr>
                         </table>
                         <div class="site-action fixed-button" data-plugin="actionBtn" data-toggle="modal"
@@ -175,32 +164,32 @@
                                     <div class="col-md-1 float-left text-right pl-0">公司名称</div>
                                     <div class="col-md-5 float-left font-weight-bold">
                                         <EditInput :content="clientInfo.company" :is-edit="isEdit"
-                                                    @change="changClientName"></EditInput>
+                                                   @change="changClientName"></EditInput>
                                     </div>
                                     <div class="col-md-1 float-left text-right pl-0">级别</div>
                                     <div class="col-md-5 float-left font-weight-bold">
                                         <EditSelector :options="clientLevelArr" :is-edit="isEdit"
-                                                       :content="clientInfo.grade"
-                                                       @change="changeClientLevel"></EditSelector>
+                                                      :content="clientInfo.grade"
+                                                      @change="changeClientLevel"></EditSelector>
                                     </div>
                                 </div>
                                 <div class="card-text py-5 clearfix">
                                     <div class="col-md-1 float-left text-right pl-0">决策关键人/部门</div>
                                     <div class="col-md-5 float-left font-weight-bold">
                                         <EditInput :content="clientInfo.keyman"
-                                                    :is-edit="isEdit" @change="changeClientDecision"></EditInput>
+                                                   :is-edit="isEdit" @change="changeClientDecision"></EditInput>
                                     </div>
                                     <div class="col-md-1 float-left text-right pl-0">负责人</div>
                                     <div class="col-md-5 float-left font-weight-bold">
                                         <EditInput-selector :is-edit="isEdit"
-                                                             :select-type="'principal'"></EditInput-selector>
+                                                            :select-type="'principal'"></EditInput-selector>
                                     </div>
                                 </div>
                                 <div class="card-text py-5 clearfix">
                                     <div class="col-md-1 float-left text-right pl-0">地区</div>
                                     <div class="col-md-5 float-left font-weight-bold">
                                         <EditSelector :options="clientTypeArr" :is-edit="isEdit"
-                                                       :content="clientInfo.type"></EditSelector>
+                                                      :content="clientInfo.type"></EditSelector>
                                     </div>
                                     <div class="col-md-1 float-left text-right pl-0">详细地址</div>
                                     <div class="col-md-5 float-left font-weight-bold">
@@ -212,13 +201,13 @@
                                     <div class="col-md-1 float-left text-right pl-0">规模</div>
                                     <div class="col-md-5 float-left font-weight-bold">
                                         <EditSelector :options="clientScaleArr" :is-edit="isEdit"
-                                                       :content="clientInfo.size"
-                                                       @change="changeClientScale"></EditSelector>
+                                                      :content="clientInfo.size"
+                                                      @change="changeClientScale"></EditSelector>
                                     </div>
                                     <div class="col-md-1 float-left text-right pl-0">备注</div>
                                     <div class="col-md-5 float-left font-weight-bold">
                                         <editTextarea :content="clientInfo.desc"
-                                                       :is-edit="isEdit" @change="changeClientDesc"></editTextarea>
+                                                      :is-edit="isEdit" @change="changeClientDesc"></editTextarea>
                                     </div>
                                 </div>
 
@@ -258,11 +247,11 @@
                                 <th class="cell-300" scope="col">操作</th>
                             </tr>
                             <tr v-for="contact in clientContactsInfo">
-                                <td>@{{ contact.name }}</td>
-                                <td>@{{ clientInfo.company }}</td>
-                                <td>@{{ contact.phone }}</td>
-                                <td>@{{ contact.position }}</td>
-                                <td>@{{ clientInfo.principal.data.name }}</td>
+                                <td>{{ contact.name }}</td>
+                                <td>{{ clientInfo.company }}</td>
+                                <td>{{ contact.phone }}</td>
+                                <td>{{ contact.position }}</td>
+                                <td>{{ clientInfo.principal.data.name }}</td>
                                 <td>
                                     <span class="pr-20 d-block float-left pointer-content"
                                           style="color: #b9b9b9;">
@@ -372,7 +361,7 @@
                         <div class="example">
                             <div class="col-md-2 text-right float-left">关联资源</div>
                             <div class="col-md-10 float-left">
-                                客户 - @{{ clientInfo.company }}
+                                客户 - {{ clientInfo.company }}
                             </div>
                         </div>
                         <div class="example">
@@ -434,23 +423,258 @@
         </div>
 
     </div>
-    <!-- End Page -->
 
-@endsection
+</template>
 
+<script>
 
-@section('style')
-    <link rel="stylesheet" href="{{ mix('css/v1.css') }}">
-@endsection
+    import fetch from '../../assets/utils/fetch.js'
+    import config from '../../assets/js/config'
 
-@section('script')
+    export default {
+        data: function () {
+            return {
+                clientId: '',
+                changeInfo: {},
+                clientTypeArr: config.clientTypeArr,
+                clientLevelArr: config.clientLevelArr,
+                clientScaleArr: config.clientScaleArr,
+                taskTypeArr: config.taskTypeArr,
+                taskLevelArr: config.taskLevelArr,
+                multiple: false,
+                taskType: '',
+                taskName: '',
+                taskPrincipal: '',
+                taskParticipant: '',
+                taskIntroduce: '',
+                taskStartTime: '',
+                startMinutes: '00:00',
+                endMinutes: '00:00',
+                taskEndTime: '',
+                taskLevel: '',
+                isEdit: false,
+                clientInfo: {},
+                clientTasksInfo: [],
+                clientTrailsInfo: [],
+                clientContactsInfo: [],
+                contactName: '',
+                contactPhone: '',
+                contactPosition: '',
+                clientProjectsInfo: '',
+            }
+        },
 
-    <script src="{{ mix('js/client.detail.js') }}"></script>
+        mounted() {
+            this.clientId = this.$route.params.id;
+            setTimeout(function () {
+                this.getClient();
+                this.getClientTrail();
+            }, 100);
+        },
 
-@endsection
+        watch: {
+            'clientInfo.company': function (newValue, oldValue) {
+                if (oldValue === undefined) {
+                    return
+                }
+                this.changeInfo.company = newValue
+            },
+            'clientInfo.type': function (newValue, oldValue) {
+                if (oldValue === undefined) {
+                    return
+                }
+                this.changeInfo.type = newValue
+            },
+            'clientInfo.grade': function (newValue, oldValue) {
+                if (oldValue === undefined) {
+                    return
+                }
+                this.changeInfo.grade = newValue
+            },
+            'clientInfo.keyman': function (newValue, oldValue) {
+                if (oldValue === undefined) {
+                    return
+                }
+                this.changeInfo.keyman = newValue
+            },
+            'clientInfo.size': function (newValue, oldValue) {
+                if (oldValue === undefined) {
+                    return
+                }
+                this.changeInfo.size = newValue
+            },
+            'clientInfo.desc': function (newValue, oldValue) {
+                if (oldValue === undefined) {
+                    return
+                }
+                this.changeInfo.desc = newValue
+            },
+        },
 
+        methods: {
 
+            getClient: function () {
+                fetch('get', '/clients/' + this.clientId, {include: 'principal'}).then(function (response) {
+                    this.clientInfo = response.data;
+                    let params = {
+                        type: 'change',
+                        data: response.data.principal.data
+                    };
+                    this.$store.dispatch('changePrincipal', params);
+                })
+            },
 
+            getClientTrail: function () {
+                if (this.clientTrailsInfo.length > 0) {
+                    return
+                }
+                let _this = this;
+                let data = {
+                    type: 'clients',
+                    id: this.clientId,
+                    include: 'principal,client'
+                };
+                fetch('get', '/trails/search', data).then(function (response) {
+                    _this.clientTrailsInfo = response.data
+                })
+            },
 
+            getClientTask: function () {
+                if (this.clientTasksInfo.length > 0) {
+                    return
+                }
+                let data = {
+                    type: 'clients',
+                    id: this.clientId,
+                    include: 'principal'
+                };
+                let _this = this;
+                fetch('get', '/clients/' + this.clientId + '/tasks', data).then(function (response) {
+                    _this.clientTasksInfo = response.data;
+                })
+            },
 
+            getClientProject: function () {
+                if (this.clientProjectsInfo.length > 0) {
+                    return
+                }
+                let data = {
+                    type: 'clients',
+                    id: this.clientId,
+                    include: 'principal,trail.expectations'
+                };
+                let _this = this;
+                fetch('get', '/clients/' + this.clientId + '/projects/search', data).then(function (response) {
+                    _this.clientProjectsInfo = response.data
+                })
+            },
 
+            getClientContact: function () {
+                if (this.clientContactsInfo.length > 0) {
+                    return
+                }
+                let _this = this;
+                fetch('get', '/clients/' + this.clientId + '/contacts').then(function (response) {
+                    _this.clientContactsInfo = response.data
+
+                })
+            },
+
+            addContact: function () {
+                let _this = this;
+                fetch('get', '/clients/' + this.clientId + '/contacts', data).then(function (response) {
+                    _this.clientContactsInfo.push(response.data);
+                    $('#addContact').modal('hide')
+                })
+            },
+
+            // TODO 地区省市级联动没有做
+            changeClientBaseInfo: function () {
+                let _this = this;
+                fetch('get', '/clients/' + this.clientId, this.changeInfo).then(function () {
+                    _this.isEdit = false;
+                    _this.success('修改成功')
+                })
+            },
+
+            editBaseInfo: function () {
+                this.isEdit = true;
+                this.changeInfo = {};
+            },
+
+            cancelEdit: function () {
+                this.isEdit = false
+            },
+
+            changeClientType: function (value) {
+                this.clientInfo.type = value
+            },
+
+            changClientName: function (value) {
+                this.clientInfo.company = value
+            },
+
+            changeClientLevel: function (value) {
+                this.clientInfo.grade = value
+            },
+
+            changeClientDecision: function (value) {
+                this.clientInfo.keyman = value
+            },
+
+            changeClientScale: function (value) {
+                this.clientInfo.size = value
+            },
+
+            changeClientDesc: function (value) {
+                this.clientInfo.desc = value
+            },
+
+            addTask: function () {
+                let _this = this;
+                let data = {
+                    resource_type: 4,
+                    resourceable_id: this.clientId,
+                    title: this.taskName,
+                    // type: 4,
+                    principal_id: this.principal,
+                    priority: this.taskLevel,
+                    start_at: this.taskStartTime + ' ' + this.startMinutes,
+                    end_at: this.taskEndTime + ' ' + this.endMinutes,
+                    desc: this.taskIntroduce,
+                    participant_ids: this.participants
+                };
+                fetch('post', '/tasks', data).then(function (response) {
+                    toastr.success('创建成功');
+                    $('#addTask').modal('hide');
+                    _this.clientTasksInfo.push(response.data)
+                })
+            },
+
+            changeTaskType: function (value) {
+                this.taskType = value
+            },
+
+            taskPrincipalChange: function (value) {
+                this.taskPrincipal = value
+            },
+
+            taskParticipantChange: function (value) {
+                this.taskParticipant = value
+            },
+
+            changeStartTime: function (value) {
+                this.taskStartTime = value
+            },
+
+            changeEndTime: function (value) {
+                this.taskEndTime = value
+            },
+
+            changeTaskLevel: function (value) {
+                this.taskLevel = value
+            }
+
+        }
+    }
+</script>

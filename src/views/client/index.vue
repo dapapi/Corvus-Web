@@ -1,14 +1,5 @@
-@extends('layouts.master')
-
-@section('title','客户管理')
-@section('body-class','dashboard')
-
-@section('body')
-    @include('layouts.top-nav')
-    @include('layouts.left-nav')
-
-    <!-- Page -->
-    <div class="page" id="root">
+<template>
+    <div class="page">
 
         <div class="page-header page-header-bordered">
             <h1 class="page-title">客户管理</h1>
@@ -54,15 +45,15 @@
                             <th class="cell-300" scope="col">跟进时间</th>
                         </tr>
                         <tr v-for="client in clientsInfo ">
-                            <td class="pointer-content" @click="redirectClientDetail(client.id)">@{{ client.company }}
+                            <td class="pointer-content" @click="redirectClientDetail(client.id)">{{ client.company }}
                             </td>
                             <td>
                                 <template v-if="client.grade === 1">直客</template>
                                 <template v-if="client.grade === 2">代理公司</template>
                             </td>
-                            <td>@{{ client.principal.data.name }}</td>
-                            <td>@{{ client.delivery }}</td>
-                            <td>@{{ client.follow_time }}</td>
+                            <td>{{ client.principal.data.name }}</td>
+                            <td>{{ client.delivery }}</td>
+                            <td>{{ client.follow_time }}</td>
                         </tr>
                     </table>
 
@@ -178,23 +169,125 @@
 
         </div>
     </div>
-    <!-- End Page -->
+</template>
 
-@endsection
+<script>
+    import fetch from '../../assets/utils/fetch.js'
+    import config from '../../assets/js/config'
+
+    export default {
+        data: function () {
+            return {
+                total: 0,
+                current_page: 0,
+                total_pages: 0,
+                customizeInfo: config.customizeInfo,
+                clientTypeArr: config.clientTypeArr,
+                clientLevelArr: config.clientLevelArr,
+                clientsInfo: [],
+                companiesArr: [],
+                clientScaleArr: config.clientScaleArr,
+                clientType: '',
+                clientName: '',
+                clientLevel: '',
+                clientAddressDetail: '',
+                clientPrincipal: '',
+                clientContact: '',
+                clientContactPhone: '',
+                clientContactPosition: '',
+                clientDecision: '',
+                clientRemark: '',
+            }
+        },
+
+        mounted() {
+            this.getClients();
+            this.getCompanies();
+        },
+
+        methods: {
+
+            getClients: function (pageNum = 1) {
+                let data = {
+                    page: pageNum,
+                    include: 'principal',
+                };
+                let _this = this;
+                fetch('get', '/clients', data).then(function (response) {
+                    _this.clientsInfo = response.data;
+                    _this.current_page = response.meta.pagination.current_page;
+                    _this.total = response.meta.pagination.total;
+                    _this.total_pages = response.meta.pagination.total_pages;
+                })
+            },
+
+            getCompanies: function () {
+                let _this = this;
+                fetch('get', '/clients/all').then(function (response) {
+                    for (let i = 0; i < response.data.length; i++) {
+                        _this.companiesArr.push({
+                            id: response.data[i].id,
+                            name: response.data[i].company,
+                            grade: response.data[i].grade
+                        })
+                    }
+                })
+            },
+
+            addClient: function () {
+                let data = {
+                    type: app.clientType,
+                    company: app.clientName,
+                    grade: app.clientLevel,
+                    // region_id: '',
+                    address: 'test',
+                    principal_id: this.$store.state.newPrincipalInfo.id,
+                    contact: {
+                        name: app.clientContact,
+                        phone: app.clientContactPhone,
+                        position: app.clientContactPosition
+                    },
+                    keyman: app.clientDecision,
+                    size: app.clientScale,
+                    desc: app.clientRemark
+                };
+                let _this = this;
+                fetch('post', '/clients', data).then(function (response) {
+                    toastr.success('创建成功');
+                    _this.$router.push({path: 'clients/' + response.data.id});
+                })
+            },
+
+            customize: function () {
+
+            },
+
+            redirectClientDetail: function (clientId) {
+                this.$router.push({path: 'clients/' + clientId});
+            },
+
+            changCompany: function (value) {
+                console.log(value)
+            },
+
+            changeClientType: function (value) {
+                this.clientType = value;
+            },
+
+            changeClientLevel: function (value) {
+                this.clientLevel = value
+            },
+
+            changePrincipal: function (value) {
+                this.clientPrincipal = value
+            },
+
+            changeClientScale: function (value) {
+                this.clientScale = value
+            }
 
 
-@section('style')
-    <link rel="stylesheet" href="{{ mix('css/v1.css') }}">
-@endsection
-
-@section('script')
-
-    <script src="{{ mix('js/client.index.js') }}"></script>
-
-@endsection
-
-
-
-
-
+        }
+    }
+</script>
 

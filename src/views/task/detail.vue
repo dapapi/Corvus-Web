@@ -105,7 +105,7 @@
                                     <div class="col-md-11 float-left font-weight-bold">
                                         <div class="edit-wrap">
                                             <EditInputSelector :is-edit="isEdit" :select-type="'principal'"
-                                                                 @change="changeTaskPrincipal"></EditInputSelector>
+                                                               @change="changeTaskPrincipal"></EditInputSelector>
                                         </div>
                                     </div>
                                 </div>
@@ -120,7 +120,7 @@
                                     <div class="col-md-11 float-left font-weight-bold">
                                         <div class="edit-wrap">
                                             <EditDatepicker :content="taskInfo.start_at" :is-edit="isEdit"
-                                                             @change="changeTaskStartTime"></EditDatepicker>
+                                                            @change="changeTaskStartTime"></EditDatepicker>
                                         </div>
                                     </div>
                                 </div>
@@ -129,7 +129,7 @@
                                     <div class="col-md-11 float-left font-weight-bold">
                                         <div class="edit-wrap">
                                             <EditDatepicker :content="taskInfo.end_at" :is-edit="isEdit"
-                                                             @change="changeEndTime"></EditDatepicker>
+                                                            @change="changeEndTime"></EditDatepicker>
                                         </div>
                                     </div>
                                 </div>
@@ -137,7 +137,7 @@
                                     <div class="col-md-1 float-left text-right pl-0">优先级</div>
                                     <div class="col-md-11 float-left font-weight-bold">
                                         <EditSelector :content="taskInfo.priority" :is-edit="isEdit"
-                                                       :options="priorityArr" @change="changeTaskLevel"></EditSelector>
+                                                      :options="priorityArr" @change="changeTaskLevel"></EditSelector>
                                     </div>
                                 </div>
                                 <div class="card-text py-5 clearfix">
@@ -145,8 +145,8 @@
                                     <div class="col-md-11 float-left font-weight-bold">
                                         <div class="">
                                             <editTextarea :content="taskInfo.desc"
-                                                           :is-edit="isEdit"
-                                                           @change="changeTaskIntroduce"></editTextarea>
+                                                          :is-edit="isEdit"
+                                                          @change="changeTaskIntroduce"></editTextarea>
                                         </div>
                                     </div>
                                 </div>
@@ -343,8 +343,403 @@
 </template>
 
 <script>
+    import fetch from '../../assets/utils/fetch.js'
+    import config from '../../assets/js/config'
+
     export default {
+
+        data: function () {
+            return {
+                taskId: '',
+                changeInfo: {},
+                isEdit: false,
+                total: 0,
+                current_page: 0,
+                total_pages: 0,
+                showChildTask: false,
+                taskInfo: {},
+                participantsArr: [],
+                flagParticipantsIdArr: [],
+                changeParticipantInfo: '',
+                newChildTask: {},
+                taskName: '',
+                taskIntroduce: '',
+                taskType: '',
+                principal: '',
+                participants: '',
+                taskLevel: '',
+                startTime: '',
+                endTime: '',
+                startMinutes: '00:00',
+                endMinutes: '00:00',
+                taskLevelArr: config.taskLevelArr,
+                taskTypeArr: config.taskTypeArr,
+                customizeInfo: config.customizeInfo,
+                priorityArr: config.priorityArr,
+                taskStatusArr: config.taskStatusArr
+            }
+        },
+
+        mounted() {
+            this.getTask();
+            $('#addChildTask').on('show.bs.modal', function () {
+                this.showChildTask = true;
+                this.isEdit = false;
+            }).on('hidden.bs.modal', function () {
+                this.showChildTask = false;
+            })
+        },
+
+        watch: {
+            'taskInfo.principal_id': function (newValue) {
+                this.changeInfo.principal_id = newValue
+            },
+            'taskInfo.participants.data': {
+                handler(newValue, oldValue) {
+                    if (newValue && oldValue) {
+                        this.changeParticipantInfo = newValue
+                    }
+                },
+                deep: true
+            },
+            'taskInfo.start_at': function (newValue) {
+                this.changeInfo.start_at = newValue
+            },
+            'taskInfo.status': function (newValue) {
+                this.changeInfo.status = newValue
+            },
+            'taskInfo.priority': function (newValue) {
+                this.changeInfo.priority = newValue
+            },
+            'taskInfo.desc': function (newValue) {
+                this.changeInfo.desc = newValue
+            },
+            'taskInfo.end_at': function (newValue) {
+                this.changeInfo.end_at = newValue
+            },
+        },
+
+        computed: {
+            principalName: function () {
+                return this.$store.state.principalInfo.name
+            }
+        },
+
+        methods: {
+
+            getTask: function () {
+                this.taskId = this.$route.params.id;
+
+                let data = {
+                    include: 'creator,principal,pTask,tasks,resource.resourceable,resource.resource,affixes,participants',
+                };
+
+                let _this = this;
+
+                fetch('get', '/tasks/' + this.taskId, data).then(function (response) {
+                    console.log(response.data);
+                    if (response.data.affixes) {
+                        for (let i = 0; i < response.data.affixes.data.length; i++) {
+                            let size = response.data.affixes.data[i].size;
+                            response.data.affixes.data[i].size = _this.unitConversion(size)
+                        }
+                    }
+
+                    _this.taskInfo = response.data;
+                    for (let i = 0; i < response.data.participants.data.length; i++) {
+                        _this.flagParticipantsIdArr.push(response.data.participants.data[i].id)
+                    }
+                    let params = {
+                        type: 'change',
+                        data: response.data.participants.data
+                    };
+                    this.$store.dispatch('changeParticipantsInfo', params);
+                    params.data = response.data.principal.data;
+                    this.$store.dispatch('changePrincipal', params)
+                })
+            },
+
+            editBaseInfo: function () {
+                this.isEdit = true;
+                this.changeInfo = {};
+            },
+
+            customize: function (value) {
+                console.log(value)
+            },
+
+            showSelectMember: function (value) {
+                this.isInputSelectShow = value
+            },
+
+            cancelEdit: function () {
+                this.isEdit = false;
+            },
+
+            changeTaskStatus: function (status) {
+                let _this = this;
+                fetch('put', '/tasks/' + this.taskId + '/status', {status: status}).then(function (response) {
+                    if (status === 2) {
+                        _this.taskInfo.status = status;
+                        toastr.success("完成任务成功");
+
+                    } else if (status === 3) {
+                        toastr.success("暂停任务成功");
+                    }
+                })
+            },
+
+            privacyTask: function () {
+                fetch('put', '/tasks/' + this.taskId + '/privacy').then(function () {
+                    toastr.success("转私密成功");
+                })
+            },
+
+            deleteTask: function () {
+                let _this = this;
+                fetch('delete', '/tasks/' + this.taskId).then(function () {
+                    toastr.success("删除任务成功");
+                    this.$router.push({path: '/tasks'})
+                })
+            },
+
+            unitConversion: function (size) {
+                if (size < 1024) {
+                    size = size + "B"
+                } else if (size < 1024 * 1024) {
+                    size = (size / 1024).toFixed(2) + "KB"
+                } else if (size < 1024 * 1024 * 1024) {
+                    size = (size / (1024 * 1024)).toFixed(2) + "MB"
+                } else {
+                    size = (size / (1024 * 1024 * 1024)).toFixed(2) + "GB"
+                }
+                let sizeStr = size + "";
+                let index = sizeStr.indexOf(".");
+                let dou = sizeStr.substr(index + 1, 2);
+                if (dou === "00") {
+                    size = sizeStr.substring(0, index) + sizeStr.substr(index + 3, 2)
+                }
+                return size
+            },
+
+            changeTaskBaseInfo: function () {
+                let _this = this;
+                if (this.changeInfo) {
+                    fetch('put', '/tasks/' + this.taskId, this.changeInfo).then(function (response) {
+                        _this.isEdit = false;
+                        if (_this.changeInfo.principal_id) {
+                            _this.taskInfo.principal.data = _this.$store.state.principalInfo
+                        }
+                    })
+                }
+                // @todo 修改时间组件
+
+                if (this.changeParticipantInfo) {
+                    let changeInfo = this.changeParticipantInfo;
+                    let participant_ids = [];
+                    for (let i = 0; i < changeInfo.length; i++) {
+                        participant_ids.push(changeInfo[i].id)
+                    }
+
+                    let flagInfo = this.flagParticipantsIdArr;
+                    let del_participant_ids = [];
+                    for (let j = 0; j < flagInfo.length; j++) {
+                        if (changeInfo.map(item => item.id).indexOf(flagInfo[j]) === -1) {
+                            del_participant_ids.push(flagInfo[j])
+                        }
+                    }
+                    let data = {
+                        person_ids: participant_ids,
+                        del_person_ids: del_participant_ids
+                    };
+                    fetch('post', '/tasks/' + this.taskId + '/participant', data).then(function () {
+                        _this.isEdit = false;
+
+                    })
+                }
+
+                toastr.success('修改成功')
+
+            },
+
+            changeEndTime: function (value) {
+                this.taskInfo.end_at = value
+            },
+
+            changeTaskIntroduce: function (value) {
+                this.taskInfo.desc = value
+            },
+
+            changeTaskLevel: function (value) {
+                this.taskInfo.priority = value
+            },
+
+            changeTaskStartTime: function (value) {
+                this.taskInfo.start_at = value
+            },
+
+            changeTaskPrincipal: function () {
+                this.taskInfo.principal_id = this.$store.state.principalInfo.id;
+            },
+
+            uploadAttachment: function (url, name, size) {
+                let _this = this;
+                let data = {
+                    title: name,
+                    url: url,
+                    size: size,
+                    type: 1
+                };
+                fetch('post', '/tasks/' + this.taskId + '/affix', data).then(function (response) {
+                    toastr.success("上传成功");
+                    response.data.size = _this.unitConversion(response.data.size);
+                    _this.taskInfo.affixes.data.push(response.data)
+                })
+            },
+
+            deleteAttachment: function (attachmentId) {
+                fetch('delete', '/tasks/' + this.taskId + '/affixes' + attachmentId, this.changeInfo).then(function (response) {
+                    toastr.success("删除成功");
+                    let index = this.taskInfo.affixes.data.indexOf(this.taskInfo.affixes.data.find(item => item.id == attachmentId));
+                    this.taskInfo.affixes.data.splice(index, 1);
+                })
+            },
+
+            downloadAttachment: function (attachmentId, attachmentUrl) {
+                window.open(attachmentUrl, '_blank');
+            },
+
+            addChildTask: function () {
+                let participant_ids = [];
+                for (let i = 0; i < this.$store.state.newParticipantsInfo.length; i++) {
+                    participant_ids.push(this.$store.state.newParticipantsInfo[i].id)
+                }
+                let data = {
+                    // resource_id: '1718463094',
+                    // resourceable_id: '1994731356',
+                    title: this.taskName,
+                    // type: this.taskType,
+                    principal_id: this.$store.state.newPrincipalInfo.id,
+                    participant_ids: participant_ids,
+                    priority: this.taskLevel,
+                    start_at: this.startTime + ' ' + this.startMinutes,
+                    end_at: this.endTime + ' ' + this.endMinutes,
+                    desc: this.taskIntroduce,
+                };
+                fetch('post', '/tasks/' + this.taskId + '/subtask', data).then(function (response) {
+                    toastr.success('添加成功');
+                    $('#addChildTask').modal('hide');
+                    this.taskInfo.tasks.data.push(response.data)
+                })
+            },
+
+            addTaskType: function (value) {
+                this.taskType = value
+            },
+
+            addPrincipal: function (value) {
+                this.principal = value
+            },
+
+            addParticipant: function (value) {
+                let flagArr = [];
+                for (let i = 0; i < value.length; i++) {
+                    flagArr.push(value[i].id)
+                }
+                this.participants = flagArr
+            },
+
+            addTaskLevel: function (value) {
+                this.taskLevel = value
+            },
+
+            addStartTime: function (value) {
+                this.startTime = value
+            },
+
+            addEndTime: function (value) {
+                this.endTime = value
+            },
+
+            addLinkage: function (value) {
+
+            },
+
+            addStartMinutes: function (value) {
+                this.startMinutes = value
+            },
+
+            addEndMinutes: function (value) {
+                this.endMinutes = value
+            },
+            redirectTaskDetail: function (taskId) {
+                this.$router.push({path: '/tasks/' + taskId})
+            }
+
+        }
 
     }
 </script>
 
+<style>
+    .task-dropdown {
+        -moz-user-select: none;
+        -webkit-user-select: none;
+        -ms-user-select: none;
+        user-select: none;
+        z-index: 2;
+    }
+
+    .task-dropdown-item {
+        position: absolute;
+        transform: translate3d(299px, 36px, 0px);
+        top: 0;
+        left: 0;
+        will-change: transform;
+    }
+
+    .attachment-upload {
+        position: relative;
+        display: inline-block;
+    }
+
+    .attachment-upload i {
+        transform: rotate(45deg);
+        -ms-transform: rotate(45deg);
+        -moz-transform: rotate(45deg);
+        -webkit-transform: rotate(45deg);
+        -o-transform: rotate(45deg);
+    }
+
+    .attachment-upload input {
+        position: absolute;
+        right: 0;
+        top: 0;
+        opacity: 0;
+        width: 25px;
+        margin: 10px;
+    }
+
+    .child-attachment-upload input {
+        position: absolute;
+        right: 0;
+        top: 0;
+        opacity: 0;
+        width: 80px;
+        cursor: pointer;
+    }
+
+    .file-list {
+        padding: 0;
+    }
+
+    .file-list li {
+        list-style: none;
+        padding-bottom: 15px;
+    }
+
+    .file-list li:last-child {
+        padding-bottom: 0;
+    }
+
+</style>
