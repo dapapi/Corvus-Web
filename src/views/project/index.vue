@@ -1,15 +1,5 @@
-@extends('layouts.master')
-
-@section('title','项目管理')
-@section('body-class','dashboard')
-
-@section('body')
-    @include('layouts.top-nav')
-    @include('layouts.left-nav')
-
-
-    <!-- Page -->
-    <div class="page" id="root">
+<template>
+    <div class="page">
 
         <div class="page-header page-header-bordered">
             <h1 class="page-title">项目管理</h1>
@@ -74,14 +64,14 @@
                                 <th class="cell-300" scope="col">跟进时间</th>
                             </tr>
                             <tr v-for="project in projectsInfo ">
-                                <td class="pointer-content" @click="redirectProjectDetail(project.id)">@{{ project.title
+                                <td class="pointer-content" @click="redirectProjectDetail(project.id)">{{ project.title
                                     }}
                                 </td>
-                                <td>@{{ project.principal }}</td>
-                                <td>@{{ project.progress }}</td>
-                                <td>@{{ project.sign_time }}</td>
-                                <td>@{{ project.delivery }}</td>
-                                <td>@{{ project.follow_time }}</td>
+                                <td>{{ project.principal }}</td>
+                                <td>{{ project.progress }}</td>
+                                <td>{{ project.sign_time }}</td>
+                                <td>{{ project.delivery }}</td>
+                                <td>{{ project.follow_time }}</td>
                             </tr>
                         </table>
                         <pagination :current_page="current_page" :method="getProjects" :total_pages="total_pages"
@@ -191,7 +181,7 @@
                             </div>
                         </div>
                         <div class="col-md-12 example clearfix" v-for="field in projectFieldsArr">
-                            <div class="col-md-2 text-right float-left pl-0">@{{ field.key }}</div>
+                            <div class="col-md-2 text-right float-left pl-0">{{ field.key }}</div>
                             <div class="col-md-10 float-left">
                                 <template v-if="field.field_type === 1">
                                     <emit-input @change="(value) => addInfo(value, field.key )"></emit-input>
@@ -244,23 +234,149 @@
         </div>
 
     </div>
-    <!-- End Page -->
 
-@endsection
+</template>
+
+<script>
+    import fetch from '../../assets/utils/fetch.js'
+    import config from '../../assets/js/config'
+
+    export default {
+
+        data: function () {
+            return {
+                total: 2,
+                current_page: 1,
+                total_pages: 1,
+                companyArr: [],
+                starsArr: [],
+                projectName: '',
+                projectTypeArr: config.projectTypeArr,
+                projectFieldsArr: [],
+                projectType: '',
+                projectFields: '',
+                projectsInfo: '',
+                customizeInfo: config.customizeInfo,
+                addInfoArr: {},
+                levelArr: config.levelArr,
+                visibleRangeArr: config.visibleRangeArr,
+            }
+        },
+
+        mounted() {
+            this.getClients();
+            this.getStars();
+            this.getProjects();
+        },
+
+        methods: {
+
+            getProjects: function (pageNum = 1) {
+                let data = {
+                    page: pageNum,
+                };
+                let _this = this;
+                fetch('get', '/projects', data).then(function (response) {
+                    _this.projectsInfo = response.data
+
+                })
+            },
+
+            getClients: function () {
+                let _this = this;
+                fetch('get', '/clients/all').then(function (response) {
+                    for (let i = 0; i < response.data.length; i++) {
+                        _this.companyArr.push({
+                            name: response.data[i].company,
+                            id: response.data[i].id,
+                            grade: response.data[i].grade
+                        })
+                    }
+
+                })
+            },
+
+            getStars: function () {
+                let _this = this;
+                fetch('get', '/stars/all').then(function (response) {
+                    for (let i = 0; i < response.data.length; i++) {
+                        _this.starsArr.push({
+                            name: response.data[i].name,
+                            id: response.data[i].id,
+                            value: response.data[i].id
+                        })
+                    }
+
+                })
+            },
+
+            projectChange: function (e) {
+                console.log(e)
+            },
+
+            projectPrincipalChange: function (e) {
+                console.log(e)
+            },
+
+            customize: function (value) {
+                console.log(value)
+            },
+
+            addProject: function () {
+
+            },
+
+            changeLinkageCompany: function (value) {
+                console.log(value)
+            },
+
+            changeTargetArtist: function (value) {
+                console.log(value)
+            },
+
+            redirectProjectDetail: function (projectId) {
+                redirect('detail?project_id=' + projectId)
+            },
+
+            changeProjectType: function (value) {
+                app.projectType = value
+            },
+
+            selectProjectType: function () {
+                let _this = this;
+                fetch('get', '/project_fields', {
+                    type: app.projectType
+                }).then(function (response) {
+                    for (let i = 0; i < response.data.length; i++) {
+                        if (response.data[i].field_type === 2) {
+                            response.data[i].contentArr = [];
+                            for (let j = 0; j < response.data[i].content.length; j++) {
+                                response.data[i].contentArr.push({
+                                    value: response.data[i].content[j],
+                                    name: response.data[i].content[j]
+                                })
+                            }
+                        }
+                    }
+                    _this.projectFieldsArr = response.data
+
+                });
+                if (_this.projectType !== 5) {
+                    this.getTrail()
+                }
+            },
+
+            getTrail: function () {
+                fetch('get', '/trails', {type: this.projectType}).then(function () {
+
+                })
+            },
 
 
-@section('style')
-    <link rel="stylesheet" href="{{ mix('css/v1.css') }}">
-@endsection
+            addInfo: function (value, name) {
+                this.addInfoArr[name] = value
+            }
 
-@section('script')
-
-    <script src="{{ mix('js/project.index.js') }}"></script>
-
-@endsection
-
-
-
-
-
-
+        }
+    }
+</script>

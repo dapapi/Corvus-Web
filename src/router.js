@@ -16,20 +16,63 @@ export default new Router({
         {
             path: '/login',
             name: 'login',
-            component: () => import(/* webpackChunkName: "about" */ './views/auth/login.vue'),
+            component: () => import('./views/auth/login.vue'),
         },
         {
             path: '/tasks',
             name: 'tasks',
-            component: () => import(/* webpackChunkName: "about" */ './views/task/index.vue'),
-            children: [
-                {
-                    path: ':id',
-                    name: 'tasks/detail',
-                    component: () => import('./views/task/detail.vue')
-                }
-            ]
+            component: () => import('./views/task/index.vue'),
         },
+        {
+            path: '/tasks/:id',
+            name: 'tasks/detail',
+            component: () => import('./views/task/detail.vue')
+        },
+        {
+            path: '/trails',
+            name: 'trails',
+            component: () => import('./views/trail/index.vue'),
+        },
+        {
+            path: '/trails/:id',
+            name: 'trails/detail',
+            component: () => import('./views/trail/detail.vue')
+        },
+        {
+            path: '/projects',
+            name: 'projects',
+            component: () => import('./views/project/index.vue'),
+        },
+        {
+            path: '/projects/:id',
+            name: 'projects/detail',
+            component: () => import('./views/project/detail.vue')
+        },
+        {
+            path: '/clients',
+            name: 'clients/project',
+            component: () => import('./views/client/index.vue'),
+        },
+        {
+            path: '/clients/:id',
+            name: 'clients/detail',
+            component: () => import('./views/client/detail.vue')
+        },
+        {
+            path: '/calendar',
+            name: 'calendar',
+            component: () => import('./views/calendar/index.vue')
+        },
+        {
+            path: '/calendar',
+            name: 'calendar',
+            component: () => import('./views/calendar/index.vue')
+        },
+        // {
+        //     path: '/artists',
+        //     name: 'artists',
+        //     component: () => import('./views/artist/index.vue')
+        // },
         {
             path: '/staff',
             name: 'staff',
