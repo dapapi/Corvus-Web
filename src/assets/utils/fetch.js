@@ -44,7 +44,7 @@ axios.interceptors.response.use((res) => {
 
 export default function fetch(method = 'post', url, params) {
 	return new Promise((resolve, reject) => {
-		axios[method](url, params)
+		axios[method](url, method.toLowerCase() === 'get' ? {params} : params)
 			.then(response => {
 				resolve(response.data);
 			}, err => {

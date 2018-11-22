@@ -1,12 +1,4 @@
-@extends('layouts.master')
-
-@section('title','员工管理')
-@section('body-class','dashboard')
-
-@section('body')
-    @include('layouts.top-nav')
-    @include('layouts.left-nav')
-
+<template>
     <!-- Page -->
     <div class="page" id="root">
 
@@ -49,7 +41,7 @@
                         <checkbox-group :option-data="filterConditions" @onchange="changeSelectOption" />
                     </Modal>
                 </div>
-                <div class="example" style="padding: 0 15px;">在职 23    入职 8     离职 2</div>
+                <div class="example" style="padding: 0 15px;">在职 23 离职 2</div>
                 <table class="table is-indent example" data-plugin="animateList" data-animate="fade" data-child="tr"
                        data-selectable="selectable">
                     <tr class="animation-fade"
@@ -58,24 +50,23 @@
                         <th class="cell-300" scope="col">序号</th>
                         <th class="cell-300" scope="col">姓名</th>
                         <th class="cell-300" scope="col">手机</th>
-                        <th class="cell-300" scope="col">工号</th>
+                        <!-- <th class="cell-300" scope="col">工号</th> -->
                         <th class="cell-300" scope="col">状态</th>
+                        <th class="cell-300" scope="col">聘用形式</th>
                         <th class="cell-300" scope="col">部门</th>
                         <th class="cell-300" scope="col">入职日期</th>
-                        <th class="cell-300" scope="col">绑定状态</th>
                         <th class="cell-300" scope="col">操作</th>
                         <th class="suf-cell"></th>
                     </tr>
-                    <tr>
-                        <th class="pre-cell"></th>
-                        <th scope="row">1</th>
-                        <td><a href="/staff/detail">bqx</a></td>
-                        <td>1871111222</td>
-                        <td>0086</td>
-                        <td>正式</td>
-                        <td>财务</td>
-                        <td>2018-01-02</td>
-                        <td>未绑定</td>
+                    <tr v-for="(item, index) in staffList" :key="index">
+                        <td class="pre-cell"></td>
+                        <td scope="row">{{index + 1}}</td>
+                        <td><router-link to="/staff/detail">{{item.name}}</router-link></td>
+                        <td>{{ item.phone }}</td>
+                        <td>{{ item.status }}</td>
+                        <td>{{ item.hire_shape }}</td>
+                        <td>{{ item.department }}</td>
+                        <td>{{ item.entry_time }}</td>
                         <td>
                             <div class="dropdown show task-dropdown">
                                 <i class="icon md-more font-size-24" aria-hidden="true" id="taskDropdown"
@@ -91,19 +82,9 @@
                         </td>
                         <td class="suf-cell"></td>
                     </tr>
-                    <!-- <tr v-for="project in projectsInfo ">
-                        <td class="pre-cell"></td>
-                        <td class="pointer-content" @click="redirectProjectDetail(project.id)">@{{ project.name }}</td>
-                        <td>@{{ project.principal }}</td>
-                        <td>@{{ project.progress }}</td>
-                        <td>@{{ project.sign_time }}</td>
-                        <td>@{{ project.delivery }}</td>
-                        <td>@{{ project.follow_time }}</td>
-                        <td class="suf-cell"></td>
-                    </tr> -->
                 </table>
 
-                <pagination :current_page="current_page" :method="getProjects" :total_pages="total_pages"
+                <pagination :current_page="currentPage" :method="getStaffList" :total_pages="totalPages"
                             :total="total"></pagination>
             </div>
             <div class="site-action">
@@ -117,27 +98,93 @@
             </div>
         </div>
 
-        <!-- <customize-filter :data="customizeInfo" @change="customize"></customize-filter> -->
         <!-- <Modal /> -->
     </div>
     <!-- End Page -->
+</template>
 
-@endsection
+<script>
+// import config from "../asconfig";
+import config from "../../assets/js/config";
+// import redirect from './bootstrap';
+const { staffStatus, dateArr, stuffType } = config;
+import fetch from "../../assets/utils/fetch";
+import axios from 'axios'
 
+export default {
+    name: 'Staff',
+    data() {
+        return {
+            total: 0,
+            current_page: 1,
+            total_pages: 1,
+            currentPage: 1,
+            totalPages: 1,
+            total: 1,
+            // customizeInfo: config.customizeInfo,
+            staffStatus: staffStatus,
+            dateArr: dateArr,
+            stuffType: stuffType,
+            filterConditions: [
+                {
+                    name: '年龄',
+                    id: 'age',
+                    value: '0'
+                },
+                {
+                    name: '入职日期',
+                    id: 'entryDate',
+                    value: '1'
+                },
+                {
+                    name: '身份证号',
+                    id: 'IDNum',
+                    value: '2'
+                },
+                {
+                    name: '离职日期',
+                    id: 'resignationDate',
+                    value: '3'
+                },
+                {
+                    name: '视频植入',
+                    id: 'video',
+                    value: '4'
+                }
+            ],
+            conditionArr: [],
+            checkedNames: [],
+            staffList: []
+        };
+    },
 
-@section('style')
-    <link rel="stylesheet" href="{{ mix('css/v1.css') }}">
-    <link rel="stylesheet" href="{{ mix('css/staff.css') }}">
-@endsection
+  mounted() {
+    this.getStaffList();
+  },
 
-@section('script')
+  methods: {
+    getStaffList() {
+        const params = {
+            status: 1
+        }
+        fetch("get", "/personnel_list", params).then(result => {
+            this.staffList = result.data;
+            this.currentPage = result.meta.pagination.current_page || 1;
+            this.totalPages = result.meta.pagination.total_pages || 1;
+            this.total = result.meta.pagination.total || 1;
+        });
+    },
+    // 改变报表筛选条件
+    changeSelectOption(newArr) {
+      this.checkedNames = newArr;
+    },
+    // 下拉框改变事件
+    projectChange() {},
+    getProjects() {}
+  }
+};
+</script>
 
-    <script src="{{ mix('js/staff.index.js') }}"></script>
-
-@endsection
-
-
-
-
-
-
+<style>
+@import '../../assets/css/staff.scss';
+</style>

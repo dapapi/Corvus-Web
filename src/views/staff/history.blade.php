@@ -70,9 +70,3 @@
     <script src="{{ mix('js/staff.history.js') }}"></script>
 
 @endsection
-
-
-
-
-
-

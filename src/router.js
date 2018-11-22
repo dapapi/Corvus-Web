@@ -30,5 +30,15 @@ export default new Router({
                 }
             ]
         },
+        {
+            path: '/staff',
+            name: 'staff',
+            component: () => import('./views/staff/index.vue')
+        },
+        {
+            path: '/staff/add',
+            name: 'staffAdd',
+            component: () => import('./views/staff/staffAdd.vue')
+        }
     ],
 });

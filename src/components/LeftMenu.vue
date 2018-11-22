@@ -15,6 +15,14 @@
                             </a>
                         </li>
                         <li class="site-menu-item">
+                            <router-link to="/staff">
+                                <a class="animsition-link waves-effect waves-classic">
+                                    <i class="site-menu-icon md-view-dashboard" aria-hidden="true"></i>
+                                    <span class="site-menu-title">档案</span>
+                                </a>
+                            </router-link>
+                        </li>
+                        <li class="site-menu-item">
                             <a class="animsition-link waves-effect waves-classic" href="/tasks">
                                 <i class="site-menu-icon md-view-dashboard" aria-hidden="true"></i>
                                 <span class="site-menu-title">任务</span>
