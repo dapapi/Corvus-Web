@@ -1,24 +1,8 @@
-@extends('layouts.master')
-
-@section('title','艺人管理')
-
-@section('style')
-    <link rel="stylesheet" href="{{ mix('css/task.css') }}">
-@endsection
-
-
-@section('body-class','dashboard')
-
-@section('body')
-    @include('layouts.top-nav')
-    @include('layouts.left-nav')
-
-
-    <!-- Page -->
-    <div class="page" id="root">
+<template>
+    <div class="page">
 
         <div class="page-header page-header-bordered">
-            <h1 class="page-title">艺人管理</h1>
+            <h1 class="page-title">博主管理</h1>
 
             <div class="page-header-actions dropdown show task-dropdown float-right">
                 <i class="icon md-more font-size-24" aria-hidden="true" id="taskDropdown"
@@ -28,10 +12,8 @@
                     <a class="dropdown-item" role="menuitem" @click="">导入</a>
                     <a class="dropdown-item" role="menuitem" @click="">导出</a>
                     <a class="dropdown-item" role="menuitem" @click="">分配制作人</a>
-                    <a class="dropdown-item" role="menuitem" @click="">分配宣传人</a>
                 </div>
             </div>
-
         </div>
 
         <div class="page-content container-fluid">
@@ -79,22 +61,23 @@
 
                 <div class="page-content tab-content nav-tabs-animate bg-white">
                     <div class="tab-pane animation-fade active" id="forum-artist" role="tabpanel">
-                        <table class="table table-hover" data-plugin="selectable"
-                               data-row-selectable="true">
+                        <table class="table table-hover is-indent" data-plugin="selectable"
+                               data-selectable="selectable">
                             <tr>
                                 <th class="w-50">
                                         <span class="checkbox-custom checkbox-primary">
-                                            <input class="selectable-all" type="checkbox" @change="selectArtists('all')">
+                                            <input class="selectable-all" type="checkbox"
+                                                   @change="selectArtists('all')">
                                             <label></label>
                                         </span>
                                 </th>
-                                <th class="cell-300" scope="col">姓名</th>
-                                <th class="cell-300" scope="col">年龄</th>
-                                <th class="cell-300" scope="col">艺人来源</th>
+                                <th class="cell-300" scope="col">昵称</th>
+                                <th class="cell-300" scope="col">类型</th>
+                                <th class="cell-300" scope="col">微博平台粉丝数</th>
+                                <th class="cell-300" scope="col">与我司签约意向</th>
                                 <th class="cell-300" scope="col">沟通状态</th>
-                                <th class="cell-300" scope="col">签约状态</th>
+                                <th class="cell-300" scope="col">制作人</th>
                                 <th class="cell-300" scope="col">录入时间</th>
-                                <th class="cell-300" scope="col">最后跟进时间</th>
                             </tr>
                             <tr v-for="artist in artistsInfo">
                                 <td>
@@ -104,26 +87,28 @@
                                         <label :for="'row-' + artist.id"></label>
                                     </span>
                                 </td>
-                                <td class="pointer-content" @click="redirectArtistDetail(artist.id)">
-                                    @{{ artist.name }}
+                                <td class="pointer-content" @click="redirectArtistDetail(artist.id)">{{ artist.nickname
+                                    }}
                                 </td>
-                                <td>根据日期生成年龄</td>
+                                <td>{{ artist.type.data.name }}</td>
+                                <td>暂无</td>
                                 <td>
-                                    <template v-if="artist.source">
-                                        @{{ artistSourceArr.find(item => item.value == artist.source).name}}
-                                    </template>
+                                    <template v-if="artist.intention">是</template>
+                                    <template v-else>否</template>
                                 </td>
                                 <td>
                                     <template v-if="artist.communication_status">
-                                        @{{ taiyangCommunicationStatusArr.find(item => item.value ==
+                                        {{ papiCommunicationStatusArr.find(item => item.value ==
                                         artist.communication_status).name}}
                                     </template>
                                 </td>
-                                <td>不知道那个字段</td>
-                                <td>暂无</td>
+                                <td>
+                                    <template v-if="artist.producer">
+                                        {{ artist.producer.data.name }}
+                                    </template>
+                                </td>
                                 <td>暂无</td>
                             </tr>
-                            </tbody>
                         </table>
                         <pagination :current_page="current_page" :method="getArtists" :total_pages="total_pages"
                                     :total="total"></pagination>
@@ -152,86 +137,43 @@
                         <button type="button" class="close" aria-hidden="true" data-dismiss="modal">
                             <i class="md-close" aria-hidden="true"></i>
                         </button>
-                        <h4 class="modal-title">新增艺人</h4>
+                        <h4 class="modal-title">新增博主</h4>
                     </div>
                     <div class="modal-body">
-                        {{-- todo 复选框单选 --}}
                         <div class="example">
-                            <div class="col-md-2 text-right float-left">姓名</div>
+                            <div class="col-md-2 text-right float-left">昵称</div>
                             <div class="col-md-10 float-left pl-0">
                                 <input type="text" class="form-control" placeholder="请输入昵称" v-model="artistName">
                             </div>
                         </div>
                         <div class="example">
-                            <div class="col-md-2 text-right float-left">性别</div>
-                            <div class="col-md-4 float-left row">
-                                <selectors :options="genderArr" placeholder="请选择性别" @change="changeGender"></selectors>
-                            </div>
-                            <div class="col-md-2 text-right float-left pr-0">出生日期</div>
-                            <div class="col-md-4 float-left pr-0">
-                                <datepicker @change="changeBirthday"></datepicker>
-                            </div>
-                        </div>
-                        <div class="example">
-                            <div class="col-md-2 text-right float-left">艺人来源</div>
-                            <div class="col-md-4 float-left row">
-                                <selectors :options="artistSourceArr" placeholder="请选择艺人来源"
-                                           @change="changeSource"></selectors>
-                            </div>
-                            <div class="col-md-2 text-right float-left pr-0">邮箱</div>
-                            <div class="col-md-4 float-left pr-0">
-                                <input type="text" class="form-control" title="" v-model="artistEmail"
-                                       placeholder="请输入邮箱">
-                            </div>
-                        </div>
-                        <div class="example">
-                            <div class="col-md-2 text-right float-left">手机号</div>
-                            <div class="col-md-4 float-left row">
-                                <input type="text" class="form-control" title="" v-model="artistPhone"
-                                       placeholder="请输入手机号">
-                            </div>
-                            <div class="col-md-2 text-right float-left pr-0">微信</div>
-                            <div class="col-md-4 float-left pr-0">
-                                <input type="text" class="form-control" title="" v-model="artistWeiXin"
-                                       placeholder="请输入微信号码">
-                            </div>
-                        </div>
-                        <div class="example">
-                            <div class="col-md-2 text-right float-left">星探</div>
-                            <div class="col-md-4 float-left row">
-                                <input type="text" class="form-control" title="" v-model="artistScoutName"
-                                       placeholder="请输入星探姓名">
-                            </div>
-                            <div class="col-md-2 text-right float-left pr-0">地区</div>
-                            <div class="col-md-4 float-left pr-0">
-                                <input type="text" class="form-control" title="" v-model="artistLocation"
-                                       placeholder="请输入地区">
-                            </div>
-                        </div>
-                        <div class="example">
                             <div class="col-md-2 text-right float-left">平台</div>
-                            <div class="col-md-10 float-left pl-0 ">
-                                {{-- @todo 全选checkbox--}}
+                            <div class="col-md-10 float-left pl-0">
                                 <div class="checkbox-custom checkbox-primary d-inline pr-20">
-                                    <input type="checkbox" name="platform" title="" @change="changeCheckbox(1)">
+                                    <input type="checkbox" name="platform" id="platformAll" @change="changeCheckbox(1)">
                                     <label for="platformAll">全选</label>
                                 </div>
                                 <div class="checkbox-custom checkbox-primary d-inline pr-20">
-                                    <input type="checkbox" name="platform" title="" @change="changeCheckbox(2)">
+                                    <input type="checkbox" name="platform" id="platformWeibo"
+                                           @change="changeCheckbox(2)">
                                     <label for="platformWeibo">微博</label>
                                 </div>
                                 <div class="checkbox-custom checkbox-primary d-inline pr-20">
-                                    <input type="checkbox" name="platform" title="" @change="changeCheckbox(3)">
+                                    <input type="checkbox" name="platform" id="platformDouyin"
+                                           @change="changeCheckbox(3)">
                                     <label for="platformDouyin">抖音</label>
                                 </div>
                                 <div class="checkbox-custom checkbox-primary d-inline pr-20">
-                                    <input type="checkbox" name="platform" title="" @change="changeCheckbox(4)">
-                                    <label for="platformXHS">百科</label>
+                                    <input type="checkbox" name="platform" id="platformXHS" @change="changeCheckbox(4)">
+                                    <label for="platformXHS">小红书</label>
                                 </div>
-                                <div class="checkbox-custom checkbox-primary d-inline pr-20">
-                                    <input type="checkbox" name="platform" title="" @change="changeCheckbox(5)">
-                                    <label for="platformXHS">其他</label>
-                                </div>
+                            </div>
+                        </div>
+                        <div class="example">
+                            <div class="col-md-2 text-right float-left">类型</div>
+                            <div class="col-md-10 float-left pl-0">
+                                <selectors :options="artistTypeArr" :placeholder="'请选择类型'"
+                                           @change="changeArtistType"></selectors>
                             </div>
                         </div>
                         <div class="example">
@@ -239,19 +181,9 @@
                             <div class="col-md-4 float-left pl-0">
                                 <input type="text" class="form-control" v-model="weiboUrl">
                             </div>
-                            <div class="col-md-3 text-right float-left">微博粉丝数</div>
-                            <div class="col-md-3 float-left pl-0">
-                                <input type="text" class="form-control" v-model="weiboFansNum">
-                            </div>
-                        </div>
-                        <div class="example">
-                            <div class="col-md-2 text-right float-left">百科地址</div>
+                            <div class="col-md-2 text-right float-left">签约时微博粉丝数</div>
                             <div class="col-md-4 float-left pl-0">
-                                <input type="text" class="form-control" v-model="baikeUrl">
-                            </div>
-                            <div class="col-md-3 text-right float-left">百科粉丝数</div>
-                            <div class="col-md-3 float-left pl-0">
-                                <input type="text" class="form-control" v-model="baikeFansNum">
+                                <number-spinner @change="changeWeiboFansNum"></number-spinner>
                             </div>
                         </div>
                         <div class="example">
@@ -259,25 +191,25 @@
                             <div class="col-md-4 float-left pl-0">
                                 <input type="text" class="form-control" v-model="douyinId">
                             </div>
-                            <div class="col-md-3 text-right float-left">抖音粉丝数</div>
-                            <div class="col-md-3 float-left pl-0">
-                                <input type="text" class="form-control" v-model="douyinFansNum">
+                            <div class="col-md-2 text-right float-left">签约时抖音粉丝数</div>
+                            <div class="col-md-4 float-left pl-0">
+                                <number-spinner @change="changeDouyinFansNum"></number-spinner>
                             </div>
                         </div>
                         <div class="example">
-                            <div class="col-md-2 text-right float-left">其他地址</div>
+                            <div class="col-md-2 text-right float-left">小红书链接</div>
                             <div class="col-md-4 float-left pl-0">
-                                <input type="text" class="form-control" v-model="qitaUrl">
+                                <input type="text" class="form-control" v-model="xhsUrl">
                             </div>
-                            <div class="col-md-3 text-right float-left">其他地址粉丝数</div>
-                            <div class="col-md-3 float-left pl-0">
-                                <input type="text" class="form-control" v-model="qitaFansNum">
+                            <div class="col-md-2 text-right float-left pl-0">签约时小红书粉丝数</div>
+                            <div class="col-md-4 float-left pl-0">
+                                <number-spinner @change="changeXHSFansNum"></number-spinner>
                             </div>
                         </div>
                         <div class="example">
                             <div class="col-md-2 text-right float-left">沟通状态</div>
                             <div class="col-md-3 float-left pl-0">
-                                <selectors :options="taiyangCommunicationStatusArr"
+                                <selectors :options="papiCommunicationStatusArr"
                                            @change="changeCommunicationType"></selectors>
                             </div>
                         </div>
@@ -288,8 +220,8 @@
                                            @change="changeSignIntention"></selectors>
                             </div>
                             <div class="col-md-5 float-left pl-0" v-if="!signIntention">
-                                <textarea name="" class="form-control" rows="1" placeholder="请填写不签约理由"
-                                          v-model="notSignReason"></textarea>
+                                <textarea name="" rows="1" class="form-control" placeholder="请填写不签约理由"
+                                          v-model="intention_desc"></textarea>
                             </div>
                         </div>
                         <div class="example">
@@ -299,14 +231,8 @@
                                            @change="isSignCompany"></selectors>
                             </div>
                             <div class="col-md-5 float-left pl-0" v-if="signCompany == 1">
-                                <input type="text" class="form-control" placeholder="请输入已签约公司名称">
-                            </div>
-                        </div>
-                        <div class="example">
-                            <div class="col-md-2 text-right float-left">上传附件</div>
-                            <div class="col-md-5 float-left pl-0">
-                                <selectors :options="attachmentTypeArr" :placeholder="'请选择附件类型'"
-                                           @change="changeAttachmentType"></selectors>
+                                <input type="text" class="form-control" placeholder="请输入已签约公司名称"
+                                       v-model="signCompanyName">
                             </div>
                         </div>
                         <div class="example">
@@ -326,20 +252,141 @@
         </div>
 
     </div>
-    <!-- End Page -->
+</template>
 
-@endsection
+<script>
+    import fetch from '../../assets/utils/fetch.js'
+    import config from '../../assets/js/config'
 
+    export default {
+        data: function () {
+            return {
+                total: 0,
+                current_page: 1,
+                total_pages: 1,
+                customizeInfo: config.customizeInfo,
+                projectStatus: config.projectStatus,
+                yesOrNoArr: config.yesOrNoArr,
+                artistStatusArr: config.artistStatusArr,
+                papiCommunicationStatusArr: config.papiCommunicationStatusArr,
+                artistsInfo: '',
+                artistStatus: '',
+                artistName: '',
+                weiboUrl: '',
+                weiboFansNum: '',
+                douyinId: '',
+                douyinFansNum: '',
+                xhsUrl: '',
+                xhsFansNum: '',
+                platformType: '',
+                signIntention: 1,
+                signCompany: '',
+                artistDesc: '',
+                artistTypeArr: '',
+                signCompanyName: '',
+            }
+        },
 
-@section('style')
-    <link rel="stylesheet" href="{{ mix('css/v1.css') }}">
-@endsection
+        mounted() {
+            this.getArtists()
+        },
 
-@section('script')
+        methods: {
+            getArtists: function (page = 1) {
+                let data = {
+                    page: page,
+                    include: 'creator,tasks,affixes,producer,type',
+                };
+                let _this = this;
+                fetch('get', '/bloggers', data).then(function (response) {
+                    _this.artistsInfo = response.data;
+                    _this.current_page = response.meta.pagination.current_page;
+                    _this.total = response.meta.pagination.total;
+                    _this.total_pages = response.meta.pagination.total_pages;
+                })
+            },
 
-    <script src="{{ mix('js/taiyang.index.js') }}"></script>
+            customize: function (value) {
 
-@endsection
+            },
+
+            changeArtistStatus: function (value) {
+                this.artistStatus = value
+            },
+
+            changeCheckbox: function (value) {
+                this.platformType = value
+            },
+
+            changeCommunicationType: function (value) {
+                console.log(value)
+            },
+
+            changeSignIntention: function (value) {
+                this.signIntention = parseInt(value)
+            },
+
+            isSignCompany: function (value) {
+                this.signCompany = value
+            },
+
+            changeWeiboFansNum: function (value) {
+                this.weiboFansNum = value
+            },
+
+            changeDouyinFansNum: function (value) {
+                this.douyinFansNum = value
+            },
+
+            changeXHSFansNum: function (value) {
+                this.xhsFansNum = value
+            },
+
+            addArtist: function () {
+                let data = {
+                    // 没有平台,微博,抖音,小红书
+                    nickname: this.artistName,
+                    gender: this.artistGender,
+                    type_id: '1994731356',
+                    communication_status: this.communicationStatus,
+                    intention: this.signIntention,
+                    intention_desc: this.notSignReason,
+                    sign_contract_other: this.signCompany,
+                    sign_contract_other_name: this.signCompanyName,
+                };
+                fetch('post', '/bloggers', data).then(function (response) {
+                    toastr.success('创建成功');
+                    $('#addArtist').modal('hide');
+                    this.$router.push({path: 'artists/' + response.data.id})
+                })
+            },
+
+            selectArtists: function (value) {
+                if (value === 'all') {
+                    this.selectedArtistsArr = [];
+                    for (let i = 0; i < this.artistsInfo.length; i++) {
+                        this.selectedArtistsArr.push(this.artistsInfo[i].id)
+                    }
+                } else {
+                    let index = this.selectedArtistsArr.indexOf(value);
+                    if (index > -1) {
+                        this.selectedArtistsArr.splice(index, 1)
+                    } else {
+                        this.selectedArtistsArr.push(value)
+                    }
+                }
+            },
+
+            changeArtistType: function (value) {
+                console.log(value)
+            },
+
+            redirectArtistDetail: function (artistId) {
+                this.$router.push({path: 'artists/' + artistId})
+            }
+        }
+    }
+</script>
 
 
 

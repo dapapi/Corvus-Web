@@ -1,17 +1,5 @@
-@extends('layouts.master')
-
-@section('title','销售线索')
-
-@section('body-class','dashboard')
-
-
-@section('body')
-    @include('layouts.top-nav')
-    @include('layouts.left-nav')
-
-
-    <!-- Page -->
-    <div class="page" id="root">
+<template>
+    <div class="page">
 
         <div class="page-header page-header-bordered">
             <h1 class="page-title d-inline">销售线索</h1>
@@ -25,7 +13,7 @@
 
             <div class="panel col-md-12">
                 <div class="card-block">
-                    <h4 class="card-title">@{{ trailInfo.title }}</h4>
+                    <h4 class="card-title">{{ trailInfo.title }}</h4>
 
                     <div class="card-text clearfix example">
                         <div class="col-md-6 float-left pl-0">
@@ -44,7 +32,7 @@
                                 <i class="md-plus pr-2" aria-hidden="true"></i>负责人
                             </div>
                             <div class="font-weight-bold float-left" v-if="trailInfo.principal">
-                                @{{ trailInfo.principal.data.name }}
+                                {{ trailInfo.principal.data.name }}
                             </div>
                         </div>
                     </div>
@@ -65,7 +53,7 @@
                             </div>
                             <div class="font-weight-bold float-left">
                                 <template v-if="trailInfo.fee">
-                                    @{{ trailInfo.fee }}
+                                    {{ trailInfo.fee }}
                                 </template>
                                 <template v-else>
                                     0
@@ -81,7 +69,7 @@
                             </div>
                             <div class="font-weight-bold float-left" v-if="trailInfo.expectations">
                             <span v-for="expectation in trailInfo.expectations.data">
-                                @{{ expectation.name }}
+                                {{ expectation.name }}
                             </span>
                             </div>
                         </div>
@@ -91,7 +79,7 @@
                             </div>
                             <div class="font-weight-bold float-left" v-if="trailInfo.recommendations">
                             <span v-for="recommendation in trailInfo.recommendations.data">
-                                @{{ recommendation.name }}
+                                {{ recommendation.name }}
                             </span>
                             </div>
                         </div>
@@ -104,7 +92,7 @@
                             </div>
                             <div class="font-weight-bold float-left pointer-content hover-content"
                                  @click="redirectCompany(trailInfo.client.data.id)">
-                                @{{ trailInfo.client.data.company }}
+                                {{ trailInfo.client.data.company }}
                             </div>
                         </div>
                         <div class="col-md-6 float-left pl-0">
@@ -113,7 +101,7 @@
                             </div>
                             <div class="font-weight-bold float-left pointer-content hover-content"
                                  @click="redirectProject(trailInfo.project.data.id)" v-if="trailInfo.project">
-                                @{{ trailInfo.project.data.title }}
+                                {{ trailInfo.project.data.title }}
                             </div>
                         </div>
                     </div>
@@ -154,7 +142,7 @@
                                             <div class="col-md-2 float-left text-right pl-0">线索名称</div>
                                             <div class="col-md-10 float-left font-weight-bold">
                                                 <EditInput :content="trailInfo.title" :is-edit="isEdit"
-                                                            @change="changeTrailName"></EditInput>
+                                                           @change="changeTrailName"></EditInput>
                                             </div>
                                         </div>
                                         <div class="card-text py-10 px-0 clearfix col-md-6 float-left">
@@ -167,7 +155,7 @@
                                             <div class="col-md-2 float-left text-right pl-0">负责人</div>
                                             <div class="col-md-10 float-left font-weight-bold">
                                                 <EditInput-selector :is-edit="isEdit"
-                                                                     @change="changeTrailPrincipal"></EditInput-selector>
+                                                                    @change="changeTrailPrincipal"></EditInput-selector>
                                             </div>
 
                                         </div>
@@ -182,9 +170,9 @@
                                             <div class="col-md-2 float-left text-right pl-0">目标艺人</div>
                                             <div class="col-md-10 float-left font-weight-bold">
                                                 <EditSelector :options="starsArr" :is-edit="isEdit"
-                                                               :content="selectedExpectationsArr"
-                                                               :multiple="true"
-                                                               @change="changeExpectations"></EditSelector>
+                                                              :content="selectedExpectationsArr"
+                                                              :multiple="true"
+                                                              @change="changeExpectations"></EditSelector>
                                             </div>
 
                                         </div>
@@ -192,9 +180,9 @@
                                             <div class="col-md-2 float-left text-right pl-0">推荐艺人</div>
                                             <div class="col-md-10 float-left font-weight-bold">
                                                 <EditSelector :options="starsArr" :is-edit="isEdit"
-                                                               :content="selectedRecommendationsArr"
-                                                               :multiple="true"
-                                                               @change="changeRecommendations"></EditSelector>
+                                                              :content="selectedRecommendationsArr"
+                                                              :multiple="true"
+                                                              @change="changeRecommendations"></EditSelector>
                                             </div>
 
                                         </div>
@@ -202,13 +190,14 @@
                                             <div class="col-md-2 float-left text-right pl-0">行业</div>
                                             <div class="col-md-10 float-left font-weight-bold">
                                                 <EditSelector :is-edit="isEdit" :options="industriesArr"
-                                                               :content="trailInfo.industry_id"></EditSelector>
+                                                              :content="trailInfo.industry_id"></EditSelector>
                                             </div>
                                         </div>
                                         <div class="card-text py-10 px-0 clearfix col-md-6 float-left">
                                             <div class="col-md-2 float-left text-right pl-0">优先级</div>
                                             <div class="col-md-10 float-left font-weight-bold">
-                                                {{--<EditSelector :is-edit="isEdit" :options="clientLevelArr"></EditSelector>--}}
+                                                <EditSelector :is-edit="isEdit"
+                                                              :options="clientLevelArr"></EditSelector>
                                             </div>
                                         </div>
                                         <div class="card-text py-10 px-0 clearfix col-md-6 float-left"
@@ -216,28 +205,29 @@
                                             <div class="col-md-2 float-left text-right pl-0">是否锁价</div>
                                             <div class="col-md-10 float-left font-weight-bold">
                                                 <EditSelector :is-edit="isEdit" :options="lockArr"
-                                                               :content="trailInfo.lock_status"></EditSelector>
+                                                              :content="trailInfo.lock_status"></EditSelector>
                                             </div>
                                         </div>
                                         <div class="card-text py-10 px-0 clearfix col-md-6 float-left"
                                              v-if="trailInfo.type !== 4">
                                             <div class="col-md-2 float-left text-right pl-0">线索状态</div>
                                             <div class="col-md-10 float-left font-weight-bold">
-                                                {{--<EditSelector :is-edit="isEdit" :options="clientLevelArr"></EditSelector>--}}
+                                                <EditSelector :is-edit="isEdit"
+                                                              :options="clientLevelArr"></EditSelector>
                                             </div>
                                         </div>
                                         <div class="card-text py-10 px-0 clearfix col-md-6 float-left">
                                             <div class="col-md-2 float-left text-right pl-0">合作类型</div>
                                             <div class="col-md-10 float-left font-weight-bold">
                                                 <EditSelector :is-edit="isEdit"
-                                                               :options="clientLevelArr"></EditSelector>
+                                                              :options="clientLevelArr"></EditSelector>
                                             </div>
                                         </div>
                                         <div class="card-text py-10 px-0 clearfix col-md-6 float-left">
                                             <div class="col-md-2 float-left text-right pl-0">品牌名称</div>
                                             <div class="col-md-10 float-left font-weight-bold">
                                                 <EditInput :content="trailInfo.brand" :is-edit="isEdit"
-                                                            @change="changeTrailBrand"></EditInput>
+                                                           @change="changeTrailBrand"></EditInput>
                                             </div>
 
                                         </div>
@@ -245,7 +235,7 @@
                                             <div class="col-md-2 float-left text-right pl-0">公司名称</div>
                                             <div class="col-md-10 float-left font-weight-bold">
                                                 <EditInput :content="trailInfo.client.data.company" :is-edit="isEdit"
-                                                            @change="changeTrailCompany"></EditInput>
+                                                           @change="changeTrailCompany"></EditInput>
                                             </div>
 
                                         </div>
@@ -253,8 +243,8 @@
                                             <div class="col-md-2 float-left text-right pl-0">级别</div>
                                             <div class="col-md-10 float-left font-weight-bold">
                                                 <EditSelector :content="trailInfo.client.data.grade" :is-edit="isEdit"
-                                                               @change="changeTrailCompanyLevel"
-                                                               :options="clientLevelArr"></EditSelector>
+                                                              @change="changeTrailCompanyLevel"
+                                                              :options="clientLevelArr"></EditSelector>
                                             </div>
 
                                         </div>
@@ -262,14 +252,14 @@
                                             <div class="col-md-2 float-left text-right pl-0">联系人</div>
                                             <div class="col-md-10 float-left font-weight-bold">
                                                 <EditInput :content="trailInfo.contact.data.name" :is-edit="isEdit"
-                                                            @change="changeTrailContact"></EditInput>
+                                                           @change="changeTrailContact"></EditInput>
                                             </div>
                                         </div>
                                         <div class="card-text py-10 px-0 clearfix col-md-6 float-left">
                                             <div class="col-md-2 float-left text-right pl-0">联系人电话</div>
                                             <div class="col-md-10 float-left font-weight-bold">
                                                 <EditInput :content="trailInfo.contact.data.phone" :is-edit="isEdit"
-                                                            @change="changeTrailContactPhone"></EditInput>
+                                                           @change="changeTrailContactPhone"></EditInput>
                                             </div>
 
                                         </div>
@@ -277,7 +267,7 @@
                                             <div class="col-md-2 float-left text-right pl-0">备注</div>
                                             <div class="col-md-10 float-left font-weight-bold">
                                                 <editTextarea :content="trailInfo.desc" :is-edit="isEdit"
-                                                               @change="changeTrailDesc"></editTextarea>
+                                                              @change="changeTrailDesc"></editTextarea>
                                             </div>
 
                                         </div>
@@ -333,15 +323,15 @@
                                     <th class="cell-300" scope="col">截止日期</th>
                                 </tr>
                                 <tr v-for="task in trailTasksInfo">
-                                    <td>@{{ task.title }}</td>
-                                    <td>@{{ task.type }}</td>
+                                    <td>{{ task.title }}</td>
+                                    <td>{{ task.type }}</td>
                                     <td>
                                         <template v-if="task.status === 1">进行中</template>
                                         <template v-else-if="task.status === 2">已完成</template>
                                         <template v-else-if="task.status === 3">已停止</template>
                                     </td>
-                                    <td>@{{ task.principal.data.name }}</td>
-                                    <td>@{{ task.end_at }}</td>
+                                    <td>{{ task.principal.data.name }}</td>
+                                    <td>{{ task.end_at }}</td>
                                 </tr>
                             </table>
 
@@ -391,7 +381,7 @@
                         <div class="example">
                             <div class="col-md-2 text-right float-left">关联资源</div>
                             <div class="col-md-10 float-left">
-                                销售线索 - @{{ trailInfo.title }}
+                                销售线索 - {{ trailInfo.title }}
                             </div>
                         </div>
                         <div class="example">
@@ -454,25 +444,324 @@
 
     </div>
 
+</template>
 
+<script>
+    import fetch from '../../assets/utils/fetch.js'
+    import config from '../../assets/js/config'
 
-    <!-- End Page -->
+    export default {
+        data: function () {
+            return {
+                total: 0,
+                current_page: 0,
+                total_pages: 0,
+                trailId: '',
+                trailInfo: {},
+                trailOrigin: '',
+                taskName: '',
+                taskIntroduce: '',
+                multiple: false,
+                isEdit: false,
+                starsArr: [],
+                industriesArr: [],
+                memberPlaceholder: '请选择负责人',
+                companyType: config.companyType,
+                customizeInfo: config.customizeInfo,
+                taskTypeArr: config.taskTypeArr,
+                taskLevelArr: config.taskLevelArr,
+                startMinutes: '00:00',
+                taskType: '',
+                endMinutes: '00:00',
+                trailTasksInfo: [],
+                clientLevelArr: config.clientLevelArr,
+                trailOriginArr: config.trailOrigin,
+                salesProgressText: '未确定合作',
+                changeInfo: {},
+                selectedExpectationsArr: [],
+                selectedRecommendationsArr: [],
+                lockArr: config.lockArr,
+            }
 
-@endsection
+        },
 
+        mounted() {
+            this.getTrail();
+            this.getStars();
+            this.getIndustries();
+        },
+        watch: {
+            'trailInfo.title': function (newValue) {
+                this.changeInfo.title = newValue
+            },
+            'trailInfo.principal.data': {
+                handler(newValue, oldValue) {
+                    if (newValue && oldValue) {
+                        this.changeInfo.principal = newValue
+                    }
+                },
+                deep: true
+            },
+            'trailInfo.fee': function (newValue) {
+                this.changeInfo.fee = newValue
+            },
+            'trailInfo.brand': function (newValue) {
+                this.changeInfo.brand = newValue
+            },
+            'trailInfo.client.data.company': function (newValue) {
+                if (this.changeInfo.client) {
+                    this.changeInfo.client.data.company = newValue
+                } else {
+                    this.changeInfo.client = {
+                        data: {
+                            company: newValue
+                        }
+                    }
+                }
 
-@section('style')
-    <link rel="stylesheet" href="{{ mix('css/v1.css') }}">
-@endsection
+            },
+            'trailInfo.contact.data.name': function (newValue) {
+                if (this.changeInfo.contact) {
+                    this.changeInfo.contact.data.name = newValue
+                } else {
+                    this.changeInfo.contact = {
+                        data: {
+                            name: newValue
+                        }
+                    }
+                }
+            },
+            'trailInfo.contact.data.phone': function (newValue) {
+                if (this.changeInfo.contact) {
+                    this.changeInfo.contact.data.phone = newValue
+                } else {
+                    this.changeInfo.contact = {
+                        data: {
+                            phone: newValue
+                        }
+                    }
+                }
+            },
+            'trailInfo.desc': function (newValue) {
+                this.changeInfo.desc = newValue
+            },
+            //    @todo 修改目标艺人、推荐艺人
+        },
 
-@section('script')
+        methods: {
 
-    <script src="{{ mix('js/trail.detail.js') }}"></script>
+            getTrail: function () {
 
-@endsection
+                this.trailId = this.$route.params.id;
+                let _this = this;
+                let data = {
+                    include: 'principal,client,contact,recommendations,expectations,project',
+                };
+                fetch('get', '/trails/' + this.trailId, data).then(function (response) {
+                    _this.trailInfo = response.data;
+                    for (let i = 0; i < _this.trailInfo.expectations.data.length; i++) {
+                        _this.selectedExpectationsArr.push(_this.trailInfo.expectations.data[i].id)
+                    }
+                    for (let i = 0; i < _this.trailInfo.recommendations.data.length; i++) {
+                        _this.selectedRecommendationsArr.push(_this.trailInfo.recommendations.data[i].id)
+                    }
+                    if (response.data.principal) {
+                        let params = {
+                            type: 'change',
+                            data: response.data.principal.data
+                        };
+                        store.dispatch('changePrincipal', params);
+                    }
+                })
+            },
 
+            getIndustries: function () {
+                let _this = this;
+                fetch('get', '/industries/all').then(function (response) {
+                    for (let i = 0; i < response.data.length; i++) {
+                        _this.industriesArr.push({
+                            id: response.data[i].id,
+                            name: response.data[i].name,
+                            value: response.data[i].id
+                        })
+                    }
+                })
+            },
 
+            changeTrailOrigin: function (value) {
+                this.trailOrigin = value
+            },
 
+            changeTrailBaseInfo: function () {
+                fetch('put', '/trails/' + this.trailId).then(function () {
+                    toastr.success('修改成功');
+                })
+            },
 
+            getStars: function () {
+                let _this = this;
+                fetch('get', '/stars/all').then(function (response) {
+                    for (let i = 0; i < response.data.length; i++) {
+                        _this.starsArr.push({
+                            id: response.data[i].id,
+                            name: response.data[i].name,
+                            value: response.data[i].id
+                        })
+                    }
+                })
+            },
 
+            editBaseInfo: function () {
+                this.isEdit = true;
+            },
 
+            cancelEdit: function () {
+                this.isEdit = false;
+            },
+
+            getTrailTask: function () {
+                if (this.trailTasksInfo.length > 0) {
+                    return
+                }
+                let _this = this;
+                fetch('get', '/trails/' + this.trailId + '/tasks').then(function (response) {
+                    for (let i = 0; i < response.data.length; i++) {
+                        _this.trailTasksInfo = response.data
+                    }
+                })
+            },
+
+            addTask: function () {
+                let _this = this;
+                let data = {
+                    resource_type: 5,
+                    resourceable_id: this.trailId,
+                    title: this.taskName,
+                    // type: this.taskType,
+                    principal_id: this.principal,
+                    priority: this.taskLevel,
+                    start_at: this.startTime + ' ' + this.startMinutes,
+                    end_at: this.endTime + ' ' + this.endMinutes,
+                    desc: this.taskIntroduce,
+                    participant_ids: this.participants
+                };
+                fetch('post', '/tasks', data).then(function (response) {
+                    toastr.success('创建成功');
+                    $('#addTask').modal('hide');
+                    _this.trailTasksInfo.push(response.data);
+                })
+            },
+
+            redirectCompany: function (companyId) {
+                this.$router.push({path: 'clients/' + companyId});
+            },
+
+            changeLinkage: function (value) {
+                console.log(value)
+            },
+
+            changeTaskType: function (value) {
+                this.taskType = value
+            },
+
+            principalChange: function (value) {
+                this.principal = value
+            },
+
+            participantChange: function (value) {
+                let flagArr = [];
+                for (let i = 0; i < value.length; i++) {
+                    flagArr.push(value[i].id)
+                }
+                this.participants = flagArr
+            },
+
+            changeTaskLevel: function (value) {
+                this.taskLevel = value
+            },
+
+            changeStartTime: function (value) {
+                this.startTime = value
+            },
+
+            changeEndTime: function (value) {
+                this.endTime = value
+            },
+
+            taskPrincipalChange: function (value) {
+                this.taskPrincipal.data = value
+            },
+
+            taskParticipantChange: function (value) {
+                this.taskParticipant.data = value
+            },
+
+            changeTrailName: function (value) {
+                this.trailInfo.title = value
+            },
+
+            changeTrailPrincipal: function (value) {
+                console.log(value);
+                this.trailInfo.principal.data = value
+            },
+
+            changeTrailFee: function (value) {
+                this.trailInfo.fee = value
+            },
+
+            changeTrailBrand: function (value) {
+                this.trailInfo.brand = value
+            },
+
+            changeTrailCompany: function (value) {
+                this.trailInfo.client.data.company = value
+            },
+
+            changeTrailCompanyLevel: function (value) {
+                this.trailInfo.client.data.grade = value
+            },
+
+            changeTrailContact: function (value) {
+                this.trailInfo.contact.data.name = value
+            },
+
+            changeTrailContactPhone: function (value) {
+                this.trailInfo.contact.data.phone = value
+            },
+
+            changeTrailExpectations: function (value) {
+
+            },
+
+            changeTrailRecommend: function (value) {
+
+            },
+
+            changeTrailDesc: function (value) {
+                this.trailInfo.desc = value
+            },
+
+            changeExpectations: function (value) {
+                console.log(value)
+            },
+
+            changeRecommendations: function (value) {
+                console.log(value)
+            },
+
+            changePriority: function (value) {
+                console.log(value)
+            }
+        }
+    }
+</script>
+
+<style>
+    .task-dropdown {
+        -moz-user-select: none;
+        -webkit-user-select: none;
+        -ms-user-select: none;
+        user-select: none;
+        z-index: 2;
+    }
+</style>
