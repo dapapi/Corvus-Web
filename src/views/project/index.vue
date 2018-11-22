@@ -113,7 +113,7 @@
                         <div class="example">
                             <div class="col-md-2 text-right float-left">关联资源</div>
                             <div class="col-md-10 float-left">
-                                {{-- todo 资源未关联--}}
+                                <!-- {{-- todo 资源未关联--}} -->
                                 {{--<normal-linkage-selectors @change="changeLinkage"></normal-linkage-selectors>--}}
                             </div>
                         </div>
@@ -223,7 +223,8 @@
         </div>
         </div>
     </div>  
-    
+        </div>
+         </div>
         
         
 

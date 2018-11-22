@@ -31,6 +31,10 @@
                     </ul>
                 </div>
                 <div class="" v-for="i in 5" :key="i">
+                     <div class="page-content col-md-12 col-lg-12 row" >
+                        <p class="messages-date">1970年1月1日</p>
+                        <hr class="col-md-10 col-lg-10">
+                    </div>
                     <Main :messageData='messageData' class="message-main-container"/>
                 </div>
             </div>
@@ -82,5 +86,11 @@ export default {
 }
 .message-main-container:hover{
     background: rgba(87, 140, 242, 0.14);
+}
+.messages-date{
+    font-family: PingFangSC-Regular;
+font-size: 18px;
+color: #C4C4C4;
+letter-spacing: 0;
 }
 </style>

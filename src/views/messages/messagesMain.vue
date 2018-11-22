@@ -1,9 +1,5 @@
 <template>
      <div class="page-content container-fluid">
-        <div class="col-md-12 col-lg-12 row" >
-          1970年1月1日
-         <hr class="col-md-10 col-lg-10">
-        </div>
         <div class="col-md-12 col-lg-12 row">
           <div class="rounded-circle img-thumbnail messages-img"></div>
           <div class="">

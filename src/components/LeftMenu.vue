@@ -72,6 +72,14 @@
                                 </a>
                             </router-link>
                         </li>
+                        <li class="site-menu-item">
+                            <router-link to="/messages">
+                                <a class="animsition-link waves-effect waves-classic">
+                                    <i class="site-menu-icon md-view-dashboard" aria-hidden="true"></i>
+                                    <span class="site-menu-title">消息</span>
+                                </a>
+                            </router-link>
+                        </li>
                     </ul>
                 </div>
             </div>
