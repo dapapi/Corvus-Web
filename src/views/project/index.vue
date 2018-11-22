@@ -64,8 +64,10 @@
                                 <th class="cell-300" scope="col">跟进时间</th>
                             </tr>
                             <tr v-for="project in projectsInfo ">
-                                <td class="pointer-content" @click="redirectProjectDetail(project.id)">{{ project.title
-                                    }}
+                                <td class="pointer-content">
+                                    <router-link :to="{name:'projects/detail', params: {id: project.id}}">
+                                        {{ project.title }}
+                                    </router-link>
                                 </td>
                                 <td>{{ project.principal }}</td>
                                 <td>{{ project.progress }}</td>
@@ -164,7 +166,7 @@
                         <div class="col-md-12 example clearfix">
                             <div class="col-md-2 text-right float-left pl-0">可见范围</div>
                             <div class="col-md-10 float-left">
-                                <selectors :options="visibleRange"
+                                <selectors :options="visibleRangeArr"
                                            @change="(value) => addInfo(value, 'name')"></selectors>
                             </div>
                         </div>
@@ -332,10 +334,6 @@
 
             changeTargetArtist: function (value) {
                 console.log(value)
-            },
-
-            redirectProjectDetail: function (projectId) {
-                redirect('detail?project_id=' + projectId)
             },
 
             changeProjectType: function (value) {

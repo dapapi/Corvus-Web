@@ -45,7 +45,10 @@
                             <th class="cell-300" scope="col">跟进时间</th>
                         </tr>
                         <tr v-for="client in clientsInfo ">
-                            <td class="pointer-content" @click="redirectClientDetail(client.id)">{{ client.company }}
+                            <td class="pointer-content">
+                                <router-link :to="{name:'clients/detail', params: {id: client.id}}">
+                                    {{ client.company }}
+                                </router-link>
                             </td>
                             <td>
                                 <template v-if="client.grade === 1">直客</template>

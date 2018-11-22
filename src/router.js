@@ -60,7 +60,7 @@ export default new Router({
         },
         {
             path: '/calendar',
-            name: 'calendar',
+            name: 'usCalendar',
             component: () => import('./views/calendar/index.vue')
         },
         {
@@ -68,11 +68,36 @@ export default new Router({
             name: 'calendar',
             component: () => import('./views/calendar/index.vue')
         },
-        // {
-        //     path: '/artists',
-        //     name: 'artists',
-        //     component: () => import('./views/artist/index.vue')
-        // },
+        {
+            path: '/artists/index',
+            name: 'artists/index',
+            component: () => import('./views/artist/index.vue')
+        },
+        {
+            path: '/artists',
+            name: 'usArtists',
+            component: () => import('./views/artist/taiyang-index.vue')
+        },
+        {
+            path: '/blogger',
+            name: 'usBlogger',
+            component: () => import('./views/artist/papi-index.vue')
+        },
+        {
+            path: '/artists/detail',
+            name: 'artists/detail/:id',
+            component: () => import('./views/artist/detail.vue')
+        },
+        {
+            path: '/artists/:id',
+            name: 'artists',
+            component: () => import('./views/artist/taiyang-detail.vue')
+        },
+        {
+            path: '/blogger/:id',
+            name: 'blogger',
+            component: () => import('./views/artist/papi-detail.vue')
+        },
         {
             path: '/staff',
             name: 'staff',

@@ -650,36 +650,36 @@
     import config from '../../assets/js/config'
 
     export default {
-        data: {
-            artistId: '',
-            artistInfo: {},
-            taskTypeArr: config.taskTypeArr,
-            taskLevelArr: config.taskLevelArr,
-            taskType: '',
-            taskName: '',
-            taskLevel: '',
-            startTime: '',
-            startMinutes: '00:00',
-            endTime: '',
-            endMinutes: '00:00',
-            taskIntroduce: '',
-            artistTasksInfo: [],
-            artistWorksInfo: [],
-            artistProjectsInfo: '',
-            artistWorkName: '',
-            workReleaseTime: '',
-            workTypeArr: config.workTypeArr,
-            workType: '',
-            character: '',
-            coActor: '',
-            isEdit: '',
-            genderArr: config.genderArr,
-            artistDesc: '',
-            artistSourceArr: config.artistSourceArr,
-            taiyangCommunicationStatusArr: config.taiyangCommunicationStatusArr,
-            yesOrNoArr: config.yesOrNoArr,
-
-
+        data: function () {
+            return {
+                artistId: '',
+                artistInfo: {},
+                taskTypeArr: config.taskTypeArr,
+                taskLevelArr: config.taskLevelArr,
+                taskType: '',
+                taskName: '',
+                taskLevel: '',
+                startTime: '',
+                startMinutes: '00:00',
+                endTime: '',
+                endMinutes: '00:00',
+                taskIntroduce: '',
+                artistTasksInfo: [],
+                artistWorksInfo: [],
+                artistProjectsInfo: '',
+                artistWorkName: '',
+                workReleaseTime: '',
+                workTypeArr: config.workTypeArr,
+                workType: '',
+                character: '',
+                coActor: '',
+                isEdit: '',
+                genderArr: config.genderArr,
+                artistDesc: '',
+                artistSourceArr: config.artistSourceArr,
+                taiyangCommunicationStatusArr: config.taiyangCommunicationStatusArr,
+                yesOrNoArr: config.yesOrNoArr,
+            }
         },
 
         mounted() {
@@ -688,7 +688,7 @@
 
         methods: {
             getArtist: function () {
-                this.artistId = Tool.getParameterByName('artist_id');
+                this.artistId = this.$route.params.id;
 
                 let data = {
                     include: 'broker,creator,tasks,affixes',
