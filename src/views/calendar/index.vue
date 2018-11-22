@@ -12,11 +12,11 @@
             <div class="panel col-md-12 py-5 clearfix px-0">
                 <div class=" float-left py-30 text-center" style="width: 20%;">
                     <div style="border-bottom: 1px solid #D8D8D8;width: 90%;margin: 0 auto">
-                        <InlineDatepicker></InlineDatepicker>
+                        <InlineDatepicker @change="selectDate"></InlineDatepicker>
                     </div>
                 </div>
                 <div class="float-left p-0" style="width: 80%;border-left: 1px solid #D8D8D8;">
-                    <calendar></calendar>
+                    <calendar :gotoDate="selectedDate"></calendar>
                 </div>
 
             </div>
@@ -217,13 +217,13 @@
                 eventDesc: '',
                 starsArr: [],
                 checkColor: '',
+                selectedDate: '',
 
             }
         },
 
         mounted() {
             this.getStars();
-            console.log(this);
             let _this = this;
             $('#addCalendar').on('hidden.bs.modal', function () {
                 _this.$store.dispatch('changeParticipantsInfo', {data: []});
@@ -258,19 +258,19 @@
             },
 
             changeStartTime: function (value) {
-                app.startTime = value
+                this.startTime = value
             },
 
             changeStartMinutes: function (value) {
-                app.startMinutes = value
+                this.startMinutes = value
             },
 
             changeEndTime: function (value) {
-                app.endTime = value
+                this.endTime = value
             },
 
             changeEndMinutes: function (value) {
-                app.endMinutes = value
+                this.endMinutes = value
             },
 
             changeIsAllDay: function (value) {
@@ -282,7 +282,7 @@
             },
 
             isShowMore: function () {
-                app.showMore = !app.showMore
+                this.showMore = !this.showMore
             },
 
             addCalendar: function () {
@@ -295,6 +295,10 @@
 
             changeCalendarColor: function (value) {
                 this.checkColor = value;
+            },
+
+            selectDate: function (value) {
+                this.selectedDate = value
             }
 
 
