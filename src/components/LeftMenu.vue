@@ -49,7 +49,7 @@
                             </router-link>
                         </li>
                         <li class="site-menu-item">
-                            <router-link to="/artists">
+                            <router-link to="/artists/index">
                                 <a class="animsition-link waves-effect waves-classic">
                                     <i class="site-menu-icon md-view-dashboard" aria-hidden="true"></i>
                                     <span class="site-menu-title">艺人</span>

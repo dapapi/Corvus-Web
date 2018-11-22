@@ -1,17 +1,7 @@
-@extends('layouts.master')
+<template>
+    <div class="page">
 
-@section('title','员工管理')
-@section('body-class','dashboard')
-
-@section('body')
-    @include('layouts.top-nav')
-    @include('layouts.left-nav')
-
-    <!-- Page -->
-    <div class="page" id="root">
-
-        <nav-back title="历史归档" href="/staff/index"></nav-back>
-
+        <NavBack title="历史归档" href="/staff"></NavBack>
 
         <div class="page-content container-fluid">
             <div class="panel col-md-12 clearfix py-5">
@@ -49,24 +39,21 @@
                 <!-- <pagination :current_page="current_page" :method="getProjects" :total_pages="total_pages"
                             :total="total"></pagination> -->
             </div>
-
         </div>
-
-        <!-- <customize-filter :data="customizeInfo" @change="customize"></customize-filter> -->
         <!-- <Modal /> -->
     </div>
     <!-- End Page -->
-
-@endsection
-
-
-@section('style')
-    <link rel="stylesheet" href="{{ mix('css/v1.css') }}">
-    <!-- <link rel="stylesheet" href="{{ mix('css/staff.css') }}"> -->
-@endsection
-
-@section('script')
-
-    <script src="{{ mix('js/staff.history.js') }}"></script>
-
-@endsection
+</template>
+<script>
+export default {
+    name: 'staffHistory',
+    data () {
+        return {
+            // 
+        }
+    },
+    methods: {
+        // 
+    }
+}
+</script>

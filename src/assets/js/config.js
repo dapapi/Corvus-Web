@@ -297,27 +297,12 @@ let config = {
             name: '离职',
         },
         {
-            value: 3,
+            value: '',
             name: '全部',
         }
     ],
-    // 年月
-    dateArr: [
-        {
-            value: 1,
-            name: '10月（10.01-10.31）',
-        },
-        {
-            value: 2,
-            name: '11月（11.01-11.30）',
-        },
-        {
-            value: 3,
-            name: '12月（12.01-12.31）',
-        }
-    ],
     // 员工类型
-    stuffType: [
+    staffType: [
         {
             value: 1,
             name: '正式员工'
@@ -329,6 +314,10 @@ let config = {
         {
             value: 3,
             name: '管培生'
+        },
+        {
+            value: 4,
+            name: '外包'
         }
     ],
     // 性别
@@ -700,6 +689,13 @@ let config = {
             value: 4
         },
     ],
+    // 聘用形式
+    employment: {
+        1: '正式',
+        2: '实习生',
+        3: '管培生',
+        4: '外包'
+    }
 
 };
 
