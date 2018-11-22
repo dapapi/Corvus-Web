@@ -9,9 +9,15 @@
         </div>
 
         <div class="page-content container-fluid">
-            <div class="panel col-md-12 col-lg-12 py-5">
-
-                <calendar></calendar>
+            <div class="panel col-md-12 py-5 clearfix px-0">
+                <div class=" float-left py-30 text-center" style="width: 20%;">
+                    <div style="border-bottom: 1px solid #D8D8D8;width: 90%;margin: 0 auto">
+                        <InlineDatepicker></InlineDatepicker>
+                    </div>
+                </div>
+                <div class="float-left p-0" style="width: 80%;border-left: 1px solid #D8D8D8;">
+                    <calendar></calendar>
+                </div>
 
             </div>
         </div>
@@ -214,13 +220,10 @@
             },
 
             getStars: function () {
-                $.ajax({
-                    type: 'get',
-                    url: config.apiUrl + '/stars/all',
-                    headers: config.getHeaders(),
-                }).done(function (response) {
+                let _this = this;
+                fetch('get', '/stars/all').then(function (response) {
                     for (let i = 0; i < response.data.length; i++) {
-                        app.starsArr.push({
+                        _this.starsArr.push({
                             value: response.data[i].id,
                             name: response.data[i].name
                         })
