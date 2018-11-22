@@ -1,11 +1,18 @@
 <template>
     <div class="page vertical-align text-center" data-animsition-in="fade-in" data-animsition-out="fade-out">
 
-        <div class="col-md-9 float-left">
-            aaa
+        <div class="col-md-9 float-left left-bg">
+            <div class="bg-top-image">
+                <img src="https://res.papitube.com/login/images/login-left-top.png" alt="">
+            </div>
         </div>
-        <div class="col-md-3 float-left">
-            nnn
+        <div class="col-md-3 float-left right-bg">
+            <div class="bg-right-top">
+                <img src="https://res.papitube.com/login/images/login-right-top.png" alt="">
+            </div>
+            <div class="bg-right-bottom">
+                <img src="https://res.papitube.com/login/images/login-right-bottom.png" alt="">
+            </div>
         </div>
         <div class="page-content vertical-align-middle">
             <div class="panel">
@@ -153,7 +160,8 @@
 
 <style>
     body {
-        height: 100%;
+        height: 100vh;
+        overflow: hidden;
     }
 
     .page {
@@ -166,11 +174,47 @@
         height: 100%;
     }
 
-    /*.input-group-icon {*/
-    /*background-color: white;*/
-    /*border-top: 1px solid #e0e0e0;*/
-    /*border-left: 1px solid #e0e0e0;*/
-    /*border-bottom: 1px solid #e0e0e0;*/
-    /*}*/
+    .left-bg {
+        background-image: url("https://res.papitube.com/login/images/login-bg.png");
+        height: 100vh;
+        background-size: 100% auto;
+    }
+
+    .bg-top-image {
+        width: 60%;
+        height: auto;
+    }
+
+    .bg-top-image img {
+        width: 100%;
+    }
+
+    .right-bg {
+        background-color: #3f51b5;
+        padding: 0;
+        height: 100vh;
+        position: relative;
+    }
+
+    .bg-right-top {
+        width: 50%;
+    }
+
+    .bg-right-top img {
+        width: 100%;
+        height: auto;
+    }
+
+    .bg-right-bottom {
+        width: 30%;
+        position: absolute;
+        right: 0;
+        bottom: 0;
+    }
+
+    .bg-right-bottom img {
+        width: 100%;
+        height: auto;
+    }
 
 </style>
