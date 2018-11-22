@@ -9,46 +9,60 @@
                     </div>
                     <ul class="site-menu" data-plugin="menu" style="transform: translate3d(0px, -1.03409px, 0px);">
                         <li class="site-menu-item">
-                            <a class="animsition-link waves-effect waves-classic" href="/project/index">
-                                <i class="site-menu-icon md-view-dashboard" aria-hidden="true"></i>
-                                <span class="site-menu-title">项目</span>
-                            </a>
+                            <router-link to="/projects">
+                                <a class="animsition-link waves-effect waves-classic">
+                                    <i class="site-menu-icon md-view-dashboard" aria-hidden="true"></i>
+                                    <span class="site-menu-title">项目</span>
+                                </a>
+                            </router-link>
                         </li>
                         <li class="site-menu-item">
-                            <a class="animsition-link waves-effect waves-classic" href="/tasks">
-                                <i class="site-menu-icon md-view-dashboard" aria-hidden="true"></i>
-                                <span class="site-menu-title">任务</span>
-                            </a>
+                            <router-link to="/tasks">
+                                <a class="animsition-link waves-effect waves-classic">
+                                    <i class="site-menu-icon md-view-dashboard" aria-hidden="true"></i>
+                                    <span class="site-menu-title">任务</span>
+                                </a>
+                            </router-link>
                         </li>
                         <li class="site-menu-item">
-                            <a class="animsition-link waves-effect waves-classic" href="/trail/index">
-                                <i class="site-menu-icon md-view-dashboard" aria-hidden="true"></i>
-                                <span class="site-menu-title">销售</span>
-                            </a>
+                            <router-link to="/staff">
+                                <a class="animsition-link waves-effect waves-classic">
+                                    <i class="site-menu-icon md-view-dashboard" aria-hidden="true"></i>
+                                    <span class="site-menu-title">档案</span>
+                                </a>
+                            </router-link>
                         </li>
                         <li class="site-menu-item">
-                            <a class="animsition-link waves-effect waves-classic" href="/client/index">
-                                <i class="site-menu-icon md-view-dashboard" aria-hidden="true"></i>
-                                <span class="site-menu-title">客户</span>
-                            </a>
+                            <router-link to="/trails">
+                                <a class="animsition-link waves-effect waves-classic">
+                                    <i class="site-menu-icon md-view-dashboard" aria-hidden="true"></i>
+                                    <span class="site-menu-title">销售</span>
+                                </a>
+                            </router-link>
                         </li>
                         <li class="site-menu-item">
-                            <a class="animsition-link waves-effect waves-classic" href="/artist/index">
-                                <i class="site-menu-icon md-view-dashboard" aria-hidden="true"></i>
-                                <span class="site-menu-title">博主</span>
-                            </a>
+                            <router-link to="/clients">
+                                <a class="animsition-link waves-effect waves-classic">
+                                    <i class="site-menu-icon md-view-dashboard" aria-hidden="true"></i>
+                                    <span class="site-menu-title">客户</span>
+                                </a>
+                            </router-link>
                         </li>
                         <li class="site-menu-item">
-                            <a class="animsition-link waves-effect waves-classic" href="/artist/taiyang">
-                                <i class="site-menu-icon md-view-dashboard" aria-hidden="true"></i>
-                                <span class="site-menu-title">艺人</span>
-                            </a>
+                            <router-link to="/artists">
+                                <a class="animsition-link waves-effect waves-classic">
+                                    <i class="site-menu-icon md-view-dashboard" aria-hidden="true"></i>
+                                    <span class="site-menu-title">艺人</span>
+                                </a>
+                            </router-link>
                         </li>
                         <li class="site-menu-item">
-                            <a class="animsition-link waves-effect waves-classic" href="/calendar/index">
-                                <i class="site-menu-icon md-view-dashboard" aria-hidden="true"></i>
-                                <span class="site-menu-title">日历</span>
-                            </a>
+                            <router-link to="/calendar">
+                                <a class="animsition-link waves-effect waves-classic">
+                                    <i class="site-menu-icon md-view-dashboard" aria-hidden="true"></i>
+                                    <span class="site-menu-title">日历</span>
+                                </a>
+                            </router-link>
                         </li>
                         <li class="site-menu-item">
                             <a class="animsition-link waves-effect waves-classic" href="/brief/index">
