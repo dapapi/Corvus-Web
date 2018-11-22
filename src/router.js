@@ -36,19 +36,19 @@ export default new Router({
             component: () => import(/* webpackChunkName: "about" */ './views/approval/index.vue'),
             children:[
                 {
-                    path:'/approval/initiate',
+                    path:'/initiate',
                     component:() => import('./views/approval/initiate.vue')
                 },
                 {
-                    path:'/approval/application',
+                    path:'/application',
                     component:() => import('./views/approval/application.vue')
                 },
                 {
-                    path:'/approval/my',
+                    path:'/my',
                     component:() => import('./views/approval/my.vue')
                 },
                 {
-                    path:'/approval/only',
+                    path:'/only',
                     component:() => import('./views/approval/only.vue')
                 }
             ]

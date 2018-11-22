@@ -1,13 +1,19 @@
 <template>
-
-<div class="page">
-    <router-views/>
-        <div class="page-header page-header-bordered">
-            <h1 class="page-title">我的申请</h1>
+<div class="page"> 
+    <div class="page-main">
+        <div class="page-header">
+          <h1 class="page-title">我的申请</h1>
         </div>
-
-        <div class="page-content container-fluid">
+    </div>
+    <div class="page-content container-fluid">
             <div class="panel col-md-12 col-lg-12 py-5">
+                <div class="col-md-5 py-20">
+                <div class="input-search">
+                      <i class="input-search-icon md-search" aria-hidden="true"></i>
+                      <input type="text" class="form-control" name="" placeholder="输入编号、类型、申请人">
+                      <button type="button" class="input-search-close icon md-close" aria-label="Close"></button>
+                </div>
+                </div>
                 <div class="col-md-12">
                     <ul class="nav nav-tabs nav-tabs-line" role="tablist">
                         <li class="nav-item" role="presentation" @click="getTasks(1)">
@@ -30,12 +36,11 @@
                                data-selectable="selectable">
                             <tr class="animation-fade"
                                 style="animation-fill-mode: backwards; animation-duration: 250ms; animation-delay: 0ms;">
-                                <th class="cell-300" scope="col">任务名称</th>
-                                <th class="cell-300" scope="col">关联资源</th>
-                                <th class="cell-300" scope="col">任务类型</th>
-                                <th class="cell-300" scope="col">任务状态</th>
-                                <th class="cell-300" scope="col">负责人</th>
-                                <th class="cell-300" scope="col">截止时间</th>
+                                <th class="cell-300" scope="col">审批编号</th>
+                                <th class="cell-300" scope="col">申请人</th>
+                                <th class="cell-300" scope="col">类型</th>
+                                <th class="cell-300" scope="col">申请时间</th>
+                                <th class="cell-300" scope="col">申请状态</th>
                             </tr>
                             <tr v-for="task in tasksInfo">
                                 <td class="pointer-content">
@@ -52,7 +57,7 @@
                                 <td>
                                     <template v-if="task.principal">{{ task.principal.data.name }}</template>
                                 </td>
-                                <td>{{ task.end_at }}</td>
+                             
                             </tr>
                         </table>
                         <template v-if="!taskStatus">
@@ -167,8 +172,7 @@
                 </div>
             </div>
         </div>
-
-    </div>
+</div>
 
 </template>
 <script>
@@ -341,7 +345,7 @@
 <style scoped>
 .page{
     position: absolute;
-    right:0;
+    left:210px;
     top:0;
 }
 

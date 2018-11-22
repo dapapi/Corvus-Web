@@ -14,8 +14,8 @@
                         <div data-role="content" class="scrollable-content" style="width: 219px;">
                         <section class="page-aside-section" style="paddingTop:0">
                             <div class="list-group">
-                            <a class="list-group-item active" href="approval/initiate"><i class="icon md-view-dashboard" aria-hidden="true"></i>发起审批</a>
-                            <a class="list-group-item " href="approval/application"><i class="icon md-view-dashboard" aria-hidden="true"></i>我的申请</a>
+                            <a class="list-group-item active" href="/initiate"><i class="icon md-view-dashboard" aria-hidden="true"></i>发起审批</a>
+                            <a class="list-group-item " href="/application"><i class="icon md-view-dashboard" aria-hidden="true"></i>我的申请</a>
                             <a class="list-group-item" href="/my"><i class="icon md-assignment" aria-hidden="true"></i>我的审批</a>
                             <a class="list-group-item" href="/only"><i class="icon md-favorite" aria-hidden="true"></i>知会我的</a>
                             </div>
