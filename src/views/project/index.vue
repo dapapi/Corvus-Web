@@ -232,141 +232,129 @@
 </template>
 
 <script>
-    import fetch from '../../assets/utils/fetch.js'
-    import config from '../../assets/js/config'
+import fetch from "../../assets/utils/fetch.js";
+import config from "../../assets/js/config";
 
-    export default {
+export default {
+  data: function() {
+    return {
+      total: 2,
+      current_page: 1,
+      total_pages: 1,
+      companyArr: [],
+      starsArr: [],
+      projectName: "",
+      projectTypeArr: config.projectTypeArr,
+      projectFieldsArr: [],
+      projectType: "",
+      projectFields: "",
+      projectsInfo: "",
+      customizeInfo: config.customizeInfo,
+      addInfoArr: {},
+      levelArr: config.levelArr,
+      visibleRangeArr: config.visibleRangeArr
+    };
+  },
 
-        data: function () {
-            return {
-                total: 2,
-                current_page: 1,
-                total_pages: 1,
-                companyArr: [],
-                starsArr: [],
-                projectName: '',
-                projectTypeArr: config.projectTypeArr,
-                projectFieldsArr: [],
-                projectType: '',
-                projectFields: '',
-                projectsInfo: '',
-                customizeInfo: config.customizeInfo,
-                addInfoArr: {},
-                levelArr: config.levelArr,
-                visibleRangeArr: config.visibleRangeArr,
-            }
-        },
+  mounted() {
+    this.getClients();
+    this.getStars();
+    this.getProjects();
+  },
 
-        mounted() {
-            this.getClients();
-            this.getStars();
-            this.getProjects();
-        },
+  methods: {
+    getProjects: function(pageNum = 1) {
+      let data = {
+        page: pageNum
+      };
+      let _this = this;
+      fetch("get", "/projects", data).then(function(response) {
+        _this.projectsInfo = response.data;
+      });
+    },
 
-        methods: {
-
-            getProjects: function (pageNum = 1) {
-                let data = {
-                    page: pageNum,
-                };
-                let _this = this;
-                fetch('get', '/projects', data).then(function (response) {
-                    _this.projectsInfo = response.data
-
-                })
-            },
-
-            getClients: function () {
-                let _this = this;
-                fetch('get', '/clients/all').then(function (response) {
-                    for (let i = 0; i < response.data.length; i++) {
-                        _this.companyArr.push({
-                            name: response.data[i].company,
-                            id: response.data[i].id,
-                            grade: response.data[i].grade
-                        })
-                    }
-
-                })
-            },
-
-            getStars: function () {
-                let _this = this;
-                fetch('get', '/stars/all').then(function (response) {
-                    for (let i = 0; i < response.data.length; i++) {
-                        _this.starsArr.push({
-                            name: response.data[i].name,
-                            id: response.data[i].id,
-                            value: response.data[i].id
-                        })
-                    }
-
-                })
-            },
-
-            projectChange: function (e) {
-                console.log(e)
-            },
-
-            projectPrincipalChange: function (e) {
-                console.log(e)
-            },
-
-            customize: function (value) {
-                console.log(value)
-            },
-
-            addProject: function () {
-
-            },
-
-            changeLinkageCompany: function (value) {
-                console.log(value)
-            },
-
-            changeTargetArtist: function (value) {
-                console.log(value)
-            },
-
-            changeProjectType: function (value) {
-                app.projectType = value
-            },
-
-            selectProjectType: function () {
-                let _this = this;
-                fetch('get', '/project_fields', {
-                    type: app.projectType
-                }).then(function (response) {
-                    for (let i = 0; i < response.data.length; i++) {
-                        if (response.data[i].field_type === 2) {
-                            response.data[i].contentArr = [];
-                            for (let j = 0; j < response.data[i].content.length; j++) {
-                                response.data[i].contentArr.push({
-                                    value: response.data[i].content[j],
-                                    name: response.data[i].content[j]
-                                })
-                            }
-                        }
-                    }
-                    _this.projectFieldsArr = response.data
-
-                });
-                if (_this.projectType !== 5) {
-                    this.getTrail()
-                }
-            },
-
-            getTrail: function () {
-                fetch('get', '/trails', {type: this.projectType}).then(function () {
-
-                })
-            },
-
-
-            addInfo: function (value, name) {
-                this.addInfoArr[name] = value
-            }
-
+    getClients: function() {
+      let _this = this;
+      fetch("get", "/clients/all").then(function(response) {
+        for (let i = 0; i < response.data.length; i++) {
+          _this.companyArr.push({
+            name: response.data[i].company,
+            id: response.data[i].id,
+            grade: response.data[i].grade
+          });
         }
+      });
+    },
+
+    getStars: function() {
+      let _this = this;
+      fetch("get", "/stars/all").then(function(response) {
+        for (let i = 0; i < response.data.length; i++) {
+          _this.starsArr.push({
+            name: response.data[i].name,
+            id: response.data[i].id,
+            value: response.data[i].id
+          });
+        }
+      });
+    },
+
+    projectChange: function(e) {
+      console.log(e);
+    },
+
+    projectPrincipalChange: function(e) {
+      console.log(e);
+    },
+
+    customize: function(value) {
+      console.log(value);
+    },
+
+    addProject: function() {},
+
+    changeLinkageCompany: function(value) {
+      console.log(value);
+    },
+
+    changeTargetArtist: function(value) {
+      console.log(value);
+    },
+
+    changeProjectType: function(value) {
+      app.projectType = value;
+    },
+
+    selectProjectType: function() {
+      let _this = this;
+      fetch("get", "/project_fields", {
+        type: app.projectType
+      }).then(function(response) {
+        for (let i = 0; i < response.data.length; i++) {
+          if (response.data[i].field_type === 2) {
+            response.data[i].contentArr = [];
+            for (let j = 0; j < response.data[i].content.length; j++) {
+              response.data[i].contentArr.push({
+                value: response.data[i].content[j],
+                name: response.data[i].content[j]
+              });
+            }
+          }
+        }
+        _this.projectFieldsArr = response.data;
+      });
+      if (_this.projectType !== 5) {
+        this.getTrail();
+      }
+    },
+
+    getTrail: function() {
+      fetch("get", "/trails", { type: this.projectType }).then(function() {});
+    },
+
+    addInfo: function(value, name) {
+      this.addInfoArr[name] = value;
     }
+  }
+};
 </script>

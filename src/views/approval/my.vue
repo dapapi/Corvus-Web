@@ -175,13 +175,173 @@
 </div>
 
 </template>
-
 <script>
+ import fetch from '../../assets/utils/fetch.js'
+    import config from '../../assets/js/config'
 
-export default {
+    export default {
+        name: '',
+        data: function () {
+            return {
+                total: 0,
+                current_page: 1,
+                total_pages: 1,
+                memberPlaceholder: '请选择负责人',
+                participants: [],
+                multiple: false,
+                taskIntroduce: '',
+                startTime: '',
+                startMinutes: '00:00',
+                endTime: '',
+                endMinutes: '00:00',
+                tasksInfo: '',
+                taskStatus: 0,
+                newTask: {},
+                taskType: '',
+                taskFinishType: '',
+                taskName: '',
+                taskLevel: '',
+                taskLevelArr: config.taskLevelArr,
+                taskTypeArr: config.taskTypeArr,
+                customizeInfo: config.customizeInfo,
+            }
 
-}
+
+        },
+
+        mounted() {
+            this.getTasks()
+        },
+
+        methods: {
+
+            getTasks: function (pageNum = 1) {
+                let data = {
+                    page: pageNum,
+                    include: 'principal,pTask,tasks,resource.resourceable,resource.resource,participants',
+                };
+                let _this = this;
+
+                fetch('get', '/tasks/my_all', data).then(function (response) {
+                    _this.tasksInfo = response.data;
+                    _this.current_page = response.meta.pagination.current_page;
+                    _this.total = response.meta.pagination.total;
+                    _this.total_pages = response.meta.pagination.total_pages;
+                });
+            },
+
+            getMyTasks: function (pageNum = 1, type = null) {
+                let _this = this;
+                if (type) {
+                    app.taskFinishType = type
+                }
+
+                let data = {
+                    page: pageNum,
+                    include: 'principal,pTask,tasks,resource.resourceable,resource.resource,participants',
+                    type: app.taskFinishType,
+                    status: 0
+                };
+
+                $.ajax({
+                    type: 'get',
+                    url: config.apiUrl + '/tasks/my',
+                    headers: config.getHeaders(),
+                    data: data
+                }).done(function (response) {
+                    _this.tasksInfo = response.data;
+                    _this.current_page = response.meta.pagination.current_page;
+                    _this.total = response.meta.pagination.total;
+                    _this.total_pages = response.meta.pagination.total_pages;
+                })
+            },
+
+            addTask: function () {
+                let _this = this;
+                let participant_ids = [];
+                for (let i = 0; i < this.$store.state.newParticipantsInfo.length; i++) {
+                    participant_ids.push(this.$store.state.newParticipantsInfo[i].id)
+                }
+                let data = {
+                    // resource_type: '1718463094',
+                    // resourceable_id: '1994731356',
+                    // type: app.taskType,
+                    // @todo 任务类型前端维护
+                    title: _this.taskName,
+                    principal_id: this.$store.state.newPrincipalInfo.id,
+                    participant_ids: participant_ids,
+                    priority: _this.taskLevel,
+                    start_at: _this.startTime + ' ' + _this.startMinutes,
+                    end_at: _this.endTime + ' ' + _this.endMinutes,
+                    desc: _this.taskIntroduce
+                };
+                $.ajax({
+                    type: 'post',
+                    url: config.apiUrl + '/tasks',
+                    headers: config.getHeaders(),
+                    data: data,
+                    statusCode: {
+                        400: function (response) {
+                            toastr.error(response.responseJSON.message);
+                        },
+                    }
+                }).done(function (response) {
+                    console.log(response);
+                    toastr.success('创建成功');
+                    $('#addTask').modal('hide');
+                    redirect('detail?task_id=' + response.data.id)
+                })
+            },
+
+            customize: function (value) {
+                console.log(value)
+            },
+
+            changeLinkage: function (value) {
+                console.log(value)
+            },
+
+            changeTaskType: function (value) {
+                this.taskType = value
+            },
+
+            principalChange: function (value) {
+                this.principal = value
+            },
+
+            participantChange: function (value) {
+                let flagArr = [];
+                for (let i = 0; i < value.length; i++) {
+                    flagArr.push(value[i].id)
+                }
+                this.participants = flagArr
+            },
+
+            changeTaskLevel: function (value) {
+                this.taskLevel = value
+            },
+
+            changeStartTime: function (value) {
+                this.startTime = value
+            },
+
+            changeStartMinutes: function (value) {
+                this.startMinutes = value
+            },
+
+            changeEndTime: function (value) {
+                this.endTime = value
+            },
+
+            changeEndMinutes: function (value) {
+                this.endMinutes = value
+            },
+        }
+
+    }
+
 </script>
+
 <style scoped>
 .page{
     position: absolute;
