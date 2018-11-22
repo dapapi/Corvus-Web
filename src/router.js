@@ -103,12 +103,12 @@ export default new Router({
             name: 'staff',
             component: () => import('./views/staff/index.vue')
         },
+        // {
+        //     path: '/staff/add',
+        //     name: 'staffAdd',
+        //     component: () => import('./views/staff/staffAdd.vue')
+        // },
         {
-            path: '/staff/add',
-            name: 'staffAdd',
-<<<<<<< HEAD
-            component: () => import('./views/staff/staffAdd.vue')
-        },{
             path: '/approval',
             name: 'approval',
             component: () => import(/* webpackChunkName: "about" */ './views/approval/index.vue'),
@@ -129,10 +129,7 @@ export default new Router({
                     path:'/approval/only',
                     component:() => import('./views/approval/only.vue')
                 }
-            ]
-
-=======
-            component: () => import('./views/staff/add.vue')
+            ],
         },
         {
             path: '/staff/detail',
@@ -143,7 +140,6 @@ export default new Router({
             path: '/staff/history',
             name: 'staffHistory',
             component: () => import('./views/staff/history.vue'),
->>>>>>> b9e7c35ec10f89f308c1ef996ee093432a78dc75
         }
     ],
 });
