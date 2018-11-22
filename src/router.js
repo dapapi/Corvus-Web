@@ -30,5 +30,20 @@ export default new Router({
                 }
             ]
         },
+        {
+            path: '/brief/index',
+            name: 'index',
+            component: () => import('./views/brief/index.vue'),
+        },
+        {
+            path:'/brief/details',
+            name:'details',
+            component: () => import('./views/brief/details.vue')
+        },
+        {
+            path: '/brief/add',
+            name: 'add',
+            component: () => import('./views/brief/add.vue')
+        }
     ],
 });

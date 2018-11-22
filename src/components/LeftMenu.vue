@@ -50,6 +50,12 @@
                                 <span class="site-menu-title">日历</span>
                             </a>
                         </li>
+                        <li class="site-menu-item">
+                            <a class="animsition-link waves-effect waves-classic" href="/brief/index">
+                                <i class="site-menu-icon md-view-dashboard" aria-hidden="true"></i>
+                                <span class="site-menu-title">简报</span>
+                            </a>
+                        </li>
                     </ul>
                 </div>
             </div>
