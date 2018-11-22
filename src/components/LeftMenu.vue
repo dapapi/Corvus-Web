@@ -58,6 +58,14 @@
                                 <span class="site-menu-title">日历</span>
                             </a>
                         </li>
+                         <li class="site-menu-item">
+                            <router-link to="/approval">
+                                <a class="animsition-link waves-effect waves-classic">
+                                    <i class="site-menu-icon md-view-dashboard" aria-hidden="true"></i>
+                                    <span class="site-menu-title">审批</span>
+                                </a>
+                            </router-link>
+                        </li>
                     </ul>
                 </div>
             </div>

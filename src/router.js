@@ -39,6 +39,29 @@ export default new Router({
             path: '/staff/add',
             name: 'staffAdd',
             component: () => import('./views/staff/staffAdd.vue')
+        },{
+            path: '/approval',
+            name: 'approval',
+            component: () => import(/* webpackChunkName: "about" */ './views/approval/index.vue'),
+            children:[
+                {
+                    path:'/approval/initiate',
+                    component:() => import('./views/approval/initiate.vue')
+                },
+                {
+                    path:'/approval/application',
+                    component:() => import('./views/approval/application.vue')
+                },
+                {
+                    path:'/approval/my',
+                    component:() => import('./views/approval/my.vue')
+                },
+                {
+                    path:'/approval/only',
+                    component:() => import('./views/approval/only.vue')
+                }
+            ]
+
         }
     ],
 });
