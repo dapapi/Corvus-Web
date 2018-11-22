@@ -41,36 +41,36 @@
 
             <!--<div class="page-login-main" id="bind-telephone-page" style="display: none;">-->
 
-                <!--<div class="brand hidden-md-up">-->
-                    <!--<img class="brand-img" src="/images/logo-colored@2x.png" alt="...">-->
-                    <!--<h3 class="brand-text font-size-40">泰洋系</h3>-->
-                <!--</div>-->
-                <!--<h3 class="font-size-24">绑定手机号</h3>-->
-                <!--<p>请输入手机号和验证码进行手机号绑定</p>-->
+            <!--<div class="brand hidden-md-up">-->
+            <!--<img class="brand-img" src="/images/logo-colored@2x.png" alt="...">-->
+            <!--<h3 class="brand-text font-size-40">泰洋系</h3>-->
+            <!--</div>-->
+            <!--<h3 class="font-size-24">绑定手机号</h3>-->
+            <!--<p>请输入手机号和验证码进行手机号绑定</p>-->
 
-                <!--<form method="post" autocomplete="off" id="bind-form">-->
-                    <!--<div class="form-group form-material floating" data-plugin="formMaterial">-->
-                        <!--<input type="text" class="form-control empty" id="bindTelephoneInput" name="bind-telephone">-->
-                        <!--<label class="floating-label" for="bindTelephoneInput">请输入手机号</label>-->
-                        <!--<a id="send-code-btn" class="" href="javascript:void(0)">发送验证码</a>-->
-                    <!--</div>-->
-                    <!--<div class="form-group form-material floating" data-plugin="formMaterial">-->
-                        <!--<input type="text" class="form-control empty" id="bindTelephoneCodeInout" name="bind-code">-->
-                        <!--<label class="floating-label" for="bindTelephoneCodeInout">请输入验证码</label>-->
-                    <!--</div>-->
-                    <!--<button id="bind-submit-btn" class="btn btn-primary btn-block">绑定</button>-->
-                <!--</form>-->
+            <!--<form method="post" autocomplete="off" id="bind-form">-->
+            <!--<div class="form-group form-material floating" data-plugin="formMaterial">-->
+            <!--<input type="text" class="form-control empty" id="bindTelephoneInput" name="bind-telephone">-->
+            <!--<label class="floating-label" for="bindTelephoneInput">请输入手机号</label>-->
+            <!--<a id="send-code-btn" class="" href="javascript:void(0)">发送验证码</a>-->
+            <!--</div>-->
+            <!--<div class="form-group form-material floating" data-plugin="formMaterial">-->
+            <!--<input type="text" class="form-control empty" id="bindTelephoneCodeInout" name="bind-code">-->
+            <!--<label class="floating-label" for="bindTelephoneCodeInout">请输入验证码</label>-->
+            <!--</div>-->
+            <!--<button id="bind-submit-btn" class="btn btn-primary btn-block">绑定</button>-->
+            <!--</form>-->
 
 
-                <!--<footer class="page-copyright">-->
-                    <!--<p>WEBSITE BY Mtop Creation Studio</p>-->
-                    <!--<p>© 2018. All RIGHT RESERVED.</p>-->
-                    <!--<div class="social">-->
-                        <!--<a class="btn btn-icon btn-round social-twitter mx-5" href="/login">-->
-                            <!--<i class="icon bd-twitter" aria-hidden="true"></i>-->
-                        <!--</a>-->
-                    <!--</div>-->
-                <!--</footer>-->
+            <!--<footer class="page-copyright">-->
+            <!--<p>WEBSITE BY Mtop Creation Studio</p>-->
+            <!--<p>© 2018. All RIGHT RESERVED.</p>-->
+            <!--<div class="social">-->
+            <!--<a class="btn btn-icon btn-round social-twitter mx-5" href="/login">-->
+            <!--<i class="icon bd-twitter" aria-hidden="true"></i>-->
+            <!--</a>-->
+            <!--</div>-->
+            <!--</footer>-->
             <!--</div>-->
 
         </div>
@@ -126,7 +126,7 @@
                         _this.storeToLocal(userJson);
                         console.log(companyType);
                         _this.storeCompamyTypeToLocal(companyType);
-                        _this.$router.push('/task')
+                        _this.$router.push('/tasks')
                     })
 
                 });

@@ -2,7 +2,7 @@
     <div class="page-header page-header-bordered">
         <h1 class="page-title">
             <!-- <i class="icon angle-left"></i> -->
-            <a :href="href"><i class="icon md-chevron-left"></i></a>
+            <router-link :to="href"><i class="icon md-chevron-left"></i></router-link>
             {{ title }}
         </h1>
 

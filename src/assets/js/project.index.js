@@ -5,6 +5,7 @@ import store from '../store/index.js';
 let app = new Vue({
         el: '#root',
         store,
+
         data: {
             total: 2,
             current_page: 1,
@@ -155,6 +156,7 @@ let app = new Vue({
                 app.addInfoArr[name] = value
             }
         }
+
 
     })
 ;
