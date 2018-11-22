@@ -1,7 +1,7 @@
 <template>
     <div id="app">
         <template v-if="isLeftMenuShow">
-            <LeftMenu/>
+            <LeftMenu/>   
         </template>
         <router-view/>
     </div>
@@ -9,7 +9,7 @@
 
 <script>
     import LeftMenu from '@/components/LeftMenu.vue'
-
+    import Approval from '@/components/Approval.vue'
     export default {
         name: 'app',
         data: function () {
