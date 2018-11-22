@@ -106,7 +106,17 @@ export default new Router({
         {
             path: '/staff/add',
             name: 'staffAdd',
-            component: () => import('./views/staff/staffAdd.vue')
+            component: () => import('./views/staff/add.vue')
+        },
+        {
+            path: '/staff/detail',
+            name: 'staffDetail',
+            component: () => import('./views/staff/detail.vue'),
+        },
+        {
+            path: '/staff/history',
+            name: 'staffHistory',
+            component: () => import('./views/staff/history.vue'),
         }
     ],
 });
