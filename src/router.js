@@ -73,5 +73,15 @@ export default new Router({
         //     name: 'artists',
         //     component: () => import('./views/artist/index.vue')
         // },
+        {
+            path: '/staff',
+            name: 'staff',
+            component: () => import('./views/staff/index.vue')
+        },
+        {
+            path: '/staff/add',
+            name: 'staffAdd',
+            component: () => import('./views/staff/staffAdd.vue')
+        }
     ],
 });

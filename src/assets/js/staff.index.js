@@ -2,6 +2,7 @@ import config from "./config";
 import redirect from './bootstrap';
 
 const { staffStatus, dateArr, stuffType } = config
+import fetch from '../utils/fetch'
 
 let app = new Vue({
         el: '#root',
@@ -9,6 +10,9 @@ let app = new Vue({
             total: 0,
             current_page: 1,
             total_pages: 1,
+            currentPage: 1,
+            totalPages: 1,
+            total: 1,
             // customizeInfo: config.customizeInfo,
             staffStatus: staffStatus,
             dateArr: dateArr,
@@ -38,14 +42,25 @@ let app = new Vue({
                 }
             ],
             conditionArr: [],
-            checkedNames: []
+            checkedNames: [],
+            staffList: []
         },
 
         mounted() {
             this.getTasks()
+            this.getStaffList()
         },
  
         methods: {
+            getStaffList () {
+                fetch('get', '/personnel_list?status=1').then((result) => {
+                    console.log(result)
+                    this.staffList = result.data
+                    this.currentPage = result.meta.pagination.current_page || 1
+                    this.totalPages = result.meta.pagination.total_pages || 1
+                    this.total = result.meta.pagination.total || 1
+                })
+            },
             // 改变报表筛选条件
             changeSelectOption (newArr) {
                 this.checkedNames = newArr
@@ -59,20 +74,6 @@ let app = new Vue({
                 // 
             },
             getTasks: function (pageNum = 1) {
-                // this.taskStatus = 0;
-                // let data = {
-                //     page: pageNum,
-                // };
-
-                // $.ajax({
-                //     type: 'get',
-                //     url: config.apiUrl + '/tasks/my_all',
-                //     headers: config.getHeaders(),
-                //     statusCode: config.getStatusCode(),
-                //     data: data
-                // }).done(function (response) {
-                //     console.log(response)
-                // })
             }
         }
     })

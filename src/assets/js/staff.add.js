@@ -192,6 +192,10 @@ let app = new Vue({
 		tableAdd (name) {
 			this[name].tBody.push(JSON.parse(JSON.stringify(this[name + 'Info'])))
 		},
+		// 上传图片
+		uploadImg (fileUrl, fileName, fileSize) {
+			this.avatar = fileUrl
+		},
 		// 提交
 		submit () {
 			// todo
@@ -218,6 +222,7 @@ let app = new Vue({
 				disease: this.isIll,
 				pregnancy: this.isPregnancy,
 				migration: this.agreeMove,
+				icon_url: this.avatar,
 				status_type: 1, // 默认
 				education: [
 					// {
