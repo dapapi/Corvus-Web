@@ -453,9 +453,9 @@
                         type: 'change',
                         data: response.data.participants.data
                     };
-                    this.$store.dispatch('changeParticipantsInfo', params);
+                    _this.$store.dispatch('changeParticipantsInfo', params);
                     params.data = response.data.principal.data;
-                    this.$store.dispatch('changePrincipal', params)
+                    _this.$store.dispatch('changePrincipal', params)
                 })
             },
 

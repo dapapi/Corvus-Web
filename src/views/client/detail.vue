@@ -514,13 +514,14 @@
         methods: {
 
             getClient: function () {
+                let _this = this;
                 fetch('get', '/clients/' + this.clientId, {include: 'principal'}).then(function (response) {
-                    this.clientInfo = response.data;
+                    _this.clientInfo = response.data;
                     let params = {
                         type: 'change',
                         data: response.data.principal.data
                     };
-                    this.$store.dispatch('changePrincipal', params);
+                    _this.$store.dispatch('changePrincipal', params);
                 })
             },
 

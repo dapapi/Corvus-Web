@@ -143,7 +143,7 @@
                         <button type="button" class="close" aria-hidden="true" data-dismiss="modal">
                             <i class="md-close" aria-hidden="true"></i>
                         </button>
-                        <h4 class="modal-title">新建日程</h4>
+                        <h4 class="modal-title">添加日历</h4>
                     </div>
                     <div class="modal-body">
                         <div class="example">
@@ -151,6 +151,17 @@
                             <div class="col-md-10 float-left pl-0">
                                 <input type="text" class="form-control" title="" placeholder="请输入标题"
                                        v-model="scheduleName">
+                            </div>
+                        </div>
+                        <div class="example">
+                            <div class="col-md-2 text-right float-left"></div>
+                            <div class="col-md-10 float-left pl-0">
+                                <ul class="color-selector calendar-color-list">
+                                    <li v-for="color in colorArr" :style="'background-color: #' + color"
+                                        @click="changeCalendarColor(color)">
+                                        <i class="icon md-check" v-if="color === checkColor"></i>
+                                    </li>
+                                </ul>
                             </div>
                         </div>
                         <div class="example">
@@ -200,15 +211,26 @@
                 meetingRomeArr: config.meetingRomeArr,
                 repeatArr: config.repeatArr,
                 visibleRangeArr: config.visibleRangeArr,
+                colorArr: config.colorArr,
                 showMore: false,
                 eventPlace: '',
                 eventDesc: '',
                 starsArr: [],
+                checkColor: '',
+
             }
         },
 
         mounted() {
             this.getStars();
+            console.log(this);
+            let _this = this;
+            $('#addCalendar').on('hidden.bs.modal', function () {
+                _this.$store.dispatch('changeParticipantsInfo', {data: []});
+            });
+            $('#addSchedule').on('hidden.bs.modal', function () {
+                _this.$store.dispatch('changeParticipantsInfo', {data: []});
+            })
         },
 
         methods: {
@@ -269,9 +291,31 @@
 
             participantChange: function () {
 
+            },
+
+            changeCalendarColor: function (value) {
+                this.checkColor = value;
             }
 
 
         }
     }
 </script>
+
+<style>
+    .calendar-color-list li {
+        width: 20px;
+        height: 20px;
+        border-radius: 100%;
+        margin-right: 10px;
+        list-style: none;
+    }
+
+    .calendar-color-list li i {
+        line-height: 20px;
+        color: white;
+        text-align: center;
+        position: absolute;
+        left: 5px;
+    }
+</style>
