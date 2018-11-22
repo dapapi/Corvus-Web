@@ -1,6 +1,7 @@
 import Vue from 'vue';
 import Router from 'vue-router';
 import Home from './views/Home.vue';
+import Messages from './views/messages/messagesIndex'
 
 Vue.use(Router);
 
@@ -26,9 +27,14 @@ export default new Router({
                 {
                     path: ':id',
                     name: 'tasks/detail',
-                    component: () => import('./views/task/detail.vue')
+                    component: () => import('./views/task/detail.vue'),
                 }
             ]
         },
+        {
+            path: '/messages',
+            name: 'messages',
+            component: Messages,
+        }
     ],
 });

@@ -79,17 +79,13 @@ Vue.component('MtpTable', MtpTable);
 Vue.component('Timepicker', Timepicker);
 
 Vue.prototype.globalClick = function (callback) {
-    document.getElementById('app').addEventListener('click', function () {
-        callback(event);
-    });
+  document.getElementById('app').addEventListener('click', () => {
+    callback(event);
+  });
 };
 
 new Vue({
-    router,
-    store,
-    render: h => h(App),
+  router,
+  store,
+  render: h => h(App),
 }).$mount('#app');
-
-
-
-
