@@ -18,21 +18,7 @@ export default new Router({
             name: 'login',
             component: () => import('./views/auth/login.vue'),
         },
-        {
-            path: '/brief/index',
-            name: 'index',
-            component: () => import('./views/brief/index.vue'),
-        },
-        {
-            path:'/brief/details',
-            name:'details',
-            component: () => import('./views/brief/details.vue')
-        },
-        {
-            path: '/brief/add',
-            name: 'add',
-            component: () => import('./views/brief/add.vue')
-        },
+        
         {
             path: '/tasks/:id',
             name: 'tasks/detail',
@@ -92,6 +78,34 @@ export default new Router({
             path: '/staff/add',
             name: 'staffAdd',
             component: () => import('./views/staff/staffAdd.vue')
+        },
+
+        //简报路由
+        {
+            path:'/brief/home',
+            name:'home',
+            component: () => import('./views/brief/home.vue'),
+            children:[
+                {
+                    path: '/brief/home', 
+                    redirect: '/brief/index'
+                },
+                {
+                    path:'/brief/index',
+                    name:'index',
+                    component: () => import('./views/brief/index.vue'),
+                },
+                {
+                    path:'/brief/details',
+                    name:'details',
+                    component: () => import('./views/brief/details.vue')
+                },
+                {
+                    path: '/brief/add',
+                    name: 'add',
+                    component: () => import('./views/brief/add.vue')
+                }
+            ]
         }
     ],
 });

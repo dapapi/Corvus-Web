@@ -1,6 +1,6 @@
 <template>
     <!-- Page -->
-<div class="page" id="root">
+<div class="page-main">
     <div class="page-header page-header-bordered">
         <h1 class="page-title">简报</h1>
         <div class="page-header-actions">

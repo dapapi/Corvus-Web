@@ -1,6 +1,6 @@
 <template>
     <!-- Page -->
-    <div class="page">
+    <div class="page-main" style="background-color:##f3f4f5">
         <div class="page-header page-header-bordered">
             <h1 class="page-title">简报</h1>
         </div>
@@ -56,6 +56,12 @@ export default {
     }
 }
 </script>
+<style lang="scss" scoped>
+    .page-main{
+        background-color:#f3f4f5 !important;
+    }
+</style>
+
 
 
 

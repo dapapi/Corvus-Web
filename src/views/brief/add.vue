@@ -1,18 +1,18 @@
 <template>
        <!-- Page -->
-    <div class="page">
+    <div class="page-main">
         <div class="page-header page-header-bordered">
-            <h1 class="page-title">添加简报</h1>
+            <h1 class="page-title">模版管理</h1>
         </div>
         <div class="page-content container-fluid">
             <div class="panel col-md-12 clearfix py-5"> 
-                <ul class="nav nav-tabs nav-tabs-line" role="tablist">
+                <!-- <ul class="nav nav-tabs nav-tabs-line" role="tablist">
                     <li class="nav-item" role="presentation">
                         <a class="nav-link active" data-toggle="tab"
                         aria-controls="forum-base"
                         aria-expanded="true" role="tab">模版管理 </a>
                     </li>
-                </ul> 
+                </ul>  -->
                 <div class="panel-body">
                     <div class="tab-content">
                         <table class="table table-hover" data-plugin="selectable" data-row-selectable="true">
@@ -24,17 +24,17 @@
                             </tr>
                             <tr v-for="(item,index) in list" :key="item.id">
                                 
-                                <td>{{index+1}}</td>
+                                <td>{{(index+1)*current_page}}</td>
                                 <td>{{item.template_name}}</td>
-                                <td>{{item.frequency}}</td>
+                                <td>{{item.frequency|getFrequency(times,item.frequency)}}</td>
                                 <td>
                                     <!--编辑模版-->
-                                    <span class="pr-40 d-block float-left pointer-content" style="color: #b9b9b9;" data-toggle="modal" data-target="#addModelDetails">
+                                    <span class="pr-40 d-block float-left pointer-content" style="color: #b9b9b9;" data-toggle="modal" data-target="#addModelDetails" @click="changeModelType('edit')">
                                         <i class="icon md-edit color" aria-hidden="true"></i>
                                     </span>
                                     <!--编辑模版结束-->
                                     <!--删除模版-->
-                                    <span class="pr-40 d-block float-left pointer-content" style="color: #b9b9b9" data-toggle="modal" data-target="#delModel">
+                                    <span class="pr-40 d-block float-left pointer-content" style="color: #b9b9b9" data-toggle="modal" data-target="#delModel" @click="getDelModelId(item.template_id,item.template_name)">
                                         <i class="icon md-delete color" aria-hidden="true"></i>
                                     </span>
                                     <!--删除模版结束-->
@@ -49,26 +49,26 @@
                 </div>
             </div>
         </div>
-        <div class="site-action" data-plugin="actionBtn" data-toggle="modal" data-target="#addModelDetails">
+        <div class="site-action" data-plugin="actionBtn" data-toggle="modal" data-target="#addModelDetails" @click="changeModelType('add')">
             <button type="button" class="site-action-toggle btn-raised btn btn-success btn-floating waves-effect waves-classic">
                 <i class="front-icon md-plus animation-scale-up" aria-hidden="true"></i>
                 <i class="back-icon md-plus animation-scale-up" aria-hidden="true"></i>
             </button>
         </div>
         <!--添加模版弹框开始-->
-        <div class="modal fade" id="addModelDetails" aria-hidden="true" aria-labelledby="addLabelForm" role="dialog" tabindex="-1">
+        <div class="modal fade" ref="addModelDetails" id="addModelDetails" aria-hidden="true" aria-labelledby="addLabelForm" role="dialog" tabindex="-1">
             <div class="modal-dialog modal-simple">
                 <div class="modal-content">
                     <div class="modal-header">
                         <button type="button" aria-hidden="true" data-dismiss="modal" class="close"><i aria-hidden="true" class="md-close"></i></button>
-                        <span>添加模版</span>
-                        <span>编辑模版</span>
+                        <span v-if="modelType == 'add'">添加模版</span>
+                        <span v-else>编辑模版</span>
                     </div>
                     <div class="modal-body clearfix">
                         <div class="example">
                             <div class="col-md-2 text-right float-left">模版名称</div>
                             <div class="col-md-10 float-left pl-0">
-                                <input type="text" class="form-control" placeholder="字数不超过10个汉字或20个字母">
+                                <input v-model="addModelData.template_name" type="text" class="form-control" placeholder="字数不超过10个汉字或20个字母" @blur="isExist">
                             </div>
                         </div>
                         <div class="example">
@@ -80,13 +80,13 @@
                         <div class="example">
                             <div class="col-md-2 text-right float-left">模版频率</div>
                             <div class="col-md-10 float-left pl-0">
-                                <selectors  :options="times" placeholder="请选择频率"></selectors>
+                                <selectors :options="times" placeholder="请选择频率" @change="changeFrequency"></selectors>
                             </div>
                         </div>
                     </div>
                     <div class="modal-footer">
                         <button class="btn btn-sm btn-white btn-pure" data-dismiss="modal">取消</button>
-                        <button class="btn btn-primary" type="submit">确定</button>
+                        <button class="btn btn-primary" type="submit" @click="changeModel()">确定</button>
                     </div>
                 </div>
             </div>
@@ -196,13 +196,13 @@
                     </div>
                     <div class="modal-body clearfix">
                         <div class="example">
-                            <p>确认删除简报模板 “管培生日报” 吗？删除模板的同时，历史相关的简报信息会一并删除。</p>
+                            <p>确认删除简报模板 “{{delName}}” 吗？删除模板的同时，历史相关的简报信息会一并删除。</p>
                         </div>
         
                     </div>
                     <div class="modal-footer">
                         <button class="btn btn-sm btn-white btn-pure" data-dismiss="modal">取消</button>
-                        <button class="btn btn-primary" type="submit">确定</button>
+                        <button class="btn btn-primary" type="submit" @click="deleteModel">确定</button>
                     </div>
                 </div>
             </div>
@@ -218,11 +218,11 @@ import config from '@/assets/js/config'
 export default {
     data(){
         return {
-           list:[],
-           current_page:1,
-           total_pages:1,
-           total:0,
-           times:[
+            list:[],
+            current_page:1,
+            total_pages:1,
+            total:0,
+            times:[
                 {
                     value:1,
                     name:'每天'
@@ -243,37 +243,55 @@ export default {
                     value:5,
                     name:'每年'
                 },
-           ],
-           type:[
-               {
-                   value:1,
-                   name:'文本'
-               },
-               {
-                   value:2,
-                   name:'数字'
-               },
-               {
-                   value:3,
-                   name:'日期'
-               },
-               {
-                   value:4,
-                   name:'附件'
-               },
-               {
-                   value:5,
-                   name:'任务'
-               },
-              
             ],
-            participants:[]
+            type:[
+                {
+                    value:1,
+                    name:'文本'
+                },
+                {
+                    value:2,
+                    name:'数字'
+                },
+                {
+                    value:3,
+                    name:'日期'
+                },
+                {
+                    value:4,
+                    name:'附件'
+                },
+                {
+                    value:5,
+                    name:'任务'
+                },
+                
+            ],
+            modelType:'add',
+            participants:[],
+            addModelData:{
+                template_name:'',
+                colour:'白',
+                frequency:1,
+                department_id:'1718463094',
+                member:'1994731356',
+                department:'1'
+            },
+            editModelData:{
+                template_id:0
+            },
+            delId:'',
+            delName:''
         }
+    },
+    computed:{
+        
     },
     mounted(){
        this.getlist()
     },
     methods:{
+        //获取模版列表
         getlist:function(){
             fetch('get',`${config.apiUrl}/report`).then((res) => {
                     this.list = res.data
@@ -283,15 +301,67 @@ export default {
                 })
         },
         participantChange:function(value){
-            alert(value);
+            // console.log(value);
             // let flagArr = [];
             // for (let i = 0; i < value.length; i++) {
             //     flagArr.push(value[i].id)
             // }
             // this.participants = flagArr
             // console.log(flagArr);
+        },
+        changeModelType:function(type){
+            type == 'add'?this.modelType ='add':this.modelType = 'edit'
+        },
+        //编辑和添加模版
+        changeModel:function(id){
+            let data,url
+            this.modelType == 'add'?url = '/report':url = '/edit'
+            this.modelType == 'add'?data = this.addModelData:this.editModelData
+            fetch('post',`${config.apiUrl}${url}`,data).then((res) =>{
+                $('#addModelDetails').modal('hide')
+                this.getlist();
+            })
+        },
+        getDelModelId:function(id,name){
+           this.delId = id
+           this.delName = name
+        },
+        //删除模版
+        deleteModel:function(){
+            fetch('del',`${config.apiUrl}/ `,{template_id:this.delId}).then((res) =>{
+                $('#delModel').modal('hide')
+                this.getlist();
+            })
+        },
+        //检查模版名称是否存在
+        isExist:function(){
+            fetch('get',`${config.apiUrl}/report/all`,{template_name:this.addModelData.template_name}).then((res) =>{
+                if(res.data.length>0){
+                    alert('简报名称重复，请重新输入')
+                }
+            })
+        },
+        //改变频次
+        changeFrequency:function(value){
+            this.addModelData.frequency = value;
+        }
+    },
+    filters:{
+        getFrequency:function(id,times){
+            for (let i = 0; i <=times.length; i++) {
+                if(times[i].value == id){
+                    return times[i].name
+                }
+                
+            }
         }
     }
 }
 </script>
+<style lang="scss" scoped>
+    .page-main{
+        background-color:#f3f4f5 !important;
+    }
+</style>
+
 
