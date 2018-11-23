@@ -31,7 +31,7 @@
                     </ul>
                 </div>
                 <div class="" v-for="i in 5" :key="i">
-                     <div class="page-content col-md-12 col-lg-12 row" >
+                    <div class="page-content col-md-12 col-lg-12 row" >
                         <p class="messages-date">1970年1月1日</p>
                         <hr class="col-md-10 col-lg-10">
                     </div>
@@ -44,8 +44,8 @@
 </template>
 
 <script>
-import Main from './messagesMain.vue';
-import FlagConfirm from './messagesFlagConfirm.vue';
+import Main from './detail.vue';
+import FlagConfirm from './flag.vue';
 
 export default {
   name: 'messagesIndex',
@@ -89,8 +89,8 @@ export default {
 }
 .messages-date{
     font-family: PingFangSC-Regular;
-font-size: 18px;
-color: #C4C4C4;
-letter-spacing: 0;
+    font-size: 18px;
+    color: #C4C4C4;
+    letter-spacing: 0;
 }
 </style>
