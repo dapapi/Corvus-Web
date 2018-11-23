@@ -24,7 +24,8 @@
         <div class="rounded-circle img-thumbnail messages-img" 
         :style="{ backgroundImage: 'url('+pageData.cover+')'}"></div>
         <div class="">
-          <p class="">{{pageData.timeYMD}}  {{pageData.timehms}}</p>
+          <p class="">{{pageData.timeYMD}}  {{pageData.timehms}}&nbsp;&nbsp;&nbsp;
+            <i class="icon md-flag" aria-hidden="true" title="点击设为未读" v-if="!pageData.readflag"></i></p>
           <h6 class="">{{pageData.name}}邀请你参与{{pageData.task}}</h6>
           <h5 class="">[{{pageData.detail.kind}}] &nbsp;&nbsp;{{pageData.detail.step}} </h5>
           <h6 class="">{{pageData.name}}</h6>
@@ -59,5 +60,10 @@ export default {
   margin-right: 17px;
   background-size: 40px 40px;
 }
-
+.md-flag{
+  color: rgba(7, 17, 27, 0.14)
+}
+.md-flag:hover{
+  color: #00bcd4
+}
 </style>

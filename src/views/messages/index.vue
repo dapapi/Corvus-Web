@@ -30,16 +30,6 @@
         </div>
         <div class="page-content container-fluid">
             <div class="panel col-md-12 col-lg-12 py-5 ">
-                <!-- <div class="col-md-12 row filter-container" >
-                    <div class="offset-md-8 col-md-2 text-right "
-                    data-target="#exampleNiftyFadeScale" data-toggle="modal" >
-                        <i class="icon md-circle-o" v-if="readFilter && !isNoUnread"></i>&nbsp;&nbsp;<span v-if="readFilter && !isNoUnread">全部标记为已读</span> 
-                    </div>
-                    <div class="col-md-2 text-right text-filter-all" @click="readTypeToggle">全部消息
-                        <i class="icon"
-                        :class="readTypeShow?'md-chevron-up':'md-chevron-down'"></i>
-                    </div>
-                </div> -->
                 <div class="" 
                     v-for="(item, index) in pageData" 
                     :key="index" 
