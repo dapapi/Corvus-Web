@@ -9,9 +9,15 @@
         </div>
 
         <div class="page-content container-fluid">
-            <div class="panel col-md-12 col-lg-12 py-5">
-
-                <calendar></calendar>
+            <div class="panel col-md-12 py-5 clearfix px-0">
+                <div class=" float-left py-30 text-center" style="width: 20%;">
+                    <div style="border-bottom: 1px solid #D8D8D8;width: 90%;margin: 0 auto">
+                        <InlineDatepicker @change="selectDate"></InlineDatepicker>
+                    </div>
+                </div>
+                <div class="float-left p-0" style="width: 80%;border-left: 1px solid #D8D8D8;">
+                    <calendar :gotoDate="selectedDate"></calendar>
+                </div>
 
             </div>
         </div>
@@ -137,7 +143,7 @@
                         <button type="button" class="close" aria-hidden="true" data-dismiss="modal">
                             <i class="md-close" aria-hidden="true"></i>
                         </button>
-                        <h4 class="modal-title">新建日程</h4>
+                        <h4 class="modal-title">添加日历</h4>
                     </div>
                     <div class="modal-body">
                         <div class="example">
@@ -145,6 +151,17 @@
                             <div class="col-md-10 float-left pl-0">
                                 <input type="text" class="form-control" title="" placeholder="请输入标题"
                                        v-model="scheduleName">
+                            </div>
+                        </div>
+                        <div class="example">
+                            <div class="col-md-2 text-right float-left"></div>
+                            <div class="col-md-10 float-left pl-0">
+                                <ul class="color-selector calendar-color-list">
+                                    <li v-for="color in colorArr" :style="'background-color: #' + color"
+                                        @click="changeCalendarColor(color)">
+                                        <i class="icon md-check" v-if="color === checkColor"></i>
+                                    </li>
+                                </ul>
                             </div>
                         </div>
                         <div class="example">
@@ -194,15 +211,26 @@
                 meetingRomeArr: config.meetingRomeArr,
                 repeatArr: config.repeatArr,
                 visibleRangeArr: config.visibleRangeArr,
+                colorArr: config.colorArr,
                 showMore: false,
                 eventPlace: '',
                 eventDesc: '',
                 starsArr: [],
+                checkColor: '',
+                selectedDate: '',
+
             }
         },
 
         mounted() {
             this.getStars();
+            let _this = this;
+            $('#addCalendar').on('hidden.bs.modal', function () {
+                _this.$store.dispatch('changeParticipantsInfo', {data: []});
+            });
+            $('#addSchedule').on('hidden.bs.modal', function () {
+                _this.$store.dispatch('changeParticipantsInfo', {data: []});
+            })
         },
 
         methods: {
@@ -214,13 +242,10 @@
             },
 
             getStars: function () {
-                $.ajax({
-                    type: 'get',
-                    url: config.apiUrl + '/stars/all',
-                    headers: config.getHeaders(),
-                }).done(function (response) {
+                let _this = this;
+                fetch('get', '/stars/all').then(function (response) {
                     for (let i = 0; i < response.data.length; i++) {
-                        app.starsArr.push({
+                        _this.starsArr.push({
                             value: response.data[i].id,
                             name: response.data[i].name
                         })
@@ -233,19 +258,19 @@
             },
 
             changeStartTime: function (value) {
-                app.startTime = value
+                this.startTime = value
             },
 
             changeStartMinutes: function (value) {
-                app.startMinutes = value
+                this.startMinutes = value
             },
 
             changeEndTime: function (value) {
-                app.endTime = value
+                this.endTime = value
             },
 
             changeEndMinutes: function (value) {
-                app.endMinutes = value
+                this.endMinutes = value
             },
 
             changeIsAllDay: function (value) {
@@ -257,7 +282,7 @@
             },
 
             isShowMore: function () {
-                app.showMore = !app.showMore
+                this.showMore = !this.showMore
             },
 
             addCalendar: function () {
@@ -266,9 +291,35 @@
 
             participantChange: function () {
 
+            },
+
+            changeCalendarColor: function (value) {
+                this.checkColor = value;
+            },
+
+            selectDate: function (value) {
+                this.selectedDate = value
             }
 
 
         }
     }
 </script>
+
+<style>
+    .calendar-color-list li {
+        width: 20px;
+        height: 20px;
+        border-radius: 100%;
+        margin-right: 10px;
+        list-style: none;
+    }
+
+    .calendar-color-list li i {
+        line-height: 20px;
+        color: white;
+        text-align: center;
+        position: absolute;
+        left: 5px;
+    }
+</style>

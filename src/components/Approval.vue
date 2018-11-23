@@ -14,7 +14,7 @@
                         <div data-role="content" class="scrollable-content" style="width: 219px;">
                         <section class="page-aside-section" style="paddingTop:0">
                             <div class="list-group">
-                            <router-link to="/approval/initiate" style="text-decoration:none">
+                            <router-link to="/initiate" style="text-decoration:none">
                                <a class="list-group-item" href=""><i class="icon md-view-dashboard" aria-hidden="true"></i>发起审批</a>
                             </router-link>
                             <router-link to="/approval/application" style="text-decoration:none">

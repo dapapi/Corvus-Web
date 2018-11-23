@@ -6,9 +6,16 @@
 
 <script>
     export default {
-        props: [],
+        props: ['gotoDate'],
         data() {
             return {}
+        },
+        watch: {
+            gotoDate: function (newValue) {
+                console.log(newValue);
+                // newValue = newValue.split('-');
+                $(this.$el).fullCalendar('gotoDate', newValue)
+            }
         },
         mounted() {
 
@@ -33,6 +40,17 @@
                     month: '月',
                     agendaWeek: '周',
                     agendaDay: '日'
+                },
+                views: {
+                    month: {
+                        titleFormat: 'YYYY年 MM月'
+                    },
+                    week: {
+                        titleFormat: 'YYYY年 MM月 DD日'
+                    },
+                    day: {
+                        titleFormat: 'YYYY年 MM月 DD日'
+                    }
                 },
                 events: [
                     {
@@ -138,18 +156,6 @@
 
 <style>
 
-    .fc-button.fc-today-button {
-        background-color: #f6f8f8;
-        height: auto !important;
-        text-transform: capitalize;
-        border-color: #e0e0e0;
-        outline: none;
-        box-shadow: none;
-        background-image: none !important;
-    }
 
-    .fc-button.fc-state-active, .fc-button.fc-state-hover {
-        background-color: #fff;
-    }
 
 </style>

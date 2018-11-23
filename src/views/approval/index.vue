@@ -1,7 +1,7 @@
 <template>
 <div>
 <Approval></Approval>
-  <router-view/>
+  <!--<router-view/>-->
 </div>
 
 </template>
