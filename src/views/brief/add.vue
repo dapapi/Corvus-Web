@@ -6,18 +6,11 @@
         </div>
         <div class="page-content container-fluid">
             <div class="panel col-md-12 clearfix py-5"> 
-                <!-- <ul class="nav nav-tabs nav-tabs-line" role="tablist">
-                    <li class="nav-item" role="presentation">
-                        <a class="nav-link active" data-toggle="tab"
-                        aria-controls="forum-base"
-                        aria-expanded="true" role="tab">模版管理 </a>
-                    </li>
-                </ul>  -->
                 <div class="panel-body">
                     <div class="tab-content">
                         <table class="table table-hover" data-plugin="selectable" data-row-selectable="true">
                             <tr>
-                                <th class="cell-100" scope="col"></th>
+                                <th class="cell-50" scope="col"></th>
                                 <th class="cell-300" scope="col">模版名称</th>
                                 <th class="cell-300" scope="col">频率</th>
                                 <th class="cell-300" scope="col">管理</th>
@@ -61,8 +54,8 @@
                 <div class="modal-content">
                     <div class="modal-header">
                         <button type="button" aria-hidden="true" data-dismiss="modal" class="close"><i aria-hidden="true" class="md-close"></i></button>
-                        <span v-if="modelType == 'add'">添加模版</span>
-                        <span v-else>编辑模版</span>
+                        <h4 class="modal-title" v-if="modelType == 'add'">添加模版</h4>
+                        <h4 class="modal-title" v-else>编辑模版</h4>
                     </div>
                     <div class="modal-body clearfix">
                         <div class="example">
@@ -74,7 +67,7 @@
                         <div class="example">
                             <div class="col-md-2 text-right float-left">模版对象</div>
                             <div class="col-md-10 float-left pl-0">
-                                <add-member @change="participantChange"></add-member>
+                                <add-member></add-member>
                             </div>
                         </div>
                         <div class="example">
@@ -98,7 +91,7 @@
                 <div class="modal-content">
                     <div class="modal-header">
                         <button type="button" aria-hidden="true" data-dismiss="modal" class="close"><i aria-hidden="true" class="md-close"></i></button>
-                        <span>设置问题</span>
+                        <h4 class="modal-title">设置问题</h4>
                     </div>
                     <div class="modal-body clearfix">
                         <table class="table table-hover" data-plugin="selectable" data-row-selectable="true">
@@ -145,8 +138,8 @@
                 <div class="modal-content">
                     <div class="modal-header">
                         <button type="button" aria-hidden="true" data-dismiss="modal" class="close"><i aria-hidden="true" class="md-close"></i></button>
-                        <span>设置问题</span>
-                        <span>编辑问题</span>
+                        <h4 class="modal-title">设置问题</h4>
+                        <h4 class="modal-title">编辑问题</h4>
                     </div>
                     <div class="modal-body clearfix">
                         <div class="example">
@@ -192,7 +185,7 @@
                 <div class="modal-content">
                     <div class="modal-header">
                         <button type="button" aria-hidden="true" data-dismiss="modal" class="close"><i aria-hidden="true" class="md-close"></i></button>
-                        <span>确认删除</span>
+                        <h4 class="modal-title">确认删除</h4>
                     </div>
                     <div class="modal-body clearfix">
                         <div class="example">

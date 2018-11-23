@@ -160,7 +160,28 @@ export default new Router({
                     path: '/brief/add',
                     name: 'add',
                     component: () => import('./views/brief/add.vue')
-                }
+                },
+                {
+                    path: '/brief/myapproval',
+                    name: 'myapproval',
+                    component: () => import('./views/brief/myapproval.vue')
+                },
+                {
+                    path: '/brief/list',
+                    name: 'list',
+                    component: () => import('./views/brief/list.vue')
+                },
+                {
+                    path: '/brief/memberReport',
+                    name: 'memberReport',
+                    component: () => import('./views/brief/memberReport.vue')
+                },
+                {
+                    path: '/brief/statistics',
+                    name: 'statistics',
+                    component: () => import('./views/brief/statistics.vue')
+                },
+                
             ]
         }
 
