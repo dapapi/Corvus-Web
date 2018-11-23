@@ -466,9 +466,10 @@
 
         mounted() {
             this.clientId = this.$route.params.id;
+            let _this = this;
             setTimeout(function () {
-                this.getClient();
-                this.getClientTrail();
+                _this.getClient();
+                _this.getClientTrail();
             }, 100);
         },
 
