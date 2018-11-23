@@ -114,23 +114,23 @@ export default new Router({
       component: () => import(/* webpackChunkName: "about" */ './views/approval/index.vue'),
       children: [
         {
-          path: '/initiate',
+          path: '/approval',
           component: () => import('./views/approval/initiate.vue')
         },
         {
-          path: '/approval/application',
+          path: '/application',
           component: () => import('./views/approval/application.vue')
         },
         {
-          path: '/approval/my',
+          path: '/my',
           component: () => import('./views/approval/my.vue')
         },
         {
-          path: '/approval/only',
+          path: '/only',
           component: () => import('./views/approval/only.vue')
         },
         {
-          path: '/approval/appdetail/:id',
+          path: '/application/:id',
           name: 'approval/detail',
           component: () => import('./views/approval/appdetail.vue')
         },

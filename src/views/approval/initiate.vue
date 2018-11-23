@@ -16,14 +16,10 @@
               <i class="icon md-file float-left" style="font-size:3rem"></i>
               <p class="my-10">{{item.key}}</p>
             </div>
-
           </div>
         </div>
       </div>
-
     </div>
-
-
     <div class="modal fade" aria-hidden="true" aria-labelledby="addLabelForm"
          role="dialog" tabindex="-1" id="approval">
       <div class="modal-dialog modal-simple">
@@ -37,7 +33,7 @@
           <div class="modal-body">
             <div class="col-md-12 example clearfix" v-for="field in selectedInfo.data " :key="field.id">
               <div class="col-md-2 text-right float-left pl-0">{{field.key }}</div>
-              <div class="col-md-10 float-left">
+              <div class="col-md-10 float-left lb">
                 <template v-if="field.field_type === 1">
                   <emit-input @change="(value) => addInfo(value, field.key )"
                               :placeholder="field.key"></emit-input>
@@ -81,7 +77,7 @@
                   </Upload>
                 </template>
                 <template v-else-if="field.field_type === 13">
-                  <Upload><a href="javascript:;" style="color:#000">上传文件</a></Upload>
+                  <Upload><a href="javascript:;" style="color:#linegreen">上传文件</a></Upload>
                 </template>
               </div>
             </div>
@@ -375,6 +371,12 @@
 
   .example {
     margin-top: 0;
+  }
+  .lb{
+      padding-left: 0;
+  }
+  .pearl.done .pearl-icon, .pearl.done .pearl-number{
+      margin-left: -30px;
   }
 
 </style>

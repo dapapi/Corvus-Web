@@ -1,6 +1,5 @@
 <template>
     <div class="page">
-
         <div class="page-header page-header-bordered">
             <h1 class="page-title d-inline">任务</h1>
 

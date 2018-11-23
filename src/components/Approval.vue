@@ -1,9 +1,10 @@
 <template>
-      <div class="page-main">
+ 
+         <div class="page">
+                  <div class="page-main">
         <div class="page-header" style="left:100px">
           <h1 class="page-title">审批</h1>
         </div>
-         <div class="page">
         <div class="page-aside">
                 <div class="page-aside-switch">
                 <i class="icon md-chevron-left" aria-hidden="true"></i>
@@ -14,16 +15,16 @@
                         <div data-role="content" class="scrollable-content" style="width: 219px;">
                         <section class="page-aside-section" style="paddingTop:0">
                             <div class="list-group">
-                            <router-link to="/initiate" style="text-decoration:none">
+                            <router-link to="/approval" style="text-decoration:none">
                                <a class="list-group-item" href=""><i class="icon md-view-dashboard" aria-hidden="true"></i>发起审批</a>
                             </router-link>
-                            <router-link to="/approval/application" style="text-decoration:none">
+                            <router-link to="/application" style="text-decoration:none">
                                 <a class="list-group-item " href=""><i class="icon md-view-dashboard" aria-hidden="true"></i>我的申请</a>
                             </router-link >
-                             <router-link to="/approval/my" style="text-decoration:none">
+                             <router-link to="/my" style="text-decoration:none">
                                <a class="list-group-item " href=""><i class="icon md-view-dashboard" aria-hidden="true"></i>我的审批</a>
                             </router-link>
-                            <router-link to="/approval/only" style="text-decoration:none">
+                            <router-link to="/only" style="text-decoration:none">
                                 <a class="list-group-item " href=""><i class="icon md-view-dashboard" aria-hidden="true"></i>知会我的</a>
                             </router-link>
                             </div>
@@ -42,10 +43,16 @@
 </template>
 <style>
   .page-content{
-        padding: 20px;
+        padding:10px 20px;
     }
     .page-header{
         padding: 20px;
+    }
+    .page-aside{
+        padding:0;
+    }
+    .page{
+        overflow-x: hidden;
     }
 </style>
 

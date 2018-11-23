@@ -1,7 +1,7 @@
 <template>
 <div>
 <Approval></Approval>
-  <!--<router-view/>-->
+  <router-view/>
 </div>
 
 </template>
@@ -15,10 +15,7 @@ export default {
 }
 </script>
 <style>
-*{
-  box-sizing: border-box;
-  overflow-x: hidden;
-}
+
 </style>
 
 

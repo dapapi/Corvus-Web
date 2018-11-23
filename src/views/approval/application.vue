@@ -34,17 +34,19 @@
               <tr class="animation-fade" style="animation-fill-mode: backwards; animation-duration: 250ms; animation-delay: 0ms;">
                 <th class="cell-300" scope="col">审批编号</th>
                 <th class="cell-300" scope="col">申请人</th>  
-                <th class="dropdown cell-300"  scope="col">
-                          <button type="button" class="btn btn-default dropdown-toggle waves-effect waves-classic" id="exampleColorDropdown1" data-toggle="dropdown" aria-expanded="false"><font style="vertical-align: inherit;"><font style="vertical-align: inherit;">
-                            类型
-                          </font></font></button>
-                          <div class="dropdown-menu" aria-labelledby="exampleColorDropdown1" role="menu" x-placement="bottom-start" style="position: absolute; transform: translate3d(0px, 38px, 0px); top: 0px; left: 0px; will-change: transform;">
-                            <a class="dropdown-item" href="javascript:void(0)" role="menuitem"><font style="vertical-align: inherit;"><font style="vertical-align: inherit;">不限</font></font></a>
-                            <a class="dropdown-item" href="javascript:void(0)" role="menuitem"><font style="vertical-align: inherit;"><font style="vertical-align: inherit;">工作室注册申请</font></font></a>
-                            <a class="active dropdown-item" href="javascript:void(0)" role="menuitem"><font style="vertical-align: inherit;"><font style="vertical-align: inherit;">报销</font></font></a>
-                            <a class="dropdown-item" href="javascript:void(0)" role="menuitem"><font style="vertical-align: inherit;"><font style="vertical-align: inherit;">通用审批</font></font></a>
-                          </div>
-                </th>
+                  <th class="cell-300" scope="col">
+                    <div class="nav-item dropdown">
+                      <a class="nav-link dropdown-toggle" data-toggle="dropdown" href="#"><font style="vertical-align: inherit;"><font style="vertical-align: inherit;">类型</font></font></a>
+                      <div class="dropdown-menu" role="menu">
+                        <a class="dropdown-item" tabindex="-1" href="javascript:void(0)"> 不限 </a>
+                        <div class="dropdown-divider"></div>
+                        <a class="dropdown-item" tabindex="-1" href="javascript:void(0)"> 工作室注册申请</a>
+                        <a class="dropdown-item" tabindex="-1" href="javascript:void(0)"> 报销</a>
+                        <a class="dropdown-item" tabindex="-1" href="javascript:void(0)"> 通用审批 </a>
+                      </div>
+                    </div>
+                  </th>  
+                   
                 <th class="cell-300" scope="col">申请时间</th>
                 <th class="cell-300" scope="col">申请状态</th>
               </tr>
@@ -53,8 +55,8 @@
                   <router-link :to="{name:'approval/detail', params: {id: task.id}}">{{ task.title }}
                   </router-link>
                 </td>
-                <td>暂无</td>
-                <td>暂无</td>
+                <td class="cell-300">暂无</td>
+                <td class="cell-300">暂无</td>
                 <td>
                   <template v-if="task.status === 1">进行中</template>
                   <template v-if="task.status === 2">已完成</template>
@@ -178,178 +180,185 @@
 
 </template>
 <script>
-  import fetch from '../../assets/utils/fetch.js'
-  import config from '../../assets/js/config'
+import fetch from "../../assets/utils/fetch.js";
+import config from "../../assets/js/config";
 
-  export default {
-    name: '',
-    data: function () {
-      return {
-        total: 0,
-        current_page: 1,
-        total_pages: 1,
-        memberPlaceholder: '请选择负责人',
-        participants: [],
-        multiple: false,
-        taskIntroduce: '',
-        startTime: '',
-        startMinutes: '00:00',
-        endTime: '',
-        endMinutes: '00:00',
-        tasksInfo: '',
-        taskStatus: 0,
-        newTask: {},
-        taskType: '',
-        taskFinishType: '',
-        taskName: '',
-        taskLevel: '',
-        taskLevelArr: config.taskLevelArr,
-        taskTypeArr: config.taskTypeArr,
-        customizeInfo: config.customizeInfo,
+export default {
+  name: "",
+  data: function() {
+    return {
+      total: 0,
+      current_page: 1,
+      total_pages: 1,
+      memberPlaceholder: "请选择负责人",
+      participants: [],
+      multiple: false,
+      taskIntroduce: "",
+      startTime: "",
+      startMinutes: "00:00",
+      endTime: "",
+      endMinutes: "00:00",
+      tasksInfo: "",
+      taskStatus: 0,
+      newTask: {},
+      taskType: "",
+      taskFinishType: "",
+      taskName: "",
+      taskLevel: "",
+      taskLevelArr: config.taskLevelArr,
+      taskTypeArr: config.taskTypeArr,
+      customizeInfo: config.customizeInfo
+    };
+  },
+
+  mounted() {
+    this.getTasks();
+  },
+
+  methods: {
+    getTasks: function(pageNum = 1) {
+      let data = {
+        page: pageNum,
+        include:
+          "principal,pTask,tasks,resource.resourceable,resource.resource,participants"
+      };
+      let _this = this;
+
+      fetch("get", "/tasks/my_all", data).then(function(response) {
+        _this.tasksInfo = response.data;
+        _this.current_page = response.meta.pagination.current_page;
+        _this.total = response.meta.pagination.total;
+        _this.total_pages = response.meta.pagination.total_pages;
+      });
+    },
+
+    getMyTasks: function(pageNum = 1, type = null) {
+      let _this = this;
+      if (type) {
+        app.taskFinishType = type;
       }
 
+      let data = {
+        page: pageNum,
+        include:
+          "principal,pTask,tasks,resource.resourceable,resource.resource,participants",
+        type: app.taskFinishType,
+        status: 0
+      };
 
+      $.ajax({
+        type: "get",
+        url: config.apiUrl + "/tasks/my",
+        headers: config.getHeaders(),
+        data: data
+      }).done(function(response) {
+        _this.tasksInfo = response.data;
+        _this.current_page = response.meta.pagination.current_page;
+        _this.total = response.meta.pagination.total;
+        _this.total_pages = response.meta.pagination.total_pages;
+      });
     },
 
-    mounted() {
-      this.getTasks()
-    },
-
-    methods: {
-
-      getTasks: function (pageNum = 1) {
-        let data = {
-          page: pageNum,
-          include: 'principal,pTask,tasks,resource.resourceable,resource.resource,participants',
-        };
-        let _this = this;
-
-        fetch('get', '/tasks/my_all', data).then(function (response) {
-          _this.tasksInfo = response.data;
-          _this.current_page = response.meta.pagination.current_page;
-          _this.total = response.meta.pagination.total;
-          _this.total_pages = response.meta.pagination.total_pages;
-        });
-      },
-
-      getMyTasks: function (pageNum = 1, type = null) {
-        let _this = this;
-        if (type) {
-          app.taskFinishType = type
-        }
-
-        let data = {
-          page: pageNum,
-          include: 'principal,pTask,tasks,resource.resourceable,resource.resource,participants',
-          type: app.taskFinishType,
-          status: 0
-        };
-
-        $.ajax({
-          type: 'get',
-          url: config.apiUrl + '/tasks/my',
-          headers: config.getHeaders(),
-          data: data
-        }).done(function (response) {
-          _this.tasksInfo = response.data;
-          _this.current_page = response.meta.pagination.current_page;
-          _this.total = response.meta.pagination.total;
-          _this.total_pages = response.meta.pagination.total_pages;
-        })
-      },
-
-      addTask: function () {
-        let _this = this;
-        let participant_ids = [];
-        for (let i = 0; i < this.$store.state.newParticipantsInfo.length; i++) {
-          participant_ids.push(this.$store.state.newParticipantsInfo[i].id)
-        }
-        let data = {
-          // resource_type: '1718463094',
-          // resourceable_id: '1994731356',
-          // type: app.taskType,
-          // @todo 任务类型前端维护
-          title: _this.taskName,
-          principal_id: this.$store.state.newPrincipalInfo.id,
-          participant_ids: participant_ids,
-          priority: _this.taskLevel,
-          start_at: _this.startTime + ' ' + _this.startMinutes,
-          end_at: _this.endTime + ' ' + _this.endMinutes,
-          desc: _this.taskIntroduce
-        };
-        $.ajax({
-          type: 'post',
-          url: config.apiUrl + '/tasks',
-          headers: config.getHeaders(),
-          data: data,
-          statusCode: {
-            400: function (response) {
-              toastr.error(response.responseJSON.message);
-            },
+    addTask: function() {
+      let _this = this;
+      let participant_ids = [];
+      for (let i = 0; i < this.$store.state.newParticipantsInfo.length; i++) {
+        participant_ids.push(this.$store.state.newParticipantsInfo[i].id);
+      }
+      let data = {
+        // resource_type: '1718463094',
+        // resourceable_id: '1994731356',
+        // type: app.taskType,
+        // @todo 任务类型前端维护
+        title: _this.taskName,
+        principal_id: this.$store.state.newPrincipalInfo.id,
+        participant_ids: participant_ids,
+        priority: _this.taskLevel,
+        start_at: _this.startTime + " " + _this.startMinutes,
+        end_at: _this.endTime + " " + _this.endMinutes,
+        desc: _this.taskIntroduce
+      };
+      $.ajax({
+        type: "post",
+        url: config.apiUrl + "/tasks",
+        headers: config.getHeaders(),
+        data: data,
+        statusCode: {
+          400: function(response) {
+            toastr.error(response.responseJSON.message);
           }
-        }).done(function (response) {
-          console.log(response);
-          toastr.success('创建成功');
-          $('#addTask').modal('hide');
-          redirect('detail?task_id=' + response.data.id)
-        })
-      },
-
-      customize: function (value) {
-        console.log(value)
-      },
-
-      changeLinkage: function (value) {
-        console.log(value)
-      },
-
-      changeTaskType: function (value) {
-        this.taskType = value
-      },
-
-      principalChange: function (value) {
-        this.principal = value
-      },
-
-      participantChange: function (value) {
-        let flagArr = [];
-        for (let i = 0; i < value.length; i++) {
-          flagArr.push(value[i].id)
         }
-        this.participants = flagArr
-      },
+      }).done(function(response) {
+        console.log(response);
+        toastr.success("创建成功");
+        $("#addTask").modal("hide");
+        redirect("detail?task_id=" + response.data.id);
+      });
+    },
 
-      changeTaskLevel: function (value) {
-        this.taskLevel = value
-      },
+    customize: function(value) {
+      console.log(value);
+    },
 
-      changeStartTime: function (value) {
-        this.startTime = value
-      },
+    changeLinkage: function(value) {
+      console.log(value);
+    },
 
-      changeStartMinutes: function (value) {
-        this.startMinutes = value
-      },
+    changeTaskType: function(value) {
+      this.taskType = value;
+    },
 
-      changeEndTime: function (value) {
-        this.endTime = value
-      },
+    principalChange: function(value) {
+      this.principal = value;
+    },
 
-      changeEndMinutes: function (value) {
-        this.endMinutes = value
-      },
+    participantChange: function(value) {
+      let flagArr = [];
+      for (let i = 0; i < value.length; i++) {
+        flagArr.push(value[i].id);
+      }
+      this.participants = flagArr;
+    },
+
+    changeTaskLevel: function(value) {
+      this.taskLevel = value;
+    },
+
+    changeStartTime: function(value) {
+      this.startTime = value;
+    },
+
+    changeStartMinutes: function(value) {
+      this.startMinutes = value;
+    },
+
+    changeEndTime: function(value) {
+      this.endTime = value;
+    },
+
+    changeEndMinutes: function(value) {
+      this.endMinutes = value;
     }
-
   }
+};
 </script>
 
 <style scoped>
-  .page {
-    position: absolute;
-    left: 210px;
-    top: 0;
-  }
-.dropdown{
-  z-index:10000;
+.page {
+  position: absolute;
+  left: 210px;
+  top: 0;
+}
+a {
+  text-decoration: none;
+}
+.nav-item a{
+  color: #757575;
+}
+.nav-link.dropdown-toggle{
+  text-align: left;
+  margin-top: -10px;
+  margin-left: -15px;
+  background: #fff;
 }
 </style>
