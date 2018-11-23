@@ -107,7 +107,7 @@
     }
 
     .page {
-        margin-left: 100px !important;
+        margin-left: 100px;
         min-height: 100vh;
     }
 
@@ -136,6 +136,10 @@
         margin: 0 4px;
         position: relative;
         top: -1px;
+    }
+
+    .site-menu > .site-menu-item > .site-menu-sub {
+        left: 100px;
     }
 
 </style>

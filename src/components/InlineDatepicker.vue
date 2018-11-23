@@ -26,3 +26,9 @@
         methods: {}
     }
 </script>
+
+<style>
+    .datepicker {
+        margin: 0 auto;
+    }
+</style>
