@@ -14,6 +14,7 @@
                         <i class="icon"
                         :class="readTypeShow?'md-chevron-up':'md-chevron-down'"
                         ></i>
+                        
                     </div>
                 </div>
                 <div class="col-md-12">
@@ -21,31 +22,40 @@
                         <li class="nav-item" role="presentation" >
                             <a class="nav-link active" data-toggle="tab" href="#forum-task"
                                aria-controls="forum-base"
-                               aria-expanded="true" role="tab">未读</a>
+                               aria-expanded="true" role="tab" @click='readFilter=1'>未读</a>
                         </li>
                         <li class="nav-item" role="presentation">
                             <a class="nav-link" data-toggle="tab" href="#forum-task"
                                aria-controls="forum-present"
-                               aria-expanded="false" role="tab">已读</a>
+                               aria-expanded="false" role="tab" @click='readFilter=0'>已读</a>
                         </li>
                     </ul>
                 </div>
-                <div class="" v-for="i in 5" :key="i">
-                    <div class="page-content col-md-12 col-lg-12 row" >
-                        <p class="messages-date">1970年1月1日</p>
-                        <hr class="col-md-10 col-lg-10">
-                    </div>
-                    <Main :messageData='messageData' class="message-main-container"/>
+                <div class="" 
+                    v-for="(item, index) in pageData" 
+                    :key="index" 
+                    @click="messageClickHandler(index)">
+                    <Main :pageData='item' class="message-main-container" v-if="item.readflag === readFilter"/>
                 </div>
+                <div v-if="isNoUnread">
+                    <div class="page-content vertical-align-middle">
+                        <header>
+                        <h1 class="animation-slide-top">oop,这里什么都没有</h1>
+                        </header>
+                        <p class="error-advise">你可以到已读消息中查看更多</p>
+                    </div>
+                 </div>
             </div>
         </div>
-        <FlagConfirm />
+        <FlagConfirm @emitMarkasRead='emitMarkasRead'/>
+        
     </div>
 </template>
 
 <script>
 import Main from './detail.vue';
 import FlagConfirm from './flag.vue';
+import messagesData from './messages.json'
 
 export default {
   name: 'messagesIndex',
@@ -57,10 +67,27 @@ export default {
       messageStatus: null,
       messageData: {},
       readTypeShow: false,
+      pageData:{},
+      readFilter:1
     };
   },
   mounted() {
-
+      this.dataInit()
+  },
+  computed:{
+      isNoUnread(){
+            let counter = 0
+            for (const key in this.pageData) {
+                if (this.pageData[key].readflag === 1) {
+                    counter++
+                }
+            }
+            if(counter === 0 && this.readFilter == 1){
+                return true
+            }else{
+                return false
+            }
+      }
   },
   methods: {
     readTypeToggle() {
@@ -69,6 +96,39 @@ export default {
     messageStatusChange(ref) {
       console.log(ref);
       this.messageStatus = ref;
+    },
+    dataInit(){
+        for (const key in messagesData) {
+            let orignTime = messagesData[key].time
+            messagesData[key].timeYMD = this.timeFormat(orignTime).formatYMD
+            messagesData[key].timehms = this.timeFormat(orignTime).formathms
+            // if(key>0 && this.timeFormat(orignTime).formatYMD === messagesData[key-1].timeYMD){
+            //    messagesData[key].timeYMD = ''
+            // }
+        }
+        this.pageData = messagesData
+    },
+    timeFormat(ref){
+        let date = new Date(ref);
+        let Y = date.getFullYear()
+        let M = (date.getMonth()+1 < 10 ? '0'+(date.getMonth()+1) : date.getMonth()+1)
+        let D = date.getDate()
+        let h = date.getHours()
+        let m = (date.getMinutes() < 10 ? '0'+(date.getMinutes()):date.getMinutes())
+        let s = (date.getSeconds()<10?'0'+(date.getSeconds()):date.getSeconds())
+        let formatYMD = Y+'-'+M+'-'+D
+        let formathms = h+':'+m+':'+s
+        return{
+            formatYMD,formathms
+        }
+    },
+    messageClickHandler(ref){
+        this.pageData[ref].readflag = 0
+    },
+    emitMarkasRead(){
+        for (const key in this.pageData) {
+            messagesData[key].readflag = 0
+        }
     },
   },
 };

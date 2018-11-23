@@ -1,24 +1,31 @@
 <template>
      <div class="page-content container-fluid">
         <div class="col-md-12 col-lg-12 row">
-          <div class="rounded-circle img-thumbnail messages-img"></div>
+          <div class="rounded-circle img-thumbnail messages-img" 
+          :style="{ backgroundImage: 'url('+pageData.cover+')'}"></div>
           <div class="">
-            <p class="">20:30</p>
-            <h6 class="">测试邀请你参与任务</h6>
-            <h5 class="">[AB巧乐滋续约] &nbsp;&nbsp;主体确认事宜 </h5>
-            <h6 class="">测试人</h6>
+            <p class="">{{pageData.timeYMD}}  {{pageData.timehms}}</p>
+            <h6 class="">{{pageData.name}}邀请你参与{{pageData.task}}</h6>
+            <h5 class="">[{{pageData.detail.kind}}] &nbsp;&nbsp;{{pageData.detail.step}} </h5>
+            <h6 class="">{{pageData.name}}</h6>
+          </div>
+          <div class="ribbon ribbon-badge ribbon-info ribbon-reverse" v-if="pageData.readflag">
+            <span class="ribbon-inner">未读消息</span>
           </div>
         </div>
     </div>
 </template>
 <script>
 export default {
-  props: ['messageData'],
+  props: ['pageData'],
   data() {
     return {
 
     };
   },
+  mounted(){
+    
+  }
 };
 </script>
 
@@ -29,6 +36,7 @@ export default {
   background: #D8D8D8;
   border: 1px solid #979797;
   margin-right: 17px;
+  background-size: 40px 40px;
 }
 
 </style>
