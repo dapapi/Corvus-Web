@@ -22,7 +22,7 @@
                 data-dismiss="modal">不</button>
                 <button type="button"
                 class="btn btn-primary waves-effect waves-classic"
-                data-dismiss="modal">确认</button>
+                data-dismiss="modal" @click='emitMarkasRead'>确认</button>
             </div>
             </div>
         </div>
@@ -31,7 +31,12 @@
 
 <script>
 export default {
-
+    methods:{
+        //发送
+        emitMarkasRead(){
+            this.$emit('emitMarkasRead')
+        }
+    }
 };
 </script>
 
