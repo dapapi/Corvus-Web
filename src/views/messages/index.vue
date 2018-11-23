@@ -1,36 +1,45 @@
 <template>
    <div class="page">
-        <div class="page-header page-header-bordered ">
-            <h1 class="page-title">消息</h1>
-        </div>
-        <div class="page-content container-fluid">
-            <div class="panel col-md-12 col-lg-12 py-5 ">
-                <div class="col-md-12 row filter-container" >
+        <div class="page-header page-header-bordered col-md-12 row">
+            <h1 class="page-title col-md-2">消息</h1>
+            <div class="col-md-10 row filter-container" >
                     <div class="offset-md-8 col-md-2 text-right "
                     data-target="#exampleNiftyFadeScale" data-toggle="modal" >
-                        <i class="icon md-circle-o" ></i>&nbsp;&nbsp;全部标记为已读
+                        <i class="icon md-circle-o" v-if="readFilter && !isNoUnread"></i>&nbsp;&nbsp;<span v-if="readFilter && !isNoUnread">全部标记为已读</span> 
                     </div>
                     <div class="col-md-2 text-right text-filter-all" @click="readTypeToggle">全部消息
                         <i class="icon"
-                        :class="readTypeShow?'md-chevron-up':'md-chevron-down'"
-                        ></i>
-                        
+                        :class="readTypeShow?'md-chevron-up':'md-chevron-down'"></i>
                     </div>
                 </div>
-                <div class="col-md-12">
-                    <ul class="nav nav-tabs nav-tabs-line" role="tablist">
-                        <li class="nav-item" role="presentation" >
-                            <a class="nav-link active" data-toggle="tab" href="#forum-task"
-                               aria-controls="forum-base"
-                               aria-expanded="true" role="tab" @click='readFilter=1'>未读</a>
-                        </li>
-                        <li class="nav-item" role="presentation">
-                            <a class="nav-link" data-toggle="tab" href="#forum-task"
-                               aria-controls="forum-present"
-                               aria-expanded="false" role="tab" @click='readFilter=0'>已读</a>
-                        </li>
-                    </ul>
-                </div>
+
+        </div>
+        <div class="col-md-12">
+            <ul class="nav nav-tabs nav-tabs-line" role="tablist">
+                <li class="nav-item" role="presentation" >
+                    <a class="nav-link active" data-toggle="tab" href="#forum-task"
+                        aria-controls="forum-base"
+                        aria-expanded="true" role="tab" @click='readFilter=1'>未读</a>
+                </li>
+                <li class="nav-item" role="presentation">
+                    <a class="nav-link" data-toggle="tab" href="#forum-task"
+                        aria-controls="forum-present"
+                        aria-expanded="false" role="tab" @click='readFilter=0'>已读</a>
+                </li>
+            </ul>
+        </div>
+        <div class="page-content container-fluid">
+            <div class="panel col-md-12 col-lg-12 py-5 ">
+                <!-- <div class="col-md-12 row filter-container" >
+                    <div class="offset-md-8 col-md-2 text-right "
+                    data-target="#exampleNiftyFadeScale" data-toggle="modal" >
+                        <i class="icon md-circle-o" v-if="readFilter && !isNoUnread"></i>&nbsp;&nbsp;<span v-if="readFilter && !isNoUnread">全部标记为已读</span> 
+                    </div>
+                    <div class="col-md-2 text-right text-filter-all" @click="readTypeToggle">全部消息
+                        <i class="icon"
+                        :class="readTypeShow?'md-chevron-up':'md-chevron-down'"></i>
+                    </div>
+                </div> -->
                 <div class="" 
                     v-for="(item, index) in pageData" 
                     :key="index" 
@@ -144,10 +153,9 @@ export default {
     font-size: 14px;
     color: #333333;
     letter-spacing: 0;
-    margin-top: 30px;
     user-select: none;
 }
-.message-main-container:hover{
+.message-main-container>:first-child:hover{
     background: rgba(87, 140, 242, 0.14);
 }
 .messages-date{
