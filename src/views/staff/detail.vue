@@ -1,16 +1,8 @@
-@extends('layouts.master')
-
-@section('title','员工管理')
-@section('body-class','dashboard')
-
-@section('body')
-    @include('layouts.top-nav')
-    @include('layouts.left-nav')
-
+<template>
     <!-- Page -->
-    <div class="page" id="root">
+    <div class="page">
 
-        <nav-back title="测试-测试部" href="/staff/index"></nav-back>
+        <NavBack title="测试-测试部" href="/staff"></NavBack>
 
         <div class="page-content container-fluid">
             <div class="panel col-md-12 clearfix py-5">
@@ -473,17 +465,25 @@
         <!-- <Modal /> -->
     </div>
     <!-- End Page -->
+</template>
 
-@endsection
+<script>
+export default {
+    name: 'staffDetail',
+    data () {
+        return {
+            // 
+        }
+    },
+    mounted () {
+        // 
+    },
+    methods: {
+        // 
+    },
+}
+</script>
 
-
-@section('style')
-    <link rel="stylesheet" href="{{ mix('css/v1.css') }}">
-    <link rel="stylesheet" href="{{ mix('css/staff.css') }}">
-@endsection
-
-@section('script')
-
-    <script src="{{ mix('js/staff.detail.js') }}"></script>
-
-@endsection
+<style>
+@import '../../assets/css/staff.scss';
+</style>
