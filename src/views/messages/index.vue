@@ -64,17 +64,18 @@ export default {
   },
   data() {
     return {
-      messageStatus: null,
-      messageData: {},
-      readTypeShow: false,
-      pageData:{},
-      readFilter:1
+      messageStatus: null,  //消息状态
+      readTypeShow: false,  //全部消息列表展开控制
+      pageData:{},          //页面数据
+      readFilter:1          //阅读状态筛选
     };
   },
   mounted() {
+      //数据初始化
       this.dataInit()
   },
   computed:{
+      //是否有未读信息判断
       isNoUnread(){
             let counter = 0
             for (const key in this.pageData) {
@@ -90,24 +91,24 @@ export default {
       }
   },
   methods: {
+    //消息模式变更
     readTypeToggle() {
       this.readTypeShow = !this.readTypeShow;
     },
+    //消息状态变更
     messageStatusChange(ref) {
-      console.log(ref);
       this.messageStatus = ref;
     },
+    //初始化数据
     dataInit(){
         for (const key in messagesData) {
             let orignTime = messagesData[key].time
             messagesData[key].timeYMD = this.timeFormat(orignTime).formatYMD
             messagesData[key].timehms = this.timeFormat(orignTime).formathms
-            // if(key>0 && this.timeFormat(orignTime).formatYMD === messagesData[key-1].timeYMD){
-            //    messagesData[key].timeYMD = ''
-            // }
         }
         this.pageData = messagesData
     },
+    //日期格式化
     timeFormat(ref){
         let date = new Date(ref);
         let Y = date.getFullYear()
@@ -122,9 +123,11 @@ export default {
             formatYMD,formathms
         }
     },
+    //已读、未读控制器
     messageClickHandler(ref){
         this.pageData[ref].readflag = 0
     },
+    //全部消息已读接收器
     emitMarkasRead(){
         for (const key in this.pageData) {
             messagesData[key].readflag = 0

@@ -32,6 +32,7 @@
 <script>
 export default {
     methods:{
+        //发送
         emitMarkasRead(){
             this.$emit('emitMarkasRead')
         }
