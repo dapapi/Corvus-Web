@@ -2,8 +2,10 @@
     <div class="page">
 
         <div class="page-header page-header-bordered">
-            <h1 class="page-title">项目管理</h1>
+            <h1 class="page-title">发起审批</h1>
         </div>
+
+
 
         <div class="page-content container-fluid">
             <div class="panel col-md-12 clearfix py-5">
@@ -64,8 +66,10 @@
                                 <th class="cell-300" scope="col">跟进时间</th>
                             </tr>
                             <tr v-for="project in projectsInfo ">
-                                <td class="pointer-content" @click="redirectProjectDetail(project.id)">{{ project.title
-                                    }}
+                                <td class="pointer-content">
+                                    <router-link :to="{name:'projects/detail', params: {id: project.id}}">
+                                        {{ project.title }}
+                                    </router-link>
                                 </td>
                                 <td>{{ project.principal }}</td>
                                 <td>{{ project.progress }}</td>
@@ -82,11 +86,11 @@
 
             </div>
 
-        </div>
 
+        </div>
         <customize-filter :data="customizeInfo" @change="customize"></customize-filter>
 
-        <div class="site-action" data-plugin="actionBtn" data-toggle="modal" data-target="#selectProjectType">
+        <div class="site-action" data-plugin="actionBtn" data-toggle="modal" data-target="#addTask">
             <button type="button"
                     class="site-action-toggle btn-raised btn btn-success btn-floating waves-effect waves-classic">
                 <i class="front-icon md-plus animation-scale-up" aria-hidden="true"></i>
@@ -94,91 +98,67 @@
             </button>
         </div>
 
-        <div class="modal fade" id="selectProjectType" aria-hidden="true" aria-labelledby="addLabelForm"
-             role="dialog" tabindex="-1">
+        <div class="modal fade" id="addTask" aria-hidden="true" aria-labelledby="addLabelForm"
+            role="dialog" tabindex="-1">
             <div class="modal-dialog modal-simple">
                 <div class="modal-content">
                     <div class="modal-header">
                         <button type="button" class="close" aria-hidden="true" data-dismiss="modal">
                             <i class="md-close" aria-hidden="true"></i>
                         </button>
-                        <h4 class="modal-title">新增项目</h4>
+                        <h4 class="modal-title">新增任务</h4>
                     </div>
                     <div class="modal-body">
 
                         <div class="example">
-                            <div class="col-md-2 text-right float-left">项目类型</div>
+                            <div class="col-md-2 text-right float-left">关联资源</div>
+                            <div class="col-md-10 float-left">
+                                <!-- todo 资源未关联-->
+                                <!--<normal-linkage-selectors @change="changeLinkage"></normal-linkage-selectors>-->
+                            </div>
+                        </div>
+                        <div class="example">
+                            <div class="col-md-2 text-right float-left">任务类型</div>
                             <div class="col-md-10 float-left pl-0">
-                                <selectors :options="projectTypeArr" @change="changeProjectType"
-                                           :placeholder="'请选择项目类型'"></selectors>
+                                <selectors :options="taskTypeArr" :placeholder="'请选择任务类型'"
+                                        @change="changeTaskType"></selectors>
                             </div>
                         </div>
-                    </div>
-                    <div class="modal-footer">
-                        <button class="btn btn-sm btn-white btn-pure" data-dismiss="modal">取消</button>
-                        <button class="btn btn-primary" type="submit" @click="selectProjectType" data-toggle="modal"
-                                data-target="#addProject">确定
-                        </button>
-                    </div>
+                        <div class="example">
+                            <div class="col-md-2 text-right float-left">任务名称</div>
+                            <div class="col-md-10 float-left pl-0">
+                                <input type="text" class="form-control" placeholder="请输入任务名称" v-model="taskName">
+                            </div>
+                        </div>
+                        <div class="example">
+                            <div class="col-md-2 text-right float-left">负责人</div>
+                            <div class="col-md-5 float-left pl-0">
+                                <input-selectors :placeholder="'请选择负责人'"
+                                                @change="principalChange"></input-selectors>
+                            </div>
+                        </div>
+                        <div class="example">
+                            <div class="col-md-2 text-right float-left">参与人</div>
+                            <div class="col-md-10 float-left pl-0">
+                                <add-member @change="participantChange"></add-member>
+                            </div>
+                        </div>
+                        <div class="example">
+                            <div class="col-md-2 text-right float-left pl-0">任务优先级</div>
+                            <div class="col-md-10 float-left pl-0">
+                                <selectors :options="taskLevelArr" :placeholder="'请选择任务优先级'"
+                                        @change="changeTaskLevel"></selectors>
+                            </div>
+                        </div>
+                        <div class="example">
+                            <div class="col-md-2 text-right float-left">开始时间</div>
+                            <div class="col-md-5 float-left pl-0">
+                                <datepicker @change="changeStartTime"></datepicker>
+                            </div>
 
-                </div>
-            </div>
-        </div>
+                            <div class="col-md-5 float-left pl-0">
+                                <timepicker :default="startMinutes" @change="changeStartMinutes"></timepicker>
 
-        <div class="modal fade" id="addProject" aria-hidden="true" aria-labelledby="addLabelForm"
-             role="dialog" tabindex="-1">
-            <div class="modal-dialog modal-simple">
-                <div class="modal-content">
-                    <div class="modal-header">
-                        <button type="button" class="close" aria-hidden="true" data-dismiss="modal">
-                            <i class="md-close" aria-hidden="true"></i>
-                        </button>
-                        <h4 class="modal-title">新增项目</h4>
-                    </div>
-                    <div class="modal-body">
-                        <div class="col-md-12 example clearfix">
-                            <div class="col-md-2 text-right float-left pl-0">销售线索</div>
-                            <div class="col-md-10 float-left">
-                                <selectors @change="(value) => addInfo(value, 'name')"></selectors>
-                            </div>
-                        </div>
-                        <div class="col-md-12 example clearfix">
-                            <div class="col-md-2 text-right float-left pl-0">项目名称</div>
-                            <div class="col-md-10 float-left">
-                                <emit-input @change="(value) => addInfo(value, 'name')"></emit-input>
-                            </div>
-                        </div>
-                        <div class="col-md-12 example clearfix">
-                            <div class="col-md-2 text-right float-left pl-0">项目负责人</div>
-                            <div class="col-md-10 float-left">
-                                <input-selectors @change="(value) => addInfo(value, 'principal_id')"></input-selectors>
-                            </div>
-                        </div>
-                        <div class="col-md-12 example clearfix">
-                            <div class="col-md-2 text-right float-left pl-0">优先级</div>
-                            <div class="col-md-10 float-left">
-                                <selectors :options="levelArr"
-                                           @change="(value) => addInfo(value, 'priority')"></selectors>
-                            </div>
-                        </div>
-                        <div class="col-md-12 example clearfix">
-                            <div class="col-md-2 text-right float-left pl-0">可见范围</div>
-                            <div class="col-md-10 float-left">
-                                <selectors :options="visibleRange"
-                                           @change="(value) => addInfo(value, 'name')"></selectors>
-                            </div>
-                        </div>
-                        <div class="col-md-12 example clearfix">
-                            <div class="col-md-2 text-right float-left pl-0">开始时间</div>
-                            <div class="col-md-10 float-left">
-                                <datepicker @change="(value) => addInfo(value, 'start_at')"></datepicker>
-                            </div>
-                        </div>
-                        <div class="col-md-12 example clearfix">
-                            <div class="col-md-2 text-right float-left pl-0">截止时间</div>
-                            <div class="col-md-10 float-left">
-                                <datepicker @change="(value) => addInfo(value, 'end_at')"></datepicker>
-                            </div>
                         </div>
                         <div class="col-md-12 example clearfix" v-for="field in projectFieldsArr">
                             <div class="col-md-2 text-right float-left pl-0">{{ field.key }}</div>
@@ -215,26 +195,36 @@
                                 <template v-else-if="field.field_type === 11">
                                     <number-spinner @change="(value) => addInfo(value, field.key )"></number-spinner>
                                 </template>
+
                             </div>
                         </div>
-                        <div class="col-md-12 example clearfix">
-                            <div class="col-md-2 text-right float-left pl-0">备注</div>
-                            <div class="col-md-10 float-left">
-                                <emit-input @change="(value) => addInfo(value, 'desc')"></emit-input>
+                        <div class="example">
+                            <div class="col-md-2 text-right float-left">截止时间</div>
+                            <div class="col-md-5 float-left pl-0">
+                                <datepicker @change="changeEndTime"></datepicker>
+                            </div>
+                            <div class="col-md-5 float-left pl-0">
+                                <timepicker :default="endMinutes" @change="changeEndMinutes"></timepicker>
                             </div>
                         </div>
-                    </div>
+                        <div class="example">
+                            <div class="col-md-2 text-right float-left">任务说明</div>
+                            <div class="col-md-10 float-left pl-0">
+                                <textarea class="form-control" name="taskDescription" id="" cols="30" rows="5" title="" v-model="taskIntroduce"></textarea>
+                            </div>
                     <div class="modal-footer">
                         <button class="btn btn-sm btn-white btn-pure" data-dismiss="modal">取消</button>
-                        <button class="btn btn-primary" type="submit" @click="addProject">确定</button>
+                        <button class="btn btn-primary" type="submit" @click="selectProjectType" data-toggle="modal"
+                                data-target="#addProject">确定
+                        </button>
                     </div>
-
                 </div>
             </div>
         </div>
-
+        </div>
+    </div>  
     </div>
-
+    </div>
 </template>
 
 <script>
@@ -332,10 +322,6 @@
 
             changeTargetArtist: function (value) {
                 console.log(value)
-            },
-
-            redirectProjectDetail: function (projectId) {
-                redirect('detail?project_id=' + projectId)
             },
 
             changeProjectType: function (value) {

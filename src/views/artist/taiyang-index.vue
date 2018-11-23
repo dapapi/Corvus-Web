@@ -139,7 +139,6 @@
                         <h4 class="modal-title">新增艺人</h4>
                     </div>
                     <div class="modal-body">
-                        {{-- todo 复选框单选 --}}
                         <div class="example">
                             <div class="col-md-2 text-right float-left">姓名</div>
                             <div class="col-md-10 float-left pl-0">

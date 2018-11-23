@@ -45,7 +45,12 @@
                             <th class="cell-300" scope="col">负责人</th>
                         </tr>
                         <tr v-for="trail in trailsInfo ">
-                            <td class="pointer-content" @click="redirectTrailDetail(trail.id)">{{ trail.title }}</td>
+                            <td class="pointer-content">
+                                <router-link :to="{name:'trails/detail', params: {id: trail.id}}">
+                                    {{ trail.title }}
+                                </router-link>
+                            </td>
+
                             <td>{{ trail.client.data.company }}</td>
                             <td>
                                 <template v-if="trail.client.data.grade === 1">直客</template>

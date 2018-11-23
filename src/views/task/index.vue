@@ -69,7 +69,8 @@
                             </tr>
                             <tr v-for="task in tasksInfo">
                                 <td class="pointer-content">
-                                    <router-link :to="{name:'tasks/detail', params: {id: task.id}}">{{ task.title }}
+                                    <router-link :to="{name:'tasks/detail', params: {id: task.id}}">
+                                        {{ task.title }}
                                     </router-link>
                                 </td>
                                 <td>暂无</td>

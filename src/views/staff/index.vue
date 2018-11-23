@@ -1,11 +1,11 @@
 <template>
     <!-- Page -->
-    <div class="page" id="root">
+    <div class="page">
 
         <div class="page-header page-header-bordered">
             <h1 class="page-title">员工档案</h1>
             <div class="page-header-actions">
-                <a href="/staff/history">历史归档</a>
+                <router-link to="/staff/history">历史归档</router-link>
             </div>
         </div>
 
@@ -13,19 +13,19 @@
             <div class="panel col-md-12 clearfix py-5">
                 <div class="clearfix">
                     <div class="col-md-2 example float-left">
-                        <selectors :options="staffStatus" @change="projectChange" :defaultValue="0"></selectors>
+                        <selectors :options="staffStatus" changeKey="status" @select="changeState"></selectors>
                     </div>
                     <div class="col-md-3 example float-left">
-                        <selectors :options="dateArr" @change="projectChange"></selectors>
+                        <selectors :options="monthArr" :value="month" changeKey="month" @select="changeState"></selectors>
                     </div>
                     <div class="col-md-2 example float-left">
-                        <selectors :options="stuffType" @change="projectChange"></selectors>
+                        <selectors :options="staffTypeArr" changeKey="staffType" @select="changeState"></selectors>
                     </div>
                     <div class="col-md-4 example float-left">
                         <div class="input-search">
-                            <button type="submit" class="input-search-btn"><i class="icon md-search" aria-hidden="true"></i>
+                            <button type="button" @click="getStaffList" class="input-search-btn"><i class="icon md-search" aria-hidden="true"></i>
                             </button>
-                            <input type="text" class="form-control" name="" placeholder="请搜索姓名/手机号/职位">
+                            <input type="text" class="form-control" @keyup.enter="getStaffList" v-model="search" placeholder="请搜索姓名/手机号/职位">
                         </div>
                     </div>
                     <div class="col-md-1 example float-left" 
@@ -41,13 +41,11 @@
                         <checkbox-group :option-data="filterConditions" @onchange="changeSelectOption" />
                     </Modal>
                 </div>
-                <div class="example" style="padding: 0 15px;">在职 23 离职 2</div>
+                <div class="example" style="padding: 0 15px;">在职 {{ onJob }} 离职 {{ departure }}</div>
                 <table class="table is-indent example" data-plugin="animateList" data-animate="fade" data-child="tr"
                        data-selectable="selectable">
                     <tr class="animation-fade"
                         style="animation-fill-mode: backwards; animation-duration: 250ms; animation-delay: 0ms;">
-                        <th class="pre-cell"></th>
-                        <th class="cell-300" scope="col">序号</th>
                         <th class="cell-300" scope="col">姓名</th>
                         <th class="cell-300" scope="col">手机</th>
                         <!-- <th class="cell-300" scope="col">工号</th> -->
@@ -56,11 +54,8 @@
                         <th class="cell-300" scope="col">部门</th>
                         <th class="cell-300" scope="col">入职日期</th>
                         <th class="cell-300" scope="col">操作</th>
-                        <th class="suf-cell"></th>
                     </tr>
                     <tr v-for="(item, index) in staffList" :key="index">
-                        <td class="pre-cell"></td>
-                        <td scope="row">{{index + 1}}</td>
                         <td><router-link to="/staff/detail">{{item.name}}</router-link></td>
                         <td>{{ item.phone }}</td>
                         <td>{{ item.status }}</td>
@@ -80,7 +75,6 @@
                                 </div>
                             </div>
                         </td>
-                        <td class="suf-cell"></td>
                     </tr>
                 </table>
 
@@ -88,13 +82,13 @@
                             :total="total"></pagination>
             </div>
             <div class="site-action">
-                <a href="/staff/add">
+                <router-link to="/staff/add">
                     <button type="button"
                             class="site-action-toggle btn-raised btn btn-success btn-floating waves-effect waves-classic">
                         <i class="front-icon md-plus animation-scale-up" aria-hidden="true"></i>
                         <!-- <i class="back-icon md-plus animation-scale-up" aria-hidden="true"></i> -->
                     </button>
-                </a>
+                </router-link>
             </div>
         </div>
 
@@ -104,12 +98,18 @@
 </template>
 
 <script>
-// import config from "../asconfig";
 import config from "../../assets/js/config";
 // import redirect from './bootstrap';
-const { staffStatus, dateArr, stuffType } = config;
+const { staffStatus, staffType } = config;
 import fetch from "../../assets/utils/fetch";
 import axios from 'axios'
+
+const monthArr = Array.from(new Array(12)).map((n, i) => {
+    let obj = {}
+    obj.name = (i + 1) + '月'
+    obj.value = i + 1
+    return obj
+})
 
 export default {
     name: 'Staff',
@@ -123,8 +123,8 @@ export default {
             total: 1,
             // customizeInfo: config.customizeInfo,
             staffStatus: staffStatus,
-            dateArr: dateArr,
-            stuffType: stuffType,
+            monthArr: monthArr,
+            staffTypeArr: staffType,
             filterConditions: [
                 {
                     name: '年龄',
@@ -154,7 +154,15 @@ export default {
             ],
             conditionArr: [],
             checkedNames: [],
-            staffList: []
+            staffList: [],
+            onJob: 0,
+            departure: 0,
+            search: '',
+            entryTime: '',
+            staffType: staffType[0].value,
+            month: new Date().getMonth() + 1, // 1-12月份，
+            status: 1, // 1在职， 2离职，全部 '',
+            page: 1, // 分页
         };
     },
 
@@ -163,24 +171,34 @@ export default {
   },
 
   methods: {
+    // 改变data的值
+    changeState (name, value) {
+        this[name] = value
+        this.getStaffList()
+    },
+
     getStaffList() {
         const params = {
-            status: 1
+            status: this.status,
+            staff_type: this.staffType,
+            page: this.page,
+            search: this.search,
+            entry_time: this.month
         }
         fetch("get", "/personnel_list", params).then(result => {
             this.staffList = result.data;
-            this.currentPage = result.meta.pagination.current_page || 1;
-            this.totalPages = result.meta.pagination.total_pages || 1;
-            this.total = result.meta.pagination.total || 1;
+            const meta = result.meta
+            this.currentPage = meta.pagination.current_page || 1;
+            this.totalPages = meta.pagination.total_pages || 1;
+            this.total = meta.pagination.total || 1;
+            this.onJob = meta.date.onjob || 0
+            this.departure = meta.date.departure || 0
         });
     },
     // 改变报表筛选条件
     changeSelectOption(newArr) {
       this.checkedNames = newArr;
     },
-    // 下拉框改变事件
-    projectChange() {},
-    getProjects() {}
   }
 };
 </script>

@@ -49,7 +49,7 @@
                             </router-link>
                         </li>
                         <li class="site-menu-item">
-                            <router-link to="/artists">
+                            <router-link to="/artists/index">
                                 <a class="animsition-link waves-effect waves-classic">
                                     <i class="site-menu-icon md-view-dashboard" aria-hidden="true"></i>
                                     <span class="site-menu-title">艺人</span>
@@ -65,10 +65,20 @@
                             </router-link>
                         </li>
                         <li class="site-menu-item">
-                            <a class="animsition-link waves-effect waves-classic" href="/brief/index">
-                                <i class="site-menu-icon md-view-dashboard" aria-hidden="true"></i>
-                                <span class="site-menu-title">简报</span>
-                            </a>
+                            <router-link to="/brief/index">
+                                <a class="animsition-link waves-effect waves-classic">
+                                    <i class="site-menu-icon md-view-dashboard" aria-hidden="true"></i>
+                                    <span class="site-menu-title">简报</span>
+                                </a>
+                            </router-link>
+                        </li>
+                         <li class="site-menu-item">
+                            <router-link to="/approval">
+                                <a class="animsition-link waves-effect waves-classic">
+                                    <i class="site-menu-icon md-view-dashboard" aria-hidden="true"></i>
+                                    <span class="site-menu-title">审批</span>
+                                </a>
+                            </router-link>
                         </li>
                     </ul>
                 </div>

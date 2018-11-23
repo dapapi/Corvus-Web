@@ -56,7 +56,7 @@ export default new Router({
         },
         {
             path: '/calendar',
-            name: 'calendar',
+            name: 'usCalendar',
             component: () => import('./views/calendar/index.vue')
         },
         {
@@ -64,40 +64,96 @@ export default new Router({
             name: 'calendar',
             component: () => import('./views/calendar/index.vue')
         },
-        // {
-        //     path: '/artists',
-        //     name: 'artists',
-        //     component: () => import('./views/artist/index.vue')
-        // },
+        {
+            path: '/artists/index',
+            name: 'artists/index',
+            component: () => import('./views/artist/index.vue')
+        },
+        {
+            path: '/artists',
+            name: 'usArtists',
+            component: () => import('./views/artist/taiyang-index.vue')
+        },
+        {
+            path: '/blogger',
+            name: 'usBlogger',
+            component: () => import('./views/artist/papi-index.vue')
+        },
+        {
+            path: '/artists/detail',
+            name: 'artists/detail/:id',
+            component: () => import('./views/artist/detail.vue')
+        },
+        {
+            path: '/artists/:id',
+            name: 'artists',
+            component: () => import('./views/artist/taiyang-detail.vue')
+        },
+        {
+            path: '/blogger/:id',
+            name: 'blogger',
+            component: () => import('./views/artist/papi-detail.vue')
+        },
         {
             path: '/staff',
             name: 'staff',
             component: () => import('./views/staff/index.vue')
         },
+        // {
+        //     path: '/staff/add',
+        //     name: 'staffAdd',
+        //     component: () => import('./views/staff/staffAdd.vue')
+        // },
         {
-            path: '/staff/add',
-            name: 'staffAdd',
-            component: () => import('./views/staff/staffAdd.vue')
-        },
-
-        //简报路由
-        {
-            path:'/brief/home',
-            name:'home',
-            component: () => import('./views/brief/home.vue'),
+            path: '/approval',
+            name: 'approval',
+            component: () => import(/* webpackChunkName: "about" */ './views/approval/index.vue'),
             children:[
                 {
-                    path: '/brief/home', 
+                    path:'/approval/initiate',
+                    component:() => import('./views/approval/initiate.vue')
+                },
+                {
+                    path:'/approval/application',
+                    component:() => import('./views/approval/application.vue')
+                },
+                {
+                    path:'/approval/my',
+                    component:() => import('./views/approval/my.vue')
+                },
+                {
+                    path:'/approval/only',
+                    component:() => import('./views/approval/only.vue')
+                }
+            ],
+        },
+        {
+            path: '/staff/detail',
+            name: 'staffDetail',
+            component: () => import('./views/staff/detail.vue'),
+        },
+        {
+            path: '/staff/history',
+            name: 'staffHistory',
+            component: () => import('./views/staff/history.vue'),
+        },
+        {
+            path: '/brief/home',
+            name: 'home',
+            component: () => import('./views/brief/home.vue'),
+            children: [
+                {
+                    path: '/brief/home',
                     redirect: '/brief/index'
                 },
                 {
-                    path:'/brief/index',
-                    name:'index',
+                    path: '/brief/index',
+                    name: 'index',
                     component: () => import('./views/brief/index.vue'),
                 },
                 {
-                    path:'/brief/details',
-                    name:'details',
+                    path: '/brief/details',
+                    name: 'details',
                     component: () => import('./views/brief/details.vue')
                 },
                 {
@@ -107,5 +163,6 @@ export default new Router({
                 }
             ]
         }
+
     ],
 });
