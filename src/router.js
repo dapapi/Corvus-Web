@@ -146,5 +146,52 @@ export default new Router({
       name: 'messages',
       component: () => import('./views/messages/messagesIndex.vue'),
     },
+    {
+        path: '/brief/home',
+        name: 'home',
+        component: () => import('./views/brief/home.vue'),
+        children: [
+            {
+                path: '/brief/home',
+                redirect: '/brief/index'
+            },
+            {
+                path: '/brief/index',
+                name: 'index',
+                component: () => import('./views/brief/index.vue'),
+            },
+            {
+                path: '/brief/details',
+                name: 'details',
+                component: () => import('./views/brief/details.vue')
+            },
+            {
+                path: '/brief/add',
+                name: 'add',
+                component: () => import('./views/brief/add.vue')
+            },
+            {
+                path: '/brief/myapproval',
+                name: 'myapproval',
+                component: () => import('./views/brief/myapproval.vue')
+            },
+            {
+                path: '/brief/list',
+                name: 'list',
+                component: () => import('./views/brief/list.vue')
+            },
+            {
+                path: '/brief/memberReport',
+                name: 'memberReport',
+                component: () => import('./views/brief/memberReport.vue')
+            },
+            {
+                path: '/brief/statistics',
+                name: 'statistics',
+                component: () => import('./views/brief/statistics.vue')
+            },
+
+        ]
+    }
   ],
 });
