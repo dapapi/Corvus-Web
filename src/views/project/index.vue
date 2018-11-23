@@ -113,8 +113,13 @@
                         <div class="example">
                             <div class="col-md-2 text-right float-left">关联资源</div>
                             <div class="col-md-10 float-left">
+<<<<<<< HEAD
 
                                 <!-- <normal-linkage-selectors @change="changeLinkage"></normal-linkage-selectors> -->
+=======
+                                <!-- todo 资源未关联-->
+                                <!--<normal-linkage-selectors @change="changeLinkage"></normal-linkage-selectors>-->
+>>>>>>> qsf
                             </div>
                         </div>
                         <div class="example">
@@ -222,6 +227,7 @@
             </div>
         </div>
     </div>  
+<<<<<<< HEAD
         </div>
          </div>
          </div>
@@ -231,6 +237,10 @@
       
 
 
+=======
+    </div>
+    </div>
+>>>>>>> qsf
 </template>
 
 <script>

@@ -689,7 +689,7 @@ let config = {
             value: 4
         },
     ],
-    colorArr: ['FFCDD2', 'F06293', 'FDD835', 'FB8C00', 'FFB300', 'E53935', 'D81B60', '8E25AA', '5E35B1', '02ACC1', '1D88E5', '3A49AB', '546E7A', '757575', '6D4C41']
+    colorArr: ['FFCDD2', 'F06293', 'FDD835', 'FB8C00', 'FFB300', 'E53935', 'D81B60', '8E25AA', '5E35B1', '02ACC1', '1D88E5', '3A49AB', '546E7A', '757575', '6D4C41'],
     // 聘用形式
     employment: {
         1: '正式',
