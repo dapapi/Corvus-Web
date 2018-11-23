@@ -1,12 +1,12 @@
 <template>
-    <div class="page vertical-align text-center" data-animsition-in="fade-in" data-animsition-out="fade-out">
+    <div class="page" data-animsition-in="fade-in" data-animsition-out="fade-out">
 
-        <div class="col-md-9 float-left left-bg">
+        <div class="col-md-7 float-left left-bg">
             <div class="bg-top-image">
                 <img src="https://res.papitube.com/login/images/login-left-top.png" alt="">
             </div>
         </div>
-        <div class="col-md-3 float-left right-bg">
+        <div class="col-md-5 float-left right-bg">
             <div class="bg-right-top">
                 <img src="https://res.papitube.com/login/images/login-right-top.png" alt="">
             </div>
@@ -14,14 +14,14 @@
                 <img src="https://res.papitube.com/login/images/login-right-bottom.png" alt="">
             </div>
         </div>
-        <div class="page-content vertical-align-middle">
+        <div class="page-content" v-if="pageType === 'login'">
             <div class="panel">
                 <div class="panel-body">
                     <ul class="nav nav-tabs nav-tabs-line" role="tablist">
                         <li class="nav-item" role="presentation">
                             <a class="nav-link active" data-toggle="tab" href="#forum-login"
                                aria-controls="forum-base"
-                               aria-expanded="true" role="tab">账号登录</a>
+                               aria-expanded="true" role="tab">帐号登录</a>
                         </li>
                         <li class="nav-item" role="presentation">
                             <a class="nav-link" data-toggle="tab" href="#forum-weixin-login"
@@ -35,125 +35,229 @@
                                 <div class="input-group input-group-icon">
                                     <span class="input-group-addon"
                                           style="background-color: white;border-top: 1px solid #e0e0e0;border-left: 1px solid #E0E0E0;border-bottom: 1px solid #E0E0E0;border-right: 0">
-                                        <span class="icon md-smartphone-iphone" aria-hidden="true"></span>
+                                        <i class="icon md-account" aria-hidden="true"></i>
                                     </span>
-                                    <input type="text" class="form-control" placeholder="手机号">
+                                    <input type="text" class="form-control" placeholder="用户名、手机号" v-model="username">
                                 </div>
                             </div>
                             <div class="form-group example">
                                 <div class="input-group input-group-icon">
                                     <span class="input-group-addon"
                                           style="background-color: white;border-top: 1px solid #e0e0e0;border-left: 1px solid #E0E0E0;border-bottom: 1px solid #E0E0E0;border-right: 0">
-                                        <span class="icon md-lock" aria-hidden="true"></span>
+                                        <i class="icon md-lock" aria-hidden="true"></i>
                                     </span>
-                                    <input type="text" class="form-control" placeholder="密码">
+                                    <input type="password" class="form-control" placeholder="密码" v-model="password">
                                 </div>
                             </div>
                             <div class="form-group clearfix">
-                                <div class="checkbox-custom checkbox-inline checkbox-primary checkbox-lg float-left">
+                                <div class="checkbox-custom checkbox-inline checkbox-primary checkbox-sm float-left">
                                     <input type="checkbox" id="inputCheckbox" name="remember">
-                                    <label for="inputCheckbox">记住账号</label>
+                                    <label for="inputCheckbox">记住帐号</label>
                                 </div>
-                                <a class="float-right">忘记密码</a>
+                                <span class="float-right pointer-content font-info" @click="forgetPassword">忘记密码</span>
+                            </div>
+                            <div class="form-group example">
+                                <button type="button" class="btn btn-block btn-primary waves-effect waves-classic"
+                                        @click="checkLogin">登录
+                                </button>
                             </div>
                         </div>
                         <div class="tab-pane animation-fade" id="forum-weixin-login" role="tabpanel">
-                            weixin
+                            <div class="qrCode-wrap">
+                                <img src="https://res.papitube.com/testQRcode.png" alt="">
+                            </div>
+                            <div class="text-center">请使用微信扫描二维码登录</div>
                         </div>
                     </div>
                 </div>
             </div>
         </div>
+
+
+        <div class="page-content" v-else-if="pageType === 'bindPhone'">
+            <div class="panel">
+                <div class="panel-body">
+                    <div class="example pate-title">
+                        <i class="icon md-smartphone-iphone pr-10"></i>绑定手机号
+                    </div>
+                    <div class="tab-content nav-tabs-animate">
+                        <div class="tab-pane animation-fade active" id="forum-bind-phone" role="tabpanel">
+                            <div class="form-group example pt-10">
+                                <input type="text" class="form-control" placeholder="手机号" v-model="username">
+                            </div>
+                            <div class="input-group">
+                                <input type="email" class="form-control" placeholder="验证码" v-model="smsCode">
+                                <div class="input-group-addon pointer-content font-info verification-wrap text-center d-block"
+                                     @click="sendMessage">{{ toastText }}
+                                </div>
+                            </div>
+                            <div class="form-group example">
+                                <button type="button" class="btn btn-block btn-primary waves-effect waves-classic"
+                                        @click="bindPhone">绑定
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="page-content" v-else-if="pageType === 'resetPassword'">
+            <div class="panel">
+                <div class="panel-body">
+                    <div class="example pate-title">
+                        <i class="icon md-shield-check pr-10"></i>修改密码
+                    </div>
+                    <div class="tab-content nav-tabs-animate">
+                        <div class="tab-pane animation-fade active" id="forum-reset" role="tabpanel">
+                            <div class="form-group example pt-10">
+                                <input type="text" class="form-control" placeholder="手机号" v-model="username">
+                            </div>
+                            <div class="form-group input-group">
+                                <input type="email" class="form-control" placeholder="验证码" v-model="smsCode">
+                                <div class="input-group-addon pointer-content font-info verification-wrap text-center d-block"
+                                     @click="sendMessage">{{ toastText }}
+                                </div>
+                            </div>
+                            <div class="form-group">
+                                <input type="password" class="form-control" placeholder="请输入新密码" v-model="newPassword">
+                            </div>
+                            <div class="form-group">
+                                <input type="password" class="form-control" placeholder="请确认密码"
+                                       v-model="repeatNewPassword">
+                            </div>
+                            <div class="form-group">
+                                <button type="button" class="btn btn-block btn-primary waves-effect waves-classic"
+                                        @click="resetPassword">重置密码
+                                </button>
+                            </div>
+                            <div class="text-center mt-20">
+                                <span class="pointer-content font-info" @click="returnLogin">
+                                    <i class="icon md-chevron-left pr-10 font-info"></i>返回登录
+                                </span>
+                            </div>
+
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
     </div>
 </template>
 
 <script>
+    import fetch from '../../assets/utils/fetch.js'
     import config from '../../assets/js/config';
     import Cookie from 'js-cookie';
+    import Verify from '../../assets/utils/verify.js';
 
     export default {
+        data: function () {
+            return {
+                pageType: 'login',
+                toastText: '发送验证码',
+                second: 60,
+                username: '',
+                password: '',
+                newPassword: '',
+                repeatNewPassword: '',
+                smsCode: '',
+            }
+        },
+
         mounted() {
+
         },
 
 
         methods: {
-            initLoginForm() {
-                let $usernameInput = $('#inputUsername');
-                let $passwordInput = $('#inputPassword');
-                let username = $usernameInput.val();
-                let password = $passwordInput.val();
+            storeToLocal(json) {
+                Cookie.set('user', json)
+            },
+
+            storeCompamyTypeToLocal(type) {
+                Cookie.set('companyType', type)
+            },
+
+            returnLogin() {
+                this.pageType = 'login'
+            },
+
+            forgetPassword() {
+                this.pageType = 'resetPassword'
+            },
+
+            sendMessage() {
+                if (this.second > 0 && this.second !== 60) {
+                    return
+                }
                 let _this = this;
-                $.ajax({
-                    type: 'post',
-                    url: config.apiUrl + '/oauth/token',
-                    headers: config.getHeaders(),
-                    data: {
-                        username,
-                        password,
-                        grant_type: 'password',
-                        client_id: config.clientId,
-                        client_secret: config.clientSecret,
-                        scope: '*'
-                    },
-                    statusCode: {
-                        // 401: function () {
-                        //     config.deleteAccessToken();
-                        //     toastr.error('用户名或者密码错误')
-                        // },
-                        // 400: function (response) {
-                        //     let json = response.responseJSON;
-                        //     let message = json.hint;
-                        //     toastr.error(message)
-                        // },
-                        // 422: function () {
-                        //
-                        // }
+                let interval = setInterval(function () {
+                    _this.toastText = _this.second + 's';
+                    _this.second -= 1;
+                    if (_this.second === 0) {
+                        clearInterval(interval);
+                        _this.toastText = '发送验证码';
+                        _this.second = 60;
                     }
-                }).done(function (resposne) {
-                    let token = resposne.access_token;
+                }, 1000);
+            },
+
+            checkLogin: function () {
+                if (!Verify.username(this.username) || !Verify.password(this.password)) {
+                    return
+                }
+                let _this = this;
+                let username = this.username;
+                let password = this.password;
+                let data = {
+                    username,
+                    password,
+                    grant_type: 'password',
+                    client_id: config.clientId,
+                    client_secret: config.clientSecret,
+                    scope: '*'
+                };
+                fetch('post', '/oauth/token', data).then(function (response) {
+                    let token = response.access_token;
                     config.setAccessToken(token);
-                    _this.fecth(function (userJson, companyType) {
+                    _this.fetchUserInfo(function (userJson, companyType) {
                         _this.storeToLocal(userJson);
-                        console.log(companyType);
                         _this.storeCompamyTypeToLocal(companyType);
                         _this.$router.push('/tasks')
                     })
-
                 });
             },
 
-            fecth(callback) {
-                $.ajax({
-                    url: config.apiUrl + '/users/my',
-                    headers: config.getHeaders(),
-                    type: 'get',
-                    statusCode: {
-                        401: function () {
-                            config.deleteAccessToken();
-                            redirect('/login')
-                        },
-                        500: function () {
-                            redirect('/errors/500')
-                        }
-                    }
-                }).done(function (response) {
-                    let userData = response.data
+            fetchUserInfo(callback) {
+                fetch('get', '/users/my').then(function (response) {
+                    let userData = response.data;
                     let json = {
                         id: userData.id,
                         avatar: userData.avatar,
                         nickname: userData.name
-                    }
+                    };
                     callback(json, userData.company)
                 })
             },
 
-            storeToLocal(json) {
-                Cookies.set('user', json)
+            resetPassword() {
+                if (!Verify.phone(this.username) ||
+                    !Verify.smsCode(this.smsCode) ||
+                    !Verify.password(this.newPassword)
+                ) {
+                    return false
+                } else if (this.newPassword !== this.repeatNewPassword) {
+                    toastr.error('两次密码不一致')
+                }
             },
 
-            storeCompamyTypeToLocal(type) {
-                Cookies.set('companyType', type)
-            }
+            bindPhone() {
+                if (!Verify.username(this.username) || !Verify.password(this.password)) {
+                    return
+                }
+            },
         }
     }
 </script>
@@ -215,6 +319,54 @@
     .bg-right-bottom img {
         width: 100%;
         height: auto;
+    }
+
+    .page-content {
+        position: absolute;
+        transform: translate(-50%, -50%);
+        -webkit-transform: translate(-50%, -50%);
+        top: 50%;
+        left: 50%;
+    }
+
+    .nav-tabs-line .nav-link.active {
+        border-bottom: 1px solid #3f51b5;
+    }
+
+    input::-webkit-input-placeholder {
+        color: #CACACA;
+        font-weight: 300;
+    }
+
+    i {
+        color: #999999;
+    }
+
+    li {
+        width: 50%;
+    }
+
+    .qrCode-wrap {
+        width: 220px;
+        height: 220px;
+        padding: 30px;
+    }
+
+    .qrCode-wrap img {
+        width: 100%;
+    }
+
+    .pate-title {
+        color: #333333;
+        font-weight: 400;
+    }
+
+    .input-group-addon {
+        background-color: white;
+    }
+
+    .verification-wrap {
+        width: 100px;
     }
 
 </style>
