@@ -67,7 +67,7 @@
                         <div class="example">
                             <div class="col-md-2 text-right float-left">模版对象</div>
                             <div class="col-md-10 float-left pl-0">
-                                <add-member></add-member>
+                                <add-member @change="participantChange"></add-member>
                             </div>
                         </div>
                         <div class="example">
@@ -293,14 +293,10 @@ export default {
                     this.total = res.meta.pagination.total
                 })
         },
-        participantChange:function(value){
-            // console.log(value);
-            // let flagArr = [];
-            // for (let i = 0; i < value.length; i++) {
-            //     flagArr.push(value[i].id)
-            // }
-            // this.participants = flagArr
-            // console.log(flagArr);
+        participantChange:function(){
+            
+            console.log(this.$store.state.newParticipantsInfo)
+            
         },
         changeModelType:function(type){
             type == 'add'?this.modelType ='add':this.modelType = 'edit'
