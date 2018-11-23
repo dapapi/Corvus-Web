@@ -33,14 +33,24 @@
               data-child="tr" data-selectable="selectable">
               <tr class="animation-fade" style="animation-fill-mode: backwards; animation-duration: 250ms; animation-delay: 0ms;">
                 <th class="cell-300" scope="col">审批编号</th>
-                <th class="cell-300" scope="col">申请人</th>
-                <th class="cell-300" scope="col">类型<span></span></th>
+                <th class="cell-300" scope="col">申请人</th>  
+                <th class="dropdown cell-300"  scope="col">
+                          <button type="button" class="btn btn-default dropdown-toggle waves-effect waves-classic" id="exampleColorDropdown1" data-toggle="dropdown" aria-expanded="false"><font style="vertical-align: inherit;"><font style="vertical-align: inherit;">
+                            类型
+                          </font></font></button>
+                          <div class="dropdown-menu" aria-labelledby="exampleColorDropdown1" role="menu" x-placement="bottom-start" style="position: absolute; transform: translate3d(0px, 38px, 0px); top: 0px; left: 0px; will-change: transform;">
+                            <a class="dropdown-item" href="javascript:void(0)" role="menuitem"><font style="vertical-align: inherit;"><font style="vertical-align: inherit;">不限</font></font></a>
+                            <a class="dropdown-item" href="javascript:void(0)" role="menuitem"><font style="vertical-align: inherit;"><font style="vertical-align: inherit;">工作室注册申请</font></font></a>
+                            <a class="active dropdown-item" href="javascript:void(0)" role="menuitem"><font style="vertical-align: inherit;"><font style="vertical-align: inherit;">报销</font></font></a>
+                            <a class="dropdown-item" href="javascript:void(0)" role="menuitem"><font style="vertical-align: inherit;"><font style="vertical-align: inherit;">通用审批</font></font></a>
+                          </div>
+                </th>
                 <th class="cell-300" scope="col">申请时间</th>
                 <th class="cell-300" scope="col">申请状态</th>
               </tr>
               <tr v-for="task in tasksInfo">
                 <td class="pointer-content">
-                  <router-link :to="{name:'tasks/detail', params: {id: task.id}}">{{ task.title }}
+                  <router-link :to="{name:'approval/detail', params: {id: task.id}}">{{ task.title }}
                   </router-link>
                 </td>
                 <td>暂无</td>
@@ -339,4 +349,7 @@
     left: 210px;
     top: 0;
   }
+.dropdown{
+  z-index:10000;
+}
 </style>

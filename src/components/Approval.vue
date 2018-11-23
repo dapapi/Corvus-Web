@@ -40,6 +40,15 @@
         </div>
     </div>
 </template>
+<style>
+  .page-content{
+        padding: 20px;
+    }
+    .page-header{
+        padding: 20px;
+    }
+</style>
+
 
 
 

@@ -128,7 +128,12 @@ export default new Router({
                 {
                     path:'/approval/only',
                     component:() => import('./views/approval/only.vue')
-                }
+                },   
+                {
+                    path: '/approval/appdetail/:id',
+                    name:'approval/detail',
+                    component: () => import('./views/approval/appdetail.vue')
+                },
             ],
         },
         {
