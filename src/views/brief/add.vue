@@ -66,8 +66,11 @@
                         </div>
                         <div class="example">
                             <div class="col-md-2 text-right float-left">模版对象</div>
-                            <div class="col-md-10 float-left pl-0">
+                            <div v-show="modelType == 'add'" class="col-md-10 float-left pl-0">
                                 <add-member @change="participantChange"></add-member>
+                            </div>
+                            <div v-show="modelType == 'edit'" class="col-md-10 float-left pl-0">
+                                <EditAddMember :is-edit="isEdit"></EditAddMember>
                             </div>
                         </div>
                         <div class="example">
@@ -266,15 +269,14 @@ export default {
                 template_name:'',
                 colour:'白',
                 frequency:1,
-                department_id:'1718463094',
-                member:'1994731356',
-                department:'1'
+                member:'',
             },
             editModelData:{
                 template_id:0
             },
             delId:'',
-            delName:''
+            delName:'',
+            isEdit:false
         }
     },
     computed:{
@@ -300,10 +302,17 @@ export default {
         },
         changeModelType:function(type){
             type == 'add'?this.modelType ='add':this.modelType = 'edit'
+            type == 'add'?this.isEdit = false:this.isEdit = true
         },
         //编辑和添加模版
         changeModel:function(id){
             let data,url
+            let aUser = [];
+            for (let i = 0; i < this.$store.state.newParticipantsInfo.length; i++) {
+                aUser.push(this.$store.state.newParticipantsInfo[i].id)
+                
+            }
+            this.addModelData.member = aUser.join(',')
             this.modelType == 'add'?url = '/report':url = '/edit'
             this.modelType == 'add'?data = this.addModelData:this.editModelData
             fetch('post',`${config.apiUrl}${url}`,data).then((res) =>{

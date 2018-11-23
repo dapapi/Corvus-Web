@@ -1,6 +1,6 @@
 <template>
     <!-- Page -->
-    <div class="page-main" style="background-color:##f3f4f5">
+    <div class="page-main" style="background-color:#f3f4f5">
         <div class="page-header page-header-bordered">
             <h1 class="page-title">待我审批</h1>
         </div>

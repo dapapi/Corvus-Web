@@ -11,8 +11,7 @@
                     <table class="table table-hover is-indent mb-20" data-plugin="animateList" data-animate="fade"
                         data-child="tr"
                         data-selectable="selectable">
-                        <tr class="animation-fade"
-                            style="animation-fill-mode: backwards; animation-duration: 250ms; animation-delay: 0ms;">
+                        <tr>
                             <th class="cell-300" scope="col">简报周期</th>
                             <th class="cell-300" scope="col">提交时间</th>
                             <!-- <th class="cell-300" scope="col">活动</th> -->
