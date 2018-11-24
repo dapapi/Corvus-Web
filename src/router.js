@@ -146,5 +146,10 @@ export default new Router({
       name: 'messages',
       component: () => import('./views/messages/index.vue'),
     },
+    {
+      path: '/broadcast',
+      name: 'broadcast',
+      component: () => import('./views/broadcast/index.vue'),
+    },
   ],
 });

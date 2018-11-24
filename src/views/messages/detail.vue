@@ -15,9 +15,9 @@
           <h5 class="">[{{pageData.detail.kind}}] &nbsp;&nbsp;{{pageData.detail.step}} </h5>
           <h6 class="">{{pageData.name}}</h6>
         </div>
-        <div class="ribbon ribbon-badge ribbon-info ribbon-reverse" v-if="pageData.readflag">
+        <!-- <div class="ribbon ribbon-badge ribbon-info ribbon-reverse" v-if="pageData.readflag">
           <span class="ribbon-inner">未读消息</span>
-        </div>
+        </div> -->
       </div>
     </div>
 </template>
