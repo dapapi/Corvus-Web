@@ -1,31 +1,16 @@
 <template>
      <div class="page-content container-fluid">
-       <!-- <div class="comment media">
-        <div class="pr-20">
-          
-          <a class="avatar avatar-lg" href="javascript:void(0)">
-            <div class="rounded-circle img-thumbnail messages-img" 
-            :style="{ backgroundImage: 'url('+pageData.cover+')'}"></div>
-          </a>
-        </div>
-        <div class="comment-body media-body">
-          <a class="comment-author" href="javascript:void(0)">{{pageData.name}}</a>&nbsp;&nbsp;邀请你参与{{pageData.task}}
-          <div class="comment-meta">
-            
-            <span class="date">{{pageData.timeYMD}}  {{pageData.timehms}}</span>
-          </div>
-          
-          <div class="comment-content">
-            <p>[{{pageData.detail.kind}}] &nbsp;&nbsp;{{pageData.detail.step}}</p>
-          </div>
-        </div>
-      </div> -->
       <div class="col-md-12 col-lg-12 row">
         <div class="rounded-circle img-thumbnail messages-img" 
         :style="{ backgroundImage: 'url('+pageData.cover+')'}"></div>
         <div class="">
           <p class="">{{pageData.timeYMD}}  {{pageData.timehms}}&nbsp;&nbsp;&nbsp;
-            <i class="icon md-flag" aria-hidden="true" title="点击设为未读" v-if="!pageData.readflag"></i></p>
+            <i class="icon md-flag" 
+            aria-hidden="true" 
+            title="点击设为未读" 
+            v-if="!pageData.readflag" 
+            @click.stop="markAsUnread"></i></p>
+            <!-- ⬆️阻止冒泡 -->
           <h6 class="">{{pageData.name}}邀请你参与{{pageData.task}}</h6>
           <h5 class="">[{{pageData.detail.kind}}] &nbsp;&nbsp;{{pageData.detail.step}} </h5>
           <h6 class="">{{pageData.name}}</h6>
@@ -47,6 +32,12 @@ export default {
   },
   mounted(){
     
+  },
+  methods:{
+    //通知父组件标记当前消息为未读
+    markAsUnread(){
+      this.$emit('markasunread',this.pageData.messageid)
+    }
   }
 };
 </script>

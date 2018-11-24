@@ -3,28 +3,38 @@
         <div class="page-header page-header-bordered col-md-12 row">
             <h1 class="page-title col-md-2">消息</h1>
             <div class="col-md-10 row filter-container" >
-                    <div class="offset-md-8 col-md-2 text-right "
-                    data-target="#exampleNiftyFadeScale" data-toggle="modal" >
-                        <i class="icon md-circle-o" v-if="readFilter && !isNoUnread"></i>&nbsp;&nbsp;<span v-if="readFilter && !isNoUnread">全部标记为已读</span> 
-                    </div>
-                    <div class="col-md-2 text-right text-filter-all" @click="readTypeToggle">全部消息
-                        <i class="icon"
-                        :class="readTypeShow?'md-chevron-up':'md-chevron-down'"></i>
-                    </div>
+                <div class="offset-md-8 col-md-2 text-right "
+                data-target="#exampleNiftyFadeScale" data-toggle="modal" >
+                    <i class="icon md-circle-o" v-if="readFilter && !isNoUnread"></i>&nbsp;&nbsp;<span v-if="readFilter && !isNoUnread">全部标记为已读</span> 
                 </div>
-
+                <li class="col-md-2">
+                    <div class="dropdown">
+                        <div class=" text-right text-filter-all" id="" data-toggle="dropdown" aria-expanded="false" @click="readTypeToggle">
+                            {{messageFilter}}
+                            <i class="icon"
+                            :class="readTypeShow?'md-chevron-up':'md-chevron-down'"></i>
+                        </div>
+                        <div class="dropdown-menu" role="menu" x-placement="bottom-start" style="position: absolute; transform: translate3d(0px, 36px, 0px); top: 0px; left: 0px; will-change: transform;">
+                            <a :class="messageFilter === '全部消息' ? 'active' :''" class="dropdown-item" href="javascript:void(0)" role="menuitem" @click="messageFilterHandler('全部消息')">全部消息</a>
+                            <a :class="messageFilter === '任务消息' ? 'active' :''" class="dropdown-item" href="javascript:void(0)" role="menuitem" @click="messageFilterHandler('任务消息')">任务消息</a>
+                            <a :class="messageFilter === '简报消息' ? 'active' :''" class="dropdown-item" href="javascript:void(0)" role="menuitem" @click="messageFilterHandler('简报消息')">简报消息</a>
+                            <a :class="messageFilter === '加班消息' ? 'active' :''" class="dropdown-item" href="javascript:void(0)" role="menuitem" @click="messageFilterHandler('加班消息')">加班消息</a>
+                        </div>
+                    </div>
+                </li>
+            </div>
         </div>
         <div class="col-md-12">
             <ul class="nav nav-tabs nav-tabs-line" role="tablist">
                 <li class="nav-item" role="presentation" >
                     <a class="nav-link active" data-toggle="tab" href="#forum-task"
                         aria-controls="forum-base"
-                        aria-expanded="true" role="tab" @click='readFilter=1'>未读</a>
+                        aria-expanded="true" role="tab" @click='readFilter=true'>未读</a>
                 </li>
                 <li class="nav-item" role="presentation">
                     <a class="nav-link" data-toggle="tab" href="#forum-task"
                         aria-controls="forum-present"
-                        aria-expanded="false" role="tab" @click='readFilter=0'>已读</a>
+                        aria-expanded="false" role="tab" @click='readFilter=false'>已读</a>
                 </li>
             </ul>
         </div>
@@ -32,9 +42,12 @@
             <div class="panel col-md-12 col-lg-12 py-5 ">
                 <div class="" 
                     v-for="(item, index) in pageData" 
-                    :key="index" 
+                    :key="index+100" 
                     @click="messageClickHandler(index)">
-                    <Main :pageData='item' class="message-main-container" v-if="item.readflag === readFilter"/>
+                    <Main :pageData='item' 
+                    class="message-main-container" 
+                    v-if="item.readflag === readFilter"
+                    @markasunread='markAsUnread'/>
                 </div>
                 <div v-if="isNoUnread">
                     <div class="page-content vertical-align-middle">
@@ -63,10 +76,11 @@ export default {
   },
   data() {
     return {
-      messageStatus: null,  //消息状态
-      readTypeShow: false,  //全部消息列表展开控制
-      pageData:{},          //页面数据
-      readFilter:1          //阅读状态筛选
+      messageStatus: null,      //消息状态
+      readTypeShow: false,      //全部消息列表展开控制
+      pageData:{},              //页面数据
+      readFilter:true,          //阅读状态筛选
+      messageFilter:"全部消息"   //消息过滤器状态
     };
   },
   mounted() {
@@ -78,11 +92,11 @@ export default {
       isNoUnread(){
             let counter = 0
             for (const key in this.pageData) {
-                if (this.pageData[key].readflag === 1) {
+                if (this.pageData[key].readflag === true) {
                     counter++
                 }
             }
-            if(counter === 0 && this.readFilter == 1){
+            if(counter === 0 && this.readFilter == true){
                 return true
             }else{
                 return false
@@ -124,14 +138,25 @@ export default {
     },
     //已读、未读控制器
     messageClickHandler(ref){
-        this.pageData[ref].readflag = 0
+        this.pageData[ref].readflag = false
     },
     //全部消息已读接收器
     emitMarkasRead(){
         for (const key in this.pageData) {
-            messagesData[key].readflag = 0
+            this.pageData[key].readflag = false
         }
     },
+    //设置当前消息为未读
+    markAsUnread(ref){
+        for (const key in this.pageData) {
+            if(this.pageData[key].messageid == ref) {
+                this.pageData[key].readflag = true
+            }
+        }
+    },
+    messageFilterHandler(ref){
+        this.messageFilter = ref
+    }
   },
 };
 </script>
@@ -153,5 +178,8 @@ export default {
     font-size: 18px;
     color: #C4C4C4;
     letter-spacing: 0;
+}
+li{
+    list-style-type: none;
 }
 </style>
