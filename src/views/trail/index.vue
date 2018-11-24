@@ -44,6 +44,7 @@
                             <th class="cell-300" scope="col">预计费用</th>
                             <th class="cell-300" scope="col">负责人</th>
                         </tr>
+                        <tbody>
                         <tr v-for="trail in trailsInfo ">
                             <td class="pointer-content">
                                 <router-link :to="{name:'trails/detail', params: {id: trail.id}}">
@@ -60,6 +61,8 @@
                             <td>{{ trail.fee }}</td>
                             <td v-if="trail.principal">{{ trail.principal.data.name }}</td>
                         </tr>
+                        </tbody>
+
                     </table>
                     <pagination :current_page="current_page" :method="getSales" :total_pages="total_pages"
                                 :total="total"></pagination>

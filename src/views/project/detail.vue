@@ -116,6 +116,7 @@
                                     <th class="cell-300" scope="col">负责人</th>
                                     <th class="cell-300" scope="col">截止日期</th>
                                 </tr>
+                                <tbody>
                                 <tr>
                                     <td>电话组织会议</td>
                                     <td>类型一</td>
@@ -123,6 +124,7 @@
                                     <td>张测试</td>
                                     <td>2018-09-23 10:23</td>
                                 </tr>
+                                </tbody>
                             </table>
 
                             <div class="site-action fixed-button" data-plugin="actionBtn" data-toggle="modal"

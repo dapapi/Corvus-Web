@@ -14,7 +14,7 @@
                 <img src="https://res.papitube.com/login/images/login-right-bottom.png" alt="">
             </div>
         </div>
-        <div class="page-content" v-if="pageType === 'login'">
+        <div class="page-content login-content" v-if="pageType === 'login'">
             <div class="panel">
                 <div class="panel-body">
                     <ul class="nav nav-tabs nav-tabs-line" role="tablist">
@@ -74,7 +74,7 @@
         </div>
 
 
-        <div class="page-content" v-else-if="pageType === 'bindPhone'">
+        <div class="page-content login-content" v-else-if="pageType === 'bindPhone'">
             <div class="panel">
                 <div class="panel-body">
                     <div class="example pate-title">
@@ -102,7 +102,7 @@
             </div>
         </div>
 
-        <div class="page-content" v-else-if="pageType === 'resetPassword'">
+        <div class="page-content login-content" v-else-if="pageType === 'resetPassword'">
             <div class="panel">
                 <div class="panel-body">
                     <div class="example pate-title">
@@ -374,6 +374,10 @@
 
     .verification-wrap {
         width: 100px;
+    }
+
+    .login-content {
+        width: 26rem;
     }
 
 </style>

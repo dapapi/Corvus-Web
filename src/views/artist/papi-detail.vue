@@ -83,7 +83,7 @@
                         </div>
                         <div class="tab-pane animation-fade pb-20 fixed-button-father" id="forum-artist-projects"
                              role="tabpanel">
-                            <table class="table table-hover is-indent example" data-plugin="animateList"
+                            <table class="table  is-indent example" data-plugin="animateList"
                                    data-animate="fade"
                                    data-child="tr"
                                    data-selectable="selectable">
@@ -134,6 +134,7 @@
                                     <th class="cell-300" scope="col">视频链接</th>
                                     <th class="cell-300" scope="col">是否广告</th>
                                 </tr>
+                                <tbody>
                                 <tr v-for="work in artistWorksInfo">
                                     <td>暂无</td>
                                     <td>暂无</td>
@@ -142,6 +143,7 @@
                                     <td>暂无</td>
                                     <td>暂无</td>
                                 </tr>
+                                </tbody>
                             </table>
 
                             <div class="site-action fixed-button" data-plugin="actionBtn" data-toggle="modal"
@@ -176,6 +178,7 @@
                                     <th class="cell-300" scope="col">付款时间</th>
                                     <th class="cell-300" scope="col">操作人</th>
                                 </tr>
+                                <tbody>
                                 <tr v-for="work in artistWorksInfo">
                                     <td>暂无</td>
                                     <td>暂无</td>
@@ -183,6 +186,7 @@
                                     <td>暂无</td>
                                     <td>暂无</td>
                                 </tr>
+                                </tbody>
                             </table>
                         </div>
                         <div class="tab-pane animation-fade fixed-button-father" id="forum-artist-base"

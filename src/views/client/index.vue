@@ -44,6 +44,7 @@
                             <th class="cell-300" scope="col">录入时间</th>
                             <th class="cell-300" scope="col">跟进时间</th>
                         </tr>
+                        <tbody>
                         <tr v-for="client in clientsInfo ">
                             <td class="pointer-content">
                                 <router-link :to="{name:'clients/detail', params: {id: client.id}}">
@@ -58,6 +59,7 @@
                             <td>{{ client.delivery }}</td>
                             <td>{{ client.follow_time }}</td>
                         </tr>
+                        </tbody>
                     </table>
 
                     <pagination :current_page="current_page" :method="getClients" :total_pages="total_pages"

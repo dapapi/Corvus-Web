@@ -5,7 +5,7 @@
 
         <div class="page-content container-fluid">
             <div class="panel col-md-12 clearfix py-5">
-                <table class="table is-indent example" data-plugin="animateList" data-animate="fade" data-child="tr"
+                <table class="table table-hover is-indent example" data-plugin="animateList" data-animate="fade" data-child="tr"
                        data-selectable="selectable">
                     <tr class="animation-fade"
                         style="animation-fill-mode: backwards; animation-duration: 250ms; animation-delay: 0ms;">
@@ -16,6 +16,7 @@
                         <th class="cell-300" scope="col">归档日期</th>
                         <th class="suf-cell"></th>
                     </tr>
+                    <tbody>
                     <tr>
                         <th class="pre-cell"></th>
                         <th scope="row">1</th>
@@ -34,6 +35,8 @@
                         <td>{{ project.follow_time }}</td>
                         <td class="suf-cell"></td>
                     </tr> -->
+                    </tbody>
+
                 </table>
 
                 <!-- <pagination :current_page="current_page" :method="getProjects" :total_pages="total_pages"

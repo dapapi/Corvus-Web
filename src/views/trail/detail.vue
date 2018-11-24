@@ -322,6 +322,7 @@
                                     <th class="cell-300" scope="col">负责人</th>
                                     <th class="cell-300" scope="col">截止日期</th>
                                 </tr>
+                                <tbody>
                                 <tr v-for="task in trailTasksInfo">
                                     <td>{{ task.title }}</td>
                                     <td>{{ task.type }}</td>
@@ -333,6 +334,7 @@
                                     <td>{{ task.principal.data.name }}</td>
                                     <td>{{ task.end_at }}</td>
                                 </tr>
+                                </tbody>
                             </table>
 
                             <div class="site-action fixed-button" data-plugin="actionBtn" data-toggle="modal"
