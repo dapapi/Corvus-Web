@@ -79,6 +79,7 @@
                                 <th class="cell-300" scope="col">制作人</th>
                                 <th class="cell-300" scope="col">录入时间</th>
                             </tr>
+                            <tbody>
                             <tr v-for="artist in artistsInfo">
                                 <td>
                                     <span class="checkbox-custom checkbox-primary">
@@ -109,6 +110,7 @@
                                 </td>
                                 <td>暂无</td>
                             </tr>
+                            </tbody>
                         </table>
                         <pagination :current_page="current_page" :method="getArtists" :total_pages="total_pages"
                                     :total="total"></pagination>
@@ -382,7 +384,7 @@
             },
 
             redirectArtistDetail: function (artistId) {
-                this.$router.push({path: 'artists/' + artistId})
+                this.$router.push({path: 'blogger/' + artistId})
             }
         }
     }

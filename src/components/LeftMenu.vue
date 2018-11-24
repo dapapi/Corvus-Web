@@ -181,6 +181,10 @@
                                 name: '我的',
                                 code: 'my'
                             },
+                            {
+                                name: '知识库',
+                                code: 'knowledge'
+                            }
                         ]
                     },
                 ],

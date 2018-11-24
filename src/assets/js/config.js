@@ -420,7 +420,7 @@ let config = {
             value: 1
         }
     ],
-    cooperationType: [
+    cooperationTypeArr: [
         {
             name: '代言',
             value: 1
