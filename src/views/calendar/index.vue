@@ -14,6 +14,7 @@
                     <div style="border-bottom: 1px solid #D8D8D8;width: 90%;margin: 0 auto">
                         <InlineDatepicker @change="selectDate"></InlineDatepicker>
                     </div>
+                    <div style=""></div>
                 </div>
                 <div class="float-left p-0" style="width: 80%;border-left: 1px solid #D8D8D8;">
                     <calendar :gotoDate="selectedDate"></calendar>

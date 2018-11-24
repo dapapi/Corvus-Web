@@ -149,8 +149,9 @@
 <script>
     import fetch from '../../assets/utils/fetch.js'
     import config from '../../assets/js/config';
-    import Cookie from 'js-cookie';
+    import Cookies from 'js-cookie';
     import Verify from '../../assets/utils/verify.js';
+    import redirect from '../../assets/js/bootstrap';
 
     export default {
         data: function () {
@@ -173,11 +174,11 @@
 
         methods: {
             storeToLocal(json) {
-                Cookie.set('user', json)
+                Cookies.set('user', json)
             },
 
             storeCompamyTypeToLocal(type) {
-                Cookie.set('companyType', type)
+                Cookies.set('companyType', type)
             },
 
             returnLogin() {
@@ -212,8 +213,8 @@
                 let username = this.username;
                 let password = this.password;
                 let data = {
-                    username,
-                    password,
+                    username: username,
+                    password: password,
                     grant_type: 'password',
                     client_id: config.clientId,
                     client_secret: config.clientSecret,
@@ -222,16 +223,22 @@
                 fetch('post', '/oauth/token', data).then(function (response) {
                     let token = response.access_token;
                     config.setAccessToken(token);
-                    _this.fetchUserInfo(function (userJson, companyType) {
-                        _this.storeToLocal(userJson);
-                        _this.storeCompamyTypeToLocal(companyType);
-                        _this.$router.push('/tasks')
-                    })
+                    setTimeout(function () {
+                        _this.fetchUserInfo(function (userJson, companyType) {
+                            _this.storeToLocal(userJson);
+                            _this.storeCompamyTypeToLocal(companyType);
+                            redirect('/messages')
+                        })
+                    }, 100)
                 });
             },
 
             fetchUserInfo(callback) {
-                fetch('get', '/users/my').then(function (response) {
+                $.ajax({
+                    type: 'get',
+                    url: config.apiUrl + '/users/my',
+                    headers: config.getHeaders(),
+                }).done(function (response) {
                     let userData = response.data;
                     let json = {
                         id: userData.id,
