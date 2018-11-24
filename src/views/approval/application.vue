@@ -1,11 +1,11 @@
 <template>
   <div class="page">
-    <div class="page-main">
-      <div class="page-header">
+    <div class="page-main" style="background-color:#f3f4f5">
+      <div class="page-header  page-header-bordered">
         <h1 class="page-title">我的申请</h1>
       </div>
     </div>
-    <div class="page-content container-fluid">
+    <div class="page-content container-fluid mt-20">
       <div class="panel col-md-12 col-lg-12 py-5">
         <div class="col-md-5 py-20">
           <div class="input-search">
@@ -346,7 +346,7 @@ export default {
 <style scoped>
 .page {
   position: absolute;
-  left: 210px;
+  left: 140px;
   top: 0;
 }
 a {
@@ -360,5 +360,8 @@ a {
   margin-top: -10px;
   margin-left: -15px;
   background: #fff;
+}
+.page-header-bordered{
+  padding: 30px;
 }
 </style>

@@ -1,11 +1,10 @@
 <template>
-  <div class="page">
-    <div class="page-main">
-      <div class="page-header">
+    <div class="page-main" style="background-color:#f3f4f5">
+      <div class="page-header page-header-bordered mb-0">
         <h1 class="page-title">发起审批</h1>
       </div>
-    </div>
-    <div class="page-content container-fluid">
+    
+    <div class="page-content container-fluid ">
       <div class="page-header">
         <h1 class="page-title">泰洋人事审批</h1>
       </div>
@@ -107,8 +106,7 @@
         </div>
       </div>
     </div>
-
-  </div>
+    </div>
 </template>
 <script>
   import fetch from "../../assets/utils/fetch.js";
@@ -343,7 +341,12 @@
     left: 210px;
     top: 0;
   }
-
+  .page-header{
+    padding: 20px;
+  }
+  .page-header-bordered{
+  padding: 30px;
+}
   .puls {
     width: 100px;
     height: 100px;
@@ -352,7 +355,9 @@
     border: 1px dashed #eee;
 
   }
-
+  .page-content{
+    padding: 10px 20
+  }
   .puls span {
     font-size: 30px;
   }
@@ -378,5 +383,5 @@
   .pearl.done .pearl-icon, .pearl.done .pearl-number{
       margin-left: -30px;
   }
-
+   .page-main{margin-left: 240px;}
 </style>
