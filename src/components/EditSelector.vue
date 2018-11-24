@@ -11,7 +11,9 @@
                 </template>
             </template>
             <template v-else>
-                {{ options.find(item => item.value == content).name }}
+                <template v-if="content">
+                    {{ options.find(item => item.value == content).name }}
+                </template>
             </template>
         </template>
     </div>

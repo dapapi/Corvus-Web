@@ -244,7 +244,7 @@
                                         <button class="btn btn-primary" @click="changeArtistBaseInfo">确定</button>
                                     </div>
                                 </div>
-                                <div class="card-block" v-if="artistInfo">
+                                <div class="card-block" v-if="artistInfo.name">
                                     <div class="clearfix">
                                         <div class="card-text py-10 px-0 clearfix col-md-6 float-left">
                                             <div class="col-md-2 float-left text-right pl-0">姓名</div>

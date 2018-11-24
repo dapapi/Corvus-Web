@@ -382,7 +382,7 @@
             },
 
             redirectArtistDetail: function (artistId) {
-                this.$router.push({path: 'artists/' + artistId})
+                this.$router.push({path: 'blogger/' + artistId})
             }
         }
     }
