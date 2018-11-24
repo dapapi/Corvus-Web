@@ -1,5 +1,5 @@
 <template>
-    <select data-plugin="selectpicker" :data-live-search="searchable" :multiple="multiple" :title="placeholder">
+    <select data-plugin="selectpicker" :value="value" :data-live-search="searchable" :multiple="multiple" :title="placeholder">
         <selectorsOptions v-for="option in this.options" v-bind:id="option.id" :val="option.value" :key="option.id">
             {{option.name}}
         </selectorsOptions>
@@ -7,7 +7,7 @@
 </template>
 <script>
     export default {
-        props: ['options', 'searchable', 'disable', 'multiple', 'placeholder', 'changeKey'], // changeKey为父组件的data，且可以被改变
+        props: ['options', 'searchable', 'disable', 'multiple', 'placeholder', 'changeKey', 'value'], // changeKey为父组件的data，且可以被改变
         data() {
             return {
                 isDisable: this.disable,
@@ -21,7 +21,7 @@
                 
                 // 可以通过调用select方法，去改变父组件传过来的changeKey
                 if (self.changeKey) {
-                    self.$emit('select', self.changeKey, $(this)[0].selectedOptions[0].label)
+                    self.$emit('select', self.changeKey, $(this).val(), $(this)[0].selectedOptions[0].label)
                 }
             });
 

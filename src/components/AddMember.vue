@@ -82,5 +82,12 @@
 </script>
 
 <style scoped>
-
+.addMember-trigger-button{
+   
+    margin-left:10px;
+  }
+  .addMember-item{
+    margin-left:10px;
+    margin-right: 0;
+  }
 </style>
