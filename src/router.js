@@ -117,6 +117,10 @@ export default new Router({
             path: '/staff/history',
             name: 'staffHistory',
             component: () => import('./views/staff/history.vue'),
+        }, {
+            path: '/portal',
+            name: 'portal',
+            component: () => import('./views/portal/index.vue')
         }
     ],
 });
