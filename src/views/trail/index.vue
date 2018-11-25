@@ -44,6 +44,7 @@
                             <th class="cell-300" scope="col">预计费用</th>
                             <th class="cell-300" scope="col">负责人</th>
                         </tr>
+                        <tbody>
                         <tr v-for="trail in trailsInfo ">
                             <td class="pointer-content">
                                 <router-link :to="{name:'trails/detail', params: {id: trail.id}}">
@@ -60,6 +61,8 @@
                             <td>{{ trail.fee }}</td>
                             <td v-if="trail.principal">{{ trail.principal.data.name }}</td>
                         </tr>
+                        </tbody>
+
                     </table>
                     <pagination :current_page="current_page" :method="getSales" :total_pages="total_pages"
                                 :total="total"></pagination>
@@ -165,7 +168,7 @@
                         <div class="example">
                             <div class="col-md-2 text-right float-left">合作类型</div>
                             <div class="col-md-10 float-left pl-0" v-if="trailType != 4">
-                                <selectors :options="cooperationType" @change="changeCooperationType"
+                                <selectors :options="cooperationTypeArr" @change="changeCooperationType"
                                            :placeholder="'请选择合作类型'"></selectors>
                             </div>
                         </div>
@@ -257,6 +260,7 @@
                 clientLevelArr: config.clientLevelArr,
                 trailOriginArr: config.trailOrigin,
                 salesProgressText: '未确定合作',
+                cooperationTypeArr: config.cooperationTypeArr,
                 selectCompany: '',
                 trailName: '',
                 targetStars: '',
@@ -316,15 +320,17 @@
             },
 
             getClients: function () {
+                let _this = this;
                 fetch('get', '/clients/all').then(function (response) {
-                    this.companyArr = response.data
+                    _this.companyArr = response.data
                 })
             },
 
             getStars: function () {
+                let _this = this;
                 fetch('get', '/stars/all').then(function (response) {
                     for (let i = 0; i < response.data.length; i++) {
-                        this.starsArr.push({
+                        _this.starsArr.push({
                             id: response.data[i].id,
                             name: response.data[i].name,
                             value: response.data[i].id

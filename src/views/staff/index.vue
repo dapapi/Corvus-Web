@@ -42,7 +42,7 @@
                     </Modal>
                 </div>
                 <div class="example" style="padding: 0 15px;">在职 {{ onJob }} 离职 {{ departure }}</div>
-                <table class="table is-indent example" data-plugin="animateList" data-animate="fade" data-child="tr"
+                <table class="table table-hover is-indent example" data-plugin="animateList" data-animate="fade" data-child="tr"
                        data-selectable="selectable">
                     <tr class="animation-fade"
                         style="animation-fill-mode: backwards; animation-duration: 250ms; animation-delay: 0ms;">
@@ -55,6 +55,7 @@
                         <th class="cell-300" scope="col">入职日期</th>
                         <th class="cell-300" scope="col">操作</th>
                     </tr>
+                    <tbody>
                     <tr v-for="(item, index) in staffList" :key="index">
                         <td><router-link to="/staff/detail">{{item.name}}</router-link></td>
                         <td>{{ item.phone }}</td>
@@ -65,9 +66,9 @@
                         <td>
                             <div class="dropdown show task-dropdown">
                                 <i class="icon md-more font-size-24" aria-hidden="true" id="taskDropdown"
-                                data-toggle="dropdown" aria-expanded="false"></i>
+                                   data-toggle="dropdown" aria-expanded="false"></i>
                                 <div class="dropdown-menu dropdown-menu-left task-dropdown-item" aria-labelledby="taskDropdown"
-                                    role="menu" x-placement="bottom-end" style="min-width: 0;">
+                                     role="menu" x-placement="bottom-end" style="min-width: 0;">
                                     <a class="dropdown-item" role="menuitem" @click="">转正</a>
                                     <a class="dropdown-item" role="menuitem" @click="">调岗</a>
                                     <a class="dropdown-item" role="menuitem" @click="">离职</a>
@@ -76,6 +77,7 @@
                             </div>
                         </td>
                     </tr>
+                    </tbody>
                 </table>
 
                 <pagination :current_page="currentPage" :method="getStaffList" :total_pages="totalPages"

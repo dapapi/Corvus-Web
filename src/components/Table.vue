@@ -1,5 +1,5 @@
 <template>
-    <table class="table table-bordered">
+    <table class="table table-hover table-bordered">
         <thead>
             <tr>
                 <th v-for="(item, index) in columns" :key="index">{{ item.title }}</th>

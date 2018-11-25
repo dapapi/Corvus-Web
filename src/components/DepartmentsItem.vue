@@ -77,6 +77,9 @@
                 } else {
                     return this.$store.state.newParticipantsInfo
                 }
+            },
+            getDepartmentId: function(){
+                
             }
         },
 

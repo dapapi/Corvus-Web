@@ -63,6 +63,7 @@
                                 <th class="cell-300" scope="col">优先级</th>
                                 <th class="cell-300" scope="col">跟进时间</th>
                             </tr>
+                            <tbody>
                             <tr v-for="project in projectsInfo ">
                                 <td class="pointer-content">
                                     <router-link :to="{name:'projects/detail', params: {id: project.id}}">
@@ -75,6 +76,7 @@
                                 <td>{{ project.delivery }}</td>
                                 <td>{{ project.follow_time }}</td>
                             </tr>
+                            </tbody>
                         </table>
                         <pagination :current_page="current_page" :method="getProjects" :total_pages="total_pages"
                                     :total="total"></pagination>

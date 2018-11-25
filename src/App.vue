@@ -9,6 +9,7 @@
 
 <script>
     import LeftMenu from '@/components/LeftMenu.vue'
+    import Approval from '@/components/Approval.vue'
 
     export default {
         name: 'app',
@@ -92,6 +93,15 @@
         border-bottom: 1px dashed #E0E0E0;
     }
 
+    .table a {
+        text-decoration: none;
+        color: rgb(117, 117, 117);;
+    }
+
+    .table td {
+        padding: 1rem;
+    }
+
     .hover-content:hover {
         color: #3f51b5;
     }
@@ -107,7 +117,7 @@
     }
 
     .page {
-        margin-left: 100px !important;
+        margin-left: 100px;
         min-height: 100vh;
     }
 
@@ -136,6 +146,10 @@
         margin: 0 4px;
         position: relative;
         top: -1px;
+    }
+
+    .site-menu > .site-menu-item > .site-menu-sub {
+        left: 100px;
     }
 
 </style>

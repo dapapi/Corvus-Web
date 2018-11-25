@@ -173,7 +173,7 @@
                         <div class="formName pd-b-15">教育背景 <i class="icon md-plus add-icon" @click="tableAdd('education')"></i></div>
                         <div class="example table-responsive padding15">
                             <!-- <mtp-table :data-source="education" :columns="eduColumns" /> -->
-                            <table class="table table-bordered">
+                            <table class="table table-hover table-bordered">
                                 <thead>
                                     <tr>
                                         <th v-for="(item, index) in education.tHead" :key="index">{{ item.value }}</th>
@@ -193,7 +193,7 @@
 
                         <div class="formName pd-b-15">培训经历<i class="icon md-plus add-icon" @click="tableAdd('train')"></i></div>
                         <div class="example table-responsive padding15">
-                            <table class="table table-bordered">
+                            <table class="table table-hover table-bordered">
                                 <thead>
                                     <tr>
                                         <th v-for="(item, index) in train.tHead" :key="index">{{ item.value }}</th>
@@ -214,7 +214,7 @@
                             <i class="icon md-plus add-icon" @click="tableAdd('work')"></i>
                         </div>
                         <div class="example table-responsive padding15">
-                            <table class="table table-bordered">
+                            <table class="table table-hover table-bordered">
                                 <thead>
                                     <tr>
                                         <th v-for="(item, index) in work.tHead" :key="index">{{ item.value }}</th>
@@ -235,7 +235,7 @@
                             <i class="icon md-plus add-icon" @click="tableAdd('home')"></i>
                         </div>
                         <div class="example table-responsive padding15">
-                            <table class="table table-bordered">
+                            <table class="table table-hover table-bordered">
                                 <thead>
                                     <tr>
                                         <th v-for="(item, index) in home.tHead" :key="index">{{ item.value }}</th>

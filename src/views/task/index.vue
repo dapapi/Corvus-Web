@@ -67,6 +67,7 @@
                                 <th class="cell-300" scope="col">负责人</th>
                                 <th class="cell-300" scope="col">截止时间</th>
                             </tr>
+                            <tbody>
                             <tr v-for="task in tasksInfo">
                                 <td class="pointer-content">
                                     <router-link :to="{name:'tasks/detail', params: {id: task.id}}">
@@ -85,6 +86,7 @@
                                 </td>
                                 <td>{{ task.end_at }}</td>
                             </tr>
+                            </tbody>
                         </table>
                         <template v-if="!taskStatus">
                             <Pagination :current_page="current_page" :method="getTasks" :total_pages="total_pages"
@@ -203,12 +205,12 @@
 </template>
 
 <script>
-    import fetch from '../../assets/utils/fetch.js'
-    import config from '../../assets/js/config'
+import fetch from '../../assets/utils/fetch.js';
+import config from '../../assets/js/config';
 
-    export default {
-        name: '',
-        data: function () {
+export default {
+  name: '',
+  data () {
             return {
                 total: 0,
                 current_page: 1,
@@ -236,13 +238,13 @@
 
         },
 
-        mounted() {
-            this.getTasks()
-        },
+  mounted() {
+    this.getTasks();
+  },
 
-        methods: {
+  methods: {
 
-            getTasks: function (pageNum = 1) {
+    getTasks (pageNum = 1) {
                 let data = {
                     page: pageNum,
                     include: 'principal,pTask,tasks,resource.resourceable,resource.resource,participants',
@@ -257,7 +259,7 @@
                 });
             },
 
-            getMyTasks: function (pageNum = 1, type = null) {
+    getMyTasks (pageNum = 1, type = null) {
                 let _this = this;
                 if (type) {
                     app.taskFinishType = type
@@ -283,7 +285,7 @@
                 })
             },
 
-            addTask: function () {
+    addTask () {
                 let _this = this;
                 let participant_ids = [];
                 for (let i = 0; i < this.$store.state.newParticipantsInfo.length; i++) {
@@ -320,23 +322,23 @@
                 })
             },
 
-            customize: function (value) {
+    customize (value) {
                 console.log(value)
             },
 
-            changeLinkage: function (value) {
+    changeLinkage (value) {
                 console.log(value)
             },
 
-            changeTaskType: function (value) {
+    changeTaskType (value) {
                 this.taskType = value
             },
 
-            principalChange: function (value) {
+    principalChange (value) {
                 this.principal = value
             },
 
-            participantChange: function (value) {
+    participantChange (value) {
                 let flagArr = [];
                 for (let i = 0; i < value.length; i++) {
                     flagArr.push(value[i].id)
@@ -344,27 +346,27 @@
                 this.participants = flagArr
             },
 
-            changeTaskLevel: function (value) {
+    changeTaskLevel (value) {
                 this.taskLevel = value
             },
 
-            changeStartTime: function (value) {
+    changeStartTime (value) {
                 this.startTime = value
             },
 
-            changeStartMinutes: function (value) {
+    changeStartMinutes (value) {
                 this.startMinutes = value
             },
 
-            changeEndTime: function (value) {
+    changeEndTime (value) {
                 this.endTime = value
             },
 
-            changeEndMinutes: function (value) {
+    changeEndMinutes (value) {
                 this.endMinutes = value
             },
-        }
+  },
 
-    }
+};
 
 </script>

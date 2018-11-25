@@ -5,11 +5,11 @@
         <div class="nav-tabs-horizontal example" data-plugin="tabs">
             <ul class="nav nav-tabs no-nav-tab-border" role="tablist">
                 <li class="nav-item" role="presentation">
-                    <a class="nav-link active" data-toggle="tab" href="#all-TaskFollowUp"
+                    <a class="nav-link" data-toggle="tab" href="#all-TaskFollowUp"
                        aria-controls="exampleTabsOne" role="tab" aria-selected="true">全部</a>
                 </li>
                 <li class="nav-item" role="presentation">
-                    <a class="nav-link" data-toggle="tab" href="#task-follow"
+                    <a class="nav-link active" data-toggle="tab" href="#task-follow"
                        aria-controls="exampleTabsTwo" role="tab" aria-selected="false">{{ this.followType }}跟进</a>
                 </li>
                 <li class="nav-item" role="presentation">
@@ -18,7 +18,7 @@
                 </li>
             </ul>
             <div class="tab-content pt-20">
-                <div class="tab-pane active" id="all-TaskFollowUp" role="tabpanel">
+                <div class="tab-pane" id="all-TaskFollowUp" role="tabpanel">
                     <ul class="task-follow">
                         <li>
                             <div class="change-dot bg-green-500"></div>
@@ -43,7 +43,7 @@
                         </li>
                     </ul>
                 </div>
-                <div class="tab-pane" id="task-follow" role="tabpanel">
+                <div class="tab-pane active" id="task-follow" role="tabpanel">
                     任务跟进
                 </div>
                 <div class="tab-pane" id="task-active" role="tabpanel">

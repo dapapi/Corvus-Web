@@ -20,11 +20,21 @@
                             </div>
                         </div>
                         <div class="col-md-6 float-left clearfix pl-0">
-                            <div class="float-left pl-0 pr-2 col-md-2">
+                            <div class="float-left pl-0 pr-2 col-md-3">
                                 <i class="md-plus pr-2" aria-hidden="true"></i>决策关键人/部门
                             </div>
                             <div class="font-weight-bold float-left">
                                 {{ clientInfo.keyman }}
+                            </div>
+                        </div>
+                    </div>
+                    <div class="card-text clearfix example">
+                        <div class="col-md-6 float-left clearfix pl-0">
+                            <div class="float-left pl-0 pr-2 col-md-2">
+                                <i class="md-plus pr-2" aria-hidden="true"></i>类型
+                            </div>
+                            <div class="font-weight-bold float-left" v-if="clientInfo.type">
+                                {{ clientTypeArr.find(item => item.value == clientInfo.type).name }}
                             </div>
                         </div>
                     </div>
@@ -76,6 +86,7 @@
                                 <th class="cell-300" scope="col">关联公司</th>
                                 <th class="cell-300" scope="col">录入日期</th>
                             </tr>
+                            <tbody>
                             <tr v-for="trail in clientTrailsInfo">
                                 <td>{{ trail.title }}</td>
                                 <td>
@@ -87,6 +98,7 @@
                                 <td>{{ trail.client.data.company }}</td>
                                 <td>{{ trail.end_at }}</td>
                             </tr>
+                            </tbody>
                         </table>
                     </div>
                     <div class="tab-pane animation-fade pb-20" id="forum-project" role="tabpanel">
@@ -126,6 +138,7 @@
                                 <th class="cell-300" scope="col">负责人</th>
                                 <th class="cell-300" scope="col">截止时间</th>
                             </tr>
+                            <tbody>
                             <tr v-for="task in clientTasksInfo">
                                 <td>{{ task.title }}</td>
                                 <td>{{ task.type }}</td>
@@ -137,6 +150,8 @@
                                 <td>{{ task.principal.data.name }}</td>
                                 <td>{{ task.end_at }}</td>
                             </tr>
+                            </tbody>
+
                         </table>
                         <div class="site-action fixed-button" data-plugin="actionBtn" data-toggle="modal"
                              data-target="#addTask">
@@ -246,6 +261,7 @@
                                 <th class="cell-300" scope="col">负责人</th>
                                 <th class="cell-300" scope="col">操作</th>
                             </tr>
+                            <tbody>
                             <tr v-for="contact in clientContactsInfo">
                                 <td>{{ contact.name }}</td>
                                 <td>{{ clientInfo.company }}</td>
@@ -264,6 +280,7 @@
                                     </span>
                                 </td>
                             </tr>
+                            </tbody>
                         </table>
 
                         <div class="site-action fixed-button" data-plugin="actionBtn" data-toggle="modal"
@@ -466,9 +483,10 @@
 
         mounted() {
             this.clientId = this.$route.params.id;
+            let _this = this;
             setTimeout(function () {
-                this.getClient();
-                this.getClientTrail();
+                _this.getClient();
+                _this.getClientTrail();
             }, 100);
         },
 
@@ -514,13 +532,14 @@
         methods: {
 
             getClient: function () {
+                let _this = this;
                 fetch('get', '/clients/' + this.clientId, {include: 'principal'}).then(function (response) {
-                    this.clientInfo = response.data;
+                    _this.clientInfo = response.data;
                     let params = {
                         type: 'change',
                         data: response.data.principal.data
                     };
-                    this.$store.dispatch('changePrincipal', params);
+                    _this.$store.dispatch('changePrincipal', params);
                 })
             },
 

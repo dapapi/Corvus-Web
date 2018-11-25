@@ -1,6 +1,5 @@
 <template>
     <div class="page">
-
         <div class="page-header page-header-bordered">
             <h1 class="page-title d-inline">任务</h1>
 
@@ -209,6 +208,7 @@
                                 <th class="cell-300" scope="col">负责人</th>
                                 <th class="cell-300" scope="col">截止日期</th>
                             </tr>
+                            <tbody>
                             <tr v-for="task in taskInfo.tasks.data">
                                 <td @click="redirectTaskDetail(task.id)" class="pointer-content">{{ task.title }}</td>
                                 <td>{{ task.type }}</td>
@@ -220,6 +220,7 @@
                                 <td>{{ task.principal.data.name }}</td>
                                 <td>{{ task.end_at }}</td>
                             </tr>
+                            </tbody>
                         </table>
 
                         <div class="site-action fixed-button" data-plugin="actionBtn" data-toggle="modal"
@@ -453,9 +454,9 @@
                         type: 'change',
                         data: response.data.participants.data
                     };
-                    this.$store.dispatch('changeParticipantsInfo', params);
+                    _this.$store.dispatch('changeParticipantsInfo', params);
                     params.data = response.data.principal.data;
-                    this.$store.dispatch('changePrincipal', params)
+                    _this.$store.dispatch('changePrincipal', params)
                 })
             },
 

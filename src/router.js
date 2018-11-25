@@ -99,6 +99,40 @@ export default new Router({
             component: () => import('./views/artist/papi-detail.vue')
         },
         {
+            path: '/approval',
+            name: 'approval',
+            redirect: '/approval/initiate',
+            component: () => import(/* webpackChunkName: "about" */ './views/approval/index.vue'),
+            children: [
+                {
+                    path: '/approval/initiate',
+                    component: () => import('./views/approval/initiate.vue')
+                },
+                {
+                    path: '/approval/application',
+                    component: () => import('./views/approval/application.vue')
+                },
+                {
+                    path: '/approval/my',
+                    component: () => import('./views/approval/my.vue')
+                },
+                {
+                    path: '/approval/only',
+                    component: () => import('./views/approval/only.vue')
+                },
+                {
+                    path: '/application/:id',
+                    name: 'approval/detail',
+                    component: () => import('./views/approval/appdetail.vue')
+                },
+                {
+                    path: '/approval/general',
+                    name: 'approval/general',
+                    component: () => import('./views/approval/general.vue')
+                },
+            ],
+        },
+        {
             path: '/staff',
             name: 'staff',
             component: () => import('./views/staff/index.vue')
@@ -117,10 +151,63 @@ export default new Router({
             path: '/staff/history',
             name: 'staffHistory',
             component: () => import('./views/staff/history.vue'),
-        }, {
-            path: '/portal',
-            name: 'portal',
-            component: () => import('./views/portal/index.vue')
+        },
+        {
+            path: '/messages',
+            name: 'messages',
+            component: () => import('./views/messages/index.vue'),
+        },
+        {
+            path: '/brief/home',
+            name: 'home',
+            component: () => import('./views/brief/home.vue'),
+            children: [
+                {
+                    path: '/brief/home',
+                    redirect: '/brief/index'
+                },
+                {
+                    path: '/brief/index',
+                    name: 'index',
+                    component: () => import('./views/brief/index.vue'),
+                },
+                {
+                    path: '/brief/details',
+                    name: 'details',
+                    component: () => import('./views/brief/details.vue')
+                },
+                {
+                    path: '/brief/add',
+                    name: 'add',
+                    component: () => import('./views/brief/add.vue')
+                },
+                {
+                    path: '/brief/myapproval',
+                    name: 'myapproval',
+                    component: () => import('./views/brief/myapproval.vue')
+                },
+                {
+                    path: '/brief/list',
+                    name: 'list',
+                    component: () => import('./views/brief/list.vue')
+                },
+                {
+                    path: '/brief/memberReport',
+                    name: 'memberReport',
+                    component: () => import('./views/brief/memberReport.vue')
+                },
+                {
+                    path: '/brief/statistics',
+                    name: 'statistics',
+                    component: () => import('./views/brief/statistics.vue')
+                },
+
+            ]
+        },
+        {
+            path: '/address',
+            name: 'address',
+            component: () => import('./views/address/index.vue')
         }
     ],
 });
