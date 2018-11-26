@@ -32,6 +32,7 @@ import SelectStaff from './components/SelectStaff.vue';
 import SelectorsOptions from './components/SelectorsOptions.vue';
 import TaskFollowUp from './components/TaskFollowUp.vue';
 import LeftMenu from './components/LeftMenu.vue';
+import MeetingRoomCalendar from './components/MeetingRoomCalendar.vue';
 import Modal from './components/Modal.vue';
 import CheckboxGroup from './components/CheckboxGroup.vue';
 import NavBack from './components/NavBack.vue';
@@ -71,6 +72,7 @@ Vue.component('Selectors', Selectors);
 Vue.component('SelectorsOptions', SelectorsOptions);
 Vue.component('TaskFollowUp', TaskFollowUp);
 Vue.component('LeftMenu', LeftMenu);
+Vue.component('MeetingRoomCalendar', MeetingRoomCalendar);
 Vue.component('Modal', Modal);
 Vue.component('CheckboxGroup', CheckboxGroup);
 Vue.component('NavBack', NavBack);
@@ -79,13 +81,13 @@ Vue.component('MtpTable', MtpTable);
 Vue.component('Timepicker', Timepicker);
 
 Vue.prototype.globalClick = function (callback) {
-  document.getElementById('app').addEventListener('click', () => {
-    callback(event);
-  });
+    document.getElementById('app').addEventListener('click', () => {
+        callback(event);
+    });
 };
 
 new Vue({
-  router,
-  store,
-  render: h => h(App),
+    router,
+    store,
+    render: h => h(App),
 }).$mount('#app');
