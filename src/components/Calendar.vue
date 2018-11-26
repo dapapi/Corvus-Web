@@ -146,6 +146,7 @@
                     console.log(event)
                     console.log(jsEvent)
                     console.log(view)
+                    $('#changeSchedule').modal('show')
                 },
             });
 

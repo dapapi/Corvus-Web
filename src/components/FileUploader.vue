@@ -8,6 +8,7 @@
 
 
     export default {
+        props:['id'],
         name: "FileUploader",
         methods: {
             uploadFile(e) {
@@ -35,7 +36,8 @@
                     }, function (res) {
                         let fileUrl = config.imgUrl + res.key;
                         let fileName = file.name;
-                        _this.$emit('change', fileUrl, fileName, fileSize);
+                        
+                        _this.$emit('change', fileUrl, fileName, fileSize,_this.id);
                     })
                 });
             },
