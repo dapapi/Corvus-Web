@@ -167,7 +167,7 @@
                             },
                             {
                                 name: '员工档案',
-                                code: 'staffs'
+                                code: 'staff'
                             },
                             {
                                 name: '通讯录',
