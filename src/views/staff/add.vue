@@ -531,7 +531,7 @@ export default {
 				this[n].tBody.push(JSON.parse(JSON.stringify(this[n+'Info'])))
 			}
 		})
-	},
+    },
 
 	methods: {
 		// 改变data的值

@@ -143,7 +143,7 @@ export default new Router({
             component: () => import('./views/staff/add.vue')
         },
         {
-            path: '/staff/detail',
+            path: '/staff/detail/:id',
             name: 'staffDetail',
             component: () => import('./views/staff/detail.vue'),
         },
