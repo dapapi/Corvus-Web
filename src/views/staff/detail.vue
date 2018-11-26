@@ -11,31 +11,31 @@
                         <div class="example">
                             <div class="col-md-3 text-right float-left">姓名(中文)</div>
                             <div class="col-md-9 float-left pl-0">
-                                <input type="text" placeholder="" class="form-control">
+                                <input type="text" v-model="info.name" placeholder="" class="form-control">
                             </div>
                         </div>
                         <div class="example">
                             <div class="col-md-3 text-right float-left">手机</div>
                             <div class="col-md-9 float-left pl-0">
-                                <input type="text" placeholder="" class="form-control">
+                                <input type="text" v-model="info.phone" placeholder="" class="form-control">
                             </div>
                         </div>
                         <div class="example">
                             <div class="col-md-3 text-right float-left">最高学历</div>
                             <div class="col-md-9 float-left pl-0">
-                                <input type="text" placeholder="" class="form-control">
+                                <input type="text" v-model="info.highestDegree" placeholder="" class="form-control">
                             </div>
                         </div>
                         <div class="example">
                             <div class="col-md-3 text-right float-left">部门</div>
                             <div class="col-md-9 float-left pl-0">
-                                <input type="text" placeholder="" class="form-control">
+                                <input type="text" v-model="info.department"  placeholder="" class="form-control">
                             </div>
                         </div>
                         <div class="example">
                             <div class="col-md-3 text-right float-left">工作邮箱</div>
                             <div class="col-md-9 float-left pl-0">
-                                <input type="text" placeholder="" class="form-control">
+                                <input type="text" v-model="info.workEmail" placeholder="" class="form-control">
                             </div>
                         </div>
                     </div>
@@ -44,33 +44,34 @@
                         <div class="example">
                             <div class="col-md-3 text-right float-left">性别</div>
                             <div class="col-md-9 float-left pl-0">
-                                <input type="text" placeholder="" class="form-control">
+                                <input type="text" v-model="info.sex" placeholder="" class="form-control">
                             </div>
                         </div>
                         <div class="example">
                             <div class="col-md-3 text-right float-left">年龄</div>
                             <div class="col-md-9 float-left pl-0">
-                                <input type="text" placeholder="" class="form-control">
+                                <input type="text" v-model="info.age" placeholder="" class="form-control">
                             </div>
                         </div>
                         <div class="example">
                             <div class="col-md-3 text-right float-left">出生日期</div>
                             <div class="col-md-9 float-left pl-0">
-                                <input type="text" placeholder="" class="form-control">
+                                <!-- <input type="text" v-model="info.birthDay" placeholder="" class="form-control"> -->
+                                <datepicker changeKey="info.birthDay" @select="changeState"></datepicker>
                             </div>
                         </div>
                         <div class="example">
                             <div class="col-md-3 text-right float-left">岗位</div>
                             <div class="col-md-9 float-left pl-0">
-                                <input type="text" placeholder="" class="form-control">
+                                <input type="text" v-model="info.position" placeholder="" class="form-control">
                             </div>
                         </div>
-                        <div class="example">
+                        <!-- <div class="example">
                             <div class="col-md-3 text-right float-left">工号</div>
                             <div class="col-md-9 float-left pl-0">
                                 <input type="text" placeholder="" class="form-control">
                             </div>
-                        </div>
+                        </div> -->
                     </div>
 
                     <div class="col-md-4">
@@ -458,28 +459,73 @@
                     <button type="button" class="btn btn-primary">提交</button>
                 </div>
             </div>
-
         </div>
-
-        <!-- <customize-filter :data="customizeInfo" @change="customize"></customize-filter> -->
         <!-- <Modal /> -->
     </div>
     <!-- End Page -->
 </template>
 
 <script>
+import fetch from '../../assets/utils/fetch'
+import { toHump, toLine } from '../../assets/utils/tool'
+
 export default {
     name: 'staffDetail',
     data () {
         return {
-            // 
+            userId: this.$route.params.id,
+            info: {
+                name: '',
+                phone: '',
+                department: '',
+                workEmail: '',
+                sex: '',
+                age: '',
+                birthDay: '222',
+                position: '',
+                highestDegree: ''
+            },
+            detail: {},
+            job: {},
+            salary: {},
+        }
+    },
+    watch: {
+        birthDay () {
+            console.log(1)
+        }
+    },
+    computed: {
+        birthDay () {
+            return this.info.birthDay
         }
     },
     mounted () {
-        // 
+        this.getData()
     },
     methods: {
-        // 
+        // 获取数据
+        getData () {
+            fetch('get', `/personnel/${this.userId}?include=detail,job,salary`).then((res) => {
+                const data = res.data
+                Object.keys(this.info).map((n) => {
+                    this['info'][`${n}`] = toHump(data[n]) || ''
+                })
+                
+            })
+        },
+        // 改变data的值
+		changeState (name, value) {
+            const tempArr = name.split('.')
+            let state = this
+            for (let i = 0; i < tempArr.length; i++) {
+                if (i === tempArr.length - 1) {
+                    state[`${tempArr[i]}`] = value
+                } else {
+                    state = state[`${tempArr[i]}`]
+                }
+            }
+        },
     },
 }
 </script>
