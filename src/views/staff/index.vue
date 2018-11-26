@@ -57,7 +57,7 @@
                     </tr>
                     <tbody>
                     <tr v-for="(item, index) in staffList" :key="index">
-                        <td><router-link to="/staff/detail">{{item.name}}</router-link></td>
+                        <td><router-link :to="{name: 'staffDetail', params: { id: item.id }}">{{item.name}}</router-link></td>
                         <td>{{ item.phone }}</td>
                         <td>{{ workStatus[item.status] }}</td>
                         <td>{{ employment[item.hire_shape] }}</td>
