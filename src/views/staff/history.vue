@@ -9,32 +9,18 @@
                        data-selectable="selectable">
                     <tr class="animation-fade"
                         style="animation-fill-mode: backwards; animation-duration: 250ms; animation-delay: 0ms;">
-                        <th class="pre-cell"></th>
-                        <th class="cell-300" scope="col">序号</th>
+                        <!-- <th class="cell-300" scope="col">序号</th> -->
                         <th class="cell-300" scope="col">姓名</th>
                         <th class="cell-300" scope="col">手机</th>
                         <th class="cell-300" scope="col">归档日期</th>
-                        <th class="suf-cell"></th>
                     </tr>
                     <tbody>
-                    <tr>
-                        <th class="pre-cell"></th>
-                        <th scope="row">1</th>
-                        <td>bqx</td>
-                        <td>1871111222</td>
-                        <td>2018-01-02</td>
-                        <td class="suf-cell"></td>
+                    <tr v-for="(item, index) in data" :key="index">
+                        <!-- <th scope="row">1</th> -->
+                        <td>{{ item.name }}</td>
+                        <td>{{ item.phone }}</td>
+                        <td>{{ item.archive_time }}</td>
                     </tr>
-                    <!-- <tr v-for="project in projectsInfo ">
-                        <td class="pre-cell"></td>
-                        <td class="pointer-content" @click="redirectProjectDetail(project.id)">{{ project.name }}</td>
-                        <td>{{ project.principal }}</td>
-                        <td>{{ project.progress }}</td>
-                        <td>{{ project.sign_time }}</td>
-                        <td>{{ project.delivery }}</td>
-                        <td>{{ project.follow_time }}</td>
-                        <td class="suf-cell"></td>
-                    </tr> -->
                     </tbody>
 
                 </table>
@@ -48,15 +34,24 @@
     <!-- End Page -->
 </template>
 <script>
+import fetch from '../../assets/utils/fetch'
+
 export default {
     name: 'staffHistory',
     data () {
         return {
-            // 
+            data: []
         }
     },
+    mounted () {
+        this.getData()
+    },
     methods: {
-        // 
+        getData () {
+            fetch ('get', '/archive').then((res) => {
+                this.data = res.data
+            })
+        }
     }
 }
 </script>

@@ -155,7 +155,7 @@
                             },
                             {
                                 name: '简报',
-                                code: 'briefing'
+                                code: 'brief'
                             },
                             {
                                 name: '在线编辑',

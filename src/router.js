@@ -158,12 +158,12 @@ export default new Router({
             component: () => import('./views/messages/index.vue'),
         },
         {
-            path: '/brief/home',
+            path: '/brief',
             name: 'home',
             component: () => import('./views/brief/home.vue'),
             children: [
                 {
-                    path: '/brief/home',
+                    path: '/brief',
                     redirect: '/brief/index'
                 },
                 {
@@ -185,6 +185,11 @@ export default new Router({
                     path: '/brief/myapproval',
                     name: 'myapproval',
                     component: () => import('./views/brief/myapproval.vue')
+                },
+                {
+                  path: '/brief/followup',
+                  name: 'followup',
+                  component: () => import('./views/brief/followup.vue')
                 },
                 {
                     path: '/brief/list',
