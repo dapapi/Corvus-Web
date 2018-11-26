@@ -5,7 +5,7 @@
           <h1 class="page-title">我的审批</h1>
         </div>
     </div>
-    <div class="page-content container-fluid">
+    <div class="page-content container-fluid  mt-20">
             <div class="panel col-md-12 col-lg-12 py-5">
                 <div class="col-md-5 py-20">
                 <div class="input-search">
@@ -42,6 +42,7 @@
                                 <th class="cell-300" scope="col">申请时间</th>
                                 <th class="cell-300" scope="col">申请状态</th>
                             </tr>
+                            <tbody>
                             <tr v-for="task in tasksInfo">
                                 <td class="pointer-content">
                                     <router-link :to="{name:'tasks/detail', params: {id: task.id}}">{{ task.title }}
@@ -57,8 +58,10 @@
                                 <td>
                                     <template v-if="task.principal">{{ task.principal.data.name }}</template>
                                 </td>
-                             
+
                             </tr>
+                            </tbody>
+
                         </table>
                         <template v-if="!taskStatus">
                             <Pagination :current_page="current_page" :method="getTasks" :total_pages="total_pages"
@@ -345,7 +348,7 @@
 <style scoped>
 .page{
     position: absolute;
-    left:210px;
+    left:140px;
     top:0;
 }
 

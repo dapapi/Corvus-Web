@@ -10,7 +10,7 @@
             <section class="page-aside-section">
               <h5 class="page-title pl-30 mb-45">简报</h5>
               <div class="list-group">
-                <router-link class="list-group-item" to="/brief/home">提交简报</router-link>
+                <router-link class="list-group-item" to="/brief">提交简报</router-link>
                 <router-link class="list-group-item" to="/brief/myapproval">我审批的</router-link>
                 <router-link class="list-group-item" to="/brief/followup">跟进的问题</router-link>
               </div>

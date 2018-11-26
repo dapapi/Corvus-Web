@@ -13,22 +13,22 @@
             <div class="panel col-md-12 clearfix py-5">
                 <div class="clearfix">
                     <div class="col-md-2 example float-left">
-                        <selectors :options="staffStatus" changeKey="status" @select="changeState"></selectors>
+                        <selectors :options="staffStatus" :value="1" changeKey="status" @select="changeState"></selectors>
                     </div>
-                    <div class="col-md-3 example float-left">
+                    <div class="col-md-2 example float-left">
                         <selectors :options="monthArr" :value="month" changeKey="month" @select="changeState"></selectors>
                     </div>
                     <div class="col-md-2 example float-left">
                         <selectors :options="staffTypeArr" changeKey="staffType" @select="changeState"></selectors>
                     </div>
-                    <div class="col-md-4 example float-left">
+                    <div class="col-md-3 example float-left">
                         <div class="input-search">
                             <button type="button" @click="getStaffList" class="input-search-btn"><i class="icon md-search" aria-hidden="true"></i>
                             </button>
                             <input type="text" class="form-control" @keyup.enter="getStaffList" v-model="search" placeholder="请搜索姓名/手机号/职位">
                         </div>
                     </div>
-                    <div class="col-md-1 example float-left" 
+                    <div class="col-md-3 example float-left" 
                         style="height: 36px; line-height: 36px; text-align: right;"
                     >
                         <span style="cursor: pointer" data-target="#examplePositionCenter" data-toggle="modal">报表</span>
@@ -42,7 +42,7 @@
                     </Modal>
                 </div>
                 <div class="example" style="padding: 0 15px;">在职 {{ onJob }} 离职 {{ departure }}</div>
-                <table class="table is-indent example" data-plugin="animateList" data-animate="fade" data-child="tr"
+                <table class="table table-hover is-indent example" data-plugin="animateList" data-animate="fade" data-child="tr"
                        data-selectable="selectable">
                     <tr class="animation-fade"
                         style="animation-fill-mode: backwards; animation-duration: 250ms; animation-delay: 0ms;">
@@ -55,27 +55,29 @@
                         <th class="cell-300" scope="col">入职日期</th>
                         <th class="cell-300" scope="col">操作</th>
                     </tr>
+                    <tbody>
                     <tr v-for="(item, index) in staffList" :key="index">
                         <td><router-link to="/staff/detail">{{item.name}}</router-link></td>
                         <td>{{ item.phone }}</td>
-                        <td>{{ item.status }}</td>
-                        <td>{{ item.hire_shape }}</td>
+                        <td>{{ workStatus[item.status] }}</td>
+                        <td>{{ employment[item.hire_shape] }}</td>
                         <td>{{ item.department }}</td>
                         <td>{{ item.entry_time }}</td>
                         <td>
                             <div class="dropdown show task-dropdown">
                                 <i class="icon md-more font-size-24" aria-hidden="true" id="taskDropdown"
-                                data-toggle="dropdown" aria-expanded="false"></i>
+                                   data-toggle="dropdown" aria-expanded="false" style="cursor: pointer"></i>
                                 <div class="dropdown-menu dropdown-menu-left task-dropdown-item" aria-labelledby="taskDropdown"
-                                    role="menu" x-placement="bottom-end" style="min-width: 0;">
-                                    <a class="dropdown-item" role="menuitem" @click="">转正</a>
-                                    <a class="dropdown-item" role="menuitem" @click="">调岗</a>
-                                    <a class="dropdown-item" role="menuitem" @click="">离职</a>
-                                    <a class="dropdown-item" role="menuitem" @click="">归档</a>
+                                     role="menu" x-placement="bottom-end" style="min-width: 0;">
+                                    <a v-if="item.status !== 2" class="dropdown-item" role="menuitem" @click="changeStaffStatus(item.id, 1)">转正</a>
+                                    <a class="dropdown-item" role="menuitem" @click="changeStaffStatus(item.id, 3)">调岗</a>
+                                    <a class="dropdown-item" role="menuitem" @click="changeStaffStatus(item.id, 2)">离职</a>
+                                    <a class="dropdown-item" role="menuitem" @click="changeStaffStatus(item.id, 6)">归档</a>
                                 </div>
                             </div>
                         </td>
                     </tr>
+                    </tbody>
                 </table>
 
                 <pagination :current_page="currentPage" :method="getStaffList" :total_pages="totalPages"
@@ -100,7 +102,7 @@
 <script>
 import config from "../../assets/js/config";
 // import redirect from './bootstrap';
-const { staffStatus, staffType } = config;
+const { staffStatus, staffType, employment, workStatus } = config;
 import fetch from "../../assets/utils/fetch";
 import axios from 'axios'
 
@@ -163,6 +165,8 @@ export default {
             month: new Date().getMonth() + 1, // 1-12月份，
             status: 1, // 1在职， 2离职，全部 '',
             page: 1, // 分页
+            employment: employment, // 聘用形式
+            workStatus: workStatus, // 当前工作状态
         };
     },
 
@@ -179,8 +183,8 @@ export default {
 
     getStaffList() {
         const params = {
-            status: this.status,
-            staff_type: this.staffType,
+            position_type: this.status,
+            status: this.staffType,
             page: this.page,
             search: this.search,
             entry_time: this.month
@@ -199,6 +203,16 @@ export default {
     changeSelectOption(newArr) {
       this.checkedNames = newArr;
     },
+    // 改变员工状态
+    changeStaffStatus (useId, status) {
+        const params = {
+            status: status // 1.转正，2.离职，3.调岗，6.归档
+        }
+        fetch('put', `/personnel/${useId}/status`, params).then((data) => {
+            toastr.success('操作成功');
+            this.getStaffList()
+        })
+    }
   }
 };
 </script>

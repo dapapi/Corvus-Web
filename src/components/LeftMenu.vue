@@ -155,7 +155,7 @@
                             },
                             {
                                 name: '简报',
-                                code: 'briefing'
+                                code: 'brief'
                             },
                             {
                                 name: '在线编辑',
@@ -167,7 +167,7 @@
                             },
                             {
                                 name: '员工档案',
-                                code: 'staffs'
+                                code: 'staff'
                             },
                             {
                                 name: '通讯录',
@@ -181,6 +181,10 @@
                                 name: '我的',
                                 code: 'my'
                             },
+                            {
+                                name: '知识库',
+                                code: 'knowledge'
+                            }
                         ]
                     },
                 ],

@@ -126,7 +126,7 @@
                                 <div class="example">
                                     <div class="col-md-3 text-right float-left">血型</div>
                                     <div class="col-md-8 float-left pl-0 require">
-                                        <input type="text" v-model="bloodType" placeholder="" class="form-control">
+                                        <selectors :options="bloodTypeArr" change-key="bloodType" @select="changeState" placeholder="请选择" :defaultValue="0"></selectors>
                                     </div>
                                 </div>
                                 <div class="example">
@@ -173,7 +173,7 @@
                         <div class="formName pd-b-15">教育背景 <i class="icon md-plus add-icon" @click="tableAdd('education')"></i></div>
                         <div class="example table-responsive padding15">
                             <!-- <mtp-table :data-source="education" :columns="eduColumns" /> -->
-                            <table class="table table-bordered">
+                            <table class="table table-hover table-bordered">
                                 <thead>
                                     <tr>
                                         <th v-for="(item, index) in education.tHead" :key="index">{{ item.value }}</th>
@@ -193,7 +193,7 @@
 
                         <div class="formName pd-b-15">培训经历<i class="icon md-plus add-icon" @click="tableAdd('train')"></i></div>
                         <div class="example table-responsive padding15">
-                            <table class="table table-bordered">
+                            <table class="table table-hover table-bordered">
                                 <thead>
                                     <tr>
                                         <th v-for="(item, index) in train.tHead" :key="index">{{ item.value }}</th>
@@ -214,7 +214,7 @@
                             <i class="icon md-plus add-icon" @click="tableAdd('work')"></i>
                         </div>
                         <div class="example table-responsive padding15">
-                            <table class="table table-bordered">
+                            <table class="table table-hover table-bordered">
                                 <thead>
                                     <tr>
                                         <th v-for="(item, index) in work.tHead" :key="index">{{ item.value }}</th>
@@ -235,7 +235,7 @@
                             <i class="icon md-plus add-icon" @click="tableAdd('home')"></i>
                         </div>
                         <div class="example table-responsive padding15">
-                            <table class="table table-bordered">
+                            <table class="table table-hover table-bordered">
                                 <thead>
                                     <tr>
                                         <th v-for="(item, index) in home.tHead" :key="index">{{ item.value }}</th>
@@ -309,7 +309,7 @@
 
 <script>
 import config from "../../assets/js/config";
-const { sexArr, maritalStatusArr, nationalityArr } = config;
+const { sexArr, maritalStatusArr, nationalityArr, bloodTypeArr } = config;
 import fetch from "../../assets/utils/fetch";
 
 let tempArr = []
@@ -327,6 +327,7 @@ export default {
             sexArr: sexArr,
             maritalStatusArr: maritalStatusArr,
             nationalityArr: tempArr,
+            bloodTypeArr: bloodTypeArr,
             nameCN: '',
             nameEN: '',
             sex: '',
@@ -474,6 +475,46 @@ export default {
             isPregnancy: '',
             agreeMove: '',
             remarks: '',
+            formCheck: [{
+                name: 'nameCN',
+                msg: '请填写姓名'
+            }, {
+                name: 'sex',
+                msg: '请选择性别'
+            }, {
+                name: 'IDNum',
+                msg: '请填写身份证号码'
+            }, {
+                name: 'phoneNum',
+                msg: '请填写手机号'
+            }, {
+                name: 'entryTime',
+                msg: '请填写入职时间'
+            }, {
+                name: 'politicalFace',
+                msg: '请填写政治面目'
+            }, {
+                name: 'maritalStatus',
+                msg: '请选择婚姻状况'
+            }, {
+                name: 'email',
+                msg: '请填写电子邮件'
+            }, {
+                name: 'birthDay',
+                msg: '请选择出生日期'
+            }, {
+                name: 'householdAddress',
+                msg: '请填写户籍所在地址'
+            }, {
+                name: 'nationality',
+                msg: '请选择民族'
+            }, {
+                name: 'bloodType',
+                msg: '请选择血型'
+            }, {
+                name: 'homeAddress',
+                msg: '请填写现居住地址'
+            }]
         };
     },
 	watch: {
@@ -507,8 +548,18 @@ export default {
 		},
 		// 提交
 		submit () {
-			// todo
-			let params = {
+            let canSend = true
+            for (let n of this.formCheck) {
+                if (!this[n.name]) {
+                    toastr.error(n.msg)
+                    canSend = false
+                    break
+                }
+            }
+            if (!canSend) {
+                return
+            }
+            let params = {
 				name: this.nameCN,
 				en_name: this.nameEN,
 				gender: this.sex,
@@ -575,10 +626,9 @@ export default {
 			}
 	
 			fetch('post', '/personnel' ,params).then(result => {
-				// 
-				alert('添加成功')
+                toastr.success('添加成功')
 			})
-		}
+        },
 	}
 }
 </script>

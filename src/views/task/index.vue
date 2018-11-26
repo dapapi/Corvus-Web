@@ -67,6 +67,7 @@
                                 <th class="cell-300" scope="col">负责人</th>
                                 <th class="cell-300" scope="col">截止时间</th>
                             </tr>
+                            <tbody>
                             <tr v-for="task in tasksInfo">
                                 <td class="pointer-content">
                                     <router-link :to="{name:'tasks/detail', params: {id: task.id}}">
@@ -85,6 +86,7 @@
                                 </td>
                                 <td>{{ task.end_at }}</td>
                             </tr>
+                            </tbody>
                         </table>
                         <template v-if="!taskStatus">
                             <Pagination :current_page="current_page" :method="getTasks" :total_pages="total_pages"

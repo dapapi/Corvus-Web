@@ -81,6 +81,7 @@
                                 <th class="cell-300" scope="col">录入时间</th>
                                 <th class="cell-300" scope="col">最后跟进时间</th>
                             </tr>
+                            <tbody>
                             <tr v-for="artist in artistsInfo">
                                 <td>
                                     <span class="checkbox-custom checkbox-primary">
@@ -108,6 +109,7 @@
                                 <td>暂无</td>
                                 <td>暂无</td>
                             </tr>
+                            </tbody>
                         </table>
                         <pagination :current_page="current_page" :method="getArtists" :total_pages="total_pages"
                                     :total="total"></pagination>

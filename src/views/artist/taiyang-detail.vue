@@ -130,6 +130,7 @@
                                     <th class="cell-300" scope="col">负责人</th>
                                     <th class="cell-300" scope="col">截止时间</th>
                                 </tr>
+                                <tbody>
                                 <tr v-for="task in artistTasksInfo">
                                     <td>{{ task.title }}</td>
                                     <td>{{ task.type }}</td>
@@ -141,6 +142,7 @@
                                     <td>{{ task.principal.data.name }}</td>
                                     <td>{{ task.end_at }}</td>
                                 </tr>
+                                </tbody>
                             </table>
                             <div class="site-action fixed-button" data-plugin="actionBtn" data-toggle="modal"
                                  data-target="#addTask">
@@ -164,6 +166,7 @@
                                     <th class="cell-300" scope="col">角色</th>
                                     <th class="cell-300" scope="col">合作演员</th>
                                 </tr>
+                                <tbody>
                                 <tr v-for="work in artistWorksInfo">
                                     <td>暂无</td>
                                     <td>暂无</td>
@@ -172,6 +175,7 @@
                                     <td>暂无</td>
                                     <td>暂无</td>
                                 </tr>
+                                </tbody>
                             </table>
 
                             <div class="site-action fixed-button" data-plugin="actionBtn">
@@ -221,6 +225,7 @@
                                     <th class="cell-300" scope="col">付款时间</th>
                                     <th class="cell-300" scope="col">操作人</th>
                                 </tr>
+                                <tbody>
                                 <tr v-for="work in artistWorksInfo">
                                     <td>暂无</td>
                                     <td>暂无</td>
@@ -228,6 +233,7 @@
                                     <td>暂无</td>
                                     <td>暂无</td>
                                 </tr>
+                                </tbody>
                             </table>
 
                         </div>
@@ -244,7 +250,7 @@
                                         <button class="btn btn-primary" @click="changeArtistBaseInfo">确定</button>
                                     </div>
                                 </div>
-                                <div class="card-block" v-if="artistInfo">
+                                <div class="card-block" v-if="artistInfo.name">
                                     <div class="clearfix">
                                         <div class="card-text py-10 px-0 clearfix col-md-6 float-left">
                                             <div class="col-md-2 float-left text-right pl-0">姓名</div>

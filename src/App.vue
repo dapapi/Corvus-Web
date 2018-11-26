@@ -1,7 +1,7 @@
 <template>
     <div id="app">
         <template v-if="isLeftMenuShow">
-            <LeftMenu/>   
+            <LeftMenu/>
         </template>
         <router-view/>
     </div>
@@ -10,6 +10,7 @@
 <script>
     import LeftMenu from '@/components/LeftMenu.vue'
     import Approval from '@/components/Approval.vue'
+
     export default {
         name: 'app',
         data: function () {
@@ -90,6 +91,15 @@
         width: 100%;
         height: 1px;
         border-bottom: 1px dashed #E0E0E0;
+    }
+
+    .table a {
+        text-decoration: none;
+        color: rgb(117, 117, 117);;
+    }
+
+    .table td {
+        padding: 1rem;
     }
 
     .hover-content:hover {
