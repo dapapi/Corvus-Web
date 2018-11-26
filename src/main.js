@@ -38,6 +38,9 @@ import NavBack from './components/NavBack.vue';
 import Upload from './components/Upload.vue';
 import MtpTable from './components/Table.vue';
 import Timepicker from './components/Timepicker.vue';
+import Flag from './components/Flag.vue'
+import AddModifyBroadCast from './components/AddModifyBroadCast.vue'
+import RegionSelector from './components/RegionSelector.vue'
 
 Vue.config.productionTip = false;
 
@@ -77,7 +80,9 @@ Vue.component('NavBack', NavBack);
 Vue.component('Upload', Upload);
 Vue.component('MtpTable', MtpTable);
 Vue.component('Timepicker', Timepicker);
-
+Vue.component('Flag', Flag);
+Vue.component('AddModifyBroadCast', AddModifyBroadCast);
+Vue.component('RegionSelector', RegionSelector);
 Vue.prototype.globalClick = function (callback) {
   document.getElementById('app').addEventListener('click', () => {
     callback(event);

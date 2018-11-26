@@ -195,8 +195,13 @@ export default new Router({
                 name: 'statistics',
                 component: () => import('./views/brief/statistics.vue')
             },
-
+           
         ]
-    }
+    },
+    {
+      path: '/broadcast',
+      name: 'broadcast',
+      component: () => import('./views/broadcast/index.vue')
+    },
   ],
 });
