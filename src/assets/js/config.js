@@ -696,7 +696,17 @@ let config = {
         2: '实习生',
         3: '管培生',
         4: '外包'
-    }
+    },
+    refuseTypeArr: [
+        {
+            name: '我方拒绝',
+            value: 1
+        },
+        {
+            name: '他方拒绝',
+            value: 2
+        }
+    ]
 
 };
 

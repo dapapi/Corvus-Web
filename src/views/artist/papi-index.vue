@@ -291,6 +291,7 @@
 
         mounted() {
             this.getArtists()
+            $('table').asSelectable();
         },
 
         methods: {
