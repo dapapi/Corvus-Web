@@ -696,7 +696,32 @@ let config = {
         2: '实习生',
         3: '管培生',
         4: '外包'
-    }
+    },
+    // 工作状态
+    workStatus: {
+        1: '试用期',
+        2: '已转正',
+        3: '离职',
+        4: '实习期',
+        5: '外包',
+    },
+    bloodTypeArr: [
+        {
+            name: 'A',
+            value: 1       
+        },
+        {
+            name: 'B',
+            value: 2
+        },
+        {
+            name: 'AB',
+            value: 3
+        }, {
+            name: 'O',
+            value: 4
+        }
+    ]
 
 };
 
