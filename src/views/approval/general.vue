@@ -26,7 +26,7 @@
              
             <div class="col-md-12 panel">
                     <div>
-                    <div class="example pt-20 pb-5">
+                    <div class="example pb-5">
                         <table class="table table-hover is-indent mb-20" data-plugin="animateList" data-animate="fade"
                                data-child="tr"
                                data-selectable="selectable">

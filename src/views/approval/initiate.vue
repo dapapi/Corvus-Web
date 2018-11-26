@@ -1,7 +1,7 @@
 <template>
     <div class="page-main" style="background-color:#f3f4f5">
       <div class="page-header page-header-bordered mb-0">
-        <h1 class="page-title">发起审批</h1>
+        <h1 class="page-title pl-10">发起审批</h1>
       </div>
     
     <div class="page-content container-fluid ">
@@ -344,9 +344,6 @@
   .page-header{
     padding: 20px;
   }
-  .page-header-bordered{
-  padding: 30px;
-}
   .puls {
     width: 100px;
     height: 100px;
@@ -363,7 +360,7 @@
   }
 
   .pearl-icon {
-    font-size: 16px;
+    font-size: 12px;
   }
 
   .modal-body {
