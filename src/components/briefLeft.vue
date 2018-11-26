@@ -12,7 +12,7 @@
               <div class="list-group">
                 <router-link class="list-group-item" to="/brief/home">提交简报</router-link>
                 <router-link class="list-group-item" to="/brief/myapproval">我审批的</router-link>
-                <router-link class="list-group-item" to="/brief/home">跟进的问题</router-link>
+                <router-link class="list-group-item" to="/brief/followup">跟进的问题</router-link>
               </div>
             </section>
             <section class="page-aside-section">
@@ -28,15 +28,15 @@
                             <!-- <a href=""> -->
                               <router-link v-if="item.id == '1'" to="/brief/list"  class="animsition-link">
                                 <span class="icon md-file-text font-size-18 mr-10"></span>
-                                <span class="site-menu-title" >我的{{item2.title}}</span>
+                                <span class="site-menu-title" >我的{{item2.template_name}}</span>
                               </router-link>
                               <router-link v-else-if="item.id == '2'" to="/brief/memberReport">
                                 <span class="icon md-file-text font-size-18 mr-10"></span>
-                                <span class="site-menu-title" >成员{{item2.title}}</span>
+                                <span class="site-menu-title" >成员{{item2.template_name}}</span>
                               </router-link>
                               <router-link to="/brief/statistics" v-else>
                                 <span class="icon md-file-text font-size-18 mr-10"></span>
-                                <span class="site-menu-title">{{item2.title}}统计</span>
+                                <span class="site-menu-title">{{item2.template_name}}统计</span>
                               </router-link>
                             <!-- </a>    -->
                           </li>
