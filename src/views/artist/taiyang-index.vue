@@ -63,12 +63,11 @@
 
                 <div class="page-content tab-content nav-tabs-animate bg-white">
                     <div class="tab-pane animation-fade active" id="forum-artist" role="tabpanel">
-                        <table class="table table-hover" data-plugin="selectable"
-                               data-row-selectable="true">
-                            <tr>
+                        <table class="table table-hover" data-plugin="selectable" data-row-selectable="true">
+                            <tr class="">
                                 <th class="w-50">
                                         <span class="checkbox-custom checkbox-primary">
-                                            <input class="selectable-all" type="checkbox"
+                                            <input class="selectable-all" type="checkbox" :checked="isSelectAll"
                                                    @change="selectArtists('all')">
                                             <label></label>
                                         </span>
@@ -365,11 +364,13 @@
                 artistLocation: '',
                 notSignReason: '',
                 selectedArtistsArr: [],
+                isSelectAll: false,
             }
         },
 
         mounted() {
-            this.getArtists()
+            this.getArtists();
+            $('table').asSelectable();
         },
 
         methods: {
@@ -384,6 +385,7 @@
                     _this.current_page = response.meta.pagination.current_page;
                     _this.total = response.meta.pagination.total;
                     _this.total_pages = response.meta.pagination.total_pages;
+                    $('table').asSelectable('_trigger');
                 })
             },
 
