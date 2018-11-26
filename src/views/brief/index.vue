@@ -13,7 +13,7 @@
                                 
                                 <i class="icon md-file float-left" style="font-size:3rem"></i>
                                 <i></i>
-                                <p class="my-10">{{item.title}}</p>
+                                <p class="my-10">{{item.template_name}}</p>
                             </div>
                         </div>
                         <div v-else class="card" data-toggle="modal" data-target="#submitReport">
@@ -21,7 +21,7 @@
                                 
                                 <i class="icon md-file float-left" style="font-size:3rem"></i>
                                 <i></i>
-                                <p class="my-10">{{item.title}}</p>
+                                <p class="my-10">{{item.template_name}}</p>
                             </div>
                         </div>
                     </div>

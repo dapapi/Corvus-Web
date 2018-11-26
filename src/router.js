@@ -176,6 +176,11 @@ export default new Router({
                 component: () => import('./views/brief/myapproval.vue')
             },
             {
+              path: '/brief/followup',
+              name: 'followup',
+              component: () => import('./views/brief/followup.vue')
+            },
+            {
                 path: '/brief/list',
                 name: 'list',
                 component: () => import('./views/brief/list.vue')
