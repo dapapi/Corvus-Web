@@ -111,24 +111,29 @@ export default new Router({
     {
       path: '/approval',
       name: 'approval',
+      redirect:'/approval/initiate',
       component: () => import(/* webpackChunkName: "about" */ './views/approval/index.vue'),
       children: [
         {
-          path: '/approval',
+          path: '/approval/initiate',
           component: () => import('./views/approval/initiate.vue')
         },
         {
-          path: '/application',
+          path: '/approval/application',
           component: () => import('./views/approval/application.vue')
         },
         {
-          path: '/my',
+          path: '/approval/my',
           component: () => import('./views/approval/my.vue')
         },
         {
-          path: '/only',
+          path: '/approval/only',
           component: () => import('./views/approval/only.vue')
         },
+        // {
+        //   path: '/approval/general',
+        //   component: () => import('./views/approval/general.vue')
+        // },
         {
           path: '/application/:id',
           name: 'approval/detail',
@@ -201,7 +206,35 @@ export default new Router({
     {
       path: '/my',
       name: 'my',
+      redirect:'/my/project',
       component: () => import('./views/application/index.vue'),
+      children:[
+      {
+        path: '/my/broadcast',
+        name: 'broadcast',
+        component: () => import('./views/application/broadcast.vue')
+      },
+      {
+        path: '/my/task',
+        name: 'task',
+        component: () => import('./views/application/task.vue')
+      },
+      {
+        path: '/my/project',
+        name: 'project',
+        component: () => import('./views/application/project.vue')
+      },
+      {
+        path: '/my/approval',
+        name: 'approval',
+        component: () => import('./views/application/approval.vue')
+      },
+      {
+        path: '/my/schedule',
+        name: 'schedule',
+        component: () => import('./views/application/schedule.vue')
+      }
+    ]
     },{
       path: '/broadcast',
       name: 'broadcast',
