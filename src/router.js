@@ -240,5 +240,10 @@ export default new Router({
       name: 'broadcast',
       component: () => import('./views/broadcast/index.vue')
     },
+    {
+      path: '/broadcast/:id',
+      name: 'broadcast/detail',
+      component: () => import('./views/broadcast/detail.vue')
+    },
   ],
 });
