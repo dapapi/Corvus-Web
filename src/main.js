@@ -39,6 +39,7 @@ import NavBack from './components/NavBack.vue';
 import Upload from './components/Upload.vue';
 import MtpTable from './components/Table.vue';
 import Timepicker from './components/Timepicker.vue';
+import StaffEditSelect from './components/StaffEditSelect'
 
 Vue.config.productionTip = false;
 
@@ -79,6 +80,7 @@ Vue.component('NavBack', NavBack);
 Vue.component('Upload', Upload);
 Vue.component('MtpTable', MtpTable);
 Vue.component('Timepicker', Timepicker);
+Vue.component('StaffEditSelect', StaffEditSelect);
 
 Vue.prototype.globalClick = function (callback) {
     document.getElementById('app').addEventListener('click', () => {
