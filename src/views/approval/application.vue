@@ -1,7 +1,7 @@
 <template>
   <div class="page">
     <div class="page-main" style="background-color:#f3f4f5">
-      <div class="page-header  page-header-bordered">
+      <div class="page-header  page-header-bordered mb-0">
         <h1 class="page-title">我的申请</h1>
       </div>
     </div>
@@ -357,11 +357,11 @@ a {
 }
 .nav-link.dropdown-toggle{
   text-align: left;
-  margin-top: -10px;
+  margin-top: -8px;
   margin-left: -15px;
   background: #fff;
 }
-.page-header-bordered{
-  padding: 30px;
+.page-content{
+  padding: 0 20px; 
 }
 </style>

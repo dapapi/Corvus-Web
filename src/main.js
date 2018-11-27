@@ -32,6 +32,8 @@ import SelectStaff from './components/SelectStaff.vue';
 import SelectorsOptions from './components/SelectorsOptions.vue';
 import TaskFollowUp from './components/TaskFollowUp.vue';
 import LeftMenu from './components/LeftMenu.vue';
+import ListSelection from './components/ListSelection.vue';
+import ListSelectMember from './components/ListSelectMember.vue';
 import MeetingRoomCalendar from './components/MeetingRoomCalendar.vue';
 import Modal from './components/Modal.vue';
 import CheckboxGroup from './components/CheckboxGroup.vue';
@@ -39,7 +41,9 @@ import NavBack from './components/NavBack.vue';
 import Upload from './components/Upload.vue';
 import MtpTable from './components/Table.vue';
 import Timepicker from './components/Timepicker.vue';
-
+import Flag from './components/Flag.vue';
+import AddModifyBroadCast from './components/AddModifyBroadCast.vue';
+import RegionSelector from './components/RegionSelector.vue';
 Vue.config.productionTip = false;
 
 Vue.component('AddMember', AddMember);
@@ -72,6 +76,8 @@ Vue.component('Selectors', Selectors);
 Vue.component('SelectorsOptions', SelectorsOptions);
 Vue.component('TaskFollowUp', TaskFollowUp);
 Vue.component('LeftMenu', LeftMenu);
+Vue.component('ListSelection', ListSelection);
+Vue.component('ListSelectMember', ListSelectMember);
 Vue.component('MeetingRoomCalendar', MeetingRoomCalendar);
 Vue.component('Modal', Modal);
 Vue.component('CheckboxGroup', CheckboxGroup);
@@ -79,7 +85,9 @@ Vue.component('NavBack', NavBack);
 Vue.component('Upload', Upload);
 Vue.component('MtpTable', MtpTable);
 Vue.component('Timepicker', Timepicker);
-
+Vue.component('Flag', Flag);
+Vue.component('AddModifyBroadCast', AddModifyBroadCast);
+Vue.component('RegionSelector', RegionSelector);
 Vue.prototype.globalClick = function (callback) {
     document.getElementById('app').addEventListener('click', () => {
         callback(event);

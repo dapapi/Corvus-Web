@@ -1,8 +1,8 @@
 <template>
    <div class="page">
-        <div class="page-header page-header-bordered col-md-12 row">
+        <div class="page-header page-header-bordered row">
             <h1 class="page-title col-md-1">消息</h1>
-            <div class="col-md-10 row filter-container" >
+            <div class="col-md-11 row filter-container" >
                 <div class="dropdown">
                     <div class=" text-right text-filter-all" id="" data-toggle="dropdown" aria-expanded="false" @click="readTypeToggle">
                         {{messageFilter}}
@@ -16,31 +16,31 @@
                         <a :class="messageFilter === '加班消息' ? 'active' :''" class="dropdown-item" href="javascript:void(0)" role="menuitem" @click="messageFilterHandler('加班消息')">加班消息</a>
                     </div>
                 </div>
-                <div class="offset-md-9 col-md-2 text-right ">
-                    <i class="icon md-circle-o" v-if="readFilter && !isNoUnread" data-target="#exampleNiftyFadeScale" 
+                <div class="offset-md-9 col-md-2 text-right mark-all-read">
+                    <i class="icon md-circle-o" v-if="readFilter && !isNoUnread" data-target="#confirmFlag" 
                     data-toggle="modal"></i>&nbsp;
                     <span v-if="readFilter && !isNoUnread" 
-                    data-target="#exampleNiftyFadeScale" 
+                    data-target="#confirmFlag" 
                     data-toggle="modal">全部标记为已读</span> 
                 </div>
             </div>
         </div>
-        <div class="col-md-12">
-            <ul class="nav nav-tabs nav-tabs-line" role="tablist">
-                <li class="nav-item" role="presentation" >
-                    <a class="nav-link active" data-toggle="tab" href="#forum-task"
-                        aria-controls="forum-base"
-                        aria-expanded="true" role="tab" @click='readFilter=true'>未读</a>
-                </li>
-                <li class="nav-item" role="presentation">
-                    <a class="nav-link" data-toggle="tab" href="#forum-task"
-                        aria-controls="forum-present"
-                        aria-expanded="false" role="tab" @click='readFilter=false'>已读</a>
-                </li>
-            </ul>
-        </div>
         <div class="page-content container-fluid">
             <div class="panel col-md-12 col-lg-12 py-5 ">
+                <div class="col-md-12">
+                    <ul class="nav nav-tabs nav-tabs-line" role="tablist">
+                        <li class="nav-item" role="presentation" >
+                            <a class="nav-link active" data-toggle="tab" href="#forum-task"
+                                aria-controls="forum-base"
+                                aria-expanded="true" role="tab" @click='readFilter=true'>未读</a>
+                        </li>
+                        <li class="nav-item" role="presentation">
+                            <a class="nav-link" data-toggle="tab" href="#forum-task"
+                                aria-controls="forum-present"
+                                aria-expanded="false" role="tab" @click='readFilter=false'>已读</a>
+                        </li>
+                    </ul>
+                </div>
                 <div class="" 
                     v-for="(item, index) in pageData" 
                     :key="index+100" 
@@ -60,19 +60,18 @@
                 </div>
             </div>
         </div>
-        <FlagConfirm @emitMarkasRead='emitMarkasRead'/>
+        <Flag typeText="全部标记为已读" @confirmFlag='emitMarkasRead'/>
     </div>
 </template>
 
 <script>
 import Main from './detail.vue';
-import FlagConfirm from './flag.vue';
 import messagesData from './messages.json'
 
 export default {
   name: 'messagesIndex',
   components: {
-    Main, FlagConfirm,
+    Main,
   },
   data() {
     return {

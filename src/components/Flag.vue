@@ -1,6 +1,6 @@
 <template>
-    <div class="modal fade modal-fade-in-scale-up"
-        id="exampleNiftyFadeScale"
+    <div class="modal fade modal-simple"
+        id="confirmFlag"
         aria-labelledby="exampleModalTitle"
         role="dialog" tabindex="-1"
         style="display: none;"
@@ -11,7 +11,7 @@
             <button type="button" class="close" data-dismiss="modal" aria-label="Close">
                 <span aria-hidden="true">×</span>
                 </button>
-                <h4 class="modal-title">确认全部标记为已读</h4>
+                <h4 class="modal-title">确认{{typeText}}</h4>
             </div>
             <div class="modal-body">
                 <p>此更改不可撤销</p>
@@ -22,7 +22,7 @@
                 data-dismiss="modal">不</button>
                 <button type="button"
                 class="btn btn-primary waves-effect waves-classic"
-                data-dismiss="modal" @click='emitMarkasRead'>确认</button>
+                data-dismiss="modal" @click='confirmFlag'>确认</button>
             </div>
             </div>
         </div>
@@ -31,10 +31,11 @@
 
 <script>
 export default {
+    props:['typeText'],
     methods:{
         //发送
-        emitMarkasRead(){
-            this.$emit('emitMarkasRead')
+        confirmFlag(){
+            this.$emit('confirmFlag')
         }
     }
 };
