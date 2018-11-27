@@ -2,6 +2,7 @@
     <div class="upload">
         <input type="file" @change="uploadFile" />
         <slot></slot>
+        <div>{{fileName}}</div>
     </div>
 </template>
 
@@ -11,7 +12,11 @@ import * as qiniu from 'qiniu-js'
 
 export default {
     name: 'file-upload',
- 
+    data(){
+        return{
+            fileName:''
+        }
+    },
     mounted () {
     },
 
@@ -44,6 +49,7 @@ export default {
                     _this.$emit('change', fileUrl, fileName, fileSize);
                 })
             });
+            this.fileName=file.name
         },
 
         getQiniuAccessToken: function (callback) {

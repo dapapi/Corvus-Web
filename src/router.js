@@ -203,6 +203,11 @@ export default new Router({
             },
 
         ]
+    },
+    {
+      path: '/my',
+      name: 'my',
+      component: () => import('./views/application/index.vue'),
     }
   ],
 });
