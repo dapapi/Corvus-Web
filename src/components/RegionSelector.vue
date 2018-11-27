@@ -39,7 +39,8 @@ export default {
             citySelected:'',            //二级列表选项
             citySelectedId:'',          //二级列表id
             area:{},                    //区级数据
-            areaSelected:''             //三级列表选项
+            areaSelected:'',            //三级列表选项
+            areaSelectedId:''
         }
     },
     created(){
@@ -57,6 +58,7 @@ export default {
             this.citySelectedId = ''
             this.area = {}
             this.areaSelected = ''
+            this.areaSelectedId=''
         },
         //获取一级列表id
         getProvinceId(ref){
@@ -74,6 +76,14 @@ export default {
                 }
             }
         },
+        //获取三级列表id
+        getAreaId(ref){
+            for (const key in this.area) {
+                if (this.area[key].name == ref) {
+                    this.areaSelectedId = this.area[key].id
+                }
+            }
+        },
         //设置二级列表数据
         setCity(){
             this.city = cityData[this.provinceSelectedId]
@@ -85,9 +95,18 @@ export default {
         sendData(){
             //设置返回数据格式
             let setAreaData = {
-                'province':this.provinceSelected,
-                'city':this.citySelected,
-                'area':this.areaSelected
+                'province':{
+                    'name':this.provinceSelected,
+                    'id':this.provinceSelectedId
+                },
+                'city':{
+                    'name':this.citySelected,
+                    'id':this.citySelectedId
+                },
+                'area':{
+                    'name':this.areaSelected,
+                    'id':this.areaSelectedId
+                }
             }
             //推送返回数据至父组件
             this.$emit('setAreaData',setAreaData)
@@ -126,7 +145,8 @@ export default {
         },
         areaSelected:function(val,oldval){
             if(val!==oldval){
-               this.sendData()
+                this.getAreaId(val)
+                this.sendData()
             }
         }
     },
