@@ -63,7 +63,7 @@
                     </div>
                     
                     <div class="modal-footer">
-                        <button data-bb-handler="confirm" type="button" class="btn btn-primary" @click="getNote">发布</button>
+                        <button data-bb-handler="confirm" type="button" class="btn btn-primary" data-dismiss="modal" @click="getNote">发布</button>
                         <button data-bb-handler="cancel" type="button" class="btn btn-default" data-dismiss="modal" @click='getNote'>取消</button>
                     </div>
                 </div>
@@ -92,13 +92,10 @@ export default {
        this.modalInit()
     },
     methods:{
-        //修复富文本编辑器多层弹窗bug，点击边框bug
+        //修复富文本编辑器多层弹窗bug
         modalInit(){
             $('.summernoteUploadModal').click(() => {
                 $('.summernoteUploadModal').modal('hide');
-            })
-            this.$nextTick(() => {
-                $('summernoteUploadModal').modal({backdrop: 'static', keyboard: false})
             })
         },
         //富文本编辑器初始化
