@@ -11,31 +11,42 @@
                             <table class="table table-hover" data-role="content" data-plugin="selectable" data-row-selectable="true">
                                 <thead class="">
                                 <tr>
-                                    <th style="width:480px"><strong>标题</strong>
-                                    </th>
-                                    <th>
-                                    <strong>分类</strong> 
-                                    </th>
-                                    <th>
+                                    <td class="broadcast-title"><strong>标题</strong>
+                                    </td>
+                                    <td>
+                                        <strong>分类</strong> 
+                                    </td>
+                                    <td></td>
+                                    <td>
                                     <strong>发布时间</strong>
-                                    </th>
-                                    <th>
+                                    </td>
+                                    <td></td>
+                                    <td></td>
+                                    <td>
                                     <strong>发布人</strong>
-                                    </th>
+                                    </td>
                                 </tr>
                                 </thead>
                                 <tbody>
                                 <tr class="broadcast-tr" v-for="i in 5" :key="i">
-                                    <td class="row broadcast-title"><div class="broadcast-title-div"><a href="javascript:void(0)" class="">Revene for last quarter in state America for year 2013,
-                                    whith112312312123123312323121233</a></div>
+                                    <td class="broadcast-title">
+                                        <span class="broadcast-title-div">
+                                            <span class="">Revene for last quarter in state America for year 2013,
+                                    whith112312312123123312323121233</span>
+                                        </span>
                                         <span class="broadcast-top-flag badge badge-outline badge-info">置顶</span>
-                                        <span class="broadcast-new-flag">NEW</span>
+                                        <span class="broadcast-new-flag">
+                                            <strong>NEW</strong>
+                                        </span>
                                     </td>
                                     <td>公告内容</td>
+                                    <td></td>
                                     <td>
                                         <span>6 minets ago</span>
                                         <i class="icon md-time ml-10" aria-hidden="true"></i>
                                     </td>
+                                    <td></td>
+                                    <td></td>
                                     <td>
                                         张小凡      
                                     </td>
@@ -47,7 +58,6 @@
                 </div>
             </div>
             <AddModifyBroadCast />
-            <RegionSelector />
         </div>
     </div>
 </template>
@@ -59,12 +69,13 @@ export default {
 </script>
 
 <style scoped>
-/* .broadcast-title{
-    width: 500px;
-
-} */
+.broadcast-title{
+    /* width: 500px; */
+    display: flex;
+}
 .broadcast-title-div{
-    max-width: 350px;
+    display: inline-block;
+    max-width: 400px;
     white-space: nowrap;
     overflow: hidden;
     text-overflow: ellipsis;
