@@ -377,7 +377,8 @@
                 taskTypeArr: config.taskTypeArr,
                 customizeInfo: config.customizeInfo,
                 priorityArr: config.priorityArr,
-                taskStatusArr: config.taskStatusArr
+                taskStatusArr: config.taskStatusArr,
+                oldInfo: '',
             }
         },
 
@@ -447,6 +448,7 @@
                     }
 
                     _this.taskInfo = response.data;
+                    _this.oldInfo = response.data;
                     for (let i = 0; i < response.data.participants.data.length; i++) {
                         _this.flagParticipantsIdArr.push(response.data.participants.data[i].id)
                     }
@@ -475,6 +477,7 @@
 
             cancelEdit: function () {
                 this.isEdit = false;
+                this.taskInfo = oldInfo;
             },
 
             changeTaskStatus: function (status) {

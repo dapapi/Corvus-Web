@@ -16,17 +16,20 @@
             </div>
             <div class="fc-right">
                 <div class="fc-button-group">
-                    <button type="button" class="fc-prev-button fc-button fc-state-default fc-corner-left"><span
+                    <button type="button" class="fc-prev-button fc-button fc-state-default fc-corner-left"
+                            @click="getBeforeDay"><span
                             class="fc-icon fc-icon-left-single-arrow"></span></button>
-                    <button type="button" class="fc-next-button fc-button fc-state-default fc-corner-right"><span
+                    <button type="button" class="fc-next-button fc-button fc-state-default fc-corner-right"
+                            @click="getNextDay"><span
                             class="fc-icon fc-icon-right-single-arrow"></span></button>
                 </div>
                 <button type="button"
-                        class="fc-today-button fc-button fc-state-default fc-corner-left fc-corner-right fc-state-disabled"
-                        disabled="">今天
+                        class="fc-today-button fc-button fc-state-default fc-corner-left fc-corner-right"
+                        :class="currentDate == numberDate? 'fc-state-disabled' : ''"
+                        @click="getCurrentDay" :disabled="currentDate == numberDate">今天
                 </button>
             </div>
-            <div class="fc-center"><h2>2018年 11月 26日</h2></div>
+            <div class="fc-center"><h2>{{ date }}</h2></div>
             <div class="fc-clear"></div>
         </div>
         <div class="fc-view-container" style="overflow: scroll">
@@ -329,7 +332,18 @@
                                                 <td v-for="meetingRome in meetingRomeList" style="width: 100px">
                                                     <div class="fc-content-col">
                                                         <div class="fc-event-container fc-helper-container"></div>
-                                                        <div class="fc-event-container"></div>
+                                                        <div class="fc-event-container">
+                                                            <a class="fc-time-grid-event fc-v-event fc-event fc-start fc-end fc-draggable fc-resizable"
+                                                               style="top: 449px; bottom: -539px; z-index: 1; left: 0%; right: 0%; margin-right: 20px;background-color: red;border: red">
+                                                                <div class="fc-content">
+                                                                    <div class="fc-time" data-start="10:00"
+                                                                         data-full="10:00 AM"><span>10:00</span></div>
+                                                                    <div class="fc-title">Repeating Event</div>
+                                                                </div>
+                                                                <div class="fc-bg"></div>
+                                                                <div class="fc-resizer fc-end-resizer"></div>
+                                                            </a>
+                                                        </div>
                                                         <div class="fc-highlight-container"></div>
                                                         <div class="fc-bgevent-container"></div>
                                                         <div class="fc-business-container"></div>
@@ -356,6 +370,8 @@
         name: "MeetingRoomCalendar",
         data() {
             return {
+                numberDate: '',
+                currentDate: '',
                 meetingRomeList: [
                     {
                         name: '会议室1',
@@ -423,9 +439,55 @@
             }
         },
 
+        mounted() {
+            this.getCurrentDay()
+        },
+
+        computed: {
+            date: function () {
+                let dateArr = this.numberDate.split('-');
+                return dateArr[0] + '年  ' + dateArr[1] + '月  ' + dateArr[2] + '日';
+            }
+        },
+
         methods: {
             displayMeetingRoom(value) {
                 this.$emit('change', value)
+            },
+
+            getCurrentDay() {
+                let date = new Date();
+                let year = date.getFullYear();
+                let month = date.getMonth() + 1;
+                let strDate = date.getDate();
+                if (month >= 1 && month <= 9) {
+                    month = "0" + month;
+                }
+                if (strDate >= 0 && strDate <= 9) {
+                    strDate = "0" + strDate;
+                }
+                this.currentDate = year + '-' + month + '-' + strDate;
+                this.numberDate = year + '-' + month + '-' + strDate;
+            },
+
+            getBeforeDay() {
+                let d = this.numberDate;
+                d = new Date(d);
+                d = +d - 1000 * 60 * 60 * 24;
+                d = new Date(d);
+                let year = d.getFullYear();
+                let mon = d.getMonth() + 1;
+                let day = d.getDate();
+                this.numberDate = year + "-" + (mon < 10 ? ('0' + mon) : mon) + "-" + (day < 10 ? ('0' + day) : day);
+            },
+
+            getNextDay() {
+                let d = this.numberDate;
+                d = new Date(d);
+                d = +d + 1000 * 60 * 60 * 24;
+                d = new Date(d);
+                this.numberDate = d.getFullYear() + "-" + (d.getMonth() + 1) + "-" + d.getDate();
+
             }
         }
     }
