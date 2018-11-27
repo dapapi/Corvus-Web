@@ -2,13 +2,15 @@
 
     <div class="department-item example">
         <div class="pt-2 team-title">
-            <span class="team-title-icon pr-2" @click="departmentClose">
-                <i class="icon md-caret-down" v-show="departmentsShow"></i>
-                <i class="icon md-caret-right" v-show="!departmentsShow"></i>
-            </span>
-            <span>
-                 <i class="icon md-balance"></i>
-                {{ this.data.name }}（{{ this.total }}人)
+            <span @click="departmentClose" class="pointer-content">
+                <span class="team-title-icon" style="padding-right: 10px">
+                    <i class="icon md-caret-down" v-show="departmentsShow"></i>
+                    <i class="icon md-caret-right" v-show="!departmentsShow"></i>
+                </span>
+                <span>
+                    <i class="icon md-balance"></i>
+                    {{ this.data.name }}（{{ this.total }}人)
+                </span>
             </span>
             <span class="team-add-all pl-2" @click="selectAllMember" v-if="multiple">
                 <i class="icon md-plus"></i>
@@ -78,9 +80,6 @@
                     return this.$store.state.newParticipantsInfo
                 }
             },
-            getDepartmentId: function(){
-                
-            }
         },
 
         mounted() {

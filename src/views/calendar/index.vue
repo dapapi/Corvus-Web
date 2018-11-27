@@ -16,39 +16,72 @@
                     </div>
                     <div class="calendar-list">
                         <div>
-                            <div class="calendar-title"><i class="icon md-calendar pr-5"></i>所有日历</div>
-                            <ul>
-                                <li v-for="calendar in calendarList" class="clearfix">
-                                    <div class="calendar-checkbox float-left pointer-content"
-                                         :style="'background-color:' + calendar.color"
-                                         @click="checkCalendar(calendar.id)">
-                                        <i class="icon md-check"
-                                           v-show="selectedCalendar.indexOf(calendar.id) > -1"></i>
-                                    </div>
-                                    <div class="float-left ml-10">{{ calendar.name }}</div>
-                                    <div class="float-right">
-                                        <i class="icon md-more" aria-hidden="true" id="taskDropdown"
-                                           data-toggle="dropdown" aria-expanded="false"></i>
-                                        <div class="dropdown-menu" aria-labelledby="taskDropdown">
-                                            <a class="dropdown-item" @click="editCalendar" data-target="#changeCalendar"
-                                               data-toggle="modal">编辑</a>
-                                            <a class="dropdown-item" data-target="#delModel" data-toggle="modal"
-                                               @click="delCalendar(calendar)">删除</a>
+                            <div class="calendar-title position-relative" style="line-height: 20px">
+                                <i class="icon md-calendar pr-5"></i>所有日历
+                                <span class="px-5 pointer-content" @click="allCalendarShow">
+                                    <template v-if="showAllCalendar">
+                                        <i class="icon md-chevron-down"></i>
+                                    </template>
+                                    <template v-else>
+                                        <i class="icon md-chevron-up"></i>
+                                    </template>
+                                </span>
+                                <span class="float-right pointer-content" data-toggle="modal" data-target="#addMembers">
+                                    <i class="icon md-accounts-add"></i>
+                                </span>
+                            </div>
+                            <div v-show="showAllCalendar">
+                                <ul>
+                                    <li v-for="calendar in calendarList" class="clearfix">
+                                        <div class="calendar-checkbox float-left pointer-content"
+                                             :style="'background-color:' + calendar.color"
+                                             @click="checkCalendar(calendar.id)">
+                                            <i class="icon md-check"
+                                               v-show="selectedCalendar.indexOf(calendar.id) > -1"></i>
                                         </div>
+                                        <div class="float-left ml-10">{{ calendar.name }}</div>
+                                        <div class="float-right">
+                                            <i class="icon md-more" aria-hidden="true" id="taskDropdown"
+                                               data-toggle="dropdown" aria-expanded="false"></i>
+                                            <div class="dropdown-menu" aria-labelledby="taskDropdown">
+                                                <a class="dropdown-item" @click="editCalendar"
+                                                   data-target="#changeCalendar"
+                                                   data-toggle="modal">编辑</a>
+                                                <a class="dropdown-item" data-target="#delModel" data-toggle="modal"
+                                                   @click="delCalendar(calendar)">删除</a>
+                                            </div>
+                                        </div>
+                                    </li>
+                                </ul>
+                                <div class="px-20">
+                                    <div class="checkbox-custom checkbox-primary">
+                                        <input type="checkbox" id="inputUnchecked" @change="selectAllCalendar">
+                                        <label for="inputUnchecked">全选</label>
                                     </div>
-                                </li>
-                            </ul>
-                            <div class="px-20">
-                                <div class="checkbox-custom checkbox-primary">
-                                    <input type="checkbox" id="inputUnchecked" @change="selectAllCalendar">
-                                    <label for="inputUnchecked">全选</label>
                                 </div>
                             </div>
                         </div>
                         <div>
-                            <div class="calendar-title"><i class="icon md-calendar pr-5"></i>会议室</div>
-                            <div class="text-center">
-                                <span class="pointer-content hover-content" @click="checkMeetingRoom">会议室占用情况</span>
+                            <div class="calendar-title">
+                                <i class="icon md-calendar pr-5"></i>资源
+                                <span class="px-5 pointer-content" @click="allResourceShow">
+                                    <template v-if="showAllResource">
+                                        <i class="icon md-chevron-down"></i>
+                                    </template>
+                                    <template v-else>
+                                        <i class="icon md-chevron-up"></i>
+                                    </template>
+                                </span>
+                            </div>
+                            <div v-show="showAllResource">
+                                <div class="text-center pb-10">
+                                    <span class="pointer-content hover-content"
+                                          @click="checkMeetingRoom(1)">会议室占用情况</span>
+                                </div>
+                                <div class="text-center pb-10">
+                                    <span class="pointer-content hover-content"
+                                          @click="checkMeetingRoom(2)">摄影棚占用情况</span>
+                                </div>
                             </div>
                         </div>
                     </div>
@@ -422,6 +455,27 @@
             </div>
         </div>
 
+        <div class="modal fade" id="addMembers" aria-hidden="true" aria-labelledby="addLabelForm" role="dialog"
+             tabindex="-1">
+            <div class="modal-dialog modal-simple" style="max-width: 50rem;">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <button type="button" aria-hidden="true" data-dismiss="modal" class="close"><i
+                                aria-hidden="true" class="md-close"></i></button>
+                        <h4 class="modal-title">批量添加成员</h4>
+                    </div>
+                    <div class="modal-body clearfix pt-10">
+                        <ListSelectMember :listName="'成员列表'" :selectName="'已选择成员'" :type="'change'"></ListSelectMember>
+                    </div>
+                    <div class="modal-footer">
+                        <button class="btn btn-sm btn-white btn-pure" data-dismiss="modal">取消</button>
+                        <button class="btn btn-primary" @click="">确定</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+
     </div>
 
 </template>
@@ -474,7 +528,21 @@
                         id: 4,
                         color: '#546E7A'
                     },
-                ]
+                    {
+                        name: '艺人日历',
+                        id: 1,
+                        color: '#FB8C00'
+                    },
+                    {
+                        name: '个人日历',
+                        id: 2,
+                        color: '#E53935'
+                    },
+
+                ],
+                showAllCalendar: true,
+                showAllResource: true,
+                selectMemberShow: false,
             }
         },
 
@@ -487,6 +555,7 @@
             $('#addSchedule').on('hidden.bs.modal', function () {
                 _this.$store.dispatch('changeParticipantsInfo', {data: []});
             })
+            this.globalClick(this.removeSelector);
         },
 
         methods: {
@@ -507,6 +576,15 @@
                         })
                     }
                 })
+            },
+
+            removeSelector: function (event) {
+                let tag = document.getElementById("selectMember");
+                if (tag) {
+                    if (!tag.contains(event.target)) {
+                        this.selectMemberShow = false;
+                    }
+                }
             },
 
             addSchedule: function () {
@@ -593,8 +671,19 @@
             },
 
             displayMeetingRoom: function (value) {
-                console.log(value)
                 this.meetingRomeShow = false
+            },
+
+            allCalendarShow: function () {
+                this.showAllCalendar = !this.showAllCalendar
+            },
+
+            allResourceShow: function () {
+                this.showAllResource = !this.showAllResource
+            },
+
+            addCalendarMember: function () {
+                this.selectMemberShow = true
             }
 
 
