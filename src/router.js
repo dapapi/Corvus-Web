@@ -210,6 +210,68 @@ export default new Router({
             ]
         },
         {
+            path: '/attendance',
+            name: 'home',
+            component: () => import('./views/attendance/home.vue'),
+            children: [
+                {
+                    path: '/attendance',
+                    redirect: '/attendance/index'
+                },
+                {
+                    path: '/attendance/index',
+                    name: 'index',
+                    component: () => import('./views/attendance/index.vue'),
+                },
+                {
+                    path: '/attendance/all/:id',
+                    name: '/attendance/all',
+                    component: () => import('./views/attendance/all.vue')
+                },
+                {
+                    path: '/attendance/apply',
+                    name: 'apply',
+                    component: () => import('./views/attendance/apply.vue')
+                },
+                {
+                    path: '/attendance/approval',
+                    name: 'approval',
+                    component: () => import('./views/attendance/approval.vue')
+                },
+                {
+                    path: '/attendance/calendar',
+                    name: 'calendar',
+                    component: () => import('./views/attendance/calendar.vue')
+                },
+                {
+                    path: '/attendance/memberAttend',
+                    name: 'memberAttend',
+                    component: () => import('./views/attendance/memberAttend.vue')
+                },
+                {
+                    path: '/attendance/memberLeave',
+                    name: 'memberLeave',
+                    component: () => import('./views/attendance/memberLeave.vue')
+                },
+                {
+                    path: '/attendance/myAttend',
+                    name: 'myAttend',
+                    component: () => import('./views/attendance/myAttend.vue')
+                },
+                {
+                    path: '/attendance/myLeave',
+                    name: 'myLeave',
+                    component: () => import('./views/attendance/myLeave.vue')
+                },
+                {
+                    path: '/attendance/tellme',
+                    name: 'tellme',
+                    component: () => import('./views/attendance/tellme.vue')
+                },
+
+            ]
+        },
+        {
             path: '/address',
             name: 'address',
             component: () => import('./views/address/index.vue')

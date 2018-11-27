@@ -10,34 +10,31 @@
             <section class="page-aside-section">
               <h5 class="page-title pl-30 mb-45">简报</h5>
               <div class="list-group">
-                <router-link class="list-group-item" to="/brief">提交简报</router-link>
-                <router-link class="list-group-item" to="/brief/myapproval">我审批的</router-link>
-                <router-link class="list-group-item" to="/brief/followup">跟进的问题</router-link>
+                <router-link class="list-group-item" v-for="(item,index) in leftData.topData" :key="index" :to="item.url">{{item.name}}</router-link>
               </div>
             </section>
             <section class="page-aside-section">
               <div class="site-menubar-body" style="width:260px;">
                 <ul  class="menu pl-30">
-                  <li class="site-menu-item has-sub" v-for="item in list" :key="item.id" @click="switchMenu(item.id)">
+                  <li class="site-menu-item has-sub" v-for="(item,index) in leftData.bottomData" :key="index" @click="switchMenu(item.value)">
                         <a href="javascript:void(0)">
-                          <span class="icon md-caret-right font-size-20 mr-10 leftImg" :class="isShow == item.id?'anmite':''"></span>
-                          <span class="site-menu-title">{{item.value}}</span>
+                          <span class="icon md-caret-right font-size-20 mr-10 leftImg" style="position:relative;top:2px" :class="isShow == item.value?'anmite':''"></span>
+                          <span class="site-menu-title">{{item.name}}</span>
                         </a>
-                        <ul class="site-menu-sub" v-show="isShow == item.id">
-                          <li class="site-menu-item" v-for="item2 in  reportList" :key="item2.id">
+                        <ul class="site-menu-sub" v-show="isShow == item.value">
+                          <li class="site-menu-item" v-for="(item2,index) in  item.data" :key="index">
                             <!-- <a href=""> -->
-                              <router-link v-if="item.id == '1'" to="/brief/list"  class="animsition-link">
+                              
+                              <router-link :to="{name:item2.url,params:{id:item2.params.id}}" v-if="item2.params">
+                              
                                 <span class="icon md-file-text font-size-18 mr-10"></span>
-                                <span class="site-menu-title" >我的{{item2.template_name}}</span>
+                                <span class="site-menu-title" >{{item2.name}}</span>
                               </router-link>
-                              <router-link v-else-if="item.id == '2'" to="/brief/memberReport">
+                              <router-link v-else :to="item2.url" >
                                 <span class="icon md-file-text font-size-18 mr-10"></span>
-                                <span class="site-menu-title" >成员{{item2.template_name}}</span>
+                                <span class="site-menu-title" >{{item2.name}}</span>
                               </router-link>
-                              <router-link to="/brief/statistics" v-else>
-                                <span class="icon md-file-text font-size-18 mr-10"></span>
-                                <span class="site-menu-title">{{item2.template_name}}统计</span>
-                              </router-link>
+        
                             <!-- </a>    -->
                           </li>
                         </ul>
@@ -84,29 +81,18 @@ import fetch from '@/assets/utils/fetch'
 import config from '@/assets/js/config'
 
 export default {
+  props:{
+     leftData:{
+        type:Object,
+        required:true
+     }
+  },
   data(){
     return {
-       list:[
-         {
-           id:'1',
-           value:'我的简报'
-         },
-         {
-           id:'2',
-           value:'成员简报',
-         },
-         {
-           id:'3',
-           value:'简报统计'
-         }
-       ],
-       reportList:[],
        isShow:'0',
     }
   },
-  mounted(){
-    this.getlist()
-  },
+  
   methods:{
     switchMenu:function(id){
       if(this.isShow == id){
@@ -115,15 +101,11 @@ export default {
         this.isShow = id;
       }
       
-    },
-    getlist:function(){
-      fetch('get',`${config.apiUrl}/launch`).then((res) => {
-          this.reportList = res.data
-      })
     }
   },
   
 }
 </script>
+
 
 
