@@ -77,7 +77,7 @@
 
         <customize-filter :data="customizeInfo" @change="customize"></customize-filter>
 
-        <div class="site-action" data-plugin="actionBtn" data-toggle="modal" data-target="#addTask">
+        <div class="site-action" data-plugin="actionBtn" data-toggle="modal" data-target="#addTrail">
             <button type="button"
                     class="site-action-toggle btn-raised btn btn-success btn-floating waves-effect waves-classic">
                 <i class="front-icon md-plus animation-scale-up" aria-hidden="true"></i>
@@ -85,7 +85,7 @@
             </button>
         </div>
 
-        <div class="modal fade" id="addTask" aria-hidden="true" aria-labelledby="addLabelForm"
+        <div class="modal fade" id="addTrail" aria-hidden="true" aria-labelledby="addLabelForm"
              role="dialog" tabindex="-1">
             <div class="modal-dialog modal-simple">
                 <div class="modal-content">
@@ -169,9 +169,9 @@
                                            :placeholder="'请选择推荐艺人'"></selectors>
                             </div>
                         </div>
-                        <div class="example">
+                        <div class="example" v-show="trailType != 4">
                             <div class="col-md-2 text-right float-left">合作类型</div>
-                            <div class="col-md-10 float-left pl-0" v-if="trailType != 4">
+                            <div class="col-md-10 float-left pl-0">
                                 <selectors :options="cooperationTypeArr" @change="changeCooperationType"
                                            :placeholder="'请选择合作类型'"></selectors>
                             </div>
@@ -197,10 +197,10 @@
                                        v-model="trailContactPhone">
                             </div>
                         </div>
-                        <div class="example" v-if="trailType != 4">
+                        <div class="example" v-show="trailType != 4">
                             <div class="col-md-2 text-right float-left">线索状态</div>
                             <div class="col-md-10 float-left pl-0">
-                                <selectors :options="priorityArr" :placeholder="'请选择线索状态'"
+                                <selectors :options="trailStatusArr" :placeholder="'请选择线索状态'"
                                            @change="changeTrailStatus"></selectors>
                             </div>
                         </div>
@@ -216,7 +216,7 @@
                             <div class="col-md-5 float-left pl-0 pr-0">
                                 <number-spinner @change="changeTrailFee"></number-spinner>
                             </div>
-                            <div class="col-md-3 float-left" v-if="companyType !== '泰洋川禾'">
+                            <div class="col-md-3 float-left" v-if="trailType == 4">
                                 <div class="checkbox-custom checkbox-primary">
                                     <input type="checkbox" id="isLocked" @change="changeCheckbox">
                                     <label for="isLocked">锁价</label>
@@ -265,6 +265,7 @@
                 trailOriginArr: config.trailOrigin,
                 salesProgressText: '未确定合作',
                 cooperationTypeArr: config.cooperationTypeArr,
+                trailStatusArr: config.trailStatusArr,
                 selectCompany: '',
                 trailName: '',
                 targetStars: '',
@@ -381,7 +382,8 @@
                 }
                 let _this = this;
                 fetch('post', '/trails', data).then(function (response) {
-                    _this.$router.push({path: '/trails/' + response.data.id})
+                    $('#addTrail').modal('hide');
+                    // _this.$router.push({path: '/trails/' + response.data.id})
                 })
             },
 

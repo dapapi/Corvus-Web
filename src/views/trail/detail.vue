@@ -534,6 +534,7 @@
                 refuseTypeArr: config.refuseTypeArr,
                 refuseType: '',
                 refuseReason: '',
+                oldInfo: '',
             }
 
         },
@@ -612,6 +613,7 @@
                 };
                 fetch('get', '/trails/' + this.trailId, data).then(function (response) {
                     _this.trailInfo = response.data;
+                    _this.oldInfo = JSON.parse(JSON.stringify(response.data));
                     for (let i = 0; i < _this.trailInfo.expectations.data.length; i++) {
                         _this.selectedExpectationsArr.push(_this.trailInfo.expectations.data[i].id)
                     }
@@ -623,7 +625,7 @@
                             type: 'change',
                             data: response.data.principal.data
                         };
-                        store.dispatch('changePrincipal', params);
+                        _this.$store.dispatch('changePrincipal', params);
                     }
                 })
             },
@@ -674,6 +676,20 @@
 
             cancelEdit: function () {
                 this.isEdit = false;
+                this.trailInfo = JSON.parse(JSON.stringify(this.oldInfo));
+                for (let i = 0; i < this.trailInfo.expectations.data.length; i++) {
+                    this.selectedExpectationsArr.push(this.trailInfo.expectations.data[i].id)
+                }
+                for (let i = 0; i < this.trailInfo.recommendations.data.length; i++) {
+                    this.selectedRecommendationsArr.push(this.trailInfo.recommendations.data[i].id)
+                }
+                if (this.trailInfo.principal) {
+                    let params = {
+                        type: 'change',
+                        data: response.data.principal.data
+                    };
+                    store.dispatch('changePrincipal', params);
+                }
             },
 
             getTrailTask: function () {

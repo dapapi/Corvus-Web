@@ -16,7 +16,16 @@
         data() {
             return {
                 isEditInput: false,
-                context: this.content
+            }
+        },
+        computed: {
+            context: {
+                get() {
+                    return this.content
+                },
+                set() {
+                    return this.content
+                }
             }
         },
         watch: {

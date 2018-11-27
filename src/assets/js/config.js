@@ -454,6 +454,56 @@ let config = {
                 value: 8
             }
         ],
+        trailStatusArr: [
+            {
+                name: '开始接洽',
+                value: 1
+            },
+            {
+                name: '主动拒绝',
+                value: 2
+            },
+            {
+                name: '客户拒绝',
+                value: 3
+            },
+            {
+                name: '进入谈判',
+                value: 4
+            },
+            {
+                name: '意向签约',
+                value: 5
+            },
+            {
+                name: '签约中',
+                value: 6
+            },
+            {
+                name: '签约完成',
+                value: 7
+            },
+            {
+                name: '待执行',
+                value: 8
+            },
+            {
+                name: '在执行',
+                value: 9
+            },
+            {
+                name: '已执行',
+                value: 10
+            },
+            {
+                name: '客户回款',
+                value: 11
+            },
+            {
+                name: '客户反馈分析及项目复盘',
+                value: 12
+            },
+        ],
         papiCommunicationStatusArr: [
             {
                 name: '初步接触',
