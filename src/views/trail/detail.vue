@@ -5,7 +5,7 @@
             <h1 class="page-title d-inline">销售线索</h1>
 
             <div class="page-header-actions dropdown show task-dropdown float-right">
-                <div class="font-info pointer-content">拒绝</div>
+                <div class="font-info pointer-content" data-target="#refuseTrail" data-toggle="modal">拒绝</div>
             </div>
         </div>
 
@@ -91,7 +91,7 @@
                                 <i class="md-plus pr-2" aria-hidden="true"></i>公司
                             </div>
                             <div class="font-weight-bold float-left pointer-content hover-content"
-                                 @click="redirectCompany(trailInfo.client.data.id)">
+                                 @click="redirectCompany(trailInfo.client.data.id)" v-if="trailInfo.client">
                                 {{ trailInfo.client.data.company }}
                             </div>
                         </div>
@@ -128,7 +128,7 @@
                             <div class="card">
                                 <div class="card-header card-header-transparent card-header-bordered">
                                     <div class="float-left font-weight-bold third-title">销售线索信息</div>
-                                    <div class="float-right">
+                                    <div class="float-right pointer-content">
                                         <i class="icon md-edit" aria-hidden="true" @click="editBaseInfo"></i>
                                     </div>
                                     <div class="float-right mr-40" v-show="isEdit">
@@ -136,22 +136,25 @@
                                         <button class="btn btn-primary" @click="changeTrailBaseInfo">确定</button>
                                     </div>
                                 </div>
-                                <div class="card-block">
+                                <div class="card-block" v-if="trailInfo.title">
                                     <div class="clearfix">
-                                        <div class="card-text py-10 px-0 clearfix col-md-6 float-left">
+                                        <div class="card-text py-10 px-0 clearfix col-md-6 float-left"
+                                             :class="isEdit ? 'edit-height':'' ">
                                             <div class="col-md-2 float-left text-right pl-0">线索名称</div>
                                             <div class="col-md-10 float-left font-weight-bold">
                                                 <EditInput :content="trailInfo.title" :is-edit="isEdit"
                                                            @change="changeTrailName"></EditInput>
                                             </div>
                                         </div>
-                                        <div class="card-text py-10 px-0 clearfix col-md-6 float-left">
+                                        <div class="card-text py-10 px-0 clearfix col-md-6 float-left"
+                                             :class="isEdit ? 'edit-height':'' ">
                                             <div class="col-md-2 float-left text-right pl-0">线索来源</div>
                                             <div class="col-md-10 float-left font-weight-bold">
 
                                             </div>
                                         </div>
-                                        <div class="card-text py-10 px-0 clearfix col-md-6 float-left">
+                                        <div class="card-text py-10 px-0 clearfix col-md-6 float-left"
+                                             :class="isEdit ? 'edit-height':'' ">
                                             <div class="col-md-2 float-left text-right pl-0">负责人</div>
                                             <div class="col-md-10 float-left font-weight-bold">
                                                 <EditInput-selector :is-edit="isEdit"
@@ -159,14 +162,16 @@
                                             </div>
 
                                         </div>
-                                        <div class="card-text py-10 px-0 clearfix col-md-6 float-left">
+                                        <div class="card-text py-10 px-0 clearfix col-md-6 float-left"
+                                             :class="isEdit ? 'edit-height':'' ">
                                             <div class="col-md-2 float-left text-right pl-0">预计费用</div>
                                             <div class="col-md-10 float-left font-weight-bold">
                                                 <edit-number-spinner :content="trailInfo.fee" :is-edit="isEdit"
                                                                      @change="changeTrailFee"></edit-number-spinner>
                                             </div>
                                         </div>
-                                        <div class="card-text py-10 px-0 clearfix col-md-6 float-left">
+                                        <div class="card-text py-10 px-0 clearfix col-md-6 float-left"
+                                             :class="isEdit ? 'edit-height':'' ">
                                             <div class="col-md-2 float-left text-right pl-0">目标艺人</div>
                                             <div class="col-md-10 float-left font-weight-bold">
                                                 <EditSelector :options="starsArr" :is-edit="isEdit"
@@ -176,7 +181,8 @@
                                             </div>
 
                                         </div>
-                                        <div class="card-text py-10 px-0 clearfix col-md-6 float-left">
+                                        <div class="card-text py-10 px-0 clearfix col-md-6 float-left"
+                                             :class="isEdit ? 'edit-height':'' ">
                                             <div class="col-md-2 float-left text-right pl-0">推荐艺人</div>
                                             <div class="col-md-10 float-left font-weight-bold">
                                                 <EditSelector :options="starsArr" :is-edit="isEdit"
@@ -186,14 +192,16 @@
                                             </div>
 
                                         </div>
-                                        <div class="card-text py-10 px-0 clearfix col-md-6 float-left">
+                                        <div class="card-text py-10 px-0 clearfix col-md-6 float-left"
+                                             :class="isEdit ? 'edit-height':'' ">
                                             <div class="col-md-2 float-left text-right pl-0">行业</div>
                                             <div class="col-md-10 float-left font-weight-bold">
                                                 <EditSelector :is-edit="isEdit" :options="industriesArr"
                                                               :content="trailInfo.industry_id"></EditSelector>
                                             </div>
                                         </div>
-                                        <div class="card-text py-10 px-0 clearfix col-md-6 float-left">
+                                        <div class="card-text py-10 px-0 clearfix col-md-6 float-left"
+                                             :class="isEdit ? 'edit-height':'' ">
                                             <div class="col-md-2 float-left text-right pl-0">优先级</div>
                                             <div class="col-md-10 float-left font-weight-bold">
                                                 <EditSelector :is-edit="isEdit"
@@ -201,7 +209,7 @@
                                             </div>
                                         </div>
                                         <div class="card-text py-10 px-0 clearfix col-md-6 float-left"
-                                             v-if="trailInfo.type === 4">
+                                             v-if="trailInfo.type === 4" :class="isEdit ? 'edit-height':'' ">
                                             <div class="col-md-2 float-left text-right pl-0">是否锁价</div>
                                             <div class="col-md-10 float-left font-weight-bold">
                                                 <EditSelector :is-edit="isEdit" :options="lockArr"
@@ -209,21 +217,23 @@
                                             </div>
                                         </div>
                                         <div class="card-text py-10 px-0 clearfix col-md-6 float-left"
-                                             v-if="trailInfo.type !== 4">
+                                             v-if="trailInfo.type !== 4" :class="isEdit ? 'edit-height':'' ">
                                             <div class="col-md-2 float-left text-right pl-0">线索状态</div>
                                             <div class="col-md-10 float-left font-weight-bold">
                                                 <EditSelector :is-edit="isEdit"
                                                               :options="clientLevelArr"></EditSelector>
                                             </div>
                                         </div>
-                                        <div class="card-text py-10 px-0 clearfix col-md-6 float-left">
+                                        <div class="card-text py-10 px-0 clearfix col-md-6 float-left"
+                                             :class="isEdit ? 'edit-height':'' ">
                                             <div class="col-md-2 float-left text-right pl-0">合作类型</div>
                                             <div class="col-md-10 float-left font-weight-bold">
                                                 <EditSelector :is-edit="isEdit"
                                                               :options="clientLevelArr"></EditSelector>
                                             </div>
                                         </div>
-                                        <div class="card-text py-10 px-0 clearfix col-md-6 float-left">
+                                        <div class="card-text py-10 px-0 clearfix col-md-6 float-left"
+                                             :class="isEdit ? 'edit-height':'' ">
                                             <div class="col-md-2 float-left text-right pl-0">品牌名称</div>
                                             <div class="col-md-10 float-left font-weight-bold">
                                                 <EditInput :content="trailInfo.brand" :is-edit="isEdit"
@@ -231,7 +241,8 @@
                                             </div>
 
                                         </div>
-                                        <div class="card-text py-10 px-0 clearfix col-md-6 float-left">
+                                        <div class="card-text py-10 px-0 clearfix col-md-6 float-left"
+                                             :class="isEdit ? 'edit-height':'' ">
                                             <div class="col-md-2 float-left text-right pl-0">公司名称</div>
                                             <div class="col-md-10 float-left font-weight-bold">
                                                 <EditInput :content="trailInfo.client.data.company" :is-edit="isEdit"
@@ -239,37 +250,38 @@
                                             </div>
 
                                         </div>
-                                        <div class="card-text py-10 px-0 clearfix col-md-6 float-left">
+                                        <div class="card-text py-10 px-0 clearfix col-md-6 float-left"
+                                             :class="isEdit ? 'edit-height':'' ">
                                             <div class="col-md-2 float-left text-right pl-0">级别</div>
                                             <div class="col-md-10 float-left font-weight-bold">
                                                 <EditSelector :content="trailInfo.client.data.grade" :is-edit="isEdit"
                                                               @change="changeTrailCompanyLevel"
                                                               :options="clientLevelArr"></EditSelector>
                                             </div>
-
                                         </div>
-                                        <div class="card-text py-10 px-0 clearfix col-md-6 float-left">
+                                        <div class="card-text py-10 px-0 clearfix col-md-6 float-left"
+                                             :class="isEdit ? 'edit-height':'' ">
                                             <div class="col-md-2 float-left text-right pl-0">联系人</div>
                                             <div class="col-md-10 float-left font-weight-bold">
                                                 <EditInput :content="trailInfo.contact.data.name" :is-edit="isEdit"
                                                            @change="changeTrailContact"></EditInput>
                                             </div>
                                         </div>
-                                        <div class="card-text py-10 px-0 clearfix col-md-6 float-left">
+                                        <div class="card-text py-10 px-0 clearfix col-md-6 float-left"
+                                             :class="isEdit ? 'edit-height':'' ">
                                             <div class="col-md-2 float-left text-right pl-0">联系人电话</div>
                                             <div class="col-md-10 float-left font-weight-bold">
                                                 <EditInput :content="trailInfo.contact.data.phone" :is-edit="isEdit"
                                                            @change="changeTrailContactPhone"></EditInput>
                                             </div>
-
                                         </div>
-                                        <div class="card-text py-10 px-0 clearfix col-md-6 float-left">
+                                        <div class="card-text py-10 px-0 clearfix col-md-6 float-left"
+                                             :class="isEdit ? 'edit-height':'' ">
                                             <div class="col-md-2 float-left text-right pl-0">备注</div>
                                             <div class="col-md-10 float-left font-weight-bold">
                                                 <editTextarea :content="trailInfo.desc" :is-edit="isEdit"
                                                               @change="changeTrailDesc"></editTextarea>
                                             </div>
-
                                         </div>
                                     </div>
 
@@ -444,6 +456,42 @@
             </div>
         </div>
 
+        <div class="modal fade" id="refuseTrail" aria-hidden="true" aria-labelledby="addLabelForm"
+             role="dialog" tabindex="-1">
+            <div class="modal-dialog modal-simple">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <button type="button" class="close" aria-hidden="true" data-dismiss="modal">
+                            <i class="md-close" aria-hidden="true"></i>
+                        </button>
+                        <h4 class="modal-title">拒绝原因</h4>
+                    </div>
+                    <div class="modal-body">
+
+                        <div class="example">
+                            <div class="col-md-2 text-right float-left">拒绝类型</div>
+                            <div class="col-md-10 float-left pl-0">
+                                <selectors :options="refuseTypeArr" @change="changeRefuseType"></selectors>
+                            </div>
+                        </div>
+                        <div class="example">
+                            <div class="col-md-2 text-right float-left">拒绝原因</div>
+                            <div class="col-md-10 float-left pl-0">
+                                 <textarea class="form-control" title="" placeholder="请输入拒绝原因"
+                                           v-model="refuseReason"></textarea>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="modal-footer">
+                        <button class="btn btn-sm btn-white btn-pure" data-dismiss="modal">取消</button>
+                        <button class="btn btn-primary" type="submit" @click="refuseTrail">确定</button>
+                    </div>
+
+                </div>
+            </div>
+        </div>
+
+
     </div>
 
 </template>
@@ -483,6 +531,9 @@
                 selectedExpectationsArr: [],
                 selectedRecommendationsArr: [],
                 lockArr: config.lockArr,
+                refuseTypeArr: config.refuseTypeArr,
+                refuseType: '',
+                refuseReason: '',
             }
 
         },
@@ -499,7 +550,7 @@
             'trailInfo.principal.data': {
                 handler(newValue, oldValue) {
                     if (newValue && oldValue) {
-                        this.changeInfo.principal = newValue
+                        this.changeInfo.principal = this.$store.state.principalInfo.id
                     }
                 },
                 deep: true
@@ -595,8 +646,11 @@
             },
 
             changeTrailBaseInfo: function () {
-                fetch('put', '/trails/' + this.trailId).then(function () {
+                let _this = this;
+                let data = _this.changeInfo;
+                fetch('put', '/trails/' + this.trailId, data).then(function () {
                     toastr.success('修改成功');
+                    _this.isEdit = false
                 })
             },
 
@@ -615,6 +669,7 @@
 
             editBaseInfo: function () {
                 this.isEdit = true;
+                this.changeInfo = {};
             },
 
             cancelEdit: function () {
@@ -703,8 +758,14 @@
             },
 
             changeTrailPrincipal: function (value) {
-                console.log(value);
-                this.trailInfo.principal.data = value
+                if (this.trailInfo.principal) {
+                    this.trailInfo.principal.data = value
+                } else {
+                    this.trailInfo.principal = {
+                        data: value
+                    };
+                    this.changeInfo.principal = this.$store.state.principalInfo.id
+                }
             },
 
             changeTrailFee: function (value) {
@@ -753,6 +814,14 @@
 
             changePriority: function (value) {
                 console.log(value)
+            },
+
+            changeRefuseType: function (value) {
+                console.log(refuseType)
+            },
+
+            refuseTrail: function () {
+
             }
         }
     }
@@ -765,5 +834,9 @@
         -ms-user-select: none;
         user-select: none;
         z-index: 2;
+    }
+
+    .edit-height {
+        height: 57px;
     }
 </style>

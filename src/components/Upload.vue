@@ -49,7 +49,11 @@ export default {
                     _this.$emit('change', fileUrl, fileName, fileSize);
                 })
             });
+<<<<<<< HEAD
             this.fileName=file.name
+=======
+            this.fileName = file.name
+>>>>>>> develop
         },
 
         getQiniuAccessToken: function (callback) {

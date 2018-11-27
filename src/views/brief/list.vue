@@ -5,12 +5,11 @@
             <h1 class="page-title">我的简报</h1>
         </div>
         <div class="page-content container-fluid">
-            <div class="col-md-12 row">
                 
-                <div class="col-md-10 panel p-20">
-                    <table class="table table-hover is-indent mb-20" data-plugin="animateList" data-animate="fade"
-                        data-child="tr"
-                        data-selectable="selectable">
+                <div class="row">
+                    <div class="col-md-8 ">
+                         <div class="panel p-20">
+                              <table class="table  table-hover is-indent mb-20" >
                         <tr>
                             <th class="cell-300" scope="col">简报周期</th>
                             <th class="cell-300" scope="col">提交时间</th>
@@ -53,11 +52,13 @@
                             <td>写季报</td>
                         </tr>
                     </table>
-                </div>
+                         </div>
+                    </div>
                 <briefright></briefright>
+                </div>
                 <!-- <pagination :current_page="current_page" :method="getProjects" :total_pages="total_pages"
                             :total="total"></pagination> -->
-            </div>
+
                 
         </div>
         <div class="site-action" data-plugin="actionBtn" @click="redirectBriefAdd()">

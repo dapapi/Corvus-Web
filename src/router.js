@@ -111,34 +111,28 @@ export default new Router({
     {
       path: '/approval',
       name: 'approval',
-      redirect:'/approval/initiate',
       component: () => import(/* webpackChunkName: "about" */ './views/approval/index.vue'),
       children: [
         {
-          path: '/approval/initiate',
+          path: '/approval',
           component: () => import('./views/approval/initiate.vue')
         },
         {
-          path: '/approval/application',
+          path: '/application',
           component: () => import('./views/approval/application.vue')
         },
         {
-          path: '/approval/my',
+          path: '/my',
           component: () => import('./views/approval/my.vue')
         },
         {
-          path: '/approval/only',
+          path: '/only',
           component: () => import('./views/approval/only.vue')
         },
         {
           path: '/application/:id',
           name: 'approval/detail',
           component: () => import('./views/approval/appdetail.vue')
-        },
-        {
-          path: '/approval/general',
-          name: 'approval/general',
-          component: () => import('./views/approval/general.vue')
         },
       ],
     },
@@ -201,13 +195,17 @@ export default new Router({
                 name: 'statistics',
                 component: () => import('./views/brief/statistics.vue')
             },
-
+           
         ]
     },
     {
       path: '/my',
       name: 'my',
       component: () => import('./views/application/index.vue'),
-    }
+    },{
+      path: '/broadcast',
+      name: 'broadcast',
+      component: () => import('./views/broadcast/index.vue')
+    },
   ],
 });

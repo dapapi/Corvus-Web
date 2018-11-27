@@ -59,7 +59,11 @@
                             </td>
                             <td>目标艺人</td>
                             <td>{{ trail.fee }}</td>
-                            <td v-if="trail.principal">{{ trail.principal.data.name }}</td>
+                            <td>
+                                <template v-if="trail.principal">
+                                    {{ trail.principal.data.name }}
+                                </template>
+                            </td>
                         </tr>
                         </tbody>
 
