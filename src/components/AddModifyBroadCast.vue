@@ -66,7 +66,7 @@
                     </div>
                     
                     <div class="modal-footer">
-                        <button data-bb-handler="confirm" type="button" class="btn btn-primary" data-dismiss="modal" @click="sendNote">发布</button>
+                        <button data-bb-handler="confirm" type="button" class="btn btn-primary" @click="sendNote">发布</button>
                         <button data-bb-handler="cancel" type="button" class="btn btn-default" data-dismiss="modal" @click='getNote'>取消</button>
                     </div>
                 </div>
@@ -126,6 +126,7 @@ export default {
             $('#summernote').summernote({
                 tabsize: 2,
                 height: 300,
+                
             });
         },
         //清空数据并关闭窗口
@@ -150,19 +151,24 @@ export default {
             this.text = markupStr
         },
         sendNote(){
-            var markupStr = $('#summernote').summernote('code');
-            this.text = markupStr
-            let currenttime = Date.now()
-            let sendData = {
-                title:this.title,       //标题内容
-                range:this.range,       //公告范围
-                type:this.type,        //公告类型
-                topFlag:this.topflag,  //置顶标示
-                text:this.text,        //富文本代码
-                newFlag:1,             //未读标示
-                time:currenttime
+            if(this.type){
+                var markupStr = $('#summernote').summernote('code');
+                this.text = markupStr
+                let currenttime = Date.now()
+                let sendData = {
+                    title:this.title,       //标题内容
+                    range:this.range,       //公告范围
+                    type:this.type,        //公告类型
+                    topFlag:this.topflag,  //置顶标示
+                    text:this.text,        //富文本代码
+                    newFlag:1,             //未读标示
+                    time:currenttime
             }
             this.$emit('sendnote',sendData)
+             $('#addNewBroadcast').modal('hide');
+            }else{
+                alert('请选择分类')
+            }
         }
     }
 }

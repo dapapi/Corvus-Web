@@ -7,7 +7,8 @@
     "readflag":false,
     "topflag":true,
     "id":1,
-    "range":["技术团队"]
+    "range":["技术团队"],
+    "del":false
 },
 {
     "name": "网络安全",
@@ -18,5 +19,6 @@
     "readflag":true,
     "topflag":false,
     "id":2,
-    "range":["技术团队","安全团队"]
+    "range":["技术团队","安全团队"],
+    "del":false
 }]
