@@ -49,7 +49,7 @@
                                 <div class="example">
                                     <div class="col-md-3 text-right float-left">性别</div>
                                     <div class="col-md-8 float-left pl-0 require">
-                                        <selectors :options="sexArr" change-key="sex" @select="changeState" placeholder="请选择" :defaultValue="0"></selectors>
+                                        <selectors :options="genderArr" change-key="gender" @select="changeState" placeholder="请选择" :defaultValue="0"></selectors>
                                     </div>
                                 </div>
                                 <div class="example">
@@ -309,7 +309,7 @@
 
 <script>
 import config from "../../assets/js/config";
-const { sexArr, maritalStatusArr, nationalityArr, bloodTypeArr } = config;
+const { genderArr, maritalStatusArr, nationalityArr, bloodTypeArr } = config;
 import fetch from "../../assets/utils/fetch";
 
 let tempArr = []
@@ -324,13 +324,14 @@ export default {
     name: 'StaffDetail',
     data () {
         return {
-            sexArr: sexArr,
+            userId: '',
+            genderArr: genderArr,
             maritalStatusArr: maritalStatusArr,
             nationalityArr: tempArr,
             bloodTypeArr: bloodTypeArr,
             nameCN: '',
             nameEN: '',
-            sex: '',
+            gender: '',
             IDNum: '',
             phoneNum: '',
             entryTime: '', // 入职时间
@@ -479,7 +480,7 @@ export default {
                 name: 'nameCN',
                 msg: '请填写姓名'
             }, {
-                name: 'sex',
+                name: 'gender',
                 msg: '请选择性别'
             }, {
                 name: 'IDNum',
@@ -517,11 +518,6 @@ export default {
             }]
         };
     },
-	watch: {
-		education () {
-			console.log(this.education)
-		}
-	},
 
 	mounted () {
 		// 深拷贝添加数组，否则改变一个会影响其他的数组
@@ -530,7 +526,12 @@ export default {
 			for (let i = 0; i < 4; i++) {
 				this[n].tBody.push(JSON.parse(JSON.stringify(this[n+'Info'])))
 			}
-		})
+        })
+        const route = this.$route
+        if (route.name === 'staffEdit') {
+            this.userId = route.params.id
+            this.getData()
+        }
     },
 
 	methods: {
@@ -562,7 +563,7 @@ export default {
             let params = {
 				name: this.nameCN,
 				en_name: this.nameEN,
-				gender: this.sex,
+				gender: this.gender,
 				id_number: this.IDNum,
 				phone: this.phoneNum,
 				political: this.politicalFace,
@@ -629,6 +630,12 @@ export default {
                 toastr.success('添加成功')
 			})
         },
+        // 获取员工数据
+        getData () {
+            fetch('get', `/personnel/entry/${this.userId}?include=skills,education,training,record,familyData`).then(res => {
+                console.log(res)
+            })
+        }
 	}
 }
 </script>

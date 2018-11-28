@@ -29,13 +29,13 @@
                         <div class="example">
                             <div class="col-md-3 text-right float-left">最高学历</div>
                             <div class="col-md-9 float-left pl-0">
-                                <input type="text" :disabled="!editInfo" v-model="info.highestDegree" placeholder="" class="form-control">
+                                <input type="text" :disabled="!editInfo" v-model="info.highSchool" placeholder="" class="form-control">
                             </div>
                         </div>
                         <div class="example">
                             <div class="col-md-3 text-right float-left">部门</div>
                             <div class="col-md-9 float-left pl-0">
-                                <input type="text" :disabled="!editInfo" v-model="info.department"  placeholder="" class="form-control">
+                                <StaffEditSelect :isEdit="editInfo" :options="departmentArr" :value="info.departmentId" changeKey="info.departmentId" @change="changeState" placeholder="请选择" :defaultValue="0" />
                             </div>
                         </div>
                         <div class="example">
@@ -50,7 +50,7 @@
                         <div class="example">
                             <div class="col-md-3 text-right float-left">性别</div>
                             <div class="col-md-9 float-left pl-0">
-                                <input type="text" :disabled="!editInfo" v-model="info.sex" placeholder="" class="form-control">
+                                <StaffEditSelect :isEdit="editInfo" :options="genderArr" :value="info.gender" changeKey="info.gender" @change="changeState" placeholder="请选择" :defaultValue="0" />
                             </div>
                         </div>
                         <div class="example">
@@ -62,24 +62,25 @@
                         <div class="example">
                             <div class="col-md-3 text-right float-left">出生日期</div>
                             <div class="col-md-9 float-left pl-0">
-                                <input v-if="!editInfo" type="text" disabled v-model="info.birthDay" placeholder="" class="form-control">
+                                <input v-if="!editInfo" type="text" disabled v-model="info.birthTime" placeholder="" class="form-control">
                                 <template v-else>
-                                    <datepicker :disabled="!editInfo" changeKey="info.birthDay" @select="changeState"></datepicker>
+                                    <datepicker :disabled="!editInfo" changeKey="info.birthTime" @select="changeState"></datepicker>
                                 </template>
                             </div>
                         </div>
                         <div class="example">
                             <div class="col-md-3 text-right float-left">岗位</div>
                             <div class="col-md-9 float-left pl-0">
-                                <input type="text" :disabled="!editInfo" v-model="info.position" placeholder="" class="form-control">
+                                <input type="text" :disabled="!editInfo" v-model="info.jobs" placeholder="" class="form-control">
                             </div>
                         </div>
-                        <!-- <div class="example">
+                        <div class="example">
                             <div class="col-md-3 text-right float-left">工号</div>
                             <div class="col-md-9 float-left pl-0">
-                                <input type="text" placeholder="" class="form-control">
+                                <input type="text" :disabled="!editInfo" v-model="info.number" placeholder="" class="form-control">
+
                             </div>
-                        </div> -->
+                        </div>
                     </div>
 
                     <div class="col-md-4">
@@ -126,14 +127,16 @@
                             </a>
                         </li>
                         <li class="nav-item" role="presentation">
-                            <a class="nav-link" 
-                                data-toggle="tab" 
-                                href="#entryInfoTab" 
-                                aria-controls="entryInfoTab" 
-                                role="tab" 
-                                aria-selected="false">
-                                入职信息表
-                            </a>
+                            <router-link :to="{name: 'staffEdit', params: { id: this.userId }}">
+                                <a class="nav-link" 
+                                    data-toggle="tab" 
+                                    href="#entryInfoTab" 
+                                    aria-controls="entryInfoTab" 
+                                    role="tab" 
+                                    aria-selected="false">
+                                    入职信息表
+                                </a>
+                            </router-link>
                         </li>
                     </ul>
 
@@ -146,12 +149,10 @@
                                 </template>
                             </div>
                             <div class="col-md-8 example">
-                                <!-- <div class="example"> -->
-                                    <div class="col-md-2 text-right float-left pl-0">身份证号</div>
-                                    <div class="col-md-6 float-left pl-0">
-                                        <input type="text" :disabled="!editDetail" v-model="detail.idNumber" placeholder="" class="form-control">
-                                    </div>
-                                <!-- </div> -->
+                                <div class="col-md-2 text-right float-left pl-0">身份证号</div>
+                                <div class="col-md-6 float-left pl-0">
+                                    <input type="text" :disabled="!editDetail" v-model="detail.idNumber" placeholder="" class="form-control">
+                                </div>
                             </div>
                             <div class="col-md-8 example">
                                 <div class="col-md-2 text-right float-left">身份证照</div>
@@ -174,7 +175,7 @@
                             <div class="col-md-8 example">
                                 <div class="col-md-2 text-right float-left">地址</div>
                                 <div class="col-md-6 float-left pl-0">
-                                    <input type="text" :disabled="!editDetail" v-model="detail.address" placeholder="" class="form-control">
+                                    <input type="text" :disabled="!editDetail" v-model="detail.currentAddress" placeholder="" class="form-control">
                                 </div>
                             </div>
                             <div class="col-md-8 example">
@@ -228,25 +229,25 @@
                             <div class="col-md-8 example">
                                 <div class="col-md-2 text-right float-left">签署合同</div>
                                 <div class="col-md-6 float-left pl-0">
-                                    <StaffEditSelect :isEdit="editDetail" :options="companyArr" changeKey="detail.contract" @change="changeState" placeholder="请选择" :defaultValue="0" />
+                                    <StaffEditSelect :isEdit="editDetail" :options="companyArr" :value="detail.contract" changeKey="detail.contract" @change="changeState" placeholder="请选择" :defaultValue="0" />
                                 </div>
                             </div>
                             <div class="col-md-8 example">
                                 <div class="col-md-2 text-right float-left">工作地点</div>
                                 <div class="col-md-6 float-left pl-0">
-                                    <StaffEditSelect :isEdit="editDetail" :options="workPlaceArr" changeKey="detail.workPlace" @change="changeState" placeholder="请选择" :defaultValue="0" />
+                                    <StaffEditSelect :isEdit="editDetail" :options="workPlaceArr" :value="detail.address" changeKey="detail.address" @change="changeState" placeholder="请选择" :defaultValue="0" />
                                 </div>
                             </div>
                             <div class="col-md-8 example">
                                 <div class="col-md-2 text-right float-left">聘用形式</div>
                                 <div class="col-md-6 float-left pl-0">
-                                    <StaffEditSelect :isEdit="editDetail" :options="employmentArr" changeKey="detail.employment" @change="changeState" placeholder="请选择" :defaultValue="0" />
+                                    <StaffEditSelect :isEdit="editDetail" :options="employmentArr" :value="detail.hireShape" changeKey="detail.hireShape" @change="changeState" placeholder="请选择" :defaultValue="0" />
                                 </div>
                             </div>
                             <div class="col-md-8 example">
                                 <div class="col-md-2 text-right float-left">部门</div>
                                 <div class="col-md-6 float-left pl-0">
-                                    <input type="text" placeholder="" class="form-control">
+                                    <StaffEditSelect :isEdit="editDetail" :options="departmentArr" :value="detail.departmentId" changeKey="detail.departmentId" @change="changeState" placeholder="请选择" :defaultValue="0" />
                                 </div>
                             </div>
                             <div class="col-md-8 example">
@@ -277,25 +278,22 @@
                             <div class="col-md-8 example">
                                 <div class="col-md-2 text-right float-left">汇报对象</div>
                                 <div class="col-md-6 float-left pl-0">
-                                    <StaffEditSelect :isEdit="editJob" :options="eportArr" changeKey="job.eport" @change="changeState" placeholder="请选择" :defaultValue="0" />
+                                    <StaffEditSelect :isEdit="editJob" :options="eportArr" :value="job.eport" changeKey="job.eport" @change="changeState" placeholder="请选择" :defaultValue="0" />
                                 </div>
                             </div>
                             <div class="col-md-8 example">
                                 <div class="col-md-2 text-right float-left">转正状态</div>
                                 <div class="col-md-6 float-left pl-0">
-                                    <StaffEditSelect :isEdit="editJob" :options="positiveStateArr" changeKey="" @change="changeState" placeholder="请选择" :defaultValue="0" />
+                                    <StaffEditSelect :isEdit="editJob" :options="positiveStateArr" :value="job.status" changeKey="job.status" @change="changeState" placeholder="请选择" :defaultValue="0" />
                                 </div>
                             </div>
                             <div class="col-md-8 example">
                                 <div class="col-md-2 text-right float-left">转正日期</div>
                                 <div class="col-md-6 float-left pl-0">
-                                    <input type="text" :disabled="!editJob" v-model="job.positiveTime" placeholder="" class="form-control">
-                                </div>
-                            </div>
-                            <div class="col-md-8 example">
-                                <div class="col-md-2 text-right float-left">聘用形式</div>
-                                <div class="col-md-6 float-left pl-0">
-                                    <input type="text" placeholder="" class="form-control">
+                                    <input v-if="!editJob" type="text" v-model="job.positiveTime" placeholder="" disabled class="form-control">
+                                    <template v-else>
+                                        <datepicker changeKey="job.positiveTime" @select="changeState"></datepicker>
+                                    </template>
                                 </div>
                             </div>
                             <div class="col-md-8 example">
@@ -313,9 +311,9 @@
                             <div class="col-md-8 example">
                                 <div class="col-md-2 text-right float-left">首次参加工作时间</div>
                                 <div class="col-md-6 float-left pl-0">
-                                    <input v-if="!editJob" type="text" v-model="job.firstWrokTime" placeholder="" disabled class="form-control">
+                                    <input v-if="!editJob" type="text" v-model="job.firstWorkTime" placeholder="" disabled class="form-control">
                                     <template v-else>
-                                        <datepicker changeKey="job.firstWrokTime" @select="changeState"></datepicker>
+                                        <datepicker changeKey="job.firstWorkTime" @select="changeState"></datepicker>
                                     </template>
                                 </div>
                             </div>
@@ -346,13 +344,13 @@
                             <div class="col-md-8 example">
                                 <div class="col-md-2 text-right float-left">工作城市</div>
                                 <div class="col-md-6 float-left pl-0">
-                                    <StaffEditSelect :isEdit="editJob" :options="companyCityArr" changeKey="job.workCity" @change="changeState" placeholder="请选择" :defaultValue="0" />
+                                    <StaffEditSelect :isEdit="editJob" :options="companyCityArr" :value="job.workCity" changeKey="job.workCity" @change="changeState" placeholder="请选择" :defaultValue="0" />
                                 </div>
                             </div>
                             <div class="col-md-8 example">
                                 <div class="col-md-2 text-right float-left">纳税城市</div>
                                 <div class="col-md-6 float-left pl-0">
-                                    <StaffEditSelect :isEdit="editJob" :options="companyCityArr" changeKey="job.taxcity" @change="changeState" placeholder="请选择" :defaultValue="0" />
+                                    <StaffEditSelect :isEdit="editJob" :options="companyCityArr" :value="job.taxcity" changeKey="job.taxcity" @change="changeState" placeholder="请选择" :defaultValue="0" />
                                 </div>
                             </div>
                             <div class="col-md-8 example">
@@ -376,19 +374,19 @@
                             <div class="col-md-8 example">
                                 <div class="col-md-2 text-right float-left">招聘渠道</div>
                                 <div class="col-md-6 float-left pl-0">
-                                    <StaffEditSelect :isEdit="editJob" :options="recruitWayArr" changeKey="job.recruitmentDispatch" @change="changeState" placeholder="请选择" :defaultValue="0" />
+                                    <StaffEditSelect :isEdit="editJob" :options="recruitWayArr" :value="job.recruitmentDitch" changeKey="job.recruitmentDitch" @change="changeState" placeholder="请选择" :defaultValue="0" />
                                 </div>
                             </div>
                             <div class="col-md-8 example">
                                 <div class="col-md-2 text-right float-left">校招/社招</div>
                                 <div class="col-md-6 float-left pl-0">
-                                    <StaffEditSelect :isEdit="editJob" :options="recruitWayArr" changeKey="job.recruitTypeArr" @change="changeState" placeholder="请选择" :defaultValue="0" />
+                                    <StaffEditSelect :isEdit="editJob" :options="recruitWayArr" :value="job.recruitmentType" changeKey="job.recruitmentType" @change="changeState" placeholder="请选择" :defaultValue="0" />
                                 </div>
                             </div>
                             <div class="col-md-8 example">
                                 <div class="col-md-2 text-right float-left">其他招聘渠道</div>
                                 <div class="col-md-6 float-left pl-0">
-                                    <input type="text" v-model="job.otherDispatch" :disabled="!editJob" placeholder="" class="form-control">
+                                    <input type="text" v-model="job.otherDitch" :disabled="!editJob" placeholder="" class="form-control">
                                 </div>
                             </div>
                         </div>
@@ -442,19 +440,19 @@
                             <div class="col-md-8 example">
                                 <div class="col-md-2 text-right float-left">个税缴纳方式</div>
                                 <div class="col-md-6 float-left pl-0">
-                                    <StaffEditSelect :isEdit="editSalary" :options="incomeTaxTypeArr" changeKey="salary.incomeTax" @change="changeState" placeholder="请选择" :defaultValue="0" />
+                                    <StaffEditSelect :isEdit="editSalary" :options="incomeTaxTypeArr" :value="salary.incomeTax" changeKey="salary.incomeTax" @change="changeState" placeholder="请选择" :defaultValue="0" />
                                 </div>
                             </div>
                             <div class="col-md-8 example">
                                 <div class="col-md-2 text-right float-left">人员类别</div>
                                 <div class="col-md-6 float-left pl-0">
-                                    <StaffEditSelect :isEdit="editSalary" :options="personnelCategoryArr" changeKey="salary.personnelCategory" @change="changeState" placeholder="请选择" :defaultValue="0" />
+                                    <StaffEditSelect :isEdit="editSalary" :options="personnelCategoryArr" :value="salary.personnelCategory" changeKey="salary.personnelCategory" @change="changeState" placeholder="请选择" :defaultValue="0" />
                                 </div>
                             </div>
                         </div>
 
                         <div class="tab-pane" id="entryInfoTab" role="tabpanel">
-                            员工信息
+                            <!-- 员工信息 -->
                         </div>
                     </div>
                 </div>
@@ -529,7 +527,7 @@ import fetch from '../../assets/utils/fetch'
 import config from '../../assets/js/config'
 const { workPlaceArr, companyArr, employment, eportArr, 
         positiveStateArr, companyCityArr, recruitWayArr, recruitTypeArr,
-        incomeTaxTypeArr, personnelCategoryArr
+        incomeTaxTypeArr, personnelCategoryArr, genderArr
     } = config
 import { toHump, toLine } from '../../assets/utils/tool'
 
@@ -553,30 +551,34 @@ export default {
             companyArr: companyArr,
             workPlaceArr: workPlaceArr,
             eportArr: eportArr,
+            genderArr: genderArr,
             positiveStateArr: positiveStateArr,
             companyCityArr: companyCityArr,
             recruitWayArr: recruitWayArr,
             recruitTypeArr: recruitTypeArr,
             incomeTaxTypeArr: incomeTaxTypeArr,
             personnelCategoryArr: personnelCategoryArr,
+            departmentArr: [],
             info: {
                 name: '',
                 phone: '',
                 department: '',
+                departmentId: '',
                 workEmail: '',
-                sex: '',
+                gender: '',
                 age: '',
-                birthDay: '',
-                position: '',
-                highestDegree: ''
+                birthTime: '',
+                jobs: '',
+                highSchool: '', // 最高学历
+                number: '',
             },
             infoCopy: {
             },
+            detailId: '',
             detail: {
                 idCardUrl: '',
                 idNumber: '',
                 passportCode: '',
-                address: '',
                 email: '',
                 cardNumberOne: '',
                 cardNumberTwo: '',
@@ -588,21 +590,22 @@ export default {
                 entryTime: '',
                 contract: '', // 合同
                 department: '',
+                departmentId: '',
                 currentAddress: '',
-                workPlace: '',
-                employment: '',
+                address: '', // 工作地点
+                hireShape: '', // 聘用形式
             },
             detailCopy: {
             },
+            jobId: '',
             job: {
                 rank: '', // 职级
                 eport: '', // 汇报对象
-                s: '', // 转正状态
-                ss: '', // 聘用形式
+                status: '', // 转正状态
                 positiveTime: '', // 转正时间
                 management: '', // 管理形式
                 siling: '', // 司龄
-                firstWrokTime: '', // 首次工作时间
+                firstWorkTime: '', // 首次工作时间
                 modulationSiling: '', // 调整司龄
                 workLing: '', // 工龄
                 modulationWorkLing: '', // 调整工龄
@@ -611,11 +614,12 @@ export default {
                 taxcity: '', // 纳税城市
                 contractStartTime: '', //合同开始时间
                 contractEndTime: '', //合同结束时间
-                recruitmentDispatch: '', // 招聘渠道
+                recruitmentDitch: '', // 招聘渠道
                 recruitmentType: '', // 招聘方式
-                otherDispatch: '', // 其他招聘渠道
+                otherDitch: '', // 其他招聘渠道
             },
             jobCopy: {},
+            salaryId: '',
             salary: {
                 entryTime: '', // 入职日期
                 trialEndTime: '', // 试用期截止日期
@@ -632,52 +636,101 @@ export default {
     },
     mounted () {
         this.getData()
+        this.getDepartments()
     },
     methods: {
         // 获取数据
         getData () {
             fetch('get', `/personnel/${this.userId}?include=detail,job,salary`).then((res) => {
                 const data = res.data
-                this.info.email = data.email || ''
-                this.info.currentAddress = data.currentAddress || ''
                 Object.keys(this.info).map((n) => {
-                    this['info'][`${n}`] = toHump(data[n] || '') || ''
-                    this['infoCopy'][`${n}`] = toHump(data[n] || '') || ''
+                    this['info'][`${n}`] = data[toLine(n || '')] || ''
+                    this['infoCopy'][`${n}`] = data[toLine(n || '')] || ''
                 })
+                if (data.detail) {
+                    this.detailId = data.detail.data.id
+                    Object.keys(this.detail).map((n) => {
+                        this['detail'][`${n}`] = data.detail.data[toLine(n)] || ''
+                        this['detailCopy'][`${n}`] = data.detail.data[toLine(n)] || ''
+                    })
+                }
 
-                Object.keys(this.detail).map((n) => {
-                    this['detail'][`${n}`] = toHump(data[n] || '') || ''
-                    this['detailCopy'][`${n}`] = toHump(data[n] || '') || ''
-                })
-
-                Object.keys(this.job).map((n) => {
-                    this['job'][`${n}`] = toHump(data[n] || '') || ''
-                    this['jobCopy'][`${n}`] = toHump(data[n] || '') || ''
-                })
-
-                Object.keys(this.salary).map((n) => {
-                    this['salary'][`${n}`] = toHump(data[n] || '') || ''
-                    this['salaryCopy'][`${n}`] = toHump(data[n] || '') || ''
-                })
+                if (data.job) {
+                    this.jobId = data.job.data.id
+                    Object.keys(this.job).map((n) => {
+                        this['job'][`${n}`] = data.job.data[toLine(n)] || ''
+                        this['jobCopy'][`${n}`] = data.job.data[toLine(n)] || ''
+                    })
+                }
+                if (data.salary) {
+                    this.salaryId = data.salary.data.id
+                    Object.keys(this.salary).map((n) => {
+                        this['salary'][`${n}`] = data.salary.data[toLine(n)] || ''
+                        this['salaryCopy'][`${n}`] = data.salary.data[toLine(n)] || ''
+                    })
+                }
+                this.detail.email = data.email || ''
+                this.detail.currentAddress = data.current_address || ''
+                this.detail.departmentId = data.department_id || ''
+                this.detail.department = data.department || ''
+                this.job.status = data.status || ''
+                this.detail.hireShape = data.hire_shape || ''
             })
         },
         // 改变data的值
-		changeState (name, value) {
+		changeState (name, value, keyName) {
             const tempArr = name.split('.')
             let state = this
-            for (let i = 0; i < tempArr.length; i++) {
-                if (i === tempArr.length - 1) {
-                    state[`${tempArr[i]}`] = value
-                } else {
-                    state = state[`${tempArr[i]}`]
+            if (name.indexOf('department') > -1) {
+                this.detail.departmentId = value
+                this.detail.department = keyName
+                this.info.departmentId = value
+                this.info.department = keyName
+            } else {
+                for (let i = 0; i < tempArr.length; i++) {
+                    if (i === tempArr.length - 1) {
+                        state[`${tempArr[i]}`] = value
+                    } else {
+                        state = state[`${tempArr[i]}`]
+                    }
                 }
             }
         },
         handleEdit (name) {
             this[name] = !this[name]
         },
+        // 修改基本信息
+        saveEdit (name) {
+            const params = {}
+            let _data = this.info
+            let url = `/personal/edit/${this.userId}`
+            let type = 'put' 
+            if (name === 'editDetail') {
+                _data = this.detail
+                url = !this.detailId ? `/personal/${this.userId}` :`/edit/${this.userId}/personal/${this.detailId}`
+                type = !this.detailId ? 'post' : 'put' 
+            } else if (name === 'editJob') {
+                _data = this.job
+                url = !this.jobId ? `/jobs/${this.userId}` :`/edit/${this.userId}/jobs/${this.jobId}`
+                type = !this.jobId ? 'post' : 'put' 
+            } else if (name === 'editSalary') {
+                _data = this.salary
+                url = !this.salaryId ? `/jobs/${this.userId}` :`/edit/${this.userId}/jobs/${this.salaryId}`
+                type = !this.salaryId ? 'post' : 'put' 
+            }
+            Object.keys(_data).map((n) => {
+                params[toLine(n)] = _data[n] || ''
+            })
+
+            fetch(type, url, params).then(res => {
+                toastr.success('保存成功！')
+                this.getData()
+                this.getDepartments()
+            })
+        },
         save (name) {
             this.handleEdit(name)
+            this.saveEdit(name)
         },
         cancel (name) {
             if (name === 'editInfo') {
@@ -690,6 +743,17 @@ export default {
                 this.salary = JSON.parse(JSON.stringify(this.salaryCopy))
             }
             this.handleEdit(name)
+        },
+        // 获取部门
+        getDepartments () {
+            fetch('get', '/departments_list').then(res => {
+                this.departmentArr = res.map(n => {
+                    return {
+                        value: n.id,
+                        name: n.name
+                    }
+                })
+            })
         }
     },
 }

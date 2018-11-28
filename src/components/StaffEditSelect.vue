@@ -2,7 +2,7 @@
     <div>
         <input v-if="!isEdit" type="text" :value="value" placeholder="" disabled class="form-control">
         <template v-else>
-            <selectors ref="mySelectors" :options="options" :changeKey="changeKey" @select="changeState" placeholder="请选择" :defaultValue="0"></selectors>
+            <selectors ref="mySelectors" :options="options" :value="value" :changeKey="changeKey" @select="changeState" placeholder="请选择" :defaultValue="0"></selectors>
         </template>
     </div>
 </template>
@@ -10,18 +10,22 @@
 <script>
 export default {
     name: 'staffSelector',
-    props: ['isEdit', 'value', 'options', 'changeKey', 'call', 'defaultValue'],
+    props: ['isEdit', 'value', 'options', 'changeKey', 'defaultValue'],
     watch: {
         isEdit (newVal) {
             const dom = this.$refs.mySelectors
+            // dom.(this.value)
             if (dom) {
+                dom.setValue(this.value)
                 dom.hide()
             }
         }
     },
+    mounted () {
+    },
     methods: {
-        changeState (name, val) {
-            this.$emit('change', name, val)
+        changeState (name, val, keyName) {
+            this.$emit('change', name, val, keyName)
         }
     }
 }

@@ -47,6 +47,7 @@
             hide () {
                 $(this.$el).selectpicker('destroy');
             },
+   
             destroy() {
                 $(this.$el).selectpicker('destroy');
             },
