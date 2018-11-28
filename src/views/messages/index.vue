@@ -1,8 +1,8 @@
 <template>
    <div class="page">
-        <div class="page-header page-header-bordered row">
-            <h1 class="page-title col-md-1">消息</h1>
-            <div class="col-md-11 row filter-container" >
+        <div class="page-header page-header-bordered">
+            <h1 class="page-title">消息
+            <div class="filter-container" >
                 <div class="dropdown">
                     <div class=" text-right text-filter-all" id="" data-toggle="dropdown" aria-expanded="false" @click="readTypeToggle">
                         {{messageFilter}}
@@ -16,7 +16,7 @@
                         <a :class="messageFilter === '加班消息' ? 'active' :''" class="dropdown-item" href="javascript:void(0)" role="menuitem" @click="messageFilterHandler('加班消息')">加班消息</a>
                     </div>
                 </div>
-                <div class="offset-md-9 col-md-2 text-right mark-all-read">
+                <div class="text-right mark-all-read">
                     <i class="icon md-circle-o" v-if="readFilter && !isNoUnread" data-target="#confirmFlag" 
                     data-toggle="modal"></i>&nbsp;
                     <span v-if="readFilter && !isNoUnread" 
@@ -24,6 +24,7 @@
                     data-toggle="modal">全部标记为已读</span> 
                 </div>
             </div>
+            </h1>
         </div>
         <div class="page-content container-fluid">
             <div class="panel col-md-12 col-lg-12 py-5 ">
@@ -162,6 +163,7 @@ export default {
 
 <style>
 .filter-container{
+    display: inline-block;
     cursor: pointer;
     font-family: PingFangSC-Regular;
     font-size: 14px;
@@ -169,6 +171,16 @@ export default {
     letter-spacing: 0;
     user-select: none; 
     margin-top: 5px;
+
+}
+.dropdown{
+    margin-left: 20px;
+    display: inline-block;
+}
+.mark-all-read{
+    position: absolute;
+    right: 41px;
+    top: 31px;
 }
 .message-main-container>:first-child:hover{
     background: rgba(87, 140, 242, 0.14);

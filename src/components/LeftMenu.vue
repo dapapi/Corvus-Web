@@ -151,7 +151,7 @@
                             },
                             {
                                 name: '公告',
-                                code: 'announcement'
+                                code: 'broadcast'
                             },
                             {
                                 name: '简报',
