@@ -319,18 +319,7 @@ let config = {
                 value: 4,
                 name: '外包'
             }
-        ],
-        // 性别
-        sexArr: [
-            {
-                name: '男',
-                value: 1,
-            },
-            {
-                value: 2,
-                name: '女'
-            }
-        ],
+        ],        
         // 婚姻状况
         maritalStatusArr: [
             {
@@ -512,6 +501,7 @@ let config = {
                 value: 0
             }
         ],
+        // 性别
         genderArr: [
             {
                 name: '男',
