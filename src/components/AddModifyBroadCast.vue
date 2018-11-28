@@ -11,7 +11,8 @@
             data-target="#addNewBroadcast" 
             class="site-action"
             aria-hidden="true"
-            data-backdrop="static">
+            data-backdrop="static"
+            v-if="pageType === '发布'">
             <button type="button" 
                 class="site-action-toggle btn-raised btn btn-success btn-floating waves-effect waves-classic"
                 @click='setNote'>
@@ -47,12 +48,14 @@
                         </div>
                         <div class="form-group row col-sm-12">
                             <label for="" class="col-sm-2 col-form-label"><strong>公告范围</strong></label>
-                            <select id="broadcastRangeSelector" class="col-sm-3 show-menu-arrow form-control selectpicker" data-live-search='true' multiple data-selected-text-format="count > 4" title="请选择" v-model="range">
-                                <option v-for="i in 5" :key="i" :value=i>选项{{i}}</option>
+                            <select id="broadcastRangeSelector" class="col-sm-3 show-menu-arrow form-control selectpicker" multiple data-selected-text-format="count > 4" title="请选择" v-model="range">
+                                <option>技术团队</option>
+                                <option>安全团队</option>
                             </select>
                             <label for="" class="offset-sm-2 col-sm-2 col-form-label"><strong>选择分类</strong></label>
-                            <select id="broadcastTypeSelector" class="col-sm-3 selectpicker show-menu-arrow form-control" title="请选择" v-model="type">
-                                <option v-for="i in 5" :key="i" :value=i>选项{{i}}</option>
+                            <select id="broadcastTypeSelector" class="col-sm-3 selectpicker show-menu-arrow form-control" :title="type?type:'请选择'" v-model="type">
+                                <option>升级</option>
+                                <option>漏洞预警</option>
                             </select>
                         </div>
                         <div class="summernote" id="summernote"></div>
@@ -63,7 +66,7 @@
                     </div>
                     
                     <div class="modal-footer">
-                        <button data-bb-handler="confirm" type="button" class="btn btn-primary" data-dismiss="modal" @click="getNote">发布</button>
+                        <button data-bb-handler="confirm" type="button" class="btn btn-primary" data-dismiss="modal" @click="sendNote">发布</button>
                         <button data-bb-handler="cancel" type="button" class="btn btn-default" data-dismiss="modal" @click='getNote'>取消</button>
                     </div>
                 </div>
@@ -75,6 +78,7 @@
 
 <script>
 export default {
+    props:['noteData'],
     data(){
         return{
             title:'',       //标题内容
@@ -86,12 +90,31 @@ export default {
             pageType:'发布'
         }
     },
+    created(){
+        this.noteInit()
+    },
     mounted(){
-       this.getSummernote()
-       this.setNote()
-       this.modalInit()
+        this.getSummernote()
+        this.setNote()
+        this.modalInit()
     },
     methods:{
+        noteInit(){
+            if(this.noteData){
+                this.pageType = '修改'
+                this.title = this.noteData.title
+                this.range = this.noteData.range
+                this.type = this.noteData.type
+                this.topFlag = this.noteData.topflag
+                this.text = this.noteData.text
+            }
+            this.$nextTick(() => {
+                $('#broadcastRangeSelector').selectpicker('render');
+                $('#broadcastRangeSelector').selectpicker('refresh');
+                $('#broadcastTypeSelector').selectpicker('render');
+                $('#broadcastTypeSelector').selectpicker('refresh');
+            })
+        },
         //修复富文本编辑器多层弹窗bug
         modalInit(){
             $('.summernoteUploadModal').click(() => {
@@ -125,6 +148,21 @@ export default {
         getNote(){
             var markupStr = $('#summernote').summernote('code');
             this.text = markupStr
+        },
+        sendNote(){
+            var markupStr = $('#summernote').summernote('code');
+            this.text = markupStr
+            let currenttime = Date.now()
+            let sendData = {
+                title:this.title,       //标题内容
+                range:this.range,       //公告范围
+                type:this.type,        //公告类型
+                topFlag:this.topflag,  //置顶标示
+                text:this.text,        //富文本代码
+                newFlag:1,             //未读标示
+                time:currenttime
+            }
+            this.$emit('sendnote',sendData)
         }
     }
 }

@@ -69,8 +69,10 @@
                     @change="(value) => addInfo(value, field.key )"></number-spinner>
                 </template>
                 <template v-else-if="field.field_type === 12">
-                  <Upload>
-                    <div class="puls">
+                  <Upload @change='getUploadUrl' class="upload-image">
+                    <div class="puls" :style="{ backgroundImage: 'url(' + uploadUrl + ')' }" v-if="uploadUrl">
+                    </div>
+                    <div class="puls" v-if="!uploadUrl">
                       <span>+</span>
                     </div>
                   </Upload>
@@ -116,6 +118,7 @@
   export default {
     data: function () {
       return {
+        uploadUrl:'',
         total: 2,
         current_page: 1,
         total_pages: 1,
@@ -228,6 +231,9 @@
     },
 
     methods: {
+      getUploadUrl(res){
+        this.uploadUrl = res
+      },
       getProjects: function (pageNum = 1) {
         let data = {
           page: pageNum
@@ -336,6 +342,11 @@
   };
 </script>
 <style scoped>
+.upload-image{
+  display: flex;
+  width: 500px;
+  height: 100px;
+}
   .page {
     position: absolute;
     left: 210px;
@@ -345,6 +356,8 @@
     padding: 20px;
   }
   .puls {
+    display: inline-block;
+    background-size: 100px;
     width: 100px;
     height: 100px;
     text-align: center;
