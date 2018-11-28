@@ -224,6 +224,8 @@
         text-align: center;
         left: 5px;
     }
-
+    .panel{
+        box-shadow: 0 0 0 0;
+    }
 
 </style>

@@ -92,7 +92,6 @@
         <i class="back-icon md-plus animation-scale-up" aria-hidden="true"></i>
       </button>
     </div>
-
     <div class="modal fade" id="addTask" aria-hidden="true" aria-labelledby="addLabelForm" role="dialog"
       tabindex="-1">
       <div class="modal-dialog modal-simple">
@@ -104,7 +103,6 @@
             <h4 class="modal-title">新增任务</h4>
           </div>
           <div class="modal-body">
-
             <div class="example">
               <div class="col-md-2 text-right float-left">关联资源</div>
               <div class="col-md-10 float-left">

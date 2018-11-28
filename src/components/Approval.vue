@@ -50,7 +50,7 @@
         <div class="modal-dialog modal-simple">
             <div class="modal-content">
                 <div class="modal-header" style="border:1px solid #ccc">
-                    <button type="button" class="close" aria-hidden="true" data-dismiss="modal" @clikc="close(setp.iSactive)">
+                    <button type="button" class="close" aria-hidden="true" data-dismiss="modal" @click="close(setp.iSactive)">
                         <i class="md-close" aria-hidden="true"></i>
                     </button>
                     <h4 class="modal-title">创建新审批报表</h4>
