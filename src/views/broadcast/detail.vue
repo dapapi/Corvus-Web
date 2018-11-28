@@ -1,26 +1,31 @@
 <template>
     <div class="page">
-        <div class="page-header page-header-bordered row">
-            <i class="icon md-chevron-left" @click="goBack"></i>
-            <h1 class="page-title col-md-2">公告&nbsp;&nbsp;({{broadCastInfo.length}})</h1>
-            <i class="icon md-flower"></i>
+        <div class="page-header page-header-bordered">
+            <h1 class="page-title">
+                <i class="icon md-chevron-left" @click="goBack"></i>公告&nbsp;&nbsp;({{broadCastInfo.length}})</h1>
+            <i class="icon md-flower" 
+            data-plugin="actionBtn" 
+            data-toggle="modal" 
+            data-target="#addNewBroadcast"
+            aria-hidden="true"
+            data-backdrop="static"></i>
         </div> 
         <div class="page-content container-fluid">
-            <div class="panel " id="">
+            <div class="panel" id="">
                 <div class="panel-body">
-                    <div class="panel-title col-md-12"><h4>{{currentData.title}}</h4></div>
-                    <div class="panel-content col-md-12 row">
+                    <div class="panel-title"><h4>{{currentData.title}}</h4></div>
+                    <div class="panel-content info">
                         <div class="rounded-circle img-thumbnail messages-img" 
                             :style="{ backgroundImage: 'url('+currentData.cover+')'}"></div>
-                        <span class=" col-md-1">{{currentData.name}}</span>
-                        <span class="col-md-2">{{currentData.timeYMD}}&nbsp;&nbsp;{{currentData.timehms}}</span>
-                        <span class="col-md-1">{{currentData.type}}</span>
+                        <span class="">{{currentData.name}}</span>
+                        <span class="">{{currentData.timeYMD}}&nbsp;&nbsp;{{currentData.timehms}}</span>
+                        <span class="">{{currentData.type}}</span>
                     </div>
                     <br>
                     <hr/>
                     <br>
                     <div class="panel-content">
-                        <h5>{{currentData.text}}</h5>
+                        <h5 v-html="currentData.text"></h5>
                         <h5>公告范围
                             <span  v-for=" item in currentData.range" :key="item">&nbsp;&nbsp;
                                 <span class="badge badge-round badge-dark">{{item}}</span>
@@ -28,10 +33,10 @@
                         </h5>
                         <hr>
                     </div>
-                    
                 </div>
             </div>
         </div>
+        <AddModifyBroadCast :noteData='currentData' position='broadCast' @sendnote='getNote' />
     </div>   
 </template>
 
@@ -40,14 +45,14 @@ import broadCastData from './broadcast.json'
 export default {
     data(){
         return{
-             broadCastInfo:{},
-             currentId:'',
-             currentData:{}
+            broadCastInfo:{},
+            currentId:'',
+            currentData:{}
         } 
     },
     created() {
        this.broadCastInfo = broadCastData    
-       this.dataInit() 
+       this.dataInit(broadCastData) 
        this.getCurrentId()
        this.getCurrentData()
     },
@@ -55,9 +60,12 @@ export default {
         
     },
     methods:{
+        //获取公告id
         getCurrentId(){
-            this.currentId = window.location.href.split('/').pop()
+            this.currentId = this.$route.params.id
+            // this.currentId = window.location.href.split('/').pop()
         },
+        //获取公告内容
         getCurrentData(){
             for (const key in this.broadCastInfo) {
                 if (this.broadCastInfo[key].id==this.currentId) {
@@ -66,13 +74,14 @@ export default {
             }
         },
         //初始化数据
-        dataInit(){
-        for (const key in broadCastData) {
-            let orignTime = broadCastData[key].time
-            broadCastData[key].timeYMD = this.timeFormat(orignTime).formatYMD
-            broadCastData[key].timehms = this.timeFormat(orignTime).formathms
-        }
-        this.broadCastInfo = broadCastData
+        dataInit(ref){
+            // console.log(ref);
+            for (const key in ref) {
+                let orignTime = ref[key].time
+                ref[key].timeYMD = this.timeFormat(orignTime).formatYMD
+                ref[key].timehms = this.timeFormat(orignTime).formathms
+            }
+            this.broadCastInfo = ref
         },
         //日期格式化
         timeFormat(ref){
@@ -91,6 +100,12 @@ export default {
         },
         goBack(){
             history.go(-1)
+        },
+        getNote(ref){
+            let orignTime = ref.time
+            ref.timeYMD = this.timeFormat(orignTime).formatYMD
+            ref.timehms = this.timeFormat(orignTime).formathms
+            this.currentData = ref
         }
     }
 }
@@ -98,39 +113,47 @@ export default {
 </script>
 
 <style scoped>
+.md-flower{
+    position: absolute;
+    right: 41px;
+    top: 28px;
+    cursor: pointer;
+}
 .md-chevron-left{
     font-size: 30px;
     cursor: pointer;
     color:#CACACA;
 }
 .panel-content{
-    top: -10px;
-    margin-bottom: -15px;
     margin-left: 20px;
-    margin-right: 20px;
+    margin-right: 20px; 
+}
+.panel-title{
+    padding-left: 10px;
 }
 h5{
     margin-bottom: 20px;
+    line-height: 25px;
+}
+.info span{
+    margin-left: 20px;
 }
 span{
 font-family:PingFangSC-Regular;
 font-weight:400;
 color:rgba(153,153,153,1);
+/* margin-left: 20px; */
 }
 .badge-dark{
     background-color: rgba(236, 236, 236, 1);
     color: #999999;
 }
-/* .row{
-    margin-left: 20px;
-    margin-right: 20px;
-} */
 .messages-img{
+    display: inline-flex;
     width: 24px;
     height: 24px;
     background: #D8D8D8;
     border: 1px solid #979797;
-    /* margin-right: 17px; */
     background-size: 24px 24px;
 }
 </style>
