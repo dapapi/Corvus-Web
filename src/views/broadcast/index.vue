@@ -1,7 +1,7 @@
 <template>
     <div class="page">
-        <div class="page-header page-header-bordered row">
-            <h1 class="page-title col-md-2">公告&nbsp;&nbsp;({{broadCastInfo.length}})</h1>
+        <div class="page-header page-header-bordered">
+            <h1 class="page-title">公告&nbsp;&nbsp;({{broadCastInfo.length}})</h1>
         </div> 
         <div class="page-content container-fluid">
             <div class="panel " id="">

@@ -2684,8 +2684,6 @@ exports.push([module.i, "\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\
 
 /***/ }),
 
-<<<<<<< HEAD
-=======
 /***/ "./node_modules/css-loader/index.js!./node_modules/vue-loader/lib/style-compiler/index.js?{\"vue\":true,\"id\":\"data-v-3e52bdb5\",\"scoped\":true,\"hasInlineConfig\":true}!./node_modules/sass-loader/lib/loader.js!./node_modules/vue-loader/lib/selector.js?type=styles&index=0!./resources/assets/components/navBack.vue":
 /***/ (function(module, exports, __webpack_require__) {
 
@@ -2716,7 +2714,6 @@ exports.push([module.i, "\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n", ""]);
 
 /***/ }),
 
->>>>>>> 3721ca59ca5e0ec019ef9666599acbc62049d4f5
 /***/ "./node_modules/css-loader/index.js!./node_modules/vue-loader/lib/style-compiler/index.js?{\"vue\":true,\"id\":\"data-v-443d9de8\",\"scoped\":true,\"hasInlineConfig\":true}!./node_modules/vue-loader/lib/selector.js?type=styles&index=0!./resources/assets/components/edit-input.vue":
 /***/ (function(module, exports, __webpack_require__) {
 
@@ -5184,8 +5181,6 @@ if (false) {
 
 /***/ }),
 
-<<<<<<< HEAD
-=======
 /***/ "./node_modules/vue-loader/lib/template-compiler/index.js?{\"id\":\"data-v-3e52bdb5\",\"hasScoped\":true,\"buble\":{\"transforms\":{}}}!./node_modules/vue-loader/lib/selector.js?type=template&index=0!./resources/assets/components/navBack.vue":
 /***/ (function(module, exports, __webpack_require__) {
 
@@ -5255,7 +5250,6 @@ if (false) {
 
 /***/ }),
 
->>>>>>> 3721ca59ca5e0ec019ef9666599acbc62049d4f5
 /***/ "./node_modules/vue-loader/lib/template-compiler/index.js?{\"id\":\"data-v-443d9de8\",\"hasScoped\":true,\"buble\":{\"transforms\":{}}}!./node_modules/vue-loader/lib/selector.js?type=template&index=0!./resources/assets/components/edit-input.vue":
 /***/ (function(module, exports, __webpack_require__) {
 
@@ -6460,8 +6454,6 @@ if(false) {
 
 /***/ }),
 
-<<<<<<< HEAD
-=======
 /***/ "./node_modules/vue-style-loader/index.js!./node_modules/css-loader/index.js!./node_modules/vue-loader/lib/style-compiler/index.js?{\"vue\":true,\"id\":\"data-v-3e52bdb5\",\"scoped\":true,\"hasInlineConfig\":true}!./node_modules/sass-loader/lib/loader.js!./node_modules/vue-loader/lib/selector.js?type=styles&index=0!./resources/assets/components/navBack.vue":
 /***/ (function(module, exports, __webpack_require__) {
 
@@ -6516,7 +6508,6 @@ if(false) {
 
 /***/ }),
 
->>>>>>> 3721ca59ca5e0ec019ef9666599acbc62049d4f5
 /***/ "./node_modules/vue-style-loader/index.js!./node_modules/css-loader/index.js!./node_modules/vue-loader/lib/style-compiler/index.js?{\"vue\":true,\"id\":\"data-v-443d9de8\",\"scoped\":true,\"hasInlineConfig\":true}!./node_modules/vue-loader/lib/selector.js?type=styles&index=0!./resources/assets/components/edit-input.vue":
 /***/ (function(module, exports, __webpack_require__) {
 
@@ -19637,15 +19628,9 @@ Vue.component('edit-number-spinner', __webpack_require__("./resources/assets/com
 Vue.component('edit-selector', __webpack_require__("./resources/assets/components/edit-selector.vue"));
 Vue.component('edit-textarea', __webpack_require__("./resources/assets/components/edit-textarea.vue"));
 Vue.component('editable-search-box', __webpack_require__("./resources/assets/components/editable-search-box.vue"));
-<<<<<<< HEAD
-Vue.component('emit-input', __webpack_require__(!(function webpackMissingModule() { var e = new Error("Cannot find module \"../components/emit-input.vue\""); e.code = 'MODULE_NOT_FOUND'; throw e; }())));
-Vue.component('file-uploader', __webpack_require__("./resources/assets/components/file-uploader.vue"));
-Vue.component('group-datepicker', __webpack_require__(!(function webpackMissingModule() { var e = new Error("Cannot find module \"../components/group-datepicker.vue\""); e.code = 'MODULE_NOT_FOUND'; throw e; }())));
-=======
 Vue.component('emit-input', __webpack_require__("./resources/assets/components/emit-input.vue"));
 Vue.component('file-uploader', __webpack_require__("./resources/assets/components/file-uploader.vue"));
 Vue.component('group-datepicker', __webpack_require__("./resources/assets/components/group-datepicker.vue"));
->>>>>>> 3721ca59ca5e0ec019ef9666599acbc62049d4f5
 Vue.component('inline-datepicker', __webpack_require__("./resources/assets/components/inline-datepicker.vue"));
 Vue.component('input-selectors', __webpack_require__("./resources/assets/components/input-selectors.vue"));
 Vue.component('normal-linkage-selectors', __webpack_require__("./resources/assets/components/normal-linkage-selectors.vue"));
@@ -20240,13 +20225,7 @@ __webpack_require__("./resources/assets/sass/login.scss");
 __webpack_require__("./resources/assets/sass/side-mask.scss");
 __webpack_require__("./resources/assets/sass/task.scss");
 __webpack_require__("./resources/assets/sass/v1.scss");
-<<<<<<< HEAD
-__webpack_require__("./resources/assets/sass/Inapproval.scss");
-__webpack_require__("./resources/assets/sass/myApplication.scss");
-module.exports = __webpack_require__("./resources/assets/sass/staff.scss");
-=======
 (function webpackMissingModule() { throw new Error("Cannot find module \"/Users/mac/Desktop/code/Corvus-Web/resources/assets/sass/staff.scss\""); }());
->>>>>>> develop
 
 
 /***/ })

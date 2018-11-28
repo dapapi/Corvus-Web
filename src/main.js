@@ -44,6 +44,8 @@ import Timepicker from './components/Timepicker.vue';
 import Flag from './components/Flag.vue';
 import AddModifyBroadCast from './components/AddModifyBroadCast.vue';
 import RegionSelector from './components/RegionSelector.vue';
+import StaffEditSelect from './components/StaffEditSelect'
+
 Vue.config.productionTip = false;
 
 Vue.component('AddMember', AddMember);
@@ -88,6 +90,8 @@ Vue.component('Timepicker', Timepicker);
 Vue.component('Flag', Flag);
 Vue.component('AddModifyBroadCast', AddModifyBroadCast);
 Vue.component('RegionSelector', RegionSelector);
+Vue.component('StaffEditSelect', StaffEditSelect);
+
 Vue.prototype.globalClick = function (callback) {
     document.getElementById('app').addEventListener('click', () => {
         callback(event);

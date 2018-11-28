@@ -3370,12 +3370,6 @@ var app = new Vue({
 		remarks: ''
 	},
 
-	watch: {
-		education: function education() {
-			console.log(this.education);
-		}
-	},
-
 	mounted: function mounted() {
 		var _this = this;
 
