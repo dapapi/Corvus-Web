@@ -57,5 +57,8 @@
 .broadcast-new-flag{
     color: #F44336;
 }
+.panel{
+    box-shadow: 0 0 0 0;
+}
 </style>
 

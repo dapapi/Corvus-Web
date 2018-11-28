@@ -70,8 +70,6 @@
                         </template>
                     </div>
                 </div>
-
-
             </div>
 </template>
 <script>
@@ -240,3 +238,9 @@ export default {
 };
 
 </script>
+<style>
+.panel{
+    box-shadow: 0 0 0 0;
+}
+</style>
+
