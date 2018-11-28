@@ -8,7 +8,7 @@
         <div data-role="container" class="scrollable-container" style="height: 691px; width: 259px;">
           <div data-role="content" class="scrollable-content" style="width: 259px;">
             <section class="page-aside-section">
-              <h5 class="page-title pl-30 mb-45">简报</h5>
+              <h5 class="page-title pl-30 mb-45">{{title}}</h5>
               <div class="list-group">
                 <router-link class="list-group-item" v-for="(item,index) in leftData.topData" :key="index" :to="item.url">{{item.name}}</router-link>
               </div>
@@ -25,7 +25,7 @@
                           <li class="site-menu-item" v-for="(item2,index) in  item.data" :key="index">
                             <!-- <a href=""> -->
                               
-                              <router-link :to="{name:item2.url,params:{id:item2.params.id}}" v-if="item2.params">
+                              <router-link :to="{path:item2.url,query:{id:item2.params.id}}" v-if="item2.params">
                               
                                 <span class="icon md-file-text font-size-18 mr-10"></span>
                                 <span class="site-menu-title" >{{item2.name}}</span>
@@ -85,7 +85,8 @@ export default {
      leftData:{
         type:Object,
         required:true
-     }
+     },
+     title:''
   },
   data(){
     return {

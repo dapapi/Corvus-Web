@@ -100,7 +100,7 @@ import fetch from '@/assets/utils/fetch'
 import config from '@/assets/js/config'
 import numberinput from '@/components/numberInput'
 import checkbox from '@/components/checkbox'
-import submitReportVue from '../../components/submitReport.vue';
+import submitReportVue from '../../components/SubmitReport.vue';
 export default {
     data(){
         return {

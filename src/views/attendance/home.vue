@@ -1,6 +1,6 @@
 <template>
     <div class="page page-aside-left">
-        <second-left :leftData="leftData"></second-left>
+        <second-left :leftData="leftData" :title="'考勤'"></second-left>
         <router-view/>
     </div>
 </template>

@@ -223,7 +223,7 @@ export default new Router({
                 component: () => import('./views/attendance/index.vue'),
             },
             {
-                path: '/attendance/all/:id',
+                path: '/attendance/all',
                 name: '/attendance/all',
                 component: () => import('./views/attendance/all.vue')
             },
@@ -267,6 +267,12 @@ export default new Router({
                 name: 'tellme',
                 component: () => import('./views/attendance/tellme.vue')
             },
+            {
+              path: '/attendance/details',
+              name: 'details',
+              component: () => import('./views/attendance/details.vue')
+            },
+            
 
         ]
     },

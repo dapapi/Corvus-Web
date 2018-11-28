@@ -29,9 +29,9 @@
                                 <th class="cell-300" scope="col">工号</th>
                                 <th class="cell-300" scope="col">姓名</th>
                                 <th class="cell-300" scope="col">部门</th>
-                                <th v-show="type == 1" class="cell-300" scope="col">类型</th>
-                                <th class="cell-300" scope="col">天数</th>
-                                <th v-show="type == 3||type ==4" class="cell-300" scope="col">地点</th>
+                                <th v-show="type == 1" class="cell-300" scope="col">{{allType[type]}}类型</th>
+                                <th class="cell-300" scope="col">{{allType[type]}}天数</th>
+                                <th v-show="type == 3||type ==4" class="cell-300" scope="col">{{allType[type]}}地点</th>
                                 <th class="cell-300" scope="col">开始时间</th>
                                 <th class="cell-300" scope="col">结束时间</th>
                                 <th class="cell-300" scope="col">审批人</th>
@@ -89,32 +89,31 @@
                 </div>
                 </div>
         </div>
-        <div class="site-action" data-plugin="actionBtn" @click="redirectBriefAdd()">
-            <button type="button"  class="site-action-toggle btn-raised btn btn-success btn-floating waves-effect waves-classic">
-                <i class="front-icon md-plus animation-scale-up" aria-hidden="true"></i>
-                <i class="back-icon md-plus animation-scale-up" aria-hidden="true"></i>
-            </button>
-        </div>
         <submitreport></submitreport>
     </div>
 </template>
 <script>
 import fetch from '@/assets/utils/fetch'
 import config from '@/assets/js/config'
-import submitreport from '@/components/submitReport'
-
+import submitreport from '@/components/SubmitReport'
+// const allType = {1:'请假',2:'加班',3:'出差',4:'外勤'}
 export default {
     data(){
         return {
             list:[], 
-            type:this.$route.params.id
+            allType:{1:'请假',2:'加班',3:'出差',4:'外勤'}
         }
     },
     components:{
         submitreport
     },
+    computed:{
+       type(){
+           return this.$route.query.id
+       }
+    },
     mounted(){
-        alert(this.type)
+        
         this.getlist()
     },
     methods:{

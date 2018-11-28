@@ -64,7 +64,7 @@
 <script>
 import fetch from '@/assets/utils/fetch'
 import config from '@/assets/js/config'
-import submitreport from '@/components/submitReport'
+import submitreport from '@/components/SubmitReport'
 
 export default {
     data(){

@@ -1,7 +1,10 @@
 <template>
     <div class="page-main">
-        <div class="page-header page-header-bordered">
-            <h1 class="page-title">我的考勤统计</h1>
+        <div class="page-header page-header-bordered clearfix">
+            <h1 class="page-title float-left">我的考勤统计</h1>
+            <div class="float-right mr-20">
+                <inlineDatepicker @change="getYear"></inlineDatepicker>
+            </div>
         </div>
         <div class="page-content container-fluid">
             
@@ -41,6 +44,8 @@
     }
 </style>
 <script>
+import fetch from '@/assets/utils/fetch'
+import config from '@/assets/js/config'
 export default {
     data(){
         return {
@@ -94,7 +99,23 @@ export default {
                     name:'12月'
                 }
                 
-            ]
+            ],
+            year:'2018'
+        }
+    },
+    mounted(){
+        this.getList()
+    },
+    methods:{
+        getYear:function(value){
+            this.year = value
+            alert(this.year)
+        },
+        getList:function(){
+            fetch('get', 'attendance/myselfleavelstatistics',{year:this.year}).then(function (res) {
+                
+                console.log(res)
+            })
         }
     }
 }

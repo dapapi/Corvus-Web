@@ -41,29 +41,29 @@
                                 <th class="cell-300" scope="col">审批状态</th>
                                 
                             </tr>
-                            <tr v-for="(item,index) in list" :key="index">
+                            <tr v-for="(item,index) in list" :key="index" @click="toDetails(item.id)">
                                 <td class="pointer-content">
-                                    <div data-toggle="modal" data-target="#submitReport">
+                                    <div>
                                         加班{{item.id}}
                                     </div>
                                 </td>
                                 <td>
-                                    <div data-toggle="modal" data-target="#submitReport">
+                                    <div>
                                         2018-12-27 19:00
                                     </div>
                                 </td>
                                 <td>
-                                    <div data-toggle="modal" data-target="#submitReport">
+                                    <div >
                                         2018-12-27 21:00
                                     </div>
                                 </td>
                                 <td>
-                                    <div data-toggle="modal" data-target="#submitReport">
+                                    <div>
                                         2小时
                                     </div>
                                 </td>
                                 <td>
-                                    <div data-toggle="modal" data-target="#submitReport">
+                                    <div>
                                         <button class="btn btn-primary">待审核</button>
                                         <!-- <button class="btn btn-warning">已同意</button>
                                         <button class="btn btn-danger">已拒绝</button> -->
@@ -88,7 +88,7 @@
 <script>
 import fetch from '@/assets/utils/fetch'
 import config from '@/assets/js/config'
-import submitreport from '@/components/submitReport'
+import submitreport from '@/components/SubmitReport'
 
 export default {
     data(){
@@ -128,8 +128,8 @@ export default {
         // this.getlist()
     },
     methods:{
-        redirectBriefDetails:function(id){
-            this.$router.push({path:'/brief/details',query:{id:id}})
+        toDetails:function(id){
+            this.$router.push({path:'/attendance/details',query:{id:id}})
         },
         redirectBriefAdd:function(){
             this.$router.push({path:'/brief/add'})
