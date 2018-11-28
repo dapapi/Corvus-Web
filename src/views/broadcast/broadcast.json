@@ -1,0 +1,22 @@
+[{
+    "name": "云服务",
+    "time": 1542941725000,
+    "type": "升级",
+    "title": "【升级】11月29日大数据总线（DataHub）升级通知",
+    "text": "【云服务器】【大数据总线（DataHub）】【升级通知】升级窗口：北京时间2018年11月29日 10:30-10:45 升级内容：大数据总线（DataHub）公有云服务版本升级。升级影响：​​升级过程中，大数据总线（DataHub）公有云服务的读写间延时可能增加。给您带来的不便敬请谅解，有任何问题，可随时通过工单或服务电话联系反馈。",
+    "readflag":false,
+    "topflag":true,
+    "id":1,
+    "range":["技术团队"]
+},
+{
+    "name": "网络安全",
+    "time": 1542941625000,
+    "type": "漏洞预警",
+    "title": "【漏洞预警】最新Apache Struts远程代码执行漏洞(CVE-2016-1000031)",
+    "text": "2018年11月7日，阿里云云盾应急响应中心监测到Apache Struts发布了一个安全更新，以解决低版本的Commons FileUpload库带来的远程反序列化代码执行漏洞，阿里云建议用户立即更新Commons FileUpload依赖库到最新版本。漏洞描述近日，Apache软件基金会（ASF）向Apache Struts项目管理员发布了关于CVE-2016-1000031漏洞的安全公告，其中披露一个Commons FileUpload库的历史高危漏洞CVE-2016-1000031，而2.3.x系列版本的Apache Struts2仍在使用低版本的Commons FileUpload库，该库作为Struts2的一部分，被用作文件上传的默认机制，远程攻击者利用该漏洞可直接获得服务器权限。2.5.12以上版本的Struts2暂不受影响。影响范围Apache Struts 2.3.36及之前的版本风险评级CVE-2016-1000031：严重",
+    "readflag":true,
+    "topflag":false,
+    "id":2,
+    "range":["技术团队","安全团队"]
+}]

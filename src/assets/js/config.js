@@ -715,6 +715,7 @@ let config = {
             4: '实习期',
             5: '外包',
         },
+        // 血型
         bloodTypeArr: [
             {
                 name: 'A',
@@ -732,7 +733,125 @@ let config = {
                 value: 4
             }
         ],
-
+        // 公司
+        companyArr: [
+            {
+                name: '泰洋川禾',
+                value: 1 
+            }, {
+                name: '泰洋明山',
+                value: 2
+            }, {
+                name: '春雨听雷',
+                value: 3
+            }, {
+                name: '泰洋星河',
+                value: 4
+            }
+        ],
+        // 工作地点
+        workPlaceArr: [
+            {
+                name: '北京市朝阳区诺金中心',
+                value: 1
+            }, {
+                name: '北京市朝阳区梵石iTOWN',
+                value: 2
+            }, {
+                name: '上海市',
+                value: 3
+            }, {
+                name: '广东省深圳市',
+                value: 4
+            }
+        ],
+        // 汇报对象
+        eportArr: [
+            {
+                name: '总裁办',
+                value: 1
+            },
+            {
+                name: 'CEO',
+                value: 2
+            }
+        ],
+        // 转正状态
+        positiveStateArr: [
+            {
+                name: '已转正',
+                value: 1
+            },
+            {
+                name: '试用期',
+                value: 2
+            }
+        ],
+        companyCityArr: [
+            {
+                name: '北京总部',
+                value: 1
+            },
+            {
+                name: '上海分部',
+                value: 2
+            },
+            {
+                name: '深圳分部',
+                value: 3
+            }
+        ],
+        //  招聘渠道
+        recruitWayArr: [
+            {
+                name: '拉勾网',
+                value: 1
+            },
+            {
+                name: '猎聘网',
+                value: 2
+            },
+            {
+                name: '智联招聘',
+                value: 3
+            }
+        ],
+        // 招聘方式
+        recruitTypeArr: [
+            {
+                name: '校招',
+                value: 1
+            },
+            {
+                name: '社招',
+                value: 2,
+            }
+        ],
+        // 个税缴纳方式
+        incomeTaxTypeArr: [
+            {
+                name: '正常酬金个税',
+                value: 1
+            },
+            {
+                name: '劳务报酬所得',
+                value: 2,
+            }
+        ],
+        personnelCategoryArr: [
+            {
+                name: '正式',
+                value: 1
+            },
+            {
+                name: '劳务',
+                value: 2,
+            },
+            {
+                name: '实习',
+                value: 3
+            }
+        ]
     }
 ;
 
