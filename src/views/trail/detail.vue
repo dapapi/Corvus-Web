@@ -163,7 +163,7 @@
                                              :class="isEdit ? 'edit-height':'' ">
                                             <div class="col-md-2 float-left text-right pl-0">负责人</div>
                                             <div class="col-md-10 float-left font-weight-bold">
-                                                <span v-show="!isEdit" >{{ trailInfo.principal.data.name }}</span>
+                                                <!-- <span v-show="!isEdit" >{{ trailInfo.principal.data.name }}</span> -->
                                                 <EditInput-selector :is-edit="isEdit" 
                                                                     @change="changeTrailPrincipal"></EditInput-selector>
                                             </div>
