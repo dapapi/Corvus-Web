@@ -319,7 +319,7 @@ let config = {
                 value: 4,
                 name: '外包'
             }
-        ],        
+        ],
         // 婚姻状况
         maritalStatusArr: [
             {
@@ -383,19 +383,19 @@ let config = {
         levelArr: [
             {
                 name: 'S',
-                value: 'S'
+                value: 4
             },
             {
                 name: 'A',
-                value: 'A'
+                value: 3
             },
             {
                 name: 'B',
-                value: 'B'
+                value: 2
             },
             {
                 name: 'C',
-                value: 'C'
+                value: 1
             }
         ],
 
@@ -652,7 +652,7 @@ let config = {
             },
             {
                 name: '公开',
-                value: 2
+                value: 0
             }
         ],
         remindArr: [
@@ -777,7 +777,7 @@ let config = {
         companyArr: [
             {
                 name: '泰洋川禾',
-                value: 1 
+                value: 1
             }, {
                 name: '泰洋明山',
                 value: 2
@@ -890,6 +890,34 @@ let config = {
             {
                 name: '实习',
                 value: 3
+            }
+        ],
+        payMethodsArr: [
+            {
+                name: '现金',
+                value: 1
+            },
+            {
+                name: '刷卡',
+                value: 2
+            },
+            {
+                name: '转账',
+                value: 3
+            },
+            {
+                name: '其他',
+                value: 4
+            }
+        ],
+        invoiceTypeArr: [
+            {
+                name: '增值税普通发票',
+                value: 1
+            },
+            {
+                name: '增值税专用发票',
+                value: 2
             }
         ]
     }
