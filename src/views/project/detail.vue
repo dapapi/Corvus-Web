@@ -636,7 +636,7 @@
                                 项目 - {{ projectInfo.title }}
                             </div>
                         </div>
-                        <div class="example">
+                        <div class="example" v-if="taskTypeArr.length > 0">
                             <div class="col-md-2 text-right float-left">任务类型</div>
                             <div class="col-md-10 float-left pl-0">
                                 <selectors :options="taskTypeArr" @change="changeTaskType"></selectors>
@@ -1007,7 +1007,7 @@
                 isEdit: false,
                 projectInfo: '',
                 trailInfo: {},
-                taskTypeArr: config.taskTypeArr,
+                taskTypeArr: [],
                 taskLevelArr: config.taskLevelArr,
                 taskLevel: '',
                 taskName: '',
@@ -1032,6 +1032,7 @@
         mounted() {
             this.getProject();
             this.getClients();
+            this.getTaskType();
         },
 
         watch: {},
@@ -1108,22 +1109,33 @@
                 }
                 let _this = this;
                 let data = {
-                    // resource_type: '1718463094',
-                    // resourceable_id: '1994731356',
-                    // type: app.taskType,
-                    // @todo 任务类型前端维护
-                    title: app.taskName,
+                    resource_type: 3,
+                    resourceable_id: this.projectId,
+                    type: this.taskType,
+                    title: this.taskName,
                     principal_id: this.$store.state.newPrincipalInfo.id,
                     participant_ids: participant_ids,
-                    priority: app.taskLevel,
-                    start_at: app.startTime + ' ' + app.startMinutes,
-                    end_at: app.endTime + ' ' + app.endMinutes,
-                    desc: app.taskIntroduce
+                    priority: this.taskLevel,
+                    start_at: this.startTime + ' ' + this.startMinutes,
+                    end_at: this.endTime + ' ' + this.endMinutes,
+                    desc: this.taskIntroduce
                 };
                 fetch('post', '/tasks', data).then(function (response) {
                     toastr.success('创建成功');
                     $('#addTask').modal('hide');
                     _this.projectTasksInfo.push(response.data)
+                })
+            },
+
+            getTaskType: function () {
+                let _this = this;
+                fetch('get', '/task_types/all').then(function (response) {
+                    for (let i = 0; i < response.data.length; i++) {
+                        _this.taskTypeArr.push({
+                            name: response.data[i].title,
+                            value: response.data[i].id
+                        })
+                    }
                 })
             },
 
@@ -1146,10 +1158,15 @@
 
             changeProjectInfo: function () {
                 let data = this.changeInfo;
+                console.log('修改成功1')
                 fetch('put', '/projects/' + this.projectId, data).then(function (response) {
-                    console.log(response)
+                    // console.log(response)
                     toastr.success('修改成功')
+                    console.log('修改成功2')
+
                 })
+                console.log('修改成功3')
+
             },
 
             cancelEdit: function () {

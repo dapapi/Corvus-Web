@@ -29,7 +29,7 @@
                             </div>
                         </li>
                     </ul>
-                    <div v-if="taskData.length === 0">
+                    <div v-if="taskData.length === 0" class="col-md-3 text-center">
                         暂无数据
                     </div>
                 </div>
@@ -44,7 +44,7 @@
                                 </div>
                             </li>
                         </ul>
-                        <div v-if="taskData.length === 0">
+                        <div v-if="taskData.length === 0" class="col-md-3 text-center">
                             暂无数据
                         </div>
                     </div>
@@ -60,7 +60,7 @@
                                 </div>
                             </li>
                         </ul>
-                        <div v-if="taskData.length === 0">
+                        <div v-if="taskData.length === 0" class="col-md-3 text-center">
                             暂无数据
                         </div>
                     </div>
