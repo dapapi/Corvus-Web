@@ -333,6 +333,7 @@
 
       addInfo: function (value, name) {
         this.addInfoArr[name] = value;
+        console.log( name,value)
       },
 
       addAproval: function (value) {

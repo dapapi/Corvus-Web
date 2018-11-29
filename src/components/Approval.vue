@@ -26,12 +26,12 @@
                                 </a>
                                 <div class="action" data-plugin="actionBtn" data-toggle="modal" data-target="#addModel" >
                                     <button type="button" class="site-action-toggle btn-raised btn  btn-floating waves-effect waves-classic">
-                                        <i class="front-icon md-plus "  aria-hidden="true"></i>
+                                        <i class="front-icon md-plus"  aria-hidden="true"></i>
                                     </button>
                                 </div> 
                                 <ul class="site-menu-sub" v-show="isShow == item.id">
                                     <li class="site-menu-item" v-for="item2 in  reportList" :key="item2.id">
-                                        <router-link v-if="item.id == '2'" to="/approval/general">
+                                        <router-link v-if="item.id == '2'" :to="item2.url">
                                             <span class="icon md-file-text font-size-18 mr-10"></span>
                                             <span class="site-menu-title" >{{item2.title}}</span>
                                         </router-link>
@@ -69,20 +69,20 @@
                         <div class="example">
                             <div class="col-md-2 text-right float-left pl-0">审批类型</div>
                             <div class="col-md-10 float-left pl-0">
-                                <Selectors :placeholder="'请选择任务优先级'"></Selectors>
+                                <Selectors :placeholder="'请选择任务优先级'" v-model="priority"></Selectors>
                         </div>
                         </div>
                         <div class="example">
                             <div class="col-md-2 text-right float-left">报表名称</div>
                             <div class="col-md-10 float-left pl-0">
-                                <input type="text" class="form-control" placeholder="请输入任务名称">
+                                <input type="text" class="form-control" placeholder="请输入任务名称" v-model="task"> 
                             </div>
                         </div>
                         <div class="example">
                             <div class="col-md-2 text-right float-left">报表描述</div>
                             <div class="col-md-10 float-left pl-0">
                             <textarea class="form-control" name="taskDescription" id="" cols="30"
-                                rows="5" title="" placeholder="请填写审批报表描述"></textarea>
+                                rows="5" title="" placeholder="请填写审批报表描述" v-model="describe"></textarea>
 
                             </div>
                         </div>
@@ -110,7 +110,7 @@
                         <div class="example">
                         <span @click="addCondition" class="select">+添加筛选条件</span>
                         </div>
-                        <div class="summary pl-30">
+                        <div class="summary">
                         <h5 class="pt-20">汇总字段</h5>
                         </div>
                         </div> 
@@ -152,17 +152,20 @@
                 reportList: [
                     {
                         title: "报销",
-                        head: "审批添增"
+                        url:"/approval/general"
                     },
                     {
                         title: "通用审批",
-                        head: "审批删除"
+                        url:"/approval/currency"
                     },
                     {
                         title: "报销",
-                        head: "审批添增"
+                        url:"/approval/account"
                     },
-                    {title: "通用审批", head: "审批删除"}
+                    {
+                        title: "通用审批",
+                        url:"/approval/cur"
+                    }
                 ],
                 isShow: "0",
                 setp: {
@@ -198,7 +201,10 @@
                 conditionLength: 1,
                 selectorHidden: [],
                 conditionData: {},
-                customizeKeyWords: ''
+                customizeKeyWords: '',
+                priority:'',
+                task:'',
+                describe:''
             }
         },
         mounted() {
@@ -318,7 +324,7 @@
     .action button {
       width: 15px;
       height: 15px;
-      border: 1px solid #626262;
+      box-shadow: 0 0 0 0 ;
       position: relative;
     }
     .action button i {
@@ -326,6 +332,7 @@
       position: absolute;
       top:-4.4px;
       left:2.5px;
+      color: #838383;
     }
     .menu li:first-child:hover .action {
       display: block;
@@ -338,6 +345,9 @@
     }
     .summary h5{
       border-top:1px solid #ccc;
+    }
+    .router-link-active{
+        background: #F1F1F1;
     }
 </style>
 

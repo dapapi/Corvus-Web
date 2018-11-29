@@ -33,27 +33,33 @@
                                         <a class="dropdown-item" tabindex="-1" href="javascript:void(0)"> 通用审批 </a>
                                     </div>
                                     </div>
-                                </th>  
-                                
+                                </th>          
                                 <th class="cell-300" scope="col">申请时间</th>
                                 <th class="cell-300" scope="col">申请状态</th>
                             </tr>
-                            <tr v-for="task in tasksInfo">
-                            <td class="pointer-content">
-                            <router-link :to="{name:'approval/detail', params: {id: task.id}}">{{ task.title }}
-                            </router-link>
-                            </td>
-                            <td class="cell-300">暂无</td>
-                            <td class="cell-300">暂无</td>
-                            <td>
-                            <template v-if="task.status === 1">进行中</template>
-                            <template v-if="task.status === 2">已完成</template>
-                            <template v-if="task.status === 3">已停止</template>
-                            </td>
-                            <td>
-                            <template v-if="task.principal">{{ task.principal.data.name }}</template>
-                            </td>
+                            <tbody>
+                            <tr v-for="task in tasksInfo" :key="task.id">
+                                <td class="pointer-content">
+                                    {{task.number}}
+                                </td>
+                                <td>{{task.person}}</td>
+                                <td>
+                                    <template v-if="task.type === 0">工作室注册申请</template>
+                                    <template v-if="task.type === 1">报销</template>
+                                    <template v-if="task.type === 2">通用审批</template>
+                                </td>
+                                <td>
+                                    {{task.time}}
+                                </td>
+                                <td>
+                                    <template v-if="task.status === 0">
+                                        <button class="btn btn-warning" type="submit" 
+                                                data-toggle="modal" data-target="#addProject"  style="color:#fff"> 待审批
+                                        </button>
+                                    </template>
+                                </td>
                             </tr>
+                            </tbody>
                             </table>
                             <template v-if="!taskStatus">
                             <Pagination :current_page="current_page" :method="getTasks" :total_pages="total_pages"
@@ -72,6 +78,7 @@
 <script>
 import fetch from '../../assets/utils/fetch.js';
 import config from '../../assets/js/config';
+import approval from "./approval.json";
 
 export default {
   name: '',
@@ -116,7 +123,7 @@ export default {
             let _this = this;
 
             fetch('get', '/tasks/my_all', data).then(function (response) {
-                _this.tasksInfo = response.data;
+                _this.tasksInfo = approval;
                 _this.current_page = response.meta.pagination.current_page;
                 _this.total = response.meta.pagination.total;
                 _this.total_pages = response.meta.pagination.total_pages;

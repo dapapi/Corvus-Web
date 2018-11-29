@@ -357,7 +357,7 @@ a {
 }
 .nav-link.dropdown-toggle{
   text-align: left;
-  margin-top: -10px;
+  margin-top: -8px;
   margin-left: -15px;
   background: #fff;
 }
