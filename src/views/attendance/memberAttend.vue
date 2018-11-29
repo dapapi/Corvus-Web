@@ -89,16 +89,12 @@
 <script>
 import fetch from '@/assets/utils/fetch'
 import config from '@/assets/js/config'
-import submitreport from '@/components/SubmitReport'
 
 export default {
     data(){
         return {
             list:[], 
         }
-    },
-    components:{
-        submitreport
     },
     mounted(){
         this.getlist()

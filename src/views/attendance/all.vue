@@ -95,7 +95,6 @@
 <script>
 import fetch from '@/assets/utils/fetch'
 import config from '@/assets/js/config'
-import submitreport from '@/components/SubmitReport'
 // const allType = {1:'请假',2:'加班',3:'出差',4:'外勤'}
 export default {
     data(){
@@ -103,9 +102,6 @@ export default {
             list:[], 
             allType:{1:'请假',2:'加班',3:'出差',4:'外勤'}
         }
-    },
-    components:{
-        submitreport
     },
     computed:{
        type(){

@@ -106,22 +106,18 @@
                 <i class="back-icon md-plus animation-scale-up" aria-hidden="true"></i>
             </button>
         </div>
-        <submitreport></submitreport>
+        <Submitreport></Submitreport>
     </div>
 </template>
 <script>
 import fetch from '@/assets/utils/fetch'
 import config from '@/assets/js/config'
-import submitreport from '@/components/SubmitReport'
 
 export default {
     data(){
         return {
             list:[], 
         }
-    },
-    components:{
-        submitreport
     },
     mounted(){
         this.getlist()

@@ -29,6 +29,7 @@ import NormalLinkageSelectors from './components/NormalLinkageSelectors.vue';
 import NumberSpinner from './components/NumberSpinner.vue';
 import Pagination from './components/Pagination.vue';
 import SelectStaff from './components/SelectStaff.vue';
+import SubmitReport from './components/SubmitReport.vue';
 import SelectorsOptions from './components/SelectorsOptions.vue';
 import TaskFollowUp from './components/TaskFollowUp.vue';
 import LeftMenu from './components/LeftMenu.vue';
@@ -74,6 +75,8 @@ Vue.component('NormalLinkageSelectors', NormalLinkageSelectors);
 Vue.component('NumberSpinner', NumberSpinner);
 Vue.component('Pagination', Pagination);
 Vue.component('SelectStaff', SelectStaff);
+Vue.component('StaffEditSelect', StaffEditSelect);
+Vue.component('SubmitReport', SubmitReport);
 Vue.component('Selectors', Selectors);
 Vue.component('SelectorsOptions', SelectorsOptions);
 Vue.component('TaskFollowUp', TaskFollowUp);
@@ -90,7 +93,6 @@ Vue.component('Timepicker', Timepicker);
 Vue.component('Flag', Flag);
 Vue.component('AddModifyBroadCast', AddModifyBroadCast);
 Vue.component('RegionSelector', RegionSelector);
-Vue.component('StaffEditSelect', StaffEditSelect);
 
 Vue.prototype.globalClick = function (callback) {
     document.getElementById('app').addEventListener('click', () => {
