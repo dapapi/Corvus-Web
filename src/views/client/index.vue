@@ -13,7 +13,7 @@
             <div class="panel col-md-12 py-5">
                 <div class="clearfix">
                     <div class="col-md-3 example float-left">
-                        <input type="text" class="form-control" id="inputPlaceholder" placeholder="请输入项目昵称"
+                        <input type="text" class="form-control" id="inputPlaceholder" placeholder="请输入客户名称"
                                style="width: 220px">
                     </div>
                     <div class="col-md-3 example float-left">
