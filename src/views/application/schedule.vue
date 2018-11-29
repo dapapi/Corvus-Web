@@ -1,7 +1,11 @@
 <template>
-     <div class="float-left p-0" style="width: 80%;border-left: 1px solid #D8D8D8;">
-        <calendar :gotoDate="selectedDate" v-show="!meetingRomeShow"></calendar>
-        <MeetingRoomCalendar v-show="meetingRomeShow" @change="displayMeetingRoom"></MeetingRoomCalendar>
+    <div class="page-content container-fluid" style="border-left:1px solid #ccc">
+        <div class="panel col-md-12 py-5 clearfix px-0 mb-0">
+        <div class="float-left p-0" style="width: 100%">
+            <calendar :gotoDate="selectedDate" v-show="!meetingRomeShow"></calendar>
+            <MeetingRoomCalendar v-show="meetingRomeShow" @change="displayMeetingRoom"></MeetingRoomCalendar>
+        </div>
+        </div>
     </div>
 </template>
 <script>

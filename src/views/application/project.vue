@@ -39,23 +39,21 @@
                                 <th class="cell-300" scope="col">跟进时间</th>
                             </tr>
                             <tbody>
-                            <tr v-for="task in tasksInfo">
+                            <tr v-for="task in tasksInfo" :key="task.id">
                                 <td class="pointer-content">
-                                    <router-link :to="{name:'tasks/detail', params: {id: task.id}}">
-                                        {{ task.title }}
-                                    </router-link>
+                                    {{task.name}}
                                 </td>
-                                <td>暂无</td>
-                                <td>暂无</td>
+                                <td>{{task.person}}</td>
+                                <td>{{task.type}}</td>
                                 <td>
                                     <template v-if="task.status === 1">进行中</template>
                                     <template v-if="task.status === 2">已完成</template>
-                                    <template v-if="task.status === 3">已停止</template>
+                                    <template v-if="task.status === 0">已开始</template>
                                 </td>
                                 <td>
-                                    <template v-if="task.principal">{{ task.principal.data.name }}</template>
+                                    {{task.priority}}
                                 </td>
-                                <td>{{ task.end_at }}</td>
+                                <td>{{ task.date }} {{task.time}}</td>
                             </tr>
                             </tbody>
                         </table>
@@ -74,7 +72,7 @@
 <script>
 import fetch from '../../assets/utils/fetch.js';
 import config from '../../assets/js/config';
-
+import data from "./data.json"
 export default {
   name: '',
   data () {
@@ -107,6 +105,7 @@ export default {
 
   mounted() {
     this.getTasks();
+    this.tasksInfo = data;
   },
 
   methods: {
@@ -119,7 +118,7 @@ export default {
                 let _this = this;
 
                 fetch('get', '/tasks/my_all', data).then(function (response) {
-                    _this.tasksInfo = response.data;
+                    
                     _this.current_page = response.meta.pagination.current_page;
                     _this.total = response.meta.pagination.total;
                     _this.total_pages = response.meta.pagination.total_pages;

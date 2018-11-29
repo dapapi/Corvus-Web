@@ -13,7 +13,7 @@
             <div data-role="container" class="scrollable-container" >
             <div data-role="content" class="scrollable-content">
               <section class="page-aside-section pt-0 m-0">
-                <div class="list-group text-center mb-0">
+                <div class="list-group text-left mb-0">
                   <router-link class="list-group-item " to="/my/project" >我的项目</router-link>
                   <router-link class="list-group-item " to="/my/task">我的任务</router-link>
                   <router-link class="list-group-item " to="/my/schedule">我的日程</router-link>
@@ -29,7 +29,7 @@
            <router-view></router-view>
           </div>
           </div>
-    </div>
+    </div> 
 </div>
 
 
@@ -41,14 +41,13 @@
 }
 </script>
 <style scoped>
-.list-group-item{
-  padding: 1.75rem 1.25rem;
-  
-}
-.page-header-bordered{
-  margin-bottom: 0;
-}
 
+.page-aside{
+  margin:90px 0 0 20px;
+}
+.router-link-active{
+  background: #F1F1F1;
+}
 </style>
 
 

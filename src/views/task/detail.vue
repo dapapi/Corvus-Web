@@ -245,7 +245,7 @@
                         </div>
                         <div class="card-block">
                             <div class="col-md-7 pl-0">
-                                <TaskFollowUp :follow-type="'任务'"></TaskFollowUp>
+                                <TaskFollowUp :follow-type="'任务'" :trailId='taskId' trailType='tasks'></TaskFollowUp>
                             </div>
                         </div>
                     </div>
@@ -377,7 +377,7 @@
                 taskTypeArr: config.taskTypeArr,
                 customizeInfo: config.customizeInfo,
                 priorityArr: config.priorityArr,
-                taskStatusArr: config.taskStatusArr,
+                taskStatusArr: config.taskStatusArr.push({name: '全部', value: ''}),
                 oldInfo: '',
             }
         },
@@ -448,7 +448,7 @@
                     }
 
                     _this.taskInfo = response.data;
-                    _this.oldInfo = response.data;
+                    _this.oldInfo = JSON.parse(JSON.stringify(response.data))
                     for (let i = 0; i < response.data.participants.data.length; i++) {
                         _this.flagParticipantsIdArr.push(response.data.participants.data[i].id)
                     }
@@ -477,7 +477,8 @@
 
             cancelEdit: function () {
                 this.isEdit = false;
-                this.taskInfo = oldInfo;
+                // this.taskInfo = JSON.parse(JSON.stringify(this.oldInfo))
+                this.taskInfo = this.oldInfo
             },
 
             changeTaskStatus: function (status) {

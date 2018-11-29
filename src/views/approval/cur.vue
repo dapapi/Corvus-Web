@@ -158,7 +158,7 @@
                 <i class="back-icon md-plus animation-scale-up" aria-hidden="true"></i>
             </button>
         </div>
-        <submit-report></submit-report>
+        <submitreport></submitreport>
     </div>
 </template>
 <script>

@@ -192,7 +192,7 @@ export default {
             startMinutes: '00:00',
             endMinutes:'00:00',
             addData:{
-                type:this.type,
+                type:this.typeCheck,
                 start_at:'',
                 end_at:'',
                 number:0,//天数
@@ -262,28 +262,45 @@ export default {
 
         },
         add:function(){
+            let _this = this
             this.addData.start_at = `${this.startDate} ${this.startTime}`
             this.addData.end_at = `${this.endDate} ${this.endTime}`
-            // console.log(this.$store.state.participantsInfo)
-            // console.log(this.$store.state.newParticipantsInfo)
             let approval = []
             let notification = []
             for (let i = 0; i < this.$store.state.participantsInfo.length; i++) {
                 approval.push(this.$store.state.participantsInfo[i].id)
                 
             }
-            // console.log(approval)
-            // return false
             this.addData.approval_flow = approval.join(',')
             for (let i = 0; i < this.$store.state.newParticipantsInfo.length; i++) {
                 notification.push(this.$store.state.newParticipantsInfo[i].id)
                 
             }
             this.addData.notification_person = notification.join(',')
-            console.log(this.addData);
-            // return false
+
+            if(this.addData.type == 1){
+                delete this.addData.place
+            }else if(this.addData.type ==2){
+                delete this.addData.leave_type
+                delete this.addData.place
+            }else{
+                delete this.addData.leave_type
+            }
+
             fetch('post', '/attendance',this.addData).then(function (response) {
                 toastr.success('提交成功');
+                _this.addData={
+                    type:0,
+                    start_at:'',
+                    end_at:'',
+                    number:0,//天数
+                    cause:'',//事由
+                    approval_flow:'12121',//审批流id -- 审批人
+                    notification_person:'',//知会人
+                    leave_type:'',//请假类型
+                    place:'',//出差 外勤地点
+                    affixes:[],//附件
+                },
                 $('#modalLeave').modal('hide');
             })
         }

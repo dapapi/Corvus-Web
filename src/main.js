@@ -33,6 +33,7 @@ import Pagination from './components/Pagination.vue';
 import SelectStaff from './components/SelectStaff.vue';
 import SubmitReport from './components/SubmitReport.vue';
 import SelectorsOptions from './components/SelectorsOptions.vue';
+import SwitchYear from '@/components/SwitchYear'
 import TaskFollowUp from './components/TaskFollowUp.vue';
 import LeftMenu from './components/LeftMenu.vue';
 import ListSelection from './components/ListSelection.vue';
@@ -83,6 +84,7 @@ Vue.component('StaffEditSelect', StaffEditSelect);
 Vue.component('SubmitReport', SubmitReport);
 Vue.component('Selectors', Selectors);
 Vue.component('SelectorsOptions', SelectorsOptions);
+Vue.component('SwitchYear', SwitchYear);
 Vue.component('TaskFollowUp', TaskFollowUp);
 Vue.component('LeftMenu', LeftMenu);
 Vue.component('ListSelection', ListSelection);

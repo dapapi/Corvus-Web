@@ -24,7 +24,7 @@
                         <ul class="site-menu-sub" v-show="isShow == item.value">
                           <li class="site-menu-item" v-for="(item2,index) in  item.data" :key="index">
                             <!-- <a href=""> -->
-                              
+   
                               <router-link :to="{path:item2.url,query:{id:item2.params.id}}" v-if="item2.params">
                               
                                 <span class="icon md-file-text font-size-18 mr-10"></span>

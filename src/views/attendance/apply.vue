@@ -10,19 +10,19 @@
                     <div class="input-search">
                         <button type="button" class="input-search-btn"><i class="icon md-search" aria-hidden="true"></i>
                         </button>
-                        <input type="text" class="form-control" placeholder="输入编号、类型或申请人">
+                        <input v-model="sendData.search" type="text" class="form-control" placeholder="输入编号、类型或申请人" @blur="getlist">
                     </div>
                 </div>
                 
             </div>
             <div class="col-md-12 panel">
                     <ul class="nav nav-tabs nav-tabs-line" role="tablist">
-                        <li class="nav-item" role="presentation">
+                        <li class="nav-item" role="presentation" @click="getlist(1)">
                             <a class="nav-link active" data-toggle="tab" href="#forum-project"
                                aria-controls="forum-base"
                                aria-expanded="true" role="tab">待审批</a>
                         </li>
-                        <li class="nav-item" role="presentation">
+                        <li class="nav-item" role="presentation" @click="getlist(2)">
                             <a class="nav-link" data-toggle="tab" href="#forum-project"
                                aria-controls="forum-present"
                                aria-expanded="false" role="tab">已审批</a>
@@ -42,39 +42,22 @@
                                 
                             </tr>
                             <tr v-for="(item,index) in list" :key="index" @click="toDetails(item.id)">
-                                <td class="pointer-content">
-                                    <div>
-                                        加班{{item.id}}
-                                    </div>
-                                </td>
+                                <td class="pointer-content">{{allType[item.type]}}</td>
+                                <td>{{item.start_at}}</td>
+                                <td>{{item.end_at}}</td>
+                                <td>{{item.number}}</td>
                                 <td>
                                     <div>
-                                        2018-12-27 19:00
-                                    </div>
-                                </td>
-                                <td>
-                                    <div >
-                                        2018-12-27 21:00
-                                    </div>
-                                </td>
-                                <td>
-                                    <div>
-                                        2小时
-                                    </div>
-                                </td>
-                                <td>
-                                    <div>
-                                        <button class="btn btn-primary">待审核</button>
-                                        <!-- <button class="btn btn-warning">已同意</button>
-                                        <button class="btn btn-danger">已拒绝</button> -->
-
+                                        <button v-show="item.status == '待审批'" class="btn btn-primary">待审批</button>
+                                        <button v-show="item.status == '已同意'" class="btn btn-warning">已同意</button>
+                                        <button v-show="item.status == '已拒绝'" class="btn btn-danger">已拒绝</button>
+                                        <button v-show="item.status == '已作废'" class="btn btn-danger">已作废</button>
                                     </div>
                                 </td>
                                 
                             </tr>
                             
                         </table>
-                        <pagination></pagination>
                         <!-- <pagination :current_page="current_page" :method="getProjects" :total_pages="total_pages"
                                     :total="total"></pagination> -->
                     </div>
@@ -82,62 +65,38 @@
                 </div>
         </div>
         
-        <submitreport></submitreport>
     </div>
 </template>
 <script>
 import fetch from '@/assets/utils/fetch'
 import config from '@/assets/js/config'
-import submitreport from '@/components/SubmitReport'
 
 export default {
     data(){
         return {
-            list:[
-                {
-                    id:1,
-                    name:'sjdks'
-                },
-                {
-                    id:2,
-                    name:'sjdks'
-                },
-                {
-                    id:3,
-                    name:'sjdks'
-                },
-                {
-                    id:4,
-                    name:'sjdks'
-                },
-                {
-                    id:5,
-                    name:'sjdks'
-                },
-                {
-                    id:6,
-                    name:'sjdks'
-                }
-            ], 
+            list:[],
+            allType:{1:'请假',2:'加班',3:'出差',4:'外勤'}, 
+            sendData:{
+                status:[1],
+                search:''
+            }
+               
+    
         }
     },
-    components:{
-        submitreport
-    },
     mounted(){
-        // this.getlist()
+        this.getlist()
     },
     methods:{
-        toDetails:function(id){
-            this.$router.push({path:'/attendance/details',query:{id:id}})
-        },
-        redirectBriefAdd:function(){
-            this.$router.push({path:'/brief/add'})
-        },
-        getlist:function(){
-            fetch('get',`${config.apiUrl}/launch`).then((res) => {
+        
+        getlist:function(type){
+            type == 2?this.sendData.status =[2,3,4]:this.sendData.status = [1]
+            fetch('get',`${config.apiUrl}/attendance/myapply`,this.sendData).then((res) => {
                 this.list = res.data
             })
+        },
+        toDetails:function(id){
+            this.$router.push({path:'/attendance/details',params:{id:id}})
         }
     }
 }

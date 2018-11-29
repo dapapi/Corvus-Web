@@ -14,10 +14,12 @@ export default {
     watch: {
         isEdit (newVal) {
             const dom = this.$refs.mySelectors
-            // dom.(this.value)
             if (dom) {
-                dom.setValue(this.value)
-                dom.hide()
+                this.$refs.mySelectors.destroy()
+            } else {
+                setTimeout(() => {
+                    this.$refs.mySelectors.setValue(this.value)
+                }, 0)
             }
         }
     },

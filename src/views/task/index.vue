@@ -9,15 +9,15 @@
             <div class="panel col-md-12 col-lg-12 py-5">
                 <div class="clearfix">
                     <div class="col-md-3 example float-left">
-                        <input type="text" class="form-control" id="inputPlaceholder" placeholder="请输入任务名称"
+                        <input type="text" class="form-control" @blur="changeTaskName" id="inputPlaceholder" v-model="taskNameSearch" placeholder="请输入任务名称"
                                style="width: 220px">
                     </div>
                     <div class="col-md-3 example float-left">
-                        <Selectors :placeholder="'请选择任务类型'"></Selectors>
+                        <Selectors :options="taskTypeArr" @change="changeTaskTypeSearch" :placeholder="'请选择任务类型'"></Selectors>
                     </div>
                     <!-- todo 任务类型暂无 -->
                     <div class="col-md-3 example float-left">
-                        <Selectors :placeholder="'请选择任务状态'"></Selectors>
+                        <Selectors :options="taskStatusArr" @change="changeTaskStatusSearch" :placeholder="'请选择任务状态'"></Selectors>
                     </div>
                     <div class="col-md-3 example float-left">
                         <button type="button" class="btn btn-default waves-effect waves-classic float-right"
@@ -74,8 +74,9 @@
                                         {{ task.title }}
                                     </router-link>
                                 </td>
-                                <td>暂无</td>
-                                <td>暂无</td>
+                                <td>{{task.resource ? task.resource.data.resource.data.title : ''}}</td>
+                                <!-- <td>暂无</td> -->
+                                <td>{{ task.type ? task.type.data ? task.type.data.title : '' : '' }}</td>
                                 <td>
                                     <template v-if="task.status === 1">进行中</template>
                                     <template v-if="task.status === 2">已完成</template>
@@ -207,7 +208,8 @@
 <script>
 import fetch from '../../assets/utils/fetch.js';
 import config from '../../assets/js/config';
-
+const taskTypeArr = [{name: '全部', value: ''}, ...config.taskTypeArr]
+const taskStatusArr = [{name: '全部', value: ''}, ...config.taskTypeArr]
 export default {
   name: '',
   data () {
@@ -230,9 +232,13 @@ export default {
                 taskFinishType: '',
                 taskName: '',
                 taskLevel: '',
+                taskTypeArr: taskTypeArr,
+                taskStatusArr: taskStatusArr,
                 taskLevelArr: config.taskLevelArr,
-                taskTypeArr: config.taskTypeArr,
                 customizeInfo: config.customizeInfo,
+                taskNameSearch: '', // 搜索的任务名称
+                taskTypeSearch: '', // 搜索的任务类型
+                taskStatusSearch: '', // 搜索的任务状态
             }
 
 
@@ -240,22 +246,37 @@ export default {
 
   mounted() {
     this.getTasks();
+    console.log(this.taskTypeArr)
   },
 
   methods: {
 
     getTasks (pageNum = 1) {
-                let data = {
+                let params = {
                     page: pageNum,
                     include: 'principal,pTask,tasks,resource.resourceable,resource.resource,participants',
                 };
-                let _this = this;
+                let url = '/tasks/my_all'
 
-                fetch('get', '/tasks/my_all', data).then(function (response) {
-                    _this.tasksInfo = response.data;
-                    _this.current_page = response.meta.pagination.current_page;
-                    _this.total = response.meta.pagination.total;
-                    _this.total_pages = response.meta.pagination.total_pages;
+                if (this.taskNameSearch) {
+                    params.keyword = this.taskNameSearch
+                }
+                if (this.taskStatusSearch) {
+                    params.status = this.taskStatusSearch
+                }
+                if (this.taskTypeSearch) {
+                    params.type_id = this.taskTypeSearch
+                }
+
+                if (this.taskNameSearch || this.taskStatusSearch || this.taskTypeSearch) {
+                    url = '/tasks/filter'
+                }
+
+                fetch('get', url, params).then( response => {
+                    this.tasksInfo = response.data;
+                    this.current_page = response.meta.pagination.current_page;
+                    this.total = response.meta.pagination.total;
+                    this.total_pages = response.meta.pagination.total_pages;
                 });
             },
 
@@ -365,6 +386,17 @@ export default {
     changeEndMinutes (value) {
                 this.endMinutes = value
             },
+    changeTaskName () {
+        this.getTasks()
+    },
+    changeTaskTypeSearch (value) {
+        this.taskTypeSearch = value
+        this.getTasks()
+    },
+    changeTaskStatusSearch (value) {
+        this.taskStatusSearch = value
+        this.getTasks()
+    }
   },
 
 };

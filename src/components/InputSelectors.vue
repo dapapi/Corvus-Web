@@ -1,8 +1,8 @@
 <!-- 选择员工，单人 -->
 <template>
-    <div class="selector" :id="'inputSelectMember' + this._uid">
+    <div class="selector" :id="'inputSelectMember' + _uid">
         <div class="float-left">
-            <input type="text" class="form-control" title="" @focus="showMember" :placeholder="this.placeholder"
+            <input type="text" class="form-control" title="" @focus="showMember" :placeholder="placeholder"
                    v-model="selectedMemberName">
         </div>
         <div class="float-left" v-show="selectMemberShow">
@@ -28,8 +28,10 @@
         computed: {
             selectedMemberName: function () {
                 if (this.type === 'change') {
+                    this.$emit('change',this.$store.state.principalInfo.name)
                     return this.$store.state.principalInfo.name
                 } else {
+                    this.$emit('change',this.$store.state.newPrincipalInfo)
                     return this.$store.state.newPrincipalInfo.name
                 }
             }

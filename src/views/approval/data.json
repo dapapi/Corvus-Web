@@ -2,7 +2,7 @@
     {
         "id":1,
         "title":"泰洋系-测试测试",
-        "number":"1092047564",
+        "number":"1470783757",
         "type":0,
         "img":"../src/assets/head.jpg",
         "applicant":"泰洋系",
@@ -13,13 +13,13 @@
         "startTime":"2018-12-13",
         "endTime":"2018-12-14",
         "fieldwork":"测试",
-        "state":"1",
+        "status":"1",
         "caption":"泰洋系-测试",
         "approval":"同意审批"
     },{
         "id":2,
         "title":"泰洋系-测试测试",
-        "number":"164827231",
+        "number":"510010496",
         "type":1,
         "img":"../src/assets/head.jpg",
         "applicant":"泰洋系",
@@ -30,13 +30,13 @@
         "startTime":"2018-12-13",
         "endTime":"2018-12-14",
         "fieldwork":"测试",
-        "state":"1",
+        "status":"1",
         "caption":"泰洋系-测试",
         "approval":"待审批" 
     },{
         "id":3,
         "title":"泰洋系-测试测试",
-        "number":"1368184786",
+        "number":"1713629715",
         "type":2,
         "img":"../src/assets/head.jpg",
         "applicant":"泰洋系",
@@ -47,13 +47,13 @@
         "startTime":"2018-12-13",
         "endTime":"2018-12-14",
         "fieldwork":"测试",
-        "state":"1",
+        "status":"1",
         "caption":"泰洋系-测试",
         "approval":"待审批" 
     },{
         "id":4,
         "title":"泰洋系-测试测试",
-        "number":"1610898232",
+        "number":"1092047564",
         "type":3,
         "img":"../src/assets/head.jpg",
         "applicant":"泰洋系",
@@ -64,13 +64,13 @@
         "startTime":"2018-12-13",
         "endTime":"2018-12-14",
         "fieldwork":"测试",
-        "state":"1",
+        "status":"1",
         "caption":"泰洋系-测试",
         "approval":"同意审批" 
     } ,{
         "id":5,
         "title":"泰洋系-测试测试",
-        "number":"683679371",
+        "number":"164827231",
         "type":4,
         "img":"../src/assets/head.jpg",
         "applicant":"泰洋系",
@@ -81,7 +81,7 @@
         "startTime":"2018-12-13",
         "endTime":"2018-12-14",
         "fieldwork":"测试",
-        "state":"1",
+        "status":"1",
         "caption":"泰洋系-测试",
         "approval":"拒绝审批" 
     }

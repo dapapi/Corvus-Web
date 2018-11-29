@@ -295,7 +295,6 @@
                     </div>
 
                 </div>
-
             </div>
 
             <div class="panel">
@@ -306,7 +305,7 @@
                         </div>
                         <div class="card-block">
                             <div class="col-md-7 pl-0">
-                                <TaskFollowUp :follow-type="'客户'"></TaskFollowUp>
+                                <TaskFollowUp :follow-type="'客户'" :trailId='clientId' trailType='clients'></TaskFollowUp>
                             </div>
                         </div>
                     </div>
@@ -583,7 +582,8 @@
                     include: 'principal,trail.expectations'
                 };
                 let _this = this;
-                fetch('get', '/clients/' + this.clientId + '/projects/search', data).then(function (response) {
+                fetch('get', '/projects/search', data).then(function (response) {
+                // fetch('get', '/clients/projects/search', data).then(function (response) {
                     _this.clientProjectsInfo = response.data
                 })
             },
@@ -595,14 +595,21 @@
                 let _this = this;
                 fetch('get', '/clients/' + this.clientId + '/contacts').then(function (response) {
                     _this.clientContactsInfo = response.data
-
+                    
                 })
             },
 
             addContact: function () {
-                let _this = this;
+                const data = {
+                    name: this.contactName,
+                    phone: this.contactPhone,
+                    position: this.contactPosition
+                }
+                let _this = this
                 fetch('get', '/clients/' + this.clientId + '/contacts', data).then(function (response) {
+                    // console.log(response)
                     _this.clientContactsInfo.push(response.data);
+                    // console.log(_this.clientContactsInfo)
                     $('#addContact').modal('hide')
                 })
             },

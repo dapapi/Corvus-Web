@@ -600,7 +600,7 @@
                 </div>
             </div>
 
-            <div class="panel">
+            <div class="panel" v-if="projectId">
                 <div class="col-md-12">
                     <div class="card col-md-12">
                         <div class="card-header card-header-transparent card-header-bordered">
@@ -608,7 +608,8 @@
                         </div>
                         <div class="card-block">
                             <div class="col-md-7 pl-0">
-                                <TaskFollowUp :follow-type="'项目'"></TaskFollowUp>
+                                <TaskFollowUp :follow-type="'项目'" :trailId="projectId"
+                                              trailType="projects"></TaskFollowUp>
                             </div>
                         </div>
                     </div>
@@ -1001,7 +1002,7 @@
     export default {
         data: function () {
             return {
-                taskId: '',
+                projectId: '',
                 changeInfo: {},
                 isEdit: false,
                 projectInfo: '',
@@ -1193,7 +1194,6 @@
 
             addInfo: function (value, name) {
                 this.addInfoArr[name] = value
-                console.log(this.addInfoArr)
             }
 
 

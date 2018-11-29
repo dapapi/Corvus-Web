@@ -124,6 +124,16 @@ export default new Router({
             component: () => import('./views/staff/history.vue'),
         },
         {
+            path: '/staff/apply',
+            name: 'staffApply',
+            component: () => import('./views/staff/apply.vue'),
+        },
+        {
+            path: '/address',
+            name: 'address',
+            component: () => import('./views/address/index.vue')
+        },
+        {
             path: '/approval',
             name: 'approval',
             redirect: '/approval/initiate',
@@ -145,10 +155,22 @@ export default new Router({
                     path: '/approval/only',
                     component: () => import('./views/approval/only.vue')
                 },
-                // {
-                //   path: '/approval/general',
-                //   component: () => import('./views/approval/general.vue')
-                // },
+                 {
+                   path: '/approval/general',
+                   component: () => import('./views/approval/general.vue')
+                 },
+                 {
+                    path: '/approval/currency',
+                    component: () => import('./views/approval/currency.vue')
+                  },
+                  {
+                    path: '/approval/cur',
+                    component: () => import('./views/approval/cur.vue')
+                  },
+                  {
+                    path: '/approval/account',
+                    component: () => import('./views/approval/account.vue')
+                  },
                 {
                     path: '/application/:id',
                     name: 'approval/detail',

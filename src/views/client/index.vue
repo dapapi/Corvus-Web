@@ -13,16 +13,19 @@
             <div class="panel col-md-12 py-5">
                 <div class="clearfix">
                     <div class="col-md-3 example float-left">
-                        <input type="text" class="form-control" id="inputPlaceholder" placeholder="请输入项目昵称"
-                               style="width: 220px">
+                        <input type="text" class="form-control" id="inputPlaceholder" placeholder="请输入公司名称"
+                               style="width: 220px" v-model="companyName" @blur="changeCompany">
                     </div>
                     <div class="col-md-3 example float-left">
-                        <selectors @change=""
-                                   :placeholder="'请选择负责人'"></selectors>
+                        <!-- <selectors @change=""
+                                   :placeholder="'请选择负责人'"></selectors> -->
+                        <input-selectors :placeholder="'请选择负责人'" @change="changePrincipalSelect"></input-selectors>
                     </div>
                     <div class="col-md-3 example float-left">
-                        <selectors @change=""
-                                   :placeholder="'请选择级别'"></selectors>
+                        <!-- <selectors @change=""
+                                   :placeholder="'请选择级别'"></selectors> -->
+                        <selectors :options="clientLevelArr" :placeholder="'请选择公司级别'"
+                                @change="changeClientLevelSelect"></selectors>
                     </div>
                     <div class="col-md-3 example float-left">
                         <button type="button" class="btn btn-default waves-effect waves-classic float-right"
@@ -165,7 +168,7 @@
                         </div>
                         <div class="modal-footer">
                             <button class="btn btn-sm btn-white btn-pure" data-dismiss="modal">取消</button>
-                            <button class="btn btn-primary" type="submit" @click="addClient">确定</button>
+                            <button class="btn btn-primary" type="submit" data-dismiss="modal" @click="addClient">确定</button>
                         </div>
 
                     </div>
@@ -179,7 +182,7 @@
 <script>
     import fetch from '../../assets/utils/fetch.js'
     import config from '../../assets/js/config'
-
+    const clientLevelArr = [{name: '全部', value: ''}, ...config.clientLevelArr]
     export default {
         data: function () {
             return {
@@ -188,7 +191,7 @@
                 total_pages: 0,
                 customizeInfo: config.customizeInfo,
                 clientTypeArr: config.clientTypeArr,
-                clientLevelArr: config.clientLevelArr,
+                clientLevelArr: clientLevelArr,
                 clientsInfo: [],
                 companiesArr: [],
                 clientScaleArr: config.clientScaleArr,
@@ -202,6 +205,10 @@
                 clientContactPosition: '',
                 clientDecision: '',
                 clientRemark: '',
+                clientPrincipalSearch: '', // 条件筛选的负责人
+                clientPrincipalIdSearch: '', // 负责人id
+                clientLevelSearch: '', // 条件筛选的公司级别
+                companyName: '', // 公司名称
             }
         },
 
@@ -213,16 +220,32 @@
         methods: {
 
             getClients: function (pageNum = 1) {
-                let data = {
+                const params = {
                     page: pageNum,
                     include: 'principal',
                 };
-                let _this = this;
-                fetch('get', '/clients', data).then(function (response) {
-                    _this.clientsInfo = response.data;
-                    _this.current_page = response.meta.pagination.current_page;
-                    _this.total = response.meta.pagination.total;
-                    _this.total_pages = response.meta.pagination.total_pages;
+
+                let url = '/clients'
+
+                if (this.companyName) {
+                    params.keyword = this.companyName
+                }
+                if (this.clientLevelSearch) {
+                    params.grade = this.clientLevelSearch
+                }
+                if (this.clientPrincipalIdSearch) {
+                    params.principal_id = this.clientPrincipalIdSearch
+                }
+
+                if (this.companyName || this.clientLevelSearch || this.clientPrincipalIdSearch) {
+                    url = '/clients/filter'
+                }
+
+                fetch('get', url, params).then( response => {
+                    this.clientsInfo = response.data;
+                    this.current_page = response.meta.pagination.current_page;
+                    this.total = response.meta.pagination.total;
+                    this.total_pages = response.meta.pagination.total_pages;
                 })
             },
 
@@ -240,21 +263,25 @@
             },
 
             addClient: function () {
+                if (this.clientContactPhone.length !== 11) {
+                    toastr.error('手机号码格式不对！');
+                    return
+                }
                 let data = {
-                    type: app.clientType,
-                    company: app.clientName,
-                    grade: app.clientLevel,
+                    type: this.clientType,
+                    company: this.clientName,
+                    grade: this.clientLevel,
                     // region_id: '',
                     address: 'test',
                     principal_id: this.$store.state.newPrincipalInfo.id,
                     contact: {
-                        name: app.clientContact,
-                        phone: app.clientContactPhone,
-                        position: app.clientContactPosition
+                        name: this.clientContact,
+                        phone: this.clientContactPhone,
+                        position: this.clientContactPosition
                     },
-                    keyman: app.clientDecision,
-                    size: app.clientScale,
-                    desc: app.clientRemark
+                    keyman: this.clientDecision,
+                    size: this.clientScale,
+                    desc: this.clientRemark
                 };
                 let _this = this;
                 fetch('post', '/clients', data).then(function (response) {
@@ -271,8 +298,8 @@
                 this.$router.push({path: 'clients/' + clientId});
             },
 
-            changCompany: function (value) {
-                console.log(value)
+            changeCompany: function () {
+                this.getClients()
             },
 
             changeClientType: function (value) {
@@ -287,11 +314,20 @@
                 this.clientPrincipal = value
             },
 
+            changePrincipalSelect (value) {
+                this.clientPrincipalSearch = value
+                this.clientPrincipalIdSearch = this.$store.state.newPrincipalInfo.id
+                this.getClients()
+            },
+
+            changeClientLevelSelect (value) {
+                this.clientLevelSearch = value
+                this.getClients()
+            },
+
             changeClientScale: function (value) {
                 this.clientScale = value
-            }
-
-
+            },
         }
     }
 </script>

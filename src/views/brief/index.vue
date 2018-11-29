@@ -34,7 +34,7 @@
                 <i class="back-icon md-plus animation-scale-up" aria-hidden="true"></i>
             </button>
         </div>
-        <submitreport></submitreport>
+        <submit-report></submit-report>
     </div>
 </template>
 <script>

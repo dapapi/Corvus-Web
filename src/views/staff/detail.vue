@@ -804,4 +804,14 @@ export default {
         right: 24px;
     }
 }
+.task-follow {
+    padding: 0 15px;
+}
+
+.task-follow li {
+    list-style: none;
+    position: relative;
+    padding-bottom: 10px;
+    border-left: 1px solid #E0E0E0;
+}
 </style>
