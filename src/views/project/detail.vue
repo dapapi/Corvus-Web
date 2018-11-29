@@ -452,14 +452,16 @@
                                              :class="isEdit ? 'edit-height':'' ">
                                             <div class="col-md-2 float-left text-right pl-0">项目名称</div>
                                             <div class="col-md-10 float-left font-weight-bold">
-                                                <EditInput :is-edit="isEdit" :content="projectInfo.title"></EditInput>
+                                                <EditInput :is-edit="isEdit" :content="projectInfo.title"
+                                                           @change="(value) => changeProjectBaseInfo(value, 'title')"></EditInput>
                                             </div>
                                         </div>
                                         <div class="card-text py-10 px-0 clearfix col-md-6 float-left"
                                              :class="isEdit ? 'edit-height':'' ">
                                             <div class="col-md-2 float-left text-right pl-0">负责人</div>
                                             <div class="col-md-10 float-left font-weight-bold">
-                                                <EditInputSelector :is-edit="isEdit"></EditInputSelector>
+                                                <EditInputSelector :is-edit="isEdit"
+                                                                   @change="(value) => changeProjectBaseInfo(value, 'principal_id')"></EditInputSelector>
                                             </div>
                                         </div>
                                         <div class="card-text py-10 px-0 clearfix col-md-6 float-left"
@@ -467,7 +469,8 @@
                                             <div class="col-md-2 float-left text-right pl-0">可见范围</div>
                                             <div class="col-md-10 float-left font-weight-bold">
                                                 <EditSelector :is-edit="isEdit" :content="projectInfo.privacy"
-                                                              :options="visibleRangeArr"></EditSelector>
+                                                              :options="visibleRangeArr"
+                                                              @change="(value) => changeProjectBaseInfo(value, 'privacy')"></EditSelector>
                                             </div>
                                         </div>
                                         <div class="card-text py-10 px-0 clearfix col-md-6 float-left"
@@ -475,7 +478,8 @@
                                             <div class="col-md-2 float-left text-right pl-0">优先级</div>
                                             <div class="col-md-10 float-left font-weight-bold">
                                                 <EditSelector :is-edit="isEdit" :options="levelArr"
-                                                              :content="projectInfo.priority"></EditSelector>
+                                                              :content="projectInfo.priority"
+                                                              @change="(value) => changeProjectBaseInfo(value, 'priority')"></EditSelector>
                                             </div>
                                         </div>
                                         <div class="card-text py-10 px-0 clearfix col-md-6 float-left"
@@ -483,7 +487,8 @@
                                             <div class="col-md-2 float-left text-right pl-0">开始时间</div>
                                             <div class="col-md-10 float-left font-weight-bold">
                                                 <EditDatepicker :is-edit="isEdit"
-                                                                :content="projectInfo.start_at"></EditDatepicker>
+                                                                :content="projectInfo.start_at"
+                                                                @change="(value) => changeProjectBaseInfo(value, 'start_at')"></EditDatepicker>
                                             </div>
                                         </div>
                                         <div class="card-text py-10 px-0 clearfix col-md-6 float-left"
@@ -491,7 +496,8 @@
                                             <div class="col-md-2 float-left text-right pl-0">截止时间</div>
                                             <div class="col-md-10 float-left font-weight-bold">
                                                 <EditDatepicker :is-edit="isEdit"
-                                                                :content="projectInfo.end_at"></EditDatepicker>
+                                                                :content="projectInfo.end_at"
+                                                                @change="(value) => changeProjectBaseInfo(value, 'end_at')"></EditDatepicker>
                                             </div>
                                         </div>
                                         <div v-if="projectInfo.fields">
@@ -512,19 +518,21 @@
                                                     </template>
                                                     <template v-else-if="field.field.field_type === 3">
                                                         <EditableSearchBox :options="starsArr" :multiple="true"
+                                                                           :is-edit="isEdit"
                                                                            @change="(value) => addInfo(value, field.id )"></EditableSearchBox>
                                                     </template>
                                                     <template v-else-if="field.field.field_type === 4">
-                                                        <EditDatepicker :content="field.value"
+                                                        <EditDatepicker :content="field.value" :is-edit="isEdit"
                                                                         @change="(value) => addInfo(value, field.id )"></EditDatepicker>
                                                     </template>
                                                     <template v-else-if="field.field.field_type === 5">
-                                                        <EditTextarea :content="field.value"
+                                                        <EditTextarea :content="field.value" :is-edit="isEdit"
                                                                       @change="(value) => addInfo(value, field.id )"></EditTextarea>
                                                     </template>
                                                     <template v-else-if="field.field.field_type === 6">
-                                                        <!--<EditSelector :content="field.value" :multiple="true"-->
-                                                        <!--@change="(value) => addInfo(value.join('|'), field.id )"></EditSelector>-->
+                                                        <EditSelector :content="field.value" :multiple="true"
+                                                                      :is-edit="isEdit"
+                                                                      @change="(value) => addInfo(value.join('|'), field.id )"></EditSelector>
                                                     </template>
                                                     <template v-else-if="field.field.field_type === 8">
                                                         <EditGroupDatePicker :content="field.value" :is-edit="isEdit"
@@ -533,11 +541,11 @@
                                                         </EditGroupDatePicker>
                                                     </template>
                                                     <template v-else-if="field.field.field_type === 10">
-                                                        <EditInputSelector
-                                                                @change="(value) => addInfo(value, field.id )"></EditInputSelector>
+                                                        <EditInputSelector :is-edit="isEdit"
+                                                                           @change="(value) => addInfo(value, field.id )"></EditInputSelector>
                                                     </template>
                                                     <template v-else-if="field.field.field_type === 11">
-                                                        <EditNumberSpinner :content="field.value"
+                                                        <EditNumberSpinner :content="field.value" :is-edit="isEdit"
                                                                            @change="(value) => addInfo(value, field.id )"></EditNumberSpinner>
                                                     </template>
                                                 </div>
@@ -1035,9 +1043,17 @@
                     include: 'principal,creator,fields,expectations',
                 };
                 fetch('get', '/projects/' + this.projectId, data).then(function (response) {
-                    for (let i = 0; i < response.data.fields.length; i++) {
-                        if (response.data.fields[i].field.field_type === 2 || response.data.fields[i].field.field_type === 6) {
-                            response.data.fields[i].field.contentArr = response.data.fields[i].field.content.split('|')
+                    for (let i = 0; i < response.data.fields.data.length; i++) {
+                        if (response.data.fields.data[i].field.field_type === 2 || response.data.fields.data[i].field.field_type === 6) {
+                            let content = response.data.fields.data[i].field.content.split('|');
+                            let contentArr = [];
+                            for (let j = 0; j < content.length; j++) {
+                                contentArr.push({
+                                    value: content[j],
+                                    name: content[j]
+                                })
+                            }
+                            response.data.fields.data[i].field.contentArr = contentArr;
                         }
                     }
                     _this.projectInfo = response.data
@@ -1104,8 +1120,11 @@
                 this.changeInfo = {};
             },
 
-            changeProjectBaseInfo: function () {
-
+            changeProjectBaseInfo: function (value, name) {
+                if (name === 'principal_id') {
+                    value = this.$store.state.principalInfo.id;
+                }
+                this.changeInfo[name] = value
             },
 
             cancelEdit: function () {
