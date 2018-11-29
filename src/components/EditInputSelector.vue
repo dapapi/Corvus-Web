@@ -12,7 +12,7 @@
 
 <script>
     export default {
-        name: "EditInput-selector",
+        name: "EditInputSelector",
         props: ['is-edit', 'selectType'],
         data() {
             return {

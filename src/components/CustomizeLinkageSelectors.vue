@@ -18,7 +18,7 @@
             <input type="text" class="form-control" v-if="valueType === 'input'" v-model="normalInput"
                    :onchange="inputChange">
             <datepicker v-if="valueType === 'date'" @change="datePickerChange"></datepicker>
-            <number-spinner v-if="valueType === 'number'" ref="numberSpinner"
+            <number-spinner v-if="valueType === 'number'" ref="numberSpinner" :shortInput="true"
                             @change="numberSpinnerChange"></number-spinner>
             <input-selectors v-if="valueType === 'person'"></input-selectors>
         </div>

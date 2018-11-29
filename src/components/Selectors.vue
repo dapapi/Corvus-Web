@@ -1,5 +1,6 @@
 <template>
-    <select data-plugin="selectpicker" :value="value" :data-live-search="searchable" :multiple="multiple" :title="placeholder">
+    <select data-plugin="selectpicker" :value="value" :data-live-search="searchable" :multiple="multiple"
+            :title="placeholder">
         <selectorsOptions v-for="option in this.options" v-bind:id="option.id" :val="option.value" :key="option.id">
             {{option.name}}
         </selectorsOptions>
@@ -18,7 +19,6 @@
             let self = this;
             $(this.$el).selectpicker().on('hidden.bs.select', function () {
                 self.$emit('change', $(this).val(), $(this)[0].selectedOptions[0].label, $(this)[0].selectedOptions[0].id);
-                
                 // 可以通过调用select方法，去改变父组件传过来的changeKey
                 if (self.changeKey) {
                     self.$emit('select', self.changeKey, $(this).val(), $(this)[0].selectedOptions[0].label)
@@ -38,16 +38,11 @@
                 }
             },
             options: function (newValue) {
-                console.log(newValue);
                 this.refresh()
             }
         },
         methods: {
 
-            hide () {
-                $(this.$el).selectpicker('destroy');
-            },
-   
             destroy() {
                 $(this.$el).selectpicker('destroy');
             },

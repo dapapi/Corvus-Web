@@ -9,7 +9,6 @@
 
 <script>
     import LeftMenu from '@/components/LeftMenu.vue'
-    import Approval from '@/components/Approval.vue'
 
     export default {
         name: 'app',
@@ -50,13 +49,8 @@
         margin: 0;
     }
 
-    .asSpinner input {
-        width: 78% !important;
-    }
-
     .asSpinner {
         height: 36px;
-        display: flex;
     }
 
     .site-menubar-body {
@@ -65,6 +59,16 @@
 
     .table td, .table th {
         border-top: none;
+    }
+
+    .table a {
+        text-decoration: none;
+        color: rgb(117, 117, 117);;
+    }
+
+    .table td {
+        padding-top: 1rem;
+        padding-bottom: 1rem;
     }
 
     .edit-wrap {
@@ -93,15 +97,6 @@
         border-bottom: 1px dashed #E0E0E0;
     }
 
-    .table a {
-        text-decoration: none;
-        color: rgb(117, 117, 117);;
-    }
-
-    .table td {
-        padding: 1rem;
-    }
-
     .hover-content:hover {
         color: #3f51b5;
     }
@@ -117,7 +112,7 @@
     }
 
     .page {
-        margin-left: 100px;
+        margin-left: 100px !important;
         min-height: 100vh;
     }
 
@@ -151,5 +146,4 @@
     .site-menu > .site-menu-item > .site-menu-sub {
         left: 100px;
     }
-
 </style>

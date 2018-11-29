@@ -36,12 +36,12 @@
                                aria-controls="forum-base"
                                aria-expanded="true" role="tab">所有项目</a>
                         </li>
-                        <li class="nav-item" role="presentation" @click="getProjects(1)">
+                        <li class="nav-item" role="presentation" @click="getProjects(1, 2)">
                             <a class="nav-link" data-toggle="tab" href="#forum-project"
                                aria-controls="forum-present"
                                aria-expanded="false" role="tab">我负责的</a>
                         </li>
-                        <li class="nav-item" role="presentation" @click="getProjects(1)">
+                        <li class="nav-item" role="presentation" @click="getProjects(1, 3)">
                             <a class="nav-link" data-toggle="tab" href="#forum-project"
                                aria-controls="forum-present"
                                aria-expanded="false" role="tab">我参与的</a>
@@ -78,6 +78,10 @@
                             </tr>
                             </tbody>
                         </table>
+                        <div class="col-md-1" style="margin: 6rem auto" v-if="projectsInfo.length === 0">
+                            <img src="https://res.papitube.com/corvus/images/content-none.png" alt=""
+                                 style="width: 100%">
+                        </div>
                         <pagination :current_page="current_page" :method="getProjects" :total_pages="total_pages"
                                     :total="total"></pagination>
                     </div>
@@ -140,91 +144,121 @@
                         <h4 class="modal-title">新增项目</h4>
                     </div>
                     <div class="modal-body">
-                        <div class="col-md-12 example clearfix">
+                        <!-- todo 默认带出的东西 添加的对象里没有 -->
+                        <div class="col-md-12 example clearfix" v-if="projectType != 5 && trailsArr.length > 0">
                             <div class="col-md-2 text-right float-left pl-0">销售线索</div>
                             <div class="col-md-10 float-left">
-                                <selectors @change="(value) => addInfo(value, 'name')"></selectors>
+                                <Selectors :options="trailsArr" @change="addProjectTrail" ref="trails"
+                                           :placeholder="'请选择销售线索'"></Selectors>
                             </div>
                         </div>
+                        <!--<div class="col-md-12 example clearfix" v-if="projectType != 5">-->
+                        <!--<div class="col-md-2 text-right float-left pl-0">项目来源</div>-->
+                        <!--<div class="col-md-10 float-left">-->
+                        <!--<div class="float-left" v-if="trailOriginArr.length > 0">-->
+                        <!--<Selectors :options="trailOriginArr" @change="changeTrailOriginType"></Selectors>-->
+                        <!--</div>-->
+                        <!--<template v-if="trailOrigin === '1' || trailOrigin === '2' || trailOrigin === '3'">-->
+                        <!--<div class="col-md-5 float-left pr-0">-->
+                        <!--<input type="text" class="form-control" title="" v-model="email">-->
+                        <!--</div>-->
+                        <!--</template>-->
+                        <!--<template v-else-if="trailOrigin === '4' || trailOrigin === '5'">-->
+                        <!--<div class="col-md-5 float-left pr-0">-->
+                        <!--<InputSelectors></InputSelectors>-->
+                        <!--</div>-->
+                        <!--</template>-->
+                        <!--</div>-->
+                        <!--</div>-->
                         <div class="col-md-12 example clearfix">
                             <div class="col-md-2 text-right float-left pl-0">项目名称</div>
                             <div class="col-md-10 float-left">
-                                <emit-input @change="(value) => addInfo(value, 'name')"></emit-input>
+                                <EmitInput @change="(value) => addProjectBaseInfo(value, 'title')"></EmitInput>
                             </div>
                         </div>
                         <div class="col-md-12 example clearfix">
                             <div class="col-md-2 text-right float-left pl-0">项目负责人</div>
                             <div class="col-md-10 float-left">
-                                <input-selectors @change="(value) => addInfo(value, 'principal_id')"></input-selectors>
+                                <InputSelectors
+                                        @change="(value) => addProjectBaseInfo(value, 'principal_id')"></InputSelectors>
+                            </div>
+                        </div>
+                        <div class="col-md-12 example clearfix" v-if="projectType != 5 && starsArr.length > 0">
+                            <div class="col-md-2 text-right float-left pl-0">目标艺人</div>
+                            <div class="col-md-10 float-left">
+                                <Selectors :multiple="true" :options="starsArr" ref="intentionArtist"
+                                           :placeholder="'请选择目标艺人'"
+                                           @change="(value) => addProjectBaseInfo(value, 'expectations')"></Selectors>
                             </div>
                         </div>
                         <div class="col-md-12 example clearfix">
                             <div class="col-md-2 text-right float-left pl-0">优先级</div>
                             <div class="col-md-10 float-left">
-                                <selectors :options="levelArr"
-                                           @change="(value) => addInfo(value, 'priority')"></selectors>
+                                <Selectors :options="levelArr" ref="priorityLevel"
+                                           @change="(value) => addProjectBaseInfo(value, 'priority')"></Selectors>
                             </div>
                         </div>
                         <div class="col-md-12 example clearfix">
                             <div class="col-md-2 text-right float-left pl-0">可见范围</div>
                             <div class="col-md-10 float-left">
-                                <selectors :options="visibleRangeArr"
-                                           @change="(value) => addInfo(value, 'name')"></selectors>
+                                <Selectors :options="visibleRangeArr" :placeholder="'请选择可见范围'"
+                                           @change="(value) => addProjectBaseInfo(value, 'privacy')"></Selectors>
                             </div>
                         </div>
                         <div class="col-md-12 example clearfix">
                             <div class="col-md-2 text-right float-left pl-0">开始时间</div>
                             <div class="col-md-10 float-left">
-                                <datepicker @change="(value) => addInfo(value, 'start_at')"></datepicker>
+                                <Datepicker @change="(value) => addProjectBaseInfo(value, 'start_at')"></Datepicker>
                             </div>
                         </div>
                         <div class="col-md-12 example clearfix">
                             <div class="col-md-2 text-right float-left pl-0">截止时间</div>
                             <div class="col-md-10 float-left">
-                                <datepicker @change="(value) => addInfo(value, 'end_at')"></datepicker>
+                                <Datepicker @change="(value) => addProjectBaseInfo(value, 'end_at')"></Datepicker>
                             </div>
                         </div>
                         <div class="col-md-12 example clearfix" v-for="field in projectFieldsArr">
                             <div class="col-md-2 text-right float-left pl-0">{{ field.key }}</div>
                             <div class="col-md-10 float-left">
                                 <template v-if="field.field_type === 1">
-                                    <emit-input @change="(value) => addInfo(value, field.key )"></emit-input>
+                                    <EmitInput @change="(value) => addInfo(value, field.id )"></EmitInput>
                                 </template>
                                 <template v-else-if="field.field_type === 2">
-                                    <selectors :options="field.contentArr"
-                                               @change="(value) => addInfo(value, field.key )"></selectors>
+                                    <Selectors :options="field.contentArr" :placeholder="'请选择' + field.key"
+                                               @change="(value) => addInfo(value, field.id )"></Selectors>
                                 </template>
                                 <template v-else-if="field.field_type === 3">
-                                    <editable-search-box :options="starsArr" :multiple="true"
-                                                         @change="(value) => addInfo(value, field.key )"></editable-search-box>
+                                    <EditableSearchBox :options="starsArr" :multiple="true"
+                                                       @change="(value) => addInfo(value, field.id )"></EditableSearchBox>
                                 </template>
                                 <template v-else-if="field.field_type === 4">
-                                    <datepicker @change="(value) => addInfo(value, field.key )"></datepicker>
+                                    <Datepicker @change="(value) => addInfo(value, field.id )"></Datepicker>
                                 </template>
                                 <template v-else-if="field.field_type === 5">
-                                    <textarea title="" class="form-control"
-                                              @change="(value) => addInfo(value, field.key )"></textarea>
+                                    <NormalTextarea title="" class="form-control"
+                                                    @change="(value) => addInfo(value, field.id )"></NormalTextarea>
                                 </template>
                                 <template v-else-if="field.field_type === 6">
-                                    <selectors :options="field.contentArr" :multiple="true"
-                                               @change="(value) => addInfo(value, field.key )"></selectors>
+                                    <Selectors :options="field.contentArr" :multiple="true"
+                                               :placeholder="'请选择' + field.key"
+                                               @change="(value) => addInfo(value.join('|'), field.id )"></Selectors>
                                 </template>
                                 <template v-else-if="field.field_type === 8">
-                                    <group-datepicker
-                                            @change="(value) => addInfo(value, field.key )"></group-datepicker>
+                                    <GroupDatepicker
+                                            @change="(from, to) => addInfo(from + '|' + to, field.id )"></GroupDatepicker>
                                 </template>
                                 <template v-else-if="field.field_type === 10">
-                                    <input-selectors @change="(value) => addInfo(value, field.key )"></input-selectors>
+                                    <InputSelectors @change="(value) => addInfo(value, field.id )"></InputSelectors>
                                 </template>
                                 <template v-else-if="field.field_type === 11">
-                                    <number-spinner @change="(value) => addInfo(value, field.key )"></number-spinner>
+                                    <NumberSpinner @change="(value) => addInfo(value, field.id )"></NumberSpinner>
                                 </template>
                             </div>
                         </div>
                         <div class="col-md-12 example clearfix">
                             <div class="col-md-2 text-right float-left pl-0">备注</div>
                             <div class="col-md-10 float-left">
-                                <emit-input @change="(value) => addInfo(value, 'desc')"></emit-input>
+                                <emit-input @change="(value) => addProjectBaseInfo(value, 'desc')"></emit-input>
                             </div>
                         </div>
                     </div>
@@ -249,7 +283,7 @@
 
         data: function () {
             return {
-                total: 2,
+                total: 0,
                 current_page: 1,
                 total_pages: 1,
                 companyArr: [],
@@ -264,6 +298,13 @@
                 addInfoArr: {},
                 levelArr: config.levelArr,
                 visibleRangeArr: config.visibleRangeArr,
+                trailOriginArr: config.trailOrigin,
+                trailsArr: [],
+                projectBaseInfo: {},
+                trailsAllInfo: '',
+                trailOrigin: '',
+                email: '',
+
             }
         },
 
@@ -271,16 +312,22 @@
             this.getClients();
             this.getStars();
             this.getProjects();
+            this.getTrail();
         },
 
         methods: {
 
-            getProjects: function (pageNum = 1) {
+            getProjects: function (pageNum = 1, type = null) {
                 let data = {
                     page: pageNum,
                 };
+                let url = '/projects';
+                if (type) {
+                    url = '/projects/my';
+                    data.type = type;
+                }
                 let _this = this;
-                fetch('get', '/projects', data).then(function (response) {
+                fetch('get', url, data).then(function (response) {
                     _this.projectsInfo = response.data
 
                 })
@@ -327,28 +374,35 @@
             },
 
             addProject: function () {
-
-            },
-
-            changeLinkageCompany: function (value) {
-                console.log(value)
-            },
-
-            changeTargetArtist: function (value) {
-                console.log(value)
+                this.projectBaseInfo.fields = this.addInfoArr;
+                this.projectBaseInfo.type = this.projectType;
+                let _this = this;
+                fetch('post', '/projects', this.projectBaseInfo).then(function (response) {
+                    $('#addProject').modal('hide');
+                    $('#selectProjectType').modal('hide');
+                    _this.$router.push({path: 'projects/' + response.data.id});
+                })
             },
 
             changeProjectType: function (value) {
-                app.projectType = value
+                this.projectType = value;
+                if (this.projectType == 5) {
+                    this.$refs.trails.destroy()
+                }
             },
 
             selectProjectType: function () {
+                this.projectFieldsArr = [];
+                if (this.projectType == 5) {
+                    return
+                }
                 let _this = this;
                 fetch('get', '/project_fields', {
-                    type: app.projectType
+                    type: _this.projectType,
+                    status: 1,
                 }).then(function (response) {
                     for (let i = 0; i < response.data.length; i++) {
-                        if (response.data[i].field_type === 2) {
+                        if (response.data[i].field_type === 2 || response.data[i].field_type === 6) {
                             response.data[i].contentArr = [];
                             for (let j = 0; j < response.data[i].content.length; j++) {
                                 response.data[i].contentArr.push({
@@ -361,20 +415,57 @@
                     _this.projectFieldsArr = response.data
 
                 });
-                if (_this.projectType !== 5) {
-                    this.getTrail()
-                }
             },
 
             getTrail: function () {
-                fetch('get', '/trails', {type: this.projectType}).then(function () {
-
+                let _this = this;
+                fetch('get', '/trails/all', {include: 'principal,expectations'}).then(function (response) {
+                    for (let i = 0; i < response.data.length; i++) {
+                        _this.trailsArr.push({
+                            name: response.data[i].title,
+                            id: response.data[i].id,
+                            value: response.data[i].id
+                        })
+                    }
+                    _this.trailsAllInfo = response.data;
                 })
             },
 
 
             addInfo: function (value, name) {
+                console.log(name);
+                console.log(value);
                 this.addInfoArr[name] = value
+            },
+
+            addProjectTrail: function (value) {
+                this.projectBaseInfo.trail = {
+                    id: value
+                };
+                let trailInfo = this.trailsAllInfo.find(item => item.id == value);
+                this.$store.dispatch('changePrincipal', {
+                    data: trailInfo.principal.data
+                });
+                this.projectBaseInfo.principal_id = trailInfo.principal.data.id;
+                let artistsArr = [];
+                for (let i = 0; i < trailInfo.expectations.data.length; i++) {
+                    artistsArr.push(trailInfo.expectations.data[i].id)
+                }
+                this.$refs.intentionArtist.setValue(artistsArr);
+                this.projectBaseInfo.expectations = artistsArr;
+                this.$refs.priorityLevel.setValue(trailInfo.priority);
+                this.projectBaseInfo.priority = trailInfo.priority;
+            },
+
+            addProjectBaseInfo: function (value, name) {
+                if (name === 'principal_id') {
+                    value = this.$store.state.newPrincipalInfo.id;
+                }
+                this.projectBaseInfo[name] = value
+            },
+
+            changeTrailOriginType: function (value) {
+                this.trailOrigin = value
             }
 
         }
