@@ -1,7 +1,7 @@
 <template>
     <div class="">
         <template v-if="isEditInput">
-            <textarea class="form-control" v-model="this.content"></textarea>
+            <textarea class="form-control" v-model="context" title=""></textarea>
         </template>
         <template v-else>
             {{ content }}
@@ -11,22 +11,28 @@
 
 <script>
     export default {
-        name: "editTextarea",
+        name: "EditTextarea",
         props: ['content', 'is-edit'],
         data() {
             return {
                 isEditInput: false,
+                context: ''
             }
         },
+
+        mounted() {
+            this.context = this.content
+        },
+
         watch: {
             isEdit(newValue) {
                 this.isEditInput = newValue;
             },
-            content(newValue) {
+
+            context(newValue) {
                 this.$emit('change', newValue)
             }
         },
-        methods: {}
     }
 </script>
 

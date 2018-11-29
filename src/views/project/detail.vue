@@ -186,7 +186,7 @@
                                 <tbody>
                                 <tr v-for="task in projectTasksInfo">
                                     <td class="pointer-content" @click="redirectTask(task.id)">{{ task.title }}</td>
-                                    <td>{{ task.type }}</td>
+                                    <td>{{ task.type.data.title }}</td>
                                     <td>{{ task.status }}</td>
                                     <td>{{ task.principal.data.name }}</td>
                                     <td>{{ task.end_at }}</td>
@@ -443,16 +443,16 @@
                                     </div>
                                     <div class="float-right mr-40" v-show="isEdit">
                                         <button class="btn btn-sm btn-white btn-pure" @click="cancelEdit">取消</button>
-                                        <button class="btn btn-primary" @click="changeProjectBaseInfo">确定</button>
+                                        <button class="btn btn-primary" @click="changeProjectInfo">确定</button>
                                     </div>
                                 </div>
-                                <div class="card-block">
+                                <div class="card-block" v-if="projectInfo.title">
                                     <div class="clearfix">
                                         <div class="card-text py-10 px-0 clearfix col-md-6 float-left"
                                              :class="isEdit ? 'edit-height':'' ">
                                             <div class="col-md-2 float-left text-right pl-0">项目名称</div>
                                             <div class="col-md-10 float-left font-weight-bold">
-                                                <EditInput :is-edit="isEdit" :content="projectInfo.title"
+                                                <EditInput :content="projectInfo.title" :is-edit="isEdit"
                                                            @change="(value) => changeProjectBaseInfo(value, 'title')"></EditInput>
                                             </div>
                                         </div>
@@ -556,8 +556,8 @@
                                              :class="isEdit ? 'edit-height':'' ">
                                             <div class="col-md-2 float-left text-right pl-0">备注</div>
                                             <div class="col-md-10 float-left font-weight-bold">
-                                                <EditTextarea :is-edit="isEdit"
-                                                              :content="projectInfo.desc"></EditTextarea>
+                                                <EditTextarea :is-edit="isEdit" :content="projectInfo.desc"
+                                                              @change="(value) => changeProjectBaseInfo(value, 'desc')"></EditTextarea>
                                             </div>
                                         </div>
                                     </div>
@@ -1023,6 +1023,7 @@
                 visibleRangeArr: config.visibleRangeArr,
                 levelArr: config.levelArr,
                 addInfoArr: [],
+                followStatus: '',
 
             }
         },
@@ -1056,7 +1057,13 @@
                             response.data.fields.data[i].field.contentArr = contentArr;
                         }
                     }
-                    _this.projectInfo = response.data
+                    _this.projectInfo = response.data;
+                    let params = {
+                        type: 'change',
+                        data: response.data.principal.data
+                    };
+                    params.data = response.data.principal.data;
+                    _this.$store.dispatch('changePrincipal', params)
                 })
             },
 
@@ -1072,6 +1079,14 @@
                     }
 
                 })
+            },
+
+            getProjectFollow: function () {
+                let data = {
+                    include: 'user',
+                    status: this.followStatus
+                };
+                fetch('get', '/projects/' + this.projectId + '/operate_log', data)
             },
 
             getProjectTasks: function () {
@@ -1118,6 +1133,7 @@
             editBaseInfo: function () {
                 this.isEdit = true;
                 this.changeInfo = {};
+                this.addInfoArr = {};
             },
 
             changeProjectBaseInfo: function (value, name) {
@@ -1125,6 +1141,14 @@
                     value = this.$store.state.principalInfo.id;
                 }
                 this.changeInfo[name] = value
+            },
+
+            changeProjectInfo: function () {
+                let data = this.changeInfo;
+                fetch('put', '/projects/' + this.projectId, data).then(function (response) {
+                    console.log(response)
+                    toastr.success('修改成功')
+                })
             },
 
             cancelEdit: function () {
@@ -1169,6 +1193,7 @@
 
             addInfo: function (value, name) {
                 this.addInfoArr[name] = value
+                console.log(this.addInfoArr)
             }
 
 
