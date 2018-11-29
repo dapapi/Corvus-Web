@@ -14,7 +14,7 @@
                 <div class="clearfix">
                     <div class="col-md-3 example float-left">
                         <input type="text" class="form-control" id="inputPlaceholder" placeholder="请输入销售线索名称"
-                               style="width: 220px">
+                               style="width: 220px" v-model="trailFilter" @blur='filterGo'>
                     </div>
                     <div class="col-md-3 example float-left">
                         <selectors :placeholder="'请选择销售进展'"></selectors>
@@ -45,7 +45,8 @@
                             <th class="cell-300" scope="col">负责人</th>
                         </tr>
                         <tbody>
-                        <tr v-for="trail in trailsInfo ">
+                        <tr v-for="trail in trailsInfo" :key='trail.id'>
+                            <!-- trailFilter?filterData:trailsInfo -->
                             <td class="pointer-content">
                                 <router-link :to="{name:'trails/detail', params: {id: trail.id}}">
                                     {{ trail.title }}
@@ -272,6 +273,7 @@
                 trailPrincipal: '',
                 trailContact: '',
                 trailContactPhone: '',
+                trailFilter:'',
                 email: '',
                 trailFee: '',
                 trailDesc: '',
@@ -283,6 +285,7 @@
                 priorityArr: config.priorityArr,
                 trailStatus: '',
                 cooperation: '',
+                filterData:'',
             }
         },
 
@@ -294,7 +297,17 @@
         },
 
         methods: {
-
+            filterGo(){
+                let _this = this;
+                 fetch('get', '/trails/filter?keyword='+this.trailFilter+'&include=principal,client,contact,recommendations,expectations').then(function (response) {
+                     
+                    console.log(response);
+                    _this.trailsInfo = response.data
+                    console.log(_this.trailsInfo);
+                    // _this.transIInfo = _this.filterData
+                })
+                this.$forceUpdate()
+            },
             getSales: function (pageNum = 1) {
                 let _this = this;
                 let data = {
@@ -348,6 +361,7 @@
             },
 
             addTrail: function () {
+                console.log(this.$store.state.newPrincipalInfo.id);
                 let data = {
                     title: this.trailName,
                     brand: this.brandName,
@@ -382,6 +396,7 @@
                 let _this = this;
                 fetch('post', '/trails', data).then(function (response) {
                     _this.$router.push({path: '/trails/' + response.data.id})
+                    console.log(response);
                 })
             },
 

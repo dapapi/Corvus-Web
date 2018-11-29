@@ -306,7 +306,7 @@
                         </div>
                         <div class="card-block">
                             <div class="col-md-7 pl-0">
-                                <TaskFollowUp :follow-type="'客户'"></TaskFollowUp>
+                                <TaskFollowUp :follow-type="'客户'" :trailId='clientId' trailType='clients'></TaskFollowUp>
                             </div>
                         </div>
                     </div>
