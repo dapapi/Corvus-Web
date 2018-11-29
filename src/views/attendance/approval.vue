@@ -88,13 +88,12 @@
                 </div>
         </div>
         
-        <submitreport></submitreport>
+        <submit-report></submit-report>
     </div>
 </template>
 <script>
 import fetch from '@/assets/utils/fetch'
 import config from '@/assets/js/config'
-import submitreport from '@/components/SubmitReport'
 
 export default {
     data(){
@@ -126,9 +125,6 @@ export default {
                 }
             ], 
         }
-    },
-    components:{
-        submitreport
     },
     mounted(){
         // this.getlist()
