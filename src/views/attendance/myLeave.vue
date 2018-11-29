@@ -1,12 +1,15 @@
 <template>
     <div class="page-main">
-        <div class="page-header page-header-bordered">
-            <h1 class="page-title">我的考勤统计</h1>
+        <div class="page-header page-header-bordered clearfix">
+            <h1 class="page-title float-left">我的请假统计</h1>
+            <div class="float-right">
+                <switch-year @click="getYear"></switch-year>
+            </div>
         </div>
         <div class="page-content container-fluid">
             
             <div class="panel p-20 pr-0">
-                <h4 class="text-center pb-10">2018年度考勤统计报表</h4>
+                <h4 class="text-center pb-10">{{this.year}}年度考勤统计报表</h4>
                  <table class="table">
                     <tr>
                         <th class="cell-300">月份／类型</th>
@@ -15,13 +18,45 @@
                         <th class="cell-100" scope="col">合计</th>
                     </tr>
                     <tr v-for="(item,index) in list" :key="index">
-                        <td>{{item.name}}</td>
-                        <td class="pointer-content" v-for="(item,index) in leaveType" :key="index">11</td>
-                        <!-- <td class="cell-300">1</td>
-                        <td class="cell-300">2</td>
-                        <td class="cell-300">4</td> -->
-                        <td class="cell-300">520</td>
-
+                        
+                        <td class="pointer-content">{{item.month}}月</td>
+                        <td v-if="item2.leave_type == '事假'" v-for="(item2,index) in item.daynumber" :key="index">
+                            <template v-if="item2.number>0">{{item2.number}}</template>
+                            <template v-else>-</template>
+                        </td>
+                        <td v-if="item2.leave_type == '病假'" v-for="(item2,index) in item.daynumber" :key="index">
+                            <template v-if="item2.number>0">{{item2.number}}</template>
+                            <template v-else>-</template>
+                        </td>
+                        <td v-if="item2.leave_type == '调休假'" v-for="(item2,index) in item.daynumber" :key="index">
+                            <template v-if="item2.number>0">{{item2.number}}</template>
+                            <template v-else>-</template>
+                        </td>
+                        <td v-if="item2.leave_type == '年假'" v-for="(item2,index) in item.daynumber" :key="index">
+                            <template v-if="item2.number>0">{{item2.number}}</template>
+                            <template v-else>-</template>
+                        </td>
+                        <td v-if="item2.leave_type == '婚假'" v-for="(item2,index) in item.daynumber" :key="index">
+                            <template v-if="item2.number>0">{{item2.number}}</template>
+                            <template v-else>-</template>
+                        </td>
+                        <td v-if="item2.leave_type == '产假'" v-for="(item2,index) in item.daynumber" :key="index">
+                            <template v-if="item2.number>0">{{item2.number}}</template>
+                            <template v-else>-</template>
+                        </td>
+                        <td v-if="item2.leave_type == '陪产假'" v-for="(item2,index) in item.daynumber" :key="index">
+                            <template v-if="item2.number>0">{{item2.number}}</template>
+                            <template v-else>-</template>
+                        </td>
+                        <td v-if="item2.leave_type == '丧假'" v-for="(item2,index) in item.daynumber" :key="index">
+                            <template v-if="item2.number>0">{{item2.number}}</template>
+                            <template v-else>-</template>
+                        </td>
+                        <td v-if="item2.leave_type == '其他'" v-for="(item2,index) in item.daynumber" :key="index">
+                            <template v-if="item2.number>0">{{item2.number}}</template>
+                            <template v-else>-</template>
+                        </td>
+                        <td>{{item.total}}</td>
                     </tr>
                 </table>
             </div>
@@ -41,60 +76,13 @@
     }
 </style>
 <script>
+import fetch from '@/assets/utils/fetch'
+import config from '@/assets/js/config'
+
 export default {
     data(){
         return {
-            list:[
-                {
-                    id:1,
-                    name:'1月'
-                },
-                {
-                    id:2,
-                    name:'2月'
-                },
-                {
-                    id:3,
-                    name:'3月'
-                },
-                {
-                    id:4,
-                    name:'4月'
-                },
-                {
-                    id:5,
-                    name:'5月'
-                },
-                {
-                    id:6,
-                    name:'6月'
-                },
-                {
-                    id:7,
-                    name:'7月'
-                },
-                {
-                    id:8,
-                    name:'8月'
-                },
-                {
-                    id:9,
-                    name:'9月'
-                },
-                {
-                    id:10,
-                    name:'10月'
-                },
-                {
-                    id:11,
-                    name:'11月'
-                },
-                {
-                    id:12,
-                    name:'12月'
-                }
-                
-            ],
+            list:[],
             leaveType:[
                 {
                     value:1,
@@ -106,7 +94,7 @@ export default {
                 },
                 {
                     value:3,
-                    name:'调休'
+                    name:'调休假'
                 },
                 {
                     value:4,
@@ -134,6 +122,57 @@ export default {
                 },
                 
             ],
+            MyLeave:[],
+            year:new Date().getFullYear()
+
+        }
+    },
+
+    mounted(){
+        this.getMyLeave()
+    },
+    methods:{
+        getYear:function(value){
+            this.year = value
+            this.getMyLeave()
+        },
+        getMyLeave:function(){
+            let _this =this
+            fetch('get', 'attendance/myselfleavelstatistics',{year:this.year}).then(function (res) {
+                _this.list = res.data
+                for (let i = 0; i < _this.list.length; i++) {
+                    if(_this.list[i].daynumber){
+                        let newArr = []
+                        _this.list[i].total =0
+                        for (let t = 0; t < _this.list[i].daynumber.length; t++) {
+                            _this.list[i].total = _this.list[i].total+_this.list[i].daynumber[t].number
+                            newArr.push(_this.list[i].daynumber[t].leave_type)
+                        }
+                        for (let j = 0; j < _this.leaveType.length; j++) {
+                            if(newArr.indexOf(_this.leaveType[j].name) == -1){
+                                _this.list[i].daynumber.push({
+                                    leave_type:_this.leaveType[j].name,
+                                    number:0
+                                })
+                            }
+                        }
+                            
+                    }else{
+                        _this.list[i].daynumber =[]
+                        _this.list[i].total = 0
+                        for (let l = 0; l< _this.leaveType.length; l++) {
+                            
+                            _this.list[i].daynumber.push({
+                                leave_type:_this.leaveType[l].name,
+                                number:0
+                            })
+                            
+                        }
+                    }
+                    
+                }
+                console.log(_this.list)
+            })
         }
     }
 }
