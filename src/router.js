@@ -124,6 +124,16 @@ export default new Router({
             component: () => import('./views/staff/history.vue'),
         },
         {
+            path: '/staff/apply',
+            name: 'staffApply',
+            component: () => import('./views/staff/apply.vue'),
+        },
+        {
+            path: '/address',
+            name: 'address',
+            component: () => import('./views/address/index.vue')
+        },
+        {
             path: '/approval',
             name: 'approval',
             redirect: '/approval/initiate',

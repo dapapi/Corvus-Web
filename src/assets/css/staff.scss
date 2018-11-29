@@ -65,17 +65,6 @@
     padding: 0 10px;
 }
 
-.task-follow {
-    padding: 0 15px;
-}
-
-.task-follow li {
-    list-style: none;
-    position: relative;
-    padding-bottom: 10px;
-    border-left: 1px solid #E0E0E0;
-}
-
 .change-text {
     line-height: 40px;
 }
@@ -85,4 +74,10 @@
     margin: 6px 4px 0 0;
     color: #838383;
     cursor: pointer;
+}
+
+.note {
+    font-size: 14px;
+    color: #999;
+    font-weight: 200;
 }

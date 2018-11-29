@@ -29,9 +29,10 @@
                         </div>
                     </div>
                     <div class="col-md-3 example float-left" 
-                        style="height: 36px; line-height: 36px; text-align: right;"
+                        style="height: 36px; line-height: 36px; text-align: right; font-size: 14px;"
                     >
-                        <span style="cursor: pointer" data-target="#examplePositionCenter" data-toggle="modal">报表</span>
+                        <span style="cursor: pointer; margin-right: 24px;" data-target="#examplePositionCenter" data-toggle="modal">报表</span>
+                        <span style="cursor: pointer"><router-link to="/staff/apply">申请表</router-link></span>
                         <!-- <button class="btn btn-primary" data-target="#examplePositionCenter"  type="button">Generate</button> -->
                     </div>
                     <Modal 
