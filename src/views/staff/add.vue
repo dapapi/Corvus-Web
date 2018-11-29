@@ -30,20 +30,25 @@
 
                     <div class="tab-content pt-20">
                       <div class="tab-pane active" id="exampleTabsOne" role="tabpanel">
-
+                        <div class="edit">
+                            <i v-if="!isEdit" @click="editInfo" class="icon md-edit"></i>
+                            <template v-else>
+                                <span class="save" @click="save">保存</span> <span class="cancel" @click="cancel">取消</span>
+                            </template>
+                        </div>
                         <div class="formName pd-b-15">个人资料 <span class="point"></span><span class="note">为必填项</span></div>
                         <div class="row">
                             <div class="col-md-6">
                                 <div class="example">
                                     <div class="col-md-3 text-right float-left">姓名(中文)</div>
                                     <div class="col-md-8 float-left pl-0 require">
-                                        <input type="text" v-model="nameCN" placeholder="1-30个字符" class="form-control">
+                                        <input type="text" :disabled="(!!userId) && !isEdit" v-model="nameCN" placeholder="1-30个字符" class="form-control">
                                     </div>
                                 </div>
                                 <div class="example">
                                     <div class="col-md-3 text-right float-left">姓名(英文)</div>
                                     <div class="col-md-8 float-left pl-0">
-                                        <input type="text" v-model="nameEN" placeholder="1-30个字符" class="form-control">
+                                        <input type="text" :disabled="(!!userId) && !isEdit" v-model="nameEN" placeholder="1-30个字符" class="form-control">
                                     </div>
                                 </div>
                                 <div class="example">
@@ -55,7 +60,7 @@
                                 <div class="example">
                                     <div class="col-md-3 text-right float-left">身份证号</div>
                                     <div class="col-md-8 float-left pl-0 require">
-                                        <input type="text" placeholder="" v-model="IDNum" class="form-control">
+                                        <input type="text" :disabled="(!!userId) && !isEdit" placeholder="" v-model="IDNum" class="form-control">
                                     </div>
                                 </div>
                             </div>
@@ -324,6 +329,7 @@ export default {
     name: 'StaffDetail',
     data () {
         return {
+            isEdit: false,
             userId: '',
             genderArr: genderArr,
             maritalStatusArr: maritalStatusArr,
@@ -532,6 +538,7 @@ export default {
             this.userId = route.params.id
             this.getData()
         }
+        console.log(!!(this.userId && this.isEdit))
     },
 
 	methods: {
@@ -633,8 +640,41 @@ export default {
         // 获取员工数据
         getData () {
             fetch('get', `/personnel/entry/${this.userId}?include=skills,education,training,record,familyData`).then(res => {
-                console.log(res)
+                const data = res.data
+                console.log(data)
+                this.nameCN = data.name
+                this.nameEN = data.en_name
+                this.gender = data.gender
+                this.IDNum = data.id_number
+                this.phoneNum = data.phone
+                this.entryTime = data.entry_time
+                this.politicalFace = data.political
+                this.maritalStatus = data.marriage
+                this.email = data.email
+                this.avatar = data.icon_url
+                this.birthDay = data.birth_time
+                this.householdAddress = data.current_address
+                this.nationality = data.national
+                this.bloodType = data.blood_type
+                this.homeAddress = data.cadastral_address
+                this.foreignLanguageLevel = data.language_level
+                this.computerSkill = data.computer_level
+                this.certificate = data.certificate
+                this.specialty = data.specialty
+                this.remarks = data.remark
+				this.isIll = data.disease
+                this.isPregnancy = data.pregnancy
+				this.agreeMove = data.migration
             })
+        },
+        editInfo () {
+            this.isEdit = !this.isEdit
+        },
+        save () {
+            this.editInfo()
+        },
+        cancel () {
+            this.editInfo()
         }
 	}
 }
@@ -643,3 +683,31 @@ export default {
 <style>
 @import '../../assets/css/staff.scss';
 </style>
+
+<style lang="scss" scoped>
+.edit {
+    display: inline-block;
+    position: absolute;
+    top: 64px;
+    right: 34px;
+    text-align: center;
+    z-index: 1000;
+    i {
+        display: inline-block;
+        width: 20px;
+        height: 20px;
+        cursor: pointer;
+    }
+    span {
+        cursor: pointer;
+    }
+    .save {
+        color: #3F51B5;
+        margin-right: 20px;
+    }
+    .cancel {
+        color: #e0e0e0;
+    }
+}
+</style>
+
