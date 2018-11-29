@@ -1158,15 +1158,11 @@
 
             changeProjectInfo: function () {
                 let data = this.changeInfo;
-                console.log('修改成功1')
                 fetch('put', '/projects/' + this.projectId, data).then(function (response) {
-                    // console.log(response)
-                    toastr.success('修改成功')
-                    console.log('修改成功2')
-
+                    toastr.success('修改成功');
+                    // todo 修改成功后页面显示信息未修改
+                    this.isEdit = false;
                 })
-                console.log('修改成功3')
-
             },
 
             cancelEdit: function () {
