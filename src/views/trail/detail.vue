@@ -618,6 +618,7 @@
                 this.changeInfo.resource_type = newValue
             },
             'trailInfo.contact.data.phone': function(newValue) {
+                console.log(newValue);
                 if (this.changeInfo.contact) {
                     this.changeInfo.contact.phone = newValue
                 } else {
@@ -804,11 +805,6 @@
             changeEndTime: function (value) {
                 this.endTime = value
             },
-
-            // taskPrincipalChange: function (value) {
-            //     console.log(value.id);
-            //     this.taskPrincipal.data = value.id
-            // },
 
             taskParticipantChange: function (value) {
                 this.taskParticipant.data = value
