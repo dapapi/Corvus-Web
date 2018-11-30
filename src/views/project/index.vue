@@ -366,7 +366,7 @@
                     data.status = value
                 }
                 if (type === 'principal' && value) {
-                    data.principal_ids = value
+                    data.principal_ids = value.join(',')
                 }
                 let _this = this;
                 this.paginationType = 'getFilterProjects';

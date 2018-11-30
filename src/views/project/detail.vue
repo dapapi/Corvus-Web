@@ -549,7 +549,7 @@
                                                         <EditGroupDatePicker
                                                                 :content="field.values ? field.values.data.value : ''"
                                                                 :is-edit="isEdit"
-                                                                @change="(from, to) => addInfo(from + '|' + to, field.id )">
+                                                                @change="(start, end) => addInfo(start + '|' + end, field.id )">
                                                         </EditGroupDatePicker>
                                                     </template>
                                                     <template v-else-if="field.field_type === 10">
@@ -1033,7 +1033,7 @@
                 invoiceTypeArr: config.invoiceTypeArr,
                 visibleRangeArr: config.visibleRangeArr,
                 levelArr: config.levelArr,
-                addInfoArr: [],
+                addInfoArr: {},
                 followStatus: '',
                 flagParticipantsIdArr: [],
 
@@ -1177,9 +1177,9 @@
                 let data = this.changeInfo;
                 data.fields = this.addInfoArr;
                 let _this = this;
+                // todo 参与人修改，添加和删除分开传
                 fetch('put', '/projects/' + this.projectId, data).then(function (response) {
                     toastr.success('修改成功');
-                    // todo 修改成功后页面显示信息未修改
                     _this.isEdit = false;
                     _this.getProject()
                 })
