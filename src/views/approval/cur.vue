@@ -4,40 +4,34 @@
         <div class="page-header page-header-bordered">
             <h1 class="page-title">我的申请</h1>
         </div>
-         <div class="page-content container-fluid  pt-20 pl-10">
+         <div class="page-content container-fluid  pt-20 px-20">
                <div class="panel col-md-12 clearfix p-10 mt-0">
                 <!-- <div class="clearfix"> -->
-                <div class="col-md-3 example float-left " style="left:-10px">
-                        <selectors :placeholder="'太阳系'" ></selectors>
+                <div class="col-md-3 example float-left " >
+                        <selectors :placeholder="'太阳系'" :options="data"></selectors>
                 </div>
-                 <div class="col-md-3 example float-left" style="left:40px">
+                 <div class="col-md-3 example float-left" >
                          <datepicker :placeholder="'开始时间'"></datepicker>
                 </div>
-                <div class="col-md-3 example float-left"  style="left:25px">
+                <div class="col-md-3 example float-left" >
                          <datepicker :placeholder="'结束时间'"></datepicker>
                 </div>
-                <div class="col-md-3 example float-left"  style="left:25px">
-                        <span>查询</span>
-                </div>
-                
                 </div>
         </div>
-        <div class="page-content container-fluid pl-10 ">
-             
+        <div class="page-content container-fluid px-20">       
             <div class="col-md-12 panel">
-                    <div>
-                    <div class="example pb-5">
+                    <div class="example pb-5 mt-0">
                         <table class="table table-hover is-indent mb-20" data-plugin="animateList" data-animate="fade"
                                data-child="tr"
                                data-selectable="selectable">
                             <tr>
-                                <th class="cell-300" scope="col">工号</th>
-                                <th class="cell-300" scope="col">姓名</th>
-                                <th class="cell-300" scope="col">部门</th>
-                                <th class="cell-300" scope="col">审批编号</th>
-                                <th class="cell-300" scope="col">申请时间</th>
-                                <th class="cell-300" scope="col">审批时间</th>
-                                <th class="cell-300" scope="col">审批人</th>   
+                                <th class="cell-300 pl-15" scope="col">工号</th>
+                                <th class="cell-300 pl-15" scope="col">姓名</th>
+                                <th class="cell-300 pl-15" scope="col">部门</th>
+                                <th class="cell-300 pl-15" scope="col">审批编号</th>
+                                <th class="cell-300 pl-15" scope="col">申请时间</th>
+                                <th class="cell-300 pl-15" scope="col">审批时间</th>
+                                <th class="cell-300 pl-15" scope="col">审批人</th>   
                             </tr>
                             <tr >
                                 <td>
@@ -148,27 +142,21 @@
                         </table>
                         <!-- <pagination :current_page="current_page" :method="getProjects" :total_pages="total_pages"
                                     :total="total"></pagination> -->
-                    </div>
                 </div>
                 </div>
         </div>
-        <div class="site-action" data-plugin="actionBtn" @click="redirectBriefAdd()">
-            <button type="button"  class="site-action-toggle btn-raised btn btn-success btn-floating waves-effect waves-classic">
-                <i class="front-icon md-plus animation-scale-up" aria-hidden="true"></i>
-                <i class="back-icon md-plus animation-scale-up" aria-hidden="true"></i>
-            </button>
-        </div>
-        <submitreport></submitreport>
     </div>
 </template>
 <script>
 import fetch from "@/assets/utils/fetch";
 import config from "@/assets/js/config";
+import data from "./selector.json"
 
 export default {
   data() {
     return {
-      list: []
+      list: [],
+      data: data
     };
   },
   mounted() {
@@ -218,6 +206,9 @@ tr {
 .example span{
     position: absolute;
     top:10px;
+}
+.panel{
+    margin:0;
 }
 </style>
 
