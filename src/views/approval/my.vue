@@ -28,13 +28,13 @@
         </div>
 
         <div class="page-content tab-content nav-tabs-animate bg-white">
-          <div class="tab-pane animation-fade active" id="forum-task" role="tabpanel">
+          <div class="tab-pane animation-fade active pt-20" id="forum-task" role="tabpanel">
             <table class="table table-hover is-indent" data-plugin="animateList" data-animate="fade"
               data-child="tr" data-selectable="selectable">
-              <tr class="animation-fade" style="animation-fill-mode: backwards; animation-duration: 250ms; animation-delay: 0ms;">
-                <th class="cell-300" scope="col">审批编号</th>
-                <th class="cell-300" scope="col">申请人</th>  
-                  <th class="cell-300" scope="col">
+              <tr class="animation-fade head" style="animation-fill-mode: backwards; animation-duration: 250ms; animation-delay: 0ms;">
+                <th class="cell-200 pt-20" scope="col">审批编号</th>
+                <th class="cell-200 pt-20" scope="col">申请人</th>  
+                  <th class="cell-200 pt-20" scope="col">
                     <div class="nav-item dropdown">
                       <a class="nav-link dropdown-toggle" data-toggle="dropdown" href="#"><font style="vertical-align: inherit;"><font style="vertical-align: inherit;">类型</font></font></a>
                       <div class="dropdown-menu" role="menu">
@@ -47,22 +47,22 @@
                     </div>
                   </th>  
                    
-                <th class="cell-300" scope="col">申请时间</th>
-                <th class="cell-300" scope="col">申请状态</th>
+                <th class="cell-200 pt-20" scope="col">申请时间</th>
+                <th class="cell-200 pt-20" scope="col">申请状态</th>
               </tr>
               <tr v-for="task in tasksInfo">
-                <td class="pointer-content">
+                <td class="pointer-content cell-200">
                   <router-link :to="{name:'approval/detail', params: {id: task.id}}">{{ task.title }}
                   </router-link>
                 </td>
-                <td class="cell-300">暂无</td>
-                <td class="cell-300">暂无</td>
-                <td>
+                <td class="cell-200">暂无</td>
+                <td class="cell-200">暂无</td>
+                <td class="cell-200">
                   <template v-if="task.status === 1">进行中</template>
                   <template v-if="task.status === 2">已完成</template>
                   <template v-if="task.status === 3">已停止</template>
                 </td>
-                <td>
+                <td class="cell-200">
                   <template v-if="task.principal">{{ task.principal.data.name }}</template>
                 </td>
 
@@ -359,9 +359,15 @@ a {
   text-align: left;
   margin-top: -8px;
   margin-left: -15px;
-  background: #fff;
 }
 .page-content{
   padding: 0 20px; 
+}
+tr:hover {
+    background-color: #f5f5f5;
+    cursor: pointer;
+}
+.head:hover{
+    background-color: #fff;
 }
 </style>
