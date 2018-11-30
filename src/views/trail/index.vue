@@ -332,7 +332,9 @@
             },
             principalFilter(value){
                 if(value){
+                    console.log(value);
                     let _this = this;
+                    console.log('/trails/filter?principal_ids='+value+'&include=principal,client,contact,recommendations,expectations');
                     fetch('get', '/trails/filter?principal_ids='+value+'&include=principal,client,contact,recommendations,expectations').then(function (response) {
                         _this.trailsInfo = response.data
                     })
