@@ -25,7 +25,7 @@
                     </ul>
                 </div>
 
-                <div class="page-content tab-content nav-tabs-animate bg-white">
+                <div class="page-content tab-content nav-tabs-animate bg-white ">
                     <div class="tab-pane animation-fade active pt-10" id="forum-task" role="tabpanel">
                         <table class="table table-hover is-indent" data-plugin="animateList" data-animate="fade"
                                data-child="tr"
@@ -185,52 +185,52 @@ export default {
                     toastr.success('创建成功');
                     $('#addTask').modal('hide');
                     redirect('detail?task_id=' + response.data.id)
-                })
-            },
+                    })
+                },
 
-    customize (value) {
-                console.log(value)
-            },
+                customize (value) {
+                    console.log(value)
+                },
 
-    changeLinkage (value) {
-                console.log(value)
-            },
+                changeLinkage (value) {
+                    console.log(value)
+                },
 
-    changeTaskType (value) {
-                this.taskType = value
-            },
+                changeTaskType (value) {
+                    this.taskType = value
+                },
 
-    principalChange (value) {
-                this.principal = value
-            },
+                principalChange (value) {
+                    this.principal = value
+                },
 
-    participantChange (value) {
-                let flagArr = [];
-                for (let i = 0; i < value.length; i++) {
-                    flagArr.push(value[i].id)
-                }
-                this.participants = flagArr
-            },
+                participantChange (value) {
+                    let flagArr = [];
+                    for (let i = 0; i < value.length; i++) {
+                        flagArr.push(value[i].id)
+                    }
+                    this.participants = flagArr
+                },
 
-    changeTaskLevel (value) {
-                this.taskLevel = value
-            },
+                changeTaskLevel (value) {
+                    this.taskLevel = value
+                },
 
-    changeStartTime (value) {
-                this.startTime = value
-            },
+                changeStartTime (value) {
+                    this.startTime = value
+                },
 
-    changeStartMinutes (value) {
-                this.startMinutes = value
-            },
+                changeStartMinutes (value) {
+                    this.startMinutes = value
+                },
 
-    changeEndTime (value) {
-                this.endTime = value
-            },
+                changeEndTime (value) {
+                    this.endTime = value
+                },
 
-    changeEndMinutes (value) {
-                this.endMinutes = value
-            },
+                changeEndMinutes (value) {
+                    this.endMinutes = value
+                },
   },
 
 };
@@ -239,6 +239,9 @@ export default {
 <style>
 .panel{
     box-shadow: 0 0 0 0;
+}
+.tab-content{
+    padding: 10px 0 10px 20px;
 }
 </style>
 
