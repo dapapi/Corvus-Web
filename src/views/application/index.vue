@@ -1,13 +1,10 @@
 <template>
 <div class="page">
-    <div class="page-header page-header-bordered mt-0">
+    <div class="page-header page-header-bordered mt-0 mb-0">
         <h1 class="page-title">工作台</h1>
-        <div class="page-header-actions" data-toggle="modal" data-target="#addCalendar">
-            <i class="icon md-plus font-size-20" aria-hidden="true"></i>
-        </div>
     </div>
     <div class="page-content container-fluid p-20" style="height:auto">
-          <div class="panel col-md-12 py-0 clearfix px-0 mb-0" style="height:auto ">
+          <div class="panel col-md-12 p-20 clearfix " style="height:auto ">
           <div class=" float-left py-0" style="width: 15%; height:100%; position: relative;">
             <div class="page-aside-inner page-aside-scroll scrollable is-enabled scrollable-vertical" style="position: relative;">
             <div data-role="container" class="scrollable-container" >

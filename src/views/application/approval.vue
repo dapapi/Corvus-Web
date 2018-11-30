@@ -7,7 +7,7 @@
                                aria-controls="forum-base"
                                aria-expanded="true" role="tab">待审批</a>
                         </li>
-                        <li class="nav-item" role="presentation" @click="getMyTasks(1,3)">
+                        <li class="nav-item" role="presentation" @click="getTasks(1)">
                             <a class="nav-link" data-toggle="tab" href="#forum-task"
                                aria-controls="forum-present"
                                aria-expanded="false" role="tab">已审批</a>
@@ -15,7 +15,7 @@
                     </ul>
                 </div>
                 <div class="page-content tab-content nav-tabs-animate bg-white">
-                    <div class="tab-pane animation-fade active" id="forum-task" role="tabpanel">
+                    <div class="tab-pane animation-fade active pt-10" id="forum-task" role="tabpanel">
                         <table class="table table-hover is-indent" data-plugin="animateList" data-animate="fade"
                                data-child="tr"
                                data-selectable="selectable">
