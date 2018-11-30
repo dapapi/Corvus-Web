@@ -538,7 +538,6 @@ export default {
             this.userId = route.params.id
             this.getData()
         }
-        console.log(!!(this.userId && this.isEdit))
     },
 
 	methods: {
@@ -641,7 +640,6 @@ export default {
         getData () {
             fetch('get', `/personnel/entry/${this.userId}?include=skills,education,training,record,familyData`).then(res => {
                 const data = res.data
-                console.log(data)
                 this.nameCN = data.name
                 this.nameEN = data.en_name
                 this.gender = data.gender

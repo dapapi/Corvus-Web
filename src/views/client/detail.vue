@@ -609,9 +609,7 @@
                 }
                 let _this = this
                 fetch('get', '/clients/' + this.clientId + '/contacts', data).then(function (response) {
-                    // console.log(response)
                     _this.clientContactsInfo.push(response.data);
-                    // console.log(_this.clientContactsInfo)
                     $('#addContact').modal('hide')
                 })
             },

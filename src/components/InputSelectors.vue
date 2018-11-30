@@ -19,7 +19,7 @@
         data() {
             return {
                 selectMemberShow: false,
-                clearFlag:false
+                clearFlag: false
             }
         },
 
@@ -29,56 +29,59 @@
 
         computed: {
             selectedMemberName: function () {
-                if(this.clearFlag == true){
+                if (this.clearFlag == true) {
                     this.$emit('clearinput')
                     this.clearFlag = false
                     return ''
-                }else{
-                     if (this.type === 'change') {
-                        this.$emit('change',this.$store.state.principalInfo.name)
+                } else {
+                    if (this.type === 'change') {
+                        this.$emit('change', this.$store.state.principalInfo.name)
                         return this.$store.state.principalInfo.name
+                    } else if (this.type === 'selector') {
+                        this.$emit('change', this.$store.state.selectPrincipalInfo)
+                        return this.$store.state.selectPrincipalInfo.name
                     } else {
-                        this.$emit('change',this.$store.state.newPrincipalInfo)
+                        this.$emit('change', this.$store.state.newPrincipalInfo)
                         return this.$store.state.newPrincipalInfo.name
                     }
                 }
-               
-            }
 
-        },
-
-        methods: {
-            showMember: function () {
-                this.selectMemberShow = true;
             },
 
-            removeInputSelect(event) {
-                let tag = document.getElementById("inputSelectMember" + this._uid);
-                if (tag) {
-                    if (!tag.contains(event.target)) {
-                        this.selectMemberShow = false;
+            methods: {
+                showMember: function () {
+                    this.selectMemberShow = true;
+                },
+
+                removeInputSelect(event) {
+                    let tag = document.getElementById("inputSelectMember" + this._uid);
+                    if (tag) {
+                        if (!tag.contains(event.target)) {
+                            this.selectMemberShow = false;
+                        }
                     }
-                }
-            },
+                },
 
-            changeSelectMember: function () {
-                this.selectMemberShow = false;
-                this.$emit('change', false)
+                changeSelectMember: function () {
+                    this.selectMemberShow = false;
+                    this.$emit('change', false)
+                }
             }
         }
-    }
 </script>
 
 <style>
-    .input-selectors-div{
+    .input-selectors-div {
         display: flex;
-        
+
     }
-    .input-selectors-span{
+
+    .input-selectors-span {
         line-height: 30px;
         margin-left: 10px;
         cursor: pointer;
     }
+
     .selector {
         position: relative;
     }

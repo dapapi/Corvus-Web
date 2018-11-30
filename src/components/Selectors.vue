@@ -1,7 +1,8 @@
 <template>
-
-    <select data-plugin="selectpicker" :value="value" :data-live-search="searchable" :multiple="multiple" :title="placeholder" v-model="valueListener">
-        <selectorsOptions v-for="option in options" v-bind:id="option.id" :val="option.value || option.id" :key="option.id">
+    <select data-plugin="selectpicker" :value="value" :data-live-search="multiple" :multiple="multiple"
+            :title="placeholder" v-model="valueListener">
+        <selectorsOptions v-for="option in options" v-bind:id="option.id" :val="option.value || option.id"
+                          :key="option.id">
             {{option.name}}
         </selectorsOptions>
     </select>
@@ -9,16 +10,17 @@
 </template>
 <script>
     export default {
-        props: ['options', 'searchable', 'disable', 'multiple', 'placeholder', 'changeKey', 'value'], // changeKey为父组件的data，且可以被改变
+        props: ['options', 'disable', 'multiple', 'placeholder', 'changeKey', 'value'], // changeKey为父组件的data，且可以被改变
         data() {
             return {
                 isDisable: this.disable,
-                valueListener:[]
+                valueListener: []
             }
         },
         mounted() {
             let self = this;
             $(this.$el).selectpicker().on('hidden.bs.select', function () {
+                console.log($(this).val());
                 self.$emit('change', $(this).val(), $(this)[0].selectedOptions[0].label, $(this)[0].selectedOptions[0].id);
                 // 可以通过调用select方法，去改变父组件传过来的changeKey
                 if (self.changeKey) {
@@ -28,8 +30,8 @@
 
         },
         watch: {
-            valueListener:function(newValue){
-                this.$emit('valuelistener',newValue)
+            valueListener: function (newValue) {
+                this.$emit('valuelistener', newValue)
             },
             disable: function (newValue) {
                 this.isDisable = newValue;

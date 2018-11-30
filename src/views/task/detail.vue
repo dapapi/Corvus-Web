@@ -439,7 +439,6 @@
                 let _this = this;
 
                 fetch('get', '/tasks/' + this.taskId, data).then(function (response) {
-                    console.log(response.data);
                     if (response.data.affixes) {
                         for (let i = 0; i < response.data.affixes.data.length; i++) {
                             let size = response.data.affixes.data[i].size;

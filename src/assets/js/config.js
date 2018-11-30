@@ -258,6 +258,20 @@ let config = {
                 value: 5
             },
         ],
+        projectStatusArr: [
+            {
+                name: '进行中',
+                value: 1
+            },
+            {
+                name: '已完成',
+                value: 2
+            },
+            {
+                name: '撤单',
+                value: 3
+            }
+        ],
         clientScaleArr: [
             {
                 name: '上市公司',

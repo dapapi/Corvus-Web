@@ -37,8 +37,8 @@
             },
         },
         methods: {
-            changeDate: function (value) {
-                this.$emit('change', value);
+            changeDate: function (start, end) {
+                this.$emit('change', start, end);
             }
         }
     }

@@ -152,10 +152,10 @@
                                             <div class="col-md-2 float-left text-right pl-0">线索来源</div>
                                             <div class="col-md-10 float-left font-weight-bold">
                                                 <div class="float-left" v-if="trailOriginArr.length > 0">
-                                                    <span v-show="!isEdit" >{{getResourceType}}</span>
-                                                    <EditSelector :options="trailOriginArr" 
-                                                    :is-edit="isEdit"
-                                                    @change="changeResourceType"></EditSelector>
+                                                    <span v-show="!isEdit">{{getResourceType}}</span>
+                                                    <EditSelector :options="trailOriginArr"
+                                                                  :is-edit="isEdit"
+                                                                  @change="changeResourceType"></EditSelector>
                                                 </div>
                                             </div>
                                         </div>
@@ -164,7 +164,7 @@
                                             <div class="col-md-2 float-left text-right pl-0">负责人</div>
                                             <div class="col-md-10 float-left font-weight-bold">
                                                 <!-- <span v-show="!isEdit" >{{ trailInfo.principal.data.name }}</span> -->
-                                                <EditInput-selector :is-edit="isEdit" 
+                                                <EditInput-selector :is-edit="isEdit"
                                                                     @change="changeTrailPrincipal"></EditInput-selector>
                                             </div>
 
@@ -175,18 +175,20 @@
                                             <div class="col-md-10 float-left font-weight-bold expfee">
                                                 <edit-number-spinner :content="trailInfo.fee" :is-edit="isEdit"
                                                                      @change="changeTrailFee"></edit-number-spinner>
-                                                                     元
+                                                元
                                             </div>
                                         </div>
                                         <div class="card-text py-10 px-0 clearfix col-md-6 float-left"
                                              :class="isEdit ? 'edit-height':'' ">
                                             <div class="col-md-2 float-left text-right pl-0">目标艺人</div>
                                             <div class="col-md-10 float-left font-weight-bold">
-                                                <span v-for="expectation in trailInfo.expectations.data" :key="expectation.name" v-if="!isEdit">
+                                                <span v-for="expectation in trailInfo.expectations.data"
+                                                      :key="expectation.name" v-if="!isEdit">
                                                     {{ expectation.name }}
                                                 </span>
                                                 <EditSelector :options="starsArr" :is-edit="isEdit"
-                                                              :multiple="true"  :content="selectedExpectationsArr" :contentHide='true'
+                                                              :multiple="true" :content="selectedExpectationsArr"
+                                                              :contentHide='true'
                                                               @valuelistener="changeExpectations"></EditSelector>
                                             </div>
 
@@ -195,7 +197,8 @@
                                              :class="isEdit ? 'edit-height':'' ">
                                             <div class="col-md-2 float-left text-right pl-0">推荐艺人</div>
                                             <div class="col-md-10 float-left font-weight-bold">
-                                                 <span v-for="recommendations in trailInfo.recommendations.data" :key="recommendations.name" v-if="!isEdit">
+                                                 <span v-for="recommendations in trailInfo.recommendations.data"
+                                                       :key="recommendations.name" v-if="!isEdit">
                                                     {{ recommendations.name }}
                                                 </span>
                                                 <EditSelector :options="starsArr" :is-edit="isEdit"
@@ -393,7 +396,8 @@
                         </div>
                         <div class="card-block">
                             <div class="col-md-7 pl-0">
-                                <TaskFollowUp :follow-type="'线索'" :trailId="trailId" trailType='trails' v-if="trailId"></TaskFollowUp>
+                                <TaskFollowUp :follow-type="'线索'" :trailId="trailId" trailType='trails'
+                                              v-if="trailId"></TaskFollowUp>
                             </div>
                         </div>
                     </div>
@@ -492,7 +496,8 @@
                         <div class="example">
                             <div class="col-md-2 text-right float-left">拒绝类型</div>
                             <div class="col-md-10 float-left pl-0">
-                                <selectors :options="refuseTypeArr" @change="changeRefuseType" placeholder="请选择拒绝种类"></selectors>
+                                <selectors :options="refuseTypeArr" @change="changeRefuseType"
+                                           placeholder="请选择拒绝种类"></selectors>
                             </div>
                         </div>
                         <div class="example">
@@ -538,7 +543,7 @@
                 customizeInfo: config.customizeInfo,
                 taskTypeArr: config.taskTypeArr,
                 taskLevelArr: config.taskLevelArr,
-                taskPrincipal:'',
+                taskPrincipal: '',
                 startMinutes: '00:00',
                 taskType: '',
                 endMinutes: '00:00',
@@ -549,17 +554,17 @@
                 changeInfo: {},
                 selectedExpectationsArr: [],
                 selectedRecommendationsArr: [],
-                recommendations:[],
+                recommendations: [],
                 lockArr: config.lockArr,
                 refuseTypeArr: config.refuseTypeArr,
                 refuseType: '',
                 refuseReason: '',
                 oldInfo: '',
-                expectations:[],
-                getTrailTaskLevel:'',
-                trailStatusArr:config.trailStatusArr,
-                trailStatus:'',
-                cooperationTypeArr:config.cooperationTypeArr, 
+                expectations: [],
+                getTrailTaskLevel: '',
+                trailStatusArr: config.trailStatusArr,
+                trailStatus: '',
+                cooperationTypeArr: config.cooperationTypeArr,
             }
 
         },
@@ -569,15 +574,15 @@
             this.getStars();
             this.getIndustries();
         },
-        computed:{
-            getResourceType(){
+        computed: {
+            getResourceType() {
                 for (const key in this.trailOriginArr) {
                     if (this.trailOriginArr[key].value == this.trailInfo.resource_type) {
                         return this.trailOriginArr[key].name
                     }
                 }
             },
-            getClientLevel(){
+            getClientLevel() {
                 for (const key in this.clientLevelArr) {
                     if (this.clientLevelArr[key].value == this.trailInfo.client.data.grade) {
                         return this.clientLevelArr[key].name
@@ -586,10 +591,10 @@
             }
         },
         watch: {
-            'trailInfo.resource':function(newValue){
+            'trailInfo.resource': function (newValue) {
                 this.changeInfo.resource = newValue
             },
-            'trailInfo.priority':function(newValue){
+            'trailInfo.priority': function (newValue) {
                 this.changeInfo.priority = newValue
             },
             'trailInfo.title': function (newValue) {
@@ -635,10 +640,10 @@
             'trailInfo.desc': function (newValue) {
                 this.changeInfo.desc = newValue
             },
-            'trailInfo.resource_type': function(newValue) {
+            'trailInfo.resource_type': function (newValue) {
                 this.changeInfo.resource_type = newValue
             },
-            'trailInfo.contact.data.phone': function(newValue) {
+            'trailInfo.contact.data.phone': function (newValue) {
                 if (this.changeInfo.contact) {
                     this.changeInfo.contact.phone = newValue
                 } else {
@@ -647,8 +652,8 @@
                     }
                 }
             },
-            'trailInfo.client.data.company':function(newValue) {
-                 if (this.changeInfo.client) {
+            'trailInfo.client.data.company': function (newValue) {
+                if (this.changeInfo.client) {
                     this.changeInfo.client.company = newValue
                 } else {
                     this.changeInfo.client = {
@@ -656,20 +661,23 @@
                     }
                 }
             },
-            'trailInfo.industry_id':function(newValue){
+            'trailInfo.industry_id': function (newValue) {
                 this.changeInfo.industry_id = newValue
             },
-            'trailInfo.expectations':function(newValue){
+            'trailInfo.expectations': function (newValue) {
                 this.changeInfo.expectations = newValue
             },
-            'trailInfo.recommendations':function(newValue){
+            'trailInfo.recommendations': function (newValue) {
                 this.changeInfo.recommendations = newValue
             },
-            'trailStatus':function(newValue){
+            'trailStatus': function (newValue) {
                 this.changeInfo.status = newValue
             },
-            'trailInfo.cooperation_type':function(newValue){
+            'trailInfo.cooperation_type': function (newValue) {
                 this.changeInfo.cooperation_type = newValue
+            },
+            'expectations': function (newValue) {
+                this.changeInfo.expectation = newValue
             }
             //    @todo 修改目标艺人、推荐艺人
         },
@@ -724,7 +732,7 @@
                     _this.isEdit = false
                     _this.getTrail()
                 })
-            
+
 
             },
 
@@ -825,7 +833,7 @@
             changeTaskLevel: function (value) {
                 this.taskLevel = value
             },
-            changeTrailTaskLevel: function(value){
+            changeTrailTaskLevel: function (value) {
                 this.trailInfo.priority = value
             },
 
@@ -844,7 +852,7 @@
             changeTrailName: function (value) {
                 this.trailInfo.title = value
             },
-            changeResource:function(value){
+            changeResource: function (value) {
                 this.trailInfo.resource = value
             },
             changeTrailPrincipal: function (value) {
@@ -893,7 +901,7 @@
             changeTrailDesc: function (value) {
                 this.trailInfo.desc = value
             },
-            changeResourceType:function(value){
+            changeResourceType: function (value) {
                 this.trailInfo.resource_type = value
             },
             changeExpectations: function (value) {
@@ -909,27 +917,27 @@
             },
 
             changeRefuseType: function (value) {
-                if(value==1){
-                    this.refuseType  = '我方拒绝'
-                }else{
-                    this.refuseType  = '客户拒绝'
+                if (value == 1) {
+                    this.refuseType = '我方拒绝'
+                } else {
+                    this.refuseType = '客户拒绝'
                 }
             },
-            changeIndustry(value){
+            changeIndustry(value) {
                 this.trailInfo.industry_id = value
             },
-            changeTrailStatus(value){
+            changeTrailStatus(value) {
                 this.trailStatus = value
             },
-            changeCooperationType(value){
+            changeCooperationType(value) {
                 this.trailInfo.cooperation_type = value
             },
             refuseTrail: function () {
                 let data = {
-                    'type' : this.refuseType,
-                    'reason' : this.refuseReason,
+                    'type': this.refuseType,
+                    'reason': this.refuseReason,
                 }
-                fetch('put', '/trails/'+this.trailInfo.id+'/refuse', data).then(function (response) {
+                fetch('put', '/trails/' + this.trailInfo.id + '/refuse', data).then(function (response) {
                     toastr.success('拒绝成功');
                     $('#refuseTrail').modal('hide');
                 })
@@ -940,9 +948,10 @@
 </script>
 
 <style>
-    .expfee{
+    .expfee {
         display: flex;
     }
+
     .task-dropdown {
         -moz-user-select: none;
         -webkit-user-select: none;

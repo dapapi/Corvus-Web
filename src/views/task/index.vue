@@ -246,7 +246,6 @@ export default {
 
   mounted() {
     this.getTasks();
-    console.log(this.taskTypeArr)
   },
 
   methods: {
@@ -336,7 +335,6 @@ export default {
                         },
                     }
                 }).done(function (response) {
-                    console.log(response);
                     toastr.success('创建成功');
                     $('#addTask').modal('hide');
                     redirect('detail?task_id=' + response.data.id)

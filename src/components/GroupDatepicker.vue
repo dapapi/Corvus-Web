@@ -28,6 +28,8 @@
                 format: "yyyy-mm-dd",
                 language: "zh-CN",
             }).on("changeDate", function () {
+                console.log($('#start').val())
+                console.log($('#end').val())
                 self.$emit('change', $('#start').val(), $('#end').val());
             });
 
