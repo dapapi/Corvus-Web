@@ -30,8 +30,6 @@ axios.interceptors.response.use((res) => {
     }
     return res;
 }, (error) => {
-    console.log(response);
-    console.log(error);
     const {response: {status}} = error
     const {response} = error
     if (status === 401) {

@@ -1071,7 +1071,6 @@
                     }
                     response.data.fields = fieldsArr;
                     _this.projectInfo = response.data;
-                    console.log(response.data);
                     let params = {
                         type: 'change',
                     };

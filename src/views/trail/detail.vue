@@ -639,7 +639,6 @@
                 this.changeInfo.industry_id = newValue
             },
             'expectations':function(newValue){
-                console.log(newValue);
                 this.changeInfo.expectation = newValue
             }
             //    @todo 修改目标艺人、推荐艺人
