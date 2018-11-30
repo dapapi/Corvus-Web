@@ -466,6 +466,14 @@
                                         </div>
                                         <div class="card-text py-10 px-0 clearfix col-md-6 float-left"
                                              :class="isEdit ? 'edit-height':'' ">
+                                            <div class="col-md-2 float-left text-right pl-0">参与人</div>
+                                            <div class="col-md-10 float-left font-weight-bold">
+                                                <EditAddMember :is-edit="isEdit"
+                                                               @change="(value) => changeProjectBaseInfo(value, 'participants')"></EditAddMember>
+                                            </div>
+                                        </div>
+                                        <div class="card-text py-10 px-0 clearfix col-md-6 float-left"
+                                             :class="isEdit ? 'edit-height':'' ">
                                             <div class="col-md-2 float-left text-right pl-0">可见范围</div>
                                             <div class="col-md-10 float-left font-weight-bold">
                                                 <EditSelector :is-edit="isEdit" :content="projectInfo.privacy"
@@ -564,34 +572,30 @@
 
                                     <div class="segmentation-line example"></div>
 
-                                    <!--<div class="card-text py-5 clearfix">-->
-                                    <!--<div class="col-md-1 float-left text-right pl-0">录入人</div>-->
-                                    <!--<div class="col-md-5 float-left font-weight-bold">-->
-                                    <!--<EditSelector></EditSelector>-->
-                                    <!--</div>-->
-                                    <!--<div class="col-md-1 float-left text-right pl-0">录入时间</div>-->
-                                    <!--<div class="col-md-5 float-left font-weight-bold">-->
-                                    <!--<EditInput></EditInput>-->
-                                    <!--</div>-->
-                                    <!--</div>-->
-                                    <!--<div class="card-text py-5 clearfix">-->
-                                    <!--<div class="col-md-1 float-left text-right pl-0">最近更新人</div>-->
-                                    <!--<div class="col-md-5 float-left font-weight-bold">-->
-                                    <!--<EditSelector></EditSelector>-->
-                                    <!--</div>-->
-                                    <!--<div class="col-md-1 float-left text-right pl-0">最近更新时间</div>-->
-                                    <!--<div class="col-md-5 float-left font-weight-bold">-->
-                                    <!--<EditInput></EditInput>-->
-                                    <!--</div>-->
-                                    <!--</div>-->
-                                    <!--<div class="card-text py-5 clearfix">-->
-                                    <!--<div class="col-md-1 float-left text-right pl-0">关联项目</div>-->
-                                    <!--<div class="col-md-5 float-left font-weight-bold">-->
-                                    <!--</div>-->
-                                    <!--<div class="col-md-1 float-left text-right pl-0">关联任务</div>-->
-                                    <!--<div class="col-md-5 float-left font-weight-bold">-->
-                                    <!--</div>-->
-                                    <!--</div>-->
+                                    <div class="card-text py-5 clearfix">
+                                        <div class="col-md-1 float-left text-right pl-0">录入人</div>
+                                        <div class="col-md-5 float-left font-weight-bold">
+                                        </div>
+                                        <div class="col-md-1 float-left text-right pl-0">录入时间</div>
+                                        <div class="col-md-5 float-left font-weight-bold">
+                                        </div>
+                                    </div>
+                                    <div class="card-text py-5 clearfix">
+                                        <div class="col-md-1 float-left text-right pl-0">最近更新人</div>
+                                        <div class="col-md-5 float-left font-weight-bold">
+                                        </div>
+                                        <div class="col-md-1 float-left text-right pl-0">最近更新时间</div>
+                                        <div class="col-md-5 float-left font-weight-bold">
+                                        </div>
+                                    </div>
+                                    <div class="card-text py-5 clearfix">
+                                        <div class="col-md-1 float-left text-right pl-0">关联项目</div>
+                                        <div class="col-md-5 float-left font-weight-bold">
+                                        </div>
+                                        <div class="col-md-1 float-left text-right pl-0">关联任务</div>
+                                        <div class="col-md-5 float-left font-weight-bold">
+                                        </div>
+                                    </div>
                                 </div>
                             </div>
                         </div>
@@ -1083,14 +1087,6 @@
                 })
             },
 
-            getProjectFollow: function () {
-                let data = {
-                    include: 'user',
-                    status: this.followStatus
-                };
-                fetch('get', '/projects/' + this.projectId + '/operate_log', data)
-            },
-
             getProjectTasks: function () {
                 let _this = this;
                 fetch('get', '/projects/' + this.projectId + '/tasks').then(function (response) {
@@ -1153,15 +1149,19 @@
                 if (name === 'principal_id') {
                     value = this.$store.state.principalInfo.id;
                 }
+                if (name === 'participants') {
+                    value = this.$store.state.participantsInfo;
+                }
                 this.changeInfo[name] = value
             },
 
             changeProjectInfo: function () {
                 let data = this.changeInfo;
+                let _this = this;
                 fetch('put', '/projects/' + this.projectId, data).then(function (response) {
                     toastr.success('修改成功');
                     // todo 修改成功后页面显示信息未修改
-                    this.isEdit = false;
+                    _this.isEdit = false;
                 })
             },
 
