@@ -17,10 +17,13 @@
                                style="width: 220px" v-model="trailFilter" @blur='filterGo'>
                     </div>
                     <div class="col-md-3 example float-left">
-                        <selectors :placeholder="'请选择销售进展'"></selectors>
+                        <selectors :placeholder="'请选择销售进展'" 
+                                :options="progressStatus"
+                                @change="progressStatusFilter"
+                                ></selectors>
                     </div>
                     <div class="col-md-3 example float-left">
-                        <selectors :placepholder="'请选择负责人'"></selectors>
+                        <selectors :placeholder="'请选择负责人'"></selectors>
                     </div>
                     <div class="col-md-3 example float-left">
                         <button type="button" class="btn btn-default waves-effect waves-classic float-right"
@@ -287,9 +290,18 @@
                 trailStatus: '',
                 cooperation: '',
                 filterData:'',
+                progressStatus:[{
+                    'name':'已拒绝',
+                    'value':0
+                },{
+                    'name':'未确定合作',
+                    'value':1
+                },{
+                    'name':'已确定合作',
+                    'value':2
+                }]
             }
         },
-
         mounted() {
             this.getSales();
             this.getClients();
@@ -301,13 +313,14 @@
             filterGo(){
                 let _this = this;
                  fetch('get', '/trails/filter?keyword='+this.trailFilter+'&include=principal,client,contact,recommendations,expectations').then(function (response) {
-                     
-                    console.log(response);
                     _this.trailsInfo = response.data
-                    console.log(_this.trailsInfo);
-                    // _this.transIInfo = _this.filterData
                 })
-                this.$forceUpdate()
+            },
+            progressStatusFilter(value){
+                 let _this = this;
+                 fetch('get', '/trails/filter?status='+value+'&include=principal,client,contact,recommendations,expectations').then(function (response) {
+                    _this.trailsInfo = response.data
+                })
             },
             getSales: function (pageNum = 1) {
                 let _this = this;
@@ -316,6 +329,8 @@
                     include: 'principal,client',
                 };
                 fetch('get', '/trails', data).then(function (response) {
+                    console.log(111);
+                    console.log(response.data);
                     _this.trailsInfo = response.data;
                     _this.total = response.meta.pagination.total;
                     _this.current_page = response.meta.pagination.current_page;

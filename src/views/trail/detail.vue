@@ -212,9 +212,10 @@
                                              :class="isEdit ? 'edit-height':'' ">
                                             <div class="col-md-2 float-left text-right pl-0">优先级</div>
                                             <div class="col-md-10 float-left font-weight-bold">
-                                                <span v-if="!isEdit">{{getClientLevel}}</span>
                                                 <EditSelector :is-edit="isEdit"
-                                                              :options="clientLevelArr"></EditSelector>
+                                                              :options="taskLevelArr"
+                                                              :content="trailInfo.priority"
+                                                              @change='changeTrailTaskLevel'></EditSelector>
                                             </div>
                                         </div>
                                         <div class="card-text py-10 px-0 clearfix col-md-6 float-left"
@@ -229,18 +230,21 @@
                                              v-if="trailInfo.type !== 4" :class="isEdit ? 'edit-height':'' ">
                                             <div class="col-md-2 float-left text-right pl-0">线索状态</div>
                                             <div class="col-md-10 float-left font-weight-bold">
-                                                <span v-if="!isEdit">{{getClientLevel}}</span>
+                                                <!-- <span v-if="!isEdit">{{trailStatus}}</span> -->
                                                 <EditSelector :is-edit="isEdit"
-                                                              :options="clientLevelArr"></EditSelector>
+                                                              :options="trailStatusArr"
+                                                              @change="changeTrailStatus"
+                                                              :content="trailInfo.status"></EditSelector>
                                             </div>
                                         </div>
                                         <div class="card-text py-10 px-0 clearfix col-md-6 float-left"
                                              :class="isEdit ? 'edit-height':'' ">
                                             <div class="col-md-2 float-left text-right pl-0">合作类型</div>
                                             <div class="col-md-10 float-left font-weight-bold">
-                                                <span v-if="!isEdit">{{getClientLevel}}</span>
                                                 <EditSelector :is-edit="isEdit"
-                                                              :options="clientLevelArr"></EditSelector>
+                                                              :options="cooperationTypeArr"
+                                                              @change='changeResource'
+                                                              :content='trailInfo.resource'></EditSelector>
                                             </div>
                                         </div>
                                         <div class="card-text py-10 px-0 clearfix col-md-6 float-left"
@@ -545,6 +549,10 @@
                 refuseReason: '',
                 oldInfo: '',
                 expectations:[],
+                getTrailTaskLevel:'',
+                trailStatusArr:config.trailStatusArr,
+                trailStatus:'',
+                cooperationTypeArr:config.cooperationTypeArr, 
             }
 
         },
@@ -571,6 +579,13 @@
             }
         },
         watch: {
+            'trailInfo.resource':function(newValue){
+                console.log(newValue);
+                this.changeInfo.resource = newValue
+            },
+            'trailInfo.priority':function(newValue){
+                this.changeInfo.priority = newValue
+            },
             'trailInfo.title': function (newValue) {
                 this.changeInfo.title = newValue
             },
@@ -618,7 +633,6 @@
                 this.changeInfo.resource_type = newValue
             },
             'trailInfo.contact.data.phone': function(newValue) {
-                console.log(newValue);
                 if (this.changeInfo.contact) {
                     this.changeInfo.contact.phone = newValue
                 } else {
@@ -640,15 +654,19 @@
                 this.changeInfo.industry_id = newValue
             },
             'expectations':function(newValue){
-                console.log(newValue);
                 this.changeInfo.expectation = newValue
+            },
+            'trailStatus':function(newValue){
+                this.changeInfo.status = newValue
+            },
+            'cooperationType':function(newValue){
+                this.changeInfo.resource = newValue
             }
             //    @todo 修改目标艺人、推荐艺人
         },
 
         methods: {
             getTrail: function () {
-
                 this.trailId = this.$route.params.id;
                 let _this = this;
                 let data = {
@@ -797,6 +815,10 @@
             changeTaskLevel: function (value) {
                 this.taskLevel = value
             },
+            changeTrailTaskLevel: function(value){
+                console.log(value);
+                this.trailInfo.priority = value
+            },
 
             changeStartTime: function (value) {
                 this.startTime = value
@@ -811,9 +833,13 @@
             },
 
             changeTrailName: function (value) {
+                console.log(value);
                 this.trailInfo.title = value
             },
-
+            changeResource:function(value){
+                console.log(value);
+                this.trailInfo.resource = value
+            },
             changeTrailPrincipal: function (value) {
                 if (this.trailInfo.principal) {
                     this.trailInfo.principal.data = value
@@ -885,7 +911,12 @@
             changeIndustry(value){
                 this.trailInfo.industry_id = value
             },
-
+            changeTrailStatus(value){
+                this.trailStatus = value
+            },
+            // changeCooperationType(value){
+            //     this.cooperationType = value
+            // },
             refuseTrail: function () {
                 let data = {
                     'type' : this.refuseType,

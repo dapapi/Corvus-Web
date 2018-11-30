@@ -1,10 +1,10 @@
 <template>
     <div class="">
         <template v-if="isEditInput">
-            <input class="form-control" type="text" v-model="context">
+            <input class="form-control" type="text" v-model="context" />
         </template>
         <template v-else>
-            {{ context }}
+            {{ content }}
         </template>
     </div>
 </template>
@@ -16,17 +16,14 @@
         data() {
             return {
                 isEditInput: false,
+                context:''
             }
         },
+        mounted(){
+            this.context = this.content
+        },
         computed: {
-            context: {
-                get() {
-                    return this.content
-                },
-                set() {
-                    return this.content
-                }
-            }
+
         },
         watch: {
             isEdit(newValue) {
