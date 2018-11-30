@@ -23,7 +23,15 @@
                                 ></selectors>
                     </div>
                     <div class="col-md-3 example float-left">
-                        <selectors :placeholder="'请选择负责人'"></selectors>
+                        <!-- <select class="selectpicker show-menu-arrow form-control"   multiple data-live-search='false' title="请选择负责人" v-model="principalFilterData">
+                            <option v-for="value in memberList" :key="value.id" v-if="memberList">{{value.name}}</option>
+                        </select> -->
+                        <selectors placeholder="请选择负责人" 
+                                :options="memberList" multiple
+                                @change="principalFilter"
+                                ></selectors>
+                        <!-- <input-selectors :placeholder="'请选择负责人'"
+                            @change="principalFilter" @clearinput='filterGo()'></input-selectors> -->
                     </div>
                     <div class="col-md-3 example float-left">
                         <button type="button" class="btn btn-default waves-effect waves-classic float-right"
@@ -299,8 +307,12 @@
                 },{
                     'name':'已确定合作',
                     'value':2
-                }]
+                }],
+                memberList:[],
             }
+        },
+        created(){
+            this.getMembers()
         },
         mounted() {
             this.getSales();
@@ -308,11 +320,33 @@
             this.getStars();
             this.getIndustries();
         },
-
+        watch:{
+            memberList:function(value){
+                this.$nextTick(() => {
+                    $('.selectpicker').selectpicker('render');
+                    $('.selectpicker').selectpicker('refresh');
+                })
+            }
+        },
         methods: {
+            getMembers(){
+                let _this = this
+                fetch('get', '/users').then(function (response) {
+                         _this.memberList = response.data
+                })
+            },
+            principalFilter(value){
+                if(value){
+                    let _this = this;
+                    fetch('get', '/trails/filter?principal_id='+value+'&include=principal,client,contact,recommendations,expectations').then(function (response) {
+                        _this.trailsInfo = response.data
+                    })
+                }
+                
+            },
             filterGo(){
                 let _this = this;
-                 fetch('get', '/trails/filter?keyword='+this.trailFilter+'&include=principal,client,contact,recommendations,expectations').then(function (response) {
+                fetch('get', '/trails/filter?keyword='+this.trailFilter+'&include=principal,client,contact,recommendations,expectations').then(function (response) {
                     _this.trailsInfo = response.data
                 })
             },
@@ -320,6 +354,7 @@
                  let _this = this;
                  fetch('get', '/trails/filter?status='+value+'&include=principal,client,contact,recommendations,expectations').then(function (response) {
                     _this.trailsInfo = response.data
+                    _this.trailFilter = ''
                 })
             },
             getSales: function (pageNum = 1) {
@@ -329,8 +364,6 @@
                     include: 'principal,client',
                 };
                 fetch('get', '/trails', data).then(function (response) {
-                    console.log(111);
-                    console.log(response.data);
                     _this.trailsInfo = response.data;
                     _this.total = response.meta.pagination.total;
                     _this.current_page = response.meta.pagination.current_page;
@@ -377,7 +410,6 @@
             },
 
             addTrail: function () {
-                console.log(this.$store.state.newPrincipalInfo.id);
                 let data = {
                     title: this.trailName,
                     brand: this.brandName,
@@ -414,7 +446,6 @@
                     $('#addTrail').modal('hide');
                     // _this.$router.push({path: '/trails/' + response.data.id})
                     _this.$router.push({path: '/trails/' + response.data.id})
-                    console.log(response);
                 })
             },
 
@@ -482,7 +513,8 @@
 
             changeCooperationType: function (value) {
                 this.cooperation = value
-            }
+            },
+            
 
 
         }

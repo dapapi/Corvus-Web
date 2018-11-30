@@ -1,5 +1,5 @@
 <template>
-
+    
     <input type="text" class="form-control" data-plugin="asSpinner" value="0"/>
 
 </template>
