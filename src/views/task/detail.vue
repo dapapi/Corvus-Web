@@ -34,7 +34,7 @@
                             <i class="md-plus pr-2" aria-hidden="true"></i>负责人
                         </div>
                         <div class="font-weight-bold float-left" v-if="taskInfo">
-                            {{ taskInfo.principal.data.name }}
+                            {{ taskInfo.principal?taskInfo.principal.data.name: '' }}
                         </div>
                     </div>
                     <div class="card-text clearfix example">
@@ -217,11 +217,15 @@
                                     <template v-if="task.status === 2">已完成</template>
                                     <template v-if="task.status === 3">已停止</template>
                                 </td>
-                                <td>{{ task.principal.data.name }}</td>
+                                <td>{{ task.principal?task.principal.data.name:'' }}</td>
                                 <td>{{ task.end_at }}</td>
                             </tr>
                             </tbody>
                         </table>
+
+                        <div class="col-md-1" style="margin: 6rem auto" v-if="taskInfo.tasks.data.length === 0">
+                            <img src="https://res.papitube.com/corvus/images/content-none.png" alt="" style="width: 100%">
+                        </div>
 
                         <div class="site-action fixed-button" data-plugin="actionBtn" data-toggle="modal"
                              data-target="#addChildTask">
