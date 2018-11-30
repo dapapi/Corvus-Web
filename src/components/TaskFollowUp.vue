@@ -10,7 +10,8 @@
                 </li>
                 <li class="nav-item" role="presentation">
                     <a class="nav-link active" data-toggle="tab" href="#task-follow"
-                       aria-controls="exampleTabsTwo" role="tab" aria-selected="false" @click="taskFilter=1">{{ this.followType }}跟进</a>
+                       aria-controls="exampleTabsTwo" role="tab" aria-selected="false" @click="taskFilter=1">{{
+                        this.followType }}跟进</a>
                 </li>
                 <li class="nav-item" role="presentation">
                     <a class="nav-link" data-toggle="tab" href="#task-active"
@@ -28,6 +29,9 @@
                             </div>
                         </li>
                     </ul>
+                    <div v-if="taskData.length === 0" class="col-md-3 text-center">
+                        暂无数据
+                    </div>
                 </div>
                 <div class="tab-pane active" id="task-follow" role="tabpanel">
                     <div class="tab-pane" id="all-TaskFollowUp" role="tabpanel">
@@ -40,6 +44,9 @@
                                 </div>
                             </li>
                         </ul>
+                        <div v-if="taskData.length === 0" class="col-md-3 text-center">
+                            暂无数据
+                        </div>
                     </div>
                 </div>
                 <div class="tab-pane" id="task-active" role="tabpanel">
@@ -53,6 +60,9 @@
                                 </div>
                             </li>
                         </ul>
+                        <div v-if="taskData.length === 0" class="col-md-3 text-center">
+                            暂无数据
+                        </div>
                     </div>
                 </div>
             </div>
@@ -65,37 +75,36 @@
 <script>
     import fetch from '@/assets/utils/fetch.js'
     import config from '@/assets/js/config'
+
     export default {
         name: "TaskFollowUp",
-        props: ['follow-type','trailId','trailType'],
+        props: ['follow-type', 'trailId', 'trailType'],
         data() {
             return {
                 showButton: false,
                 taskFollowText: '',
-                taskFilter:'1',
-                taskData:[]
+                taskFilter: '1',
+                taskData: []
             }
         },
-        created(){
-            
+        created() {
+
         },
-        mounted(){
+        mounted() {
             this.getTrail()
         },
         methods: {
-            getTrail(){
+            getTrail() {
                 let _this = this
-                fetch('get', '/'+this.trailType+'/'+this.trailId+'/operate_log?status='+this.taskFilter).then(function (response) {
-                     _this.taskData = response.data
+                fetch('get', '/' + this.trailType + '/' + this.trailId + '/operate_log?status=' + this.taskFilter).then(function (response) {
+                    _this.taskData = response.data
                 })
             },
-            sendTrail(){
+            sendTrail() {
                 let data = {
-                    content:this.taskFollowText,
+                    content: this.taskFollowText,
                 }
-                console.log('send data');
-                let _this = this
-                fetch('post', '/'+this.trailType+'/'+this.trailId+'/follow_up',data).then(() => {
+                fetch('post', '/' + this.trailType + '/' + this.trailId + '/follow_up', data).then(() => {
                     this.getTrail()
                 })
             },
@@ -104,10 +113,10 @@
                 this.sendTrail()
             }
         },
-        watch:{
-            taskFilter:function(val,oldval){
-                if(val!=oldval){
-                  this.getTrail()
+        watch: {
+            taskFilter: function (val, oldval) {
+                if (val != oldval) {
+                    this.getTrail()
                 }
             }
         }

@@ -4,7 +4,7 @@
             <div>
                 <div>
                     <div class="py-10 menu-icon"
-                         style="position: relative;background-color: #3f51b5">
+                         style="position: relative;background-color: #3f51b5;z-index: 2">
                         <div class="icon-wrap">
                             <img src="https://res.papitube.com/corvus/images/taiyang-icon.png" alt="">
                         </div>
@@ -118,14 +118,14 @@
                                 name: '合同',
                                 code: 'contracts'
                             },
-                            {
-                                name: '报表',
-                                code: 'reports'
-                            },
-                            {
-                                name: '审批',
-                                code: 'approval'
-                            }
+                            // {
+                            //     name: '报表',
+                            //     code: 'reports'
+                            // },
+                            // {
+                            //     name: '审批',
+                            //     code: 'approval'
+                            // }
                         ]
                     },
                     {
@@ -173,10 +173,10 @@
                                 name: '通讯录',
                                 code: 'address'
                             },
-                            {
-                                name: '任务',
-                                code: 'tasks'
-                            },
+                            // {
+                            //     name: '任务',
+                            //     code: 'tasks'
+                            // },
                             {
                                 name: '我的',
                                 code: 'my'

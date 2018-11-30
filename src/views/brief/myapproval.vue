@@ -92,7 +92,7 @@
                 <i class="back-icon md-plus animation-scale-up" aria-hidden="true"></i>
             </button>
         </div>
-        <Submitreport></Submitreport>
+        <submit-report></submit-report>
     </div>
 </template>
 <script>

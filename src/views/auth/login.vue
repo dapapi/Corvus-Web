@@ -1,5 +1,5 @@
 <template>
-    <div class="page" data-animsition-in="fade-in" data-animsition-out="fade-out">
+    <div class="" data-animsition-in="fade-in" data-animsition-out="fade-out">
 
         <div class="col-md-7 float-left left-bg">
             <div class="bg-top-image">

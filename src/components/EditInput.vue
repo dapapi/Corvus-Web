@@ -4,30 +4,26 @@
             <input class="form-control" type="text" v-model="context">
         </template>
         <template v-else>
-            {{ context }}
+            {{ content }}
         </template>
     </div>
 </template>
 
 <script>
     export default {
-        name: "editinput",
+        name: "EditInput",
         props: ['content', 'is-edit'],
         data() {
             return {
                 isEditInput: false,
+                context: ''
             }
         },
-        computed: {
-            context: {
-                get() {
-                    return this.content
-                },
-                set() {
-                    return this.content
-                }
-            }
+
+        mounted() {
+            this.context = this.content
         },
+
         watch: {
             isEdit(newValue) {
                 this.isEditInput = newValue;
@@ -36,8 +32,7 @@
             context(newValue) {
                 this.$emit('change', newValue)
             }
-        },
-        methods: {}
+        }
     }
 </script>
 
