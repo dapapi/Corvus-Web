@@ -47,14 +47,6 @@
                     <div class="card-text clearfix example">
                         <div class="col-md-6 float-left pl-0">
                             <div class="float-left pl-0 pr-2 col-md-3">
-                                <i class="md-plus pr-2" aria-hidden="true"></i>组别
-                            </div>
-                            <div class="font-weight-bold float-left">
-                                {{ projectInfo.principal.data.name }}
-                            </div>
-                        </div>
-                        <div class="col-md-6 float-left pl-0">
-                            <div class="float-left pl-0 pr-2 col-md-3">
                                 <i class="md-plus pr-2" aria-hidden="true"></i>项目状态
                             </div>
                             <div class="font-weight-bold float-left">
@@ -437,7 +429,7 @@
                             <div class="card">
                                 <div class="card-header card-header-transparent card-header-bordered">
                                     <div class="float-left font-weight-bold third-title">项目信息</div>
-                                    <div class="float-right">
+                                    <div class="float-right" v-show="!isEdit">
                                         <i class="icon md-edit pointer-content" aria-hidden="true"
                                            @click="editBaseInfo"></i>
                                     </div>
@@ -473,7 +465,7 @@
                                             </div>
                                         </div>
                                         <div class="card-text py-10 px-0 clearfix col-md-6 float-left"
-                                             :class="isEdit ? 'edit-height':'' ">
+                                             :class="isEdit ? 'edit-height':'' " v-if="projectInfo.type == 5">
                                             <div class="col-md-2 float-left text-right pl-0">可见范围</div>
                                             <div class="col-md-10 float-left font-weight-bold">
                                                 <EditSelector :is-edit="isEdit" :content="projectInfo.privacy"
@@ -511,50 +503,64 @@
                                         <div v-if="projectInfo.fields">
                                             <div class="card-text py-10 px-0 clearfix col-md-6 float-left"
                                                  :class="isEdit ? 'edit-height':'' "
-                                                 v-for="field in projectInfo.fields.data">
-                                                <div class="col-md-2 float-left text-right pl-0">{{ field.field.key }}
+                                                 v-for="field in projectInfo.fields">
+                                                <div class="col-md-2 float-left text-right pl-0">{{ field.key }}
                                                 </div>
                                                 <div class="col-md-10 float-left font-weight-bold">
-                                                    <template v-if="field.field.field_type === 1">
-                                                        <EditInput :content="field.value" :is-edit="isEdit"
-                                                                   @change="(value) => addInfo(value, field.id )"></EditInput>
+                                                    <template v-if="field.field_type === 1">
+                                                        <EditInput
+                                                                :content="field.values ? field.values.data.value : ''"
+                                                                :is-edit="isEdit"
+                                                                @change="(value) => addInfo(value, field.id )"></EditInput>
                                                     </template>
-                                                    <template v-else-if="field.field.field_type === 2">
-                                                        <EditSelector :content="field.value" :is-edit="isEdit"
-                                                                      :options="field.field.contentArr"
+                                                    <template v-else-if="field.field_type === 2">
+                                                        <EditSelector :placeholder="'请选择' + field.key"
+                                                                      :content="field.values ? field.values.data.value : ''"
+                                                                      :is-edit="isEdit"
+                                                                      :options="field.contentArr"
                                                                       @change="(value) => addInfo(value, field.id )"></EditSelector>
                                                     </template>
-                                                    <template v-else-if="field.field.field_type === 3">
+                                                    <template v-else-if="field.field_type === 3">
                                                         <EditableSearchBox :options="starsArr" :multiple="true"
                                                                            :is-edit="isEdit"
                                                                            @change="(value) => addInfo(value, field.id )"></EditableSearchBox>
                                                     </template>
-                                                    <template v-else-if="field.field.field_type === 4">
-                                                        <EditDatepicker :content="field.value" :is-edit="isEdit"
-                                                                        @change="(value) => addInfo(value, field.id )"></EditDatepicker>
+                                                    <template v-else-if="field.field_type === 4">
+                                                        <EditDatepicker
+                                                                :content="field.values ? field.values.data.value : ''"
+                                                                :is-edit="isEdit"
+                                                                @change="(value) => addInfo(value, field.id )"></EditDatepicker>
                                                     </template>
-                                                    <template v-else-if="field.field.field_type === 5">
-                                                        <EditTextarea :content="field.value" :is-edit="isEdit"
-                                                                      @change="(value) => addInfo(value, field.id )"></EditTextarea>
+                                                    <template v-else-if="field.field_type === 5">
+                                                        <EditTextarea
+                                                                :content="field.values ? field.values.data.value : ''"
+                                                                :is-edit="isEdit"
+                                                                @change="(value) => addInfo(value, field.id )"></EditTextarea>
                                                     </template>
-                                                    <template v-else-if="field.field.field_type === 6">
-                                                        <EditSelector :content="field.value" :multiple="true"
-                                                                      :is-edit="isEdit"
-                                                                      @change="(value) => addInfo(value.join('|'), field.id )"></EditSelector>
+                                                    <template v-else-if="field.field_type === 6">
+                                                        <EditSelector
+                                                                :content="field.values ? field.values.data.value : ''"
+                                                                :multiple="true"
+                                                                :is-edit="isEdit"
+                                                                :options="field.contentArr"
+                                                                @change="(value) => addInfo(value.join('|'), field.id )"></EditSelector>
                                                     </template>
-                                                    <template v-else-if="field.field.field_type === 8">
-                                                        <EditGroupDatePicker :content="field.value" :is-edit="isEdit"
-                                                                             @change="(from, to) => addInfo(from + '|' + to, field.id )">
-
+                                                    <template v-else-if="field.field_type === 8">
+                                                        <EditGroupDatePicker
+                                                                :content="field.values ? field.values.data.value : ''"
+                                                                :is-edit="isEdit"
+                                                                @change="(from, to) => addInfo(from + '|' + to, field.id )">
                                                         </EditGroupDatePicker>
                                                     </template>
-                                                    <template v-else-if="field.field.field_type === 10">
+                                                    <template v-else-if="field.field_type === 10">
                                                         <EditInputSelector :is-edit="isEdit"
                                                                            @change="(value) => addInfo(value, field.id )"></EditInputSelector>
                                                     </template>
-                                                    <template v-else-if="field.field.field_type === 11">
-                                                        <EditNumberSpinner :content="field.value" :is-edit="isEdit"
-                                                                           @change="(value) => addInfo(value, field.id )"></EditNumberSpinner>
+                                                    <template v-else-if="field.field_type === 11">
+                                                        <EditNumberSpinner
+                                                                :content="field.values ? field.values.data.value : ''"
+                                                                :is-edit="isEdit"
+                                                                @change="(value) => addInfo(value, field.id )"></EditNumberSpinner>
                                                     </template>
                                                 </div>
                                             </div>
@@ -1029,6 +1035,7 @@
                 levelArr: config.levelArr,
                 addInfoArr: [],
                 followStatus: '',
+                flagParticipantsIdArr: [],
 
             }
         },
@@ -1050,26 +1057,34 @@
                     include: 'principal,creator,fields,expectations',
                 };
                 fetch('get', '/projects/' + this.projectId, data).then(function (response) {
-                    for (let i = 0; i < response.data.fields.data.length; i++) {
-                        if (response.data.fields.data[i].field.field_type === 2 || response.data.fields.data[i].field.field_type === 6) {
-                            let content = response.data.fields.data[i].field.content.split('|');
-                            let contentArr = [];
-                            for (let j = 0; j < content.length; j++) {
-                                contentArr.push({
-                                    value: content[j],
-                                    name: content[j]
+                    let fieldsArr = response.meta.fields.data;
+                    for (let i = 0; i < fieldsArr.length; i++) {
+                        if (fieldsArr[i].field_type === 2 || fieldsArr[i].field_type === 6) {
+                            fieldsArr[i].contentArr = [];
+                            for (let j = 0; j < fieldsArr[i].content.length; j++) {
+                                fieldsArr[i].contentArr.push({
+                                    name: fieldsArr[i].content[j],
+                                    value: fieldsArr[i].content[j],
                                 })
                             }
-                            response.data.fields.data[i].field.contentArr = contentArr;
                         }
                     }
+                    response.data.fields = fieldsArr;
                     _this.projectInfo = response.data;
+                    console.log(response.data);
                     let params = {
                         type: 'change',
-                        data: response.data.principal.data
                     };
                     params.data = response.data.principal.data;
                     _this.$store.dispatch('changePrincipal', params)
+                    if (response.data.participants) {
+                        for (let i = 0; i < response.data.participants.data.length; i++) {
+                            _this.flagParticipantsIdArr.push(response.data.participants.data[i].id)
+                        }
+                        params.data = response.data.participants.data;
+                        _this.$store.dispatch('changeParticipantsInfo', params);
+                    }
+
                 })
             },
 
@@ -1141,8 +1156,6 @@
 
             editBaseInfo: function () {
                 this.isEdit = true;
-                this.changeInfo = {};
-                this.addInfoArr = {};
             },
 
             changeProjectBaseInfo: function (value, name) {
@@ -1150,23 +1163,32 @@
                     value = this.$store.state.principalInfo.id;
                 }
                 if (name === 'participants') {
-                    value = this.$store.state.participantsInfo;
+                    let participants = this.$store.state.participantsInfo;
+                    let participantsArr = [];
+                    for (let i = 0; i < participants.length; i++) {
+                        participantsArr.push(participants[i].id)
+                    }
+                    value = participantsArr;
                 }
                 this.changeInfo[name] = value
             },
 
             changeProjectInfo: function () {
                 let data = this.changeInfo;
+                data.fields = this.addInfoArr;
                 let _this = this;
                 fetch('put', '/projects/' + this.projectId, data).then(function (response) {
                     toastr.success('修改成功');
                     // todo 修改成功后页面显示信息未修改
                     _this.isEdit = false;
+                    _this.getProject()
                 })
             },
 
             cancelEdit: function () {
                 this.isEdit = false;
+                this.changeInfo = {};
+                this.addInfoArr = {};
             },
 
             changeTaskType: function (value) {

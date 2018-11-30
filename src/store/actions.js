@@ -10,6 +10,8 @@ export default {
     changePrincipal: function (data, params) {
         if (params.type === 'change') {
             data.commit('changePrincipal', params.data)
+        } else if (params.type === 'selector') {
+            data.commit('changeSelectorPrincipal', params.data)
         } else {
             data.commit('changeNewPrincipal', params.data)
         }

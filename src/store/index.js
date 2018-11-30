@@ -12,6 +12,7 @@ const state = {
     principalInfo: {},
     newPrincipalInfo: {},
     companyInfo: {},
+    selectPrincipalInfo: {},
 };
 
 export default new Vuex.Store({

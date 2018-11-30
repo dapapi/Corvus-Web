@@ -17,5 +17,9 @@ export default {
 
     changeCompany(state, data) {
         state.companyInfo = data
+    },
+
+    changeSelectorPrincipal(state, data) {
+        state.selectPrincipalInfo = data
     }
 }

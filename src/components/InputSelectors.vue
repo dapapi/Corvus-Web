@@ -28,10 +28,13 @@
         computed: {
             selectedMemberName: function () {
                 if (this.type === 'change') {
-                    this.$emit('change',this.$store.state.principalInfo.name)
+                    this.$emit('change', this.$store.state.principalInfo.name)
                     return this.$store.state.principalInfo.name
+                } else if (this.type === 'selector') {
+                    this.$emit('change', this.$store.state.selectPrincipalInfo)
+                    return this.$store.state.selectPrincipalInfo.name
                 } else {
-                    this.$emit('change',this.$store.state.newPrincipalInfo)
+                    this.$emit('change', this.$store.state.newPrincipalInfo)
                     return this.$store.state.newPrincipalInfo.name
                 }
             }

@@ -10,15 +10,18 @@
                 <div class="clearfix">
                     <div class="col-md-3 example float-left">
                         <input type="text" class="form-control" id="inputPlaceholder" placeholder="请输入项目昵称"
-                               style="width: 220px">
+                               v-model="projectKeyword"
+                               @blur="getFilterProjects(1)" style="width: 220px">
                     </div>
                     <div class="col-md-3 example float-left">
-                        <selectors @change="projectChange"
+                        <selectors @change="(value) => getFilterProjects(1, 'status', value)"
+                                   :options="projectStatusArr"
                                    :placeholder="'请选择项目状态'"></selectors>
                     </div>
-                    <div class="col-md-3 example float-left">
-                        <selectors @change="projectPrincipalChange"
-                                   :placeholder="'请选择负责人'"></selectors>
+                    <div class="col-md-3 example float-left" v-if="allUsers.length > 0">
+                        <selectors @change="(value) => getFilterProjects(1, 'principal', value)"
+                                   :options="allUsers" multiple="true"
+                                   :placeholder="'请选择项目负责人'"></selectors>
                     </div>
                     <div class="col-md-3 example float-left">
                         <button type="button" class="btn btn-default waves-effect waves-classic float-right"
@@ -52,14 +55,12 @@
                 <div class="page-content tab-content nav-tabs-animate bg-white">
                     <div class="tab-pane animation-fade active" id="forum-project" role="tabpanel">
                         <table class="table table-hover is-indent mb-20" data-plugin="animateList" data-animate="fade"
-                               data-child="tr"
-                               data-selectable="selectable">
+                               data-child="tr" data-selectable="selectable" v-if="projectsInfo.length > 0">
                             <tr class="animation-fade"
                                 style="animation-fill-mode: backwards; animation-duration: 250ms; animation-delay: 0ms;">
                                 <th class="cell-300" scope="col">项目名称</th>
                                 <th class="cell-300" scope="col">负责人</th>
                                 <th class="cell-300" scope="col">目标艺人</th>
-                                <th class="cell-300" scope="col">预计订单收入</th>
                                 <th class="cell-300" scope="col">优先级</th>
                                 <th class="cell-300" scope="col">跟进时间</th>
                             </tr>
@@ -70,11 +71,24 @@
                                         {{ project.title }}
                                     </router-link>
                                 </td>
-                                <td>{{ project.principal }}</td>
-                                <td>{{ project.progress }}</td>
-                                <td>{{ project.sign_time }}</td>
-                                <td>{{ project.delivery }}</td>
-                                <td>{{ project.follow_time }}</td>
+                                <td>
+                                    <template v-if="project.principal">
+                                        {{ project.principal.data.name }}
+                                    </template>
+                                </td>
+                                <td>
+                                    <template v-if="project.trail && project.trail.data.expectations">
+                                        <template v-for="expectation in project.trail.data.expectations.data">
+                                            {{ expectation.name }}
+                                        </template>
+                                    </template>
+                                </td>
+                                <td>
+                                    <template v-if="project.priority">
+                                        {{ levelArr.find(item => item.value == project.priority).name}}
+                                    </template>
+                                </td>
+                                <td>{{ project.last_follow_up_at }}</td>
                             </tr>
                             </tbody>
                         </table>
@@ -82,7 +96,7 @@
                             <img src="https://res.papitube.com/corvus/images/content-none.png" alt=""
                                  style="width: 100%">
                         </div>
-                        <pagination :current_page="current_page" :method="getProjects" :total_pages="total_pages"
+                        <pagination :current_page="current_page" :method="paginationType" :total_pages="total_pages"
                                     :total="total"></pagination>
                     </div>
                 </div>
@@ -198,7 +212,7 @@
                                            @change="(value) => addProjectBaseInfo(value, 'priority')"></Selectors>
                             </div>
                         </div>
-                        <div class="col-md-12 example clearfix">
+                        <div class="col-md-12 example clearfix" v-if="projectType == 5">
                             <div class="col-md-2 text-right float-left pl-0">可见范围</div>
                             <div class="col-md-10 float-left">
                                 <Selectors :options="visibleRangeArr" :placeholder="'请选择可见范围'"
@@ -304,6 +318,10 @@
                 trailsAllInfo: '',
                 trailOrigin: '',
                 email: '',
+                projectKeyword: '',
+                paginationType: '',
+                projectStatusArr: config.projectStatusArr,
+                allUsers: [],
 
             }
         },
@@ -313,6 +331,7 @@
             this.getStars();
             this.getProjects();
             this.getTrail();
+            this.getAllMembers();
         },
 
         methods: {
@@ -320,16 +339,51 @@
             getProjects: function (pageNum = 1, type = null) {
                 let data = {
                     page: pageNum,
+                    include: 'principal,trail.expectations'
                 };
                 let url = '/projects';
                 if (type) {
                     url = '/projects/my';
                     data.type = type;
                 }
+                this.paginationType = 'getProjects';
                 let _this = this;
                 fetch('get', url, data).then(function (response) {
                     _this.projectsInfo = response.data
 
+                })
+            },
+
+            getFilterProjects: function (pageNum = 1, type, value) {
+                let data = {
+                    page: pageNum,
+                    include: 'principal,trail.expectations'
+                };
+                if (this.projectKeyword) {
+                    data.keyword = this.projectKeyword
+                }
+                if (type === 'status') {
+                    data.status = value
+                }
+                if (type === 'principal' && value) {
+                    data.principal_ids = value
+                }
+                let _this = this;
+                this.paginationType = 'getFilterProjects';
+                fetch('get', '/projects/filter', data).then(function (response) {
+                    _this.projectsInfo = response.data
+                })
+            },
+
+            getAllMembers: function () {
+                let _this = this;
+                fetch('get', '/users').then(function (response) {
+                    for (let i = 0; i < response.data.length; i++) {
+                        _this.allUsers.push({
+                            name: response.data[i].name,
+                            value: response.data[i].id
+                        })
+                    }
                 })
             },
 
@@ -359,14 +413,6 @@
                     }
 
                 })
-            },
-
-            projectChange: function (e) {
-                console.log(e)
-            },
-
-            projectPrincipalChange: function (e) {
-                console.log(e)
             },
 
             customize: function (value) {
@@ -433,8 +479,6 @@
 
 
             addInfo: function (value, name) {
-                console.log(name);
-                console.log(value);
                 this.addInfoArr[name] = value
             },
 
