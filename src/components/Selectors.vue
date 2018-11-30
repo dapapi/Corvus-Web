@@ -1,10 +1,11 @@
 <template>
-    <select data-plugin="selectpicker" :value="value" :data-live-search="searchable" :multiple="multiple"
-            :title="placeholder">
-        <selectorsOptions v-for="option in this.options" v-bind:id="option.id" :val="option.value" :key="option.id">
+
+    <select data-plugin="selectpicker" :value="value" :data-live-search="searchable" :multiple="multiple" :title="placeholder" v-model="valueListener">
+        <selectorsOptions v-for="option in options" v-bind:id="option.id" :val="option.value || option.id" :key="option.id">
             {{option.name}}
         </selectorsOptions>
     </select>
+
 </template>
 <script>
     export default {
@@ -12,10 +13,10 @@
         data() {
             return {
                 isDisable: this.disable,
+                valueListener:[]
             }
         },
         mounted() {
-
             let self = this;
             $(this.$el).selectpicker().on('hidden.bs.select', function () {
                 self.$emit('change', $(this).val(), $(this)[0].selectedOptions[0].label, $(this)[0].selectedOptions[0].id);
@@ -27,6 +28,9 @@
 
         },
         watch: {
+            valueListener:function(newValue){
+                this.$emit('valuelistener',newValue)
+            },
             disable: function (newValue) {
                 this.isDisable = newValue;
                 if (newValue) {
@@ -38,7 +42,10 @@
                 }
             },
             options: function (newValue) {
-                this.refresh()
+                this.$nextTick(() => {
+                    this.refresh()
+                })
+
             }
         },
         methods: {

@@ -1,5 +1,5 @@
 <template>
-    <option v-bind:value="val"><slot></slot></option>
+    <option :value="val" ><slot></slot></option>
 </template>
 <script>
     export default {
@@ -9,6 +9,10 @@
                 value: ''
             }
         },
+        mounted() {
+        },
+        methods:{
+        }
     }
 </script>
 
