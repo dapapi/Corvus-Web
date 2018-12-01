@@ -6,12 +6,12 @@
             <ul class="nav nav-tabs no-nav-tab-border" role="tablist">
                 <li class="nav-item" role="presentation">
                     <a class="nav-link" data-toggle="tab" href="#all-TaskFollowUp"
-                       aria-controls="exampleTabsOne" role="tab" aria-selected="true" @click="taskFilter=0">全部</a>
+                       aria-controls="exampleTabsOne" role="tab" aria-selected="true" @click="taskFilter=1">全部</a>
                 </li>
                 <li class="nav-item" role="presentation">
                     <a class="nav-link active" data-toggle="tab" href="#task-follow"
-                       aria-controls="exampleTabsTwo" role="tab" aria-selected="false" @click="taskFilter=1">{{
-                        this.followType }}跟进</a>
+                       aria-controls="exampleTabsTwo" role="tab" aria-selected="false" @click="taskFilter=3">{{
+                        followType }}跟进</a>
                 </li>
                 <li class="nav-item" role="presentation">
                     <a class="nav-link" data-toggle="tab" href="#task-active"
@@ -83,7 +83,7 @@
             return {
                 showButton: false,
                 taskFollowText: '',
-                taskFilter: '1',
+                taskFilter: '3',
                 taskData: []
             }
         },
