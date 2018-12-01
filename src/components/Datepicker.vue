@@ -8,7 +8,7 @@
 </template>
 <script>
     export default {
-        props: ['placeholder', 'changeKey'],
+        props: ['placeholder', 'changeKey', 'startDate'],
         data() {
             return {}
         },
@@ -27,7 +27,18 @@
             });
 
         },
+        watch: {
+            /**
+             * 设置时间选择范围，一般用于设置截止时间大于开始时间
+             * */
+            startDate(newValue) {
+                $(this.$el).datepicker('setStartDate', newValue);
+            }
+        },
         methods: {
+            /**
+             * 在清空选择时间时，可设置value为空
+             * */
             setValue(value) {
                 $(this.$el).datepicker('update', value);
             },

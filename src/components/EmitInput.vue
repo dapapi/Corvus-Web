@@ -16,7 +16,9 @@
             }
         },
         methods: {
-            // 清空input内容
+            /**
+             * 清空input内容
+             * */
             refresh() {
                 this.value = ''
             }

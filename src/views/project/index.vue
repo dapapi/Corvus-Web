@@ -231,7 +231,7 @@
                             <div class="col-md-2 text-right float-left pl-0">截止时间</div>
                             <div class="col-md-10 float-left">
                                 <Datepicker @change="(value) => addProjectBaseInfo(value, 'end_at')"
-                                            ref="endTime"></Datepicker>
+                                            ref="endTime" :startDate="startTime"></Datepicker>
                             </div>
                         </div>
                         <div class="col-md-12 example clearfix" v-for="field in projectFieldsArr">
@@ -326,6 +326,7 @@
                 paginationType: '',
                 projectStatusArr: config.projectStatusArr,
                 allUsers: [],
+                startTime: '',
 
             }
         },
@@ -520,6 +521,9 @@
             addProjectBaseInfo: function (value, name) {
                 if (name === 'principal_id') {
                     value = this.$store.state.newPrincipalInfo.id;
+                }
+                if (name === 'start_at') {
+                    this.startTime = value
                 }
                 this.projectBaseInfo[name] = value
             },

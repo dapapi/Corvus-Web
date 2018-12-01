@@ -55,6 +55,9 @@
                 $(this.$el).selectpicker('destroy');
             },
 
+            /**
+             * 在清空选择时，可设置value为空
+             * */
             setValue(value) {
                 $(this.$el).selectpicker('val', value);
             },
