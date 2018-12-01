@@ -48,24 +48,24 @@
 
             },
 
-            methods: {
-                showMember: function () {
-                    this.selectMemberShow = true;
-                },
+        },
+        methods: {
+            showMember: function () {
+                this.selectMemberShow = true;
+            },
 
-                removeInputSelect(event) {
-                    let tag = document.getElementById("inputSelectMember" + this._uid);
-                    if (tag) {
-                        if (!tag.contains(event.target)) {
-                            this.selectMemberShow = false;
-                        }
+            removeInputSelect(event) {
+                let tag = document.getElementById("inputSelectMember" + this._uid);
+                if (tag) {
+                    if (!tag.contains(event.target)) {
+                        this.selectMemberShow = false;
                     }
-                },
-
-                changeSelectMember: function () {
-                    this.selectMemberShow = false;
-                    this.$emit('change', false)
                 }
+            },
+
+            changeSelectMember: function () {
+                this.selectMemberShow = false;
+                this.$emit('change', false)
             }
         }
     }
