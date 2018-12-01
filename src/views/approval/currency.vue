@@ -1,159 +1,225 @@
 <template>
-    <div class="page-main" style="padding-left:240px">
+    <!-- Page -->
+    <div class="page-main" style="background-color:##f3f4f5">
         <div class="page-header page-header-bordered">
-            <h1 class="page-title">成员请假统计</h1>
+            <h1 class="page-title">我的审批</h1>
         </div>
-        <div class="page-content container-fluid">
-            <div class="panel p-20 clearfix">
-                <!-- <div class="col-md-4  p-20"> -->
-                    <div class="col-md-4 input-search float-left">
-                        <selectors></selectors>
-                    </div>
-                    <div class="col-md-4 float-left">
-                        <Datepicker></Datepicker>
-                    </div>
-                    <div class="col-md-4 float-left">
-                        <Datepicker></Datepicker>
-                    </div>
-                <!-- </div> -->
-                
-            </div>
-            
-            <div class="panel p-20 pr-0">
-                 <table class="table">
-                    <tr>
-                        <th class="cell-200">工号</th>
-                        <th class="cell-200">姓名</th>
-                        <th class="cell-200">部门</th>
-                        <th class="cell-200" scope="col" v-for="(item,index) in leaveType" :key="index">{{item.name}}</th>
-                        
-                        <th class="cell-200" scope="col">合计</th>
-                    </tr>
-                    <tr v-for="(item,index) in list" :key="index">
-                        <td>{{index}}</td>
-                        <td>{{item.name}}</td>
-                        <td>{{item.name}}</td>
-                        <td class="pointer-content" v-for="(item,index) in leaveType" :key="index">11</td>
-                        <!-- <td class="cell-300">1</td>
-                        <td class="cell-300">2</td>
-                        <td class="cell-300">4</td> -->
-                        <td class="cell-300">520</td>
-
-                    </tr>
-                </table>
-            </div>
+         <div class="page-content container-fluid  pt-20 px-20">
+               <div class="panel col-md-12 clearfix p-10 mt-0">
+                <!-- <div class="clearfix"> -->
+                <div class="col-md-3 example float-left " >
+                        <selectors :placeholder="'太阳系'" :options="data"></selectors>
+                </div>
+                 <div class="col-md-3 example float-left" >
+                         <datepicker :placeholder="'开始时间'"></datepicker>
+                </div>
+                <div class="col-md-3 example float-left" >
+                         <datepicker :placeholder="'结束时间'"></datepicker>
+                </div>
+                </div>
+        </div>
+        <div class="page-content container-fluid px-20">       
+            <div class="col-md-12 panel">
+                    <div class="example pb-5 mt-0">
+                        <table class="table table-hover is-indent mb-20" data-plugin="animateList" data-animate="fade"
+                               data-child="tr"
+                               data-selectable="selectable">
+                            <tr>
+                                <th class="cell-300 pl-15" scope="col">工号</th>
+                                <th class="cell-300 pl-15" scope="col">姓名</th>
+                                <th class="cell-300 pl-15" scope="col">部门</th>
+                                <th class="cell-300 pl-15" scope="col">审批编号</th>
+                                <th class="cell-300 pl-15" scope="col">申请时间</th>
+                                <th class="cell-300 pl-15" scope="col">审批时间</th>
+                                <th class="cell-300 pl-15" scope="col">审批人</th>   
+                            </tr>
+                            <tr >
+                                <td>
+                                    <div data-toggle="modal" data-target="#submitReport">
+                                        10001
+                                    </div>
+                                </td>
+                                <td>
+                                    <div data-toggle="modal" data-target="#submitReport">
+                                        张三
+                                    </div>
+                                </td>
+                                <td>
+                                    <div data-toggle="modal" data-target="#submitReport">
+                                        技术部
+                                    </div>
+                                </td>
+                                <td>
+                                    <div data-toggle="modal" data-target="#submitReport">
+                                        1234567
+                                    </div>
+                                </td>
+                                <td>
+                                    <div data-toggle="modal" data-target="#submitReport">
+                                        2018.10.11
+                                    </div>
+                                </td>
+                                <td class="pointer-content">
+                                    <div data-toggle="modal" data-target="#submitReport">
+                                          2018.10.14
+                                    </div>
+                                </td>
+                                <td>
+                                    <div data-toggle="modal" data-target="#submitReport">明明</div>
+                                </td>     
+                            </tr>
+                                <tr >
+                                    <td>
+                                        <div data-toggle="modal" data-target="#submitReport">
+                                            10002
+                                        </div>
+                                    </td>
+                                    <td>
+                                        <div data-toggle="modal" data-target="#submitReport">
+                                            王五
+                                        </div>
+                                    </td>
+                                    <td>
+                                        <div data-toggle="modal" data-target="#submitReport">
+                                            技术部
+                                        </div>
+                                    </td>
+                                    <td>
+                                        <div data-toggle="modal" data-target="#submitReport">
+                                            7654321
+                                        </div>
+                                    </td>
+                                    <td>
+                                        <div data-toggle="modal" data-target="#submitReport">
+                                            2018.10.16
+                                        </div>
+                                    </td>
+                                    <td class="pointer-content">
+                                        <div data-toggle="modal" data-target="#submitReport">
+                                            2018.10.17
+                                        </div>
+                                    </td>
+                                    <td>
+                                        <div data-toggle="modal" data-target="#submitReport">明明</div>
+                                    </td>     
+                                </tr>
+                                 <tr >
+                                <td>
+                                    <div data-toggle="modal" data-target="#submitReport">
+                                        10003
+                                    </div>
+                                </td>
+                                <td>
+                                    <div data-toggle="modal" data-target="#submitReport">
+                                        李四
+                                    </div>
+                                </td>
+                                <td>
+                                    <div data-toggle="modal" data-target="#submitReport">
+                                        人事部
+                                    </div>
+                                </td>
+                                <td>
+                                    <div data-toggle="modal" data-target="#submitReport">
+                                        01018456
+                                    </div>
+                                </td>
+                                <td>
+                                    <div data-toggle="modal" data-target="#submitReport">
+                                        2018.10.13
+                                    </div>
+                                </td>
+                                <td class="pointer-content">
+                                    <div data-toggle="modal" data-target="#submitReport">
+                                          2018.10.15
+                                    </div>
+                                </td>
+                                <td>
+                                    <div data-toggle="modal" data-target="#submitReport">白白</div>
+                                </td>     
+                            </tr>
+                            
+                        </table>
+                        <!-- <pagination :current_page="current_page" :method="getProjects" :total_pages="total_pages"
+                                    :total="total"></pagination> -->
+                </div>
+                </div>
         </div>
     </div>
 </template>
-<style lang="scss" scoped>
-    .page-main{
-        background-color:#f3f4f5 !important;
-    }
-    tr{ 
-        
-        &:hover{
-            background-color:#f5f5f5;
-            cursor: pointer;
-        }
-    }
-</style>
 <script>
+import fetch from "@/assets/utils/fetch";
+import config from "@/assets/js/config";
+import data from "./selector.json"
+
 export default {
-    data(){
-        return {
-            list:[
-                {
-                    id:1,
-                    name:'1月'
-                },
-                {
-                    id:2,
-                    name:'2月'
-                },
-                {
-                    id:3,
-                    name:'3月'
-                },
-                {
-                    id:4,
-                    name:'4月'
-                },
-                {
-                    id:5,
-                    name:'5月'
-                },
-                {
-                    id:6,
-                    name:'6月'
-                },
-                {
-                    id:7,
-                    name:'7月'
-                },
-                {
-                    id:8,
-                    name:'8月'
-                },
-                {
-                    id:9,
-                    name:'9月'
-                },
-                {
-                    id:10,
-                    name:'10月'
-                },
-                {
-                    id:11,
-                    name:'11月'
-                },
-                {
-                    id:12,
-                    name:'12月'
-                }
-                
-            ],
-            leaveType:[
-                {
-                    value:1,
-                    name:'事假'
-                },
-                {
-                    value:2,
-                    name:'病假'
-                },
-                {
-                    value:3,
-                    name:'调休'
-                },
-                {
-                    value:4,
-                    name:'年假'
-                },
-                {
-                    value:5,
-                    name:'婚假'
-                },
-                {
-                    value:6,
-                    name:'产假'
-                },
-                {
-                    value:7,
-                    name:'陪产假'
-                },
-                {
-                    value:8,
-                    name:'丧假'
-                },
-                {
-                    value:9,
-                    name:'其他'
-                },
-                
-            ],
-        }
-    }
-}
+  data() {
+    return {
+      list: [],
+      data: data
+    };
+  },
+  mounted() {
+    this.getlist();
+  },
+  methods: {
+    redirectBriefDetails: function(id) {
+      this.$router.push({ path: "/brief/details", query: { id: id } });
+    },
+    redirectBriefAdd: function() {
+      this.$router.push({ path: "/brief/add" });
+    },
+    getlist: function() {
+      fetch("get", `${config.apiUrl}/launch`).then(res => {
+        this.list = res.data;
+        console.log(res.data)
+      });
+    },
+    addInfo: function (value, name) {
+        this.addInfoArr[name] = value;
+    },
+  }
+};
 </script>
+<style lang="scss" scoped>
+.page-main {
+  background-color: #f3f4f5 !important;
+}
+tr {
+  &:hover {
+    background-color: #f5f5f5;
+    cursor: pointer;
+  }
+}
+.page-main {
+  position: absolute;
+  left: 240px;
+  top: 0;
+}
+
+.page-header-bordered {
+  margin: 0;
+}
+.page-content{
+   padding: 0;
+}
+.example span{
+    position: absolute;
+    top:10px;
+}
+.panel{
+    margin:0;
+}
+</style>
+
+
+
+
+    
+    
+
+
+
+
 
 

@@ -17,10 +17,16 @@
                                style="width: 220px" v-model="trailFilter" @blur='filterGo'>
                     </div>
                     <div class="col-md-3 example float-left">
-                        <selectors :placeholder="'请选择销售进展'"></selectors>
+                        <selectors :placeholder="'请选择销售进展'" 
+                                :options="progressStatus"
+                                @change="progressStatusFilter"
+                                ></selectors>
                     </div>
                     <div class="col-md-3 example float-left">
-                        <selectors :placepholder="'请选择负责人'"></selectors>
+                        <selectors placeholder="请选择负责人" 
+                                :options="memberList" multiple
+                                @change="principalFilter"
+                                ></selectors>
                     </div>
                     <div class="col-md-3 example float-left">
                         <button type="button" class="btn btn-default waves-effect waves-classic float-right"
@@ -274,7 +280,7 @@
                 trailPrincipal: '',
                 trailContact: '',
                 trailContactPhone: '',
-                trailFilter:'',
+                trailFilter: '',
                 email: '',
                 trailFee: '',
                 trailDesc: '',
@@ -287,27 +293,66 @@
                 trailStatus: '',
                 cooperation: '',
                 filterData:'',
+                progressStatus:[{
+                    'name':'已拒绝',
+                    'value':0
+                },{
+                    'name':'未确定合作',
+                    'value':1
+                },{
+                    'name':'已确定合作',
+                    'value':2
+                }],
+                memberList:[],
             }
         },
-
+        created(){
+            this.getMembers()
+        },
         mounted() {
             this.getSales();
             this.getClients();
             this.getStars();
             this.getIndustries();
         },
-
+        watch:{
+            memberList:function(value){
+                this.$nextTick(() => {
+                    $('.selectpicker').selectpicker('render');
+                    $('.selectpicker').selectpicker('refresh');
+                })
+            }
+        },
         methods: {
+            getMembers(){
+                let _this = this
+                fetch('get', '/users').then(function (response) {
+                         _this.memberList = response.data
+                })
+            },
+            principalFilter(value){
+                if(value){
+                    console.log(value);
+                    let _this = this;
+                    console.log('/trails/filter?principal_ids='+value+'&include=principal,client,contact,recommendations,expectations');
+                    fetch('get', '/trails/filter?principal_ids='+value+'&include=principal,client,contact,recommendations,expectations').then(function (response) {
+                        _this.trailsInfo = response.data
+                    })
+                }
+                
+            },
             filterGo(){
                 let _this = this;
-                 fetch('get', '/trails/filter?keyword='+this.trailFilter+'&include=principal,client,contact,recommendations,expectations').then(function (response) {
-                     
-                    console.log(response);
+                fetch('get', '/trails/filter?keyword='+this.trailFilter+'&include=principal,client,contact,recommendations,expectations').then(function (response) {
                     _this.trailsInfo = response.data
-                    console.log(_this.trailsInfo);
-                    // _this.transIInfo = _this.filterData
                 })
-                this.$forceUpdate()
+            },
+            progressStatusFilter(value){
+                 let _this = this;
+                 fetch('get', '/trails/filter?status='+value+'&include=principal,client,contact,recommendations,expectations').then(function (response) {
+                    _this.trailsInfo = response.data
+                    _this.trailFilter = ''
+                })
             },
             getSales: function (pageNum = 1) {
                 let _this = this;
@@ -362,7 +407,6 @@
             },
 
             addTrail: function () {
-                console.log(this.$store.state.newPrincipalInfo.id);
                 let data = {
                     title: this.trailName,
                     brand: this.brandName,
@@ -387,7 +431,7 @@
                 if (this.trailOrigin == 1 || this.trailOrigin == 2 || this.trailOrigin == 3) {
                     data.resource = this.email
                 } else if (this.trailOrigin == 4 || this.trailOrigin == 5) {
-                    data.resource = this.trailOriginPerson
+                    data.resource = this.trailOriginPerson.id
                 } else {
                     data.resource = ''
                 }
@@ -397,9 +441,7 @@
                 let _this = this;
                 fetch('post', '/trails', data).then(function (response) {
                     $('#addTrail').modal('hide');
-                    // _this.$router.push({path: '/trails/' + response.data.id})
                     _this.$router.push({path: '/trails/' + response.data.id})
-                    console.log(response);
                 })
             },
 
@@ -467,8 +509,8 @@
 
             changeCooperationType: function (value) {
                 this.cooperation = value
-            }
-
+            },
+            
 
         }
     }

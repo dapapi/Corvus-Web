@@ -230,10 +230,10 @@
 
                                 <div class="card-text py-5 clearfix">
                                     <div class="col-md-1 float-left text-right pl-0">录入人</div>
-                                    <div class="col-md-5 float-left font-weight-bold">
+                                    <div class="col-md-5 float-left font-weight-bold">{{clientInfo.creator.data.name}}
                                     </div>
                                     <div class="col-md-1 float-left text-right pl-0">录入时间</div>
-                                    <div class="col-md-5 float-left font-weight-bold">
+                                    <div class="col-md-5 float-left font-weight-bold">{{clientInfo.created_at.date.substr(0,19)}}
                                     </div>
                                 </div>
                                 <div class="card-text py-5 clearfix">
@@ -241,7 +241,7 @@
                                     <div class="col-md-5 float-left font-weight-bold">
                                     </div>
                                     <div class="col-md-1 float-left text-right pl-0">最近更新时间</div>
-                                    <div class="col-md-5 float-left font-weight-bold">
+                                    <div class="col-md-5 float-left font-weight-bold">{{clientInfo.updated_at.date.substr(0,19)}}
                                     </div>
                                 </div>
                             </div>
@@ -467,7 +467,7 @@
                 startMinutes: '00:00',
                 endMinutes: '00:00',
                 taskEndTime: '',
-                taskLevel: '',
+                taskLevel: 1, 
                 isEdit: false,
                 clientInfo: {},
                 clientTasksInfo: [],
@@ -477,11 +477,13 @@
                 contactPhone: '',
                 contactPosition: '',
                 clientProjectsInfo: '',
+                taskPrincipalId: '',
             }
         },
-
-        mounted() {
+        beforeMount () {
             this.clientId = this.$route.params.id;
+        },
+        mounted() {
             let _this = this;
             setTimeout(function () {
                 _this.getClient();
@@ -532,7 +534,7 @@
 
             getClient: function () {
                 let _this = this;
-                fetch('get', '/clients/' + this.clientId, {include: 'principal'}).then(function (response) {
+                fetch('get', '/clients/' + this.clientId, {include: 'principal,creator'}).then(function (response) {
                     _this.clientInfo = response.data;
                     let params = {
                         type: 'change',
@@ -661,7 +663,7 @@
                     resourceable_id: this.clientId,
                     title: this.taskName,
                     // type: 4,
-                    principal_id: this.principal,
+                    principal_id: this.taskPrincipalId,
                     priority: this.taskLevel,
                     start_at: this.taskStartTime + ' ' + this.startMinutes,
                     end_at: this.taskEndTime + ' ' + this.endMinutes,
@@ -685,6 +687,7 @@
 
             taskParticipantChange: function (value) {
                 this.taskParticipant = value
+                this.taskPrincipalId =  this.$store.state.newPrincipalInfo.id
             },
 
             changeStartTime: function (value) {
@@ -697,6 +700,7 @@
 
             changeTaskLevel: function (value) {
                 this.taskLevel = value
+                console.log(value)
             }
 
         }
