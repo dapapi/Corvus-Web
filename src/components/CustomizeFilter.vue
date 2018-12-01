@@ -16,7 +16,7 @@
                            v-model="customizeKeyWords">
 
                     <h5>筛选条件</h5>
-                    <div v-for="n in conditionLength" class="clearfix">
+                    <div v-for="n in conditionLength" class="clearfix" :key="n">
                         <div :id="'selector' + n" v-show="selectorHidden.indexOf('selector' + n) === -1">
                             <div class="float-left col-md-11 p-0">
                                 <customize-linkage-selectors :data="data,n"
@@ -90,8 +90,7 @@
                     keywords: this.customizeKeyWords,
                     conditions: this.conditionData
                 };
-                let self = this;
-                self.$emit('change', data);
+                this.$emit('change', data);
                 $('.modal').modal('hide');
             }
         }

@@ -32,16 +32,16 @@
                             </span>
                             <span>
                                  <i class="icon md-account pl-2"></i>
-                            泰洋系（{{ this.normalUsers.length }}人)
+                            泰洋系（{{ normalUsers.length }}人)
                             </span>
                             <span class="team-add-all pl-2" @click="selectAllMember" v-if="multiple">
                                 <i class="icon md-plus"></i>
                             </span>
                         </div>
                         <div v-show="teamShow">
-                            <div class="users" v-for="user in this.normalUsers"
+                            <div class="users" v-for="user in normalUsers"
                                  v-show="user.name.indexOf(searchKeyWord) > -1"
-                                 @click="selectMember(user)">
+                                 @click="selectMember(user)" :key='user.name+Math.random()'>
                                 <a class="avatar" href="javascript:void(0)">
                                     <img src="https://res.papitube.com/no-icon.png" alt="...">
                                 </a>
@@ -64,7 +64,7 @@
 
                 </div>
                 <div class="tab-pane animation-fade" :id="'forum-department' + this._uid" role="tabpanel">
-                    <div v-for="department in departmentUsers">
+                    <div v-for="department in departmentUsers" :key='department.id+Math.random()'>
                         <departments-item :data="department" @change="memberChange" :type="type"
                                           :multiple="multiple" :member-type="memberType"></departments-item>
                     </div>

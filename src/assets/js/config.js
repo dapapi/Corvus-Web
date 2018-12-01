@@ -118,6 +118,16 @@ let config = {
                 value: 4
             },
         ],
+        classifyArr:[
+            {
+                name: '规则制度',
+                value: 1
+            },
+            {
+                name: '内部公告',
+                value: 2
+            }
+        ],
         customizeInfo: [
             {
                 id: 0,

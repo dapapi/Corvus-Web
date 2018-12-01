@@ -36,21 +36,21 @@
                                             </router-link>
                                         </span>
                                         <span class="broadcast-top-flag badge badge-outline badge-info" 
-                                            v-if="item.topflag">置顶</span>
+                                            v-if="item.stick">置顶</span>
                                         <span class="broadcast-new-flag" v-if="item.readflag">
                                             <strong>NEW</strong>
                                         </span>
                                     </td>
-                                    <td>{{item.type}}</td>
+                                    <td>{{classifyArr.find(classifyArr => classifyArr.value == item.classify).name}}</td>
                                     <td></td>
                                     <td>
-                                        <span>{{item.timeYMD}} {{item.timehms}}</span>
+                                        <span>{{item.created_at}}</span>
                                         <i class="icon md-time ml-10" aria-hidden="true"></i>
                                     </td>
                                     <td></td>
                                     <td></td>
                                     <td>
-                                        {{item.name}}      
+                                        {{item.creator_id}}      
                                     </td>
                                 </tr>
                                 </tbody>
@@ -65,30 +65,34 @@
 </template>
 
 <script>
-import broadCastData from './broadcast.json'
+// import broadCastData from './broadcast.json'
+import fetch from '../../assets/utils/fetch.js'
+import config from '../../assets/js/config'
 export default {
     data(){
         return{
-             broadCastInfo:{}
+             broadCastInfo:{},
+             classifyArr:config.classifyArr,
         }
           
     },
     created() {
-       this.broadCastInfo = broadCastData    
        this.dataInit()    
     },
-    mounted(){
+    computed:{
 
+    },
+    mounted(){
+        
     },
     methods:{
         //初始化数据
         dataInit(){
-        for (const key in broadCastData) {
-            let orignTime = broadCastData[key].time
-            broadCastData[key].timeYMD = this.timeFormat(orignTime).formatYMD
-            broadCastData[key].timehms = this.timeFormat(orignTime).formathms
-        }
-        this.broadCastInfo = broadCastData
+            let _this = this
+                fetch('get', '/announcements').then(function (response) {
+                    console.log(response.data);
+                    _this.broadCastInfo = response.data
+            })
         },
         //日期格式化
         timeFormat(ref){
@@ -105,6 +109,12 @@ export default {
                 formatYMD,formathms
             }
         },
+        // getBroadCast(){
+        //      let _this = this
+        //         fetch('get', '/users').then(function (response) {
+        //                  _this.memberList = response.data
+        //         })
+        // }
     }
 }
 </script>
@@ -116,6 +126,7 @@ export default {
 }
 .broadcast-title-div{
     display: inline-block;
+    min-width: 200px;
     max-width: 500px;
     white-space: nowrap;
     overflow: hidden;

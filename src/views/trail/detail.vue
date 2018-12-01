@@ -136,7 +136,7 @@
                                         <button class="btn btn-primary" @click="changeTrailBaseInfo">确定</button>
                                     </div>
                                 </div>
-                                <div class="card-block" v-if="trailInfo.title">
+                                <div class="card-block">
                                     <div class="clearfix">
                                         <div class="card-text py-10 px-0 clearfix col-md-6 float-left"
                                              :class="isEdit ? 'edit-height':'' ">
@@ -267,7 +267,7 @@
                                             <div class="col-md-2 float-left text-right pl-0">公司名称</div>
                                             <div class="col-md-10 float-left font-weight-bold">
                                                 <EditInput :content="trailInfo.client.data.company" :is-edit="isEdit"
-                                                           @change="changeTrailCompany"></EditInput>
+                                                           @change="changeTrailCompany" disabled></EditInput>
                                             </div>
 
                                         </div>
@@ -675,6 +675,42 @@
         },
 
         methods: {
+            trailTypeValidate(){
+                if(!this.trailInfo.principal){
+                    toastr.error("负责人为必填");
+                    return false;
+                }else if(!this.trailInfo.fee){
+                    toastr.error("费用为必填")
+                    return false;
+                }else if(!this.trailInfo.client.data.company){
+                    toastr.error("公司名称为必填")
+                    return false;
+                }else if(!this.trailInfo.title){
+                    toastr.error("线索名称为必填")
+                    return false;
+                }else if(!this.trailInfo.expectations){
+                    toastr.error("目标艺人为必填")
+                    return false; 
+                }else if(!this.trailInfo.contact.data.name){
+                    toastr.error("联系人为必填")
+                    return false;
+                }else if(this.trailInfo.contact.data.phone){
+                    let phone = this.trailInfo.contact.data.phone
+                    if(!(/^1(3|4|5|7|8)\d{9}$/.test(phone))){ 
+                        // alert("手机号码有误，请重填");  
+                        toastr.error("请输入正确的手机号码");
+                        return false; 
+                    }else{
+                        return true;
+                    }  
+                }else if(!this.trailInfo.contact.data.phone){
+                    toastr.error("手机号码为必填")
+                    return false;
+                }else{
+                    console.log(ture);
+                    return true
+                }
+            },
             getTrail: function () {
                 this.trailId = this.$route.params.id;
                 let _this = this;
@@ -682,6 +718,7 @@
                     include: 'principal,client,contact,recommendations,expectations,project',
                 };
                 fetch('get', '/trails/' + this.trailId, data).then(function (response) {
+                    console.log(response);
                     _this.trailInfo = response.data;
                     _this.oldInfo = JSON.parse(JSON.stringify(response.data));
                     for (let i = 0; i < _this.trailInfo.expectations.data.length; i++) {
@@ -717,15 +754,15 @@
             },
 
             changeTrailBaseInfo: function () {
-                let _this = this;
-                let data = _this.changeInfo;
-                fetch('put', '/trails/' + this.trailId, data).then(function () {
-                    toastr.success('修改成功');
-                    _this.isEdit = false
-                    _this.getTrail()
-                })
-            
-
+                if (this.trailTypeValidate()){
+                    let _this = this;
+                    let data = _this.changeInfo;
+                    fetch('put', '/trails/' + this.trailId, data).then(function () {
+                        toastr.success('修改成功');
+                        _this.isEdit = false
+                        _this.getTrail()
+                    })
+                }
             },
 
             getStars: function () {
@@ -799,9 +836,11 @@
             },
 
             redirectCompany: function (companyId) {
-                this.$router.push({path: 'clients/' + companyId});
+                this.$router.replace({path: '/clients/' + companyId});
             },
-
+            redirectProject: function (projectId){
+                this.$router.replace({path: '/project/' + projectId});
+            },
             changeLinkage: function (value) {
                 console.log(value)
             },
