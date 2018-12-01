@@ -1,7 +1,7 @@
 <template>
     <div class="">
         <template v-if="isEditInput">
-            <input class="form-control" type="text" v-model="context">
+            <input class="form-control" type="text" v-model="context" />
         </template>
         <template v-else>
             {{ content }}
@@ -16,12 +16,15 @@
         data() {
             return {
                 isEditInput: false,
-                context: ''
+                context:''
             }
         },
 
         mounted() {
             // this.context = this.content // 此时获取不到值 ，所以改为监听
+        },
+        computed: {
+
         },
 
         watch: {

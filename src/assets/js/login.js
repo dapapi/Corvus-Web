@@ -179,7 +179,6 @@ function sendCodeSms(token, telephone) {
     }).done(function () {
         //发送成功
         toastr.success('发送成功');
-        //TODO 增加计时器
         $sendCodeBtn.html('发送验证码(60s)').addClass('disable')
     })
 }

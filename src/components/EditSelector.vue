@@ -1,17 +1,17 @@
 <template>
     <div v-if="options.length > 0">
         <template v-if="isEditSelect">
-            <selectors :options="this.options" @change="changeSelect"
+            <selectors :options="options" @change="changeSelect" @valuelistener='valueListener'
                        ref="selector" :multiple="multiple"></selectors>
         </template>
         <template v-else>
-            <template v-if="multiple">
+            <template v-if="multiple && !contentHide">
                 <template v-for="cont in content">
                     {{ options.find(item => item.value == cont).name }}
                 </template>
             </template>
             <template v-else>
-                <template v-if="content">
+                <template v-if="content && !contentHide">
                     {{ options.find(item => item.value == content).name }}
                 </template>
             </template>
@@ -22,7 +22,7 @@
 <script>
     export default {
         name: "EditSelector",
-        props: ['options', 'is-edit', 'content', 'multiple'],
+        props: ['options', 'is-edit', 'content', 'multiple','contentHide'],
         data() {
             return {
                 isEditSelect: false,
@@ -46,6 +46,9 @@
             }
         },
         methods: {
+            valueListener(value){
+                this.$emit('valuelistener',value)
+            },
             changeSelect: function (value) {
                 this.$emit('change', value);
             }

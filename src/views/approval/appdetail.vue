@@ -4,19 +4,19 @@
             <div class="page-header  page-header-bordered mb-0">
                 <h6 class="page-title nav-head">{{item.title}}
                     <template v-if="item.type==0">
-                        <span class="approved">已审批</span>
+                        <button class="btn btn-success py-5">已审批</button>
                     </template>
                     <template v-if="item.type==1">
-                        <span class="pending">待审批</span>
+                        <button class="btn btn-warning py-5">待审批</button>
                     </template>
                     <template v-if="item.type==2">
-                        <span class="revoke">已撤销</span>
+                        <button class="btn py-5">已撤销</button>
                     </template>
                     <template v-if="item.type==3">
-                        <span class="cancel">已作废</span>
+                        <button class="btn py-5">已作废</button>
                     </template>
                     <template v-if="item.type==4">
-                        <span class="refuse">已拒绝</span>
+                        <button class="btn btn-danger py-5 ">已拒绝</button>
                     </template>
                 </h6>
             </div>
@@ -48,14 +48,35 @@
                         <h6 class="page-title">{{item.caption}}</h6>
                         <span>编号：{{item.number}}</span>
                     </div>
-                    <div class="content" style="border-bottom:1px dashed #ccc">
-                        <p class="py-10 pl-20"><span>申请人<em></em><i>{{item.applicant}}</i></span><b >部门<i class="p-10">{{item.department}}</i></b></p>
-                        <p class="py-10 pl-20"><span>部门<i class="p-10">{{item.fieldlocation}}</i></span><b >申请时间<i class="p-10">{{item.time}}</i></b></p>
+                    <div class="example">
+                        <div class="col-md-2 float-left">申请人</div>
+                        <div class="col-md-2 float-left">{{item.applicant}}</div>
+                        <div class="col-md-2 float-left">部门</div>
+                        <div class="col-md-2 float-left">{{item.department}}</div>
                     </div>
-                    <div class="content">
-                        <p class="py-10 pl-20"><span>外勤地点<i class="p-10">{{item.fieldlocation}}</i></span><b >外勤天数<i class="p-10">{{item.fieldDays}}天</i></b></p>
-                        <p class="py-10 pl-20"><span>开始时间<i class="p-10">{{item.startTime}}</i></span><b>结束时间<i class="p-10">{{item.endTime}}</i></b></p>
-                        <p class="py-10 pl-20"><span>外勤事由<i class="p-10">{{item.fieldwork}}</i></span><b >附件<i class="p-10">{{item.department}}</i></b></p>
+                    <div class="example">
+                        <div class="col-md-2 float-left">部门</div>
+                        <div class="col-md-2 float-left">{{item.fieldlocation}}</div>
+                        <div class="col-md-2 float-left">申请时间</div>
+                        <div class="col-md-2 float-left">{{item.time}}</div>
+                    </div>
+                    <div class="example pt-20" style="border-top:1px solid #ccc">
+                        <div class="col-md-2 float-left">外勤地点</div>
+                        <div class="col-md-2 float-left">{{item.fieldlocation}}</div>
+                        <div class="col-md-2 float-left">外勤天数</div>
+                        <div class="col-md-2 float-left">{{item.fieldDays}}天</div>
+                    </div>
+                    <div class="example">
+                        <div class="col-md-2 float-left">开始时间</div>
+                        <div class="col-md-2 float-left">{{item.startTime}}</div>
+                        <div class="col-md-2 float-left">结束时间</div>
+                        <div class="col-md-2 float-left">{{item.endTime}}</div>
+                    </div>
+                    <div class="example">
+                        <div class="col-md-2 float-left">外勤事由</div>
+                        <div class="col-md-2 float-left">{{item.fieldwork}}</div>
+                        <div class="col-md-2 float-left">附件</div>
+                        <div class="col-md-2 float-left">{{item.department}}</div>
                     </div>
                     
                 </div>
@@ -64,10 +85,10 @@
                         <h6 class="page-title pb-20" style="border-bottom:1px solid #ccc">审批流程</h6>
                         <div class="setp pt-20">
                             <div class="left col-md-2">
-                                <em><i class="icon md-check-circle pr-5" style="color:#4DAF50"></i></em>
+                                <em class="mr-10"><i class="icon md-check-circle pr-5" style="color:#4DAF50"></i></em>
                                 <div class="left-cont">
                                     <b class="branch">泰洋系</b>
-                                    <b class="type" style="color:#999">提交审批</b>
+                                    <b class="type" style="color:#999;width:48px;">提交审批</b>
                                 </div>
                             </div>
                             <div class="middle col-md-2">
@@ -147,24 +168,38 @@
                 </div>
                 <div class="panel col-md-12 col-lg-12 py-10">
                     <div class="content" >
-                        <p class="py-10 pl-20" style="border-bottom:1px solid #E0E0E0"><span>审批<em></em><i>{{item.applicant}}</i></span><span class="pl-100">操作<i class="p-10">同意审批</i></span> <span class="pl-100">审批时间<i class="p-10">2018-12-13</i></span></p>
-                        <p class="py-10 pl-20" style="border-bottom:1px solid #E0E0E0"><span>审批<em></em><i>{{item.applicant}}</i></span>       
-                        <template v-if="item.type==0">
-                         <span class="pl-100">操作<i class="p-10">{{item.approval}}</i></span>
-                        </template> 
-                        <template v-if="item.type==1">
-                         <span class="pl-100">操作<i class="pl-10 " style="padding-right:23px">{{item.approval}}</i></span>
-                        </template> 
-                        <template v-if="item.type==2">
-                         <span class="pl-100">操作<i class="pl-10 " style="padding-right:23px">{{item.approval}}</i></span>
-                        </template> 
-                        <template v-if="item.type==3">
-                         <span class="pl-100">操作<i class="p-10">{{item.approval}}</i></span>
-                        </template>   
-                        <template v-if="item.type==4">
-                         <span class="pl-100">操作<i class="p-10">{{item.approval}}</i></span>
-                        </template>          
-                        <span class="pl-100">审批时间<i class="p-10">2018-12-13</i></span></p>
+                        <div class="example" >
+                            <div class="col-md-1 float-left">审批</div>
+                            <em></em>
+                            <div class="col-md-2 float-left">{{item.applicant}}</div>
+                            <div class="col-md-1 float-left">操作</div>
+                            <div class="col-md-2 float-left">同意审批</div>
+                            <div class="col-md-2 float-left">审批时间</div>
+                            <div class="col-md-2 float-left">2018-12-13</div>
+                        </div>
+                        <div class="example">
+                            <div class="col-md-1 float-left">审批</div>
+                            <em></em>
+                            <div class="col-md-2 float-left">{{item.applicant}}</div>
+                            <div class="col-md-1 float-left">操作</div>
+                            <template v-if="item.type==0">
+                                <div class="col-md-2 float-left">{{item.approval}}</div>
+                            </template> 
+                            <template v-if="item.type==1">
+                                <div class="col-md-2 float-left">{{item.approval}}</div>
+                            </template> 
+                             <template v-if="item.type==2">
+                                <div class="col-md-2 float-left">{{item.approval}}</div>
+                            </template> 
+                            <template v-if="item.type==3">
+                                <div class="col-md-2 float-left">{{item.approval}}</div>
+                            </template>   
+                            <template v-if="item.type==4">
+                                <div class="col-md-2 float-left">{{item.approval}}</div>
+                            </template>          
+                            <div class="col-md-2 float-left">审批时间</div>
+                            <div class="col-md-2 float-left">2018-12-13</div>
+                        </div>
                     </div>
                      <div class="notify pl-20">
                         <div>知会人</div>
@@ -213,33 +248,13 @@ export default {
     left: 140px;
     top: 0;
 }
-.pending{
-    background: #FFC107
-}
-.approved{
-    background: #4DAF50 
-}
-.revoke{
-    background: #616161
-}
-.cancel{
-    background: #616161
-}
-.refuse{
-    background: red
-}
 .btn{
     padding: 0 10px;
     margin: 0 10px;
 }
-.nav-head span{
-   display: inline-block;
-   color: #fff;
-   font-size: 14px;
-   padding: 4px;
-}
 .title-status{
     position: relative;
+    font-size: 1rem;
 }
 .title-status em,.content em,.setp em{
     width: 25px;
@@ -261,6 +276,7 @@ export default {
   position: relative;
   border-bottom: 1px solid #ccc;
 }
+
 .caption span{
   position: absolute;
   right:10px;
@@ -271,14 +287,6 @@ export default {
 }
 .notify{
     display: flex;
-}
-.content p{
-    position: relative;
-}
-.content p b{
-    position: absolute;
-    left:300px;
-    top:10px;
 }
 .left,.middle{
     display: flex;
@@ -294,6 +302,14 @@ export default {
     position: absolute;
     top: 15px;
     left: 130px;
+}
+.example{
+    position: relative;
+}
+.example em{
+    position: absolute;
+    left: 50px;
+    top:-2px;
 }
 .left-cont,.middle-cont{
     display: flex;

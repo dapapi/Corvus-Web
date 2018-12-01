@@ -69,7 +69,7 @@
                         <div class="example">
                             <div class="col-md-2 text-right float-left pl-0">审批类型</div>
                             <div class="col-md-10 float-left pl-0">
-                                <Selectors :placeholder="'请选择任务优先级'" v-model="priority"></Selectors>
+                                <Selectors :placeholder="'请选择任务优先级'" v-model="priority" :options="data"></Selectors>
                         </div>
                         </div>
                         <div class="example">
@@ -183,12 +183,12 @@
                         },
                         {
                             id: "2",
-                            title: "填写基本信息",
+                            title: "设置显示字段",
                             num: "2",
                         },
                         {
                             id: "3",
-                            title: "填写基本信息",
+                            title: "设置筛选条件和汇总字段",
                             num: "3",
                         },
                     ],

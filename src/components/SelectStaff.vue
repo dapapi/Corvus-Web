@@ -97,6 +97,8 @@
             principalInfo: function () {
                 if (this.type === 'change') {
                     return this.$store.state.principalInfo
+                } else if (this.type === 'selector') {
+                    return this.$store.state.selectPrincipalInfo
                 } else {
                     return this.$store.state.newPrincipalInfo
                 }

@@ -6,7 +6,7 @@
         </div>
         <div class="float-left col-md-6">
             <selectors :options="clientLevelArr" ref="companyLevel" @change="changeCompanyLevel"
-                       :disable="isDisable"></selectors>
+                       :disable="isDisable" placeholder='请选择类别'></selectors>
         </div>
     </div>
 </template>
