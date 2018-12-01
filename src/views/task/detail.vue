@@ -24,7 +24,7 @@
                     <h4 class="card-title">{{ taskInfo.title }}
                         <template v-if="!taskInfo.task_p">
                            <span class="font-size-14 pl-10 pointer-content hover-content"
-                                 @click="redirectTaskDetail(taskInfo.pTask.data.id)">
+                                 @click="redirectTaskDetail(askInfo.pTask?taskInfo.pTask.data.id: '')">
                            <i class="icon md-chevron-left"></i>回到主任务
                             </span>
                         </template>
@@ -165,7 +165,7 @@
                                 <div class="card-text py-5 clearfix">
                                     <div class="col-md-1 float-left text-right pl-0">创建人</div>
                                     <div class="col-md-11 float-left font-weight-bold">
-                                        {{ taskInfo.creator.data.name }}
+                                        {{ taskInfo.creator?taskInfo.creator.data.name:'' }}
                                     </div>
                                 </div>
                             </div>
@@ -182,7 +182,7 @@
                             </div>
                             <div class="card-block">
                                 <ul class="file-list">
-                                    <li v-for="attachment in taskInfo.affixes.data">
+                                    <li v-for="attachment in taskInfo.affixes?taskInfo.affixes.data:[]">
                                         <i class="md-file pr-5"></i>{{ attachment.title }}
                                         <span class="float-right pl-10 pointer-content"
                                               @click="deleteAttachment(attachment.id)">删除</span>
@@ -209,7 +209,7 @@
                                 <th class="cell-300" scope="col">截止日期</th>
                             </tr>
                             <tbody>
-                            <tr v-for="task in taskInfo.tasks.data">
+                            <tr v-for="task in taskInfo.tasks?taskInfo.tasks.data:[]">
                                 <td @click="redirectTaskDetail(task.id)" class="pointer-content">{{ task.title }}</td>
                                 <td>{{ task.type }}</td>
                                 <td>
@@ -223,7 +223,7 @@
                             </tbody>
                         </table>
 
-                        <div class="col-md-1" style="margin: 6rem auto" v-if="taskInfo.tasks.data.length === 0">
+                        <div class="col-md-1" style="margin: 6rem auto" v-if="taskInfo.tasks&&taskInfo.tasks.data.length === 0">
                             <img src="https://res.papitube.com/corvus/images/content-none.png" alt="" style="width: 100%">
                         </div>
 
@@ -269,12 +269,12 @@
                         </button>
                         <h4 class="modal-title">新增子任务</h4>
                     </div>
-                    <div class="modal-body" v-if="showChildTask">
-
+                    <div class="modal-body">
+                        <!-- 报错？？ -->
                         <div class="example">
                             <div class="col-md-2 text-right float-left">关联资源</div>
                             <div class="col-md-10 float-left">
-                                <normal-linkage-selectors @change="addLinkage"></normal-linkage-selectors>
+                                <normal-linkage-selectors ref="linkage" v-if="linkData.length>0" :myData="linkData" :data="linkData" @change="addLinkage"></normal-linkage-selectors>
                             </div>
                         </div>
                         <div class="example">
@@ -355,13 +355,13 @@
 
         data: function () {
             return {
-                taskId: '',
+                taskId: this.$route.params.id,
                 changeInfo: {},
                 isEdit: false,
                 total: 0,
                 current_page: 0,
                 total_pages: 0,
-                showChildTask: false,
+                // showChildTask: false,
                 taskInfo: {},
                 participantsArr: [],
                 flagParticipantsIdArr: [],
@@ -372,7 +372,7 @@
                 taskType: '',
                 principal: '',
                 participants: '',
-                taskLevel: '',
+                taskLevel: 1,
                 startTime: '',
                 endTime: '',
                 startMinutes: '00:00',
@@ -383,16 +383,22 @@
                 priorityArr: config.priorityArr,
                 taskStatusArr: config.taskStatusArr.push({name: '全部', value: ''}),
                 oldInfo: '',
+                linkData: [],
+                resourceType: '', // 资源type
+                resourceableId: '', // 资源id
             }
+        },
+        created () {
+            this.getLinkData()
         },
 
         mounted() {
             this.getTask();
             $('#addChildTask').on('show.bs.modal', function () {
-                this.showChildTask = true;
+                // this.showChildTask = true;
                 this.isEdit = false;
             }).on('hidden.bs.modal', function () {
-                this.showChildTask = false;
+                // this.showChildTask = false;
             })
         },
 
@@ -434,16 +440,14 @@
         methods: {
 
             getTask: function () {
-                this.taskId = this.$route.params.id;
 
                 let data = {
-                    include: 'creator,principal,pTask,tasks,resource.resourceable,resource.resource,affixes,participants',
+                    include: 'creator,principal,pTask,tasks.type,resource.resourceable,resource.resource,affixes,participants',
                 };
 
                 let _this = this;
 
                 fetch('get', '/tasks/' + this.taskId, data).then(function (response) {
-                    console.log(response.data);
                     if (response.data.affixes) {
                         for (let i = 0; i < response.data.affixes.data.length; i++) {
                             let size = response.data.affixes.data[i].size;
@@ -624,10 +628,10 @@
                     participant_ids.push(this.$store.state.newParticipantsInfo[i].id)
                 }
                 let data = {
-                    // resource_id: '1718463094',
-                    // resourceable_id: '1994731356',
                     title: this.taskName,
-                    // type: this.taskType,
+                    type: this.taskType,
+                    resource_type: this.resourceType, // 资源type
+                    resourceable_id: this.resourceableId, // 资源id
                     principal_id: this.$store.state.newPrincipalInfo.id,
                     participant_ids: participant_ids,
                     priority: this.taskLevel,
@@ -635,10 +639,12 @@
                     end_at: this.endTime + ' ' + this.endMinutes,
                     desc: this.taskIntroduce,
                 };
+                let self = this
                 fetch('post', '/tasks/' + this.taskId + '/subtask', data).then(function (response) {
                     toastr.success('添加成功');
                     $('#addChildTask').modal('hide');
-                    this.taskInfo.tasks.data.push(response.data)
+                    // this.taskInfo.tasks.data.push(response.data)
+                    self.getTask();
                 })
             },
 
@@ -670,8 +676,13 @@
                 this.endTime = value
             },
 
-            addLinkage: function (value) {
-
+            addLinkage: function (type, value, id, index) {
+                if (type === 'father') {
+                    this.getChildLinkData(value, index)
+                    this.resourceType = id
+                } else if (type === 'child') {
+                    this.resourceableId = value
+                }
             },
 
             addStartMinutes: function (value) {
@@ -683,10 +694,46 @@
             },
             redirectTaskDetail: function (taskId) {
                 this.$router.push({path: '/tasks/' + taskId})
+            },
+            // 获取关联父资源数据
+            getLinkData () {
+                fetch('get', '/resources').then(res => {
+                    let code = 0
+                    this.linkData = res.data.map((n, i) => {
+                        if (i === 0) {
+                            code = n.code
+                        }
+                        return {
+                            name: n.title,
+                            id: n.type,
+                            value: n.code,
+                            // type: n.type,
+                            child: []
+                        }
+                    })
+                    if (this.linkData[0].child.length === 0) {
+                        this.getChildLinkData(code, 0)
+                    }
+                })
+            },
+            // 获取关联子资源数据
+            getChildLinkData (url, index) {
+                fetch('get', `/${url}`).then(res => {
+                    const temp = this.linkData[index]
+                    temp.child = res.data.map(n => {
+                        return {
+                            name: n.name || n.nickname || n.title || n.company,
+                            id: n.id,
+                            value: n.id,
+                        }
+                    })
+                    this.$set(this.linkData, index, temp)
+                    setTimeout(() => {
+                        this.$refs.linkage.refresh()
+                    }, 100)
+                })
             }
-
         }
-
     }
 </script>
 

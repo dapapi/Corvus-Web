@@ -214,7 +214,8 @@
                                     </div>
                                     <div class="col-md-1 float-left text-right pl-0">详细地址</div>
                                     <div class="col-md-5 float-left font-weight-bold">
-                                        {{ clientInfo.address }}
+                                        <EditInput :content="clientInfo.address" :is-edit="isEdit"
+                                                   @change="changeClientName"></EditInput>
                                     </div>
                                 </div>
 

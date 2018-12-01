@@ -21,7 +21,7 @@
         },
 
         mounted() {
-            this.context = this.content
+            // this.context = this.content // 此时获取不到值 ，所以改为监听
         },
 
         watch: {
@@ -31,6 +31,9 @@
 
             context(newValue) {
                 this.$emit('change', newValue)
+            },
+            content () {
+                this.context = this.content
             }
         }
     }

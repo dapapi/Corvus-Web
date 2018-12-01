@@ -274,7 +274,7 @@
                 trailPrincipal: '',
                 trailContact: '',
                 trailContactPhone: '',
-                trailFilter:'',
+                trailFilter: '',
                 email: '',
                 trailFee: '',
                 trailDesc: '',
@@ -286,7 +286,7 @@
                 priorityArr: config.priorityArr,
                 trailStatus: '',
                 cooperation: '',
-                filterData:'',
+                filterData: '',
             }
         },
 
@@ -298,14 +298,10 @@
         },
 
         methods: {
-            filterGo(){
+            filterGo() {
                 let _this = this;
-                 fetch('get', '/trails/filter?keyword='+this.trailFilter+'&include=principal,client,contact,recommendations,expectations').then(function (response) {
-                     
-                    console.log(response);
+                fetch('get', '/trails/filter?keyword=' + this.trailFilter + '&include=principal,client,contact,recommendations,expectations').then(function (response) {
                     _this.trailsInfo = response.data
-                    console.log(_this.trailsInfo);
-                    // _this.transIInfo = _this.filterData
                 })
                 this.$forceUpdate()
             },
@@ -362,7 +358,6 @@
             },
 
             addTrail: function () {
-                console.log(this.$store.state.newPrincipalInfo.id);
                 let data = {
                     title: this.trailName,
                     brand: this.brandName,
@@ -387,7 +382,7 @@
                 if (this.trailOrigin == 1 || this.trailOrigin == 2 || this.trailOrigin == 3) {
                     data.resource = this.email
                 } else if (this.trailOrigin == 4 || this.trailOrigin == 5) {
-                    data.resource = this.trailOriginPerson
+                    data.resource = this.trailOriginPerson.id
                 } else {
                     data.resource = ''
                 }
@@ -397,9 +392,7 @@
                 let _this = this;
                 fetch('post', '/trails', data).then(function (response) {
                     $('#addTrail').modal('hide');
-                    // _this.$router.push({path: '/trails/' + response.data.id})
                     _this.$router.push({path: '/trails/' + response.data.id})
-                    console.log(response);
                 })
             },
 
@@ -468,7 +461,6 @@
             changeCooperationType: function (value) {
                 this.cooperation = value
             }
-
 
         }
     }
