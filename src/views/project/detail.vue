@@ -9,9 +9,12 @@
                    data-toggle="dropdown" aria-expanded="false"></i>
                 <div class="dropdown-menu dropdown-menu-right task-dropdown-item" aria-labelledby="taskDropdown"
                      role="menu" x-placement="bottom-end">
-                    <a class="dropdown-item" role="menuitem" @click="">关联</a>
-                    <a class="dropdown-item" role="menuitem" @click="">完成</a>
-                    <a class="dropdown-item" role="menuitem" data-toggle="modal" data-target="#withdrawal">撤单</a>
+                    <a class="dropdown-item" role="menuitem" data-toggle="modal" data-target="#addLinkage"
+                       @click="">关联</a>
+                    <a class="dropdown-item" role="menuitem" data-toggle="modal" data-target="#confirmFlag"
+                       @click="changeToastrText(2)">完成</a>
+                    <a class="dropdown-item" role="menuitem" data-toggle="modal" data-target="#confirmFlag"
+                       @click="changeToastrText(3)">撤单</a>
                     <a class="dropdown-item" role="menuitem" data-toggle="modal" data-target="#addPrivacy">隐私设置</a>
                 </div>
             </div>
@@ -64,7 +67,7 @@
             <div class="col-md-12 panel">
                 <div class="col-md-12">
                     <ul class="nav nav-tabs nav-tabs-line" role="tablist">
-                        <li class="nav-item" role="presentation">
+                        <li class="nav-item" role="presentation" v-if="projectInfo.type != 5">
                             <a class="nav-link" :class="projectInfo.type != 5 ? '' : 'active'" data-toggle="tab"
                                href="#forum-project-follow"
                                aria-controls="forum-base"
@@ -75,17 +78,17 @@
                                aria-controls="forum-present"
                                aria-expanded="false" role="tab">任务</a>
                         </li>
-                        <li class="nav-item" role="presentation">
+                        <li class="nav-item" role="presentation" v-if="projectInfo.type != 5">
                             <a class="nav-link" data-toggle="tab" href="#forum-project-contract"
                                aria-controls="forum-present"
                                aria-expanded="false" role="tab">合同</a>
                         </li>
-                        <li class="nav-item" role="presentation">
+                        <li class="nav-item" role="presentation" v-if="projectInfo.type != 5">
                             <a class="nav-link" data-toggle="tab" href="#forum-project-bill"
                                aria-controls="forum-present"
                                aria-expanded="false" role="tab">账单</a>
                         </li>
-                        <li class="nav-item" role="presentation">
+                        <li class="nav-item" role="presentation" v-if="projectInfo.type != 5">
                             <a class="nav-link" data-toggle="tab" href="#forum-project-payback"
                                aria-controls="forum-present"
                                aria-expanded="false" role="tab">回款</a>
@@ -585,6 +588,7 @@
                                         </div>
                                         <div class="col-md-1 float-left text-right pl-0">录入时间</div>
                                         <div class="col-md-5 float-left font-weight-bold">
+                                            {{ projectInfo.created_at }}
                                         </div>
                                     </div>
                                     <div class="card-text py-5 clearfix">
@@ -1003,6 +1007,35 @@
             </div>
         </div>
 
+        <div class="modal fade" id="addLinkage" aria-hidden="true" aria-labelledby="addLabelForm"
+             role="dialog" tabindex="-1">
+            <div class="modal-dialog modal-simple">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <button type="button" class="close" aria-hidden="true" data-dismiss="modal">
+                            <i class="md-close" aria-hidden="true"></i>
+                        </button>
+                        <h4 class="modal-title">关联资源</h4>
+                    </div>
+                    <div class="modal-body">
+                        <div class="example">
+                            <div class="col-md-2 text-right float-left">关联资源</div>
+                            <div class="col-md-10 float-left">
+                                <NormalLinkageSelectors :data="projectLinkageInfo"
+                                                        @change="selectProjectLinkage"></NormalLinkageSelectors>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="modal-footer">
+                        <button class="btn btn-sm btn-white btn-pure" data-dismiss="modal">取消</button>
+                        <button class="btn btn-primary" type="submit" @click="addPrivacy">确定</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <Flag :typeText="changeProjectStatusText" @confirmFlag='changeProjectStatus'/>
+
     </div>
 </template>
 
@@ -1037,7 +1070,20 @@
                 addInfoArr: {},
                 followStatus: '',
                 flagParticipantsIdArr: [],
-
+                changeProjectStatusText: '',
+                projectChangeStatus: '',
+                projectLinkageInfo: [
+                    {
+                        name: '项目',
+                        value: 1,
+                        child: []
+                    },
+                    {
+                        name: '任务',
+                        value: 2,
+                        child: []
+                    }
+                ],
             }
         },
 
@@ -1244,6 +1290,40 @@
 
             addInfo: function (value, name) {
                 this.addInfoArr[name] = value
+            },
+
+            changeToastrText: function (status) {
+                if (status === 2) {
+                    this.changeProjectStatusText = '完成 " ' + this.projectInfo.title + ' " 项目吗？'
+                } else if (status === 3) {
+                    this.changeProjectStatusText = '撤单 " ' + this.projectInfo.title + ' " 项目吗？'
+                }
+                this.projectChangeStatus = status
+            },
+
+            changeProjectStatus: function () {
+                let _this = this;
+                fetch('put', '/projects/' + this.projectId + '/status', {status: this.projectChangeStatus}).then(function () {
+                    toastr.success('修改成功');
+                    _this.projectInfo.status = _this.projectChangeStatus
+                })
+            },
+
+            selectProjectLinkage: function (type, value) {
+                console.log(type)
+                console.log(value)
+                if (type === 'father') {
+                    let url = '';
+                    if (value === 1) {
+                        url = '/projects/all'
+                    } else {
+                        url = ''
+                    }
+                    fetch('get', url).then(function (response) {
+                        console.log(response)
+                    })
+                }
+
             }
 
 
