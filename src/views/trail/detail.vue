@@ -641,7 +641,6 @@
             'expectations':function(newValue){
                 this.changeInfo.expectation = newValue
             }
-            //    @todo 修改目标艺人、推荐艺人
         },
 
         methods: {

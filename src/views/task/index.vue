@@ -15,7 +15,6 @@
                     <div class="col-md-3 example float-left">
                         <Selectors :options="taskTypeArr" @change="changeTaskTypeSearch" :placeholder="'请选择任务类型'"></Selectors>
                     </div>
-                    <!-- todo 任务类型暂无 -->
                     <div class="col-md-3 example float-left">
                         <Selectors :options="taskStatusArr" @change="changeTaskStatusSearch" :placeholder="'请选择任务状态'"></Selectors>
                     </div>
