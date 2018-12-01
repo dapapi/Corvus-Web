@@ -14,6 +14,12 @@
             value: function (newValue) {
                 this.$emit('change', newValue)
             }
+        },
+        methods: {
+            // 清空input内容
+            refresh() {
+                this.value = ''
+            }
         }
     }
 </script>

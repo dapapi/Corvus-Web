@@ -44,7 +44,6 @@
         methods: {
 
             showMember: function () {
-                console.log('true');
                 this.isMemberShow = true;
             },
 

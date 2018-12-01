@@ -146,4 +146,8 @@
     .site-menu > .site-menu-item > .site-menu-sub {
         left: 100px;
     }
+
+    .modal-header {
+        border-bottom: 1px solid #eee;
+    }
 </style>

@@ -33,12 +33,12 @@
                                 {{ projectInfo.principal.data.name }}
                             </div>
                         </div>
-                        <div class="col-md-6 float-left pl-0">
+                        <div class="col-md-6 float-left pl-0" v-if="projectInfo.type != 5">
                             <div class="float-left pl-0 pr-2 col-md-3">
                                 <i class="md-plus pr-2" aria-hidden="true"></i>目标艺人
                             </div>
-                            <div class="font-weight-bold float-left" v-if="projectInfo.expectations">
-                                <template v-for="artist in projectInfo.expectations.data">
+                            <div class="font-weight-bold float-left" v-if="projectInfo.trail.data.expectations">
+                                <template v-for="artist in projectInfo.trail.data.expectations.data">
                                     {{ artist.name }}
                                 </template>
                             </div>
@@ -461,7 +461,7 @@
                                             <div class="col-md-2 float-left text-right pl-0">参与人</div>
                                             <div class="col-md-10 float-left font-weight-bold">
                                                 <EditAddMember :is-edit="isEdit"
-                                                               @change="(value) => changeProjectBaseInfo(value, 'participants')"></EditAddMember>
+                                                               @change="(value) => changeProjectBaseInfo(value, 'participant_ids')"></EditAddMember>
                                             </div>
                                         </div>
                                         <div class="card-text py-10 px-0 clearfix col-md-6 float-left"
@@ -581,6 +581,7 @@
                                     <div class="card-text py-5 clearfix">
                                         <div class="col-md-1 float-left text-right pl-0">录入人</div>
                                         <div class="col-md-5 float-left font-weight-bold">
+                                            {{ projectInfo.creator.data.name }}
                                         </div>
                                         <div class="col-md-1 float-left text-right pl-0">录入时间</div>
                                         <div class="col-md-5 float-left font-weight-bold">
@@ -815,16 +816,16 @@
                         <h4 class="modal-title">新建回款期次</h4>
                     </div>
                     <div class="modal-body">
-                        <div class="example" v-if="companyArr.length > 0">
+                        <div class="example" v-if="projectInfo.trail">
                             <div class="col-md-2 text-right float-left">关联公司</div>
                             <div class="col-md-10 float-left">
-                                <Selectors :options="companyArr"></Selectors>
+                                {{ projectInfo.trail.data.client.data.company }}
                             </div>
                         </div>
                         <div class="example">
                             <div class="col-md-2 text-right float-left">关联项目</div>
                             <div class="col-md-10 float-left">
-                                <Selectors></Selectors>
+                                {{ projectInfo.title }}
                             </div>
                         </div>
                         <div class="example">
@@ -1054,7 +1055,7 @@
                 this.projectId = this.$route.params.id;
                 let _this = this;
                 let data = {
-                    include: 'principal,creator,fields,expectations',
+                    include: 'principal,participant,creator,fields,trail.expectations,trail.client',
                 };
                 fetch('get', '/projects/' + this.projectId, data).then(function (response) {
                     let fieldsArr = response.meta.fields.data;
@@ -1155,13 +1156,18 @@
 
             editBaseInfo: function () {
                 this.isEdit = true;
+                this.changeInfo = {};
+                this.addInfoArr = {};
             },
 
             changeProjectBaseInfo: function (value, name) {
                 if (name === 'principal_id') {
+                    if (value === this.projectInfo.principal.data.id) {
+                        return
+                    }
                     value = this.$store.state.principalInfo.id;
                 }
-                if (name === 'participants') {
+                if (name === 'participant_ids') {
                     let participants = this.$store.state.participantsInfo;
                     let participantsArr = [];
                     for (let i = 0; i < participants.length; i++) {
@@ -1176,7 +1182,17 @@
                 let data = this.changeInfo;
                 data.fields = this.addInfoArr;
                 let _this = this;
-                // todo 参与人修改，添加和删除分开传
+                let flagInfo = this.projectInfo.participants;
+                if (flagInfo) {
+                    let del_participant_ids = [];
+                    for (let j = 0; j < flagInfo.data.length; j++) {
+                        if (data.participants.map(item => item.id).indexOf(flagInfo[j]) === -1) {
+                            del_participant_ids.push(flagInfo[j])
+                        }
+                    }
+                    data.participant_del_ids = del_participant_ids
+                }
+
                 fetch('put', '/projects/' + this.projectId, data).then(function (response) {
                     toastr.success('修改成功');
                     _this.isEdit = false;

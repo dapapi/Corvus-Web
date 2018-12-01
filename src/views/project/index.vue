@@ -159,11 +159,11 @@
                     </div>
                     <div class="modal-body">
                         <!-- todo 默认带出的东西 添加的对象里没有 -->
-                        <div class="col-md-12 example clearfix" v-if="projectType != 5 && trailsArr.length > 0">
+                        <div class="col-md-12 example clearfix" v-show="projectType != 5 && trailsArr.length > 0">
                             <div class="col-md-2 text-right float-left pl-0">销售线索</div>
                             <div class="col-md-10 float-left">
                                 <Selectors :options="trailsArr" @change="addProjectTrail" ref="trails"
-                                           :placeholder="'请选择销售线索'"></Selectors>
+                                           placeholder="请选择销售线索"></Selectors>
                             </div>
                         </div>
                         <!--<div class="col-md-12 example clearfix" v-if="projectType != 5">-->
@@ -187,7 +187,8 @@
                         <div class="col-md-12 example clearfix">
                             <div class="col-md-2 text-right float-left pl-0">项目名称</div>
                             <div class="col-md-10 float-left">
-                                <EmitInput @change="(value) => addProjectBaseInfo(value, 'title')"></EmitInput>
+                                <EmitInput @change="(value) => addProjectBaseInfo(value, 'title')"
+                                           ref="projectNameRef"></EmitInput>
                             </div>
                         </div>
                         <div class="col-md-12 example clearfix">
@@ -197,38 +198,40 @@
                                         @change="(value) => addProjectBaseInfo(value, 'principal_id')"></InputSelectors>
                             </div>
                         </div>
-                        <div class="col-md-12 example clearfix" v-if="projectType != 5 && starsArr.length > 0">
+                        <div class="col-md-12 example clearfix" v-show="projectType != 5 && starsArr.length > 0">
                             <div class="col-md-2 text-right float-left pl-0">目标艺人</div>
                             <div class="col-md-10 float-left">
-                                <Selectors :multiple="true" :options="starsArr" ref="intentionArtist"
-                                           :placeholder="'请选择目标艺人'"
+                                <Selectors multiple="true" :options="starsArr" ref="intentionArtist"
+                                           placeholder="请选择目标艺人"
                                            @change="(value) => addProjectBaseInfo(value, 'expectations')"></Selectors>
                             </div>
                         </div>
                         <div class="col-md-12 example clearfix">
                             <div class="col-md-2 text-right float-left pl-0">优先级</div>
                             <div class="col-md-10 float-left">
-                                <Selectors :options="levelArr" ref="priorityLevel"
+                                <Selectors :options="levelArr" ref="priorityLevel" placeholder="请选择优先级"
                                            @change="(value) => addProjectBaseInfo(value, 'priority')"></Selectors>
                             </div>
                         </div>
-                        <div class="col-md-12 example clearfix" v-if="projectType == 5">
+                        <div class="col-md-12 example clearfix" v-show="projectType == 5">
                             <div class="col-md-2 text-right float-left pl-0">可见范围</div>
                             <div class="col-md-10 float-left">
-                                <Selectors :options="visibleRangeArr" :placeholder="'请选择可见范围'"
+                                <Selectors :options="visibleRangeArr" placeholder="请选择可见范围" ref="visibleRange"
                                            @change="(value) => addProjectBaseInfo(value, 'privacy')"></Selectors>
                             </div>
                         </div>
                         <div class="col-md-12 example clearfix">
                             <div class="col-md-2 text-right float-left pl-0">开始时间</div>
                             <div class="col-md-10 float-left">
-                                <Datepicker @change="(value) => addProjectBaseInfo(value, 'start_at')"></Datepicker>
+                                <Datepicker @change="(value) => addProjectBaseInfo(value, 'start_at')"
+                                            ref="startTime"></Datepicker>
                             </div>
                         </div>
                         <div class="col-md-12 example clearfix">
                             <div class="col-md-2 text-right float-left pl-0">截止时间</div>
                             <div class="col-md-10 float-left">
-                                <Datepicker @change="(value) => addProjectBaseInfo(value, 'end_at')"></Datepicker>
+                                <Datepicker @change="(value) => addProjectBaseInfo(value, 'end_at')"
+                                            ref="endTime"></Datepicker>
                             </div>
                         </div>
                         <div class="col-md-12 example clearfix" v-for="field in projectFieldsArr">
@@ -272,7 +275,8 @@
                         <div class="col-md-12 example clearfix">
                             <div class="col-md-2 text-right float-left pl-0">备注</div>
                             <div class="col-md-10 float-left">
-                                <emit-input @change="(value) => addProjectBaseInfo(value, 'desc')"></emit-input>
+                                <emit-input @change="(value) => addProjectBaseInfo(value, 'desc')"
+                                            ref="desc"></emit-input>
                             </div>
                         </div>
                     </div>
@@ -332,6 +336,10 @@
             this.getProjects();
             this.getTrail();
             this.getAllMembers();
+            let _this = this;
+            $('#addProject').on('hidden.bs.modal', function () {
+                _this.refreshAddProjectModal()
+            })
         },
 
         methods: {
@@ -415,6 +423,17 @@
                 })
             },
 
+            refreshAddProjectModal: function () {
+                this.$refs.projectNameRef.refresh();
+                this.$refs.priorityLevel.setValue('');
+                this.$refs.visibleRange.setValue('');
+                this.$refs.intentionArtist.setValue('');
+                this.$refs.startTime.setValue('');
+                this.$refs.endTime.setValue('');
+                this.$refs.desc.refresh();
+                this.$store.dispatch('changePrincipal', {data: {}});
+            },
+
             customize: function (value) {
                 console.log(value)
             },
@@ -432,9 +451,6 @@
 
             changeProjectType: function (value) {
                 this.projectType = value;
-                if (this.projectType == 5) {
-                    this.$refs.trails.destroy()
-                }
             },
 
             selectProjectType: function () {
