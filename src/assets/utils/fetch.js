@@ -52,6 +52,10 @@ export default function fetch(method = 'post', url, params) {
     return new Promise((resolve, reject) => {
         axios[method](url, method.toLowerCase() === 'get' ? {params} : params)
             .then(response => {
+<<<<<<< HEAD
+=======
+             
+>>>>>>> hp
                 resolve(response.data);
             }, err => {
                 reject(err);

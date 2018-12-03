@@ -199,11 +199,7 @@ let config = {
             {
                 name: '试戏',
                 value: 2
-            },
-            {
-                name: '类型1',
-                value: 3
-            },
+            }
         ],
 
         taskLevelArr: [

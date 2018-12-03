@@ -21,14 +21,14 @@
                 <div class="clearfix">
                     <div class="col-md-3 example float-left">
                         <input type="text" class="form-control" id="inputPlaceholder" placeholder="请输入项目昵称"
-                               style="width: 220px">
+                               style="width: 220px" v-model="trailFilter" @blur='filterGo'>
                     </div>
                     <div class="col-md-3 example float-left">
-                        <selectors :options="projectStatus"
-                                   :placeholder="'请选择项目状态'"></selectors>
+                        <selectors :options="artistTypeArr"
+                                   :placeholder="'请选择项目类型'"  @change="typeFilter" v-model="typeF"></selectors>
                     </div>
                     <div class="col-md-3 example float-left">
-                        <selectors :placeholder="'请选择负责人'"></selectors>
+                        <selectors :placeholder="'请选择沟通状态'" :options="papiCommunicationStatusArr" ></selectors>
                     </div>
                     <div class="col-md-3 example float-left">
                         <button type="button" class="btn btn-default waves-effect waves-classic float-right"
@@ -91,7 +91,7 @@
                                 <td class="pointer-content" @click="redirectArtistDetail(artist.id)">{{ artist.nickname
                                     }}
                                 </td>
-                                <td>{{ artist.type.data.name }}</td>
+                                <td>{{ artist.type.name }}</td>
                                 <td>暂无</td>
                                 <td>
                                     <template v-if="artist.intention">是</template>
@@ -152,7 +152,7 @@
                             <div class="col-md-2 text-right float-left">平台</div>
                             <div class="col-md-10 float-left pl-0">
                                 <div class="checkbox-custom checkbox-primary d-inline pr-20">
-                                    <input type="checkbox" name="platform" id="platformAll" @change="changeCheckbox(1)">
+                                    <input type="checkbox" name="platform" id="platformAll" @change="changeCheckbox(1)" >
                                     <label for="platformAll">全选</label>
                                 </div>
                                 <div class="checkbox-custom checkbox-primary d-inline pr-20">
@@ -285,12 +285,21 @@
                 signCompany: '',
                 artistDesc: '',
                 artistTypeArr: '',
+                artistTypeId:'',
                 signCompanyName: '',
+                companyCityArr:config. companyCityArr,
+                trailFilter:'',
+                userData:'',
+                communicationArr:'',
+                communication:'',
+                intention_desc:'',
+                typeF:''
             }
         },
 
         mounted() {
-            this.getArtists()
+            this.getArtists();
+            this.getUser();
             $('table').asSelectable();
         },
 
@@ -298,39 +307,81 @@
             getArtists: function (page = 1) {
                 let data = {
                     page: page,
-                    include: 'creator,tasks,affixes,producer,type',
+                    include:'creator,tasks,affixes,producer'
                 };
                 let _this = this;
                 fetch('get', '/bloggers', data).then(function (response) {
+                    
                     _this.artistsInfo = response.data;
                     _this.current_page = response.meta.pagination.current_page;
                     _this.total = response.meta.pagination.total;
                     _this.total_pages = response.meta.pagination.total_pages;
+                    console.log(response.data) 
+                });
+                fetch('get','/bloggers/gettype').then(function(response){ 
+                   
+                    _this.artistTypeArr=response.data  
+                    
                 })
             },
-
+            filterGo(){
+                
+                let _this = this;
+                fetch('get','/bloggers?name='+ this.trailFilter).then(function(response){
+                    
+                     _this.artistsInfo = response.data
+                })
+              
+            },
+            typeFilter(value){
+                this.typeF=value;
+                let _this = this;
+                fetch('get','/bloggers?type='+ this.typeF).then(function(response){
+                     _this.artistsInfo = response.data
+                })
+            },
+           
             customize: function (value) {
 
             },
-
+            getUser(){
+                let _this = this;
+                fetch('get', '/users').then(function (response) {
+                    _this.userData = response.data
+                })
+            },
             changeArtistStatus: function (value) {
                 this.artistStatus = value
             },
 
             changeCheckbox: function (value) {
+             
                 this.platformType = value
             },
 
             changeCommunicationType: function (value) {
-                console.log(value)
+                this.communication=value
+           
             },
 
             changeSignIntention: function (value) {
-                this.signIntention = parseInt(value)
+                if(value){
+                    this.signIntention = value  
+                }else{
+                    this.signIntention = 0
+                }
+                console.log( this.signIntention )
+              
             },
 
             isSignCompany: function (value) {
-                this.signCompany = value
+                 
+                if(value){
+                    this.signCompany = value  
+                }else{
+                    this.signConpany = 0
+                }
+               console.log(this.signConpany)
             },
 
             changeWeiboFansNum: function (value) {
@@ -344,33 +395,42 @@
             changeXHSFansNum: function (value) {
                 this.xhsFansNum = value
             },
-
+             changeArtistType: function (value) {
+                this.artistTypeId=value
+                console.log(this.artistTypeId)
+            },
             addArtist: function () {
+                let _this=this;
                 let data = {
                     // 没有平台,微博,抖音,小红书
                     nickname: this.artistName,
                     gender: this.artistGender,
-                    type_id: '1994731356',
-                    communication_status: this.communicationStatus,
+                    type_id: this.artistTypeId,
+                    communication_status: this.communication,
                     intention: this.signIntention,
-                    intention_desc: this.notSignReason,
+                    intention_desc: this.intention_desc,
                     sign_contract_other: this.signCompany,
                     sign_contract_other_name: this.signCompanyName,
+                    
                 };
                 fetch('post', '/bloggers', data).then(function (response) {
                     toastr.success('创建成功');
                     $('#addArtist').modal('hide');
-                    this.$router.push({path: 'artists/' + response.data.id})
+                    _this.$router.push({path: 'blogger/' + response.data.id})
+                 
                 })
+                
             },
 
             selectArtists: function (value) {
+                console.log(value)
                 if (value === 'all') {
                     this.selectedArtistsArr = [];
                     for (let i = 0; i < this.artistsInfo.length; i++) {
                         this.selectedArtistsArr.push(this.artistsInfo[i].id)
                     }
                 } else {
+                    console.log(this.selectedArtistsArr)
                     let index = this.selectedArtistsArr.indexOf(value);
                     if (index > -1) {
                         this.selectedArtistsArr.splice(index, 1)
@@ -380,9 +440,7 @@
                 }
             },
 
-            changeArtistType: function (value) {
-                console.log(value)
-            },
+           
 
             redirectArtistDetail: function (artistId) {
                 this.$router.push({path: 'blogger/' + artistId})
