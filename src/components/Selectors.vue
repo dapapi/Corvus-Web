@@ -10,7 +10,7 @@
 </template>
 <script>
     export default {
-        props: ['options', 'disable', 'multiple', 'placeholder', 'changeKey', 'value','resetinfo'], // changeKey为父组件的data，且可以被改变
+        props: ['options', 'disable', 'multiple', 'placeholder', 'changeKey', 'value', 'resetinfo'], // changeKey为父组件的data，且可以被改变
         data() {
             return {
                 isDisable: this.disable,
@@ -29,9 +29,9 @@
 
         },
         watch: {
-            resetinfo: function(value){
-                if(value){
-                    
+            resetinfo: function (value) {
+                if (value) {
+
                 }
             },
             valueListener: function (newValue) {
@@ -51,7 +51,6 @@
                 this.$nextTick(() => {
                     this.refresh()
                 })
-
             }
         },
         methods: {
