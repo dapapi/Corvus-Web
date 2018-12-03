@@ -1,6 +1,7 @@
 <template>
-    <select data-plugin="selectpicker" :value="value" :data-live-search="multiple" :multiple="multiple"
-            :title="placeholder" v-model="valueListener">
+    <select class="selectpicker show-tick" data-plugin="selectpicker" :value="value" :data-live-search="multiple"
+            :data-show-subtext="multiple"
+            :multiple="multiple" :title="placeholder" v-model="valueListener">
         <selectorsOptions v-for="option in options" v-bind:id="option.id" :val="option.value || option.id"
                           :key="option.id">
             {{option.name}}

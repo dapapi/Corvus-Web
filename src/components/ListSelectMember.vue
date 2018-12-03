@@ -33,7 +33,7 @@
 <script>
     export default {
         name: "ListSelectMember",
-        props: ['listName', 'selectName', 'type'],
+        props: ['type'],
         data() {
             return {
                 params: {
@@ -62,11 +62,8 @@
                     participantInfo = this.$store.state.newParticipantsInfo;
                 }
 
-                if (participantInfo.find(item => item.id == memberId)) {
-                    participantInfo.splice(participantInfo.map(item => item.id).indexOf(memberId), 1)
-                } else {
-                    participantInfo.push(user)
-                }
+                participantInfo.splice(participantInfo.map(item => item.id).indexOf(memberId), 1)
+
                 this.params.data = participantInfo;
                 this.$store.dispatch('changeParticipantsInfo', this.params);
             }

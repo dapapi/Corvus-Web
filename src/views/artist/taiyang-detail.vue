@@ -10,8 +10,10 @@
                 <div class="dropdown-menu dropdown-menu-right task-dropdown-item" aria-labelledby="taskDropdown"
                      role="menu" x-placement="bottom-end">
                     <a class="dropdown-item" role="menuitem" @click="">分享</a>
-                    <a class="dropdown-item" role="menuitem" @click="">分配经纪人</a>
-                    <a class="dropdown-item" role="menuitem" @click="">分配宣传人</a>
+                    <a class="dropdown-item" role="menuitem" data-toggle="modal"
+                       data-target="#distributionBroker" @click="distributionPerson('broker')">分配经纪人</a>
+                    <a class="dropdown-item" role="menuitem" data-toggle="modal"
+                       data-target="#distributionBroker" @click="distributionPerson('publicity')">分配宣传人</a>
                     <a class="dropdown-item" role="menuitem" @click="">自定义字段</a>
                     <a class="dropdown-item" role="menuitem" @click="" data-toggle="modal" data-target="#addPrivacy">隐私设置</a>
                 </div>
@@ -295,20 +297,6 @@
                                             </div>
                                         </div>
                                         <div class="card-text py-10 px-0 clearfix col-md-6 float-left edit-height">
-                                            <div class="col-md-2 float-left text-right pl-0">经纪人</div>
-                                            <div class="col-md-10 float-left font-weight-bold">
-                                                <EditInputSelector :is-edit="isEdit"
-                                                                   @change="(value) => changeArtistBaseInfo(value, 'broker_id')"></EditInputSelector>
-                                            </div>
-                                        </div>
-                                        <div class="card-text py-10 px-0 clearfix col-md-6 float-left edit-height">
-                                            <div class="col-md-2 float-left text-right pl-0">宣传人</div>
-                                            <div class="col-md-10 float-left font-weight-bold">
-                                                <EditInputSelector :is-edit="isEdit"
-                                                                   @change="(value) => changeArtistBaseInfo(value, 'broker_id')"></EditInputSelector>
-                                            </div>
-                                        </div>
-                                        <div class="card-text py-10 px-0 clearfix col-md-6 float-left edit-height">
                                             <div class="col-md-2 float-left text-right pl-0">艺人来源</div>
                                             <div class="col-md-10 float-left font-weight-bold">
                                                 <EditSelector :content="artistInfo.source" :options="artistSourceArr"
@@ -340,7 +328,7 @@
                                                                   :content="artistInfo.sign_contract_other"
                                                                   :input-content="artistInfo.sign_contract_other_name"
                                                                   :condition="1"
-                                                                  @change="(value) => changeArtistBaseInfo(value, 'intention')"></ConditionalInput>
+                                                                  @change="(value) => changeArtistBaseInfo(value, 'sign_contract_other')"></ConditionalInput>
                                             </div>
                                         </div>
                                         <div class="card-text py-10 px-0 clearfix col-md-6 float-left edit-height">
@@ -687,6 +675,35 @@
             </div>
         </div>
 
+        <div class="modal fade" id="distributionBroker" aria-hidden="true" aria-labelledby="addLabelForm"
+             role="dialog" tabindex="-1">
+            <div class="modal-dialog modal-simple" style="max-width: 50rem;">
+
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <button type="button" class="close" aria-hidden="true" data-dismiss="modal">
+                            <i class="md-close" aria-hidden="true"></i>
+                        </button>
+                        <template v-if="distributionType === 'broker'">
+                            <h4 class="modal-title">分配经纪人</h4>
+                        </template>
+                        <template v-else>
+                            <h4 class="modal-title">分配宣传人</h4>
+                        </template>
+                    </div>
+                    <div class="modal-body">
+                        <div class="py-20">
+                            <ListSelectMember type="change"></ListSelectMember>
+                        </div>
+                    </div>
+                    <div class="modal-footer">
+                        <button class="btn btn-sm btn-white btn-pure" data-dismiss="modal">取消</button>
+                        <button class="btn btn-primary" type="submit" @click="addDistributionPerson">确定</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+
     </div>
 </template>
 
@@ -728,7 +745,7 @@
                 yesOrNoArr: config.yesOrNoArr,
                 changeArtistInfo: {},
                 artistSocialPlatform: config.artistSocialPlatform,
-
+                distributionType: '',
             }
         },
 
@@ -954,6 +971,17 @@
                     } else {
                         return
                     }
+                } else if (name === 'intention') {
+                    if (value.key === 'value') {
+                        name = 'intention_desc'
+                    }
+                    value = value.value
+
+                } else if (name === 'sign_contract_other') {
+                    if (value.key === 'value') {
+                        name = 'sign_contract_other_name'
+                    }
+                    value = value.value
                 }
                 this.changeArtistInfo[name] = value
             },
@@ -969,6 +997,18 @@
                     _this.isEdit = false;
                     _this.getArtist();
                 })
+            },
+
+            distributionPerson: function (value) {
+                this.distributionType = value
+            },
+
+            addDistributionPerson: function () {
+                if (this.distributionType === '') {
+
+                } else {
+
+                }
             }
 
         }

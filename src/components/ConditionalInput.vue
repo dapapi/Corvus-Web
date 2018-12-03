@@ -35,13 +35,16 @@
             this.context = this.content
         },
 
+        watch: {
+            context(newValue) {
+                this.$emit({key: 'value', value: newValue})
+            }
+        },
+
         methods: {
             changeSelector(value) {
-                if (value == this.condition) {
-                    this.isInputShow = true
-                } else {
-                    this.isInputShow = false
-                }
+                this.isInputShow = value == this.condition ? true : false
+                this.$emit({key: 'condition', value: value});
             }
         }
     }
