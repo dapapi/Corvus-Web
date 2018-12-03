@@ -22,15 +22,14 @@
             <div class="panel col-md-12 clearfix py-5">
                 <div class="clearfix">
                     <div class="col-md-3 example float-left">
-                        <input type="text" class="form-control" id="inputPlaceholder" placeholder="请输入项目昵称"
-                               style="width: 220px">
+                        <input type="text" v-model="listData.name" class="form-control" id="inputPlaceholder" placeholder="请输入项目昵称"
+                               style="width: 220px" @blur="getArtists"> 
                     </div>
                     <div class="col-md-3 example float-left">
-                        <selectors :options="projectStatus"
-                                   :placeholder="'请选择项目状态'"></selectors>
+                        <selectors :options="artistStatusArr" :placeholder="'请选择沟通状态'" @change="getStatus"></selectors>
                     </div>
                     <div class="col-md-3 example float-left">
-                        <selectors :placeholder="'请选择负责人'"></selectors>
+                        <selectors :options="artistSourceArr" :placeholder="'请选择艺人来源'" @change="getSource"></selectors>
                     </div>
                     <div class="col-md-3 example float-left">
                         <button type="button" class="btn btn-default waves-effect waves-classic float-right"
@@ -43,17 +42,17 @@
 
                 <div class="col-md-12">
                     <ul class="nav nav-tabs nav-tabs-line" role="tablist">
-                        <li class="nav-item" role="presentation" @click="getArtists(1)">
+                        <li class="nav-item" role="presentation" @click="getArtists(1,1)">
                             <a class="nav-link active" data-toggle="tab" href="#forum-artist"
                                aria-controls="forum-base"
                                aria-expanded="true" role="tab">签约中</a>
                         </li>
-                        <li class="nav-item" role="presentation" @click="getArtists(1)">
+                        <li class="nav-item" role="presentation" @click="getArtists(1,2)">
                             <a class="nav-link" data-toggle="tab" href="#forum-artist"
                                aria-controls="forum-present"
                                aria-expanded="false" role="tab">已签约</a>
                         </li>
-                        <li class="nav-item" role="presentation" @click="getArtists(1)">
+                        <li class="nav-item" role="presentation" @click="getArtists(1,3)">
                             <a class="nav-link" data-toggle="tab" href="#forum-artist"
                                aria-controls="forum-present"
                                aria-expanded="false" role="tab">已解约</a>
@@ -63,7 +62,7 @@
 
                 <div class="page-content tab-content nav-tabs-animate bg-white">
                     <div class="tab-pane animation-fade active" id="forum-artist" role="tabpanel">
-                        <table class="table table-hover" data-plugin="selectable" data-row-selectable="true">
+                        <table v-if="artistsInfo.length>0" class="table table-hover" data-plugin="selectable" data-row-selectable="true">
                             <tr class="">
                                 <th class="w-50">
                                         <span class="checkbox-custom checkbox-primary">
@@ -80,36 +79,46 @@
                                 <th class="cell-300" scope="col">录入时间</th>
                                 <th class="cell-300" scope="col">最后跟进时间</th>
                             </tr>
-                            <tbody>
-                            <tr v-for="artist in artistsInfo">
-                                <td>
-                                    <span class="checkbox-custom checkbox-primary">
-                                        <input class="selectable-item" type="checkbox" :id="'row-' + artist.id"
-                                               :value="artist.id" @change="selectArtists(artist.id)">
-                                        <label :for="'row-' + artist.id"></label>
-                                    </span>
-                                </td>
-                                <td class="pointer-content" @click="redirectArtistDetail(artist.id)">
-                                    {{ artist.name }}
-                                </td>
-                                <td>根据日期生成年龄</td>
-                                <td>
-                                    <template v-if="artist.source">
-                                        {{ artistSourceArr.find(item => item.value == artist.source).name}}
-                                    </template>
-                                </td>
-                                <td>
-                                    <template v-if="artist.communication_status">
-                                        {{ taiyangCommunicationStatusArr.find(item => item.value ==
-                                        artist.communication_status).name}}
-                                    </template>
-                                </td>
-                                <td>不知道那个字段</td>
-                                <td>暂无</td>
-                                <td>暂无</td>
-                            </tr>
+                            <tbody >
+                                <tr  v-for="artist in artistsInfo">
+                                    <td>
+                                        <span class="checkbox-custom checkbox-primary">
+                                            <input class="selectable-item" type="checkbox" :id="'row-' + artist.id"
+                                                :value="artist.id" @change="selectArtists(artist.id)">
+                                            <label :for="'row-' + artist.id"></label>
+                                        </span>
+                                    </td>
+                                    <td class="pointer-content" @click="redirectArtistDetail(artist.id)">
+                                        {{ artist.name }}
+                                    </td>
+                                    <td>{{artist.birthday|jsGetAge}}</td>
+                                    <td>
+                                        <template v-if="artist.source">
+                                            {{ artistSourceArr.find(item => item.value == artist.source).name}}
+                                        </template>
+                                    </td>
+                                    <td>
+                                        <template v-if="artist.communication_status">
+                                            {{ taiyangCommunicationStatusArr.find(item => item.value ==
+                                            artist.communication_status).name}}
+                                        </template>
+                                    </td>
+                                    <td>
+                                        <template v-if="artist.sign_contract_status ==1">签约中</template>
+                                        <template v-if="artist.sign_contract_status ==2">已签约</template>
+                                        <template v-if="artist.sign_contract_status ==3">已解约</template>
+                                        <!-- {{ artistSourceArr.find(item => item.value == artist.source).name}} -->
+                                    </td>
+                                    <td>{{artist.created_at}}</td>
+                                    <td>{{artist.updated_at}}</td>
+                                </tr>
                             </tbody>
+                            
                         </table>
+                        <div v-else class="col-md-1" style="margin: 6rem auto">
+                            <img src="https://res.papitube.com/corvus/images/content-none.png" alt="" style="width: 100%">
+                        </div>
+                             
                         <pagination :current_page="current_page" :method="getArtists" :total_pages="total_pages"
                                     :total="total"></pagination>
                     </div>
@@ -365,6 +374,13 @@
                 notSignReason: '',
                 selectedArtistsArr: [],
                 isSelectAll: false,
+                listData:{
+                    include:'broker,creator',
+                    name:'',
+                    sign_contract_status:1,//  签约状态
+                    communication_status:'', //沟通状态
+                    source:'', // 艺人来源
+                }
             }
         },
 
@@ -374,13 +390,25 @@
         },
 
         methods: {
-            getArtists: function (page = 1) {
-                let data = {
-                    page: page,
-                    include: 'broker,creator',
-                };
+
+            //获取沟通状态
+            getStatus:function(value){
+                this.listData.communication_status = value
+                this.getArtists()
+            },
+            //获取艺人来源
+            getSource:function(value){
+                this.listData.source = value
+                this.getArtists()
+            },
+            //查询列表
+            getArtists: function (page = 1,signStatus) {
                 let _this = this;
-                fetch('get', '/stars', data).then(function (response) {
+                if(signStatus){
+                    this.listData.sign_contract_status = signStatus
+                }
+                this.listData.page=page
+                fetch('get', '/stars', this.listData).then(function (response) {
                     _this.artistsInfo = response.data;
                     _this.current_page = response.meta.pagination.current_page;
                     _this.total = response.meta.pagination.total;
@@ -388,7 +416,7 @@
                     $('table').asSelectable('_trigger');
                 })
             },
-
+            
             customize: function (value) {
 
             },
@@ -424,7 +452,7 @@
             changeSource: function (value) {
                 this.artistSource = value
             },
-
+      
             addArtist: function () {
                 let data = {
                     name: this.artistName,
@@ -470,6 +498,66 @@
                     }
                 }
             }
+        },
+        filters:{
+            jsGetAge:function(strBirthday){
+                if(strBirthday){
+                    var returnAge;
+                    // 根据生日计算年龄（"1995-09-25"）
+                    //以下五行是为了获取出生年月日，如果是从身份证上获取需要稍微改变一下
+                    var strBirthdayArr=strBirthday.split("-");
+                    var birthYear = strBirthdayArr[0];
+                    var birthMonth = strBirthdayArr[1];
+                    var birthDay = strBirthdayArr[2];
+
+                    var d = new Date();
+                    var nowYear = d.getFullYear();
+                    var nowMonth = d.getMonth() + 1;
+                    var nowDay = d.getDate();
+
+                    if(nowYear == birthYear){
+                        returnAge = 0;//同年 则为0岁
+                    }
+                    else{
+                        var ageDiff = nowYear - birthYear ; //年之差
+                        if(ageDiff > 0){
+                        if(nowMonth == birthMonth) {
+                            var dayDiff = nowDay - birthDay;//日之差
+                            if(dayDiff < 0)
+                            {
+                            returnAge = ageDiff - 1;
+                            }
+                            else
+                            {
+                            returnAge = ageDiff ;
+                            }
+                        }
+                        else
+                        {
+                            var monthDiff = nowMonth - birthMonth;//月之差
+                            if(monthDiff < 0)
+                            {
+                            returnAge = ageDiff - 1;
+                            }
+                            else
+                            {
+                            returnAge = ageDiff ;
+                            }
+                        }
+                        }
+                        else
+                        {
+                        returnAge = -1;//返回-1 表示出生日期输入错误 晚于今天
+                        }
+                    }
+                    return returnAge;//返回周岁年龄
+                }else{
+                    return strBirthday
+                }
+                
+                
+               
+            },
         }
     }
 </script>

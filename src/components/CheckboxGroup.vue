@@ -1,10 +1,10 @@
 <template>
     <div>
-        <input id="allCheck" @click="setAllCheck" type="checkbox" v-model="allCheck">
+        <input id="allCheck" @change="setAllCheck" type="checkbox" v-model="allCheck">
         <label for="allCheck">全选</label>
         <ul>
             <li v-for="(item,index) in optionData" :key="index">
-                <input v-model="item.isCheck" class="mr-10" type="checkbox" @click="getCheck(item,index)"/>
+                <input v-model="item.isCheck" class="mr-10" type="checkbox" @change="getCheck(item)"/>
                 <slot :row="item" :$index="index"></slot>
             </li>
         </ul>
@@ -46,30 +46,24 @@ export default {
             for (let i = 0; i < this.optionData.length; i++) {
                 
                 this.optionData[i].isCheck = false
-                // if(this.optionData[i][`${this.propCheck}`]){
-                //     this.optionData[i].isCheck = true
-                // }
-                this.optionData[i].checkId = i  
             }
         },
-        getCheck:function(item,index){
-            item.isCheck = !item.isCheck
+        getCheck:function(item){
             if(item.isCheck == true){
                this.checkData.push(item)
             }else{
                 for (let i = 0; i < this.checkData.length; i++) {
-                    if(this.checkData[i].checkId == index){
+                    if(this.Compare(this.checkData[i],item)){
                         this.checkData.splice(i,1);
                     }
                     
                 }
             }
-            this.$emit('click', this.checkData)
+            this.$emit('change', this.checkData)
            
         },
         setAllCheck:function(){
             
-            this.allCheck = !this.allCheck;
             for (let i = 0; i < this.optionData.length; i++) {
                 if(this.allCheck == true){
                     this.optionData[i].isCheck = true
@@ -81,7 +75,57 @@ export default {
                 }
                               
             }
-            this.$emit('click', this.checkData)
+            this.$emit('change', this.checkData)
+        },
+        isObj:function (object) {
+            return object && typeof(object) == 'object' && Object.prototype.toString.call(object).toLowerCase() == "[object object]";
+        },
+        isArray:function (object) {
+            return object && typeof(object) == 'object' && object.constructor == Array;
+        },
+        getLength:function (object) {
+            var count = 0;
+            for(var i in object) count++;
+            return count;
+        },
+        Compare:function (objA, objB) {
+            if(!this.isObj(objA) || !this.isObj(objB)) return false; //判断类型是否正确
+            if(this.getLength(objA) != this.getLength(objB)) return false; //判断长度是否一致
+            return this.CompareObj(objA, objB, true); //默认为true
+        },
+
+        CompareObj:function (objA, objB, flag) {
+            for(var key in objA) {
+                if(!flag) //跳出整个循环
+                    break;
+                if(!objB.hasOwnProperty(key)) {
+                    flag = false;
+                    break;
+                }
+                if(!this.isArray(objA[key])) { //子级不是数组时,比较属性值
+                    if(objB[key] != objA[key]) {
+                        flag = false;
+                        break;
+                    }
+                } else {
+                    if(!this.isArray(objB[key])) {
+                        flag = false;
+                        break;
+                    }
+                    var oA = objA[key],
+                        oB = objB[key];
+                    if(oA.length != oB.length) {
+                        flag = false;
+                        break;
+                    }
+                    for(var k in oA) {
+                        if(!flag) //这里跳出循环是为了不让递归继续
+                            break;
+                        flag = CompareObj(oA[k], oB[k], flag);
+                    }
+                }
+            }
+            return flag;
         }
        
     }

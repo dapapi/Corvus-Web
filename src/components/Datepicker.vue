@@ -29,7 +29,7 @@
         },
         methods: {
             setValue(value) {
-                $(this.$el).datepicker('update', value,answerId);
+                $(this.$el).datepicker('update', value);
             },
 
             destroy() {

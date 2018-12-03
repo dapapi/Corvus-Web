@@ -6,26 +6,45 @@
 
 <script>
     export default {
-        props: ['gotoDate'],
+        props:{
+            gotoDate:{
+                type:String,
+            },
+            defaultView:{
+                type:String,
+                default:'agendaWeek'
+            }
+        },
         data() {
-            return {}
+            return {
+                startTime:'', //获取开始时间
+                endTime:'',  //获取结束时间
+
+            }
         },
         watch: {
             gotoDate: function (newValue) {
                 console.log(newValue);
-                // newValue = newValue.split('-');
                 $(this.$el).fullCalendar('gotoDate', newValue)
+            },
+            startTime:function(){
+                alert(444)
+                this.$emit('changeTime',this.startTime,this.startTime)
+            },
+            endTime:function(){
+                alert(444)
+                this.$emit('changeTime',this.startTime,this.endTime)
             }
         },
         mounted() {
-
+            
             $(this.$el).fullCalendar({
                 header: {
                     right: 'prev,next today',
                     center: 'title',
-                    left: 'month,agendaWeek,agendaDay'
+                    left: 'month,agendaWeek,agendaDay' 
                 },
-                defaultView: 'agendaWeek',
+                defaultView: this.defaultView, //设置默认显示月，周，日
                 navLinks: true,
                 editable: true,
                 eventLimit: true,
@@ -52,90 +71,99 @@
                         titleFormat: 'YYYY年 MM月 DD日'
                     }
                 },
-                events: [
-                    {
-                        title: 'All Day Event',
-                        start: '2018-10-01',
-                    },
-                    {
-                        title: 'Long Event',
-                        start: '2018-10-07',
-                        end: '2018-10-10',
-                        color: 'white',
-                        backgroundColor: 'red',
-                        textColor: 'white'
+                events:function(start,end){
+                   this.startTime = start._d
+                   this.endTime = start._d
+                   this.startTime = `${start._d.getFullYear()}-${start._d.getMonth()+1}-${start._d.getDate()}`
+                   this.endTime = `${end._d.getFullYear()}-${end._d.getMonth()+1}-${end._d.getDate()}`
+                    
+                //    console.log(this.startTime,this.endTime)
 
-                    },
-                    {
-                        id: 999,
-                        title: 'Repeating Event',
-                        start: '2018-11-19T16:00:00'
-                    },
-                    {
-                        title: 'Repeating Event',
-                        start: '2018-11-19T15:00:00'
-                    },
-                    {
-                        title: 'Repeating Event',
-                        start: '2018-11-19T14:00:00'
-                    },
-                    {
-                        title: 'Repeating Event',
-                        start: '2018-11-19T13:00:00'
-                    },
-                    {
-                        title: 'Repeating Event',
-                        start: '2018-11-19T12:00:00'
-                    },
-                    {
-                        title: 'Repeating Event',
-                        start: '2018-11-19T11:00:00'
-                    },
-                    {
-                        title: 'Repeating Event',
-                        start: '2018-11-19T10:00:00'
-                    },
-                    {
-                        id: 999,
-                        title: 'Repeating Event',
-                        start: '2018-10-16T16:00:00'
-                    },
-                    {
-                        title: 'Conference',
-                        start: '2018-10-11',
-                        end: '2018-10-13'
-                    },
-                    {
-                        title: 'Meeting',
-                        start: '2018-03-12T10:30:00',
-                        end: '2018-03-12T12:30:00'
-                    },
-                    {
-                        title: 'Lunch',
-                        start: '2018-03-12T12:00:00'
-                    },
-                    {
-                        title: 'Meeting',
-                        start: '2018-03-12T14:30:00'
-                    },
-                    {
-                        title: 'Happy Hour',
-                        start: '2018-03-12T17:30:00'
-                    },
-                    {
-                        title: 'Dinner',
-                        start: '2018-03-12T20:00:00'
-                    },
-                    {
-                        title: 'Birthday Party',
-                        start: '2018-03-13T07:00:00'
-                    },
-                    {
-                        title: 'Click for Google',
-                        url: 'http://google.com/',
-                        start: '2018-03-28'
-                    }
-                ],
+                },
+                // events: [
+                //     {
+                //         title: 'All Day Event',
+                //         start: '2018-10-01',
+                //     },
+                //     {
+                //         title: 'Long Event',
+                //         start: '2018-10-07',
+                //         end: '2018-10-10',
+                //         color: 'white',
+                //         backgroundColor: 'red',
+                //         textColor: 'white'
+
+                //     },
+                //     {
+                //         id: 999,
+                //         title: 'Repeating Event',
+                //         start: '2018-11-19T16:00:00'
+                //     },
+                //     {
+                //         title: 'Repeating Event',
+                //         start: '2018-11-19T15:00:00'
+                //     },
+                //     {
+                //         title: 'Repeating Event',
+                //         start: '2018-11-19T14:00:00'
+                //     },
+                //     {
+                //         title: 'Repeating Event',
+                //         start: '2018-11-19T13:00:00'
+                //     },
+                //     {
+                //         title: 'Repeating Event',
+                //         start: '2018-11-19T12:00:00'
+                //     },
+                //     {
+                //         title: 'Repeating Event',
+                //         start: '2018-11-19T11:00:00'
+                //     },
+                //     {
+                //         title: 'Repeating Event',
+                //         start: '2018-11-19T10:00:00'
+                //     },
+                //     {
+                //         id: 999,
+                //         title: 'Repeating Event',
+                //         start: '2018-10-16T16:00:00'
+                //     },
+                //     {
+                //         title: 'Conference',
+                //         start: '2018-10-11',
+                //         end: '2018-10-13'
+                //     },
+                //     {
+                //         title: 'Meeting',
+                //         start: '2018-03-12T10:30:00',
+                //         end: '2018-03-12T12:30:00'
+                //     },
+                //     {
+                //         title: 'Lunch',
+                //         start: '2018-03-12T12:00:00'
+                //     },
+                //     {
+                //         title: 'Meeting',
+                //         start: '2018-03-12T14:30:00'
+                //     },
+                //     {
+                //         title: 'Happy Hour',
+                //         start: '2018-03-12T17:30:00'
+                //     },
+                //     {
+                //         title: 'Dinner',
+                //         start: '2018-03-12T20:00:00'
+                //     },
+                //     {
+                //         title: 'Birthday Party',
+                //         start: '2018-03-13T07:00:00'
+                //     },
+                //     {
+                //         title: 'Click for Google',
+                //         url: 'http://google.com/',
+                //         start: '2018-03-28'
+                //     }
+                // ],
                 dayClick: function (date, allDay, jsEvent) {
                     console.log(date)
                     console.log(allDay)

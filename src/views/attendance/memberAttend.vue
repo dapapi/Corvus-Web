@@ -22,7 +22,7 @@
             <div class="col-md-12 panel">
                     <div>
                     <div class="example pt-20 pb-5">
-                        <table class="table table-hover is-indent mb-20" data-plugin="animateList" data-animate="fade"
+                        <table v-if="dataList.length>0" class="table table-hover is-indent mb-20" data-plugin="animateList" data-animate="fade"
                                data-child="tr"
                                data-selectable="selectable">
                             <tr>
@@ -58,6 +58,9 @@
                                 </td>
                             </tr>        
                         </table>
+                        <div v-else class="col-md-1" style="margin: 6rem auto">
+                            <img src="https://res.papitube.com/corvus/images/content-none.png" alt="" style="width: 100%">
+                        </div>
                         <!-- <pagination :current_page="current_page" :method="getProjects" :total_pages="total_pages"
                                     :total="total"></pagination> -->
                     </div>
