@@ -10,7 +10,7 @@
                 <div class="dropdown-menu dropdown-menu-right task-dropdown-item" aria-labelledby="taskDropdown"
                      role="menu" x-placement="bottom-end">
                     <a class="dropdown-item" role="menuitem" @click="">分享</a>
-                    <a class="dropdown-item" role="menuitem" @click="">分配制作人</a>
+                    <a class="dropdown-item" role="menuitem" @click="">分配经纪人</a>
                     <a class="dropdown-item" role="menuitem" @click="">分配宣传人</a>
                     <a class="dropdown-item" role="menuitem" @click="">自定义字段</a>
                     <a class="dropdown-item" role="menuitem" @click="" data-toggle="modal" data-target="#addPrivacy">隐私设置</a>
@@ -29,7 +29,7 @@
                                 <i class="md-plus pr-2" aria-hidden="true"></i>经纪人
                             </div>
                             <div class="font-weight-bold float-left">
-                                {{broker}}
+                                {{artistInfo.broker}}
                             </div>
                         </div>
                         <div class="col-md-6 float-left pl-0">
@@ -37,21 +37,21 @@
                                 <i class="md-plus pr-2" aria-hidden="true"></i>宣传人
                             </div>
                             <div class="font-weight-bold float-left">
-                                {{publicity}}
+                                {{artistInfo.publicity}}
                             </div>
                         </div>
 
                     </div>
-                    <div class="card-text clearfix example">
-                        <div class="col-md-6 float-left pl-0">
-                            <div class="float-left pl-0 pr-2 col-md-2">
-                                <i class="md-plus pr-2" aria-hidden="true"></i>艺人状态
-                            </div>
-                            <div class="font-weight-bold float-left">
-                                5/12
-                            </div>
-                        </div>
-                    </div>
+                    <!--<div class="card-text clearfix example">-->
+                    <!--<div class="col-md-6 float-left pl-0">-->
+                    <!--<div class="float-left pl-0 pr-2 col-md-2">-->
+                    <!--<i class="md-plus pr-2" aria-hidden="true"></i>艺人状态-->
+                    <!--</div>-->
+                    <!--<div class="font-weight-bold float-left">-->
+                    <!--5/12-->
+                    <!--</div>-->
+                    <!--</div>-->
+                    <!--</div>-->
                 </div>
 
             </div>
@@ -64,7 +64,7 @@
                                aria-controls="forum-base"
                                aria-expanded="true" role="tab">日程</a>
                         </li>
-                        <li class="nav-item" role="presentation" >
+                        <li class="nav-item" role="presentation">
                             <a class="nav-link" data-toggle="tab" href="#forum-artist-projects"
                                aria-controls="forum-present"
                                aria-expanded="false" role="tab">项目</a>
@@ -126,6 +126,10 @@
                                     <td>{{item.created_at}}</td>
                                 </tr>
                             </table>
+                            <div class="col-md-1" style="margin: 6rem auto" v-if="artistProjectsInfo.length === 0">
+                                <img src="https://res.papitube.com/corvus/images/content-none.png" alt=""
+                                     style="width: 100%">
+                            </div>
                         </div>
                         <!--任务-->
                         <div class="tab-pane animation-fade pb-20 fixed-button-father" id="forum-artist-tasks"
@@ -157,6 +161,10 @@
                                 </tr>
                                 </tbody>
                             </table>
+                            <div class="col-md-1" style="margin: 6rem auto" v-if="artistTasksInfo.length === 0">
+                                <img src="https://res.papitube.com/corvus/images/content-none.png" alt=""
+                                     style="width: 100%">
+                            </div>
                             <div class="site-action fixed-button" data-plugin="actionBtn" data-toggle="modal"
                                  data-target="#addTask">
                                 <button type="button"
@@ -191,37 +199,28 @@
                                 </tr>
                                 </tbody>
                             </table>
+                            <div class="col-md-1" style="margin: 6rem auto" v-if="artistWorksInfo.length === 0">
+                                <img src="https://res.papitube.com/corvus/images/content-none.png" alt=""
+                                     style="width: 100%">
+                            </div>
 
                             <div class="site-action fixed-button" data-plugin="actionBtn" data-toggle="modal"
-                                            data-target="#addWork">
+                                 data-target="#addWork">
                                 <button type="button"
                                         class="site-action-toggle btn-raised btn btn-success btn-floating waves-effect waves-classic">
-                                    <i class="front-icon md-edit animation-scale-up" aria-hidden="true"></i>
+                                    <i class="front-icon md-plus animation-scale-up" aria-hidden="true"></i>
                                     <i class="back-icon md-close animation-scale-up" aria-hidden="true"></i>
                                 </button>
-                                <div class="site-action-buttons">
-                                    <button type="button" data-action="trash"
-                                            class="btn-raised btn btn-success btn-floating animation-slide-bottom waves-effect waves-classic">
-                                        <i class="icon md-download" aria-hidden="true"></i>
-                                    </button>
-                                    <button type="button" data-action="trash"
-                                            class="btn-raised btn btn-success btn-floating animation-slide-bottom waves-effect waves-classic">
-                                        <i class="icon md-upload" aria-hidden="true"></i>
-                                    </button>
-                                    <button type="button" data-action="trash" 
-                                            class="btn-raised btn btn-success btn-floating animation-slide-bottom waves-effect waves-classic">
-                                        <i class="icon md-plus" aria-hidden="true"></i>
-                                    </button>
-                                </div>
                             </div>
 
                         </div>
                         <!--粉丝数据-->
                         <div class="tab-pane animation-fade fixed-button-father" id="forum-artist-fans"
                              role="tabpanel">
-                            <div id="myChart" style="width:80vw ;height:400px; margin-top:30px"></div>
+                            <div id="myChart"
+                                 style="width:80vw ;height:400px; margin-top:30px;padding-bottom: 20px"></div>
                         </div>
-                         <!--账单-->
+                        <!--账单-->
                         <div class="tab-pane animation-fade  pb-20 fixed-button-father" id="forum-artist-bill"
                              role="tabpanel">
                             <div class="example">
@@ -230,7 +229,7 @@
                                 <div class="col-md-1 float-left pl-0">付款金额</div>
                                 <div class="col-md-2 float-left">10000000元</div>
                             </div>
-                           
+
                             <table class="table table-hover is-indent example" data-plugin="animateList"
                                    data-animate="fade" data-child="tr">
                                 <tr class="animation-fade"
@@ -242,7 +241,7 @@
                                     <th class="cell-300" scope="col">操作人</th>
                                 </tr>
                                 <tbody>
-                                <tr v-for="work in artistWorksInfo">
+                                <tr v-for="work in artistBillsInfo">
                                     <td>暂无</td>
                                     <td>暂无</td>
                                     <td>暂无</td>
@@ -251,7 +250,10 @@
                                 </tr>
                                 </tbody>
                             </table>
-
+                            <div class="col-md-1" style="margin: 6rem auto" v-if="artistBillsInfo.length === 0">
+                                <img src="https://res.papitube.com/corvus/images/content-none.png" alt=""
+                                     style="width: 100%">
+                            </div>
                         </div>
                         <!--概况-->
                         <div class="tab-pane animation-fade  pb-20 fixed-button-father" id="forum-artist-base"
@@ -264,156 +266,167 @@
                                     </div>
                                     <div class="float-right mr-40" v-show="isEdit">
                                         <button class="btn btn-sm btn-white btn-pure" @click="cancelEdit">取消</button>
-                                        <button class="btn btn-primary" @click="changeArtistBaseInfo">确定</button>
+                                        <button class="btn btn-primary" @click="changeArtist">确定</button>
                                     </div>
                                 </div>
                                 <div class="card-block" v-if="artistInfo.name">
                                     <div class="clearfix">
-                                        <div class="card-text py-10 px-0 clearfix col-md-6 float-left">
+                                        <div class="card-text py-10 px-0 clearfix col-md-6 float-left edit-height">
                                             <div class="col-md-2 float-left text-right pl-0">姓名</div>
-                                            <div class="col-md-10 float-left font-weight-bold" :class="isEdit?'height':''">
+                                            <div class="col-md-10 float-left font-weight-bold">
                                                 <EditInput :content="artistInfo.name" :is-edit="isEdit"
-                                                           @change="changArtistName"></EditInput>
+                                                           @change="(value) => changeArtistBaseInfo(value, 'name')"></EditInput>
                                             </div>
                                         </div>
-                                        <div class="card-text py-10 px-0 clearfix col-md-6 float-left">
+                                        <div class="card-text py-10 px-0 clearfix col-md-6 float-left edit-height">
                                             <div class="col-md-2 float-left text-right pl-0">性别</div>
-                                            <div class="col-md-10 float-left font-weight-bold" :class="isEdit?'height':''">
+                                            <div class="col-md-10 float-left font-weight-bold">
                                                 <EditSelector :options="genderArr" :content="artistInfo.gender"
                                                               :is-edit="isEdit"
-                                                              @change="changeArtistGender"></EditSelector>
+                                                              @change="(value) => changeArtistBaseInfo(value, 'gender')"></EditSelector>
                                             </div>
                                         </div>
-                                        <div class="card-text py-10 px-0 clearfix col-md-6 float-left">
+                                        <div class="card-text py-10 px-0 clearfix col-md-6 float-left edit-height">
                                             <div class="col-md-2 float-left text-right pl-0">出生日期</div>
-                                            <div class="col-md-10 float-left font-weight-bold" :class="isEdit?'height':''">
+                                            <div class="col-md-10 float-left font-weight-bold">
                                                 <EditDatepicker :content="artistInfo.birthday"
-                                                                :is-edit="isEdit"></EditDatepicker>
+                                                                :is-edit="isEdit"
+                                                                @change="(value) => changeArtistBaseInfo(value, 'birthday')"></EditDatepicker>
                                             </div>
                                         </div>
-                                        <div class="card-text py-10 px-0 clearfix col-md-6 float-left">
-                                            <div class="col-md-2 float-left text-right pl-0">年龄？</div>
-                                            <div class="col-md-10 float-left font-weight-bold" :class="isEdit?'height':''">
-                                                <EditInput :content="artistInfo.name" :is-edit="isEdit"
-                                                           @change="changArtistName"></EditInput>
+                                        <div class="card-text py-10 px-0 clearfix col-md-6 float-left edit-height">
+                                            <div class="col-md-2 float-left text-right pl-0">经纪人</div>
+                                            <div class="col-md-10 float-left font-weight-bold">
+                                                <EditInputSelector :is-edit="isEdit"
+                                                                   @change="(value) => changeArtistBaseInfo(value, 'broker_id')"></EditInputSelector>
                                             </div>
                                         </div>
-                                        <div class="card-text py-10 px-0 clearfix col-md-6 float-left">
+                                        <div class="card-text py-10 px-0 clearfix col-md-6 float-left edit-height">
+                                            <div class="col-md-2 float-left text-right pl-0">宣传人</div>
+                                            <div class="col-md-10 float-left font-weight-bold">
+                                                <EditInputSelector :is-edit="isEdit"
+                                                                   @change="(value) => changeArtistBaseInfo(value, 'broker_id')"></EditInputSelector>
+                                            </div>
+                                        </div>
+                                        <div class="card-text py-10 px-0 clearfix col-md-6 float-left edit-height">
                                             <div class="col-md-2 float-left text-right pl-0">艺人来源</div>
-                                            <div class="col-md-10 float-left font-weight-bold" :class="isEdit?'height':''">
+                                            <div class="col-md-10 float-left font-weight-bold">
                                                 <EditSelector :content="artistInfo.source" :options="artistSourceArr"
                                                               :is-edit="isEdit"
-                                                              @change="changeArtistSource"></EditSelector>
+                                                              @change="(value) => changeArtistBaseInfo(value, 'source')"></EditSelector>
                                             </div>
                                         </div>
-                                        <div class="card-text py-10 px-0 clearfix col-md-6 float-left">
+                                        <div class="card-text py-10 px-0 clearfix col-md-6 float-left edit-height">
                                             <div class="col-md-2 float-left text-right pl-0">沟通状态</div>
-                                            <div class="col-md-10 float-left font-weight-bold" :class="isEdit?'height':''">
+                                            <div class="col-md-10 float-left font-weight-bold">
                                                 <EditSelector :content="artistInfo.communication_status"
                                                               :options="taiyangCommunicationStatusArr"
                                                               :is-edit="isEdit"
-                                                              @change="changeArtistCommunication"></EditSelector>
+                                                              @change="(value) => changeArtistBaseInfo(value, 'communication_status')"></EditSelector>
                                             </div>
                                         </div>
-                                        <div class="card-text py-10 px-0 clearfix col-md-6 float-left">
+                                        <div class="card-text py-10 px-0 clearfix col-md-6 float-left edit-height">
                                             <div class="col-md-2 float-left text-right pl-0">与我司签约意向</div>
-                                            <div class="col-md-10 float-left font-weight-bold" :class="isEdit?'height':''">
-                                                <EditSelector :content="artistInfo.intention" :options="yesOrNoArr"
-                                                              :is-edit="isEdit"
-                                                              @change="changeArtistIntention"></EditSelector>
+                                            <div class="col-md-10 float-left font-weight-bold">
+                                                <ConditionalInput :is-edit="isEdit" :content="artistInfo.intention_desc"
+                                                                  :input-content="artistInfo.intention" :condition="0"
+                                                                  @change="(value) => changeArtistBaseInfo(value, 'intention')"></ConditionalInput>
                                             </div>
                                         </div>
-                                        <div class="card-text py-10 px-0 clearfix col-md-6 float-left">
+                                        <div class="card-text py-10 px-0 clearfix col-md-6 float-left edit-height">
                                             <div class="col-md-2 float-left text-right pl-0">是否签约其他公司</div>
-                                            <div class="col-md-10 float-left font-weight-bold" :class="isEdit?'height':''">
-                                                <EditSelector :content="artistInfo.sign_contract_other"
-                                                              :options="yesOrNoArr"
-                                                              :is-edit="isEdit"
-                                                              @change="changeArtistSignStatus"></EditSelector>
+                                            <div class="col-md-10 float-left font-weight-bold">
+                                                <ConditionalInput :is-edit="isEdit"
+                                                                  :content="artistInfo.sign_contract_other"
+                                                                  :input-content="artistInfo.sign_contract_other_name"
+                                                                  :condition="1"
+                                                                  @change="(value) => changeArtistBaseInfo(value, 'intention')"></ConditionalInput>
                                             </div>
                                         </div>
-                                        <div class="card-text py-10 px-0 clearfix col-md-6 float-left">
+                                        <div class="card-text py-10 px-0 clearfix col-md-6 float-left edit-height">
                                             <div class="col-md-2 float-left text-right pl-0">星探</div>
-                                            <div class="col-md-10 float-left font-weight-bold" :class="isEdit?'height':''">
-                                                <input v-show='isEdit' type="number" class="form-control"  placeholder="请输入星探名称">
-                                                <span v-show='!isEdit'>{{artistInfo.weibo_url}}</span>
+                                            <div class="col-md-10 float-left font-weight-bold">
+                                                <EditInput :content="artistInfo.artist_scout_name" :is-edit="isEdit"
+                                                           @change="(value) => changeArtistBaseInfo(value, 'artist_scout_name')"></EditInput>
                                             </div>
                                         </div>
-                                        <div class="card-text py-10 px-0 clearfix col-md-6 float-left">
+                                        <div class="card-text py-10 px-0 clearfix col-md-6 float-left edit-height">
                                             <div class="col-md-2 float-left text-right pl-0">地区</div>
-                                            <div class="col-md-10 float-left font-weight-bold" :class="isEdit?'height':''">
-                                                <input v-show='isEdit' type="number" class="form-control"  placeholder="请输入地区">
-                                                <span v-show='!isEdit'>{{artistInfo.weibo_url}}</span>
-                                            </div>       
-                                        </div>
-                                        <div class="card-text py-10 px-0 clearfix col-md-6 float-left">
-                                            <div class="col-md-2 float-left text-right pl-0">艺人规划</div>
-                                            <div class="col-md-10 float-left font-weight-bold" :class="isEdit?'height':''">
-
+                                            <div class="col-md-10 float-left font-weight-bold">
+                                                <EditInput :content="artistInfo.artist_location" :is-edit="isEdit"
+                                                           @change="(value) => changeArtistBaseInfo(value, 'artist_location')"></EditInput>
                                             </div>
                                         </div>
-                                        <div class="card-text py-10 px-0 clearfix col-md-6 float-left">
+                                        <div class="card-text py-10 px-0 clearfix col-md-6 float-left edit-height">
                                             <div class="col-md-2 float-left text-right pl-0">手机号</div>
-                                            <div class="col-md-10 float-left font-weight-bold" :class="isEdit?'height':''">
+                                            <div class="col-md-10 float-left font-weight-bold">
                                                 <EditInput :content="artistInfo.phone" :is-edit="isEdit"
-                                                           @change="changeArtistPhone"></EditInput>
+                                                           @change="(value) => changeArtistBaseInfo(value, 'phone')"></EditInput>
                                             </div>
                                         </div>
-                                        <div class="card-text py-10 px-0 clearfix col-md-6 float-left">
+                                        <div class="card-text py-10 px-0 clearfix col-md-6 float-left edit-height">
                                             <div class="col-md-2 float-left text-right pl-0">微信</div>
-                                            <div class="col-md-10 float-left font-weight-bold" :class="isEdit?'height':''">
+                                            <div class="col-md-10 float-left font-weight-bold">
                                                 <EditInput :content="artistInfo.wechat" :is-edit="isEdit"
-                                                           @change="changeArtistWeixin"></EditInput>
+                                                           @change="(value) => changeArtistBaseInfo(value, 'wechat')"></EditInput>
                                             </div>
                                         </div>
-                                        <div class="card-text py-10 px-0 clearfix col-md-6 float-left">
+                                        <div class="card-text py-10 px-0 clearfix col-md-6 float-left edit-height">
                                             <div class="col-md-2 float-left text-right pl-0">邮箱</div>
-                                            <div class="col-md-10 float-left font-weight-bold" :class="isEdit?'height':''">
+                                            <div class="col-md-10 float-left font-weight-bold">
                                                 <EditInput :content="artistInfo.email" :is-edit="isEdit"
-                                                           @change="changeArtistEmail"></EditInput>
+                                                           @change="(value) => changeArtistBaseInfo(value, 'email')"></EditInput>
                                             </div>
                                         </div>
-                                        <div class="card-text py-10 px-0 clearfix col-md-6 float-left">
+                                        <div class="card-text py-10 px-0 clearfix col-md-6 float-left edit-height">
                                             <div class="col-md-2 float-left text-right pl-0">社交平台</div>
-                                            <div class="col-md-10 float-left font-weight-bold" :class="isEdit?'height':''"> 
-
+                                            <div class="col-md-10 float-left font-weight-bold">
+                                                <EditSelector :is-edit="isEdit" :multiple="true"
+                                                              :content="artistInfo.platform ? artistInfo.platform.split(',') : ''"
+                                                              :options="artistSocialPlatform"
+                                                              @change="(value) => changeArtistBaseInfo(value, 'platform')"></EditSelector>
                                             </div>
                                         </div>
-                                        <div class="card-text py-10 px-0 clearfix col-md-6 float-left">
+                                        <div class="card-text py-10 px-0 clearfix col-md-6 float-left edit-height">
                                             <div class="col-md-2 float-left text-right pl-0">微博主页地址</div>
-                                            <div class="col-md-10 float-left font-weight-bold" :class="isEdit?'height':''">
-                                                <input v-show='isEdit' type="number" class="form-control"  placeholder="请输入微博Id">
-                                                <span v-show='!isEdit'>{{artistInfo.weibo_url}}</span>
+                                            <div class="col-md-10 float-left font-weight-bold">
+                                                <EditInput :content="artistInfo.weibo_url" :is-edit="isEdit"
+                                                           @change="(value) => changeArtistBaseInfo(value, 'weibo_url')"></EditInput>
                                             </div>
                                         </div>
-                                        <div class="card-text py-10 px-0 clearfix col-md-6 float-left">
+                                        <div class="card-text py-10 px-0 clearfix col-md-6 float-left edit-height">
                                             <div class="col-md-2 float-left text-right pl-0">微博粉丝数</div>
-                                            <div class="col-md-10 float-left font-weight-bold" :class="isEdit?'height':''">
-                                                 <input v-show='isEdit' type="number" class="form-control"  placeholder="请输入微博粉丝数">
-                                                <span v-show='!isEdit'>{{artistInfo.weibo_fans_num}}</span>
+                                            <div class="col-md-10 float-left font-weight-bold">
+                                                <EditInput :content="artistInfo.weibo_fans_num" :is-edit="isEdit"
+                                                           @change="(value) => changeArtistBaseInfo(value, 'weibo_fans_num')"></EditInput>
                                             </div>
                                         </div>
-                                        <div class="card-text py-10 px-0 clearfix col-md-6 float-left">
+                                        <div class="card-text py-10 px-0 clearfix col-md-6 float-left edit-height">
                                             <div class="col-md-2 float-left text-right pl-0">抖音Id</div>
-                                            <div class="col-md-10 float-left font-weight-bold" :class="isEdit?'height':''">
-                                                <input v-show='isEdit' type="number" class="form-control"  placeholder="请输入抖音Id">
-                                                <span v-show='!isEdit'>{{artistInfo.douyin_id}}</span>
+                                            <div class="col-md-10 float-left font-weight-bold">
+                                                <EditInput :content="artistInfo.douyin_id" :is-edit="isEdit"
+                                                           @change="(value) => changeArtistBaseInfo(value, 'douyin_id')"></EditInput>
                                             </div>
                                         </div>
-                                        <div class="card-text py-10 px-0 clearfix col-md-6 float-left">
+                                        <div class="card-text py-10 px-0 clearfix col-md-6 float-left edit-height">
                                             <div class="col-md-2 float-left text-right pl-0">抖音粉丝数</div>
-                                            <div class="col-md-10 float-left font-weight-bold" :class="isEdit?'height':''">
-                                                 <input v-show='isEdit' type="number" class="form-control"  placeholder="请输入抖音粉丝数">
-                                                 <span v-show='!isEdit'>{{artistInfo.douyin_fans_num}}</span>
+                                            <div class="col-md-10 float-left font-weight-bold">
+                                                <EditInput :content="artistInfo.douyin_fans_num" :is-edit="isEdit"
+                                                           @change="(value) => changeArtistBaseInfo(value, 'douyin_fans_num')"></EditInput>
                                             </div>
                                         </div>
 
-                                        <div class="card-text py-10 px-0 clearfix col-md-6 float-left">
+                                        <div class="card-text py-10 px-0 clearfix col-md-6 float-left edit-height">
                                             <div class="col-md-2 float-left text-right pl-0">备注</div>
-                                            <div class="col-md-10 float-left font-weight-bold" :class="isEdit?'height':''">
+                                            <div class="col-md-10 float-left font-weight-bold">
                                                 <editTextarea :content="artistInfo.desc" :is-edit="isEdit"
-                                                              @change="changeArtistDesc"></editTextarea>
+                                                              @change="(value) => changeArtistBaseInfo(value, 'desc')"></editTextarea>
                                             </div>
+                                        </div>
+                                    </div>
+                                    <div class="card-text py-10 px-0 clearfix col-md-12">
+                                        <div class="col-md-1 float-left text-right pl-0">附件</div>
+                                        <div class="col-md-11 float-left font-weight-bold">
 
                                         </div>
                                     </div>
@@ -422,9 +435,11 @@
                                     <div class="card-text py-5 clearfix">
                                         <div class="col-md-1 float-left text-right pl-0">录入人</div>
                                         <div class="col-md-5 float-left font-weight-bold">
+                                            {{ artistInfo.creator.data.name }}
                                         </div>
                                         <div class="col-md-1 float-left text-right pl-0">录入时间</div>
                                         <div class="col-md-5 float-left font-weight-bold">
+                                            {{ artistInfo.created_at }}
                                         </div>
                                     </div>
                                     <div class="card-text py-5 clearfix">
@@ -460,6 +475,7 @@
 
         </div>
 
+        <!-- 新增任务 -->
         <div class="modal fade" id="addTask" aria-hidden="true" aria-labelledby="addLabelForm"
              role="dialog" tabindex="-1">
             <div class="modal-dialog modal-simple">
@@ -482,7 +498,7 @@
                             <div class="col-md-2 text-right float-left">任务类型</div>
                             <div class="col-md-10 float-left pl-0">
                                 <selectors :options="taskTypeArr" :placeholder="'请选择任务类型'"
-                                           @change="changeTaskType"></selectors>
+                                           @change="changeTaskType" v-if="taskTypeArr.length > 0"></selectors>
                             </div>
                         </div>
                         <div class="example">
@@ -494,14 +510,13 @@
                         <div class="example">
                             <div class="col-md-2 text-right float-left">负责人</div>
                             <div class="col-md-5 float-left pl-0">
-                                <input-selectors :placeholder="'请选择负责人'"
-                                                 @change="principalChange"></input-selectors>
+                                <input-selectors :placeholder="'请选择负责人'"></input-selectors>
                             </div>
                         </div>
                         <div class="example">
                             <div class="col-md-2 text-right float-left">参与人</div>
                             <div class="col-md-10 float-left pl-0">
-                                <add-member @change="participantChange"></add-member>
+                                <add-member></add-member>
                             </div>
                         </div>
                         <div class="example">
@@ -545,7 +560,7 @@
                 </div>
             </div>
         </div>
-        
+
         <!--作品库-->
         <div class="modal fade" id="addWork" aria-hidden="true" aria-labelledby="addLabelForm"
              role="dialog" tabindex="-1">
@@ -570,7 +585,7 @@
                                        placeholder="请输入作品名称">
                             </div>
                         </div>
-                        
+
                         <div class="example">
                             <div class="col-md-2 text-right float-left">导演</div>
                             <div class="col-md-10 float-left">
@@ -671,8 +686,6 @@
                 </div>
             </div>
         </div>
-        
-
 
     </div>
 </template>
@@ -685,10 +698,8 @@
         data: function () {
             return {
                 artistId: '',
-                artistInfo: {
-                    sign_contract_other:0
-                },
-                taskTypeArr: config.taskTypeArr,
+                artistInfo: {},
+                taskTypeArr: [],
                 taskLevelArr: config.taskLevelArr,
                 taskType: '',
                 taskName: '',
@@ -702,9 +713,8 @@
                 artistWorksInfo: [],//作品库
                 artistProjectsInfo: [],//项目
                 artistWorkName: '', //作品名称
-                artistWorkDirector:'',//导演名称
-                broker:'',//经纪人
-                publicity:'',//宣传人
+                artistWorkDirector: '',//导演名称
+                artistBillsInfo: [],//账单
                 workReleaseTime: '',
                 workTypeArr: config.workTypeArr,
                 workType: '',
@@ -716,11 +726,15 @@
                 artistSourceArr: config.artistSourceArr,
                 taiyangCommunicationStatusArr: config.taiyangCommunicationStatusArr,
                 yesOrNoArr: config.yesOrNoArr,
+                changeArtistInfo: {},
+                artistSocialPlatform: config.artistSocialPlatform,
+
             }
         },
 
         mounted() {
-            this.getArtist()
+            this.getArtist();
+            this.getTaskType();
             // this.drawLine()
             // this.$nextTick(function() {
             //     this.myChart = echarts.init(document.getElementById('myChart'));  //初始化echarts实例
@@ -736,35 +750,47 @@
                 this.artistId = this.$route.params.id;
 
                 let data = {
-                    include: 'broker,creator,tasks,affixes,trails.project.principal,works,trails.client,publicity',
+                    include: 'publicity,broker,creator,tasks,affixes,trails.project.principal,works,trails.client',
                 };
                 let _this = this;
                 fetch('get', '/stars/' + this.artistId, data).then(function (response) {
                     _this.artistInfo = response.data;
                     _this.artistTasksInfo = response.data.tasks.data
                     _this.artistWorksInfo = response.data.works.data
-                    if(response.data.broker){
-                        _this.broker = response.data.broker.data.name
-                    }
-                    if(response.data.publicity){
-                        _this.publicity = response.data.publicity.data.name
-                    }
                     for (let i = 0; i < response.data.trails.data.length; i++) {
-                        if(response.data.trails.data[i].project){
+                        if (response.data.trails.data[i].project) {
                             response.data.trails.data[i].project.data.company = response.data.trails.data[i].client.data.company
                             _this.artistProjectsInfo.push(response.data.trails.data[i].project.data)
                         }
                     }
-                    console.log(_this.artistProjectsInfo)
+                    if (response.data.broker) {
+                        let params = {
+                            type: 'change',
+                            data: response.data.broker.data
+                        };
+                        _this.$store.dispatch('changePrincipal', params);
+                    }
+                })
+            },
+
+            getTaskType: function () {
+                let _this = this;
+                fetch('get', '/task_types/all').then(function (response) {
+                    for (let i = 0; i < response.data.length; i++) {
+                        _this.taskTypeArr.push({
+                            value: response.data[i].id,
+                            name: response.data[i].title
+                        })
+                    }
                 })
             },
 
             //粉丝数据
-             draw:function(){
-                var myChart = echarts.init(document.getElementById('myChart'));
+            draw: function () {
+                let myChart = echarts.init(document.getElementById('myChart'));
 
                 // 指定图表的配置项和数据
-                var option = {
+                let option = {
                     title: {
                         text: '粉丝统计'
                     },
@@ -772,7 +798,7 @@
                         trigger: 'axis'
                     },
                     legend: {
-                        data:['微博','百科','抖音','其他']
+                        data: ['微博', '百科', '抖音', '其他']
                     },
                     grid: {
                         left: '3%',
@@ -788,35 +814,35 @@
                     xAxis: {
                         type: 'category',
                         boundaryGap: false,
-                        data: ['周一','周二','周三','周四','周五','周六','周日']
+                        data: ['周一', '周二', '周三', '周四', '周五', '周六', '周日']
                     },
                     yAxis: {
                         type: 'value'
                     },
                     series: [
                         {
-                            name:'微博',
-                            type:'line',
+                            name: '微博',
+                            type: 'line',
                             stack: '总量',
-                            data:[120, 132, 101, 134, 90, 230, 210]
+                            data: [120, 132, 101, 134, 90, 230, 210]
                         },
                         {
-                            name:'百科',
-                            type:'line',
+                            name: '百科',
+                            type: 'line',
                             stack: '总量',
-                            data:[220, 182, 191, 234, 290, 330, 310]
+                            data: [220, 182, 191, 234, 290, 330, 310]
                         },
                         {
-                            name:'抖音',
-                            type:'line',
+                            name: '抖音',
+                            type: 'line',
                             stack: '总量',
-                            data:[150, 232, 201, 154, 190, 330, 410]
+                            data: [150, 232, 201, 154, 190, 330, 410]
                         },
                         {
-                            name:'其他',
-                            type:'line',
+                            name: '其他',
+                            type: 'line',
                             stack: '总量',
-                            data:[320, 332, 301, 334, 390, 330, 320]
+                            data: [320, 332, 301, 334, 390, 330, 320]
                         },
                         // {
                         //     name:'搜索引擎',
@@ -831,19 +857,11 @@
                 myChart.setOption(option);
             },
             getArtistWorks: function () {
-                 
+
             },
 
             changeTaskType: function (value) {
                 this.taskType = value
-            },
-
-            principalChange: function (value) {
-
-            },
-
-            participantChange: function (value) {
-
             },
 
             changeTaskLevel: function (value) {
@@ -872,10 +890,6 @@
                     participant_ids.push(this.$store.state.newParticipantsInfo[i].id)
                 }
                 let data = {
-                    // resource_type: '1718463094',
-                    // resourceable_id: '1994731356',
-                    // type: this.taskType,
-                    // @todo 任务类型前端维护
                     title: this.taskName,
                     principal_id: this.$store.state.newPrincipalInfo.id,
                     participant_ids: participant_ids,
@@ -883,8 +897,8 @@
                     start_at: this.startTime + ' ' + this.startMinutes,
                     end_at: this.endTime + ' ' + this.endMinutes,
                     desc: this.taskIntroduce,
-                    resource_type:2,
-                    resourceable_id:this.artistId,
+                    resource_type: 2,
+                    resourceable_id: this.artistId,
                     type: this.taskType,
                 };
                 let _this = this;
@@ -897,15 +911,15 @@
 
             addWork: function () {
                 let data = {
-                    name:this.artistWorkName,
-                    director:this.artistWorkDirector,
-                    role:this.character,
-                    co_star:this.coActor,
-                    release_time:this.workReleaseTime,
-                    works_type:this.workType
+                    name: this.artistWorkName,
+                    director: this.artistWorkDirector,
+                    role: this.character,
+                    co_star: this.coActor,
+                    release_time: this.workReleaseTime,
+                    works_type: this.workType
                 };
                 let _this = this;
-                fetch('post', `/stars/${this.$route.params.id}/works`,data).then(function (response) {
+                fetch('post', `/stars/${this.$route.params.id}/works`, data).then(function (response) {
                     toastr.success('新增成功');
                     $('#addWork').modal('hide');
                     _this.artistWorksInfo.push(response.data)
@@ -926,57 +940,36 @@
 
             editBaseInfo: function () {
                 this.isEdit = true;
-                this.changeInfo = [];
+                this.changeArtistInfo = {};
             },
 
             cancelEdit: function () {
                 this.isEdit = false
             },
 
-            changeArtistBaseInfo: function () {
-
+            changeArtistBaseInfo: function (value, name) {
+                if (name === 'broker_id') {
+                    if (value) {
+                        value = this.$store.state.principalInfo.id
+                    } else {
+                        return
+                    }
+                }
+                this.changeArtistInfo[name] = value
             },
 
-            changArtistName: function (value) {
-                this.artistInfo.name = value
-            },
-
-            changeArtistGender: function (value) {
-                this.artistInfo.gender = value
-            },
-
-            changeArtistDesc: function (value) {
-                this.artistInfo.desc = value
-            },
-
-            changeArtistSource: function (value) {
-                this.artistInfo.source = value
-            },
-
-            changeArtistCommunication: function (value) {
-                this.artistInfo.communication_status = value
-            },
-
-            changeArtistIntention: function (value) {
-                this.artistInfo.intention = value
-            },
-
-            changeArtistSignStatus: function (value) {
-                console.log(value)
-                this.artistInfo.sign_contract_other = value
-            },
-
-            changeArtistPhone: function (value) {
-                this.artistInfo.phone = value
-            },
-
-            changeArtistWeixin: function (value) {
-                this.artistInfo.wechat = value
-            },
-
-            changeArtistEmail: function (value) {
-                this.artistInfo.email = value
-            },
+            changeArtist: function () {
+                if (JSON.stringify(this.changeArtistInfo) === "{}") {
+                    this.isEdit = false;
+                    return
+                }
+                let _this = this;
+                fetch('put', '/stars/' + this.artistId, this.changeArtistInfo).then(function (response) {
+                    toastr.success('修改成功');
+                    _this.isEdit = false;
+                    _this.getArtist();
+                })
+            }
 
         }
     }
@@ -999,7 +992,8 @@
         left: 0;
         will-change: transform;
     }
-    .height{
+
+    .edit-height {
         height: 57px;
     }
 </style>

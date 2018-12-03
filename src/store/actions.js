@@ -19,5 +19,8 @@ export default {
 
     changeCompany: function (data, params) {
         data.commit('changeCompany', params)
+    },
+    changeOtherSlot: function(data,params){
+        data.commit('changeOtherSlot',params)
     }
 }

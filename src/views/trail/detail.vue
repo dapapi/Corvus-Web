@@ -4,7 +4,7 @@
         <div class="page-header page-header-bordered">
             <h1 class="page-title d-inline">销售线索</h1>
 
-            <div class="page-header-actions dropdown show task-dropdown float-right">
+            <div class="page-header-actions dropdown show task-dropdown float-right" v-if="this.trailInfo.progress_status !== 0">
                 <div class="font-info pointer-content" data-target="#refuseTrail" data-toggle="modal">拒绝</div>
             </div>
         </div>
@@ -181,7 +181,7 @@
                                         <div class="card-text py-10 px-0 clearfix col-md-6 float-left"
                                              :class="isEdit ? 'edit-height':'' ">
                                             <div class="col-md-2 float-left text-right pl-0">目标艺人</div>
-                                            <div class="col-md-10 float-left font-weight-bold">
+                                            <div class="col-md-10 float-left font-weight-bold" v-if="trailInfo.expectations">
                                                 <span v-for="expectation in trailInfo.expectations.data"
                                                       :key="expectation.name" v-if="!isEdit">
                                                     {{ expectation.name }}
@@ -196,7 +196,7 @@
                                         <div class="card-text py-10 px-0 clearfix col-md-6 float-left"
                                              :class="isEdit ? 'edit-height':'' ">
                                             <div class="col-md-2 float-left text-right pl-0">推荐艺人</div>
-                                            <div class="col-md-10 float-left font-weight-bold">
+                                            <div class="col-md-10 float-left font-weight-bold" v-if="trailInfo.recommendations">
                                                  <span v-for="recommendations in trailInfo.recommendations.data"
                                                        :key="recommendations.name" v-if="!isEdit">
                                                     {{ recommendations.name }}
@@ -204,7 +204,7 @@
                                                 <EditSelector :options="starsArr" :is-edit="isEdit"
                                                               :content="selectedRecommendationsArr"
                                                               :multiple="true" :contentHide='true'
-                                                              @change="changeRecommendations"></EditSelector>
+                                                              @valuelistener="changeRecommendations"></EditSelector>
                                             </div>
 
                                         </div>
@@ -268,16 +268,16 @@
                                         <div class="card-text py-10 px-0 clearfix col-md-6 float-left"
                                              :class="isEdit ? 'edit-height':'' ">
                                             <div class="col-md-2 float-left text-right pl-0">公司名称</div>
-                                            <div class="col-md-10 float-left font-weight-bold">
+                                            <div class="col-md-10 float-left font-weight-bold" v-if="trailInfo.client">
                                                 <EditInput :content="trailInfo.client.data.company" :is-edit="isEdit"
-                                                           @change="changeTrailCompany" disabled></EditInput>
+                                                           @change="changeTrailCompany"></EditInput>
                                             </div>
 
                                         </div>
                                         <div class="card-text py-10 px-0 clearfix col-md-6 float-left"
                                              :class="isEdit ? 'edit-height':'' ">
                                             <div class="col-md-2 float-left text-right pl-0">级别</div>
-                                            <div class="col-md-10 float-left font-weight-bold">
+                                            <div class="col-md-10 float-left font-weight-bold" v-if="trailInfo.client">
                                                 <EditSelector :content="trailInfo.client.data.grade" :is-edit="isEdit"
                                                               @change="changeTrailCompanyLevel"
                                                               :options="clientLevelArr"></EditSelector>
@@ -286,15 +286,15 @@
                                         <div class="card-text py-10 px-0 clearfix col-md-6 float-left"
                                              :class="isEdit ? 'edit-height':'' ">
                                             <div class="col-md-2 float-left text-right pl-0">联系人</div>
-                                            <div class="col-md-10 float-left font-weight-bold">
+                                            <div class="col-md-10 float-left font-weight-bold" v-if="trailInfo.contact">
                                                 <EditInput :content="trailInfo.contact.data.name" :is-edit="isEdit"
                                                            @change="changeTrailContact"></EditInput>
                                             </div>
                                         </div>
                                         <div class="card-text py-10 px-0 clearfix col-md-6 float-left"
                                              :class="isEdit ? 'edit-height':'' ">
-                                            <div class="col-md-2 float-left text-right pl-0">联系人电话</div>
-                                            <div class="col-md-10 float-left font-weight-bold">
+                                            <div class="col-md-2 float-left text-right pl-0">联系方式</div>
+                                            <div class="col-md-10 float-left font-weight-bold" v-if="trailInfo.contact">
                                                 <EditInput :content="trailInfo.contact.data.phone" :is-edit="isEdit"
                                                            @change="changeTrailContactPhone"></EditInput>
                                             </div>
@@ -302,7 +302,7 @@
                                         <div class="card-text py-10 px-0 clearfix col-md-6 float-left"
                                              :class="isEdit ? 'edit-height':'' ">
                                             <div class="col-md-2 float-left text-right pl-0">备注</div>
-                                            <div class="col-md-10 float-left font-weight-bold">
+                                            <div class="col-md-10 float-left font-weight-bold" v-if="trailInfo.contact">
                                                 <editTextarea :content="trailInfo.desc" :is-edit="isEdit"
                                                               @change="changeTrailDesc"></editTextarea>
                                             </div>
@@ -312,18 +312,28 @@
                                     <div class="segmentation-line example"></div>
                                     <div class="card-text py-5 clearfix">
                                         <div class="col-md-1 float-left text-right pl-0">录入人</div>
-                                        <div class="col-md-5 float-left font-weight-bold">
+                                        <div class="col-md-5 float-left font-weight-bold">{{trailInfo.creator}}
                                         </div>
                                         <div class="col-md-1 float-left text-right pl-0">录入时间</div>
-                                        <div class="col-md-5 float-left font-weight-bold">
+                                        <div class="col-md-5 float-left font-weight-bold">{{trailInfo.created_at}}
                                         </div>
                                     </div>
                                     <div class="card-text py-5 clearfix">
                                         <div class="col-md-1 float-left text-right pl-0">最近更新人</div>
-                                        <div class="col-md-5 float-left font-weight-bold">
+                                        <div class="col-md-5 float-left font-weight-bold">{{trailInfo.last_updated_user}}
                                         </div>
                                         <div class="col-md-1 float-left text-right pl-0">最近更新时间</div>
-                                        <div class="col-md-5 float-left font-weight-bold">
+                                        <div class="col-md-5 float-left font-weight-bold">{{trailInfo.last_updated_at ||trailInfo.last_follow_up_at }}
+                                        </div>
+                                    </div>
+                                    <div v-if="trailInfo.progress_status === 0">
+                                        <div class="card-text py-5 clearfix">
+                                            <div class="col-md-1 float-left text-right pl-0">拒绝人</div>
+                                            <div class="col-md-5 float-left font-weight-bold">{{trailInfo.refused_user}}
+                                            </div>
+                                            <div class="col-md-1 float-left text-right pl-0">拒绝日期</div>
+                                            <div class="col-md-5 float-left font-weight-bold">{{trailInfo.refused_at}}
+                                            </div>
                                         </div>
                                     </div>
                                     <div v-if="trailInfo.type === 4">
@@ -359,9 +369,9 @@
                                     <th class="cell-300" scope="col">截止日期</th>
                                 </tr>
                                 <tbody>
-                                <tr v-for="task in trailTasksInfo">
+                                <tr v-for="task in trailTasksInfo" v-if="trailTasksInfo">
                                     <td>{{ task.title }}</td>
-                                    <td>{{ task.type }}</td>
+                                    <td>{{ task.type.data.title }}</td>
                                     <td>
                                         <template v-if="task.status === 1">进行中</template>
                                         <template v-else-if="task.status === 2">已完成</template>
@@ -439,7 +449,7 @@
                             <div class="col-md-2 text-right float-left">负责人</div>
                             <div class="col-md-5 float-left pl-0">
                                 <input-selectors :placeholder="'请选择负责人'"
-                                                 @change="principalChange"></input-selectors>
+                                                @change="principalChange"></input-selectors>
                             </div>
                         </div>
                         <div class="example">
@@ -541,7 +551,7 @@
                 memberPlaceholder: '请选择负责人',
                 companyType: config.companyType,
                 customizeInfo: config.customizeInfo,
-                taskTypeArr: config.taskTypeArr,
+                taskTypeArr: {},
                 taskLevelArr: config.taskLevelArr,
                 taskPrincipal: '',
                 startMinutes: '00:00',
@@ -567,8 +577,10 @@
                 cooperationTypeArr: config.cooperationTypeArr,
             }
 
+        }, 
+        created(){
+            this.getAllType()
         },
-
         mounted() {
             this.getTrail();
             this.getStars();
@@ -665,7 +677,7 @@
                 this.changeInfo.industry_id = newValue
             },
             'trailInfo.expectations': function (newValue) {
-                this.changeInfo.expectations = newValue
+                this.changeInfo.expectations = newValue 
             },
             'trailInfo.recommendations': function (newValue) {
                 this.changeInfo.recommendations = newValue
@@ -674,14 +686,21 @@
                 this.changeInfo.status = newValue
             },
             'trailInfo.cooperation_type': function (newValue) {
+                console.log(newValue);
                 this.changeInfo.cooperation_type = newValue
             },
             'expectations': function (newValue) {
-                this.changeInfo.expectation = newValue
+                this.expectation = newValue
             }
         },
 
         methods: {
+            getAllType(){
+                let _this = this
+                fetch('get','/task_types/all').then((response) => {
+                    _this.taskTypeArr = response.data
+                })
+            },
             trailTypeValidate(){
                 if(!this.trailInfo.principal){
                     toastr.error("负责人为必填");
@@ -714,10 +733,10 @@
                     toastr.error("手机号码为必填")
                     return false;
                 }else{
-                    console.log(ture);
                     return true
                 }
             },
+            
             getTrail: function () {
                 this.trailId = this.$route.params.id;
                 let _this = this;
@@ -725,7 +744,6 @@
                     include: 'principal,client,contact,recommendations,expectations,project',
                 };
                 fetch('get', '/trails/' + this.trailId, data).then(function (response) {
-                    console.log(response);
                     _this.trailInfo = response.data;
                     _this.oldInfo = JSON.parse(JSON.stringify(response.data));
                     for (let i = 0; i < _this.trailInfo.expectations.data.length; i++) {
@@ -764,6 +782,7 @@
                 if (this.trailTypeValidate()){
                     let _this = this;
                     let data = _this.changeInfo;
+                    console.log(data);
                     fetch('put', '/trails/' + this.trailId, data).then(function () {
                         toastr.success('修改成功');
                         _this.isEdit = false
@@ -971,21 +990,28 @@
                 this.trailInfo.cooperation_type = value
             },
             refuseTrail: function () {
-                let data = {
-                    'type': this.refuseType,
-                    'reason': this.refuseReason,
+                if(!this.refuseType){
+                    toastr.error('请选择拒绝原因')
+                }else if(!this.refuseReason){
+                    toastr.error('请输入拒绝理由')
+                }else{
+                        let data = {
+                        'type': this.refuseType,
+                        'reason': this.refuseReason,
+                    }
+                    fetch('put', '/trails/' + this.trailInfo.id + '/refuse', data).then(function (response) {
+                        toastr.success('拒绝成功');
+                        $('#refuseTrail').modal('hide');
+                    })
+                    this.trailInfo.progress_status = 0
                 }
-                fetch('put', '/trails/' + this.trailInfo.id + '/refuse', data).then(function (response) {
-                    toastr.success('拒绝成功');
-                    $('#refuseTrail').modal('hide');
-                })
-                this.trailInfo.progress_status = 0
             },
         }
     }
 </script>
 
 <style>
+    
     .expfee {
         display: flex;
     }
