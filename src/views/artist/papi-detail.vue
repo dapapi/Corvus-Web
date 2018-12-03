@@ -131,7 +131,7 @@
                                     <th class="cell-300" scope="col">负责人</th>
                                     <th class="cell-300" scope="col">截止日期</th>
                                 </tr>
-                                <tr v-for="v in item"  :key="v.id">
+                                <!-- <tr v-for="v in item"  :key="v.id">
                                     <td>{{v.title}}</td>
                                     <td>{{v.resource.data.resource.data.title}}</td>
                                     <td>
@@ -147,7 +147,7 @@
                                     </td>
                                     <td>{{v.principal.data.name}}</td>
                                     <td>{{v.end_at}}</td>
-                                </tr>
+                                </tr> -->
                             </table>
                             <div class="site-action fixed-button" data-plugin="actionBtn" data-toggle="modal"
                                  data-target="#addTask">
@@ -204,7 +204,8 @@
                         <div class="tab-pane animation-fade pb-20 fixed-button-father" id="forum-artist-fans"
                              role="tabpanel">
                             粉丝
-                            <div id="main" style="width: 800px;height:400px; padding:30px;" ></div>
+                            <div id="myChart"
+                                 style="width:80vw ;height:400px; margin-top:30px;padding-bottom: 20px"></div>
                         </div>
                         <div class="tab-pane animation-fade pb-20 fixed-button-father" id="forum-artist-bill"
                              role="tabpanel">
@@ -290,7 +291,7 @@
                                         <div class="card-text py-10 px-0 clearfix col-md-6 float-left">
                                             <div class="col-md-2 float-left text-right pl-0">是否签约其他公司</div>
                                             <div class="col-md-10 float-left font-weight-bold">
-                                                <EditSelector :content="artistInfo.sign_contract_other"
+                                                <EditSelector :content="artistInfo.sign_contract_status"
                                                               :options="yesOrNoArr"
                                                               :is-edit="isEdit"
                                                               @change="changeArtistSignStatus"></EditSelector>
@@ -380,7 +381,7 @@
                         </div>
                         <div class="card-block">
                             <div class="col-md-7 pl-0">
-                                <TaskFollowUp :follow-type="'博主'"></TaskFollowUp>
+                                <TaskFollowUp :follow-type="'博主'" trailType='blogger' :trailId="$route.params.id"></TaskFollowUp>
                             </div>
                         </div>
                     </div>
@@ -640,33 +641,74 @@
 
         methods: {
             charts:function(){
-            let myChart = echarts.init(document.getElementById('main'));
-            let option = {
+            let myChart = echarts.init(document.getElementById('myChart'));
+
+                // 指定图表的配置项和数据
+                let option = {
                     title: {
-                        text: '一周粉丝热度展示'
+                        text: '粉丝统计'
+                    },
+                    tooltip: {
+                        trigger: 'axis'
                     },
                     legend: {
-                        data:['这周热度','上周热度']
+                        data: ['微博', '百科', '抖音', '其他']
+                    },
+                    grid: {
+                        left: '3%',
+                        right: '4%',
+                        bottom: '3%',
+                        containLabel: true
+                    },
+                    toolbox: {
+                        feature: {
+                            saveAsImage: {}
+                        }
                     },
                     xAxis: {
                         type: 'category',
-                        data: ['Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat', 'Sun']
+                        boundaryGap: false,
+                        data: ['周一', '周二', '周三', '周四', '周五', '周六', '周日']
                     },
                     yAxis: {
                         type: 'value'
                     },
-                    series: [{
-                        name:'这周热度',
-                        data: [820, 932, 901, 934, 1290, 1330, 1320],
-                        type: 'line'
-                    },
-                    {
-                        name:'上周热度',
-                        type:'line',
-                        data:[620, 782, 791, 734, 1090, 1130, 1210]
-                    },]
+                    series: [
+                        {
+                            name: '微博',
+                            type: 'line',
+                            stack: '总量',
+                            data: [120, 132, 101, 134, 90, 230, 210]
+                        },
+                        {
+                            name: '百科',
+                            type: 'line',
+                            stack: '总量',
+                            data: [220, 182, 191, 234, 290, 330, 310]
+                        },
+                        {
+                            name: '抖音',
+                            type: 'line',
+                            stack: '总量',
+                            data: [150, 232, 201, 154, 190, 330, 410]
+                        },
+                        {
+                            name: '其他',
+                            type: 'line',
+                            stack: '总量',
+                            data: [320, 332, 301, 334, 390, 330, 320]
+                        },
+                        // {
+                        //     name:'搜索引擎',
+                        //     type:'line',
+                        //     stack: '总量',
+                        //     data:[820, 932, 901, 934, 1290, 1330, 1320]
+                        // }
+                    ]
                 };
-               myChart.setOption(option)
+
+                // 使用刚指定的配置项和数据显示图表。
+                myChart.setOption(option);
             },
             getArtist: function () {
                 this.artistId = this.$route.params.id;
@@ -678,7 +720,7 @@
                     _this.artistInfo = response.data;
                  
                 });
-                fetch('get','/bloggers/1994731356?include=tasks.type,trails.project.principal,trails.client').then(function(response){
+                fetch('get','/bloggers/'+this.artistId+'?include=tasks.type,trails.project.principal,trails.client').then(function(response){
                     _this.data=response.data
                     console.log(_this.data)
                 })
@@ -690,7 +732,6 @@
                     _this.Users=response.data;
                 })
                 fetch('get','/task_types').then(function(response){
-                    console.log(response)
                     _this.tasksType=response.data;
                 })
             },
