@@ -118,7 +118,7 @@ let config = {
                 value: 4
             },
         ],
-        classifyArr:[
+        classifyArr: [
             {
                 name: '规则制度',
                 value: 1
@@ -359,7 +359,7 @@ let config = {
             "土族", "达斡尔族", "仫佬族", "羌族", "布朗族", "撒拉族", "毛南族", "仡佬族", "锡伯族", "阿昌族", "普米族", "塔吉克族", "怒族", "乌孜别克族",
             "俄罗斯族", "鄂温克族", "德昂族", "保安族", "裕固族", "京族", "塔塔尔族", "独龙族", "鄂伦春族", "赫哲族", "门巴族", "珞巴族", "基诺族"], // 民族
 
-            //沟通状态
+        //沟通状态
         artistStatusArr: [
             {
                 name: '已签约',
@@ -589,7 +589,7 @@ let config = {
             }
         ],
         //艺人来源
-        artistSourceArr: [ 
+        artistSourceArr: [
             {
                 name: '线上',
                 value: 1
@@ -946,6 +946,24 @@ let config = {
                 name: '增值税专用发票',
                 value: 2
             }
+        ],
+        artistSocialPlatform: [
+            {
+                name: '微博',
+                value: 1
+            },
+            {
+                name: '抖音',
+                value: 2
+            },
+            {
+                name: '百科',
+                value: 3
+            },
+            {
+                name: '其他',
+                value: 4
+            },
         ]
     }
 ;

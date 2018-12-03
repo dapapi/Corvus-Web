@@ -6,6 +6,7 @@ import AddMember from './components/AddMember.vue';
 import Calendar from './components/Calendar.vue';
 import Selectors from './components/Selectors.vue';
 import ChangeSizeInput from './components/ChangeSizeInput.vue';
+import ConditionalInput from './components/ConditionalInput.vue';
 import CustomizeField from './components/CustomizeField.vue';
 import CustomizeFilter from './components/CustomizeFilter.vue';
 import CustomizeLinkageSelectors from './components/CustomizeLinkageSelectors.vue';
@@ -49,14 +50,13 @@ import Flag from './components/Flag.vue';
 import AddModifyBroadCast from './components/AddModifyBroadCast.vue';
 import RegionSelector from './components/RegionSelector.vue';
 import StaffEditSelect from './components/StaffEditSelect'
-// import echarts from 'https://cdn.bootcss.com/echarts/4.2.0-rc.2/echarts-en.common.min.js'
-
 
 Vue.config.productionTip = false;
 
 Vue.component('AddMember', AddMember);
 Vue.component('Calendar', Calendar);
 Vue.component('ChangeSizeInput', ChangeSizeInput);
+Vue.component('ConditionalInput', ConditionalInput);
 Vue.component('CustomizeField', CustomizeField);
 Vue.component('CustomizeFilter', CustomizeFilter);
 Vue.component('CustomizeLinkageSelectors', CustomizeLinkageSelectors);
@@ -101,8 +101,6 @@ Vue.component('Timepicker', Timepicker);
 Vue.component('Flag', Flag);
 Vue.component('AddModifyBroadCast', AddModifyBroadCast);
 Vue.component('RegionSelector', RegionSelector);
-
-// Vue.prototype.$echarts = echarts 
 
 Vue.prototype.globalClick = function (callback) {
     document.getElementById('app').addEventListener('click', () => {
