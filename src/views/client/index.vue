@@ -59,8 +59,8 @@
                                 <template v-if="client.grade === 2">代理公司</template>
                             </td>
                             <td>{{ client.principal?client.principal.data.name:'' }}</td>
-                            <td>{{ client.created_at?client.created_at.date.substr(0,19):'' }}</td>
-                            <td>{{ client.follow_time }}</td>
+                            <td>{{ client.created_at?client.created_at:'' }}</td>
+                            <td>{{ client.last_follow_up_at?client.last_follow_up_at:'' }}</td>
                         </tr>
                         </tbody>
                     </table>
@@ -223,7 +223,7 @@
             getClients: function (pageNum = 1) {
                 const params = {
                     page: pageNum,
-                    include: 'principal',
+                    include: 'principal,',
                 };
 
                 let url = '/clients'
@@ -333,3 +333,17 @@
     }
 </script>
 
+<style lang="scss" scoped>
+table td {
+    position: relative;
+    a:before {
+        content: '';
+        position: absolute;
+        width: 100%;
+        height: 100%;
+        top: 0;
+        left: 0;
+        display: inline-block;
+    }
+}
+</style>

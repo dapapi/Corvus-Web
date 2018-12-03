@@ -184,11 +184,11 @@ export default {
 
     getStaffList() {
         const params = {
-            position_type: this.status,
-            status: this.staffType,
-            page: this.page,
-            search: this.search,
-            entry_time: this.month
+            // position_type: this.status,
+            // status: this.staffType,
+            // page: this.page,
+            // search: this.search,
+            // entry_time: this.month
         }
         fetch("get", "/personnel_list", params).then(result => {
             this.staffList = result.data;
