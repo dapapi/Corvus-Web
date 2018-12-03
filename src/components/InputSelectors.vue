@@ -1,13 +1,12 @@
 <!-- 选择员工，单人 -->
 <template>
     <div class="selector" :id="'inputSelectMember' + _uid">
-        <div class="float-left input-selectors-div">
+        <div class="float-left input-selectors-div" :class='otherslot?"input-selectors-add":""'>
             <input type="text" class="form-control" title="" @focus="showMember" :placeholder="placeholder"
                    v-model="selectedMemberName">
-            <span v-if="selectedMemberName" @click="clearFlag = true" class="input-selectors-span">x</span>
         </div>
         <div class="float-left" v-show="selectMemberShow">
-            <select-staff class="selector" @change="changeSelectMember" :member-type="'principal'"
+            <select-staff class="selector" @change="changeSelectMember" :member-type="'principal'" :otherslot='otherslot'
                           :type="type"></select-staff>
         </div>
     </div>
@@ -15,7 +14,7 @@
 
 <script>
     export default {
-        props: ['placeholder', 'type'],
+        props: ['placeholder', 'type','propSelectMemberName','otherslot'],
         data() {
             return {
                 selectMemberShow: false,
@@ -29,7 +28,10 @@
 
         computed: {
             selectedMemberName: function () {
-                if (this.clearFlag == true) {
+                if(this.propSelectMemberName){
+                    return this.propSelectMemberName
+                }else{
+                     if (this.clearFlag == true) {
                     this.$emit('clearinput')
                     this.clearFlag = false
                     return ''
@@ -46,6 +48,7 @@
                     }
                 }
 
+                }
             },
 
         },
@@ -66,6 +69,7 @@
             changeSelectMember: function () {
                 this.selectMemberShow = false;
                 this.$emit('change', false)
+                this.$emit('')
             }
         }
     }
@@ -74,9 +78,11 @@
 <style>
     .input-selectors-div {
         display: flex;
-
+        
     }
-
+    .input-selectors-add{
+        width: 220px;
+    }
     .input-selectors-span {
         line-height: 30px;
         margin-left: 10px;
