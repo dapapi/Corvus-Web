@@ -41,17 +41,10 @@
                 }
             },
             options: function (newValue) {
-<<<<<<< HEAD
-                this.$nextTick(() => {
-                    this.refresh()
-                })
-
-=======
                 this.$nextTick(()=>{
                     this.refresh()
                 })
                 
->>>>>>> hp
             }
         },
         methods: {
