@@ -690,7 +690,6 @@
                     _this.Users=response.data;
                 })
                 fetch('get','/task_types').then(function(response){
-                    console.log(response)
                     _this.tasksType=response.data;
                 })
             },
