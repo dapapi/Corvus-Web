@@ -62,7 +62,7 @@
 
                 <div class="page-content tab-content nav-tabs-animate bg-white">
                     <div class="tab-pane animation-fade active" id="forum-artist" role="tabpanel">
-                        <table v-if="artistsInfo.length>0" class="table table-hover" data-plugin="selectable" data-row-selectable="true">
+                        <table class="table table-hover" data-plugin="selectable" data-row-selectable="true">
                             <tr class="">
                                 <th class="w-50">
                                         <span class="checkbox-custom checkbox-primary">
@@ -115,7 +115,7 @@
                             </tbody>
                             
                         </table>
-                        <div v-else class="col-md-1" style="margin: 6rem auto">
+                        <div v-if="artistsInfo.length === 0" class="col-md-1" style="margin: 6rem auto">
                             <img src="https://res.papitube.com/corvus/images/content-none.png" alt="" style="width: 100%">
                         </div>
                              
@@ -205,34 +205,39 @@
                             <div class="col-md-2 text-right float-left">平台</div>
                             <div class="col-md-10 float-left pl-0 ">
                                 <!-- todo 全选 -->
-                                <div class="checkbox-custom checkbox-primary d-inline pr-20">
+                                <CheckboxGroup :optionData="platformList" @change="changeCheckbox" :isLine="true">
+                                    <template slot-scope="scope">
+                                        <span>{{scope.row.name}}</span>
+                                    </template>
+                                </CheckboxGroup>
+                                <!-- <div class="checkbox-custom checkbox-primary d-inline pr-20">
                                     <input id="platformAll" type="checkbox" name="platform" title=""
-                                           @change="changeCheckbox(1)">
+                                           @change="changeCheckbox(0)">
                                     <label for="platformAll">全选</label>
                                 </div>
                                 <div class="checkbox-custom checkbox-primary d-inline pr-20">
                                     <input id="platformWeibo" type="checkbox" name="platform" title=""
-                                           @change="changeCheckbox(2)">
+                                           @change="changeCheckbox(1)">
                                     <label for="platformWeibo">微博</label>
                                 </div>
                                 <div class="checkbox-custom checkbox-primary d-inline pr-20">
                                     <input id="platformDouyin" type="checkbox" name="platform" title=""
-                                           @change="changeCheckbox(3)">
+                                           @change="changeCheckbox(2)">
                                     <label for="platformDouyin">抖音</label>
                                 </div>
                                 <div class="checkbox-custom checkbox-primary d-inline pr-20">
                                     <input id="platformBK" type="checkbox" name="platform" title=""
-                                           @change="changeCheckbox(4)">
+                                           @change="changeCheckbox(3)">
                                     <label for="platformBK">百科</label>
                                 </div>
                                 <div class="checkbox-custom checkbox-primary d-inline pr-20">
                                     <input id="platformOther" type="checkbox" name="platform" title=""
-                                           @change="changeCheckbox(5)">
+                                           @change="changeCheckbox(4)">
                                     <label for="platformOther">其他</label>
-                                </div>
+                                </div> -->
                             </div>
                         </div>
-                        <div class="example">
+                        <div class="example" v-show="platformType.find(item => item ==1)">
                             <div class="col-md-2 text-right float-left">微博主页地址</div>
                             <div class="col-md-4 float-left pl-0">
                                 <input type="text" class="form-control" v-model="weiboUrl">
@@ -242,7 +247,7 @@
                                 <input type="text" class="form-control" v-model="weiboFansNum">
                             </div>
                         </div>
-                        <div class="example">
+                        <div class="example" v-show="platformType.find(item => item ==2)">
                             <div class="col-md-2 text-right float-left">百科地址</div>
                             <div class="col-md-4 float-left pl-0">
                                 <input type="text" class="form-control" v-model="baikeUrl">
@@ -252,7 +257,7 @@
                                 <input type="text" class="form-control" v-model="baikeFansNum">
                             </div>
                         </div>
-                        <div class="example">
+                        <div class="example" v-show="platformType.find(item => item ==3)">
                             <div class="col-md-2 text-right float-left">抖音ID</div>
                             <div class="col-md-4 float-left pl-0">
                                 <input type="text" class="form-control" v-model="douyinId">
@@ -262,7 +267,7 @@
                                 <input type="text" class="form-control" v-model="douyinFansNum">
                             </div>
                         </div>
-                        <div class="example">
+                        <div class="example" v-show='platformType.find(item => item ==4)'> 
                             <div class="col-md-2 text-right float-left">其他地址</div>
                             <div class="col-md-4 float-left pl-0">
                                 <input type="text" class="form-control" v-model="qitaUrl">
@@ -297,7 +302,7 @@
                                            @change="isSignCompany"></selectors>
                             </div>
                             <div class="col-md-5 float-left pl-0" v-if="signCompany == 1">
-                                <input type="text" class="form-control" placeholder="请输入已签约公司名称">
+                                <input type="text" class="form-control" v-model="sign_contract_other_name" placeholder="请输入已签约公司名称">
                             </div>
                         </div>
                         <div class="example">
@@ -361,9 +366,11 @@
                 douyinFansNum: '',
                 xhsUrl: '',
                 xhsFansNum: '',
-                platformType: '',
+                // platform:[],
+                platformType: [],
                 signIntention: 1,
                 signCompany: '',
+                sign_contract_other_name:'',
                 artistDesc: '',
                 baikeUrl: '',
                 baikeFansNum: '',
@@ -374,6 +381,24 @@
                 notSignReason: '',
                 selectedArtistsArr: [],
                 isSelectAll: false,
+                platformList:[
+                    {
+                        value:1,
+                        name:'微博'
+                    },
+                    {
+                        value:2,
+                        name:'百科'
+                    },
+                    {
+                        value:3,
+                        name:'抖音'
+                    },
+                    {
+                        value:4,
+                        name:'其他'
+                    },
+                ],
                 listData:{
                     include:'broker,creator',
                     name:'',
@@ -383,12 +408,16 @@
                 }
             }
         },
-
+        watch:{
+            platformType:function(){
+                return  this.platformType
+            }
+        },
         mounted() {
             this.getArtists();
             $('table').asSelectable();
         },
-
+        
         methods: {
 
             //获取沟通状态
@@ -426,7 +455,13 @@
             },
 
             changeCheckbox: function (value) {
-                this.platformType = value
+                // console.log(value)
+                this.platformType = []
+                for (let i = 0; i < value.length; i++) {
+                    this.platformType.push(value[i].value)
+                }
+                
+                // console.log(this.platformType)
             },
 
             changeCommunicationType: function (value) {
@@ -455,17 +490,32 @@
       
             addArtist: function () {
                 let data = {
-                    name: this.artistName,
-                    gender: this.artistGender,
-                    birthday: this.artistBirthday,
-                    source: this.artistSource,
-                    email: this.artistEmail,
-                    phone: this.artistPhone,
-                    wechat: this.artistWeiXin,
-                    communication_status: this.communicationStatus,
-                    intention: this.signIntention,
-                    intention_desc: this.notSignReason,
-                    sign_contract_other: this.signCompany,
+                    name: this.artistName,//名字
+                    gender: this.artistGender,//性别
+                    birthday: this.artistBirthday,//生日
+                    source: this.artistSource, //艺人来源
+                    email: this.artistEmail, //邮箱
+                    phone: this.artistPhone, //手机
+                    wechat: this.artistWeiXin, //微信
+                    communication_status: this.communicationStatus, //沟通状态
+                    intention: this.signIntention, //签约意向
+                    intention_desc: this.notSignReason, //不签约理由
+                    sign_contract_other: this.signCompany, //是否签约其他公司
+                    sign_contract_other_name:this.sign_contract_other_name, //签约其他公司名称
+                    // sign_contract_at:'',//签约日期
+                    artist_scout_name:this.artistScoutName,//星探名称
+                    artist_location:this.artistLocation, //明星地区
+                    platform:'',//社交平台
+                    weibo_url:'',
+                    weibo_fans_num:'',
+                    baike_url:'',
+                    baike_fans_num:'',
+                    douyin_id:'',
+                    douyin_fans_num:'',
+                    qita_url:'',
+                    qita_fans_num:''
+
+
                 };
                 let _this = this;
                 fetch('post', '/stars', data).then(function (response) {
