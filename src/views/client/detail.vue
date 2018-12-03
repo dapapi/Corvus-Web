@@ -119,7 +119,7 @@
                             <tr v-for="project in clientProjectsInfo">
                                 <td>{{ project.title }}</td>
                                 <td>{{ project.status }}</td>
-                                <td>{{ project.principal.data.name }}</td>
+                                <td>{{ project.principal?project.principal.data.name:'' }}</td>
                                 <td>{{ project.trail.data.client.data.company}}</td>
                                 <td>{{ project.created_at }}</td>
                             </tr>
@@ -210,7 +210,7 @@
                                     <div class="col-md-1 float-left text-right pl-0">地区</div>
                                     <div class="col-md-5 float-left font-weight-bold">
                                         <EditSelector :options="clientTypeArr" :is-edit="isEdit"
-                                                      :content="clientInfo.type"></EditSelector>
+                                                      :content="clientInfo.address"></EditSelector>
                                     </div>
                                     <div class="col-md-1 float-left text-right pl-0">详细地址</div>
                                     <div class="col-md-5 float-left font-weight-bold">
@@ -721,6 +721,31 @@
                     desc: this.taskIntroduce,
                     participant_ids: this.participants
                 };
+
+                if (!data.title) {
+                    toastr.error('请填写任务名称')
+                    return
+                }
+
+                if (!this.taskStartTime) {
+                    toastr.error('请选择开始时间')
+                    return
+                }
+
+                if (!this.taskEndTime) {
+                    toastr.error('请选择截止时间')
+                    return
+                }
+
+                if (this.taskStartTime > this.taskEndTime) {
+                    toastr.error('开始时间不能晚于截止时间')
+                    return
+                }
+
+                if (!data.principal_id) {
+                    toastr.error('请选择负责人')
+                }
+
                 fetch('post', '/tasks', data).then(function (response) {
                     toastr.success('创建成功');
                     $('#addTask').modal('hide');
