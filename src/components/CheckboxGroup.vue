@@ -1,10 +1,12 @@
 <template>
-    <div>
-        <input id="allCheck" @change="setAllCheck" type="checkbox" v-model="allCheck">
-        <label for="allCheck">全选</label>
-        <ul>
-            <li v-for="(item,index) in optionData" :key="index">
-                <input v-model="item.isCheck" class="mr-10" type="checkbox" @change="getCheck(item)"/>
+    <div :class="isLine?'clearfix':''">
+        <div :class="isLine?'float-left':''">
+            <input id="allCheck" class="mr-10" @change="setAllCheck" type="checkbox" v-model="allCheck">
+            <label for="allCheck">全选</label>
+        </div>
+        <ul :class="isLine?'clearfix float-left':''">
+            <li :class="isLine?'float-left mr-20':''" v-for="(item,index) in optionData" :key="index">
+                <input v-model="item.isCheck" class="mr-5" type="checkbox" @change="getCheck(item)"/>
                 <slot :row="item" :$index="index"></slot>
             </li>
         </ul>
@@ -18,7 +20,11 @@ export default {
             type:Array,
             required: true
         },
-        propCheck:''
+        propCheck:'',
+        isLine:{
+            type:Boolean,
+            default:false
+        }
     },
     data () {
         return {
