@@ -10,7 +10,7 @@
                 <div class="dropdown-menu dropdown-menu-right task-dropdown-item" aria-labelledby="taskDropdown"
                      role="menu" x-placement="bottom-end">
                     <a class="dropdown-item" role="menuitem" data-toggle="modal" data-target="#addLinkage"
-                       @click="">关联</a>
+                       @click="selectProjectLinkage">关联</a>
                     <a class="dropdown-item" role="menuitem" data-toggle="modal" data-target="#confirmFlag"
                        @click="changeToastrText(2)">完成</a>
                     <a class="dropdown-item" role="menuitem" data-toggle="modal" data-target="#confirmFlag"
@@ -542,7 +542,7 @@
                                                     </template>
                                                     <template v-else-if="field.field_type === 6">
                                                         <EditSelector
-                                                                :content="field.values ? field.values.data.value : ''"
+                                                                :content="field.values ? field.values.data.value : []"
                                                                 :multiple="true"
                                                                 :is-edit="isEdit"
                                                                 :options="field.contentArr"
@@ -1018,17 +1018,68 @@
                         <h4 class="modal-title">关联资源</h4>
                     </div>
                     <div class="modal-body">
-                        <div class="example">
-                            <div class="col-md-2 text-right float-left">关联资源</div>
-                            <div class="col-md-10 float-left">
-                                <NormalLinkageSelectors :data="projectLinkageInfo"
-                                                        @change="selectProjectLinkage"></NormalLinkageSelectors>
+                        <div class="tab-pane p-20" role="tabpanel">
+                            <div class="nav-tabs-vertical" data-plugin="tabs" style="margin: 0 -20px -30px  -20px ">
+                                <ul class="nav nav-tabs nav-tabs-line mr-25" role="tablist">
+                                    <li class="nav-item" role="presentation" @click="selectProjectLinkage('project')">
+                                        <a class="nav-link active" data-toggle="tab" href="#projectsPane"
+                                           aria-controls="exampleTabsLineLeftOne" role="tab" aria-selected="false">
+                                            项目</a>
+                                    </li>
+                                    <li class="nav-item" role="presentation" @click="selectProjectLinkage('task')">
+                                        <a class="nav-link" data-toggle="tab" href="#tasksPane"
+                                           aria-controls="exampleTabsLineLeftOne" role="tab" aria-selected="false">
+                                            任务</a>
+                                    </li>
+                                </ul>
+                                <div class="tab-content" style="max-height: 70vh;overflow-y: auto">
+                                    <div class="tab-pane active" id="projectsPane" role="tabpanel">
+                                        <div class="input-search mb-20" style="width: 70%">
+                                            <button type="submit" class="input-search-btn">
+                                                <i class="icon md-search" aria-hidden="true"></i>
+                                            </button>
+                                            <input type="text" class="form-control" name="" placeholder="搜索关键字..."
+                                                   v-model="searchKeyWord">
+                                        </div>
+                                        <ul class="nav">
+                                            <li class="nav-link pointer-content" style="width: 95%"
+                                                v-for="project in allProjectsInfo"
+                                                v-show="project.title.indexOf(searchKeyWord) > -1"
+                                                @click="selectResource('projects', project.id)">{{ project.title }}
+                                                <span class="float-right"
+                                                      v-show="linkageSelectedIds.projects.indexOf(project.id) > -1">
+                                                    <i class="icon md-check"></i>
+                                                </span>
+                                            </li>
+                                        </ul>
+                                    </div>
+                                    <div class="tab-pane" id="tasksPane" role="tabpanel">
+                                        <div class="input-search mb-20" style="width: 70%">
+                                            <button type="submit" class="input-search-btn">
+                                                <i class="icon md-search" aria-hidden="true"></i>
+                                            </button>
+                                            <input type="text" class="form-control" name="" placeholder="搜索关键字..."
+                                                   v-model="searchKeyWord">
+                                        </div>
+                                        <ul class="nav">
+                                            <li class="nav-link pointer-content" style="width: 95%"
+                                                v-for="task in allTasksInfo"
+                                                v-show="task.title.indexOf(searchKeyWord) > -1"
+                                                @click="selectResource('tasks', task.id)">{{ task.title }}
+                                                <span class="float-right"
+                                                      v-show="linkageSelectedIds.tasks.indexOf(task.id) > -1">
+                                                    <i class="icon md-check"></i>
+                                                </span>
+                                            </li>
+                                        </ul>
+                                    </div>
+                                </div>
                             </div>
                         </div>
                     </div>
                     <div class="modal-footer">
                         <button class="btn btn-sm btn-white btn-pure" data-dismiss="modal">取消</button>
-                        <button class="btn btn-primary" type="submit" @click="addPrivacy">确定</button>
+                        <button class="btn btn-primary" type="submit" @click="">确定</button>
                     </div>
                 </div>
             </div>
@@ -1071,7 +1122,15 @@
                 followStatus: '',
                 flagParticipantsIdArr: [],
                 changeProjectStatusText: '',
+                allProjectsInfo: '',
+                allTasksInfo: '',
                 projectChangeStatus: '',
+                linkageResource: '',
+                searchKeyWord: '',
+                linkageSelectedIds: {
+                    projects: [],
+                    tasks: []
+                },
                 projectLinkageInfo: [
                     {
                         name: '项目',
@@ -1196,6 +1255,20 @@
                 })
             },
 
+            getAllProjects: function () {
+                let _this = this;
+                fetch('get', '/projects/all').then(function (response) {
+                    _this.allProjectsInfo = response.data
+                })
+            },
+
+            getAllTasks: function () {
+                let _this = this;
+                fetch('get', '/tasksAll').then(function (response) {
+                    _this.allTasksInfo = response.data
+                })
+            },
+
             addPrivacy: function () {
 
             },
@@ -1309,23 +1382,24 @@
                 })
             },
 
-            selectProjectLinkage: function (type, value) {
-                console.log(type)
-                console.log(value)
-                if (type === 'father') {
-                    let url = '';
-                    if (value === 1) {
-                        url = '/projects/all'
-                    } else {
-                        url = ''
-                    }
-                    fetch('get', url).then(function (response) {
-                        console.log(response)
-                    })
+            selectProjectLinkage: function (value) {
+                this.linkageResource = value;
+                if (!this.allProjectsInfo) {
+                    this.getAllProjects()
                 }
+                if (!this.allTasksInfo) {
+                    this.getAllTasks()
+                }
+            },
 
-            }
-
+            selectResource: function (type, value) {
+                let index = this.linkageSelectedIds[type].indexOf(value);
+                if (index > -1) {
+                    this.linkageSelectedIds[type].splice(index, 1)
+                } else {
+                    this.linkageSelectedIds[type].push(value)
+                }
+            },
 
         }
     }

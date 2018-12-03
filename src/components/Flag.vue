@@ -14,7 +14,7 @@
                     <h4 class="modal-title">确认{{typeText}}</h4>
                 </div>
                 <div class="modal-body">
-                    <p>此更改不可撤销</p>
+                    <p class="mt-20">此更改不可撤销</p>
                 </div>
                 <div class="modal-footer">
                     <button type="button"

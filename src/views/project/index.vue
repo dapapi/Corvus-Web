@@ -66,10 +66,8 @@
                             </tr>
                             <tbody>
                             <tr v-for="project in projectsInfo ">
-                                <td class="pointer-content">
-                                    <router-link :to="{name:'projects/detail', params: {id: project.id}}">
-                                        {{ project.title }}
-                                    </router-link>
+                                <td class="pointer-content" @click="redirectDetail(project.id)">
+                                    {{ project.title }}
                                 </td>
                                 <td>
                                     <template v-if="project.principal">
@@ -433,6 +431,10 @@
                 this.$refs.endTime.setValue('');
                 this.$refs.desc.refresh();
                 this.$store.dispatch('changePrincipal', {data: {}});
+            },
+
+            redirectDetail: function (projectId) {
+                this.$router.push({path: '/projects/' + projectId})
             },
 
             customize: function (value) {

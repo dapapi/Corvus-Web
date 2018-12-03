@@ -6,7 +6,7 @@
         </template>
         <template v-else>
             <template v-if="multiple && !contentHide">
-                <template v-for="cont in content">
+                <template v-if="content.length > 0" v-for="cont in content">
                     {{ options.find(item => item.value == cont).name }}
                 </template>
             </template>
@@ -22,7 +22,7 @@
 <script>
     export default {
         name: "EditSelector",
-        props: ['options', 'is-edit', 'content', 'multiple','contentHide'],
+        props: ['options', 'is-edit', 'content', 'multiple', 'contentHide'],
         data() {
             return {
                 isEditSelect: false,
@@ -46,8 +46,8 @@
             }
         },
         methods: {
-            valueListener(value){
-                this.$emit('valuelistener',value)
+            valueListener(value) {
+                this.$emit('valuelistener', value)
             },
             changeSelect: function (value) {
                 this.$emit('change', value);
