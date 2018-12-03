@@ -55,7 +55,7 @@
                   </router-link>
                 </td>
                 <td class="cell-200">暂无</td>
-                <td class="cell-200">暂无</td>
+                <td class="cell-200 ">暂无</td>
                 <td class="cell-200">
                   <template v-if="task.status === 1">进行中</template>
                   <template v-if="task.status === 2">已完成</template>

@@ -69,7 +69,7 @@
                         <div class="example">
                             <div class="col-md-2 text-right float-left pl-0">审批类型</div>
                             <div class="col-md-10 float-left pl-0">
-                                <Selectors :placeholder="'请选择任务优先级'" v-model="priority" :options="data"></Selectors>
+                                <Selectors :placeholder="'请选择任务优先级'" @change="seleValue" :options="data" ></Selectors>
                         </div>
                         </div>
                         <div class="example">
@@ -204,7 +204,7 @@
                 customizeKeyWords: '',
                 priority:'',
                 task:'',
-                describe:''
+                describe:'',
             }
         },
         mounted() {
@@ -218,6 +218,7 @@
                         _this.conditionLength = 1;
                     }, 0);
                 })
+                
         },
         methods: {
                 switchMenu: function (id) {
@@ -240,6 +241,7 @@
                         this.iScancel = false
 
                     }
+                    
                 },
                 minus(id) {
                     if (id == '1') {
@@ -280,6 +282,14 @@
                     let self = this;
                     self.$emit('change', data);
                     $('.modal').modal('hide');
+                },
+                seleValue(e){
+                    this.data.forEach(item=>{
+                        if(item.value==e){
+                            this.priority=item.name
+                        }
+                    })
+                    console.log(this.priority)
                 }
         }
     }

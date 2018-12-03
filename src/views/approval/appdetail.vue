@@ -201,7 +201,7 @@
                             <div class="col-md-2 float-left">2018-12-13</div>
                         </div>
                     </div>
-                     <div class="notify pl-20">
+                     <div class="notify pl-15">
                         <div>知会人</div>
                         <AddMember @change="participantChange"></AddMember>
                     </div>
@@ -254,6 +254,9 @@ export default {
 }
 .title-status{
     position: relative;
+   
+}
+.page-title{
     font-size: 1rem;
 }
 .title-status em,.content em,.setp em{
@@ -338,6 +341,9 @@ export default {
 }
 .panel{
    margin-bottom: 20px;
+}
+.nav-head{
+    font-size: 26px;
 }
 </style>
 
