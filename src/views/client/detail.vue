@@ -118,7 +118,12 @@
                             </tr>
                             <tr v-for="project in clientProjectsInfo">
                                 <td>{{ project.title }}</td>
-                                <td>{{ project.status }}</td>
+                                <td>
+                                    <template v-if="project.status === 1">进行中</template>
+                                    <template v-if="project.status === 2">完成</template>
+                                    <template v-if="project.status === 3">终止</template>
+                                    <template v-if="project.status === 4">删除</template>
+                                </td>
                                 <td>{{ project.principal?project.principal.data.name:'' }}</td>
                                 <td>{{ project.trail.data.client.data.company}}</td>
                                 <td>{{ project.created_at }}</td>
