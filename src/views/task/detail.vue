@@ -11,7 +11,7 @@
                     <a class="dropdown-item" role="menuitem" @click="changeTaskStatus(3)">终止</a>
                     <a class="dropdown-item" role="menuitem" @click="changeTaskStatus(2)">完成</a>
                     <a class="dropdown-item" role="menuitem" data-toggle="modal" data-target="#customizeFieldContent">自定义字段</a>
-                    <a class="dropdown-item" role="menuitem" @click="privacyTask">转私密</a>
+                    <a class="dropdown-item" role="menuitem" @click="privacyTask">{{taskInfo.privacy == 1?'转公开':'转私密'}}</a>
                     <a class="dropdown-item" role="menuitem" @click="deleteTask">删除</a>
                 </div>
             </div>
@@ -386,6 +386,7 @@
                 linkData: [],
                 resourceType: '', // 资源type
                 resourceableId: '', // 资源id
+                user: {} // 个人信息
             }
         },
         created () {
@@ -400,6 +401,13 @@
             }).on('hidden.bs.modal', function () {
                 // this.showChildTask = false;
             })
+            this.user = JSON.parse(Cookies.get('user'))
+            // 负责人默认值的设置
+            this.$store.commit('changeNewPrincipal', {
+            name: this.user.nickname,
+            id: this.user.id
+            })
+            this.getTaskType()
         },
 
         watch: {
@@ -503,8 +511,10 @@
             },
 
             privacyTask: function () {
+                let self = this
                 fetch('put', '/tasks/' + this.taskId + '/privacy').then(function () {
-                    toastr.success("转私密成功");
+                    toastr.success(self.taskInfo.privacy == 1?'转公开成功!':'转私密成功!');
+                    self.getTask()
                 })
             },
 
@@ -630,8 +640,8 @@
                 let data = {
                     title: this.taskName,
                     type: this.taskType,
-                    resource_type: this.resourceType, // 资源type
-                    resourceable_id: this.resourceableId, // 资源id
+                    resource_type: this.resourceType?this.resourceType:this.linkData[0].id,
+                    resourceable_id: this.resourceableId?this.resourceableId:this.linkData[0].child[0].id,
                     principal_id: this.$store.state.newPrincipalInfo.id,
                     participant_ids: participant_ids,
                     priority: this.taskLevel,
@@ -639,6 +649,27 @@
                     end_at: this.endTime + ' ' + this.endMinutes,
                     desc: this.taskIntroduce,
                 };
+                // 校验
+                if (!data.title) {
+                    toastr.error('请填写任务名称！')
+                    return
+                }
+                if (!data.type) {
+                    toastr.error('请选择任务类型！')
+                    return
+                }
+                if (!data.priority) {
+                    toastr.error('请选择任务优先级！')
+                    return
+                }
+                if (!this.startTime || !this.endTime) {
+                    toastr.error('请选择时间!')
+                    return
+                }
+                if (data.start_at > data.end_at) {
+                    toastr.error('开始时间不能晚于截止时间!')
+                    return
+                }
                 let self = this
                 fetch('post', '/tasks/' + this.taskId + '/subtask', data).then(function (response) {
                     toastr.success('添加成功');
@@ -727,10 +758,21 @@
                             value: n.id,
                         }
                     })
+                    this.resourceableId = temp.child[0].id
                     this.$set(this.linkData, index, temp)
                     setTimeout(() => {
                         this.$refs.linkage.refresh()
                     }, 100)
+                })
+            },
+            // 获取任务类型列表
+            getTaskType () {
+                fetch('get', '/task_types/all').then(res => {
+                    const data = res.data
+                    this.taskTypeArr = data.map(n => {
+                        return {name: n.title, value: n.id}
+                    })
+                    this.taskTypeArr.unshift({name: '全部', value: ''})
                 })
             }
         }

@@ -34,6 +34,14 @@ axios.interceptors.response.use((res) => {
     const {response} = error
     if (status === 401) {
         config.getStatusCode()[401]()
+    } else if (status === 422) {
+        const errors = response.data.errors
+        const errInfoArr = Object.keys(errors)
+        if (errInfoArr.length > 0) {
+            toastr.error(errors[errInfoArr[0]]);
+        } else {
+            toastr.error(response.data.message);
+        }
     } else {
         toastr.error(response.data.message);
     }

@@ -124,7 +124,7 @@
                                 <td>{{ project.created_at }}</td>
                             </tr>
                         </table>
-                        <div class="col-md-1" style="margin: 6rem auto">
+                        <div class="col-md-1" v-if="clientProjectsInfo.length === 0" style="margin: 6rem auto">
                             <img src="https://res.papitube.com/corvus/images/content-none.png" alt="" style="width: 100%">
                         </div>
                     </div>
@@ -168,7 +168,7 @@
                         </div>
                     </div>
                     <div class="tab-pane animation-fade pb-20" id="forum-base" role="tabpanel">
-                        <div class="card">
+                        <div class="card" v-if="clientInfo.company">
                             <div class="card-header card-header-transparent card-header-bordered">
                                 <div class="float-left font-weight-bold third-title">客户详情</div>
                                 <div class="float-right pointer-content">
@@ -240,15 +240,16 @@
                                     <div class="col-md-5 float-left font-weight-bold">{{clientInfo.creator?clientInfo.creator.data.name:''}}
                                     </div>
                                     <div class="col-md-1 float-left text-right pl-0">录入时间</div>
-                                    <div class="col-md-5 float-left font-weight-bold">{{clientInfo.created_at?clientInfo.created_at.date.substr(0,19):''}}
+                                    <div class="col-md-5 float-left font-weight-bold">{{clientInfo.created_at?clientInfo.created_at:''}}
                                     </div>
                                 </div>
                                 <div class="card-text py-5 clearfix">
                                     <div class="col-md-1 float-left text-right pl-0">最近更新人</div>
+                                    {{clientInfo.last_updated_user?clientInfo.last_updated_user:''}}
                                     <div class="col-md-5 float-left font-weight-bold">
                                     </div>
                                     <div class="col-md-1 float-left text-right pl-0">最近更新时间</div>
-                                    <div class="col-md-5 float-left font-weight-bold">{{clientInfo.updated_at?clientInfo.updated_at.date.substr(0,19):''}}
+                                    <div class="col-md-5 float-left font-weight-bold">{{clientInfo.updated_at?clientInfo.updated_at:''}}
                                     </div>
                                 </div>
                             </div>
@@ -557,7 +558,7 @@
                 let _this = this;
                 fetch('get', '/clients/' + this.clientId, {include: 'principal,creator'}).then(function (response) {
                     _this.clientInfo = response.data;
-                    console.log(_this.clientInfo)
+
                     let params = {
                         type: 'change',
                         data: response.data.principal.data
