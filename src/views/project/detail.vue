@@ -94,7 +94,7 @@
                                aria-expanded="false" role="tab">回款</a>
                         </li>
                         <li class="nav-item" role="presentation">
-                            <a class="nav-link" :class="projectInfo.type == 5 ? '' : 'active'" data-toggle="tab"
+                            <a class="nav-link" :class="projectInfo.type == 5 ? 'active' : ''" data-toggle="tab"
                                href="#forum-project-base"
                                aria-controls="forum-base"
                                aria-expanded="true" role="tab">概况</a>
@@ -426,7 +426,7 @@
                                 </div>
                             </div>
                         </div>
-                        <div class="tab-pane animation-fade" :class="projectInfo.type == 5 ? '' : 'active'"
+                        <div class="tab-pane animation-fade" :class="projectInfo.type == 5 ? 'active' : ''"
                              id="forum-project-base"
                              role="tabpanel">
                             <div class="card">
