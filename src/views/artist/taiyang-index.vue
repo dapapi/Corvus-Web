@@ -545,7 +545,6 @@
                     toastr.error('情选择艺人出生日期');
                     return false
                 }
-                if(!this.signIntention == '')
                 let platform = this.platformType.join(',');
                 let data = {
                     name: this.artistName,//名字
