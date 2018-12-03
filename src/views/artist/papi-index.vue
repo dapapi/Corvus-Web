@@ -80,7 +80,7 @@
                                 <th class="cell-300" scope="col">录入时间</th>
                             </tr>
                             <tbody>
-                            <tr v-for="artist in artistsInfo">
+                            <tr v-for="artist in artistsInfo" :key="artist.id" class="pointer-content" @click="redirectArtistDetail(artist.id)">
                                 <td>
                                     <span class="checkbox-custom checkbox-primary">
                                         <input class="selectable-item" type="checkbox" :id="'row-' + artist.id"
@@ -88,7 +88,7 @@
                                         <label :for="'row-' + artist.id"></label>
                                     </span>
                                 </td>
-                                <td class="pointer-content" @click="redirectArtistDetail(artist.id)">{{ artist.nickname
+                                <td  >{{ artist.nickname
                                     }}
                                 </td>
                                 <td>{{ artist.type.name }}</td>

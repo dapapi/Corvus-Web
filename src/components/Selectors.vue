@@ -48,16 +48,9 @@
                 }
             },
             options: function (newValue) {
-<<<<<<< HEAD
-                this.$nextTick(()=>{
-                    this.refresh()
-                })
-                
-=======
                 this.$nextTick(() => {
                     this.refresh()
                 })
->>>>>>> 7b2b7ee8fa583f358005ee643057cecd182b2337
             }
         },
         methods: {
