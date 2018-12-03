@@ -96,7 +96,7 @@
                                 </td>
                                 <td>{{ trail.principal?trail.principal.data.name: '' }}</td>
                                 <td>{{ trail.client?trail.client.data.company:'' }}</td>
-                                <td>{{ trail.end_at }}</td>
+                                <td>{{ trail.created_at }}</td>
                             </tr>
                             </tbody>
                         </table>
@@ -215,7 +215,7 @@
                                     <div class="col-md-1 float-left text-right pl-0">详细地址</div>
                                     <div class="col-md-5 float-left font-weight-bold">
                                         <EditInput :content="clientInfo.address" :is-edit="isEdit"
-                                                   @change="changeClientName"></EditInput>
+                                                   @change="changeClientAddress"></EditInput>
                                     </div>
                                 </div>
 
@@ -544,6 +544,12 @@
                 }
                 this.changeInfo.size = newValue
             },
+            'clientInfo.address': function (newValue, oldValue) {
+                if (oldValue === undefined) {
+                    return
+                }
+                this.changeInfo.address = newValue
+            },
             'clientInfo.desc': function (newValue, oldValue) {
                 if (oldValue === undefined) {
                     return
@@ -653,6 +659,7 @@
             // TODO 地区省市级联动没有做
             changeClientBaseInfo: function () {
                 let _this = this;
+                console.log(this.changeInfo)
                 fetch('put', '/clients/' + this.clientId, this.changeInfo).then(function () {
                     _this.isEdit = false;
                     toastr.success('修改成功')
@@ -677,6 +684,11 @@
 
             changeClientName: function (value) {
                 this.clientInfo.company = value
+            },
+
+            changeClientAddress: function (value) {
+                this.clientInfo.address = value
+                console.log(this.clientInfo)
             },
 
             changeClientLevel: function (value) {

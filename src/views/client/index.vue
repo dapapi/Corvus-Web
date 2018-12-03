@@ -169,7 +169,7 @@
                         </div>
                         <div class="modal-footer">
                             <button class="btn btn-sm btn-white btn-pure" data-dismiss="modal">取消</button>
-                            <button class="btn btn-primary" type="submit" data-dismiss="modal" @click="addClient">确定</button>
+                            <button class="btn btn-primary" type="submit" @click="addClient">确定</button>
                         </div>
 
                     </div>
@@ -223,7 +223,7 @@
             getClients: function (pageNum = 1) {
                 const params = {
                     page: pageNum,
-                    include: 'principal,',
+                    include: 'principal',
                 };
 
                 let url = '/clients'
@@ -268,6 +268,23 @@
                     toastr.error('手机号码格式不对！');
                     return
                 }
+                if (!this.clientName) {
+                    toastr.error('请输入公司名称！');
+                    return
+                }
+                if (!this.clientLevel) {
+                    toastr.error('请选择公司级别！');
+                    return
+                }
+                if (!this.clientType) {
+                    toastr.error('请选择客户类型！')
+                }
+                if (!this.clientContact) {
+                    toastr.error('请填写联系人！')
+                }
+                 if (!this.clientContactPosition) {
+                    toastr.error('请填写联系人职位！')
+                }
                 let data = {
                     type: this.clientType,
                     company: this.clientName,
@@ -284,9 +301,14 @@
                     size: this.clientScale,
                     desc: this.clientRemark
                 };
+                if (!data.principal_id) {
+                    toastr.error('请选择负责人！')
+                }
+
                 let _this = this;
                 fetch('post', '/clients', data).then(function (response) {
                     toastr.success('创建成功');
+                    $("#addClient").modal("hide");
                     _this.$router.push({path: 'clients/' + response.data.id});
                 })
             },
