@@ -3,14 +3,14 @@
             :title="placeholder" v-model="valueListener">
         <selectorsOptions v-for="option in options" v-bind:id="option.id" :val="option.value || option.id"
                           :key="option.id">
-            {{option.name}}
+            {{option.name || option.title}}
         </selectorsOptions>
     </select>
 
 </template>
 <script>
     export default {
-        props: ['options', 'disable', 'multiple', 'placeholder', 'changeKey', 'value'], // changeKey为父组件的data，且可以被改变
+        props: ['options', 'disable', 'multiple', 'placeholder', 'changeKey', 'value','resetinfo'], // changeKey为父组件的data，且可以被改变
         data() {
             return {
                 isDisable: this.disable,
@@ -29,6 +29,11 @@
 
         },
         watch: {
+            resetinfo: function(value){
+                if(value){
+                    
+                }
+            },
             valueListener: function (newValue) {
                 this.$emit('valuelistener', newValue)
             },

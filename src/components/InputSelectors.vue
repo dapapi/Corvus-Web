@@ -1,12 +1,12 @@
 <!-- 选择员工，单人 -->
 <template>
     <div class="selector" :id="'inputSelectMember' + _uid">
-        <div class="float-left">
+        <div class="float-left input-selectors-div" :class='otherslot?"input-selectors-add":""'>
             <input type="text" class="form-control" title="" @focus="showMember" :placeholder="placeholder"
                    v-model="selectedMemberName">
         </div>
         <div class="float-left" v-show="selectMemberShow">
-            <select-staff class="selector" @change="changeSelectMember" :member-type="'principal'"
+            <select-staff class="selector" @change="changeSelectMember" :member-type="'principal'" :otherslot='otherslot'
                           :type="type"></select-staff>
         </div>
     </div>
@@ -14,7 +14,7 @@
 
 <script>
     export default {
-        props: ['placeholder', 'type'],
+        props: ['placeholder', 'type','propSelectMemberName','otherslot'],
         data() {
             return {
                 selectMemberShow: false
@@ -27,18 +27,27 @@
 
         computed: {
             selectedMemberName: function () {
-                if (this.type === 'change') {
-                    this.$emit('change', this.$store.state.principalInfo.name)
-                    return this.$store.state.principalInfo.name
-                } else if (this.type === 'selector') {
-                    this.$emit('change', this.$store.state.selectPrincipalInfo)
-                    return this.$store.state.selectPrincipalInfo.name
-                } else {
-                    this.$emit('change', this.$store.state.newPrincipalInfo)
-                    return this.$store.state.newPrincipalInfo.name
+                // if (this.type === 'change') {
+                //     this.$emit('change', this.$store.state.principalInfo.name)
+                //     return this.$store.state.principalInfo.name
+                // } else if (this.type === 'selector') {
+                //     this.$emit('change', this.$store.state.selectPrincipalInfo)
+                //     return this.$store.state.selectPrincipalInfo.name
+                if(this.propSelectMemberName){
+                    return this.propSelectMemberName
+                }else{
+                     if(this.type === 'change') {
+                        this.$emit('change', this.$store.state.principalInfo.name)
+                        return this.$store.state.principalInfo.name
+                    }else if(this.type === 'selector') {
+                        this.$emit('change', this.$store.state.selectPrincipalInfo)
+                        return this.$store.state.selectPrincipalInfo.name
+                    }else{
+                        this.$emit('change', this.$store.state.newPrincipalInfo)
+                        return this.$store.state.newPrincipalInfo.name
+                    }
                 }
-            },
-
+            }
         },
         methods: {
             showMember: function () {
@@ -57,12 +66,26 @@
             changeSelectMember: function () {
                 this.selectMemberShow = false;
                 this.$emit('change', false)
+                this.$emit('')
             }
         }
     }
 </script>
 
 <style>
+    .input-selectors-div {
+        display: flex;
+        
+    }
+    .input-selectors-add{
+        width: 220px;
+    }
+    .input-selectors-span {
+        line-height: 30px;
+        margin-left: 10px;
+        cursor: pointer;
+    }
+
     .selector {
         position: relative;
     }
