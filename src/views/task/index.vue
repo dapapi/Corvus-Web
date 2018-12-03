@@ -183,8 +183,6 @@
             <div class="example">
               <div class="col-md-2 text-right float-left">关联资源</div>
               <div class="col-md-10 float-left">
-                <!-- todo 未关联资源-->
-                <!-- <normal-linkage-selectors @change="changeLinkage"></normal-linkage-selectors> -->
                 <normal-linkage-selectors ref="linkage" v-if="linkData.length>0" :myData="linkData" :data="linkData" @change="addLinkage"></normal-linkage-selectors>
               </div>
             </div>
@@ -268,8 +266,8 @@
 <script>
 import fetch from "../../assets/utils/fetch.js";
 import config from "../../assets/js/config";
-const taskTypeArr = [{ name: "全部", value: "" }, ...config.taskTypeArr];
-const taskStatusArr = [{ name: "全部", value: "" }, ...config.taskTypeArr];
+import Cookies from 'js-cookie'
+const taskStatusArr = [{ name: "全部", value: "" }, ...config.taskStatusArr];
 export default {
   name: "",
   data() {
@@ -292,7 +290,7 @@ export default {
       taskFinishType: "",
       taskName: "",
       taskLevel: "",
-      taskTypeArr: taskTypeArr,
+      taskTypeArr: [],
       taskStatusArr: taskStatusArr,
       taskLevelArr: config.taskLevelArr,
       customizeInfo: config.customizeInfo,
@@ -301,7 +299,8 @@ export default {
       taskTypeSearch: "", // 搜索的任务类型
       taskStatusSearch: "", // 搜索的任务状态
       resourceType: "", // 资源type
-      resourceableId: "" // 资源id
+      resourceableId: "", // 资源id
+      user: {} // 个人信息
     };
   },
   created() {
@@ -309,6 +308,13 @@ export default {
   },
   mounted() {
     this.getTasks();
+    this.user = JSON.parse(Cookies.get('user'))
+    // 负责人默认值的设置
+    this.$store.commit('changeNewPrincipal', {
+      name: this.user.nickname,
+      id: this.user.id
+    })
+    this.getTaskType()
   },
 
   methods: {
@@ -375,11 +381,11 @@ export default {
       for (let i = 0; i < this.$store.state.newParticipantsInfo.length; i++) {
         participant_ids.push(this.$store.state.newParticipantsInfo[i].id);
       }
+
       let data = {
-        resource_type: this.resourceType,
-        resourceable_id: this.resourceableId,
-        // type: app.taskType,
-        // @todo 任务类型前端维护
+        resource_type: this.resourceType?this.resourceType:this.linkData[0].id,
+        resourceable_id: this.resourceableId?this.resourceableId:this.linkData[0].child[0].id,
+        type: this.taskType,
         title: _this.taskName,
         principal_id: this.$store.state.newPrincipalInfo.id,
         participant_ids: participant_ids,
@@ -388,27 +394,33 @@ export default {
         end_at: _this.endTime + " " + _this.endMinutes,
         desc: _this.taskIntroduce
       };
-      console.log(data)
+        // 校验
+        if (!data.title) {
+            toastr.error('请填写任务名称！')
+            return
+        }
+        if (!data.type) {
+            toastr.error('请选择任务类型！')
+            return
+        }
+        if (!data.priority) {
+            toastr.error('请选择任务优先级！')
+            return
+        }
+        if (!this.startTime || !this.endTime) {
+            toastr.error('请选择时间!')
+            return
+        }
+        if (data.start_at > data.end_at) {
+            toastr.error('开始时间不能晚于截止时间!')
+            return
+        }
+
       fetch('post', '/tasks', data).then(res => {
            toastr.success("创建成功");
+           this.getTasks();
             $("#addTask").modal("hide");
       })
-    // $.ajax({
-    //     type: "post",
-    //     url: config.apiUrl + "/tasks",
-    //     headers: config.getHeaders(),
-    //     data: data,
-    //     statusCode: {
-    //       400: function(response) {
-    //         toastr.error(response.responseJSON.message);
-    //       }
-    //     }
-    //   }).done(function(response) {
-    //     console.log(response);
-    //     toastr.success("创建成功");
-    //     $("#addTask").modal("hide");
-    //     redirect("detail?task_id=" + response.data.id);
-    //   });
     },
 
     customize(value) {
@@ -505,12 +517,38 @@ export default {
                         value: n.id,
                     }
                 })
+                this.resourceableId = temp.child[0].id
                 this.$set(this.linkData, index, temp)
                 setTimeout(() => {
                     this.$refs.linkage.refresh()
                 }, 100)
             })
+        },
+        // 获取任务类型列表
+        getTaskType () {
+            fetch('get', '/task_types/all').then(res => {
+                const data = res.data
+                this.taskTypeArr = data.map(n => {
+                    return {name: n.title, value: n.id}
+                })
+                this.taskTypeArr.unshift({name: '全部', value: ''})
+            })
         }
-  }
+    }
 };
 </script>
+
+<style lang="scss" scoped>
+table td {
+    position: relative;
+    a:before {
+        content: '';
+        position: absolute;
+        width: 100%;
+        height: 100%;
+        top: 0;
+        left: 0;
+        display: inline-block;
+    }
+}
+</style>
