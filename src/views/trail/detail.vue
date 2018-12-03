@@ -371,7 +371,7 @@
                                 <tbody>
                                 <tr v-for="task in trailTasksInfo" v-if="trailTasksInfo">
                                     <td>{{ task.title }}</td>
-                                    <td>{{ task.type }}</td>
+                                    <td>{{ task.type.data.title }}</td>
                                     <td>
                                         <template v-if="task.status === 1">进行中</template>
                                         <template v-else-if="task.status === 2">已完成</template>
