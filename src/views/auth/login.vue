@@ -153,16 +153,16 @@
     import Verify from '../../assets/utils/verify.js';
     import redirect from '../../assets/js/bootstrap';
 
-    let obj = new WxLogin({
-        self_redirect: true,
-        id: "loginContainer",
-        appid: "",
-        scope: "",
-        redirect_uri: "",
-        state: "",
-        style: "",
-        href: ""
-    });
+    // let obj = new WxLogin({
+    //     self_redirect: true,
+    //     id: "loginContainer",
+    //     appid: "",
+    //     scope: "",
+    //     redirect_uri: "",
+    //     state: "",
+    //     style: "",
+    //     href: ""
+    // });
 
     export default {
         data: function () {
