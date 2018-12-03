@@ -17,15 +17,15 @@
                     <div class="panel-content info">
                         <div class="rounded-circle img-thumbnail messages-img" 
                             :style="{ backgroundImage: 'url('+currentData.cover+')'}"></div>
-                        <span class="">{{currentData.name}}</span>
-                        <span class="">{{currentData.timeYMD}}&nbsp;&nbsp;{{currentData.timehms}}</span>
-                        <span class="">{{currentData.type}}</span>
+                        <span class="">{{currentData.creator_id}}</span>
+                        <span class="">{{currentData.created_at}}</span>
+                        <span class="">{{classifyArr.find(classifyArr => classifyArr.value == currentData.classify).name}}</span>
                     </div>
                     <br>
                     <hr/>
                     <br>
                     <div class="panel-content">
-                        <h5 v-html="currentData.text"></h5>
+                        <h5 v-html="currentData.desc"></h5>
                         <h5>公告范围
                             <span  v-for=" item in currentData.range" :key="item">&nbsp;&nbsp;
                                 <span class="badge badge-round badge-dark">{{item}}</span>
@@ -41,25 +41,35 @@
 </template>
 
 <script>
-import broadCastData from './broadcast.json'
+import fetch from '../../assets/utils/fetch.js'
+import config from '../../assets/js/config'
 export default {
     data(){
         return{
             broadCastInfo:{},
             currentId:'',
-            currentData:{}
+            currentData:{},
+            classifyArr:config.classifyArr,
         } 
     },
-    created() {
-       this.broadCastInfo = broadCastData    
-       this.dataInit(broadCastData) 
-       this.getCurrentId()
-       this.getCurrentData()
+    created() { 
+       this.dataInit()
+
     },
     mounted(){
         
     },
     methods:{
+        //初始化数据
+        dataInit(){
+            let _this = this
+                fetch('get', '/announcements').then(function (response) {
+                    console.log(response.data);
+                    _this.broadCastInfo = response.data
+                    _this.getCurrentId()
+                    _this.getCurrentData()
+            })
+        },
         //获取公告id
         getCurrentId(){
             this.currentId = this.$route.params.id
@@ -74,15 +84,15 @@ export default {
             }
         },
         //初始化数据
-        dataInit(ref){
-            // console.log(ref);
-            for (const key in ref) {
-                let orignTime = ref[key].time
-                ref[key].timeYMD = this.timeFormat(orignTime).formatYMD
-                ref[key].timehms = this.timeFormat(orignTime).formathms
-            }
-            this.broadCastInfo = ref
-        },
+        // dataInit(ref){
+        //     // console.log(ref);
+        //     for (const key in ref) {
+        //         let orignTime = ref[key].time
+        //         ref[key].timeYMD = this.timeFormat(orignTime).formatYMD
+        //         ref[key].timehms = this.timeFormat(orignTime).formathms
+        //     }
+        //     this.broadCastInfo = ref
+        // },
         //日期格式化
         timeFormat(ref){
             let date = new Date(ref);

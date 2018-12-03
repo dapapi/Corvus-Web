@@ -1,7 +1,7 @@
 <template>
     <div class="">
         <template v-if="isEditInput">
-            <input class="form-control" type="text" v-model="context" />
+            <input class="form-control" type="text" v-model="context" :disabled='disabled' />
         </template>
         <template v-else>
             {{ content }}
@@ -12,15 +12,16 @@
 <script>
     export default {
         name: "EditInput",
-        props: ['content', 'is-edit'],
+        props: ['content', 'is-edit','disabled'],
         data() {
             return {
                 isEditInput: false,
                 context:''
             }
         },
-        mounted(){
-            this.context = this.content
+
+        mounted() {
+            // this.context = this.content // 此时获取不到值 ，所以改为监听
         },
         computed: {
 
@@ -33,6 +34,9 @@
 
             context(newValue) {
                 this.$emit('change', newValue)
+            },
+            content () {
+                this.context = this.content
             }
         }
     }

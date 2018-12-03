@@ -10,7 +10,7 @@
             
             <div class="panel p-20">
                 <h4 class="text-center pb-10">{{year}}年度考勤统计报表</h4>
-                 <table class="table">
+                 <table v-if="dataList.length>0" class="table">
                     <tr>
                         <th class="cell-300" scope="col">月份</th>
                         <th class="cell-300" scope="col">请假</th>  
@@ -20,6 +20,7 @@
                     </tr>
                     <tr v-for="(item,index) in dataList" :key="index">
                         <td class="pointer-content">{{item.month}}月</td>
+                        
                         <td v-if="item2.type == 1" v-for="(item2,index) in item.daynumber" :key="index">
                             <template v-if="item2.number>0">{{item2.number}}</template>
                             <template v-else>-</template>
@@ -39,6 +40,9 @@
                         
                     </tr>
                 </table>
+                <div v-else class="col-md-1" style="margin: 6rem auto">
+                    <img src="https://res.papitube.com/corvus/images/content-none.png" alt="" style="width: 100%">
+                </div>
             </div>
         </div>
     </div>

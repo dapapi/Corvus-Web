@@ -58,8 +58,8 @@
                                 <template v-if="client.grade === 1">直客</template>
                                 <template v-if="client.grade === 2">代理公司</template>
                             </td>
-                            <td>{{ client.principal.data.name }}</td>
-                            <td>{{ client.delivery }}</td>
+                            <td>{{ client.principal?client.principal.data.name:'' }}</td>
+                            <td>{{ client.created_at?client.created_at.date.substr(0,19):'' }}</td>
                             <td>{{ client.follow_time }}</td>
                         </tr>
                         </tbody>
@@ -112,10 +112,11 @@
                                            @change="changeClientLevel"></selectors>
                             </div>
                         </div>
-                        <div class="example">
+                        <!-- 暂时隐藏 -->
+                        <!-- <div class="example">
                             <div class="col-md-2 text-right float-left">地区</div>
                             <div class="col-md-10 float-left pl-0"></div>
-                        </div>
+                        </div> -->
                         <div class="example">
                             <div class="col-md-2 text-right float-left">详细地址</div>
                             <div class="col-md-10 float-left pl-0">

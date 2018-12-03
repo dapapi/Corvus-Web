@@ -2,15 +2,7 @@
     <!-- Page -->
     <div class="page-main" style="background-color:#f3f4f5">
         <div class="page-header page-header-bordered clearfix">
-            <h1 class="page-title float-left">填写申请类型和名称</h1>
-            <button class="btn btn-warning float-left ml-10">待审批</button>
-            <!-- <button class="btn btn-success float-left ml-10">已审批</button>
-            <button class="btn btn-default float-left ml-10">已撤销</button>
-            <button class="btn btn-default float-left ml-10">已作废</button>
-
-            <button class="btn btn-default">同意</button>
-            <button class="btn btn-danger">拒绝</button>
-            <button class="btn btn-default">转交</button> -->
+            <h1 class="page-title float-left">我申请的</h1>
         </div>
         <div class="page-content container-fluid">
             <div class="panel p-20">

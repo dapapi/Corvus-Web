@@ -16,7 +16,7 @@
                                 <i class="md-plus pr-2" aria-hidden="true"></i>负责人
                             </div>
                             <div class="font-weight-bold float-left" v-if="clientInfo.principal">
-                                {{ clientInfo.principal.data.name }}
+                                {{ clientInfo.principal?clientInfo.principal.data.name:'' }}
                             </div>
                         </div>
                         <div class="col-md-6 float-left clearfix pl-0">
@@ -94,12 +94,15 @@
                                     <template v-if="trail.progress_status === 2">已确定合作</template>
                                     <template v-if="trail.progress_status === 0">已拒绝</template>
                                 </td>
-                                <td>{{ trail.principal.data.name }}</td>
-                                <td>{{ trail.client.data.company }}</td>
+                                <td>{{ trail.principal?trail.principal.data.name: '' }}</td>
+                                <td>{{ trail.client?trail.client.data.company:'' }}</td>
                                 <td>{{ trail.end_at }}</td>
                             </tr>
                             </tbody>
                         </table>
+                        <div class="col-md-1" style="margin: 6rem auto" v-if="clientTrailsInfo.length === 0">
+                            <img src="https://res.papitube.com/corvus/images/content-none.png" alt="" style="width: 100%">
+                        </div>
                     </div>
                     <div class="tab-pane animation-fade pb-20" id="forum-project" role="tabpanel">
                         <table class="table table-hover is-indent example" data-plugin="animateList" data-animate="fade"
@@ -113,18 +116,17 @@
                                 <th class="cell-300" scope="col">关联公司</th>
                                 <th class="cell-300" scope="col">录入日期</th>
                             </tr>
-                            <!--<tr v-for="task in taskInfo.tasks.data">-->
-                            <!--<td>{{ task.title }}</td>-->
-                            <!--<td>{{ task.type }}</td>-->
-                            <!--<td>-->
-                            <!--<template v-if="task.status === 1">进行中</template>-->
-                            <!--<template v-if="task.status === 2">已完成</template>-->
-                            <!--<template v-if="task.status === 3">已停止</template>-->
-                            <!--</td>-->
-                            <!--<td>{{ task.principal }}</td>-->
-                            <!--<td>{{ task.end_at }}</td>-->
-                            <!--</tr>-->
+                            <tr v-for="project in clientProjectsInfo">
+                                <td>{{ project.title }}</td>
+                                <td>{{ project.status }}</td>
+                                <td>{{ project.principal.data.name }}</td>
+                                <td>{{ project.trail.data.client.data.company}}</td>
+                                <td>{{ project.created_at }}</td>
+                            </tr>
                         </table>
+                        <div class="col-md-1" style="margin: 6rem auto">
+                            <img src="https://res.papitube.com/corvus/images/content-none.png" alt="" style="width: 100%">
+                        </div>
                     </div>
                     <div class="tab-pane animation-fade pb-20 fixed-button-father" id="forum-task" role="tabpanel">
                         <table class="table table-hover is-indent example" data-plugin="animateList" data-animate="fade"
@@ -147,12 +149,15 @@
                                     <template v-if="task.status === 2">已完成</template>
                                     <template v-if="task.status === 3">已停止</template>
                                 </td>
-                                <td>{{ task.principal.data.name }}</td>
+                                <td>{{ task.principal?task.principal.data.name:'' }}</td>
                                 <td>{{ task.end_at }}</td>
                             </tr>
                             </tbody>
 
                         </table>
+                        <div class="col-md-1" style="margin: 6rem auto" v-if="clientTasksInfo.length === 0">
+                            <img src="https://res.papitube.com/corvus/images/content-none.png" alt="" style="width: 100%">
+                        </div>
                         <div class="site-action fixed-button" data-plugin="actionBtn" data-toggle="modal"
                              data-target="#addTask">
                             <button type="button"
@@ -179,7 +184,7 @@
                                     <div class="col-md-1 float-left text-right pl-0">公司名称</div>
                                     <div class="col-md-5 float-left font-weight-bold">
                                         <EditInput :content="clientInfo.company" :is-edit="isEdit"
-                                                   @change="changClientName"></EditInput>
+                                                   @change="changeClientName"></EditInput>
                                     </div>
                                     <div class="col-md-1 float-left text-right pl-0">级别</div>
                                     <div class="col-md-5 float-left font-weight-bold">
@@ -196,7 +201,8 @@
                                     </div>
                                     <div class="col-md-1 float-left text-right pl-0">负责人</div>
                                     <div class="col-md-5 float-left font-weight-bold">
-                                        <EditInput-selector :is-edit="isEdit"
+
+                                        <EditInput-selector :is-edit="isEdit"  :placeholder="'请选择负责人'"  @change="selectPrincipal"
                                                             :select-type="'principal'"></EditInput-selector>
                                     </div>
                                 </div>
@@ -208,7 +214,8 @@
                                     </div>
                                     <div class="col-md-1 float-left text-right pl-0">详细地址</div>
                                     <div class="col-md-5 float-left font-weight-bold">
-                                        <EditInput :content="clientInfo.company" :is-edit="isEdit"></EditInput>
+                                        <EditInput :content="clientInfo.address" :is-edit="isEdit"
+                                                   @change="changeClientName"></EditInput>
                                     </div>
                                 </div>
 
@@ -230,10 +237,10 @@
 
                                 <div class="card-text py-5 clearfix">
                                     <div class="col-md-1 float-left text-right pl-0">录入人</div>
-                                    <div class="col-md-5 float-left font-weight-bold">{{clientInfo.creator.data.name}}
+                                    <div class="col-md-5 float-left font-weight-bold">{{clientInfo.creator?clientInfo.creator.data.name:''}}
                                     </div>
                                     <div class="col-md-1 float-left text-right pl-0">录入时间</div>
-                                    <div class="col-md-5 float-left font-weight-bold">{{clientInfo.created_at.date.substr(0,19)}}
+                                    <div class="col-md-5 float-left font-weight-bold">{{clientInfo.created_at?clientInfo.created_at.date.substr(0,19):''}}
                                     </div>
                                 </div>
                                 <div class="card-text py-5 clearfix">
@@ -241,7 +248,7 @@
                                     <div class="col-md-5 float-left font-weight-bold">
                                     </div>
                                     <div class="col-md-1 float-left text-right pl-0">最近更新时间</div>
-                                    <div class="col-md-5 float-left font-weight-bold">{{clientInfo.updated_at.date.substr(0,19)}}
+                                    <div class="col-md-5 float-left font-weight-bold">{{clientInfo.updated_at?clientInfo.updated_at.date.substr(0,19):''}}
                                     </div>
                                 </div>
                             </div>
@@ -267,24 +274,31 @@
                                 <td>{{ clientInfo.company }}</td>
                                 <td>{{ contact.phone }}</td>
                                 <td>{{ contact.position }}</td>
-                                <td>{{ clientInfo.principal.data.name }}</td>
+                                <td>{{ clientInfo.principal?clientInfo.principal.data.name:'' }}</td>
                                 <td>
                                     <span class="pr-20 d-block float-left pointer-content"
-                                          style="color: #b9b9b9;">
+                                          style="color: #b9b9b9;"
+                                          data-plugin="actionBtn" data-toggle="modal"
+                                            data-target="#addContact"
+                                            @click="changeEditStatus(false,contact)"
+                                        >
                                         <i class="icon md-edit" aria-hidden="true"></i>
                                     </span>
                                     <span class="d-block float-left"
                                           style="width: 1px; height: 14px;border-right: 1px solid #b9b9b9;margin: 3px;"></span>
-                                    <span class="pl-20 d-block float-left pointer-content" style="color: #b9b9b9">
+                                    <span class="pl-20 d-block float-left pointer-content" style="color: #b9b9b9"  @click="delContact(contact.id)">
                                         <i class="icon md-delete" aria-hidden="true"></i>
                                     </span>
                                 </td>
                             </tr>
                             </tbody>
                         </table>
-
+                        <div class="col-md-1" style="margin: 6rem auto" v-if="clientContactsInfo.length === 0">
+                            <img src="https://res.papitube.com/corvus/images/content-none.png" alt="" style="width: 100%">
+                        </div>
                         <div class="site-action fixed-button" data-plugin="actionBtn" data-toggle="modal"
-                             data-target="#addContact">
+                             data-target="#addContact"
+                             @click="changeEditStatus(true)">
                             <button type="button"
                                     class="site-action-toggle btn-raised btn btn-success btn-floating waves-effect waves-classic">
                                 <i class="front-icon md-plus animation-scale-up" aria-hidden="true"></i>
@@ -321,7 +335,7 @@
                         <button type="button" class="close" aria-hidden="true" data-dismiss="modal">
                             <i class="md-close" aria-hidden="true"></i>
                         </button>
-                        <h4 class="modal-title">新增联系人</h4>
+                        <h4 class="modal-title">{{isEditContact?'新增联系人':'修改联系人'}}</h4>
                     </div>
                     <div class="modal-body">
 
@@ -336,21 +350,21 @@
                             <div class="col-md-2 text-right float-left">联系人</div>
                             <div class="col-md-10 float-left">
                                 <input type="text" title="" class="form-control"
-                                       placeholder="请输入联系人" v-model="contactName">
+                                       placeholder="请输入联系人" v-model="editConfig.name">
                             </div>
                         </div>
                         <div class="example">
                             <div class="col-md-2 text-right float-left">联系人电话</div>
                             <div class="col-md-10 float-left">
                                 <input type="text" title="" class="form-control"
-                                       placeholder="请输入联系人电话" v-model="contactPhone">
+                                       placeholder="请输入联系人电话" v-model="editConfig.phone" />
                             </div>
                         </div>
                         <div class="example">
                             <div class="col-md-2 text-right float-left">职位</div>
                             <div class="col-md-10 float-left">
                                 <input type="text" title="" class="form-control"
-                                       placeholder="请输入联系人职位" v-model="contactPosition">
+                                       placeholder="请输入联系人职位" v-model="editConfig.position">
                             </div>
                         </div>
                     </div>
@@ -478,6 +492,12 @@
                 contactPosition: '',
                 clientProjectsInfo: '',
                 taskPrincipalId: '',
+                isEditContact: true,
+                editConfig: {
+                    position: '',
+                    name: '',
+                    phone: ''
+                }, // 修改的联系人信息
             }
         },
         beforeMount () {
@@ -488,6 +508,7 @@
             setTimeout(function () {
                 _this.getClient();
                 _this.getClientTrail();
+                _this.getClientProject()
             }, 100);
         },
 
@@ -536,6 +557,7 @@
                 let _this = this;
                 fetch('get', '/clients/' + this.clientId, {include: 'principal,creator'}).then(function (response) {
                     _this.clientInfo = response.data;
+                    console.log(_this.clientInfo)
                     let params = {
                         type: 'change',
                         data: response.data.principal.data
@@ -579,21 +601,18 @@
                     return
                 }
                 let data = {
-                    type: 'clients',
-                    id: this.clientId,
-                    include: 'principal,trail.expectations'
+                    include: 'principal,trail.expectations,trail.client'
                 };
                 let _this = this;
-                fetch('get', '/projects/search', data).then(function (response) {
-                // fetch('get', '/clients/projects/search', data).then(function (response) {
+                fetch('get', `/clients/${this.clientId}/projects`, data).then(function (response) {
                     _this.clientProjectsInfo = response.data
                 })
             },
 
             getClientContact: function () {
-                if (this.clientContactsInfo.length > 0) {
-                    return
-                }
+                // if (this.clientContactsInfo.length > 0) {
+                //     return
+                // }
                 let _this = this;
                 fetch('get', '/clients/' + this.clientId + '/contacts').then(function (response) {
                     _this.clientContactsInfo = response.data
@@ -602,24 +621,42 @@
             },
 
             addContact: function () {
-                const data = {
-                    name: this.contactName,
-                    phone: this.contactPhone,
-                    position: this.contactPosition
+                let data = {}
+
+                if (this.editConfig.phone.length !== 11) {
+                    toastr.error('手机号码格式不对！')
+                    return
                 }
+                data = {
+                    name: this.editConfig.name || '',
+                    phone: this.editConfig.phone,
+                    position: this.editConfig.position
+                }
+
                 let _this = this
-                fetch('get', '/clients/' + this.clientId + '/contacts', data).then(function (response) {
+                fetch(this.isEditContact?'post': 'put', `/clients/${this.clientId}/contacts${!this.isEditContact?'/'+this.editConfig.id: ''}`, data).then(function (response) {
                     _this.clientContactsInfo.push(response.data);
+                    toastr.success(_this.isEditContact?'添加成功！':'修改成功')
+                    _this.getClientContact()
                     $('#addContact').modal('hide')
+                })
+            },
+            delContact (id) {
+                let _this = this
+                fetch('delete', `/clients/${this.clientId}/contacts/${id}`).then(function (response) {
+                    toastr.success('删除成功')
+                    _this.getClientContact()
                 })
             },
 
             // TODO 地区省市级联动没有做
             changeClientBaseInfo: function () {
                 let _this = this;
-                fetch('get', '/clients/' + this.clientId, this.changeInfo).then(function () {
+                fetch('put', '/clients/' + this.clientId, this.changeInfo).then(function () {
                     _this.isEdit = false;
-                    _this.success('修改成功')
+                    toastr.success('修改成功')
+                    _this.getClient();
+                    _this.getClientTrail();
                 })
             },
 
@@ -630,13 +667,14 @@
 
             cancelEdit: function () {
                 this.isEdit = false
+                this.getClient()
             },
 
             changeClientType: function (value) {
                 this.clientInfo.type = value
             },
 
-            changClientName: function (value) {
+            changeClientName: function (value) {
                 this.clientInfo.company = value
             },
 
@@ -673,6 +711,7 @@
                 fetch('post', '/tasks', data).then(function (response) {
                     toastr.success('创建成功');
                     $('#addTask').modal('hide');
+                    this.editConfig = {}
                     _this.clientTasksInfo.push(response.data)
                 })
             },
@@ -700,9 +739,18 @@
 
             changeTaskLevel: function (value) {
                 this.taskLevel = value
-                console.log(value)
+            },
+            selectPrincipal (value) {
+                this.changeInfo.principal_id = value
+            },
+            changeEditStatus (value, config) {
+                this.editConfig = config || {
+                    position: '',
+                    name: '',
+                    phone: ''
+                }
+                this.isEditContact = value
             }
-
         }
     }
 </script>

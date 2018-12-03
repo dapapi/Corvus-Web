@@ -1,14 +1,14 @@
 <template>
 
     <div class="clearfix pb-5">
-        <select :id="'father' + this.n" title="" class="col-md-4 pl-0 float-left">
-            <selectorsOptions v-for="option in this.data" v-bind:id="option.id" :val="option.value"
+        <select :id="'father' + n" title="" class="col-md-4 pl-0 float-left">
+            <selectorsOptions v-for="option in data" v-bind:id="option.id" :val="option.value"
                               :key="option.id">
                 {{option.name}}
             </selectorsOptions>
         </select>
-        <select :id="'child' + this.n" title="" class="col-md-4 pl-0 float-left">
-            <selectorsOptions v-for="option in this.item" v-bind:id="option.id" :val="option.value"
+        <select :id="'child' + n" title="" class="col-md-4 pl-0 float-left">
+            <selectorsOptions v-for="option in item" v-bind:id="option.id" :val="option.value"
                               :key="option.id">
                 {{option.name}}
             </selectorsOptions>
@@ -96,6 +96,7 @@
                     value: value,
                     n: this.n
                 };
+                console.log(value);
                 this.$emit('change', data)
             }
         }

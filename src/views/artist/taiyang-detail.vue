@@ -22,14 +22,14 @@
 
             <div class="panel col-md-12">
                 <div class="card-block">
-                    <h4 class="card-title">蔡徐坤</h4>
+                    <h4 class="card-title">{{artistInfo.name}}</h4>
                     <div class="card-text clearfix example">
                         <div class="col-md-6 float-left pl-0">
                             <div class="float-left pl-0 pr-2 col-md-2">
                                 <i class="md-plus pr-2" aria-hidden="true"></i>经纪人
                             </div>
                             <div class="font-weight-bold float-left">
-                                沟通中
+                                {{broker}}
                             </div>
                         </div>
                         <div class="col-md-6 float-left pl-0">
@@ -37,7 +37,7 @@
                                 <i class="md-plus pr-2" aria-hidden="true"></i>宣传人
                             </div>
                             <div class="font-weight-bold float-left">
-                                www.weibo.com
+                                {{broker}}
                             </div>
                         </div>
 
@@ -64,12 +64,12 @@
                                aria-controls="forum-base"
                                aria-expanded="true" role="tab">日程</a>
                         </li>
-                        <li class="nav-item" role="presentation" @click="getArtistProjects">
+                        <li class="nav-item" role="presentation" >
                             <a class="nav-link" data-toggle="tab" href="#forum-artist-projects"
                                aria-controls="forum-present"
                                aria-expanded="false" role="tab">项目</a>
                         </li>
-                        <li class="nav-item" role="presentation" @click="getArtistTasks">
+                        <li class="nav-item" role="presentation">
                             <a class="nav-link" data-toggle="tab" href="#forum-artist-tasks"
                                aria-controls="forum-present"
                                aria-expanded="false" role="tab">任务</a>
@@ -96,12 +96,14 @@
                         </li>
                     </ul>
                     <div class="tab-content nav-tabs-animate bg-white col-md-12">
+                        <!--日历日程-->
                         <div class="tab-pane animation-fade active pb-20 fixed-button-father" id="forum-artist-schedule"
                              role="tabpanel">
                             <div class="col-md-12">
                                 <calendar></calendar>
                             </div>
                         </div>
+                        <!--项目-->
                         <div class="tab-pane animation-fade pb-20 fixed-button-father" id="forum-artist-projects"
                              role="tabpanel">
                             <table class="table table-hover is-indent example" data-plugin="animateList"
@@ -116,8 +118,16 @@
                                     <th class="cell-300" scope="col">关联公司</th>
                                     <th class="cell-300" scope="col">录入日期</th>
                                 </tr>
+                                <tr v-for="(item,index) in artistProjectsInfo" :key="index">
+                                    <td>{{item.title}}</td>
+                                    <td>{{item.status}}</td>
+                                    <td>{{item.principal.data.name}}</td>
+                                    <td>{{item.company}}</td>
+                                    <td>{{item.created_at}}</td>
+                                </tr>
                             </table>
                         </div>
+                        <!--任务-->
                         <div class="tab-pane animation-fade pb-20 fixed-button-father" id="forum-artist-tasks"
                              role="tabpanel">
                             <table class="table table-hover is-indent example" data-plugin="animateList"
@@ -132,8 +142,11 @@
                                 </tr>
                                 <tbody>
                                 <tr v-for="task in artistTasksInfo">
-                                    <td>{{ task.title }}</td>
-                                    <td>{{ task.type }}</td>
+                                    <td>{{task.title}}</td>
+                                    <td>
+                                        <template v-if="task.type">{{task.type.data.title}}</template>
+                                        <template v-else></template>
+                                    </td>
                                     <td>
                                         <template v-if="task.status === 1">进行中</template>
                                         <template v-if="task.status === 2">已完成</template>
@@ -153,6 +166,7 @@
                                 </button>
                             </div>
                         </div>
+                        <!--作品库-->
                         <div class="tab-pane animation-fade pb-20 fixed-button-father" id="forum-artist-work"
                              role="tabpanel">
                             <table class="table table-hover is-indent example" data-plugin="animateList"
@@ -168,17 +182,18 @@
                                 </tr>
                                 <tbody>
                                 <tr v-for="work in artistWorksInfo">
-                                    <td>暂无</td>
-                                    <td>暂无</td>
-                                    <td>暂无</td>
-                                    <td>暂无</td>
-                                    <td>暂无</td>
-                                    <td>暂无</td>
+                                    <td>{{work.name}}</td>
+                                    <td>{{work.director}}</td>
+                                    <td>{{work.release_time}}</td>
+                                    <td>{{workTypeArr.find(item => item.value == work.works_type).name}}</td>
+                                    <td>{{work.role}}</td>
+                                    <td>{{work.co_star}}</td>
                                 </tr>
                                 </tbody>
                             </table>
 
-                            <div class="site-action fixed-button" data-plugin="actionBtn">
+                            <div class="site-action fixed-button" data-plugin="actionBtn" data-toggle="modal"
+                                            data-target="#addWork">
                                 <button type="button"
                                         class="site-action-toggle btn-raised btn btn-success btn-floating waves-effect waves-classic">
                                     <i class="front-icon md-edit animation-scale-up" aria-hidden="true"></i>
@@ -193,8 +208,7 @@
                                             class="btn-raised btn btn-success btn-floating animation-slide-bottom waves-effect waves-classic">
                                         <i class="icon md-upload" aria-hidden="true"></i>
                                     </button>
-                                    <button type="button" data-action="trash" data-toggle="modal"
-                                            data-target="#addWork"
+                                    <button type="button" data-action="trash" 
                                             class="btn-raised btn btn-success btn-floating animation-slide-bottom waves-effect waves-classic">
                                         <i class="icon md-plus" aria-hidden="true"></i>
                                     </button>
@@ -202,10 +216,12 @@
                             </div>
 
                         </div>
+                        <!--粉丝数据-->
                         <div class="tab-pane animation-fade fixed-button-father" id="forum-artist-fans"
                              role="tabpanel">
-                            粉丝
+                            <div id="myChart" style="width:80vw ;height:400px; margin-top:30px"></div>
                         </div>
+                         <!--账单-->
                         <div class="tab-pane animation-fade  pb-20 fixed-button-father" id="forum-artist-bill"
                              role="tabpanel">
                             <div class="example">
@@ -214,7 +230,7 @@
                                 <div class="col-md-1 float-left pl-0">付款金额</div>
                                 <div class="col-md-2 float-left">10000000元</div>
                             </div>
-
+                           
                             <table class="table table-hover is-indent example" data-plugin="animateList"
                                    data-animate="fade" data-child="tr">
                                 <tr class="animation-fade"
@@ -237,12 +253,13 @@
                             </table>
 
                         </div>
+                        <!--概况-->
                         <div class="tab-pane animation-fade  pb-20 fixed-button-father" id="forum-artist-base"
                              role="tabpanel">
                             <div class="card">
                                 <div class="card-header card-header-transparent card-header-bordered">
                                     <div class="float-left font-weight-bold third-title">艺人信息</div>
-                                    <div class="float-right pointer-content">
+                                    <div class="float-right pointer-content" v-show="!isEdit">
                                         <i class="icon md-edit" aria-hidden="true" @click="editBaseInfo"></i>
                                     </div>
                                     <div class="float-right mr-40" v-show="isEdit">
@@ -522,7 +539,8 @@
                 </div>
             </div>
         </div>
-
+        
+        <!--作品库-->
         <div class="modal fade" id="addWork" aria-hidden="true" aria-labelledby="addLabelForm"
              role="dialog" tabindex="-1">
             <div class="modal-dialog modal-simple">
@@ -546,10 +564,11 @@
                                        placeholder="请输入作品名称">
                             </div>
                         </div>
+                        
                         <div class="example">
                             <div class="col-md-2 text-right float-left">导演</div>
                             <div class="col-md-10 float-left">
-                                <input type="text" title="" class="form-control" v-model="artistWorkName"
+                                <input type="text" title="" class="form-control" v-model="artistWorkDirector"
                                        placeholder="请输入导演姓名">
                             </div>
                         </div>
@@ -646,6 +665,7 @@
                 </div>
             </div>
         </div>
+        
 
 
     </div>
@@ -670,10 +690,12 @@
                 endTime: '',
                 endMinutes: '00:00',
                 taskIntroduce: '',
-                artistTasksInfo: [],
-                artistWorksInfo: [],
-                artistProjectsInfo: '',
-                artistWorkName: '',
+                artistTasksInfo: [],//任务
+                artistWorksInfo: [],//作品库
+                artistProjectsInfo: [],//项目
+                artistWorkName: '', //作品名称
+                artistWorkDirector:'',//导演名称
+                broker:'',//经纪人
                 workReleaseTime: '',
                 workTypeArr: config.workTypeArr,
                 workType: '',
@@ -690,34 +712,112 @@
 
         mounted() {
             this.getArtist()
+            // this.drawLine()
+            // this.$nextTick(function() {
+            //     this.myChart = echarts.init(document.getElementById('myChart'));  //初始化echarts实例
+            //     // this.draw();
+            // })
+            this.draw()
         },
 
         methods: {
+
+            //获取艺人信息
             getArtist: function () {
                 this.artistId = this.$route.params.id;
 
                 let data = {
-                    include: 'broker,creator,tasks,affixes',
+                    include: 'broker,creator,tasks,affixes,trails.project.principal,works,trails.client',
                 };
                 let _this = this;
                 fetch('get', '/stars/' + this.artistId, data).then(function (response) {
                     _this.artistInfo = response.data;
+                    _this.artistTasksInfo = response.data.tasks.data
+                    _this.artistWorksInfo = response.data.works.data
+                    _this.broker = response.data.broker.data.name
+                    for (let i = 0; i < response.data.trails.data.length; i++) {
+                        if(response.data.trails.data[i].project){
+                            response.data.trails.data[i].project.data.company = response.data.trails.data[i].client.data.company
+                            _this.artistProjectsInfo.push(response.data.trails.data[i].project.data)
+                        }
+                    }
+                    console.log(_this.artistProjectsInfo)
                 })
             },
 
-            getArtistProjects: function () {
+            //粉丝数据
+             draw:function(){
+                var myChart = echarts.init(document.getElementById('myChart'));
 
+                // 指定图表的配置项和数据
+                var option = {
+                    title: {
+                        text: '粉丝统计'
+                    },
+                    tooltip: {
+                        trigger: 'axis'
+                    },
+                    legend: {
+                        data:['微博','百科','抖音','其他']
+                    },
+                    grid: {
+                        left: '3%',
+                        right: '4%',
+                        bottom: '3%',
+                        containLabel: true
+                    },
+                    toolbox: {
+                        feature: {
+                            saveAsImage: {}
+                        }
+                    },
+                    xAxis: {
+                        type: 'category',
+                        boundaryGap: false,
+                        data: ['周一','周二','周三','周四','周五','周六','周日']
+                    },
+                    yAxis: {
+                        type: 'value'
+                    },
+                    series: [
+                        {
+                            name:'微博',
+                            type:'line',
+                            stack: '总量',
+                            data:[120, 132, 101, 134, 90, 230, 210]
+                        },
+                        {
+                            name:'百科',
+                            type:'line',
+                            stack: '总量',
+                            data:[220, 182, 191, 234, 290, 330, 310]
+                        },
+                        {
+                            name:'抖音',
+                            type:'line',
+                            stack: '总量',
+                            data:[150, 232, 201, 154, 190, 330, 410]
+                        },
+                        {
+                            name:'其他',
+                            type:'line',
+                            stack: '总量',
+                            data:[320, 332, 301, 334, 390, 330, 320]
+                        },
+                        // {
+                        //     name:'搜索引擎',
+                        //     type:'line',
+                        //     stack: '总量',
+                        //     data:[820, 932, 901, 934, 1290, 1330, 1320]
+                        // }
+                    ]
+                };
+
+                // 使用刚指定的配置项和数据显示图表。
+                myChart.setOption(option);
             },
-
-            getArtistTasks: function () {
-                let _this = this;
-                fetch('get', '/stars/' + this.artistId, data).then(function (response) {
-                    _this.artistTasksInfo = response.data;
-                })
-            },
-
             getArtistWorks: function () {
-
+                 
             },
 
             changeTaskType: function (value) {
@@ -768,10 +868,13 @@
                     priority: this.taskLevel,
                     start_at: this.startTime + ' ' + this.startMinutes,
                     end_at: this.endTime + ' ' + this.endMinutes,
-                    desc: this.taskIntroduce
+                    desc: this.taskIntroduce,
+                    resource_type:2,
+                    resourceable_id:this.artistId,
+                    type: this.taskType,
                 };
                 let _this = this;
-                fetch('get', '/tasks', data).then(function (response) {
+                fetch('post', '/tasks', data).then(function (response) {
                     toastr.success('创建成功');
                     $('#addTask').modal('hide');
                     _this.artistTasksInfo.push(response.data)
@@ -779,9 +882,16 @@
             },
 
             addWork: function () {
-                let data = {};
+                let data = {
+                    name:this.artistWorkName,
+                    director:this.artistWorkDirector,
+                    role:this.character,
+                    co_star:this.coActor,
+                    release_time:this.workReleaseTime,
+                    works_type:this.workType
+                };
                 let _this = this;
-                fetch('post', '/tasks', data).then(function (response) {
+                fetch('post', `/stars/${this.$route.params.id}/works`,data).then(function (response) {
                     toastr.success('新增成功');
                     $('#addWork').modal('hide');
                     _this.artistWorksInfo.push(response.data)

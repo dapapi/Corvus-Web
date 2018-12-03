@@ -30,6 +30,7 @@
         },
         methods: {
             changeMember: function (value) {
+                console.log(this.$store.state.principalInfo.id)
                 this.$emit('change', this.$store.state.principalInfo.id)
             }
         }
