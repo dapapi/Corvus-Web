@@ -4,7 +4,7 @@
             <input class="form-control" type="text" v-model="context" :disabled='disabled'/>
         </template>
         <template v-else>
-            {{ content }}
+            {{ context }}
         </template>
     </div>
 </template>
@@ -21,7 +21,7 @@
         },
 
         mounted() {
-            this.context = this.content
+            this.context = this.content // 此时获取不到值 ，所以改为监听
         },
         computed: {},
 
@@ -33,6 +33,11 @@
             context(newValue) {
                 this.$emit('change', newValue)
             },
+            content () {
+                this.$nextTick(() => {
+                    this.context = this.content
+                })
+            }
         }
     }
 </script>

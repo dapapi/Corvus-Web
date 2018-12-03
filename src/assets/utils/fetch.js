@@ -52,7 +52,10 @@ export default function fetch(method = 'post', url, params) {
     return new Promise((resolve, reject) => {
         axios[method](url, method.toLowerCase() === 'get' ? {params} : params)
             .then(response => {
+<<<<<<< HEAD
              
+=======
+>>>>>>> 7b2b7ee8fa583f358005ee643057cecd182b2337
                 resolve(response.data);
             }, err => {
                 reject(err);

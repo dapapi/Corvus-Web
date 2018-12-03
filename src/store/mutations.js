@@ -21,5 +21,9 @@ export default {
 
     changeSelectorPrincipal(state, data) {
         state.selectPrincipalInfo = data
+    },
+
+    changeOtherSlot(state,data){
+        state.otherSlot = data
     }
 }

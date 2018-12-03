@@ -1,14 +1,16 @@
 <template>
-    <select data-plugin="selectpicker" v-model="valueListener" :value="value" :data-live-search="searchable" :multiple="multiple" :title="placeholder">
-        <selectorsOptions v-for="option in this.options" v-bind:id="option.id" :val="option.value || option.id" :key="option.id">
-            {{option.name||option.title}}
+    <select data-plugin="selectpicker" :value="value" :data-live-search="multiple" :multiple="multiple"
+            :title="placeholder" v-model="valueListener">
+        <selectorsOptions v-for="option in options" v-bind:id="option.id" :val="option.value || option.id"
+                          :key="option.id">
+            {{option.name || option.title}}
         </selectorsOptions>
     </select>
 
 </template>
 <script>
     export default {
-        props: ['options', 'disable', 'multiple', 'placeholder', 'changeKey', 'value'], // changeKey为父组件的data，且可以被改变
+        props: ['options', 'disable', 'multiple', 'placeholder', 'changeKey', 'value', 'resetinfo'], // changeKey为父组件的data，且可以被改变
         data() {
             return {
                 isDisable: this.disable,
@@ -27,6 +29,11 @@
 
         },
         watch: {
+            resetinfo: function (value) {
+                if (value) {
+
+                }
+            },
             valueListener: function (newValue) {
                 this.$emit('valuelistener', newValue)
             },
@@ -41,10 +48,16 @@
                 }
             },
             options: function (newValue) {
+<<<<<<< HEAD
                 this.$nextTick(()=>{
                     this.refresh()
                 })
                 
+=======
+                this.$nextTick(() => {
+                    this.refresh()
+                })
+>>>>>>> 7b2b7ee8fa583f358005ee643057cecd182b2337
             }
         },
         methods: {
