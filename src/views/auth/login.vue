@@ -25,7 +25,7 @@
                         </li>
                         <li class="nav-item" role="presentation">
                             <a class="nav-link" data-toggle="tab" href="#forum-weixin-login"
-                               aria-controls="forum-present"
+                               aria-controls="forum-present" @click="getWeixinCode"
                                aria-expanded="false" role="tab">微信登录</a>
                         </li>
                     </ul>
@@ -63,7 +63,7 @@
                             </div>
                         </div>
                         <div class="tab-pane animation-fade" id="forum-weixin-login" role="tabpanel">
-                            <div class="qrCode-wrap">
+                            <div class="qrCode-wrap" id="loginContainer">
                                 <img src="https://res.papitube.com/testQRcode.png" alt="">
                             </div>
                             <div class="text-center">请使用微信扫描二维码登录</div>
@@ -152,6 +152,17 @@
     import Cookies from 'js-cookie';
     import Verify from '../../assets/utils/verify.js';
     import redirect from '../../assets/js/bootstrap';
+
+    let obj = new WxLogin({
+        self_redirect: true,
+        id: "loginContainer",
+        appid: "",
+        scope: "",
+        redirect_uri: "",
+        state: "",
+        style: "",
+        href: ""
+    });
 
     export default {
         data: function () {
@@ -265,6 +276,12 @@
                     return
                 }
             },
+
+            getWeixinCode() {
+                fetch('get', 'https://api.weixin.qq.com/sns/oauth2/access_token?appid=APPID&secret=SECRET&code=CODE&grant_type=authorization_code').then(function (response) {
+                    console.log(response)
+                })
+            }
         }
     }
 </script>
