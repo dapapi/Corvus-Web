@@ -82,11 +82,11 @@
                             </div>
                         </div>
                         <div class="tab-pane animation-fade pb-20 fixed-button-father" id="forum-artist-projects"
-                             role="tabpanel">
+                             role="tabpanel" v-for="item in data.trails" :key="item.id">
                             <table class="table  is-indent example" data-plugin="animateList"
                                    data-animate="fade"
                                    data-child="tr"
-                                   data-selectable="selectable">
+                                   data-selectable="selectable" >
                                 <tr class="animation-fade"
                                     style="animation-fill-mode: backwards; animation-duration: 250ms; animation-delay: 0ms;">
                                     <th class="cell-300" scope="col">项目名称</th>
@@ -95,14 +95,34 @@
                                     <th class="cell-300" scope="col">关联公司</th>
                                     <th class="cell-300" scope="col">录入日期</th>
                                 </tr>
+                                <tr v-for="v in item"  :key="v.id">
+                                    <td>{{v.project.data.title}}</td>
+                                    <td>
+                                        <template v-if="v.project.data.status==1">
+                                            初步接触
+                                        </template>
+                                        <template v-if="v.project.data.status==2">
+                                            沟通中
+                                        </template>
+                                        <template v-if="v.project.data.status==3">
+                                            合同中
+                                        </template>
+                                        <template v-if="v.project.data.status==4">
+                                            沟通完成
+                                        </template>
+                                    </td>
+                                    <td>{{v.refused_user}}</td>
+                                    <td>{{data.sign_contract_other_name}}</td>
+                                    <td>{{v.project.data.created_at}}</td>
+                                </tr>
                             </table>
                         </div>
                         <div class="tab-pane animation-fade pb-20 fixed-button-father" id="forum-artist-tasks"
-                             role="tabpanel">
+                             role="tabpanel" >
                             <table class="table table-hover is-indent example" data-plugin="animateList"
                                    data-animate="fade"
                                    data-child="tr"
-                                   data-selectable="selectable">
+                                   data-selectable="selectable" v-for="item in data.tasks" :key="item.id">
                                 <tr class="animation-fade"
                                     style="animation-fill-mode: backwards; animation-duration: 250ms; animation-delay: 0ms;">
                                     <th class="cell-300" scope="col">任务名称</th>
@@ -110,6 +130,23 @@
                                     <th class="cell-300" scope="col">状态</th>
                                     <th class="cell-300" scope="col">负责人</th>
                                     <th class="cell-300" scope="col">截止日期</th>
+                                </tr>
+                                <tr v-for="v in item"  :key="v.id">
+                                    <td>{{v.title}}</td>
+                                    <td>{{v.resource.data.resource.data.title}}</td>
+                                    <td>
+                                        <template v-if="v.status==1">
+                                            开始
+                                        </template>
+                                        <template v-if="v.status==2">
+                                            进行中
+                                        </template>
+                                        <template v-if="v.status==3">
+                                            已完成
+                                        </template>
+                                    </td>
+                                    <td>{{v.principal.data.name}}</td>
+                                    <td>{{v.end_at}}</td>
                                 </tr>
                             </table>
                             <div class="site-action fixed-button" data-plugin="actionBtn" data-toggle="modal"
@@ -135,13 +172,22 @@
                                     <th class="cell-300" scope="col">是否广告</th>
                                 </tr>
                                 <tbody>
-                                <tr v-for="work in artistWorksInfo">
-                                    <td>暂无</td>
-                                    <td>暂无</td>
-                                    <td>暂无</td>
-                                    <td>暂无</td>
-                                    <td>暂无</td>
-                                    <td>暂无</td>
+                                <tr v-for="work in worksData"> 
+                                    <td>{{work.nickname}}</td>
+                                    <td>{{work.videoname}}</td>
+                                    <td>{{work.release_time}}</td>
+                                    <td>{{work.read_proportion}}</td>  
+                                    <td>
+                                        <template v-show="wock.link">
+                                            www.baidu.com
+                                        </template>
+                                    </td>
+                                    <td v-if="work.advertising==1">
+                                       是
+                                    </td>
+                                    <td v-else-if="work.advertising==0">
+                                       否
+                                    </td>
                                 </tr>
                                 </tbody>
                             </table>
@@ -158,6 +204,7 @@
                         <div class="tab-pane animation-fade pb-20 fixed-button-father" id="forum-artist-fans"
                              role="tabpanel">
                             粉丝
+                            <div id="main" style="width: 800px;height:400px; padding:30px;" ></div>
                         </div>
                         <div class="tab-pane animation-fade pb-20 fixed-button-father" id="forum-artist-bill"
                              role="tabpanel">
@@ -194,7 +241,7 @@
                             <div class="card">
                                 <div class="card-header card-header-transparent card-header-bordered">
                                     <div class="float-left font-weight-bold third-title">艺人信息</div>
-                                    <div class="float-right pointer-content">
+                                    <div class="float-right pointer-content" v-show="isStatrtEdit">
                                         <i class="icon md-edit" aria-hidden="true" @click="editBaseInfo"></i>
                                     </div>
                                     <div class="float-right mr-40" v-show="isEdit">
@@ -207,17 +254,20 @@
                                         <div class="card-text py-10 px-0 clearfix col-md-6 float-left">
                                             <div class="col-md-2 float-left text-right pl-0">昵称</div>
                                             <div class="col-md-10 float-left font-weight-bold">
-                                                <EditInput :content="artistInfo.name" :is-edit="isEdit"
+                                                <EditInput :content="artistInfo.nickname    " :is-edit="isEdit"
                                                            @change="changArtistName"></EditInput>
                                             </div>
                                         </div>
                                         <div class="card-text py-10 px-0 clearfix col-md-6 float-left">
                                             <div class="col-md-2 float-left text-right pl-0">类型</div>
                                             <div class="col-md-10 float-left font-weight-bold">
-                                                <!--<EditSelector :options="" :content=""-->
+                                                <!--<EditSelector :options="type_id" :content=""-->
                                                 <!--:is-edit="isEdit"-->
                                                 <!--@change=""></EditSelector>-->
-
+                                                <EditSelector :content="artistInfo.type_id"
+                                                              :options="papiCommunicationStatusArr"
+                                                              :is-edit="isEdit"
+                                                              @change="changeArtistCommunication"></EditSelector>
                                             </div>
                                         </div>
                                         <div class="card-text py-10 px-0 clearfix col-md-6 float-left">
@@ -360,7 +410,7 @@
                         <div class="example">
                             <div class="col-md-2 text-right float-left">任务类型</div>
                             <div class="col-md-10 float-left pl-0">
-                                <selectors :options="taskTypeArr" :placeholder="'请选择任务类型'"
+                                <selectors :options="tasksType" :placeholder="'请选择任务类型'"
                                            @change="changeTaskType"></selectors>
                             </div>
                         </div>
@@ -373,8 +423,8 @@
                         <div class="example">
                             <div class="col-md-2 text-right float-left">负责人</div>
                             <div class="col-md-5 float-left pl-0">
-                                <input-selectors :placeholder="'请选择负责人'"
-                                                 @change="principalChange"></input-selectors>
+                                <selectors :placeholder="'请选择负责人'"
+                                                 @change="principalChange" :options="Users"></selectors>
                             </div>
                         </div>
                         <div class="example">
@@ -439,7 +489,7 @@
 
                         <div class="example">
                             <div class="col-md-2 text-right float-left">昵称</div>
-                            <div class="col-md-10 float-left">{{ artistInfo.nickname }}</div>
+                            <div class="col-md-10 float-left">{{ artistInfo.nickname}}</div>
                         </div>
                         <div class="example">
                             <div class="col-md-2 text-right float-left">视频名称</div>
@@ -571,15 +621,53 @@
                 taskIntroduce: '',
                 artistWorkName: '',
                 isEdit: false,
-                papiCommunicationStatusArr: config.papiCommunicationStatusArr
+                isStatrtEdit:true,
+                papiCommunicationStatusArr: config.papiCommunicationStatusArr,
+                updateNickname:'',
+                data:'',
+                worksData:'',
+                advertisingType:'',
+                Person_id:'',
+                Users:'',
+                tasksType:''
             }
         },
 
         mounted() {
             this.getArtist()
+            this.charts()
         },
 
         methods: {
+            charts:function(){
+            let myChart = echarts.init(document.getElementById('main'));
+            let option = {
+                    title: {
+                        text: '一周粉丝热度展示'
+                    },
+                    legend: {
+                        data:['这周热度','上周热度']
+                    },
+                    xAxis: {
+                        type: 'category',
+                        data: ['Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat', 'Sun']
+                    },
+                    yAxis: {
+                        type: 'value'
+                    },
+                    series: [{
+                        name:'这周热度',
+                        data: [820, 932, 901, 934, 1290, 1330, 1320],
+                        type: 'line'
+                    },
+                    {
+                        name:'上周热度',
+                        type:'line',
+                        data:[620, 782, 791, 734, 1090, 1130, 1210]
+                    },]
+                };
+               myChart.setOption(option)
+            },
             getArtist: function () {
                 this.artistId = this.$route.params.id;
                 let _this = this;
@@ -588,6 +676,22 @@
                 };
                 fetch('get', '/bloggers/' + this.artistId, data).then(function (response) {
                     _this.artistInfo = response.data;
+                 
+                });
+                fetch('get','/bloggers/1994731356?include=tasks.type,trails.project.principal,trails.client').then(function(response){
+                    _this.data=response.data
+                    console.log(_this.data)
+                })
+                fetch('get','/bloggers/index/production').then(function(response){
+                    _this.worksData=response.data
+                    console.log(_this.worksData)
+                });
+                fetch('get','/users/').then(function(response){
+                    _this.Users=response.data;
+                })
+                fetch('get','/task_types').then(function(response){
+                    console.log(response)
+                    _this.tasksType=response.data;
                 })
             },
 
@@ -610,41 +714,94 @@
             },
 
             addPrivacy: function () {
-
+                let _this=this;
+                let data = { 
+                    updateNickname:this.artistInfo.name 
+                }
+              fetch('put','/bloggers/1994731356',data).then(function(response){
+                   _this.artistTasksInfo = response.data;
+              })
             },
 
             editBaseInfo: function () {
                 this.isEdit = true;
+                this.isStatrtEdit=false
                 this.changeInfo = [];
             },
 
             cancelEdit: function () {
-                this.isEdit = false
+                this.isEdit = false;
+                this.isStatrtEdit=true
             },
 
             changeArtistBaseInfo: function () {
-
+                this.isEdit = false;
+                this.isStatrtEdit=true 
+                let _this = this;
+                let data = { 
+                    updateNickname:this.artistInfo.name 
+                }
+                fetch('put','/bloggers/1994731356',data).then(function(response){
+                   _this.artistTasksInfo = response.data;
+              })
             },
 
 
-            changeWorkAd: function () {
-
+            changeWorkAd: function (value) {
+                console.log(value)
+                if(value){
+                  this.advertisingType=value;
+                }else{
+                    this.advertisingType=0;
+                }
+                
             },
 
             addWork: function () {
-
+                let _this=this;
+                let data={
+                   nickname:this.artistInfo.nickname,
+                   videoname:this.artistWorkName,
+                   release_time:this.workReleaseTime,
+                   read_proportion:this.artistWorkProportion,
+                   link:this.videoUrl,
+                   advertising:this.advertisingType,
+                   blogger_id:this.artistInfo.id
+                }
+                fetch('post','/bloggers/new/production',data).then(function(response){
+                    toastr.success('创建成功');
+                    $('#addWork').modal('hide');
+                    _this.getArtist()
+                })
             },
 
             addTask: function () {
-
+                let _this=this;
+                let data={
+                   title:this.taskName,
+                   principal_id:this.Person_id,
+                   start_at:this.startTime ,
+                   end_at:this.endTime,
+                   resource_type:1,
+                   resourceable_id:this.artistInfo.id,
+                   desc:this.taskIntroduce,
+                   type:this.taskType
+                }
+                fetch('post','/tasks',data).then(function(response){
+                    toastr.success('创建成功');
+                    $('#addTask').modal('hide');
+                    _this.getArtist()
+                })
             },
 
             changeTaskType: function (value) {
                 this.taskType = value
+                console.log(this.taskType)
             },
 
             principalChange: function (value) {
-
+                console.log(value)
+                this.Person_id=value;  
             },
 
             participantChange: function (value) {

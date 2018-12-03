@@ -1,7 +1,7 @@
 <template>
     <select data-plugin="selectpicker" :value="value" :data-live-search="searchable" :multiple="multiple" :title="placeholder">
-        <selectorsOptions v-for="option in this.options" v-bind:id="option.id" :val="option.value" :key="option.id">
-            {{option.name}}
+        <selectorsOptions v-for="option in this.options" v-bind:id="option.id" :val="option.value || option.id" :key="option.id">
+            {{option.name||option.title}}
         </selectorsOptions>
     </select>
 </template>
@@ -38,8 +38,10 @@
                 }
             },
             options: function (newValue) {
-                console.log(newValue);
-                this.refresh()
+                this.$nextTick(()=>{
+                    this.refresh()
+                })
+                
             }
         },
         methods: {

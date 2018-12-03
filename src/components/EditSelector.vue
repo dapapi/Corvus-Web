@@ -12,7 +12,7 @@
             </template>
             <template v-else>
                 <template v-if="content">
-                    {{ options.find(item => item.value == content).name }}
+                    {{ options.find(item => item.value ||item.id == content).name }}
                 </template>
             </template>
         </template>
