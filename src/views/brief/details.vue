@@ -48,13 +48,17 @@
                                 <Datepicker v-bind:changeKey="item.id" @select="datePickerChange"></Datepicker>
                             </div>
                             <div v-show="item.type == 4" class="taskList">
-                                
-                                <router-link v-for="(item,index) in submitAnswerData[`answer[${item.id}]`]" :key="index" :to="`/task/${item.id}`">{{item.title}}</router-link>
+                                <div class="ml-15"  v-for="(item,index) in submitAnswerData[`answer[${item.id}]`]" :key="index">
+                                    <i class="icon icon md-email-open"></i>
+                                <router-link class="mr-10" :to="`/tasks/${item.id}`">{{item.title}}</router-link>
+                                </div>
                             </div>
                             <div class="pt-10 uploadContent" v-show="item.type == 5" >
-                                <!-- <div class="list">{{}}</div> -->
-                                <span style="color:#01BCD4;cursor:pointer">上传附件</span>
-                                <FileUploader class="upload" v-bind:id="item.id"  @change="uploadAttachment"></FileUploader>
+                                {{submitAnswerData[`answer[${item.id}]`]}}
+                                <div v-for="(item,index) in submitAnswerData[`answer[${item.id}]`]" :key="index">{{item.name}}</div>
+                                <!-- <span style="color:#01BCD4;cursor:pointer">上传附件</span> -->
+                                <Upload v-bind:id="item.id" @change="uploadAttachment">上传附件</Upload>
+                                <!-- <FileUploader class="upload" v-bind:id="item.id"  @change="uploadAttachment"></FileUploader> -->
                             </div>
                             
                         </li>
@@ -78,7 +82,7 @@
                 </div>
                 <div class="modal-body clearfix">
                      <ul class="list-group">
-                        <CheckboxGroup :optionData="taskList" @click="getCheckbox">
+                        <CheckboxGroup :optionData="taskList" @change="getCheckbox">
                             <template slot-scope="scope">
                                 <span>{{scope.row.title}}</span>
                             </template>
@@ -107,9 +111,11 @@ export default {
             quesList:[],
             birthday:'',
             isEdit:false,
+            renderTaskData:{},
+            renderUploadData:{},
             submitAnswerData:{
                 reviewer_ids:'',
-                accessory:this.accessory,
+                accessory:'',
 
             },
             uploadList:{
@@ -117,8 +123,7 @@ export default {
             },
             taskList:[],
             selectTask:[],
-            quesTaskId:''
-
+            quesTaskId:'',
         }
     },
     components:{
@@ -128,6 +133,7 @@ export default {
 
         this.getAll()
         this.getTaskList()
+        this.getDetails()
     },
     methods:{
          
@@ -161,44 +167,46 @@ export default {
                 }
                 this.submitAnswerData[`answer[${this.quesTaskId}]`].push(data) 
             }
-            console.log(this.submitAnswerData[`answer[${this.quesTaskId}]`]);
            
         },
         
         /*数字*/
         changeNum:function(value,id){
             this.submitAnswerData[`answer[${id}]`] = value
-            // console.log(value,id)
-        },
-
-
-        changeTrailFee:function(value,count){
-            console.log(value,count)
         },
 
         /*日期*/
         datePickerChange:function(key,value){
-            console.log(key,value)
             this.submitAnswerData[`answer[${key}]`] = value
         },
 
         /*附件*/
         uploadAttachment:function(url,name,size,id){
+            this.submitAnswerData[`answer[${id}]`] = []
+
             let data={
                 url:url,
                 name:name
             }
-            this.submitAnswerData[`answer[${id}]`] = data
-            console.log(url,name,size,id)
+            this.submitAnswerData[`answer[${id}]`].push(data)
+            this.updateAffix(url,name,size,id)
+        },
+        updateAffix:function(url,name,size,id){
+            let data ={
+                title:name,
+                url:url,
+                size:size,
+                type:1
+            }
+            fetch('put',`${config.apiUrl}/reports/${id}/affix`,data).then((res) => {
+                this.taskList = res.data
+            })
         },
         participantChange:function(value){
-            console.log(value)
         },
         changePrincipal:function(value){
-           console.log(value)
-           this.submitAnswerData.reviewer_ids = this.$store.state.principalInfo
-           console.log(this.$store.state.principalInfo)
-           
+            
+           this.submitAnswerData.reviewer_ids = value.id
         },
         //获取任务列表
         getTaskList:function(){
@@ -212,15 +220,30 @@ export default {
            for (let i = 0; i < this.quesList.length; i++) {
                 this.submitAnswerData[`answer[${this.quesList[i].id}]`]=''
            }
-           console.log(this.submitAnswerData);
         },
 
         //提交
         submitAnswer:function(){
-            console.log(this.submitAnswerData)
+            this.submitAnswerData.accessory = this.$route.query.id
+            for (const key in this.submitAnswerData) {
+                if(Array.isArray(this.submitAnswerData[key])){
+                    this.submitAnswerData[key] =JSON.stringify(this.submitAnswerData[key]) 
+                }
+            }
             fetch('post',`${config.apiUrl}/launch`,this.submitAnswerData).then((res) => {
-                this.quesList = res.data
-                this.isEdit = true
+               toastr.success('提交成功');
+                
+            })
+        },
+        getDetails:function(){
+            fetch('get',`${config.apiUrl}/review/${this.$route.query.id}`).then((res) => {
+               console.log(res)
+                
+            })
+        },
+        modify:function(){
+            fetch('post',`${config.apiUrl}/launch`,this.submitAnswerData).then((res) => {
+               toastr.success('提交成功');
                 
             })
         }
@@ -235,15 +258,5 @@ export default {
     }
     .list-group-item{
         border-bottom:1px solid #f4f4f4;
-    }
-    .uploadContent{
-        position: relative;
-    }
-    .upload{
-        position: absolute;
-        top:0px;
-        left:0px;
-        opacity: 0;
-
     }
 </style>

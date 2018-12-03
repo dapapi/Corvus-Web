@@ -761,17 +761,6 @@
             },
 
             changeTrailBaseInfo: function () {
-<<<<<<< HEAD
-                let _this = this;
-                let data = _this.changeInfo;
-                fetch('put', '/trails/' + this.trailId, data).then(function () {
-                    toastr.success('修改成功');
-                    _this.isEdit = false
-                    _this.getTrail()
-                })
-
-
-=======
                 if (this.trailTypeValidate()){
                     let _this = this;
                     let data = _this.changeInfo;
@@ -781,7 +770,6 @@
                         _this.getTrail()
                     })
                 }
->>>>>>> wx
             },
 
             getStars: function () {

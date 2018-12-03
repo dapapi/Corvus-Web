@@ -3,65 +3,17 @@
 
         <div class="page-header page-header-bordered">
             <h1 class="page-title">考勤日历</h1>
-            <div class="page-header-actions" data-toggle="modal" data-target="#addCalendar">
-                <i class="icon md-plus font-size-20" aria-hidden="true"></i>
-            </div>
         </div>
 
         <div class="page-content container-fluid">
             <div class="panel col-md-12 py-5 clearfix px-0 mb-0">
-                <!-- <div class=" float-left py-30" style="width: 20%;">
-                    <div style="border-bottom: 1px solid #D8D8D8;width: 90%;margin: 0 auto">
-                        <InlineDatepicker @change="selectDate"></InlineDatepicker>
-                    </div>
-                    <div class="calendar-list">
-                        <div>
-                            <div class="calendar-title"><i class="icon md-calendar pr-5"></i>所有日历</div>
-                            <ul>
-                                <li v-for="calendar in calendarList" class="clearfix">
-                                    <div class="calendar-checkbox float-left pointer-content"
-                                         :style="'background-color:' + calendar.color"
-                                         @click="checkCalendar(calendar.id)">
-                                        <i class="icon md-check"
-                                           v-show="selectedCalendar.indexOf(calendar.id) > -1"></i>
-                                    </div>
-                                    <div class="float-left ml-10">{{ calendar.name }}</div>
-                                    <div class="float-right">
-                                        <i class="icon md-more" aria-hidden="true" id="taskDropdown"
-                                           data-toggle="dropdown" aria-expanded="false"></i>
-                                        <div class="dropdown-menu" aria-labelledby="taskDropdown">
-                                            <a class="dropdown-item" @click="editCalendar" data-target="#changeCalendar"
-                                               data-toggle="modal">编辑</a>
-                                            <a class="dropdown-item" data-target="#delModel" data-toggle="modal"
-                                               @click="delCalendar(calendar)">删除</a>
-                                        </div>
-                                    </div>
-                                </li>
-                            </ul>
-                            <div class="px-20">
-                                <div class="checkbox-custom checkbox-primary">
-                                    <input type="checkbox" id="inputUnchecked" @change="selectAllCalendar">
-                                    <label for="inputUnchecked">全选</label>
-                                </div>
-                            </div>
-                        </div>
-                        <div>
-                            <div class="calendar-title"><i class="icon md-calendar pr-5"></i>会议室</div>
-                            <div class="text-center">
-                                <span class="pointer-content hover-content" @click="checkMeetingRoom">会议室占用情况</span>
-                            </div>
-                        </div>
-                    </div>
-                </div> -->
-                <div class="float-left p-0" style="width: 100%">
-                    <calendar :gotoDate="selectedDate" v-show="!meetingRomeShow"></calendar>
-                    <MeetingRoomCalendar v-show="meetingRomeShow" @change="displayMeetingRoom"></MeetingRoomCalendar>
+                <div class="p-0" style="width: 100%">
+                    <calendar :gotoDate="selectedDate" :defaultView="'month'" @changeTime="getTime()"></calendar>
                 </div>
-
             </div>
         </div>
 
-        <div class="modal fade" id="addSchedule" aria-hidden="true" aria-labelledby="addLabelForm"
+        <!-- <div class="modal fade" id="addSchedule" aria-hidden="true" aria-labelledby="addLabelForm"
              role="dialog" tabindex="-1">
             <div class="modal-dialog modal-simple">
                 <div class="modal-content">
@@ -171,7 +123,7 @@
                     </div>
                 </div>
             </div>
-        </div>
+        </div> -->
 
         <div class="modal fade" id="changeSchedule" aria-hidden="true" aria-labelledby="addLabelForm"
              role="dialog" tabindex="-1">
@@ -285,7 +237,7 @@
             </div>
         </div>
 
-        <div class="modal fade" id="addCalendar" aria-hidden="true" aria-labelledby="addLabelForm"
+        <!-- <div class="modal fade" id="addCalendar" aria-hidden="true" aria-labelledby="addLabelForm"
              role="dialog" tabindex="-1">
             <div class="modal-dialog modal-simple">
                 <div class="modal-content">
@@ -340,9 +292,9 @@
                 </div>
             </div>
 
-        </div>
+        </div> -->
 
-        <div class="modal fade" id="changeCalendar" aria-hidden="true" aria-labelledby="addLabelForm"
+        <!-- <div class="modal fade" id="changeCalendar" aria-hidden="true" aria-labelledby="addLabelForm"
              role="dialog" tabindex="-1">
             <div class="modal-dialog modal-simple">
                 <div class="modal-content">
@@ -397,9 +349,9 @@
                 </div>
             </div>
 
-        </div>
+        </div> -->
 
-        <div class="modal fade" id="delModel" aria-hidden="true" aria-labelledby="addLabelForm" role="dialog"
+        <!-- <div class="modal fade" id="delModel" aria-hidden="true" aria-labelledby="addLabelForm" role="dialog"
              tabindex="-1">
             <div class="modal-dialog modal-simple">
                 <div class="modal-content">
@@ -420,7 +372,7 @@
                     </div>
                 </div>
             </div>
-        </div>
+        </div> -->
 
     </div>
 
@@ -450,8 +402,8 @@
                 checkColor: '',
                 selectedDate: '',
                 calendarColor: '',
-                selectedCalendar: [],
-                delCalendarInfo: '',
+                // selectedCalendar: [],
+                // delCalendarInfo: '',
                 meetingRomeShow: false,
                 calendarList: [
                     {
@@ -479,7 +431,6 @@
         },
 
         mounted() {
-            this.getStars();
             let _this = this;
             $('#addCalendar').on('hidden.bs.modal', function () {
                 _this.$store.dispatch('changeParticipantsInfo', {data: []});
@@ -487,32 +438,19 @@
             $('#addSchedule').on('hidden.bs.modal', function () {
                 _this.$store.dispatch('changeParticipantsInfo', {data: []});
             })
+            this.getCalendar()
         },
 
         methods: {
-
+            getTime:function(value){
+                alert(1111)
+                  console.log(value)
+            },
             getClients: function () {
                 fetch('get', '/clients').then(function (response) {
                     console.log(response)
                 })
             },
-
-            getStars: function () {
-                let _this = this;
-                fetch('get', '/stars/all').then(function (response) {
-                    for (let i = 0; i < response.data.length; i++) {
-                        _this.starsArr.push({
-                            value: response.data[i].id,
-                            name: response.data[i].name
-                        })
-                    }
-                })
-            },
-
-            addSchedule: function () {
-
-            },
-
             changeStartTime: function (value) {
                 this.startTime = value
             },
@@ -544,7 +482,9 @@
             addCalendar: function () {
 
             },
+            addSchedule: function () {
 
+            },
             participantChange: function () {
 
             },
@@ -555,38 +495,40 @@
 
             selectDate: function (value) {
                 this.selectedDate = value
+                console.log(value)
+                alert(111)
             },
 
-            checkCalendar: function (value) {
-                let index = this.selectedCalendar.indexOf(value);
-                if (index > -1) {
-                    this.selectedCalendar.splice(index, 1)
-                } else {
-                    this.selectedCalendar.push(value)
-                }
-            },
+            // checkCalendar: function (value) {
+            //     let index = this.selectedCalendar.indexOf(value);
+            //     if (index > -1) {
+            //         this.selectedCalendar.splice(index, 1)
+            //     } else {
+            //         this.selectedCalendar.push(value)
+            //     }
+            // },
 
-            editCalendar: function () {
+            // editCalendar: function () {
 
-            },
+            // },
 
-            selectAllCalendar: function (e) {
-                this.selectedCalendar = [];
-                if (e.target.checked) {
-                    for (let i = 0; i < this.calendarList.length; i++) {
-                        this.selectedCalendar.push(this.calendarList[i].id)
-                    }
-                }
-            },
+            // selectAllCalendar: function (e) {
+            //     this.selectedCalendar = [];
+            //     if (e.target.checked) {
+            //         for (let i = 0; i < this.calendarList.length; i++) {
+            //             this.selectedCalendar.push(this.calendarList[i].id)
+            //         }
+            //     }
+            // },
 
-            delCalendar: function (calendar) {
-                this.delCalendarInfo = calendar
-            },
+            // delCalendar: function (calendar) {
+            //     this.delCalendarInfo = calendar
+            // },
 
-            deleteCalendar: function () {
-                toastr.success('删除成功');
-                $('#delModel').modal('hide')
-            },
+            // deleteCalendar: function () {
+            //     toastr.success('删除成功');
+            //     $('#delModel').modal('hide')
+            // },
 
             checkMeetingRoom: function () {
                 this.meetingRomeShow = true
@@ -595,6 +537,16 @@
             displayMeetingRoom: function (value) {
                 console.log(value)
                 this.meetingRomeShow = false
+            },
+            getCalendar:function(){
+                let data={
+                    start_time:'2018-01-01',
+                    end_time:'2018-12-01'
+                }
+                fetch('get',`${config.apiUrl}/attendance/calendar`,data).then((res) => {
+                     
+                    
+                })
             }
 
 

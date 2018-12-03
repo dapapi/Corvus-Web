@@ -14,6 +14,7 @@ import config from '../assets/js/config'
 import * as qiniu from 'qiniu-js'
 
 export default {
+    props:['id'],
     name: 'file-upload',
     data(){
         return{
@@ -66,7 +67,8 @@ export default {
                 }, function (res) {
                     let fileUrl = config.imgUrl + res.key;
                     let fileName = file.name;
-                    _this.$emit('change', fileUrl, fileName, fileSize);
+                    
+                    _this.$emit('change', fileUrl, fileName, fileSize,_this.fileExt,_this.id);
                 })
             });
             this.fileInfo = file

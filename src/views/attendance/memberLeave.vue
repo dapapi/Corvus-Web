@@ -20,7 +20,7 @@
             </div>
             
             <div class="panel p-20 pr-0">
-                 <table class="table">
+                 <table v-if="list.length>0" class="table">
                     <tr>
                         <th class="cell-200">工号</th>
                         <th class="cell-200">姓名</th>
@@ -72,6 +72,9 @@
                         <td>{{item.total}}</td>
                     </tr>
                 </table>
+                <div v-else class="col-md-1" style="margin: 6rem auto">
+                    <img src="https://res.papitube.com/corvus/images/content-none.png" alt="" style="width: 100%">
+                </div>
             </div>
         </div>
     </div>

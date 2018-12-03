@@ -90,8 +90,13 @@
         created() {
 
         },
+<<<<<<< HEAD
         mounted() {
             this.getTrail()
+=======
+        mounted(){
+            // this.getTrail()
+>>>>>>> qsf
         },
         methods: {
             getTrail() {

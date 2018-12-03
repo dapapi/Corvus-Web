@@ -49,6 +49,8 @@ import Flag from './components/Flag.vue';
 import AddModifyBroadCast from './components/AddModifyBroadCast.vue';
 import RegionSelector from './components/RegionSelector.vue';
 import StaffEditSelect from './components/StaffEditSelect'
+// import echarts from 'https://cdn.bootcss.com/echarts/4.2.0-rc.2/echarts-en.common.min.js'
+
 
 Vue.config.productionTip = false;
 
@@ -99,6 +101,8 @@ Vue.component('Timepicker', Timepicker);
 Vue.component('Flag', Flag);
 Vue.component('AddModifyBroadCast', AddModifyBroadCast);
 Vue.component('RegionSelector', RegionSelector);
+
+// Vue.prototype.$echarts = echarts 
 
 Vue.prototype.globalClick = function (callback) {
     document.getElementById('app').addEventListener('click', () => {
