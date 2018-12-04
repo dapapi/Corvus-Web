@@ -1,6 +1,5 @@
 <template>
     <div class="page">
-
         <div class="page-header page-header-bordered">
             <h1 class="page-title d-inline">博主详情</h1>
 
@@ -60,7 +59,7 @@
                     </div>
                 </div>
             </div>
-
+            
             <div class="col-md-12 panel">
                 <div class="col-md-12">
                     <ul class="nav nav-tabs nav-tabs-line" role="tablist">
@@ -108,7 +107,7 @@
                             </div>
                         </div>
                         <div class="tab-pane animation-fade pb-20 fixed-button-father" id="forum-artist-projects"
-                             role="tabpanel" v-for="item in data.trails" :key="item.id">
+                             role="tabpanel" v-for="item in totalData.trails" :key="item.id">
                             <table class="table  is-indent example" data-plugin="animateList"
                                    data-animate="fade"
                                    data-child="tr"
@@ -121,7 +120,7 @@
                                     <th class="cell-300" scope="col">关联公司</th>
                                     <th class="cell-300" scope="col">录入日期</th>
                                 </tr>
-                                <tr v-for="v in item" :key="v.id">
+                                <tr v-for="v in item"  :key="v.id" v-if="v.project">
                                     <td>{{v.project.data.title}}</td>
                                     <td>
                                         <template v-if="v.project.data.status==1">
@@ -137,18 +136,22 @@
                                             沟通完成
                                         </template>
                                     </td>
-                                    <td>{{v.refused_user}}</td>
-                                    <td>{{data.sign_contract_other_name}}</td>
+                                    <td>{{v.creator}}</td>
+                                    <td>{{v.client.data.company}}</td>
                                     <td>{{v.project.data.created_at}}</td>
                                 </tr>
+                               
                             </table>
+                             <div class="col-md-1" style="margin: 6rem auto"  v-if="totalData.trails.data.length==0">
+                                <img src="https://res.papitube.com/corvus/images/content-none.png" alt="" style="width: 100%">
+                            </div>
                         </div>
                         <div class="tab-pane animation-fade pb-20 fixed-button-father" id="forum-artist-tasks"
-                             role="tabpanel">
+                             role="tabpanel" v-for="item in totalData.tasks" :key="item.id">
                             <table class="table table-hover is-indent example" data-plugin="animateList"
                                    data-animate="fade"
                                    data-child="tr"
-                                   data-selectable="selectable" v-for="item in data.tasks" :key="item.id">
+                                   data-selectable="selectable" >
                                 <tr class="animation-fade"
                                     style="animation-fill-mode: backwards; animation-duration: 250ms; animation-delay: 0ms;">
                                     <th class="cell-300" scope="col">任务名称</th>
@@ -157,9 +160,9 @@
                                     <th class="cell-300" scope="col">负责人</th>
                                     <th class="cell-300" scope="col">截止日期</th>
                                 </tr>
-                                <!-- <tr v-for="v in item"  :key="v.id">
+                                <tr v-for="v in item" :key="v.id" v-if="item">
                                     <td>{{v.title}}</td>
-                                    <td>{{v.resource.data.resource.data.title}}</td>
+                                    <td>{{v.type.data.title}}</td>
                                     <td>
                                         <template v-if="v.status==1">
                                             开始
@@ -173,8 +176,11 @@
                                     </td>
                                     <td>{{v.principal.data.name}}</td>
                                     <td>{{v.end_at}}</td>
-                                </tr> -->
+                                </tr>
                             </table>
+                            <div class="col-md-1" style="margin: 6rem auto" v-if="totalData.tasks.data.length==0">
+                                <img src="https://res.papitube.com/corvus/images/content-none.png" alt="" style="width: 100%">
+                               </div>
                             <div class="site-action fixed-button" data-plugin="actionBtn" data-toggle="modal"
                                  data-target="#addTask">
                                 <button type="button"
@@ -198,7 +204,7 @@
                                     <th class="cell-300" scope="col">是否广告</th>
                                 </tr>
                                 <tbody>
-                                <tr v-for="work in worksData">
+                                <tr v-for="work in worksData" :key="work.id"> 
                                     <td>{{work.nickname}}</td>
                                     <td>{{work.videoname}}</td>
                                     <td>{{work.release_time}}</td>
@@ -217,7 +223,9 @@
                                 </tr>
                                 </tbody>
                             </table>
-
+                            <div class="col-md-1" style="margin: 6rem auto">
+                                <img src="https://res.papitube.com/corvus/images/content-none.png" alt="" style="width: 100%">
+                            </div>
                             <div class="site-action fixed-button" data-plugin="actionBtn" data-toggle="modal"
                                  data-target="#addWork">
                                 <button type="button"
@@ -287,14 +295,11 @@
                                         </div>
                                         <div class="card-text py-10 px-0 clearfix col-md-6 float-left">
                                             <div class="col-md-2 float-left text-right pl-0">类型</div>
-                                            <div class="col-md-10 float-left font-weight-bold">
-                                                <!--<EditSelector :options="type_id" :content=""-->
-                                                <!--:is-edit="isEdit"-->
-                                                <!--@change=""></EditSelector>-->
-                                                <EditSelector :content="artistInfo.type_id"
-                                                              :options="papiCommunicationStatusArr"
+                                            <div class="col-md-10 float-left font-weight-bold" v-if="artistInfo.type">
+                                                <EditSelector :content="artistInfo.type.data.id"
+                                                              :options="artistTypeArr"
                                                               :is-edit="isEdit"
-                                                              @change="changeArtistCommunication"></EditSelector>
+                                                              @change="changArtistType"></EditSelector>
                                             </div>
                                         </div>
                                         <div class="card-text py-10 px-0 clearfix col-md-6 float-left">
@@ -309,7 +314,8 @@
                                         <div class="card-text py-10 px-0 clearfix col-md-6 float-left">
                                             <div class="col-md-2 float-left text-right pl-0">与我司签约意向</div>
                                             <div class="col-md-10 float-left font-weight-bold">
-                                                <EditSelector :content="artistInfo.intention" :options="yesOrNoArr"
+                                                <EditSelector :content="artistInfo.intention"
+                                                              :options="yesOrNoArr"
                                                               :is-edit="isEdit"
                                                               @change="changeArtistIntention"></EditSelector>
                                             </div>
@@ -317,7 +323,7 @@
                                         <div class="card-text py-10 px-0 clearfix col-md-6 float-left">
                                             <div class="col-md-2 float-left text-right pl-0">是否签约其他公司</div>
                                             <div class="col-md-10 float-left font-weight-bold">
-                                                <EditSelector :content="artistInfo.sign_contract_status"
+                                                <EditSelector :content="artistInfo.sign_contract_other"
                                                               :options="yesOrNoArr"
                                                               :is-edit="isEdit"
                                                               @change="changeArtistSignStatus"></EditSelector>
@@ -326,43 +332,51 @@
                                         <div class="card-text py-10 px-0 clearfix col-md-6 float-left">
                                             <div class="col-md-2 float-left text-right pl-0">社交平台</div>
                                             <div class="col-md-10 float-left font-weight-bold">
-
+                                                <editTextarea :content="artistInfo.platform_id" :is-edit="isEdit"
+                                                              :options="platformArr"
+                                                              @change="changeArtistPlatform_id"></editTextarea>
                                             </div>
                                         </div>
                                         <div class="card-text py-10 px-0 clearfix col-md-6 float-left">
                                             <div class="col-md-2 float-left text-right pl-0">微博主页地址</div>
                                             <div class="col-md-10 float-left font-weight-bold">
-
+                                                <editTextarea :content="artistInfo.weibo_url" :is-edit="isEdit"
+                                                              @change="changeArtistWeibo_url"></editTextarea>
                                             </div>
                                         </div>
                                         <div class="card-text py-10 px-0 clearfix col-md-6 float-left">
                                             <div class="col-md-2 float-left text-right pl-0">微博粉丝数</div>
                                             <div class="col-md-10 float-left font-weight-bold">
-
+                                                <editTextarea :content="artistInfo.weibo_fans_num" :is-edit="isEdit"
+                                                              @change="changeArtistWeibo_fans_num"></editTextarea>
                                             </div>
                                         </div>
                                         <div class="card-text py-10 px-0 clearfix col-md-6 float-left">
                                             <div class="col-md-2 float-left text-right pl-0">抖音Id</div>
                                             <div class="col-md-10 float-left font-weight-bold">
-
+                                                <editTextarea :content="artistInfo.douyin_id" :is-edit="isEdit"
+                                                              @change="changeArtistDouyin_id"></editTextarea>
                                             </div>
                                         </div>
                                         <div class="card-text py-10 px-0 clearfix col-md-6 float-left">
                                             <div class="col-md-2 float-left text-right pl-0">抖音粉丝数</div>
                                             <div class="col-md-10 float-left font-weight-bold">
-
+                                                <editTextarea :content="artistInfo.douyin_fans_num" :is-edit="isEdit"
+                                                              @change="changeArtistDouyin_fans_num"></editTextarea>
                                             </div>
                                         </div>
                                         <div class="card-text py-10 px-0 clearfix col-md-6 float-left">
                                             <div class="col-md-2 float-left text-right pl-0">小红书链接</div>
                                             <div class="col-md-10 float-left font-weight-bold">
-
+                                                <editTextarea :content="artistInfo.xiaohongshu_url" :is-edit="isEdit"
+                                                              @change="changeArtistXiaohongshu_url"></editTextarea>
                                             </div>
                                         </div>
                                         <div class="card-text py-10 px-0 clearfix col-md-6 float-left">
                                             <div class="col-md-2 float-left text-right pl-0">小红书粉丝数</div>
                                             <div class="col-md-10 float-left font-weight-bold">
-
+                                                <editTextarea :content="artistInfo.xiaohongshu_fans_num" :is-edit="isEdit"
+                                                              @change="changeArtistXiaohongshu_fans_num"></editTextarea>
                                             </div>
                                         </div>
 
@@ -379,9 +393,11 @@
                                     <div class="card-text py-5 clearfix">
                                         <div class="col-md-1 float-left text-right pl-0">录入人</div>
                                         <div class="col-md-5 float-left font-weight-bold">
+                                            {{artistInfo.name}}
                                         </div>
                                         <div class="col-md-1 float-left text-right pl-0">录入时间</div>
                                         <div class="col-md-5 float-left font-weight-bold">
+                                            {{artistInfo.created_at}}
                                         </div>
                                     </div>
                                     <div class="card-text py-5 clearfix">
@@ -390,6 +406,7 @@
                                         </div>
                                         <div class="col-md-1 float-left text-right pl-0">最近更新时间</div>
                                         <div class="col-md-5 float-left font-weight-bold">
+                                            {{artistInfo.updated_at}}
                                         </div>
                                     </div>
                                 </div>
@@ -651,13 +668,30 @@
                 isEdit: false,
                 isStatrtEdit: true,
                 papiCommunicationStatusArr: config.papiCommunicationStatusArr,
-                updateNickname: '',
-                data: '',
-                worksData: '',
-                advertisingType: '',
-                Person_id: '',
-                Users: '',
-                tasksType: ''
+                updateNickname:'',
+                updateType:'',
+                updateCommunication_status:'',
+                totalData:'',
+                worksData:'',
+                advertisingType:'',
+                Person_id:'',
+                Users:'',
+                tasksType:'',
+                tasksData:'',
+                artistTypeArr:'',
+                platformArr:[{
+                    value:0,
+                    name:'全选'
+                },{
+                    value:1,
+                    name:'抖音'
+                },{
+                    value:2,
+                    name:'微博'
+                },{
+                    value:3,
+                    name:'小红书'
+                }]
             }
         },
 
@@ -725,12 +759,7 @@
                             stack: '总量',
                             data: [320, 332, 301, 334, 390, 330, 320]
                         },
-                        // {
-                        //     name:'搜索引擎',
-                        //     type:'line',
-                        //     stack: '总量',
-                        //     data:[820, 932, 901, 934, 1290, 1330, 1320]
-                        // }
+
                     ]
                 };
 
@@ -745,30 +774,35 @@
                 };
                 fetch('get', '/bloggers/' + this.artistId, data).then(function (response) {
                     _this.artistInfo = response.data;
-
+                    console.log(_this.artistInfo)
                 });
-                fetch('get', '/bloggers/461022713?include=tasks.type,trails.project.principal,trails.client').then(function (response) {
-                    _this.data = response.data
-                    console.log(_this.data)
+                //项目
+                fetch('get','/bloggers/'+this.artistId+'?include=tasks.type,trails.project.principal,trails.client,producer,creator,affixes,type').then(function(response){
+                    _this.totalData=response.data
                 })
-                fetch('get', '/bloggers/index/production').then(function (response) {
-                    _this.worksData = response.data
-                    console.log(_this.worksData)
+                //作品
+                fetch('get','/bloggers/index/production?blogger_id='+this.artistId+'').then(function(response){
+                    _this.worksData=response.data
                 });
-                fetch('get', '/users/').then(function (response) {
-                    _this.Users = response.data;
+                //负责人
+                fetch('get','/users/').then(function(response){
+                    _this.Users=response.data;
                 })
-                fetch('get', '/task_types').then(function (response) {
-                    _this.tasksType = response.data;
+                //任务状态跑组。试戏
+                fetch('get','/task_types').then(function(response){
+                    _this.tasksType=response.data;
+                })
+                 fetch('get','/bloggers/gettype').then(function(response){      
+                    _this.artistTypeArr=response.data                  
                 })
             },
 
-            getArtistProjects: function () {
-                let _this = this;
-                fetch('get', '/stars/' + this.artistId).then(function (response) {
-                    _this.artistProjectsInfo = response.data;
-                })
-            },
+            // getArtistProjects: function () {
+            //     let _this = this;
+            //     fetch('get', '/stars/' + this.artistId).then(function (response) {
+            //         _this.artistProjectsInfo = response.data;
+            //     })
+            // },
 
             getArtistTasks: function () {
                 let _this = this;
@@ -782,13 +816,13 @@
             },
 
             addPrivacy: function () {
-                let _this = this;
-                let data = {
-                    updateNickname: this.artistInfo.name
-                }
-                fetch('put', '/bloggers/1994731356', data).then(function (response) {
-                    _this.artistTasksInfo = response.data;
-                })
+            //     let _this=this;
+            //     let data = { 
+            //         updateNickname:this.artistInfo.name 
+            //     }
+            //   fetch('put','/bloggers/1994731356',data).then(function(response){
+            //        _this.artistTasksInfo = response.data;
+            //   })
             },
 
             editBaseInfo: function () {
@@ -801,17 +835,45 @@
                 this.isEdit = false;
                 this.isStatrtEdit = true
             },
-
+              //类型
+            changArtistType: function (value) {
+               
+                this.artistInfo.type.data.id = value
+                
+            },
+            //沟通状态
+            changeArtistCommunication: function (value) {
+                
+                this.artistInfo.communication_status = value
+              
+            },
+             //签约其他公司
+            changeArtistSignStatus: function (value) {
+                
+                if(value){
+                    this.artistInfo.sign_contract_other = value
+                }else{
+                    this.artistInfo.sign_contract_other=0
+                }
+                
+            },
+            //修改
             changeArtistBaseInfo: function () {
                 this.isEdit = false;
-                this.isStatrtEdit = true
+                this.isStatrtEdit=true; 
                 let _this = this;
-                let data = {
-                    updateNickname: this.artistInfo.name
+                 this.artistId = this.$route.params.id;
+                let data = { 
+                    nickname:this.artistInfo.name,
+                    type_id:this.artistInfo.type.data.id,
+                    communication_status:this.artistInfo.communication_status,
+                    intention:this.artistInfo.intention,
+                    sign_contract_other: this.artistInfo.sign_contract_other,
+                    desc:this.artistInfo.desc
                 }
-                fetch('put', '/bloggers/1994731356', data).then(function (response) {
-                    _this.artistTasksInfo = response.data;
-                })
+                fetch('put','/bloggers/'+ this.artistId,data).then(function(response){
+                   _this.artistTasksInfo = response.data;
+              })
             },
 
 
@@ -824,7 +886,7 @@
                 }
 
             },
-
+            //添加作品
             addWork: function () {
                 let _this = this;
                 let data = {
@@ -838,38 +900,56 @@
                 }
                 fetch('post', '/bloggers/new/production', data).then(function (response) {
                     toastr.success('创建成功');
+                    
                     $('#addWork').modal('hide');
+                        _this.artistInfo.nickname='';
+                        _this.artistWorkName='';
+                        _this.workReleaseTime='';
+                        _this.artistWorkProportion='';
+                        _this.videoUrl='';
+                        _this.advertisingType='';
+                        _this.artistInfo.id='';  
                     _this.getArtist()
                 })
+              
             },
-
+            //添加任务
             addTask: function () {
-                let _this = this;
-                let data = {
-                    title: this.taskName,
-                    principal_id: this.Person_id,
-                    start_at: this.startTime,
-                    end_at: this.endTime,
-                    resource_type: 1,
-                    resourceable_id: this.artistInfo.id,
-                    desc: this.taskIntroduce,
-                    type: this.taskType
+                let _this=this;
+                console.log(this.artistInfo.id)
+                let data={
+                   title:this.taskName,
+                   principal_id:this.Person_id,
+                   start_at:this.startTime ,
+                   end_at:this.endTime,
+                   resource_type:1,
+                   resourceable_id:this.artistInfo.id,
+                   desc:this.taskIntroduce,
+                   type:this.taskType
                 }
-                fetch('post', '/tasks', data).then(function (response) {
+                fetch('post','/tasks',data).then(function(response){
+                  
                     toastr.success('创建成功');
                     $('#addTask').modal('hide');
+                    _this.tasksData=response.data;
+                    _this.taskName='';
+                    _this.Person_id='';
+                    _this.this.startTime='';
+                    _this.this.endTime='';
+                    _this.taskIntroduce='';
+                    _this.taskType='';
                     _this.getArtist()
                 })
             },
 
             changeTaskType: function (value) {
                 this.taskType = value
-                console.log(this.taskType)
+              
             },
 
             principalChange: function (value) {
-                console.log(value)
-                this.Person_id = value;
+                this.Person_id=value
+                console.log(value) 
             },
 
             participantChange: function (value) {
@@ -895,27 +975,56 @@
             changeEndMinutes: function (value) {
                 this.endMinutes = value
             },
-
+            //视频时间
             changeWorkReleaseTime: function (value) {
                 this.workReleaseTime = value
             },
-
+            //昵称
             changArtistName: function (value) {
                 this.artistInfo.name = value
             },
+          
+            
+            //平台id
+            changeArtistPlatform_id(value){
 
-            changeArtistCommunication: function (value) {
-                this.artistInfo.communication_status = value
             },
-
+            //我公司签约
             changeArtistIntention: function (value) {
-                this.artistInfo.intention = value
+                if(value){
+                  this.artistInfo.intention = value
+                }else{
+                  this.artistInfo.intention=0   
+                }
+                
             },
+           
 
-            changeArtistSignStatus: function (value) {
-                this.artistInfo.sign_contract_other = value
+            //微博地址
+            changeArtistWeibo_url(value){
+
             },
+            //微博粉丝
+            changeArtistWeibo_fans_num(value){
 
+            },
+            //抖音id
+            changeArtistDouyin_id(value){
+
+            },
+            //抖音粉丝数
+            changeArtistDouyin_fans_num(value){
+
+            },
+            //小红书地址
+            changeArtistXiaohongshu_url(value){
+
+            },
+            //小红书粉丝数
+            changeArtistXiaohongshu_fans_num(value){
+
+            },
+            //备注
             changeArtistDesc: function (value) {
                 this.artistInfo.desc = value
             },

@@ -1,6 +1,5 @@
 <template>
     <div class="page">
-
         <div class="page-header page-header-bordered">
             <h1 class="page-title d-inline">艺人详情</h1>
 
