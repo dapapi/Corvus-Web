@@ -370,8 +370,11 @@
                                     <th class="cell-300" scope="col">截止日期</th>
                                 </tr>
                                 <tbody>
-                                <tr v-for="task in trailTasksInfo" v-if="trailTasksInfo">
-                                    <td>{{ task.title }}</td>
+                                <tr v-for="task in trailTasksInfo" v-if="trailTasksInfo" :key="task.id">
+                                    <!-- {{task.id}} -->
+                                    <router-link :to="'/tasks/'+task.id">
+                                        <td>{{ task.title }}</td>
+                                    </router-link>
                                     <td>{{ task.type.data.title }}</td>
                                     <td>
                                         <template v-if="task.status === 1">进行中</template>
@@ -383,7 +386,9 @@
                                 </tr>
                                 </tbody>
                             </table>
-
+                            <div class="col-md-1" style="margin: 6rem auto" v-if="trailTasksInfo.length === 0">
+                                <img src="https://res.papitube.com/corvus/images/content-none.png" alt="" style="width: 100%">
+                            </div>
                             <div class="site-action fixed-button" data-plugin="actionBtn" data-toggle="modal"
                                  data-target="#addTask">
                                 <button type="button"
@@ -877,7 +882,7 @@
                     start_at: this.startTime + ' ' + this.startMinutes,
                     end_at: this.endTime + ' ' + this.endMinutes,
                     desc: this.taskIntroduce,
-                    participant_ids: this.participants
+                    participants: this.$store.state.newParticipantsInfo,
                 };
                 fetch('post', '/tasks', data).then(function (response) {
                     toastr.success('创建成功');
@@ -928,7 +933,8 @@
             },
 
             taskParticipantChange: function (value) {
-                this.taskParticipant.data = value
+                console.log(value);
+                // this.taskParticipant.data = value
             },
 
             changeTrailName: function (value) {
