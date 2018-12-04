@@ -503,7 +503,7 @@
 
             addProjectTrail: function (value) {
                 this.projectBaseInfo.trail = {
-                    id: value
+                    id: value[0]
                 };
                 let trailInfo = this.trailsAllInfo.find(item => item.id == value);
                 this.$store.dispatch('changePrincipal', {
