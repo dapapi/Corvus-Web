@@ -13,13 +13,11 @@
             <div class="panel col-md-12 py-5">
                 <div class="clearfix">
                     <div class="col-md-3 example float-left">
-                        <input type="text" class="form-control" id="inputPlaceholder" placeholder="请输入公司名称"
-                               style="width: 220px" v-model="companyName" @blur="changeCompany">
+                        <input v-if="true" type="text" class="form-control" placeholder="请输入公司名称"
+                               style="width: 220px" v-model="companyName" @blur="changeCompany" >
                     </div>
                     <div class="col-md-3 example float-left">
-                        <!-- <selectors @change=""
-                                   :placeholder="'请选择负责人'"></selectors> -->
-                        <input-selectors :placeholder="'请选择负责人'" @change="changePrincipalSelect"></input-selectors>
+                        <input-selectors :key="'inputSelect'" :placeholder="'请选择负责人'" @change="changePrincipalSelect"></input-selectors>
                     </div>
                     <div class="col-md-3 example float-left">
                         <!-- <selectors @change=""

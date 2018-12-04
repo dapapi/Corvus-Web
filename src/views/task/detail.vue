@@ -185,7 +185,12 @@
                                     <li v-for="attachment in taskInfo.affixes?taskInfo.affixes.data:[]">
                                         <i class="md-file pr-5"></i>{{ attachment.title }}
                                         <span class="float-right pl-10 pointer-content"
-                                              @click="deleteAttachment(attachment.id)">删除</span>
+                                         data-plugin="actionBtn" @click="setDelInfo(attachment.id)" data-toggle="modal"
+                                            data-target="#confirmFlag">删除</span>
+
+                                        <!-- <span class="pl-20 d-block float-left pointer-content" style="color: #b9b9b9"typeText="删除">
+                                        <i class="icon md-delete" aria-hidden="true"></i> -->
+                                    <!-- </span> -->
                                         <span class="float-right px-10">|</span>
                                         <span class="float-right px-10 pointer-content"
                                               @click="downloadAttachment(attachment.id, attachment.url)">下载</span>
@@ -211,7 +216,7 @@
                             <tbody>
                             <tr v-for="task in taskInfo.tasks?taskInfo.tasks.data:[]">
                                 <td @click="redirectTaskDetail(task.id)" class="pointer-content">{{ task.title }}</td>
-                                <td>{{ task.type }}</td>
+                                <td>{{ task.type.data.title }}</td>
                                 <td>
                                     <template v-if="task.status === 1">进行中</template>
                                     <template v-if="task.status === 2">已完成</template>
@@ -334,6 +339,8 @@
                             </div>
                         </div>
                     </div>
+                    <!-- 是否确认删除 -->
+
                     <div class="modal-footer">
                         <button class="btn btn-sm btn-white btn-pure" data-dismiss="modal">取消</button>
                         <button class="btn btn-primary" @click="addChildTask">确定</button>
@@ -341,6 +348,7 @@
                 </div>
             </div>
         </div>
+        <flag @confirmFlag="deleteAttachment" />
 
         <customize-field></customize-field>
 
@@ -378,7 +386,7 @@
                 startMinutes: '00:00',
                 endMinutes: '00:00',
                 taskLevelArr: config.taskLevelArr,
-                taskTypeArr: config.taskTypeArr,
+                taskTypeArr: [],
                 customizeInfo: config.customizeInfo,
                 priorityArr: config.priorityArr,
                 taskStatusArr: config.taskStatusArr.push({name: '全部', value: ''}),
@@ -386,7 +394,8 @@
                 linkData: [],
                 resourceType: '', // 资源type
                 resourceableId: '', // 资源id
-                user: {} // 个人信息
+                user: {}, // 个人信息
+                attachmentId: '', // 附件id
             }
         },
         created () {
@@ -620,10 +629,10 @@
                 })
             },
 
-            deleteAttachment: function (attachmentId) {
-                fetch('delete', '/tasks/' + this.taskId + '/affixes' + attachmentId, this.changeInfo).then(function (response) {
+            deleteAttachment: function () {
+                fetch('delete', '/tasks/' + this.taskId + '/affixes/' + this.attachmentId, this.changeInfo).then(response => {
                     toastr.success("删除成功");
-                    let index = this.taskInfo.affixes.data.indexOf(this.taskInfo.affixes.data.find(item => item.id == attachmentId));
+                    let index = this.taskInfo.affixes.data.indexOf(this.taskInfo.affixes.data.find(item => item.id == this.attachmentId));
                     this.taskInfo.affixes.data.splice(index, 1);
                 })
             },
@@ -767,13 +776,16 @@
             },
             // 获取任务类型列表
             getTaskType () {
-                fetch('get', '/task_types/all').then(res => {
+                fetch('get', '/task_types').then(res => {
                     const data = res.data
                     this.taskTypeArr = data.map(n => {
                         return {name: n.title, value: n.id}
                     })
                     this.taskTypeArr.unshift({name: '全部', value: ''})
                 })
+            },
+            setDelInfo (id) {
+                this.attachmentId = id
             }
         }
     }
