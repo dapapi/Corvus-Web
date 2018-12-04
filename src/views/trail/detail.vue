@@ -697,7 +697,7 @@
         methods: {
             getAllType(){
                 let _this = this
-                fetch('get','/task_types/all').then((response) => {
+                fetch('get','/task_types').then((response) => {
                     _this.taskTypeArr = response.data
                 })
             },

@@ -805,7 +805,7 @@
             },
             // 获取任务类型列表
             getTaskType () {
-                fetch('get', '/task_types/all').then(res => {
+                fetch('get', '/task_types').then(res => {
                     const data = res.data
                     this.taskTypeArr = data.map(n => {
                         return {name: n.title, value: n.id}

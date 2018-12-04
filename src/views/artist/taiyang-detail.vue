@@ -775,7 +775,7 @@
 
             getTaskType: function () {
                 let _this = this;
-                fetch('get', '/task_types/all').then(function (response) {
+                fetch('get', '/task_types').then(function (response) {
                     for (let i = 0; i < response.data.length; i++) {
                         _this.taskTypeArr.push({
                             value: response.data[i].id,
