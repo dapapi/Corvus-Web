@@ -33,6 +33,41 @@
                         </div>
                     </div>
                 </div>
+                <div class="clearfix">
+                    <div class="col-md-6 float-left pl-0 mb-20" style="border-right: 1px solid #eee">
+                        <div class="col-md-6">任务 5/12</div>
+                        <div class="clearfix example">
+                            <div class="col-md-3 float-left">电话会议</div>
+                            <div class="col-md-3 float-left">张佳佳</div>
+                            <div class="col-md-3 float-left">2018-12-03 11:10</div>
+                            <div class="col-md-3 float-left">进行中</div>
+                        </div>
+                        <div class="clearfix example">
+                            <div class="col-md-3 float-left">电话会议</div>
+                            <div class="col-md-3 float-left">张佳佳</div>
+                            <div class="col-md-3 float-left">2018-12-03 11:10</div>
+                            <div class="col-md-3 float-left">进行中</div>
+                        </div>
+                        <div class="clearfix example">
+                            <div class="col-md-3 float-left">电话会议</div>
+                            <div class="col-md-3 float-left">张佳佳</div>
+                            <div class="col-md-3 float-left">2018-12-03 11:10</div>
+                            <div class="col-md-3 float-left">进行中</div>
+                        </div>
+                        <div class="clearfix example">
+                            <div class="col-md-3 float-left">电话会议</div>
+                            <div class="col-md-3 float-left">张佳佳</div>
+                            <div class="col-md-3 float-left">2018-12-03 11:10</div>
+                            <div class="col-md-3 float-left">进行中</div>
+                        </div>
+                        <div class="clearfix example">
+                            <div class="col-md-3 float-left">电话会议</div>
+                            <div class="col-md-3 float-left">张佳佳</div>
+                            <div class="col-md-3 float-left">2018-12-03 11:10</div>
+                            <div class="col-md-3 float-left">进行中</div>
+                        </div>
+                    </div>
+                </div>
             </div>
 
             <div class="col-md-12 panel">
@@ -86,7 +121,7 @@
                             <table class="table  is-indent example" data-plugin="animateList"
                                    data-animate="fade"
                                    data-child="tr"
-                                   data-selectable="selectable" >
+                                   data-selectable="selectable">
                                 <tr class="animation-fade"
                                     style="animation-fill-mode: backwards; animation-duration: 250ms; animation-delay: 0ms;">
                                     <th class="cell-300" scope="col">项目名称</th>
@@ -95,7 +130,7 @@
                                     <th class="cell-300" scope="col">关联公司</th>
                                     <th class="cell-300" scope="col">录入日期</th>
                                 </tr>
-                                <tr v-for="v in item"  :key="v.id">
+                                <tr v-for="v in item" :key="v.id">
                                     <td>{{v.project.data.title}}</td>
                                     <td>
                                         <template v-if="v.project.data.status==1">
@@ -118,7 +153,7 @@
                             </table>
                         </div>
                         <div class="tab-pane animation-fade pb-20 fixed-button-father" id="forum-artist-tasks"
-                             role="tabpanel" >
+                             role="tabpanel">
                             <table class="table table-hover is-indent example" data-plugin="animateList"
                                    data-animate="fade"
                                    data-child="tr"
@@ -172,21 +207,21 @@
                                     <th class="cell-300" scope="col">是否广告</th>
                                 </tr>
                                 <tbody>
-                                <tr v-for="work in worksData"> 
+                                <tr v-for="work in worksData">
                                     <td>{{work.nickname}}</td>
                                     <td>{{work.videoname}}</td>
                                     <td>{{work.release_time}}</td>
-                                    <td>{{work.read_proportion}}</td>  
+                                    <td>{{work.read_proportion}}</td>
                                     <td>
                                         <template v-show="wock.link">
                                             www.baidu.com
                                         </template>
                                     </td>
                                     <td v-if="work.advertising==1">
-                                       是
+                                        是
                                     </td>
                                     <td v-else-if="work.advertising==0">
-                                       否
+                                        否
                                     </td>
                                 </tr>
                                 </tbody>
@@ -381,7 +416,8 @@
                         </div>
                         <div class="card-block">
                             <div class="col-md-7 pl-0">
-                                <TaskFollowUp :follow-type="'博主'" trailType='blogger' :trailId="$route.params.id"></TaskFollowUp>
+                                <TaskFollowUp :follow-type="'博主'" trailType='blogger'
+                                              :trailId="$route.params.id"></TaskFollowUp>
                             </div>
                         </div>
                     </div>
@@ -425,7 +461,7 @@
                             <div class="col-md-2 text-right float-left">负责人</div>
                             <div class="col-md-5 float-left pl-0">
                                 <selectors :placeholder="'请选择负责人'"
-                                                 @change="principalChange" :options="Users"></selectors>
+                                           @change="principalChange" :options="Users"></selectors>
                             </div>
                         </div>
                         <div class="example">
@@ -622,15 +658,15 @@
                 taskIntroduce: '',
                 artistWorkName: '',
                 isEdit: false,
-                isStatrtEdit:true,
+                isStatrtEdit: true,
                 papiCommunicationStatusArr: config.papiCommunicationStatusArr,
-                updateNickname:'',
-                data:'',
-                worksData:'',
-                advertisingType:'',
-                Person_id:'',
-                Users:'',
-                tasksType:''
+                updateNickname: '',
+                data: '',
+                worksData: '',
+                advertisingType: '',
+                Person_id: '',
+                Users: '',
+                tasksType: ''
             }
         },
 
@@ -640,8 +676,8 @@
         },
 
         methods: {
-            charts:function(){
-            let myChart = echarts.init(document.getElementById('myChart'));
+            charts: function () {
+                let myChart = echarts.init(document.getElementById('myChart'));
 
                 // 指定图表的配置项和数据
                 let option = {
@@ -718,21 +754,21 @@
                 };
                 fetch('get', '/bloggers/' + this.artistId, data).then(function (response) {
                     _this.artistInfo = response.data;
-                 
+
                 });
-                fetch('get','/bloggers/461022713?include=tasks.type,trails.project.principal,trails.client').then(function(response){
-                    _this.data=response.data
+                fetch('get', '/bloggers/461022713?include=tasks.type,trails.project.principal,trails.client').then(function (response) {
+                    _this.data = response.data
                     console.log(_this.data)
                 })
-                fetch('get','/bloggers/index/production').then(function(response){
-                    _this.worksData=response.data
+                fetch('get', '/bloggers/index/production').then(function (response) {
+                    _this.worksData = response.data
                     console.log(_this.worksData)
                 });
-                fetch('get','/users/').then(function(response){
-                    _this.Users=response.data;
+                fetch('get', '/users/').then(function (response) {
+                    _this.Users = response.data;
                 })
-                fetch('get','/task_types').then(function(response){
-                    _this.tasksType=response.data;
+                fetch('get', '/task_types').then(function (response) {
+                    _this.tasksType = response.data;
                 })
             },
 
@@ -755,61 +791,61 @@
             },
 
             addPrivacy: function () {
-                let _this=this;
-                let data = { 
-                    updateNickname:this.artistInfo.name 
+                let _this = this;
+                let data = {
+                    updateNickname: this.artistInfo.name
                 }
-              fetch('put','/bloggers/1994731356',data).then(function(response){
-                   _this.artistTasksInfo = response.data;
-              })
+                fetch('put', '/bloggers/1994731356', data).then(function (response) {
+                    _this.artistTasksInfo = response.data;
+                })
             },
 
             editBaseInfo: function () {
                 this.isEdit = true;
-                this.isStatrtEdit=false
+                this.isStatrtEdit = false
                 this.changeInfo = [];
             },
 
             cancelEdit: function () {
                 this.isEdit = false;
-                this.isStatrtEdit=true
+                this.isStatrtEdit = true
             },
 
             changeArtistBaseInfo: function () {
                 this.isEdit = false;
-                this.isStatrtEdit=true 
+                this.isStatrtEdit = true
                 let _this = this;
-                let data = { 
-                    updateNickname:this.artistInfo.name 
+                let data = {
+                    updateNickname: this.artistInfo.name
                 }
-                fetch('put','/bloggers/1994731356',data).then(function(response){
-                   _this.artistTasksInfo = response.data;
-              })
+                fetch('put', '/bloggers/1994731356', data).then(function (response) {
+                    _this.artistTasksInfo = response.data;
+                })
             },
 
 
             changeWorkAd: function (value) {
                 console.log(value)
-                if(value){
-                  this.advertisingType=value;
-                }else{
-                    this.advertisingType=0;
+                if (value) {
+                    this.advertisingType = value;
+                } else {
+                    this.advertisingType = 0;
                 }
-                
+
             },
 
             addWork: function () {
-                let _this=this;
-                let data={
-                   nickname:this.artistInfo.nickname,
-                   videoname:this.artistWorkName,
-                   release_time:this.workReleaseTime,
-                   read_proportion:this.artistWorkProportion,
-                   link:this.videoUrl,
-                   advertising:this.advertisingType,
-                   blogger_id:this.artistInfo.id
+                let _this = this;
+                let data = {
+                    nickname: this.artistInfo.nickname,
+                    videoname: this.artistWorkName,
+                    release_time: this.workReleaseTime,
+                    read_proportion: this.artistWorkProportion,
+                    link: this.videoUrl,
+                    advertising: this.advertisingType,
+                    blogger_id: this.artistInfo.id
                 }
-                fetch('post','/bloggers/new/production',data).then(function(response){
+                fetch('post', '/bloggers/new/production', data).then(function (response) {
                     toastr.success('创建成功');
                     $('#addWork').modal('hide');
                     _this.getArtist()
@@ -817,18 +853,18 @@
             },
 
             addTask: function () {
-                let _this=this;
-                let data={
-                   title:this.taskName,
-                   principal_id:this.Person_id,
-                   start_at:this.startTime ,
-                   end_at:this.endTime,
-                   resource_type:1,
-                   resourceable_id:this.artistInfo.id,
-                   desc:this.taskIntroduce,
-                   type:this.taskType
+                let _this = this;
+                let data = {
+                    title: this.taskName,
+                    principal_id: this.Person_id,
+                    start_at: this.startTime,
+                    end_at: this.endTime,
+                    resource_type: 1,
+                    resourceable_id: this.artistInfo.id,
+                    desc: this.taskIntroduce,
+                    type: this.taskType
                 }
-                fetch('post','/tasks',data).then(function(response){
+                fetch('post', '/tasks', data).then(function (response) {
                     toastr.success('创建成功');
                     $('#addTask').modal('hide');
                     _this.getArtist()
@@ -842,7 +878,7 @@
 
             principalChange: function (value) {
                 console.log(value)
-                this.Person_id=value;  
+                this.Person_id = value;
             },
 
             participantChange: function (value) {

@@ -25,10 +25,11 @@
                     </div>
                     <div class="col-md-3 example float-left">
                         <selectors :options="artistTypeArr"
-                                   :placeholder="'请选择博主类型'"  @change="typeFilter" v-model="typeF"></selectors>
+                                   :placeholder="'请选择博主类型'" @change="typeFilter" v-model="typeF"></selectors>
                     </div>
                     <div class="col-md-3 example float-left">
-                        <selectors :placeholder="'请选择沟通状态'" :options="papiCommunicationStatusArr" @change="CommunicationStatus" v-model="statusF"></selectors>
+                        <selectors :placeholder="'请选择沟通状态'" :options="papiCommunicationStatusArr"
+                                   @change="CommunicationStatus" v-model="statusF"></selectors>
                     </div>
                     <div class="col-md-3 example float-left">
                         <button type="button" class="btn btn-default waves-effect waves-classic float-right"
@@ -46,20 +47,12 @@
                                aria-controls="forum-base"
                                aria-expanded="true" role="tab">签约中</a>
                         </li>
-<<<<<<< HEAD
-                        <li class="nav-item" role="presentation" @click="getArtists(2)">
-=======
                         <li class="nav-item" role="presentation" @click="getArtists(1,2)">
->>>>>>> hp
                             <a class="nav-link" data-toggle="tab" href="#forum-artist"
                                aria-controls="forum-present"
                                aria-expanded="false" role="tab">已签约</a>
                         </li>
-<<<<<<< HEAD
-                        <li class="nav-item" role="presentation" @click="getArtists(3)">
-=======
                         <li class="nav-item" role="presentation" @click="getArtists(1,3)">
->>>>>>> hp
                             <a class="nav-link" data-toggle="tab" href="#forum-artist"
                                aria-controls="forum-present"
                                aria-expanded="false" role="tab">已解约</a>
@@ -88,15 +81,15 @@
                                 <th class="cell-300" scope="col">录入时间</th>
                             </tr>
                             <tbody>
-                            <tr v-for="artist in artistsInfo" :key="artist.id" class="pointer-content" >
+                            <tr v-for="artist in artistsInfo" :key="artist.id" class="pointer-content">
                                 <td>
-                                    <span class="checkbox-custom checkbox-primary" >
+                                    <span class="checkbox-custom checkbox-primary">
                                         <input class="selectable-item" type="checkbox" :id="'row-' + artist.id"
                                                :value="artist.id" @change="selectArtists(artist.id)">
                                         <label :for="'row-' + artist.id"></label>
                                     </span>
                                 </td>
-                                <td  @click="redirectArtistDetail(artist.id)">{{ artist.nickname
+                                <td @click="redirectArtistDetail(artist.id)">{{ artist.nickname
                                     }}
                                 </td>
                                 <td>{{ artist.type.data.name }}</td>
@@ -160,7 +153,8 @@
                             <div class="col-md-2 text-right float-left">平台</div>
                             <div class="col-md-10 float-left pl-0">
                                 <div class="checkbox-custom checkbox-primary d-inline pr-20">
-                                    <input type="checkbox" name="platform" id="platformAll" @change="changeCheckbox(1)" v-model="checkboxedone">
+                                    <input type="checkbox" name="platform" id="platformAll" @change="changeCheckbox(1)"
+                                           v-model="checkboxedone">
                                     <label for="platformAll">全选</label>
                                 </div>
                                 <div class="checkbox-custom checkbox-primary d-inline pr-20">
@@ -174,7 +168,8 @@
                                     <label for="platformDouyin">抖音</label>
                                 </div>
                                 <div class="checkbox-custom checkbox-primary d-inline pr-20">
-                                    <input type="checkbox" name="platform" id="platformXHS" @change="changeCheckbox(4)" v-model="checkoutfix">
+                                    <input type="checkbox" name="platform" id="platformXHS" @change="changeCheckbox(4)"
+                                           v-model="checkoutfix">
                                     <label for="platformXHS">小红书</label>
                                 </div>
                             </div>
@@ -293,25 +288,25 @@
                 signCompany: '',
                 artistDesc: '',
                 artistTypeArr: '',
-                artistTypeId:'',
+                artistTypeId: '',
                 signCompanyName: '',
-                companyCityArr:config. companyCityArr,
-                trailFilter:'',
-                userData:'',
-                communicationArr:'',
-                communication:'',
-                intention_desc:'',
-                typeF:'',
-                statusF:'',
-                checkboxedone:'',
-                checkboxtow:'',
-                checkboxedthree:'',
-                checkoutfix:'',
-                filetData:{
-                    include:'type,creator,tasks,affixes,producer',
+                companyCityArr: config.companyCityArr,
+                trailFilter: '',
+                userData: '',
+                communicationArr: '',
+                communication: '',
+                intention_desc: '',
+                typeF: '',
+                statusF: '',
+                checkboxedone: '',
+                checkboxtow: '',
+                checkboxedthree: '',
+                checkoutfix: '',
+                filetData: {
+                    include: 'type,creator,tasks,affixes,producer',
                 },
-                filterObject:{
-                    include:'type,creator,tasks,affixes,producer',
+                filterObject: {
+                    include: 'type,creator,tasks,affixes,producer',
                 }
             }
         },
@@ -323,54 +318,54 @@
         },
 
         methods: {
-            getArtists: function (page = 1,signStatus) {
-                if(signStatus){
-                   this.filetData.status= signStatus
+            getArtists: function (page = 1, signStatus) {
+                if (signStatus) {
+                    this.filetData.status = signStatus
                 }
-                this.filetData.page=page 
-               
+                this.filetData.page = page
+
                 let _this = this;
                 fetch('get', '/bloggers', this.filetData).then(function (response) {
-                    
+
                     _this.artistsInfo = response.data;
-                    console.log(_this.artistsInfo )
+                    console.log(_this.artistsInfo)
                     _this.current_page = response.meta.pagination.current_page;
                     _this.total = response.meta.pagination.total;
                     _this.total_pages = response.meta.pagination.total_pages;
                 });
-                fetch('get','/bloggers/gettype').then(function(response){      
-                    _this.artistTypeArr=response.data                  
+                fetch('get', '/bloggers/gettype').then(function (response) {
+                    _this.artistTypeArr = response.data
                 })
             },
-            filterGo(){ 
+            filterGo() {
                 let _this = this;
                 this.filterObject.name = this.trailFilter;
                 console.log(this.filterObject)
-                fetch('get','/bloggers',this.filterObject).then(function(response){  
-                             
-                    _this.artistsInfo =response.data
+                fetch('get', '/bloggers', this.filterObject).then(function (response) {
+
+                    _this.artistsInfo = response.data
                     console.log(_this.artistsInfo)
-                })      
-            },
-            typeFilter(value){
-                this.filterObject.type=value;
-                console.log(this.filterObject)
-                let _this = this;
-                fetch('get','/bloggers', this.filterObject).then(function(response){
-                     _this.artistsInfo = response.data
                 })
             },
-            CommunicationStatus(value){
-                 this.filterObject.communication_status=value;
+            typeFilter(value) {
+                this.filterObject.type = value;
+                console.log(this.filterObject)
                 let _this = this;
-                fetch('get','/bloggers', this.filterObject).then(function(response){
-                     _this.artistsInfo = response.data
+                fetch('get', '/bloggers', this.filterObject).then(function (response) {
+                    _this.artistsInfo = response.data
+                })
+            },
+            CommunicationStatus(value) {
+                this.filterObject.communication_status = value;
+                let _this = this;
+                fetch('get', '/bloggers', this.filterObject).then(function (response) {
+                    _this.artistsInfo = response.data
                 })
             },
             customize: function (value) {
 
             },
-            getUser(){
+            getUser() {
                 let _this = this;
                 fetch('get', '/users').then(function (response) {
                     _this.userData = response.data
@@ -380,45 +375,45 @@
                 this.artistStatus = value
             },
 
-            changeCheckbox: function (value) {   
+            changeCheckbox: function (value) {
                 console.log(value)
                 this.platformType = value
-                if(this.checkboxedone==1){
-                    this.checkboxtow=true;
-                    this.checkboxedthree=true;
-                    this.checkoutfix=true;
+                if (this.checkboxedone == 1) {
+                    this.checkboxtow = true;
+                    this.checkboxedthree = true;
+                    this.checkoutfix = true;
                 }
- 
-                else if(this.checkboxtow==true&&this.checkboxedthree==true&&this.checkoutfix==true){
-                    this.checkboxedone=true
-                }else if(this.checkboxtow==false||this.checkboxedthree==false||this.checkoutfix==false){
-                    this.checkboxedone=false
+
+                else if (this.checkboxtow == true && this.checkboxedthree == true && this.checkoutfix == true) {
+                    this.checkboxedone = true
+                } else if (this.checkboxtow == false || this.checkboxedthree == false || this.checkoutfix == false) {
+                    this.checkboxedone = false
                 }
             },
 
             changeCommunicationType: function (value) {
-                this.communication=value
-           
+                this.communication = value
+
             },
 
             changeSignIntention: function (value) {
-                if(value){
-                    this.signIntention = value  
-                }else{
+                if (value) {
+                    this.signIntention = value
+                } else {
                     this.signIntention = 0
                 }
-                console.log( this.signIntention )
-              
+                console.log(this.signIntention)
+
             },
 
             isSignCompany: function (value) {
-                 
-                if(value){
-                    this.signCompany = value  
-                }else{
+
+                if (value) {
+                    this.signCompany = value
+                } else {
                     this.signCompany = 0
                 }
-               console.log(this.signCompany)
+                console.log(this.signCompany)
             },
 
             changeWeiboFansNum: function (value) {
@@ -432,12 +427,12 @@
             changeXHSFansNum: function (value) {
                 this.xhsFansNum = value
             },
-             changeArtistType: function (value) {
-                this.artistTypeId=value
+            changeArtistType: function (value) {
+                this.artistTypeId = value
                 console.log(this.artistTypeId)
             },
             addArtist: function () {
-                let _this=this;
+                let _this = this;
                 let data = {
                     // 没有平台,微博,抖音,小红书
                     nickname: this.artistName,
@@ -449,15 +444,15 @@
                     sign_contract_other: this.signCompany,
                     sign_contract_other_name: this.signCompanyName,
                     // desc:this.artistDesc,
-                    
+
                 };
                 fetch('post', '/bloggers', data).then(function (response) {
                     toastr.success('创建成功');
                     $('#addArtist').modal('hide');
                     _this.getArtists()
-                 
+
                 })
-                
+
             },
 
             selectArtists: function (value) {
@@ -478,7 +473,6 @@
                 }
             },
 
-           
 
             redirectArtistDetail: function (artistId) {
                 this.$router.push({path: 'blogger/' + artistId})

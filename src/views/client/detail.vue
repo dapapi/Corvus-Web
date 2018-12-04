@@ -38,6 +38,62 @@
                             </div>
                         </div>
                     </div>
+                    <div class="clearfix">
+                        <div class="col-md-6 float-left pl-0 mb-20" style="border-right: 1px solid #eee">
+                            <div class="col-md-6">任务 5/12</div>
+                            <div class="clearfix example">
+                                <div class="col-md-3 float-left">电话会议</div>
+                                <div class="col-md-3 float-left">张佳佳</div>
+                                <div class="col-md-3 float-left">2018-12-03 11:10</div>
+                                <div class="col-md-3 float-left">进行中</div>
+                            </div>
+                            <div class="clearfix example">
+                                <div class="col-md-3 float-left">电话会议</div>
+                                <div class="col-md-3 float-left">张佳佳</div>
+                                <div class="col-md-3 float-left">2018-12-03 11:10</div>
+                                <div class="col-md-3 float-left">进行中</div>
+                            </div>
+                            <div class="clearfix example">
+                                <div class="col-md-3 float-left">电话会议</div>
+                                <div class="col-md-3 float-left">张佳佳</div>
+                                <div class="col-md-3 float-left">2018-12-03 11:10</div>
+                                <div class="col-md-3 float-left">进行中</div>
+                            </div>
+                            <div class="clearfix example">
+                                <div class="col-md-3 float-left">电话会议</div>
+                                <div class="col-md-3 float-left">张佳佳</div>
+                                <div class="col-md-3 float-left">2018-12-03 11:10</div>
+                                <div class="col-md-3 float-left">进行中</div>
+                            </div>
+                            <div class="clearfix example">
+                                <div class="col-md-3 float-left">电话会议</div>
+                                <div class="col-md-3 float-left">张佳佳</div>
+                                <div class="col-md-3 float-left">2018-12-03 11:10</div>
+                                <div class="col-md-3 float-left">进行中</div>
+                            </div>
+                        </div>
+                        <div class="col-md-6 float-left pl-0 mb-20">
+                            <div class="col-md-6">项目</div>
+                            <div class="clearfix example">
+                                <div class="col-md-3 float-left">Ugg代言</div>
+                                <div class="col-md-3 float-left">商务项目</div>
+                                <div class="col-md-3 float-left">2018-12-03 11:10</div>
+                                <div class="col-md-3 float-left">进行中</div>
+                            </div>
+                            <div class="clearfix example">
+                                <div class="col-md-3 float-left">星巴克代言</div>
+                                <div class="col-md-3 float-left">商务项目</div>
+                                <div class="col-md-3 float-left">2018-12-03 11:10</div>
+                                <div class="col-md-3 float-left">进行中</div>
+                            </div>
+                            <div class="clearfix example">
+                                <div class="col-md-3 float-left">万达商演</div>
+                                <div class="col-md-3 float-left">影视项目</div>
+                                <div class="col-md-3 float-left">2018-12-03 11:10</div>
+                                <div class="col-md-3 float-left">进行中</div>
+                            </div>
+                        </div>
+                    </div>
                 </div>
 
             </div>
@@ -88,7 +144,11 @@
                             </tr>
                             <tbody>
                             <tr v-for="trail in clientTrailsInfo">
-                                <td><router-link :to="{name: 'trails/detail', params: {id: trail.id}}">{{ trail.title }}</router-link></td>
+                                <td>
+                                    <router-link :to="{name: 'trails/detail', params: {id: trail.id}}">{{ trail.title
+                                        }}
+                                    </router-link>
+                                </td>
                                 <td>
                                     <template v-if="trail.progress_status === 1">未确定合作</template>
                                     <template v-if="trail.progress_status === 2">已确定合作</template>
@@ -101,7 +161,8 @@
                             </tbody>
                         </table>
                         <div class="col-md-1" style="margin: 6rem auto" v-if="clientTrailsInfo.length === 0">
-                            <img src="https://res.papitube.com/corvus/images/content-none.png" alt="" style="width: 100%">
+                            <img src="https://res.papitube.com/corvus/images/content-none.png" alt=""
+                                 style="width: 100%">
                         </div>
                     </div>
                     <div class="tab-pane animation-fade pb-20" id="forum-project" role="tabpanel">
@@ -117,7 +178,11 @@
                                 <th class="cell-300" scope="col">录入日期</th>
                             </tr>
                             <tr v-for="project in clientProjectsInfo">
-                                <td><router-link :to="{name: 'projects/detail', params: {id: project.id}}">{{ project.title }}</router-link></td>
+                                <td>
+                                    <router-link :to="{name: 'projects/detail', params: {id: project.id}}">{{
+                                        project.title }}
+                                    </router-link>
+                                </td>
                                 <td>
                                     <template v-if="project.status === 1">进行中</template>
                                     <template v-if="project.status === 2">完成</template>
@@ -130,7 +195,8 @@
                             </tr>
                         </table>
                         <div class="col-md-1" v-if="clientProjectsInfo.length === 0" style="margin: 6rem auto">
-                            <img src="https://res.papitube.com/corvus/images/content-none.png" alt="" style="width: 100%">
+                            <img src="https://res.papitube.com/corvus/images/content-none.png" alt=""
+                                 style="width: 100%">
                         </div>
                     </div>
                     <div class="tab-pane animation-fade pb-20 fixed-button-father" id="forum-task" role="tabpanel">
@@ -147,7 +213,10 @@
                             </tr>
                             <tbody>
                             <tr v-for="task in clientTasksInfo">
-                                <td><router-link :to="{name: 'tasks/detail', params: {id: task.id}}">{{ task.title }}</router-link></td>
+                                <td>
+                                    <router-link :to="{name: 'tasks/detail', params: {id: task.id}}">{{ task.title }}
+                                    </router-link>
+                                </td>
                                 <td>{{ task.type?task.type.data.title:'' }}</td>
                                 <td>
                                     <template v-if="task.status === 1">进行中</template>
@@ -161,7 +230,8 @@
 
                         </table>
                         <div class="col-md-1" style="margin: 6rem auto" v-if="clientTasksInfo.length === 0">
-                            <img src="https://res.papitube.com/corvus/images/content-none.png" alt="" style="width: 100%">
+                            <img src="https://res.papitube.com/corvus/images/content-none.png" alt=""
+                                 style="width: 100%">
                         </div>
                         <div class="site-action fixed-button" data-plugin="actionBtn" data-toggle="modal"
                              data-target="#addTask">
@@ -207,7 +277,8 @@
                                     <div class="col-md-1 float-left text-right pl-0">负责人</div>
                                     <div class="col-md-5 float-left font-weight-bold">
 
-                                        <EditInput-selector :is-edit="isEdit"  :placeholder="'请选择负责人'"  @change="selectPrincipal"
+                                        <EditInput-selector :is-edit="isEdit" :placeholder="'请选择负责人'"
+                                                            @change="selectPrincipal"
                                                             :select-type="'principal'"></EditInput-selector>
                                     </div>
                                 </div>
@@ -242,10 +313,12 @@
 
                                 <div class="card-text py-5 clearfix">
                                     <div class="col-md-1 float-left text-right pl-0">录入人</div>
-                                    <div class="col-md-5 float-left font-weight-bold">{{clientInfo.creator?clientInfo.creator.data.name:''}}
+                                    <div class="col-md-5 float-left font-weight-bold">
+                                        {{clientInfo.creator?clientInfo.creator.data.name:''}}
                                     </div>
                                     <div class="col-md-1 float-left text-right pl-0">录入时间</div>
-                                    <div class="col-md-5 float-left font-weight-bold">{{clientInfo.created_at?clientInfo.created_at:''}}
+                                    <div class="col-md-5 float-left font-weight-bold">
+                                        {{clientInfo.created_at?clientInfo.created_at:''}}
                                     </div>
                                 </div>
                                 <div class="card-text py-5 clearfix">
@@ -254,7 +327,8 @@
                                     <div class="col-md-5 float-left font-weight-bold">
                                     </div>
                                     <div class="col-md-1 float-left text-right pl-0">最近更新时间</div>
-                                    <div class="col-md-5 float-left font-weight-bold">{{clientInfo.updated_at?clientInfo.updated_at:''}}
+                                    <div class="col-md-5 float-left font-weight-bold">
+                                        {{clientInfo.updated_at?clientInfo.updated_at:''}}
                                     </div>
                                 </div>
                             </div>
@@ -285,15 +359,16 @@
                                     <span class="pr-20 d-block float-left pointer-content"
                                           style="color: #b9b9b9;"
                                           data-plugin="actionBtn" data-toggle="modal"
-                                            data-target="#addContact"
-                                            @click="changeEditStatus(false,contact)"
-                                        >
+                                          data-target="#addContact"
+                                          @click="changeEditStatus(false,contact)"
+                                    >
                                         <i class="icon md-edit" aria-hidden="true"></i>
                                     </span>
                                     <span class="d-block float-left"
                                           style="width: 1px; height: 14px;border-right: 1px solid #b9b9b9;margin: 3px;"></span>
-                                    <span class="pl-20 d-block float-left pointer-content" style="color: #b9b9b9" data-plugin="actionBtn" @click="setDelInfo(contact.id)" data-toggle="modal"
-                                            data-target="#confirmFlag" typeText="删除">
+                                    <span class="pl-20 d-block float-left pointer-content" style="color: #b9b9b9"
+                                          data-plugin="actionBtn" @click="setDelInfo(contact.id)" data-toggle="modal"
+                                          data-target="#confirmFlag" typeText="删除">
                                         <i class="icon md-delete" aria-hidden="true"></i>
                                     </span>
                                 </td>
@@ -301,7 +376,8 @@
                             </tbody>
                         </table>
                         <div class="col-md-1" style="margin: 6rem auto" v-if="clientContactsInfo.length === 0">
-                            <img src="https://res.papitube.com/corvus/images/content-none.png" alt="" style="width: 100%">
+                            <img src="https://res.papitube.com/corvus/images/content-none.png" alt=""
+                                 style="width: 100%">
                         </div>
                         <div class="site-action fixed-button" data-plugin="actionBtn" data-toggle="modal"
                              data-target="#addContact"
@@ -326,7 +402,8 @@
                         </div>
                         <div class="card-block">
                             <div class="col-md-7 pl-0">
-                                <TaskFollowUp :follow-type="'客户'" :trailId='clientId' trailType='clients'></TaskFollowUp>
+                                <TaskFollowUp :follow-type="'客户'" :trailId='clientId'
+                                              trailType='clients'></TaskFollowUp>
                             </div>
                         </div>
                     </div>
@@ -364,7 +441,7 @@
                             <div class="col-md-2 text-right float-left">联系人电话</div>
                             <div class="col-md-10 float-left">
                                 <input type="text" title="" class="form-control"
-                                       placeholder="请输入联系人电话" v-model="editConfig.phone" />
+                                       placeholder="请输入联系人电话" v-model="editConfig.phone"/>
                             </div>
                         </div>
                         <div class="example">
@@ -460,7 +537,7 @@
         </div>
 
         <!-- 是否确认删除 -->
-        <flag @confirmFlag="delContact" />
+        <flag @confirmFlag="delContact"/>
     </div>
 
 </template>
@@ -490,7 +567,7 @@
                 startMinutes: '00:00',
                 endMinutes: '00:00',
                 taskEndTime: '',
-                taskLevel: 1, 
+                taskLevel: 1,
                 isEdit: false,
                 clientInfo: {},
                 clientTasksInfo: [],
@@ -511,7 +588,7 @@
                 contactId: '', // 联系人id
             }
         },
-        beforeMount () {
+        beforeMount() {
             this.clientId = this.$route.params.id;
         },
         mounted() {
@@ -634,7 +711,7 @@
                 let _this = this;
                 fetch('get', '/clients/' + this.clientId + '/contacts').then(function (response) {
                     _this.clientContactsInfo = response.data
-                    
+
                 })
             },
 
@@ -652,14 +729,14 @@
                 }
 
                 let _this = this
-                fetch(this.isEditContact?'post': 'put', `/clients/${this.clientId}/contacts${!this.isEditContact?'/'+this.editConfig.id: ''}`, data).then(function (response) {
+                fetch(this.isEditContact ? 'post' : 'put', `/clients/${this.clientId}/contacts${!this.isEditContact ? '/' + this.editConfig.id : ''}`, data).then(function (response) {
                     _this.clientContactsInfo.push(response.data);
-                    toastr.success(_this.isEditContact?'添加成功！':'修改成功')
+                    toastr.success(_this.isEditContact ? '添加成功！' : '修改成功')
                     _this.getClientContact()
                     $('#addContact').modal('hide')
                 })
             },
-            delContact () {
+            delContact() {
                 let _this = this
                 fetch('delete', `/clients/${this.clientId}/contacts/${this.contactId}`).then(function (response) {
                     toastr.success('删除成功')
@@ -792,10 +869,10 @@
             changeTaskLevel: function (value) {
                 this.taskLevel = value
             },
-            selectPrincipal (value) {
+            selectPrincipal(value) {
                 this.changeInfo.principal_id = value
             },
-            changeEditStatus (value, config) {
+            changeEditStatus(value, config) {
                 this.editConfig = config || {
                     position: '',
                     name: '',
@@ -804,7 +881,7 @@
                 this.isEditContact = value
             },
             // 获取任务类型列表
-            getTaskType () {
+            getTaskType() {
                 fetch('get', '/task_types').then(res => {
                     const data = res.data
                     this.taskTypeArr = data.map(n => {
@@ -814,7 +891,7 @@
                 })
             },
             // 获取要删除的信息
-            setDelInfo (id) {
+            setDelInfo(id) {
                 this.contactId = id
             }
         }
