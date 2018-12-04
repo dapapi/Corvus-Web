@@ -100,6 +100,20 @@ let config = {
                 value: 11
             }
         ],
+        trailBloggerOrigin:[
+            {
+                name:'个人',
+                value:'4'
+            },
+            {
+                name:'商务邮箱/微信',
+                value:'1'
+            },
+            {
+                name:'高层推荐',
+                value:'5'
+            }
+        ],
         trailTypeArr: [
             {
                 name: '影视线索',

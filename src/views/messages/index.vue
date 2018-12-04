@@ -51,17 +51,15 @@
                     v-if="item.readflag === readFilter"
                     @markasunread='markAsUnread'/>
                 </div>
-                <div v-if="isNoUnread">
-                    <div class="page-content vertical-align-middle">
-                        <header>
-                            <h1 class="animation-slide-top">oop,这里什么都没有</h1>
-                        </header>
-                        <p class="error-advise">你可以到已读消息中查看更多</p>
-                    </div>
+                <div class="col-md-1" style="margin: 6rem auto" v-if="isNoUnread" >
+                    <img src="https://res.papitube.com/corvus/images/content-none.png" alt="" style="width: 100%">
                 </div>
             </div>
         </div>
         <Flag typeText="全部标记为已读" @confirmFlag='emitMarkasRead'/>
+        <!-- <div class="col-md-1" style="margin: 6rem auto" >
+          <img src="https://res.papitube.com/corvus/images/content-none.png" alt="" style="width: 100%">
+      </div> -->
     </div>
 </template>
 

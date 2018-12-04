@@ -1,6 +1,17 @@
 <template>
     <div class="page">
-
+         <div class="loader-overlay" v-if="isLoading">
+            <div class="loader-content">
+                <div class="loader-index">
+                <div></div>
+                <div></div>
+                <div></div>
+                <div></div>
+                <div></div>
+                <div></div>
+        </div>
+      </div>
+      </div>
         <div class="page-header page-header-bordered">
             <h1 class="page-title">销售线索管理</h1>
             <div class="page-header-actions">
@@ -243,7 +254,7 @@
                         </div>
                     </div>
                     <div class="modal-footer">
-                        <button class="btn btn-sm btn-white btn-pure" data-dismiss="modal">取消</button>
+                        <button class="btn btn-sm btn-white btn-pure" data-dismiss="modal" @click='cleanTempData'>取消</button>
                         <button class="btn btn-primary" type="submit" @click="addTrail">确定</button>
                     </div>
 
@@ -315,6 +326,7 @@
                 fetchData:{},
                 currentUser:{},
                 resetInfo:false,
+                isLoading:true,
             }
         },
         created(){
@@ -329,6 +341,9 @@
         },
         watch:{
             trailType:function(){
+                if(this.trailType == 4){
+                    this.trailOriginArr = config.trailBloggerOrigin
+                }
                 this.getStars()
                 this.$nextTick(() => {
                     $('.selectpicker').selectpicker('render');
@@ -449,6 +464,7 @@
                     _this.total = response.meta.pagination.total;
                     _this.current_page = response.meta.pagination.current_page;
                     _this.total_pages = response.meta.pagination.total_pages;
+                    _this.isLoading = false;
                 })
             },
 
@@ -475,10 +491,8 @@
 
             getStars: function () {
                 this.starsArr=[]
-                console.log(this.trailType);
                 let _this = this;
                 if(this.trailType == 4){
-                    console.log(11111);
                     fetch('get', '/bloggers/all').then(function (response) {
                     for (let i = 0; i < response.data.length; i++) {
                         _this.starsArr.push({
@@ -503,7 +517,6 @@
             },
 
             customize: function (value) {
-                console.log(value);
 
             },
 
@@ -532,7 +545,6 @@
                 }else{
                     data.principal_id = this.$store.state.otherSlot.data.id
                 }
-                                    console.log(data);
                 if (this.trailType != 4) {
                     //    todo 添加线索状态
                 }
@@ -549,13 +561,28 @@
                 let _this = this;
                 if(this.trailTypeValidate()){
                     fetch('post', '/trails', data).then(function (response) {
-                    $('#addTrail').modal('hide');
-                    _this.$router.push({path: '/trails/' + response.data.id})
-                })
-                }
-                
-            },
+                        $('#addTrail').modal('hide');
+                        _this.$router.push({path: '/trails/' + response.data.id})
+                        _this.cleanTempData()
 
+                    })
+                }
+            },
+            cleanTempData(){
+                this.trailName=''
+                this.brandName=''
+                this.selectCompany = ''
+                this.recommendStars=''
+                this.targetStars=''
+                this.trailContact=''
+                this.trailContactPhone=''
+                this.trailFee =''
+                this.trailDesc = ''
+                this.industry = ''
+                this.trailType = ''
+                this.priority = ''
+                this.cooperation = ''
+            },
             redirectTrailDetail: function (trailId) {
                 this.$router.push({path: '/trails/' + trailId})
             },
@@ -615,7 +642,6 @@
             },
 
             changeTrailType: function (value) {
-                console.log(value);
                 this.trailType = value
             },
 
@@ -624,7 +650,6 @@
             },
 
             changeCooperationType: function (value) {
-                console.log(value);
                 this.cooperation = value
             },
             
@@ -632,7 +657,11 @@
         }
     }
 </script>
-<style>
+<style scoped>
+    .loader-overlay{
+        margin-left: 100px;
+        background-color: rgba(7, 17, 27, 0.2)
+    }
     .error{
         border: 1px solid red;
         border-radius: 5px;
