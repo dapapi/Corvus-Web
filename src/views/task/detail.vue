@@ -18,13 +18,12 @@
         </div>
 
         <div class="page-content container-fluid">
-
             <div class="panel col-md-12 col-lg-12">
                 <div class="card-block">
                     <h4 class="card-title">{{ taskInfo.title }}
                         <template v-if="!taskInfo.task_p">
                            <span class="font-size-14 pl-10 pointer-content hover-content"
-                                 @click="redirectTaskDetail(askInfo.pTask?taskInfo.pTask.data.id: '')">
+                                 @click="redirectTaskDetail(taskInfo.pTask?taskInfo.pTask.data.id: '')">
                            <i class="icon md-chevron-left"></i>回到主任务
                             </span>
                         </template>
@@ -396,6 +395,7 @@
                 resourceableId: '', // 资源id
                 user: {}, // 个人信息
                 attachmentId: '', // 附件id
+                // routerId: this.$route.params.id || '',// 路由
             }
         },
         created () {
@@ -446,11 +446,20 @@
             'taskInfo.end_at': function (newValue) {
                 this.changeInfo.end_at = newValue
             },
+            routerId (id) {
+                this.taskId = id
+                setTimeout(() => {
+                    this.getTask();
+                }, 100)
+            }
         },
 
         computed: {
             principalName: function () {
                 return this.$store.state.principalInfo.name
+            },
+            routerId () {
+                return this.$route.params.id
             }
         },
 
@@ -484,6 +493,7 @@
                     _this.$store.dispatch('changeParticipantsInfo', params);
                     params.data = response.data.principal.data;
                     _this.$store.dispatch('changePrincipal', params)
+                    console.log(_this.taskInfo)
                 })
             },
 
@@ -733,7 +743,8 @@
                 this.endMinutes = value
             },
             redirectTaskDetail: function (taskId) {
-                this.$router.push({path: '/tasks/' + taskId})
+                this.$router.push({path: '/tasks/' + taskId, force: true})
+                // this.$router.replace({path: '/tasks/' + taskId})
             },
             // 获取关联父资源数据
             getLinkData () {
