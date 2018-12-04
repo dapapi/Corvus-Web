@@ -22,7 +22,7 @@
             <div class="panel col-md-12 clearfix py-5">
                 <div class="clearfix">
                     <div class="col-md-3 example float-left">
-                        <input type="text" v-model="listData.name" class="form-control" id="inputPlaceholder" placeholder="请输入项目昵称"
+                        <input type="text" v-model="listData.name" class="form-control" id="inputPlaceholder" placeholder="请输入姓名"
                                style="width: 220px" @blur="getArtists"> 
                     </div>
                     <div class="col-md-3 example float-left">
@@ -152,7 +152,7 @@
                         <div class="example">
                             <div class="col-md-2 text-right float-left">姓名</div>
                             <div class="col-md-10 float-left pl-0">
-                                <input type="text" class="form-control" placeholder="请输入昵称" v-model="artistName">
+                                <input type="text" class="form-control" placeholder="请输入姓名" v-model="artistName">
                             </div>
                         </div>
                         <div class="example">
@@ -162,7 +162,7 @@
                             </div>
                             <div class="col-md-2 text-right float-left pr-0">出生日期</div>
                             <div class="col-md-4 float-left pr-0">
-                                <datepicker @change="changeBirthday"></datepicker>
+                                <datepicker @change="changeBirthday" :placeholder="'请选择日期'"></datepicker>
                             </div>
                         </div>
                         <div class="example">
@@ -210,31 +210,6 @@
                                         <span>{{scope.row.name}}</span>
                                     </template>
                                 </CheckboxGroup>
-                                <!-- <div class="checkbox-custom checkbox-primary d-inline pr-20">
-                                    <input id="platformAll" type="checkbox" name="platform" title=""
-                                           @change="changeCheckbox(0)">
-                                    <label for="platformAll">全选</label>
-                                </div>
-                                <div class="checkbox-custom checkbox-primary d-inline pr-20">
-                                    <input id="platformWeibo" type="checkbox" name="platform" title=""
-                                           @change="changeCheckbox(1)">
-                                    <label for="platformWeibo">微博</label>
-                                </div>
-                                <div class="checkbox-custom checkbox-primary d-inline pr-20">
-                                    <input id="platformDouyin" type="checkbox" name="platform" title=""
-                                           @change="changeCheckbox(2)">
-                                    <label for="platformDouyin">抖音</label>
-                                </div>
-                                <div class="checkbox-custom checkbox-primary d-inline pr-20">
-                                    <input id="platformBK" type="checkbox" name="platform" title=""
-                                           @change="changeCheckbox(3)">
-                                    <label for="platformBK">百科</label>
-                                </div>
-                                <div class="checkbox-custom checkbox-primary d-inline pr-20">
-                                    <input id="platformOther" type="checkbox" name="platform" title=""
-                                           @change="changeCheckbox(4)">
-                                    <label for="platformOther">其他</label>
-                                </div> -->
                             </div>
                         </div>
                         <div class="example" v-show="platformType.find(item => item ==1)">
@@ -306,10 +281,22 @@
                             </div>
                         </div>
                         <div class="example">
-                            <div class="col-md-2 text-right float-left">上传附件</div>
+                            <div class="col-md-2 text-right float-left">附件类型</div>
                             <div class="col-md-5 float-left pl-0">
                                 <selectors :options="attachmentTypeArr" :placeholder="'请选择附件类型'"
                                            @change="changeAttachmentType"></selectors>
+                            </div>
+                        </div>
+                        <div class="example">
+                            <div class="col-md-2 text-right float-left">上传附件</div>
+                            <div class="col-md-5 float-left pl-0">
+                                <upload @change="getUrl">
+                                        <div class="id-upload">
+                                            <span>上传附件</span>
+                                            <!-- <i class="icon md-plus" style="font-size: 50px" aria-hidden="true"></i> -->
+                                            <!-- + -->
+                                        </div>
+                                </upload>
                             </div>
                         </div>
                         <div class="example">
@@ -440,6 +427,8 @@
                     source:'', // 艺人来源
                 },
                 giveType:1,//1 分配经纪人  2 分配宣传人
+                affixes:[],
+                affixesType:''//附件类型
             }
         },
         watch:{
@@ -479,7 +468,14 @@
                     $('table').asSelectable('_trigger');
                 })
             },
-            
+            getUrl:function(url,name,size){
+                this.affixes.push({
+                    title:name,
+                    size:size,
+                    url:url,
+                    type:this.affixesType
+                })
+            },
             customize: function (value) {
 
             },
@@ -489,13 +485,11 @@
             },
 
             changeCheckbox: function (value) {
-                // console.log(value)
                 this.platformType = []
                 for (let i = 0; i < value.length; i++) {
                     this.platformType.push(value[i].value)
                 }
                 
-                // console.log(this.platformType)
             },
 
             changeCommunicationType: function (value) {
@@ -570,7 +564,8 @@
                     douyin_id:this.douyinId,
                     douyin_fans_num:this.douyinFansNum,
                     qita_url:this.qitaUrl,
-                    qita_fans_num:this.qitaFansNum
+                    qita_fans_num:this.qitaFansNum,
+                    affixes:this.affixes//附件
 
 
                 };
@@ -581,9 +576,10 @@
                     _this.$router.push({path: 'artists/' + response.data.id});
                 })
             },
-
+            
+            //选择附件类型
             changeAttachmentType: function (value) {
-                  
+                  this.affixesType = value
             },
 
             redirectArtistDetail: function (artistId) {
@@ -612,23 +608,31 @@
                 let url,toast,data
                 
                 if(this.giveType == 1){
-                   url = '' 
+                   url = 'distribution/perosn' 
                    toast = '分配经纪人成功'
                    data = {
-
+                        person_ids:[],//经纪人数组
+                        del_person_ids:[],//删除
+                        moduleable_ids:this.selectedArtistsArr,//艺人
+                        moduleable_type:'star',
+                        moduleable_type:3,//经纪人
                    }
                 }else{
-                    url = ''
+                    url = 'distribution/perosn'
                     toast= '分配宣传人成功'
                     data = {
-
+                        person_ids:[],//经纪人数组
+                        del_person_ids:[],//删除
+                        moduleable_ids:this.selectedArtistsArr,//艺人
+                        moduleable_type:'star',
+                        moduleable_type:2, //宣传人
                     }
                 }
                 
-                // for (let  i= 0;  i< this.$store.state.participantsInfo.length; i++) {
-                //     person_ids.push(this.$store.state.participantsInfo[i].id)
+                for (let  i= 0;  i< this.$store.state.participantsInfo.length; i++) {
+                    data.person_ids.push(this.$store.state.participantsInfo[i].id)
                     
-                // }
+                }
                 fetch('post', url, data).then(function (response) {
                     toastr.success(toast);
                     $('#giveBroker').modal('hide');
