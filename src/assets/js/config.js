@@ -358,6 +358,10 @@ let config = {
         //沟通状态
         artistStatusArr: [
             {
+                name: '全部',
+                value: ''
+            },
+            {
                 name: '已签约',
                 value: 1
             },
@@ -586,6 +590,10 @@ let config = {
         ],
         //艺人来源
         artistSourceArr: [
+            {
+               name:'全部',
+               value:''
+            },
             {
                 name: '线上',
                 value: 1

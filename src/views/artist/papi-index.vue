@@ -46,12 +46,12 @@
                                aria-controls="forum-base"
                                aria-expanded="true" role="tab">签约中</a>
                         </li>
-                        <li class="nav-item" role="presentation" @click="getArtists(1)">
+                        <li class="nav-item" role="presentation" @click="getArtists(2)">
                             <a class="nav-link" data-toggle="tab" href="#forum-artist"
                                aria-controls="forum-present"
                                aria-expanded="false" role="tab">已签约</a>
                         </li>
-                        <li class="nav-item" role="presentation" @click="getArtists(1)">
+                        <li class="nav-item" role="presentation" @click="getArtists(3)">
                             <a class="nav-link" data-toggle="tab" href="#forum-artist"
                                aria-controls="forum-present"
                                aria-expanded="false" role="tab">已解约</a>
