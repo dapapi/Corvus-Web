@@ -451,7 +451,7 @@
                         </div>
                         <div class="card-block">
                             <div class="col-md-7 pl-0">
-                                <TaskFollowUp :follow-type="'艺人'"></TaskFollowUp>
+                                <TaskFollowUp :follow-type="'艺人'" :trailId="$route.params.id" trailType="stars"></TaskFollowUp>
                             </div>
                         </div>
                     </div>
