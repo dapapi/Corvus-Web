@@ -521,6 +521,10 @@ let config = {
         ],
         papiCommunicationStatusArr: [
             {
+                name: '全部',
+                value: ''
+            },
+            {
                 name: '初步接触',
                 value: 1
             },
@@ -642,20 +646,20 @@ let config = {
             },
             {
                 name: '独白视频',
-                value: 1
+                value: 2
             },
             {
                 name: '艺人规划',
-                value: 1
+                value: 3
             },
             {
                 name: '自我介绍视频',
-                value: 1
+                value: 4
             },
             {
-                name: '其他',
-                value: 1
-            },
+                name:'其他',
+                value:5
+            }
 
         ],
         workTypeArr: [
