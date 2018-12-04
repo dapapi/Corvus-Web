@@ -14,16 +14,17 @@
                 <div class="clearfix">
                     <div class="col-md-3 example float-left">
                         <input v-if="true" type="text" class="form-control" placeholder="请输入公司名称"
-                               style="width: 220px" v-model="companyName" @blur="changeCompany" >
+                               style="width: 220px" v-model="companyName" @blur="changeCompany">
                     </div>
                     <div class="col-md-3 example float-left">
-                        <input-selectors :key="'inputSelect'" :placeholder="'请选择负责人'" @change="changePrincipalSelect"></input-selectors>
+                        <input-selectors :key="'inputSelect'" :placeholder="'请选择负责人'"
+                                         @change="changePrincipalSelect"></input-selectors>
                     </div>
                     <div class="col-md-3 example float-left">
                         <!-- <selectors @change=""
                                    :placeholder="'请选择级别'"></selectors> -->
                         <selectors :options="clientLevelArr" :placeholder="'请选择公司级别'"
-                                @change="changeClientLevelSelect"></selectors>
+                                   @change="changeClientLevelSelect"></selectors>
                     </div>
                     <div class="col-md-3 example float-left">
                         <button type="button" class="btn btn-default waves-effect waves-classic float-right"
@@ -62,6 +63,10 @@
                         </tr>
                         </tbody>
                     </table>
+
+                    <div class="col-md-1" style="margin: 6rem auto" v-if="clientsInfo.length === 0">
+                        <img src="https://res.papitube.com/corvus/images/content-none.png" alt="" style="width: 100%">
+                    </div>
 
                     <pagination :current_page="current_page" :method="getClients" :total_pages="total_pages"
                                 :total="total"></pagination>
@@ -181,6 +186,7 @@
 <script>
     import fetch from '../../assets/utils/fetch.js'
     import config from '../../assets/js/config'
+
     const clientLevelArr = [{name: '全部', value: ''}, ...config.clientLevelArr]
     export default {
         data: function () {
@@ -246,7 +252,7 @@
                     url = '/clients/filter'
                 }
 
-                fetch('get', url, params).then( response => {
+                fetch('get', url, params).then(response => {
                     this.clientsInfo = response.data;
                     this.current_page = response.meta.pagination.current_page;
                     this.total = response.meta.pagination.total;
@@ -288,7 +294,7 @@
                     toastr.error('请填写联系人！')
                     return
                 }
-                 if (!this.clientContactPosition) {
+                if (!this.clientContactPosition) {
                     toastr.error('请填写联系人职位！')
                     return
                 }
@@ -344,13 +350,13 @@
                 this.clientPrincipal = value
             },
 
-            changePrincipalSelect (value) {
+            changePrincipalSelect(value) {
                 this.clientPrincipalSearch = value
                 this.clientPrincipalIdSearch = this.$store.state.newPrincipalInfo.id
                 this.getClients()
             },
 
-            changeClientLevelSelect (value) {
+            changeClientLevelSelect(value) {
                 this.clientLevelSearch = value
                 this.getClients()
             },
@@ -363,16 +369,16 @@
 </script>
 
 <style lang="scss" scoped>
-table td {
-    position: relative;
-    a:before {
-        content: '';
-        position: absolute;
-        width: 100%;
-        height: 100%;
-        top: 0;
-        left: 0;
-        display: inline-block;
+    table td {
+        position: relative;
+        a:before {
+            content: '';
+            position: absolute;
+            width: 100%;
+            height: 100%;
+            top: 0;
+            left: 0;
+            display: inline-block;
+        }
     }
-}
 </style>
