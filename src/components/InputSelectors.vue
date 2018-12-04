@@ -66,7 +66,6 @@
             changeSelectMember: function () {
                 this.selectMemberShow = false;
                 this.$emit('change', false)
-                this.$emit('')
             }
         }
     }
