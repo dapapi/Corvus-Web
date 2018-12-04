@@ -440,7 +440,7 @@
                     intention_desc: this.intention_desc,
                     sign_contract_other: this.signCompany,
                     sign_contract_other_name: this.signCompanyName,
-                    // desc:this.artistDesc,
+                    desc:this.artistDesc,
                     
                 };
                 fetch('post', '/bloggers', data).then(function (response) {

@@ -82,7 +82,7 @@
                             </div>
                         </div>
                         <div class="tab-pane animation-fade pb-20 fixed-button-father" id="forum-artist-projects"
-                             role="tabpanel" v-for="item in data.trails" :key="item.id">
+                             role="tabpanel" v-for="item in totalData.trails" :key="item.id">
                             <table class="table  is-indent example" data-plugin="animateList"
                                    data-animate="fade"
                                    data-child="tr"
@@ -95,7 +95,7 @@
                                     <th class="cell-300" scope="col">关联公司</th>
                                     <th class="cell-300" scope="col">录入日期</th>
                                 </tr>
-                                <tr v-for="v in item"  :key="v.id">
+                                <tr v-for="v in item"  :key="v.id" v-if="v.project">
                                     <td>{{v.project.data.title}}</td>
                                     <td>
                                         <template v-if="v.project.data.status==1">
@@ -111,18 +111,22 @@
                                             沟通完成
                                         </template>
                                     </td>
-                                    <td>{{v.refused_user}}</td>
-                                    <td>{{data.sign_contract_other_name}}</td>
+                                    <td>{{v.creator}}</td>
+                                    <td>{{v.client.data.company}}</td>
                                     <td>{{v.project.data.created_at}}</td>
                                 </tr>
+                               
                             </table>
+                             <div class="col-md-1" style="margin: 6rem auto" v-if="totalData.trails.length==0">
+                                <img src="https://res.papitube.com/corvus/images/content-none.png" alt="" style="width: 100%">
+                            </div>
                         </div>
                         <div class="tab-pane animation-fade pb-20 fixed-button-father" id="forum-artist-tasks"
-                             role="tabpanel" >
+                             role="tabpanel" v-for="item in totalData.tasks" :key="item.id">
                             <table class="table table-hover is-indent example" data-plugin="animateList"
                                    data-animate="fade"
                                    data-child="tr"
-                                   data-selectable="selectable" v-for="item in data.tasks" :key="item.id">
+                                   data-selectable="selectable" >
                                 <tr class="animation-fade"
                                     style="animation-fill-mode: backwards; animation-duration: 250ms; animation-delay: 0ms;">
                                     <th class="cell-300" scope="col">任务名称</th>
@@ -131,9 +135,9 @@
                                     <th class="cell-300" scope="col">负责人</th>
                                     <th class="cell-300" scope="col">截止日期</th>
                                 </tr>
-                                <!-- <tr v-for="v in item"  :key="v.id">
+                                <tr v-for="v in item" :key="v.id">
                                     <td>{{v.title}}</td>
-                                    <td>{{v.resource.data.resource.data.title}}</td>
+                                    <td>{{v.type.data.title}}</td>
                                     <td>
                                         <template v-if="v.status==1">
                                             开始
@@ -147,8 +151,11 @@
                                     </td>
                                     <td>{{v.principal.data.name}}</td>
                                     <td>{{v.end_at}}</td>
-                                </tr> -->
+                                </tr>
                             </table>
+                            <div class="col-md-1" style="margin: 6rem auto">
+                                <img src="https://res.papitube.com/corvus/images/content-none.png" alt="" style="width: 100%">
+                               </div>
                             <div class="site-action fixed-button" data-plugin="actionBtn" data-toggle="modal"
                                  data-target="#addTask">
                                 <button type="button"
@@ -172,11 +179,11 @@
                                     <th class="cell-300" scope="col">是否广告</th>
                                 </tr>
                                 <tbody>
-                                <tr v-for="work in worksData"> 
+                                <tr v-for="work in worksData" :key="work.id"> 
                                     <td>{{work.nickname}}</td>
                                     <td>{{work.videoname}}</td>
                                     <td>{{work.release_time}}</td>
-                                    <td>{{work.read_proportion}}</td>  
+                                    <td>{{work.read_proportion}}</td>
                                     <td>
                                         <template v-show="wock.link">
                                             www.baidu.com
@@ -625,12 +632,13 @@
                 isStatrtEdit:true,
                 papiCommunicationStatusArr: config.papiCommunicationStatusArr,
                 updateNickname:'',
-                data:'',
+                totalData:'',
                 worksData:'',
                 advertisingType:'',
                 Person_id:'',
                 Users:'',
-                tasksType:''
+                tasksType:'',
+                tasksData:''
             }
         },
 
@@ -698,12 +706,7 @@
                             stack: '总量',
                             data: [320, 332, 301, 334, 390, 330, 320]
                         },
-                        // {
-                        //     name:'搜索引擎',
-                        //     type:'line',
-                        //     stack: '总量',
-                        //     data:[820, 932, 901, 934, 1290, 1330, 1320]
-                        // }
+
                     ]
                 };
 
@@ -720,28 +723,32 @@
                     _this.artistInfo = response.data;
                  
                 });
-                fetch('get','/bloggers/'+this.artistId+'?include=tasks.type,trails.project.principal,trails.client').then(function(response){
-                    _this.data=response.data
-                    console.log(_this.data)
+                //项目
+                fetch('get','/bloggers/'+this.artistId+'?include=tasks.type,trails.project.principal,trails.client,producer,creator,affixes,type').then(function(response){
+                    _this.totalData=response.data
+                    console.log(_this.totalData)
                 })
-                fetch('get','/bloggers/index/production').then(function(response){
+                //作品
+                fetch('get','/bloggers/index/production?blogger_id='+this.artistId+'').then(function(response){
                     _this.worksData=response.data
                     console.log(_this.worksData)
                 });
+                //负责人
                 fetch('get','/users/').then(function(response){
                     _this.Users=response.data;
                 })
+                //任务状态跑组。试戏
                 fetch('get','/task_types').then(function(response){
                     _this.tasksType=response.data;
                 })
             },
 
-            getArtistProjects: function () {
-                let _this = this;
-                fetch('get', '/stars/' + this.artistId).then(function (response) {
-                    _this.artistProjectsInfo = response.data;
-                })
-            },
+            // getArtistProjects: function () {
+            //     let _this = this;
+            //     fetch('get', '/stars/' + this.artistId).then(function (response) {
+            //         _this.artistProjectsInfo = response.data;
+            //     })
+            // },
 
             getArtistTasks: function () {
                 let _this = this;
@@ -797,7 +804,7 @@
                 }
                 
             },
-
+            //添加作品
             addWork: function () {
                 let _this=this;
                 let data={
@@ -811,13 +818,23 @@
                 }
                 fetch('post','/bloggers/new/production',data).then(function(response){
                     toastr.success('创建成功');
+                    
                     $('#addWork').modal('hide');
+                        _this.artistInfo.nickname='';
+                        _this.artistWorkName='';
+                        _this.workReleaseTime='';
+                        _this.artistWorkProportion='';
+                        _this.videoUrl='';
+                        _this.advertisingType='';
+                        _this.artistInfo.id='';  
                     _this.getArtist()
                 })
+              
             },
-
+            //添加任务
             addTask: function () {
                 let _this=this;
+                console.log(this.artistInfo.id)
                 let data={
                    title:this.taskName,
                    principal_id:this.Person_id,
@@ -829,20 +846,28 @@
                    type:this.taskType
                 }
                 fetch('post','/tasks',data).then(function(response){
+                  
                     toastr.success('创建成功');
                     $('#addTask').modal('hide');
+                    _this.tasksData=response.data;
+                    _this.taskName='';
+                    _this.Person_id='';
+                    _this.this.startTime='';
+                    _this.this.endTime='';
+                    _this.taskIntroduce='';
+                    _this.taskType='';
                     _this.getArtist()
                 })
             },
 
             changeTaskType: function (value) {
                 this.taskType = value
-                console.log(this.taskType)
+              
             },
 
             principalChange: function (value) {
-                console.log(value)
-                this.Person_id=value;  
+                this.Person_id=value
+                console.log(value) 
             },
 
             participantChange: function (value) {
