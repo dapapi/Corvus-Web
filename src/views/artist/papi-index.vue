@@ -28,7 +28,7 @@
                                    :placeholder="'请选择博主类型'"  @change="typeFilter" v-model="typeF"></selectors>
                     </div>
                     <div class="col-md-3 example float-left">
-                        <selectors :placeholder="'请选择博主状态'" :options="papiCommunicationStatusArr" @change="CommunicationStatus" v-model="statusF"></selectors>
+                        <selectors :placeholder="'请选择沟通状态'" :options="papiCommunicationStatusArr" @change="CommunicationStatus" v-model="statusF"></selectors>
                     </div>
                     <div class="col-md-3 example float-left">
                         <button type="button" class="btn btn-default waves-effect waves-classic float-right"
@@ -41,17 +41,25 @@
 
                 <div class="col-md-12">
                     <ul class="nav nav-tabs nav-tabs-line" role="tablist">
-                        <li class="nav-item" role="presentation" @click="getArtists(1)">
+                        <li class="nav-item" role="presentation" @click="getArtists(1,1)">
                             <a class="nav-link active" data-toggle="tab" href="#forum-artist"
                                aria-controls="forum-base"
                                aria-expanded="true" role="tab">签约中</a>
                         </li>
+<<<<<<< HEAD
                         <li class="nav-item" role="presentation" @click="getArtists(2)">
+=======
+                        <li class="nav-item" role="presentation" @click="getArtists(1,2)">
+>>>>>>> hp
                             <a class="nav-link" data-toggle="tab" href="#forum-artist"
                                aria-controls="forum-present"
                                aria-expanded="false" role="tab">已签约</a>
                         </li>
+<<<<<<< HEAD
                         <li class="nav-item" role="presentation" @click="getArtists(3)">
+=======
+                        <li class="nav-item" role="presentation" @click="getArtists(1,3)">
+>>>>>>> hp
                             <a class="nav-link" data-toggle="tab" href="#forum-artist"
                                aria-controls="forum-present"
                                aria-expanded="false" role="tab">已解约</a>
@@ -91,7 +99,7 @@
                                 <td  @click="redirectArtistDetail(artist.id)">{{ artist.nickname
                                     }}
                                 </td>
-                                <td>{{ artist.type.name }}</td>
+                                <td>{{ artist.type.data.name }}</td>
                                 <td>暂无</td>
                                 <td>
                                     <template v-if="artist.intention">是</template>
@@ -108,7 +116,7 @@
                                         {{ artist.producer.data.name }}
                                     </template>
                                 </td>
-                                <td>{{artist.created_at.date}}</td>
+                                <td>{{artist.created_at}}</td>
                             </tr>
                             </tbody>
                         </table>
@@ -298,7 +306,13 @@
                 checkboxedone:'',
                 checkboxtow:'',
                 checkboxedthree:'',
-                checkoutfix:''
+                checkoutfix:'',
+                filetData:{
+                    include:'type,creator,tasks,affixes,producer',
+                },
+                filterObject:{
+                    include:'type,creator,tasks,affixes,producer',
+                }
             }
         },
 
@@ -309,46 +323,47 @@
         },
 
         methods: {
-            getArtists: function (page = 1) {
-                let data = {
-                    page: page,
-                    include:'creator,tasks,affixes,producer'
-                };
+            getArtists: function (page = 1,signStatus) {
+                if(signStatus){
+                   this.filetData.status= signStatus
+                }
+                this.filetData.page=page 
+               
                 let _this = this;
-                fetch('get', '/bloggers', data).then(function (response) {
+                fetch('get', '/bloggers', this.filetData).then(function (response) {
                     
                     _this.artistsInfo = response.data;
+                    console.log(_this.artistsInfo )
                     _this.current_page = response.meta.pagination.current_page;
                     _this.total = response.meta.pagination.total;
                     _this.total_pages = response.meta.pagination.total_pages;
-                    console.log(response.data) 
                 });
-                fetch('get','/bloggers/gettype').then(function(response){ 
-                   
-                    _this.artistTypeArr=response.data  
-                    
+                fetch('get','/bloggers/gettype').then(function(response){      
+                    _this.artistTypeArr=response.data                  
                 })
             },
-            filterGo(){
-                
+            filterGo(){ 
                 let _this = this;
-                fetch('get','/bloggers?name='+ this.trailFilter).then(function(response){
-                    
-                     _this.artistsInfo = response.data
-                })
-              
+                this.filterObject.name = this.trailFilter;
+                console.log(this.filterObject)
+                fetch('get','/bloggers',this.filterObject).then(function(response){  
+                             
+                    _this.artistsInfo =response.data
+                    console.log(_this.artistsInfo)
+                })      
             },
             typeFilter(value){
-                this.typeF=value;
+                this.filterObject.type=value;
+                console.log(this.filterObject)
                 let _this = this;
-                fetch('get','/bloggers?type='+ this.typeF).then(function(response){
+                fetch('get','/bloggers', this.filterObject).then(function(response){
                      _this.artistsInfo = response.data
                 })
             },
             CommunicationStatus(value){
-                this.statusF=value;
+                 this.filterObject.communication_status=value;
                 let _this = this;
-                fetch('get','/bloggers?communication_status='+ this.statusF).then(function(response){
+                fetch('get','/bloggers', this.filterObject).then(function(response){
                      _this.artistsInfo = response.data
                 })
             },
@@ -365,9 +380,20 @@
                 this.artistStatus = value
             },
 
-            changeCheckbox: function (value) {
-                 
+            changeCheckbox: function (value) {   
+                console.log(value)
                 this.platformType = value
+                if(this.checkboxedone==1){
+                    this.checkboxtow=true;
+                    this.checkboxedthree=true;
+                    this.checkoutfix=true;
+                }
+ 
+                else if(this.checkboxtow==true&&this.checkboxedthree==true&&this.checkoutfix==true){
+                    this.checkboxedone=true
+                }else if(this.checkboxtow==false||this.checkboxedthree==false||this.checkoutfix==false){
+                    this.checkboxedone=false
+                }
             },
 
             changeCommunicationType: function (value) {
@@ -422,7 +448,7 @@
                     intention_desc: this.intention_desc,
                     sign_contract_other: this.signCompany,
                     sign_contract_other_name: this.signCompanyName,
-                    desc:this.artistDesc,
+                    // desc:this.artistDesc,
                     
                 };
                 fetch('post', '/bloggers', data).then(function (response) {
