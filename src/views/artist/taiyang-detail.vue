@@ -30,16 +30,20 @@
                             <div class="float-left pl-0 pr-2 col-md-2">
                                 <i class="md-plus pr-2" aria-hidden="true"></i>经纪人
                             </div>
-                            <div class="font-weight-bold float-left">
-                                {{artistInfo.broker}}
+                            <div class="font-weight-bold float-left" v-if="artistInfo.broker">
+                                <template v-for="broker in artistInfo.broker.data">
+                                    {{ broker.name }}
+                                </template>
                             </div>
                         </div>
                         <div class="col-md-6 float-left pl-0">
                             <div class="float-left pl-0 pr-2 col-md-2">
                                 <i class="md-plus pr-2" aria-hidden="true"></i>宣传人
                             </div>
-                            <div class="font-weight-bold float-left">
-                                {{artistInfo.publicity}}
+                            <div class="font-weight-bold float-left" v-if="artistInfo.publicity">
+                                <template v-for="publicity in artistInfo.publicity.data">
+                                    {{ publicity.name }}
+                                </template>
                             </div>
                         </div>
 
@@ -54,6 +58,42 @@
                     <!--</div>-->
                     <!--</div>-->
                     <!--</div>-->
+                </div>
+                <div class="clearfix">
+                    <div class="col-md-6 float-left pl-0 mb-20" style="border-right: 1px solid #eee">
+                        <div class="col-md-6">任务 5/12</div>
+                        <div class="clearfix example">
+                            <div class="col-md-3 float-left">电话会议</div>
+                            <div class="col-md-3 float-left">张佳佳</div>
+                            <div class="col-md-3 float-left">2018-12-03 11:10</div>
+                            <div class="col-md-3 float-left">进行中</div>
+                        </div>
+                        <div class="clearfix example">
+                            <div class="col-md-3 float-left">电话会议</div>
+                            <div class="col-md-3 float-left">张佳佳</div>
+                            <div class="col-md-3 float-left">2018-12-03 11:10</div>
+                            <div class="col-md-3 float-left">进行中</div>
+                        </div>
+                        <div class="clearfix example">
+                            <div class="col-md-3 float-left">电话会议</div>
+                            <div class="col-md-3 float-left">张佳佳</div>
+                            <div class="col-md-3 float-left">2018-12-03 11:10</div>
+                            <div class="col-md-3 float-left">进行中</div>
+                        </div>
+                        <div class="clearfix example">
+                            <div class="col-md-3 float-left">电话会议</div>
+                            <div class="col-md-3 float-left">张佳佳</div>
+                            <div class="col-md-3 float-left">2018-12-03 11:10</div>
+                            <div class="col-md-3 float-left">进行中</div>
+                        </div>
+                        <div class="clearfix example">
+                            <div class="col-md-3 float-left">电话会议</div>
+                            <div class="col-md-3 float-left">张佳佳</div>
+                            <div class="col-md-3 float-left">2018-12-03 11:10</div>
+                            <div class="col-md-3 float-left">进行中</div>
+                        </div>
+                    </div>
+
                 </div>
 
             </div>
@@ -316,8 +356,9 @@
                                         <div class="card-text py-10 px-0 clearfix col-md-6 float-left edit-height">
                                             <div class="col-md-2 float-left text-right pl-0">与我司签约意向</div>
                                             <div class="col-md-10 float-left font-weight-bold">
-                                                <ConditionalInput :is-edit="isEdit" :content="artistInfo.intention_desc"
-                                                                  :input-content="artistInfo.intention" :condition="0"
+                                                <ConditionalInput :is-edit="isEdit" :content="artistInfo.intention"
+                                                                  :input-content="artistInfo.intention_desc"
+                                                                  :condition="0"
                                                                   @change="(value) => changeArtistBaseInfo(value, 'intention')"></ConditionalInput>
                                             </div>
                                         </div>
@@ -757,7 +798,11 @@
             //     this.myChart = echarts.init(document.getElementById('myChart'));  //初始化echarts实例
             //     // this.draw();
             // })
-            this.draw()
+            this.draw();
+            let _this = this;
+            $('#distributionBroker').on('hidden.bs.modal', function () {
+                _this.$store.commit('changeParticipantsInfo', [])
+            })
         },
 
         methods: {
@@ -779,13 +824,6 @@
                             response.data.trails.data[i].project.data.company = response.data.trails.data[i].client.data.company
                             _this.artistProjectsInfo.push(response.data.trails.data[i].project.data)
                         }
-                    }
-                    if (response.data.broker) {
-                        let params = {
-                            type: 'change',
-                            data: response.data.broker.data
-                        };
-                        _this.$store.dispatch('changePrincipal', params);
                     }
                 })
             },
@@ -1000,15 +1038,62 @@
             },
 
             distributionPerson: function (value) {
-                this.distributionType = value
+                this.distributionType = value;
+                if (value === 'broker') {
+                    if (this.artistInfo.broker) {
+                        let params = {
+                            type: 'change',
+                            data: JSON.parse(JSON.stringify(this.artistInfo.broker.data))
+                        };
+                        this.$store.dispatch('changeParticipantsInfo', params);
+                    }
+                } else {
+                    if (this.artistInfo.publicity) {
+                        let params = {
+                            type: 'change',
+                            data: JSON.parse(JSON.stringify(this.artistInfo.publicity.data))
+                        };
+                        this.$store.dispatch('changeParticipantsInfo', params);
+                    }
+                }
             },
 
             addDistributionPerson: function () {
-                if (this.distributionType === '') {
-
+                let data = {
+                    person_ids: [],
+                    del_person_ids: [],
+                    moduleable_type: 'star',
+                    moduleable_ids: [this.artistId]
+                };
+                let personInfo = this.$store.state.participantsInfo;
+                // todo 删除和新增的数据有问题
+                if (this.artistInfo[this.distributionType].data.length > 0) {
+                    for (let i = 0; i < this.artistInfo[this.distributionType].data.length; i++) {
+                        console.log(personInfo.map(item => item.id).indexOf(this.artistInfo[this.distributionType].data[i]))
+                        if (personInfo.map(item => item.id).indexOf(this.artistInfo[this.distributionType].data[i]) === -1) {
+                            data.person_ids.push(this.artistInfo[this.distributionType].data[i].id)
+                        } else {
+                            data.del_person_ids.push(this.artistInfo[this.distributionType].data[i].id)
+                        }
+                    }
                 } else {
-
+                    for (let i = 0; i < personInfo.length; i++) {
+                        data.person_ids.push(personInfo[i].id)
+                    }
                 }
+
+
+                if (this.distributionType === 'broker') {
+                    data.type = 3
+                } else {
+                    data.type = 2
+                }
+                console.log(data)
+                let _this = this;
+                // fetch('post', '/distribution/person', data).then(function (response) {
+                //     $('#distributionBroker').modal('hide');
+                //     _this.getArtist();
+                // })
             }
 
         }
