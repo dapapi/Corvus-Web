@@ -65,7 +65,7 @@
                                 <template v-if="trail.client.data.grade === 2">代理公司</template>
                             </td>
                             <td>
-                                <span class="overflowsp" v-for="(item , index) in trail.expectations.data" :key="index" v-if="index < 2" >{{item.name}}&nbsp;&nbsp;</span>
+                                <span class="overflowsp" v-for="(item , index) in trail.expectations.data" :key="index" v-if="index < 2" >{{item.name || item.nickname}}&nbsp;&nbsp;</span>
                             </td>
                             <td class="">{{ trail.fee }}元</td>
                             <td>
@@ -328,6 +328,13 @@
             this.getIndustries();
         },
         watch:{
+            trailType:function(){
+                this.getStars()
+                this.$nextTick(() => {
+                    $('.selectpicker').selectpicker('render');
+                    $('.selectpicker').selectpicker('refresh');
+                })
+            },
             memberList:function(value){
                 this.$nextTick(() => {
                     $('.selectpicker').selectpicker('render');
@@ -467,8 +474,22 @@
             },
 
             getStars: function () {
+                this.starsArr=[]
+                console.log(this.trailType);
                 let _this = this;
-                fetch('get', '/stars/all').then(function (response) {
+                if(this.trailType == 4){
+                    console.log(11111);
+                    fetch('get', '/bloggers/all').then(function (response) {
+                    for (let i = 0; i < response.data.length; i++) {
+                        _this.starsArr.push({
+                            id: response.data[i].id,
+                            name: response.data[i].nickname,
+                            value: response.data[i].id
+                        })
+                    }
+                })
+                }else{
+                    fetch('get', '/stars/all').then(function (response) {
                     for (let i = 0; i < response.data.length; i++) {
                         _this.starsArr.push({
                             id: response.data[i].id,
@@ -477,6 +498,8 @@
                         })
                     }
                 })
+                }
+                
             },
 
             customize: function (value) {
@@ -588,6 +611,7 @@
             },
 
             changeTrailType: function (value) {
+                console.log(value);
                 this.trailType = value
             },
 

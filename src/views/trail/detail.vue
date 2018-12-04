@@ -69,7 +69,7 @@
                             </div>
                             <div class="font-weight-bold float-left" v-if="trailInfo.expectations">
                             <span v-for="expectation in trailInfo.expectations.data" :key="expectation.name">
-                                {{ expectation.name }}
+                                {{ expectation.name || expectation.nickname}}
                             </span>
                             </div>
                         </div>
@@ -79,7 +79,7 @@
                             </div>
                             <div class="font-weight-bold float-left" v-if="trailInfo.recommendations">
                             <span v-for="recommendation in trailInfo.recommendations.data" :key="recommendation.name">
-                                {{ recommendation.name }}
+                                {{ recommendation.name || recommendation.nickname }}
                             </span>
                             </div>
                         </div>
@@ -184,7 +184,7 @@
                                             <div class="col-md-10 float-left font-weight-bold" v-if="trailInfo.expectations">
                                                 <span v-for="expectation in trailInfo.expectations.data"
                                                       :key="expectation.name" v-if="!isEdit">
-                                                    {{ expectation.name }}
+                                                    {{ expectation.name || expectation.nickname}}
                                                 </span>
                                                 <EditSelector :options="starsArr" :is-edit="isEdit"
                                                               :multiple="true" :content="selectedExpectationsArr"
@@ -199,7 +199,7 @@
                                             <div class="col-md-10 float-left font-weight-bold" v-if="trailInfo.recommendations">
                                                  <span v-for="recommendations in trailInfo.recommendations.data"
                                                        :key="recommendations.name" v-if="!isEdit">
-                                                    {{ recommendations.name }}
+                                                    {{ recommendations.name || recommendations.nickname}}
                                                 </span>
                                                 <EditSelector :options="starsArr" :is-edit="isEdit"
                                                               :content="selectedRecommendationsArr"
@@ -250,6 +250,7 @@
                                              :class="isEdit ? 'edit-height':'' ">
                                             <div class="col-md-2 float-left text-right pl-0">合作类型</div>
                                             <div class="col-md-10 float-left font-weight-bold">
+                                                
                                                 <EditSelector :is-edit="isEdit"
                                                               :options="cooperationTypeArr"
                                                               @change='changeCooperationType'
@@ -575,14 +576,16 @@
                 trailStatusArr: config.trailStatusArr,
                 trailStatus: '',
                 cooperationTypeArr: config.cooperationTypeArr,
+                trailType:'',
             }
 
         }, 
         created(){
             this.getAllType()
+            this.getTrail();
+
         },
         mounted() {
-            this.getTrail();
             this.getStars();
             this.getIndustries();
         },
@@ -603,6 +606,16 @@
             }
         },
         watch: {
+            'trailInfo.type': function(newValue){
+                if(this.trailInfo.type === 4){
+                    this.getStars()
+                    this.$nextTick(() => {
+                        $('.selectpicker').selectpicker('render');
+                        $('.selectpicker').selectpicker('refresh');
+                    })
+                }
+
+            },
             'trailInfo.resource': function (newValue) {
                 this.changeInfo.resource = newValue
             },
@@ -686,7 +699,6 @@
                 this.changeInfo.status = newValue
             },
             'trailInfo.cooperation_type': function (newValue) {
-                console.log(newValue);
                 this.changeInfo.cooperation_type = newValue
             },
             'expectations': function (newValue) {
@@ -744,6 +756,7 @@
                     include: 'principal,client,contact,recommendations,expectations,project',
                 };
                 fetch('get', '/trails/' + this.trailId, data).then(function (response) {
+                    _this.trailType = response.data.type
                     _this.trailInfo = response.data;
                     _this.oldInfo = JSON.parse(JSON.stringify(response.data));
                     for (let i = 0; i < _this.trailInfo.expectations.data.length; i++) {
@@ -782,7 +795,6 @@
                 if (this.trailTypeValidate()){
                     let _this = this;
                     let data = _this.changeInfo;
-                    console.log(data);
                     fetch('put', '/trails/' + this.trailId, data).then(function () {
                         toastr.success('修改成功');
                         _this.isEdit = false
@@ -790,18 +802,31 @@
                     })
                 }
             },
-
             getStars: function () {
                 let _this = this;
-                fetch('get', '/stars/all').then(function (response) {
-                    for (let i = 0; i < response.data.length; i++) {
-                        _this.starsArr.push({
-                            id: response.data[i].id,
-                            name: response.data[i].name,
-                            value: response.data[i].id
-                        })
-                    }
-                })
+                if(this.trailInfo.type == 4){  
+                    fetch('get', '/bloggers/all').then(function (response) {
+                        _this.starsArr=[]
+                        for (let i = 0; i < response.data.length; i++) {
+                            _this.starsArr.push({
+                                id: response.data[i].id,
+                                name: response.data[i].nickname,
+                                value: response.data[i].id
+                            })
+                        }
+                    })
+                }else{
+                    fetch('get', '/stars/all').then(function (response) {
+                        _this.starsArr=[]
+                        for (let i = 0; i < response.data.length; i++) {
+                            _this.starsArr.push({
+                                id: response.data[i].id,
+                                name: response.data[i].name,
+                                value: response.data[i].id
+                            })
+                        }
+                    })
+                }
             },
 
             editBaseInfo: function () {
