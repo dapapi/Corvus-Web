@@ -77,6 +77,9 @@
                         </tbody>
 
                     </table>
+                    <div class="col-md-1" style="margin: 6rem auto" v-if="trailsInfo.length === 0">
+                            <img src="https://res.papitube.com/corvus/images/content-none.png" alt="" style="width: 100%">
+                    </div>
                     <pagination :current_page="current_page" :method="getSales" :total_pages="total_pages"
                                 :total="total"></pagination>
                 </div>

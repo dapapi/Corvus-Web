@@ -865,7 +865,7 @@
                 this.$router.replace({path: '/clients/' + companyId});
             },
             redirectProject: function (projectId){
-                this.$router.replace({path: '/project/' + projectId});
+                this.$router.replace({path: '/projects/' + projectId});
             },
             changeLinkage: function (value) {
                 console.log(value)
@@ -966,6 +966,7 @@
             },
 
             changeRecommendations: function (value) {
+                console.log(value);
                 this.trailInfo.recommendations = value
             },
 
