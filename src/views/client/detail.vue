@@ -147,7 +147,7 @@
                             </tr>
                             <tbody>
                             <tr v-for="task in clientTasksInfo">
-                                <td><router-link :to="{name: 'tasks/detail', params: {id: task.id}}">{{ task.title }}</router-link></td>
+                                <td><router-link :to="{name: 'clients/detail', params: {id: task.id}}">{{ task.title }}</router-link></td>
                                 <td>{{ task.type?task.type.data.title:'' }}</td>
                                 <td>
                                     <template v-if="task.status === 1">进行中</template>
