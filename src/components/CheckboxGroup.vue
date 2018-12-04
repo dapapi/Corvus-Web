@@ -1,12 +1,13 @@
 <template>
-    <div :class="isLine?'clearfix':''">
-        <div :class="isLine?'float-left':''">
+    <div :class="isLine?'clearfix':''" >
+        <div :class="isLine?'float-left':''" class="checkbox-custom checkbox-primary my-0">
             <input id="allCheck" class="mr-10" @change="setAllCheck" type="checkbox" v-model="allCheck">
             <label for="allCheck">全选</label>
         </div>
-        <ul :class="isLine?'clearfix float-left':''">
-            <li :class="isLine?'float-left mr-20':''" v-for="(item,index) in optionData" :key="index">
-                <input v-model="item.isCheck" class="mr-5" type="checkbox" @change="getCheck(item)"/>
+        <ul :class="isLine?'clearfix float-left':''" class="defaultUl">
+            <li class="checkbox-custom checkbox-primary my-0" :class="isLine?'float-left mr-20':''" v-for="(item,index) in optionData" :key="index">
+                <input :id="`row-${index}`" v-model="item.isCheck" class="mr-5" type="checkbox" @change="getCheck(item)"/>
+                <label class="mr-2" :for="`row-${index}`"></label>       
                 <slot :row="item" :$index="index"></slot>
             </li>
         </ul>
@@ -141,6 +142,9 @@ export default {
 <style lang="scss" scoped>
     li{
         list-style: none;
+    }
+    .defaultUl{
+        margin-bottom:0px
     }
 </style>
 
