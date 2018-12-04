@@ -19,7 +19,7 @@
                 </li>
             </ul>
             <div class="tab-content pt-20">
-                <div class="tab-pane" id="all-TaskFollowUp" role="tabpanel">
+                <div class="tab-pane follow-task" id="all-TaskFollowUp" role="tabpanel">
                     <ul class="task-follow">
                         <li v-for="(item, index) in taskData" :key="index">
                             <div class="change-dot bg-green-500"></div>
@@ -33,7 +33,7 @@
                         暂无数据
                     </div>
                 </div>
-                <div class="tab-pane active" id="task-follow" role="tabpanel">
+                <div class="tab-pane active follow-task" id="task-follow" role="tabpanel">
                     <div class="tab-pane" id="all-TaskFollowUp" role="tabpanel">
                         <ul class="task-follow">
                             <li v-for="(item, index) in taskData" :key="index">
@@ -49,7 +49,7 @@
                         </div>
                     </div>
                 </div>
-                <div class="tab-pane" id="task-active" role="tabpanel">
+                <div class="tab-pane follow-task" id="task-active" role="tabpanel">
                     <div class="tab-pane" id="all-TaskFollowUp" role="tabpanel">
                         <ul class="task-follow">
                             <li v-for="(item, index) in taskData" :key="index">
@@ -124,6 +124,10 @@
 </script>
 
 <style scoped>
+.follow-task{
+    height: 240px;
+    overflow:scroll;
+}
     .no-nav-tab-border {
         border: none;
     }
