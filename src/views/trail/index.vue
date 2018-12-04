@@ -583,7 +583,11 @@
             },
 
             changePrincipal: function (value) {
-                this.trailPrincipal = this.$store.state.otherSlot.data.name
+                if(this.$store.state.otherSlot.data){
+                    this.trailPrincipal = this.$store.state.otherSlot.data.name
+                }else{
+                    this.trailPrincipal = ''
+                }
             },
 
             changeTargetStars: function (value) {

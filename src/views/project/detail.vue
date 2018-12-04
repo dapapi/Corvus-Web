@@ -60,15 +60,38 @@
                             </div>
                         </div>
                     </div>
+                    <div class="clearfix">
+                        <div class="col-md-6 float-left pl-0 mb-20" style="border-right: 1px solid #eee">
+                            <div class="col-md-6">任务 5/12</div>
+                            <div class="clearfix example">
+                                <div class="col-md-3 float-left">电话会议</div>
+                                <div class="col-md-3 float-left">张佳佳</div>
+                                <div class="col-md-3 float-left">2018-12-03 11:10</div>
+                                <div class="col-md-3 float-left">进行中</div>
+                            </div>
+                            <div class="clearfix example">
+                                <div class="col-md-3 float-left">电话会议</div>
+                                <div class="col-md-3 float-left">张佳佳</div>
+                                <div class="col-md-3 float-left">2018-12-03 11:10</div>
+                                <div class="col-md-3 float-left">进行中</div>
+                            </div>
+                            <div class="clearfix example">
+                                <div class="col-md-3 float-left">电话会议</div>
+                                <div class="col-md-3 float-left">张佳佳</div>
+                                <div class="col-md-3 float-left">2018-12-03 11:10</div>
+                                <div class="col-md-3 float-left">进行中</div>
+                            </div>
+                        </div>
+                    </div>
 
                 </div>
             </div>
 
-            <div class="col-md-12 panel">
+            <div class="col-md-12 panel" v-if="projectInfo.title">
                 <div class="col-md-12">
                     <ul class="nav nav-tabs nav-tabs-line" role="tablist">
                         <li class="nav-item" role="presentation" v-if="projectInfo.type != 5">
-                            <a class="nav-link" :class="projectInfo.type != 5 ? '' : 'active'" data-toggle="tab"
+                            <a class="nav-link" :class="projectInfo.type != 5 ? 'active' : ''" data-toggle="tab"
                                href="#forum-project-follow"
                                aria-controls="forum-base"
                                aria-expanded="true" role="tab">项目跟进</a>
@@ -94,7 +117,7 @@
                                aria-expanded="false" role="tab">回款</a>
                         </li>
                         <li class="nav-item" role="presentation">
-                            <a class="nav-link" :class="projectInfo.type == 5 ? '' : 'active'" data-toggle="tab"
+                            <a class="nav-link" :class="projectInfo.type == 5 ? 'active' : ''" data-toggle="tab"
                                href="#forum-project-base"
                                aria-controls="forum-base"
                                aria-expanded="true" role="tab">概况</a>
@@ -102,6 +125,7 @@
                     </ul>
                     <div class="tab-content nav-tabs-animate bg-white">
                         <div class="tab-pane animation-fade" v-if="projectInfo.type != 5"
+                             :class="projectInfo.type != 5 ? 'active' : ''"
                              id="forum-project-follow" role="tabpanel">
                             <div class="clearfix py-20">
                                 <div class="checkbox-custom checkbox-inline checkbox-primary checkbox-sm float-left">
@@ -426,7 +450,7 @@
                                 </div>
                             </div>
                         </div>
-                        <div class="tab-pane animation-fade" :class="projectInfo.type == 5 ? '' : 'active'"
+                        <div class="tab-pane animation-fade" :class="projectInfo.type == 5 ? 'active' : ''"
                              id="forum-project-base"
                              role="tabpanel">
                             <div class="card">

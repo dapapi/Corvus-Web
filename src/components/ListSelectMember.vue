@@ -13,7 +13,7 @@
         <div class="right">
             <div class="right-cont">
                 <div class="right-head">已选择成员</div>
-                <ul class="pointer-content">
+                <ul class="pointer-content selected-member">
                     <li v-for="(item,index) in participantsInfo" :key="index" class="users">
                         <a class="avatar" href="javascript:void(0)">
                             <img src="https://res.papitube.com/no-icon.png" alt="...">
@@ -33,7 +33,7 @@
 <script>
     export default {
         name: "ListSelectMember",
-        props: ['listName', 'selectName', 'type'],
+        props: ['type'],
         data() {
             return {
                 params: {
@@ -62,11 +62,8 @@
                     participantInfo = this.$store.state.newParticipantsInfo;
                 }
 
-                if (participantInfo.find(item => item.id == memberId)) {
-                    participantInfo.splice(participantInfo.map(item => item.id).indexOf(memberId), 1)
-                } else {
-                    participantInfo.push(user)
-                }
+                participantInfo.splice(participantInfo.map(item => item.id).indexOf(memberId), 1)
+
                 this.params.data = participantInfo;
                 this.$store.dispatch('changeParticipantsInfo', this.params);
             }
@@ -138,4 +135,27 @@
         line-height: 30px;
         padding: 10px 20px;
     }
+
+    .selected-member {
+        height: 355px;
+        overflow-y: auto;
+    }
+
+    .selected-member::-webkit-scrollbar {
+        width: 6px;
+        height: 12px;
+        -webkit-appearance: none;
+    }
+
+    .selected-member::-webkit-scrollbar-thumb {
+        background: #ddd;
+        border-radius: 10px;
+    }
+
+    .selected-member::-webkit-scrollbar-track-piece {
+        background: #eee;
+        border-radius: 3px;
+    }
+
+
 </style>>

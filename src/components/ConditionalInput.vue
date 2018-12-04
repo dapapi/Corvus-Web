@@ -4,7 +4,7 @@
         <template v-if="isEdit">
             <div class="">
                 <div class="col-md-6 float-left pl-0">
-                    <Selectors :options="options" :content="inputContent" @change="changeSelector"></Selectors>
+                    <Selectors :options="options" ref="conditionSelector" @change="changeSelector"></Selectors>
                 </div>
                 <div class="col-md-6 float-left pr-0" v-show="isInputShow">
                     <input type="text" class="form-control" v-model="context">
@@ -12,7 +12,7 @@
             </div>
         </template>
         <template v-else>
-            {{ options.find(item => item.value == inputContent).name }} - {{ content }}
+            {{ options.find(item => item.value == content).name }} - {{ inputContent }}
         </template>
     </div>
 
@@ -32,16 +32,32 @@
             }
         },
         mounted() {
-            this.context = this.content
+            this.context = this.inputContent;
+            this.isInputShow = this.content == this.condition ? true : false
+        },
+
+        watch: {
+            context(newValue) {
+                this.$emit('change', {key: 'value', value: newValue})
+            },
+            isEdit(newValue) {
+                if (newValue) {
+                    let _this = this;
+                    setTimeout(function () {
+                        console.log(_this.content);
+                        _this.$refs.conditionSelector.setValue(_this.content)
+                    }, 100)
+                }
+            }
         },
 
         methods: {
             changeSelector(value) {
-                if (value == this.condition) {
-                    this.isInputShow = true
-                } else {
-                    this.isInputShow = false
+                this.isInputShow = value == this.condition ? true : false
+                if (!value) {
+                    value = 0
                 }
+                this.$emit('change', {key: 'condition', value: value});
             }
         }
     }
