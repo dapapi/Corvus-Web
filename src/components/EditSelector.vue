@@ -11,7 +11,7 @@
                 </template>
             </template>
             <template v-else>
-                <template v-if="content && !contentHide">
+                <template v-if="(content && !contentHide)||content===0">
                     {{ options.find(item => item.value == content || item.id  == content).name }}
                 </template>
             </template>
