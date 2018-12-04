@@ -720,7 +720,7 @@
                     _this.artistInfo = response.data;
                  
                 });
-                fetch('get','/bloggers/'+this.artistId+'?include=tasks.type,trails.project.principal,trails.client').then(function(response){
+                fetch('get','/bloggers/461022713?include=tasks.type,trails.project.principal,trails.client').then(function(response){
                     _this.data=response.data
                     console.log(_this.data)
                 })
