@@ -515,11 +515,9 @@
             },
 
             isSignCompany: function (value) {
-                if(!value){
-                    this.signCompany = 0
-                }else{
-                    this.signCompany = value
-                }
+               
+                this.signCompany = value
+                
                 
             },
 
@@ -541,11 +539,19 @@
                     return false
                 }
                 if(!this.artistGender){
-                    toastr.error('情选择艺人性别');
+                    toastr.error('请选择艺人性别');
                     return false
                 }
                 if(!this.artistBirthday){
-                    toastr.error('情选择艺人出生日期');
+                    toastr.error('请选择艺人出生日期');
+                    return false
+                }
+                if(!this.communicationStatus){
+                    toastr.error('请选择沟通状态');
+                    return false
+                }
+                if(!this.signCompany){
+                    toastr.error('请选择是否与其他公司签约');
                     return false
                 }
                 let platform = this.platformType.join(',');
