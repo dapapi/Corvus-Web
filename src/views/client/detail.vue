@@ -88,7 +88,7 @@
                             </tr>
                             <tbody>
                             <tr v-for="trail in clientTrailsInfo">
-                                <td>{{ trail.title }}</td>
+                                <td><router-link :to="{name: 'trails/detail', params: {id: trail.id}}">{{ trail.title }}</router-link></td>
                                 <td>
                                     <template v-if="trail.progress_status === 1">未确定合作</template>
                                     <template v-if="trail.progress_status === 2">已确定合作</template>
@@ -117,7 +117,7 @@
                                 <th class="cell-300" scope="col">录入日期</th>
                             </tr>
                             <tr v-for="project in clientProjectsInfo">
-                                <td>{{ project.title }}</td>
+                                <td><router-link :to="{name: 'projects/detail', params: {id: project.id}}">{{ project.title }}</router-link></td>
                                 <td>
                                     <template v-if="project.status === 1">进行中</template>
                                     <template v-if="project.status === 2">完成</template>
@@ -147,7 +147,7 @@
                             </tr>
                             <tbody>
                             <tr v-for="task in clientTasksInfo">
-                                <td>{{ task.title }}</td>
+                                <td><router-link :to="{name: 'tasks/detail', params: {id: task.id}}">{{ task.title }}</router-link></td>
                                 <td>{{ task.type?task.type.data.title:'' }}</td>
                                 <td>
                                     <template v-if="task.status === 1">进行中</template>

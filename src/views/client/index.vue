@@ -208,16 +208,22 @@
                 clientPrincipalIdSearch: '', // 负责人id
                 clientLevelSearch: '', // 条件筛选的公司级别
                 companyName: '', // 公司名称
+                user: {}, // 个人信息
             }
         },
 
         mounted() {
             this.getClients();
             this.getCompanies();
+            this.user = JSON.parse(Cookies.get('user'))
+            // 负责人默认值的设置
+            this.$store.commit('changeNewPrincipal', {
+                name: this.user.nickname,
+                id: this.user.id
+            })
         },
 
         methods: {
-
             getClients: function (pageNum = 1) {
                 const params = {
                     page: pageNum,
