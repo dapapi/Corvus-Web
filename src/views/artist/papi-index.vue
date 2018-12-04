@@ -80,15 +80,15 @@
                                 <th class="cell-300" scope="col">录入时间</th>
                             </tr>
                             <tbody>
-                            <tr v-for="artist in artistsInfo" :key="artist.id" class="pointer-content" >
+                            <tr v-for="artist in artistsInfo" :key="artist.id" class="pointer-content">
                                 <td>
-                                    <span class="checkbox-custom checkbox-primary" >
+                                    <span class="checkbox-custom checkbox-primary">
                                         <input class="selectable-item" type="checkbox" :id="'row-' + artist.id"
                                                :value="artist.id" @change="selectArtists(artist.id)">
                                         <label :for="'row-' + artist.id"></label>
                                     </span>
                                 </td>
-                                <td  @click="redirectArtistDetail(artist.id)">{{ artist.nickname
+                                <td @click="redirectArtistDetail(artist.id)">{{ artist.nickname
                                     }}
                                 </td>
                                 <td>{{ artist.type.data.name }}</td>
@@ -305,20 +305,20 @@
                 artistTypeArr: [],
                 artistTypeId:'',
                 signCompanyName: '',
-                companyCityArr:config. companyCityArr,
-                trailFilter:'',
-                userData:'',
-                communicationArr:'',
-                communication:'',
-                intention_desc:'',
-                typeF:'',
-                statusF:'',
-                checkboxedone:'',
-                checkboxtow:'',
-                checkboxedthree:'',
-                checkoutfix:'',
-                filetData:{
-                    include:'type,creator,tasks,affixes,producer',
+                companyCityArr: config.companyCityArr,
+                trailFilter: '',
+                userData: '',
+                communicationArr: '',
+                communication: '',
+                intention_desc: '',
+                typeF: '',
+                statusF: '',
+                checkboxedone: '',
+                checkboxtow: '',
+                checkboxedthree: '',
+                checkoutfix: '',
+                filetData: {
+                    include: 'type,creator,tasks,affixes,producer',
                 },
                 filterObject:{
                     include:'type,creator,tasks,affixes,producer',
@@ -448,7 +448,7 @@
             customize: function (value) {
 
             },
-            getUser(){
+            getUser() {
                 let _this = this;
                 fetch('get', '/users').then(function (response) {
                     _this.userData = response.data
@@ -466,8 +466,8 @@
             },
 
             changeCommunicationType: function (value) {
-                this.communication=value
-           
+                this.communication = value
+
             },
 
             changeSignIntention: function (value) {
@@ -525,9 +525,9 @@
                     toastr.success('创建成功');
                     $('#addArtist').modal('hide');
                     _this.getArtists()
-                 
+
                 })
-                
+
             },
 
             selectArtists: function (value) {
@@ -548,7 +548,6 @@
                 }
             },
 
-           
 
             redirectArtistDetail: function (artistId) {
                 this.$router.push({path: 'blogger/' + artistId})

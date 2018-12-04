@@ -161,7 +161,7 @@
                             <div class="col-md-2 text-right float-left pl-0">销售线索</div>
                             <div class="col-md-10 float-left">
                                 <Selectors :options="trailsArr" @change="addProjectTrail" ref="trails"
-                                           placeholder="请选择销售线索"></Selectors>
+                                           placeholder="请选择销售线索" multiple="true"></Selectors>
                             </div>
                         </div>
                         <!--<div class="col-md-12 example clearfix" v-if="projectType != 5">-->
@@ -503,7 +503,7 @@
 
             addProjectTrail: function (value) {
                 this.projectBaseInfo.trail = {
-                    id: value
+                    id: value[0]
                 };
                 let trailInfo = this.trailsAllInfo.find(item => item.id == value);
                 this.$store.dispatch('changePrincipal', {
