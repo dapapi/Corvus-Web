@@ -567,7 +567,7 @@
                     sign_contract_other_name:this.sign_contract_other_name, //签约其他公司名称
                     // sign_contract_at:'',//签约日期
                     artist_scout_name:this.artistScoutName,//星探名称
-                    artist_location:this.artistLocation, //明星地区
+                    star_location:this.artistLocation, //明星地区
                     platform:platform,//社交平台
                     weibo_url:this.weiboUrl,
                     weibo_fans_num:this.weiboFansNum,
