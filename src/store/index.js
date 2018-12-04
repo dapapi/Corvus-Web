@@ -13,6 +13,7 @@ const state = {
     newPrincipalInfo: {},
     companyInfo: {},
     selectPrincipalInfo: {},
+    otherSlot:{},
 };
 
 export default new Vuex.Store({

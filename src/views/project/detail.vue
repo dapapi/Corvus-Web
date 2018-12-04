@@ -443,32 +443,29 @@
                                 </div>
                                 <div class="card-block" v-if="projectInfo.title">
                                     <div class="clearfix">
-                                        <div class="card-text py-10 px-0 clearfix col-md-6 float-left"
-                                             :class="isEdit ? 'edit-height':'' ">
+                                        <div class="card-text py-10 px-0 clearfix col-md-6 float-left edit-height">
                                             <div class="col-md-2 float-left text-right pl-0">项目名称</div>
                                             <div class="col-md-10 float-left font-weight-bold">
                                                 <EditInput :content="projectInfo.title" :is-edit="isEdit"
                                                            @change="(value) => changeProjectBaseInfo(value, 'title')"></EditInput>
                                             </div>
                                         </div>
-                                        <div class="card-text py-10 px-0 clearfix col-md-6 float-left"
-                                             :class="isEdit ? 'edit-height':'' ">
+                                        <div class="card-text py-10 px-0 clearfix col-md-6 float-left edit-height">
                                             <div class="col-md-2 float-left text-right pl-0">负责人</div>
                                             <div class="col-md-10 float-left font-weight-bold">
                                                 <EditInputSelector :is-edit="isEdit"
                                                                    @change="(value) => changeProjectBaseInfo(value, 'principal_id')"></EditInputSelector>
                                             </div>
                                         </div>
-                                        <div class="card-text py-10 px-0 clearfix col-md-6 float-left"
-                                             :class="isEdit ? 'edit-height':'' ">
+                                        <div class="card-text py-10 px-0 clearfix col-md-6 float-left edit-height">
                                             <div class="col-md-2 float-left text-right pl-0">参与人</div>
                                             <div class="col-md-10 float-left font-weight-bold">
                                                 <EditAddMember :is-edit="isEdit"
                                                                @change="(value) => changeProjectBaseInfo(value, 'participant_ids')"></EditAddMember>
                                             </div>
                                         </div>
-                                        <div class="card-text py-10 px-0 clearfix col-md-6 float-left"
-                                             :class="isEdit ? 'edit-height':'' " v-if="projectInfo.type == 5">
+                                        <div class="card-text py-10 px-0 clearfix col-md-6 float-left edit-height"
+                                             v-if="projectInfo.type == 5">
                                             <div class="col-md-2 float-left text-right pl-0">可见范围</div>
                                             <div class="col-md-10 float-left font-weight-bold">
                                                 <EditSelector :is-edit="isEdit" :content="projectInfo.privacy"
@@ -476,8 +473,7 @@
                                                               @change="(value) => changeProjectBaseInfo(value, 'privacy')"></EditSelector>
                                             </div>
                                         </div>
-                                        <div class="card-text py-10 px-0 clearfix col-md-6 float-left"
-                                             :class="isEdit ? 'edit-height':'' ">
+                                        <div class="card-text py-10 px-0 clearfix col-md-6 float-left edit-height">
                                             <div class="col-md-2 float-left text-right pl-0">优先级</div>
                                             <div class="col-md-10 float-left font-weight-bold">
                                                 <EditSelector :is-edit="isEdit" :options="levelArr"
@@ -485,8 +481,7 @@
                                                               @change="(value) => changeProjectBaseInfo(value, 'priority')"></EditSelector>
                                             </div>
                                         </div>
-                                        <div class="card-text py-10 px-0 clearfix col-md-6 float-left"
-                                             :class="isEdit ? 'edit-height':'' ">
+                                        <div class="card-text py-10 px-0 clearfix col-md-6 float-left edit-height">
                                             <div class="col-md-2 float-left text-right pl-0">开始时间</div>
                                             <div class="col-md-10 float-left font-weight-bold">
                                                 <EditDatepicker :is-edit="isEdit"
@@ -494,8 +489,7 @@
                                                                 @change="(value) => changeProjectBaseInfo(value, 'start_at')"></EditDatepicker>
                                             </div>
                                         </div>
-                                        <div class="card-text py-10 px-0 clearfix col-md-6 float-left"
-                                             :class="isEdit ? 'edit-height':'' ">
+                                        <div class="card-text py-10 px-0 clearfix col-md-6 float-left edit-height">
                                             <div class="col-md-2 float-left text-right pl-0">截止时间</div>
                                             <div class="col-md-10 float-left font-weight-bold">
                                                 <EditDatepicker :is-edit="isEdit"
@@ -504,8 +498,7 @@
                                             </div>
                                         </div>
                                         <div v-if="projectInfo.fields">
-                                            <div class="card-text py-10 px-0 clearfix col-md-6 float-left"
-                                                 :class="isEdit ? 'edit-height':'' "
+                                            <div class="card-text py-10 px-0 clearfix col-md-6 float-left edit-height"
                                                  v-for="field in projectInfo.fields">
                                                 <div class="col-md-2 float-left text-right pl-0">{{ field.key }}
                                                 </div>
@@ -542,7 +535,7 @@
                                                     </template>
                                                     <template v-else-if="field.field_type === 6">
                                                         <EditSelector
-                                                                :content="field.values ? field.values.data.value : []"
+                                                                :content="field.values ? field.values.data.value.split('|') : ''"
                                                                 :multiple="true"
                                                                 :is-edit="isEdit"
                                                                 :options="field.contentArr"
@@ -1298,6 +1291,10 @@
             },
 
             changeProjectInfo: function () {
+                if (JSON.stringify(this.changeInfo) === "{}" && JSON.stringify(this.addInfoArr) === "{}") {
+                    this.isEdit = false
+                    return
+                }
                 let data = this.changeInfo;
                 data.fields = this.addInfoArr;
                 let _this = this;

@@ -278,12 +278,15 @@
                 }
                 if (!this.clientType) {
                     toastr.error('请选择客户类型！')
+                    return
                 }
                 if (!this.clientContact) {
                     toastr.error('请填写联系人！')
+                    return
                 }
                  if (!this.clientContactPosition) {
                     toastr.error('请填写联系人职位！')
+                    return
                 }
                 let data = {
                     type: this.clientType,

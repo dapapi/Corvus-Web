@@ -1,13 +1,13 @@
 <template>
 
     <input type="text" class="form-control" data-plugin="asSpinner" value="0"
-           :class="shortInput ? 'short-spinner-input' : ''">
+           :class="[shortInput ? 'short-spinner-input' : '' , addtrail?'addtrail':'']">
 
 </template>
 
 <script>
     export default {
-        props: ['shortInput'],
+        props: ['shortInput','addtrail'],
         mounted() {
             let self = this;
             $(this.$el).asSpinner(
@@ -38,6 +38,9 @@
 </script>
 
 <style>
+    .addtrail{
+        width: 180px !important;
+    }
     .short-spinner-input {
         width: 76% !important;
     }

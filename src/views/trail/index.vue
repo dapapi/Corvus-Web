@@ -14,17 +14,17 @@
                 <div class="clearfix">
                     <div class="col-md-3 example float-left">
                         <input type="text" class="form-control" id="inputPlaceholder" placeholder="请输入销售线索名称"
-                               style="width: 220px" v-model="trailFilter" @keyup.enter='filterGo'>
+                               style="width: 220px" v-model="trailFilter" @keyup.enter='filterGo' @blur='filterGo'>
                     </div>
                     <div class="col-md-3 example float-left">
                         <selectors :placeholder="'请选择销售进展'" 
-                                :options="progressStatus"
+                                :options="progressStatus" :resetinfo='resetInfo'
                                 @change="progressStatusFilter"
                                 ></selectors>
                     </div>
                     <div class="col-md-3 example float-left">
                         <selectors placeholder="请选择负责人" 
-                                :options="memberList" multiple searchable="searchable"
+                                :options="memberList" multiple='true'
                                 @valuelistener="principalFilter"
                                 ></selectors>
                     </div>
@@ -65,7 +65,7 @@
                                 <template v-if="trail.client.data.grade === 2">代理公司</template>
                             </td>
                             <td>
-                                <span v-for="(item , index) in trail.expectations.data" :key="index" v-if="index < 2">{{item.name}}&nbsp;&nbsp;</span>
+                                <span class="overflowsp" v-for="(item , index) in trail.expectations.data" :key="index" v-if="index < 2" >{{item.name}}&nbsp;&nbsp;</span>
                             </td>
                             <td class="">{{ trail.fee }}元</td>
                             <td>
@@ -145,7 +145,7 @@
                             </template>
                             <template v-else-if="trailOrigin === '4' || trailOrigin === '5'">
                                 <div class="col-md-5 float-left pr-0">
-                                    <input-selectors @change="changeTrailOrigin"></input-selectors>
+                                    <input-selectors @change="changeTrailOrigin" :propSelectMemberName='trailOriginPerson.name'></input-selectors>
                                 </div>
                             </template>
 
@@ -160,8 +160,8 @@
                         <div class="example">
                             <div class="col-md-2 text-right float-left">负责人</div>
                             <div class="col-md-10 float-left pl-0">
-                                <input-selectors :placeholder="'请选择负责人'"
-                                                 @change="changePrincipal"></input-selectors>
+                                <input-selectors :placeholder="'请选择负责人'" otherslot = 'otherslot'
+                                                 @change="changePrincipal" :propSelectMemberName='$store.state.otherSlot.data?$store.state.otherSlot.data.name:currentUser.name'></input-selectors>
                             </div>
                         </div>
                         <div class="example">
@@ -223,7 +223,7 @@
                         <div class="example">
                             <div class="col-md-2 text-right float-left">预计费用</div>
                             <div class="col-md-5 float-left pl-0 pr-0">
-                                <number-spinner @change="changeTrailFee"></number-spinner>
+                                <number-spinner @change="changeTrailFee" :addtrail='true'></number-spinner>
                             </div>
                             <div class="col-md-3 float-left" v-if="trailType == 4">
                                 <div class="checkbox-custom checkbox-primary">
@@ -310,10 +310,13 @@
                 }],
                 memberList:[],
                 fetchData:{},
+                currentUser:{},
+                resetInfo:false,
             }
         },
         created(){
             this.getMembers()
+            this.getCurrentUser()
         },
         mounted() {
             this.getSales();
@@ -330,6 +333,11 @@
             }
         },
         methods: {
+            getCurrentUser(){
+                fetch('get','/users/my').then((response) => {
+                    this.currentUser = response.data
+                })
+            },
             getMembers(){
                 let _this = this
                 fetch('get', '/users').then(function (response) {
@@ -365,7 +373,7 @@
                 }else if(!this.trailOrigin){
                     toastr.error("线索为必填")
                     return false;
-                }else if(!this.trailPrincipal){
+                }else if(!this.trailPrincipal && !this.currentUser){
                     toastr.error("负责人为必填")
                     return false;
                 }else if(!this.targetStars){
@@ -408,7 +416,6 @@
                 this.fetchData.include = 'principal,client,contact,recommendations,expectations'
                 fetch(methods,url,this.fetchData).then((response) => {
                     _this.trailsInfo = response.data
-                    _this.fetchData = {}
                 })
             },
             filterGo(){
@@ -416,13 +423,10 @@
                 this.fetchHandler('get','/trails/filter')
             },
             progressStatusFilter(value){
-                console.log(value);
                 if(value){
                     this.fetchData.status= value
-                    this.trailFilter = ''
                 }
                 this.fetchHandler('get','/trails/filter')
-                this.trailFilter = ''
             },
             getSales: function (pageNum = 1) {
                 let _this = this;
@@ -483,7 +487,7 @@
                     brand: this.brandName,
                     client: this.selectCompany,
                     resource_type: this.trailOrigin,
-                    principal_id: this.$store.state.newPrincipalInfo.id,
+                    // principal_id: this.$store.state.otherSlot.data.id || this.currentUser.id,
                     recommendations: this.recommendStars,
                     expectations: this.targetStars,
                     contact: {
@@ -495,8 +499,14 @@
                     industry_id: this.industry,
                     type: this.trailType,
                     priority: this.priority,
-                    cooperation_type:this.cooperation
+                    cooperation_type:this.cooperation*1
                 };
+                if(!this.$store.state.otherSlot.data && this.currentUser){
+                    data.principal_id = this.currentUser.id
+                }else{
+                    data.principal_id = this.$store.state.otherSlot.data.id
+                }
+                                    console.log(data);
                 if (this.trailType != 4) {
                     //    todo 添加线索状态
                 }
@@ -547,7 +557,7 @@
             },
 
             changePrincipal: function (value) {
-                this.trailPrincipal = value
+                this.trailPrincipal = this.$store.state.otherSlot.data.name
             },
 
             changeTargetStars: function (value) {
@@ -583,6 +593,7 @@
             },
 
             changeCooperationType: function (value) {
+                console.log(value);
                 this.cooperation = value
             },
             
