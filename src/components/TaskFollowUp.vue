@@ -91,7 +91,7 @@
 
         },
         mounted(){
-            // this.getTrail()
+            this.getTrail()
         },
         methods: {
             getTrail() {

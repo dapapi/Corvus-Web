@@ -231,7 +231,7 @@
                                              v-if="trailInfo.type === 4" :class="isEdit ? 'edit-height':'' ">
                                             <div class="col-md-2 float-left text-right pl-0">是否锁价</div>
                                             <div class="col-md-10 float-left font-weight-bold">
-                                                <EditSelector :is-edit="isEdit" :options="lockArr"
+                                                <EditSelector :is-edit="isEdit" :options="lockArr" @change='changeLockStatus'
                                                               :content="trailInfo.lock_status"></EditSelector>
                                             </div>
                                         </div>
@@ -371,17 +371,18 @@
                                 </tr>
                                 <tbody>
                                 <tr v-for="task in trailTasksInfo" v-if="trailTasksInfo" :key="task.id">
-                                    <!-- {{task.id}} -->
                                     <router-link :to="'/tasks/'+task.id">
                                         <td>{{ task.title }}</td>
                                     </router-link>
-                                    <td>{{ task.type.data.title }}</td>
+                                    <td v-if="task.type">{{ task.type.data.title }}</td>
+                                    <td v-if="!task.type">{{ '' }}</td>
                                     <td>
                                         <template v-if="task.status === 1">进行中</template>
                                         <template v-else-if="task.status === 2">已完成</template>
                                         <template v-else-if="task.status === 3">已停止</template>
                                     </td>
-                                    <td>{{ task.principal.data.name }}</td>
+                                    <td v-if="task.principal">{{ task.principal.data.name }}</td>
+                                    <td v-if="!task.principal">{{ '' }}</td>
                                     <td>{{ task.end_at }}</td>
                                 </tr>
                                 </tbody>
@@ -588,6 +589,7 @@
         created(){
             this.getAllType()
             this.getTrail();
+            this.getTrailTask()
 
         },
         mounted() {
@@ -613,6 +615,7 @@
         watch: {
             'trailInfo.type': function(newValue){
                 if(this.trailInfo.type === 4){
+                    this.trailOriginArr = config.trailBloggerOrigin
                     this.getStars()
                     this.$nextTick(() => {
                         $('.selectpicker').selectpicker('render');
@@ -708,6 +711,9 @@
             },
             'expectations': function (newValue) {
                 this.expectation = newValue
+            },
+            'trailInfo.lock_status':function(newValue){
+                this.changeInfo.lock_status = newValue
             }
         },
 
@@ -864,12 +870,13 @@
                 }
                 let _this = this;
                 fetch('get', '/trails/' + this.trailId + '/tasks').then(function (response) {
-                    for (let i = 0; i < response.data.length; i++) {
-                        _this.trailTasksInfo = response.data
-                    }
+                    _this.trailTasksInfo = response.data
+                    console.log(response.data);
                 })
             },
-
+            changeLockStatus(value){
+                this.trailInfo.lock_status = value
+            },
             addTask: function () {
                 let _this = this;
                 let data = {
@@ -884,11 +891,25 @@
                     desc: this.taskIntroduce,
                     participants: this.$store.state.newParticipantsInfo,
                 };
-                fetch('post', '/tasks', data).then(function (response) {
-                    toastr.success('创建成功');
-                    $('#addTask').modal('hide');
-                    _this.trailTasksInfo.push(response.data);
-                })
+                if(!this.taskName){
+                     toastr.error('请输入任务名称');
+                }else if(!this.taskType){
+                     toastr.error('请选择任务类型');
+                }else if(!this.principal){
+                     toastr.error('请选择负责人');
+                }else if(!this.taskLevel){
+                     toastr.error('请设置任务优先级');                    
+                }else if(!this.startTime){
+                     toastr.error('请设置开始时间');
+                }else if(!this.endTime){
+                    toastr.error('请设置结束时间')
+                }else{
+                    fetch('post', '/tasks', data).then(function (response) {
+                        toastr.success('创建成功');
+                        $('#addTask').modal('hide');
+                        _this.trailTasksInfo.push(response.data);
+                    })
+                }
             },
 
             redirectCompany: function (companyId) {

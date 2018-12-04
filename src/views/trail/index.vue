@@ -329,6 +329,10 @@
         },
         watch:{
             trailType:function(){
+                if(this.trailType == 4){
+                    this.trailOriginArr = config.trailBloggerOrigin
+                    console.log(this.trailOriginArr);
+                }
                 this.getStars()
                 this.$nextTick(() => {
                     $('.selectpicker').selectpicker('render');
