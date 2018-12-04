@@ -20,15 +20,15 @@
             <div class="panel col-md-12 clearfix py-5">
                 <div class="clearfix">
                     <div class="col-md-3 example float-left">
-                        <input type="text" class="form-control" id="inputPlaceholder" placeholder="请输入项目昵称"
+                        <input type="text" class="form-control" id="inputPlaceholder" placeholder="请输入博主昵称"
                                style="width: 220px" v-model="trailFilter" @blur='filterGo'>
                     </div>
                     <div class="col-md-3 example float-left">
                         <selectors :options="artistTypeArr"
-                                   :placeholder="'请选择项目类型'"  @change="typeFilter" v-model="typeF"></selectors>
+                                   :placeholder="'请选择博主类型'"  @change="typeFilter" v-model="typeF"></selectors>
                     </div>
                     <div class="col-md-3 example float-left">
-                        <selectors :placeholder="'请选择沟通状态'" :options="papiCommunicationStatusArr" ></selectors>
+                        <selectors :placeholder="'请选择沟通状态'" :options="papiCommunicationStatusArr" @change="CommunicationStatus" v-model="statusF"></selectors>
                     </div>
                     <div class="col-md-3 example float-left">
                         <button type="button" class="btn btn-default waves-effect waves-classic float-right"
@@ -41,17 +41,25 @@
 
                 <div class="col-md-12">
                     <ul class="nav nav-tabs nav-tabs-line" role="tablist">
-                        <li class="nav-item" role="presentation" @click="getArtists(1)">
+                        <li class="nav-item" role="presentation" @click="getArtists(1,1)">
                             <a class="nav-link active" data-toggle="tab" href="#forum-artist"
                                aria-controls="forum-base"
                                aria-expanded="true" role="tab">签约中</a>
                         </li>
-                        <li class="nav-item" role="presentation" @click="getArtists(1)">
+<<<<<<< HEAD
+                        <li class="nav-item" role="presentation" @click="getArtists(2)">
+=======
+                        <li class="nav-item" role="presentation" @click="getArtists(1,2)">
+>>>>>>> hp
                             <a class="nav-link" data-toggle="tab" href="#forum-artist"
                                aria-controls="forum-present"
                                aria-expanded="false" role="tab">已签约</a>
                         </li>
-                        <li class="nav-item" role="presentation" @click="getArtists(1)">
+<<<<<<< HEAD
+                        <li class="nav-item" role="presentation" @click="getArtists(3)">
+=======
+                        <li class="nav-item" role="presentation" @click="getArtists(1,3)">
+>>>>>>> hp
                             <a class="nav-link" data-toggle="tab" href="#forum-artist"
                                aria-controls="forum-present"
                                aria-expanded="false" role="tab">已解约</a>
@@ -80,18 +88,18 @@
                                 <th class="cell-300" scope="col">录入时间</th>
                             </tr>
                             <tbody>
-                            <tr v-for="artist in artistsInfo">
+                            <tr v-for="artist in artistsInfo" :key="artist.id" class="pointer-content" >
                                 <td>
-                                    <span class="checkbox-custom checkbox-primary">
+                                    <span class="checkbox-custom checkbox-primary" >
                                         <input class="selectable-item" type="checkbox" :id="'row-' + artist.id"
                                                :value="artist.id" @change="selectArtists(artist.id)">
                                         <label :for="'row-' + artist.id"></label>
                                     </span>
                                 </td>
-                                <td class="pointer-content" @click="redirectArtistDetail(artist.id)">{{ artist.nickname
+                                <td  @click="redirectArtistDetail(artist.id)">{{ artist.nickname
                                     }}
                                 </td>
-                                <td>{{ artist.type.name }}</td>
+                                <td>{{ artist.type.data.name }}</td>
                                 <td>暂无</td>
                                 <td>
                                     <template v-if="artist.intention">是</template>
@@ -108,7 +116,7 @@
                                         {{ artist.producer.data.name }}
                                     </template>
                                 </td>
-                                <td>暂无</td>
+                                <td>{{artist.created_at}}</td>
                             </tr>
                             </tbody>
                         </table>
@@ -152,21 +160,21 @@
                             <div class="col-md-2 text-right float-left">平台</div>
                             <div class="col-md-10 float-left pl-0">
                                 <div class="checkbox-custom checkbox-primary d-inline pr-20">
-                                    <input type="checkbox" name="platform" id="platformAll" @change="changeCheckbox(1)" >
+                                    <input type="checkbox" name="platform" id="platformAll" @change="changeCheckbox(1)" v-model="checkboxedone">
                                     <label for="platformAll">全选</label>
                                 </div>
                                 <div class="checkbox-custom checkbox-primary d-inline pr-20">
                                     <input type="checkbox" name="platform" id="platformWeibo"
-                                           @change="changeCheckbox(2)">
+                                           @change="changeCheckbox(2)" v-model="checkboxtow">
                                     <label for="platformWeibo">微博</label>
                                 </div>
                                 <div class="checkbox-custom checkbox-primary d-inline pr-20">
                                     <input type="checkbox" name="platform" id="platformDouyin"
-                                           @change="changeCheckbox(3)">
+                                           @change="changeCheckbox(3)" v-model="checkboxedthree">
                                     <label for="platformDouyin">抖音</label>
                                 </div>
                                 <div class="checkbox-custom checkbox-primary d-inline pr-20">
-                                    <input type="checkbox" name="platform" id="platformXHS" @change="changeCheckbox(4)">
+                                    <input type="checkbox" name="platform" id="platformXHS" @change="changeCheckbox(4)" v-model="checkoutfix">
                                     <label for="platformXHS">小红书</label>
                                 </div>
                             </div>
@@ -178,34 +186,34 @@
                                            @change="changeArtistType"></selectors>
                             </div>
                         </div>
-                        <div class="example">
+                        <div class="example" v-if="checkboxtow">
                             <div class="col-md-2 text-right float-left">微博主页地址</div>
                             <div class="col-md-4 float-left pl-0">
                                 <input type="text" class="form-control" v-model="weiboUrl">
                             </div>
                             <div class="col-md-2 text-right float-left">签约时微博粉丝数</div>
                             <div class="col-md-4 float-left pl-0">
-                                <number-spinner @change="changeWeiboFansNum"></number-spinner>
+                                <number-spinner @change="changeWeiboFansNum" style="width:130px"></number-spinner>
                             </div>
                         </div>
-                        <div class="example">
+                        <div class="example" v-if="checkboxedthree">
                             <div class="col-md-2 text-right float-left">抖音ID</div>
                             <div class="col-md-4 float-left pl-0">
                                 <input type="text" class="form-control" v-model="douyinId">
                             </div>
                             <div class="col-md-2 text-right float-left">签约时抖音粉丝数</div>
                             <div class="col-md-4 float-left pl-0">
-                                <number-spinner @change="changeDouyinFansNum"></number-spinner>
+                                <number-spinner @change="changeDouyinFansNum" style="width:130px"></number-spinner>
                             </div>
                         </div>
-                        <div class="example">
+                        <div class="example" v-if="checkoutfix">
                             <div class="col-md-2 text-right float-left">小红书链接</div>
                             <div class="col-md-4 float-left pl-0">
                                 <input type="text" class="form-control" v-model="xhsUrl">
                             </div>
                             <div class="col-md-2 text-right float-left pl-0">签约时小红书粉丝数</div>
                             <div class="col-md-4 float-left pl-0">
-                                <number-spinner @change="changeXHSFansNum"></number-spinner>
+                                <number-spinner @change="changeXHSFansNum" style="width:130px"></number-spinner>
                             </div>
                         </div>
                         <div class="example">
@@ -293,7 +301,18 @@
                 communicationArr:'',
                 communication:'',
                 intention_desc:'',
-                typeF:''
+                typeF:'',
+                statusF:'',
+                checkboxedone:'',
+                checkboxtow:'',
+                checkboxedthree:'',
+                checkoutfix:'',
+                filetData:{
+                    include:'type,creator,tasks,affixes,producer',
+                },
+                filterObject:{
+                    include:'type,creator,tasks,affixes,producer',
+                }
             }
         },
 
@@ -304,43 +323,50 @@
         },
 
         methods: {
-            getArtists: function (page = 1) {
-                let data = {
-                    page: page,
-                    include:'creator,tasks,affixes,producer'
-                };
+            getArtists: function (page = 1,signStatus) {
+                if(signStatus){
+                   this.filetData.status= signStatus
+                }
+                this.filetData.page=page 
+               
                 let _this = this;
-                fetch('get', '/bloggers', data).then(function (response) {
+                fetch('get', '/bloggers', this.filetData).then(function (response) {
                     
                     _this.artistsInfo = response.data;
+                    console.log(_this.artistsInfo )
                     _this.current_page = response.meta.pagination.current_page;
                     _this.total = response.meta.pagination.total;
                     _this.total_pages = response.meta.pagination.total_pages;
-                    console.log(response.data) 
                 });
-                fetch('get','/bloggers/gettype').then(function(response){ 
-                   
-                    _this.artistTypeArr=response.data  
-                    
+                fetch('get','/bloggers/gettype').then(function(response){      
+                    _this.artistTypeArr=response.data                  
                 })
             },
-            filterGo(){
-                
+            filterGo(){ 
                 let _this = this;
-                fetch('get','/bloggers?name='+ this.trailFilter).then(function(response){
-                    
-                     _this.artistsInfo = response.data
-                })
-              
+                this.filterObject.name = this.trailFilter;
+                console.log(this.filterObject)
+                fetch('get','/bloggers',this.filterObject).then(function(response){  
+                             
+                    _this.artistsInfo =response.data
+                    console.log(_this.artistsInfo)
+                })      
             },
             typeFilter(value){
-                this.typeF=value;
+                this.filterObject.type=value;
+                console.log(this.filterObject)
                 let _this = this;
-                fetch('get','/bloggers?type='+ this.typeF).then(function(response){
+                fetch('get','/bloggers', this.filterObject).then(function(response){
                      _this.artistsInfo = response.data
                 })
             },
-           
+            CommunicationStatus(value){
+                 this.filterObject.communication_status=value;
+                let _this = this;
+                fetch('get','/bloggers', this.filterObject).then(function(response){
+                     _this.artistsInfo = response.data
+                })
+            },
             customize: function (value) {
 
             },
@@ -354,9 +380,20 @@
                 this.artistStatus = value
             },
 
-            changeCheckbox: function (value) {
-             
+            changeCheckbox: function (value) {   
+                console.log(value)
                 this.platformType = value
+                if(this.checkboxedone==1){
+                    this.checkboxtow=true;
+                    this.checkboxedthree=true;
+                    this.checkoutfix=true;
+                }
+ 
+                else if(this.checkboxtow==true&&this.checkboxedthree==true&&this.checkoutfix==true){
+                    this.checkboxedone=true
+                }else if(this.checkboxtow==false||this.checkboxedthree==false||this.checkoutfix==false){
+                    this.checkboxedone=false
+                }
             },
 
             changeCommunicationType: function (value) {
@@ -379,9 +416,9 @@
                 if(value){
                     this.signCompany = value  
                 }else{
-                    this.signConpany = 0
+                    this.signCompany = 0
                 }
-               console.log(this.signConpany)
+               console.log(this.signCompany)
             },
 
             changeWeiboFansNum: function (value) {
@@ -411,12 +448,13 @@
                     intention_desc: this.intention_desc,
                     sign_contract_other: this.signCompany,
                     sign_contract_other_name: this.signCompanyName,
+                    // desc:this.artistDesc,
                     
                 };
                 fetch('post', '/bloggers', data).then(function (response) {
                     toastr.success('创建成功');
                     $('#addArtist').modal('hide');
-                    _this.$router.push({path: 'blogger/' + response.data.id})
+                    _this.getArtists()
                  
                 })
                 

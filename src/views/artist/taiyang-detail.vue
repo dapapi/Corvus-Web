@@ -495,7 +495,7 @@
                         </div>
                         <div class="card-block">
                             <div class="col-md-7 pl-0">
-                                <TaskFollowUp :follow-type="'艺人'"></TaskFollowUp>
+                                <TaskFollowUp :follow-type="'艺人'" :trailId="$route.params.id" trailType="stars"></TaskFollowUp>
                             </div>
                         </div>
                     </div>
@@ -830,7 +830,7 @@
 
             getTaskType: function () {
                 let _this = this;
-                fetch('get', '/task_types/all').then(function (response) {
+                fetch('get', '/task_types').then(function (response) {
                     for (let i = 0; i < response.data.length; i++) {
                         _this.taskTypeArr.push({
                             value: response.data[i].id,

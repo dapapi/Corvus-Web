@@ -88,7 +88,7 @@
                             </tr>
                             <tbody>
                             <tr v-for="trail in clientTrailsInfo">
-                                <td>{{ trail.title }}</td>
+                                <td><router-link :to="{name: 'trails/detail', params: {id: trail.id}}">{{ trail.title }}</router-link></td>
                                 <td>
                                     <template v-if="trail.progress_status === 1">未确定合作</template>
                                     <template v-if="trail.progress_status === 2">已确定合作</template>
@@ -117,9 +117,14 @@
                                 <th class="cell-300" scope="col">录入日期</th>
                             </tr>
                             <tr v-for="project in clientProjectsInfo">
-                                <td>{{ project.title }}</td>
-                                <td>{{ project.status }}</td>
-                                <td>{{ project.principal.data.name }}</td>
+                                <td><router-link :to="{name: 'projects/detail', params: {id: project.id}}">{{ project.title }}</router-link></td>
+                                <td>
+                                    <template v-if="project.status === 1">进行中</template>
+                                    <template v-if="project.status === 2">完成</template>
+                                    <template v-if="project.status === 3">终止</template>
+                                    <template v-if="project.status === 4">删除</template>
+                                </td>
+                                <td>{{ project.principal?project.principal.data.name:'' }}</td>
                                 <td>{{ project.trail.data.client.data.company}}</td>
                                 <td>{{ project.created_at }}</td>
                             </tr>
@@ -142,8 +147,8 @@
                             </tr>
                             <tbody>
                             <tr v-for="task in clientTasksInfo">
-                                <td>{{ task.title }}</td>
-                                <td>{{ task.type }}</td>
+                                <td><router-link :to="{name: 'tasks/detail', params: {id: task.id}}">{{ task.title }}</router-link></td>
+                                <td>{{ task.type?task.type.data.title:'' }}</td>
                                 <td>
                                     <template v-if="task.status === 1">进行中</template>
                                     <template v-if="task.status === 2">已完成</template>
@@ -210,7 +215,7 @@
                                     <div class="col-md-1 float-left text-right pl-0">地区</div>
                                     <div class="col-md-5 float-left font-weight-bold">
                                         <EditSelector :options="clientTypeArr" :is-edit="isEdit"
-                                                      :content="clientInfo.type"></EditSelector>
+                                                      :content="clientInfo.address"></EditSelector>
                                     </div>
                                     <div class="col-md-1 float-left text-right pl-0">详细地址</div>
                                     <div class="col-md-5 float-left font-weight-bold">
@@ -287,7 +292,8 @@
                                     </span>
                                     <span class="d-block float-left"
                                           style="width: 1px; height: 14px;border-right: 1px solid #b9b9b9;margin: 3px;"></span>
-                                    <span class="pl-20 d-block float-left pointer-content" style="color: #b9b9b9"  @click="delContact(contact.id)">
+                                    <span class="pl-20 d-block float-left pointer-content" style="color: #b9b9b9" data-plugin="actionBtn" @click="setDelInfo(contact.id)" data-toggle="modal"
+                                            data-target="#confirmFlag" typeText="删除">
                                         <i class="icon md-delete" aria-hidden="true"></i>
                                     </span>
                                 </td>
@@ -453,6 +459,8 @@
             </div>
         </div>
 
+        <!-- 是否确认删除 -->
+        <flag @confirmFlag="delContact" />
     </div>
 
 </template>
@@ -470,7 +478,7 @@
                 clientTypeArr: config.clientTypeArr,
                 clientLevelArr: config.clientLevelArr,
                 clientScaleArr: config.clientScaleArr,
-                taskTypeArr: config.taskTypeArr,
+                taskTypeArr: [],
                 taskLevelArr: config.taskLevelArr,
                 multiple: false,
                 taskType: '',
@@ -492,13 +500,15 @@
                 contactPhone: '',
                 contactPosition: '',
                 clientProjectsInfo: '',
-                taskPrincipalId: '',
+                taskPrincipalId: '', // 负责人
+                participantIds: [], // 参与人
                 isEditContact: true,
                 editConfig: {
                     position: '',
                     name: '',
                     phone: ''
                 }, // 修改的联系人信息
+                contactId: '', // 联系人id
             }
         },
         beforeMount () {
@@ -511,6 +521,7 @@
                 _this.getClientTrail();
                 _this.getClientProject()
             }, 100);
+            this.getTaskType()
         },
 
         watch: {
@@ -648,9 +659,9 @@
                     $('#addContact').modal('hide')
                 })
             },
-            delContact (id) {
+            delContact () {
                 let _this = this
-                fetch('delete', `/clients/${this.clientId}/contacts/${id}`).then(function (response) {
+                fetch('delete', `/clients/${this.clientId}/contacts/${this.contactId}`).then(function (response) {
                     toastr.success('删除成功')
                     _this.getClientContact()
                 })
@@ -659,7 +670,7 @@
             // TODO 地区省市级联动没有做
             changeClientBaseInfo: function () {
                 let _this = this;
-                console.log(this.changeInfo)
+                // console.log(this.changeInfo)
                 fetch('put', '/clients/' + this.clientId, this.changeInfo).then(function () {
                     _this.isEdit = false;
                     toastr.success('修改成功')
@@ -713,19 +724,47 @@
                     resource_type: 4,
                     resourceable_id: this.clientId,
                     title: this.taskName,
-                    // type: 4,
-                    principal_id: this.taskPrincipalId,
+                    type: this.taskType,
+                    principal_id: this.taskPrincipalId, // 负责人 principal_id
                     priority: this.taskLevel,
                     start_at: this.taskStartTime + ' ' + this.startMinutes,
                     end_at: this.taskEndTime + ' ' + this.endMinutes,
                     desc: this.taskIntroduce,
-                    participant_ids: this.participants
+                    participant_ids: this.participantIds
                 };
+                console.log(data)
+                if (!data.title) {
+                    toastr.error('请填写任务名称')
+                    return
+                }
+
+                if (!this.taskStartTime) {
+                    toastr.error('请选择开始时间')
+                    return
+                }
+
+                if (!this.taskEndTime) {
+                    toastr.error('请选择截止时间')
+                    return
+                }
+
+                if (this.taskStartTime > this.taskEndTime) {
+                    toastr.error('开始时间不能晚于截止时间')
+                    return
+                }
+
+                if (!data.principal_id) {
+                    toastr.error('请选择负责人')
+                }
+
                 fetch('post', '/tasks', data).then(function (response) {
                     toastr.success('创建成功');
                     $('#addTask').modal('hide');
-                    this.editConfig = {}
+                    _this.editConfig = {}
                     _this.clientTasksInfo.push(response.data)
+                    _this.getClient();
+                    _this.getClientTrail();
+                    _this.getClientProject()
                 })
             },
 
@@ -734,12 +773,12 @@
             },
 
             taskPrincipalChange: function (value) {
-                this.taskPrincipal = value
+                this.taskPrincipalId = value.id
             },
 
             taskParticipantChange: function (value) {
-                this.taskParticipant = value
-                this.taskPrincipalId =  this.$store.state.newPrincipalInfo.id
+                const _arr = this.$store.state.newParticipantsInfo.map(n => n.id)
+                this.participantIds = _arr
             },
 
             changeStartTime: function (value) {
@@ -763,6 +802,20 @@
                     phone: ''
                 }
                 this.isEditContact = value
+            },
+            // 获取任务类型列表
+            getTaskType () {
+                fetch('get', '/task_types').then(res => {
+                    const data = res.data
+                    this.taskTypeArr = data.map(n => {
+                        return {name: n.title, value: n.id}
+                    })
+                    this.taskTypeArr.unshift({name: '全部', value: ''})
+                })
+            },
+            // 获取要删除的信息
+            setDelInfo (id) {
+                this.contactId = id
             }
         }
     }

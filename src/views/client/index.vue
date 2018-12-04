@@ -13,13 +13,11 @@
             <div class="panel col-md-12 py-5">
                 <div class="clearfix">
                     <div class="col-md-3 example float-left">
-                        <input type="text" class="form-control" id="inputPlaceholder" placeholder="请输入公司名称"
-                               style="width: 220px" v-model="companyName" @blur="changeCompany">
+                        <input v-if="true" type="text" class="form-control" placeholder="请输入公司名称"
+                               style="width: 220px" v-model="companyName" @blur="changeCompany" >
                     </div>
                     <div class="col-md-3 example float-left">
-                        <!-- <selectors @change=""
-                                   :placeholder="'请选择负责人'"></selectors> -->
-                        <input-selectors :placeholder="'请选择负责人'" @change="changePrincipalSelect"></input-selectors>
+                        <input-selectors :key="'inputSelect'" :placeholder="'请选择负责人'" @change="changePrincipalSelect"></input-selectors>
                     </div>
                     <div class="col-md-3 example float-left">
                         <!-- <selectors @change=""
@@ -210,16 +208,22 @@
                 clientPrincipalIdSearch: '', // 负责人id
                 clientLevelSearch: '', // 条件筛选的公司级别
                 companyName: '', // 公司名称
+                user: {}, // 个人信息
             }
         },
 
         mounted() {
             this.getClients();
             this.getCompanies();
+            this.user = JSON.parse(Cookies.get('user'))
+            // 负责人默认值的设置
+            this.$store.commit('changeNewPrincipal', {
+                name: this.user.nickname,
+                id: this.user.id
+            })
         },
 
         methods: {
-
             getClients: function (pageNum = 1) {
                 const params = {
                     page: pageNum,
@@ -278,12 +282,15 @@
                 }
                 if (!this.clientType) {
                     toastr.error('请选择客户类型！')
+                    return
                 }
                 if (!this.clientContact) {
                     toastr.error('请填写联系人！')
+                    return
                 }
                  if (!this.clientContactPosition) {
                     toastr.error('请填写联系人职位！')
+                    return
                 }
                 let data = {
                     type: this.clientType,

@@ -7,12 +7,12 @@
         <template v-else>
             <template v-if="multiple && !contentHide">
                 <template v-if="content.length > 0" v-for="cont in content">
-                    {{ options.find(item => item.value == cont).name }}
+                    {{ options.find(item => item.value == cont ).name }}
                 </template>
             </template>
             <template v-else>
-                <template v-if="content">
-                    {{ options.find(item => item.value ||item.id == content).name }}
+                <template v-if="content && !contentHide">
+                    {{ options.find(item => item.value == content || item.id  == content).name }}
                 </template>
             </template>
         </template>
