@@ -570,7 +570,7 @@ let config = {
             },
             {
                 name: '否',
-                value: 0
+                value: 2
             }
         ],
         // 性别

@@ -465,7 +465,7 @@
                         <h4 class="modal-title">批量添加成员</h4>
                     </div>
                     <div class="modal-body clearfix pt-10">
-                        <ListSelectMember :listName="'成员列表'" :selectName="'已选择成员'" :type="'change'"></ListSelectMember>
+                        <ListSelectMember :type="'change'"></ListSelectMember>
                     </div>
                     <div class="modal-footer">
                         <button class="btn btn-sm btn-white btn-pure" data-dismiss="modal">取消</button>
