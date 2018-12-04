@@ -53,24 +53,6 @@
                                 <div class="col-md-3 float-left">2018-12-03 11:10</div>
                                 <div class="col-md-3 float-left">进行中</div>
                             </div>
-                            <div class="clearfix example">
-                                <div class="col-md-3 float-left">电话会议</div>
-                                <div class="col-md-3 float-left">张佳佳</div>
-                                <div class="col-md-3 float-left">2018-12-03 11:10</div>
-                                <div class="col-md-3 float-left">进行中</div>
-                            </div>
-                            <div class="clearfix example">
-                                <div class="col-md-3 float-left">电话会议</div>
-                                <div class="col-md-3 float-left">张佳佳</div>
-                                <div class="col-md-3 float-left">2018-12-03 11:10</div>
-                                <div class="col-md-3 float-left">进行中</div>
-                            </div>
-                            <div class="clearfix example">
-                                <div class="col-md-3 float-left">电话会议</div>
-                                <div class="col-md-3 float-left">张佳佳</div>
-                                <div class="col-md-3 float-left">2018-12-03 11:10</div>
-                                <div class="col-md-3 float-left">进行中</div>
-                            </div>
                         </div>
                         <div class="col-md-6 float-left pl-0 mb-20">
                             <div class="col-md-6">项目</div>
@@ -83,12 +65,6 @@
                             <div class="clearfix example">
                                 <div class="col-md-3 float-left">星巴克代言</div>
                                 <div class="col-md-3 float-left">商务项目</div>
-                                <div class="col-md-3 float-left">2018-12-03 11:10</div>
-                                <div class="col-md-3 float-left">进行中</div>
-                            </div>
-                            <div class="clearfix example">
-                                <div class="col-md-3 float-left">万达商演</div>
-                                <div class="col-md-3 float-left">影视项目</div>
                                 <div class="col-md-3 float-left">2018-12-03 11:10</div>
                                 <div class="col-md-3 float-left">进行中</div>
                             </div>

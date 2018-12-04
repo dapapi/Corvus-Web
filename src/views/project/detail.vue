@@ -81,18 +81,6 @@
                                 <div class="col-md-3 float-left">2018-12-03 11:10</div>
                                 <div class="col-md-3 float-left">进行中</div>
                             </div>
-                            <div class="clearfix example">
-                                <div class="col-md-3 float-left">电话会议</div>
-                                <div class="col-md-3 float-left">张佳佳</div>
-                                <div class="col-md-3 float-left">2018-12-03 11:10</div>
-                                <div class="col-md-3 float-left">进行中</div>
-                            </div>
-                            <div class="clearfix example">
-                                <div class="col-md-3 float-left">电话会议</div>
-                                <div class="col-md-3 float-left">张佳佳</div>
-                                <div class="col-md-3 float-left">2018-12-03 11:10</div>
-                                <div class="col-md-3 float-left">进行中</div>
-                            </div>
                         </div>
                     </div>
 
