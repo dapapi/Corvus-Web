@@ -48,10 +48,12 @@
                                 </ul>
                             </template>
                         </li>
+                        <li class="site-menu-item">
+                            <div class="user-wrap">
+                                <img src="https://res.papitube.com/no-icon.png" alt="">
+                            </div>
+                        </li>
                     </ul>
-                    <div class="user-wrap">
-                        <img src="https://res.papitube.com/no-icon.png" alt="">
-                    </div>
                 </div>
             </div>
         </div>
@@ -240,8 +242,8 @@
         height: 50px;
         border-radius: 100%;
         overflow: hidden;
-        position: absolute;
-        bottom: 30px;
+        position: relative;
+        top: 30px;
         left: 25px;
     }
 
