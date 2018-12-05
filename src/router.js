@@ -155,22 +155,22 @@ export default new Router({
                     path: '/approval/only',
                     component: () => import('./views/approval/only.vue')
                 },
-                 {
-                   path: '/approval/general',
-                   component: () => import('./views/approval/general.vue')
-                 },
-                 {
+                {
+                    path: '/approval/general',
+                    component: () => import('./views/approval/general.vue')
+                },
+                {
                     path: '/approval/currency',
                     component: () => import('./views/approval/currency.vue')
-                  },
-                  {
+                },
+                {
                     path: '/approval/cur',
                     component: () => import('./views/approval/cur.vue')
-                  },
-                  {
+                },
+                {
                     path: '/approval/account',
                     component: () => import('./views/approval/account.vue')
-                  },
+                },
                 {
                     path: '/application/:id',
                     name: 'approval/detail',
@@ -295,9 +295,9 @@ export default new Router({
                     component: () => import('./views/attendance/tellme.vue')
                 },
                 {
-                path: '/attendance/details',
-                name: 'details',
-                component: () => import('./views/attendance/details.vue')
+                    path: '/attendance/details',
+                    name: 'details',
+                    component: () => import('./views/attendance/details.vue')
                 },
             ]
         },
@@ -342,6 +342,11 @@ export default new Router({
             path: '/broadcast/:id',
             name: 'broadcast/detail',
             component: () => import('./views/broadcast/detail.vue')
+        },
+        {
+            path: '/management',
+            name: 'management/index',
+            component: () => import('./views/management/index.vue')
         },
     ],
 });
