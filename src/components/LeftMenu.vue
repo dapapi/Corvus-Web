@@ -13,7 +13,7 @@
                         <li class="site-menu-item" v-for="menu in menuData"
                             :class="{'has-sub': menu.data, 'active' : pageRoute === menu.code || ( menu.data && menu.data.find(item => item.code === pageRoute))}">
                             <template v-if="!menu.data">
-                                <router-link :to="'/' + menu.code" class="animsition-link waves-effect waves-classic">
+                                <router-link :to="'/' + menu.code" class="animsition-link">
                                     <div>
                                         <span class="base-icon">
                                             <img :src="menu.image" alt="">
@@ -26,7 +26,7 @@
                                 </router-link>
                             </template>
                             <template v-else>
-                                <a class="animsition-link waves-effect waves-classic">
+                                <a class="animsition-link">
                                     <div>
                                         <span class="base-icon">
                                             <img :src="menu.image" alt="">
@@ -41,19 +41,17 @@
                                     <li class="site-menu-item" v-for="subMenu in menu.data"
                                         :class="pageRoute === subMenu.code ? 'active': ''">
                                         <router-link :to="'/' + subMenu.code"
-                                                     class="animsition-link waves-effect waves-classic">
+                                                     class="animsition-link">
                                             <span class="site-menu-title">{{ subMenu.name }}</span>
                                         </router-link>
                                     </li>
                                 </ul>
                             </template>
                         </li>
-                        <li class="site-menu-item">
-                            <div class="user-wrap">
-                                <img src="https://res.papitube.com/no-icon.png" alt="">
-                            </div>
-                        </li>
                     </ul>
+                    <div class="user-wrap">
+                        <img src="https://res.papitube.com/no-icon.png" alt="">
+                    </div>
                 </div>
             </div>
         </div>
@@ -242,8 +240,8 @@
         height: 50px;
         border-radius: 100%;
         overflow: hidden;
-        position: relative;
-        top: 30px;
+        position: absolute;
+        bottom: 30px;
         left: 25px;
     }
 
