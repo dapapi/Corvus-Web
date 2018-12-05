@@ -626,9 +626,15 @@
                                     <div class="card-text py-5 clearfix">
                                         <div class="col-md-1 float-left text-right pl-0">关联项目</div>
                                         <div class="col-md-5 float-left font-weight-bold">
+                                            <template v-for="project in projectInfo.relate_projects.data">
+                                                {{project.title }}
+                                            </template>
                                         </div>
                                         <div class="col-md-1 float-left text-right pl-0">关联任务</div>
                                         <div class="col-md-5 float-left font-weight-bold">
+                                            <template v-for="task in projectInfo.relate_tasks.data">
+                                                {{ task.title }}
+                                            </template>
                                         </div>
                                     </div>
                                 </div>
@@ -1184,7 +1190,7 @@
                 this.projectId = this.$route.params.id;
                 let _this = this;
                 let data = {
-                    include: 'principal,participant,creator,fields,trail.expectations,trail.client,relates',
+                    include: 'principal,participant,creator,fields,trail.expectations,trail.client,relate_tasks,relate_projects',
                 };
                 fetch('get', '/projects/' + this.projectId, data).then(function (response) {
                     let fieldsArr = response.meta.fields.data;
@@ -1212,6 +1218,13 @@
                         }
                         params.data = response.data.participants.data;
                         _this.$store.dispatch('changeParticipantsInfo', params);
+                    }
+
+                    for (let i = 0; i < response.data.relate_tasks.data.length; i++) {
+                        _this.linkageSelectedIds.tasks.push(response.data.relate_tasks.data[i].id)
+                    }
+                    for (let i = 0; i < response.data.relate_projects.data.length; i++) {
+                        _this.linkageSelectedIds.projects.push(response.data.relate_projects.data[i].id)
                     }
 
                 })
@@ -1323,7 +1336,7 @@
 
             changeProjectInfo: function () {
                 if (JSON.stringify(this.changeInfo) === "{}" && JSON.stringify(this.addInfoArr) === "{}") {
-                    this.isEdit = false
+                    this.isEdit = false;
                     return
                 }
                 let data = this.changeInfo;
@@ -1340,7 +1353,7 @@
                     data.participant_del_ids = del_participant_ids
                 }
 
-                fetch('put', '/projects/' + this.projectId, data).then(function (response) {
+                fetch('put', '/projects/' + this.projectId, data).then(function () {
                     toastr.success('修改成功');
                     _this.isEdit = false;
                     _this.getProject()
@@ -1432,10 +1445,11 @@
             },
 
             addLinkageResource: function () {
-                console.log(this.linkageSelectedIds)
-                fetch('post', '/projects/' + this.projectId + '/relates').then(function (response) {
-                    console.log(response)
-                    toastr.success('关联成功')
+                let _this = this;
+                fetch('post', '/projects/' + this.projectId + '/relates', this.linkageSelectedIds).then(function () {
+                    toastr.success('关联成功');
+                    $('#addLinkage').modal('hide');
+                    _this.getProject()
                 })
             }
 
