@@ -77,7 +77,12 @@
                                 <td>
                                     <template v-if="project.trail && project.trail.data.expectations">
                                         <template v-for="expectation in project.trail.data.expectations.data">
-                                            {{ expectation.name }}
+                                            <template v-if="expectation.name">
+                                                {{ expectation.name }}
+                                            </template>
+                                            <template v-else>
+                                                {{ expectation.nickname }}
+                                            </template>
                                         </template>
                                     </template>
                                 </td>

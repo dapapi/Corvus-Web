@@ -12,9 +12,11 @@
                     <a class="dropdown-item" role="menuitem" data-toggle="modal" data-target="#addLinkage"
                        @click="selectProjectLinkage">关联</a>
                     <a class="dropdown-item" role="menuitem" data-toggle="modal" data-target="#confirmFlag"
-                       @click="changeToastrText(2)">完成</a>
+                       @click="changeToastrText(1)" v-show="projectInfo.status != 1">激活</a>
                     <a class="dropdown-item" role="menuitem" data-toggle="modal" data-target="#confirmFlag"
-                       @click="changeToastrText(3)">撤单</a>
+                       @click="changeToastrText(2)" v-show="projectInfo.status != 2">完成</a>
+                    <a class="dropdown-item" role="menuitem" data-toggle="modal" data-target="#confirmFlag"
+                       @click="changeToastrText(3)" v-show="projectInfo.status != 3">撤单</a>
                     <a class="dropdown-item" role="menuitem" data-toggle="modal" data-target="#addPrivacy">隐私设置</a>
                 </div>
             </div>
@@ -42,7 +44,12 @@
                             </div>
                             <div class="font-weight-bold float-left" v-if="projectInfo.trail.data.expectations">
                                 <template v-for="artist in projectInfo.trail.data.expectations.data">
-                                    {{ artist.name }}
+                                    <template v-if="artist.name">
+                                        {{ artist.name }}
+                                    </template>
+                                    <template v-else>
+                                        {{ artist.nickname }}
+                                    </template>
                                 </template>
                             </div>
                         </div>
@@ -1096,7 +1103,7 @@
                     </div>
                     <div class="modal-footer">
                         <button class="btn btn-sm btn-white btn-pure" data-dismiss="modal">取消</button>
-                        <button class="btn btn-primary" type="submit" @click="">确定</button>
+                        <button class="btn btn-primary" type="submit" @click="addLinkageResource">确定</button>
                     </div>
                 </div>
             </div>
@@ -1177,7 +1184,7 @@
                 this.projectId = this.$route.params.id;
                 let _this = this;
                 let data = {
-                    include: 'principal,participant,creator,fields,trail.expectations,trail.client',
+                    include: 'principal,participant,creator,fields,trail.expectations,trail.client,relates',
                 };
                 fetch('get', '/projects/' + this.projectId, data).then(function (response) {
                     let fieldsArr = response.meta.fields.data;
@@ -1391,6 +1398,8 @@
                     this.changeProjectStatusText = '完成 " ' + this.projectInfo.title + ' " 项目吗？'
                 } else if (status === 3) {
                     this.changeProjectStatusText = '撤单 " ' + this.projectInfo.title + ' " 项目吗？'
+                } else if (status === 1) {
+                    this.changeProjectStatusText = '激活 " ' + this.projectInfo.title + ' " 项目吗？'
                 }
                 this.projectChangeStatus = status
             },
@@ -1421,6 +1430,14 @@
                     this.linkageSelectedIds[type].push(value)
                 }
             },
+
+            addLinkageResource: function () {
+                console.log(this.linkageSelectedIds)
+                fetch('post', '/projects/' + this.projectId + '/relates').then(function (response) {
+                    console.log(response)
+                    toastr.success('关联成功')
+                })
+            }
 
         }
     }
