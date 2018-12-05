@@ -265,7 +265,7 @@
                                 <selectors :options="yesOrNoArr" :placeholder="'请选择签约意向'"
                                            @change="changeSignIntention"></selectors>
                             </div>
-                            <div class="col-md-5 float-left pl-0" v-show="signIntention === 0">
+                            <div class="col-md-5 float-left pl-0" v-show="signIntention == 2">
                                 <textarea name="" class="form-control" rows="1" placeholder="请填写不签约理由"
                                           v-model="notSignReason"></textarea>
                             </div>
@@ -280,25 +280,21 @@
                                 <input type="text" class="form-control" v-model="sign_contract_other_name" placeholder="请输入已签约公司名称">
                             </div>
                         </div>
-                        <!-- <div class="example">
+                        <div class="example">
                             <div class="col-md-2 text-right float-left">附件类型</div>
                             <div class="col-md-5 float-left pl-0">
                                 <selectors :options="attachmentTypeArr" :placeholder="'请选择附件类型'"
                                            @change="changeAttachmentType"></selectors>
                             </div>
                         </div>
-                        <div class="example">
+                        <div class="example" v-show="affixesType>0">
                             <div class="col-md-2 text-right float-left">上传附件</div>
                             <div class="col-md-5 float-left pl-0">
-                                <upload @change="getUrl">
-                                        <div class="id-upload">
-                                            <span>上传附件</span>
-                                            <i class="icon md-plus" style="font-size: 50px" aria-hidden="true"></i>
-                                            +
-                                        </div>
-                                </upload>
+                                <span style="color:#01BCD4;cursor:pointer">上传附件</span>
+                                <FileUploader class="upload"  @change="uploadAttachment"></FileUploader>
+                                <div class="mt-5" v-for="(attach,index) in affixes" :key="index">{{attachmentTypeArr.find(item => item.value == attach.type).name}} - {{attach.title}}</div>
                             </div>
-                        </div> -->
+                        </div>
                         <div class="example">
                             <div class="col-md-2 text-right float-left">备注</div>
                             <div class="col-md-10 float-left pl-0">
@@ -341,15 +337,7 @@
         </div>
     </div>
 </template>
-<style lang="scss" scoped>
-    #giveBroker .modal-body{
-        padding:0px;
-    }
-    #giveBroker .assistor{
-        position: relative;
-        border:0px
-    }
-</style>
+
 
 <script>
     import fetch from '../../assets/utils/fetch.js'
@@ -468,14 +456,6 @@
                     $('table').asSelectable('_trigger');
                 })
             },
-            getUrl:function(url,name,size){
-                this.affixes.push({
-                    title:name,
-                    size:size,
-                    url:url,
-                    type:this.affixesType
-                })
-            },
             customize: function (value) {
 
             },
@@ -532,7 +512,24 @@
             changeSource: function (value) {
                 this.artistSource = value
             },
-      
+            uploadAttachment:function (url,name,size){
+                // console.log(url,name,size)
+                // alert(this.affixesType)
+                for (let i = 0; i < this.affixes.length; i++) {
+                    if(this.affixes[i].type == this.affixesType){
+
+                        this.affixes.splice(i,1)
+                    }
+                    
+                }
+                this.affixes.push ({
+                    title:name,
+                    size:size,
+                    url:url,
+                    type:this.affixesType
+                }) 
+                // console.log(this.affixes)
+            },
             addArtist: function () {
                 if(!this.artistName){
                     toastr.error('请输入艺人名称');
@@ -570,7 +567,7 @@
                     sign_contract_other_name:this.sign_contract_other_name, //签约其他公司名称
                     // sign_contract_at:'',//签约日期
                     artist_scout_name:this.artistScoutName,//星探名称
-                    artist_location:this.artistLocation, //明星地区
+                    star_location:this.artistLocation, //明星地区
                     platform:platform,//社交平台
                     weibo_url:this.weiboUrl,
                     weibo_fans_num:this.weiboFansNum,
@@ -580,7 +577,7 @@
                     douyin_fans_num:this.douyinFansNum,
                     qita_url:this.qitaUrl,
                     qita_fans_num:this.qitaFansNum,
-                    affixes:this.affixes//附件
+                    affix:this.affixes//附件
 
 
                 };
@@ -588,13 +585,16 @@
                 fetch('post', '/stars', data).then(function (response) {
                     toastr.success('创建成功');
                     $('#addArtist').modal('hide');
-                    // _this.$router.push({path: 'artists/' + response.data.id});
+                    _this.$router.push({path: 'artists/' + response.data.id});
                 })
             },
             
             //选择附件类型
             changeAttachmentType: function (value) {
                   this.affixesType = value
+                //   alert(value)
+                //   alert(this.affixesType)
+
             },
 
             redirectArtistDetail: function (artistId) {
@@ -653,8 +653,8 @@
                     $('#giveBroker').modal('hide')
                      console.log($('input[type = checkbox]'));
                     // _this.$router.go(0)
-                    $('input[type = checkbox]').removeClass('selectable-all')
-                    $('input[type = checkbox]').removeClass('selectable-item')
+                    // $('input[type = checkbox]').removeClass('selectable-all')
+                    // $('input[type = checkbox]').removeClass('selectable-item')
                     _this.$store.state.participantsInfo = []
 
                 })
@@ -722,8 +722,7 @@
         }
     }
 </script>
-
-<style>
+<style lang="scss" scoped>
     .task-dropdown {
         -moz-user-select: none;
         -webkit-user-select: none;
@@ -738,5 +737,22 @@
         top: 0;
         left: 0;
         will-change: transform;
+    }
+    #giveBroker .modal-body{
+        padding:0px;
+    }
+    #giveBroker .assistor{
+        position: relative;
+        border:0px
+    }
+    .uploadContent{
+        position: relative;
+    }
+    .upload{
+        position: absolute;
+        top:0px;
+        left:0px;
+        opacity: 0;
+
     }
 </style>

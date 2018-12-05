@@ -1,5 +1,6 @@
 <template>
     <div class="page">
+
         <div class="page-header page-header-bordered">
             <h1 class="page-title">
                 <i class="icon md-chevron-left" @click="goBack"></i>公告&nbsp;&nbsp;({{broadCastInfo.length}})</h1>
@@ -50,6 +51,7 @@ export default {
             currentId:'',
             currentData:{},
             classifyArr:config.classifyArr,
+            broadCastPost:{}
         } 
     },
     created() { 

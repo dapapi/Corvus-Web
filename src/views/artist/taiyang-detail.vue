@@ -1,6 +1,5 @@
 <template>
     <div class="page">
-
         <div class="page-header page-header-bordered">
             <h1 class="page-title d-inline">艺人详情</h1>
 
@@ -385,8 +384,8 @@
                                         <div class="card-text py-10 px-0 clearfix col-md-6 float-left edit-height">
                                             <div class="col-md-2 float-left text-right pl-0">地区</div>
                                             <div class="col-md-10 float-left font-weight-bold">
-                                                <EditInput :content="artistInfo.artist_location" :is-edit="isEdit"
-                                                           @change="(value) => changeArtistBaseInfo(value, 'artist_location')"></EditInput>
+                                                <EditInput :content="artistInfo.star_location" :is-edit="isEdit"
+                                                           @change="(value) => changeArtistBaseInfo(value, 'star_location')"></EditInput>
                                             </div>
                                         </div>
                                         <div class="card-text py-10 px-0 clearfix col-md-6 float-left edit-height">
@@ -455,13 +454,39 @@
                                                               @change="(value) => changeArtistBaseInfo(value, 'desc')"></editTextarea>
                                             </div>
                                         </div>
-                                    </div>
-                                    <div class="card-text py-10 px-0 clearfix col-md-12">
-                                        <div class="col-md-1 float-left text-right pl-0">附件</div>
-                                        <div class="col-md-11 float-left font-weight-bold">
-
+                                        <div class="card-text py-10 px-0 clearfix col-md-6 float-left edit-height">
+                                            <div class="col-md-2 float-left text-right pl-0">附件类型</div>
+                                            <div class="col-md-10 float-left font-weight-bold">
+                                                
+                                                <span v-show="isEdit">
+                                                    <selectors  v-show="isEdit" :options="attachmentTypeArr" :placeholder="'请选择附件类型'"
+                                           @change="changeAttachmentType"></selectors> 
+                                                </span>
+                                                <!-- <EditSelector :is-edit="isEdit" :multiple="true"
+                                                              :content="affixes.length>0 ? affixes.split(',') : ''"
+                                                              :options="attachmentTypeArr"
+                                                              @change="(value) => changeAttachmentType(value, 'platform')"></EditSelector> -->
+                                                <span v-show="!isEdit" ></span>
+                                            </div>
+                                        </div>
+                                        <div class="card-text py-10 px-0 clearfix col-md-6 float-left edit-height">
+                                            <div class="col-md-2 float-left text-right pl-0">附件</div>
+                                            <div class="col-md-10 float-left font-weight-bold">
+                                                <span v-show="isEdit" style="color:#01BCD4;cursor:pointer">上传附件</span>
+                                                <FileUploader v-show="isEdit" class="upload"  @change="uploadAttachment"></FileUploader>
+                                                <div class="mt-5" v-for="(attach,index) in affixes" :key="index">{{attachmentTypeArr.find(item => item.value == attach.type).name}} - {{attach.title}}</div>
+                                            </div>
                                         </div>
                                     </div>
+
+                                    <!-- <div class="card-text py-10 px-0 clearfix col-md-12">
+                                        <div class="col-md-1 float-left text-right pl-0">附件</div>
+                                        <div class="col-md-11 float-left font-weight-bold">
+                                            <span style="color:#01BCD4;cursor:pointer">上传附件</span>
+                                            <FileUploader class="upload"  @change="uploadAttachment"></FileUploader>
+                                            <div class="mt-5" v-for="(attach,index) in affixes" :key="index">{{attachmentTypeArr.find(item => item.value == attach.type).name}} - {{attach.title}}</div>
+                                        </div>
+                                    </div> -->
 
                                     <div class="segmentation-line example"></div>
                                     <div class="card-text py-5 clearfix">
@@ -763,6 +788,7 @@
                 artistInfo: {},
                 taskTypeArr: [],
                 taskLevelArr: config.taskLevelArr,
+                attachmentTypeArr:config.attachmentTypeArr,
                 taskType: '',
                 taskName: '',
                 taskLevel: '',
@@ -791,17 +817,13 @@
                 changeArtistInfo: {},
                 artistSocialPlatform: config.artistSocialPlatform,
                 distributionType: '',
+                affixes:[]
             }
         },
 
         mounted() {
             this.getArtist();
             this.getTaskType();
-            // this.drawLine()
-            // this.$nextTick(function() {
-            //     this.myChart = echarts.init(document.getElementById('myChart'));  //初始化echarts实例
-            //     // this.draw();
-            // })
             this.draw();
             let _this = this;
             $('#distributionBroker').on('hidden.bs.modal', function () {
@@ -873,7 +895,7 @@
                     xAxis: {
                         type: 'category',
                         boundaryGap: false,
-                        data: ['周一', '周二', '周三', '周四', '周五', '周六', '周日']
+                        data: ['2018', '2017', '2016', '2015', '2014', '2013', '2012']
                     },
                     yAxis: {
                         type: 'value'
@@ -1005,7 +1027,7 @@
             cancelEdit: function () {
                 this.isEdit = false
             },
-
+            
             changeArtistBaseInfo: function (value, name) {
                 if (name === 'broker_id') {
                     if (value) {
@@ -1098,6 +1120,12 @@
                 //     $('#distributionBroker').modal('hide');
                 //     _this.getArtist();
                 // })
+            },
+            changeAttachmentType:function(value){
+
+            },
+            uploadAttachment:function(){
+
             }
 
         }
@@ -1124,5 +1152,15 @@
 
     .edit-height {
         height: 57px;
+    }
+    .uploadContent{
+        position: relative;
+    }
+    .upload{
+        position: absolute;
+        top:0px;
+        left:0px;
+        opacity: 0;
+
     }
 </style>

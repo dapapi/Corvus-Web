@@ -4,14 +4,14 @@
         <div class="page-header page-header-bordered">
             <h1 class="page-title">博主管理</h1>
 
-            <div class="page-header-actions dropdown show task-dropdown float-right">
+            <div class="page-header-actions dropdown show task-dropdown float-right" style="z-index:1000">
                 <i class="icon md-more font-size-24" aria-hidden="true" id="taskDropdown"
                    data-toggle="dropdown" aria-expanded="false"></i>
                 <div class="dropdown-menu dropdown-menu-right task-dropdown-item" aria-labelledby="taskDropdown"
                      role="menu" x-placement="bottom-end">
                     <a class="dropdown-item" role="menuitem" @click="">导入</a>
                     <a class="dropdown-item" role="menuitem" @click="">导出</a>
-                    <a class="dropdown-item" role="menuitem" @click="">分配制作人</a>
+                    <a class="dropdown-item" role="menuitem" data-toggle="modal" data-target="#giveBroker">分配制作人</a>
                 </div>
             </div>
         </div>
@@ -21,15 +21,14 @@
                 <div class="clearfix">
                     <div class="col-md-3 example float-left">
                         <input type="text" class="form-control" id="inputPlaceholder" placeholder="请输入博主昵称"
-                               style="width: 220px" v-model="trailFilter" @blur='filterGo'>
+                               style="width: 220px" v-model="blogName" @blur='getArtists()'>
                     </div>
                     <div class="col-md-3 example float-left">
                         <selectors :options="artistTypeArr"
-                                   :placeholder="'请选择博主类型'" @change="typeFilter" v-model="typeF"></selectors>
+                                   :placeholder="'请选择博主类型'"  @change="typeFilter"></selectors>
                     </div>
                     <div class="col-md-3 example float-left">
-                        <selectors :placeholder="'请选择沟通状态'" :options="papiCommunicationStatusArr"
-                                   @change="CommunicationStatus" v-model="statusF"></selectors>
+                        <selectors :placeholder="'请选择沟通状态'" :options="papiCommunicationStatusArr" @change="CommunicationStatus"></selectors>
                     </div>
                     <div class="col-md-3 example float-left">
                         <button type="button" class="btn btn-default waves-effect waves-classic float-right"
@@ -152,26 +151,42 @@
                         <div class="example">
                             <div class="col-md-2 text-right float-left">平台</div>
                             <div class="col-md-10 float-left pl-0">
-                                <div class="checkbox-custom checkbox-primary d-inline pr-20">
-                                    <input type="checkbox" name="platform" id="platformAll" @change="changeCheckbox(1)"
-                                           v-model="checkboxedone">
-                                    <label for="platformAll">全选</label>
-                                </div>
-                                <div class="checkbox-custom checkbox-primary d-inline pr-20">
-                                    <input type="checkbox" name="platform" id="platformWeibo"
-                                           @change="changeCheckbox(2)" v-model="checkboxtow">
-                                    <label for="platformWeibo">微博</label>
-                                </div>
-                                <div class="checkbox-custom checkbox-primary d-inline pr-20">
-                                    <input type="checkbox" name="platform" id="platformDouyin"
-                                           @change="changeCheckbox(3)" v-model="checkboxedthree">
-                                    <label for="platformDouyin">抖音</label>
-                                </div>
-                                <div class="checkbox-custom checkbox-primary d-inline pr-20">
-                                    <input type="checkbox" name="platform" id="platformXHS" @change="changeCheckbox(4)"
-                                           v-model="checkoutfix">
-                                    <label for="platformXHS">小红书</label>
-                                </div>
+                                 <CheckboxGroup :optionData="platformList" @change="changeCheckbox" :isLine="true">
+                                    <template slot-scope="scope">
+                                        <span>{{scope.row.name}}</span>
+                                    </template>
+                                </CheckboxGroup>
+                            </div>
+                        </div>
+                        
+                        <div class="example" v-show="platformType.find(item => item ==1)">
+                            <div class="col-md-2 text-right float-left">微博主页地址</div>
+                            <div class="col-md-4 float-left pl-0">
+                                <input type="text" class="form-control" v-model="star_weibo_infos.url">
+                            </div>
+                            <div class="col-md-2 text-right float-left">签约时微博粉丝数</div>
+                            <div class="col-md-4 float-left pl-0">
+                                <number-spinner @change="changeWeiboFansNum" style="width:130px"></number-spinner>
+                            </div>
+                        </div>
+                        <div class="example" v-show="platformType.find(item => item ==2)">
+                            <div class="col-md-2 text-right float-left">抖音ID</div>
+                            <div class="col-md-4 float-left pl-0">
+                                <input type="text" class="form-control" v-model="star_douyin_infos.url">
+                            </div>
+                            <div class="col-md-2 text-right float-left">签约时抖音粉丝数</div>
+                            <div class="col-md-4 float-left pl-0">
+                                <number-spinner @change="changeDouyinFansNum" style="width:130px"></number-spinner>
+                            </div>
+                        </div>
+                        <div class="example" v-show="platformType.find(item => item ==3)">
+                            <div class="col-md-2 text-right float-left">小红书链接</div>
+                            <div class="col-md-4 float-left pl-0">
+                                <input type="text" class="form-control" v-model="star_xiaohongshu_infos.url">
+                            </div>
+                            <div class="col-md-2 text-right float-left pl-0">签约时小红书粉丝数</div>
+                            <div class="col-md-4 float-left pl-0">
+                                <number-spinner @change="changeXHSFansNum" style="width:130px"></number-spinner>
                             </div>
                         </div>
                         <div class="example">
@@ -179,36 +194,6 @@
                             <div class="col-md-10 float-left pl-0">
                                 <selectors :options="artistTypeArr" :placeholder="'请选择类型'"
                                            @change="changeArtistType"></selectors>
-                            </div>
-                        </div>
-                        <div class="example" v-if="checkboxtow">
-                            <div class="col-md-2 text-right float-left">微博主页地址</div>
-                            <div class="col-md-4 float-left pl-0">
-                                <input type="text" class="form-control" v-model="weiboUrl">
-                            </div>
-                            <div class="col-md-2 text-right float-left">签约时微博粉丝数</div>
-                            <div class="col-md-4 float-left pl-0">
-                                <number-spinner @change="changeWeiboFansNum" style="width:130px"></number-spinner>
-                            </div>
-                        </div>
-                        <div class="example" v-if="checkboxedthree">
-                            <div class="col-md-2 text-right float-left">抖音ID</div>
-                            <div class="col-md-4 float-left pl-0">
-                                <input type="text" class="form-control" v-model="douyinId">
-                            </div>
-                            <div class="col-md-2 text-right float-left">签约时抖音粉丝数</div>
-                            <div class="col-md-4 float-left pl-0">
-                                <number-spinner @change="changeDouyinFansNum" style="width:130px"></number-spinner>
-                            </div>
-                        </div>
-                        <div class="example" v-if="checkoutfix">
-                            <div class="col-md-2 text-right float-left">小红书链接</div>
-                            <div class="col-md-4 float-left pl-0">
-                                <input type="text" class="form-control" v-model="xhsUrl">
-                            </div>
-                            <div class="col-md-2 text-right float-left pl-0">签约时小红书粉丝数</div>
-                            <div class="col-md-4 float-left pl-0">
-                                <number-spinner @change="changeXHSFansNum" style="width:130px"></number-spinner>
                             </div>
                         </div>
                         <div class="example">
@@ -224,7 +209,7 @@
                                 <selectors :options="yesOrNoArr" :placeholder="'请选择签约意向'"
                                            @change="changeSignIntention"></selectors>
                             </div>
-                            <div class="col-md-5 float-left pl-0" v-if="!signIntention">
+                            <div class="col-md-5 float-left pl-0" v-if="signIntention === '0'">
                                 <textarea name="" rows="1" class="form-control" placeholder="请填写不签约理由"
                                           v-model="intention_desc"></textarea>
                             </div>
@@ -255,6 +240,27 @@
                 </div>
             </div>
         </div>
+        <div class="modal fade" id="giveBroker" aria-hidden="true" aria-labelledby="addLabelForm"
+             role="dialog" tabindex="-1">
+            <div class="modal-dialog modal-simple">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <button type="button" class="close" aria-hidden="true" data-dismiss="modal">
+                            <i class="md-close" aria-hidden="true"></i>
+                        </button>
+                        <h4 class="modal-title">分配制作人</h4>
+                    </div>
+                    <div class="modal-body">
+                        <ListSelectMember :listName="'成员列表'" :selectName="'已选择成员'" :type="'change'"></ListSelectMember>
+                    </div>
+                    <div class="modal-footer">
+                        <button class="btn btn-sm btn-white btn-pure" data-dismiss="modal">取消</button>
+                        <button class="btn btn-primary" type="submit" @click="giveBroker()">确定</button>
+                    </div>
+
+                </div>
+            </div>
+        </div>
 
     </div>
 </template>
@@ -271,7 +277,16 @@
                 total_pages: 1,
                 customizeInfo: config.customizeInfo,
                 projectStatus: config.projectStatus,
-                yesOrNoArr: config.yesOrNoArr,
+                yesOrNoArr:[
+                    {
+                        name: '是',
+                        value: '1'
+                    },
+                    {
+                        name: '否',
+                        value: '0'
+                    }
+                ],
                 artistStatusArr: config.artistStatusArr,
                 papiCommunicationStatusArr: config.papiCommunicationStatusArr,
                 artistsInfo: '',
@@ -283,12 +298,12 @@
                 douyinFansNum: '',
                 xhsUrl: '',
                 xhsFansNum: '',
-                platformType: '',
-                signIntention: 1,
+                platformType: [],//平台类型
+                signIntention: '',
                 signCompany: '',
                 artistDesc: '',
-                artistTypeArr: '',
-                artistTypeId: '',
+                artistTypeArr: [],
+                artistTypeId:'',
                 signCompanyName: '',
                 companyCityArr: config.companyCityArr,
                 trailFilter: '',
@@ -305,62 +320,130 @@
                 filetData: {
                     include: 'type,creator,tasks,affixes,producer',
                 },
-                filterObject: {
-                    include: 'type,creator,tasks,affixes,producer',
-                }
+                filterObject:{
+                    include:'type,creator,tasks,affixes,producer',
+                },
+                platformList:[
+                    {
+                        value:1,
+                        name:'微博'
+                    },
+                    {
+                        value:2,
+                        name:'抖音'
+                    },
+                    {
+                        value:3,
+                        name:'小红书'
+                    },
+                ],
+                star_douyin_infos:{
+                    // open_id:1,
+                    url:'',
+                    // nickname:'',
+                    avatar:'',
+                },
+                star_weibo_infos:{
+                    // open_id:2,
+                    url:'',
+                    // nickname:'',
+                    avatar:'',
+                },
+                star_xiaohongshu_infos:{
+                    // open_id:3,
+                    url:'',
+                    // nickname:'',
+                    avatar:'',
+                },
+                blogCommunication:'',//沟通状态
+                bolgType:'',//博主类型
+                blogName:'',//博主名称
+                blogStatus:1,//博主状态
+                selectedArtistsArr: [],
             }
         },
-
+        watch:{
+            platformType:function(){
+                return  this.platformType
+            }
+        },
         mounted() {
             this.getArtists();
             this.getUser();
+            this.getBlogType() //获取博主类型
             $('table').asSelectable();
         },
 
         methods: {
-            getArtists: function (page = 1, signStatus) {
-                if (signStatus) {
-                    this.filetData.status = signStatus
+            getArtists: function (page = 1,signStatus) {
+                let data={
+                    include:'type,creator,tasks,affixes,producer',
+        
                 }
-                this.filetData.page = page
-
                 let _this = this;
-                fetch('get', '/bloggers', this.filetData).then(function (response) {
-
+                
+                //博主状态
+                if(signStatus){
+                    this.blogStatus = signStatus
+                }
+                data.status = this.blogStatus
+                //博主类型
+                if(this.bolgType){
+                    data.type = this.bolgType
+                }
+                //沟通状态
+                if(this.blogCommunication){
+                    data.communication_status = this.blogCommunication
+                }
+                //博主名称
+                if(this.blogName){
+                    data.name = this.blogName
+                }
+                data.page = page
+                fetch('get', '/bloggers', data).then(function (response) {
+                    
                     _this.artistsInfo = response.data;
-                    console.log(_this.artistsInfo)
+                    // console.log(_this.artistsInfo )
                     _this.current_page = response.meta.pagination.current_page;
                     _this.total = response.meta.pagination.total;
                     _this.total_pages = response.meta.pagination.total_pages;
+                    
                 });
-                fetch('get', '/bloggers/gettype').then(function (response) {
-                    _this.artistTypeArr = response.data
-                })
             },
-            filterGo() {
-                let _this = this;
-                this.filterObject.name = this.trailFilter;
-                console.log(this.filterObject)
-                fetch('get', '/bloggers', this.filterObject).then(function (response) {
 
-                    _this.artistsInfo = response.data
-                    console.log(_this.artistsInfo)
+            //获取博主类型
+            getBlogType(){
+                let _this = this
+                fetch('get','/bloggers/gettype').then(function(response){    
+                    let data = {
+                        id:'',
+                        name:'全部'
+                    }  
+                    _this.artistTypeArr = response.data
+                    _this.artistTypeArr.unshift(data) 
+                    
                 })
             },
-            typeFilter(value) {
-                this.filterObject.type = value;
-                console.log(this.filterObject)
-                let _this = this;
-                fetch('get', '/bloggers', this.filterObject).then(function (response) {
-                    _this.artistsInfo = response.data
-                })
+            // filterGo(){ 
+            //     let _this = this;
+            //     this.filterObject.name = this.trailFilter;
+            //     console.log(this.filterObject)
+            //     fetch('get','/bloggers',this.filterObject).then(function(response){  
+                             
+            //         _this.artistsInfo =response.data
+            //         console.log(_this.artistsInfo)
+            //     })      
+            // },
+            //选择博主类型
+            typeFilter(value){
+                this.bolgType  = value
+                this.getArtists()
+                
             },
-            CommunicationStatus(value) {
-                this.filterObject.communication_status = value;
-                let _this = this;
-                fetch('get', '/bloggers', this.filterObject).then(function (response) {
-                    _this.artistsInfo = response.data
-                })
+            //沟通状态
+            CommunicationStatus(value){
+                this.blogCommunication  = value
+                this.getArtists()
             },
             customize: function (value) {
 
@@ -375,19 +458,10 @@
                 this.artistStatus = value
             },
 
-            changeCheckbox: function (value) {
-                console.log(value)
-                this.platformType = value
-                if (this.checkboxedone == 1) {
-                    this.checkboxtow = true;
-                    this.checkboxedthree = true;
-                    this.checkoutfix = true;
-                }
-
-                else if (this.checkboxtow == true && this.checkboxedthree == true && this.checkoutfix == true) {
-                    this.checkboxedone = true
-                } else if (this.checkboxtow == false || this.checkboxedthree == false || this.checkoutfix == false) {
-                    this.checkboxedone = false
+            changeCheckbox: function (value) {   
+                this.platformType = []
+                for (let i = 0; i < value.length; i++) {
+                    this.platformType.push(value[i].value)
                 }
             },
 
@@ -397,44 +471,41 @@
             },
 
             changeSignIntention: function (value) {
-                if (value) {
-                    this.signIntention = value
-                } else {
-                    this.signIntention = 0
-                }
-                console.log(this.signIntention)
-
+                
+                this.signIntention = value  
+                
+              
             },
 
             isSignCompany: function (value) {
-
-                if (value) {
-                    this.signCompany = value
-                } else {
-                    this.signCompany = 0
-                }
-                console.log(this.signCompany)
+            
+                this.signCompany = value  
+               
             },
 
             changeWeiboFansNum: function (value) {
-                this.weiboFansNum = value
+                this.star_weibo_infos.avatar = value
             },
 
             changeDouyinFansNum: function (value) {
-                this.douyinFansNum = value
+                this.star_douyin_infos.avatar = value
             },
 
             changeXHSFansNum: function (value) {
-                this.xhsFansNum = value
+                this.star_xiaohongshu_infos. avatar= value
             },
-            changeArtistType: function (value) {
-                this.artistTypeId = value
-                console.log(this.artistTypeId)
+             changeArtistType: function (value) {
+                this.artistTypeId=value
             },
             addArtist: function () {
-                let _this = this;
+                let _this=this;
+                if(!this.artistName){
+                    toastr.success('请输入博主名称');
+                    return false
+                }
+                let platform = this.platformType.join(',');
                 let data = {
-                    // 没有平台,微博,抖音,小红书
+                    //微博,抖音,小红书
                     nickname: this.artistName,
                     gender: this.artistGender,
                     type_id: this.artistTypeId,
@@ -443,8 +514,12 @@
                     intention_desc: this.intention_desc,
                     sign_contract_other: this.signCompany,
                     sign_contract_other_name: this.signCompanyName,
-                    // desc:this.artistDesc,
-
+                    desc:this.artistDesc,
+                    platform:platform,//平台id
+                    star_douyin_infos:this.star_douyin_infos,
+                    star_weibo_infos:this.star_weibo_infos,
+                    star_xiaohongshu_infos:this.star_xiaohongshu_infos
+                    
                 };
                 fetch('post', '/bloggers', data).then(function (response) {
                     toastr.success('创建成功');
@@ -456,14 +531,14 @@
             },
 
             selectArtists: function (value) {
-                console.log(value)
+                // console.log(value)
                 if (value === 'all') {
                     this.selectedArtistsArr = [];
                     for (let i = 0; i < this.artistsInfo.length; i++) {
                         this.selectedArtistsArr.push(this.artistsInfo[i].id)
                     }
                 } else {
-                    console.log(this.selectedArtistsArr)
+                    // console.log(this.selectedArtistsArr)
                     let index = this.selectedArtistsArr.indexOf(value);
                     if (index > -1) {
                         this.selectedArtistsArr.splice(index, 1)
@@ -476,12 +551,60 @@
 
             redirectArtistDetail: function (artistId) {
                 this.$router.push({path: 'blogger/' + artistId})
+            },
+            //分配制作人
+            giveBroker:function(){
+                let _this = this
+                let data = {}
+                data = {
+                    person_ids:[],
+                    del_person_ids:[],//删除
+                    moduleable_ids:this.selectedArtistsArr,//
+                    moduleable_type:'blogger',
+                    type:4, //制作人
+                }
+                for (let  i= 0;  i< this.$store.state.participantsInfo.length; i++) {
+                    data.person_ids.push(this.$store.state.participantsInfo[i].id)
+                    
+                }
+                fetch('post', 'distribution/person', data).then(function (response) {
+                    toastr.success('分配制作人成功')
+                    $('#giveBroker').modal('hide')
+                    //  console.log($('input[type = checkbox]'));
+                    _this.$router.go(0)
+                    // $('input[type = checkbox]').removeClass('selectable-all')
+                    // $('input[type = checkbox]').removeClass('selectable-item')
+                    _this.$store.state.participantsInfo = []
+
+                })
             }
         }
     }
 </script>
+<style lang="scss" scoped>
+    .task-dropdown {
+        -moz-user-select: none;
+        -webkit-user-select: none;
+        -ms-user-select: none;
+        user-select: none;
+        z-index: 2;
+    }
 
-
+    .task-dropdown-item {
+        position: absolute;
+        transform: translate3d(299px, 36px, 0px);
+        top: 0;
+        left: 0;
+        will-change: transform;
+    }
+    #giveBroker .modal-body{
+        padding:0px;
+    }
+    #giveBroker .assistor{
+        position: relative;
+        border:0px
+    }
+</style>
 
 
 
