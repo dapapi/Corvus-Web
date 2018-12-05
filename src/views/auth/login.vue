@@ -174,6 +174,7 @@
                 scope: "snsapi_login",
                 redirect_uri: "https%3a%2f%2fsandbox-api-crm.papitube.com%2fwechat_open%2foauth%2fcallback",
                 state: "",
+                href: "https://res-crm.papitube.com/css/wxLogin-QrcodeStyle.css"
             });
         },
 
