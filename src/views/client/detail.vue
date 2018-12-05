@@ -107,6 +107,7 @@
                 </div>
                 <div class="tab-content nav-tabs-animate bg-white col-md-12" v-if="clientInfo">
                     <div class="tab-pane animation-fade pb-20 active" id="forum-trail" role="tabpanel">
+
                         <table class="table table-hover is-indent example" data-plugin="animateList" data-animate="fade"
                                data-child="tr"
                                data-selectable="selectable">
@@ -260,9 +261,14 @@
                                 </div>
                                 <div class="card-text py-5 clearfix">
                                     <div class="col-md-1 float-left text-right pl-0">地区</div>
-                                    <div class="col-md-5 float-left font-weight-bold">
-                                        <EditSelector :options="clientTypeArr" :is-edit="isEdit"
-                                                      :content="clientInfo.address"></EditSelector>
+                                    <div class="col-md-5 float-left font-weight-bold region">
+                                        <template v-if="!isEdit">
+                                            {{clientInfo.province}}{{clientInfo.city}}{{clientInfo.district}}
+                                        </template>
+                                        <template v-else>
+                                            <RegionSelector :provinceVal="clientInfo.province" :cityVal="clientInfo.city" :areaVal="clientInfo.district" @setAreaData="changeAreaData" />
+                                        </template>
+
                                     </div>
                                     <div class="col-md-1 float-left text-right pl-0">详细地址</div>
                                     <div class="col-md-5 float-left font-weight-bold">
@@ -869,7 +875,29 @@
             // 获取要删除的信息
             setDelInfo(id) {
                 this.contactId = id
+            },
+            // 选择地区
+            changeAreaData (val) {
+                if (val.area.name) {
+                    this.changeInfo.province = val.province.name
+                    this.changeInfo.city = val.city.name !== '市辖区' ? val.city.name : val.province.name
+                    this.changeInfo.district = val.area.name
+                }
             }
         }
     }
 </script>
+
+<style lang="scss" scoped>
+ .region {
+        /deep/ .page-content {
+            padding: 0;
+            .modal-body {
+                padding: 0;
+                .form-group {
+                    margin-bottom: 0;
+                }
+            }
+        }
+    }
+</style>

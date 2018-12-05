@@ -116,10 +116,12 @@
                             </div>
                         </div>
                         <!-- 暂时隐藏 -->
-                        <!-- <div class="example">
+                        <div class="example">
                             <div class="col-md-2 text-right float-left">地区</div>
-                            <div class="col-md-10 float-left pl-0"></div>
-                        </div> -->
+                            <div class="col-md-10 float-left pl-0 region">
+                                <RegionSelector @setAreaData="changeAreaData" />
+                            </div>
+                        </div>
                         <div class="example">
                             <div class="col-md-2 text-right float-left">详细地址</div>
                             <div class="col-md-10 float-left pl-0">
@@ -215,6 +217,7 @@
                 clientLevelSearch: '', // 条件筛选的公司级别
                 companyName: '', // 公司名称
                 user: {}, // 个人信息
+                ragion: {}, // 区域
             }
         },
 
@@ -303,6 +306,9 @@
                     company: this.clientName,
                     grade: this.clientLevel,
                     // region_id: '',
+                    province: this.ragion.province || '',
+                    city: this.ragion.city || '',
+                    district: this.ragion.district || '',
                     address: 'test',
                     principal_id: this.$store.state.newPrincipalInfo.id,
                     contact: {
@@ -364,6 +370,14 @@
             changeClientScale: function (value) {
                 this.clientScale = value
             },
+            // 选择地区
+            changeAreaData (val) {
+                if (val.area.name) {
+                    this.ragion.province = val.province.name
+                    this.ragion.city = val.city.name !== '市辖区' ? val.city.name : val.province.name
+                    this.ragion.district = val.area.name
+                }
+            }
         }
     }
 </script>
@@ -379,6 +393,17 @@
             top: 0;
             left: 0;
             display: inline-block;
+        }
+    }
+    .region {
+        /deep/ .page-content {
+            padding: 0;
+            .modal-body {
+                padding: 0;
+                .form-group {
+                    margin-bottom: 0;
+                }
+            }
         }
     }
 </style>
