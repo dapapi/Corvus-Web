@@ -3,7 +3,7 @@
         <template v-if="isLeftMenuShow">
             <LeftMenu/>
         </template>
-        <!--<router-view/>-->
+        <router-view/>
     </div>
 </template>
 
