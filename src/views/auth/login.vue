@@ -172,7 +172,7 @@
                 id: "loginContainer",
                 appid: "wx1c8644b3e608c59b",
                 scope: "snsapi_login",
-                redirect_uri: "https%3a%2f%2fsandbox-api-crm.papitube.com%2fwechat_opten%2foauth%2fcallback",
+                redirect_uri: "https%3a%2f%2fsandbox-api-crm.papitube.com%2fwechat_open%2foauth%2fcallback",
                 state: "",
             });
         },
