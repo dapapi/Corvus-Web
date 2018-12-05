@@ -361,7 +361,7 @@
                                             <div class="col-md-10 float-left font-weight-bold">
                                                 <ConditionalInput :is-edit="isEdit" :content="artistInfo.intention"
                                                                   :input-content="artistInfo.intention_desc"
-                                                                  :condition="0"
+                                                                  :condition="2"
                                                                   @change="(value) => changeArtistBaseInfo(value, 'intention')"></ConditionalInput>
                                             </div>
                                         </div>
@@ -455,39 +455,27 @@
                                                               @change="(value) => changeArtistBaseInfo(value, 'desc')"></editTextarea>
                                             </div>
                                         </div>
-                                        <div class="card-text py-10 px-0 clearfix col-md-6 float-left edit-height">
+                                        <div v-show="isEdit" class="card-text py-10 px-0 clearfix col-md-6 float-left edit-height">
                                             <div class="col-md-2 float-left text-right pl-0">附件类型</div>
-                                            <div class="col-md-10 float-left font-weight-bold">
-                                                
-                                                <span v-show="isEdit">
+                                            <div class="col-md-10 float-left font-weight-bold">            
                                                     <selectors  v-show="isEdit" :options="attachmentTypeArr" :placeholder="'请选择附件类型'"
                                            @change="changeAttachmentType"></selectors> 
-                                                </span>
-                                                <!-- <EditSelector :is-edit="isEdit" :multiple="true"
-                                                              :content="affixes.length>0 ? affixes.split(',') : ''"
-                                                              :options="attachmentTypeArr"
-                                                              @change="(value) => changeAttachmentType(value, 'platform')"></EditSelector> -->
-                                                <span v-show="!isEdit" ></span>
+                                               
                                             </div>
                                         </div>
-                                        <div class="card-text py-10 px-0 clearfix col-md-6 float-left edit-height">
+                                        <div class="card-text py-10 px-0 clearfix col-md-6 float-left mt-10" style="min-height:57px">
                                             <div class="col-md-2 float-left text-right pl-0">附件</div>
                                             <div class="col-md-10 float-left font-weight-bold">
                                                 <span v-show="isEdit" style="color:#01BCD4;cursor:pointer">上传附件</span>
                                                 <FileUploader v-show="isEdit" class="upload"  @change="uploadAttachment"></FileUploader>
-                                                <div class="mt-5" v-for="(attach,index) in affixes" :key="index">{{attachmentTypeArr.find(item => item.value == attach.type).name}} - {{attach.title}}</div>
+                                                <div class="mt-5" v-for="(attach,index) in affixes" :key="index">
+                                                    <span class="mr-10">{{attachmentTypeArr.find(item => item.value == attach.type).name}} - {{attach.title}}</span>
+                                                    <i class="icon md-delete mr-10" data-toggle="modal" data-target="#affix" @click="getAffixId(attach.id)"></i>
+                                                    <a :href="attach.url" class="icon md-download"></a>
+                                                </div>
                                             </div>
                                         </div>
                                     </div>
-
-                                    <!-- <div class="card-text py-10 px-0 clearfix col-md-12">
-                                        <div class="col-md-1 float-left text-right pl-0">附件</div>
-                                        <div class="col-md-11 float-left font-weight-bold">
-                                            <span style="color:#01BCD4;cursor:pointer">上传附件</span>
-                                            <FileUploader class="upload"  @change="uploadAttachment"></FileUploader>
-                                            <div class="mt-5" v-for="(attach,index) in affixes" :key="index">{{attachmentTypeArr.find(item => item.value == attach.type).name}} - {{attach.title}}</div>
-                                        </div>
-                                    </div> -->
 
                                     <div class="segmentation-line example"></div>
                                     <div class="card-text py-5 clearfix">
@@ -503,9 +491,11 @@
                                     <div class="card-text py-5 clearfix">
                                         <div class="col-md-1 float-left text-right pl-0">最近更新人</div>
                                         <div class="col-md-5 float-left font-weight-bold">
+                                            {{artistInfo.last_updated_user}}
                                         </div>
                                         <div class="col-md-1 float-left text-right pl-0">最近更新时间</div>
                                         <div class="col-md-5 float-left font-weight-bold">
+                                            {{artistInfo.last_updated_at}}
                                         </div>
                                     </div>
                                 </div>
@@ -533,7 +523,11 @@
             </div>
 
         </div>
+        
 
+        <modal :id="'affix'" :title="'删除附件'" @onOK="deleteAffix">
+            <div class="text-center m-20">您确认删除该附件吗？</div>
+        </modal>
         <!-- 新增任务 -->
         <div class="modal fade" id="addTask" aria-hidden="true" aria-labelledby="addLabelForm"
              role="dialog" tabindex="-1">
@@ -557,7 +551,7 @@
                             <div class="col-md-2 text-right float-left">任务类型</div>
                             <div class="col-md-10 float-left pl-0">
                                 <selectors :options="taskTypeArr" :placeholder="'请选择任务类型'"
-                                           @change="changeTaskType" v-if="taskTypeArr.length > 0"></selectors>
+                                           @change="changeTaskType" ></selectors>
                             </div>
                         </div>
                         <div class="example">
@@ -588,16 +582,16 @@
                         <div class="example">
                             <div class="col-md-2 text-right float-left">开始时间</div>
                             <div class="col-md-5 float-left pl-0">
-                                <datepicker @change="changeStartTime"></datepicker>
+                                <datepicker @change="changeStartTime" :placeholder="'请输入开始时间'"></datepicker>
                             </div>
                             <div class="col-md-5 float-left pl-0">
-                                <timepicker :default="startMinutes" @change="changeStartMinutes"></timepicker>
+                                <timepicker :default="startMinutes" @change="changeStartMinutes" ></timepicker>
                             </div>
                         </div>
                         <div class="example">
                             <div class="col-md-2 text-right float-left">截止时间</div>
                             <div class="col-md-5 float-left pl-0">
-                                <datepicker @change="changeEndTime"></datepicker>
+                                <datepicker @change="changeEndTime" :placeholder="'请输入结束时间'"></datepicker>
                             </div>
                             <div class="col-md-5 float-left pl-0">
                                 <timepicker :default="endMinutes" @change="changeEndMinutes"></timepicker>
@@ -818,7 +812,9 @@
                 changeArtistInfo: {},
                 artistSocialPlatform: config.artistSocialPlatform,
                 distributionType: '',
-                affixes:[]
+                affixes:[], //附件
+                affixesType:'',//附件类型
+                affixId:'',
             }
         },
 
@@ -831,7 +827,7 @@
                 _this.$store.commit('changeParticipantsInfo', [])
             })
         },
-
+        
         methods: {
 
             //获取艺人信息
@@ -846,6 +842,7 @@
                     _this.artistInfo = response.data;
                     _this.artistTasksInfo = response.data.tasks.data
                     _this.artistWorksInfo = response.data.works.data
+                    _this.affixes = response.data.affixes.data
                     for (let i = 0; i < response.data.trails.data.length; i++) {
                         if (response.data.trails.data[i].project) {
                             response.data.trails.data[i].project.data.company = response.data.trails.data[i].client.data.company
@@ -951,7 +948,9 @@
             },
 
             changeStartTime: function (value) {
+                
                 this.startTime = value
+
             },
 
             changeStartMinutes: function (value) {
@@ -968,8 +967,19 @@
 
             addTask: function () {
                 let participant_ids = [];
+                let start,end,startMin,endMin
                 for (let i = 0; i < this.$store.state.newParticipantsInfo.length; i++) {
                     participant_ids.push(this.$store.state.newParticipantsInfo[i].id)
+                }
+
+                //判断开始时间必须早于结束时间
+                startMin = this.startMinutes.split(':')
+                endMin = this.endMinutes.split(':')
+                start =new Date(this.startTime).getTime()+startMin[0]*60*60*1000+startMin[1]*60*1000
+                end = new Date(this.endTime).getTime()+endMin[0]*60*60*1000+endMin[1]*60*1000
+                if(start>end){
+                    toastr.error('结束时间必须晚于开始时间,请重新选择时间');
+                    return false;
                 }
                 let data = {
                     title: this.taskName,
@@ -1005,6 +1015,12 @@
                     toastr.success('新增成功');
                     $('#addWork').modal('hide');
                     _this.artistWorksInfo.push(response.data)
+                    _this.artistWorkName = ''
+                    _this.artistWorkDirector = ''
+                    _this.character = ''
+                    _this.coActor = ''
+                    _this.workReleaseTime = ''
+                    _this.workType = ''
                 })
             },
 
@@ -1028,8 +1044,11 @@
             cancelEdit: function () {
                 this.isEdit = false
             },
-            
+            //修改基本信息
             changeArtistBaseInfo: function (value, name) {
+                if(name === 'platform'){
+                    value = value.join(',')
+                }
                 if (name === 'broker_id') {
                     if (value) {
                         value = this.$store.state.principalInfo.id
@@ -1066,47 +1085,53 @@
 
             distributionPerson: function (value) {
                 this.distributionType = value;
-                if (value === 'broker') {
-                    if (this.artistInfo.broker) {
-                        let params = {
-                            type: 'change',
-                            data: JSON.parse(JSON.stringify(this.artistInfo.broker.data))
-                        };
-                        this.$store.dispatch('changeParticipantsInfo', params);
-                    }
-                } else {
-                    if (this.artistInfo.publicity) {
-                        let params = {
-                            type: 'change',
-                            data: JSON.parse(JSON.stringify(this.artistInfo.publicity.data))
-                        };
-                        this.$store.dispatch('changeParticipantsInfo', params);
-                    }
+                if(this.artistInfo[value].data.length>0){
+                    this.$store.state.participantsInfo = Object.assign([],this.artistInfo[value].data)
                 }
+                // if (value === 'broker') {
+                //     if (this.artistInfo.broker) {
+                //         let params = {
+                //             type: 'change',
+                //             data: JSON.parse(JSON.stringify(this.artistInfo.broker.data))
+                //         };
+                //         this.$store.dispatch('changeParticipantsInfo', params);
+                //     }
+                // } else {
+                //     if (this.artistInfo.publicity) {
+                //         let params = {
+                //             type: 'change',
+                //             data: JSON.parse(JSON.stringify(this.artistInfo.publicity.data))
+                //         };
+                //         this.$store.dispatch('changeParticipantsInfo', params);
+                //     }
+                // }
             },
 
             addDistributionPerson: function () {
                 let data = {
-                    person_ids: [],
+                    person_ids:[],
                     del_person_ids: [],
                     moduleable_type: 'star',
                     moduleable_ids: [this.artistId]
                 };
+                
+                
                 let personInfo = this.$store.state.participantsInfo;
-                // todo 删除和新增的数据有问题
+                let oldPersonInfo = this.artistInfo[this.distributionType].data
+                //todo 删除和新增的数据有问题
                 if (this.artistInfo[this.distributionType].data.length > 0) {
+                    
                     for (let i = 0; i < this.artistInfo[this.distributionType].data.length; i++) {
-                        console.log(personInfo.map(item => item.id).indexOf(this.artistInfo[this.distributionType].data[i]))
-                        if (personInfo.map(item => item.id).indexOf(this.artistInfo[this.distributionType].data[i]) === -1) {
-                            data.person_ids.push(this.artistInfo[this.distributionType].data[i].id)
-                        } else {
+
+                        if (personInfo.map(item => item.id).indexOf(this.artistInfo[this.distributionType].data[i].id) === -1) {
+
                             data.del_person_ids.push(this.artistInfo[this.distributionType].data[i].id)
                         }
                     }
-                } else {
-                    for (let i = 0; i < personInfo.length; i++) {
-                        data.person_ids.push(personInfo[i].id)
-                    }
+                }
+                for (let  i= 0;  i< this.$store.state.participantsInfo.length; i++) {
+                    data.person_ids.push(this.$store.state.participantsInfo[i].id)
+                    
                 }
 
 
@@ -1115,20 +1140,58 @@
                 } else {
                     data.type = 2
                 }
-                console.log(data)
+                // console.log(data)
                 let _this = this;
-                // fetch('post', '/distribution/person', data).then(function (response) {
-                //     $('#distributionBroker').modal('hide');
-                //     _this.getArtist();
-                // })
+                fetch('post', '/distribution/person', data).then(function (response) {
+                    $('#distributionBroker').modal('hide');
+                    _this.getArtist();
+                    _this.$store.state.participantsInfo = []
+                })
             },
+            //获取附件类型
             changeAttachmentType:function(value){
+               this.affixesType = value
+            },
+            //上传附件
+            uploadAttachment:function(url,name,size){
+               if(!this.affixesType){
+                   toastr.error('请选择上传附件类型');
+                   return false
+               }
+
+               //删除已存在的数据
+               for (let i = 0; i < this.affixes.length; i++) {
+                    if(this.affixes[i].type == this.affixesType){
+
+                        this.affixes.splice(i,1)
+                    }
+                    
+                }
+                //添加新的数据
+                this.affixes.push ({
+                    title:name,
+                    size:size,
+                    url:url,
+                    type:this.affixesType
+                }) 
+                this.changeArtistBaseInfo(this.affixes,'affix')
 
             },
-            uploadAttachment:function(){
-
+            //获取附件id
+            getAffixId:function(id){
+                this.affixId =id
+            },
+            //删除附件
+            deleteAffix:function(){
+                let _this = this
+                fetch('delete', `/star/${this.$route.params.id}/affixes/${this.affixId}`).then(function (response) {
+                    $('#affix').modal('hide');
+                    toastr.success('删除成功');
+                    _this.isEdit = false;
+                    _this.getArtist();
+                })
             }
-
+           
         }
     }
 
