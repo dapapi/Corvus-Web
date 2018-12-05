@@ -486,11 +486,9 @@
             },
 
             changeSignIntention: function (value) {
-                if(value == ''){
-                    this.signIntention = 0
-                }else{
+                
                     this.signIntention = value
-                }
+                
                 
             },
 
@@ -547,6 +545,10 @@
                     toastr.error('请选择沟通状态');
                     return false
                 }
+                if(!this.signIntention){
+                    toastr.error('请选择签约意向');
+                    return false
+                }
                 if(!this.signCompany){
                     toastr.error('请选择是否与其他公司签约');
                     return false
@@ -577,8 +579,8 @@
                     douyin_fans_num:this.douyinFansNum,
                     qita_url:this.qitaUrl,
                     qita_fans_num:this.qitaFansNum,
-                    affix:this.affixes//附件
-
+                    affix:this.affixes,//附件
+                    desc:this.artistDesc//  备注
 
                 };
                 let _this = this;
@@ -636,7 +638,7 @@
                     url = 'distribution/person'
                     toast= '分配宣传人成功'
                     data = {
-                        person_ids:[],//经纪人数组
+                        person_ids:[],//宣传人数组
                         del_person_ids:[],//删除
                         moduleable_ids:this.selectedArtistsArr,//艺人
                         moduleable_type:'star',
@@ -651,10 +653,6 @@
                 fetch('post', url, data).then(function (response) {
                     toastr.success(toast)
                     $('#giveBroker').modal('hide')
-                     console.log($('input[type = checkbox]'));
-                    // _this.$router.go(0)
-                    // $('input[type = checkbox]').removeClass('selectable-all')
-                    // $('input[type = checkbox]').removeClass('selectable-item')
                     _this.$store.state.participantsInfo = []
 
                 })
