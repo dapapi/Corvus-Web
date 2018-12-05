@@ -57,7 +57,13 @@
                         </div>
                         <div class="float-right text-right pr-0">
                             <span>关联资源</span>
-                            <span class="pl-2 font-weight-bold">博主-bigger研究所</span>
+                            <span class="pl-2 font-weight-bold">
+                                {{taskInfo.resource?taskInfo.resource.data.resource.data.title:''}}-
+                                {{taskInfo.resource? taskInfo.resource.data.resourceable.data.name
+                                                    || taskInfo.resource.data.resourceable.data.nickname
+                                                    || taskInfo.resource.data.resourceable.data.title
+                                                    || taskInfo.resource.data.resourceable.data.company:''}}
+                            </span>
                         </div>
                     </div>
                 </div>
@@ -66,7 +72,7 @@
             <div class="panel col-md-12 col-lg-12">
 
                 <div class="col-md-12">
-                    <ul class="nav nav-tabs nav-tabs-line" role="tablist">
+                    <ul class="nav nav-tabs nav-tabs-line" role="tablist" id="taskTab">
                         <li class="nav-item" role="presentation">
                             <a class="nav-link active" data-toggle="tab" href="#forum-task-base"
                                aria-controls="forum-base"
@@ -413,8 +419,8 @@
             this.user = JSON.parse(Cookies.get('user'))
             // 负责人默认值的设置
             this.$store.commit('changeNewPrincipal', {
-            name: this.user.nickname,
-            id: this.user.id
+                name: this.user.nickname,
+                id: this.user.id
             })
             this.getTaskType()
         },
@@ -451,6 +457,7 @@
                 setTimeout(() => {
                     this.getTask();
                 }, 100)
+                $('#taskTab a:first').tab('show')
             }
         },
 

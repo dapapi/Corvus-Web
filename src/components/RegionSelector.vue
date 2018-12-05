@@ -30,6 +30,7 @@ import provinceData from '@/assets/utils/regionsdata/province.json'
 import cityData from '@/assets/utils/regionsdata/city.json'
 import areaData from '@/assets/utils/regionsdata/area.json'
 export default {
+    props: ['provinceVal', 'cityVal', 'areaVal'], // 默认选中的省、市、区
     data(){
         return{
             province:{},                //省级数据
@@ -47,8 +48,14 @@ export default {
         //省级数据初始化
         this.province = provinceData
     },
+
     mounted() {
-        
+        // 在某些情况下，组件渲染异常，所以重新加载一次 by 鲍庆鑫
+        $('#provinceSelector').selectpicker('render');
+        $('#citySelector').selectpicker('render');
+        $('#areaSelector').selectpicker('render');
+        // 设置默认选中数据
+        this.setRegion()
     },
     methods:{
         //清理数据
@@ -94,23 +101,45 @@ export default {
         },
         sendData(){
             //设置返回数据格式
-            let setAreaData = {
+            let setAreaData = { 
                 'province':{
-                    'name':this.provinceSelected,
-                    'id':this.provinceSelectedId
+                    name:this.provinceSelected,
+                    id:this.provinceSelectedId
                 },
                 'city':{
-                    'name':this.citySelected,
-                    'id':this.citySelectedId
+                    name:this.citySelected,
+                    id:this.citySelectedId
                 },
                 'area':{
-                    'name':this.areaSelected,
-                    'id':this.areaSelectedId
+                    name:this.areaSelected,
+                    id:this.areaSelectedId
                 }
             }
             //推送返回数据至父组件
             this.$emit('setAreaData',setAreaData)
             console.log(setAreaData);
+        },
+        // 设置默认选中地区 by 鲍庆鑫
+        setRegion () {
+            if (!this.provinceVal || !this.cityVal || !this.areaVal) {
+                return
+            }
+            this.provinceSelected = this.provinceVal
+            this.getProvinceId(this.provinceSelected)
+            this.setCity()
+            $('#provinceSelector').selectpicker('val', this.provinceSelected);
+            this.$nextTick(() => {
+                this.citySelected = this.cityVal
+                this.getCityId(this.citySelected)
+                this.setCity()
+                $('#citySelector').selectpicker('val', this.citySelected);
+            })
+            this.$nextTick(() => {
+                this.areaSelected = this.areaVal
+                this.getAreaId(this.areaSelected)
+                this.setCity()
+                $('#areaSelector').selectpicker('val', this.areaSelected);
+            })
         }
     },
     watch:{
