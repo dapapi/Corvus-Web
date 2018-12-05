@@ -437,6 +437,7 @@
                 }
             },
             fetchHandler(methods,url){
+                console.log(this.fetchData);
                 let _this = this
                 this.fetchData.include = 'principal,client,contact,recommendations,expectations'
                 fetch(methods,url,this.fetchData).then((response) => {
@@ -448,9 +449,8 @@
                 this.fetchHandler('get','/trails/filter')
             },
             progressStatusFilter(value){
-                if(value){
-                    this.fetchData.status= value
-                }
+                console.log(value);
+                this.fetchData.status= value
                 this.fetchHandler('get','/trails/filter')
             },
             getSales: function (pageNum = 1) {
