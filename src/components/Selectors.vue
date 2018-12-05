@@ -1,6 +1,6 @@
 <template>
-    <select class="selectpicker show-tick" data-plugin="selectpicker" :value="value" :data-live-search="multiple"
-            :data-show-subtext="multiple"
+    <select class="selectpicker show-tick" data-plugin="selectpicker" :value="value" :data-live-search="isSelectable"
+            :data-show-subtext="isSelectable"
             :multiple="multiple" :title="placeholder" v-model="valueListener">
         <selectorsOptions v-for="option in options" v-bind:id="option.id" :val="option.value || option.id"
                           :key="option.id">
@@ -11,17 +11,30 @@
 </template>
 <script>
     export default {
-        props: ['options', 'disable', 'multiple', 'placeholder', 'changeKey', 'value', 'resetinfo'], // changeKey为父组件的data，且可以被改变
+        // 凡是多选，都有搜索框；不是多选传入selectable为true也可以有搜索框
+        // changeKey为父组件的data，且可以被改变
+        props: ['options', 'disable', 'multiple', 'placeholder', 'changeKey', 'value', 'resetinfo', 'selectable'],
         data() {
             return {
                 isDisable: this.disable,
-                valueListener: []
+                valueListener: [],
             }
         },
+        computed: {
+            isSelectable: function () {
+                if (this.selectable) {
+                    return true
+                }
+                if (this.multiple) {
+                    return true
+                }
+                return false
+            },
+        },
+
         mounted() {
             let self = this;
             $(this.$el).selectpicker().on('hidden.bs.select', function () {
-                console.log($(this).val())
                 self.$emit('change', $(this).val(), $(this)[0].selectedOptions[0].label, $(this)[0].selectedOptions[0].id);
                 // 可以通过调用select方法，去改变父组件传过来的changeKey
                 if (self.changeKey) {
