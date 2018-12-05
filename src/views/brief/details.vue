@@ -124,6 +124,15 @@ export default {
             taskList:[],
             selectTask:[],
             quesTaskId:'',
+            modData:['node','hahah',{
+                title:'测试',
+                id:'1',
+                color:'red'
+                
+            },{
+                name:'张强',
+                color:"黑色"
+            }]
         }
     },
     components:{
@@ -134,6 +143,7 @@ export default {
         this.getAll()
         this.getTaskList()
         this.getDetails()
+        console.log(this.arrayToUpParams(this.modData))
     },
     methods:{
          
@@ -237,7 +247,7 @@ export default {
         },
         getDetails:function(){
             fetch('get',`${config.apiUrl}/review/${this.$route.query.id}`).then((res) => {
-               console.log(res)
+            //    console.log(res)
                 
             })
         },
@@ -246,6 +256,27 @@ export default {
                toastr.success('提交成功');
                 
             })
+        },
+        arrayToUpParams:function(arr){
+           var count = arr.length
+           for (var i = 0; i<count;i++) {
+               var ele = arr[i]
+               if(ele instanceof Object){
+                   if(i+1<=count&&arr[i+1] instanceof Object){
+                       var ele2 = arr[i+1]
+                       for(var key in ele){
+                           for(var key1 in ele2){
+                               if(key1 == key){
+                                   ele2[key1] = ele[key]+','+ele2[key1]
+                               }
+                           }
+                       }
+                   }
+               }
+               
+           }
+           var modfiyEnd = arr[arr.length-1]
+           return modfiyEnd
         }
     }
 }
