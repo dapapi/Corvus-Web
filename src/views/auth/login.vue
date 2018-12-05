@@ -14,7 +14,7 @@
                 <img src="https://res.papitube.com/login/images/login-right-bottom.png" alt="">
             </div>
         </div>
-        <div class="page-content login-content" v-if="pageType === 'login'">
+        <div class="page-content login-content" v-show="pageType === 'login'">
             <div class="panel">
                 <div class="panel-body">
                     <ul class="nav nav-tabs nav-tabs-line" role="tablist">
@@ -74,7 +74,7 @@
         </div>
 
 
-        <div class="page-content login-content" v-else-if="pageType === 'bindPhone'">
+        <div class="page-content login-content" v-show="pageType === 'bindPhone'">
             <div class="panel">
                 <div class="panel-body">
                     <div class="example pate-title">
@@ -102,7 +102,7 @@
             </div>
         </div>
 
-        <div class="page-content login-content" v-else-if="pageType === 'resetPassword'">
+        <div class="page-content login-content" v-show="pageType === 'resetPassword'">
             <div class="panel">
                 <div class="panel-body">
                     <div class="example pate-title">
@@ -153,17 +153,6 @@
     import Verify from '../../assets/utils/verify.js';
     import redirect from '../../assets/js/bootstrap';
 
-    // let obj = new WxLogin({
-    //     self_redirect: true,
-    //     id: "loginContainer",
-    //     appid: "",
-    //     scope: "",
-    //     redirect_uri: "",
-    //     state: "",
-    //     style: "",
-    //     href: ""
-    // });
-
     export default {
         data: function () {
             return {
@@ -179,7 +168,13 @@
         },
 
         mounted() {
-
+            new WxLogin({
+                id: "loginContainer",
+                appid: "wx1c8644b3e608c59b",
+                scope: "snsapi_login",
+                redirect_uri: "/login",
+                state: "",
+            });
         },
 
 
@@ -278,9 +273,9 @@
             },
 
             getWeixinCode() {
-                fetch('get', 'https://api.weixin.qq.com/sns/oauth2/access_token?appid=APPID&secret=SECRET&code=CODE&grant_type=authorization_code').then(function (response) {
-                    console.log(response)
-                })
+                // fetch('get', 'https://api.weixin.qq.com/sns/oauth2/access_token?appid=APPID&secret=SECRET&code=CODE&grant_type=authorization_code').then(function (response) {
+                //     console.log(response)
+                // })
             }
         }
     }
