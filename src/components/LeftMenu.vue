@@ -10,8 +10,8 @@
                         </div>
                     </div>
                     <ul class="site-menu" data-plugin="menu" style="transform: translate3d(0px, -1.03409px, 0px);">
-                        <li class="site-menu-item" v-for="menu in menuData">
-                            <!--:class="{'has-sub': menu.data, 'active' : pageRoute === menu.code || ( menu.data && menu.data.find(item => item.code === pageRoute))}">-->
+                        <li class="site-menu-item" v-for="menu in menuData"
+                            :class="{'has-sub': menu.data, 'active' : pageRoute === menu.code || ( menu.data && menu.data.find(item => item.code === pageRoute))}">
                             <template v-if="!menu.data">
                                 <router-link :to="'/' + menu.code" class="animsition-link waves-effect waves-classic">
                                     <div>
@@ -38,8 +38,8 @@
                                     <span class="site-menu-title">{{ menu.name }}</span>
                                 </a>
                                 <ul class="site-menu-sub" style="">
-                                    <li class="site-menu-item" v-for="subMenu in menu.data">
-                                        <!--:class="pageRoute === subMenu.code ? 'active': ''">-->
+                                    <li class="site-menu-item" v-for="subMenu in menu.data"
+                                        :class="pageRoute === subMenu.code ? 'active': ''">
                                         <router-link :to="'/' + subMenu.code"
                                                      class="animsition-link waves-effect waves-classic">
                                             <span class="site-menu-title">{{ subMenu.name }}</span>
