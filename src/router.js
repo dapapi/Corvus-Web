@@ -10,7 +10,7 @@ export default new Router({
     routes: [
         {
             path: '/',
-            name: 'home',
+            // name: 'home',
             component: Home,
         },
         {
@@ -185,7 +185,7 @@ export default new Router({
         },
         {
             path: '/brief',
-            name: 'home',
+            // name: 'home',
             component: () => import('./views/brief/home.vue'),
             children: [
                 {
@@ -246,7 +246,7 @@ export default new Router({
                 },
                 {
                     path: '/attendance/index',
-                    name: 'index',
+                    // name: 'index',
                     component: () => import('./views/attendance/index.vue'),
                 },
                 {
@@ -261,12 +261,12 @@ export default new Router({
                 },
                 {
                     path: '/attendance/approval',
-                    name: 'approval',
+                    // name: 'approval',
                     component: () => import('./views/attendance/approval.vue')
                 },
                 {
                     path: '/attendance/calendar',
-                    name: 'calendar',
+                    // name: 'calendar',
                     component: () => import('./views/attendance/calendar.vue')
                 },
                 {
@@ -295,9 +295,9 @@ export default new Router({
                     component: () => import('./views/attendance/tellme.vue')
                 },
                 {
-                    path: '/attendance/details',
-                    name: 'details',
-                    component: () => import('./views/attendance/details.vue')
+                path: '/attendance/details',
+                // name: 'details',
+                component: () => import('./views/attendance/details.vue')
                 },
             ]
         },
@@ -324,7 +324,7 @@ export default new Router({
                 },
                 {
                     path: '/my/approval',
-                    name: 'approval',
+                    // name: 'approval',
                     component: () => import('./views/application/approval.vue')
                 },
                 {
@@ -335,7 +335,7 @@ export default new Router({
             ]
         }, {
             path: '/broadcast',
-            name: 'broadcast',
+            // name: 'broadcast',
             component: () => import('./views/broadcast/index.vue')
         },
         {

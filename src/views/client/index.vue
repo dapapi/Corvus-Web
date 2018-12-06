@@ -13,8 +13,11 @@
             <div class="panel col-md-12 py-5">
                 <div class="clearfix">
                     <div class="col-md-3 example float-left">
-                        <input v-if="true" type="text" class="form-control" placeholder="请输入公司名称"
-                               style="width: 220px" v-model="companyName" @blur="changeCompany">
+                        <!-- <input type="text" class="form-control" placeholder="请输入公司名称"
+                               style="width: 220px" @change="changeCompany"> -->
+                        <selectors :options="companiesArr" :placeholder="'请选择公司'"
+                                   @change="changeCompany"></selectors>
+                               
                     </div>
                     <div class="col-md-3 example float-left">
                         <input-selectors :key="'inputSelect'" :placeholder="'请选择负责人'"
@@ -270,6 +273,7 @@
                         _this.companiesArr.push({
                             id: response.data[i].id,
                             name: response.data[i].company,
+                            value: response.data[i].company,
                             grade: response.data[i].grade
                         })
                     }
@@ -340,7 +344,8 @@
                 this.$router.push({path: 'clients/' + clientId});
             },
 
-            changeCompany: function () {
+            changeCompany: function (value) {
+                this.companyName = value
                 this.getClients()
             },
 
