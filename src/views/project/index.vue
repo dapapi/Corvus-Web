@@ -336,6 +336,7 @@
                 projectStatusArr: config.projectStatusArr,
                 allUsers: [],
                 startTime: '',
+                selectedTrailId: '',
 
             }
         },
@@ -537,6 +538,7 @@
                 this.$refs.projectFee.setValue(trailInfo.fee);
                 this.$refs.trailOrigin.setValue(trailInfo.resource_type);
                 this.trailOrigin = trailInfo.resource_type;
+                this.selectedTrailId = trailInfo.id;
                 switch (trailInfo.resource_type) {
                     case 1:
                         this.trailOriginContent = JSON.parse(JSON.stringify(trailInfo.resource));
@@ -559,11 +561,20 @@
             },
 
             addProjectBaseInfo: function (value, name) {
-                if (name === 'principal_id') {
-                    value = this.$store.state.newPrincipalInfo.id;
-                }
-                if (name === 'start_at') {
-                    this.startTime = value
+                switch (name) {
+                    case 'principal_id':
+                        value = this.$store.state.newPrincipalInfo.id;
+                        break;
+                    case 'start_at':
+                        this.startTime = value;
+                        break;
+                    case 'fee':
+                        name = 'trail';
+                        value = {
+                            id: this.selectedTrailId,
+                            fee: value
+                        };
+                        break;
                 }
                 this.projectBaseInfo[name] = value
             },

@@ -496,6 +496,21 @@
                                             </div>
                                         </div>
                                         <div class="card-text py-10 px-0 clearfix col-md-6 float-left edit-height"
+                                             v-if="projectInfo.type != 5">
+                                            <div class="col-md-2 float-left text-right pl-0">目标艺人</div>
+                                            <div class="col-md-10 float-left font-weight-bold"
+                                                 v-if="projectInfo.trail.data.expectations">
+                                                <span v-for="expectation in projectInfo.trail.data.expectations.data"
+                                                      :key="expectation.name" v-if="!isEdit">
+                                                    {{ expectation.name || expectation.nickname}}
+                                                </span>
+                                                <EditSelector :options="starsArr" :is-edit="isEdit"
+                                                              :multiple="true" :content="selectedExpectationsArr"
+                                                              :contentHide='true'
+                                                              @change="(value) => changeProjectBaseInfo(value, 'expectations')"></EditSelector>
+                                            </div>
+                                        </div>
+                                        <div class="card-text py-10 px-0 clearfix col-md-6 float-left edit-height"
                                              v-if="projectInfo.type == 5">
                                             <div class="col-md-2 float-left text-right pl-0">可见范围</div>
                                             <div class="col-md-10 float-left font-weight-bold">
@@ -508,7 +523,8 @@
                                              v-if="projectInfo.type != 5">
                                             <div class="col-md-2 float-left text-right pl-0">预计费用</div>
                                             <div class="col-md-10 float-left font-weight-bold">
-                                                <EditNumberSpinner :is-edit="isEdit" :content="projectInfo.fee"
+                                                <EditNumberSpinner :is-edit="isEdit"
+                                                                   :content="projectInfo.trail.data.fee"
                                                                    @change="(value) => changeProjectBaseInfo(value, 'fee')"></EditNumberSpinner>
                                             </div>
                                         </div>
@@ -1156,9 +1172,11 @@
                 invoiceTypeArr: config.invoiceTypeArr,
                 visibleRangeArr: config.visibleRangeArr,
                 levelArr: config.levelArr,
+                selectedExpectationsArr: [],
                 addInfoArr: {},
                 followStatus: '',
                 flagParticipantsIdArr: [],
+                starsArr: [],
                 changeProjectStatusText: '',
                 allProjectsInfo: '',
                 allTasksInfo: '',
@@ -1188,6 +1206,7 @@
             this.getProject();
             this.getClients();
             this.getTaskType();
+            this.getStars();
         },
 
         watch: {},
@@ -1198,7 +1217,7 @@
                 this.projectId = this.$route.params.id;
                 let _this = this;
                 let data = {
-                    include: 'principal,participant,creator,fields,trail.expectations,trail.client,relate_tasks,relate_projects',
+                    include: 'principal,participants,creator,fields,trail.expectations,trail.client,relate_tasks,relate_projects',
                 };
                 fetch('get', '/projects/' + this.projectId, data).then(function (response) {
                     let fieldsArr = response.meta.fields.data;
@@ -1219,12 +1238,12 @@
                         type: 'change',
                     };
                     params.data = response.data.principal.data;
-                    _this.$store.dispatch('changePrincipal', params)
+                    _this.$store.dispatch('changePrincipal', params);
                     if (response.data.participants) {
                         for (let i = 0; i < response.data.participants.data.length; i++) {
                             _this.flagParticipantsIdArr.push(response.data.participants.data[i].id)
                         }
-                        params.data = response.data.participants.data;
+                        params.data = JSON.parse(JSON.stringify(response.data.participants.data));
                         _this.$store.dispatch('changeParticipantsInfo', params);
                     }
 
@@ -1233,6 +1252,23 @@
                     }
                     for (let i = 0; i < response.data.relate_projects.data.length; i++) {
                         _this.linkageSelectedIds.projects.push(response.data.relate_projects.data[i].id)
+                    }
+                    for (let i = 0; i < response.data.trail.data.expectations.data.length; i++) {
+                        _this.selectedExpectationsArr.push(response.data.trail.data.expectations.data[i].id)
+                    }
+
+                })
+            },
+
+            getStars: function () {
+                let _this = this;
+                fetch('get', '/stars/all').then(function (response) {
+                    for (let i = 0; i < response.data.length; i++) {
+                        _this.starsArr.push({
+                            name: response.data[i].name,
+                            id: response.data[i].id,
+                            value: response.data[i].id
+                        })
                     }
 
                 })
@@ -1325,42 +1361,63 @@
             },
 
             changeProjectBaseInfo: function (value, name) {
-                if (name === 'principal_id') {
-                    if (value === this.projectInfo.principal.data.id) {
-                        return
-                    }
-                    value = this.$store.state.principalInfo.id;
-                }
-                if (name === 'participant_ids') {
-                    let participants = this.$store.state.participantsInfo;
-                    let participantsArr = [];
-                    for (let i = 0; i < participants.length; i++) {
-                        participantsArr.push(participants[i].id)
-                    }
-                    value = participantsArr;
+                switch (name) {
+                    case 'principal_id':
+                        if (value === this.projectInfo.principal.data.id) {
+                            return
+                        }
+                        value = this.$store.state.principalInfo.id;
+                        break;
+                    case 'participant_ids':
+                        let participants = this.$store.state.participantsInfo;
+                        let participantsArr = [];
+                        for (let i = 0; i < participants.length; i++) {
+                            participantsArr.push(participants[i].id)
+                        }
+                        value = participantsArr;
+                        break;
+                    case 'fee':
+                        if (value == this.projectInfo.trail.data.fee) {
+                            return
+                        }
+                        this.changeInfo['trail'] = {
+                            id: this.projectInfo.trail.data.id,
+                            fee: value
+                        };
+                        return;
+                    case 'expectations':
+                        this.changeInfo['trail'] = {
+                            id: this.projectInfo.trail.data.id,
+                            expectations: value
+                        };
+                        return;
+                    default:
+                        break
                 }
                 this.changeInfo[name] = value
             },
 
             changeProjectInfo: function () {
-                if (JSON.stringify(this.changeInfo) === "{}" && JSON.stringify(this.addInfoArr) === "{}") {
-                    this.isEdit = false;
-                    return
-                }
                 let data = this.changeInfo;
                 if (JSON.stringify(this.addInfoArr) !== "{}") {
                     data.fields = this.addInfoArr;
                 }
                 let _this = this;
                 let flagInfo = this.projectInfo.participants;
-                if (flagInfo) {
-                    let del_participant_ids = [];
+                data.participant_del_ids = [];
+                if (data.participant_ids && flagInfo) {
                     for (let j = 0; j < flagInfo.data.length; j++) {
-                        if (data.participants.map(item => item.id).indexOf(flagInfo[j]) === -1) {
-                            del_participant_ids.push(flagInfo[j])
+                        if (data.participant_ids.map(item => item.id).indexOf(flagInfo.data[j].id) === -1) {
+                            data.participant_del_ids.push(flagInfo.data[j].id)
                         }
                     }
-                    data.participant_del_ids = del_participant_ids
+                } else if (flagInfo && !data.participant_ids) {
+                    let participantsInfo = this.$store.state.participantsInfo;
+                    for (let i = 0; i < flagInfo.data.length; i++) {
+                        if (participantsInfo.map(item => item.id).indexOf(flagInfo.data[i].id) === -1) {
+                            data.participant_del_ids.push(flagInfo.data[i].id)
+                        }
+                    }
                 }
 
                 fetch('put', '/projects/' + this.projectId, data).then(function () {

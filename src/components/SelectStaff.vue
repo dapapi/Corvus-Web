@@ -251,22 +251,6 @@
         z-index: 10;
     }
 
-    .selector-page-content::-webkit-scrollbar {
-        width: 6px;
-        height: 12px;
-        -webkit-appearance: none;
-    }
-
-    .selector-page-content::-webkit-scrollbar-thumb {
-        background: #ddd;
-        border-radius: 10px;
-    }
-
-    .selector-page-content::-webkit-scrollbar-track-piece {
-        background: #eee;
-        border-radius: 3px;
-    }
-
     .page-nav-tabs {
         position: absolute;
         z-index: 2;
