@@ -1107,7 +1107,10 @@
         z-index: 2;
     }
 
-    .edit-height {
+    /* .edit-height {
+        height: 57px;
+    } */
+    .py-10{
         height: 57px;
     }
 </style>

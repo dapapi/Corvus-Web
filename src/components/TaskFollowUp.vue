@@ -124,10 +124,11 @@
 </script>
 
 <style scoped>
-.follow-task{
-    height: 240px;
-    overflow:scroll;
-}
+    .follow-task{
+        height: 240px;
+        overflow:auto;
+    }
+    
     .no-nav-tab-border {
         border: none;
     }
