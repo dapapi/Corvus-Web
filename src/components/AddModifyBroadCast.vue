@@ -119,16 +119,20 @@ export default {
             if(this.notedata){
                 this.pageType = '修改'
                 this.title = this.notedata.title
-                this.range = this.notedata.scpoe
+                this.range = this.notedata.scope
                 this.type = this.notedata.classify
                 this.topFlag = this.notedata.stick
                 this.text = this.notedata.desc
             }
             this.$nextTick(() => {
-                this.$refs.scopeSelector.setValue(this.range)           //设置默认值
+                let rangearr = []
+                for (const key in this.range.data) {
+                   rangearr.push(this.range.data[key].announcement_id)
+                }
+                this.$refs.scopeSelector.setValue(rangearr)           //设置默认值
                 this.$refs.classifySelector.setValue(this.type)
-                $('#broadcastRangeSelector').selectpicker('render');    //刷新下拉选单
-                $('#broadcastRangeSelector').selectpicker('refresh');
+                $('.selectpicker').selectpicker('render');    //刷新下拉选单
+                $('.selectpicker').selectpicker('refresh');
                 $('#broadcastTypeSelector').selectpicker('render');
                 $('#broadcastTypeSelector').selectpicker('refresh');
             })
@@ -170,6 +174,7 @@ export default {
             this.text = ''
             let currentId = this.$route.params.id
             fetch('delete','/announcements/'+currentId)
+            toastr.success('删除成功')
             $('#addNewBroadcast').modal('hide')
             this.$router.push('/broadcast/')
         },
@@ -219,6 +224,7 @@ export default {
                     _this.type = ''
                     _this.text = ''
                 })
+                _this.$emit('refresh')
             }
         },
         //上传
