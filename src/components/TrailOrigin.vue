@@ -1,9 +1,10 @@
 <template>
     <div class="example">
-        
         <div class="col-md-2 text-right float-left">{{typeName}}来源</div>
-        <div v-if="isEditSituation">
+        <div v-if="isEditSituation || alwaysShow">
+            <!-- ⬆️判断是否永久显示 -->
             <div :class="detailPage?'col-md-10 float-left font-weight-bold expfee':''">
+                <!-- ⬆️启用详情页样式 -->
                 <div class="float-left" v-if="trailOriginArr.length > 0" >
                     <selectors :options="trailOriginArr" @change="changeTrailOriginType" ref='contentType'
                                 :placeholder="'请选择线索来源'"></selectors>
@@ -30,28 +31,35 @@
 import config from '@/assets/js/config'
 import fetch from '@/assets/utils/fetch.js'
 export default {
-    
-    props:['trailType','typeName','isEdit','detailPage','content','contentType'],
+            //线索类型   {{什么}}线索  编辑状态   详情页样式  当前线索值    当前线索来源     永久显示
+    props:['trailType','typeName','isEdit','detailPage','content','contentType','alwaysShow'],
     data(){
         return {
-            trailOriginArr: config.trailOrigin,
-            trailOrigin:'',
-            trailOriginPerson:'',
-            email:'',
-            starsArr:[],
-            isEditSituation:'',
+            trailOriginArr: config.trailOrigin,     //线索类型列表
+            trailOrigin:'',                         //线索类型
+            trailOriginPerson:'',                   //人员
+            email:'',                               //
+            starsArr:[],                            //
+            isEditSituation:'',                     //编辑状态
         }
     },
     watch:{
+        //监听获取当前类型
         contentType(value){
             this.trailOrigin = String(value)
         },
+        //监听获取编辑状态
         isEdit(value){
             this.isEditSituation = value
-            this.$nextTick(() => {
-                this.$refs.contentType.setValue(this.contentType)           //设置默认值
-            })
+            if(value == true){
+                this.$nextTick(() => {
+                    this.$refs.contentType.setValue(this.contentType)           //设置默认值
+                    this.email = this.content
+                })
+            }
+            
         },
+        //线索类型为4时切换博主
         trailType:function(){
             if(this.trailType == 4){
                 this.trailOriginArr = config.trailBloggerOrigin
@@ -62,23 +70,29 @@ export default {
                 $('.selectpicker').selectpicker('refresh');
             })
         },
+        //线索类型提交
         trailOrigin:function(){
             this.$emit('changeTrailOrigin',this.trailOrigin)
         },
+        //
         email:function(){
             this.$emit('changeEmail',this.email)
         },
+        //
         trailOriginPerson:function(){
             this.$emit('changeTrailOriginPerson',this.trailOriginPerson)
         }
     },
     methods:{
+        //
         changeTrailOriginType: function (value) {
             this.trailOrigin = value
         },
+        //
         changeTrailOrigin: function (value) {
             this.trailOriginPerson = value
         },
+        //获取艺人、博主信息
         getStars: function () {
             this.starsArr=[]
             let _this = this;

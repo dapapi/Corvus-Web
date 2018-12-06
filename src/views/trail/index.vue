@@ -147,7 +147,7 @@
                             </div>
                         </div>
                             <TrailOrigin :trailType='trailType' 
-                            typeName='线索' isEdit='true'
+                            typeName='线索' alwaysShow='true'
                             @changeTrailOrigin='changeTrailOrigin' 
                             @changeEmail='changeEmail'
                             @changeTrailOriginPerson='changeTrailOriginPerson' />

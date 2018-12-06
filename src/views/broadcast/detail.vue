@@ -31,7 +31,7 @@
                             :style="{ backgroundImage: 'url('+currentData.cover+')'}"></div>
                         <span class="">{{currentData.creator.data.name}}</span>
                         <span class="">{{currentData.created_at}}</span>
-                        <span class="">{{classifyArr.find(classifyArr => classifyArr.value == currentData.classify).name}}</span>
+                        <span v-if="classifyArr[0]" class="">{{classifyArr.find(classifyArr => classifyArr.value == currentData.classify).name}}</span>
                     </div>
                     <br>
                     <hr/>
@@ -40,7 +40,7 @@
                         <h5 v-html="currentData.desc" class="broadcast-content"></h5>
                         <h5>公告范围
                             <span  v-for=" item in currentData.scope.data" :key="item.department_id">&nbsp;&nbsp;
-                                <span class="badge badge-round badge-dark">{{departments.find(departments => departments.id == item.department_id).name}}</span>
+                                <span v-if="departments[0]" class="badge badge-round badge-dark">{{departments.find(departments => departments.id == item.department_id).name}}</span>
                             </span>
                         </h5>
                         <hr>
