@@ -146,24 +146,11 @@
                                        v-model="trailName">
                             </div>
                         </div>
-                        <div class="example">
-                            <div class="col-md-2 text-right float-left">线索来源</div>
-                            <div class="float-left" v-if="trailOriginArr.length > 0">
-                                <selectors :options="trailOriginArr" @change="changeTrailOriginType"
-                                           :placeholder="'请选择线索来源'"></selectors>
-                            </div>
-                            <template v-if="trailOrigin === '1' || trailOrigin === '2' || trailOrigin === '3'">
-                                <div class="col-md-5 float-left pr-0">
-                                    <input type="text" class="form-control" title="" v-model="email">
-                                </div>
-                            </template>
-                            <template v-else-if="trailOrigin === '4' || trailOrigin === '5'">
-                                <div class="col-md-5 float-left pr-0">
-                                    <input-selectors @change="changeTrailOrigin" :propSelectMemberName='trailOriginPerson.name'></input-selectors>
-                                </div>
-                            </template>
-
-                        </div>
+                            <TrailOrigin :trailType='trailType' 
+                            typeName='线索' isEdit='true'
+                            @changeTrailOrigin='changeTrailOrigin' 
+                            @changeEmail='changeEmail'
+                            @changeTrailOriginPerson='changeTrailOriginPerson' />
                         <div class="example">
                             <div class="col-md-2 text-right float-left">行业</div>
                             <div class="col-md-10 float-left pl-0" v-if="industriesArr.length > 0">
@@ -358,6 +345,12 @@
             }
         },
         methods: {
+            changeTrailOriginPerson(value){
+                this.trailOriginPerson = value
+            },
+            changeEmail(value){
+                this.email = value
+            },
             getCurrentUser(){
                 fetch('get','/users/my').then((response) => {
                     this.currentUser = response.data
@@ -527,7 +520,6 @@
                     brand: this.brandName,
                     client: this.selectCompany,
                     resource_type: this.trailOrigin,
-                    // principal_id: this.$store.state.otherSlot.data.id || this.currentUser.id,
                     recommendations: this.recommendStars,
                     expectations: this.targetStars,
                     contact: {
@@ -587,9 +579,12 @@
             redirectTrailDetail: function (trailId) {
                 this.$router.push({path: '/trails/' + trailId})
             },
-
-            changeTrailOrigin: function (value) {
+            changeTrailOriginPerson(value){
                 this.trailOriginPerson = value
+            },
+            changeTrailOrigin: function (value) {
+                this.trailOrigin = value
+                console.log(value);
             },
 
             changeTrailOriginType: function (value) {

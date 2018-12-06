@@ -126,9 +126,9 @@
 <style scoped>
     .follow-task{
         height: 240px;
-        overflow:auto;
+        overflow-y: scroll;
+        overflow-x: hidden;
     }
-    
     .no-nav-tab-border {
         border: none;
     }
@@ -144,6 +144,7 @@
 
     .follow-item {
         padding: 0 10px;
+        
     }
 
     .task-follow {
@@ -155,6 +156,7 @@
         position: relative;
         padding-bottom: 10px;
         border-left: 1px solid #E0E0E0;
+        margin-left: 10px;
     }
     .change-text {
         line-height: 40px;
