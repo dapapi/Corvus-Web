@@ -209,6 +209,7 @@
                 this.bindToken = decodeURIComponent(results[2].replace(/\+/g, " "));
                 this.pageType = 'bindPhone';
                 console.log('bindphone');
+                console.log(this.pageType);
                 this.getServicesToken();
             },
 
