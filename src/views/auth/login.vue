@@ -208,6 +208,7 @@
                 if (!results[2]) return '';
                 this.bindToken = decodeURIComponent(results[2].replace(/\+/g, " "));
                 this.pageType = 'bindPhone';
+                console.log('bindphone');
                 this.getServicesToken();
             },
 
@@ -217,9 +218,11 @@
                 }
                 if (!this.smsRequestToken) {
                     this.getServicesToken(function (token) {
+                        console.log('sendmessage')
                         this.sendMessage(token)
                     })
                 } else {
+                    console.log('---sendmessage')
                     this.sendMessage(this.smsRequestToken)
                 }
             },
@@ -231,7 +234,8 @@
                 let _this = this;
                 fetch('get', '/services/request_token', data).then(function (response) {
                     console.log(response);
-                    _this.smsRequestToken = response.data.token
+                    _this.smsRequestToken = response.data.token;
+                    console.log(callback)
                     if (callback) {
                         callback(response.data.token)
                     }
