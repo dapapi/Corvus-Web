@@ -230,7 +230,7 @@
 
             getServicesToken() {
                 let data = {
-                    device: this.getDevice(),
+                    // device: this.getDevice(),
                 };
                 let _this = this;
                 // fetch('get', '/services/request_token', data).then(function (response) {
