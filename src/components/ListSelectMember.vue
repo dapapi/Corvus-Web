@@ -141,21 +141,4 @@
         overflow-y: auto;
     }
 
-    .selected-member::-webkit-scrollbar {
-        width: 6px;
-        height: 12px;
-        -webkit-appearance: none;
-    }
-
-    .selected-member::-webkit-scrollbar-thumb {
-        background: #ddd;
-        border-radius: 10px;
-    }
-
-    .selected-member::-webkit-scrollbar-track-piece {
-        background: #eee;
-        border-radius: 3px;
-    }
-
-
 </style>>

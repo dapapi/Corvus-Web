@@ -80,6 +80,7 @@
                                 <th class="cell-300" scope="col">录入时间</th>
                             </tr>
                             <tbody>
+                            
                             <tr v-for="artist in artistsInfo" :key="artist.id" class="pointer-content">
                                 <td>
                                     <span class="checkbox-custom checkbox-primary">
@@ -103,15 +104,20 @@
                                         artist.communication_status).name}}
                                     </template>
                                 </td>
-                                <td>
-                                    <template v-if="artist.producer">
-                                        {{ artist.producer.data.name }}
-                                    </template>
+                                <td >
+                                    <span v-for="(v,index) in artist.publicity.data" :key="index">
+                                        {{v.name}}
+                                    </span>
                                 </td>
                                 <td>{{artist.created_at}}</td>
                             </tr>
+                            
                             </tbody>
+                            
                         </table>
+                        <div class="col-md-1" style="margin: 6rem auto"  v-if="artistsInfo.length==0">
+                                <img src="https://res.papitube.com/corvus/images/content-none.png" alt="" style="width: 100%">
+                            </div>
                         <pagination :current_page="current_page" :method="getArtists" :total_pages="total_pages"
                                     :total="total"></pagination>
                     </div>
@@ -377,7 +383,7 @@
         methods: {
             getArtists: function (page = 1,signStatus) {
                 let data={
-                    include:'type,creator,tasks,affixes,producer',
+                    include:'type,creator,tasks,affixes,producer,publicity',
         
                 }
                 let _this = this;
@@ -403,7 +409,6 @@
                 fetch('get', '/bloggers', data).then(function (response) {
                     
                     _this.artistsInfo = response.data;
-                    // console.log(_this.artistsInfo )
                     _this.current_page = response.meta.pagination.current_page;
                     _this.total = response.meta.pagination.total;
                     _this.total_pages = response.meta.pagination.total_pages;
@@ -571,12 +576,12 @@
                     toastr.success('分配制作人成功')
                     $('#giveBroker').modal('hide')
                     //  console.log($('input[type = checkbox]'));
-                    _this.$router.go(0)
+                
                     // $('input[type = checkbox]').removeClass('selectable-all')
                     // $('input[type = checkbox]').removeClass('selectable-item')
                     _this.$store.state.participantsInfo = []
-
                 })
+               
             }
         }
     }

@@ -2,7 +2,7 @@
     <div class="addMember">
         <ul class="addMember-items">
             <li class="addMember-item mb-5" v-for="member in selectMemberArr" :key="member.id">
-                <img onerror="noneAvatar(this)" class="avatar" :src="member.avatar" title="Herman Beck" src="">
+                <img onerror="noneAvatar(this)" class="avatar" :src="member.avatar">
                 <span class="addMember-remove" @click="removeMember(member.id)">
                     <i class="md-minus-circle"></i>
                 </span>
@@ -81,12 +81,12 @@
 </script>
 
 <style scoped>
-.addMember-trigger-button{
-   
-    margin-left:10px;
-  }
-  .addMember-item{
-    margin-left:10px;
-    margin-right: 0;
-  }
+    .addMember-trigger-button {
+        margin-left: 10px;
+    }
+
+    .addMember-item {
+        margin-left: 10px;
+        margin-right: 0;
+    }
 </style>

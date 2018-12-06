@@ -595,6 +595,20 @@ let config = {
                 value: 2
             }
         ],
+        //社交平台
+        platformArr:[{
+            value:1,
+            name:'抖音'
+        },{
+            value:2,
+            name:'微博'
+        },{
+            value:3,
+            name:'小红书',  
+        },{
+            value:["1","2","3"],
+            name:('抖音','微博','小红书')
+        }],
         // 性别
         genderArr: [
             {
@@ -979,13 +993,9 @@ let config = {
                 value: 2
             },
             {
-                name: '百科',
+                name: '小红书',
                 value: 3
-            },
-            {
-                name: '其他',
-                value: 4
-            },
+            }
         ]
     }
 ;

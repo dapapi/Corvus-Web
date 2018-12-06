@@ -19,7 +19,7 @@
 
         <div class="items" v-show="departmentsShow">
             <div>
-                <div class="users" v-for="user in this.data.users.data" @click="selectMember(user)">
+                <div class="users" v-for="user in data.users.data" @click="selectMember(user)">
                     <a class="avatar" href="javascript:void(0)">
                         <img src="https://res.papitube.com/no-icon.png" alt="...">
                     </a>
@@ -38,7 +38,7 @@
             </div>
 
             <div v-if="this.data.departments.data.length > 0">
-                <div v-for="departmentData in this.data.departments.data">
+                <div v-for="departmentData in data.departments.data">
                     <departments-item :data="departmentData" :member-type="memberType" :type="type"
                                       :multiple="multiple" @change="memberChange"></departments-item>
                 </div>

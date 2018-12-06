@@ -79,7 +79,7 @@
     import config from '../assets/js/config'
 
     export default {
-        props: ['multiple', 'member-type', 'type','otherslot'],
+        props: ['multiple', 'member-type', 'type', 'otherslot'],
         data() {
             return {
                 normalUsers: {},
@@ -174,7 +174,7 @@
                     this.params.data = participantInfo;
                     this.$store.dispatch('changeParticipantsInfo', this.params);
                 }
-                if(this.otherslot){
+                if (this.otherslot) {
                     this.$store.dispatch('changeOtherSlot', this.params);
                 }
                 this.$emit('change', false)
@@ -249,22 +249,6 @@
         border: 1px solid #f2f2f2;
         overflow: hidden;
         z-index: 10;
-    }
-
-    .selector-page-content::-webkit-scrollbar {
-        width: 6px;
-        height: 12px;
-        -webkit-appearance: none;
-    }
-
-    .selector-page-content::-webkit-scrollbar-thumb {
-        background: #ddd;
-        border-radius: 10px;
-    }
-
-    .selector-page-content::-webkit-scrollbar-track-piece {
-        background: #eee;
-        border-radius: 3px;
     }
 
     .page-nav-tabs {

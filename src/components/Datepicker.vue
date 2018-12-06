@@ -40,7 +40,6 @@
              * 在清空选择时间时，可设置value为空
              * */
             setValue(value) {
-                console.log(value)
                 $(this.$el).datepicker('update', value);
             },
 

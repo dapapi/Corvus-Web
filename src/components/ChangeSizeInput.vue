@@ -66,20 +66,4 @@
         resize: none;
     }
 
-    .input-wraper textarea::-webkit-scrollbar {
-        width: 6px;
-        height: 12px;
-        -webkit-appearance: none;
-    }
-
-    .input-wraper textarea::-webkit-scrollbar-thumb {
-        background: #ddd;
-        border-radius: 10px;
-    }
-
-    .input-wraper textarea::-webkit-scrollbar-track-piece {
-        background: #eee;
-        border-radius: 3px;
-    }
-
 </style>

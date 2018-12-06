@@ -134,7 +134,7 @@
                         </li>
                     </ul>
                     <div class="tab-content nav-tabs-animate bg-white col-md-12 row">
-                        <div class="tab-pane animation-fade active col-md-8" id="forum-trail-base" role="tabpanel">
+                        <div class="tab-pane animation-fade active col-md-12" id="forum-trail-base" role="tabpanel">
                             <div class="card">
                                 <div class="card-header card-header-transparent card-header-bordered">
                                     <div class="float-left font-weight-bold third-title">销售线索信息</div>
@@ -157,18 +157,24 @@
                                                            @change="changeTrailName"></EditInput>
                                             </div>
                                         </div>
-                                        <div class="card-text py-10 px-0 clearfix col-md-6 float-left"
-                                             :class="isEdit ? 'edit-height':''">
-                                            <div class="col-md-2 float-left text-right pl-0">线索来源</div>
+                                        <!-- <div class="card-text py-10 px-0 clearfix col-md-12 float-left"
+                                             :class="isEdit ? 'edit-height':'edit-height'"> -->
+                                                    <!-- <span v-show="!isEdit">{{trailInfo.resource_type}} {{trailInfo.resource}}</span> -->
+
+                                              <TrailOrigin class='card-text clearfix my-0 py-10 px-0 col-md-6 float-left' :trailType='trailType' 
+                                                typeName='线索' :isEdit='isEdit' :content='trailInfo.resource'
+                                                @changeTrailOrigin='changeTrailOrigin' :contentType='trailInfo.resource_type'
+                                                @changeEmail='changeEmail' detailPage='true'
+                                                @changeTrailOriginPerson='changeTrailOriginPerson' />
+                                            <!-- <div class="col-md-2 float-left text-right pl-0">线索来源</div>
                                             <div class="col-md-10 float-left font-weight-bold">
                                                 <div class="float-left" v-if="trailOriginArr.length > 0">
-                                                    <!-- <span v-show="!isEdit">{{trailInfo.resource_type}}</span> -->
                                                     <EditSelector :options="trailOriginArr"
                                                                   :is-edit="isEdit"
                                                                   @change="changeResourceType" :content='trailInfo.resource_type'></EditSelector>
                                                 </div>
-                                            </div>
-                                        </div>
+                                            </div> -->
+                                        <!-- </div> -->
                                         <div class="card-text py-10 px-0 clearfix col-md-6 float-left"
                                              :class="isEdit ? 'edit-height':'' ">
                                             <div class="col-md-2 float-left text-right pl-0">负责人</div>
@@ -410,7 +416,7 @@
                             </div>
 
                         </div>
-                         <div class="col-md-4">
+                         <!-- <div class="col-md-4">
                         <div class="card-header card-header-transparent card-header-bordered">
                             <span><strong>销售线索跟进</strong></span>
                         </div>
@@ -420,14 +426,14 @@
                                                 v-if="trailId"></TaskFollowUp>
                             </div>
                         </div>
-                    </div>
+                    </div> -->
                     </div>
                     
                 </div>
 
             </div>
 
-            <!-- <div class="panel">
+            <div class="panel">
                 <div class="col-md-12">
                     <div class="card col-md-12">
                         <div class="card-header card-header-transparent card-header-bordered">
@@ -441,7 +447,7 @@
                         </div>
                     </div>
                 </div>
-            </div> -->
+            </div>
         </div>
 
         <div class="modal fade" id="addTask" aria-hidden="true" aria-labelledby="addLabelForm"
@@ -606,8 +612,9 @@
                 cooperationTypeArr: config.cooperationTypeArr,
                 trailType:'',
                 isLoading:true,
+                email:'',
+                trailOriginPerson : ''
             }
-
         }, 
         created(){
             this.getAllType()
@@ -741,6 +748,12 @@
         },
 
         methods: {
+             changeTrailOriginPerson(value){
+                this.trailOriginPerson = value
+            },
+            changeEmail(value){
+                this.email = value
+            },
             getAllType(){
                 let _this = this
                 fetch('get','/task_types').then((response) => {
@@ -827,6 +840,13 @@
             },
 
             changeTrailBaseInfo: function () {
+                if (this.trailOrigin == 1 || this.trailOrigin == 2 || this.trailOrigin == 3) {
+                    this.changeInfo.resource = this.email
+                } else if (this.trailOrigin == 4 || this.trailOrigin == 5) {
+                    this.changeInfo.resource = this.trailOriginPerson.id
+                } else {
+                    this.changeInfo.resource = ''
+                }
                 if (this.trailTypeValidate()){
                     let _this = this;
                     let data = _this.changeInfo;
@@ -1107,7 +1127,10 @@
         z-index: 2;
     }
 
-    .edit-height {
+    /* .edit-height {
+        height: 57px;
+    } */
+    .py-10{
         height: 57px;
     }
 </style>
