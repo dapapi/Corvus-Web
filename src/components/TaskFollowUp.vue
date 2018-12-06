@@ -90,7 +90,7 @@
         created() {
 
         },
-        mounted(){
+        mounted() {
             this.getTrail()
         },
         methods: {
@@ -124,11 +124,12 @@
 </script>
 
 <style scoped>
-    .follow-task{
+    .follow-task {
         height: 240px;
-        overflow:auto;
+        overflow-y: auto;
+        padding: 10px;
     }
-    
+
     .no-nav-tab-border {
         border: none;
     }
@@ -156,6 +157,7 @@
         padding-bottom: 10px;
         border-left: 1px solid #E0E0E0;
     }
+
     .change-text {
         line-height: 40px;
     }
