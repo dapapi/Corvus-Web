@@ -173,7 +173,8 @@
                             <div class="col-md-2 text-right float-left pl-0">项目来源</div>
                             <div class="col-md-10 float-left">
                                 <div class="col-md-6 float-left pl-0" v-if="trailOriginArr.length > 0">
-                                    <Selectors :options="trailOriginArr" @change="changeTrailOriginType"
+                                    <Selectors :options="trailOriginArr"
+                                               @change="(value) => addProjectBaseInfo(value, 'resource_type')"
                                                ref="trailOrigin" placeholder="请选择项目来源"></Selectors>
                                 </div>
                                 <div class="col-md-6 float-left pr-0">
@@ -327,7 +328,9 @@
                 visibleRangeArr: config.visibleRangeArr,
                 trailOriginArr: config.trailOrigin,
                 trailsArr: [],
-                projectBaseInfo: {},
+                projectBaseInfo: {
+                    trail: {}
+                },
                 trailsAllInfo: '',
                 trailOrigin: '',
                 trailOriginContent: '',
@@ -336,7 +339,6 @@
                 projectStatusArr: config.projectStatusArr,
                 allUsers: [],
                 startTime: '',
-                selectedTrailId: '',
 
             }
         },
@@ -447,7 +449,9 @@
                 this.$refs.trailOrigin.setValue('');
                 this.trailOriginContent = '';
                 this.trailOrigin = '';
+                this.projectBaseInfo = {};
                 this.$store.dispatch('changePrincipal', {data: {}});
+                this.$store.dispatch('changePrincipal', {type: 'selector', data: {}});
             },
 
             redirectDetail: function (projectId) {
@@ -461,6 +465,14 @@
             addProject: function () {
                 this.projectBaseInfo.fields = this.addInfoArr;
                 this.projectBaseInfo.type = this.projectType;
+                if (this.projectBaseInfo.trail && this.projectBaseInfo.trail.resource_type) {
+                    let resource = this.projectBaseInfo.trail.resource_type;
+                    if (resource == 1 || resource == 2 || resource == 3) {
+                        this.projectBaseInfo.trail.resource = this.trailOriginContent;
+                    } else if (resource == 4 || resource == 5) {
+                        this.projectBaseInfo.trail.resource = this.$store.state.selectPrincipalInfo.id
+                    }
+                }
                 let _this = this;
                 fetch('post', '/projects', this.projectBaseInfo).then(function (response) {
                     $('#addProject').modal('hide');
@@ -538,7 +550,7 @@
                 this.$refs.projectFee.setValue(trailInfo.fee);
                 this.$refs.trailOrigin.setValue(trailInfo.resource_type);
                 this.trailOrigin = trailInfo.resource_type;
-                this.selectedTrailId = trailInfo.id;
+                this.projectBaseInfo.trail.id = trailInfo.id;
                 switch (trailInfo.resource_type) {
                     case 1:
                         this.trailOriginContent = JSON.parse(JSON.stringify(trailInfo.resource));
@@ -569,19 +581,15 @@
                         this.startTime = value;
                         break;
                     case 'fee':
-                        name = 'trail';
-                        value = {
-                            id: this.selectedTrailId,
-                            fee: value
-                        };
-                        break;
+                        this.projectBaseInfo.trail.fee = value;
+                        return;
+                    case 'resource_type':
+                        this.trailOrigin = value;
+                        this.projectBaseInfo.trail.resource_type = value;
+                        return
                 }
                 this.projectBaseInfo[name] = value
             },
-
-            changeTrailOriginType: function (value) {
-                this.trailOrigin = value
-            }
 
         }
     }
