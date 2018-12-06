@@ -20,12 +20,12 @@
                         <li class="nav-item" role="presentation">
                             <a class="nav-link active" data-toggle="tab" href="#forum-project"
                                aria-controls="forum-base"
-                               aria-expanded="true" role="tab">待审批</a>
+                               aria-expanded="true" role="tab" @click="getlist(1,1)">待评审</a>
                         </li>
                         <li class="nav-item" role="presentation">
                             <a class="nav-link" data-toggle="tab" href="#forum-project"
                                aria-controls="forum-present"
-                               aria-expanded="false" role="tab">已审批</a>
+                               aria-expanded="false" role="tab" @click="getlist(1,2)">已审批</a>
                         </li>
                     </ul>
                     <div class="page-content tab-content nav-tabs-animate bg-white">
@@ -41,42 +41,16 @@
                                 <th class="cell-300" scope="col">状态</th>
                                 
                             </tr>
-                            <tr >
-                                <td class="pointer-content">
-                                    <div data-toggle="modal" data-target="#submitReport">
-                                        的爽肤水地方
-                                    </div>
-                                </td>
-                                <td><div data-toggle="modal" data-target="#submitReport">
-                                        屈素芳
-                                    </div></td>
-                                <td><div data-toggle="modal" data-target="#submitReport">
-                                        每周
-                                    </div></td>
-                                <td><div data-toggle="modal" data-target="#submitReport">
-                                        2018-11-23
-                                    </div></td>
-                                <td><div data-toggle="modal" data-target="#submitReport">的方式地方</div></td>
-                                
-                            </tr>
-                            <tr data-toggle="modal" data-target="#submitReport">
-                                <td class="pointer-content">
-                                    的爽肤水地方
-                                </td>
+                            
+                            <tr data-toggle="modal" data-target="#submitReport" v-for="(item,index) in list" :key="index">
+                                <td class="pointer-content">{{item.template.template_name}}</td>
                                 <td>屈素芳</td>
                                 <td>每周</td>
-                                <td>2018-11-23</td>
-                                <td>的方式地方</td>
-                                
-                            </tr>
-                            <tr data-toggle="modal" data-target="#submitReport">
-                                <td class="pointer-content">
-                                    的爽肤水地方
+                                <td>{{item.template.updated_at}}</td>
+                                <td>
+                                    <template v-if="item.status == 1">未评审</template>
+                                    <template v-if="item.status == 2">已评审</template>
                                 </td>
-                                <td>屈素芳</td>
-                                <td>每周</td>
-                                <td>2018-11-23</td>
-                                <td>的方式地方</td>
                                 
                             </tr>
                         </table>
@@ -103,10 +77,13 @@ export default {
     data(){
         return {
             list:[], 
+            search:'',
+            status:1,//status 1 未评审  2已评审
+             
         }
     },
     mounted(){
-        this.getlist()
+        this.getlist(1,1)
     },
     methods:{
         redirectBriefDetails:function(id){
@@ -115,9 +92,12 @@ export default {
         redirectBriefAdd:function(){
             this.$router.push({path:'/brief/add'})
         },
-        getlist:function(){
-            fetch('get',`${config.apiUrl}/launch`).then((res) => {
-                this.list = res.data
+        getlist:function(page = 1,status){
+            let _this = this
+            this.status = status
+           
+            fetch('get',`${config.apiUrl}/review`,{search:this.search,status:this.status}).then((res) => {
+                _this.list = res.data
             })
         }
     }

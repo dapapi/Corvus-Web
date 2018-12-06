@@ -82,7 +82,7 @@ export default {
             this.$router.push({path:'/brief/add'})
         },
         getlist:function(){
-            fetch('get',`${config.apiUrl}/launch`).then((res) => {
+            fetch('get',`${config.apiUrl}/issues/1293569893/operate_log`).then((res) => {
                 this.list = res.data
             })
         }
