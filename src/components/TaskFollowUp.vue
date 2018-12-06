@@ -124,10 +124,11 @@
 </script>
 
 <style scoped>
-.follow-task{
-    height: 240px;
-    overflow:scroll;
-}
+    .follow-task{
+        height: 240px;
+        overflow:auto;
+    }
+    
     .no-nav-tab-border {
         border: none;
     }
@@ -155,10 +156,6 @@
         padding-bottom: 10px;
         border-left: 1px solid #E0E0E0;
     }
-
-    .change-time {
-    }
-
     .change-text {
         line-height: 40px;
     }

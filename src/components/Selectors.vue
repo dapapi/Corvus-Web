@@ -5,6 +5,7 @@
         <selectorsOptions v-for="option in options" v-bind:id="option.id" :val="option.value || option.id"
                           :key="option.id">
             {{option.name || option.title}}
+            <!-- 增强组件扩展性和数据通用性 -->
         </selectorsOptions>
     </select>
 
@@ -41,7 +42,6 @@
                     self.$emit('select', self.changeKey, $(this).val(), $(this)[0].selectedOptions[0].label)
                 }
             });
-
         },
         watch: {
             resetinfo: function (value) {

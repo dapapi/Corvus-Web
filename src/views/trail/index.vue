@@ -442,6 +442,7 @@
                 this.fetchData.include = 'principal,client,contact,recommendations,expectations'
                 fetch(methods,url,this.fetchData).then((response) => {
                     _this.trailsInfo = response.data
+                    _this.total = response.meta.pagination.total;
                 })
             },
             filterGo(){
@@ -449,7 +450,6 @@
                 this.fetchHandler('get','/trails/filter')
             },
             progressStatusFilter(value){
-                console.log(value);
                 this.fetchData.status= value
                 this.fetchHandler('get','/trails/filter')
             },
@@ -462,6 +462,7 @@
                 fetch('get', '/trails', data).then(function (response) {
                     _this.trailsInfo = response.data;
                     _this.total = response.meta.pagination.total;
+                    console.log(response.meta.pagination.total)
                     _this.current_page = response.meta.pagination.current_page;
                     _this.total_pages = response.meta.pagination.total_pages;
                     _this.isLoading = false;
