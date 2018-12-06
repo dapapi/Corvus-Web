@@ -88,12 +88,12 @@
                             <div class="input-group">
                                 <input type="email" class="form-control" placeholder="验证码" v-model="smsCode">
                                 <div class="input-group-addon pointer-content font-info verification-wrap text-center d-block"
-                                     @click="sendMessage">{{ toastText }}
+                                     @click="initSendSmsBtn">{{ toastText }}
                                 </div>
                             </div>
                             <div class="form-group example">
                                 <button type="button" class="btn btn-block btn-primary waves-effect waves-classic"
-                                        @click="bindPhone">绑定
+                                        @click="bindTelephone">绑定
                                 </button>
                             </div>
                         </div>
@@ -116,7 +116,7 @@
                             <div class="form-group input-group">
                                 <input type="email" class="form-control" placeholder="验证码" v-model="smsCode">
                                 <div class="input-group-addon pointer-content font-info verification-wrap text-center d-block"
-                                     @click="sendMessage">{{ toastText }}
+                                     @click="initSendSmsBtn">{{ toastText }}
                                 </div>
                             </div>
                             <div class="form-group">
@@ -164,6 +164,8 @@
                 newPassword: '',
                 repeatNewPassword: '',
                 smsCode: '',
+                bindToken: '',
+                smsRequestToken: '',
             }
         },
 
@@ -176,7 +178,7 @@
                 state: "",
                 href: "https://res-crm.papitube.com/css/wxLogin-QrcodeStyle.css"
             });
-            this.checkBindTelephone()
+            this.checkBindTelephone();
         },
 
         methods: {
@@ -204,13 +206,65 @@
                     results = regex.exec(url);
                 if (!results) return null;
                 if (!results[2]) return '';
-                let token = decodeURIComponent(results[2].replace(/\+/g, " "));
-                console.log(token)
+                this.bindToken = decodeURIComponent(results[2].replace(/\+/g, " "));
                 this.pageType = 'bindPhone';
+                this.getServicesToken();
+            },
+
+            initSendSmsBtn() {
+                if (!Verify.phone(this.username)) {
+                    return
+                }
+                if (!this.smsRequestToken) {
+                    this.getServicesToken(function (token) {
+                        this.sendMessage(token)
+                    })
+                } else {
+                    this.sendMessage(this.smsRequestToken)
+                }
+            },
+
+            getServicesToken(callback) {
+                let data = {
+                    device: this.getDevice(),
+                };
+                let _this = this;
+                fetch('get', '/services/request_token', data).then(function (response) {
+                    console.log(response);
+                    _this.smsRequestToken = response.data.token
+                    if (callback) {
+                        callback(response.data.token)
+                    }
+                })
+            },
+
+            bindTelephone() {
+                if (!Verify.phone(this.username) || !Verify.smsCode(this.smsCode)) {
+                    return
+                }
 
             },
 
-            sendMessage() {
+            getDevice() {
+                let deviceId = Cookies.get('deviceId');
+                if (!deviceId) {
+                    deviceId = this.generateId(24);
+                    Cookies.set('deviceId', deviceId)
+                }
+                return deviceId
+            },
+
+            generateId(len) {
+                let arr = new Uint8Array((len || 40) / 2);
+                window.crypto.getRandomValues(arr);
+                return Array.from(arr, this.dec2hex).join('');
+            },
+
+            dec2hex(dec) {
+                return ('0' + dec.toString(16)).substr(-2);
+            },
+
+            sendMessage(token) {
                 if (this.second > 0 && this.second !== 60) {
                     return
                 }
@@ -224,6 +278,14 @@
                         _this.second = 60;
                     }
                 }, 1000);
+                let data = {
+                    telephone: this.username,
+                    device: Cookies.get('deviceId'),
+                    token: token
+                };
+                fetch('get', '/services/send_sms_code', data).then(function () {
+                    toastr.success('发送成功');
+                })
             },
 
             checkLogin: function () {
@@ -281,17 +343,6 @@
                 }
             },
 
-            bindPhone() {
-                if (!Verify.username(this.username) || !Verify.password(this.password)) {
-                    return
-                }
-            },
-
-            getWeixinCode() {
-                // fetch('get', 'https://api.weixin.qq.com/sns/oauth2/access_token?appid=APPID&secret=SECRET&code=CODE&grant_type=authorization_code').then(function (response) {
-                //     console.log(response)
-                // })
-            }
         }
     }
 </script>
