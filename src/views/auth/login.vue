@@ -25,7 +25,7 @@
                         </li>
                         <li class="nav-item" role="presentation">
                             <a class="nav-link" data-toggle="tab" href="#forum-weixin-login"
-                               aria-controls="forum-present" @click="getWeixinCode"
+                               aria-controls="forum-present"
                                aria-expanded="false" role="tab">微信登录</a>
                         </li>
                     </ul>
