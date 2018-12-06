@@ -169,24 +169,23 @@
                                            placeholder="请选择销售线索" selectable="true"></Selectors>
                             </div>
                         </div>
-                        <!--<div class="col-md-12 example clearfix" v-if="projectType != 5">-->
-                        <!--<div class="col-md-2 text-right float-left pl-0">项目来源</div>-->
-                        <!--<div class="col-md-10 float-left">-->
-                        <!--<div class="float-left" v-if="trailOriginArr.length > 0">-->
-                        <!--<Selectors :options="trailOriginArr" @change="changeTrailOriginType"></Selectors>-->
-                        <!--</div>-->
-                        <!--<template v-if="trailOrigin === '1' || trailOrigin === '2' || trailOrigin === '3'">-->
-                        <!--<div class="col-md-5 float-left pr-0">-->
-                        <!--<input type="text" class="form-control" title="" v-model="email">-->
-                        <!--</div>-->
-                        <!--</template>-->
-                        <!--<template v-else-if="trailOrigin === '4' || trailOrigin === '5'">-->
-                        <!--<div class="col-md-5 float-left pr-0">-->
-                        <!--<InputSelectors></InputSelectors>-->
-                        <!--</div>-->
-                        <!--</template>-->
-                        <!--</div>-->
-                        <!--</div>-->
+                        <div class="col-md-12 example clearfix" v-if="projectType != 5">
+                            <div class="col-md-2 text-right float-left pl-0">项目来源</div>
+                            <div class="col-md-10 float-left">
+                                <div class="col-md-6 float-left pl-0" v-if="trailOriginArr.length > 0">
+                                    <Selectors :options="trailOriginArr" @change="changeTrailOriginType"
+                                               ref="trailOrigin" placeholder="请选择项目来源"></Selectors>
+                                </div>
+                                <div class="col-md-6 float-left pr-0">
+                                    <template v-if="trailOrigin == 1 || trailOrigin == 2 || trailOrigin == 3">
+                                        <input type="text" class="form-control" title="" v-model="trailOriginContent">
+                                    </template>
+                                    <template v-else-if="trailOrigin == 4 || trailOrigin == 5">
+                                        <InputSelectors type="selector"></InputSelectors>
+                                    </template>
+                                </div>
+                            </div>
+                        </div>
                         <div class="col-md-12 example clearfix">
                             <div class="col-md-2 text-right float-left pl-0">项目名称</div>
                             <div class="col-md-10 float-left">
@@ -235,6 +234,13 @@
                             <div class="col-md-10 float-left">
                                 <Datepicker @change="(value) => addProjectBaseInfo(value, 'end_at')"
                                             ref="endTime" :startDate="startTime"></Datepicker>
+                            </div>
+                        </div>
+                        <div class="col-md-12 example clearfix" v-show="projectType != 5">
+                            <div class="col-md-2 text-right float-left pl-0">预计费用</div>
+                            <div class="col-md-10 float-left">
+                                <NumberSpinner ref="projectFee"
+                                               @change="(value) => addProjectBaseInfo(value, 'fee')"></NumberSpinner>
                             </div>
                         </div>
                         <div class="col-md-12 example clearfix" v-for="field in projectFieldsArr">
@@ -324,7 +330,7 @@
                 projectBaseInfo: {},
                 trailsAllInfo: '',
                 trailOrigin: '',
-                email: '',
+                trailOriginContent: '',
                 projectKeyword: '',
                 paginationType: '',
                 projectStatusArr: config.projectStatusArr,
@@ -428,6 +434,7 @@
             },
 
             refreshAddProjectModal: function () {
+                this.$refs.trails.setValue('');
                 this.$refs.projectNameRef.refresh();
                 this.$refs.priorityLevel.setValue('');
                 this.$refs.visibleRange.setValue('');
@@ -435,6 +442,10 @@
                 this.$refs.startTime.setValue('');
                 this.$refs.endTime.setValue('');
                 this.$refs.desc.refresh();
+                this.$refs.projectFee.setValue('0');
+                this.$refs.trailOrigin.setValue('');
+                this.trailOriginContent = '';
+                this.trailOrigin = '';
                 this.$store.dispatch('changePrincipal', {data: {}});
             },
 
@@ -523,6 +534,28 @@
                 this.projectBaseInfo.expectations = artistsArr;
                 this.$refs.priorityLevel.setValue(trailInfo.priority);
                 this.projectBaseInfo.priority = trailInfo.priority;
+                this.$refs.projectFee.setValue(trailInfo.fee);
+                this.$refs.trailOrigin.setValue(trailInfo.resource_type);
+                this.trailOrigin = trailInfo.resource_type;
+                switch (trailInfo.resource_type) {
+                    case 1:
+                        this.trailOriginContent = JSON.parse(JSON.stringify(trailInfo.resource));
+                        break;
+                    case 2:
+                        this.trailOriginContent = JSON.parse(JSON.stringify(trailInfo.resource));
+                        break;
+                    case 3:
+                        this.trailOriginContent = JSON.parse(JSON.stringify(trailInfo.resource));
+                        break;
+                    case 4:
+                        this.$store.dispatch('changePrincipal', {type: 'selector', data: trailInfo.resource});
+                        break;
+                    case 5:
+                        this.$store.dispatch('changePrincipal', {type: 'selector', data: trailInfo.resource});
+                        break;
+                    default:
+                        break;
+                }
             },
 
             addProjectBaseInfo: function (value, name) {

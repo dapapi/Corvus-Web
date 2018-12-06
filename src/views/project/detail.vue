@@ -504,6 +504,14 @@
                                                               @change="(value) => changeProjectBaseInfo(value, 'privacy')"></EditSelector>
                                             </div>
                                         </div>
+                                        <div class="card-text py-10 px-0 clearfix col-md-6 float-left edit-height"
+                                             v-if="projectInfo.type != 5">
+                                            <div class="col-md-2 float-left text-right pl-0">预计费用</div>
+                                            <div class="col-md-10 float-left font-weight-bold">
+                                                <EditNumberSpinner :is-edit="isEdit" :content="projectInfo.fee"
+                                                                   @change="(value) => changeProjectBaseInfo(value, 'fee')"></EditNumberSpinner>
+                                            </div>
+                                        </div>
                                         <div class="card-text py-10 px-0 clearfix col-md-6 float-left edit-height">
                                             <div class="col-md-2 float-left text-right pl-0">优先级</div>
                                             <div class="col-md-10 float-left font-weight-bold">
@@ -605,7 +613,7 @@
 
                                     <div class="segmentation-line example"></div>
 
-                                    <div class="card-text py-5 clearfix">
+                                    <div class="card-text py-5 clearfix edit-height">
                                         <div class="col-md-1 float-left text-right pl-0">录入人</div>
                                         <div class="col-md-5 float-left font-weight-bold">
                                             {{ projectInfo.creator.data.name }}
@@ -615,7 +623,7 @@
                                             {{ projectInfo.created_at }}
                                         </div>
                                     </div>
-                                    <div class="card-text py-5 clearfix">
+                                    <div class="card-text py-5 clearfix edit-height">
                                         <div class="col-md-1 float-left text-right pl-0">最近更新人</div>
                                         <div class="col-md-5 float-left font-weight-bold">
                                         </div>
@@ -623,7 +631,7 @@
                                         <div class="col-md-5 float-left font-weight-bold">
                                         </div>
                                     </div>
-                                    <div class="card-text py-5 clearfix">
+                                    <div class="card-text py-5 clearfix edit-height">
                                         <div class="col-md-1 float-left text-right pl-0">关联项目</div>
                                         <div class="col-md-5 float-left font-weight-bold">
                                             <template v-for="project in projectInfo.relate_projects.data">
@@ -1340,7 +1348,9 @@
                     return
                 }
                 let data = this.changeInfo;
-                data.fields = this.addInfoArr;
+                if (JSON.stringify(this.addInfoArr) !== "{}") {
+                    data.fields = this.addInfoArr;
+                }
                 let _this = this;
                 let flagInfo = this.projectInfo.participants;
                 if (flagInfo) {

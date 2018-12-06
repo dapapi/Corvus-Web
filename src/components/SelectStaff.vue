@@ -79,7 +79,7 @@
     import config from '../assets/js/config'
 
     export default {
-        props: ['multiple', 'member-type', 'type','otherslot'],
+        props: ['multiple', 'member-type', 'type', 'otherslot'],
         data() {
             return {
                 normalUsers: {},
@@ -174,7 +174,7 @@
                     this.params.data = participantInfo;
                     this.$store.dispatch('changeParticipantsInfo', this.params);
                 }
-                if(this.otherslot){
+                if (this.otherslot) {
                     this.$store.dispatch('changeOtherSlot', this.params);
                 }
                 this.$emit('change', false)

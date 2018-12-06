@@ -7,7 +7,7 @@
 
 <script>
     export default {
-        props: ['shortInput','addtrail'],
+        props: ['shortInput', 'addtrail'],
         mounted() {
             let self = this;
             $(this.$el).asSpinner(
@@ -24,6 +24,9 @@
         },
 
         methods: {
+            /**
+             * 重置value为0时，value值 '0' 为字符串
+             * */
             setValue(value) {
                 $(this.$el).asSpinner('val', value);
             },
@@ -38,9 +41,10 @@
 </script>
 
 <style>
-    .addtrail{
+    .addtrail {
         width: 180px !important;
     }
+
     .short-spinner-input {
         width: 76% !important;
     }

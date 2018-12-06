@@ -150,4 +150,24 @@
     .modal-header {
         border-bottom: 1px solid #eee;
     }
+
+    .edit-height {
+        height: 57px;
+    }
+
+    *::-webkit-scrollbar {
+        width: 6px;
+        height: 12px;
+        -webkit-appearance: none;
+    }
+
+    *::-webkit-scrollbar-thumb {
+        background: #ddd;
+        border-radius: 10px;
+    }
+
+    *::-webkit-scrollbar-track-piece {
+        background: #eee;
+        border-radius: 3px;
+    }
 </style>
