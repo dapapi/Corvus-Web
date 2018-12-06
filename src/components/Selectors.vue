@@ -4,18 +4,22 @@
         <selectorsOptions v-for="option in options" v-bind:id="option.id" :val="option.value || option.id"
                           :key="option.id">
             {{option.name || option.title}}
+            <!-- 增强组件扩展性和数据通用性 -->
         </selectorsOptions>
     </select>
 
 </template>
 <script>
     export default {
-        props: ['options', 'disable', 'multiple', 'placeholder', 'changeKey', 'value', 'resetinfo'], // changeKey为父组件的data，且可以被改变
+        props: ['options', 'disable', 'multiple', 'placeholder', 'changeKey', 'value', 'resetinfo','preinfo'], // changeKey为父组件的data，且可以被改变
         data() {
             return {
                 isDisable: this.disable,
                 valueListener: []
             }
+        },
+        created() {
+
         },
         mounted() {
             let self = this;
@@ -26,7 +30,6 @@
                     self.$emit('select', self.changeKey, $(this).val(), $(this)[0].selectedOptions[0].label)
                 }
             });
-
         },
         watch: {
             resetinfo: function (value) {

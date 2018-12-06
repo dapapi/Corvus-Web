@@ -1,5 +1,17 @@
 <template>
     <div class="page">
+        <div class="loader-overlay" v-if="isLoading">
+            <div class="loader-content">
+                <div class="loader-index">
+                <div></div>
+                <div></div>
+                <div></div>
+                <div></div>
+                <div></div>
+                <div></div>
+        </div>
+      </div>
+      </div>
         <div class="page-header page-header-bordered">
             <h1 class="page-title">公告&nbsp;&nbsp;({{broadCastInfo.length}})</h1>
         </div> 
@@ -18,17 +30,17 @@
                                     </td>
                                     <td></td>
                                     <td>
-                                    <strong>发布时间</strong>
+                                        <strong>发布时间</strong>
                                     </td>
                                     <td></td>
                                     <td></td>
                                     <td>
-                                    <strong>发布人</strong>
+                                        <strong>发布人</strong>
                                     </td>
                                 </tr>
                                 </thead>
                                 <tbody>
-                                <tr class="broadcast-tr" v-for="item in broadCastInfo" :key="item.id">
+                                <tr class="broadcast-tr" v-for="item in broadCastInfo" :key="item.id" v-if="memberList">
                                     <td class="broadcast-title">
                                         <span class="broadcast-title-div">
                                             <router-link :to="{name:'broadcast/detail', params: {id: item.id}}">
@@ -37,7 +49,7 @@
                                         </span>
                                         <span class="broadcast-top-flag badge badge-outline badge-info" 
                                             v-if="item.stick">置顶</span>
-                                        <span class="broadcast-new-flag" v-if="item.readflag">
+                                        <span class="broadcast-new-flag" v-if="!item.readflag">
                                             <strong>NEW</strong>
                                         </span>
                                     </td>
@@ -49,23 +61,27 @@
                                     </td>
                                     <td></td>
                                     <td></td>
-                                    <td>
-                                        {{item.creator_id}}      
+                                    <td v-if="memberList[0]">
+                                        {{memberList.find(memberList => memberList.id == item.creator.data.id).name}}
                                     </td>
                                 </tr>
                                 </tbody>
                             </table>
+                            <div class="col-md-1" style="margin: 6rem auto" v-if="broadCastInfo.length === 0">
+                                <img src="https://res.papitube.com/corvus/images/content-none.png" alt="" style="width: 100%">
+                            </div>
                         </div>
                     </div>
                 </div>
             </div>
-            <AddModifyBroadCast />
+            <AddModifyBroadCast @refresh='refreshList' />
         </div>
+                        
+
     </div>
 </template>
 
 <script>
-// import broadCastData from './broadcast.json'
 import fetch from '../../assets/utils/fetch.js'
 import config from '../../assets/js/config'
 export default {
@@ -73,55 +89,48 @@ export default {
         return{
              broadCastInfo:{},
              classifyArr:config.classifyArr,
+             memberList:[],
+             isLoading:true,
         }
           
     },
     created() {
-       this.dataInit()    
-    },
-    computed:{
-
+        this.getMemberList()
+        this.dataInit()    
     },
     mounted(){
-        
+    },
+    watch:{
+      memberList:function(){
+          
+      }  
     },
     methods:{
         //初始化数据
         dataInit(){
             let _this = this
-                fetch('get', '/announcements').then(function (response) {
-                    console.log(response.data);
+                fetch('get', '/announcements?include=creator').then(function (response) {
                     _this.broadCastInfo = response.data
+                    _this.isLoading = false
             })
         },
-        //日期格式化
-        timeFormat(ref){
-            let date = new Date(ref);
-            let Y = date.getFullYear()
-            let M = (date.getMonth()+1 < 10 ? '0'+(date.getMonth()+1) : date.getMonth()+1)
-            let D = date.getDate()
-            let h = date.getHours()
-            let m = (date.getMinutes() < 10 ? '0'+(date.getMinutes()):date.getMinutes())
-            let s = (date.getSeconds()<10?'0'+(date.getSeconds()):date.getSeconds())
-            let formatYMD = Y+'-'+M+'-'+D
-            let formathms = h+':'+m+':'+s
-            return{
-                formatYMD,formathms
-            }
+        //获取人员信息
+        getMemberList(){
+            let _this = this
+            fetch('get','/users').then((params) => {
+                _this.memberList = params.data
+            })
         },
-        // getBroadCast(){
-        //      let _this = this
-        //         fetch('get', '/users').then(function (response) {
-        //                  _this.memberList = response.data
-        //         })
-        // }
+        // 重新请求
+        refreshList(){
+            this.dataInit()
+        }
     }
 }
 </script>
 
 <style scoped>
 .broadcast-title{
-    /* width: 500px; */
     display: flex;
 }
 .broadcast-title-div{
@@ -139,5 +148,9 @@ export default {
 .broadcast-new-flag{
     margin-left: 20px;
     color: #F44336;
+}
+.loader-overlay{
+        margin-left: 100px;
+        background-color: rgba(7, 17, 27, 0.2)
 }
 </style>
