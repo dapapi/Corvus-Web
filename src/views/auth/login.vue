@@ -176,7 +176,14 @@
                 state: "",
                 href: "https://res-crm.papitube.com/css/wxLogin-QrcodeStyle.css"
             });
+            this.bindOrLogin()
         },
+
+        // watch: {
+        //     '$route'(newValue) {
+        //         console.log(newValue)
+        //     }
+        // },
 
 
         methods: {
@@ -194,6 +201,18 @@
 
             forgetPassword() {
                 this.pageType = 'resetPassword'
+            },
+
+            bindOrLogin() {
+                let url = window.location.href;
+                let name = 'bind_token';
+                name = name.replace(/[\[\]]/g, "\\$&");
+                let regex = new RegExp("[?&]" + name + "(=([^&#]*)|&|#|$)"),
+                    results = regex.exec(url);
+                if (!results) return null;
+                if (!results[2]) return '';
+                let token = decodeURIComponent(results[2].replace(/\+/g, " "));
+                console.log(token)
             },
 
             sendMessage() {
