@@ -156,10 +156,6 @@
         padding-bottom: 10px;
         border-left: 1px solid #E0E0E0;
     }
-
-    .change-time {
-    }
-
     .change-text {
         line-height: 40px;
     }

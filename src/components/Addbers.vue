@@ -2,7 +2,7 @@
     <div class="addMember">
         <ul class="addMember-items">
             <li class="addMember-item mb-5" v-for="member in selectMemberArr">
-                <img onerror="noneAvatar(this)" class="avatar" :src="member.avatar" title="Herman Beck" src="">
+                <img onerror="noneAvatar(this)" class="avatar" :src="member.avatar" title="Herman Beck">
                 <span class="addMember-remove" @click="removeMember(member.id)">
                     <i class="md-minus-circle"></i>
                 </span>
