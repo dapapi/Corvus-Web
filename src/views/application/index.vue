@@ -45,6 +45,9 @@
 .router-link-active{
   background: #F1F1F1;
 }
+.panel{
+  margin-bottom: 0;
+}
 </style>
 
 
