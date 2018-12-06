@@ -233,14 +233,14 @@
                     device: this.getDevice(),
                 };
                 let _this = this;
-                fetch('get', '/services/request_token', data).then(function (response) {
-                    console.log(response);
-                    _this.smsRequestToken = response.data.token;
-                    console.log(callback)
-                    if (callback) {
-                        callback(response.data.token)
-                    }
-                })
+                // fetch('get', '/services/request_token', data).then(function (response) {
+                //     console.log(response);
+                //     _this.smsRequestToken = response.data.token;
+                //     console.log(callback)
+                //     if (callback) {
+                //         callback(response.data.token)
+                //     }
+                // })
             },
 
             bindTelephone() {
