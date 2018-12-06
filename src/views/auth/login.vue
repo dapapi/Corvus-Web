@@ -228,7 +228,7 @@
                 }
             },
 
-            getServicesToken(callback) {
+            getServicesToken() {
                 let data = {
                     device: this.getDevice(),
                 };
