@@ -176,15 +176,8 @@
                 state: "",
                 href: "https://res-crm.papitube.com/css/wxLogin-QrcodeStyle.css"
             });
-            this.bindOrLogin()
+            this.checkBindTelephone()
         },
-
-        // watch: {
-        //     '$route'(newValue) {
-        //         console.log(newValue)
-        //     }
-        // },
-
 
         methods: {
             storeToLocal(json) {
@@ -203,7 +196,7 @@
                 this.pageType = 'resetPassword'
             },
 
-            bindOrLogin() {
+            checkBindTelephone() {
                 let url = window.location.href;
                 let name = 'bind_token';
                 name = name.replace(/[\[\]]/g, "\\$&");
@@ -213,6 +206,8 @@
                 if (!results[2]) return '';
                 let token = decodeURIComponent(results[2].replace(/\+/g, " "));
                 console.log(token)
+                this.pageType = 'bindPhone';
+
             },
 
             sendMessage() {
