@@ -231,18 +231,27 @@ let config = {
             },
         ],
 
+        //任务状态
         taskStatusArr: [
             {
                 name: '进行中',
-                value: 1
+                value: 1,
+                color: '#FF9800'
             },
             {
                 name: '已完成',
-                value: 2
+                value: 2,
+                color: '#4CAF50'
             },
             {
                 name: '已停止',
-                value: 3
+                value: 3,
+                color: '#9E9E9E'
+            },
+            {
+                name: '延期',
+                value: 4,
+                color: '#F44336'
             }
         ],
 
@@ -278,18 +287,23 @@ let config = {
                 value: 5
             },
         ],
+
+        // 项目状态
         projectStatusArr: [
             {
                 name: '进行中',
-                value: 1
+                value: 1,
+                color: '#FF9800'
             },
             {
                 name: '已完成',
-                value: 2
+                value: 2,
+                color: '#4CAF50'
             },
             {
                 name: '撤单',
-                value: 3
+                value: 3,
+                color: '#9E9E9E'
             }
         ],
         clientScaleArr: [
@@ -369,39 +383,47 @@ let config = {
             "土族", "达斡尔族", "仫佬族", "羌族", "布朗族", "撒拉族", "毛南族", "仡佬族", "锡伯族", "阿昌族", "普米族", "塔吉克族", "怒族", "乌孜别克族",
             "俄罗斯族", "鄂温克族", "德昂族", "保安族", "裕固族", "京族", "塔塔尔族", "独龙族", "鄂伦春族", "赫哲族", "门巴族", "珞巴族", "基诺族"], // 民族
 
-        //沟通状态
+        // 艺人沟通状态
         artistStatusArr: [
             {
                 name: '全部',
-                value: ''
+                value: '',
+                color: ''
             },
             {
                 name: '已签约',
-                value: 1
+                value: 1,
+                color: '#4CAF50'
             },
             {
                 name: '经理人沟通中',
-                value: 2
+                value: 2,
+                color: "#00BCD4"
             },
             {
                 name: '兼职星探沟通中',
-                value: 3
+                value: 3,
+                color: "#00B0FF"
             },
             {
                 name: '待定',
-                value: 4
+                value: 4,
+                color: '#FF9800'
             },
             {
                 name: '淘汰',
-                value: 5
+                value: 5,
+                color: '#9e9e9e'
             },
             {
                 name: '合同中',
-                value: 6
+                value: 6,
+                color: '#9c27b0'
             },
             {
                 name: '联系但无回复',
-                value: 7
+                value: 7,
+                color: '#f44336'
             },
         ],
 
@@ -483,106 +505,133 @@ let config = {
                 value: 8
             }
         ],
+        //销售线索状态
         trailStatusArr: [
             {
                 name: '开始接洽',
-                value: 1
+                value: 1,
+                color: '#00b0ff'
             },
             {
                 name: '主动拒绝',
-                value: 2
+                value: 2,
+                color: '#9e9e9e'
             },
             {
                 name: '客户拒绝',
-                value: 3
+                value: 3,
+                color: '#f44336'
             },
             {
                 name: '进入谈判',
-                value: 4
+                value: 4,
+                color: '#00bcd4'
             },
             {
                 name: '意向签约',
-                value: 5
+                value: 5,
+                color: '#f44336'
             },
             {
                 name: '签约中',
-                value: 6
+                value: 6,
+                color: '#ff9800'
             },
             {
                 name: '签约完成',
-                value: 7
+                value: 7,
+                color: '#4caf50'
             },
             {
                 name: '待执行',
-                value: 8
+                value: 8,
+                color: '#ff9800'
             },
             {
                 name: '在执行',
-                value: 9
+                value: 9,
+                color: '#00bcd4'
             },
             {
                 name: '已执行',
-                value: 10
+                value: 10,
+                color: '#4caf50'
             },
             {
                 name: '客户回款',
-                value: 11
+                value: 11,
+                color: '#9c27b0'
             },
             {
                 name: '客户反馈分析及项目复盘',
-                value: 12
+                value: 12,
+                color: '#3f51b5'
             },
         ],
+        // papi沟通状态
         papiCommunicationStatusArr: [
             {
                 name: '全部',
-                value: ''
+                value: '',
+                color: ''
             },
             {
                 name: '初步接触',
-                value: 1
+                value: 1,
+                color: '#00bcd4'
             },
             {
                 name: '沟通中',
-                value: 2
+                value: 2,
+                color: '#00b0ff'
             },
             {
                 name: '合同中',
-                value: 3
+                value: 3,
+                color: '#ff9800'
             },
             {
                 name: '沟通完成',
-                value: 4
+                value: 4,
+                color: '#4caf50'
             },
         ],
+        //泰洋艺人沟通状态
         taiyangCommunicationStatusArr: [
             {
                 name: '已签约',
-                value: 1
+                value: 1,
+                color: '#4caf50'
             },
             {
                 name: '经理人沟通中',
-                value: 2
+                value: 2,
+                color: '#00bcd4'
             },
             {
                 name: '兼职星探沟通中',
-                value: 3
+                value: 3,
+                color: '#00b0ff'
             },
             {
                 name: '待定',
-                value: 4
+                value: 4,
+                color: '#ff9800'
             },
             {
                 name: '淘汰',
-                value: 5
+                value: 5,
+                color:'#9e9e9e'
             },
             {
                 name: '合同中',
-                value: 6
+                value: 6,
+                color: '#9c27b0'
             },
             {
                 name: '联系但无回复',
-                value: 7
+                value: 7,
+                color: '#f44336'
             },
         ],
         yesOrNoArr: [
@@ -996,6 +1045,83 @@ let config = {
                 name: '小红书',
                 value: 3
             }
+        ],
+        // 签约状态
+        signState:[
+            {
+                name:'签约中',
+                value:1,
+                color:'#ff9800'
+            },
+            {
+                name: '已签约',
+                value: 2,
+                color: '#4caf50'
+            },
+            {
+                name: '已解决',
+                value: 3,
+                color: '#f44336'
+            }
+        ],
+
+        // 合同状态
+        contractState:[
+            {
+                name: '待审批',
+                value: 1,
+                color: '#ff9800'
+            },
+            {
+                name: '已同意',
+                value: 2,
+                color: '#4caf50'
+            },
+            {
+                name: '已拒绝',
+                value: 3,
+                color: '#f44336'
+            },
+            {
+                name: '已撤销',
+                value: 4,
+                color: '#eeeeee'
+            },
+            {
+                name: '已作废',
+                value: 5,
+                color: '#eeeeee'
+            }
+        ],
+
+        // 审批状态（合同）
+        approvalState: [
+            {
+                name: '待审批',
+                value: 1,
+                color: '#ff9800'
+            },
+            {
+                name: '已同意',
+                value: 2,
+                color: '#4caf50'
+            },
+            {
+                name: '已拒绝',
+                value: 3,
+                color: '#f44336'
+            },
+            {
+                name: '已撤销',
+                value: 4,
+                color: '#eeeeee'
+            },
+            {
+                name: '已作废',
+                value: 5,
+                color: '#eeeeee'
+            }
+
         ]
     }
 ;
