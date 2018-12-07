@@ -1,8 +1,10 @@
 <template>
     <div>
-        <i class="icon md-chevron-left font-size-20" @click="changeYear('left')"></i>
-        <span class="mx-30">{{year}}</span>
-        <i class="icon md-chevron-right font-size-20" @click="changeYear('right')"></i>
+       <div style="display:none">
+            <i class="icon md-chevron-left font-size-20" @click="changeYear('left')"></i>
+            <span class="mx-30">{{year}}</span>
+            <i class="icon md-chevron-right font-size-20" @click="changeYear('right')"></i>
+       </div>
     </div>
 </template>
 <script>

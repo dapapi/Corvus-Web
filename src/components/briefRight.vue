@@ -1,7 +1,8 @@
 <template>
     <div class="col-md-4 pl-10">
         <div class="panel pt-15" style="width:100%">
-            <InlineDatepicker @change="selectDate"></InlineDatepicker>
+            <switchWeek></switchWeek>
+            <!-- <InlineDatepicker @change="selectDate"></InlineDatepicker> -->
             <div class="footer mx-30 py-10 mt-30">
                  <span class="inline-block btn-success mr-10"></span>
                  <span class="mr-30">已提交</span>
@@ -21,6 +22,26 @@
         border-top:1px solid #f5f5f5;
     }
 </style>
+<script>
+
+import switchWeek from '@/components/SwitchWeek.vue'
+export default {
+    data(){
+        return {
+
+        }
+    },
+    components:{
+       switchWeek
+    },
+    methods:{
+        selectDate:function(){
+
+        }
+    }
+}
+</script>
+
 
 
 
