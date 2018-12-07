@@ -54,9 +54,9 @@
                                 <i class="md-plus pr-2" aria-hidden="true"></i>销售进展
                             </div>
                             <div class="font-weight-bold float-left">
-                                <template v-if="trailInfo.progress_status === 1">未确定合作</template>
-                                <template v-else-if="trailInfo.progress_status === 2">确定合作</template>
-                                <template v-else-if="trailInfo.progress_status === 0">已拒绝</template>
+                                <span v-if="trailInfo.progress_status === 1" style="color:#ff9800">未确定合作</span>
+                                <span v-else-if="trailInfo.progress_status === 2" style="color:#4caf50" >确定合作</span>
+                                <span v-else-if="trailInfo.progress_status === 0" style="color:#f44336">已拒绝</span>
                             </div>
                         </div>
                         <div class="col-md-6 float-left pl-0">
@@ -180,11 +180,9 @@
                                              :class="isEdit ? 'edit-height':'' ">
                                             <div class="col-md-2 float-left text-right pl-0">负责人</div>
                                             <div class="col-md-10 float-left font-weight-bold">
-                                                <!-- <span v-show="!isEdit" >{{ trailInfo.principal.data.name }}</span> -->
                                                 <EditInput-selector :is-edit="isEdit"
                                                                     @change="changeTrailPrincipal"></EditInput-selector>
                                             </div>
-
                                         </div>
                                         <div class="card-text py-10 px-0 clearfix col-md-6 float-left"
                                              :class="isEdit ? 'edit-height':'' ">
@@ -220,12 +218,11 @@
                                                        :key="recommendations.name" v-if="!isEdit">
                                                     {{ recommendations.name || recommendations.nickname}}
                                                 </span>
-                                                <EditSelector :options="starsArr" :is-edit="isEdit"
+                                                <EditSelector :options="starsArr" :is-edit="isEdit" @refresh='getTrail'
                                                               :content="selectedRecommendationsArr"
                                                               :multiple="true" :contentHide='true'
                                                               @valuelistener="changeRecommendations"></EditSelector>
                                             </div>
-
                                         </div>
                                         <div class="card-text py-10 px-0 clearfix col-md-6 float-left"
                                              :class="isEdit ? 'edit-height':'' ">

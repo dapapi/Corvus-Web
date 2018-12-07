@@ -24,7 +24,8 @@
         </div>
         <div v-if="!isEditSituation && trailOriginArr[0] && contentType && !(trailOrigin === '4' || trailOrigin === '5')"
              class="col-md-10 float-left font-weight-bold expfee">
-            <span>{{trailOriginArr.find(item=>item.value == contentType).name}} - {{content.value || content}}</span>
+            <span>{{trailOriginArr.find(item=>item.value == contentType).name}}</span>
+            <span v-if="content"> - {{content.value || content}}</span>
         </div>
         <div v-if="!isEditSituation && members[0] && content && (trailOrigin === '4' || trailOrigin === '5')"
              class="col-md-10 float-left font-weight-bold expfee">
