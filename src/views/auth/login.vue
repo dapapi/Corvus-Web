@@ -171,6 +171,7 @@
 
         mounted() {
             this.checkBindTelephone();
+            this.checkWechatLogin();
         },
 
         methods: {
@@ -206,16 +207,40 @@
             },
 
             checkBindTelephone() {
-                let url = window.location.href;
-                let name = 'bind_token';
+                this.bindToken = this.getParameterByUrl('bind_token');
+                if (!this.bindToken) {
+                    return
+                }
+                this.pageType = 'bindPhone';
+                this.getServicesToken();
+            },
+
+            checkWechatLogin() {
+                this.access_token = this.getParameterByUrl('access_token');
+                if (!this.access_token) {
+                    return
+                }
+                let _this = this;
+                config.setAccessToken(this.access_token);
+                setTimeout(function () {
+                    _this.fetchUserInfo(function (userJson, companyType) {
+                        _this.storeToLocal(userJson);
+                        _this.storeCompamyTypeToLocal(companyType);
+                        redirect('/messages')
+                    })
+                }, 100)
+            },
+
+            getParameterByUrl(name, url) {
+                if (!url) {
+                    url = window.location.href;
+                }
                 name = name.replace(/[\[\]]/g, "\\$&");
                 let regex = new RegExp("[?&]" + name + "(=([^&#]*)|&|#|$)"),
                     results = regex.exec(url);
                 if (!results) return null;
                 if (!results[2]) return '';
-                this.bindToken = decodeURIComponent(results[2].replace(/\+/g, " "));
-                this.pageType = 'bindPhone';
-                this.getServicesToken();
+                return decodeURIComponent(results[2].replace(/\+/g, " "));
             },
 
             initSendSmsBtn() {
@@ -249,7 +274,24 @@
                 if (!Verify.phone(this.username) || !Verify.smsCode(this.smsCode)) {
                     return
                 }
-
+                let data = {
+                    telephone: this.username,
+                    device: Cookies.get('deviceId'),
+                    bind_token: this.bindToken,
+                    sms_code: this.smsCode,
+                    token: this.smsRequestToken
+                };
+                let _this = this;
+                fetch('post', '/wechat/merge', data).then(function (response) {
+                    config.setAccessToken(response.access_token);
+                    setTimeout(function () {
+                        _this.fetchUserInfo(function (userJson, companyType) {
+                            _this.storeToLocal(userJson);
+                            _this.storeCompamyTypeToLocal(companyType);
+                            redirect('/messages')
+                        })
+                    }, 100)
+                })
             },
 
             getDevice() {
