@@ -497,6 +497,17 @@
                                         </div>
                                         <div class="card-text py-10 px-0 clearfix col-md-6 float-left edit-height"
                                              v-if="projectInfo.type != 5">
+                                            <!--<div class="col-md-2 float-left text-right pl-0">项目来源</div>-->
+                                            <!--<div class="col-md-10 float-left font-weight-bold">-->
+                                            <!---->
+                                            <!--</div>-->
+                                            <TrailOrigin :is-edit="isEdit"
+                                                         :trailType="projectInfo.trail.data.resource_type"
+                                                         typeName="项目"
+                                                         @change="(value) => changeProjectBaseInfo(value, 'trail_origin')"></TrailOrigin>
+                                        </div>
+                                        <div class="card-text py-10 px-0 clearfix col-md-6 float-left edit-height"
+                                             v-if="projectInfo.type != 5">
                                             <div class="col-md-2 float-left text-right pl-0">目标艺人</div>
                                             <div class="col-md-10 float-left font-weight-bold"
                                                  v-if="projectInfo.trail.data.expectations">
