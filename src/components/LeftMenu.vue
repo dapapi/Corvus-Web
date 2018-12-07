@@ -95,16 +95,16 @@
                         hoverImage: 'https://res.papitube.com/corvus/images/select-crm.png',
                         data: [
                             {
+                                name: '项目',
+                                code: 'projects'
+                            },
+                            {
                                 name: '销售',
                                 code: 'trails'
                             },
                             {
                                 name: '客户',
                                 code: 'clients'
-                            },
-                            {
-                                name: '项目',
-                                code: 'projects'
                             },
                             {
                                 name: '任务',
