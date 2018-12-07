@@ -1,17 +1,17 @@
 <template>
     <div class="page">
-         <div class="loader-overlay" v-if="isLoading">
+        <div class="loader-overlay" v-if="isLoading">
             <div class="loader-content">
                 <div class="loader-index">
-                <div></div>
-                <div></div>
-                <div></div>
-                <div></div>
-                <div></div>
-                <div></div>
+                    <div></div>
+                    <div></div>
+                    <div></div>
+                    <div></div>
+                    <div></div>
+                    <div></div>
+                </div>
+            </div>
         </div>
-      </div>
-      </div>
         <div class="page-header page-header-bordered">
             <h1 class="page-title">销售线索管理</h1>
             <div class="page-header-actions">
@@ -28,16 +28,16 @@
                                style="width: 220px" v-model="trailFilter" @keyup.enter='filterGo' @blur='filterGo'>
                     </div>
                     <div class="col-md-3 example float-left">
-                        <selectors :placeholder="'请选择销售进展'" 
-                                :options="progressStatus" :resetinfo='resetInfo'
-                                @change="progressStatusFilter"
-                                ></selectors>
+                        <selectors :placeholder="'请选择销售进展'"
+                                   :options="progressStatus" :resetinfo='resetInfo'
+                                   @change="progressStatusFilter"
+                        ></selectors>
                     </div>
                     <div class="col-md-3 example float-left">
-                        <selectors placeholder="请选择负责人" 
-                                :options="memberList" multiple='true'
-                                @valuelistener="principalFilter"
-                                ></selectors>
+                        <selectors placeholder="请选择负责人"
+                                   :options="memberList" multiple='true'
+                                   @valuelistener="principalFilter"
+                        ></selectors>
                     </div>
                     <div class="col-md-3 example float-left">
                         <button type="button" class="btn btn-default waves-effect waves-classic float-right"
@@ -76,7 +76,8 @@
                                 <template v-if="trail.client.data.grade === 2">代理公司</template>
                             </td>
                             <td>
-                                <span class="overflowsp" v-for="(item , index) in trail.expectations.data" :key="index" v-if="index < 2" >{{item.name || item.nickname}}&nbsp;&nbsp;</span>
+                                <span class="overflowsp" v-for="(item , index) in trail.expectations.data" :key="index"
+                                      v-if="index < 2">{{item.name || item.nickname}}&nbsp;&nbsp;</span>
                             </td>
                             <td class="">{{ trail.fee }}元</td>
                             <td>
@@ -89,7 +90,7 @@
 
                     </table>
                     <div class="col-md-1" style="margin: 6rem auto" v-if="trailsInfo.length === 0">
-                            <img src="https://res.papitube.com/corvus/images/content-none.png" alt="" style="width: 100%">
+                        <img src="https://res.papitube.com/corvus/images/content-none.png" alt="" style="width: 100%">
                     </div>
                     <pagination :current_page="current_page" :method="getSales" :total_pages="total_pages"
                                 :total="total"></pagination>
@@ -121,8 +122,8 @@
                     <div class="modal-body">
                         <div class="example">
                             <div class="col-md-2 text-right float-left">线索类型</div>
-                            <div class="col-md-5 float-left pl-0"> 
-                                <selectors :placeholder="'请选择销售线索'" :options="trailTypeArr" 
+                            <div class="col-md-5 float-left pl-0">
+                                <selectors :placeholder="'请选择销售线索'" :options="trailTypeArr"
                                            @change="changeTrailType"></selectors>
                             </div>
                         </div>
@@ -146,11 +147,13 @@
                                        v-model="trailName">
                             </div>
                         </div>
-                            <TrailOrigin :trailType='trailType' 
-                            typeName='线索' alwaysShow='true'
-                            @changeTrailOrigin='changeTrailOrigin' 
-                            @changeEmail='changeEmail'
-                            @changeTrailOriginPerson='changeTrailOriginPerson' />
+                        <div class="example">
+                            <TrailOrigin :trailType='trailType'
+                                         typeName='线索' alwaysShow='true'
+                                         @changeTrailOrigin='changeTrailOrigin'
+                                         @changeEmail='changeEmail'
+                                         @changeTrailOriginPerson='changeTrailOriginPerson'/>
+                        </div>
                         <div class="example">
                             <div class="col-md-2 text-right float-left">行业</div>
                             <div class="col-md-10 float-left pl-0" v-if="industriesArr.length > 0">
@@ -161,8 +164,9 @@
                         <div class="example">
                             <div class="col-md-2 text-right float-left">负责人</div>
                             <div class="col-md-10 float-left pl-0">
-                                <input-selectors :placeholder="'请选择负责人'" otherslot = 'otherslot'
-                                                 @change="changePrincipal" :propSelectMemberName='$store.state.otherSlot.data?$store.state.otherSlot.data.name:currentUser.name'></input-selectors>
+                                <input-selectors :placeholder="'请选择负责人'" otherslot='otherslot'
+                                                 @change="changePrincipal"
+                                                 :propSelectMemberName='$store.state.otherSlot.data?$store.state.otherSlot.data.name:currentUser.name'></input-selectors>
                             </div>
                         </div>
                         <div class="example">
@@ -241,7 +245,8 @@
                         </div>
                     </div>
                     <div class="modal-footer">
-                        <button class="btn btn-sm btn-white btn-pure" data-dismiss="modal" @click='cleanTempData'>取消</button>
+                        <button class="btn btn-sm btn-white btn-pure" data-dismiss="modal" @click='cleanTempData'>取消
+                        </button>
                         <button class="btn btn-primary" type="submit" @click="addTrail">确定</button>
                     </div>
 
@@ -295,28 +300,28 @@
                 priorityArr: config.priorityArr,
                 trailStatus: '',
                 cooperation: '',
-                filterData:'',
-                progressStatus:[{
-                    'name':'全部',
-                    'value':''
-                },{
-                    'name':'已拒绝',
-                    'value':'0'
-                },{
-                    'name':'未确定合作',
-                    'value':'1'
-                },{
-                    'name':'已确定合作',
-                    'value':'2'
+                filterData: '',
+                progressStatus: [{
+                    'name': '全部',
+                    'value': ''
+                }, {
+                    'name': '已拒绝',
+                    'value': '0'
+                }, {
+                    'name': '未确定合作',
+                    'value': '1'
+                }, {
+                    'name': '已确定合作',
+                    'value': '2'
                 }],
-                memberList:[],
-                fetchData:{},
-                currentUser:{},
-                resetInfo:false,
-                isLoading:true,
+                memberList: [],
+                fetchData: {},
+                currentUser: {},
+                resetInfo: false,
+                isLoading: true,
             }
         },
-        created(){
+        created() {
             this.getMembers()
             this.getCurrentUser()
         },
@@ -326,9 +331,9 @@
             this.getStars();
             this.getIndustries();
         },
-        watch:{
-            trailType:function(){
-                if(this.trailType == 4){
+        watch: {
+            trailType: function () {
+                if (this.trailType == 4) {
                     this.trailOriginArr = config.trailBloggerOrigin
                 }
                 this.getStars()
@@ -337,7 +342,7 @@
                     $('.selectpicker').selectpicker('refresh');
                 })
             },
-            memberList:function(value){
+            memberList: function (value) {
                 this.$nextTick(() => {
                     $('.selectpicker').selectpicker('render');
                     $('.selectpicker').selectpicker('refresh');
@@ -345,106 +350,106 @@
             }
         },
         methods: {
-            changeTrailOriginPerson(value){
+            changeTrailOriginPerson(value) {
                 this.trailOriginPerson = value
             },
-            changeEmail(value){
+            changeEmail(value) {
                 this.email = value
             },
-            getCurrentUser(){
-                fetch('get','/users/my').then((response) => {
+            getCurrentUser() {
+                fetch('get', '/users/my').then((response) => {
                     this.currentUser = response.data
                 })
             },
-            getMembers(){
+            getMembers() {
                 let _this = this
                 fetch('get', '/users').then(function (response) {
-                         _this.memberList = response.data
+                    _this.memberList = response.data
                 })
             },
-            principalFilter(value){
-                if(value){
+            principalFilter(value) {
+                if (value) {
                     this.fetchData.principal_ids = value.join(',')
                 }
-                    this.fetchHandler('get','/trails/filter')
+                this.fetchHandler('get', '/trails/filter')
 
             },
-            phoneValidate(){ 
+            phoneValidate() {
                 let phone = this.trailContactPhone
-                    if(!(/^1(3|4|5|7|8)\d{9}$/.test(phone))){ 
-                        return false; 
-                } 
+                if (!(/^1(3|4|5|7|8)\d{9}$/.test(phone))) {
+                    return false;
+                }
             },
-            trailTypeValidate(){
-                if(!this.trailType){
+            trailTypeValidate() {
+                if (!this.trailType) {
                     toastr.error("销售线索为必填");
                     return false;
-                }else if(!this.brandName){
+                } else if (!this.brandName) {
                     toastr.error("品牌名称为必填")
                     return false;
-                }else if(!this.selectCompany){
+                } else if (!this.selectCompany) {
                     toastr.error("公司名称为必填")
                     return false;
-                }else if(!this.trailName){
+                } else if (!this.trailName) {
                     toastr.error("线索名称为必填")
                     return false;
-                }else if(!this.trailOrigin){
+                } else if (!this.trailOrigin) {
                     toastr.error("线索为必填")
                     return false;
-                }else if(!this.trailPrincipal && !this.currentUser){
+                } else if (!this.trailPrincipal && !this.currentUser) {
                     toastr.error("负责人为必填")
                     return false;
-                }else if(!this.targetStars){
+                } else if (!this.targetStars) {
                     toastr.error("目标艺人为必填")
                     return false;
-                }else if(!this.priority){
+                } else if (!this.priority) {
                     toastr.error("优先级为必填")
                     return false;
-                }else if(!this.industry){
+                } else if (!this.industry) {
                     toastr.error("行业为必填")
                     return false;
-                }else if(!this.industry){
+                } else if (!this.industry) {
                     toastr.error("行业为必填")
                     return false;
-                }else if(!this.trailContact){
+                } else if (!this.trailContact) {
                     toastr.error("联系人为必填")
                     return false;
                 }
-                else if(!this.trailFee){
+                else if (!this.trailFee) {
                     toastr.error("预计费用为必填")
                     return false;
-                }else if(this.trailContactPhone){
+                } else if (this.trailContactPhone) {
                     let phone = this.trailContactPhone
-                    if(!(/^1(3|4|5|7|8)\d{9}$/.test(phone))){ 
+                    if (!(/^1(3|4|5|7|8)\d{9}$/.test(phone))) {
                         // alert("手机号码有误，请重填");  
                         toastr.error("请输入正确的手机号码");
-                        return false; 
-                    }else{
+                        return false;
+                    } else {
                         return true;
-                    }  
-                }else if(!this.trailContactPhone){
+                    }
+                } else if (!this.trailContactPhone) {
                     toastr.error("手机号码为必填")
                     return false;
-                }else{
+                } else {
                     return true
                 }
             },
-            fetchHandler(methods,url){
+            fetchHandler(methods, url) {
                 console.log(this.fetchData);
                 let _this = this
                 this.fetchData.include = 'principal,client,contact,recommendations,expectations'
-                fetch(methods,url,this.fetchData).then((response) => {
+                fetch(methods, url, this.fetchData).then((response) => {
                     _this.trailsInfo = response.data
                     _this.total = response.meta.pagination.total;
                 })
             },
-            filterGo(){
-                this.fetchData.keyword=this.trailFilter
-                this.fetchHandler('get','/trails/filter')
+            filterGo() {
+                this.fetchData.keyword = this.trailFilter
+                this.fetchHandler('get', '/trails/filter')
             },
-            progressStatusFilter(value){
-                this.fetchData.status= value
-                this.fetchHandler('get','/trails/filter')
+            progressStatusFilter(value) {
+                this.fetchData.status = value
+                this.fetchHandler('get', '/trails/filter')
             },
             getSales: function (pageNum = 1) {
                 let _this = this;
@@ -484,30 +489,30 @@
             },
 
             getStars: function () {
-                this.starsArr=[]
+                this.starsArr = []
                 let _this = this;
-                if(this.trailType == 4){
+                if (this.trailType == 4) {
                     fetch('get', '/bloggers/all').then(function (response) {
-                    for (let i = 0; i < response.data.length; i++) {
-                        _this.starsArr.push({
-                            id: response.data[i].id,
-                            name: response.data[i].nickname,
-                            value: response.data[i].id
-                        })
-                    }
-                })
-                }else{
+                        for (let i = 0; i < response.data.length; i++) {
+                            _this.starsArr.push({
+                                id: response.data[i].id,
+                                name: response.data[i].nickname,
+                                value: response.data[i].id
+                            })
+                        }
+                    })
+                } else {
                     fetch('get', '/stars/all').then(function (response) {
-                    for (let i = 0; i < response.data.length; i++) {
-                        _this.starsArr.push({
-                            id: response.data[i].id,
-                            name: response.data[i].name,
-                            value: response.data[i].id
-                        })
-                    }
-                })
+                        for (let i = 0; i < response.data.length; i++) {
+                            _this.starsArr.push({
+                                id: response.data[i].id,
+                                name: response.data[i].name,
+                                value: response.data[i].id
+                            })
+                        }
+                    })
                 }
-                
+
             },
 
             customize: function (value) {
@@ -531,11 +536,11 @@
                     industry_id: this.industry,
                     type: this.trailType,
                     priority: this.priority,
-                    cooperation_type:this.cooperation*1
+                    cooperation_type: this.cooperation * 1
                 };
-                if(!this.$store.state.otherSlot.data && this.currentUser){
+                if (!this.$store.state.otherSlot.data && this.currentUser) {
                     data.principal_id = this.currentUser.id
-                }else{
+                } else {
                     data.principal_id = this.$store.state.otherSlot.data.id
                 }
                 if (this.trailType != 4) {
@@ -552,7 +557,7 @@
                     data.lock = this.trailIsLocked
                 }
                 let _this = this;
-                if(this.trailTypeValidate()){
+                if (this.trailTypeValidate()) {
                     fetch('post', '/trails', data).then(function (response) {
                         $('#addTrail').modal('hide');
                         _this.$router.push({path: '/trails/' + response.data.id})
@@ -561,15 +566,15 @@
                     })
                 }
             },
-            cleanTempData(){
-                this.trailName=''
-                this.brandName=''
+            cleanTempData() {
+                this.trailName = ''
+                this.brandName = ''
                 this.selectCompany = ''
-                this.recommendStars=''
-                this.targetStars=''
-                this.trailContact=''
-                this.trailContactPhone=''
-                this.trailFee =''
+                this.recommendStars = ''
+                this.targetStars = ''
+                this.trailContact = ''
+                this.trailContactPhone = ''
+                this.trailFee = ''
                 this.trailDesc = ''
                 this.industry = ''
                 this.trailType = ''
@@ -579,7 +584,7 @@
             redirectTrailDetail: function (trailId) {
                 this.$router.push({path: '/trails/' + trailId})
             },
-            changeTrailOriginPerson(value){
+            changeTrailOriginPerson(value) {
                 this.trailOriginPerson = value
             },
             changeTrailOrigin: function (value) {
@@ -606,9 +611,9 @@
             },
 
             changePrincipal: function (value) {
-                if(this.$store.state.otherSlot.data){
+                if (this.$store.state.otherSlot.data) {
                     this.trailPrincipal = this.$store.state.otherSlot.data.name
-                }else{
+                } else {
                     this.trailPrincipal = ''
                 }
             },
@@ -648,17 +653,18 @@
             changeCooperationType: function (value) {
                 this.cooperation = value
             },
-            
+
 
         }
     }
 </script>
 <style scoped>
-    .loader-overlay{
+    .loader-overlay {
         margin-left: 100px;
         background-color: rgba(7, 17, 27, 0.2)
     }
-    .error{
+
+    .error {
         border: 1px solid red;
         border-radius: 5px;
     }
