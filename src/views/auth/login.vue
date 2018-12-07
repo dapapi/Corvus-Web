@@ -246,7 +246,8 @@
                     telephone: this.username,
                     device: Cookies.get('deviceId'),
                     bind_token: this.bindToken,
-                    sms_code: this.smsCode
+                    sms_code: this.smsCode,
+                    token: this.smsRequestToken
                 };
                 fetch('post', '/wechat/merge', data).then(function (response) {
                     console.log(response)
