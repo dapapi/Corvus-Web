@@ -414,6 +414,7 @@
                     sms_code: this.smsCode,
                     password: this.newPassword
                 };
+                let _this = this;
                 fetch('put', '/users/telephone', data).then(function (response) {
                     config.setAccessToken(response.access_token);
                     setTimeout(function () {
