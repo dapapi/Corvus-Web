@@ -249,8 +249,16 @@
                     sms_code: this.smsCode,
                     token: this.smsRequestToken
                 };
+                let _this = this;
                 fetch('post', '/wechat/merge', data).then(function (response) {
-                    console.log(response)
+                    config.setAccessToken(response.access_token);
+                    setTimeout(function () {
+                        _this.fetchUserInfo(function (userJson, companyType) {
+                            _this.storeToLocal(userJson);
+                            _this.storeCompamyTypeToLocal(companyType);
+                            redirect('/messages')
+                        })
+                    }, 100)
                 })
             },
 
