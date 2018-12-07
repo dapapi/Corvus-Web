@@ -10,7 +10,7 @@
                     <div class="input-search">
                         <button type="button" class="input-search-btn"><i class="icon md-search" aria-hidden="true"></i>
                         </button>
-                        <input type="text" class="form-control" placeholder="搜索成员、简报类型">
+                        <input type="text" class="form-control" placeholder="搜索成员、简报类型" v-model="search" @blur="getlist()">
                     </div>
                 </div>
                 
@@ -42,7 +42,7 @@
                                 
                             </tr>
                             
-                            <tr data-toggle="modal" data-target="#submitReport" v-for="(item,index) in list" :key="index">
+                            <tr data-toggle="modal" data-target="#submitReport" v-for="(item,index) in list" :key="index" @click="getId(item.template.id)">
                                 <td class="pointer-content">{{item.template.template_name}}</td>
                                 <td>屈素芳</td>
                                 <td>每周</td>
@@ -54,8 +54,8 @@
                                 
                             </tr>
                         </table>
-                        <!-- <pagination :current_page="current_page" :method="getProjects" :total_pages="total_pages"
-                                    :total="total"></pagination> -->
+                        <pagination :current_page="current_page" :method="getlist" :total_pages="total_pages"
+                                    :total="total"></pagination>
                     </div>
                 </div>
                 </div>
@@ -66,7 +66,7 @@
                 <i class="back-icon md-plus animation-scale-up" aria-hidden="true"></i>
             </button>
         </div>
-        <submit-report></submit-report>
+        <submit-report :templateId="temId" :templateStatus="status"></submit-report>
     </div>
 </template>
 <script>
@@ -79,6 +79,13 @@ export default {
             list:[], 
             search:'',
             status:1,//status 1 未评审  2已评审
+            temId:'',
+            current_page:0,
+            total_pages:0,
+            total:0,
+
+        
+
              
         }
     },
@@ -86,7 +93,11 @@ export default {
         this.getlist(1,1)
     },
     methods:{
+        getId:function(id){
+            this.temId = id
+        },
         redirectBriefDetails:function(id){
+            
             this.$router.push({path:'/brief/details',query:{id:id}})
         },
         redirectBriefAdd:function(){
@@ -98,6 +109,9 @@ export default {
            
             fetch('get',`${config.apiUrl}/review`,{search:this.search,status:this.status}).then((res) => {
                 _this.list = res.data
+                _this.current_page = res.meta.pagination.current_page
+                _this.total_pages = res.meta.pagination.total_pages
+                _this.total = res.meta.pagination.total
             })
         }
     }
