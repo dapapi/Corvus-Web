@@ -21,8 +21,11 @@
                 </template>
             </div>
         </div>
-        <div v-if="!isEditSituation" class="col-md-10 float-left font-weight-bold expfee">
-            <span v-if="trailOriginArr[0] && contentType">{{trailOriginArr.find(item=>item.value == contentType).name}}-{{content}}</span>
+        <div v-if="!isEditSituation && trailOriginArr[0] && contentType && !(trailOrigin === '4' || trailOrigin === '5')" class="col-md-10 float-left font-weight-bold expfee">
+            <span>{{trailOriginArr.find(item=>item.value == contentType).name}}-{{content.value || content}}</span>
+        </div>
+        <div v-if="!isEditSituation && members[0] && content && (trailOrigin === '4' || trailOrigin === '5')" class="col-md-10 float-left font-weight-bold expfee">
+            <span>{{trailOriginArr.find(item=>item.value == contentType).name}}-{{members.find(item=>item.id == content).name}}</span>
         </div>
     </div>    
 </template>
@@ -41,7 +44,11 @@ export default {
             email:'',                               //
             starsArr:[],                            //
             isEditSituation:'',                     //编辑状态
+            members:{}
         }
+    },
+    created(){
+        this.getMembers()
     },
     watch:{
         //监听获取当前类型
@@ -84,6 +91,11 @@ export default {
         }
     },
     methods:{
+        getMembers(){
+            fetch('get','/users').then((params) => {
+                this.members = params.data
+            })
+        },
         //
         changeTrailOriginType: function (value) {
             this.trailOrigin = value
