@@ -23,7 +23,7 @@
                                aria-controls="forum-base"
                                aria-expanded="true" role="tab">帐号登录</a>
                         </li>
-                        <li class="nav-item" role="presentation" @click="wechatLogin">
+                        <li class="nav-item" role="presentation" @click="initWechatLogin">
                             <a class="nav-link" data-toggle="tab" href="#forum-weixin-login"
                                aria-controls="forum-present"
                                aria-expanded="false" role="tab">微信登录</a>
@@ -51,7 +51,8 @@
                             </div>
                             <div class="form-group clearfix">
                                 <div class="checkbox-custom checkbox-inline checkbox-primary checkbox-sm float-left">
-                                    <input type="checkbox" id="inputCheckbox" name="remember" @change="rememberName">
+                                    <input type="checkbox" id="inputCheckbox" name="remember" :checked="isRememberName"
+                                           @change="rememberName">
                                     <label for="inputCheckbox">记住帐号</label>
                                 </div>
                                 <span class="float-right pointer-content font-info" @click="forgetPassword">忘记密码</span>
@@ -83,7 +84,7 @@
                     <div class="tab-content nav-tabs-animate">
                         <div class="tab-pane animation-fade active" id="forum-bind-phone" role="tabpanel">
                             <div class="form-group example pt-10">
-                                <input type="text" class="form-control" placeholder="手机号" v-model="username">
+                                <input type="text" class="form-control" placeholder="手机号" v-model="phone">
                             </div>
                             <div class="input-group">
                                 <input type="email" class="form-control" placeholder="验证码" v-model="smsCode">
@@ -111,7 +112,7 @@
                     <div class="tab-content nav-tabs-animate">
                         <div class="tab-pane animation-fade active" id="forum-reset" role="tabpanel">
                             <div class="form-group example pt-10">
-                                <input type="text" class="form-control" placeholder="手机号" v-model="username">
+                                <input type="text" class="form-control" placeholder="手机号" v-model="phone">
                             </div>
                             <div class="form-group input-group">
                                 <input type="email" class="form-control" placeholder="验证码" v-model="smsCode">
@@ -166,12 +167,18 @@
                 smsCode: '',
                 bindToken: '',
                 smsRequestToken: '',
+                isRememberName: false,
+                phone: '',
             }
         },
 
         mounted() {
             this.checkBindTelephone();
             this.checkWechatLogin();
+            if (Cookies.get('user_account')) {
+                this.username = Cookies.get('user_account');
+                this.isRememberName = true;
+            }
         },
 
         methods: {
@@ -184,7 +191,7 @@
             },
 
             rememberName(value) {
-                console.log(value)
+                this.isRememberName = value.target.checked;
             },
 
             initWechatLogin() {
@@ -244,7 +251,7 @@
             },
 
             initSendSmsBtn() {
-                if (!Verify.phone(this.username)) {
+                if (!Verify.phone(this.phone)) {
                     return
                 }
                 if (!this.smsRequestToken) {
@@ -271,11 +278,11 @@
             },
 
             bindTelephone() {
-                if (!Verify.phone(this.username) || !Verify.smsCode(this.smsCode)) {
+                if (!Verify.phone(this.phone) || !Verify.smsCode(this.smsCode)) {
                     return
                 }
                 let data = {
-                    telephone: this.username,
+                    telephone: this.phone,
                     device: Cookies.get('deviceId'),
                     bind_token: this.bindToken,
                     sms_code: this.smsCode,
@@ -328,7 +335,7 @@
                     }
                 }, 1000);
                 let data = {
-                    telephone: this.username,
+                    telephone: this.phone,
                     device: Cookies.get('deviceId'),
                     token: token
                 };
@@ -363,14 +370,17 @@
                         })
                     }, 100)
                 });
+                if (this.isRememberName) {
+                    Cookies.set('user_account', this.username)
+                } else {
+                    if (Cookies.get('user_account')) {
+                        Cookies.remove('user_account')
+                    }
+                }
             },
 
             fetchUserInfo(callback) {
-                $.ajax({
-                    type: 'get',
-                    url: config.apiUrl + '/users/my',
-                    headers: config.getHeaders(),
-                }).done(function (response) {
+                fetch('get', '/users/my').then(function (response) {
                     let userData = response.data;
                     let json = {
                         id: userData.id,
@@ -382,7 +392,7 @@
             },
 
             resetPassword() {
-                if (!Verify.phone(this.username) ||
+                if (!Verify.phone(this.phone) ||
                     !Verify.smsCode(this.smsCode) ||
                     !Verify.password(this.newPassword)
                 ) {

@@ -1,58 +1,54 @@
 <template>
     <div class="site-menubar" style="height: 100%!important;top: 0;width: 100px">
         <div class="site-menubar-body">
-            <div>
-                <div>
-                    <div class="py-10 menu-icon"
-                         style="position: relative;background-color: #3f51b5;z-index: 2">
-                        <div class="icon-wrap">
-                            <img src="https://res.papitube.com/corvus/images/taiyang-icon.png" alt="">
-                        </div>
-                    </div>
-                    <ul class="site-menu" data-plugin="menu" style="transform: translate3d(0px, -1.03409px, 0px);">
-                        <li class="site-menu-item" v-for="menu in menuData"
-                            :class="{'has-sub': menu.data, 'active' : pageRoute === menu.code || ( menu.data && menu.data.find(item => item.code === pageRoute))}">
-                            <template v-if="!menu.data">
-                                <router-link :to="'/' + menu.code" class="animsition-link">
-                                    <div>
-                                        <span class="base-icon">
-                                            <img :src="menu.image" alt="">
-                                        </span>
-                                        <span class="hover-icon">
-                                            <img :src="menu.hoverImage" alt="">
-                                        </span>
-                                    </div>
-                                    <span class="site-menu-title">{{ menu.name }}</span>
-                                </router-link>
-                            </template>
-                            <template v-else>
-                                <a class="animsition-link">
-                                    <div>
-                                        <span class="base-icon">
-                                            <img :src="menu.image" alt="">
-                                        </span>
-                                        <span class="hover-icon">
-                                            <img :src="menu.hoverImage" alt="">
-                                        </span>
-                                    </div>
-                                    <span class="site-menu-title">{{ menu.name }}</span>
-                                </a>
-                                <ul class="site-menu-sub" style="">
-                                    <li class="site-menu-item" v-for="subMenu in menu.data"
-                                        :class="pageRoute === subMenu.code ? 'active': ''">
-                                        <router-link :to="'/' + subMenu.code"
-                                                     class="animsition-link">
-                                            <span class="site-menu-title">{{ subMenu.name }}</span>
-                                        </router-link>
-                                    </li>
-                                </ul>
-                            </template>
-                        </li>
-                    </ul>
-                    <div class="user-wrap">
-                        <img src="https://res.papitube.com/no-icon.png" alt="">
-                    </div>
+            <div class="py-10 menu-icon"
+                 style="position: relative;background-color: #3f51b5;z-index: 2">
+                <div class="icon-wrap">
+                    <img src="https://res.papitube.com/corvus/images/taiyang-icon.png" alt="">
                 </div>
+            </div>
+            <ul class="site-menu" data-plugin="menu" style="transform: translate3d(0px, -1.03409px, 0px);">
+                <li class="site-menu-item" v-for="menu in menuData"
+                    :class="{'has-sub': menu.data, 'active' : pageRoute === menu.code || ( menu.data && menu.data.find(item => item.code === pageRoute))}">
+                    <template v-if="!menu.data">
+                        <router-link :to="'/' + menu.code" class="animsition-link">
+                            <div>
+                                        <span class="base-icon">
+                                            <img :src="menu.image" alt="">
+                                        </span>
+                                <span class="hover-icon">
+                                            <img :src="menu.hoverImage" alt="">
+                                        </span>
+                            </div>
+                            <span class="site-menu-title">{{ menu.name }}</span>
+                        </router-link>
+                    </template>
+                    <template v-else>
+                        <a class="animsition-link">
+                            <div>
+                                        <span class="base-icon">
+                                            <img :src="menu.image" alt="">
+                                        </span>
+                                <span class="hover-icon">
+                                            <img :src="menu.hoverImage" alt="">
+                                        </span>
+                            </div>
+                            <span class="site-menu-title">{{ menu.name }}</span>
+                        </a>
+                        <ul class="site-menu-sub" style="">
+                            <li class="site-menu-item" v-for="subMenu in menu.data"
+                                :class="pageRoute === subMenu.code ? 'active': ''">
+                                <router-link :to="'/' + subMenu.code"
+                                             class="animsition-link">
+                                    <span class="site-menu-title">{{ subMenu.name }}</span>
+                                </router-link>
+                            </li>
+                        </ul>
+                    </template>
+                </li>
+            </ul>
+            <div class="user-wrap">
+                <img src="https://res.papitube.com/no-icon.png" alt="">
             </div>
         </div>
     </div>
@@ -118,14 +114,6 @@
                                 name: '合同',
                                 code: 'contracts'
                             },
-                            // {
-                            //     name: '报表',
-                            //     code: 'reports'
-                            // },
-                            // {
-                            //     name: '审批',
-                            //     code: 'approval'
-                            // }
                         ]
                     },
                     {
@@ -173,10 +161,6 @@
                                 name: '通讯录',
                                 code: 'address'
                             },
-                            // {
-                            //     name: '任务',
-                            //     code: 'tasks'
-                            // },
                             {
                                 name: '我的',
                                 code: 'my'
