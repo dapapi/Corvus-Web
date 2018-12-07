@@ -328,6 +328,8 @@
         },
         watch:{
             trailType:function(){
+                this.trailOriginArr = config.trailOrigin
+                console.log(this.trailType);
                 if(this.trailType == 4){
                     this.trailOriginArr = config.trailBloggerOrigin
                 }
@@ -430,7 +432,6 @@
                 }
             },
             fetchHandler(methods,url){
-                console.log(this.fetchData);
                 let _this = this
                 this.fetchData.include = 'principal,client,contact,recommendations,expectations'
                 fetch(methods,url,this.fetchData).then((response) => {
@@ -455,7 +456,6 @@
                 fetch('get', '/trails', data).then(function (response) {
                     _this.trailsInfo = response.data;
                     _this.total = response.meta.pagination.total;
-                    console.log(response.meta.pagination.total)
                     _this.current_page = response.meta.pagination.current_page;
                     _this.total_pages = response.meta.pagination.total_pages;
                     _this.isLoading = false;

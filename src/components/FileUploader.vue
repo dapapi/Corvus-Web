@@ -1,5 +1,12 @@
 <template>
-    <input type="file" @change="uploadFile">
+    <div>
+        <input type="file" @change="uploadFile">
+        <div class="progress progress-xs" v-if="progressShow">
+                        <div class="progress-bar progress-bar-striped active" aria-valuemin="0" aria-valuemax="100" :style="'width:'+ uploadProgress+'%'" role="progressbar">
+                          <span class="sr-only">90% Complete</span>
+                        </div>
+                      </div>
+    </div>
 </template>
 
 <script>
@@ -10,8 +17,23 @@
     export default {
         props:['id'],
         name: "FileUploader",
+        data(){
+            return{
+                uploadProgress:0,
+                progressShow:false,
+            }
+        },
         methods: {
             uploadFile(e) {
+                this.progressShow = true
+                this.uploadProgress = 0
+                let _this = this
+                let uploadGo = setInterval(() => {
+                    _this.uploadProgress += 10
+                    if(_this.uploadProgress == 80){
+                        clearInterval('uploadGo')
+                    }
+                },500)
                 let file = e.target.files[0];
                 let putExtra = null;
                 let type = file.type.split('/');
@@ -27,7 +49,6 @@
                 let key = this.guid() + '.' + type[type.length - 1];
                 let conf = null;
                 let fileSize = file.size;
-                let _this = this;
                 this.getQiniuAccessToken((token) => {
                     let observable = qiniu.upload(file, key, token, putExtra, conf);
                     let subscription = observable.subscribe(function (res) {
@@ -36,7 +57,10 @@
                     }, function (res) {
                         let fileUrl = config.imgUrl + res.key;
                         let fileName = file.name;
-                        
+                        _this.uploadProgress = 100;
+                        setTimeout(() => {
+                            _this.progressShow = false
+                        },1000)
                         _this.$emit('change', fileUrl, fileName, fileSize,_this.id);
                     })
                 });
@@ -67,5 +91,8 @@
 </script>
 
 <style scoped>
-
+    .progress{
+        margin-top: 10px;
+        width: 200px;
+    }
 </style>

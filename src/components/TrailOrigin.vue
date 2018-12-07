@@ -70,6 +70,8 @@ export default {
         trailType:function(){
             if(this.trailType == 4){
                 this.trailOriginArr = config.trailBloggerOrigin
+            }else{
+                this.trailOriginArr = config.trailOrigin
             }
             this.getStars()
             this.$nextTick(() => {

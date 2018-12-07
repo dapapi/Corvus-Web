@@ -38,6 +38,7 @@
                     <br>
                     <div class="panel-content" v-if="currentData.scope && departments">
                         <h5 v-html="currentData.desc" class="broadcast-content"></h5>
+                        <div v-if="currentData.accessory"><a :href="currentData.accessory">查看附件</a></div>
                         <h5>公告范围
                             <span  v-for=" item in currentData.scope.data" :key="item.department_id">&nbsp;&nbsp;
                                 <span v-if="departments[0]" class="badge badge-round badge-dark">{{departments.find(departments => departments.id == item.department_id).name}}</span>
@@ -48,7 +49,7 @@
                 </div>
             </div>
         </div>
-        <AddModifyBroadCast :notedata='currentData' position='broadCast' @goback='goBack' />
+        <AddModifyBroadCast :notedata='currentData' position='broadCast' @goback='goBack' @refresh='dataInit' />
     </div>   
 </template>
 

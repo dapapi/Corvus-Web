@@ -52,9 +52,9 @@
                                 <i class="md-plus pr-2" aria-hidden="true"></i>销售进展
                             </div>
                             <div class="font-weight-bold float-left">
-                                <template v-if="trailInfo.progress_status === 1">未确定合作</template>
-                                <template v-else-if="trailInfo.progress_status === 2">确定合作</template>
-                                <template v-else-if="trailInfo.progress_status === 0">已拒绝</template>
+                                <span v-if="trailInfo.progress_status === 1" style="color:#ff9800">未确定合作</span>
+                                <span v-else-if="trailInfo.progress_status === 2" style="color:#4caf50" >确定合作</span>
+                                <span v-else-if="trailInfo.progress_status === 0" style="color:#f44336">已拒绝</span>
                             </div>
                         </div>
                         <div class="col-md-6 float-left pl-0">
@@ -157,33 +157,18 @@
                                                            @change="changeTrailName"></EditInput>
                                             </div>
                                         </div>
-                                        <!-- <div class="card-text py-10 px-0 clearfix col-md-12 float-left"
-                                             :class="isEdit ? 'edit-height':'edit-height'"> -->
-                                                    <!-- <span v-show="!isEdit">{{trailInfo.resource_type}} {{trailInfo.resource}}</span> -->
-
-                                              <TrailOrigin class='card-text clearfix my-0 py-10 px-0 col-md-6 float-left' :trailType='trailType' 
+                                            <TrailOrigin class='card-text clearfix my-0 py-10 px-0 col-md-6 float-left' :trailType='trailType' 
                                                 typeName='线索' :isEdit='isEdit' :content='trailInfo.resource'
                                                 @changeTrailOrigin='changeTrailOrigin' :contentType='trailInfo.resource_type'
                                                 @changeEmail='changeEmail' detailPage='true'
                                                 @changeTrailOriginPerson='changeTrailOriginPerson' />
-                                            <!-- <div class="col-md-2 float-left text-right pl-0">线索来源</div>
-                                            <div class="col-md-10 float-left font-weight-bold">
-                                                <div class="float-left" v-if="trailOriginArr.length > 0">
-                                                    <EditSelector :options="trailOriginArr"
-                                                                  :is-edit="isEdit"
-                                                                  @change="changeResourceType" :content='trailInfo.resource_type'></EditSelector>
-                                                </div>
-                                            </div> -->
-                                        <!-- </div> -->
                                         <div class="card-text py-10 px-0 clearfix col-md-6 float-left"
                                              :class="isEdit ? 'edit-height':'' ">
                                             <div class="col-md-2 float-left text-right pl-0">负责人</div>
                                             <div class="col-md-10 float-left font-weight-bold">
-                                                <!-- <span v-show="!isEdit" >{{ trailInfo.principal.data.name }}</span> -->
                                                 <EditInput-selector :is-edit="isEdit"
                                                                     @change="changeTrailPrincipal"></EditInput-selector>
                                             </div>
-
                                         </div>
                                         <div class="card-text py-10 px-0 clearfix col-md-6 float-left"
                                              :class="isEdit ? 'edit-height':'' ">
@@ -217,12 +202,11 @@
                                                        :key="recommendations.name" v-if="!isEdit">
                                                     {{ recommendations.name || recommendations.nickname}}
                                                 </span>
-                                                <EditSelector :options="starsArr" :is-edit="isEdit"
+                                                <EditSelector :options="starsArr" :is-edit="isEdit" @refresh='getTrail'
                                                               :content="selectedRecommendationsArr"
                                                               :multiple="true" :contentHide='true'
                                                               @valuelistener="changeRecommendations"></EditSelector>
                                             </div>
-
                                         </div>
                                         <div class="card-text py-10 px-0 clearfix col-md-6 float-left"
                                              :class="isEdit ? 'edit-height':'' ">
