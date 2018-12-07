@@ -409,7 +409,7 @@
                 }
                 let data = {
                     telephone: this.phone,
-                    device: Cookies.get('deviceId'),
+                    device: this.getDevice(),
                     token: this.smsRequestToken,
                     sms_code: this.smsCode,
                     password: this.newPassword
