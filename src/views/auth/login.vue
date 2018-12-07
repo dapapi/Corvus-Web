@@ -214,7 +214,7 @@
                     return
                 }
                 let _this = this;
-                config.setAccessToken(response.access_token);
+                config.setAccessToken(this.access_token);
                 setTimeout(function () {
                     _this.fetchUserInfo(function (userJson, companyType) {
                         _this.storeToLocal(userJson);
