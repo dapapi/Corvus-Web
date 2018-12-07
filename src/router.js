@@ -236,6 +236,46 @@ export default new Router({
             ]
         },
         {
+            path: '/reports',
+            component: () => import('./views/reports/home.vue'),
+            children: [
+                {
+                    path: '/reports',
+                    redirect: '/reports/business'
+                },
+                {
+                    path: '/reports/business',
+                    name: 'business',
+                    component: () => import('./views/reports/business.vue'),
+                },
+                {
+                    path: '/reports/trail',
+                    name: 'trail',
+                    component: () => import('./views/reports/trail.vue')
+                },
+                {
+                    path: '/reports/projects',
+                    name: 'projects',
+                    component: () => import('./views/reports/projects.vue')
+                },
+                {
+                    path: '/reports/clients',
+                    name: 'clients',
+                    component: () => import('./views/reports/clients.vue')
+                },
+                {
+                    path: '/reports/artists',
+                    name: 'artists',
+                    component: () => import('./views/reports/artists.vue')
+                },
+                {
+                    path: '/reports/blogger',
+                    name: 'blogger',
+                    component: () => import('./views/reports/blogger.vue')
+                }
+            ]
+        },
+        {
             path: '/attendance',
             name: 'home',
             component: () => import('./views/attendance/home.vue'),
@@ -295,9 +335,9 @@ export default new Router({
                     component: () => import('./views/attendance/tellme.vue')
                 },
                 {
-                path: '/attendance/details',
-                // name: 'details',
-                component: () => import('./views/attendance/details.vue')
+                    path: '/attendance/details',
+                    // name: 'details',
+                    component: () => import('./views/attendance/details.vue')
                 },
             ]
         },

@@ -6,11 +6,11 @@
                 <span class="input-group-addon">
                   <i class="icon md-calendar" aria-hidden="true"></i>
                 </span>
-            <input type="text" class="form-control" id="start">
+            <input type="text" class="form-control" id="start" name="start">
         </div>
         <div class="input-group">
             <span class="input-group-addon">to</span>
-            <input type="text" class="form-control" id="end">
+            <input type="text" class="form-control" id="end" name="end">
         </div>
     </div>
 </template>
@@ -28,14 +28,15 @@
                 format: "yyyy-mm-dd",
                 language: "zh-CN",
             }).on("changeDate", function () {
-                console.log($('#start').val())
-                console.log($('#end').val())
                 self.$emit('change', $('#start').val(), $('#end').val());
             });
 
         },
         methods: {
             setValue(start, end) {
+                console.log(start);
+                console.log(end);
+                console.log($(this.$el));
                 $(this.$el).datepicker('update', start, end);
             },
 
