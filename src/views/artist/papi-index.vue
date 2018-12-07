@@ -73,11 +73,10 @@
                                 </th>
                                 <th class="cell-300" scope="col">昵称</th>
                                 <th class="cell-300" scope="col">类型</th>
-                                <th class="cell-300" scope="col">微博平台粉丝数</th>
-                                <th class="cell-300" scope="col">与我司签约意向</th>
                                 <th class="cell-300" scope="col">沟通状态</th>
                                 <th class="cell-300" scope="col">制作人</th>
                                 <th class="cell-300" scope="col">录入时间</th>
+                                <th class="cell-300" scope="col">最后跟进时间</th>
                             </tr>
                             <tbody>
                             
@@ -93,11 +92,6 @@
                                     }}
                                 </td>
                                 <td>{{ artist.type.data.name }}</td>
-                                <td>暂无</td>
-                                <td>
-                                    <template v-if="artist.intention">是</template>
-                                    <template v-else>否</template>
-                                </td>
                                 <td>
                                     <template v-if="artist.communication_status">
                                         {{ papiCommunicationStatusArr.find(item => item.value ==
@@ -110,6 +104,7 @@
                                     </span>
                                 </td>
                                 <td>{{artist.created_at}}</td>
+                                <td>{{artist.updated_at}}</td>
                             </tr>
                             
                             </tbody>
@@ -412,7 +407,6 @@
                     _this.current_page = response.meta.pagination.current_page;
                     _this.total = response.meta.pagination.total;
                     _this.total_pages = response.meta.pagination.total_pages;
-                    
                 });
             },
 
@@ -429,16 +423,6 @@
                     
                 })
             },
-            // filterGo(){ 
-            //     let _this = this;
-            //     this.filterObject.name = this.trailFilter;
-            //     console.log(this.filterObject)
-            //     fetch('get','/bloggers',this.filterObject).then(function(response){  
-                             
-            //         _this.artistsInfo =response.data
-            //         console.log(_this.artistsInfo)
-            //     })      
-            // },
             //选择博主类型
             typeFilter(value){
                 this.bolgType  = value

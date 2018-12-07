@@ -19,34 +19,49 @@
                                 <span class="pr-10 pl-30">当前状态</span>
                                 <span>待屈素芳评审</span>
                             </div>
-                            <button class="btn btn-primary">评审</button>
-                            <button class="btn btn-primary" style='display:none'>评审通过</button>
+                            <button class="btn btn-primary" v-show="templateStatus == 1" @click="review(2)">评审</button>
+                            <button class="btn btn-primary" v-show="templateStatus == 2">评审通过</button>
                          </div>
                     </div>
-                    <ul class="list-group ">
-                        <li class="list-group-item p-0 mb-10">
-                            <p class="list-group-item-heading mt-0 mb-5">1.本周你完成了哪些工作？最有成就的是什么</p>
-                            <p>文本</p>
-                            <p>数字</p>
-                            <p>链接</p>
-                            <p>附件</p>
-                        </li>
-                        <li class="list-group-item mb-10 p-0">
-                            <p class="list-group-item-heading mt-0 mb-5">1.本周你完成了哪些工作？最有成就的是什么</p>
-                            <p>文本</p>
-                            <p>数字</p>
-                            <p>链接</p>
-                            <p>附件</p>
-                        </li>
-                        <li class="list-group-item mb-10 p-0">
-                            <p class="list-group-item-heading mt-0 mb-5">1.本周你完成了哪些工作？最有成就的是什么</p>
-                            <p>文本</p>
-                            <p>数字</p>
-                            <p>链接</p>
-                            <p>附件</p>
+                    <!--问题列表开始-->
+                    <ul class="list-group mt-10">
+                        <li class="list-group-item p-0 mb-10 pb-10 clearfix" v-for="(item,index) in list" :key="item.id">
+                            
+                            <!--问题-->
+                            <div class="float-left">
+                                
+                                
+                                <p v-if="item.type == 4" class="list-group-item-heading mt-0 mb-5">{{index+1}}.{{item.issues}}</p>
+                                <p v-else>{{index+1}}.{{item.issues}}</p>
+
+                                <div v-if="item.type == 4" class="taskList">
+                                    <div class="ml-15"  v-for="(item2,index) in item.answer" :key="index">
+                                        <i class="icon icon md-email-open"></i>
+                                    <router-link class="mr-10" :to="`/tasks/${item2.id}`">{{item2.title}}</router-link>
+                                    </div>
+                                </div>
+                                <div class="pt-10 uploadContent" v-else-if="item.type == 5" >
+                                
+                                <div v-for="(item3,index) in item.answer" :key="index"><a :href="item3.url">{{item3.name}}</a></div>
+                                
+                                </div>
+                                <div class="pt-10"  v-else>{{item.answer}}</div>
+                            </div>
+                            <div class="float-right">
+                                <i class="icon md-flag" @click="getId(item.id)" :id="`id_${item.id}`"></i>
+                            </div>
+                            <!--填写答案-->
+                            
+                            
+                            
                         </li>
                     </ul>
+                    <div v-if="isIf">
+                        <select-staff :multiple="true" :member-type="'participant'" 
+                              @change="changeSelectedMember"></select-staff>
+                    </div>
                 </div>
+                    <!--问题列表结束-->
             </div>
         </div>
     </div>
@@ -57,26 +72,71 @@
     }
 </style>
 <script>
+import fetch from '@/assets/utils/fetch'
+import config from '@/assets/js/config'
 export default {
-    
-}
-</script>
-<script>
-export default {
+    props:{
+       templateId:'',//添加问题之后新生成的id
+       templateStatus:'',
+       isIf:false,
+       quesId:''
+    },
     data(){
         return {
-
+           list:[],
+           
         }
     },
+    watch:{
+        templateId:function(){
+            
+            this.getDetails()
+        },
+        
+    },
     mounted(){
-         
+
     },
     methods:{
+        getId:function(id){
+            this.isIf = true
+        },
+        //获取简报详情
+        getDetails:function(){
+            
+            fetch('get',`${config.apiUrl}/review/${this.templateId}`).then((res) => {
+                this.list = res.data.issues
+            })
+        
+        },
         modalclose(){
            $('.modal-backdrop').remove()
+        },
+        //提交评审
+        review:function(status){
+            
+            fetch('put',`${config.apiUrl}/review/${this.templateId}`,{status:status}).then((res) => {
+                toastr.success('评审成功');
+                $('#submitReport').modal('hide')
+            })
+        },
+        //跟进
+        setFollowUp:function(value,id){
+            
+           fetch('post',`${config.apiUrl}/issues/${id}/follow_up`).then((res) => {
+                console.log(res)
+            })
+        },
+        changeSelectedMember:function(){
+           this.isIf = true
         }
     }
 }
 </script>
+<style>
+    .show{
+        display: none
+    }
+</style>
 
 

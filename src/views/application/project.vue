@@ -2,33 +2,29 @@
     <div class="panel col-md-12 col-lg-12 py-5" style="border-left:1px solid #ccc">
                 <div class="col-md-12">
                     <ul class="nav nav-tabs nav-tabs-line" role="tablist">
-                        <li class="nav-item" role="presentation" @click="getTasks(1)">
+                        <li class="nav-item" role="presentation" @click="getTasks(1,1)">
                             <a class="nav-link active" data-toggle="tab" href="#forum-task"
                                aria-controls="forum-base"
                                aria-expanded="true" role="tab">所有项目</a>
                         </li>
-                        <li class="nav-item" role="presentation" @click="getTasks(1)">
+                        <li class="nav-item" role="presentation" @click="getDate(1,2)">
                             <a class="nav-link" data-toggle="tab" href="#forum-task"
                                aria-controls="forum-present"
                                aria-expanded="false" role="tab">我负责的</a>
                         </li>
-                        <li class="nav-item" role="presentation" @click="getTasks(1)">
+                        <li class="nav-item" role="presentation" @click="getDate(1,3)">
                             <a class="nav-link" data-toggle="tab" href="#forum-task"
                                aria-controls="forum-present"
                                aria-expanded="false" role="tab">我参与的</a>
                         </li>
-                        <li class="nav-item" role="presentation" @click="getTasks(1)">
-                            <a class="nav-link" data-toggle="tab" href="#forum-task"
-                               aria-controls="forum-present"
-                               aria-expanded="false" role="tab">我创建的</a>
-                        </li>
+                       
                     </ul>
                 </div>
                 <div class="page-content tab-content nav-tabs-animate bg-white">
                     <div class="tab-pane animation-fade active pt-10" id="forum-task" role="tabpanel">
                         <table class="table table-hover is-indent" data-plugin="animateList" data-animate="fade"
                                data-child="tr"
-                               data-selectable="selectable">
+                               data-selectable="selectable" >
                             <tr class="animation-fade"
                                 style="animation-fill-mode: backwards; animation-duration: 250ms; animation-delay: 0ms;">
                                 <th class="cell-300" scope="col">项目名称</th>
@@ -39,30 +35,60 @@
                                 <th class="cell-300" scope="col">跟进时间</th>
                             </tr>
                             <tbody>
-                            <tr v-for="task in tasksInfo" :key="task.id">
-                                <td class="pointer-content">
-                                    {{task.name}}
+                            <tr v-for="item in projectInfo" :key="item.id">
+                                <td class="pointer-content" @click="projectDetail(item.id)">
+                                    {{item.title}}
                                 </td>
-                                <td>{{task.person}}</td>
-                                <td>{{task.type}}</td>
+                                <td >{{item.principal.data.name}}</td>
                                 <td>
-                                    <template v-if="task.status === 1">进行中</template>
-                                    <template v-if="task.status === 2">已完成</template>
-                                    <template v-if="task.status === 0">已开始</template>
+                                    <template v-if="item.status === 1">进行中</template>
+                                    <template v-if="item.status === 2">已完成</template>
+                                    <template v-if="item.status === 3">已停止</template>
+                                    
+                                </td>
+                                <td v-if="item.trail">
+                                    <template v-if="item.trail.data.cooperation_type ==1">
+                                       代言 
+                                    </template>
+                                    <template v-if="item.trail.data.cooperation_type ==2">
+                                       合作 
+                                    </template>
+                                     <template v-if="item.trail.data.cooperation_type ==3">
+                                       活动 
+                                    </template>
+                                    <template v-if="item.trail.data.cooperation_type ==4">
+                                       微博 
+                                    </template>
+                                     <template v-if="item.trail.data.cooperation_type ==5">
+                                       抖音 
+                                    </template>
+                                     <template v-if="item.trail.data.cooperation_type ==6">
+                                       短期代言 
+                                    </template>
+                                      <template v-if="item.trail.data.cooperation_type ==7">
+                                       时装周 
+                                    </template>
+                                     <template v-if="item.trail.data.cooperation_type ==8">
+                                       未确定 
+                                    </template>
+                                </td>
+                                <td v-if="!item.trail"></td>
+                                <td v-if="item.priority">
+                                    <template v-if="item.priority === 1">高</template>
+                                    <template v-if="item.priority === 2">中</template>
+                                    <template v-if="item.priority === 3">低</template>
                                 </td>
                                 <td>
-                                    {{task.priority}}
+                                    {{item.last_follow_up_at}}
                                 </td>
-                                <td>{{ task.date }} {{task.time}}</td>
                             </tr>
                             </tbody>
                         </table>
-                        <template v-if="!taskStatus">
+                          <div class="col-md-1" style="margin: 6rem auto"  v-if="projectInfo.length==0">
+                                <img src="https://res.papitube.com/corvus/images/content-none.png" alt="" style="width: 100%">
+                            </div>
+                        <template>
                             <Pagination :current_page="current_page" :method="getTasks" :total_pages="total_pages"
-                                        :total="total"></Pagination>
-                        </template>
-                        <template v-else>
-                            <Pagination :current_page="current_page" :method="getMyTasks" :total_pages="total_pages"
                                         :total="total"></Pagination>
                         </template>
                     </div>
@@ -98,6 +124,9 @@ export default {
                 taskLevelArr: config.taskLevelArr,
                 taskTypeArr: config.taskTypeArr,
                 customizeInfo: config.customizeInfo,
+                projectStatus:1,//项目区别
+                projectInfo:'',
+                myType:''
             }
 
 
@@ -105,139 +134,102 @@ export default {
 
   mounted() {
     this.getTasks();
+    this.getDate();
     this.tasksInfo = data;
   },
 
   methods: {
-        getTasks (pageNum = 1) {
-                    let data = {
-                        page: pageNum,
-                        include: 'principal,pTask,tasks,resource.resourceable,resource.resource,participants',
-                    };
-                    let _this = this;
+            getTasks: function (page = 1,signStatus) {
+                let data={
+                    include:'principal,trail.expectations',
+                    status:this.projectStatus
+                }
+                let _this = this;
+                if(signStatus){
+                    this.projectStatus = signStatus
+                }
+                fetch('get', '/projects/my_all', data).then(function (response) {
+                    
+                    _this.projectInfo = response.data;
+                    _this.current_page = response.meta.pagination.current_page;
+                    _this.total = response.meta.pagination.total;
+                    _this.total_pages = response.meta.pagination.total_pages;
+                });
+            },
+            getDate: function (page = 1,type) {
+                let data={
+                    include:'principal,trail.expectations',
+                    // status:this.projectStatus,
+                   
+                }
+                let _this = this;
+                if(type){
+                    this.myType = type
+                }
+                data.type=this.myType
+                fetch('get', '/projects/my', data).then(function (response) {
+                    
+                    _this.projectInfo = response.data;
+                    _this.current_page = response.meta.pagination.current_page;
+                    _this.total = response.meta.pagination.total;
+                    _this.total_pages = response.meta.pagination.total_pages;
+                    console.log(response)
+                });
+            },
+            projectDetail(projectId){
+                this.$router.push({path: '/projects/' + projectId})
+            },
+            customize (value) {
+                console.log(value)
+            },
 
-                    fetch('get', '/tasks/my_all', data).then(function (response) {
-                        
-                        _this.current_page = response.meta.pagination.current_page;
-                        _this.total = response.meta.pagination.total;
-                        _this.total_pages = response.meta.pagination.total_pages;
-                    });
-                },
+            changeLinkage (value) {
+                console.log(value)
+            },
 
-        getMyTasks (pageNum = 1, type = null) {
-                    let _this = this;
-                    if (type) {
-                        app.taskFinishType = type
-                    }
+            changeTaskType (value) {
+                this.taskType = value
+            },
 
-        let data = {
-            page: pageNum,
-            include: 'principal,pTask,tasks,resource.resourceable,resource.resource,participants',
-            type: app.taskFinishType,
-            status: 0
-        };
+            principalChange (value) {
+                this.principal = value
+            },
 
-        $.ajax({
-            type: 'get',
-            url: config.apiUrl + '/tasks/my',
-            headers: config.getHeaders(),
-            data: data
-        }).done(function (response) {
-            _this.tasksInfo = response.data;
-            _this.current_page = response.meta.pagination.current_page;
-            _this.total = response.meta.pagination.total;
-            _this.total_pages = response.meta.pagination.total_pages;
-        })
-        },
+            participantChange (value) {
+                let flagArr = [];
+                for (let i = 0; i < value.length; i++) {
+                    flagArr.push(value[i].id)
+                }
+                this.participants = flagArr
+            },
 
-        addTask () {
-            let _this = this;
-            let participant_ids = [];
-            for (let i = 0; i < this.$store.state.newParticipantsInfo.length; i++) {
-                participant_ids.push(this.$store.state.newParticipantsInfo[i].id)
-        }
-        let data = {
-            // resource_type: '1718463094',
-            // resourceable_id: '1994731356',
-            // type: app.taskType,
-            // @todo 任务类型前端维护
-            title: _this.taskName,
-            principal_id: this.$store.state.newPrincipalInfo.id,
-            participant_ids: participant_ids,
-            priority: _this.taskLevel,
-            start_at: _this.startTime + ' ' + _this.startMinutes,
-            end_at: _this.endTime + ' ' + _this.endMinutes,
-            desc: _this.taskIntroduce
-        };
-        $.ajax({
-            type: 'post',
-            url: config.apiUrl + '/tasks',
-            headers: config.getHeaders(),
-            data: data,
-            statusCode: {
-                400: function (response) {
-                    toastr.error(response.responseJSON.message);
-                },
-            }
-        }).done(function (response) {
-            console.log(response);
-            toastr.success('创建成功');
-            $('#addTask').modal('hide');
-            redirect('detail?task_id=' + response.data.id)
-        })
-        },
+            changeTaskLevel (value) {
+                this.taskLevel = value
+            },
 
-        customize (value) {
-            console.log(value)
-        },
+            changeStartTime (value) {
+                this.startTime = value
+            },
 
-        changeLinkage (value) {
-            console.log(value)
-        },
+            changeStartMinutes (value) {
+                this.startMinutes = value
+            },
 
-        changeTaskType (value) {
-            this.taskType = value
-        },
+            changeEndTime (value) {
+                this.endTime = value
+            },
 
-        principalChange (value) {
-            this.principal = value
-        },
+            changeEndMinutes (value) {
+                this.endMinutes = value
+            },
+    },
 
-        participantChange (value) {
-            let flagArr = [];
-            for (let i = 0; i < value.length; i++) {
-                flagArr.push(value[i].id)
-            }
-            this.participants = flagArr
-        },
+    };
 
-        changeTaskLevel (value) {
-            this.taskLevel = value
-        },
-
-        changeStartTime (value) {
-            this.startTime = value
-        },
-
-        changeStartMinutes (value) {
-            this.startMinutes = value
-        },
-
-        changeEndTime (value) {
-            this.endTime = value
-        },
-
-        changeEndMinutes (value) {
-            this.endMinutes = value
-        },
-  },
-
-};
-
-</script>
-<style>
-.panel{
-    box-shadow: 0 0 0 0;
-}
-</style>
+    </script>
+    <style>
+    .panel{
+        box-shadow: 0 0 0 0;
+    }
+    </style>
 

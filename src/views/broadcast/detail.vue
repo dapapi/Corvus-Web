@@ -31,16 +31,16 @@
                             :style="{ backgroundImage: 'url('+currentData.cover+')'}"></div>
                         <span class="">{{currentData.creator.data.name}}</span>
                         <span class="">{{currentData.created_at}}</span>
-                        <span class="">{{classifyArr.find(classifyArr => classifyArr.value == currentData.classify).name}}</span>
+                        <span v-if="classifyArr[0]" class="">{{classifyArr.find(classifyArr => classifyArr.value == currentData.classify).name}}</span>
                     </div>
                     <br>
                     <hr/>
                     <br>
-                    <div class="panel-content">
+                    <div class="panel-content" v-if="currentData.scope && departments">
                         <h5 v-html="currentData.desc" class="broadcast-content"></h5>
                         <h5>公告范围
-                            <span  v-for=" item in currentData.range" :key="item">&nbsp;&nbsp;
-                                <span class="badge badge-round badge-dark">{{item}}</span>
+                            <span  v-for=" item in currentData.scope.data" :key="item.department_id">&nbsp;&nbsp;
+                                <span v-if="departments[0]" class="badge badge-round badge-dark">{{departments.find(departments => departments.id == item.department_id).name}}</span>
                             </span>
                         </h5>
                         <hr>
@@ -65,11 +65,13 @@ export default {
             broadCastPost:{},
             paramsId:'',
             isLoading:true,
+            departments:[],
         } 
     },
     created() { 
         this.getCurrentId()
         this.dataInit()
+        this.getDepartments()
 
     },
     mounted(){
@@ -79,7 +81,7 @@ export default {
         //初始化数据
         dataInit(){
             let _this = this
-                fetch('get', '/announcements/'+this.currentId+'?include=creator').then(function (response) {
+                fetch('get', '/announcements/'+this.currentId+'?include=scope,creator').then(function (response) {
                     _this.currentData = response.data
                     _this.isLoading = false
             })
@@ -91,6 +93,12 @@ export default {
         //后退
         goBack(){
             history.go(-1)
+        },
+        //获取部门数据
+        getDepartments(){
+            fetch('get','/departments').then((params) => {
+                this.departments = params.data
+            })
         },
     }
 }
