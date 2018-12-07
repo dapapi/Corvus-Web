@@ -298,6 +298,8 @@
                             redirect('/messages')
                         })
                     }, 100)
+                }).catch(function () {
+                    Cookies.remove('deviceId');
                 })
             },
 
@@ -405,6 +407,25 @@
                 } else if (this.newPassword !== this.repeatNewPassword) {
                     toastr.error('两次密码不一致')
                 }
+                let data = {
+                    telephone: this.phone,
+                    device: Cookies.get('deviceId'),
+                    token: this.smsRequestToken,
+                    sms_code: this.smsCode,
+                    password: this.newPassword
+                };
+                fetch('put', '/users/telephone', data).then(function (response) {
+                    config.setAccessToken(response.access_token);
+                    setTimeout(function () {
+                        _this.fetchUserInfo(function (userJson, companyType) {
+                            _this.storeToLocal(userJson);
+                            _this.storeCompamyTypeToLocal(companyType);
+                            redirect('/messages')
+                        })
+                    }, 100)
+                }).catch(function () {
+                    Cookies.remove('deviceId');
+                })
             },
 
         }
