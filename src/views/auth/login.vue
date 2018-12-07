@@ -380,7 +380,12 @@
             },
 
             fetchUserInfo(callback) {
-                fetch('get', '/users/my').then(function (response) {
+                $.ajax({
+                    type: 'get',
+                    url: config.apiUrl + '/users/my',
+                    headers: config.getHeaders(),
+                    statusCode: config.getStatusCode()
+                }).done(function (response) {
                     let userData = response.data;
                     let json = {
                         id: userData.id,
