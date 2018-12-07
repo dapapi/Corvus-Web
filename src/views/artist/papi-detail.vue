@@ -959,7 +959,7 @@
                     $('#addWork').modal('hide');
                         _this.artistInfo.nickname='';
                         _this.artistWorkName='';
-                        _this.workReleaseTime=null;
+                        _this.workReleaseTime='';
                         _this.artistWorkProportion='';
                         _this.videoUrl='';
                         _this.advertisingType='';

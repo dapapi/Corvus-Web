@@ -5,7 +5,7 @@
         <h1 class="page-title">简报</h1>
         <div class="page-header-actions">
             <button type="button" class="btn btn-primary mr-20" @click="submitAnswer">提交</button>
-            <button type="button" class="btn btn-default">保存草稿</button>
+            <button type="button" class="btn btn-default" @click="draft">保存草稿</button>
         </div>
         
     </div>
@@ -114,7 +114,7 @@ export default {
             renderTaskData:{},
             renderUploadData:{},
             submitAnswerData:{
-                reviewer_ids:'',
+                reviewer_id:'',
                 accessory:'',
 
             },
@@ -124,15 +124,7 @@ export default {
             taskList:[],
             selectTask:[],
             quesTaskId:'',
-            modData:['node','hahah',{
-                title:'测试',
-                id:'1',
-                color:'red'
-                
-            },{
-                name:'张强',
-                color:"黑色"
-            }]
+            
         }
     },
     components:{
@@ -142,8 +134,7 @@ export default {
 
         this.getAll()
         this.getTaskList()
-        this.getDetails()
-        console.log(this.arrayToUpParams(this.modData))
+        // this.getDetails()
     },
     methods:{
          
@@ -159,6 +150,7 @@ export default {
         /*任务*/
         //取消选择任务
         canelTask:function(){
+            
             this.submitAnswerData[`answer[${this.quesTaskId}]`] = []
         },
         //获取任务问题的id
@@ -191,7 +183,7 @@ export default {
         },
 
         /*附件*/
-        uploadAttachment:function(url,name,size,id){
+        uploadAttachment:function(url,name,size,type,id){
             this.submitAnswerData[`answer[${id}]`] = []
 
             let data={
@@ -216,7 +208,7 @@ export default {
         },
         changePrincipal:function(value){
             
-           this.submitAnswerData.reviewer_ids = value.id
+           this.submitAnswerData.reviewer_id = value.id
         },
         //获取任务列表
         getTaskList:function(){
@@ -245,38 +237,24 @@ export default {
                 
             })
         },
-        getDetails:function(){
-            fetch('get',`${config.apiUrl}/review/${this.$route.query.id}`).then((res) => {
-            //    console.log(res)
+        // getDetails:function(){
+        //     fetch('get',`${config.apiUrl}/review/${this.$route.query.id}`).then((res) => {
+        //     //    console.log(res)
                 
-            })
-        },
+        //     })
+        // },
         modify:function(){
             fetch('post',`${config.apiUrl}/launch`,this.submitAnswerData).then((res) => {
                toastr.success('提交成功');
                 
             })
         },
-        arrayToUpParams:function(arr){
-           var count = arr.length
-           for (var i = 0; i<count;i++) {
-               var ele = arr[i]
-               if(ele instanceof Object){
-                   if(i+1<=count&&arr[i+1] instanceof Object){
-                       var ele2 = arr[i+1]
-                       for(var key in ele){
-                           for(var key1 in ele2){
-                               if(key1 == key){
-                                   ele2[key1] = ele[key]+','+ele2[key1]
-                               }
-                           }
-                       }
-                   }
-               }
-               
-           }
-           var modfiyEnd = arr[arr.length-1]
-           return modfiyEnd
+        //草稿
+        draft:function(){
+            fetch('post',`${config.apiUrl}/launch/${this.$route.query.id}/draft`).then((res) => {
+               toastr.success('保存草稿成功');
+                
+            })
         }
     }
 }
