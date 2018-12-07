@@ -23,7 +23,7 @@
                                aria-controls="forum-base"
                                aria-expanded="true" role="tab">帐号登录</a>
                         </li>
-                        <li class="nav-item" role="presentation">
+                        <li class="nav-item" role="presentation" @click="wechatLogin">
                             <a class="nav-link" data-toggle="tab" href="#forum-weixin-login"
                                aria-controls="forum-present"
                                aria-expanded="false" role="tab">微信登录</a>
@@ -51,7 +51,7 @@
                             </div>
                             <div class="form-group clearfix">
                                 <div class="checkbox-custom checkbox-inline checkbox-primary checkbox-sm float-left">
-                                    <input type="checkbox" id="inputCheckbox" name="remember">
+                                    <input type="checkbox" id="inputCheckbox" name="remember" @change="rememberName">
                                     <label for="inputCheckbox">记住帐号</label>
                                 </div>
                                 <span class="float-right pointer-content font-info" @click="forgetPassword">忘记密码</span>
@@ -170,14 +170,6 @@
         },
 
         mounted() {
-            new WxLogin({
-                id: "loginContainer",
-                appid: "wx1c8644b3e608c59b",
-                scope: "snsapi_login",
-                redirect_uri: "https%3a%2f%2fsandbox-api-crm.papitube.com%2fwechat_open%2foauth%2fcallback",
-                state: "",
-                href: "https://res-crm.papitube.com/css/wxLogin-QrcodeStyle.css"
-            });
             this.checkBindTelephone();
         },
 
@@ -188,6 +180,21 @@
 
             storeCompamyTypeToLocal(type) {
                 Cookies.set('companyType', type)
+            },
+
+            rememberName(value) {
+                console.log(value)
+            },
+
+            initWechatLogin() {
+                new WxLogin({
+                    id: "loginContainer",
+                    appid: "wx1c8644b3e608c59b",
+                    scope: "snsapi_login",
+                    redirect_uri: "https%3a%2f%2fsandbox-api-crm.papitube.com%2fwechat_open%2foauth%2fcallback",
+                    state: "",
+                    href: "https://res-crm.papitube.com/css/wxLogin-QrcodeStyle.css"
+                });
             },
 
             returnLogin() {
