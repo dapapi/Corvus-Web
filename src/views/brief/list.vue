@@ -2,64 +2,48 @@
     <!-- Page -->
     <div class="page-main" style="background-color:#f3f4f5">
         <div class="page-header page-header-bordered">
-            <h1 class="page-title">我的简报</h1>
+            <h1 class="page-title">我的{{template_name}}</h1>
         </div>
         <div class="page-content container-fluid">
                 
                 <div class="row">
                     <div class="col-md-8 ">
                          <div class="panel p-20">
-                              <table class="table  table-hover is-indent mb-20" >
-                        <tr>
-                            <th class="cell-300" scope="col">简报周期</th>
-                            <th class="cell-300" scope="col">提交时间</th>
-                            <!-- <th class="cell-300" scope="col">活动</th> -->
-                            <th class="cell-300" scope="col">状态</th>
-                            <th class="cell-300" scope="col">操作</th>
-                            
-                        </tr>
-                        <tr>
-                            <td class="pointer-content">
-                                2018年第4季度
-                            </td>
-                            <!-- <td>sdfsdf</td> -->
-                            <td>sdfsdf</td>
-                            <td>
-                                <button class="btn-success">已审批</button>
-                            </td>
-                            <td>写季报</td>
-                        </tr>
-                        <tr>
-                            <td class="pointer-content">
-                                2018年第4季度
-                            </td>
-                            <td>sdfsdf</td>
-                            <!-- <td>sdfsdf</td> -->
-                            <td>
-                                <button class="btn-success">已审批</button>
-                            </td>
-                            <td>写季报</td>
-                        </tr>
-                        <tr>
-                            <td class="pointer-content">
-                                2018年第4季度
-                            </td>
-                            <td>sdfsdf</td>
-                            <!-- <td>sdfsdf</td> -->
-                            <td>
-                                <button class="btn-success">已审批</button>
-                            </td>
-                            <td>写季报</td>
-                        </tr>
-                    </table>
-                         </div>
+                            <table class="table  table-hover is-indent mb-20" >
+                                <tr>
+                                    <th class="cell-300" scope="col">简报周期</th>
+                                    <th class="cell-200" scope="col">提交时间</th>
+                                    <th class="cell-200" scope="col">状态</th>
+                                    <th class="cell-200" scope="col">操作</th>
+                                    
+                                </tr>
+                                <tr v-for="(item,index) in list" :key="index">
+                                    <td class="pointer-content">
+                                        <div>{{item.title[0]}}</div>
+                                        <div>{{item.title[1]}}</div>
+                                    </td>
+                                    <td>{{item.template.updated_at}}</td>
+                                    <td>
+                                        <button class="btn-warning" v-if="item.status === null">未提交</button>
+                                        <button class="btn-primary" v-else-if="item.status ==1">未审核</button>
+                                        <button class="btn-success" v-else>已审核</button>
+                                    </td>
+                                    <td>
+                                        <router-link v-if="item.status === null" :to="{path:'/brief/details',query:{id:item.id}}">写{{item.template.template_name}}</router-link>
+                                        <router-link v-else-if="item.status ==1"  :to="{path:'/brief/details',query:{id:item.id}}">编辑</router-link>
+                                        <span v-else data-toggle="modal" data-target="#submitReport">查看</span>
+                                    </td>
+                                
+                                </tr>
+                            </table>
+                        </div>
                     </div>
                 <briefright></briefright>
                 </div>
                 <!-- <pagination :current_page="current_page" :method="getProjects" :total_pages="total_pages"
                             :total="total"></pagination> -->
 
-                
+                <submit-report :templateId="temId" :templateStatus="status"></submit-report>
         </div>
         <div class="site-action" data-plugin="actionBtn" @click="redirectBriefAdd()">
             <button type="button"  class="site-action-toggle btn-raised btn btn-success btn-floating waves-effect waves-classic">
@@ -78,24 +62,36 @@ export default {
     data(){
         return {
             list:[], 
+            template_name:'',
+            temId:'',
+            status:''
+            
         }
     },
     components:{
         briefright
     },
-    mounted(){
+    watch:{
+        
+       "$route":"getlist",
+
+    },
+    created(){
         this.getlist()
     },
+    
     methods:{
-        redirectBriefDetails:function(id){
-            this.$router.push({path:'/brief/details',query:{id:id}})
-        },
-        redirectBriefAdd:function(){
-            this.$router.push({path:'/brief/add'})
-        },
+        
         getlist:function(){
-            fetch('get',`${config.apiUrl}/launch`).then((res) => {
+            
+            fetch('get',`${config.apiUrl}/review/my/template`,{template_id:this.$route.params.id}).then((res) => {
+                console.log(res.data)
                 this.list = res.data
+                this.template_name = res.data[0].template.template_name
+                for (let i = 0; i < this.list.length; i++) {
+                    this.list[i].title = this.list[i].title.split(',');
+                    
+                }
             })
         }
     }
