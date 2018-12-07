@@ -1,5 +1,16 @@
 <template>
     <div class="page">
+        <div class="loader-overlay" v-if="isLoading" style="background:rgb(255,255,255,.4)">
+            <div class="loader-content">
+                <div class="loader-index">
+                <div></div>
+                <div></div>
+                <div></div>
+                <div></div>
+                <div></div>
+                <div></div>
+        </div>
+        </div></div>
         <div class="page-header page-header-bordered">
             <h1 class="page-title d-inline">博主详情</h1>
 
@@ -161,7 +172,7 @@
                                     <th class="cell-300" scope="col">截止日期</th>
                                 </tr>
                                 <tr v-for="v in item" :key="v.id" v-if="item">
-                                    <td>{{v.title}}</td>
+                                    <td @click="taskdetail(v.id)" class="Jump">{{v.title}}</td>
                                     <td>{{v.type.data.title}}</td>
                                     <td>
                                         <template v-if="v.status==1">
@@ -457,39 +468,39 @@
                             <div class="col-md-2 text-right float-left">任务类型</div>
                             <div class="col-md-10 float-left pl-0">
                                 <selectors :options="tasksType" :placeholder="'请选择任务类型'"
-                                           @change="changeTaskType"></selectors>
+                                           @change="changeTaskType" ref="tasksmold"></selectors>
                             </div>
                         </div>
                         <div class="example">
                             <div class="col-md-2 text-right float-left">任务名称</div>
                             <div class="col-md-10 float-left pl-0">
-                                <input type="text" class="form-control" placeholder="请输入任务名称" v-model="taskName">
+                                <input type="text" class="form-control" placeholder="请输入任务名称" v-model="taskName" >
                             </div>
                         </div>
                         <div class="example">
                             <div class="col-md-2 text-right float-left">负责人</div>
                             <div class="col-md-5 float-left pl-0">
                                 <selectors :placeholder="'请选择负责人'"
-                                           @change="principalChange" :options="Users"></selectors>
+                                           @change="principalChange" :options="Users" ref="chargePerson"></selectors>
                             </div>
                         </div>
                         <div class="example">
                             <div class="col-md-2 text-right float-left">参与人</div>
                             <div class="col-md-10 float-left pl-0">
-                                <add-member @change="participantChange"></add-member>
+                                <add-member @change="participantChange" ></add-member>
                             </div>
                         </div>
                         <div class="example">
                             <div class="col-md-2 text-right float-left pl-0">任务优先级</div>
                             <div class="col-md-10 float-left pl-0">
                                 <selectors :options="taskLevelArr" :placeholder="'请选择任务优先级'"
-                                           @change="changeTaskLevel"></selectors>
+                                           @change="changeTaskLevel" ref="taskpriority"></selectors>
                             </div>
                         </div>
                         <div class="example">
                             <div class="col-md-2 text-right float-left">开始时间</div>
                             <div class="col-md-5 float-left pl-0">
-                                <datepicker @change="changeStartTime"></datepicker>
+                                <datepicker @change="changeStartTime" ref="startTime"></datepicker>
                             </div>
                             <div class="col-md-5 float-left pl-0">
                                 <timepicker :default="startMinutes" @change="changeStartMinutes"></timepicker>
@@ -498,7 +509,7 @@
                         <div class="example">
                             <div class="col-md-2 text-right float-left">截止时间</div>
                             <div class="col-md-5 float-left pl-0">
-                                <datepicker @change="changeEndTime"></datepicker>
+                                <datepicker @change="changeEndTime" ref="deadline"></datepicker>
                             </div>
                             <div class="col-md-5 float-left pl-0">
                                 <timepicker :default="endMinutes" @change="changeEndMinutes"></timepicker>
@@ -508,7 +519,7 @@
                             <div class="col-md-2 text-right float-left">任务说明</div>
                             <div class="col-md-10 float-left pl-0">
                                 <textarea class="form-control" name="taskDescription" id="" cols="30"
-                                          rows="5" title="" v-model="taskIntroduce"></textarea>
+                                          rows="5" title="" v-model="taskIntroduce" ></textarea>
                             </div>
                         </div>
                     </div>
@@ -547,7 +558,7 @@
                         <div class="example">
                             <div class="col-md-2 text-right float-left">视频发布时间</div>
                             <div class="col-md-10 float-left">
-                                <datepicker @change="changeWorkReleaseTime"></datepicker>
+                                <datepicker @change="changeWorkReleaseTime" ref="workReleaseTime"></datepicker>
                             </div>
                         </div>
                         <div class="example">
@@ -567,7 +578,7 @@
                         <div class="example">
                             <div class="col-md-2 text-right float-left">是否广告</div>
                             <div class="col-md-10 float-left">
-                                <selectors :options="yesOrNoArr" @change="changeWorkAd"></selectors>
+                                <selectors :options="yesOrNoArr" @change="changeWorkAd" placeholder="请选择是否广告" ref="advertisingType"></selectors>
                             </div>
                         </div>
                     </div>
@@ -685,13 +696,38 @@
                 updateStar_weibo_infos:{},//修改微博
                 updateStar_douyin_infos:{},//修改抖音
                 updateStar_xiaohongshu_infos:{},//修改小红书
-                updatePlatform:''//修改平台
+                updatePlatform:'',//修改平台
+                isLoading:true,
+                participant:''
             }
         },
 
         mounted() {
             this.getArtist()
+            
             this.charts()
+            let _this = this;
+             $('#addTask').on('hidden.bs.modal',function() {
+                    _this.$refs.tasksmold.setValue('1');//类型
+                    _this.$refs.chargePerson.setValue('');//负责人
+                    _this.$refs.taskpriority.setValue('');
+                    _this.$refs.startTime.setValue('');
+                    _this.$refs.deadline.setValue('');
+                    _this.participant='';//参与人
+                    _this.taskIntroduce='';
+                    _this.taskName='';
+                
+             })
+              $('#addWork').on('hidden.bs.modal',function() {
+                    _this.artistInfo.nickname='';
+                    _this.artistWorkName='';
+                    _this.artistWorkProportion='';
+                    _this.videoUrl='';
+                    _this.artistInfo.id=''; 
+                     _this.$refs.advertisingType.setValue(''); 
+                     _this.$refs.workReleaseTime.setValue('');
+                
+             })
         },
 
         methods: {
@@ -760,6 +796,7 @@
                 // 使用刚指定的配置项和数据显示图表。
                 myChart.setOption(option);
             },
+            
             getArtist: function () {
                 this.artistId = this.$route.params.id;
                 let _this = this;
@@ -788,7 +825,9 @@
                 //项目
                 fetch('get','/bloggers/'+this.artistId+'?include=tasks.type,trails.project.principal,trails.client,producer,creator,affixes,type,publicity').then(function(response){
                     _this.totalData=response.data
+                    _this.isLoading=false
                 })
+                
                 //作品
                 fetch('get','/bloggers/index/production?blogger_id='+this.artistId+'').then(function(response){
                     _this.worksData=response.data
@@ -957,15 +996,9 @@
                     toastr.success('创建成功');
                     
                     $('#addWork').modal('hide');
-                        _this.artistInfo.nickname='';
-                        _this.artistWorkName='';
-                        _this.workReleaseTime='';
-                        _this.artistWorkProportion='';
-                        _this.videoUrl='';
-                        _this.advertisingType='';
-                        _this.artistInfo.id='';  
-                    _this.getArtist()
-                    $('.selectpicker').selectpicker('refresh')
+                        
+                        _this.getArtist()
+                        
                 })
               
             },
@@ -987,12 +1020,6 @@
                     toastr.success('创建成功');
                     $('#addTask').modal('hide');
                     _this.tasksData=response.data;
-                    _this.taskName='';
-                    _this.Person_id='';
-                    _this.startTime='';
-                    _this.endTime='';
-                    _this.taskIntroduce='';
-                    _this.taskType='';
                     _this.getArtist()
                     $('.selectpicker').selectpicker('refresh')
                 })
@@ -1009,7 +1036,7 @@
             },
 
             participantChange: function (value) {
-
+               this.participant=value
             },
 
             changeTaskLevel: function (value) {
@@ -1074,7 +1101,9 @@
                 this.artistInfo.desc = value
             },
 
-
+            taskdetail(id){
+             this.$router.push({path: '/tasks/' + id})
+            }
         }
     }
 </script>
@@ -1097,5 +1126,8 @@
     }
     .edit-height {
         height: 57px;
+    }
+    .Jump{
+        cursor:pointer;
     }
 </style>
