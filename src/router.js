@@ -348,5 +348,10 @@ export default new Router({
             name: 'management/index',
             component: () => import('./views/management/index.vue')
         },
+        {
+            path:'/organization',
+            name: 'organization',
+            component: () => import('./views/organization/index.vue')
+        }
     ],
 });

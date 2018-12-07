@@ -184,6 +184,10 @@
                             {
                                 name: '知识库',
                                 code: 'knowledge'
+                            },
+                            {
+                                name: '组织架构',
+                                code: 'organization'
                             }
                         ]
                     },
