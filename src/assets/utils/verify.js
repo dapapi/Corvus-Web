@@ -20,8 +20,8 @@ export default {
             toastr.error("密码不能为空");
             return false
         }
-        if (!(/^\w+$/.test(value))) {
-            toastr.error("密码只能为数字和字母");
+        if (!(/^\w{6,18}$/.test(value))) {
+            toastr.error("密码只能为6-18位数字或字母");
             return false
         }
         return true;
