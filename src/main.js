@@ -52,6 +52,8 @@ import RegionSelector from './components/RegionSelector.vue';
 import StaffEditSelect from './components/StaffEditSelect'
 import TrailOrigin from './components/TrailOrigin'
 import DepartmentItem from './views/organization/DepartmentItem.vue';
+import DropDepartment from './components/DropDepartment.vue'
+import Department from './components/Department.vue'
 
 Vue.config.productionTip = false;
 
@@ -105,6 +107,8 @@ Vue.component('AddModifyBroadCast', AddModifyBroadCast);
 Vue.component('RegionSelector', RegionSelector);
 Vue.component('TrailOrigin', TrailOrigin)
 Vue.component('Department', DepartmentItem);
+Vue.component('Departments', Department);
+Vue.component('DropDepartment', DropDepartment);
 
 Vue.prototype.globalClick = function (callback) {
     document.getElementById('app').addEventListener('click', () => {

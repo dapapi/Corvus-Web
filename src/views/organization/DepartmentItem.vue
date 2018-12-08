@@ -1,20 +1,34 @@
 <template>
     <div class="department-item">
-        <div class="name" :style="{paddingLeft: paddingLeft + 'px'}" @click="showList">
-            <i v-show="visible" class="icon md-caret-down"></i>
-            <i v-show="!visible" class="icon md-caret-right"></i>
-            <img src="../../assets/img/department@2x.png" />
-            {{ data.name }} <span>({{count}})</span> {{principal ? principal.name:'无负责人'}} 
-            <i class="icon md-plus add-member" style="float: right;line-height: 40px;" @click.stop="addMember"></i>
+        <div class="name" :class="visible && bgColor ? 'dark': ''" :style="{paddingLeft: paddingLeft + 'px'}">
+            <span @click="showList">
+                <i v-show="visible" class="icon md-caret-down showList"></i>
+                <i v-show="!visible" class="icon md-caret-right showList"></i>
+                <img src="../../assets/img/department@2x.png" />
+                {{ data.name }} <span>({{count}})</span> {{principal ? principal.name:'无负责人'}}
+            </span>
+            <i v-if="!isEdit" class="icon md-plus edit" style="float: right;line-height: 40px;" @click.stop="addMember"></i>
+            <div class="drop" v-else>
+                 <i class="icon md-more font-size-24" aria-hidden="true" id="org-dropdown"
+                    data-toggle="dropdown" aria-expanded="false" style="cursor: pointer; float: right;line-height: 40px;">
+                </i>
+                <div class="dropdown-menu dropdown-menu-left" aria-labelledby="org-dropdown" role="menu" x-placement="bottom-start" style="min-width: 0">
+                    <a class="dropdown-item" role="menuitem" @click="edit(data)">编辑部门</a>
+                    <a class="dropdown-item" role="menuitem">选择成员</a>
+                    <a class="dropdown-item" role="menuitem">移动部门到</a>
+                    <a class="dropdown-item" role="menuitem">添加子部门</a>
+                    <a class="dropdown-item" role="menuitem">删除部门</a>
+                </div>
+            </div>
         </div>
-        <ul v-show="visible">
+        <ul v-show="visible" v-if="!isEdit">
             <li v-for="(_item, _index) in data.users.data" :key="_index" :style="{paddingLeft: paddingLeft + 40 + 'px'}">
                 {{ _item.name }}
                 <i class="icon md-eye" style="float: right;line-height: 40px;" @click.stop></i>
             </li>
         </ul>
          <template v-for="(item, index) in data.departments.data">
-            <Department v-show="visible" :data="item" :left="paddingLeft" :bgColor="true" :key="index" />
+            <Department v-show="visible" :data="item" :isEdit="isEdit" :left="paddingLeft" :key="index" />
         </template>
     </div>
 </template>
@@ -22,7 +36,7 @@
 <script>
 export default {
     name: 'DepartmentItem',
-    props: ['data', 'bgColor', 'left'],
+    props: ['data', 'bgColor', 'left', 'isEdit', 'editDepartment'],
     data () {
         return {
             visible: false,
@@ -59,6 +73,27 @@ export default {
         // 添加部门成员
         addMember (id) {
             alert('添加成员')
+        },
+        // 编辑部门
+        edit (data) {
+            this.editDepartment(data)
+            // alert(1)
+        },
+        // 删除
+        delDepartment () {
+            // 
+        },
+        // 选择成员
+        chooseMember () {
+            // 
+        },
+        // 移动部门
+        moveDepartment () {
+            // 
+        },
+        // 添加子部门
+        addChildDepartment () {
+
         }
     }
 }
@@ -79,7 +114,7 @@ ul {
         }
         &:hover {
             background: #F5F5F5;
-            color: #3f51b5;
+            // color: #3f51b5;
             cursor: pointer;
             i {
                 margin: 0 11px;
@@ -96,13 +131,14 @@ ul {
     line-height: 40px;
     &:hover {
         background: #F5F5F5;
-        color: #3f51b5;
-        .add-member {
+        .edit {
             display: block;
         }
     }
-    i {
-        margin: 0 14px;
+    .showList {
+        width: 30px;
+        height: 20px;
+        text-align: center;
     }
     img {
         position: relative;
@@ -111,12 +147,15 @@ ul {
         height: 12px;
         margin-right: 2px;
     }
-    .add-member {
+    .edit {
         display: none;
     }
 }
 .dark {
     background: #F5F5F5;
     color: #3f51b5;
+}
+.drop {
+    float: right;
 }
 </style>

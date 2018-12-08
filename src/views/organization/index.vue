@@ -17,11 +17,13 @@
                     </div>
 
                     <div class="col-md-12 example float-left">
-                        <h1 class="page-title">泰洋系 <span class="color999">（{{count}}人）</span></h1>
+                        <h1 class="page-title">泰洋系 
+                            <span class="color999">（{{count}}人）</span> 
+                            <span style="float: right; cursor: pointer;"><router-link to="/organization/management">管理部门</router-link></span>
+                        </h1>
                         <template v-for="(item, index) in data">
                             <Department :data="item" :bgColor="true" :key="index" />
                         </template>
-                        <!-- <Department v-for="da" :data="data" :bgColor="true" /> -->
                     </div>
                 </div>
             </div>
