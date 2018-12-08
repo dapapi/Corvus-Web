@@ -19,9 +19,9 @@
                    data-toggle="dropdown" aria-expanded="false"></i>
                 <div class="dropdown-menu dropdown-menu-right task-dropdown-item" aria-labelledby="taskDropdown"
                      role="menu" x-placement="bottom-end">
-                    <a class="dropdown-item" role="menuitem" @click="">分享</a>
-                    <a class="dropdown-item" role="menuitem" @click="">分配制作人</a>
-                    <a class="dropdown-item" role="menuitem" @click="">自定义字段</a>
+                    <a class="dropdown-item" role="menuitem" >分享</a>
+                    <a class="dropdown-item" role="menuitem" >分配制作人</a>
+                    <a class="dropdown-item" role="menuitem">自定义字段</a>
                     <a class="dropdown-item" role="menuitem" data-toggle="modal" data-target="#addPrivacy">隐私设置</a>
                 </div>
             </div>
@@ -132,7 +132,7 @@
                                     <th class="cell-300" scope="col">录入日期</th>
                                 </tr>
                                 <tr v-for="v in item"  :key="v.id" v-if="v.project">
-                                    <td>{{v.project.data.title}}</td>
+                                    <td @click="projectdetil(v.project.data.id)" class="Jump">{{v.project.data.title}}</td>
                                     <td>
                                         <template v-if="v.project.data.status==1">
                                             初步接触
@@ -415,6 +415,7 @@
                                     <div class="card-text py-5 clearfix">
                                         <div class="col-md-1 float-left text-right pl-0">最近更新人</div>
                                         <div class="col-md-5 float-left font-weight-bold">
+                                              {{artistInfo.name}}
                                         </div>
                                         <div class="col-md-1 float-left text-right pl-0">最近更新时间</div>
                                         <div class="col-md-5 float-left font-weight-bold">
@@ -468,7 +469,7 @@
                             <div class="col-md-2 text-right float-left">任务类型</div>
                             <div class="col-md-10 float-left pl-0">
                                 <selectors :options="tasksType" :placeholder="'请选择任务类型'"
-                                           @change="changeTaskType" ref="tasksmold"></selectors>
+                                           @change="changeTaskType" ref="mold" ></selectors>
                             </div>
                         </div>
                         <div class="example">
@@ -480,9 +481,12 @@
                         <div class="example">
                             <div class="col-md-2 text-right float-left">负责人</div>
                             <div class="col-md-5 float-left pl-0">
-                                <selectors :placeholder="'请选择负责人'"
-                                           @change="principalChange" :options="Users" ref="chargePerson"></selectors>
+                                    <InputSelectors
+                                        :placeholder="'请选择负责人'"
+                                        @change="principalChange">
+                                    </InputSelectors>
                             </div>
+                            
                         </div>
                         <div class="example">
                             <div class="col-md-2 text-right float-left">参与人</div>
@@ -605,13 +609,13 @@
                         <div class="example">
                             <div class="col-md-2 text-right float-left">收款金额</div>
                             <div class="col-md-10 float-left">
-                                <add-member></add-member>
+                                <add-member ></add-member>
                             </div>
                         </div>
                         <div class="example">
                             <div class="col-md-2 text-right float-left">付款金额</div>
                             <div class="col-md-10 float-left">
-                                <add-member></add-member>
+                                <add-member ></add-member>
 
                             </div>
                         </div>
@@ -698,7 +702,7 @@
                 updateStar_xiaohongshu_infos:{},//修改小红书
                 updatePlatform:'',//修改平台
                 isLoading:true,
-                participant:''
+                participant:'',
             }
         },
 
@@ -707,25 +711,31 @@
             
             this.charts()
             let _this = this;
+            //  清空任务
              $('#addTask').on('hidden.bs.modal',function() {
-                    _this.$refs.tasksmold.setValue('1');//类型
-                    _this.$refs.chargePerson.setValue('');//负责人
+                 console.log(_this.$refs.mold)
+                    _this.$refs.mold.setValue('');//类型
+                    _this.taskType=''
+                    _this.Person_id='';//负责人
                     _this.$refs.taskpriority.setValue('');
                     _this.$refs.startTime.setValue('');
                     _this.$refs.deadline.setValue('');
                     _this.participant='';//参与人
                     _this.taskIntroduce='';
                     _this.taskName='';
+                    _this.startMinutes='00:00';
+                    _this.endMinutes='00:00';
                 
              })
+              //  清空视频
               $('#addWork').on('hidden.bs.modal',function() {
                     _this.artistInfo.nickname='';
                     _this.artistWorkName='';
                     _this.artistWorkProportion='';
                     _this.videoUrl='';
                     _this.artistInfo.id=''; 
-                     _this.$refs.advertisingType.setValue(''); 
-                     _this.$refs.workReleaseTime.setValue('');
+                    _this.$refs.advertisingType.setValue(''); 
+                    _this.$refs.workReleaseTime.setValue('');
                 
              })
         },
@@ -805,6 +815,7 @@
                 };
                 fetch('get', '/bloggers/' + this.artistId, data).then(function (response) {
                     _this.artistInfo = response.data;
+                    
                    
                     if(_this.artistInfo.intention==false){
                         _this.updateType=2
@@ -971,7 +982,7 @@
             changeWorkAd: function (value) {
            
                 if (value) {
-                    this.advertisingType = value;
+                    this.advertisingType = value.id;
                 } else {
                     this.advertisingType = 0;
                 }
@@ -1032,7 +1043,7 @@
             },
 
             principalChange: function (value) {
-                this.Person_id=value 
+                this.Person_id= value = this.$store.state.newPrincipalInfo.id
             },
 
             participantChange: function (value) {
@@ -1060,7 +1071,6 @@
             },
             //视频时间
             changeWorkReleaseTime: function (value) {
-                console.log(value)
                 this.workReleaseTime = value
             },
             //昵称
@@ -1103,6 +1113,9 @@
 
             taskdetail(id){
              this.$router.push({path: '/tasks/' + id})
+            },
+            projectdetil(id){
+             this.$router.push({path: '/projects/' + id}) 
             }
         }
     }

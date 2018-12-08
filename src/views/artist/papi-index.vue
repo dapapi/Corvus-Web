@@ -9,8 +9,8 @@
                    data-toggle="dropdown" aria-expanded="false"></i>
                 <div class="dropdown-menu dropdown-menu-right task-dropdown-item" aria-labelledby="taskDropdown"
                      role="menu" x-placement="bottom-end">
-                    <a class="dropdown-item" role="menuitem" @click="">导入</a>
-                    <a class="dropdown-item" role="menuitem" @click="">导出</a>
+                    <a class="dropdown-item" role="menuitem" >导入</a>
+                    <a class="dropdown-item" role="menuitem" >导出</a>
                     <a class="dropdown-item" role="menuitem" data-toggle="modal" data-target="#giveBroker">分配制作人</a>
                 </div>
             </div>
@@ -375,6 +375,7 @@
             $('table').asSelectable();
              let _this = this;
              $('#addArtist').on('hidden.bs.modal',function() {
+                 
                     _this.artistName='';//昵称
                     _this.star_weibo_infos.url='';//微博地址
                     _this.$refs.weibo.setValue('0');//微博粉丝
@@ -387,10 +388,9 @@
                     _this.$refs.signIntention.setValue('')//我公司意向
                     _this.$refs.isSign.setValue('')//其他公司意向 
                     _this.artistDesc='';//备注
-                    _this.platformType=[] 
+                    _this.platformType=[];
              })
         },
-
         methods: {
             getArtists: function (page = 1,signStatus) {
                 let data={
@@ -463,7 +463,7 @@
                 this.artistStatus = value
             },
 
-            changeCheckbox: function (value) {   
+            changeCheckbox: function (value) {
                 this.platformType = []
                 for (let i = 0; i < value.length; i++) {
                     this.platformType.push(value[i].value)

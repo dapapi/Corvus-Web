@@ -16,8 +16,7 @@
                 </template>
                 <template v-else-if="trailOrigin === '4' || trailOrigin === '5'">
                     <div class="col-md-5 float-left pr-0">
-                        <input-selectors @change="changeTrailOrigin"
-                                         :placeholder='members.find(item=>item.id == content).name'
+                        <input-selectors @change="changeTrailOrigin" :placeholder='members.find(item=>item.id == content).name'
                                          :propSelectMemberName='trailOriginPerson.name'></input-selectors>
                     </div>
                 </template>

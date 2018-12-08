@@ -155,6 +155,7 @@ export default {
     }
 }
 </script>
+
 <style scoped>
     .show{
         display: none
@@ -164,6 +165,7 @@ export default {
         width: 20rem;
         height: 400px;
     }
+
 </style>
 
 

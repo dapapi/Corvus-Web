@@ -55,6 +55,7 @@ import DepartmentItem from './views/organization/DepartmentItem.vue';
 import DropDepartment from './components/DropDepartment.vue'
 import Department from './components/Department.vue'
 
+import DepartmentPicker from '@/components/DepartmentPicker'
 Vue.config.productionTip = false;
 
 Vue.component('AddMember', AddMember);
@@ -66,6 +67,7 @@ Vue.component('CustomizeFilter', CustomizeFilter);
 Vue.component('CustomizeLinkageSelectors', CustomizeLinkageSelectors);
 Vue.component('Datepicker', Datepicker);
 Vue.component('DepartmentsItem', DepartmentsItem);
+Vue.component('DepartmentPicker', DepartmentPicker);
 Vue.component('EditAddMember', EditAddMember);
 Vue.component('EditCompany', EditCompany);
 Vue.component('EditDatepicker', EditDatepicker);
@@ -109,6 +111,7 @@ Vue.component('TrailOrigin', TrailOrigin)
 Vue.component('Department', DepartmentItem);
 Vue.component('Departments', Department);
 Vue.component('DropDepartment', DropDepartment);
+
 
 Vue.prototype.globalClick = function (callback) {
     document.getElementById('app').addEventListener('click', () => {
