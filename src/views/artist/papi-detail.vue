@@ -19,9 +19,9 @@
                    data-toggle="dropdown" aria-expanded="false"></i>
                 <div class="dropdown-menu dropdown-menu-right task-dropdown-item" aria-labelledby="taskDropdown"
                      role="menu" x-placement="bottom-end">
-                    <a class="dropdown-item" role="menuitem" @click="">分享</a>
-                    <a class="dropdown-item" role="menuitem" @click="">分配制作人</a>
-                    <a class="dropdown-item" role="menuitem" @click="">自定义字段</a>
+                    <a class="dropdown-item" role="menuitem" >分享</a>
+                    <a class="dropdown-item" role="menuitem" >分配制作人</a>
+                    <a class="dropdown-item" role="menuitem">自定义字段</a>
                     <a class="dropdown-item" role="menuitem" data-toggle="modal" data-target="#addPrivacy">隐私设置</a>
                 </div>
             </div>
@@ -132,7 +132,7 @@
                                     <th class="cell-300" scope="col">录入日期</th>
                                 </tr>
                                 <tr v-for="v in item"  :key="v.id" v-if="v.project">
-                                    <td>{{v.project.data.title}}</td>
+                                    <td @click="projectdetil(v.project.data.id)" class="Jump">{{v.project.data.title}}</td>
                                     <td>
                                         <template v-if="v.project.data.status==1">
                                             初步接触
@@ -707,8 +707,10 @@
             
             this.charts()
             let _this = this;
+            //  清空任务
              $('#addTask').on('hidden.bs.modal',function() {
-                    _this.$refs.tasksmold.setValue('1');//类型
+                 console.log(_this.$refs)
+                    _this.$refs.tasksmold.setValue('');//类型
                     _this.$refs.chargePerson.setValue('');//负责人
                     _this.$refs.taskpriority.setValue('');
                     _this.$refs.startTime.setValue('');
@@ -716,8 +718,11 @@
                     _this.participant='';//参与人
                     _this.taskIntroduce='';
                     _this.taskName='';
+                    // _this.startMinutes='0:00';
+                    // _this.endMinutes='0:00';
                 
              })
+              //  清空视频
               $('#addWork').on('hidden.bs.modal',function() {
                     _this.artistInfo.nickname='';
                     _this.artistWorkName='';
@@ -805,6 +810,7 @@
                 };
                 fetch('get', '/bloggers/' + this.artistId, data).then(function (response) {
                     _this.artistInfo = response.data;
+                    
                    
                     if(_this.artistInfo.intention==false){
                         _this.updateType=2
@@ -1103,6 +1109,9 @@
 
             taskdetail(id){
              this.$router.push({path: '/tasks/' + id})
+            },
+            projectdetil(id){
+             this.$router.push({path: '/projects/' + id}) 
             }
         }
     }

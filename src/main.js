@@ -103,6 +103,7 @@ Vue.component('AddModifyBroadCast', AddModifyBroadCast);
 Vue.component('RegionSelector', RegionSelector);
 Vue.component('TrailOrigin', TrailOrigin)
 
+
 Vue.prototype.globalClick = function (callback) {
     document.getElementById('app').addEventListener('click', () => {
         callback(event);
