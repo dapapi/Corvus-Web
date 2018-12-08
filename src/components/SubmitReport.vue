@@ -134,9 +134,7 @@ export default {
 }
 </script>
 <style>
-    .show{
-        display: none
-    }
+
 </style>
 
 
