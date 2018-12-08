@@ -98,7 +98,6 @@
 <script>
 import fetch from '../../assets/utils/fetch.js';
 import config from '../../assets/js/config';
-import data from "./data.json"
 export default {
   name: '',
   data () {
@@ -135,7 +134,7 @@ export default {
   mounted() {
     this.getTasks();
     this.getDate();
-    this.tasksInfo = data;
+ 
   },
 
   methods: {

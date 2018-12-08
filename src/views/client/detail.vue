@@ -305,8 +305,8 @@
                                 </div>
                                 <div class="card-text py-5 clearfix">
                                     <div class="col-md-1 float-left text-right pl-0">最近更新人</div>
-                                    {{clientInfo.last_updated_user?clientInfo.last_updated_user:''}}
                                     <div class="col-md-5 float-left font-weight-bold">
+                                    {{clientInfo.last_updated_user?clientInfo.last_updated_user:''}}
                                     </div>
                                     <div class="col-md-1 float-left text-right pl-0">最近更新时间</div>
                                     <div class="col-md-5 float-left font-weight-bold">

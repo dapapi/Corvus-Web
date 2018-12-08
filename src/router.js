@@ -388,5 +388,27 @@ export default new Router({
             name: 'management/index',
             component: () => import('./views/management/index.vue')
         },
+        {
+            path:'/organization',
+            name: 'organization',
+            component: () => import('./views/organization/index.vue')
+        },
+        {
+            path: '/knowledgebase',
+            name: 'knowledgebase/index',
+            component: () => import('./views/knowledgebase/index.vue')
+        },
+        {
+            path: '/knowledgebase/:id',
+            name: 'knowledgebase/detail',
+            component: () => import('./views/knowledgebase/detail.vue')
+        },
     ],
+    scrollBehavior (to, from, savedPosition) {
+        if (savedPosition) {
+         return savedPosition
+        } else {
+         return { x: 0, y: 0 }
+        }
+        }
 });

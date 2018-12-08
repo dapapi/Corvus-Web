@@ -51,6 +51,9 @@ import AddModifyBroadCast from './components/AddModifyBroadCast.vue';
 import RegionSelector from './components/RegionSelector.vue';
 import StaffEditSelect from './components/StaffEditSelect'
 import TrailOrigin from './components/TrailOrigin'
+import DepartmentItem from './views/organization/DepartmentItem.vue';
+
+import DepartmentPicker from '@/components/DepartmentPicker'
 Vue.config.productionTip = false;
 
 Vue.component('AddMember', AddMember);
@@ -62,6 +65,7 @@ Vue.component('CustomizeFilter', CustomizeFilter);
 Vue.component('CustomizeLinkageSelectors', CustomizeLinkageSelectors);
 Vue.component('Datepicker', Datepicker);
 Vue.component('DepartmentsItem', DepartmentsItem);
+Vue.component('DepartmentPicker', DepartmentPicker);
 Vue.component('EditAddMember', EditAddMember);
 Vue.component('EditCompany', EditCompany);
 Vue.component('EditDatepicker', EditDatepicker);
@@ -102,6 +106,8 @@ Vue.component('Flag', Flag);
 Vue.component('AddModifyBroadCast', AddModifyBroadCast);
 Vue.component('RegionSelector', RegionSelector);
 Vue.component('TrailOrigin', TrailOrigin)
+Vue.component('Department', DepartmentItem);
+
 
 Vue.prototype.globalClick = function (callback) {
     document.getElementById('app').addEventListener('click', () => {
