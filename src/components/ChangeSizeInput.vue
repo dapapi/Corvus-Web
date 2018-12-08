@@ -1,6 +1,6 @@
 <template>
     <div class="input-wraper" :class="showButton ? 'focus-border' : ''" id="changeSizeInput">
-        <textarea class="" name="" id="" rows="4" title="" @focus="showTaskFollow"
+        <textarea class="" name="" id="" rows="4" title="" @focus="showTaskFollow" 
                   v-model="taskFollowText"></textarea>
         <div class="text-right pt-5" v-show="showButton">
             <button class="btn btn-sm btn-white btn-pure" @click="cancelTaskFollow">取消</button>
@@ -11,6 +11,7 @@
 
 <script>
     export default {
+        props:['addcomment'],
         name: "change-size-input",
         data() {
             return {
@@ -22,7 +23,11 @@
         mounted() {
             this.globalClick(this.removeFocus);
         },
-
+        watch:{
+            addcomment:function(value){
+                this.showTaskFollow()
+            }
+        },
         methods: {
             showTaskFollow: function () {
                 this.showButton = true

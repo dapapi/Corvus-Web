@@ -48,7 +48,7 @@
                         </div>
                         <div class="form-group row col-sm-12">
                             <label for="" class="col-sm-2 col-form-label"><strong>公告范围</strong></label>
-                            <selectors  ref='scopeSelector' :options="departments" @valuelistener="changeDepartments"  multiple='true' :placeholder='"请选择范围"'></selectors>
+                            <selectors  class="scopeSelector" ref='scopeSelector' :options="departments" @valuelistener="changeDepartments"  multiple='true' :placeholder='"请选择范围"'></selectors>
                             <label for="" class="offset-sm-1 col-sm-2 col-form-label"><strong>选择分类</strong></label>
                             <selectors ref='classifySelector' :options="classifyArr" @change="changeClassify" placeholder='请选择类型' ></selectors>
                         </div>
@@ -129,7 +129,6 @@ export default {
                 for (const key in this.range.data) {
                     this.scope.push(this.range.data[key].department_id)
                 }
-                console.log(this.scope);
             }
             this.$nextTick(() => {
                 this.$refs.scopeSelector.setValue(this.scope)            //设置默认值
