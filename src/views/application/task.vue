@@ -65,11 +65,11 @@
                         </div>
                         <template v-if="!taskStatus">
                             <Pagination :current_page="current_page" :method="getTasks" :total_pages="total_pages"
-                                        :total="taskInfo.length"></Pagination>
+                                        :total="total"></Pagination>
                         </template>
                         <template v-else>
                             <Pagination :current_page="current_page" :method="getOther" :total_pages="total_pages"
-                                        :total="taskInfo.length"></Pagination>
+                                        :total="total"></Pagination>
                         </template>
                     </div>
                 </div>
@@ -78,7 +78,6 @@
 <script>
 import fetch from '../../assets/utils/fetch.js';
 import config from '../../assets/js/config';
-import data from './data.json'
 export default {
   name: '',
   data () {
@@ -106,7 +105,7 @@ export default {
                 customizeInfo: config.customizeInfo,
                 taskStatus:0,//状态
                 taskInfo:'',//数据
-                myType:''
+                myType:'',
             }
 
 

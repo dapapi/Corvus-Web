@@ -1,5 +1,5 @@
 <template>
-        <div class="panel " id="">
+        <div class="panel " id="" style="border-left:1px solid #ccc">
                 <div class="panel-body">
                     <div class="">
                         <div class="table-responsive">
@@ -77,7 +77,6 @@ export default {
         dataInit(){
             let _this = this
                 fetch('get', '/announcements').then(function (response) {
-                    console.log(response.data);
                     _this.broadCastInfo = response.data
             })
         },

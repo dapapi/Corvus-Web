@@ -156,14 +156,12 @@ export default {
 }
 </script>
 <style>
-    .show{
-        display: none
-    }
     #selctStaff{
         position: absolute;
         width: 20rem;
         height: 400px;
     }
+
 </style>
 
 
