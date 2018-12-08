@@ -190,7 +190,9 @@
                                 </tr>
                                 <tbody>
                                 <tr v-for="task in artistTasksInfo">
-                                    <td>{{task.title}}</td>
+                                    <td>
+                                        <router-link :to="{path:`/tasks/${task.id}`}">{{task.title}}</router-link>
+                                    </td>
                                     <td>
                                         <template v-if="task.type">{{task.type.data.title}}</template>
                                         <template v-else></template>

@@ -218,21 +218,61 @@ export default new Router({
                     component: () => import('./views/brief/followup.vue')
                 },
                 {
-                    path: '/brief/list',
+                    path: '/brief/list/:id',
                     name: 'list',
                     component: () => import('./views/brief/list.vue')
                 },
                 {
-                    path: '/brief/memberReport',
+                    path: '/brief/memberReport/:id',
                     name: 'memberReport',
                     component: () => import('./views/brief/memberReport.vue')
                 },
                 {
-                    path: '/brief/statistics',
+                    path: '/brief/statistics/:id',
                     name: 'statistics',
                     component: () => import('./views/brief/statistics.vue')
                 },
 
+            ]
+        },
+        {
+            path: '/reports',
+            component: () => import('./views/reports/home.vue'),
+            children: [
+                {
+                    path: '/reports',
+                    redirect: '/reports/business'
+                },
+                {
+                    path: '/reports/business',
+                    name: 'business',
+                    component: () => import('./views/reports/business.vue'),
+                },
+                {
+                    path: '/reports/trail',
+                    name: 'trail',
+                    component: () => import('./views/reports/trail.vue')
+                },
+                {
+                    path: '/reports/projects',
+                    name: 'projects',
+                    component: () => import('./views/reports/projects.vue')
+                },
+                {
+                    path: '/reports/clients',
+                    name: 'clients',
+                    component: () => import('./views/reports/clients.vue')
+                },
+                {
+                    path: '/reports/artists',
+                    name: 'artists',
+                    component: () => import('./views/reports/artists.vue')
+                },
+                {
+                    path: '/reports/blogger',
+                    name: 'blogger',
+                    component: () => import('./views/reports/blogger.vue')
+                }
             ]
         },
         {
@@ -295,9 +335,9 @@ export default new Router({
                     component: () => import('./views/attendance/tellme.vue')
                 },
                 {
-                path: '/attendance/details',
-                // name: 'details',
-                component: () => import('./views/attendance/details.vue')
+                    path: '/attendance/details',
+                    // name: 'details',
+                    component: () => import('./views/attendance/details.vue')
                 },
             ]
         },
@@ -348,6 +388,11 @@ export default new Router({
             name: 'management/index',
             component: () => import('./views/management/index.vue')
         },
+        {
+            path:'/organization',
+            name: 'organization',
+            component: () => import('./views/organization/index.vue')
+        }
     ],
     scrollBehavior (to, from, savedPosition) {
         if (savedPosition) {

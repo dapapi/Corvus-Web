@@ -65,14 +65,14 @@ export default {
         getlist:function(){
             fetch('get',`${config.apiUrl}/launch`).then((res) => {
                 let data={}
-               
                 for (let i = 0; i < this.leftData.bottomData.length; i++) {
                     if(this.leftData.bottomData[i].value == 1){
+                        
                         for (let t = 0; t < res.data.length; t++) {
                             data={
                                 value:res.data[t].id,
                                 name:`我的${res.data[t].template_name}`,
-                                url:'/brief/list'
+                                url:`/brief/list/${res.data[t].id}`
                             }
                             this.leftData.bottomData[i].data.push(data)
                             
@@ -82,7 +82,7 @@ export default {
                             data={
                                 value:res.data[t].id,
                                 name:`成员${res.data[t].template_name}`,
-                                url:'/brief/memberReport'
+                                url:`/brief/memberReport/${res.data[t].id}`
                             }
                             this.leftData.bottomData[i].data.push(data)
                             
@@ -92,7 +92,7 @@ export default {
                             data={
                                 value:res.data[t].id,
                                 name:`统计${res.data[t].template_name}`,
-                                url:'/brief/statistics'
+                                url:`/brief/statistics/${res.data[t].id}`
                             }
                             this.leftData.bottomData[i].data.push(data)
                             

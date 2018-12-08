@@ -48,7 +48,7 @@
                         </div>
                         <div class="form-group row col-sm-12">
                             <label for="" class="col-sm-2 col-form-label"><strong>公告范围</strong></label>
-                            <selectors ref='scopeSelector' :options="departments" @valuelistener="changeDepartments"  multiple :placeholder='"请选择范围"'></selectors>
+                            <selectors  ref='scopeSelector' :options="departments" @valuelistener="changeDepartments"  multiple='true' :placeholder='"请选择范围"'></selectors>
                             <label for="" class="offset-sm-1 col-sm-2 col-form-label"><strong>选择分类</strong></label>
                             <selectors ref='classifySelector' :options="classifyArr" @change="changeClassify" placeholder='请选择类型' ></selectors>
                         </div>
@@ -73,7 +73,6 @@
 <script>
 import fetch from '@/assets/utils/fetch.js'
 import config from '@/assets/js/config'
-// import '@/assets/js/summernote.js'
 export default {
     props:['notedata'],
     data(){
@@ -89,13 +88,14 @@ export default {
             is_accessory:false,     //是否携带附件
             departments:{},         //公告范围
             classifyArr:config.classifyArr, 
+            scope:[],
         }
     },
     created(){
-        this.noteInit()
         this.getDepartments()
     },
     mounted(){
+        this.noteInit()
         this.getSummernote()
         this.setNote()
         this.modalInit()
@@ -111,7 +111,7 @@ export default {
             }else{
                 this.is_accessory = false
             }
-        }
+        },
     },
     methods:{
         //数据初始化
@@ -124,17 +124,18 @@ export default {
                 this.topFlag = this.notedata.stick
                 this.text = this.notedata.desc
             }
-            this.$nextTick(() => {
-                let rangearr = []
+            this.scope = []
+            if(this.range){
                 for (const key in this.range.data) {
-                   rangearr.push(this.range.data[key].announcement_id)
+                    this.scope.push(this.range.data[key].department_id)
                 }
-                this.$refs.scopeSelector.setValue(rangearr)           //设置默认值
+                console.log(this.scope);
+            }
+            this.$nextTick(() => {
+                this.$refs.scopeSelector.setValue(this.scope)            //设置默认值
                 this.$refs.classifySelector.setValue(this.type)
-                $('.selectpicker').selectpicker('render');    //刷新下拉选单
+                $('.selectpicker').selectpicker('render');               //刷新下拉选单
                 $('.selectpicker').selectpicker('refresh');
-                $('#broadcastTypeSelector').selectpicker('render');
-                $('#broadcastTypeSelector').selectpicker('refresh');
             })
         },
         //修复富文本编辑器多层弹窗bug
@@ -151,7 +152,7 @@ export default {
         },
         //公告范围选择（数组）
         changeDepartments(value){
-            this.range = value
+            this.scope = value
         },
         //公告类型选择
         changeClassify(value){
@@ -198,9 +199,9 @@ export default {
                 this.text = markupStr
                 let currenttime = Date.now()
                 let topflag = Number(this.topFlag)
-                let sendData = {
+                this.sendData = {
                     title:this.title,                       //标题内容
-                    scope:this.range,                       //公告范围
+                    scope:this.scope,                       //公告范围
                     classify : this.type,                   //公告类型
                     stick:topflag,                          //置顶标示
                     desc:this.text,                         //富文本代码
@@ -208,23 +209,25 @@ export default {
                     accessory : this.accessory,             //附件内容
                     readflag : 0,                           //已读状态         
             }
+            console.log(this.sendData);
             //发布模式
             if(this.pageType === '发布'){
-                fetch('post','/announcements/',sendData).then((params) => {
+                fetch('post','/announcements/',this.sendData).then((params) => {
                     $('#addNewBroadcast').modal('hide');
                     _this.$emit('refresh')
                 })
             //修改模式
             }else{
                 let currentId = this.$route.params.id
-                fetch('put','/announcements/'+currentId,sendData).then((params) => {
+                fetch('put','/announcements/'+currentId,this.sendData).then((params) => {
                     $('#addNewBroadcast').modal('hide');
                     _this.title = ''
                     _this.range = []
                     _this.type = ''
                     _this.text = ''
+                    _this.$emit('refresh')
                 })
-                _this.$emit('refresh')
+                
             }
         },
         //上传
