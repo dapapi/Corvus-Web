@@ -1,17 +1,13 @@
 <template>
-    <div class="input-daterange datepicker"
+    <div class="input-daterange input-group date"
          data-date-format="yyyy-mm-dd" data-date-today-highlight="true" data-date-autoclose="true"
          style="padding: 0">
-        <div class="input-group">
-                <span class="input-group-addon">
-                  <i class="icon md-calendar" aria-hidden="true"></i>
-                </span>
-            <input type="text" class="form-control" id="start" name="start">
-        </div>
-        <div class="input-group">
-            <span class="input-group-addon">to</span>
-            <input type="text" class="form-control" id="end" name="end">
-        </div>
+        <span class="input-group-addon">
+            <i class="icon md-calendar" aria-hidden="true"></i>
+        </span>
+        <input type="text" class="form-control" id="start" name="start">
+        <span class="input-group-addon">to</span>
+        <input type="text" class="form-control" id="end" name="end">
     </div>
 </template>
 <script>
@@ -28,16 +24,15 @@
                 format: "yyyy-mm-dd",
                 language: "zh-CN",
             }).on("changeDate", function () {
+                console.log('change');
                 self.$emit('change', $('#start').val(), $('#end').val());
             });
 
         },
         methods: {
             setValue(start, end) {
-                console.log(start);
-                console.log(end);
-                console.log($(this.$el));
-                $(this.$el).datepicker('update', start, end);
+                $('#start').datepicker('update', start);
+                $('#end').datepicker('update', end);
             },
 
             destroy() {
