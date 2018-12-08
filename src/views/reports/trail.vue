@@ -33,14 +33,14 @@
                     </div>
                 </div>
 
-                <div class="col-md-12 clearfix my-10 px-0">
+                <div class="col-md-12 clearfix my-10 px-0" v-if="tableData">
                     <div class="col-md-3 float-left">
                         <div class="col-md-6 float-left text-right">数量合计</div>
-                        <div class="col-md-6 float-left">666个</div>
+                        <div class="col-md-6 float-left">{{ tableData.trail_total }}个</div>
                     </div>
                     <div class="col-md-4 float-left">
                         <div class="col-md-6 float-left text-right">预计订单收入总额</div>
-                        <div class="col-md-6 float-left">888元</div>
+                        <div class="col-md-6 float-left">{{ tableData.fee_total }}元</div>
                     </div>
                 </div>
 
@@ -83,37 +83,48 @@
                                 <th class="cell-100" scope="col">负责人</th>
                             </tr>
                             <tbody>
-                            <!--<template v-for="(data, type) in tableData.data">-->
-                            <!--<tr v-for="(item, index) in data">-->
-                            <!--<td v-if="index === 0">-->
-                            <!--<template v-if="type === 'industry_data'">品类</template>-->
-                            <!--<template v-if="type === 'cooperation_data'">合作</template>-->
-                            <!--<template v-if="type === 'resource_type_data'">线索来源</template>-->
-                            <!--<template v-if="type === 'priority_data'">优先级</template>-->
-                            <!--</td>-->
-                            <!--<td v-else></td>-->
-                            <!--<td>{{ item.name }}</td>-->
-                            <!--<td>{{ item.number }}</td>-->
-                            <!--<td>{{ item.ratio }}</td>-->
-                            <!--<td>{{ item.ring_ratio_increment }}</td>-->
-                            <!--<td>{{ item.annual_increment }}</td>-->
-                            <!--<td>{{ item.confirm_number }}</td>-->
-                            <!--<td>{{ item.confirm_ratio_increment }}</td>-->
-                            <!--<td>{{ item.confirm_annual_increment }}</td>-->
-                            <!--<td>{{ item.customer_conversion_rate }}</td>-->
-                            <!--</tr>-->
-                            <!--</template>-->
+                            <tr v-for="data in tableData.trail_list">
+                                <td>
+                                    <template v-if="data.type === 1">影视</template>
+                                    <template v-if="data.type === 2">综艺</template>
+                                    <template v-if="data.type === 3">商务</template>
+                                </td>
+                                <td>{{ data.title }}</td>
+                                <td>
+                                    {{ trailOrigin.find(item => item.value == data.resource_type).name }}
+                                    <template v-if="data.resource">
+                                        ：{{ data.resource }}
+                                    </template>
+                                </td>
+                                <td>{{ data.deparment_name }}</td>
+                                <td>{{ data.star_name }}</td>
+                                <td>{{ data.fee }}元</td>
+                                <td>{{ trailStatusArr.find(item => item.value == data.status).name }}</td>
+                                <td>{{ priorityArr.find(item => item.value == data.priority).name }}</td>
+                                <td>{{ data.principal_user }}</td>
+                            </tr>
                             </tbody>
                         </table>
+                        <div class="col-md-1" style="margin: 6rem auto"
+                             v-if="tableData.trail_list && tableData.trail_list.length === 0">
+                            <img src="https://res.papitube.com/corvus/images/content-none.png" alt=""
+                                 style="width: 100%">
+                        </div>
                     </div>
                     <div class="tab-pane animation-fade" id="forum-trail-add" role="tabpanel">
-                        <div class="col-md-12 py-20">
+                        <div class="mt-20">
+                            <Selectors :options="trailTypeArr" @change="changeTrailType"></Selectors>
+                        </div>
+                        <div class="col-md-12">
                             <div ref="trail" style="width: 600px;height:500px;margin: 0 auto"></div>
                         </div>
                     </div>
                     <div class="tab-pane animation-fade" id="forum-industry-analysis" role="tabpanel">
-                        <div class="col-md-12 py-20">
-                            <div ref="industry" style="width: 600px;height:500px;margin: 0 auto"></div>
+                        <div class="mt-20">
+                            <Selectors :options="trailTypeArr" @change="changeTrailType"></Selectors>
+                        </div>
+                        <div class="col-md-12">
+                            <div ref="industry" style="width: 800px;height:500px;margin: 0 auto"></div>
                         </div>
                     </div>
                 </div>
@@ -124,6 +135,7 @@
 
 <script>
     import fetch from '../../assets/utils/fetch.js'
+    import config from '../../assets/js/config'
 
     export default {
         name: "trail",
@@ -132,6 +144,7 @@
                 tableData: [],
                 nowDate: '',
                 designationDateNum: 'day',
+                trailOrigin: config.trailOrigin,
                 trailTypeArr: [
                     {
                         name: '线索类型',
@@ -151,13 +164,15 @@
                     }
                 ],
                 trailType: '',
+                trailStatusArr: config.trailStatusArr,
+                priorityArr: config.priorityArr,
             }
         },
         mounted() {
-            this.getBusinessReport();
+            this.getReport();
         },
         methods: {
-            getBusinessReport(start_time = null, end_time = null) {
+            getReport(start_time = null, end_time = null) {
                 if (!start_time || !end_time) {
                     start_time = this.getDesignationDate(-7);
                     end_time = this.getNowFormatDate();
@@ -167,9 +182,12 @@
                     start_time: start_time,
                     end_time: end_time,
                 };
+                if (this.trailType) {
+                    data.type = this.trailType
+                }
                 this.$refs.timeInterval.setValue(start_time, end_time);
                 let _this = this;
-                fetch('get', '/reportfrom/commercialfunnel', data).then(function (response) {
+                fetch('get', '/reportfrom/trail', data).then(function (response) {
                     _this.tableData = response
                 })
             },
@@ -216,16 +234,17 @@
                         break;
                 }
                 this.$refs.timeInterval.setValue(designationDate, this.nowDate);
-                this.getBusinessReport(designationDate, this.nowDate)
+                this.getReport(designationDate, this.nowDate)
             },
 
             changeDate(start, end) {
                 this.designationDateNum = '';
-                this.getBusinessReport(start, end);
+                this.getReport(start, end);
             },
 
             changeTrailType(value) {
-                this.trailType = value
+                this.trailType = value;
+                this.getReport()
             },
 
             setReprots(start_time, end_time) {
@@ -244,7 +263,7 @@
                 let industryChart = echarts.init(_this.$refs.industry, 'mttop');
 
 
-                fetch('get', '/reportfrom/salesFunnel', data).then(function (response) {
+                fetch('get', '/reportfrom/newtrail', data).then(function (response) {
                     console.log(response);
                     let trailOption = {
                         tooltip: {
@@ -303,21 +322,39 @@
 
                     trailChart.setOption(trailOption);
                 });
-                let industryOption = {
-                    xAxis: {
-                        type: 'category',
-                        data: ['Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat', 'Sun']
-                    },
-                    yAxis: {
-                        type: 'value'
-                    },
-                    series: [{
-                        data: [120, 200, 150, 80, 70, 110, 130],
-                        type: 'bar'
-                    }]
+
+                data = {
+                    start_time: start_time,
+                    end_time: end_time
                 };
 
-                industryChart.setOption(industryOption)
+                if (this.trailType) {
+                    data.type = this.trailType
+                }
+
+                fetch('get', '/reportfrom/industryanalysis', data).then(function (response) {
+                    let data = [];
+                    let dataValue = [];
+                    for (let i = 0; i < response.trails.length; i++) {
+                        data.push(response.trails[i].industry_name);
+                        dataValue.push(response.trails[i].total)
+                    }
+                    let industryOption = {
+                        xAxis: {
+                            type: 'category',
+                            data: data
+                        },
+                        yAxis: {
+                            type: 'value'
+                        },
+                        series: [{
+                            data: dataValue,
+                            type: 'bar'
+                        }]
+                    };
+                    industryChart.setOption(industryOption)
+                })
+
             }
         }
     }

@@ -36,19 +36,19 @@
                 <div class="col-md-12 clearfix my-10 px-0">
                     <div class="col-md-3 float-left">
                         <div class="col-md-7 float-left text-right">艺人数量合计</div>
-                        <div class="col-md-5 float-left">666个</div>
+                        <div class="col-md-5 float-left pl-0">{{ tableData.total }}个</div>
                     </div>
                     <div class="col-md-3 float-left">
                         <div class="col-md-7 float-left text-right pl-0">预计订单收入总额</div>
-                        <div class="col-md-5 float-left">666元</div>
+                        <div class="col-md-5 float-left pl-0">{{ tableData.total_fee }}元</div>
                     </div>
                     <div class="col-md-3 float-left">
                         <div class="col-md-7 float-left text-right">合同金额总额</div>
-                        <div class="col-md-5 float-left">666元</div>
+                        <div class="col-md-5 float-left pl-0">666元</div>
                     </div>
                     <div class="col-md-3 float-left">
                         <div class="col-md-7 float-left text-right">花费金额总额</div>
-                        <div class="col-md-5 float-left">666元</div>
+                        <div class="col-md-5 float-left pl-0">666元</div>
                     </div>
                 </div>
 
@@ -68,18 +68,22 @@
                 </div>
                 <div class="tab-content nav-tabs-animate bg-white col-md-12 pb-20">
                     <div class="tab-pane animation-fade active" id="forum-business-report" role="tabpanel">
+                        <div class="example">
+                            <div class="col-md-2 float-left">
+                                <Selectors :options="artistStatusArr" @change="changeArtistStatus"></Selectors>
+                            </div>
+                            <div class="col-md-2 float-left">
+                                <Selectors :options="trailsNumArr" @change="changeTrailsNum"></Selectors>
+                            </div>
+                        </div>
                         <table class="table table-hover is-indent example" data-plugin="animateList" data-animate="fade"
                                data-child="tr"
                                data-selectable="selectable">
                             <tr class="animation-fade"
                                 style="animation-fill-mode: backwards; animation-duration: 250ms; animation-delay: 0ms;">
-                                <th class="cell-100" scope="col">
-                                    <Selectors style="width: 100px" :options="artistStatusArr"
-                                               @change="changeArtistStatus"></Selectors>
-                                </th>
                                 <template v-if="artistStatus == 1">
                                     <th class="cell-100" scope="col">姓名</th>
-                                    <th class="cell-100" scope="col">年龄</th>
+                                    <th class="cell-80" scope="col">年龄</th>
                                     <th class="cell-100" scope="col">艺人来源</th>
                                     <th class="cell-100" scope="col">沟通状态</th>
                                     <th class="cell-100" scope="col">录入时间</th>
@@ -88,42 +92,40 @@
                                 <template v-else>
                                     <th class="cell-100" scope="col">组别</th>
                                     <th class="cell-100" scope="col">姓名</th>
-                                    <th class="cell-100" scope="col">
-                                        <Selectors style="width: 100px" :options="trailsNumArr"
-                                                   @change="changeTrailsNum"></Selectors>
-                                    </th>
                                     <th class="cell-100" scope="col">预计订单收入</th>
-                                    <th class="cell-100" scope="col">
-                                        <Selectors style="width: 100px" :options="projectsNumArr"
-                                                   @changeProjectsNum></Selectors>
-                                    </th>
                                     <th class="cell-100" scope="col">合同金额</th>
                                     <th class="cell-100" scope="col">花费金额</th>
                                 </template>
                             </tr>
                             <tbody>
-                            <!--<template v-for="(data, type) in tableData.data">-->
-                            <!--<tr v-for="(item, index) in data">-->
-                            <!--<td v-if="index === 0">-->
-                            <!--<template v-if="type === 'industry_data'">品类</template>-->
-                            <!--<template v-if="type === 'cooperation_data'">合作</template>-->
-                            <!--<template v-if="type === 'resource_type_data'">线索来源</template>-->
-                            <!--<template v-if="type === 'priority_data'">优先级</template>-->
-                            <!--</td>-->
-                            <!--<td v-else></td>-->
-                            <!--<td>{{ item.name }}</td>-->
-                            <!--<td>{{ item.number }}</td>-->
-                            <!--<td>{{ item.ratio }}</td>-->
-                            <!--<td>{{ item.ring_ratio_increment }}</td>-->
-                            <!--<td>{{ item.annual_increment }}</td>-->
-                            <!--<td>{{ item.confirm_number }}</td>-->
-                            <!--<td>{{ item.confirm_ratio_increment }}</td>-->
-                            <!--<td>{{ item.confirm_annual_increment }}</td>-->
-                            <!--<td>{{ item.customer_conversion_rate }}</td>-->
-                            <!--</tr>-->
-                            <!--</template>-->
+                            <tr v-for="data in tableData.stars">
+                                <template v-if="artistStatus == 1">
+                                    <td>{{ data.name }}</td>
+                                    <td>{{ data.birthday|jsGetAge }}</td>
+                                    <td>
+                                        <template v-if="data.source">
+                                            {{ artistSourceArr.find(item => item.value == data.source).name }}
+                                        </template>
+                                    </td>
+                                    <td>{{ data.created_at }}</td>
+                                    <td>
+                                        <template v-if="data.last_update_at">{{ data.last_update_at }}</template>
+                                    </td>
+                                </template>
+                                <template v-else>
+                                    <td>{{ data.department_name }}</td>
+                                    <td>{{ data.name}}</td>
+                                    <td>{{ data.total_fee }}</td>
+                                </template>
+
+                            </tr>
                             </tbody>
                         </table>
+                        <div class="col-md-1" style="margin: 6rem auto"
+                             v-if="tableData.stars && tableData.stars.length === 0">
+                            <img src="https://res.papitube.com/corvus/images/content-none.png" alt=""
+                                 style="width: 100%">
+                        </div>
                     </div>
                     <div class="tab-pane animation-fade" id="forum-sales-funnel" role="tabpanel">
                         <div class="col-md-12 py-20">
@@ -147,6 +149,8 @@
                 tableData: [],
                 nowDate: '',
                 designationDateNum: 'day',
+                taiyangCommunicationStatusArr: config.taiyangCommunicationStatusArr,
+                artistSourceArr: config.artistSourceArr,
                 artistStatusArr: [
                     {
                         name: '签约中',
@@ -166,7 +170,7 @@
                 projectsNum: '',
                 trailsNumArr: [
                     {
-                        name: '线索数量',
+                        name: '项目类型',
                         value: '',
                     },
                     {
@@ -203,10 +207,10 @@
             }
         },
         mounted() {
-            this.getBusinessReport();
+            this.getReport();
         },
         methods: {
-            getBusinessReport(start_time = null, end_time = null) {
+            getReport(start_time = null, end_time = null) {
                 if (!start_time || !end_time) {
                     start_time = this.getDesignationDate(-7);
                     end_time = this.getNowFormatDate();
@@ -215,10 +219,11 @@
                 let data = {
                     start_time: start_time,
                     end_time: end_time,
+                    sign_contract_status: this.artistStatus
                 };
                 this.$refs.timeInterval.setValue(start_time, end_time);
                 let _this = this;
-                fetch('get', '/reportfrom/commercialfunnel', data).then(function (response) {
+                fetch('get', '/reportfrom/starreport', data).then(function (response) {
                     _this.tableData = response
                 })
             },
@@ -264,12 +269,12 @@
                         break;
                 }
                 this.$refs.timeInterval.setValue(designationDate, this.nowDate);
-                this.getBusinessReport(designationDate, this.nowDate)
+                this.getReport(designationDate, this.nowDate)
             },
 
             changeDate(start, end) {
                 this.designationDateNum = '';
-                this.getBusinessReport(start, end);
+                this.getReport(start, end);
             },
 
             changeArtistStatus(value) {
@@ -298,8 +303,26 @@
 
                 let myChart = echarts.init(_this.$refs.main, 'mttop');
 
-                fetch('get', '/reportfrom/salesFunnel', data).then(function (response) {
+                fetch('get', '/reportfrom/starprojectanalysis', data).then(function (response) {
                     console.log(response);
+                    let firstInfo = [];
+                    let secondName = [];
+                    let secondInfo = [];
+                    for (let i = 0; i < response.list.length; i++) {
+                        firstInfo.push(
+                            {
+                                value: response.list[i].type_total,
+                                name: response.list[i].type_name
+                            }
+                        );
+                        for (let j = 0; j < response.list[i].value.length; j++) {
+                            secondName.push(response.list[i].value[j].value);
+                            secondInfo.push({
+                                value: response.list[i].value[j].p_total,
+                                name: response.list[i].value[j].value
+                            })
+                        }
+                    }
                     let option = {
                         tooltip: {
                             trigger: 'item',
@@ -308,11 +331,11 @@
                         legend: {
                             orient: 'vertical',
                             x: 'left',
-                            data: ['直达', '营销广告', '搜索引擎', '邮件营销', '联盟广告', '视频广告', '百度', '谷歌', '必应', '其他']
+                            data: secondName
                         },
                         series: [
                             {
-                                name: '访问来源',
+                                name: '项目',
                                 type: 'pie',
                                 selectedMode: 'single',
                                 radius: [0, '30%'],
@@ -327,14 +350,10 @@
                                         show: false
                                     }
                                 },
-                                data: [
-                                    {value: 335, name: '直达', selected: true},
-                                    {value: 679, name: '营销广告'},
-                                    {value: 1548, name: '搜索引擎'}
-                                ]
+                                data: firstInfo
                             },
                             {
-                                name: '访问来源',
+                                name: '类别',
                                 type: 'pie',
                                 radius: ['40%', '55%'],
                                 label: {
@@ -369,16 +388,7 @@
                                         }
                                     }
                                 },
-                                data: [
-                                    {value: 335, name: '直达'},
-                                    {value: 310, name: '邮件营销'},
-                                    {value: 234, name: '联盟广告'},
-                                    {value: 135, name: '视频广告'},
-                                    {value: 1048, name: '百度'},
-                                    {value: 251, name: '谷歌'},
-                                    {value: 147, name: '必应'},
-                                    {value: 102, name: '其他'}
-                                ]
+                                data: secondInfo
                             }
                         ]
                     };
@@ -388,7 +398,59 @@
 
 
             }
+        },
+        filters: {
+            jsGetAge: function (strBirthday) {
+                if (strBirthday) {
+                    var returnAge;
+                    // 根据生日计算年龄（"1995-09-25"）
+                    //以下五行是为了获取出生年月日，如果是从身份证上获取需要稍微改变一下
+                    var strBirthdayArr = strBirthday.split("-");
+                    var birthYear = strBirthdayArr[0];
+                    var birthMonth = strBirthdayArr[1];
+                    var birthDay = strBirthdayArr[2];
+
+                    var d = new Date();
+                    var nowYear = d.getFullYear();
+                    var nowMonth = d.getMonth() + 1;
+                    var nowDay = d.getDate();
+
+                    if (nowYear == birthYear) {
+                        returnAge = 0;//同年 则为0岁
+                    }
+                    else {
+                        var ageDiff = nowYear - birthYear; //年之差
+                        if (ageDiff > 0) {
+                            if (nowMonth == birthMonth) {
+                                var dayDiff = nowDay - birthDay;//日之差
+                                if (dayDiff < 0) {
+                                    returnAge = ageDiff - 1;
+                                }
+                                else {
+                                    returnAge = ageDiff;
+                                }
+                            }
+                            else {
+                                var monthDiff = nowMonth - birthMonth;//月之差
+                                if (monthDiff < 0) {
+                                    returnAge = ageDiff - 1;
+                                }
+                                else {
+                                    returnAge = ageDiff;
+                                }
+                            }
+                        }
+                        else {
+                            returnAge = -1;//返回-1 表示出生日期输入错误 晚于今天
+                        }
+                    }
+                    return returnAge;//返回周岁年龄
+                } else {
+                    return strBirthday
+                }
+            },
         }
+
     }
 </script>
 
