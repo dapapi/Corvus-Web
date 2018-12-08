@@ -348,5 +348,15 @@ export default new Router({
             name: 'management/index',
             component: () => import('./views/management/index.vue')
         },
+        {
+            path: '/knowledgebase',
+            name: 'knowledgebase/index',
+            component: () => import('./views/knowledgebase/index.vue')
+        },
+        {
+            path: '/knowledgebase/:id',
+            name: 'knowledgebase/detail',
+            component: () => import('./views/knowledgebase/detail.vue')
+        },
     ],
 });
