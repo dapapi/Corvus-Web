@@ -53,6 +53,7 @@ import StaffEditSelect from './components/StaffEditSelect'
 import TrailOrigin from './components/TrailOrigin'
 import DepartmentItem from './views/organization/DepartmentItem.vue';
 
+import DepartmentPicker from '@/components/DepartmentPicker'
 Vue.config.productionTip = false;
 
 Vue.component('AddMember', AddMember);
@@ -64,6 +65,7 @@ Vue.component('CustomizeFilter', CustomizeFilter);
 Vue.component('CustomizeLinkageSelectors', CustomizeLinkageSelectors);
 Vue.component('Datepicker', Datepicker);
 Vue.component('DepartmentsItem', DepartmentsItem);
+Vue.component('DepartmentPicker', DepartmentPicker);
 Vue.component('EditAddMember', EditAddMember);
 Vue.component('EditCompany', EditCompany);
 Vue.component('EditDatepicker', EditDatepicker);

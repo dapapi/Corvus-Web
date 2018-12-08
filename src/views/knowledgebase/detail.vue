@@ -14,7 +14,7 @@
       </div>
         <div class="page-header page-header-bordered">
             <h1 class="page-title">
-                <i class="icon md-chevron-left" @click="goBack"></i>公告&nbsp;&nbsp;</h1>
+                <i class="icon md-chevron-left" @click="goBack"></i>知识库&nbsp;&nbsp;</h1>
             <i class="icon md-flower" 
             data-plugin="actionBtn" 
             data-toggle="modal" 
@@ -41,12 +41,23 @@
                     <div class="panel-content" v-if="currentData.scope && departments">
                         <h5 v-html="currentData.desc" class="broadcast-content"></h5>
                         <div v-if="currentData.accessory"><a :href="currentData.accessory">查看附件</a></div>
-                        <h5>公告范围
+                        <h5 class="">公告范围
                             <span  v-for=" item in currentData.scope.data" :key="item.department_id">&nbsp;&nbsp;
                                 <span v-if="departments[0]" class="badge badge-round badge-dark">{{departments.find(departments => departments.id == item.department_id).name}}</span>
                             </span>
+                            <div class="float-right row mr-20">
+                                <div class="mr-80 add-comment" @click='addComment'><i class="icon md-comment-more"></i>评论</div>
+                                <div class="mr-80"><i class="icon md-email"></i>未读 0</div>
+                                <div><i class="icon md-email-open"></i>已读 0</div>
+                            </div>
                         </h5>
                         <hr>
+                        
+                            <change-size-input @change="commentSubmit" :addcomment="isComment" />
+
+                        <div class="col-md-1" style="margin: 6rem auto">
+                            <img src="https://res.papitube.com/corvus/images/content-none.png" alt="" style="width: 100%">
+                        </div>
                     </div>
                 </div>
             </div>
@@ -69,6 +80,7 @@ export default {
             paramsId:'',
             isLoading:true,
             departments:[],
+            isComment:false,
         } 
     },
     created() { 
@@ -103,12 +115,21 @@ export default {
                 this.departments = params.data
             })
         },
+        addComment(){
+            this.isComment = !this.isComment;
+        },
+        commentSubmit(value){
+            console.log(value);
+        }
     }
 }
 
 </script>
 
 <style scoped>
+.add-comment{
+    cursor: pointer;
+}
 .loader-overlay{
         margin-left: 100px;
         background-color: rgba(7, 17, 27, 0.2)

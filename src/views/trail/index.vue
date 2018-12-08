@@ -99,7 +99,7 @@
         </div>
 
 
-        <customize-filter :data="customizeInfo" @change="customize"></customize-filter>
+        <customize-filter :data="customizeInfo" :stararr='starsArr' @change="customize"></customize-filter>
 
         <div class="site-action" data-plugin="actionBtn" data-toggle="modal" data-target="#addTrail">
             <button type="button"
@@ -275,7 +275,7 @@
                 companyType: config.companyType,
                 companyArr: [],
                 starsArr: [],
-                customizeInfo: config.customizeInfo,
+                customizeInfo: {},
                 clientLevelArr: config.clientLevelArr,
                 trailOriginArr: config.trailOrigin,
                 salesProgressText: '未确定合作',
@@ -322,6 +322,7 @@
             }
         },
         created() {
+            this.getField()
             this.getMembers()
             this.getCurrentUser()
         },
@@ -352,6 +353,12 @@
             }
         },
         methods: {
+            getField(){
+                let _this = this
+                fetch('get','/trails/filter_fields').then((params) => {
+                    _this.customizeInfo = params.data
+                })
+            },
             changeTrailOriginPerson(value) {
                 this.trailOriginPerson = value
             },
