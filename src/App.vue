@@ -3,29 +3,40 @@
         <template v-if="isLeftMenuShow">
             <LeftMenu/>
         </template>
+        <template v-else-if="isLeftManageShow">
+            <LeftManage/>
+        </template>
         <router-view/>
     </div>
 </template>
 
 <script>
     import LeftMenu from '@/components/LeftMenu.vue'
-
+    import LeftManage from '@/components/LeftManage.vue'
     export default {
         name: 'app',
         data: function () {
             return {
-                isLeftMenuShow: true
+                isLeftMenuShow: true,
+                isLeftManageShow:false
             }
         },
         components: {
-            LeftMenu
+            LeftMenu,
+            LeftManage
         },
         watch: {
             '$route': function (to, from) {
-                if (this.$route.path === '/login' || this.$route.path === '/management') {
+                if (this.$route.path === '/login') {
                     this.isLeftMenuShow = false
+                   
                 }
-            }
+                else if(this.$route.path === '/management'||this.$route.path === '/rolemanagement'||this.$route.path === '/appmanagement'){
+                     this.isLeftMenuShow = false
+                     this.isLeftManageShow = true
+                }
+            },
+          
         },
         methods: {}
     };

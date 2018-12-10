@@ -1,6 +1,6 @@
 <template>
-    <div class="page">
-        管理中心
+    <div class="page col-md-10.5">
+        <router-view/>
     </div>
 </template>
 
@@ -12,7 +12,7 @@
 
 <style lang="css" scoped>
     .page {
-        margin-left: 0!important;
+        margin-left: 200px!important;
         height: 100%;
         padding: 0;
     }
