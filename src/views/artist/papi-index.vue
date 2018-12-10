@@ -9,8 +9,8 @@
                    data-toggle="dropdown" aria-expanded="false"></i>
                 <div class="dropdown-menu dropdown-menu-right task-dropdown-item" aria-labelledby="taskDropdown"
                      role="menu" x-placement="bottom-end">
-                    <a class="dropdown-item" role="menuitem" @click="">导入</a>
-                    <a class="dropdown-item" role="menuitem" @click="">导出</a>
+                    <a class="dropdown-item" role="menuitem" >导入</a>
+                    <a class="dropdown-item" role="menuitem" >导出</a>
                     <a class="dropdown-item" role="menuitem" data-toggle="modal" data-target="#giveBroker">分配制作人</a>
                 </div>
             </div>
@@ -167,7 +167,7 @@
                             </div>
                             <div class="col-md-2 text-right float-left">签约时微博粉丝数</div>
                             <div class="col-md-4 float-left pl-0">
-                                <number-spinner @change="changeWeiboFansNum" style="width:130px"></number-spinner>
+                                <number-spinner @change="changeWeiboFansNum" style="width:130px" ref="weibo"></number-spinner>
                             </div>
                         </div>
                         <div class="example" v-show="platformType.find(item => item ==2)">
@@ -177,7 +177,7 @@
                             </div>
                             <div class="col-md-2 text-right float-left">签约时抖音粉丝数</div>
                             <div class="col-md-4 float-left pl-0">
-                                <number-spinner @change="changeDouyinFansNum" style="width:130px"></number-spinner>
+                                <number-spinner @change="changeDouyinFansNum" style="width:130px" ref="douyin"></number-spinner>
                             </div>
                         </div>
                         <div class="example" v-show="platformType.find(item => item ==3)">
@@ -187,28 +187,28 @@
                             </div>
                             <div class="col-md-2 text-right float-left pl-0">签约时小红书粉丝数</div>
                             <div class="col-md-4 float-left pl-0">
-                                <number-spinner @change="changeXHSFansNum" style="width:130px"></number-spinner>
+                                <number-spinner @change="changeXHSFansNum" style="width:130px" ref="xiaohongshu"></number-spinner>
                             </div>
                         </div>
                         <div class="example">
                             <div class="col-md-2 text-right float-left">类型</div>
                             <div class="col-md-10 float-left pl-0">
                                 <selectors :options="artistTypeArr" :placeholder="'请选择类型'"
-                                           @change="changeArtistType"></selectors>
+                                           @change="changeArtistType" ref="papitype"></selectors>
                             </div>
                         </div>
                         <div class="example">
                             <div class="col-md-2 text-right float-left">沟通状态</div>
                             <div class="col-md-3 float-left pl-0">
                                 <selectors :options="papiCommunicationStatusArr"
-                                           @change="changeCommunicationType"></selectors>
+                                           @change="changeCommunicationType" ref="communicationType"></selectors>
                             </div>
                         </div>
                         <div class="example">
                             <div class="col-md-2 text-right float-left">与我司签约意向</div>
                             <div class="col-md-5 float-left pl-0">
                                 <selectors :options="yesOrNoArr" :placeholder="'请选择签约意向'"
-                                           @change="changeSignIntention"></selectors>
+                                           @change="changeSignIntention" ref="signIntention"></selectors>
                             </div>
                             <div class="col-md-5 float-left pl-0" v-if="signIntention === '0'">
                                 <textarea name="" rows="1" class="form-control" placeholder="请填写不签约理由"
@@ -219,7 +219,7 @@
                             <div class="col-md-2 text-right float-left">是否签约其他公司</div>
                             <div class="col-md-5 float-left pl-0">
                                 <selectors :options="yesOrNoArr" :placeholder="'请选择是否签约其他公司'"
-                                           @change="isSignCompany"></selectors>
+                                           @change="isSignCompany" ref="isSign"></selectors>
                             </div>
                             <div class="col-md-5 float-left pl-0" v-if="signCompany == 1">
                                 <input type="text" class="form-control" placeholder="请输入已签约公司名称"
@@ -373,8 +373,24 @@
             this.getUser();
             this.getBlogType() //获取博主类型
             $('table').asSelectable();
+             let _this = this;
+             $('#addArtist').on('hidden.bs.modal',function() {
+                 
+                    _this.artistName='';//昵称
+                    _this.star_weibo_infos.url='';//微博地址
+                    _this.$refs.weibo.setValue('0');//微博粉丝
+                    _this.star_douyin_infos.url='';//抖音地址
+                    _this.$refs.douyin.setValue('0');//抖音粉丝
+                    _this.star_xiaohongshu_infos.url='';//小红书地址
+                    _this.$refs.xiaohongshu.setValue('0')//小红书粉丝
+                    _this.$refs.papitype.setValue('')//类型
+                    _this.$refs.communicationType.setValue('')//沟通类型 
+                    _this.$refs.signIntention.setValue('')//我公司意向
+                    _this.$refs.isSign.setValue('')//其他公司意向 
+                    _this.artistDesc='';//备注
+                    _this.platformType=[];
+             })
         },
-
         methods: {
             getArtists: function (page = 1,signStatus) {
                 let data={
@@ -447,7 +463,7 @@
                 this.artistStatus = value
             },
 
-            changeCheckbox: function (value) {   
+            changeCheckbox: function (value) {
                 this.platformType = []
                 for (let i = 0; i < value.length; i++) {
                     this.platformType.push(value[i].value)

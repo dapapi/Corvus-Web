@@ -1,5 +1,5 @@
 <template>
-    <div class="assistor">
+    <div class="assistor" id="assistor">
         <div class="bg-white select-staff">
             <div class="page-nav-tabs">
                 <ul class="nav nav-tabs nav-tabs-line" role="tablist">
@@ -266,6 +266,5 @@
     .team-title {
         font-weight: 400;
     }
-
 </style>
 

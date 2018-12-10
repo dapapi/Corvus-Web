@@ -218,17 +218,17 @@ export default new Router({
                     component: () => import('./views/brief/followup.vue')
                 },
                 {
-                    path: '/brief/list',
+                    path: '/brief/list/:id',
                     name: 'list',
                     component: () => import('./views/brief/list.vue')
                 },
                 {
-                    path: '/brief/memberReport',
+                    path: '/brief/memberReport/:id',
                     name: 'memberReport',
                     component: () => import('./views/brief/memberReport.vue')
                 },
                 {
-                    path: '/brief/statistics',
+                    path: '/brief/statistics/:id',
                     name: 'statistics',
                     component: () => import('./views/brief/statistics.vue')
                 },
@@ -388,5 +388,32 @@ export default new Router({
             name: 'management/index',
             component: () => import('./views/management/index.vue')
         },
+        {
+            path:'/organization',
+            name: 'organization',
+            component: () => import('./views/organization/index.vue')
+        },
+        {
+            path:'/organization/management',
+            name: 'organization/management',
+            component: () => import('./views/organization/management.vue')
+        },
+        {
+            path: '/knowledgebase',
+            name: 'knowledgebase/index',
+            component: () => import('./views/knowledgebase/index.vue')
+        },
+        {
+            path: '/knowledgebase/:id',
+            name: 'knowledgebase/detail',
+            component: () => import('./views/knowledgebase/detail.vue')
+        },
     ],
+    scrollBehavior (to, from, savedPosition) {
+        if (savedPosition) {
+         return savedPosition
+        } else {
+         return { x: 0, y: 0 }
+        }
+    }
 });

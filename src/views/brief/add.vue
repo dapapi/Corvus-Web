@@ -321,6 +321,13 @@ export default {
        this.getlist()
     },
     methods:{
+        redirectBriefDetails:function(id){
+            
+            this.$router.push({path:'/brief/details',query:{id:id}})
+        },
+        redirectBriefAdd:function(){
+            this.$router.push({path:'/brief/add'})
+        },
         //获取模版列表
         getlist:function(pageNum = 1){
             
@@ -393,7 +400,7 @@ export default {
         deleteModel:function(){
             fetch('delete',`${config.apiUrl}/ `,{template_id:this.delId}).then((res) =>{
                 $('#delModel').modal('hide')
-                this.getlist();
+                this.getlist()
             })
         },
         //检查模版名称是否存在

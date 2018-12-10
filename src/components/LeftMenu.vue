@@ -163,7 +163,11 @@
                             },
                             {
                                 name: '知识库',
-                                code: 'knowledge'
+                                code: 'knowledgebase'
+                            },
+                            {
+                                name: '组织架构',
+                                code: 'organization'
                             }
                         ]
                     },

@@ -56,10 +56,12 @@
                             
                         </li>
                     </ul>
-                    <div v-if="isIf">
-                        <select-staff :multiple="true" :member-type="'participant'" 
-                              @change="changeSelectedMember"></select-staff>
+                    
+                    <div id="selctStaff" v-show="isIf">
+                         <select-staff :multiple="true" :member-type="'participant'" 
+                            @change="changeSelectedMember"></select-staff>
                     </div>
+                    
                 </div>
                     <!--问题列表结束-->
             </div>
@@ -78,13 +80,13 @@ export default {
     props:{
        templateId:'',//添加问题之后新生成的id
        templateStatus:'',
-       isIf:false,
        quesId:''
     },
     data(){
         return {
            list:[],
-           
+           isIf:false,
+           flagId:''
         }
     },
     watch:{
@@ -95,11 +97,21 @@ export default {
         
     },
     mounted(){
-
+        this.globalClick(this.closeStaff);
     },
     methods:{
         getId:function(id){
+
+        
+            //给人员选择设置位置
+            let top = $(`#id_${id}`).offset().top - $('.modal-body').offset().top+20;
+            $('#selctStaff').css({
+                'right':'30px',
+                'top':top
+            })
+            this.flagId = id
             this.isIf = true
+            
         },
         //获取简报详情
         getDetails:function(){
@@ -129,14 +141,31 @@ export default {
         },
         changeSelectedMember:function(){
            this.isIf = true
+           
+        },
+        closeStaff:function(event){
+            let tag = document.getElementById('selctStaff')
+            let tag2 = document.getElementById(`id_${this.flagId}`)
+            if (tag&&tag2) {
+                if (!tag.contains(event.target)&&!tag2.contains(event.target)) {
+                    this.isIf = false;
+                }
+            }
         }
     }
 }
 </script>
-<style>
+
+<style scoped>
     .show{
         display: none
     }
+    #selctStaff{
+        position: absolute;
+        width: 20rem;
+        height: 400px;
+    }
+
 </style>
 
 
