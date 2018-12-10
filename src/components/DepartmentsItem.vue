@@ -85,7 +85,6 @@
         },
 
         mounted() {
-            console.log(this.data)
             this.total = this.memberNum(this.data);
         },
 

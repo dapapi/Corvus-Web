@@ -1,5 +1,5 @@
 <template>
-    <div class="panel col-md-12 col-lg-12 py-5" style="border-left:1px solid #ccc">
+    <div class="panel col-md-12 col-lg-12 py-5" style="border-left:1px solid #e3e3e3">
                 <div class="col-md-12">
                     <ul class="nav nav-tabs nav-tabs-line" role="tablist">
                         <li class="nav-item" role="presentation" @click="getTasks(1,1)">
@@ -21,7 +21,7 @@
                     </ul>
                 </div>
                 <div class="page-content tab-content nav-tabs-animate bg-white">
-                    <div class="tab-pane animation-fade active pt-10" id="forum-task" role="tabpanel">
+                    <div class="tab-pane animation-fade active pt-20" id="forum-task" role="tabpanel">
                         <table class="table table-hover is-indent" data-plugin="animateList" data-animate="fade"
                                data-child="tr"
                                data-selectable="selectable" >
