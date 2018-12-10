@@ -1,15 +1,19 @@
 <template>
-    <div>
+    <div class="page">
         管理中心
     </div>
 </template>
 
 <script>
     export default {
-        name: "index.vue"
+        name: "index"
     }
 </script>
 
-<style scoped>
-
+<style lang="css" scoped>
+    .page {
+        margin-left: 0!important;
+        height: 100%;
+        padding: 0;
+    }
 </style>

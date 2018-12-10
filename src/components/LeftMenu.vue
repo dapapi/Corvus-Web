@@ -3,8 +3,10 @@
         <div class="site-menubar-body">
             <div class="py-10 menu-icon"
                  style="position: relative;background-color: #3f51b5;z-index: 2">
-                <div class="icon-wrap">
-                    <img src="https://res.papitube.com/corvus/images/taiyang-icon.png" alt="">
+                <div class="icon-wrap" @click.stop="showBackModel">
+                    <label for="console-model">
+                        <img src="https://res.papitube.com/corvus/images/taiyang-icon.png" alt="">
+                    </label>
                 </div>
             </div>
             <ul class="site-menu" data-plugin="menu" style="transform: translate3d(0px, -1.03409px, 0px);">
@@ -49,6 +51,13 @@
             </ul>
             <div class="user-wrap">
                 <img src="https://res.papitube.com/no-icon.png" alt="">
+            </div>
+            <input id="console-model" type="text" @blur="blur" />
+            <div class="console" v-show="visible" @click="blur">
+                <ul>
+                    <li><router-link target="_blank" to="/management">进入企业后台</router-link></li>
+                    <li @click="layout">退出当前账号</li>
+                </ul>
             </div>
         </div>
     </div>
@@ -177,6 +186,7 @@
                     },
                 ],
                 pageRoute: '',
+                visible: false,
             }
         },
 
@@ -185,6 +195,22 @@
                 this.pageRoute = to.path.split('/')[1];
             },
         },
+        methods: {
+            showBackModel () {
+                this.visible = !this.visible
+            },
+            blur () {
+                this.visible = false
+            },
+            // 退出登录
+            layout () {
+                Cookies.remove('user');
+                Cookies.remove('companyType');
+                Cookies.remove('CORVUS-ACCESS-TOKEN');
+                // 可以？
+                window.location.href = '/login'
+            }
+        }
     }
 </script>
 
@@ -223,6 +249,10 @@
         margin: 0 auto;
     }
 
+     .menu-icon .icon-wrap img {
+        cursor: pointer;
+     }
+
     .user-wrap {
         width: 50px;
         height: 50px;
@@ -245,5 +275,32 @@
     .active .hover-icon {
         display: block !important;
     }
-
+    #console-model {
+        opacity: 0;
+        position: absolute;
+        z-index: -1000;
+    }
+    .console {
+        padding: 10px 0;
+        width: 200px;
+        background: #fff;
+        position: absolute;
+        top: 10px;
+        left: 101px;
+        z-index: 100000;
+        border: 1px solid #f7f7f7;
+    }
+    .console ul li {
+        height: 40px;
+        line-height: 40px;
+        padding: 0 30px;
+    }
+    .console ul li:hover {
+        cursor: pointer;
+        color: #3f51b5;
+        background: rgba(40,53,147,.03);
+    }
+     .console ul li a {
+        color: rgba(117, 117, 117, 0.9);
+     }
 </style>
