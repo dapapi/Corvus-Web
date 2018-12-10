@@ -17,7 +17,7 @@
                     <a class="dropdown-item" role="menuitem">选择成员</a>
                     <a class="dropdown-item" role="menuitem">移动部门到</a>
                     <a class="dropdown-item" role="menuitem">添加子部门</a>
-                    <a class="dropdown-item" role="menuitem">删除部门</a>
+                    <a class="dropdown-item" role="menuitem" @click="del(data)">删除部门</a>
                 </div>
             </div>
         </div>
@@ -36,7 +36,7 @@
 <script>
 export default {
     name: 'DepartmentItem',
-    props: ['data', 'bgColor', 'left', 'isEdit', 'editDepartment'],
+    props: ['data', 'bgColor', 'left', 'isEdit', 'editDepartment', 'delDepartment'],
     data () {
         return {
             visible: false,
@@ -77,11 +77,10 @@ export default {
         // 编辑部门
         edit (data) {
             this.editDepartment(data)
-            // alert(1)
         },
         // 删除
-        delDepartment () {
-            // 
+        del (data) {
+            this.delDepartment(data)
         },
         // 选择成员
         chooseMember () {

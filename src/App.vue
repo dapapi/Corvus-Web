@@ -22,7 +22,7 @@
         },
         watch: {
             '$route': function (to, from) {
-                if (this.$route.path === '/login') {
+                if (this.$route.path === '/login' || this.$route.path === '/management') {
                     this.isLeftMenuShow = false
                 }
             }
