@@ -35,8 +35,8 @@
 
                 <div class="col-md-12 clearfix my-10 px-0">
                     <div class="col-md-3 float-left">
-                        <div class="col-md-7 float-left text-right">博主数量合计</div>
-                        <div class="col-md-5 float-left">666个</div>
+                        <div class="col-md-7 float-left text-right">数量合计</div>
+                        <div class="col-md-5 float-left" v-if="tableData.total">{{ tableData.total }}个</div>
                     </div>
                     <div class="col-md-3 float-left">
                         <div class="col-md-7 float-left text-right pl-0">预计订单收入总额</div>
@@ -61,17 +61,25 @@
                         </li>
                     </ul>
                 </div>
-                <div class="tab-content nav-tabs-animate bg-white col-md-12 pb-20">
+                <div class="page-content tab-content nav-tabs-animate bg-white">
                     <div class="tab-pane animation-fade active" id="forum-business-report" role="tabpanel">
+                        <div class="clearfix">
+                            <div class="col-md-2 float-left pl-0">
+                                <Selectors :options="artistStatusArr" @change="changeArtistStatus"></Selectors>
+                            </div>
+                            <div class="col-md-2 float-left pl-0" v-if="artistStatus != 1">
+                                <Selectors :options="trailsNumArr" @change="changeTrailsNum"></Selectors>
+                            </div>
+                            <div class="col-md-3 float-left pl-0"
+                                 v-if="departmentsInfo.length > 1 && artistStatus != 1">
+                                <DropDepartment name="组别" :data="departmentsInfo" @change="selectDepartment"/>
+                            </div>
+                        </div>
                         <table class="table table-hover is-indent example" data-plugin="animateList" data-animate="fade"
                                data-child="tr"
                                data-selectable="selectable">
                             <tr class="animation-fade"
                                 style="animation-fill-mode: backwards; animation-duration: 250ms; animation-delay: 0ms;">
-                                <th class="cell-100" scope="col">
-                                    <Selectors style="width: 100px" :options="artistStatusArr"
-                                               @change="changeArtistStatus"></Selectors>
-                                </th>
                                 <template v-if="artistStatus == 1">
                                     <th class="cell-100" scope="col">昵称</th>
                                     <th class="cell-100" scope="col">类型</th>
@@ -82,40 +90,28 @@
                                 <template v-else>
                                     <th class="cell-100" scope="col">制作组</th>
                                     <th class="cell-100" scope="col">昵称</th>
-                                    <th class="cell-100" scope="col">
-                                        <Selectors style="width: 100px" :options="trailsNumArr"
-                                                   @change="changeTrailsNum"></Selectors>
-                                    </th>
                                     <th class="cell-100" scope="col">预计订单收入</th>
-                                    <th class="cell-100" scope="col">
-                                        <Selectors style="width: 100px" :options="projectsNumArr"
-                                                   @changeProjectsNum></Selectors>
-                                    </th>
                                     <th class="cell-100" scope="col">合同金额</th>
                                     <th class="cell-100" scope="col">花费金额</th>
                                 </template>
                             </tr>
                             <tbody>
-                            <!--<template v-for="(data, type) in tableData.data">-->
-                            <!--<tr v-for="(item, index) in data">-->
-                            <!--<td v-if="index === 0">-->
-                            <!--<template v-if="type === 'industry_data'">品类</template>-->
-                            <!--<template v-if="type === 'cooperation_data'">合作</template>-->
-                            <!--<template v-if="type === 'resource_type_data'">线索来源</template>-->
-                            <!--<template v-if="type === 'priority_data'">优先级</template>-->
-                            <!--</td>-->
-                            <!--<td v-else></td>-->
-                            <!--<td>{{ item.name }}</td>-->
-                            <!--<td>{{ item.number }}</td>-->
-                            <!--<td>{{ item.ratio }}</td>-->
-                            <!--<td>{{ item.ring_ratio_increment }}</td>-->
-                            <!--<td>{{ item.annual_increment }}</td>-->
-                            <!--<td>{{ item.confirm_number }}</td>-->
-                            <!--<td>{{ item.confirm_ratio_increment }}</td>-->
-                            <!--<td>{{ item.confirm_annual_increment }}</td>-->
-                            <!--<td>{{ item.customer_conversion_rate }}</td>-->
-                            <!--</tr>-->
-                            <!--</template>-->
+                            <tr v-for="data in tableData.blogger">
+                                <template v-if="artistStatus == 1">
+                                    <td>{{ data.nickname }}</td>
+                                    <td>{{ data.type_id }}</td>
+                                    <td>{{ data.communication_status }}</td>
+                                    <td>{{ data.created_at }}</td>
+                                    <td>{{ data.last_update_at }}</td>
+                                </template>
+                                <template v-else>
+                                    <td>{{ data.department_name }}</td>
+                                    <td>{{ data.nickname }}</td>
+                                    <td></td>
+                                    <td></td>
+                                    <td></td>
+                                </template>
+                            </tr>
                             </tbody>
                         </table>
                     </div>
@@ -188,26 +184,83 @@
                         value: 3
                     }
                 ],
+                departmentsInfo: [
+                    {
+                        name: '请选择组别',
+                        id: '',
+                        departments: {
+                            data: []
+                        }
+                    }
+                ],
+                departmentId: '',
+                starsArr: [
+                    {
+                        name: '目标艺人',
+                        value: ''
+                    }
+                ],
             }
         },
         mounted() {
-            this.getBusinessReport();
+            this.getReport();
+            this.getStars();
+            this.getDepartments();
         },
         methods: {
-            getBusinessReport(start_time = null, end_time = null) {
-                if (!start_time || !end_time) {
-                    start_time = this.getDesignationDate(-7);
-                    end_time = this.getNowFormatDate();
+            getReport(start_time = null, end_time = null) {
+                if (!start_time) {
+                    if (!this.start_time) {
+                        start_time = this.getDesignationDate(-7);
+                    } else {
+                        start_time = this.start_time
+                    }
+                }
+                if (!end_time) {
+                    if (!this.end_time) {
+                        end_time = this.getNowFormatDate();
+                    } else {
+                        end_time = this.end_time
+                    }
                 }
                 let data = {
                     start_time: start_time,
                     end_time: end_time,
+                    sign_contract_status: this.artistStatus
                 };
+                if (this.departmentId) {
+                    data.department = this.departmentId
+                }
+                if (this.trailsNum) {
+                    data.type = this.trailsNum
+                }
                 this.$refs.timeInterval.setValue(start_time, end_time);
                 let _this = this;
-                fetch('get', '/reportfrom/commercialfunnel', data).then(function (response) {
+                fetch('get', '/reportfrom/bloggerreport', data).then(function (response) {
                     _this.tableData = response
                 })
+            },
+
+            getStars() {
+                fetch('get', '/stars/all').then(response => {
+                    for (let i = 0; i < response.data.length; i++) {
+                        this.starsArr.push({
+                            value: response.data[i].id,
+                            name: response.data[i].name
+                        })
+                    }
+                })
+            },
+
+            getDepartments() {
+                fetch('get', '/departments').then(res => {
+                    this.departmentsInfo = this.departmentsInfo.concat(res.data);
+                })
+            },
+
+            selectDepartment(value) {
+                this.departmentId = value.id;
+                this.getReport()
             },
 
             getNowFormatDate() {
@@ -226,6 +279,7 @@
                 this.nowDate = nowDate;
                 return nowDate;
             },
+
             getDesignationDate(value) {
                 let date1 = new Date();
                 let date2 = new Date(date1);
@@ -251,16 +305,22 @@
                         break;
                 }
                 this.$refs.timeInterval.setValue(designationDate, this.nowDate);
-                this.getBusinessReport(designationDate, this.nowDate)
+                this.getReport(designationDate, this.nowDate)
+            },
+
+            changeTrailsNum(value) {
+                this.trailsNum = value;
+                this.getReport();
             },
 
             changeDate(start, end) {
                 this.designationDateNum = '';
-                this.getBusinessReport(start, end);
+                this.getReport(start, end);
             },
 
             changeArtistStatus(value) {
-                this.artistStatus = value
+                this.artistStatus = value;
+                this.getReport()
             },
         }
     }

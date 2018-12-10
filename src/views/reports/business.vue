@@ -70,13 +70,13 @@
                                 <td></td>
                                 <td></td>
                                 <td>{{ tableData.sum }}</td>
-                                <td>{{ tableData.ratio_sum }}</td>
+                                <td>{{ tableData.ratio_sum * 100}}%</td>
                                 <td>{{ tableData.ring_ratio_increment_sum }}</td>
                                 <td>{{ tableData.annual_ratio_increment_sum }}</td>
                                 <td>{{ tableData.confirm_sum }}</td>
                                 <td>{{ tableData.confirm_ratio_increment_sum }}</td>
                                 <td>{{ tableData.confirm_annual_increment_sum }}</td>
-                                <td>{{ tableData.customer_conversion_rate_sum }}</td>
+                                <td>{{ tableData.customer_conversion_rate_sum * 100}}%</td>
                             </tr>
                             <template v-for="(data, type) in tableData.data">
                                 <tr v-for="(item, index) in data">
@@ -89,13 +89,13 @@
                                     <td v-else></td>
                                     <td>{{ item.name }}</td>
                                     <td>{{ item.number }}</td>
-                                    <td>{{ item.ratio }}</td>
+                                    <td>{{ Number(item.ratio * 100).toFixed(2) }}%</td>
                                     <td>{{ item.ring_ratio_increment }}</td>
                                     <td>{{ item.annual_increment }}</td>
                                     <td>{{ item.confirm_number }}</td>
                                     <td>{{ item.confirm_ratio_increment }}</td>
                                     <td>{{ item.confirm_annual_increment }}</td>
-                                    <td>{{ item.customer_conversion_rate }}</td>
+                                    <td>{{ Number(item.customer_conversion_rate * 100).toFixed(2) }}%</td>
                                 </tr>
                             </template>
                             </tbody>
@@ -129,11 +129,21 @@
         },
         methods: {
             getBusinessReport(start_time = null, end_time = null) {
-                if (!start_time || !end_time) {
-                    start_time = this.getDesignationDate(-7);
-                    end_time = this.getNowFormatDate();
+                if (!start_time) {
+                    if (!this.start_time) {
+                        start_time = this.getDesignationDate(-7);
+                    } else {
+                        start_time = this.start_time
+                    }
                 }
-                this.setReprots(start_time, end_time);
+                if (!end_time) {
+                    if (!this.end_time) {
+                        end_time = this.getNowFormatDate();
+                    } else {
+                        end_time = this.end_time
+                    }
+                }
+                this.setReports(start_time, end_time);
                 let data = {
                     start_time: start_time,
                     end_time: end_time,
@@ -190,28 +200,27 @@
             },
 
             changeDate(start, end) {
+                this.start_time = start;
+                this.end_time = end;
                 this.designationDateNum = '';
                 this.getBusinessReport(start, end);
             },
 
-            setReprots(start_time, end_time) {
+            setReports(start_time, end_time) {
                 if (!start_time || !end_time) {
-                    start_time = this.getDesignationDate(-7);
-                    end_time = this.getNowFormatDate();
+                    start_time = this.start_time;
+                    end_time = this.end_time;
                 }
-                let _this = this;
-                let myChart = '';
 
                 let data = {
                     start_time: start_time,
                     end_time: end_time
                 };
 
-                myChart = echarts.init(_this.$refs.main, 'mttop');
+                let myChart = echarts.init(this.$refs.main, 'mttop');
 
 
                 fetch('get', '/reportfrom/salesFunnel', data).then(function (response) {
-                    console.log(response);
                     let data = [
                         {
                             value: 100,

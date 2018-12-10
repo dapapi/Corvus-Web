@@ -61,7 +61,7 @@
                         </div>
                         <div class="col-md-6 float-left pl-0">
                             <div class="float-left pl-0 pr-2 col-md-2">
-                                <i class="md-plus pr-2" aria-hidden="true"></i>预计费用
+                                <i class="md-plus pr-2" aria-hidden="true"></i>预计订单收入
                             </div>
                             <div class="font-weight-bold float-left">
                                 <template v-if="trailInfo.fee">
@@ -186,7 +186,7 @@
                                         </div>
                                         <div class="card-text py-10 px-0 clearfix col-md-6 float-left"
                                              :class="isEdit ? 'edit-height':'' ">
-                                            <div class="col-md-2 float-left text-right pl-0">预计费用</div>
+                                            <div class="col-md-2 float-left text-right pl-0">预计订单收入</div>
                                             <div class="col-md-10 float-left font-weight-bold expfee">
                                                 <edit-number-spinner :content="trailInfo.fee" :is-edit="isEdit"
                                                                      @change="changeTrailFee"></edit-number-spinner>

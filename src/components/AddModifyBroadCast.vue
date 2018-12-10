@@ -208,7 +208,6 @@ export default {
                     accessory : this.accessory,             //附件内容
                     readflag : 0,                           //已读状态         
             }
-            console.log(this.sendData);
             //发布模式
             if(this.pageType === '发布'){
                 fetch('post','/announcements/',this.sendData).then((params) => {
@@ -231,7 +230,6 @@ export default {
         },
         //上传
         fileUploaded(value){
-            console.log(value);
             this.accessory = value
         }
     }

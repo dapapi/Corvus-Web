@@ -166,7 +166,6 @@ export default {
             let _this = this
             fetch('get', 'attendance/leavestatistics',this.searchData).then(function (res) {
                 _this.list = res
-                console.log(_this.list)
                 for (let i = 0; i < _this.list.length; i++) {
                     if(_this.list[i].daynumber){
                         let newArr = []

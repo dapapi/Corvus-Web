@@ -58,7 +58,7 @@
                             <th class="cell-300" scope="col">公司名称</th>
                             <th class="cell-300" scope="col">级别</th>
                             <th class="cell-300" scope="col">目标艺人</th>
-                            <th class="cell-300" scope="col">预计费用</th>
+                            <th class="cell-300" scope="col">预计订单收入</th>
                             <th class="cell-300" scope="col">负责人</th>
                         </tr>
                         <tbody>
@@ -120,6 +120,13 @@
                         <h4 class="modal-title">新增销售线索</h4>
                     </div>
                     <div class="modal-body">
+                        <div class="example" v-show="trailType != 4">
+                            <div class="col-md-2 text-right float-left">合作类型</div>
+                            <div class="col-md-10 float-left pl-0">
+                                <selectors :options="cooperationTypeArr" @change="changeCooperationType"
+                                           :placeholder="'请选择合作类型'"></selectors>
+                            </div>
+                        </div>
                         <div class="example">
                             <div class="col-md-2 text-right float-left">线索类型</div>
                             <div class="col-md-5 float-left pl-0">
@@ -183,13 +190,6 @@
                                            :placeholder="'请选择推荐艺人'"></selectors>
                             </div>
                         </div>
-                        <div class="example" v-show="trailType != 4">
-                            <div class="col-md-2 text-right float-left">合作类型</div>
-                            <div class="col-md-10 float-left pl-0">
-                                <selectors :options="cooperationTypeArr" @change="changeCooperationType"
-                                           :placeholder="'请选择合作类型'"></selectors>
-                            </div>
-                        </div>
                         <div class="example">
                             <div class="col-md-2 text-right float-left">优先级</div>
                             <div class="col-md-10 float-left pl-0">
@@ -226,7 +226,7 @@
                             </div>
                         </div>
                         <div class="example">
-                            <div class="col-md-2 text-right float-left">预计费用</div>
+                            <div class="col-md-2 text-right float-left">预计订单收入</div>
                             <div class="col-md-5 float-left pl-0 pr-0">
                                 <number-spinner @change="changeTrailFee" :addtrail='true'></number-spinner>
                             </div>
@@ -332,11 +332,10 @@
             this.getStars();
             this.getIndustries();
         },
-        watch:{
-            trailType:function(){
+        watch: {
+            trailType: function () {
                 this.trailOriginArr = config.trailOrigin
-                console.log(this.trailType);
-                if(this.trailType == 4){
+                if (this.trailType == 4) {
                     this.trailOriginArr = config.trailBloggerOrigin
                 }
                 this.getStars()
@@ -353,9 +352,9 @@
             }
         },
         methods: {
-            getField(){
+            getField() {
                 let _this = this
-                fetch('get','/trails/filter_fields').then((params) => {
+                fetch('get', '/trails/filter_fields').then((params) => {
                     _this.customizeInfo = params.data
                 })
             },
@@ -425,7 +424,7 @@
                     return false;
                 }
                 else if (!this.trailFee) {
-                    toastr.error("预计费用为必填")
+                    toastr.error("预计订单收入为必填")
                     return false;
                 } else if (this.trailContactPhone) {
                     let phone = this.trailContactPhone
@@ -443,7 +442,7 @@
                     return true
                 }
             },
-            fetchHandler(methods,url){
+            fetchHandler(methods, url) {
                 let _this = this
                 this.fetchData.include = 'principal,client,contact,recommendations,expectations'
                 fetch(methods, url, this.fetchData).then((response) => {
@@ -596,7 +595,6 @@
             },
             changeTrailOrigin: function (value) {
                 this.trailOrigin = value
-                console.log(value);
             },
 
             changeTrailOriginType: function (value) {

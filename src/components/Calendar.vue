@@ -24,7 +24,6 @@
         },
         watch: {
             gotoDate: function (newValue) {
-                console.log(newValue);
                 $(this.$el).fullCalendar('gotoDate', newValue)
             },
             startTime:function(){
@@ -77,7 +76,6 @@
                    this.startTime = `${start._d.getFullYear()}-${start._d.getMonth()+1}-${start._d.getDate()}`
                    this.endTime = `${end._d.getFullYear()}-${end._d.getMonth()+1}-${end._d.getDate()}`
                     
-                //    console.log(this.startTime,this.endTime)
 
                 },
                 // events: [

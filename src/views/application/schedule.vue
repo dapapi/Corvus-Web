@@ -175,7 +175,6 @@
             },
 
             displayMeetingRoom: function (value) {
-                console.log(value)
                 this.meetingRomeShow = false
             }
 

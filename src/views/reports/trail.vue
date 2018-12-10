@@ -36,43 +36,51 @@
                 <div class="col-md-12 clearfix my-10 px-0" v-if="tableData">
                     <div class="col-md-3 float-left">
                         <div class="col-md-6 float-left text-right">数量合计</div>
-                        <div class="col-md-6 float-left">{{ tableData.trail_total }}个</div>
+                        <div class="col-md-6 float-left" v-if="tableData.trail_total">{{ tableData.trail_total }}个</div>
                     </div>
                     <div class="col-md-4 float-left">
                         <div class="col-md-6 float-left text-right">预计订单收入总额</div>
-                        <div class="col-md-6 float-left">{{ tableData.fee_total }}元</div>
+                        <div class="col-md-6 float-left" v-if="tableData.fee_total">{{ tableData.fee_total }}元</div>
                     </div>
                 </div>
 
                 <div class="col-md-12">
                     <ul class="nav nav-tabs nav-tabs-line" role="tablist" id="taskTab">
-                        <li class="nav-item" role="presentation">
+                        <li class="nav-item" role="presentation" @click="getReport(0, 0)">
                             <a class="nav-link active" data-toggle="tab" href="#forum-trail-report"
                                aria-controls="forum-base"
                                aria-expanded="true" role="tab">线索报表</a>
                         </li>
-                        <li class="nav-item" role="presentation">
+                        <li class="nav-item" role="presentation" @click="setReports">
                             <a class="nav-link" data-toggle="tab" href="#forum-trail-add"
                                aria-controls="forum-present"
                                aria-expanded="false" role="tab">线索新增</a>
                         </li>
-                        <li class="nav-item" role="presentation">
+                        <li class="nav-item" role="presentation" @click="industryReports">
                             <a class="nav-link" data-toggle="tab" href="#forum-industry-analysis"
                                aria-controls="forum-present"
                                aria-expanded="false" role="tab">行业分析</a>
                         </li>
                     </ul>
                 </div>
-                <div class="tab-content nav-tabs-animate bg-white col-md-12 pb-20">
+                <div class="page-content tab-content nav-tabs-animate bg-white">
                     <div class="tab-pane animation-fade active" id="forum-trail-report" role="tabpanel">
+                        <div class="clearfix">
+                            <div class="col-md-2 float-left pl-0">
+                                <Selectors :options="trailTypeArr"
+                                           @change="changeTrailType"></Selectors>
+                            </div>
+                            <div class="col-md-3 float-left pl-0" v-if="departmentsInfo.length > 1">
+                                <DropDepartment name="组别" :data="departmentsInfo" @change="selectDepartment"/>
+                            </div>
+                        </div>
+
                         <table class="table table-hover is-indent example" data-plugin="animateList" data-animate="fade"
                                data-child="tr"
                                data-selectable="selectable">
                             <tr class="animation-fade"
                                 style="animation-fill-mode: backwards; animation-duration: 250ms; animation-delay: 0ms;">
-                                <th class="cell-100" scope="col">
-                                    <Selectors :options="trailTypeArr" @change="changeTrailType"></Selectors>
-                                </th>
+                                <th class="cell-100" scope="col">线索类别</th>
                                 <th class="cell-100" scope="col">线索名称</th>
                                 <th class="cell-100" scope="col">线索来源</th>
                                 <th class="cell-100" scope="col">组别</th>
@@ -112,16 +120,24 @@
                         </div>
                     </div>
                     <div class="tab-pane animation-fade" id="forum-trail-add" role="tabpanel">
-                        <div class="mt-20">
-                            <Selectors :options="trailTypeArr" @change="changeTrailType"></Selectors>
+                        <div class="clearfix pb-20">
+                            <div class="col-md-2 float-left pl-0">
+                                <Selectors :options="newTrailSearchArr" @change="changeSelectTime"></Selectors>
+                            </div>
+                            <div class="col-md-2 float-left pl-0">
+                                <Selectors :options="starsArr" @change="changeStar"></Selectors>
+                            </div>
+                            <div class="col-md-3 float-left">
+                                <DropDepartment name="组别" :data="departmentsInfo" @change="selectAddDepartment"/>
+                            </div>
                         </div>
                         <div class="col-md-12">
-                            <div ref="trail" style="width: 600px;height:500px;margin: 0 auto"></div>
+                            <div ref="trail" style="width: 800px;height:500px;margin: 0 auto"></div>
                         </div>
                     </div>
                     <div class="tab-pane animation-fade" id="forum-industry-analysis" role="tabpanel">
-                        <div class="mt-20">
-                            <Selectors :options="trailTypeArr" @change="changeTrailType"></Selectors>
+                        <div class="">
+                            <Selectors :options="trailTypeArr" @change="changeIndustryTrailType"></Selectors>
                         </div>
                         <div class="col-md-12">
                             <div ref="industry" style="width: 800px;height:500px;margin: 0 auto"></div>
@@ -163,21 +179,68 @@
                         value: 3
                     }
                 ],
+                newTrailSearchArr: [
+                    {
+                        name: '查询时间',
+                        value: '',
+                    },
+                    {
+                        name: '最近半年',
+                        value: 1
+                    },
+                    {
+                        name: '本年',
+                        value: 2
+                    }
+                ],
                 trailType: '',
                 trailStatusArr: config.trailStatusArr,
                 priorityArr: config.priorityArr,
+                departmentsInfo: [
+                    {
+                        name: '请选择组别',
+                        id: '',
+                        departments: {
+                            data: []
+                        }
+                    }
+                ],
+                departmentId: '',
+                starsArr: [
+                    {
+                        name: '目标艺人',
+                        value: ''
+                    }
+                ],
+                starId: '',
+                start_time: '',
+                end_time: '',
             }
         },
         mounted() {
             this.getReport();
+            this.getDepartments();
+            this.getStars();
         },
         methods: {
             getReport(start_time = null, end_time = null) {
-                if (!start_time || !end_time) {
-                    start_time = this.getDesignationDate(-7);
-                    end_time = this.getNowFormatDate();
+                if (!start_time) {
+                    if (!this.start_time) {
+                        start_time = this.getDesignationDate(-7);
+                        this.start_time = start_time;
+                    } else {
+                        start_time = this.start_time
+                    }
                 }
-                this.setReprots(start_time, end_time);
+                if (!end_time) {
+                    if (!this.end_time) {
+                        end_time = this.getNowFormatDate();
+                        this.end_time = end_time;
+                    } else {
+                        end_time = this.end_time
+                    }
+                }
+
                 let data = {
                     start_time: start_time,
                     end_time: end_time,
@@ -185,10 +248,29 @@
                 if (this.trailType) {
                     data.type = this.trailType
                 }
+                if (this.departmentId) {
+                    data.department = this.departmentId
+                }
                 this.$refs.timeInterval.setValue(start_time, end_time);
-                let _this = this;
-                fetch('get', '/reportfrom/trail', data).then(function (response) {
-                    _this.tableData = response
+                fetch('get', '/reportfrom/trail', data).then(response => {
+                    this.tableData = response
+                })
+            },
+
+            getDepartments() {
+                fetch('get', '/departments').then(res => {
+                    this.departmentsInfo = this.departmentsInfo.concat(res.data);
+                })
+            },
+
+            getStars() {
+                fetch('get', '/stars/all').then(response => {
+                    for (let i = 0; i < response.data.length; i++) {
+                        this.starsArr.push({
+                            value: response.data[i].id,
+                            name: response.data[i].name
+                        })
+                    }
                 })
             },
 
@@ -234,12 +316,39 @@
                         break;
                 }
                 this.$refs.timeInterval.setValue(designationDate, this.nowDate);
-                this.getReport(designationDate, this.nowDate)
+                this.getReport(designationDate, this.nowDate);
+                this.setReports(designationDate, this.nowDate);
+                this.industryReports(designationDate, this.nowDate);
             },
 
             changeDate(start, end) {
+                this.start_time = start;
+                this.end_time = end;
                 this.designationDateNum = '';
                 this.getReport(start, end);
+                this.setReports(start, end);
+                this.industryReports(start, end);
+            },
+
+            changeSelectTime(value) {
+                let designationDate = '';
+                if (value == 1) {
+                    designationDate = this.getDesignationDate(-180);
+                } else if (value == 2) {
+                    designationDate = this.getDesignationDate(0);
+                    designationDate = designationDate.split('-')[0] + '-' + 1 + '-' + 1;
+                } else {
+                    designationDate = this.nowDate;
+                }
+                this.designationDateNum = '';
+                this.$refs.timeInterval.setValue(designationDate, this.nowDate);
+                this.setReports(designationDate, this.nowDate)
+            },
+
+            changeStar(value) {
+                this.starId = value;
+                this.designationDateNum = '';
+                this.setReports();
             },
 
             changeTrailType(value) {
@@ -247,30 +356,77 @@
                 this.getReport()
             },
 
-            setReprots(start_time, end_time) {
-                if (!start_time || !end_time) {
-                    start_time = this.getDesignationDate(-7);
-                    end_time = this.getNowFormatDate();
-                }
-                let _this = this;
+            changeIndustryTrailType(value) {
+                this.industryTrailType = value;
+                this.industryReports();
+            },
 
+            selectDepartment(value) {
+                this.departmentId = value.id;
+                this.getReport()
+            },
+
+            selectAddDepartment(value) {
+                this.addDepartmentId = value.id;
+                this.setReports();
+            },
+
+            setReports(start_time, end_time) {
+                if (!start_time || !end_time) {
+                    start_time = this.start_time;
+                    end_time = this.start_time;
+                }
                 let data = {
                     start_time: start_time,
                     end_time: end_time
                 };
 
-                let trailChart = echarts.init(_this.$refs.trail, 'mttop');
-                let industryChart = echarts.init(_this.$refs.industry, 'mttop');
+                if (this.starId) {
+                    data.target_star = this.starId
+                }
+                if (this.addDepartmentId) {
+                    data.department = this.addDepartmentId
+                }
 
+                let trailChart = echarts.init(this.$refs.trail, 'mttop');
 
                 fetch('get', '/reportfrom/newtrail', data).then(function (response) {
-                    console.log(response);
+                    let dataTimeArr = [];
+                    let dataAllInfo = [];
+                    let dataBusinessInfo = [];
+                    let dataMovieInfo = [];
+                    let dataZYInfo = [];
+                    for (let item in response.trails) {
+                        dataTimeArr.push(item);
+                        if (response.trails[item].length === 0) {
+                            dataAllInfo.push(0);
+                            dataBusinessInfo.push(0);
+                            dataMovieInfo.push(0);
+                            dataZYInfo.push(0);
+                            continue;
+                        }
+                        for (let i = 0; i < response.trails[item].length; i++) {
+                            switch (response.trails[item][i].type) {
+                                case 1:
+                                    dataMovieInfo.push(response.trails[item][i].total);
+                                    break;
+                                case 2:
+                                    dataZYInfo.push(response.trails[item][i].total);
+                                    break;
+                                case 3:
+                                    dataBusinessInfo.push(response.trails[item][i].total);
+                                    break;
+                                case 'sum':
+                                    dataAllInfo.push(response.trails[item][i].total)
+                            }
+                        }
+                    }
                     let trailOption = {
                         tooltip: {
                             trigger: 'axis'
                         },
                         legend: {
-                            data: ['邮件营销', '联盟广告', '视频广告', '直接访问', '搜索引擎']
+                            data: ['总数', '商务', '影视', '综艺']
                         },
                         grid: {
                             left: '3%',
@@ -281,41 +437,31 @@
                         xAxis: {
                             type: 'category',
                             boundaryGap: false,
-                            data: ['周一', '周二', '周三', '周四', '周五', '周六', '周日']
+                            data: dataTimeArr
                         },
                         yAxis: {
                             type: 'value'
                         },
                         series: [
                             {
-                                name: '邮件营销',
+                                name: '总数',
                                 type: 'line',
-                                stack: '总量',
-                                data: [120, 132, 101, 134, 90, 230, 210]
+                                data: dataAllInfo
                             },
                             {
-                                name: '联盟广告',
+                                name: '商务',
                                 type: 'line',
-                                stack: '总量',
-                                data: [220, 182, 191, 234, 290, 330, 310]
+                                data: dataBusinessInfo
                             },
                             {
-                                name: '视频广告',
+                                name: '影视',
                                 type: 'line',
-                                stack: '总量',
-                                data: [150, 232, 201, 154, 190, 330, 410]
+                                data: dataMovieInfo
                             },
                             {
-                                name: '直接访问',
+                                name: '综艺',
                                 type: 'line',
-                                stack: '总量',
-                                data: [320, 332, 301, 334, 390, 330, 320]
-                            },
-                            {
-                                name: '搜索引擎',
-                                type: 'line',
-                                stack: '总量',
-                                data: [820, 932, 901, 934, 1290, 1330, 1320]
+                                data: dataZYInfo
                             }
                         ]
                     };
@@ -323,14 +469,19 @@
                     trailChart.setOption(trailOption);
                 });
 
-                data = {
-                    start_time: start_time,
-                    end_time: end_time
+            },
+
+            industryReports() {
+                let data = {
+                    start_time: this.start_time,
+                    end_time: this.end_time
                 };
 
-                if (this.trailType) {
-                    data.type = this.trailType
+                if (this.industryTrailType) {
+                    data.type = this.industryTrailType
                 }
+
+                let industryChart = echarts.init(this.$refs.industry, 'mttop');
 
                 fetch('get', '/reportfrom/industryanalysis', data).then(function (response) {
                     let data = [];
@@ -354,7 +505,6 @@
                     };
                     industryChart.setOption(industryOption)
                 })
-
             }
         }
     }

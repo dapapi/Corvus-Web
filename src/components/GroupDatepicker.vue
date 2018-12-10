@@ -24,7 +24,6 @@
                 format: "yyyy-mm-dd",
                 language: "zh-CN",
             }).on("changeDate", function () {
-                console.log('change');
                 self.$emit('change', $('#start').val(), $('#end').val());
             });
 

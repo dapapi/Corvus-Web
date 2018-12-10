@@ -172,7 +172,6 @@ export default {
     getlist: function() {
       fetch("get", `${config.apiUrl}/launch`).then(res => {
         this.list = res.data;
-        console.log(res.data)
       });
     },
     addInfo: function (value, name) {

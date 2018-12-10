@@ -237,12 +237,6 @@ export default {
                 
             })
         },
-        // getDetails:function(){
-        //     fetch('get',`${config.apiUrl}/review/${this.$route.query.id}`).then((res) => {
-        //     //    console.log(res)
-                
-        //     })
-        // },
         modify:function(){
             fetch('post',`${config.apiUrl}/launch`,this.submitAnswerData).then((res) => {
                toastr.success('提交成功');

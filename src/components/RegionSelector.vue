@@ -117,7 +117,6 @@ export default {
             }
             //推送返回数据至父组件
             this.$emit('setAreaData',setAreaData)
-            console.log(setAreaData);
         },
         // 设置默认选中地区 by 鲍庆鑫
         setRegion () {

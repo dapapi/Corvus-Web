@@ -11,16 +11,17 @@
                     <div class="col-md-12 example float-left">
                         <h1 class="page-title">泰洋系 <span class="color999">（{{count}}人）</span></h1>
                         <template v-for="(item, index) in data">
-                            <Department 
-                                :data="item" :bgColor="true" 
-                                :editDepartment="editDepartment" 
-                                :delDepartment="delDepartment"
-                                :key="index" 
-                                :isEdit="true" />
+                            <Department
+                                    :data="item" :bgColor="true"
+                                    :editDepartment="editDepartment"
+                                    :delDepartment="delDepartment"
+                                    :key="index"
+                                    :isEdit="true"/>
                         </template>
                     </div>
 
-                    <div class="site-action" data-plugin="actionBtn" data-toggle="modal" data-target="#add-department" @click="editStatus(false)">
+                    <div class="site-action" data-plugin="actionBtn" data-toggle="modal" data-target="#add-department"
+                         @click="editStatus(false)">
                         <button type="button"
                                 class="site-action-toggle btn-raised btn btn-success btn-floating waves-effect waves-classic">
                             <i class="front-icon md-plus animation-scale-up" aria-hidden="true"></i>
@@ -52,15 +53,15 @@
                         <div class="example">
                             <div class="col-md-2 text-right float-left">部门所属</div>
                             <div class="col-md-10 float-left">
-                                <DropDepartment 
-                                    :data="data" 
-                                    @change="selectDepartment"
+                                <DropDepartment
+                                        :data="data"
+                                        @change="selectDepartment"
                                 />
                             </div>
                         </div>
                     </Modal>
 
-                    <flag @confirmFlag="sureDel" />
+                    <flag @confirmFlag="sureDel"/>
 
                 </div>
             </div>
@@ -93,20 +94,18 @@
 
         mounted() {
             this.getDepartment()
-            // this.user = JSON.parse(Cookies.get('user'))
             this.userId = JSON.parse(Cookies.get('user')).id
-            console.log(this.userId)
         },
 
         methods: {
             // 获取部门数据
-            getDepartment () {
+            getDepartment() {
                 fetch('get', '/departments').then(res => {
                     this.data = res.data
                     this.count = this.countNum(this.data)
                 })
             },
-            countNum (data) {
+            countNum(data) {
                 let count = 0
                 data.map(n => {
                     count += n.users.data.length + this.countNum(n.departments.data)
@@ -114,7 +113,7 @@
                 return count
             },
             // 添加部门
-            addDepartment (id) {
+            addDepartment(id) {
                 if (!this.departmentName) {
                     toastr.error('请填写部门名称')
                     return
@@ -131,39 +130,38 @@
                 if (this.isEdit) {
                     params.user_id = this.userId
                 }
-         
+
                 fetch('post', `/departments/${this.principalId}`, params).then(res => {
                     console.log(res)
                 })
             },
-            selectDepartment (data) {
+            selectDepartment(data) {
                 this.departmentId = data.id
             },
             // 负责人
-            principalChange (val) {
+            principalChange(val) {
                 this.principalId = val.id
             },
             // 编辑部门
-            editDepartment (val) {
+            editDepartment(val) {
                 this.editStatus(true)
-                // this.editDepart
                 this.departmentName = val.name
                 this.departmentId = val.id
                 console.log(val)
                 $('#add-department').modal()
             },
             // 切换编辑状态
-            editStatus (status = false) {
+            editStatus(status = false) {
                 this.isEdit = status
             },
             // 确认删除
-            sureDel () {
+            sureDel() {
                 fetch('delete', `/departments/remove/${this.delId}`).then(res => {
                     toastr.success('删除成功')
                 })
             },
             // 删除部门
-            delDepartment (val) {
+            delDepartment(val) {
                 this.delId = val.id
                 $('#confirmFlag').modal()
             }
@@ -175,6 +173,7 @@
     .color999 {
         color: #999;
     }
+
     .input-search i {
         cursor: pointer;
     }

@@ -289,7 +289,6 @@
                             this.priority=item.name
                         }
                     })
-                    console.log(this.priority)
                 }
         }
     }

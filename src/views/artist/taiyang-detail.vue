@@ -1141,7 +1141,6 @@
                 } else {
                     data.type = 2
                 }
-                // console.log(data)
                 let _this = this;
                 fetch('post', '/distribution/person', data).then(function (response) {
                     $('#distributionBroker').modal('hide');
