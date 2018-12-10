@@ -408,17 +408,23 @@
                         for (let i = 0; i < response.trails[item].length; i++) {
                             switch (response.trails[item][i].type) {
                                 case 1:
-                                    dataMovieInfo.push(response.trails[item][i].total_fee);
+                                    dataMovieInfo.push(response.trails[item][i].total);
                                     break;
                                 case 2:
-                                    dataZYInfo.push(response.trails[item][i].total_fee);
+                                    dataZYInfo.push(response.trails[item][i].total);
                                     break;
                                 case 3:
-                                    dataBusinessInfo.push(response.trails[item][i].total_fee);
+                                    dataBusinessInfo.push(response.trails[item][i].total);
                                     break;
+                                case 'sum':
+                                    dataAllInfo.push(response.trails[item][i].total)
                             }
                         }
                     }
+                    console.log('dataMovieInfo', dataMovieInfo);
+                    console.log('dataZYInfo', dataZYInfo);
+                    console.log('dataBusinessInfo', dataBusinessInfo);
+                    console.log('dataAllInfo', dataAllInfo);
                     let trailOption = {
                         tooltip: {
                             trigger: 'axis'
@@ -444,25 +450,21 @@
                             {
                                 name: '总数',
                                 type: 'line',
-                                stack: '总量',
                                 data: dataAllInfo
                             },
                             {
                                 name: '商务',
                                 type: 'line',
-                                stack: '总量',
                                 data: dataBusinessInfo
                             },
                             {
                                 name: '影视',
                                 type: 'line',
-                                stack: '总量',
                                 data: dataMovieInfo
                             },
                             {
                                 name: '综艺',
                                 type: 'line',
-                                stack: '总量',
                                 data: dataZYInfo
                             }
                         ]

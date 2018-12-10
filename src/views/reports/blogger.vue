@@ -35,7 +35,7 @@
 
                 <div class="col-md-12 clearfix my-10 px-0">
                     <div class="col-md-3 float-left">
-                        <div class="col-md-7 float-left text-right">博主数量合计</div>
+                        <div class="col-md-7 float-left text-right">数量合计</div>
                         <div class="col-md-5 float-left">666个</div>
                     </div>
                     <div class="col-md-3 float-left">
