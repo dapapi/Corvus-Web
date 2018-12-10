@@ -386,7 +386,11 @@ export default new Router({
         {
             path: '/management',
             name: 'management/index',
-            component: () => import('./views/management/index.vue')
+            component: () => import('./views/management/index.vue'),
+            children:[{
+                path:'/rolemanagement',
+                component:()=>import('./views/management/rolemanagement.vue')
+            }]
         },
         {
             path:'/organization',
