@@ -97,7 +97,6 @@ export default {
 
         getFileExt(){
             this.fileExt = this.fileInfo.name.split('.').pop()
-            console.log(this.fileExt);
         }
     },
     watch:{

@@ -536,14 +536,12 @@
             },
 
             selectArtists: function (value) {
-                // console.log(value)
                 if (value === 'all') {
                     this.selectedArtistsArr = [];
                     for (let i = 0; i < this.artistsInfo.length; i++) {
                         this.selectedArtistsArr.push(this.artistsInfo[i].id)
                     }
                 } else {
-                    // console.log(this.selectedArtistsArr)
                     let index = this.selectedArtistsArr.indexOf(value);
                     if (index > -1) {
                         this.selectedArtistsArr.splice(index, 1)
@@ -575,10 +573,6 @@
                 fetch('post', 'distribution/person', data).then(function (response) {
                     toastr.success('分配制作人成功')
                     $('#giveBroker').modal('hide')
-                    //  console.log($('input[type = checkbox]'));
-                
-                    // $('input[type = checkbox]').removeClass('selectable-all')
-                    // $('input[type = checkbox]').removeClass('selectable-item')
                     _this.$store.state.participantsInfo = []
                 })
                

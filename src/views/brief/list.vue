@@ -85,7 +85,6 @@ export default {
         getlist:function(){
             
             fetch('get',`${config.apiUrl}/review/my/template`,{template_id:this.$route.params.id}).then((res) => {
-                console.log(res.data)
                 this.list = res.data
                 this.template_name = res.data[0].template.template_name
                 for (let i = 0; i < this.list.length; i++) {

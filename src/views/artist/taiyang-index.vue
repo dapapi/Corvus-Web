@@ -511,8 +511,6 @@
                 this.artistSource = value
             },
             uploadAttachment:function (url,name,size){
-                // console.log(url,name,size)
-                // alert(this.affixesType)
                 for (let i = 0; i < this.affixes.length; i++) {
                     if(this.affixes[i].type == this.affixesType){
 
@@ -526,7 +524,6 @@
                     url:url,
                     type:this.affixesType
                 }) 
-                // console.log(this.affixes)
             },
             addArtist: function () {
                 if(!this.artistName){

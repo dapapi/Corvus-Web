@@ -726,10 +726,8 @@
                 })
             },
 
-            // TODO 地区省市级联动没有做
             changeClientBaseInfo: function () {
                 let _this = this;
-                // console.log(this.changeInfo)
                 fetch('put', '/clients/' + this.clientId, this.changeInfo).then(function () {
                     _this.isEdit = false;
                     toastr.success('修改成功')
@@ -758,7 +756,6 @@
 
             changeClientAddress: function (value) {
                 this.clientInfo.address = value
-                console.log(this.clientInfo)
             },
 
             changeClientLevel: function (value) {
@@ -791,7 +788,6 @@
                     desc: this.taskIntroduce,
                     participant_ids: this.participantIds
                 };
-                console.log(data)
                 if (!data.title) {
                     toastr.error('请填写任务名称')
                     return

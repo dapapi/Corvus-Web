@@ -713,7 +713,6 @@
             let _this = this;
             //  清空任务
              $('#addTask').on('hidden.bs.modal',function() {
-                 console.log(_this.$refs.mold)
                     _this.$refs.mold.setValue('');//类型
                     _this.taskType=''
                     _this.Person_id='';//负责人

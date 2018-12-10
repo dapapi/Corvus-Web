@@ -532,7 +532,7 @@
                                         </div>
                                         <div class="card-text py-10 px-0 clearfix col-md-6 float-left edit-height"
                                              v-if="projectInfo.type != 5">
-                                            <div class="col-md-2 float-left text-right pl-0">预计费用</div>
+                                            <div class="col-md-2 float-left text-right pl-0">合同金额</div>
                                             <div class="col-md-10 float-left font-weight-bold">
                                                 <EditNumberSpinner :is-edit="isEdit"
                                                                    :content="projectInfo.trail.data.fee"
@@ -794,7 +794,7 @@
                     </div>
                     <div class="modal-body">
                         <div class="example">
-                            <div class="col-md-2 text-right float-left">预计费用</div>
+                            <div class="col-md-2 text-right float-left">合同金额</div>
                             <div class="col-md-10 float-left">
                                 <add-member></add-member>
 
@@ -808,13 +808,6 @@
                         </div>
                         <div class="example">
                             <div class="col-md-2 text-right float-left">付款金额</div>
-                            <div class="col-md-10 float-left">
-                                <add-member></add-member>
-
-                            </div>
-                        </div>
-                        <div class="example">
-                            <div class="col-md-2 text-right float-left">合约费用(含税)</div>
                             <div class="col-md-10 float-left">
                                 <add-member></add-member>
 

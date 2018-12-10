@@ -33,7 +33,6 @@ export default {
         }
     },
     mounted(){
-        console.log(this.theWeek())
         document.onselectstart = function(){return false}
     },
     methods:{

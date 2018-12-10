@@ -84,9 +84,7 @@
 
         mounted() {
             this.getDepartment()
-            // this.user = JSON.parse(Cookies.get('user'))
             this.userId = JSON.parse(Cookies.get('user')).id
-            console.log(this.userId)
         },
 
         methods: {
@@ -137,10 +135,8 @@
             // 编辑部门
             editDepartment (val) {
                 this.editStatus = true
-                // this.editDepart
                 this.departmentName = val.name
                 this.departmentId = val.name
-                console.log(val)
             },
             // 切换编辑状态
             editStatus (status = false) {

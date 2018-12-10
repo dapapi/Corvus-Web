@@ -89,13 +89,13 @@
                                     <td v-else></td>
                                     <td>{{ item.name }}</td>
                                     <td>{{ item.number }}</td>
-                                    <td>{{ item.ratio * 100 }}%</td>
+                                    <td>{{ Number(item.ratio * 100).toFixed(2) }}%</td>
                                     <td>{{ item.ring_ratio_increment }}</td>
                                     <td>{{ item.annual_increment }}</td>
                                     <td>{{ item.confirm_number }}</td>
                                     <td>{{ item.confirm_ratio_increment }}</td>
                                     <td>{{ item.confirm_annual_increment }}</td>
-                                    <td>{{ item.customer_conversion_rate * 100 }}%</td>
+                                    <td>{{ Number(item.customer_conversion_rate * 100).toFixed(2) }}%</td>
                                 </tr>
                             </template>
                             </tbody>
@@ -221,7 +221,6 @@
 
 
                 fetch('get', '/reportfrom/salesFunnel', data).then(function (response) {
-                    console.log(response);
                     let data = [
                         {
                             value: 100,

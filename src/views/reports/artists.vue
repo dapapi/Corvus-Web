@@ -392,7 +392,6 @@
                 let myChart = echarts.init(this.$refs.main, 'mttop');
 
                 fetch('get', '/reportfrom/starprojectanalysis', data).then(function (response) {
-                    console.log(response);
                     let firstInfo = [];
                     let secondName = [];
                     let secondInfo = [];

@@ -102,7 +102,6 @@ function initLoginForm() {
             let user = new User();
             user.fecth(function (userJson, companyType) {
                 user.storeToLocal(userJson);
-                console.log(companyType);
                 user.storeCompamyTypeToLocal(companyType);
                 redirect('/')
             })

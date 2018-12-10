@@ -490,7 +490,6 @@
                 let proportionChart = echarts.init(this.$refs.industry, 'mttop');
 
                 fetch('get', '/reportfrom/percentageofproject', data).then(function (response) {
-                    console.log(response);
                     let firstInfo = [];
                     let secondName = [];
                     let secondInfo = [];

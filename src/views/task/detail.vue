@@ -500,7 +500,6 @@
                     _this.$store.dispatch('changeParticipantsInfo', params);
                     params.data = response.data.principal.data;
                     _this.$store.dispatch('changePrincipal', params)
-                    console.log(_this.taskInfo)
                 })
             },
 
@@ -582,7 +581,6 @@
                     })
                 }
                 // @todo 修改时间组件
-                console.log(this.changeParticipantInfo)
                 if (this.changeParticipantInfo) {
                     let changeInfo = this.changeParticipantInfo;
                     let participant_ids = [];
@@ -628,9 +626,7 @@
             },
 
             changeTaskPrincipal: function () {
-                // this.taskInfo.principal_id = this.$store.state.principalInfo.id;
                 this.changeInfo.principal_id = this.$store.state.principalInfo.id;
-                console.log(this.taskInfo.principal_id)
             },
 
             uploadAttachment: function (url, name, size) {

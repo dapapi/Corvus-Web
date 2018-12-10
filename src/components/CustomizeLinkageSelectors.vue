@@ -65,7 +65,6 @@
             father.selectpicker().on('hidden.bs.select', function () {
                 let id = $(this)[0].selectedOptions[0].id;
                 let father = _this.data.find(item => item.id === parseInt(id));
-                console.log(father);
                 _this.item = father.operator;
                 _this.refresh()
                 if (_this.valueType === 'number') {
@@ -106,7 +105,6 @@
                     value: value,
                     n: this.n
                 };
-                console.log(value);
                 this.$emit('change', data)
             },
             changeTargetStars(){

@@ -421,10 +421,6 @@
                             }
                         }
                     }
-                    console.log('dataMovieInfo', dataMovieInfo);
-                    console.log('dataZYInfo', dataZYInfo);
-                    console.log('dataBusinessInfo', dataBusinessInfo);
-                    console.log('dataAllInfo', dataAllInfo);
                     let trailOption = {
                         tooltip: {
                             trigger: 'axis'

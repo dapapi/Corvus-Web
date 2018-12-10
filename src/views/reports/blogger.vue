@@ -36,7 +36,7 @@
                 <div class="col-md-12 clearfix my-10 px-0">
                     <div class="col-md-3 float-left">
                         <div class="col-md-7 float-left text-right">数量合计</div>
-                        <div class="col-md-5 float-left">666个</div>
+                        <div class="col-md-5 float-left" v-if="tableData.total">{{ tableData.total }}个</div>
                     </div>
                     <div class="col-md-3 float-left">
                         <div class="col-md-7 float-left text-right pl-0">预计订单收入总额</div>
@@ -96,7 +96,7 @@
                                 </template>
                             </tr>
                             <tbody>
-                            <tr v-for="data in tableData">
+                            <tr v-for="data in tableData.blogger">
                                 <template v-if="artistStatus == 1">
                                     <td>{{ data.nickname }}</td>
                                     <td>{{ data.type_id }}</td>
