@@ -54,26 +54,30 @@
 
                 <div class="col-md-12">
                     <ul class="nav nav-tabs nav-tabs-line" role="tablist" id="taskTab">
-                        <li class="nav-item" role="presentation">
+                        <li class="nav-item" role="presentation" @click="getReport(0, 0)">
                             <a class="nav-link active" data-toggle="tab" href="#forum-business-report"
                                aria-controls="forum-base"
                                aria-expanded="true" role="tab">艺人报表</a>
                         </li>
-                        <li class="nav-item" role="presentation">
+                        <li class="nav-item" role="presentation" @click="setReports">
                             <a class="nav-link" data-toggle="tab" href="#forum-sales-funnel"
                                aria-controls="forum-present"
                                aria-expanded="false" role="tab">艺人分析</a>
                         </li>
                     </ul>
                 </div>
-                <div class="tab-content nav-tabs-animate bg-white col-md-12 pb-20">
+                <div class="page-content tab-content nav-tabs-animate bg-white">
                     <div class="tab-pane animation-fade active" id="forum-business-report" role="tabpanel">
-                        <div class="example">
-                            <div class="col-md-2 float-left">
+                        <div class="clearfix">
+                            <div class="col-md-2 float-left pl-0">
                                 <Selectors :options="artistStatusArr" @change="changeArtistStatus"></Selectors>
                             </div>
-                            <div class="col-md-2 float-left">
+                            <div class="col-md-2 float-left pl-0" v-if="artistStatus != 1">
                                 <Selectors :options="trailsNumArr" @change="changeTrailsNum"></Selectors>
+                            </div>
+                            <div class="col-md-3 float-left pl-0"
+                                 v-if="departmentsInfo.length > 1 && artistStatus != 1">
+                                <DropDepartment name="组别" :data="departmentsInfo" @change="selectDepartment"/>
                             </div>
                         </div>
                         <table class="table table-hover is-indent example" data-plugin="animateList" data-animate="fade"
@@ -128,7 +132,15 @@
                         </div>
                     </div>
                     <div class="tab-pane animation-fade" id="forum-sales-funnel" role="tabpanel">
-                        <div class="col-md-12 py-20">
+                        <div class="clearfix pb-20">
+                            <div class="col-md-2 float-left pl-0">
+                                <Selectors :options="starsArr" @change="changeStar"></Selectors>
+                            </div>
+                            <div class="col-md-3 float-left pl-0" v-if="departmentsInfo.length > 1">
+                                <DropDepartment name="组别" :data="departmentsInfo" @change="selectAnalysisDepartment"/>
+                            </div>
+                        </div>
+                        <div class="col-md-12">
                             <div ref="main" style="width: 600px;height:400px;margin: 0 auto"></div>
                         </div>
                     </div>
@@ -204,27 +216,73 @@
                         value: 3
                     }
                 ],
+                starsArr: [
+                    {
+                        name: '目标艺人',
+                        value: ''
+                    }
+                ],
+                starId: '',
+                departmentsInfo: [
+                    {
+                        name: '请选择组别',
+                        id: '',
+                        departments: {
+                            data: []
+                        }
+                    }
+                ],
+                departmentId: '',
+                departmentAnalysisId: '',
             }
         },
         mounted() {
             this.getReport();
+            this.getStars();
+            this.getDepartments();
         },
         methods: {
             getReport(start_time = null, end_time = null) {
-                if (!start_time || !end_time) {
-                    start_time = this.getDesignationDate(-7);
-                    end_time = this.getNowFormatDate();
+                if (!start_time) {
+                    if (!this.start_time) {
+                        start_time = this.getDesignationDate(-7);
+                    } else {
+                        start_time = this.start_time
+                    }
                 }
-                this.setReprots(start_time, end_time);
+                if (!end_time) {
+                    if (!this.end_time) {
+                        end_time = this.getNowFormatDate();
+                    } else {
+                        end_time = this.end_time
+                    }
+                }
                 let data = {
                     start_time: start_time,
                     end_time: end_time,
                     sign_contract_status: this.artistStatus
                 };
+                if (this.departmentId) {
+                    data.department = this.departmentId
+                }
+                if (this.trailsNum) {
+                    data.type = this.trailsNum
+                }
                 this.$refs.timeInterval.setValue(start_time, end_time);
                 let _this = this;
                 fetch('get', '/reportfrom/starreport', data).then(function (response) {
                     _this.tableData = response
+                })
+            },
+
+            getStars() {
+                fetch('get', '/stars/all').then(response => {
+                    for (let i = 0; i < response.data.length; i++) {
+                        this.starsArr.push({
+                            value: response.data[i].id,
+                            name: response.data[i].name
+                        })
+                    }
                 })
             },
 
@@ -244,11 +302,34 @@
                 this.nowDate = nowDate;
                 return nowDate;
             },
+
             getDesignationDate(value) {
                 let date1 = new Date();
                 let date2 = new Date(date1);
                 date2.setDate(date1.getDate() + value);
                 return date2.getFullYear() + "-" + (date2.getMonth() + 1) + "-" + date2.getDate();
+            },
+
+            getDepartments() {
+                fetch('get', '/departments').then(res => {
+                    this.departmentsInfo = this.departmentsInfo.concat(res.data);
+                })
+            },
+
+            selectDepartment(value) {
+                this.departmentId = value.id;
+                this.getReport()
+            },
+
+            selectAnalysisDepartment(value) {
+                this.departmentAnalysisId = value.id;
+                this.setReports()
+            },
+
+            changeStar(value) {
+                this.starId = value;
+                this.designationDateNum = '';
+                this.setReports();
             },
 
             selectDate(value) {
@@ -273,35 +354,42 @@
             },
 
             changeDate(start, end) {
+                this.start_time = start;
+                this.end_time = end;
                 this.designationDateNum = '';
                 this.getReport(start, end);
             },
 
             changeArtistStatus(value) {
-                this.artistStatus = value
+                this.artistStatus = value;
+                this.getReport();
             },
 
             changeTrailsNum(value) {
-                this.trailsNum = value
+                this.trailsNum = value;
+                this.getReport();
             },
 
-            changeProjectsNum(value) {
-                this.projectsNum = value
-            },
-
-            setReprots(start_time, end_time) {
+            setReports(start_time, end_time) {
                 if (!start_time || !end_time) {
-                    start_time = this.getDesignationDate(-7);
-                    end_time = this.getNowFormatDate();
+                    start_time = this.start_time;
+                    end_time = this.end_time;
                 }
-                let _this = this;
 
                 let data = {
                     start_time: start_time,
                     end_time: end_time
                 };
 
-                let myChart = echarts.init(_this.$refs.main, 'mttop');
+                if (this.starId) {
+                    data.target_star = this.starId
+                }
+
+                if (this.departmentAnalysisId) {
+                    data.department = this.departmentAnalysisId
+                }
+
+                let myChart = echarts.init(this.$refs.main, 'mttop');
 
                 fetch('get', '/reportfrom/starprojectanalysis', data).then(function (response) {
                     console.log(response);

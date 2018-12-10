@@ -62,10 +62,10 @@
             return {
                 menuData: [
                     {
-                        name: '消息',
-                        code: 'messages',
-                        image: 'https://res.papitube.com/corvus/images/xiaoxi.png',
-                        hoverImage: 'https://res.papitube.com/corvus/images/select-xiaoxi.png'
+                        name: '我的',
+                        code: 'my',
+                        image: 'https://res.papitube.com/corvus/images/gongzuotai.png',
+                        hoverImage: 'https://res.papitube.com/corvus/images/select-gongzuotai.png'
                     },
                     {
                         name: '日历',
@@ -160,10 +160,6 @@
                             {
                                 name: '通讯录',
                                 code: 'address'
-                            },
-                            {
-                                name: '我的',
-                                code: 'my'
                             },
                             {
                                 name: '知识库',

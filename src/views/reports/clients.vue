@@ -36,34 +36,34 @@
                 <div class="col-md-12 clearfix my-10 px-0">
                     <div class="col-md-3 float-left">
                         <div class="col-md-6 float-left text-right">数量合计</div>
-                        <div class="col-md-6 float-left">666个</div>
+                        <div class="col-md-6 float-left" v-if="tableData.total">{{ tableData.total }}个</div>
                     </div>
                 </div>
 
                 <div class="col-md-12">
                     <ul class="nav nav-tabs nav-tabs-line" role="tablist" id="taskTab">
-                        <li class="nav-item" role="presentation">
+                        <li class="nav-item" role="presentation" @click="getReport(0, 0)">
                             <a class="nav-link active" data-toggle="tab" href="#forum-trail-report"
                                aria-controls="forum-base"
                                aria-expanded="true" role="tab">客户报表</a>
                         </li>
-                        <li class="nav-item" role="presentation">
+                        <li class="nav-item" role="presentation" @click="setReports">
                             <a class="nav-link" data-toggle="tab" href="#forum-trail-add"
                                aria-controls="forum-present"
                                aria-expanded="false" role="tab">客户分析</a>
                         </li>
                     </ul>
                 </div>
-                <div class="tab-content nav-tabs-animate bg-white col-md-12 pb-20">
+                <div class="page-content tab-content nav-tabs-animate bg-white">
                     <div class="tab-pane animation-fade active" id="forum-trail-report" role="tabpanel">
+                        <div class="clearfix">
+                            <Selectors :options="clientTypeArr" @change="changeClientType"></Selectors>
+                        </div>
                         <table class="table table-hover is-indent example" data-plugin="animateList" data-animate="fade"
                                data-child="tr"
                                data-selectable="selectable">
                             <tr class="animation-fade"
                                 style="animation-fill-mode: backwards; animation-duration: 250ms; animation-delay: 0ms;">
-                                <th class="cell-100" scope="col">
-                                    <Selectors :options="clientTypeArr" @change="changeClientType"></Selectors>
-                                </th>
                                 <th class="cell-100" scope="col">公司名称</th>
                                 <th class="cell-100" scope="col">级别</th>
                                 <th class="cell-100" scope="col">决策关键人/部门</th>
@@ -72,31 +72,24 @@
                                 <th class="cell-100" scope="col">负责人</th>
                             </tr>
                             <tbody>
-                            <!--<template v-for="(data, type) in tableData.data">-->
-                            <!--<tr v-for="(item, index) in data">-->
-                            <!--<td v-if="index === 0">-->
-                            <!--<template v-if="type === 'industry_data'">品类</template>-->
-                            <!--<template v-if="type === 'cooperation_data'">合作</template>-->
-                            <!--<template v-if="type === 'resource_type_data'">线索来源</template>-->
-                            <!--<template v-if="type === 'priority_data'">优先级</template>-->
-                            <!--</td>-->
-                            <!--<td v-else></td>-->
-                            <!--<td>{{ item.name }}</td>-->
-                            <!--<td>{{ item.number }}</td>-->
-                            <!--<td>{{ item.ratio }}</td>-->
-                            <!--<td>{{ item.ring_ratio_increment }}</td>-->
-                            <!--<td>{{ item.annual_increment }}</td>-->
-                            <!--<td>{{ item.confirm_number }}</td>-->
-                            <!--<td>{{ item.confirm_ratio_increment }}</td>-->
-                            <!--<td>{{ item.confirm_annual_increment }}</td>-->
-                            <!--<td>{{ item.customer_conversion_rate }}</td>-->
-                            <!--</tr>-->
-                            <!--</template>-->
+                            <tr v-for="data in tableData.client">
+                                <td>{{ data.company }}</td>
+                                <td>{{ clientLevelArr.find(item => item.value == data.grade).name }}</td>
+                                <td>{{ data.keyman }}</td>
+                                <td>{{ data.contact_name }}</td>
+                                <td style="overflow: hidden;text-overflow: ellipsis;word-break: break-all;">
+                                    {{ data.contact_phone }}
+                                </td>
+                                <td>{{ data.principal_name }}</td>
+                            </tr>
                             </tbody>
                         </table>
                     </div>
                     <div class="tab-pane animation-fade" id="forum-trail-add" role="tabpanel">
-                        <div class="col-md-12 py-20">
+                        <div class="clearfix pb-20">
+                            <Selectors :options="newTrailSearchArr" @change="changeSelectTime"></Selectors>
+                        </div>
+                        <div class="col-md-12">
                             <div ref="client" style="width: 600px;height:500px;margin: 0 auto"></div>
                         </div>
                     </div>
@@ -108,6 +101,7 @@
 
 <script>
     import fetch from '../../assets/utils/fetch.js'
+    import config from '../../assets/js/config'
 
     export default {
         name: "clients",
@@ -116,6 +110,7 @@
                 tableData: [],
                 nowDate: '',
                 designationDateNum: 'day',
+                clientLevelArr: config.clientLevelArr,
                 clientTypeArr: [
                     {
                         name: '客户类型',
@@ -135,25 +130,56 @@
                     }
                 ],
                 clientType: '',
+                newTrailSearchArr: [
+                    {
+                        name: '查询时间',
+                        value: '',
+                    },
+                    {
+                        name: '最近半年',
+                        value: 1
+                    },
+                    {
+                        name: '本年',
+                        value: 2
+                    }
+                ],
             }
         },
         mounted() {
-            this.getBusinessReport();
+            this.getReport();
         },
         methods: {
-            getBusinessReport(start_time = null, end_time = null) {
-                if (!start_time || !end_time) {
-                    start_time = this.getDesignationDate(-7);
-                    end_time = this.getNowFormatDate();
+            getReport(start_time = null, end_time = null) {
+                if (!start_time) {
+                    if (!this.start_time) {
+                        start_time = this.getDesignationDate(-7);
+                    } else {
+                        start_time = this.start_time
+                    }
                 }
-                this.setReprots(start_time, end_time);
+                if (!end_time) {
+                    if (!this.end_time) {
+                        end_time = this.getNowFormatDate();
+                    } else {
+                        end_time = this.end_time
+                    }
+                }
+                this.start_time = start_time;
+                this.end_time = end_time;
+
                 let data = {
                     start_time: start_time,
                     end_time: end_time,
                 };
+
+                if (this.clientType) {
+                    data.type = this.clientType
+                }
+
                 this.$refs.timeInterval.setValue(start_time, end_time);
                 let _this = this;
-                fetch('get', '/reportfrom/commercialfunnel', data).then(function (response) {
+                fetch('get', '/reportfrom/clientreport', data).then(function (response) {
                     _this.tableData = response
                 })
             },
@@ -200,40 +226,85 @@
                         break;
                 }
                 this.$refs.timeInterval.setValue(designationDate, this.nowDate);
-                this.getBusinessReport(designationDate, this.nowDate)
+                this.getReport(designationDate, this.nowDate);
+                this.setReports(designationDate, this.nowDate)
             },
 
             changeDate(start, end) {
+                this.start_time = start;
+                this.end_time = end;
                 this.designationDateNum = '';
-                this.getBusinessReport(start, end);
+                this.getReport(start, end);
+                this.setReports(start, end);
             },
 
             changeClientType(value) {
-                this.clientType = value
+                this.clientType = value;
+                this.getReport();
             },
 
-            setReprots(start_time, end_time) {
-                if (!start_time || !end_time) {
-                    start_time = this.getDesignationDate(-7);
-                    end_time = this.getNowFormatDate();
+            changeSelectTime(value) {
+                let designationDate = '';
+                if (value == 1) {
+                    designationDate = this.getDesignationDate(-180);
+                } else if (value == 2) {
+                    designationDate = this.getDesignationDate(0);
+                    designationDate = designationDate.split('-')[0] + '-' + 1 + '-' + 1;
+                } else {
+                    designationDate = this.nowDate;
                 }
-                let _this = this;
+                this.designationDateNum = '';
+                this.$refs.timeInterval.setValue(designationDate, this.nowDate);
+                this.setReports(designationDate, this.nowDate)
+            },
 
+            setReports(start_time, end_time) {
+                if (!start_time || !end_time) {
+                    start_time = this.start_time;
+                    end_time = this.start_time;
+                }
                 let data = {
                     start_time: start_time,
                     end_time: end_time
                 };
 
-                let clientChart = echarts.init(_this.$refs.client, 'mttop');
+                let clientChart = echarts.init(this.$refs.client, 'mttop');
 
-                fetch('get', '/reportfrom/salesFunnel', data).then(function (response) {
-                    console.log(response);
+                fetch('get', '/reportfrom/clientanalysis', data).then(function (response) {
+                    let dataTimeArr = [];
+                    let dataAllInfo = [];
+                    let dataBusinessInfo = [];
+                    let dataMovieInfo = [];
+                    let dataZYInfo = [];
+                    for (let item in response.clients) {
+                        dataTimeArr.push(item);
+                        if (response.clients[item].length === 0) {
+                            dataAllInfo.push(0);
+                            dataBusinessInfo.push(0);
+                            dataMovieInfo.push(0);
+                            dataZYInfo.push(0);
+                            continue;
+                        }
+                        for (let i = 0; i < response.clients[item].length; i++) {
+                            switch (response.clients[item][i].type) {
+                                case 1:
+                                    dataMovieInfo.push(response.clients[item][i].total);
+                                    break;
+                                case 2:
+                                    dataZYInfo.push(response.clients[item][i].total);
+                                    break;
+                                case 3:
+                                    dataBusinessInfo.push(response.clients[item][i].total);
+                                    break;
+                            }
+                        }
+                    }
                     let option = {
                         tooltip: {
                             trigger: 'axis'
                         },
                         legend: {
-                            data: ['邮件营销', '联盟广告', '视频广告', '直接访问', '搜索引擎']
+                            data: ['总数', '商务', '影视', '综艺']
                         },
                         grid: {
                             left: '3%',
@@ -244,41 +315,35 @@
                         xAxis: {
                             type: 'category',
                             boundaryGap: false,
-                            data: ['周一', '周二', '周三', '周四', '周五', '周六', '周日']
+                            data: dataTimeArr
                         },
                         yAxis: {
                             type: 'value'
                         },
                         series: [
                             {
-                                name: '邮件营销',
+                                name: '总数',
                                 type: 'line',
                                 stack: '总量',
-                                data: [120, 132, 101, 134, 90, 230, 210]
+                                data: dataAllInfo
                             },
                             {
-                                name: '联盟广告',
+                                name: '商务',
                                 type: 'line',
                                 stack: '总量',
-                                data: [220, 182, 191, 234, 290, 330, 310]
+                                data: dataBusinessInfo
                             },
                             {
-                                name: '视频广告',
+                                name: '影视',
                                 type: 'line',
                                 stack: '总量',
-                                data: [150, 232, 201, 154, 190, 330, 410]
+                                data: dataMovieInfo
                             },
                             {
-                                name: '直接访问',
+                                name: '综艺',
                                 type: 'line',
                                 stack: '总量',
-                                data: [320, 332, 301, 334, 390, 330, 320]
-                            },
-                            {
-                                name: '搜索引擎',
-                                type: 'line',
-                                stack: '总量',
-                                data: [820, 932, 901, 934, 1290, 1330, 1320]
+                                data: dataZYInfo
                             }
                         ]
                     };

@@ -36,7 +36,7 @@
                 <div class="col-md-12 clearfix my-10 px-0">
                     <div class="col-md-3 float-left">
                         <div class="col-md-6 float-left text-right">数量合计</div>
-                        <div class="col-md-6 float-left">666个</div>
+                        <div class="col-md-6 float-left" v-if="tableData.sum">{{ tableData.sum }}个</div>
                     </div>
                     <div class="col-md-3 float-left">
                         <div class="col-md-6 float-left  text-right pl-0">合同金额总额</div>
@@ -50,33 +50,38 @@
 
                 <div class="col-md-12">
                     <ul class="nav nav-tabs nav-tabs-line" role="tablist" id="taskTab">
-                        <li class="nav-item" role="presentation">
+                        <li class="nav-item" role="presentation" @click="getReport(0, 0)">
                             <a class="nav-link active" data-toggle="tab" href="#forum-trail-report"
                                aria-controls="forum-base"
                                aria-expanded="true" role="tab">项目报表</a>
                         </li>
-                        <li class="nav-item" role="presentation">
+                        <li class="nav-item" role="presentation" @click="setReports">
                             <a class="nav-link" data-toggle="tab" href="#forum-trail-add"
                                aria-controls="forum-present"
                                aria-expanded="false" role="tab">项目新增</a>
                         </li>
-                        <li class="nav-item" role="presentation">
+                        <li class="nav-item" role="presentation" @click="proportionReports">
                             <a class="nav-link" data-toggle="tab" href="#forum-industry-analysis"
                                aria-controls="forum-present"
                                aria-expanded="false" role="tab">项目占比</a>
                         </li>
                     </ul>
                 </div>
-                <div class="tab-content nav-tabs-animate bg-white col-md-12 pb-20">
+                <div class="page-content tab-content nav-tabs-animate bg-white">
                     <div class="tab-pane animation-fade active" id="forum-trail-report" role="tabpanel">
+                        <div class="clearfix">
+                            <div class="col-md-2 float-left pl-0">
+                                <Selectors :options="projectsTypeArr" @change="changeProjectType"></Selectors>
+                            </div>
+                            <div class="col-md-3 float-left pl-0" v-if="departmentsInfo.length > 1">
+                                <DropDepartment name="组别" :data="departmentsInfo" @change="selectDepartment"/>
+                            </div>
+                        </div>
                         <table class="table table-hover is-indent example" data-plugin="animateList" data-animate="fade"
                                data-child="tr"
                                data-selectable="selectable">
                             <tr class="animation-fade"
                                 style="animation-fill-mode: backwards; animation-duration: 250ms; animation-delay: 0ms;">
-                                <th class="cell-100" scope="col">
-                                    <Selectors :options="projectsTypeArr" @change="changeProjectType"></Selectors>
-                                </th>
                                 <th class="cell-100" scope="col">项目名称</th>
                                 <th class="cell-100" scope="col">组别</th>
                                 <th class="cell-100" scope="col">签约艺人</th>
@@ -86,36 +91,51 @@
                                 <th class="cell-100" scope="col">负责人</th>
                             </tr>
                             <tbody>
-                            <!--<template v-for="(data, type) in tableData.data">-->
-                            <!--<tr v-for="(item, index) in data">-->
-                            <!--<td v-if="index === 0">-->
-                            <!--<template v-if="type === 'industry_data'">品类</template>-->
-                            <!--<template v-if="type === 'cooperation_data'">合作</template>-->
-                            <!--<template v-if="type === 'resource_type_data'">线索来源</template>-->
-                            <!--<template v-if="type === 'priority_data'">优先级</template>-->
-                            <!--</td>-->
-                            <!--<td v-else></td>-->
-                            <!--<td>{{ item.name }}</td>-->
-                            <!--<td>{{ item.number }}</td>-->
-                            <!--<td>{{ item.ratio }}</td>-->
-                            <!--<td>{{ item.ring_ratio_increment }}</td>-->
-                            <!--<td>{{ item.annual_increment }}</td>-->
-                            <!--<td>{{ item.confirm_number }}</td>-->
-                            <!--<td>{{ item.confirm_ratio_increment }}</td>-->
-                            <!--<td>{{ item.confirm_annual_increment }}</td>-->
-                            <!--<td>{{ item.customer_conversion_rate }}</td>-->
-                            <!--</tr>-->
-                            <!--</template>-->
+                            <tr v-for="data in tableData.project">
+                                <td class="cell-100" scope="col">{{ data.title }}</td>
+                                <td class="cell-100" scope="col">{{ data.deparment_name }}</td>
+                                <td class="cell-100" scope="col">{{ data.star_name }}</td>
+                                <td class="cell-100" scope="col"></td>
+                                <td class="cell-100" scope="col"></td>
+                                <td class="cell-100" scope="col">
+                                    {{ projectStatusArr.find(item => item.value == data.status).name }}
+                                </td>
+                                <td class="cell-100" scope="col">{{ data.principal_name }}</td>
+                            </tr>
                             </tbody>
                         </table>
+                        <div class="col-md-1" style="margin: 6rem auto"
+                             v-if="tableData.project && tableData.project.length === 0">
+                            <img src="https://res.papitube.com/corvus/images/content-none.png" alt=""
+                                 style="width: 100%">
+                        </div>
                     </div>
                     <div class="tab-pane animation-fade" id="forum-trail-add" role="tabpanel">
-                        <div class="col-md-12 py-20">
+                        <div class="clearfix pb-20">
+                            <div class="col-md-2 float-left pl-0">
+                                <Selectors :options="newTrailSearchArr" @change="changeSelectTime"></Selectors>
+                            </div>
+                            <div class="col-md-2 float-left pl-0">
+                                <Selectors :options="starsArr" @change="changeStar"></Selectors>
+                            </div>
+                            <div class="col-md-3 float-left">
+                                <DropDepartment name="组别" :data="departmentsInfo" @change="selectNewDepartment"/>
+                            </div>
+                        </div>
+                        <div class="col-md-12">
                             <div ref="trail" style="width: 600px;height:500px;margin: 0 auto"></div>
                         </div>
                     </div>
                     <div class="tab-pane animation-fade" id="forum-industry-analysis" role="tabpanel">
-                        <div class="col-md-12 py-20">
+                        <div class="clearfix pb-20">
+                            <div class="col-md-2 float-left pl-0">
+                                <Selectors :options="starsArr" @change="changeProportionStar"></Selectors>
+                            </div>
+                            <div class="col-md-3 float-left pl-0" v-if="departmentsInfo.length > 1">
+                                <DropDepartment name="组别" :data="departmentsInfo" @change="selectProportionDepartment"/>
+                            </div>
+                        </div>
+                        <div class="col-md-12">
                             <div ref="industry" style="width: 600px;height:500px;margin: 0 auto"></div>
                         </div>
                     </div>
@@ -127,6 +147,7 @@
 
 <script>
     import fetch from '../../assets/utils/fetch.js'
+    import config from '../../assets/js/config'
 
     export default {
         name: "projects",
@@ -135,6 +156,7 @@
                 tableData: [],
                 nowDate: '',
                 designationDateNum: 'day',
+                projectStatusArr: config.projectStatusArr,
                 projectsTypeArr: [
                     {
                         name: '项目类型',
@@ -154,27 +176,124 @@
                     }
                 ],
                 projectType: '',
+                departmentId: '',
+                departmentsInfo: [
+                    {
+                        name: '请选择组别',
+                        id: '',
+                        departments: {
+                            data: []
+                        }
+                    }
+                ],
+                newTrailSearchArr: [
+                    {
+                        name: '查询时间',
+                        value: '',
+                    },
+                    {
+                        name: '最近半年',
+                        value: 1
+                    },
+                    {
+                        name: '本年',
+                        value: 2
+                    }
+                ],
+                starsArr: [
+                    {
+                        name: '目标艺人',
+                        value: ''
+                    }
+                ],
+                starId: '',
+                departmentNewId: '',
+                proportionDepartmentId: '',
+
             }
         },
         mounted() {
-            this.getBusinessReport();
+            this.getReport();
+            this.getDepartments();
+            this.getStars();
         },
         methods: {
-            getBusinessReport(start_time = null, end_time = null) {
-                if (!start_time || !end_time) {
-                    start_time = this.getDesignationDate(-7);
-                    end_time = this.getNowFormatDate();
+            getReport(start_time = null, end_time = null) {
+                if (!start_time) {
+                    if (!this.start_time) {
+                        start_time = this.getDesignationDate(-7);
+                    } else {
+                        start_time = this.start_time
+                    }
                 }
-                this.setReprots(start_time, end_time);
+                if (!end_time) {
+                    if (!this.end_time) {
+                        end_time = this.getNowFormatDate();
+                    } else {
+                        end_time = this.end_time
+                    }
+                }
+                this.start_time = start_time;
+                this.end_time = end_time;
+
                 let data = {
                     start_time: start_time,
                     end_time: end_time,
                 };
+                if (this.departmentId) {
+                    data.department = this.departmentId
+                }
+                if (this.projectType) {
+                    data.type = this.projectType
+                }
                 this.$refs.timeInterval.setValue(start_time, end_time);
                 let _this = this;
-                fetch('get', '/reportfrom/commercialfunnel', data).then(function (response) {
+                fetch('get', '/reportfrom/projectreport', data).then(function (response) {
                     _this.tableData = response
                 })
+            },
+
+            getStars() {
+                fetch('get', '/stars/all').then(response => {
+                    for (let i = 0; i < response.data.length; i++) {
+                        this.starsArr.push({
+                            value: response.data[i].id,
+                            name: response.data[i].name
+                        })
+                    }
+                })
+            },
+
+            getDepartments() {
+                fetch('get', '/departments').then(res => {
+                    this.departmentsInfo = this.departmentsInfo.concat(res.data);
+                })
+            },
+
+            changeSelectTime(value) {
+                let designationDate = '';
+                if (value == 1) {
+                    designationDate = this.getDesignationDate(-180);
+                } else if (value == 2) {
+                    designationDate = this.getDesignationDate(0);
+                    designationDate = designationDate.split('-')[0] + '-' + 1 + '-' + 1;
+                } else {
+                    designationDate = this.nowDate;
+                }
+                this.designationDateNum = '';
+                this.$refs.timeInterval.setValue(designationDate, this.nowDate);
+                this.setReports(designationDate, this.nowDate)
+            },
+
+            changeStar(value) {
+                this.starId = value;
+                this.designationDateNum = '';
+                this.setReports();
+            },
+
+            changeProportionStar(value) {
+                this.proportionStarId = value;
+                this.proportionReports();
             },
 
             getNowFormatDate() {
@@ -219,42 +338,95 @@
                         break;
                 }
                 this.$refs.timeInterval.setValue(designationDate, this.nowDate);
-                this.getBusinessReport(designationDate, this.nowDate)
+                this.getReport(designationDate, this.nowDate);
+                this.setReports(designationDate, this.nowDate);
+                this.proportionReports(designationDate, this.nowDate);
             },
 
             changeDate(start, end) {
+                this.start_time = start;
+                this.end_time = end;
                 this.designationDateNum = '';
-                this.getBusinessReport(start, end);
+                this.getReport(start, end);
+                this.setReports(start, end);
+                this.proportionReports(start, end);
             },
 
             changeProjectType(value) {
-                this.projectType = value
+                this.projectType = value;
+                this.getReport()
             },
 
-            setReprots(start_time, end_time) {
-                if (!start_time || !end_time) {
-                    start_time = this.getDesignationDate(-7);
-                    end_time = this.getNowFormatDate();
-                }
-                let _this = this;
+            selectDepartment(value) {
+                this.departmentId = value.id;
+                this.getReport()
+            },
 
+            selectNewDepartment(value) {
+                this.departmentNewId = value.id;
+                this.setReports()
+            },
+
+            selectProportionDepartment(value) {
+                this.proportionDepartmentId = value.id;
+                this.proportionReports();
+            },
+
+            setReports(start_time, end_time) {
+                if (!start_time || !end_time) {
+                    start_time = this.start_time;
+                    end_time = this.start_time;
+                }
                 let data = {
                     start_time: start_time,
                     end_time: end_time
                 };
 
-                let trailChart = echarts.init(_this.$refs.trail, 'mttop');
-                let industryChart = echarts.init(_this.$refs.industry, 'mttop');
+                if (this.starId) {
+                    data.target_star = this.starId
+                }
 
+                if (this.departmentNewId) {
+                    data.department = this.departmentNewId
+                }
 
-                fetch('get', '/reportfrom/salesFunnel', data).then(function (response) {
-                    console.log(response);
+                let trailChart = echarts.init(this.$refs.trail, 'mttop');
+
+                fetch('get', '/reportfrom/newproject', data).then(function (response) {
+                    let dataTimeArr = [];
+                    let dataAllInfo = [];
+                    let dataBusinessInfo = [];
+                    let dataMovieInfo = [];
+                    let dataZYInfo = [];
+                    for (let item in response.data) {
+                        dataTimeArr.push(item);
+                        if (response.data[item].length === 0) {
+                            dataAllInfo.push(0);
+                            dataBusinessInfo.push(0);
+                            dataMovieInfo.push(0);
+                            dataZYInfo.push(0);
+                            continue;
+                        }
+                        for (let i = 0; i < response.data[item].length; i++) {
+                            switch (response.data[item][i].type) {
+                                case 1:
+                                    dataMovieInfo.push(response.data[item][i].total);
+                                    break;
+                                case 2:
+                                    dataZYInfo.push(response.data[item][i].total);
+                                    break;
+                                case 3:
+                                    dataBusinessInfo.push(response.data[item][i].total);
+                                    break;
+                            }
+                        }
+                    }
                     let trailOption = {
                         tooltip: {
                             trigger: 'axis'
                         },
                         legend: {
-                            data: ['邮件营销', '联盟广告', '视频广告', '直接访问', '搜索引擎']
+                            data: ['总数', '商务', '影视', '综艺']
                         },
                         grid: {
                             left: '3%',
@@ -265,63 +437,153 @@
                         xAxis: {
                             type: 'category',
                             boundaryGap: false,
-                            data: ['周一', '周二', '周三', '周四', '周五', '周六', '周日']
+                            data: dataTimeArr
                         },
                         yAxis: {
                             type: 'value'
                         },
                         series: [
                             {
-                                name: '邮件营销',
+                                name: '总数',
                                 type: 'line',
                                 stack: '总量',
-                                data: [120, 132, 101, 134, 90, 230, 210]
+                                data: dataAllInfo
                             },
                             {
-                                name: '联盟广告',
+                                name: '商务',
                                 type: 'line',
                                 stack: '总量',
-                                data: [220, 182, 191, 234, 290, 330, 310]
+                                data: dataBusinessInfo
                             },
                             {
-                                name: '视频广告',
+                                name: '影视',
                                 type: 'line',
                                 stack: '总量',
-                                data: [150, 232, 201, 154, 190, 330, 410]
+                                data: dataMovieInfo
                             },
                             {
-                                name: '直接访问',
+                                name: '综艺',
                                 type: 'line',
                                 stack: '总量',
-                                data: [320, 332, 301, 334, 390, 330, 320]
-                            },
-                            {
-                                name: '搜索引擎',
-                                type: 'line',
-                                stack: '总量',
-                                data: [820, 932, 901, 934, 1290, 1330, 1320]
+                                data: dataZYInfo
                             }
                         ]
                     };
 
                     trailChart.setOption(trailOption);
                 });
-                let industryOption = {
-                    xAxis: {
-                        type: 'category',
-                        data: ['Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat', 'Sun']
-                    },
-                    yAxis: {
-                        type: 'value'
-                    },
-                    series: [{
-                        data: [120, 200, 150, 80, 70, 110, 130],
-                        type: 'bar'
-                    }]
+
+            },
+
+            proportionReports() {
+                let data = {
+                    start_time: this.start_time,
+                    end_time: this.end_time
                 };
 
-                industryChart.setOption(industryOption)
-            }
+                if (this.proportionStarId) {
+                    data.target_star = this.proportionStarId
+                }
+
+                if (this.proportionDepartmentId) {
+                    data.department = this.proportionDepartmentId
+                }
+
+                let proportionChart = echarts.init(this.$refs.industry, 'mttop');
+
+                fetch('get', '/reportfrom/percentageofproject', data).then(function (response) {
+                    console.log(response);
+                    let firstInfo = [];
+                    let secondName = [];
+                    let secondInfo = [];
+                    for (let i = 0; i < response.length; i++) {
+                        firstInfo.push(
+                            {
+                                value: response[i].type_total,
+                                name: response[i].type_name
+                            }
+                        );
+                        for (let j = 0; j < response[i].value.length; j++) {
+                            secondName.push(response[i].value[j].value);
+                            secondInfo.push({
+                                value: response[i].value[j].p_total,
+                                name: response[i].value[j].value
+                            })
+                        }
+                    }
+                    let industryOption = {
+                        tooltip: {
+                            trigger: 'item',
+                            formatter: "{a} <br/>{b}: {c} ({d}%)"
+                        },
+                        legend: {
+                            orient: 'vertical',
+                            x: 'left',
+                            data: secondName
+                        },
+                        series: [
+                            {
+                                name: '项目',
+                                type: 'pie',
+                                selectedMode: 'single',
+                                radius: [0, '30%'],
+
+                                label: {
+                                    normal: {
+                                        position: 'inner'
+                                    }
+                                },
+                                labelLine: {
+                                    normal: {
+                                        show: false
+                                    }
+                                },
+                                data: firstInfo
+                            },
+                            {
+                                name: '类别',
+                                type: 'pie',
+                                radius: ['40%', '55%'],
+                                label: {
+                                    normal: {
+                                        formatter: '{a|{a}}{abg|}\n{hr|}\n  {b|{b}：}{c}  {per|{d}%}  ',
+                                        backgroundColor: '#eee',
+                                        borderColor: '#aaa',
+                                        borderWidth: 1,
+                                        borderRadius: 4,
+                                        rich: {
+                                            a: {
+                                                color: '#999',
+                                                lineHeight: 22,
+                                                align: 'center'
+                                            },
+                                            hr: {
+                                                borderColor: '#aaa',
+                                                width: '100%',
+                                                borderWidth: 0.5,
+                                                height: 0
+                                            },
+                                            b: {
+                                                fontSize: 16,
+                                                lineHeight: 33
+                                            },
+                                            per: {
+                                                color: '#eee',
+                                                backgroundColor: '#334455',
+                                                padding: [2, 4],
+                                                borderRadius: 2
+                                            }
+                                        }
+                                    }
+                                },
+                                data: secondInfo
+                            }
+                        ]
+                    };
+
+                    proportionChart.setOption(industryOption)
+                })
+            },
         }
     }
 </script>
