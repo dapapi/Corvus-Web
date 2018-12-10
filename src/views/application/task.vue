@@ -1,5 +1,5 @@
 <template>
-    <div class="panel col-md-12 col-lg-12 py-5" style="border-left:1px solid #ccc">
+    <div class="panel col-md-12 col-lg-12 py-5" style="border-left:1px solid #e3e3e3">
                 <div class="col-md-12">
                     <ul class="nav nav-tabs nav-tabs-line" role="tablist">
                         <li class="nav-item" role="presentation" @click="getTasks(1,0)">
@@ -26,7 +26,7 @@
                 </div>
 
                 <div class="page-content tab-content nav-tabs-animate bg-white ">
-                    <div class="tab-pane animation-fade active pt-10" id="forum-task" role="tabpanel">
+                    <div class="tab-pane animation-fade active pt-20" id="forum-task" role="tabpanel">
                         <table class="table table-hover is-indent" data-plugin="animateList" data-animate="fade"
                                data-child="tr"
                                data-selectable="selectable">
@@ -103,7 +103,6 @@ export default {
                 taskLevelArr: config.taskLevelArr,
                 taskTypeArr: config.taskTypeArr,
                 customizeInfo: config.customizeInfo,
-                taskStatus:0,//状态
                 taskInfo:'',//数据
                 myType:'',
             }
@@ -127,6 +126,7 @@ export default {
                 if(signStatus){
                     this.taskStatus = signStatus
                 }
+                data.page = page
                 fetch('get', '/tasks/my_all', data).then(function (response) {             
                     _this.taskInfo = response.data;
                     _this.current_page = response.meta.pagination.current_page;
@@ -161,6 +161,9 @@ export default {
 }
 .tab-content{
     padding: 10px 0 10px 20px;
+}
+.page-item{
+    cursor: pointer;
 }
 </style>
 
