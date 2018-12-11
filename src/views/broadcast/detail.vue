@@ -40,9 +40,15 @@
                     <br>
                     <div class="panel-content" v-if="currentData.scope && departments">
                         <h5 v-html="currentData.desc" class="broadcast-content"></h5>
-                        <div v-if="currentData.accessory"><a :href="currentData.accessory">查看附件</a></div>
+                        <div v-if="currentData.accessory"
+                        data-plugin="actionBtn" 
+            data-toggle="modal" 
+            data-target="#docPreview"
+            aria-hidden="true"
+                        ><a href="#">查看附件</a></div>
+                        <DocPreview :url='currentData.accessory' :givenFileName='currentData.accessory_name' />
                         <h5>公告范围
-                            <span  v-for=" item in currentData.scope.data" :key="item.department_id">&nbsp;&nbsp;
+                            <span  v-for=" item in currentData.scope.data" :key="item.department_id" v-if="item.department_id">&nbsp;&nbsp;
                                 <span v-if="departments[0]" class="badge badge-round badge-dark">{{departments.find(departments => departments.id == item.department_id).name}}</span>
                             </span>
                         </h5>
@@ -51,7 +57,7 @@
                 </div>
             </div>
         </div>
-        <AddModifyBroadCast :notedata='currentData' position='broadCast' @goback='goBack' @refresh='dataInit' />
+        <AddModifyBroadCast :notedata='currentData' position='broadCast' @goback='goBack' @refresh='dataInit' :givenFileName='currentData.accessory_name'/>
     </div>   
 </template>
 
@@ -109,6 +115,10 @@ export default {
 </script>
 
 <style scoped>
+iframe{
+    position: fixed;
+
+}
 .loader-overlay{
         margin-left: 100px;
         background-color: rgba(7, 17, 27, 0.2)

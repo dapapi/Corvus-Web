@@ -1,13 +1,15 @@
 <template>
 
     <div class="clearfix pb-5">
-        <select :id="'father' + n" title="" class="col-md-4 pl-0 float-left selectpicker">
+        <select :id="'father' + n" title="" class="col-md-4 pl-0 float-left selectpicker" v-model="fatherData">
+            <option value='' disabled selected style='display:none' >请选择</option>
             <selectorsOptions v-for="option in data" v-bind:id="option.id" :val="option.value"
                               :key="option.id">
                 {{option.value}}
             </selectorsOptions>
         </select>
-        <select :id="'child' + n" title="" class="col-md-4 pl-0 float-left">
+        <select :id="'child' + n" title="" class="col-md-4 pl-0 float-left" v-model="childData">
+            <option value='' disabled selected style='display:none'>请选择</option>
             <selectorsOptions v-for="option in item" v-bind:id="option.id" :val="option.value"
                               :key="option.id">
                 {{option.value}}
@@ -22,14 +24,20 @@
                             @change="numberSpinnerChange"></number-spinner>
             <input-selectors v-if="valueType === 6"></input-selectors>
             <div v-if="valueType === 5" class="">
-                <selectors  :options="stararr" @change="changeTargetStars" :multiple="true"
-                                        :placeholder="'请选择目标艺人'"></selectors>
+                <selectors class="pr-40" ref='selectors' :options="stararr" @valuelistener="changeTargetStars" :multiple="true"
+                                        :placeholder="'请选择'"></selectors>
+            </div>
+            <div class="" v-if="[4,7].includes(valueType) ">
+                <selectors  class="scopeSelector pr-40" ref='selectors' :options="valueType===7?departments:optionsData" 
+                @valuelistener="changeDepartments"  multiple='true' :placeholder='"请选择"'></selectors>
             </div>
         </div>
     </div>
 
 </template>
 <script>
+import fetch from '@/assets/utils/fetch.js'
+import config from '@/assets/js/config'
     export default {
         props: ['data', 'n','stararr'],
         data() {
@@ -42,10 +50,44 @@
                 item: function () {
                     return this.data[0].operator
                 },
+                departmentShow:false,
+                departments:{},
+                optionsData:{},
+                fatherData:'',
+                childData:'',
+                detailData:'',
+                sendData:{
+                    value:[],
+                    field:'',
+                    type:'',
+                    operator:'',
+                },
             }
         },
         computed:{
            
+        },
+        watch:{
+            'sendData.value':function(value){
+                this.$emit('sendcusdata',this.sendData,this.n)
+            },
+            normalInput:function(){
+                this.sendData.value = this.normalInput
+            },
+            fatherData:function(){
+                let currentData = this.data.find(item => item.value == this.fatherData)
+                this.sendData.field = currentData.code
+                this.sendData.type = currentData.type
+                this.sendData.value = ''
+            },
+            childData:function(){
+                console.log(this.item);
+                let currentData = this.item.find(item =>item.value == this.childData)
+                this.sendData.operator = currentData.code
+            }
+        },
+        created(){
+            this.getDepartmets()    
         },
         beforeMount() {
             if(this.data[0]){
@@ -55,7 +97,6 @@
                 this.refresh()
             })
         },
-
         mounted() {
             $('.selectpicker').selectpicker('refresh')
             let _this = this;
@@ -66,6 +107,7 @@
                 let id = $(this)[0].selectedOptions[0].id;
                 let father = _this.data.find(item => item.id === parseInt(id));
                 _this.item = father.operator;
+                _this.optionsData = father.content
                 _this.refresh()
                 if (_this.valueType === 'number') {
                     _this.$refs.numberSpinner.destroy();
@@ -90,13 +132,13 @@
                 $('#child' + this.n).selectpicker('refresh');
             },
             datePickerChange: function (value) {
-                this.basicEmit(value)
+                this.sendData.value = value
             },
             inputChange: function () {
-                this.basicEmit(this.normalInput)
+               this.sendData.value = value
             },
             numberSpinnerChange: function (value) {
-                this.basicEmit(value)
+                this.sendData.value = value
             },
             basicEmit: function (value) {
                 let data = {
@@ -107,14 +149,27 @@
                 };
                 this.$emit('change', data)
             },
-            changeTargetStars(){
-                
+            changeTargetStars(value){
+                this.sendData.value = value 
+            },
+            getDepartmets(value){
+                let _this = this
+                fetch('get','/departments').then((params) => {
+                    _this.departments = params.data
+                })
+            },
+            changeDepartments(value){
+                this.sendData.value = value 
             }
         }
     }
 </script>
 
 <style scoped>
+.scopeSelector{
+    width: 200px !important;
+    overflow: hidden !important;
+}
 .selectorsABC{
     width: 20px !important; 
 }

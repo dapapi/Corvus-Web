@@ -366,11 +366,11 @@
                                             <div class="col-md-5 float-left font-weight-bold">
                                             </div>
                                         </div>
-                                        <div class="card-text py-5 clearfix">
+                                        <!-- <div class="card-text py-5 clearfix">
                                             <div class="col-md-1 float-left text-right pl-0">保护截止日期</div>
                                             <div class="col-md-5 float-left font-weight-bold">
                                             </div>
-                                        </div>
+                                        </div> -->
                                     </div>
                                 </div>
                             </div>

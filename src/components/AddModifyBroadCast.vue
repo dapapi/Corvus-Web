@@ -53,7 +53,7 @@
                             <selectors ref='classifySelector' :options="classifyArr" @change="changeClassify" placeholder='请选择类型' ></selectors>
                         </div>
                         <div class="summernote" id="summernote"></div>
-                        <File-Uploader class="upload" url="javascript:void()" @change="fileUploaded">上传附件</File-Uploader>
+                        <File-Uploader class="upload" url="javascript:void()" @changePlus="fileUploaded">上传附件</File-Uploader>
                         <br/>
                         <input type="checkbox" v-model="topFlag">
                         <span class="set-top-flag" >&nbsp;&nbsp;置顶</span>
@@ -74,7 +74,7 @@
 import fetch from '@/assets/utils/fetch.js'
 import config from '@/assets/js/config'
 export default {
-    props:['notedata'],
+    props:['notedata','givenFileName'],
     data(){
         return{
             title:'',               //标题内容
@@ -89,6 +89,7 @@ export default {
             departments:{},         //公告范围
             classifyArr:config.classifyArr, 
             scope:[],
+            accessory_name:'',
         }
     },
     created(){
@@ -145,8 +146,9 @@ export default {
         },
         //获取部门数据
         getDepartments(){
+            let _this = this
             fetch('get','/departments').then((params) => {
-                this.departments = params.data
+                _this.departments = params.data
             })
         },
         //公告范围选择（数组）
@@ -206,7 +208,8 @@ export default {
                     desc:this.text,                         //富文本代码
                     is_accessory : this.is_accessory,       //是否带附件
                     accessory : this.accessory,             //附件内容
-                    readflag : 0,                           //已读状态         
+                    readflag : 0, 
+                    accessory_name : this.accessory_name                          //已读状态         
             }
             //发布模式
             if(this.pageType === '发布'){
@@ -230,7 +233,9 @@ export default {
         },
         //上传
         fileUploaded(value){
-            this.accessory = value
+            console.log(value);
+            this.accessory_name = value.fileName
+            this.accessory = value.fileUrl
         }
     }
 }
