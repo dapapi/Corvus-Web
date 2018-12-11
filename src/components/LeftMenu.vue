@@ -291,12 +291,12 @@
         line-height: 40px;
         padding: 0 30px;
     }
-    .console ul li:hover {
+    .console ul li:hover, .console ul li a:hover {
         cursor: pointer;
         color: #3f51b5;
         background: rgba(40,53,147,.03);
     }
-     .console ul li a {
+    .console ul li a {
         color: rgba(117, 117, 117, 0.9);
-     }
+    }
 </style>

@@ -6,7 +6,7 @@
             {{ text ? text : '选择部门' }}
         </button>
         <div class="dropdown-menu dropdown-menu-left" aria-labelledby="departmentDropdown" role="menu"
-             x-placement="bottom-end" style="min-width: calc(100% - 30px)">
+             x-placement="bottom-end" style="min-width: calc(100% - 30px); padding: 6px;">
             <template v-for="(item, index) in data">
                 <Departments :data="item" :change="select" :key="index"/>
             </template>
