@@ -17,14 +17,25 @@
                     </div>
 
                     <div class="col-md-12 example float-left">
-                        <h1 class="page-title">泰洋系 
-                            <span class="color999">（{{count}}人）</span> 
+                        <h3 class="example">泰洋系 
+                            <span class="color999" style="font-weight: 300;">（{{count}}人）</span> 
                             <span style="float: right; cursor: pointer;"><router-link to="/organization/management">管理部门</router-link></span>
-                        </h1>
+                        </h3>
                         <template v-for="(item, index) in data">
-                            <Department :data="item" :bgColor="true" :key="index" />
+                            <Department 
+                                :data="item" 
+                                :dIndex="index"
+                                :bgColor="dIndex === index" 
+                                :checkMember="checkMember"
+                                @changeIndex="changeIndex"
+                                :key="index" />
                         </template>
                     </div>
+
+                    <!-- 选择成员 -->
+                    <Modal id="check-member" title="选择成员" @onOK="sureCheckMember">
+                        <ListSelectMember />
+                    </Modal>
                 </div>
             </div>
         </div>
@@ -34,7 +45,6 @@
 
 <script>
     import fetch from '../../assets/utils/fetch.js'
-    import config from '../../assets/js/config'
 
     export default {
         data() {
@@ -42,6 +52,7 @@
                 keyword: '',
                 data: [],
                 count: 0,
+                dIndex: -1,
             }
         },
 
@@ -63,6 +74,27 @@
                     count += n.users.data.length + this.countNum(n.departments.data)
                 })
                 return count
+            },
+            // 选择
+            checkMember (data) {
+                this.departmentId = data.id
+                this.$store.commit('changeNewParticipantsInfo', data.users.data)
+                $('#check-member').modal()
+            },
+            // 选择成员
+            sureCheckMember () {
+                const params = {
+                    user: this.$store.state.newParticipantsInfo.map(n => n.id)
+                }
+                fetch('put', `/departments/member/${this.departmentId}`, params).then(res => {
+                    $('#check-member').modal('hide')
+                    toastr.success('成员选择成功')
+                    this.getDepartment()
+                })
+            },
+            // index
+            changeIndex (index) {
+                this.dIndex = index
             }
         }
     }
@@ -74,6 +106,12 @@
     }
     .input-search i {
         cursor: pointer;
+    }
+    h3 a{
+        color: #333;
+    }
+    h3 a:hover {
+        text-decoration: none;
     }
 </style>
 

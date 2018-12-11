@@ -1,21 +1,21 @@
 <template>
     <div class="department-item">
-        <div class="name" :class="visible && bgColor ? 'dark': ''" :style="{paddingLeft: paddingLeft + 'px'}">
+        <div class="name" :class="bgColor ? 'dark': ''" :style="{paddingLeft: paddingLeft + 'px'}">
             <span @click="showList">
                 <i v-show="visible" class="icon md-caret-down showList"></i>
                 <i v-show="!visible" class="icon md-caret-right showList"></i>
                 <img src="../../assets/img/department@2x.png" />
                 {{ data.name }} <span>({{count}})</span> {{principal ? principal.name:'无负责人'}}
             </span>
-            <i v-if="!isEdit" class="icon md-plus edit" style="float: right;line-height: 40px;" @click.stop="addMember"></i>
+            <i v-if="!isEdit" class="icon md-plus edit" style="float: right;line-height: 50px;" @click.stop="check(data)"></i>
             <div class="drop" v-else>
                  <i class="icon md-more font-size-24" aria-hidden="true" id="org-dropdown"
-                    data-toggle="dropdown" aria-expanded="false" style="cursor: pointer; float: right;line-height: 40px;">
+                    data-toggle="dropdown" aria-expanded="false" style="cursor: pointer; float: right;line-height: 50px;">
                 </i>
                 <div class="dropdown-menu dropdown-menu-left" aria-labelledby="org-dropdown" role="menu" x-placement="bottom-start" style="min-width: 0">
                     <a class="dropdown-item" role="menuitem" @click="edit(data)">编辑部门</a>
                     <a class="dropdown-item" role="menuitem" @click="check(data)">选择成员</a>
-                    <a class="dropdown-item" role="menuitem">移动部门到</a>
+                    <a class="dropdown-item" role="menuitem" @click="move(data)">移动部门到</a>
                     <a class="dropdown-item" role="menuitem" @click="addChild(data)">添加子部门</a>
                     <a class="dropdown-item" role="menuitem" @click="del(data)">删除部门</a>
                 </div>
@@ -24,7 +24,7 @@
         <ul v-show="visible" v-if="!isEdit">
             <li v-for="(_item, _index) in data.users.data" :key="_index" :style="{paddingLeft: paddingLeft + 40 + 'px'}">
                 {{ _item.name }}
-                <i class="icon md-eye" style="float: right;line-height: 40px;" @click.stop></i>
+                <i class="icon md-eye" style="float: right;line-height: 50px;" @click.stop></i>
             </li>
         </ul>
          <template v-for="(item, index) in data.departments.data">
@@ -35,6 +35,7 @@
                 :delDepartment="delDepartment" 
                 :checkMember="checkMember"
                 :addChildDepartment="addChildDepartment"
+                :moveDepartment="moveDepartment"
                 :isEdit="isEdit" :left="paddingLeft" :key="index" />
         </template>
     </div>
@@ -43,7 +44,7 @@
 <script>
 export default {
     name: 'DepartmentItem',
-    props: ['data', 'bgColor', 'left', 'isEdit', 'editDepartment', 'delDepartment', 'checkMember', 'addChildDepartment'],
+    props: ['data', 'bgColor', 'left', 'isEdit', 'editDepartment', 'delDepartment', 'checkMember', 'addChildDepartment', 'moveDepartment', 'dIndex'],
     data () {
         return {
             visible: false,
@@ -66,6 +67,9 @@ export default {
         // 列表展示
         showList () {
             this.visible = !this.visible
+            if (this.dIndex || this.dIndex === 0) {
+                this.$emit('changeIndex', this.dIndex)
+            }
         },
         // 计算人数
         countNum (data) {
@@ -76,10 +80,6 @@ export default {
                 })
             }
             return data.users.data.length + count
-        },
-        // 添加部门成员
-        addMember (id) {
-            alert('添加成员')
         },
         // 编辑部门
         edit (data) {
@@ -95,8 +95,8 @@ export default {
             // 
         },
         // 移动部门
-        moveDepartment () {
-            // 
+        move (data) {
+            this.moveDepartment(data)
         },
         // 添加子部门
         addChild (data) {
@@ -112,8 +112,8 @@ ul {
     padding: 0;
     margin: 0;
     li {
-        height: 40px;
-        line-height: 40px;
+        height: 50px;
+        line-height: 50px;
         list-style: none;
         i {
             margin: 0 11px;
@@ -121,7 +121,6 @@ ul {
         }
         &:hover {
             background: #F5F5F5;
-            // color: #3f51b5;
             cursor: pointer;
             i {
                 margin: 0 11px;
@@ -134,8 +133,9 @@ ul {
     color: #333;
     font-size: 16px;
     cursor: pointer;
-    height: 40px;
-    line-height: 40px;
+    height: 50px;
+    line-height: 50px;
+    padding-right: 14px;
     &:hover {
         background: #F5F5F5;
         .edit {
@@ -165,4 +165,5 @@ ul {
 .drop {
     float: right;
 }
+
 </style>

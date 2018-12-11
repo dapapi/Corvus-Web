@@ -35,9 +35,11 @@
                 return this.left || this.left === 0 ? this.left * 1 + 20 : 0
             },
         },
-        // 返回选中数据
-        selectData () {
-            this.change({id: this.data.id, name: this.data.name, pId: this.data.department_pid})
+        methods: {
+            // 返回选中数据
+            selectData () {
+                this.change({id: this.data.id, name: this.data.name, pId: this.data.department_pid})
+            }
         }
     }
 </script>
@@ -73,8 +75,8 @@
         color: #333;
         font-size: 16px;
         cursor: pointer;
-        height: 40px;
-        line-height: 40px;
+        height: 50px;
+        line-height: 50px;
         &:hover {
             background: #F5F5F5;
             // color: #3f51b5;
