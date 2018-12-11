@@ -39,7 +39,7 @@
                         </a>
                         <ul class="site-menu-sub" style="">
                             <li class="site-menu-item" v-for="subMenu in menu.data"
-                                :class="pageRoute === subMenu.code ? 'active': ''">
+                            :class="pageRoute === subMenu.code ? 'active': ''">
                                 <router-link :to="'/' + subMenu.code"
                                              class="animsition-link">
                                     <span class="site-menu-title">{{ subMenu.name }}</span>
@@ -82,12 +82,6 @@
                 pageRoute: '',
             }
         },
-
-        // watch: {
-        //     '$route'(to, from) {
-        //         this.pageRoute = to.path.split('/')[1];
-        //     },
-        // },
         methods: {
         }
     }
