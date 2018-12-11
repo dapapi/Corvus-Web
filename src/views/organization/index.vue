@@ -28,7 +28,6 @@
                 </div>
             </div>
         </div>
-
     </div>
 
 </template>
@@ -48,8 +47,6 @@
 
         mounted() {
             this.getDepartment()
-            // $('popover').popover('show')
-
         },
 
         methods: {
