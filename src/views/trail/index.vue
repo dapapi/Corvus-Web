@@ -101,13 +101,15 @@
 
         <customize-filter :data="customizeInfo" :stararr='starsArr' @change="customize"></customize-filter>
 
-        <div class="site-action" data-plugin="actionBtn" data-toggle="modal" data-target="#addTrail">
-            <button type="button"
-                    class="site-action-toggle btn-raised btn btn-success btn-floating waves-effect waves-classic">
-                <i class="front-icon md-plus animation-scale-up" aria-hidden="true"></i>
-                <i class="back-icon md-plus animation-scale-up" aria-hidden="true"></i>
-            </button>
-        </div>
+        <!--<div class="site-action" data-plugin="actionBtn" data-toggle="modal" data-target="#addTrail">-->
+        <!--<button type="button"-->
+        <!--class="site-action-toggle btn-raised btn btn-success btn-floating waves-effect waves-classic">-->
+        <!--<i class="front-icon md-plus animation-scale-up" aria-hidden="true"></i>-->
+        <!--<i class="back-icon md-plus animation-scale-up" aria-hidden="true"></i>-->
+        <!--</button>-->
+        <!--</div>-->
+
+        <AddClientType @change="changeTrailType"></AddClientType>
 
         <div class="modal fade" id="addTrail" aria-hidden="true" aria-labelledby="addLabelForm"
              role="dialog" tabindex="-1">
@@ -127,13 +129,13 @@
                                            :placeholder="'请选择合作类型'"></selectors>
                             </div>
                         </div>
-                        <div class="example">
-                            <div class="col-md-2 text-right float-left">线索类型</div>
-                            <div class="col-md-5 float-left pl-0">
-                                <selectors :placeholder="'请选择销售线索'" :options="trailTypeArr"
-                                           @change="changeTrailType"></selectors>
-                            </div>
-                        </div>
+                        <!--<div class="example">-->
+                        <!--<div class="col-md-2 text-right float-left">线索类型</div>-->
+                        <!--<div class="col-md-5 float-left pl-0">-->
+                        <!--<selectors :placeholder="'请选择销售线索'" :options="trailTypeArr"-->
+                        <!--@change="changeTrailType"></selectors>-->
+                        <!--</div>-->
+                        <!--</div>-->
                         <div class="example">
                             <div class="col-md-2 text-right float-left">品牌名称</div>
                             <div class="col-md-10 float-left pl-0">
@@ -648,7 +650,8 @@
             },
 
             changeTrailType: function (value) {
-                this.trailType = value
+                this.trailType = value;
+                $('#addTrail').modal('show')
             },
 
             changeTrailStatus: function (value) {

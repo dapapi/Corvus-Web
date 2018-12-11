@@ -161,7 +161,6 @@
                         <h4 class="modal-title">新增项目</h4>
                     </div>
                     <div class="modal-body">
-                        <!-- todo 默认带出的东西 添加的对象里没有 -->
                         <div class="col-md-12 example clearfix" v-show="projectType != 5 && trailsArr.length > 0">
                             <div class="col-md-2 text-right float-left pl-0">销售线索</div>
                             <div class="col-md-10 float-left">

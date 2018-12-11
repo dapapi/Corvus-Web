@@ -75,7 +75,6 @@
                 if (this.trailType == 4) {
                     this.trailOriginArr = config.trailBloggerOrigin
                 }
-                this.getStars()
                 this.$nextTick(() => {
                     $('.selectpicker').selectpicker('render');
                     $('.selectpicker').selectpicker('refresh');
