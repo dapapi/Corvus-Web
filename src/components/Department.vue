@@ -35,15 +35,9 @@
                 return this.left || this.left === 0 ? this.left * 1 + 20 : 0
             },
         },
-        methods: {
-            // 列表展示
-            showList() {
-                this.visible = !this.visible
-            },
-            // 返回选中数据
-            selectData() {
-                this.change({id: this.data.id, name: this.data.name})
-            }
+        // 返回选中数据
+        selectData () {
+            this.change({id: this.data.id, name: this.data.name, pId: this.data.department_pid})
         }
     }
 </script>

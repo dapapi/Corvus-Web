@@ -81,13 +81,14 @@
 
         <customize-filter :data="customizeInfo" @change="customize"></customize-filter>
 
-        <div class="site-action" data-plugin="actionBtn" data-toggle="modal" data-target="#addClient">
+        <!-- <div class="site-action" data-plugin="actionBtn" data-toggle="modal" data-target="#addClient">
             <button type="button"
                     class="site-action-toggle btn-raised btn btn-success btn-floating waves-effect waves-classic">
                 <i class="front-icon md-plus animation-scale-up" aria-hidden="true"></i>
                 <i class="back-icon md-plus animation-scale-up" aria-hidden="true"></i>
             </button>
-        </div>
+        </div> -->
+        <AddClientType @change="showAddModal" />
 
         <div class="modal fade" id="addClient" aria-hidden="true" aria-labelledby="addLabelForm"
              role="dialog" tabindex="-1">
@@ -101,13 +102,13 @@
                     </div>
                     <div class="modal-body">
 
-                        <div class="example">
+                        <!-- <div class="example">
                             <div class="col-md-2 text-right float-left">客户类型</div>
                             <div class="col-md-10 float-left pl-0">
                                 <selectors :options="clientTypeArr" :placeholder="'请选择客户类型'"
                                            @change="changeClientType"></selectors>
                             </div>
-                        </div>
+                        </div> -->
                         <div class="example">
                             <div class="col-md-2 text-right float-left">公司名称</div>
                             <div class="col-md-5 float-left pl-0">
@@ -351,6 +352,7 @@
 
             changeClientType: function (value) {
                 this.clientType = value;
+                console.log(value)
             },
 
             changeClientLevel: function (value) {
@@ -382,6 +384,11 @@
                     this.ragion.city = val.city.name !== '市辖区' ? val.city.name : val.province.name
                     this.ragion.district = val.area.name
                 }
+            },
+            // show add
+            showAddModal (val) {
+                $('#addClient').modal()
+                this.clientType = val
             }
         }
     }
