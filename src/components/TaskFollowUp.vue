@@ -9,12 +9,12 @@
                        aria-controls="exampleTabsOne" role="tab" aria-selected="true" @click="taskFilter=1">全部</a>
                 </li>
                 <li class="nav-item" role="presentation">
-                    <a class="nav-link active" data-toggle="tab" href="#task-follow"
-                       aria-controls="exampleTabsTwo" role="tab" aria-selected="false" @click="taskFilter=3">{{
-                        followType }}跟进</a>
+                    <a class="nav-link active" data-toggle="tab" href="#all-TaskFollowUp"
+                       aria-controls="exampleTabsTwo" role="tab" aria-selected="false" @click="taskFilter=3">
+                        {{ followType }}跟进</a>
                 </li>
                 <li class="nav-item" role="presentation">
-                    <a class="nav-link" data-toggle="tab" href="#task-active"
+                    <a class="nav-link" data-toggle="tab" href="#all-TaskFollowUp"
                        aria-controls="exampleTabsThree" role="tab" aria-selected="false" @click="taskFilter=2">动态</a>
                 </li>
             </ul>
@@ -31,38 +31,6 @@
                     </ul>
                     <div v-if="taskData.length === 0" class="col-md-3 text-center">
                         暂无数据
-                    </div>
-                </div>
-                <div class="tab-pane active follow-task" id="task-follow" role="tabpanel">
-                    <div class="tab-pane" id="all-TaskFollowUp" role="tabpanel">
-                        <ul class="task-follow">
-                            <li v-for="(item, index) in taskData" :key="index">
-                                <div class="change-dot bg-green-500"></div>
-                                <div class="follow-item">
-                                    <div class="change-time">{{item.created_at}}</div>
-                                    <div class="change-text">{{item.username}} {{item.content}}</div>
-                                </div>
-                            </li>
-                        </ul>
-                        <div v-if="taskData.length === 0" class="col-md-3 text-center">
-                            暂无数据
-                        </div>
-                    </div>
-                </div>
-                <div class="tab-pane follow-task" id="task-active" role="tabpanel">
-                    <div class="tab-pane" id="all-TaskFollowUp" role="tabpanel">
-                        <ul class="task-follow">
-                            <li v-for="(item, index) in taskData" :key="index">
-                                <div class="change-dot bg-green-500"></div>
-                                <div class="follow-item">
-                                    <div class="change-time">{{item.created_at}}</div>
-                                    <div class="change-text">{{item.username}} {{item.content}}</div>
-                                </div>
-                            </li>
-                        </ul>
-                        <div v-if="taskData.length === 0" class="col-md-3 text-center">
-                            暂无数据
-                        </div>
                     </div>
                 </div>
             </div>
@@ -126,9 +94,10 @@
 <style scoped>
     .follow-task {
         height: 240px;
-        overflow-y: scroll;
+        overflow-y: auto;
         overflow-x: hidden;
     }
+
     .no-nav-tab-border {
         border: none;
     }
@@ -144,7 +113,6 @@
 
     .follow-item {
         padding: 0 10px;
-        
     }
 
     .task-follow {

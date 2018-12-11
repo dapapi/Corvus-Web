@@ -76,7 +76,7 @@
 </template>
 
 <script>
-    import config from '../assets/js/config'
+    import fetch from '../assets/utils/fetch.js'
 
     export default {
         props: ['multiple', 'member-type', 'type', 'otherslot'],
@@ -114,21 +114,11 @@
         },
 
         mounted() {
-            let self = this;
-            $.ajax({
-                url: config.apiUrl + '/users',
-                headers: config.getHeaders(),
-                type: 'get',
-            }).done(function (response) {
-                self.normalUsers = response.data;
+            fetch('get', '/users').then(response => {
+                this.normalUsers = response.data;
             });
-
-            $.ajax({
-                url: config.apiUrl + '/departments',
-                headers: config.getHeaders(),
-                type: 'get',
-            }).done(function (response) {
-                self.departmentUsers = response.data
+            fetch('get', '/departments').then(response => {
+                this.departmentUsers = response.data;
             });
         },
 

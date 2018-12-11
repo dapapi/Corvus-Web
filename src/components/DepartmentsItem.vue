@@ -24,15 +24,17 @@
                         <img src="https://res.papitube.com/no-icon.png" alt="...">
                     </a>
                     <span class="pl-1">{{ user.name }}</span>
-                    <template v-if="memberType === 'principal'">
+                    <template v-if="!selectHidden">
+                        <template v-if="memberType === 'principal'">
                         <span class="float-right" v-show="principalInfo.id == user.id">
                             <i class="icon md-check"></i>
                         </span>
-                    </template>
-                    <template v-else-if="memberType === 'participant'">
+                        </template>
+                        <template v-else-if="memberType === 'participant'">
                         <span class="float-right" v-show="participantsInfo.find(item => item.id == user.id)">
                             <i class="icon md-check"></i>
                         </span>
+                        </template>
                     </template>
                 </div>
             </div>
@@ -40,7 +42,7 @@
             <div v-if="this.data.departments.data.length > 0">
                 <div v-for="departmentData in data.departments.data">
                     <departments-item :data="departmentData" :member-type="memberType" :type="type"
-                                      :multiple="multiple" @change="memberChange"></departments-item>
+                                      :multiple="multiple" :select-hidden="selectHidden" @change="memberChange"></departments-item>
                 </div>
             </div>
         </div>
@@ -52,7 +54,7 @@
 <script>
     export default {
         name: "departments-item",
-        props: ['data', 'select', 'multiple', 'member-type', 'type'],
+        props: ['data', 'select-hidden', 'multiple', 'member-type', 'type'],
         data() {
             return {
                 departmentsShow: false,

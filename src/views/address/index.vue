@@ -1,215 +1,248 @@
 <template>
-    <!-- Page -->
-    <div class="page">
-        <div class="page-header page-header-bordered">
-
-        <!-- <div class="col-md-12 clearfix py-5" style="padding: 0!important;"> -->
-            <div class="clearfix p-0">
-                <div class="row">
-                    <div class="col-md-3">
-                        <div class="page-header page-header-bordered">
-                            <h1 class="page-title">通讯录</h1>
-                            <div class="input-search" style="top: 10px;left: -39px;">
-                                <button type="submit" class="input-search-btn"><i class="icon md-search" aria-hidden="true"></i>
-                                </button>
-                                <input type="text" class="form-control" name="" placeholder="请搜索姓名/手机号/职位">
-                            </div>
-                            <select-staff></select-staff>
-                        </div>
-                    </div>
-
-                    <div class="col-md-9">
-                    
-                        <div class="page-header page-header-bordered">
-                            <h1 class="page-title">xx的个人信息</h1>
-                        </div>
-
-                        <div class="page-content container-fluid">
-                            <div class="panel col-md-12 clearfix py-5">
-                                <div class="row" style="align-items: center">
-                                    <div class="col-md-2">
-                                        <div class="avatar"></div>
+    <div class="page page-aside-left">
+        <div class="page-aside">
+            <div class="page-aside-inner page-aside-scroll scrollable is-enabled scrollable-vertical">
+                <div data-role="container" class="">
+                    <div data-role="content" class="scrollable-content">
+                        <section class="page-aside-section">
+                            <h5 class="page-title pl-30 mb-40">通讯录</h5>
+                            <div class="position-relative">
+                                <div class="page-nav-tabs">
+                                    <ul class="nav nav-tabs nav-tabs-line" role="tablist">
+                                        <li class="nav-item col-md-6" role="presentation">
+                                            <a class="nav-link active" data-toggle="tab"
+                                               href="#forum-team"
+                                               aria-controls="forum-base"
+                                               aria-expanded="true" role="tab"> 团队 </a>
+                                        </li>
+                                        <li class="nav-item col-md-6" role="presentation">
+                                            <a class="nav-link" data-toggle="tab"
+                                               href="#forum-department"
+                                               aria-controls="forum-present"
+                                               aria-expanded="false" role="tab"> 部门 </a>
+                                        </li>
+                                    </ul>
+                                </div>
+                                <div class="page-content tab-content nav-tabs-animate member-list">
+                                    <div class="tab-pane animation-fade active" id="forum-team" role="tabpanel">
+                                        <div class="mt-20">
+                                            <div class="input-search m-0">
+                                                <button type="submit" class="input-search-btn">
+                                                    <i class="icon md-search" aria-hidden="true"></i>
+                                                </button>
+                                                <input type="text" class="form-control" name="" placeholder="搜索成员..."
+                                                       v-model="searchKeyWord">
+                                            </div>
+                                        </div>
+                                        <div class="users" v-for="user in normalUsers"
+                                             v-show="user.name.indexOf(searchKeyWord) > -1"
+                                             @click="" :key='user.name+Math.random()'>
+                                            <a class="avatar" href="javascript:void(0)">
+                                                <img src="https://res.papitube.com/no-icon.png" alt="...">
+                                            </a>
+                                            <span class="pl-1">{{ user.name }}</span>
+                                        </div>
                                     </div>
-                                    <div class="col-md-10">
-                                        <div class="row">
-                                            <div class="col-md-4">
-                                                <p>测试</p>
-                                                <p>xx@xx.com</p>
-                                            </div>
-                                            <div class="col-md-4">
-                                                <p>部门 测试</p>
-                                                <p>职位 产品经理</p>
-                                            </div>
-                                            <div class="col-md-4">
-                                                <p>电话 123091283</p>
-                                                <p>WeChat 测试</p>
-                                            </div>
+                                    <div class="tab-pane animation-fade" id="forum-department"
+                                         role="tabpanel">
+                                        <div v-for="department in departmentUsers" :key='department.id + Math.random()'>
+                                            <departments-item :data="department" @change="memberChange"
+                                                              select-hidden="true"
+                                                              member-type="principal"></departments-item>
                                         </div>
                                     </div>
                                 </div>
-
-                                <ul class="nav nav-tabs nav-tabs-line" role="tablist">
-                                    <li class="nav-item" role="presentation">
-                                        <a class="nav-link active" 
-                                            data-toggle="tab" 
-                                            href="#exampleTabsOne" 
-                                            aria-controls="exampleTabsOne" 
-                                            role="tab" aria-selected="true">
-                                            正在进行
-                                        </a>
-                                    </li>
-                                    <li class="nav-item" role="presentation">
-                                        <a class="nav-link" 
-                                            data-toggle="tab" 
-                                            href="#exampleTabsTwo" 
-                                            aria-controls="exampleTabsTwo" 
-                                            role="tab" 
-                                            aria-selected="false">
-                                            已完成
-                                        </a>
-                                    </li>
-                                    <li class="nav-item" role="presentation">
-                                        <a class="nav-link" 
-                                            data-toggle="tab" 
-                                            href="#exampleTabsThree" 
-                                            aria-controls="exampleTabsThree" 
-                                            role="tab" 
-                                            aria-selected="false">
-                                            待完成
-                                        </a>
-                                    </li>
-                                </ul>
-                                
-                                <div class="tab-content pt-20">
-                                    <div class="tab-pane active" id="exampleTabsOne" role="tabpanel">
-                                        <h3>测试正在进行的任务</h3>
-                                        <ul class="list-group list-group-dividered list-group-full">
-                                            <li class="list-group-item">
-                                                <div class="row">
-                                                    <div class="col-md-4">吃火锅</div>
-                                                    <div class="col-md-6">吃火锅底料</div>
-                                                </div>
-                                            </li>
-                                            <li class="list-group-item">
-                                                <div class="row">
-                                                    <div class="col-md-4">吃火锅</div>
-                                                    <div class="col-md-6">吃火锅底料</div>
-                                                </div>
-                                            </li>
-                                        </ul>
-                                        <h3>最近日程</h3>
-                                        <ul class="list-group list-group-dividered list-group-full">
-                                            <li class="list-group-item">
-                                                <div class="row">
-                                                    <div class="col-md-4">吃火锅</div>
-                                                    <div class="col-md-6">吃火锅底料</div>
-                                                </div>
-                                            </li>
-                                            <li class="list-group-item">
-                                                <div class="row">
-                                                    <div class="col-md-4">吃火锅</div>
-                                                    <div class="col-md-6">吃火锅底料</div>
-                                                </div>
-                                            </li>
-                                        </ul>
+                            </div>
+                        </section>
+                    </div>
+                </div>
+                <div class="scrollable-bar scrollable-bar-vertical is-disabled scrollable-bar-hide" draggable="false">
+                    <div class="scrollable-bar-handle"></div>
+                </div>
+            </div>
+        </div>
+        <div class="page-main" style="background-color:#f3f4f5">
+            <div class="page-content container-fluid">
+                <div class="panel">
+                    <div class="col-md-12">
+                        <div class="py-25 clearfix position-relative">
+                            <div class="col-md-2 float-left">
+                                <img src="https://res.papitube.com/no-icon.png" alt="" style="width: 80%;">
+                            </div>
+                            <div class="col-md-10 float-left position-absolute" style="bottom: 25px;right: 0;">
+                                <div class="clearfix mb-20">
+                                    <div class="col-md-4 float-left">
+                                        <div class="float-left col-md-5">
+                                            <i class="icon md-plus pr-2"></i>
+                                            <span class="font-weight-bold">姓名</span>
+                                        </div>
+                                        <div class="float-left col-md-6 pl-0">XXX</div>
                                     </div>
-                                    <div class="tab-pane" id="exampleTabsTwo" role="tabpanel">
-                                        <h3>测试已完成的任务</h3>
-                                        <ul class="list-group list-group-dividered list-group-full">
-                                            <li class="list-group-item">
-                                                <div class="row">
-                                                    <div class="col-md-4">吃火锅</div>
-                                                    <div class="col-md-6">吃火锅底料</div>
-                                                </div>
-                                            </li>
-                                            <li class="list-group-item">
-                                                <div class="row">
-                                                    <div class="col-md-4">吃火锅</div>
-                                                    <div class="col-md-6">吃火锅底料</div>
-                                                </div>
-                                            </li>
-                                        </ul>
-                                        <h3>最近日程</h3>
-                                        <ul class="list-group list-group-dividered list-group-full">
-                                            <li class="list-group-item">
-                                                <div class="row">
-                                                    <div class="col-md-4">吃火锅</div>
-                                                    <div class="col-md-6">吃火锅底料</div>
-                                                </div>
-                                            </li>
-                                            <li class="list-group-item">
-                                                <div class="row">
-                                                    <div class="col-md-4">吃火锅</div>
-                                                    <div class="col-md-6">吃火锅底料</div>
-                                                </div>
-                                            </li>
-                                        </ul>
+                                    <div class="col-md-4 float-left">
+                                        <div class="float-left col-md-6">
+                                            <i class="icon md-plus pr-2"></i>
+                                            <span class="font-weight-bold">职位</span>
+                                        </div>
+                                        <div class="float-left col-md-6 pl-0">XXX</div>
                                     </div>
-                                    <div class="tab-pane" id="exampleTabsThree" role="tabpanel">
-                                        <h3>测试待完成的任务</h3>
-                                        <ul class="list-group list-group-dividered list-group-full">
-                                            <li class="list-group-item">
-                                                <div class="row">
-                                                    <div class="col-md-4">吃火锅</div>
-                                                    <div class="col-md-6">吃火锅底料</div>
-                                                </div>
-                                            </li>
-                                            <li class="list-group-item">
-                                                <div class="row">
-                                                    <div class="col-md-4">吃火锅</div>
-                                                    <div class="col-md-6">吃火锅底料</div>
-                                                </div>
-                                            </li>
-                                        </ul>
-                                        <h3>最近日程</h3>
-                                        <ul class="list-group list-group-dividered list-group-full">
-                                            <li class="list-group-item">
-                                                <div class="row">
-                                                    <div class="col-md-4">吃火锅</div>
-                                                    <div class="col-md-6">吃火锅底料</div>
-                                                </div>
-                                            </li>
-                                            <li class="list-group-item">
-                                                <div class="row">
-                                                    <div class="col-md-4">吃火锅</div>
-                                                    <div class="col-md-6">吃火锅底料</div>
-                                                </div>
-                                            </li>
-                                        </ul>
+                                    <div class="col-md-4 float-left">
+                                        <div class="float-left col-md-6">
+                                            <i class="icon md-plus pr-2"></i>
+                                            <span class="font-weight-bold">部门</span>
+                                        </div>
+                                        <div class="float-left col-md-6 pl-0">XXX</div>
+                                    </div>
+                                </div>
+                                <div class="clearfix">
+                                    <div class="col-md-4 float-left">
+                                        <div class="float-left col-md-6">
+                                            <i class="icon md-email pr-2"></i>
+                                            <span class="font-weight-bold">邮箱</span>
+                                        </div>
+                                        <div class="float-left col-md-6 pl-0">XXX</div>
+                                    </div>
+                                    <div class="col-md-4 float-left">
+                                        <div class="float-left col-md-6">
+                                            <i class="icon md-phone pr-2"></i>
+                                            <span class="font-weight-bold">电话</span>
+                                        </div>
+                                        <div class="float-left col-md-6 pl-0">XXX</div>
+                                    </div>
+                                    <div class="col-md-4 float-left">
+                                        <div class="float-left col-md-6">
+                                            <i class="icon md-plus pr-2"></i>
+                                            <span class="font-weight-bold">WeChat</span>
+                                        </div>
+                                        <div class="float-left col-md-6 pl-0">XXX</div>
                                     </div>
                                 </div>
                             </div>
                         </div>
                     </div>
                 </div>
+                <div class="panel task-panel">
+                    <div class="px-30 py-10 title-wrap">
+                        <h5>任务</h5>
+                    </div>
+                    <div class="col-md-12">
+                        <ul class="nav nav-tabs nav-tabs-line" role="tablist">
+                            <li class="nav-item" role="presentation">
+                                <a class="nav-link active" data-toggle="tab"
+                                   href="#forum-tasking"
+                                   aria-controls="forum-base"
+                                   aria-expanded="true" role="tab">正在进行</a>
+                            </li>
+                            <li class="nav-item" role="presentation">
+                                <a class="nav-link" data-toggle="tab"
+                                   href="#forum-task"
+                                   aria-controls="forum-present"
+                                   aria-expanded="false" role="tab">待完成</a>
+                            </li>
+                            <li class="nav-item" role="presentation">
+                                <a class="nav-link" data-toggle="tab"
+                                   href="#forum-task-finish"
+                                   aria-controls="forum-present"
+                                   aria-expanded="false" role="tab">已完成</a>
+                            </li>
+                        </ul>
+                    </div>
+                    <div class="page-content tab-content nav-tabs-animate">
+                        <div class="tab-pane animation-fade active" id="forum-tasking" role="tabpanel">
+                            <div class="clearfix pb-10">
+                                <div class="col-md-6 float-left pl-0">任务1</div>
+                                <div class="col-md-6 float-left">任务1所在项目</div>
+                            </div>
+                            <div class="clearfix pb-10">
+                                <div class="col-md-6 float-left pl-0">任务2</div>
+                                <div class="col-md-6 float-left">任务2所在项目</div>
+                            </div>
+                            <div class="clearfix pb-10">
+                                <div class="col-md-6 float-left pl-0">任务3</div>
+                                <div class="col-md-6 float-left">任务3所在项目</div>
+                            </div>
+                        </div>
+                        <div class="tab-pane animation-fade" id="forum-task" role="tabpanel">
+                            待完成
+                        </div>
+                        <div class="tab-pane animation-fade" id="forum-task-finish" role="tabpanel">
+                            已完成
+                        </div>
+                    </div>
+                </div>
+                <div class="panel schedule-panel">
+                    <div class="px-30 py-10 title-wrap">
+                        <h5>最近日程</h5>
+                    </div>
+                    <div class="page-content tab-content nav-tabs-animate">
+                        <div class="clearfix pb-10">
+                            <div class="col-md-6 float-left pl-0">日程1</div>
+                            <div class="col-md-6 float-left">2018-09-23 11：22</div>
+                        </div>
+                        <div class="clearfix pb-10">
+                            <div class="col-md-6 float-left pl-0">日程2</div>
+                            <div class="col-md-6 float-left">2018-09-23 11：22</div>
+                        </div>
+                    </div>
+                </div>
             </div>
+
         </div>
+
     </div>
-    <!-- End Page -->
 </template>
 
 <script>
-export default {
-    name: 'portal',
-    data () {
-        return {}
-    },
-    methods: {},
-}
+    import fetch from '../../assets/utils/fetch.js'
+
+    export default {
+        name: 'portal',
+        data() {
+            return {
+                searchKeyWord: '',
+                normalUsers: '',
+                departmentUsers: '',
+            }
+        },
+        mounted() {
+            fetch('get', '/users').then(response => {
+                this.normalUsers = response.data;
+            });
+            fetch('get', '/departments').then(response => {
+                this.departmentUsers = response.data;
+            });
+        },
+        methods: {
+            memberChange() {
+
+            },
+        },
+    }
 </script>
 
-<style lang="scss" scoped>
-.avatar {
-    width: 100%;
-    height: 140px;
-    margin: 20px 0;
-    border: 1px solid #cacaca;
-    border-radius: 0;
-    padding: 0 20px;
-}
-.assistor {
-    left: -31px;
-    top: 116px;
-}
+<style>
+    .member-list {
+        overflow-y: auto;
+        position: relative;
+        top: 45px;
+        padding-top: 0;
+        padding-bottom: 0;
+        height: calc(100vh - 150px);
+    }
+
+    .schedule-panel {
+        width: calc(50% - 15px);
+        float: left;
+        margin-left: 30px;
+    }
+
+    .task-panel {
+        width: calc(50% - 15px);
+        float: left;
+    }
+
+    .title-wrap {
+        border-bottom: 1px solid #e3e3e3;
+    }
+
 </style>
 
