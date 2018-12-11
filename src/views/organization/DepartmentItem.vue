@@ -14,9 +14,9 @@
                 </i>
                 <div class="dropdown-menu dropdown-menu-left" aria-labelledby="org-dropdown" role="menu" x-placement="bottom-start" style="min-width: 0">
                     <a class="dropdown-item" role="menuitem" @click="edit(data)">编辑部门</a>
-                    <a class="dropdown-item" role="menuitem">选择成员</a>
+                    <a class="dropdown-item" role="menuitem" @click="check(data)">选择成员</a>
                     <a class="dropdown-item" role="menuitem">移动部门到</a>
-                    <a class="dropdown-item" role="menuitem">添加子部门</a>
+                    <a class="dropdown-item" role="menuitem" @click="addChild(data)">添加子部门</a>
                     <a class="dropdown-item" role="menuitem" @click="del(data)">删除部门</a>
                 </div>
             </div>
@@ -28,7 +28,14 @@
             </li>
         </ul>
          <template v-for="(item, index) in data.departments.data">
-            <Department v-show="visible" :data="item" :isEdit="isEdit" :left="paddingLeft" :key="index" />
+            <Department 
+                v-show="visible" 
+                :data="item" 
+                :editDepartment="editDepartment" 
+                :delDepartment="delDepartment" 
+                :checkMember="checkMember"
+                :addChildDepartment="addChildDepartment"
+                :isEdit="isEdit" :left="paddingLeft" :key="index" />
         </template>
     </div>
 </template>
@@ -36,7 +43,7 @@
 <script>
 export default {
     name: 'DepartmentItem',
-    props: ['data', 'bgColor', 'left', 'isEdit', 'editDepartment', 'delDepartment'],
+    props: ['data', 'bgColor', 'left', 'isEdit', 'editDepartment', 'delDepartment', 'checkMember', 'addChildDepartment'],
     data () {
         return {
             visible: false,
@@ -83,7 +90,8 @@ export default {
             this.delDepartment(data)
         },
         // 选择成员
-        chooseMember () {
+        check (data) {
+            this.checkMember(data)
             // 
         },
         // 移动部门
@@ -91,8 +99,8 @@ export default {
             // 
         },
         // 添加子部门
-        addChildDepartment () {
-
+        addChild (data) {
+            this.addChildDepartment(data)
         }
     }
 }

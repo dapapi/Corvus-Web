@@ -41,7 +41,7 @@ export default {
         },
         // 返回选中数据
         selectData () {
-            this.change({id: this.data.id, name: this.data.name})
+            this.change({id: this.data.id, name: this.data.name, pId: this.data.department_pid})
         }
     }
 }

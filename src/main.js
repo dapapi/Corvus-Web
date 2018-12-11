@@ -54,6 +54,7 @@ import TrailOrigin from './components/TrailOrigin'
 import DepartmentItem from './views/organization/DepartmentItem.vue';
 import DropDepartment from './components/DropDepartment.vue'
 import Department from './components/Department.vue'
+import AddClientType from './components/AddClientType.vue'
 
 import DepartmentPicker from '@/components/DepartmentPicker'
 Vue.config.productionTip = false;
@@ -111,7 +112,7 @@ Vue.component('TrailOrigin', TrailOrigin)
 Vue.component('Department', DepartmentItem);
 Vue.component('Departments', Department);
 Vue.component('DropDepartment', DropDepartment);
-
+Vue.component('AddClientType', AddClientType);
 
 Vue.prototype.globalClick = function (callback) {
     document.getElementById('app').addEventListener('click', () => {

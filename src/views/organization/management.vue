@@ -15,6 +15,8 @@
                                 :data="item" :bgColor="true" 
                                 :editDepartment="editDepartment" 
                                 :delDepartment="delDepartment"
+                                :checkMember="checkMember"
+                                :addChildDepartment="showChild"
                                 :key="index" 
                                 :isEdit="true" />
                         </template>
@@ -60,8 +62,44 @@
                         </div>
                     </Modal>
 
-                    <flag @confirmFlag="sureDel" />
+                    <!-- 新增子部门 -->
+                    <Modal id="add-child-department" title="添加子部门'" @onOK="addChildDepartment">
+                        <div class="example">
+                            <div class="col-md-2 text-right float-left require">部门名称</div>
+                            <div class="col-md-10 float-left">
+                                <input type="text" title="" class="form-control"
+                                       placeholder="请输入联系人" v-model="departmentName">
+                            </div>
+                        </div>
+                        <div class="example">
+                            <div class="col-md-2 text-right float-left require">负责人</div>
+                            <div class="col-md-10 float-left">
+                                <InputSelectors :placeholder="'请选择负责人'" @change="principalChange"></InputSelectors>
+                            </div>
+                        </div>
+                        <!-- <div v-if="isChild" class="example">
+                            <div class="col-md-2 text-right float-left">部门城市</div>
+                            <div class="col-md-10 float-left">
+                                <input type="text" title="" class="form-control" placeholder="请选择" v-model="city">
+                            </div>
+                        </div> -->
+                        <div class="example">
+                            <div class="col-md-2 text-right float-left">部门所属</div>
+                            <div class="col-md-10 float-left">
+                                <DropDepartment 
+                                    :data="data" 
+                                    @change="selectDepartment"
+                                />
+                            </div>
+                        </div>
+                    </Modal>
 
+                    <!-- 选择成员 -->
+                    <Modal id="check-member" title="选择成员" @onOk="sureCheckMember">
+                        <ListSelectMember />
+                    </Modal>
+
+                    <flag @confirmFlag="sureDel" />
                 </div>
             </div>
 
@@ -84,10 +122,14 @@
                 // editData: {} // 每次改变时的数据
                 departmentName: '', // 部门名称
                 departmentId: 0, // 部门id
+                departmentPId: 0, // 父级部门id
                 city: '',
                 isEdit: false,
                 userId: '',
                 delId: '',
+                checkMemberData: null,
+                isChild: false,
+                childData: null
             }
         },
 
@@ -124,20 +166,20 @@
                     return
                 }
                 const params = {
-                    department_pid: this.departmentId,
+                    department_pid: this.departmentPId,
                     name: this.departmentName,
-                    city: this.city
-                }
-                if (this.isEdit) {
-                    params.user_id = this.userId
+                    city: this.city,
+                    user_id: this.principalId,
                 }
          
-                fetch('post', `/departments/${this.principalId}`, params).then(res => {
+                fetch(!this.isEdit?'post':'put', `/departments${!this.isEdit?'':'/'+this.departmentId}`, params).then(res => {
                     console.log(res)
                 })
             },
             selectDepartment (data) {
+                console.log(data)
                 this.departmentId = data.id
+                this.departmentPId = data.pId
             },
             // 负责人
             principalChange (val) {
@@ -146,15 +188,16 @@
             // 编辑部门
             editDepartment (val) {
                 this.editStatus(true)
-                // this.editDepart
                 this.departmentName = val.name
                 this.departmentId = val.id
+                this.departmentPId = val.department_pid
                 console.log(val)
                 $('#add-department').modal()
             },
             // 切换编辑状态
             editStatus (status = false) {
                 this.isEdit = status
+                this.isChild = false
             },
             // 确认删除
             sureDel () {
@@ -166,6 +209,32 @@
             delDepartment (val) {
                 this.delId = val.id
                 $('#confirmFlag').modal()
+            },
+            // 选择
+            checkMember (data) {
+                this.checkMemberData = data
+                $('#check-member').modal()
+            },
+            // 选择成员
+            sureCheckMember () {
+                alert(1)
+                console.log(this.checkMemberData)
+            },
+            // 弹出子部门
+            showChild (data) {
+                $('#add-child-department').modal()
+                this.childData = data
+            },
+            // 新增子部门
+            addChildDepartment () {
+                const params = {
+                    department_pid: this.childData.id,
+                    name: this.departmentName,
+                    user_id: this.principalId,
+                }
+                fetch('post', `/departments`, params).then(res => {
+                    console.log(res)
+                })
             }
         }
     }
