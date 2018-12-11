@@ -9,7 +9,7 @@
         </div>
         <ul>
             <li v-for="(item, index) in clientTypeArr"
-                :style="{right: XPos(index), bottom: YPos(index), transitionDelay: `${index * 0.15}s` }"
+                :style="{right: XPos(index), bottom: YPos(index), transitionDelay: `${index * 0.1}s` }"
                 :class="visible?'show':''"
                 @click="handleClick(item.value)"
                 :key="index">{{ item.name.split('客户')[0] }}
@@ -63,7 +63,7 @@ export default {
             cursor: pointer;
             position: fixed;
             opacity: 0;
-            transition: opacity 1s;
+            transition: opacity 0.8s;
         }
         li.show {
             opacity: 1;
