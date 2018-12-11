@@ -233,7 +233,7 @@
                     _this.fetchUserInfo(function (userJson, companyType) {
                         _this.storeToLocal(userJson);
                         _this.storeCompamyTypeToLocal(companyType);
-                        redirect('/messages')
+                        redirect('/my')
                     })
                 }, 100)
             },
@@ -295,7 +295,7 @@
                         _this.fetchUserInfo(function (userJson, companyType) {
                             _this.storeToLocal(userJson);
                             _this.storeCompamyTypeToLocal(companyType);
-                            redirect('/messages')
+                            redirect('/my')
                         })
                     }, 100)
                 }).catch(function () {
@@ -368,7 +368,7 @@
                         _this.fetchUserInfo(function (userJson, companyType) {
                             _this.storeToLocal(userJson);
                             _this.storeCompamyTypeToLocal(companyType);
-                            redirect('/messages')
+                            redirect('/my')
                         })
                     }, 100)
                 });
@@ -421,7 +421,7 @@
                         _this.fetchUserInfo(function (userJson, companyType) {
                             _this.storeToLocal(userJson);
                             _this.storeCompamyTypeToLocal(companyType);
-                            redirect('/messages')
+                            redirect('/my')
                         })
                     }, 100)
                 }).catch(function () {
