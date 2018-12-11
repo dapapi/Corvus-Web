@@ -33,7 +33,7 @@
                         暂无数据
                     </div>
                 </div>
-                <div class="tab-pane active follow-task" id="task-follow" role="tabpanel">
+                <!-- <div class="tab-pane active follow-task" id="task-follow" role="tabpanel">
                     <div class="tab-pane" id="all-TaskFollowUp" role="tabpanel">
                         <ul class="task-follow">
                             <li v-for="(item, index) in taskData" :key="index">
@@ -64,7 +64,7 @@
                             暂无数据
                         </div>
                     </div>
-                </div>
+                </div> -->
             </div>
         </div>
 

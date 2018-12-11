@@ -1,26 +1,27 @@
 <template>
     <div>
-        <input type="file" @change="uploadFile">
+        <label for="fileUploader" class="btn btn-default waves-effect waves-light waves-round">上传附件</label>
+        <span>&nbsp;&nbsp;{{fileName || givenFileName ||"未选择任何附件"}}</span>
+        <input type="file" @change="uploadFile" title='123' id="fileUploader" v-show="false">
         <div class="progress progress-xs" v-if="progressShow">
-                        <div class="progress-bar progress-bar-striped active" aria-valuemin="0" aria-valuemax="100" :style="'width:'+ uploadProgress+'%'" role="progressbar">
-                          <span class="sr-only">90% Complete</span>
-                        </div>
-                      </div>
+            <div class="progress-bar progress-bar-striped active" aria-valuemin="0" aria-valuemax="100" :style="'width:'+ uploadProgress+'%'" role="progressbar">
+                <span class="sr-only">Uploading</span>
+            </div>
+        </div>
     </div>
 </template>
 
 <script>
     import config from '../assets/js/config';
     import * as qiniu from 'qiniu-js'
-
-
     export default {
-        props:['id'],
+        props:['id','givenFileName'],
         name: "FileUploader",
         data(){
             return{
                 uploadProgress:0,
                 progressShow:false,
+                fileName:'',
             }
         },
         methods: {
@@ -62,6 +63,8 @@
                             _this.progressShow = false
                         },1000)
                         _this.$emit('change', fileUrl, fileName, fileSize,_this.id);
+                        _this.$emit('changePlus',{fileUrl,fileName,fileSize})
+                        _this.fileName = fileName
                     })
                 });
             },

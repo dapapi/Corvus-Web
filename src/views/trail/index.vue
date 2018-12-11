@@ -99,7 +99,7 @@
         </div>
 
 
-        <customize-filter :data="customizeInfo" :stararr='starsArr' @change="customize"></customize-filter>
+        <customize-filter :data="customizeInfo" :stararr='starsArr' @change="customize" :cleanup="cleanUp" @cleanupdone='cleanUp=false'></customize-filter>
 
         <div class="site-action" data-plugin="actionBtn" data-toggle="modal" data-target="#addTrail">
             <button type="button"
@@ -319,6 +319,7 @@
                 currentUser: {},
                 resetInfo: false,
                 isLoading: true,
+                cleanUp:false,
             }
         },
         created() {
@@ -522,7 +523,14 @@
             },
 
             customize: function (value) {
-
+                let _this = this
+                console.log(value);
+                fetch('post','/trails/filter?include=principal,client,contact,recommendations,expectations',value).then((params) => {
+                    _this.trailsInfo = params.data
+                    _this.total = params.meta.pagination.total;
+                    _this.cleanUp = true
+                })
+                
             },
 
             addTrail: function () {

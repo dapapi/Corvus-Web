@@ -19,7 +19,7 @@
                     <div v-for="n in conditionLength" class="clearfix" :key="n">
                         <div :id="'selector' + n" v-show="selectorHidden.indexOf('selector' + n) === -1">
                             <div class="float-left col-md-11 p-0">
-                                <customize-linkage-selectors :data="data,n,stararr"
+                                <customize-linkage-selectors :data="data,n,stararr" @sendcusdata='getCusData'
                                                           @change="conditionChange"></customize-linkage-selectors>
                             </div>
                             <div class="float-left col-md-1 pb-5">
@@ -49,16 +49,26 @@
 <script>
     export default {
         name: "",
-        props: ['data','stararr'],
+        props: ['data','stararr','cleanup'],
         data() {
             return {
                 conditionLength: 1,
                 selectorHidden: [],
                 conditionData: {},
-                customizeKeyWords: ''
+                customizeKeyWords: '',
+                sendFilterData:{
+                    'conditions':[]
+                },
             }
         },
-
+        watch:{
+            cleanup:function(value){
+                if(value===true){
+                    this.sendFilterData.conditions = []
+                    this.$emit('cleanupdone')
+                }
+            }
+        },
         mounted() {
             let _this = this;
             $(this.$el).on('hidden.bs.modal',function () {
@@ -86,12 +96,11 @@
                 this.conditionData[e.n] = e
             },
             filter: function () {
-                let data = {
-                    keywords: this.customizeKeyWords,
-                    conditions: this.conditionData
-                };
-                this.$emit('change', data);
+                this.$emit('change', this.sendFilterData);
                 $('.modal').modal('hide');
+            },
+            getCusData:function(data,n){
+                this.sendFilterData.conditions[n-1]=data
             },
         }
     }
