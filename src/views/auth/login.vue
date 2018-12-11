@@ -186,7 +186,7 @@
                 Cookies.set('user', json)
             },
 
-            storeCompamyTypeToLocal(type) {
+            storeCompanyTypeToLocal(type) {
                 Cookies.set('companyType', type)
             },
 
@@ -232,7 +232,7 @@
                 setTimeout(function () {
                     _this.fetchUserInfo(function (userJson, companyType) {
                         _this.storeToLocal(userJson);
-                        _this.storeCompamyTypeToLocal(companyType);
+                        _this.storeCompanyTypeToLocal(companyType);
                         redirect('/my')
                     })
                 }, 100)
@@ -294,7 +294,7 @@
                     setTimeout(function () {
                         _this.fetchUserInfo(function (userJson, companyType) {
                             _this.storeToLocal(userJson);
-                            _this.storeCompamyTypeToLocal(companyType);
+                            _this.storeCompanyTypeToLocal(companyType);
                             redirect('/my')
                         })
                     }, 100)
@@ -367,7 +367,7 @@
                     setTimeout(function () {
                         _this.fetchUserInfo(function (userJson, companyType) {
                             _this.storeToLocal(userJson);
-                            _this.storeCompamyTypeToLocal(companyType);
+                            _this.storeCompanyTypeToLocal(companyType);
                             redirect('/my')
                         })
                     }, 100)
@@ -389,6 +389,7 @@
                     statusCode: config.getStatusCode()
                 }).done(function (response) {
                     let userData = response.data;
+                    console.log(response);
                     let json = {
                         id: userData.id,
                         avatar: userData.avatar,
@@ -420,7 +421,7 @@
                     setTimeout(function () {
                         _this.fetchUserInfo(function (userJson, companyType) {
                             _this.storeToLocal(userJson);
-                            _this.storeCompamyTypeToLocal(companyType);
+                            _this.storeCompanyTypeToLocal(companyType);
                             redirect('/my')
                         })
                     }, 100)

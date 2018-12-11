@@ -366,80 +366,20 @@
 </template>
 
 <script>
+    import fetch from '../assets/utils/fetch.js'
+
     export default {
         name: "MeetingRoomCalendar",
         data() {
             return {
                 numberDate: '',
                 currentDate: '',
-                meetingRomeList: [
-                    {
-                        name: '会议室1',
-                        id: 1,
-                    },
-                    {
-                        name: '会议室2',
-                        id: 2,
-                    },
-                    {
-                        name: '会议室3',
-                        id: 3,
-                    },
-                    {
-                        name: '会议室4',
-                        id: 4,
-                    },
-                    {
-                        name: '会议室5',
-                        id: 5,
-                    },
-                    {
-                        name: '会议室6',
-                        id: 6,
-                    },
-                    {
-                        name: '会议室7',
-                        id: 7,
-                    },
-                    {
-                        name: '会议室8',
-                        id: 8,
-                    },
-                    {
-                        name: '会议室9',
-                        id: 9,
-                    },
-                    {
-                        name: '会议室10',
-                        id: 10,
-                    },
-                    {
-                        name: '会议室10',
-                        id: 10,
-                    },
-                    {
-                        name: '会议室10',
-                        id: 10,
-                    },
-                    {
-                        name: '会议室10',
-                        id: 10,
-                    },
-                    {
-                        name: '会议室10',
-                        id: 10,
-                    },
-                    {
-                        name: '会议室10',
-                        id: 10,
-                    },
-
-
-                ]
+                meetingRomeList: []
             }
         },
 
         mounted() {
+            this.getResources();
             this.getCurrentDay()
         },
 
@@ -453,6 +393,12 @@
         methods: {
             displayMeetingRoom(value) {
                 this.$emit('change', value)
+            },
+
+            getResources() {
+                fetch('get', '/materials/all').then(response => {
+                    this.meetingRomeList = response.data
+                })
             },
 
             getCurrentDay() {

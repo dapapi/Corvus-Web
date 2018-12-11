@@ -100,18 +100,18 @@ let config = {
                 value: 11
             }
         ],
-        trailBloggerOrigin:[
+        trailBloggerOrigin: [
             {
-                name:'个人',
-                value:'4'
+                name: '个人',
+                value: '4'
             },
             {
-                name:'商务邮箱/微信',
-                value:'1'
+                name: '商务邮箱/微信',
+                value: '1'
             },
             {
-                name:'高层推荐',
-                value:'5'
+                name: '高层推荐',
+                value: '5'
             }
         ],
         trailTypeArr: [
@@ -621,7 +621,7 @@ let config = {
             {
                 name: '淘汰',
                 value: 5,
-                color:'#9e9e9e'
+                color: '#9e9e9e'
             },
             {
                 name: '合同中',
@@ -645,18 +645,18 @@ let config = {
             }
         ],
         //社交平台
-        platformArr:[{
-            value:1,
-            name:'抖音'
-        },{
-            value:2,
-            name:'微博'
-        },{
-            value:3,
-            name:'小红书',  
-        },{
-            value:["1","2","3"],
-            name:('抖音','微博','小红书')
+        platformArr: [{
+            value: 1,
+            name: '抖音'
+        }, {
+            value: 2,
+            name: '微博'
+        }, {
+            value: 3,
+            name: '小红书',
+        }, {
+            value: ["1", "2", "3"],
+            name: ('抖音', '微博', '小红书')
         }],
         // 性别
         genderArr: [
@@ -672,8 +672,8 @@ let config = {
         //艺人来源
         artistSourceArr: [
             {
-               name:'全部',
-               value:''
+                name: '全部',
+                value: ''
             },
             {
                 name: '线上',
@@ -734,8 +734,8 @@ let config = {
                 value: 4
             },
             {
-                name:'其他',
-                value:5
+                name: '其他',
+                value: 5
             }
 
         ],
@@ -760,11 +760,11 @@ let config = {
         visibleRangeArr: [
             {
                 name: '私有',
-                value: 1
+                value: '1'
             },
             {
                 name: '公开',
-                value: 0
+                value: '0'
             }
         ],
         remindArr: [
@@ -841,7 +841,7 @@ let config = {
                 value: 4
             },
         ],
-        colorArr: ['FFCDD2', 'F06293', 'FDD835', 'FB8C00', 'FFB300', 'E53935', 'D81B60', '8E25AA', '5E35B1', '02ACC1', '1D88E5', '3A49AB', '546E7A', '757575', '6D4C41'],
+        colorArr: ['#FFCDD2', '#F06293', '#FDD835', '#FB8C00', '#FFB300', '#E53935', '#D81B60', '#8E25AA', '#5E35B1', '#02ACC1', '#1D88E5', '#3A49AB', '#546E7A', '#757575', '#6D4C41'],
         // 聘用形式
         employment: {
             1: '正式',
@@ -1047,11 +1047,11 @@ let config = {
             }
         ],
         // 签约状态
-        signState:[
+        signState: [
             {
-                name:'签约中',
-                value:1,
-                color:'#ff9800'
+                name: '签约中',
+                value: 1,
+                color: '#ff9800'
             },
             {
                 name: '已签约',
@@ -1066,7 +1066,7 @@ let config = {
         ],
 
         // 合同状态
-        contractState:[
+        contractState: [
             {
                 name: '待审批',
                 value: 1,

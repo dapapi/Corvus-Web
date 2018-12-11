@@ -3,7 +3,8 @@
 
         <div class="page-header page-header-bordered">
             <h1 class="page-title">日历</h1>
-            <div class="page-header-actions" data-toggle="modal" data-target="#addCalendar">
+            <div class="page-header-actions" data-toggle="modal" data-target="#addCalendar"
+                 @click="changeCalendarActionType('add')">
                 <i class="icon md-plus font-size-20" aria-hidden="true"></i>
             </div>
         </div>
@@ -39,13 +40,13 @@
                                             <i class="icon md-check"
                                                v-show="selectedCalendar.indexOf(calendar.id) > -1"></i>
                                         </div>
-                                        <div class="float-left ml-10">{{ calendar.name }}</div>
+                                        <div class="float-left ml-10">{{ calendar.title }}</div>
                                         <div class="float-right">
                                             <i class="icon md-more" aria-hidden="true" id="taskDropdown"
                                                data-toggle="dropdown" aria-expanded="false"></i>
                                             <div class="dropdown-menu" aria-labelledby="taskDropdown">
-                                                <a class="dropdown-item" @click="editCalendar"
-                                                   data-target="#changeCalendar"
+                                                <a class="dropdown-item" @click="getCalendarDetail(calendar.id)"
+                                                   data-target="#addCalendar"
                                                    data-toggle="modal">编辑</a>
                                                 <a class="dropdown-item" data-target="#delModel" data-toggle="modal"
                                                    @click="delCalendar(calendar)">删除</a>
@@ -94,6 +95,7 @@
             </div>
         </div>
 
+        <!-- 新建日程 -->
         <div class="modal fade" id="addSchedule" aria-hidden="true" aria-labelledby="addLabelForm"
              role="dialog" tabindex="-1">
             <div class="modal-dialog modal-simple">
@@ -206,6 +208,7 @@
             </div>
         </div>
 
+        <!-- 修改日程 -->
         <div class="modal fade" id="changeSchedule" aria-hidden="true" aria-labelledby="addLabelForm"
              role="dialog" tabindex="-1">
             <div class="modal-dialog modal-simple">
@@ -318,6 +321,7 @@
             </div>
         </div>
 
+        <!-- 添加/修改 日历 -->
         <div class="modal fade" id="addCalendar" aria-hidden="true" aria-labelledby="addLabelForm"
              role="dialog" tabindex="-1">
             <div class="modal-dialog modal-simple">
@@ -326,7 +330,12 @@
                         <button type="button" class="close" aria-hidden="true" data-dismiss="modal">
                             <i class="md-close" aria-hidden="true"></i>
                         </button>
-                        <h4 class="modal-title">添加日历</h4>
+                        <template v-if="calendarActionType === 'add'">
+                            <h4 class="modal-title">添加日历</h4>
+                        </template>
+                        <template v-else>
+                            <h4 class="modal-title">修改日历</h4>
+                        </template>
                     </div>
                     <div class="modal-body">
                         <div class="example">
@@ -340,7 +349,7 @@
                             <div class="col-md-2 text-right float-left"></div>
                             <div class="col-md-10 float-left pl-0">
                                 <ul class="color-selector calendar-color-list">
-                                    <li v-for="color in colorArr" :style="'background-color: #' + color"
+                                    <li v-for="color in colorArr" :style="'background-color: ' + color"
                                         @click="changeCalendarColor(color)">
                                         <i class="icon md-check" v-if="color === checkColor"></i>
                                     </li>
@@ -350,24 +359,30 @@
                         <div class="example">
                             <div class="col-md-2 text-right float-left">可见范围</div>
                             <div class="col-md-10 float-left pl-0">
-                                <selectors :options="visibleRangeArr"></selectors>
+                                <selectors :options="visibleRangeArr" ref="visibleSelector"
+                                           @change="addCalendarVisible"></selectors>
                             </div>
                         </div>
                         <div class="example">
                             <div class="col-md-2 text-right float-left">关联艺人</div>
                             <div class="col-md-10 float-left pl-0" v-if="starsArr.length > 0">
-                                <selectors :multiple="true" :options="starsArr"></selectors>
+                                <selectors :options="starsArr" ref="linkageStar" @change="addCalendarStar"></selectors>
                             </div>
                         </div>
                         <div class="example">
                             <div class="col-md-2 text-right float-left">参与人</div>
                             <div class="col-md-10 float-left pl-0">
-                                <add-member @change="participantChange"></add-member>
+                                <add-member @change="addParticipant"></add-member>
                             </div>
                         </div>
                         <div class="modal-footer">
                             <button class="btn btn-sm btn-white btn-pure" data-dismiss="modal">取消</button>
-                            <button class="btn btn-primary" type="submit" @click="addCalendar">确定</button>
+                            <template v-if="calendarActionType === 'add'">
+                                <button class="btn btn-primary" type="submit" @click="addCalendar">确定</button>
+                            </template>
+                            <template>
+                                <button class="btn btn-primary" type="submit" @click="changeCalendar">确定</button>
+                            </template>
                         </div>
                     </div>
                 </div>
@@ -375,63 +390,7 @@
 
         </div>
 
-        <div class="modal fade" id="changeCalendar" aria-hidden="true" aria-labelledby="addLabelForm"
-             role="dialog" tabindex="-1">
-            <div class="modal-dialog modal-simple">
-                <div class="modal-content">
-                    <div class="modal-header">
-                        <button type="button" class="close" aria-hidden="true" data-dismiss="modal">
-                            <i class="md-close" aria-hidden="true"></i>
-                        </button>
-                        <h4 class="modal-title">添加日历</h4>
-                    </div>
-                    <div class="modal-body">
-                        <div class="example">
-                            <div class="col-md-2 text-right float-left">标题</div>
-                            <div class="col-md-10 float-left pl-0">
-                                <input type="text" class="form-control" title="" placeholder="请输入标题"
-                                       v-model="scheduleName">
-                            </div>
-                        </div>
-                        <div class="example">
-                            <div class="col-md-2 text-right float-left"></div>
-                            <div class="col-md-10 float-left pl-0">
-                                <ul class="color-selector calendar-color-list">
-                                    <li v-for="color in colorArr" :style="'background-color: #' + color"
-                                        @click="changeCalendarColor(color)">
-                                        <i class="icon md-check" v-if="color === checkColor"></i>
-                                    </li>
-                                </ul>
-                            </div>
-                        </div>
-                        <div class="example">
-                            <div class="col-md-2 text-right float-left">可见范围</div>
-                            <div class="col-md-10 float-left pl-0">
-                                <selectors :options="visibleRangeArr"></selectors>
-                            </div>
-                        </div>
-                        <div class="example">
-                            <div class="col-md-2 text-right float-left">关联艺人</div>
-                            <div class="col-md-10 float-left pl-0" v-if="starsArr.length > 0">
-                                <selectors :multiple="true" :options="starsArr"></selectors>
-                            </div>
-                        </div>
-                        <div class="example">
-                            <div class="col-md-2 text-right float-left">参与人</div>
-                            <div class="col-md-10 float-left pl-0">
-                                <add-member @change="participantChange"></add-member>
-                            </div>
-                        </div>
-                        <div class="modal-footer">
-                            <button class="btn btn-sm btn-white btn-pure" data-dismiss="modal">取消</button>
-                            <button class="btn btn-primary" type="submit" @click="addCalendar">确定</button>
-                        </div>
-                    </div>
-                </div>
-            </div>
-
-        </div>
-
+        <!-- 删除日历 -->
         <div class="modal fade" id="delModel" aria-hidden="true" aria-labelledby="addLabelForm" role="dialog"
              tabindex="-1">
             <div class="modal-dialog modal-simple">
@@ -443,7 +402,7 @@
                     </div>
                     <div class="modal-body clearfix">
                         <div class="example">
-                            <p>确认删除日历 “{{ delCalendarInfo.name }}” </p>
+                            <p>确认删除日历 “{{ delCalendarInfo.title }}” </p>
                         </div>
 
                     </div>
@@ -455,6 +414,7 @@
             </div>
         </div>
 
+        <!-- 日历批量添加成员 -->
         <div class="modal fade" id="addMembers" aria-hidden="true" aria-labelledby="addLabelForm" role="dialog"
              tabindex="-1">
             <div class="modal-dialog modal-simple" style="max-width: 50rem;">
@@ -483,6 +443,7 @@
 <script>
     import fetch from '../../assets/utils/fetch.js'
     import config from '../../assets/js/config'
+    import Cookies from 'js-cookie';
 
     export default {
         data: function () {
@@ -500,61 +461,46 @@
                 showMore: false,
                 eventPlace: '',
                 eventDesc: '',
-                starsArr: [],
+                starsArr: [
+                    {
+                        name: '无',
+                        value: ''
+                    }
+                ],
                 checkColor: '',
                 selectedDate: '',
                 calendarColor: '',
                 selectedCalendar: [],
                 delCalendarInfo: '',
                 meetingRomeShow: false,
-                calendarList: [
-                    {
-                        name: '艺人日历',
-                        id: 1,
-                        color: '#FB8C00'
-                    },
-                    {
-                        name: '个人日历',
-                        id: 2,
-                        color: '#E53935'
-                    },
-                    {
-                        name: '公告日历',
-                        id: 3,
-                        color: '#8E25AA'
-                    },
-                    {
-                        name: '某某日程',
-                        id: 4,
-                        color: '#546E7A'
-                    },
-                    {
-                        name: '艺人日历',
-                        id: 1,
-                        color: '#FB8C00'
-                    },
-                    {
-                        name: '个人日历',
-                        id: 2,
-                        color: '#E53935'
-                    },
-
-                ],
+                calendarList: [],
                 showAllCalendar: true,
                 showAllResource: true,
                 selectMemberShow: false,
+                starId: '',
+                calendarVisible: 1,
+                calendarDetailInfo: '',
+                calendarActionType: '',
             }
         },
 
         mounted() {
             this.getStars();
+            this.getCalendarList();
             let _this = this;
             $('#addCalendar').on('hidden.bs.modal', function () {
                 _this.$store.dispatch('changeParticipantsInfo', {data: []});
+                _this.starId = '';
+                _this.scheduleName = '';
+                _this.checkColor = '';
+                _this.calendarVisible = 1;
+                _this.$refs.linkageStar.setValue('');
+                _this.$refs.visibleSelector.setValue('');
             });
+
             $('#addSchedule').on('hidden.bs.modal', function () {
                 _this.$store.dispatch('changeParticipantsInfo', {data: []});
-            })
+            });
             this.globalClick(this.removeSelector);
         },
 
@@ -567,15 +513,57 @@
             },
 
             getStars: function () {
-                let _this = this;
-                fetch('get', '/stars/all').then(function (response) {
-                    for (let i = 0; i < response.data.length; i++) {
-                        _this.starsArr.push({
-                            value: response.data[i].id,
-                            name: response.data[i].name
-                        })
+                if (Cookies.get('companyType') === '泰洋川禾') {
+                    fetch('get', '/stars/all').then(response => {
+                        for (let i = 0; i < response.data.length; i++) {
+                            this.starsArr.push({
+                                value: response.data[i].id,
+                                name: response.data[i].name
+                            })
+                        }
+                    })
+                } else {
+                    fetch('get', '/bloggers/all').then(response => {
+                        for (let i = 0; i < response.data.length; i++) {
+                            this.starsArr.push({
+                                value: response.data[i].id,
+                                name: response.data[i].nickname
+                            })
+                        }
+                    })
+                }
+
+            },
+
+            getCalendarList: function () {
+                fetch('get', '/calendars/all').then(response => {
+                    this.calendarList = response.data
+                })
+            },
+
+            getCalendarDetail: function (calendarId) {
+                this.calendarActionType = 'change';
+                this.calendarId = calendarId
+                let data = {
+                    include: 'starable,participants',
+                };
+                fetch('get', '/calendars/' + calendarId, data).then(response => {
+                    console.log(response)
+                    this.scheduleName = response.data.title;
+                    this.checkColor = response.data.color;
+                    this.calendarVisible = response.data.privacy;
+                    this.$refs.visibleSelector.setValue(response.data.privacy);
+                    this.$store.dispatch('changeParticipantsInfo', {data: response.data.participants.data});
+                    if (response.data.starable) {
+                        let starId = response.data.starable.data.id;
+                        this.starId = starId;
+                        this.$refs.linkageStar.setValue(starId)
                     }
                 })
+            },
+
+            changeCalendarActionType: function (value) {
+                this.calendarActionType = value
             },
 
             removeSelector: function (event) {
@@ -589,6 +577,14 @@
 
             addSchedule: function () {
 
+            },
+
+            addCalendarVisible: function (value) {
+                this.calendarVisible = value
+            },
+
+            addCalendarStar: function (value) {
+                this.starId = value
             },
 
             changeStartTime: function (value) {
@@ -620,10 +616,52 @@
             },
 
             addCalendar: function () {
-
+                let data = {
+                    title: this.scheduleName,
+                    color: this.checkColor,
+                    privacy: this.calendarVisible,
+                };
+                if (this.starId.length > 0) {
+                    data.star = this.starId
+                }
+                let participants = this.$store.state.newParticipantsInfo;
+                if (participants.length > 0) {
+                    data.participant_ids = [];
+                    for (let i = 0; i < participants.length; i++) {
+                        data.participant_ids.push(participants[i].id)
+                    }
+                }
+                fetch('post', '/calendars', data).then(response => {
+                    $('#addCalendar').modal('hide');
+                    this.calendarList.push(response.data);
+                    toastr.success('添加成功')
+                })
             },
 
-            participantChange: function () {
+            changeCalendar: function () {
+                let data = {
+                    title: this.scheduleName,
+                    color: this.checkColor,
+                    privacy: this.calendarVisible,
+                };
+                if (this.starId.length > 0) {
+                    data.star = this.starId
+                }
+                let participants = this.$store.state.newParticipantsInfo;
+                if (participants.length > 0) {
+                    data.participant_ids = [];
+                    for (let i = 0; i < participants.length; i++) {
+                        data.participant_ids.push(participants[i].id)
+                    }
+                }
+                fetch('put', '/calendars/' + this.calendarId, data).then(response => {
+                    this.getCalendarList();
+                    $('#addCalendar').modal('hide');
+                    toastr.success('修改成功')
+                })
+            },
+
+            addParticipant: function () {
 
             },
 
@@ -662,8 +700,11 @@
             },
 
             deleteCalendar: function () {
-                toastr.success('删除成功');
-                $('#delModel').modal('hide')
+                fetch('delete', '/calendars/' + this.delCalendarInfo.id).then(response => {
+                    toastr.success('删除成功');
+                    $('#delModel').modal('hide');
+                    this.getCalendarList();
+                })
             },
 
             checkMeetingRoom: function () {
