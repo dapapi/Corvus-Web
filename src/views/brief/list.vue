@@ -104,12 +104,8 @@ export default {
                 end_time:this.end_time
             }
             
-<<<<<<< HEAD
-            fetch('get',`${config.apiUrl}/review/my/template`,{template_id:this.$route.params.id}).then((res) => {
-=======
             fetch('get',`${config.apiUrl}/review/my/template`,data).then((res) => {
                 
->>>>>>> qsf
                 this.list = res.data
                 // if(res.data.length>0){
                 //      this.template_name = res.data[0].template.template_name
