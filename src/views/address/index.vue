@@ -2,7 +2,7 @@
     <div class="page page-aside-left">
         <div class="page-aside">
             <div class="page-aside-inner page-aside-scroll scrollable is-enabled scrollable-vertical">
-                <div data-role="container" class="">
+                <div data-role="container">
                     <div data-role="content" class="scrollable-content">
                         <section class="page-aside-section">
                             <h5 class="page-title pl-30 mb-40">通讯录</h5>
@@ -23,7 +23,7 @@
                                         </li>
                                     </ul>
                                 </div>
-                                <div class="page-content tab-content nav-tabs-animate member-list">
+                                <div class="page-content tab-content nav-tabs-animate member-list" style="padding: 0;">
                                     <div class="tab-pane animation-fade active" id="forum-team" role="tabpanel">
                                         <div class="mt-20">
                                             <div class="input-search m-0">
@@ -34,14 +34,22 @@
                                                        v-model="searchKeyWord">
                                             </div>
                                         </div>
-                                        <div class="users" v-for="user in normalUsers"
-                                             v-show="user.name.indexOf(searchKeyWord) > -1"
-                                             @click="" :key='user.name+Math.random()'>
-                                            <a class="avatar" href="javascript:void(0)">
-                                                <img src="https://res.papitube.com/no-icon.png" alt="...">
-                                            </a>
-                                            <span class="pl-1">{{ user.name }}</span>
+
+                                        <div v-for="(value, key, index) in normalUsers" :key="index">
+                                            <div class="letter">{{ key }}</div>
+                                            <div class="users" v-for="(user, _index) in value"
+                                                v-show="user.name.indexOf(searchKeyWord) > -1"
+                                                :class="checkedIndex === (index + '' + _index) ? 'checked' : ''"
+                                                @click="handelMemberClick(index + '' + _index, user)"
+                                                :key='user.name+Math.random()'>
+                                                <a class="avatar" href="javascript:void(0)">
+                                                    <img src="https://res.papitube.com/no-icon.png" alt="...">
+                                                </a>
+                                                <span class="pl-1 user-name">{{ user.name }}</span>
+                                            </div>
                                         </div>
+                                        
+
                                     </div>
                                     <div class="tab-pane animation-fade" id="forum-department"
                                          role="tabpanel">
@@ -72,25 +80,25 @@
                             <div class="col-md-10 float-left position-absolute" style="bottom: 25px;right: 0;">
                                 <div class="clearfix mb-20">
                                     <div class="col-md-4 float-left">
-                                        <div class="float-left col-md-5">
+                                        <div class="float-left col-md-6">
                                             <i class="icon md-plus pr-2"></i>
                                             <span class="font-weight-bold">姓名</span>
                                         </div>
-                                        <div class="float-left col-md-6 pl-0">XXX</div>
+                                        <div class="float-left col-md-6 pl-0">{{ personalInfo.name ? personalInfo.name : ''}}</div>
                                     </div>
                                     <div class="col-md-4 float-left">
                                         <div class="float-left col-md-6">
                                             <i class="icon md-plus pr-2"></i>
                                             <span class="font-weight-bold">职位</span>
                                         </div>
-                                        <div class="float-left col-md-6 pl-0">XXX</div>
+                                        <div class="float-left col-md-6 pl-0">{{ personalInfo.position ? personalInfo.position : ''}}</div>
                                     </div>
                                     <div class="col-md-4 float-left">
                                         <div class="float-left col-md-6">
                                             <i class="icon md-plus pr-2"></i>
                                             <span class="font-weight-bold">部门</span>
                                         </div>
-                                        <div class="float-left col-md-6 pl-0">XXX</div>
+                                        <div class="float-left col-md-6 pl-0">{{ personalInfo.position ? personalInfo.position : ''}}</div>
                                     </div>
                                 </div>
                                 <div class="clearfix">
@@ -99,14 +107,14 @@
                                             <i class="icon md-email pr-2"></i>
                                             <span class="font-weight-bold">邮箱</span>
                                         </div>
-                                        <div class="float-left col-md-6 pl-0">XXX</div>
+                                        <div class="float-left col-md-6 pl-0">{{ personalInfo.work_email ? personalInfo.work_email : ''}}</div>
                                     </div>
                                     <div class="col-md-4 float-left">
                                         <div class="float-left col-md-6">
                                             <i class="icon md-phone pr-2"></i>
                                             <span class="font-weight-bold">电话</span>
                                         </div>
-                                        <div class="float-left col-md-6 pl-0">XXX</div>
+                                        <div class="float-left col-md-6 pl-0">{{ personalInfo.phone ? personalInfo.phone : ''}}</div>
                                     </div>
                                     <div class="col-md-4 float-left">
                                         <div class="float-left col-md-6">
@@ -201,32 +209,40 @@
                 searchKeyWord: '',
                 normalUsers: '',
                 departmentUsers: '',
+                personalInfo: {},
+                checkedIndex: '',
             }
         },
         mounted() {
-            fetch('get', '/users').then(response => {
-                this.normalUsers = response.data;
-            });
             fetch('get', '/departments').then(response => {
                 this.departmentUsers = response.data;
             });
+            fetch('get', '/departments/crew').then(res => {
+                console.log(res)
+                this.normalUsers = res;
+            })
         },
         methods: {
             memberChange() {
-
+                // 
             },
+            handelMemberClick (index, data) {
+                this.checkedIndex = index
+                this.personalInfo = data
+                console.log(data)
+            }
         },
     }
 </script>
 
-<style>
+<style scoped>
     .member-list {
         overflow-y: auto;
         position: relative;
         top: 45px;
         padding-top: 0;
         padding-bottom: 0;
-        height: calc(100vh - 150px);
+        height: calc(100vh - 114px);
     }
 
     .schedule-panel {
@@ -244,5 +260,30 @@
         border-bottom: 1px solid #e3e3e3;
     }
 
+    #forum-team {
+        padding-bottom: 40px;
+    }
+    .user-name {
+        color: #333;
+    }
+    .users {
+        padding: 10px 0 10px 40px;
+    }
+    .users:hover {
+        background: rgba(40,53,147,.03);
+    }
+    .letter {
+        color: #cacaca;
+        padding: 4px 0 4px 44px;
+    }
+    .mt-20{
+        padding: 0 30px 12px;
+    }
+    .checked {
+        background: rgba(40,53,147,.03);
+    }
+    .checked .user-name {
+        color: #3f51b5;
+    }
 </style>
 
