@@ -14,7 +14,7 @@
                         <input type="text" class="form-control" title="" v-model="email">
                     </div>
                 </template>
-                <template v-else-if="trailOrigin === '4' || trailOrigin === '5'">
+                <template v-else-if="(trailOrigin === '4' || trailOrigin === '5') && members[0]">
                     <div class="col-md-5 float-left pr-0">
                         <input-selectors @change="changeTrailOrigin" :placeholder='members.find(item=>item.id == content).name'
                                          :propSelectMemberName='trailOriginPerson.name'></input-selectors>
@@ -39,7 +39,7 @@
     import fetch from '@/assets/utils/fetch.js'
 
     export default {
-        //线索类型   {{什么}}线索  编辑状态   详情页样式  当前线索值    当前线索来源     永久显示
+                    //线索类型   {{什么}}线索  编辑状态   详情页样式  当前线索值    当前线索来源     永久显示
         props: ['trailType', 'typeName', 'isEdit', 'detailPage', 'content', 'contentType', 'alwaysShow'],
         data() {
             return {
@@ -95,8 +95,9 @@
         },
         methods: {
             getMembers() {
+                let _this = this
                 fetch('get', '/users').then((params) => {
-                    this.members = params.data
+                    _this.members = params.data
                 })
             },
             //

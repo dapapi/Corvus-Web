@@ -48,7 +48,7 @@
                         </div>
                         <div class="form-group row col-sm-12">
                             <label for="" class="col-sm-2 col-form-label"><strong>公告范围</strong></label>
-                            <selectors  class="scopeSelector" ref='scopeSelector' :options="departments" @valuelistener="changeDepartments"  multiple='true' :placeholder='"请选择范围"'></selectors>
+                            <selectors class="scopeSelector" ref='scopeSelector' :options="departments" @valuelistener="changeDepartments"  multiple='true' :placeholder='"请选择范围"'></selectors>
                             <label for="" class="offset-sm-1 col-sm-2 col-form-label"><strong>选择分类</strong></label>
                             <selectors ref='classifySelector' :options="classifyArr" @change="changeClassify" placeholder='请选择类型' ></selectors>
                         </div>
@@ -90,9 +90,12 @@ export default {
             classifyArr:config.classifyArr, 
             scope:[],
             accessory_name:'',
+            whoamiid:'',
         }
     },
     created(){
+        console.log(this.notedata);
+        this.whoami()
         this.getDepartments()
     },
     mounted(){
@@ -134,8 +137,12 @@ export default {
             this.$nextTick(() => {
                 this.$refs.scopeSelector.setValue(this.scope)            //设置默认值
                 this.$refs.classifySelector.setValue(this.type)
-                $('.selectpicker').selectpicker('render');               //刷新下拉选单
-                $('.selectpicker').selectpicker('refresh');
+            })
+        },
+        whoami(){
+            let _this = this
+            fetch('get','/users/my').then((params) => {
+                _this.whoamiid = params.data.id
             })
         },
         //修复富文本编辑器多层弹窗bug
