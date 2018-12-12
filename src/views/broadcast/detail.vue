@@ -42,9 +42,9 @@
                         <h5 v-html="currentData.desc" class="broadcast-content"></h5>
                         <div v-if="currentData.accessory"
                         data-plugin="actionBtn" 
-            data-toggle="modal" 
-            data-target="#docPreview"
-            aria-hidden="true"
+                        data-toggle="modal" 
+                        data-target="#docPreview"
+                        aria-hidden="true"
                         ><a href="#">查看附件</a></div>
                         <DocPreview :url='currentData.accessory' :givenFileName='currentData.accessory_name' />
                         <h5>公告范围

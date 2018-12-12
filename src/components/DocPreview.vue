@@ -1,4 +1,9 @@
 <template>
+<!-- 文件预览组件 by王骁
+    需要url和文件名  
+    模态框组件，需要父组件设置data-target='docPreview'触发
+    内置下载按钮
+-->
     <div>
         <div class="modal fade  bootbox" id="docPreview" aria-labelledby="docPreviewPositionCenter" role="dialog" tabindex="-1">
             <div class="modal-dialog modal-simple modal-center modal-lg">
@@ -13,7 +18,8 @@
                     <iframe v-if="['doc','docx','xls','xlsx','ppt','pptx'].includes(fileNameHandler)" class="mt-20 ml-30" :src='"https://view.officeapps.live.com/op/view.aspx?src="+url' width='800px' height='500px' frameborder='1'>
 			        </iframe>
                     <img v-else-if="['png','gif','bmp','jpg','jpeg'].includes(fileNameHandler)" :src="url">
-                    <div v-else>不支持此文件格式预览{{fileNameHandler}}</div>
+                    <embed v-else-if="fileNameHandler === 'pdf'" :src="url" type="application/pdf" width="100%" height="100%">
+                    <div v-else>不支持此文件格式预览</div>
                 </div>
                 <div class="modal-footer">
                     <a :href="url" download="">
@@ -32,14 +38,16 @@
 <script>
 export default {
     name:'docPreview',
+        //文件url     文件名
     props:['url','givenFileName'],
     created(){
         
     },
     mounted(){
-        console.log(this.url);
+
     },
     computed:{
+        //获取扩展名
         fileNameHandler(){
             return String(this.givenFileName).split('.').pop()
         }
