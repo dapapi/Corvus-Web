@@ -72,7 +72,7 @@
                             <div class="col-md-10 float-left position-absolute" style="bottom: 25px;right: 0;">
                                 <div class="clearfix mb-20">
                                     <div class="col-md-4 float-left">
-                                        <div class="float-left col-md-5">
+                                        <div class="float-left col-md-6">
                                             <i class="icon md-plus pr-2"></i>
                                             <span class="font-weight-bold">姓名</span>
                                         </div>
@@ -226,7 +226,7 @@
         top: 45px;
         padding-top: 0;
         padding-bottom: 0;
-        height: calc(100vh - 150px);
+        height: calc(100vh - 114px);
     }
 
     .schedule-panel {
@@ -242,6 +242,10 @@
 
     .title-wrap {
         border-bottom: 1px solid #e3e3e3;
+    }
+
+    #forum-team {
+        padding-bottom: 40px;
     }
 
 </style>
