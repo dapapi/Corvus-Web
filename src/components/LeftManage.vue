@@ -15,12 +15,12 @@
                     <template v-if="!menu.data">
                         <router-link :to="'/' + menu.code" class="animsition-link py-20">
                             <div>
-                                        <span class="base-icon">
-                                            <img :src="menu.image" alt="">
-                                        </span>
+                                <span class="base-icon">
+                                    <img :src="menu.image" alt="">
+                                </span>
                                 <span class="hover-icon">
-                                            <img :src="menu.hoverImage" alt="">
-                                        </span>
+                                    <img :src="menu.hoverImage" alt="">
+                                </span>
                             </div>
                             <span class="site-menu-title">{{ menu.name }}</span>
                         </router-link>
@@ -28,18 +28,18 @@
                     <template v-else>
                         <a class="animsition-link">
                             <div>
-                                        <span class="base-icon">
-                                            <img :src="menu.image" alt="">
-                                        </span>
+                                <span class="base-icon">
+                                    <img :src="menu.image" alt="">
+                                </span>
                                 <span class="hover-icon">
-                                            <img :src="menu.hoverImage" alt="">
-                                        </span>
+                                    <img :src="menu.hoverImage" alt="">
+                                </span>
                             </div>
                             <span class="site-menu-title">{{ menu.name }}</span>
                         </a>
                         <ul class="site-menu-sub" style="">
                             <li class="site-menu-item" v-for="subMenu in menu.data"
-                            :class="pageRoute === subMenu.code ? 'active': ''">
+                                :class="pageRoute === subMenu.code ? 'active': ''">
                                 <router-link :to="'/' + subMenu.code"
                                              class="animsition-link">
                                     <span class="site-menu-title">{{ subMenu.name }}</span>
@@ -73,8 +73,8 @@
                         hoverImage: 'https://res.papitube.com/corvus/images/select-rili.png'
                     },
                     {
-                        name: '组织构架',
-                        code: 'organizat',
+                        name: '组织架构',
+                        code: 'organization',
                         image: 'https://res.papitube.com/corvus/images/talent.png',
                         hoverImage: 'https://res.papitube.com/corvus/images/select-talent.png',
                     }
