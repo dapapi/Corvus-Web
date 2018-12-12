@@ -9,7 +9,6 @@
             <div class="panel col-md-12 clearfix py-5">
                 <div class="clearfix">
                     <div class="col-md-12 example float-left">
-                        <h1 class="page-title">泰洋系 <span class="color999">（{{count}}人）</span></h1>
                         <template v-for="(item, index) in data">
                             <Department 
                                 :data="item" 
@@ -146,15 +145,7 @@
             getDepartment() {
                 fetch('get', '/departments').then(res => {
                     this.data = res.data
-                    this.count = this.countNum(this.data)
                 })
-            },
-            countNum(data) {
-                let count = 0
-                data.map(n => {
-                    count += n.users.data.length + this.countNum(n.departments.data)
-                })
-                return count
             },
             // 添加部门
             addDepartment(id) {

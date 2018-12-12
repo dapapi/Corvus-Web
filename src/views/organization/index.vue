@@ -16,11 +16,11 @@
                         </div>
                     </div>
 
-                    <div class="col-md-12 example float-left">
-                        <h3 class="example">泰洋系 
+                    <div class="col-md-12 float-left" style="magin-top: -20px;">
+                        <h4>泰洋系 
                             <span class="color999" style="font-weight: 300;">（{{count}}人）</span> 
                             <span style="float: right; cursor: pointer;"><router-link to="/organization/management">管理部门</router-link></span>
-                        </h3>
+                        </h4>
                         <template v-for="(item, index) in data">
                             <Department 
                                 :data="item" 
@@ -107,10 +107,14 @@
     .input-search i {
         cursor: pointer;
     }
-    h3 a{
+    h4 {
+        padding-bottom: 20px;
+        border-bottom: 1px solid #eee;
+    }
+    h4 a{
         color: #333;
     }
-    h3 a:hover {
+    h4 a:hover {
         text-decoration: none;
     }
 </style>
