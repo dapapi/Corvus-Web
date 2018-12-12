@@ -1122,7 +1122,92 @@ let config = {
                 color: '#eeeeee'
             }
 
-        ]
+        ],
+        //简报 --频次
+        briefTime: [
+            {
+                value: 1,
+                name: '每天'
+            },
+            {
+                value: 2,
+                name: '每周'
+            },
+            {
+                value: 3,
+                name: '每月'
+            },
+            {
+                value: 4,
+                name: '每季'
+            },
+            {
+                value: 5,
+                name: '每年'
+            },
+        ],
+        //简报问题--类型
+        briefType: [
+            {
+                value: 1,
+                name: '文本'
+            },
+            {
+                value: 2,
+                name: '数字'
+            },
+            {
+                value: 3,
+                name: '日期'
+            },
+            {
+                value: 4,
+                name: '任务'
+            },
+            {
+                value: 5,
+                name: '附件'
+            },
+
+        ],
+        //季节
+        season: [
+            {
+                value: 1,
+                name: '第1季度',
+                start: '1月1日',
+                end: '3月31日',
+                startTime: '1-1',
+                endTime: '3-31'
+
+            },
+            {
+                value: 2,
+                name: '第2季度',
+                start: '4月1日',
+                end: '6月30日',
+                startTime: '4-1',
+                endTime: '6-30'
+            },
+            {
+                value: 3,
+                name: '第3季度',
+                start: '7月1日',
+                end: '9月30日',
+                startTime: '7-1',
+                endTime: '9-30'
+
+            },
+            {
+                value: 4,
+                name: '第4季度',
+                start: '10月1日',
+                end: '12月31日',
+                startTime: '10-1',
+                endTime: '12-31'
+
+            }
+        ],
     }
 ;
 

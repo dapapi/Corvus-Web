@@ -2,7 +2,7 @@
     <!-- Page -->
 <div class="page-main">
     <div class="page-header page-header-bordered">
-        <h1 class="page-title">简报</h1>
+        <h1 class="page-title">我的{{template_name}}</h1>
         <div class="page-header-actions">
             <button type="button" class="btn btn-primary mr-20" @click="submitAnswer">提交</button>
             <button type="button" class="btn btn-default" @click="draft">保存草稿</button>
@@ -12,18 +12,18 @@
     <div class="page-content container-fluid">
         <div class="col-md-12 panel example clearfix p-20">
             <span class="float-left pr-10">评审人</span>
-            <input-selectors :placeholder="'请选择负责人'" @change="changePrincipal"></input-selectors>
-            <!-- <add-member class="float-left pr-20" @change="participantChange"></add-member> -->
-            <!-- <span class="float-left pr-10 ml-20">谁可以看</span> -->
-            <!-- <add-member @change="participantChange"></add-member> -->
+            <input-selectors :placeholder="'请选择评审人'" @change="changePrincipal"></input-selectors>
+            <!-- <add-member class="float-left pr-20" @change="participantChange"></add-member>
+            <span class="float-left pr-10 ml-20">谁可以看</span>
+            <add-member @change="participantChange"></add-member> -->
 
         </div>
         <div class="panel col-md-12 p-20">
              <div class="panel-header clearfix">
-                 <!-- <div class="float-left">
-                      日历控件
-                 </div> -->
-                 <button type="button" class="btn btn-warning float-right" style="color:#fff">待评审</button>
+                 <div class="float-left">
+                    <switchYear :type ="type" @click="getTime"></switchYear>
+                 </div>
+                 <button type="button" class="btn btn-warning float-right" style="color:#fff">未提交</button>
              </div>
              <div class="panel-content">
                  <!--问题列表开始-->
@@ -107,7 +107,7 @@ import checkbox from '@/components/checkbox'
 export default {
     data(){
         return {
-            accessory:this.$route.query.id,
+            accessory:this.$route.query.id,//模版id
             quesList:[],
             birthday:'',
             isEdit:false,
@@ -124,6 +124,10 @@ export default {
             taskList:[],
             selectTask:[],
             quesTaskId:'',
+            type:this.$route.query.type-0,
+            startTime:'',
+            endTime:'',
+            template_name:''
             
         }
     },
@@ -134,13 +138,19 @@ export default {
 
         this.getAll()
         this.getTaskList()
+        // console.log(typeof this.type)
         // this.getDetails()
     },
     methods:{
-         
+        getTime:function(start,end){
+            // console.log(start,end)
+            this.startTime = start 
+            this.endTime = end
+        },
         //获取所有的问题
         getAll:function(){
-            fetch('get',`${config.apiUrl}/launch/all`,{accessory:this.accessory}).then((res) => {
+            this.template_name = this.$route.query.name
+            fetch('get',`${config.apiUrl}/launch/all`,{accessory:this.accessory,start_time:this.startTime,end_time:this.endTime}).then((res) => {
                 this.quesList = res.data
                 this.isEdit = true
                 this.getData()
@@ -206,9 +216,8 @@ export default {
         },
         participantChange:function(value){
         },
-        changePrincipal:function(value){
-            
-           this.submitAnswerData.reviewer_id = value.id
+        changePrincipal:function(){ 
+           
         },
         //获取任务列表
         getTaskList:function(){
@@ -226,6 +235,7 @@ export default {
 
         //提交
         submitAnswer:function(){
+            this.submitAnswerData.reviewer_id = this.$store.state.newPrincipalInfo.id
             this.submitAnswerData.accessory = this.$route.query.id
             for (const key in this.submitAnswerData) {
                 if(Array.isArray(this.submitAnswerData[key])){
@@ -251,7 +261,9 @@ export default {
         },
         //草稿
         draft:function(){
-            fetch('post',`${config.apiUrl}/launch/${this.$route.query.id}/draft`).then((res) => {
+            this.submitAnswerData.reviewer_id = this.$store.state.newPrincipalInfo.id
+            this.submitAnswerData.accessory = this.$route.query.id
+            fetch('post',`${config.apiUrl}/launch/${this.$route.query.id}/draft`,this.submitAnswerData).then((res) => {
                toastr.success('保存草稿成功');
                 
             })

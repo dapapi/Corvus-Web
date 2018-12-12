@@ -218,17 +218,17 @@ export default new Router({
                     component: () => import('./views/brief/followup.vue')
                 },
                 {
-                    path: '/brief/list/:id',
+                    path: '/brief/list/',
                     name: 'list',
                     component: () => import('./views/brief/list.vue')
                 },
                 {
-                    path: '/brief/memberReport/:id',
+                    path: '/brief/memberReport/',
                     name: 'memberReport',
                     component: () => import('./views/brief/memberReport.vue')
                 },
                 {
-                    path: '/brief/statistics/:id',
+                    path: '/brief/statistics/',
                     name: 'statistics',
                     component: () => import('./views/brief/statistics.vue')
                 },
