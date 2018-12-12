@@ -74,7 +74,7 @@ export default {
             var currentDayOfWeekIsLastDay = false;
 
             var firstDayOfYearIsFirstDayOfWeek = false;
-
+            
             //当前年份
             var year = 0;
             if(now.getYear()>=2000)
@@ -96,7 +96,7 @@ export default {
                 isFullYear = true;
             }
 
-
+            
             //循环计算天数
             for(var i=0;i<monthOfFullDay.length;i++){
                 //判断数组月份是否小于等于当前月份
@@ -139,4 +139,5 @@ export default {
     },
 }
 </script>
+
 

@@ -5,7 +5,7 @@
             <h1 class="page-title">待我审批</h1>
         </div>
         <div class="page-content container-fluid">
-            <div class="panel">
+            <div class="panel mb-0 pb-10">
                 <div class="col-md-4  p-20">
                     <div class="input-search">
                         <button type="button" class="input-search-btn"><i class="icon md-search" aria-hidden="true"></i>
@@ -42,11 +42,14 @@
                                 
                             </tr>
                             
-                            <tr data-toggle="modal" data-target="#submitReport" v-for="(item,index) in list" :key="index" @click="getId(item.template.id)">
-                                <td class="pointer-content">{{item.template.template_name}}</td>
-                                <td>屈素芳</td>
-                                <td>每周</td>
-                                <td>{{item.template.updated_at}}</td>
+                            <tr data-toggle="modal" data-target="#submitReport" v-for="(item,index) in list" :key="index" @click="getId(item.id)">
+                                <td class="pointer-content">{{item.template}}</td>
+                                <td>{{item.member}}</td>
+                                <td>
+                                    <div>{{item.title[0]}}</div>
+                                    <div style="color:#ccc">{{item.title[1]}}</div>
+                                </td>
+                                <td>{{item.updated_at}}</td>
                                 <td>
                                     <template v-if="item.status == 1">未评审</template>
                                     <template v-if="item.status == 2">已评审</template>
@@ -54,6 +57,9 @@
                                 
                             </tr>
                         </table>
+                        <div v-if="list.length === 0" class="col-md-1" style="margin: 6rem auto">
+                            <img src="https://res.papitube.com/corvus/images/content-none.png" alt="" style="width: 100%">
+                        </div>
                         <pagination :current_page="current_page" :method="getlist" :total_pages="total_pages"
                                     :total="total"></pagination>
                     </div>
@@ -66,7 +72,7 @@
                 <i class="back-icon md-plus animation-scale-up" aria-hidden="true"></i>
             </button>
         </div>
-        <submit-report :templateId="temId" :templateStatus="status"></submit-report>
+        <submit-report :templateId="temId" :templateStatus="status" @refresh="getlist"></submit-report>
     </div>
 </template>
 <script>
@@ -83,10 +89,6 @@ export default {
             current_page:0,
             total_pages:0,
             total:0,
-
-        
-
-             
         }
     },
     mounted(){
@@ -105,10 +107,23 @@ export default {
         },
         getlist:function(page = 1,status){
             let _this = this
-            this.status = status
+            if(status){
+                this.status = status
+            }
            
             fetch('get',`${config.apiUrl}/review`,{search:this.search,status:this.status}).then((res) => {
                 _this.list = res.data
+                // console.log(_this.list)
+                for (let i = 0; i < _this.list.length; i++) {
+                    if(_this.list[i].title){
+                        console.log(_this.list[i].title)
+                        _this.list[i].title = _this.list[i].title.split(',')
+                    }else{
+                         _this.list[i].title = ['','']
+
+                    }
+                    
+                }
                 _this.current_page = res.meta.pagination.current_page
                 _this.total_pages = res.meta.pagination.total_pages
                 _this.total = res.meta.pagination.total

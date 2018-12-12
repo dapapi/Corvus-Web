@@ -10,7 +10,7 @@
                      role="menu" x-placement="bottom-end">
                     <a class="dropdown-item" role="menuitem" @click="">分享</a>
                     <a class="dropdown-item" role="menuitem" data-toggle="modal"
-                       data-target="#distributionBroker" @click="distributionPerson('broker')">分配经纪人</a>
+                       data-target="#distributionBroker" @click="distributionPerson('broker')">分配经理人</a>
                     <a class="dropdown-item" role="menuitem" data-toggle="modal"
                        data-target="#distributionBroker" @click="distributionPerson('publicity')">分配宣传人</a>
                     <a class="dropdown-item" role="menuitem" @click="">自定义字段</a>
@@ -27,7 +27,7 @@
                     <div class="card-text clearfix example">
                         <div class="col-md-6 float-left pl-0">
                             <div class="float-left pl-0 pr-2 col-md-2">
-                                <i class="md-plus pr-2" aria-hidden="true"></i>经纪人
+                                <i class="md-plus pr-2" aria-hidden="true"></i>经理人
                             </div>
                             <div class="font-weight-bold float-left" v-if="artistInfo.broker">
                                 <template v-for="broker in artistInfo.broker.data">
@@ -163,7 +163,7 @@
                                     <th class="cell-300" scope="col">录入日期</th>
                                 </tr>
                                 <tr v-for="(item,index) in artistProjectsInfo" :key="index">
-                                    <td>{{item.title}}</td>
+                                    <td><router-link :to="{path:`/projects/${item.id}`}">{{item.title}}</router-link></td>
                                     <td>{{item.status}}</td>
                                     <td>{{item.principal.data.name}}</td>
                                     <td>{{item.company}}</td>
@@ -188,7 +188,6 @@
                                     <th class="cell-300" scope="col">负责人</th>
                                     <th class="cell-300" scope="col">截止时间</th>
                                 </tr>
-                                <tbody>
                                 <tr v-for="task in artistTasksInfo">
                                     <td>
                                         <router-link :to="{path:`/tasks/${task.id}`}">{{task.title}}</router-link>
@@ -751,7 +750,7 @@
                             <i class="md-close" aria-hidden="true"></i>
                         </button>
                         <template v-if="distributionType === 'broker'">
-                            <h4 class="modal-title">分配经纪人</h4>
+                            <h4 class="modal-title">分配经理人</h4>
                         </template>
                         <template v-else>
                             <h4 class="modal-title">分配宣传人</h4>

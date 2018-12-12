@@ -8,7 +8,7 @@
             <div class="">
                 <div class="row py-5">
                     <div class="col-lg-4" v-for="item in list" :key="item.id" >
-                        <div v-if="item.status === null" class="card" @click="redirectBriefDetails(item.id)">
+                        <div v-if="item.status === null" class="card" @click="redirectBriefDetails(item.id,item.frequency,item.template_name)">
                             <div class="card-block clearfix">
                                 
                                 <i class="icon md-file float-left" style="font-size:3rem"></i>
@@ -19,7 +19,7 @@
                                 </div>
                             </div>
                         </div>
-                        <div v-else class="card" data-toggle="modal" data-target="#submitReport" @click="getId(item.status)">
+                        <div v-else class="card" data-toggle="modal" data-target="#submitReport" @click="getId(item.status,item.template_name)">
                             <div class="card-block clearfix">
                                 
                                 <i class="icon md-file float-left" style="font-size:3rem"></i>
@@ -27,7 +27,7 @@
                                 <div class="float-left">
                                      <div>{{item.template_name}}</div>
                                      <div class="lightColor">
-                                        <template v-if="item.status == 1">未审核</template>
+                                        <template v-if="item.status.status == 1">未审核</template>
                                         <template v-else>已审核</template>
                                      </div>
                                 </div>
@@ -43,7 +43,7 @@
                 <i class="back-icon md-plus animation-scale-up" aria-hidden="true"></i>
             </button>
         </div>
-        <submit-report :templateId="temId" :templateStatus="temStatus"></submit-report>
+        <submit-report :templateId="temId" :templateStatus="temStatus" :tempName="tempName" @refresh="getlist()"></submit-report>
     </div>
 </template>
 <script>
@@ -56,19 +56,21 @@ export default {
             list:[], 
             temId:'',//简报id
             temStatus:'',//提交状态
+            tempName:'',//模版名称
         }
     },
     mounted(){
         this.getlist()
     },
     methods:{
-        getId:function(status){
+        getId:function(status,name){
             this.temId = status.id
             this.temStatus = status.status
+            this.tempName = name
         },
-        redirectBriefDetails:function(id){
+        redirectBriefDetails:function(id,type,name){
             
-            this.$router.push({path:'/brief/details',query:{id:id}})
+            this.$router.push({path:'/brief/details',query:{id:id,type:type,name:name}})
         },
         redirectBriefAdd:function(){
             this.$router.push({path:'/brief/add'})
