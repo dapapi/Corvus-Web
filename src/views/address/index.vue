@@ -74,8 +74,8 @@
                 <div class="panel">
                     <div class="col-md-12">
                         <div class="py-25 clearfix position-relative">
-                            <div class="col-md-2 float-left">
-                                <img src="https://res.papitube.com/no-icon.png" alt="" style="width: 80%;">
+                            <div class="col-md-2 float-left head-img">
+                                <img :src="personalInfo.icon_url ? personalInfo.icon_url : 'https://res.papitube.com/no-icon.png'" alt="">
                             </div>
                             <div class="col-md-10 float-left position-absolute" style="bottom: 25px;right: 0;">
                                 <div class="clearfix mb-20">
@@ -201,6 +201,7 @@
 
 <script>
     import fetch from '../../assets/utils/fetch.js'
+    import Cookies from 'js-cookie'
 
     export default {
         name: 'portal',
@@ -218,18 +219,31 @@
                 this.departmentUsers = response.data;
             });
             fetch('get', '/departments/crew').then(res => {
-                console.log(res)
                 this.normalUsers = res;
+                this.setDefaultInfo(JSON.parse(Cookies.get('user')).id)
             })
         },
         methods: {
             memberChange() {
-                // 
+                this.setDefaultInfo(this.$store.state.newPrincipalInfo.id)
             },
             handelMemberClick (index, data) {
                 this.checkedIndex = index
                 this.personalInfo = data
-                console.log(data)
+            },
+            setDefaultInfo(id) {
+                let i = 0
+                for (let item in this.normalUsers) {
+                    let j = 0
+                    for (let n of this.normalUsers[item]) {
+                        if (n.user_id === id) {
+                            this.checkedIndex = i + '' + j
+                            this.personalInfo = n
+                        }
+                        j++
+                    }
+                    i++
+                }
             }
         },
     }
@@ -284,6 +298,13 @@
     }
     .checked .user-name {
         color: #3f51b5;
+    }
+    .head-img img {
+        width: 117px;
+        height: 130px;
+    }
+    #forum-department {
+        padding-bottom: 30px;
     }
 </style>
 

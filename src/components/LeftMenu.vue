@@ -244,6 +244,9 @@
         overflow: hidden;
         margin: 0 auto;
     }
+    .menu-icon .icon-wrap label {
+        margin: 0;
+    }
 
      .menu-icon .icon-wrap img {
         cursor: pointer;
