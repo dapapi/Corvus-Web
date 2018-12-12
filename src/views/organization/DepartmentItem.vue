@@ -5,7 +5,7 @@
                 <i v-show="visible" class="icon md-caret-down showList"></i>
                 <i v-show="!visible" class="icon md-caret-right showList"></i>
                 <img src="../../assets/img/department@2x.png" />
-                {{ data.name }} <span>({{count}})</span> {{principal ? principal.name:'无负责人'}}
+                {{ data.name }} <span>({{count}})</span> <span class="principal">{{principal ? principal.name:'无负责人'}}</span>
             </span>
             <i v-if="!isEdit" class="icon md-plus edit" style="float: right;line-height: 50px;" @click.stop="check(data)"></i>
             <div class="drop" v-else>
@@ -164,6 +164,10 @@ ul {
 }
 .drop {
     float: right;
+}
+.principal {
+    position: absolute;
+    left: 300px;
 }
 
 </style>

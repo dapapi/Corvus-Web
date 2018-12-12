@@ -19,6 +19,7 @@
                     <div class="col-md-12 float-left" style="magin-top: -20px;">
                         <h4>泰洋系 
                             <span class="color999" style="font-weight: 300;">（{{count}}人）</span> 
+                            <span class="principal">负责人</span>
                             <span style="float: right; cursor: pointer;"><router-link to="/organization/management">管理部门</router-link></span>
                         </h4>
                         <template v-for="(item, index) in data">
@@ -116,6 +117,10 @@
     }
     h4 a:hover {
         text-decoration: none;
+    }
+    .principal {
+        position: absolute;
+        left: 300px;
     }
 </style>
 

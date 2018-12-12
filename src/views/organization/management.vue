@@ -145,6 +145,8 @@
             getDepartment() {
                 fetch('get', '/departments').then(res => {
                     this.data = res.data
+                    this.departmentPId = res.data[0].department_pid
+                    this.departmentId = res.data[0].id
                 })
             },
             // 添加部门
@@ -172,7 +174,7 @@
             },
             selectDepartment (data) {
                 this.departmentId = data.id
-                this.departmentPId = data.pId
+                this.departmentPId = data.department_pid
             },
             // 负责人
             principalChange(val) {
