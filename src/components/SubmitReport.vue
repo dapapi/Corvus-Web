@@ -9,15 +9,16 @@
                 <div class="modal-body clearfix">
                     <div class="row example">
                          <div class="col-md-4">
-                            <p>测试甲的周报-第12周</p>
-                            <p>10月15日-10月21日</p>
+                            <p>{{tempName}}</p>
+                            <p>{{temDetails.updated_at}}</p>
                          </div>
                          <div class="col-md-8 clearfix text-right mb-20">
                             <div class="right mb-10">
                                 <span class="pr-10">创建人</span>
-                                <span>测试</span>
+                                <span>{{temDetails.creator_id}}</span>
                                 <span class="pr-10 pl-30">当前状态</span>
-                                <span>待屈素芳评审</span>
+                                <span v-show="templateStatus == 1">待{{temDetails.reviewer_id}}评审</span>
+                                <span v-show="templateStatus == 2">{{temDetails.reviewer_id}}已评审</span>
                             </div>
                             <button class="btn btn-primary" v-show="templateStatus == 1" @click="review(2)">评审</button>
                             <button class="btn btn-primary" v-show="templateStatus == 2">评审通过</button>
@@ -47,13 +48,10 @@
                                 </div>
                                 <div class="pt-10"  v-else>{{item.answer}}</div>
                             </div>
-                            <div class="float-right">
+                            <!-- <div class="float-right">
                                 <i class="icon md-flag" @click="getId(item.id)" :id="`id_${item.id}`"></i>
-                            </div>
+                            </div> -->
                             <!--填写答案-->
-                            
-                            
-                            
                         </li>
                     </ul>
                     
@@ -80,18 +78,19 @@ export default {
     props:{
        templateId:'',//添加问题之后新生成的id
        templateStatus:'',
-       quesId:''
+       quesId:'',
+       tempName:''
     },
     data(){
         return {
            list:[],
            isIf:false,
-           flagId:''
+           flagId:'',
+           temDetails:{}
         }
     },
     watch:{
         templateId:function(){
-            
             this.getDetails()
         },
         
@@ -100,9 +99,7 @@ export default {
         this.globalClick(this.closeStaff);
     },
     methods:{
-        getId:function(id){
-
-        
+        getId:function(id){        
             //给人员选择设置位置
             let top = $(`#id_${id}`).offset().top - $('.modal-body').offset().top+20;
             $('#selctStaff').css({
@@ -116,8 +113,15 @@ export default {
         //获取简报详情
         getDetails:function(){
             
-            fetch('get',`${config.apiUrl}/review/${this.templateId}`).then((res) => {
-                this.list = res.data.issues
+            fetch('get',`${config.apiUrl}/review/${this.templateId}?include=issues`).then((res) => {
+                this.temDetails= res.data
+                this.list = res.data.issues.data
+                for (let i = 0; i < this.list.length; i++) {
+                    if(this.list[i].type == 4||this.list[i].type == 5){
+                        this.list[i].answer = JSON.parse(this.list[i].answer)
+                    }
+                    
+                }
             })
         
         },
@@ -130,17 +134,20 @@ export default {
             fetch('put',`${config.apiUrl}/review/${this.templateId}`,{status:status}).then((res) => {
                 toastr.success('评审成功');
                 $('#submitReport').modal('hide')
+                this.$emit('refresh')
             })
         },
-        //跟进
-        setFollowUp:function(value,id){
-            
-           fetch('post',`${config.apiUrl}/issues/${id}/follow_up`).then((res) => {
-                console.log(res)
-            })
-        },
+        //跟进  ---接口有问题
         changeSelectedMember:function(){
+           
            this.isIf = true
+           let id = this.$store.state.newParticipantsInfo[0].id
+        //    console.log(id)
+           fetch('post',`${config.apiUrl}/issues/${id}/follow_up`,{content:'跟进'}).then((res) => {
+                toastr.success('跟进成功');
+                this.$store.state.newParticipantsInfo = []
+                this.getDetails()
+            })
            
         },
         closeStaff:function(event){
@@ -155,11 +162,16 @@ export default {
     }
 }
 </script>
+<<<<<<< HEAD
 
 <style scoped>
     .show{
         display: none
     }
+=======
+<style>
+     
+>>>>>>> qsf
     #selctStaff{
         position: absolute;
         width: 20rem;

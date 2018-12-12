@@ -28,7 +28,7 @@
                                     </span>
                                     <!--编辑模版结束-->
                                     <!--删除模版-->
-                                    <span class="pr-40 d-block float-left pointer-content" style="color: #b9b9b9" data-toggle="modal" data-target="#delModel" @click="getDelModelId(item.template_id,item.template_name)">
+                                    <span class="pr-40 d-block float-left pointer-content" style="color: #b9b9b9" data-toggle="modal" data-target="#delModel" @click="getDelModelId(item.id,item.template_name)">
                                         <i class="icon md-delete color" aria-hidden="true"></i>
                                     </span>
                                     <!--删除模版结束-->
@@ -243,51 +243,8 @@ export default {
             total_pages:1,
             total:0,
             per_page:20,
-            times:[
-                {
-                    value:1,
-                    name:'每天'
-                },
-                {
-                    value:2,
-                    name:'每周'
-                },
-                {
-                    value:3,
-                    name:'每月'
-                },
-                {
-                    value:4,
-                    name:'每季'
-                },
-                {
-                    value:5,
-                    name:'每年'
-                },
-            ],
-            type:[
-                {
-                    value:1,
-                    name:'文本'
-                },
-                {
-                    value:2,
-                    name:'数字'
-                },
-                {
-                    value:3,
-                    name:'日期'
-                },
-                {
-                    value:4,
-                    name:'任务'
-                },
-                {
-                    value:5,
-                    name:'附件'
-                },
-                
-            ],
+            times:config.briefTime,
+            type:config.briefType,
             modelType:'add',
             participants:[],
             addModelData:{
@@ -296,7 +253,7 @@ export default {
                 frequency:1,
                 member:'',
             },
-            delId:'',
+            delId:0,
             delName:'',
             isEdit:false,
             editId:'',
@@ -374,6 +331,14 @@ export default {
         changeModel:function(){
             let url,type
             let aUser = []
+            if(this.$store.state.newParticipantsInfo.length<=0){
+                toastr.error('请选择评审人');
+                return false
+            }
+            if(!this.addModelData.template_name){
+                toastr.error('请输入模版名称');
+                return false
+            }
             for (let i = 0; i < this.$store.state.newParticipantsInfo.length; i++) {
                 if(this.$store.state.newParticipantsInfo[i].id){
                     aUser.push(this.$store.state.newParticipantsInfo[i].id)
@@ -398,9 +363,13 @@ export default {
         },
         //删除模版
         deleteModel:function(){
-            fetch('delete',`${config.apiUrl}/ `,{template_id:this.delId}).then((res) =>{
+            let _this = this
+            let data ={
+                template_id:this.delId
+            }
+            fetch('delete',`${config.apiUrl}/report?all=${this.delId}`).then((res) =>{
                 $('#delModel').modal('hide')
-                this.getlist()
+                _this.getlist()
             })
         },
         //检查模版名称是否存在
@@ -415,9 +384,8 @@ export default {
         changeFrequency:function(value){
             this.addModelData.frequency = value;
         },
-        
+
         //问题
-        
         getQuesList:function(id,pageNum = 1){
             this.addQuesData.accessory = id
             fetch('get',`${config.apiUrl}/report/issues`,{id:id}).then((res) => {
@@ -443,10 +411,15 @@ export default {
                 this.modelType = 'add'
             }
         },
-        //添加和修改问题  ---后台问题  修改成员字段传递之后并没有进行修改  简报名称不修改报错
+        //添加和修改问题  
         changeQues:function(){
             let url,type
             let aUser = []
+            
+            if(!this.addQuesData.issues){
+                toastr.error('请输入问题描述');
+                return false
+            }
             for (let i = 0; i < this.$store.state.participantsInfo.length; i++) {
                 if(this.$store.state.participantsInfo[i].id){
                     aUser.push(this.$store.state.participantsInfo[i].id)
@@ -478,7 +451,7 @@ export default {
                 this.getQuesList(this.addQuesData.accessory);
             })
         },
-        //问题的上移和下移 ---后台问题 上移下移不起作用
+        //问题的上移和下移
         quesUpDown:function(operation,id){
             let other_id,t
             for (let i = 0; i <this.quesList.length; i++) {

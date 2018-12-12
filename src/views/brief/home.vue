@@ -37,11 +37,11 @@ export default {
                 name:'我审批的',
                 url:'/brief/myapproval'
                 },
-                {
-                value:3,
-                name:'跟进的问题',
-                url:'/brief/followup'
-                }
+                // {
+                // value:3,
+                // name:'跟进的问题',
+                // url:'/brief/followup'
+                // }
             ]
             this.leftData.bottomData=[
                 {
@@ -64,6 +64,7 @@ export default {
         },
         getlist:function(){
             fetch('get',`${config.apiUrl}/launch`).then((res) => {
+                // console.log(res.data)
                 let data={}
                 for (let i = 0; i < this.leftData.bottomData.length; i++) {
                     if(this.leftData.bottomData[i].value == 1){
@@ -72,7 +73,7 @@ export default {
                             data={
                                 value:res.data[t].id,
                                 name:`我的${res.data[t].template_name}`,
-                                url:`/brief/list/${res.data[t].id}`
+                                url:`/brief/list?id=${res.data[t].id}&type=${res.data[t].frequency}&name=${res.data[t].template_name}`
                             }
                             this.leftData.bottomData[i].data.push(data)
                             
@@ -82,7 +83,7 @@ export default {
                             data={
                                 value:res.data[t].id,
                                 name:`成员${res.data[t].template_name}`,
-                                url:`/brief/memberReport/${res.data[t].id}`
+                                url:`/brief/memberReport?id=${res.data[t].id}&type=${res.data[t].frequency}&name=${res.data[t].template_name}`
                             }
                             this.leftData.bottomData[i].data.push(data)
                             
@@ -92,7 +93,7 @@ export default {
                             data={
                                 value:res.data[t].id,
                                 name:`统计${res.data[t].template_name}`,
-                                url:`/brief/statistics/${res.data[t].id}`
+                                url:`/brief/statistics?id=${res.data[t].id}&type=${res.data[t].frequency}&name=${res.data[t].template_name}`
                             }
                             this.leftData.bottomData[i].data.push(data)
                             
