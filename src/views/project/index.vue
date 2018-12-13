@@ -99,7 +99,7 @@
                             <img src="https://res.papitube.com/corvus/images/content-none.png" alt=""
                                  style="width: 100%">
                         </div>
-                        <pagination :current_page="current_page" :method="paginationType" :total_pages="total_pages"
+                        <pagination :current_page="current_page" :method="getProjects" :total_pages="total_pages"
                                     :total="total"></pagination>
                     </div>
                 </div>
@@ -367,9 +367,11 @@
                     data.type = type;
                 }
                 this.paginationType = 'getProjects';
-                let _this = this;
-                fetch('get', url, data).then(function (response) {
-                    _this.projectsInfo = response.data
+                fetch('get', url, data).then(response => {
+                    this.projectsInfo = response.data;
+                    this.total = response.meta.pagination.total;
+                    this.current_page = response.meta.pagination.current_page;
+                    this.total_pages = response.meta.pagination.total_pages;
 
                 })
             },

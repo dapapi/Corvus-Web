@@ -1257,8 +1257,10 @@
                     for (let i = 0; i < response.data.relate_projects.data.length; i++) {
                         _this.linkageSelectedIds.projects.push(response.data.relate_projects.data[i].id)
                     }
-                    for (let i = 0; i < response.data.trail.data.expectations.data.length; i++) {
-                        _this.selectedExpectationsArr.push(response.data.trail.data.expectations.data[i].id)
+                    if (response.data.trail) {
+                        for (let i = 0; i < response.data.trail.data.expectations.data.length; i++) {
+                            _this.selectedExpectationsArr.push(response.data.trail.data.expectations.data[i].id)
+                        }
                     }
 
                 })
