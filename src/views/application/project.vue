@@ -144,9 +144,9 @@ export default {
                     status:this.projectStatus
                 }
                 let _this = this;
-                if(signStatus){
-                    this.projectStatus = signStatus
-                }
+                // if(signStatus){
+                //     this.projectStatus = signStatus
+                // }
                 fetch('get', '/projects/my_all', data).then(function (response) {
                     console.log(response.data)
                     _this.projectInfo = response.data;

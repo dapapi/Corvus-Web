@@ -19,7 +19,7 @@
                     <section class="page-aside-section" style=" position: absolute; top:70px;left:0px;">
                     <div class="site-menubar-body" style="width:260px;">
                         <ul  class="menu pl-30">
-                        <li class="site-menu-item has-sub  pb-10" v-for="(item,index) in groupingDate" :key="index" >
+                        <li class="site-menu-item has-sub  pb-10" v-for="item in groupingDate" :key="item.id" >
                                 <a href="javascript:void(0) " class="p-10" @click="switchMenu(item.id)">
                                 <span class="icon md-caret-right font-size-20 mr-10 leftImg" style="position:relative;top:2px" :class="isShow == item.value?'anmite':''"></span>
                                 <i class="iconfont icon-renyuan1 pr-10" style="vertical-align: middle;"></i>
@@ -36,7 +36,7 @@
                                     </div>
                                 </div> 
                                 <ul class="administration-subordinate-item m-0" v-show="isShow == item.id"  >
-                                 <li   v-if="item.id==n.group_id" class="py-10" v-for="n in roleDate" :key="n.id" style="position:relative;" @click="changeCont(n.id)">
+                                 <li   v-if="item.id==n.group_id" class="py-10" v-for="(n,index) in roleDate" :key="n.id" style="position:relative;" @click="changeCont(n.id)">
                                     <template >
                                         <i class="iconfont icon-renyuan1 pr-10" style="vertical-align: middle;"></i>
                                         <span class="site-menu-title" >{{n.name}}</span>
@@ -46,7 +46,7 @@
                                         data-toggle="dropdown" aria-expanded="false" style="cursor: pointer; float: right;line-height: 40px;">
                                         </i>
                                     <div class="dropdown-menu dropdown-menu-left " aria-labelledby="org-dropdown" role="menu" x-placement="bottom-start" style="">
-                                        <a class="dropdown-item" role="menuitem" data-toggle="modal" data-target="#addMember">添加成员</a>
+                                        <a class="dropdown-item" role="menuitem" data-toggle="modal" data-target="#addMember" @click="getmemberDate(item.id,index)">添加成员</a>
                                         <a class="dropdown-item" role="menuitem" data-toggle="modal" data-target="#updateSubgroup">修改角色</a>
                                         <a class="dropdown-item" role="menuitem" data-toggle="modal" data-target="#moveSubgroup ">移动到分组</a>
                                         <a class="dropdown-item" role="menuitem" data-toggle="modal" data-target="#deleteRole">删除角色</a>
@@ -193,7 +193,7 @@
                 </div>
                 <div class="modal-footer">
                     <button class="btn btn-sm btn-white btn-pure" data-dismiss="modal">取消</button>
-                    <button class="btn btn-primary" type="submit" >确定</button>
+                    <button class="btn btn-primary" type="submit" @click="moverole">确定</button>
                 </div>
                 </div>
             </div>
@@ -328,7 +328,7 @@
                 </div>
                 <div class="modal-footer">
                     <button class="btn btn-sm btn-white btn-pure" data-dismiss="modal">取消</button>
-                    <button class="btn btn-primary" type="submit" >确定</button>
+                    <button class="btn btn-primary" type="submit" @click="addmember">确定</button>
                 </div>
                 </div>
             </div>
@@ -388,12 +388,13 @@ export default {
             groupingName:'',//分组名称
             groupingDate:'',
             groupingId:'',
-            updategrouping:''
+            updategrouping:'',
+            memberDate:''
         }
     },
     mounted(){
        this.getroleDate();
-       this.getgroupingDate()
+       this.getgroupingDate();
     },
     methods:{
             //获取角色数据
@@ -401,7 +402,7 @@ export default {
                 let _this=this;
                 fetch('get', '/console/role').then(function (response) {  
                     _this.roleDate = response.data;
-                    console.log(_this.roleDate)
+                   
                 });
             },
             //获取分组数据
@@ -409,9 +410,29 @@ export default {
                 let _this=this;
                 fetch('get', '/console/group?Accept=application/vnd.Corvus.v1+json').then(function (response) {  
                     _this.groupingDate = response.data;
-                    console.log(_this.groupingDate )
+                    
                 });
             },
+            //获取成员数据
+            getmemberDate(id,index){
+                console.log(id)
+                 let _this=this;
+                fetch('get', '/console/person/'+id).then(function (response) {  
+                    _this.memberDate = response.data;
+                    console.log(_this.memberDate)
+                     _this.memberDate.forEach(item=>{
+                            console.log(item.group_id) 
+                            console.log(id)
+                          if(id==item.group_id){  
+                                  
+                      _this.$store.state.participantsInfo=item.users.data
+                    }
+                   
+                        
+                })
+                })     
+                        
+             },       
             //全选反选
             selectArtists: function (value) {
                 if (value === 'all') {
@@ -462,6 +483,23 @@ export default {
                 
                 });
             },
+            //添加成员
+            addmember(){
+                let _this=this;
+                let data={
+                    user:[]
+                }
+
+                for (let  i= 0;  i< this.$store.state.participantsInfo.length; i++) {
+                    data.user.push(this.$store.state.participantsInfo[i].id)
+                    
+                }
+                fetch('post', '/console/relevancy/'+this.roleId,data).then(function (response) {  
+                toastr.success('添加成功');
+                $('#addMember').modal('hide');
+                _this.getroleDate()
+            });
+            },
             //修改类型
             updateRolejob(value){
                 this.updateType=value
@@ -495,21 +533,22 @@ export default {
                     _this.getroleDate()
                 });
             },
+            //移动角色的id
             moveGrouping(value){
                 this.movegroupingId=value
             },
-            //  //移动角色
-            // moverole(){
-            //     let _this=this;
-            //     let data={
-            //         group_id:this.movegroupingId
-            //     }
-            //     fetch('put', '/console/mobile/'+this.roleId,data).then(function (response) {  
-            //         toastr.success('移动成功');
-            //         $('#moveSubgroup').modal('hide');
-            //         _this.getroleDate()
-            //     });
-            // },
+             //移动角色
+            moverole(){
+                let _this=this;
+                let data={
+                    group_id:this.movegroupingId
+                }
+                fetch('put', '/console/mobile/'+this.roleId,data).then(function (response) {  
+                    toastr.success('移动成功');
+                    $('#moveSubgroup').modal('hide');
+                    _this.getroleDate()
+                });
+            },
             //新增分组
             addSubgroup(){
                 let _this=this;

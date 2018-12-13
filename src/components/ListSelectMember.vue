@@ -12,7 +12,7 @@
         </div>
         <div class="right">
             <div class="right-cont">
-                <div class="right-head">已选择成员({{participantsInfo.length}})</div>
+                <div class="right-head">已选择成员</div>
                 <ul class="pointer-content selected-member">
                     <li v-for="(item,index) in participantsInfo" :key="index" class="users">
                         <a class="avatar" href="javascript:void(0)">
@@ -47,9 +47,11 @@
             participantsInfo: function () {
                 if (this.type === 'change') {
                     return this.$store.state.participantsInfo
-                } else {
+                }
+                 else {
                     return this.$store.state.newParticipantsInfo
                 }
+                
             },
         },
 
@@ -58,10 +60,10 @@
                 let participantInfo = '';
                 if (this.type === 'change') {
                     participantInfo = this.$store.state.participantsInfo;
-                } else {
+                } 
+                else {
                     participantInfo = this.$store.state.newParticipantsInfo;
                 }
-
                 participantInfo.splice(participantInfo.map(item => item.id).indexOf(memberId), 1)
 
                 this.params.data = participantInfo;
