@@ -19,15 +19,6 @@
                                 {{ clientInfo.principal?clientInfo.principal.data.name:'' }}
                             </div>
                         </div>
-                        <!-- 注释 -->
-                        <!-- <div class="col-md-6 float-left clearfix pl-0">
-                            <div class="float-left pl-0 pr-2 col-md-3">
-                                <i class="md-plus pr-2" aria-hidden="true"></i>决策关键人/部门
-                            </div>
-                            <div class="font-weight-bold float-left">
-                                {{ clientInfo.keyman }}
-                            </div>
-                        </div> -->
                     </div>
                     <div class="card-text clearfix example">
                         <div class="col-md-6 float-left clearfix pl-0">
@@ -40,34 +31,33 @@
                         </div>
                     </div>
                     <div class="clearfix">
-                        <div class="col-md-6 float-left pl-0 mb-20" style="border-right: 1px solid #eee">
-                            <div class="col-md-6">任务 5/12</div>
-                            <div class="clearfix example">
-                                <div class="col-md-3 float-left">电话会议</div>
-                                <div class="col-md-3 float-left">张佳佳</div>
-                                <div class="col-md-3 float-left">2018-12-03 11:10</div>
-                                <div class="col-md-3 float-left">进行中</div>
+                        <div class="col-md-6 float-left pl-0 mb-20" style="border-right: 1px solid #eee" v-if="clientTasksInfo.length > 0">
+                            <div class="col-md-6">任务 
+                                <!-- {{newArray(clientTasksInfo).length}}/{{clientTasksInfo.length}} -->
                             </div>
-                            <div class="clearfix example">
-                                <div class="col-md-3 float-left">电话会议</div>
-                                <div class="col-md-3 float-left">张佳佳</div>
-                                <div class="col-md-3 float-left">2018-12-03 11:10</div>
-                                <div class="col-md-3 float-left">进行中</div>
+                            <div class="clearfix example" v-for="(task, index) in newArray(clientTasksInfo)" :key="index">
+                                <div class="col-md-3 float-left">{{ task.title }}</div>
+                                <div class="col-md-3 float-left">{{ task.principal?task.principal.data.name:'' }}</div>
+                                <div class="col-md-3 float-left">{{ task.end_at }}</div>
+                                <div class="col-md-3 float-left">
+                                    <template v-if="task.status === 1">进行中</template>
+                                    <template v-if="task.status === 2">已完成</template>
+                                    <template v-if="task.status === 3">已停止</template>
+                                </div>
                             </div>
                         </div>
-                        <div class="col-md-6 float-left pl-0 mb-20">
+                        <div class="col-md-6 float-left pl-0 mb-20" v-if="clientProjectsInfo.length > 0">
                             <div class="col-md-6">项目</div>
-                            <div class="clearfix example">
-                                <div class="col-md-3 float-left">Ugg代言</div>
-                                <div class="col-md-3 float-left">商务项目</div>
-                                <div class="col-md-3 float-left">2018-12-03 11:10</div>
-                                <div class="col-md-3 float-left">进行中</div>
-                            </div>
-                            <div class="clearfix example">
-                                <div class="col-md-3 float-left">星巴克代言</div>
-                                <div class="col-md-3 float-left">商务项目</div>
-                                <div class="col-md-3 float-left">2018-12-03 11:10</div>
-                                <div class="col-md-3 float-left">进行中</div>
+                            <div class="clearfix example" v-for="(project, index) in newArray(clientProjectsInfo)" :key="index">
+                                <div class="col-md-3 float-left">{{project.title}}</div>
+                                <div class="col-md-3 float-left">{{ clientTypeArr.find(item => item.value == project.type).name }}</div>
+                                <div class="col-md-3 float-left">{{ project.created_at }}</div>
+                                <div class="col-md-3 float-left">
+                                    <template v-if="project.status === 1">进行中</template>
+                                    <template v-if="project.status === 2">完成</template>
+                                    <template v-if="project.status === 3">终止</template>
+                                    <template v-if="project.status === 4">删除</template>
+                                </div>
                             </div>
                         </div>
                     </div>
@@ -907,6 +897,13 @@
             // 关键决策人
             changeContactClientType (val) {
                 this.editConfig.type = val
+            },
+            // 返回前5组数据
+            newArray (arr) {
+                if (arr.length > 5) {
+                    arr.length = 5
+                }
+                return arr
             }
         }
     }
