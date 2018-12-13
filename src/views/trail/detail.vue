@@ -843,6 +843,7 @@
                 })
             },
             changeTrailOrigin: function (value) {
+                this.changeInfo.resource_type = value
                 this.trailOrigin = value
             },
 

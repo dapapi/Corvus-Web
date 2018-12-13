@@ -1,6 +1,6 @@
 <template>
-    <div class="page detail">
-        <div class="page-main" style="background-color:#f3f4f5" v-for="item in list" :key="item.id">
+    <div class="">
+        <div class="" style="background-color:#f3f4f5" v-for="item in list" :key="item.id">
             <div class="page-header  page-header-bordered mb-0">
                 <h6 class="page-title nav-head">{{item.title}}
                     <template v-if="item.type==0">

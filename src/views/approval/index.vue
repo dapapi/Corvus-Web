@@ -1,9 +1,12 @@
 <template>
-<div class="page">
-<Approval></Approval>
-  <router-view/>
-</div>
-
+  <div class="page-container">
+    <div class="page-aside">
+      <Approval></Approval>
+    </div>
+    <div class="page">
+      <router-view/>
+    </div>
+  </div>
 </template>
 
 <script>
@@ -14,8 +17,13 @@ export default {
         },
 }
 </script>
-<style>
-
+<style scoped>
+  .page-container{
+    margin-left: 100px !important;
+  }
+  .page{
+    margin-left: 260px !important;
+  }
 </style>
 
 

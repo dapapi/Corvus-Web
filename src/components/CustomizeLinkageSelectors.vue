@@ -22,7 +22,11 @@
             <datepicker v-if="valueType === 3" @change="datePickerChange"></datepicker>
             <number-spinner v-if="valueType === 2" ref="numberSpinner" :shortInput="true"
                             @change="numberSpinnerChange"></number-spinner>
-            <input-selectors v-if="valueType === 6"></input-selectors>
+            <!-- <input-selectors v-if="valueType === 6"></input-selectors> -->
+            <div v-if="valueType === 6" class="">
+                <selectors class="pr-40" ref='selectors' :options="users" @valuelistener="changeUsers" :multiple="true"
+                                        :placeholder="'请选择'"></selectors>
+            </div>
             <div v-if="valueType === 5" class="">
                 <selectors class="pr-40" ref='selectors' :options="stararr" @valuelistener="changeTargetStars" :multiple="true"
                                         :placeholder="'请选择'"></selectors>
@@ -56,6 +60,8 @@ import config from '@/assets/js/config'
                 fatherData:'',
                 childData:'',
                 detailData:'',
+                trailTypeArr:config.trailTypeArr,
+                users:'',
                 sendData:{
                     value:[],
                     field:'',
@@ -87,7 +93,8 @@ import config from '@/assets/js/config'
             }
         },
         created(){
-            this.getDepartmets()    
+            this.getDepartmets()   
+            this.getUsers() 
         },
         beforeMount() {
             if(this.data[0]){
@@ -105,9 +112,13 @@ import config from '@/assets/js/config'
 
             father.selectpicker().on('hidden.bs.select', function () {
                 let id = $(this)[0].selectedOptions[0].id;
+                console.log(id);
                 let father = _this.data.find(item => item.id === parseInt(id));
                 _this.item = father.operator;
                 _this.optionsData = father.content
+                if(id == 255353757){
+                    _this.optionsData = _this.trailTypeArr
+                }
                 _this.refresh()
                 if (_this.valueType === 'number') {
                     _this.$refs.numberSpinner.destroy();
@@ -131,26 +142,26 @@ import config from '@/assets/js/config'
             refresh: function () {
                 $('#child' + this.n).selectpicker('refresh');
             },
-            datePickerChange: function (value) {
-                this.sendData.value = value
+            datePickerChange: function (params) {
+                this.sendData.value = params
             },
             inputChange: function () {
-               this.sendData.value = value
+               this.sendData.value = params
             },
-            numberSpinnerChange: function (value) {
-                this.sendData.value = value
+            numberSpinnerChange: function (params) {
+                this.sendData.value = params
             },
-            basicEmit: function (value) {
+            basicEmit: function (params) {
                 let data = {
                     key: this.keyId,
                     condition: this.conditionId,
-                    value: value,
+                    value: params,
                     n: this.n
                 };
                 this.$emit('change', data)
             },
-            changeTargetStars(value){
-                this.sendData.value = value 
+            changeTargetStars(params){
+                this.sendData.value = params 
             },
             getDepartmets(value){
                 let _this = this
@@ -160,6 +171,15 @@ import config from '@/assets/js/config'
             },
             changeDepartments(value){
                 this.sendData.value = value 
+            },
+            getUsers(value){
+                let _this = this
+                fetch('get','/users').then((params) => {
+                    _this.users = params.data
+                })
+            },
+            changeUsers(params){
+                this.sendData.value = params 
             }
         }
     }
