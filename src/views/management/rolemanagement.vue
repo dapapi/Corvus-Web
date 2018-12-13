@@ -447,10 +447,6 @@
             },
             getrolenameId(){
                 console.log(this.roleDate)
-                // this.roleDate.forEach(item=>{
-                //     this.rolenameId=item.group_id
-                // })
-                // console.log(this.rolenameId)
             },
             //获取分组数据
             getgroupingDate() {
