@@ -13,7 +13,7 @@
             aria-hidden="true"
             data-backdrop="static"
             v-if="pageType === '发布'">
-            <button type="button" 
+            <button type="button"  
                 class="site-action-toggle btn-raised btn btn-success btn-floating waves-effect waves-classic"
                 @click='setNote'>
                 <i aria-hidden="true" 
@@ -30,7 +30,7 @@
             <div class="modal-dialog modal-lg modal-info">
                 <div class="modal-content">
                     <div class="modal-body">
-                        <button type="button" class="bootbox-close-button close" data-dismiss="modal" aria-hidden="true" style="margin-top: 10px;">
+                        <button type="button" class="bootbox-close-button close" data-dismiss="modal" aria-hidden="true" style="margin-top: 10px;" >
                             <svg xmlns="http://www.w3.org/2000/svg" width="12" height="16" viewBox="0 0 12 16">
                                 <path fill-rule="evenodd" d="M7.48 8l3.75 3.75-1.48 1.48L6 9.48l-3.75 3.75-1.48-1.48L4.52 8 .77 4.25l1.48-1.48L6 6.52l3.75-3.75 1.48 1.48L7.48 8z"/>
                             </svg>
@@ -53,7 +53,7 @@
                             <selectors ref='classifySelector' :options="classifyArr" @change="changeClassify" placeholder='请选择类型' ></selectors>
                         </div>
                         <div class="summernote" id="summernote"></div>
-                        <File-Uploader class="upload" url="javascript:void()" @changePlus="fileUploaded">上传附件</File-Uploader>
+                        <File-Uploader class="upload" url="javascript:void()" @changePlus="fileUploaded" :givenfilename='givenfilename'>上传附件</File-Uploader>
                         <br/>
                         <input type="checkbox" v-model="topFlag">
                         <span class="set-top-flag" >&nbsp;&nbsp;置顶</span>
@@ -74,7 +74,7 @@
 import fetch from '@/assets/utils/fetch.js'
 import config from '@/assets/js/config'
 export default {
-    props:['notedata','givenFileName'],
+    props:['notedata','givenfilename'],
     data(){
         return{
             title:'',               //标题内容
@@ -91,11 +91,10 @@ export default {
             scope:[],
             accessory_name:'',
             whoamiid:'',
+            creator_id:','
         }
     },
     created(){
-        console.log(this.notedata);
-        this.whoami()
         this.getDepartments()
     },
     mounted(){
@@ -103,9 +102,13 @@ export default {
         this.getSummernote()
         this.setNote()
         this.modalInit()
+        
+       
     },
     watch:{
-        notedata:function(){
+        notedata:function(value){
+            let {creator:{data:{id = '-'}}} = value
+            this.creator_id = id
             this.noteInit()
             this.setNote()
         },
@@ -139,12 +142,7 @@ export default {
                 this.$refs.classifySelector.setValue(this.type)
             })
         },
-        whoami(){
-            let _this = this
-            fetch('get','/users/my').then((params) => {
-                _this.whoamiid = params.data.id
-            })
-        },
+    
         //修复富文本编辑器多层弹窗bug
         modalInit(){
             $('.summernoteUploadModal').click(() => {

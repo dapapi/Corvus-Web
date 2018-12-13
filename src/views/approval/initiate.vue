@@ -1,15 +1,15 @@
 <template>
-    <div class="page-main" style="background-color:#f3f4f5">
+    <div class="" style="background-color:#f3f4f5">
       <div class="page-header page-header-bordered mb-0">
-        <h1 class="page-title pl-10">发起审批</h1>
+        <h1 class="page-title">发起审批</h1>
       </div>
     
     <div class="page-content container-fluid ">
       <div class="page-header">
-        <h1 class="page-title">泰洋人事审批</h1>
+        <h4 class="">泰洋人事审批</h4>
       </div>
       <div class="row py-5">
-        <div class="col-lg-4" v-for="item in dailog" :key="item.id">
+        <div class="col-lg-4 approval-module" v-for="item in dailog" :key="item.id">
           <div class="card" @click="addAproval(item)">
             <div class="card-block" data-toggle="modal" data-target="#approval">
               <i class="icon md-file float-left" style="font-size:3rem"></i>
@@ -342,7 +342,7 @@
   };
 </script>
 <style scoped>
-.upload-image{
+ .upload-image{
   display: flex;
   width: 500px;
   height: 100px;
@@ -378,7 +378,7 @@
 
   .modal-body {
     padding: 0;
-  }
+  } */
 
   .addMember {
     padding-left: 20px;
@@ -393,5 +393,10 @@
   .pearl.done .pearl-icon, .pearl.done .pearl-number{
       margin-left: -30px;
   }
-   .page-main{margin-left: 240px;}
+  .approval-module{
+    cursor: pointer;
+  }
+  .card-block:hover{
+    box-shadow:4px 4px 12px 1px rgba(7,17,27,0.2);
+  }
 </style>
