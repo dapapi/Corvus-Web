@@ -4,8 +4,8 @@
         <h1 class="page-title">角色管理</h1>
       </div>
        <div class="page-content container-fluid pt-30" >
-            <div class="panel col-md-12 clearfix py-5" style="height:520px">
-                <div class="col-md-3 float-left" style="height:100%;position: relative;">
+            <div class="panel col-md-12 clearfix py-5" style="height:520px;">
+                <div class="col-md-3 float-left" style="height:100%;position: relative;border-right:1px solid #e3e3e3;">
                     <div class=" py-20 float-left fuound col-md-12 clearfix" style="border-bottom:1px solid #e3e3e3">
                         <span class="pl-10"  style="color:#3F51B5" data-toggle="modal" data-target="#addRole">
                       <i class="iconfont icon-tianjiarenyuan pr-5" style="font-size:12px"  ></i>
@@ -19,13 +19,13 @@
                     <section class="page-aside-section" style=" position: absolute; top:70px;left:0px;">
                     <div class="site-menubar-body" style="width:260px;">
                         <ul  class="menu pl-30">
-                        <li class="site-menu-item has-sub  pb-10" v-for="(item,index) in job" :key="index" >
-                                <a href="javascript:void(0) " class="p-10" @click="switchMenu(item.value)">
+                        <li class="site-menu-item has-sub  pb-10" v-for="(item,index) in groupingDate" :key="index" >
+                                <a href="javascript:void(0) " class="p-10" @click="switchMenu(item.id)">
                                 <span class="icon md-caret-right font-size-20 mr-10 leftImg" style="position:relative;top:2px" :class="isShow == item.value?'anmite':''"></span>
                                 <i class="iconfont icon-renyuan1 pr-10" style="vertical-align: middle;"></i>
                                 <span class="site-menu-title">{{item.name}}</span>
                                 </a>
-                                <div class="drop-parent" style="position: absolute; right:0px;top:0;" v-if="item.value==2">
+                                <div class="drop-parent" style="position: absolute; right:20px;top:0;" v-if="item.id" @click="grouping(item.id)">
                                     <i class="icon md-more font-size-24 parent" aria-hidden="true" id="org-dropdown"
                                         data-toggle="dropdown" aria-expanded="false" style="cursor: pointer; float: right;line-height: 40px;">
                                     </i>
@@ -35,43 +35,38 @@
                                         <a class="dropdown-item" role="menuitem" data-toggle="modal" data-target="#deleteGrouping" >删除分组</a>
                                     </div>
                                 </div> 
-                                <ul class="administration-subordinate-item m-0" v-show="isShow == item.id" v-for="v in  item.data" :key="v.id" style="position:relative;">
-                                <li   v-if="item.value == 1" class="py-10">
+                                <ul class="administration-subordinate-item m-0" v-show="isShow == item.id"  >
+                                 <li   v-if="item.id==n.group_id" class="py-10" v-for="n in roleDate" :key="n.id" style="position:relative;" @click="changeCont(n.id)">
                                     <template >
                                         <i class="iconfont icon-renyuan1 pr-10" style="vertical-align: middle;"></i>
-                                        <span class="site-menu-title" >{{v.name}}</span>
+                                        <span class="site-menu-title" >{{n.name}}</span>
                                     </template>
-                                </li>
-                                <li  v-if="item.value == 2" class="py-10">
-                                    <template >
-                                        <i class="iconfont icon-renyuan1 pr-10" style="vertical-align: middle;"></i>
-                                        <span class="site-menu-title" >{{v.name}}</span>
-                                    </template>
-                                    
-                                </li>
-                                <div class="drop-son" style="position: absolute; right:10px;top:0px;" v-if="item.value==2" @click="role(v.id)">
-                                    <i class="icon md-more font-size-24 son" aria-hidden="true" id="org-dropdown"
+                                    <div class="drop-son" style="position: absolute; right:10px;top:0px;"  @click="role(n.id)">
+                                        <i class="icon md-more font-size-12 son" aria-hidden="true" id="org-dropdown"
                                         data-toggle="dropdown" aria-expanded="false" style="cursor: pointer; float: right;line-height: 40px;">
-                                    </i>
-                                    <div class="dropdown-menu dropdown-menu-left box" aria-labelledby="org-dropdown" role="menu" x-placement="bottom-start" style="">
+                                        </i>
+                                    <div class="dropdown-menu dropdown-menu-left " aria-labelledby="org-dropdown" role="menu" x-placement="bottom-start" style="">
                                         <a class="dropdown-item" role="menuitem" data-toggle="modal" data-target="#addMember">添加成员</a>
                                         <a class="dropdown-item" role="menuitem" data-toggle="modal" data-target="#updateSubgroup">修改角色</a>
                                         <a class="dropdown-item" role="menuitem" data-toggle="modal" data-target="#moveSubgroup ">移动到分组</a>
                                         <a class="dropdown-item" role="menuitem" data-toggle="modal" data-target="#deleteRole">删除角色</a>
                                     </div>
                                     </div> 
-                                 </ul>
                                 </li>
+                                  
+                                 </ul>
+                                </li> 
+                              
                                 </ul>
                             </div>               
                         </section> 
                 </div>
-                <div class="col-md-9 float-left " style="border-left:1px solid #e3e3e3;height:100%">    
+                <div class="col-md-9 float-left " style="" v-for="item in roleDate" :key="item.id" v-if="item.id==jobCont">    
                         <div class="top">
-                            <h4 class="float-left" style="line-height:3">子管理员</h4>
-                            <span class="float-left pl-10" style="line-height:5.5">全部人员，共1人</span>
+                            <h4 class="float-left" style="line-height:3">{{item.name}}</h4>
+                            <span class="float-left pl-10" style="line-height:5.5">全部人员，共{{item.users.data.length}}人</span>
                         </div>
-                        <div class="page-content tab-content nav-tabs-animate bg-white">
+                        <div class="page-content tab-content nav-tabs-animate bg-white" >
                             <div class="tab-pane animation-fade active" id="forum-artist" role="tabpanel">
                                 <table class="table table-hover" data-plugin="selectable"  data-selectable="selectable">
                                     <tr style="border-bottom:1px solid #e3e3e3">
@@ -87,18 +82,18 @@
                                         <th class="cell-300" scope="col">邮箱</th>
                                     </tr>
                                     <tbody>
-                                        <tr v-for="item in list" :key="item.id" class="pointer-content">
+                                        <tr  v-for="v in item.users.data" :key="v.id" class="pointer-content">
                                             <td>
                                                 <span class="checkbox-custom checkbox-primary">
-                                                    <input class="selectable-item" type="checkbox" :id="'row-' + item.id"
-                                                        :value="item.id" @change="selectArtists(item.id)">
-                                                    <label :for="'row-' + item.id"></label>
+                                                    <input class="selectable-item" type="checkbox" :id="'row-' + v.id"
+                                                        :value="v.id" @change="selectArtists(v.id)">
+                                                    <label :for="'row-' + v.id"></label>
                                                 </span>
                                             </td>
-                                            <td><em></em>{{item.name}}</td>
-                                            <td>{{item.phone}}</td>
+                                            <td><em></em>{{v.name}}</td>
+                                            <td>{{v.phone}}</td>
                                         
-                                            <td>{{item.email}}</td>
+                                            <td>{{v.email}}</td>
                                         </tr>
                                     </tbody>        
                                 </table>             
@@ -113,6 +108,7 @@
                 <i class="back-icon md-plus animation-scale-up" aria-hidden="true"></i>
             </button>
         </div>
+        <!--新增角色 -->
         <div class="modal fade" id="addRole" aria-hidden="true" aria-labelledby="addLabelForm" role="dialog"
         tabindex="-1">
             <div class="modal-dialog modal-simple">
@@ -133,7 +129,7 @@
                     <div class="example">
                     <div class="col-md-2 text-right float-left">资源类型</div>
                     <div class="col-md-10 float-left pl-0">
-                        <Selectors  :placeholder="'职务'" @change="changeRolejob"></Selectors>
+                        <Selectors  :placeholder="'职务'" @change="changeRolejob" :options="groupingDate"></Selectors>
                     </div>
                     </div>
                     <div class="example">
@@ -145,11 +141,12 @@
                 </div>
                 <div class="modal-footer">
                     <button class="btn btn-sm btn-white btn-pure" data-dismiss="modal">取消</button>
-                    <button class="btn btn-primary" type="submit" >确定</button>
+                    <button class="btn btn-primary" type="submit" @click="addrole">确定</button>
                 </div>
                 </div>
             </div>
         </div>
+        <!--新增分组-->
          <div class="modal fade" id="addSubgroup" aria-hidden="true" aria-labelledby="addLabelForm" role="dialog"
         tabindex="-1" >
             <div class="modal-dialog modal-simple">
@@ -164,17 +161,18 @@
                     <div class="example">
                     <div class="col-md-2 text-right float-left">分组名称</div>
                     <div class="col-md-10 float-left pl-0">
-                        <input type="text" class="form-control" placeholder="请输入分组名称" v-model="roleName">
+                        <input type="text" class="form-control" placeholder="请输入分组名称" v-model="groupingName">
                     </div>
                     </div>
                 </div>
                 <div class="modal-footer">
                     <button class="btn btn-sm btn-white btn-pure" data-dismiss="modal">取消</button>
-                    <button class="btn btn-primary" type="submit" >确定</button>
+                    <button class="btn btn-primary" type="submit" @click="addSubgroup">确定</button>
                 </div>
                 </div>
             </div>
         </div>
+        <!--移动到分组-->
         <div class="modal fade" id="moveSubgroup" aria-hidden="true" aria-labelledby="addLabelForm" role="dialog"
         tabindex="-1" >
             <div class="modal-dialog modal-simple">
@@ -189,7 +187,7 @@
                     <div class="example">
                     <div class="col-md-2 text-right float-left">角色组</div>
                     <div class="col-md-10 float-left pl-0">
-                        <selectors  class="form-control" placeholder="职务" v-model="roleName"></selectors>
+                        <selectors  class="form-control" placeholder="职务" @change="moveGrouping" :options="groupingDate"></selectors>
                     </div>
                     </div>
                 </div>
@@ -200,6 +198,7 @@
                 </div>
             </div>
         </div>
+        <!--修改角色-->
         <div class="modal fade" id="updateSubgroup" aria-hidden="true" aria-labelledby="addLabelForm" role="dialog"
         tabindex="-1" >
             <div class="modal-dialog modal-simple">
@@ -214,29 +213,30 @@
                     <div class="example">
                     <div class="col-md-2 text-right float-left">角色名</div>
                     <div class="col-md-10 float-left pl-0">
-                        <input type="text" class="form-control" placeholder="请输入角色称" v-model="roleName">
+                        <input type="text" class="form-control" v-model="updateName" :placeholder="'请输入角色名'">
                     </div>
                     </div>
                     <div class="example">
                     <div class="col-md-2 text-right float-left">角色组</div>
                     <div class="col-md-10 float-left pl-0">
-                        <Selectors  :placeholder="'职务'" @change="changeRolejob"></Selectors>
+                        <Selectors  :placeholder="'职务'" @change="updateRolejob" :options="groupingDate"></Selectors>
                     </div>
                     </div>
                     <div class="example">
                     <div class="col-md-2 text-right float-left">描述</div>
                     <div class="col-md-10 float-left pl-0">
-                        <textarea name="" rows="5" class="form-control" @change="describe"></textarea>
+                        <textarea name="" rows="5" class="form-control" @change="updateDescribe"></textarea>
                     </div>
                     </div>
                 </div>
                 <div class="modal-footer">
                     <button class="btn btn-sm btn-white btn-pure" data-dismiss="modal">取消</button>
-                    <button class="btn btn-primary" type="submit" >确定</button>
+                    <button class="btn btn-primary" type="submit" @click="updaterole">确定</button>
                 </div>
             </div>
         </div>
         </div>
+        <!--重命名-->
           <div class="modal fade" id="Rename" aria-hidden="true" aria-labelledby="addLabelForm" role="dialog"
         tabindex="-1" >
             <div class="modal-dialog modal-simple">
@@ -251,17 +251,18 @@
                     <div class="example">
                     <div class="col-md-2 text-right float-left">角色组</div>
                     <div class="col-md-10 float-left pl-0">
-                        <input type="text" class="form-control" placeholder="职务" v-model="roleName">
+                        <input type="text" class="form-control" placeholder="请输入分组名称" v-model="updategrouping">
                     </div>
                     </div>
                 </div>
                 <div class="modal-footer">
                     <button class="btn btn-sm btn-white btn-pure" data-dismiss="modal">取消</button>
-                    <button class="btn btn-primary" type="submit" >确定</button>
+                    <button class="btn btn-primary" type="submit" @click="editgroup">确定</button>
                 </div>
                 </div>
             </div>
         </div>
+        <!--删除分组-->
             <div class="modal fade" id="deleteGrouping" aria-hidden="true" aria-labelledby="addLabelForm" role="dialog"
                 tabindex="-1" >
                 <div class="modal-dialog modal-simple">
@@ -273,7 +274,7 @@
                         <h4 class="modal-title">删除</h4>
                     </div>
                     <div class="modal-body">
-                        <div class="example" v-for="item in job" :key="item.id" v-if="item.id==2">
+                        <div class="example" v-for="item in groupingDate" :key="item.id" v-if="item.id==groupingId">
                         <div class="col-md-12  pl-0">
                              <p class="modal-title text-center">确认删除{{item.name}}</p>   
                         </div>
@@ -281,11 +282,12 @@
                     </div>
                     <div class="modal-footer">
                         <button class="btn btn-sm btn-white btn-pure" data-dismiss="modal">取消</button>
-                        <button class="btn btn-danger" type="submit" >确定</button>
+                        <button class="btn btn-danger" type="submit" @click="deleteGrouping">确定</button>
                     </div>
                     </div>
                 </div>
             </div>
+            <!--删除角色-->
             <div class="modal fade" id="deleteRole" aria-hidden="true" aria-labelledby="addLabelForm" role="dialog"
                 tabindex="-1" >
                 <div class="modal-dialog modal-simple">
@@ -297,19 +299,20 @@
                         <h4 class="modal-title">删除</h4>
                     </div>
                     <div class="modal-body">
-                        <div class="example" v-for="item in job" :key="item.id" v-if="item.id==2">
-                        <div class="col-md-12  pl-0" v-for="v in item.data" :key="v.id" v-if="roleId==v.id">
-                             <p class="modal-title text-center">确认删除{{v.name}}</p>   
+                        <div class="example" v-for="item in groupingDate" :key="item.id">
+                        <div class="col-md-12  pl-0"  v-if="roleId==item.id">
+                             <p class="modal-title text-center">确认删除</p>   
                         </div>
                         </div>
                     </div>
                     <div class="modal-footer">
                         <button class="btn btn-sm btn-white btn-pure" data-dismiss="modal">取消</button>
-                        <button class="btn btn-danger" type="submit" >确定</button>
+                        <button class="btn btn-danger" type="submit" @click="deleterole">确定</button>
                     </div>
                     </div>
                 </div>
             </div>
+            <!--添加成员-->
             <div class="modal fade" id="addMember" aria-hidden="true" aria-labelledby="addLabelForm" role="dialog"
             tabindex="-1" >
             <div class="modal-dialog modal-simple">
@@ -333,31 +336,10 @@
     </div>
 </template>
 <script>
-
+        import fetch from '../../assets/utils/fetch.js'
 export default {
     data(){
         return{
-            list:[{
-                id:1,
-                name:'big研究所',
-                phone:145255366147,
-                email:'gaoyangyi@mttp.cn'
-            },{
-                id:2,
-                name:'big研究所',
-                phone:145255366147,
-                email:'gaoyangyi@mttp.cn'
-            },{
-                id:3,
-                name:'big研究所',
-                phone:145255366147,
-                email:'gaoyangyi@mttp.cn'
-            },{
-                id:4,
-                name:'big研究所',
-                phone:145255366147,
-                email:'gaoyangyi@mttp.cn'
-            }],
             job:[ {
                     value:1,
                     id:1,
@@ -377,41 +359,60 @@ export default {
                     value:2,
                     id:2,
                     name:'职务',
-                    data:[
-                        {
-                            id:1,
-                            value:2,
-                            name:'子管理员1',
-                            
-                        },
-                        {
-                            id:2,
-                            value:2,
-                            name:'子管理员2',
-                        },
-                        {
-                            id:3,
-                            value:2,
-                            name:'子管理员3',
-                        
-                        },
-                        {
-                            id:4,
-                            value:2,
-                            name:'子管理员4',
-                        
-                        }
-                    ]
+                  
                 }],
+            resourcesType:[
+                {
+                  value:2,
+                  name:'职务'
+                },
+                {
+                  value:3,
+                  name:'部门'
+                }
+            ],
             visible:false,
-            roleName:'',
             roleId:'',
+            jobCont:'',
             isShow:'0',
             selectedArtistsArr: [],
-            isSelectAll:false
+            isSelectAll:false,
+            roleDate:'',//数据
+            roleName:'',//新增名字
+            roleType:'',//新增角色的类别
+            roledescribe:'', //新增角色描述
+            updateName:'',
+            updateType:'',
+            updateDes:'',
+            movegroupingId:'',
+            groupingName:'',//分组名称
+            groupingDate:'',
+            groupingId:'',
+            updategrouping:''
         }
     },
+    mounted(){
+       this.getroleDate();
+       this.getgroupingDate()
+    },
     methods:{
+            //获取角色数据
+            getroleDate(){
+                let _this=this;
+                fetch('get', '/console/role').then(function (response) {  
+                    _this.roleDate = response.data;
+                    console.log(_this.roleDate)
+                });
+            },
+            //获取分组数据
+            getgroupingDate(){
+                let _this=this;
+                fetch('get', '/console/group?Accept=application/vnd.Corvus.v1+json').then(function (response) {  
+                    _this.groupingDate = response.data;
+                    console.log(_this.groupingDate )
+                });
+            },
+            //全选反选
             selectArtists: function (value) {
                 if (value === 'all') {
                     this.selectedArtistsArr = [];
@@ -432,14 +433,119 @@ export default {
                     console.log(this.selectedArtistsArr)
                 }
             },
+            //切换内容
+            changeCont(value){
+                this.jobCont=value
+            },
             showList () {
                 this.visible = !this.visible
             },
-            changeRolejob(){
+            //获取新增角色的类别
+            changeRolejob(value){
+                this.roleType=value
+            },
+            //获取新增角色的描述
+            describe(value){
+                this.roledescribe=value
+            },
+            //新增角色
+            addrole(){
+                let _this=this;
+                let data={
+                    name:this.roleName,
+                    group_id:this.roleType
+                }
+                fetch('post', '/console/role',data).then(function (response) {  
+                    toastr.success('创建成功');
+                    $('#addRole').modal('hide');
+                    _this.getroleDate()
+                
+                });
+            },
+            //修改类型
+            updateRolejob(value){
+                this.updateType=value
+            },
+            //修改描述
+            updateDescribe(){
 
             },
-            describe(){
-
+             //修改角色
+            updaterole(){
+                console.log(this.updateType)
+                let _this=this;
+                let data={
+                    name:this.updateName,
+                    group_id:this.updateType
+                }
+                console.log(this.roleId)
+                fetch('put', '/console/role/'+this.roleId,data).then(function (response) {  
+                    toastr.success('修改成功');
+                    $('#updateSubgroup').modal('hide');
+                    _this.getroleDate()
+                
+                });
+            },
+             //删除角色
+            deleterole(){
+                let _this=this;
+                fetch('delete', '/console/role/'+this.roleId).then(function (response) {  
+                    toastr.success('删除成功');
+                    $('#deleteRole').modal('hide');
+                    _this.getroleDate()
+                });
+            },
+            moveGrouping(value){
+                this.movegroupingId=value
+            },
+            //  //移动角色
+            // moverole(){
+            //     let _this=this;
+            //     let data={
+            //         group_id:this.movegroupingId
+            //     }
+            //     fetch('put', '/console/mobile/'+this.roleId,data).then(function (response) {  
+            //         toastr.success('移动成功');
+            //         $('#moveSubgroup').modal('hide');
+            //         _this.getroleDate()
+            //     });
+            // },
+            //新增分组
+            addSubgroup(){
+                let _this=this;
+                let data={
+                    name:this.groupingName
+                }
+                fetch('post', '/console/group/',data).then(function (response) {  
+                    toastr.success('删除成功');
+                    $('#addSubgroup').modal('hide');
+                    _this.getgroupingDate()
+                    console.log(response)
+                
+                });
+            },
+            //修改分组
+            editgroup(){
+                let _this=this;
+                let data={
+                    name:this.updategrouping,
+                }
+                console.log(this.groupingId)
+                fetch('put', '/console/group/'+this.groupingId,data).then(function (response) {  
+                    toastr.success('修改成功');
+                    $('#Rename').modal('hide');
+                    _this.getgroupingDate()
+                
+                });
+            },
+            //删除分组
+            deleteGrouping(){
+                let _this=this;
+                fetch('delete', '/console/group/'+this.groupingId).then(function (response) {  
+                    toastr.success('删除成功');
+                    $('#deleteGrouping').modal('hide');
+                      _this.getgroupingDate()
+                });
             },
             switchMenu:function(id){
                 if(this.isShow == id){
@@ -449,8 +555,13 @@ export default {
                 }
                 
             },
+            //删除的名字id获取
             role(value){
               this.roleId=value
+            },
+            grouping(value){
+                console.log(value)
+                this.groupingId=value
             }
     }
 }
@@ -496,22 +607,24 @@ a{
 .site-menu-item a:hover{
     background: #F5F5F5;
 }
-.administration-subordinate-item:hover{
+.administration-subordinate-item li:hover{
     background: #F5F5F5;
     cursor: pointer;
-    
 }
-/* .drop-son{
-    display: none;
-}
-.administration-subordinate-item:hover .drop-son{
-    display: block;
-} */
 .administration-subordinate-item :hover span{
     color: #3F51B5;
 } 
 .dropdown-item:hover{
     cursor: pointer;
 }
+#org-dropdown{
+    font-size: 18px!important;
+}
+/* .drop-parent{
+    display: none;
+}
+.site-menu-item:hover .drop-parent{
+    display: block;
+} */
 </style>
 
