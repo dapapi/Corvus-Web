@@ -19,14 +19,6 @@
                                 {{ clientInfo.principal?clientInfo.principal.data.name:'' }}
                             </div>
                         </div>
-                        <div class="col-md-6 float-left clearfix pl-0">
-                            <div class="float-left pl-0 pr-2 col-md-3">
-                                <i class="md-plus pr-2" aria-hidden="true"></i>决策关键人/部门
-                            </div>
-                            <div class="font-weight-bold float-left">
-                                {{ clientInfo.keyman }}
-                            </div>
-                        </div>
                     </div>
                     <div class="card-text clearfix example">
                         <div class="col-md-6 float-left clearfix pl-0">
@@ -39,34 +31,33 @@
                         </div>
                     </div>
                     <div class="clearfix">
-                        <div class="col-md-6 float-left pl-0 mb-20" style="border-right: 1px solid #eee">
-                            <div class="col-md-6">任务 5/12</div>
-                            <div class="clearfix example">
-                                <div class="col-md-3 float-left">电话会议</div>
-                                <div class="col-md-3 float-left">张佳佳</div>
-                                <div class="col-md-3 float-left">2018-12-03 11:10</div>
-                                <div class="col-md-3 float-left">进行中</div>
+                        <div class="col-md-6 float-left pl-0 mb-20" style="border-right: 1px solid #eee" v-if="clientTasksInfo.length > 0">
+                            <div class="col-md-6">任务 
+                                <!-- {{newArray(clientTasksInfo).length}}/{{clientTasksInfo.length}} -->
                             </div>
-                            <div class="clearfix example">
-                                <div class="col-md-3 float-left">电话会议</div>
-                                <div class="col-md-3 float-left">张佳佳</div>
-                                <div class="col-md-3 float-left">2018-12-03 11:10</div>
-                                <div class="col-md-3 float-left">进行中</div>
+                            <div class="clearfix example" v-for="(task, index) in newArray(clientTasksInfo)" :key="index">
+                                <div class="col-md-3 float-left">{{ task.title }}</div>
+                                <div class="col-md-3 float-left">{{ task.principal?task.principal.data.name:'' }}</div>
+                                <div class="col-md-3 float-left">{{ task.end_at }}</div>
+                                <div class="col-md-3 float-left">
+                                    <template v-if="task.status === 1">进行中</template>
+                                    <template v-if="task.status === 2">已完成</template>
+                                    <template v-if="task.status === 3">已停止</template>
+                                </div>
                             </div>
                         </div>
-                        <div class="col-md-6 float-left pl-0 mb-20">
+                        <div class="col-md-6 float-left pl-0 mb-20" v-if="clientProjectsInfo.length > 0">
                             <div class="col-md-6">项目</div>
-                            <div class="clearfix example">
-                                <div class="col-md-3 float-left">Ugg代言</div>
-                                <div class="col-md-3 float-left">商务项目</div>
-                                <div class="col-md-3 float-left">2018-12-03 11:10</div>
-                                <div class="col-md-3 float-left">进行中</div>
-                            </div>
-                            <div class="clearfix example">
-                                <div class="col-md-3 float-left">星巴克代言</div>
-                                <div class="col-md-3 float-left">商务项目</div>
-                                <div class="col-md-3 float-left">2018-12-03 11:10</div>
-                                <div class="col-md-3 float-left">进行中</div>
+                            <div class="clearfix example" v-for="(project, index) in newArray(clientProjectsInfo)" :key="index">
+                                <div class="col-md-3 float-left">{{project.title}}</div>
+                                <div class="col-md-3 float-left">{{ clientTypeArr.find(item => item.value == project.type).name }}</div>
+                                <div class="col-md-3 float-left">{{ project.created_at }}</div>
+                                <div class="col-md-3 float-left">
+                                    <template v-if="project.status === 1">进行中</template>
+                                    <template v-if="project.status === 2">完成</template>
+                                    <template v-if="project.status === 3">终止</template>
+                                    <template v-if="project.status === 4">删除</template>
+                                </div>
                             </div>
                         </div>
                     </div>
@@ -324,7 +315,8 @@
                             <tr class="animation-fade"
                                 style="animation-fill-mode: backwards; animation-duration: 250ms; animation-delay: 0ms;">
                                 <th class="cell-300" scope="col">联系人</th>
-                                <th class="cell-300" scope="col">关联公司</th>
+                                <!-- <th class="cell-300" scope="col">关联公司</th> -->
+                                <th class="cell-300" scope="col">关键决策人</th>
                                 <th class="cell-300" scope="col">联系人电话</th>
                                 <th class="cell-300" scope="col">职位</th>
                                 <th class="cell-300" scope="col">负责人</th>
@@ -333,7 +325,11 @@
                             <tbody>
                             <tr v-for="contact in clientContactsInfo">
                                 <td>{{ contact.name }}</td>
-                                <td>{{ clientInfo.company }}</td>
+                                <!-- <td>{{ clientInfo.company }}</td> -->
+                                <td>
+                                    {{ contact.type === 1 ? '否' : '' }}
+                                    {{ contact.type === 2 ? '是' : '' }}
+                                </td>
                                 <td>{{ contact.phone }}</td>
                                 <td>{{ contact.position }}</td>
                                 <td>{{ clientInfo.principal?clientInfo.principal.data.name:'' }}</td>
@@ -417,6 +413,13 @@
                             <div class="col-md-10 float-left">
                                 <input type="text" title="" class="form-control"
                                        placeholder="请输入联系人" v-model="editConfig.name">
+                            </div>
+                        </div>
+                        <div class="example">
+                            <div class="col-md-2 text-right float-left">关键决策人</div>
+                            <div class="col-md-10 float-left">
+                                <selectors ref="contact" :options="keyMasterArr" :value="editConfig.type" :placeholder="'请选择是否是关键决策人'"
+                                    @change="changeContactClientType"></selectors>
                             </div>
                         </div>
                         <div class="example">
@@ -537,6 +540,7 @@
                 clientTypeArr: config.clientTypeArr,
                 clientLevelArr: config.clientLevelArr,
                 clientScaleArr: config.clientScaleArr,
+                keyMasterArr: config.isKeyMasterArr,
                 taskTypeArr: [],
                 taskLevelArr: config.taskLevelArr,
                 multiple: false,
@@ -565,7 +569,8 @@
                 editConfig: {
                     position: '',
                     name: '',
-                    phone: ''
+                    phone: '',
+                    type: '' // 是否是关键人
                 }, // 修改的联系人信息
                 contactId: '', // 联系人id
             }
@@ -704,10 +709,16 @@
                     toastr.error('手机号码格式不对！')
                     return
                 }
+
+                if (!this.editConfig.type) {
+                    toastr.error('请选择关键决策人！')
+                    return
+                }
                 data = {
                     name: this.editConfig.name || '',
                     phone: this.editConfig.phone,
-                    position: this.editConfig.position
+                    position: this.editConfig.position,
+                    type: this.editConfig.type
                 }
 
                 let _this = this
@@ -851,10 +862,13 @@
                 this.changeInfo.principal_id = value
             },
             changeEditStatus(value, config) {
+                // console.log(config.type)
+                this.$refs.contact.setValue(config.type)
                 this.editConfig = config || {
                     position: '',
                     name: '',
-                    phone: ''
+                    phone: '',
+                    type: '',
                 }
                 this.isEditContact = value
             },
@@ -879,6 +893,17 @@
                     this.changeInfo.city = val.city.name !== '市辖区' ? val.city.name : val.province.name
                     this.changeInfo.district = val.area.name
                 }
+            },
+            // 关键决策人
+            changeContactClientType (val) {
+                this.editConfig.type = val
+            },
+            // 返回前5组数据
+            newArray (arr) {
+                if (arr.length > 5) {
+                    arr.length = 5
+                }
+                return arr
             }
         }
     }

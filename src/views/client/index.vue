@@ -146,6 +146,13 @@
                             </div>
                         </div>
                         <div class="example">
+                            <div class="col-md-2 text-right float-left">关键决策人</div>
+                            <div class="col-md-10 float-left pl-0">
+                                <selectors :options="keyMasterArr" :placeholder="'请选择是否是关键决策人'"
+                                           @change="changeContactClientType"></selectors>
+                            </div>
+                        </div>
+                        <div class="example">
                             <div class="col-md-2 text-right float-left">联系人电话</div>
                             <div class="col-md-10 float-left pl-0">
                                 <input type="text" class="form-control" title="" v-model="clientContactPhone">
@@ -164,12 +171,13 @@
                                            @change="changeClientScale"></selectors>
                             </div>
                         </div>
-                        <div class="example">
+                        <!-- 注释掉 -->
+                        <!-- <div class="example">
                             <div class="col-md-2 text-right float-left">决策关键人/部门</div>
                             <div class="col-md-10 float-left pl-0">
                                 <input type="text" class="form-control" title="" v-model="clientDecision">
                             </div>
-                        </div>
+                        </div> -->
                         <div class="example">
                             <div class="col-md-2 text-right float-left">备注</div>
                             <div class="col-md-10 float-left pl-0">
@@ -203,6 +211,7 @@
                 customizeInfo: config.customizeInfo,
                 clientTypeArr: config.clientTypeArr,
                 clientLevelArr: clientLevelArr,
+                keyMasterArr: config.isKeyMasterArr,
                 clientsInfo: [],
                 companiesArr: [],
                 clientScaleArr: config.clientScaleArr,
@@ -214,7 +223,8 @@
                 clientContact: '',
                 clientContactPhone: '',
                 clientContactPosition: '',
-                clientDecision: '',
+                clientContactType: '', // 是否是关键人
+                // clientDecision: '',
                 clientRemark: '',
                 clientPrincipalSearch: '', // 条件筛选的负责人
                 clientPrincipalIdSearch: '', // 负责人id
@@ -302,6 +312,10 @@
                     toastr.error('请填写联系人！')
                     return
                 }
+                if (!this.clientContactType) {
+                    toastr.error('请选择关键决策人！')
+                    return
+                }
                 if (!this.clientContactPosition) {
                     toastr.error('请填写联系人职位！')
                     return
@@ -319,9 +333,10 @@
                     contact: {
                         name: this.clientContact,
                         phone: this.clientContactPhone,
-                        position: this.clientContactPosition
+                        position: this.clientContactPosition,
+                        type: this.clientContactType,
                     },
-                    keyman: this.clientDecision,
+                    // keyman: this.clientDecision,
                     size: this.clientScale,
                     desc: this.clientRemark
                 };
@@ -389,6 +404,10 @@
             showAddModal (val) {
                 $('#addClient').modal()
                 this.clientType = val
+            },
+            // 关键决策人
+            changeContactClientType (val) {
+                this.clientContactType = val
             }
         }
     }

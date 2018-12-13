@@ -116,7 +116,7 @@
                             <img src="https://res.papitube.com/corvus/images/content-none.png" alt=""
                                  style="width: 100%">
                         </div>
-                        <template v-if="!taskStatus">
+                        <template v-if="!taskStatus && !taskFinishType">
                             <Pagination :current_page="current_page"
                                         :method="getTasks"
                                         :total_pages="total_pages"
@@ -331,14 +331,14 @@
             getMyTasks(pageNum = 1, type = null) {
                 let _this = this;
                 if (type) {
-                    app.taskFinishType = type;
+                    this.taskFinishType = type;
                 }
 
                 let data = {
                     page: pageNum,
                     include:
                         "principal,pTask,tasks,resource.resourceable,resource.resource,participants",
-                    type: app.taskFinishType,
+                    type: this.taskFinishType,
                     status: 0
                 };
 

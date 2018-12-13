@@ -55,7 +55,8 @@
             <input id="console-model" type="text" @blur="blur" />
             <div class="console" v-show="visible" @click="blur">
                 <ul>
-                    <li><router-link target="_blank" to="/management">进入企业后台</router-link></li>
+                    <!-- <li @click="goManagement"><router-link target="_blank" to="/management">进入企业后台</router-link></li> -->
+                    <li @click="goManagement">进入企业后台</li>
                     <li @click="layout">退出当前账号</li>
                 </ul>
             </div>
@@ -205,6 +206,10 @@
                 Cookies.remove('CORVUS-ACCESS-TOKEN');
                 // 可以？
                 window.location.href = '/login'
+            },
+            goManagement () {
+                window.open('/management')
+                // this.$router.go('')
             }
         }
     }
@@ -294,12 +299,13 @@
         line-height: 40px;
         padding: 0 30px;
     }
-    .console ul li:hover, .console ul li a:hover {
+    .console ul li a {
+        color: rgba(117, 117, 117, 0.9);
+    }
+    .console ul li:hover, .console ul li:hover a {
         cursor: pointer;
         color: #3f51b5;
         background: rgba(40,53,147,.03);
     }
-    .console ul li a {
-        color: rgba(117, 117, 117, 0.9);
-    }
+    
 </style>
