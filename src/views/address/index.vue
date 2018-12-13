@@ -231,6 +231,7 @@
                 this.checkedIndex = index
                 this.personalInfo = data
             },
+            // 设置默认信息
             setDefaultInfo(id) {
                 let i = 0
                 for (let item in this.normalUsers) {
@@ -244,7 +245,12 @@
                     }
                     i++
                 }
+            },
+            // 日程
+            getSchedules () {
+                // todo
             }
+            // 任务  todo
         },
     }
 </script>

@@ -1208,6 +1208,17 @@ let config = {
 
             }
         ],
+        // 是否是关键决策人
+        isKeyMasterArr: [
+            {
+                name: '是',
+                value: 2
+            },
+            {
+                name: '否',
+                value: 1
+            }
+        ]
     }
 ;
 
