@@ -2,6 +2,7 @@
   <div class="page-container">
     <div class="page-aside">
       <Approval></Approval>
+      <ApprovalGreatModule />
     </div>
     <div class="page">
       <router-view/>
@@ -11,9 +12,10 @@
 
 <script>
 import Approval from '@/components/Approval.vue'
+import ApprovalGreatModule from '@/components/ApprovalGreatModule'
 export default {
         components: {
-            Approval
+            Approval,ApprovalGreatModule
         },
 }
 </script>
