@@ -21,24 +21,12 @@
                     <div class="">
                         <div class="table-responsive">
                             <table class="table table-hover" data-role="content" data-plugin="selectable" data-row-selectable="true">
-                                <thead class="">
                                 <tr>
-                                    <td class="broadcast-title"><strong>标题</strong>
-                                    </td>
-                                    <td>
-                                        <strong>分类</strong> 
-                                    </td>
-                                    <td></td>
-                                    <td>
-                                        <strong>发布时间</strong>
-                                    </td>
-                                    <td></td>
-                                    <td></td>
-                                    <td>
-                                        <strong>发布人</strong>
-                                    </td>
+                                    <th class="cell-300" scope="col">标题</th>
+                                    <th class="cell-300" scope="col">分类</th>
+                                    <th class="cell-300" scope="col">发布时间</th>
+                                    <th class="cell-300" scope="col">发布人</th>
                                 </tr>
-                                </thead>
                                 <tbody>
                                 <tr class="broadcast-tr" v-for="item in broadCastInfo" :key="item.id" v-if="memberList">
                                     <td class="broadcast-title">
@@ -50,17 +38,13 @@
                                         <span class="broadcast-top-flag badge badge-outline badge-info" 
                                             v-if="item.stick">置顶</span>
                                         <span class="broadcast-new-flag" v-if="!item.readflag">
-                                            <strong>NEW</strong>
+                                           NEW
                                         </span>
                                     </td>
                                     <td>{{classifyArr.find(classifyArr => classifyArr.value == item.classify).name}}</td>
-                                    <td></td>
                                     <td>
                                         <span>{{item.created_at}}</span>
-                                        <i class="icon md-time ml-10" aria-hidden="true"></i>
                                     </td>
-                                    <td></td>
-                                    <td></td>
                                     <td v-if="memberList[0]">
                                         {{memberList.find(memberList => memberList.id == item.creator.data.id).name}}
                                     </td>
@@ -148,6 +132,7 @@ export default {
 .broadcast-new-flag{
     margin-left: 20px;
     color: #F44336;
+    font-size: 5px;
 }
 .loader-overlay{
         margin-left: 100px;

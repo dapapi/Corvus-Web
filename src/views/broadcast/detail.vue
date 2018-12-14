@@ -20,7 +20,8 @@
             data-toggle="modal" 
             data-target="#addNewBroadcast"
             aria-hidden="true"
-            data-backdrop="static"></i>
+            data-backdrop="static"
+            v-if="my_id === creator_id"></i>
         </div> 
         <div class="page-content container-fluid">
             <div class="panel" id="">
@@ -42,11 +43,11 @@
                         <h5 v-html="currentData.desc" class="broadcast-content"></h5>
                         <div v-if="currentData.accessory"
                         data-plugin="actionBtn" 
-            data-toggle="modal" 
-            data-target="#docPreview"
-            aria-hidden="true"
+                        data-toggle="modal" 
+                        data-target="#docPreview"
+                        aria-hidden="true"
                         ><a href="#">查看附件</a></div>
-                        <DocPreview :url='currentData.accessory' :givenFileName='currentData.accessory_name' />
+                        <DocPreview :url='currentData.accessory' :givenfilename='currentData.accessory_name' />
                         <h5>公告范围
                             <span  v-for=" item in currentData.scope.data" :key="item.department_id" v-if="item.department_id">&nbsp;&nbsp;
                                 <span v-if="departments[0]" class="badge badge-round badge-dark">{{departments.find(departments => departments.id == item.department_id).name}}</span>
@@ -57,13 +58,13 @@
                 </div>
             </div>
         </div>
-        <AddModifyBroadCast :notedata='currentData' position='broadCast' @goback='goBack' @refresh='dataInit' :givenFileName='currentData.accessory_name'/>
+        <AddModifyBroadCast :notedata='currentData' position='broadCast' @goback='goBack' @refresh='dataInit' :givenfilename='currentData.accessory_name'/>
     </div>   
 </template>
 
 <script>
-import fetch from '../../assets/utils/fetch.js'
-import config from '../../assets/js/config'
+import fetch from '@/assets/utils/fetch.js'
+import config from '@/assets/js/config'
 export default {
     data(){
         return{
@@ -75,9 +76,12 @@ export default {
             paramsId:'',
             isLoading:true,
             departments:[],
+            creator_id:'',
+            my_id:''
         } 
     },
     created() { 
+        this.whoami()
         this.getCurrentId()
         this.dataInit()
         this.getDepartments()
@@ -92,6 +96,8 @@ export default {
             let _this = this
                 fetch('get', '/announcements/'+this.currentId+'?include=scope,creator').then(function (response) {
                     _this.currentData = response.data
+                    let {creator:{data:{id='-'}}} = response.data
+                    _this.creator_id = id
                     _this.isLoading = false
             })
         },
@@ -105,10 +111,17 @@ export default {
         },
         //获取部门数据
         getDepartments(){
+            let _this = this
             fetch('get','/departments').then((params) => {
-                this.departments = params.data
+                _this.departments = params.data
             })
         },
+        whoami(){
+            let _this = this
+            fetch('get','/users/my').then((params) => {
+                _this.my_id = params.data.id
+            })
+        }
     }
 }
 

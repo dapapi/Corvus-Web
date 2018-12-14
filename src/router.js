@@ -11,7 +11,8 @@ export default new Router({
         {
             path: '/',
             // name: 'home',
-            component: Home,
+            redirect: 'my',
+            // component: Home,
         },
         {
             path: '/login',
@@ -413,6 +414,11 @@ export default new Router({
             name: 'knowledgebase/detail',
             component: () => import('./views/knowledgebase/detail.vue')
         },
+        {
+            path: '/contracts',
+            name: 'contracts',
+            component: () => import('./views/contracts/index.vue')
+        }
     ],
     scrollBehavior (to, from, savedPosition) {
         if (savedPosition) {

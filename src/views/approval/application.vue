@@ -1,12 +1,12 @@
 <template>
-  <div class="page">
-    <div class="page-main" style="background-color:#f3f4f5">
+  <div class="">
+    <div class="" style="background-color:#f3f4f5">
       <div class="page-header  page-header-bordered mb-0">
         <h1 class="page-title">我的申请</h1>
       </div>
     </div>
     <div class="page-content container-fluid mt-20">
-      <div class="panel col-md-12 col-lg-12 py-5">
+      <div class="panel col-md-12 col-lg-12 py-5 ">
         <div class="col-md-5 py-20">
           <div class="input-search">
             <i class="input-search-icon md-search" aria-hidden="true"></i>
