@@ -38,8 +38,8 @@
                             <div class="clearfix example" v-for="(task, index) in newArray(clientTasksInfo)" :key="index">
                                 <div class="col-md-3 float-left">{{ task.title }}</div>
                                 <div class="col-md-3 float-left">{{ task.principal?task.principal.data.name:'' }}</div>
-                                <div class="col-md-3 float-left">{{ task.end_at }}</div>
-                                <div class="col-md-3 float-left">
+                                <div class="col-md-4 float-left">{{ task.end_at }}</div>
+                                <div class="col-md-2 float-left">
                                     <template v-if="task.status === 1">进行中</template>
                                     <template v-if="task.status === 2">已完成</template>
                                     <template v-if="task.status === 3">已停止</template>
@@ -51,8 +51,8 @@
                             <div class="clearfix example" v-for="(project, index) in newArray(clientProjectsInfo)" :key="index">
                                 <div class="col-md-3 float-left">{{project.title}}</div>
                                 <div class="col-md-3 float-left">{{ clientTypeArr.find(item => item.value == project.type).name }}</div>
-                                <div class="col-md-3 float-left">{{ project.created_at }}</div>
-                                <div class="col-md-3 float-left">
+                                <div class="col-md-4 float-left">{{ project.created_at }}</div>
+                                <div class="col-md-2 float-left">
                                     <template v-if="project.status === 1">进行中</template>
                                     <template v-if="project.status === 2">完成</template>
                                     <template v-if="project.status === 3">终止</template>
@@ -584,6 +584,7 @@
                 _this.getClient();
                 _this.getClientTrail();
                 _this.getClientProject()
+                _this.getClientTask()
             }, 100);
             this.getTaskType()
         },
