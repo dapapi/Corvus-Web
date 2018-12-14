@@ -15,8 +15,8 @@
                     </div>
                 </template>
                 <template v-else-if="(trailOrigin === '4' || trailOrigin === '5') && members[0]">
-                    <div class="col-md-5 float-left pr-0">
-                        <input-selectors @change="changeTrailOrigin" :placeholder='members.find(item=>item.id == content).name'
+                    <div class="col-md-5 float-left pr-0"> 
+                        <input-selectors @change="changeTrailOrigin" :placeholder='memberFinder'
                                          :propSelectMemberName='trailOriginPerson.name'></input-selectors>
                     </div>
                 </template>
@@ -29,7 +29,7 @@
         </div>
         <div v-if="!isEditSituation && members[0] && content && (trailOrigin === '4' || trailOrigin === '5')"
              class="col-md-10 float-left font-weight-bold expfee">
-            <span>{{trailOriginArr.find(item=>item.value == contentType).name}} - {{members.find(item=>item.id == content).name}}</span>
+            <span>{{trailOriginArr.find(item=>item.value == contentType).name}} - {{memberFinder}}</span>
         </div>
     </div>
 </template>
@@ -53,6 +53,15 @@
         },
         created() {
             this.getMembers()
+        },
+        computed:{
+            memberFinder(){
+                if(this.members){
+                   return this.members.find(item=>item.id == this.content).name || '-'
+                }else{
+                    return '-'
+                }
+            }
         },
         watch: {
             //监听获取当前类型
@@ -97,6 +106,8 @@
             getMembers() {
                 let _this = this
                 fetch('get', '/users').then((params) => {
+                    let {data = '-'} = params
+                    console.log(data);
                     _this.members = params.data
                 })
             },

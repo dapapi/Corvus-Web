@@ -7,13 +7,12 @@
                     <button type="button" class="close" data-dismiss="modal" aria-label="Close">
                     <span aria-hidden="true">×</span>
                     </button>
-                    <h4 class="modal-title" id="exampleModalTitle">审批</h4>
+                    <h4 class="modal-title" id="exampleModalTitle">{{pageInfo.title}}</h4>
                 </div>
                 <div class="modal-body modal-greater">
-                    <div v-for="(i, index) in 5" :key="index" class="great-option">
+                    <div v-for="(item, index) in moduleInfo" :key="index" class="great-option">
                         <div :is='sortChecker(i)'></div>
                     </div>
-                    <p>正文部分</p>
                 </div>
                 <div class="modal-footer">
                     <button type="button" class="btn btn-default btn-pure waves-effect waves-light waves-round" data-dismiss="modal">取消</button>
@@ -32,7 +31,13 @@ import ApprovalText from '@/components/ForApproval/ApprovalText'
 import ApprovalSelector from '@/components/ForApproval/ApprovalSelector'
 export default {
     data(){
-        
+        return{
+            pageInfo:{
+                title:'',
+                description:''
+            },
+            moduleInfo:[]
+        }
     },
     mounted(){
         console.log(pageData);
@@ -44,8 +49,10 @@ export default {
     methods:{
         dataInit(){
             let {name,description,approval_form_controls} = pageData[0]
-            console.log(name,description,approval_form_controls);
             let controlArr= Array.from(approval_form_controls)
+            this.moduleInfo = controlArr
+            this.pageInfo.title = name
+            this.pageInfo.description= description
         },
         sortChecker(params){
             switch (params){
@@ -70,6 +77,8 @@ export default {
 <style scoped>
 .modal-greater{
     margin-top: 20px !important;
+    height: 61.8vh;
+    overflow-y:scroll;
 }
 .great-option{
     /* height: 50px; */
