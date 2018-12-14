@@ -173,14 +173,14 @@
                         <div class="example">
                             <div class="col-md-2 text-right float-left">目标艺人</div>
                             <div class="col-md-10 float-left pl-0" v-if="starsArr.length > 0">
-                                <selectors :options="starsArr" @change="changeTargetStars" :multiple="true"
+                                <selectors :options="starsArr" @valuelistener="changeTargetStars" :multiple="true"
                                            :placeholder="'请选择目标艺人'"></selectors>
                             </div>
                         </div>
                         <div class="example">
                             <div class="col-md-2 text-right float-left">推荐艺人</div>
                             <div class="col-md-10 float-left pl-0" v-if="starsArr.length > 0">
-                                <selectors :options="starsArr" @change="changeRecommendStars" :multiple="true"
+                                <selectors :options="starsArr" @valuelistener="changeRecommendStars" :multiple="true"
                                            :placeholder="'请选择推荐艺人'"></selectors>
                             </div>
                         </div>
@@ -629,6 +629,7 @@
             },
 
             changeTargetStars: function (value) {
+                console.log(123);
                 this.targetStars = value
             },
 
