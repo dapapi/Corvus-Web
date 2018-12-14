@@ -1,24 +1,16 @@
-<template>
-  <div class="home">
-
-  </div>
-</template>
 
 <script>
-// @ is an alias to /src
-import LeftMenu from '@/components/LeftMenu.vue'
-import getMessage from '@/components/getMessage.vue'
 export default {
-  name: 'home',
-  components: {
-      LeftMenu,
-      getMessage
-  },
-  mounted(){
-     this.receive()
-  },
-  methods:{
-    receive:function(){
+    data(){
+       return {
+
+       }
+    },
+    mounted(){
+        this.receive()       
+    },
+    methods:{
+        receive:function(){
             alert(222)
             let login = {}
             let user = JSON.parse(Cookies.get('user'))
@@ -52,6 +44,8 @@ export default {
         // };
 
        },
-  }
-};
+    }
+}
 </script>
+
+

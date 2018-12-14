@@ -162,16 +162,8 @@ export default {
     }
 }
 </script>
-<<<<<<< HEAD
-
-<style scoped>
-    .show{
-        display: none
-    }
-=======
 <style>
      
->>>>>>> qsf
     #selctStaff{
         position: absolute;
         width: 20rem;

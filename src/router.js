@@ -412,7 +412,7 @@ export default new Router({
             path: '/knowledgebase/:id',
             name: 'knowledgebase/detail',
             component: () => import('./views/knowledgebase/detail.vue')
-        },
+        }
     ],
     scrollBehavior (to, from, savedPosition) {
         if (savedPosition) {
