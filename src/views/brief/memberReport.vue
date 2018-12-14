@@ -3,7 +3,7 @@
     <div class="page-main" style="background-color:##f3f4f5">
         <div class="page-header page-header-bordered clearfix">
             <h1 class="page-title float-left">成员{{templateName}}</h1>
-            <switch-year class="float-right" :showDetails="true" :type="type" @click="selectDate"></switch-year>
+            <switch-year class="float-right" :type="type" @click="selectDate"></switch-year>
         </div>
         <div class="page-content container-fluid">
             <div class="panel mb-0">
