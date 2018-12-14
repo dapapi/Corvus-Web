@@ -168,10 +168,6 @@ export default {
     .show{
         display: none
     }
-=======
-<style>
-     
->>>>>>> qsf
     #selctStaff{
         position: absolute;
         width: 20rem;
