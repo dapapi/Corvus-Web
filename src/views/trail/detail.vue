@@ -843,6 +843,9 @@
                 })
             },
             changeTrailOrigin: function (value) {
+                this.trailInfo.resource = ''
+                this.email = ''
+                this.trailOriginPerson = ''
                 this.changeInfo.resource_type = value
                 this.trailOrigin = value
             },

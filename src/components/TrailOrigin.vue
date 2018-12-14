@@ -24,12 +24,12 @@
         </div>
         <div v-if="!isEditSituation && trailOriginArr[0] && contentType && !(trailOrigin === '4' || trailOrigin === '5')"
              class="col-md-10 float-left font-weight-bold expfee">
-            <span>{{trailOriginArr.find(item=>item.value == contentType).name}}</span>
+            <span>{{typeFinder}}</span>
             <span v-if="content"> - {{content.value || content}}</span>
         </div>
-        <div v-if="!isEditSituation && members[0] && content && (trailOrigin === '4' || trailOrigin === '5')"
+        <div v-if="!isEditSituation && (trailOrigin === '4' || trailOrigin === '5')"
              class="col-md-10 float-left font-weight-bold expfee">
-            <span>{{trailOriginArr.find(item=>item.value == contentType).name}} - {{memberFinder}}</span>
+            <span>{{typeFinder}} - {{memberFinder}}</span>
         </div>
     </div>
 </template>
@@ -55,11 +55,18 @@
             this.getMembers()
         },
         computed:{
-            memberFinder(){
-                if(this.members){
-                   return this.members.find(item=>item.id == this.content).name || '-'
+            typeFinder(){
+                if(this.contentType && this.trailOriginArr){
+                   return this.trailOriginArr.find(item=>item.value == contentType).name
                 }else{
-                    return '-'
+                    return ''
+                }
+            },
+            memberFinder(){
+                if(this.members && this.content){
+                   return this.members.find(item=>item.id == this.content).name
+                }else{
+                    return ''
                 }
             }
         },
@@ -107,12 +114,13 @@
                 let _this = this
                 fetch('get', '/users').then((params) => {
                     let {data = '-'} = params
-                    console.log(data);
                     _this.members = params.data
                 })
             },
             //
             changeTrailOriginType: function (value) {
+                this.trailOriginPerson = ''
+                this.email = ''
                 this.trailOrigin = value
             },
             //
