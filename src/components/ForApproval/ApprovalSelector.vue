@@ -1,22 +1,29 @@
 <template>
-    <select class="selectpicker show-tick" data-plugin="selectpicker" :value="value" :data-live-search="isSelectable"
+    <div class="approval-text-container col-md-12">
+        <span class="col-md-2 text-right">{{title || '测试文本下拉框'}}</span>
+        <select class="selectpicker col-md-10" data-plugin="selectpicker" :value="value" :data-live-search="isSelectable"
             :data-show-subtext="isSelectable"
             :multiple="multiple" :title="placeholder" v-model="valueListener">
-        <selectorsOptions v-for="option in options" v-bind:id="option.id" :val="option.value || option.id"
+            <option value="">ceshi 111</option>
+            <option value="">ceshi 222</option>
+        <selectorsOptions v-for="option in options" :id="option.id" :val="option.value || option.id"
                           :key="option.id">
             {{option.name || option.title}}
             <!-- 增强组件扩展性和数据通用性 -->
         </selectorsOptions>
     </select>
 
+    </div>
 </template>
+
 <script>
-    export default {
-        // 凡是多选，都有搜索框；不是多选传入selectable为true也可以有搜索框
+export default {
+     // 凡是多选，都有搜索框；不是多选传入selectable为true也可以有搜索框
         // changeKey为父组件的data，且可以被改变
         props: ['options', 'disable', 'multiple', 'placeholder', 'changeKey', 'value', 'resetinfo', 'selectable'],
         data() {
             return {
+                title:'',
                 isDisable: this.disable,
                 valueListener: [],
             }
@@ -99,9 +106,7 @@
 </script>
 
 <style>
-    .btn-default {
-        background: white;
-    }
+.col-md-10{
+    padding: 0;
+}
 </style>
-
-

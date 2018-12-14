@@ -375,11 +375,6 @@
   .pearl-icon {
     font-size: 12px;
   }
-
-  .modal-body {
-    padding: 0;
-  } */
-
   .addMember {
     padding-left: 20px;
   }
