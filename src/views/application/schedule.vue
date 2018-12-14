@@ -61,7 +61,7 @@
         },
 
         mounted() {
-            this.getStars();
+           
             let _this = this;
             $('#addCalendar').on('hidden.bs.modal', function () {
                 _this.$store.dispatch('changeParticipantsInfo', {data: []});
@@ -73,23 +73,7 @@
 
         methods: {
 
-            getClients: function () {
-                fetch('get', '/clients').then(function (response) {
-                    console.log(response)
-                })
-            },
-
-            getStars: function () {
-                let _this = this;
-                fetch('get', '/stars/all').then(function (response) {
-                    for (let i = 0; i < response.data.length; i++) {
-                        _this.starsArr.push({
-                            value: response.data[i].id,
-                            name: response.data[i].name
-                        })
-                    }
-                })
-            },
+           
 
             addSchedule: function () {
 

@@ -2,9 +2,14 @@ export default {
     changeParticipantsInfo: function (data, params) {
         if (params.type === 'change') {
             data.commit('changeParticipantsInfo', params.data);
-        } else {
+        }
+        else if(params.type === 'role'){
+            data.commit('changeRole',params.data)
+        } 
+        else {
             data.commit('changeNewParticipantsInfo', params.data);
         }
+        
     },
 
     changePrincipal: function (data, params) {

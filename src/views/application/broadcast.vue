@@ -28,8 +28,7 @@
                             </td>
                             <td>{{classifyArr.find(classifyArr => classifyArr.value == item.classify).name}}</td>
                             <td>
-                                <span>{{item.created_at}}</span>
-                                <i class="icon md-time ml-10" aria-hidden="true"></i>
+                                <span>{{item.created_at}}</span> 
                             </td>
                             <td v-if="memberList[0]">
                                 {{memberList.find(memberList => memberList.id == item.creator.data.id).name}}

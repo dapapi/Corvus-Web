@@ -246,9 +246,6 @@ export default {
   margin-left: -15px;
   background: #fff;
 }
-.page-content{
-  padding: 0 20px; 
-}
 .panel{
     box-shadow: 0 0 0 0;
 }
