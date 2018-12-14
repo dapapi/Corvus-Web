@@ -1,6 +1,8 @@
 <template>
      <div class="page-content container-fluid">
+      
       <div class="col-md-12 col-lg-12 row">
+        
         <div class="rounded-circle img-thumbnail messages-img" 
         :style="{ backgroundImage: 'url('+pageData.cover+')'}"></div>
         <div class="">
