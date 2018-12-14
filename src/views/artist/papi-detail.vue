@@ -814,7 +814,7 @@
                 };
                 fetch('get', '/bloggers/' + this.artistId, data).then(function (response) {
                     _this.artistInfo = response.data;
-                    
+                    console.log(_this.artistInfo)
                    
                     if(_this.artistInfo.intention==false){
                         _this.updateType=2
