@@ -132,7 +132,7 @@
                         <li class="nav-item" role="presentation" @click="getTrailTask">
                             <a class="nav-link" data-toggle="tab" href="#forum-trail-tasks"
                                aria-controls="forum-present"
-                               aria-expanded="false" role="tab">任务</a>
+                               aria-expanded="false" role="tab">任务(5/12)</a>
                         </li>
                     </ul>
                     <div class="tab-content nav-tabs-animate bg-white col-md-12 row">

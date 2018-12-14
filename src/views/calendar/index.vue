@@ -18,7 +18,8 @@
                     <div class="calendar-list">
                         <div>
                             <div class="calendar-title position-relative" style="line-height: 20px">
-                                <i class="icon md-calendar pr-5"></i>所有日历
+                                <i class="icon md-calendar pr-5"></i>
+                                <span @click="displayMeetingRoom">所有日历</span>
                                 <span class="px-5 pointer-content" @click="allCalendarShow">
                                     <template v-if="showAllCalendar">
                                         <i class="icon md-chevron-down"></i>
@@ -88,8 +89,10 @@
                     </div>
                 </div>
                 <div class="float-left p-0" style="width: 80%;border-left: 1px solid #D8D8D8;">
-                    <calendar :gotoDate="selectedDate" v-show="!meetingRomeShow"></calendar>
-                    <MeetingRoomCalendar v-show="meetingRomeShow" @change="displayMeetingRoom"></MeetingRoomCalendar>
+                    <calendar :gotoDate="selectedDate" v-show="!meetingRomeShow"
+                              :calendars="selectedCalendar" @scheduleClick="showSchedule"></calendar>
+                    <MeetingRoomCalendar v-show="meetingRomeShow" ref="meetingRoom"
+                                         @change="displayMeetingRoom"></MeetingRoomCalendar>
                 </div>
 
             </div>
@@ -117,7 +120,8 @@
                         <div class="example">
                             <div class="col-md-2 text-right float-left">日历</div>
                             <div class="col-md-10 float-left pl-0">
-                                <selectors :placeholder="'请选择日历'"></selectors>
+                                <selectors :options="calendarList" :placeholder="'请选择日历'"
+                                           @change="selectScheduleCalendar"></selectors>
                             </div>
                         </div>
                         <div class="example">
@@ -179,7 +183,8 @@
                             <div class="example">
                                 <div class="col-md-2 text-right float-left">重复</div>
                                 <div class="col-md-10 float-left pl-0">
-                                    <selectors :options="repeatArr" :placeholder="''"></selectors>
+                                    <selectors :options="repeatArr" :placeholder="''"
+                                               @change="changeScheduleRepeat"></selectors>
                                 </div>
                             </div>
                             <div class="example">
@@ -208,16 +213,21 @@
             </div>
         </div>
 
-        <!-- 修改日程 -->
+        <!-- 查看日程 -->
         <div class="modal fade" id="changeSchedule" aria-hidden="true" aria-labelledby="addLabelForm"
              role="dialog" tabindex="-1">
             <div class="modal-dialog modal-simple">
-                <div class="modal-content">
-                    <div class="modal-header">
-                        <button type="button" class="close" aria-hidden="true" data-dismiss="modal">
-                            <i class="md-close" aria-hidden="true"></i>
-                        </button>
-                        <h4 class="modal-title">修改日程</h4>
+                <div class="modal-content" v-if="scheduleData">
+                    <div class="" style="padding: 15px 20px;border-bottom: 1px solid #eee">
+                        <div class="float-right">
+                            <i class="md-delete pr-4 font-size-16" aria-hidden="true"></i>
+                            <i class="md-file pr-4 font-size-16" aria-hidden="true"></i>
+                            <i class="md-edit pr-4 font-size-16" aria-hidden="true"></i>
+                            <button type="button" class="close" aria-hidden="true">
+                                <i class="md-close" aria-hidden="true" data-dismiss="modal"></i>
+                            </button>
+                        </div>
+                        <h4 class="modal-title float-left">{{ scheduleData.calendar.data.title }}</h4>
                     </div>
                     <div class="modal-body">
                         <div class="example">
@@ -481,6 +491,11 @@
                 calendarVisible: 1,
                 calendarDetailInfo: '',
                 calendarActionType: '',
+                scheduleCalendar: '',
+                isScheduleAllday: 0,
+                privacy: '',
+                scheduleRepeat: 1,
+                scheduleData: '',
             }
         },
 
@@ -502,9 +517,26 @@
                 _this.$store.dispatch('changeParticipantsInfo', {data: []});
             });
             this.globalClick(this.removeSelector);
+            this.initCalendar();
+        },
+
+        watch: {
+            selectedCalendar(newValue) {
+                Cookies.set('selectedCalendar', newValue.join(','))
+            }
         },
 
         methods: {
+            initCalendar: function () {
+                let data = Cookies.get('selectedCalendar');
+                if (Cookies.get('selectedCalendar')) {
+                    data = data.split(',');
+                    for (let i = 0; i < data.length; i++) {
+                        data[i] = parseInt(data[i]);
+                    }
+                    this.selectedCalendar = data;
+                }
+            },
 
             getClients: function () {
                 fetch('get', '/clients').then(function (response) {
@@ -537,18 +569,21 @@
 
             getCalendarList: function () {
                 fetch('get', '/calendars/all').then(response => {
-                    this.calendarList = response.data
+                    for (let i = 0; i < response.data.length; i++) {
+                        response.data[i].name = response.data[i].title;
+                        response.data[i].value = response.data[i].id;
+                        this.calendarList.push(response.data[i])
+                    }
                 })
             },
 
             getCalendarDetail: function (calendarId) {
                 this.calendarActionType = 'change';
-                this.calendarId = calendarId
+                this.calendarId = calendarId;
                 let data = {
                     include: 'starable,participants',
                 };
                 fetch('get', '/calendars/' + calendarId, data).then(response => {
-                    console.log(response)
                     this.scheduleName = response.data.title;
                     this.checkColor = response.data.color;
                     this.calendarVisible = response.data.privacy;
@@ -562,8 +597,21 @@
                 })
             },
 
+            showSchedule: function (data) {
+                this.scheduleData = data;
+                $('#changeSchedule').modal('show')
+            },
+
+            selectScheduleCalendar: function (value) {
+                this.scheduleCalendar = value
+            },
+
             changeCalendarActionType: function (value) {
                 this.calendarActionType = value
+            },
+
+            changeScheduleRepeat: function (value) {
+                this.scheduleRepeat = value;
             },
 
             removeSelector: function (event) {
@@ -576,7 +624,22 @@
             },
 
             addSchedule: function () {
-
+                let data = {
+                    title: this.scheduleName,
+                    calendar_id: this.scheduleCalendar,
+                    is_allday: this.isScheduleAllday,
+                    privacy: this.privacy,
+                    start_at: this.startTime + ' ' + this.startMinutes,
+                    end_at: this.endTime + ' ' + this.endMinutes,
+                    position: this.eventPlace,
+                    repeat: this.scheduleRepeat,
+                    desc: this.eventDesc,
+                };
+                fetch('post', '/schedules', data).then(response => {
+                    console.log(response);
+                    $('#addSchedule').modal('hide');
+                    toastr.success('添加成功')
+                })
             },
 
             addCalendarVisible: function (value) {
@@ -603,12 +666,12 @@
                 this.endMinutes = value
             },
 
-            changeIsAllDay: function (value) {
-                console.log(value)
+            changeIsAllDay: function (e) {
+                this.isScheduleAllday = Number(e.target.checked);
             },
 
-            changeParticipantVisible: function (value) {
-                console.log(value)
+            changeParticipantVisible: function (e) {
+                this.privacy = Number(e.target.checked);
             },
 
             isShowMore: function () {
@@ -670,7 +733,8 @@
             },
 
             selectDate: function (value) {
-                this.selectedDate = value
+                this.selectedDate = value;
+                this.$refs.meetingRoom.setDate(value)
             },
 
             checkCalendar: function (value) {
@@ -711,7 +775,7 @@
                 this.meetingRomeShow = true
             },
 
-            displayMeetingRoom: function (value) {
+            displayMeetingRoom: function () {
                 this.meetingRomeShow = false
             },
 

@@ -395,6 +395,10 @@
                 this.$emit('change', value)
             },
 
+            setDate(value) {
+                this.numberDate = value;
+            },
+
             getResources() {
                 fetch('get', '/materials/all').then(response => {
                     this.meetingRomeList = response.data

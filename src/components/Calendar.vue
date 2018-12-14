@@ -5,45 +5,42 @@
 </template>
 
 <script>
+    import fetch from '../assets/utils/fetch.js'
+
     export default {
-        props:{
-            gotoDate:{
-                type:String,
-            },
-            defaultView:{
-                type:String,
-                default:'agendaWeek'
-            }
-        },
+        props: ['calendars', 'gotoDate'],
         data() {
             return {
-                startTime:'', //获取开始时间
-                endTime:'',  //获取结束时间
-
+                startDate: '', //获取开始时间
+                endDate: '',  //获取结束时间
+                allScheduleInfo: '',
             }
         },
         watch: {
             gotoDate: function (newValue) {
                 $(this.$el).fullCalendar('gotoDate', newValue)
             },
-            startTime:function(){
-                alert(444)
-                this.$emit('changeTime',this.startTime,this.startTime)
+            startDate: function () {
+                this.$emit('changeTime', this.startDate, this.startDate)
             },
-            endTime:function(){
-                alert(444)
-                this.$emit('changeTime',this.startTime,this.endTime)
-            }
+            endDate: function () {
+                this.$emit('changeTime', this.startDate, this.endDate)
+            },
+            calendars: function (newValue) {
+                // console.log(newValue);
+                // $(this.$el).fullCalendar('refetchEvents')
+            },
         },
         mounted() {
-            
+            let self = this;
+
             $(this.$el).fullCalendar({
                 header: {
                     right: 'prev,next today',
                     center: 'title',
-                    left: 'month,agendaWeek,agendaDay' 
+                    left: 'month,agendaWeek,agendaDay'
                 },
-                defaultView: this.defaultView, //设置默认显示月，周，日
+                defaultView: 'month', //设置默认显示月，周，日
                 navLinks: true,
                 editable: true,
                 eventLimit: true,
@@ -70,109 +67,40 @@
                         titleFormat: 'YYYY年 MM月 DD日'
                     }
                 },
-                events:function(start,end){
-                   this.startTime = start._d
-                   this.endTime = start._d
-                   this.startTime = `${start._d.getFullYear()}-${start._d.getMonth()+1}-${start._d.getDate()}`
-                   this.endTime = `${end._d.getFullYear()}-${end._d.getMonth()+1}-${end._d.getDate()}`
-                    
+                events: function (start, end, timezone, callback) {
+                    this.startTime = start._d;
+                    this.endTime = start._d;
+                    self.startDate = `${start._d.getFullYear()}-${start._d.getMonth() + 1}-${start._d.getDate()}`;
+                    self.endDate = `${end._d.getFullYear()}-${end._d.getMonth() + 1}-${end._d.getDate()}`;
+                    let data = {
+                        calendar_ids: self.calendars,
+                        start_date: self.startDate,
+                        end_date: self.endDate,
+                        include: 'calendar'
+                    };
+                    fetch('get', '/schedules', data).then(response => {
+                        self.allScheduleInfo = response.data;
+                        let events = [];
+                        for (let i = 0; i < response.data.length; i++) {
+                            events.push({
+                                title: response.data[i].title,
+                                start: response.data[i].start_at,
+                                end: response.data[i].end_at,
+                                color: response.data[i].calendar.data.color,
+                                allDay: response.data[i].is_allday,
+                                id: response.data[i].id,
+                            })
+                        }
+                        callback(events)
+                    })
 
                 },
-                // events: [
-                //     {
-                //         title: 'All Day Event',
-                //         start: '2018-10-01',
-                //     },
-                //     {
-                //         title: 'Long Event',
-                //         start: '2018-10-07',
-                //         end: '2018-10-10',
-                //         color: 'white',
-                //         backgroundColor: 'red',
-                //         textColor: 'white'
-
-                //     },
-                //     {
-                //         id: 999,
-                //         title: 'Repeating Event',
-                //         start: '2018-11-19T16:00:00'
-                //     },
-                //     {
-                //         title: 'Repeating Event',
-                //         start: '2018-11-19T15:00:00'
-                //     },
-                //     {
-                //         title: 'Repeating Event',
-                //         start: '2018-11-19T14:00:00'
-                //     },
-                //     {
-                //         title: 'Repeating Event',
-                //         start: '2018-11-19T13:00:00'
-                //     },
-                //     {
-                //         title: 'Repeating Event',
-                //         start: '2018-11-19T12:00:00'
-                //     },
-                //     {
-                //         title: 'Repeating Event',
-                //         start: '2018-11-19T11:00:00'
-                //     },
-                //     {
-                //         title: 'Repeating Event',
-                //         start: '2018-11-19T10:00:00'
-                //     },
-                //     {
-                //         id: 999,
-                //         title: 'Repeating Event',
-                //         start: '2018-10-16T16:00:00'
-                //     },
-                //     {
-                //         title: 'Conference',
-                //         start: '2018-10-11',
-                //         end: '2018-10-13'
-                //     },
-                //     {
-                //         title: 'Meeting',
-                //         start: '2018-03-12T10:30:00',
-                //         end: '2018-03-12T12:30:00'
-                //     },
-                //     {
-                //         title: 'Lunch',
-                //         start: '2018-03-12T12:00:00'
-                //     },
-                //     {
-                //         title: 'Meeting',
-                //         start: '2018-03-12T14:30:00'
-                //     },
-                //     {
-                //         title: 'Happy Hour',
-                //         start: '2018-03-12T17:30:00'
-                //     },
-                //     {
-                //         title: 'Dinner',
-                //         start: '2018-03-12T20:00:00'
-                //     },
-                //     {
-                //         title: 'Birthday Party',
-                //         start: '2018-03-13T07:00:00'
-                //     },
-                //     {
-                //         title: 'Click for Google',
-                //         url: 'http://google.com/',
-                //         start: '2018-03-28'
-                //     }
-                // ],
                 dayClick: function (date, allDay, jsEvent) {
-                    console.log(date)
-                    console.log(allDay)
-                    console.log(jsEvent)
                     $('#addSchedule').modal('show')
                 },
                 eventClick: function (event, jsEvent, view) {
-                    console.log(event)
-                    console.log(jsEvent)
-                    console.log(view)
-                    $('#changeSchedule').modal('show')
+                    let data = self.allScheduleInfo.find(item => item.id === event.id);
+                    self.$emit('scheduleClick', data)
                 },
             });
 
@@ -182,7 +110,6 @@
 </script>
 
 <style>
-
 
 
 </style>
