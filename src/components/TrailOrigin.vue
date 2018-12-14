@@ -15,8 +15,8 @@
                     </div>
                 </template>
                 <template v-else-if="(trailOrigin === '4' || trailOrigin === '5') && members[0]">
-                    <div class="col-md-5 float-left pr-0">
-                        <input-selectors @change="changeTrailOrigin" :placeholder='members.find(item=>item.id == content).name'
+                    <div class="col-md-5 float-left pr-0"> 
+                        <input-selectors @change="changeTrailOrigin" :placeholder='memberFinder'
                                          :propSelectMemberName='trailOriginPerson.name'></input-selectors>
                     </div>
                 </template>
@@ -24,12 +24,12 @@
         </div>
         <div v-if="!isEditSituation && trailOriginArr[0] && contentType && !(trailOrigin === '4' || trailOrigin === '5')"
              class="col-md-10 float-left font-weight-bold expfee">
-            <span>{{trailOriginArr.find(item=>item.value == contentType).name}}</span>
+            <span>{{typeFinder}}</span>
             <span v-if="content"> - {{content.value || content}}</span>
         </div>
-        <div v-if="!isEditSituation && members[0] && content && (trailOrigin === '4' || trailOrigin === '5')"
+        <div v-if="!isEditSituation && (trailOrigin === '4' || trailOrigin === '5')"
              class="col-md-10 float-left font-weight-bold expfee">
-            <span>{{trailOriginArr.find(item=>item.value == contentType).name}} - {{members.find(item=>item.id == content).name}}</span>
+            <span>{{typeFinder}} - {{memberFinder}}</span>
         </div>
     </div>
 </template>
@@ -53,6 +53,22 @@
         },
         created() {
             this.getMembers()
+        },
+        computed:{
+            typeFinder(){
+                if(this.contentType && this.trailOriginArr){
+                   return this.trailOriginArr.find(item=>item.value == contentType).name
+                }else{
+                    return ''
+                }
+            },
+            memberFinder(){
+                if(this.members && this.content){
+                   return this.members.find(item=>item.id == this.content).name
+                }else{
+                    return ''
+                }
+            }
         },
         watch: {
             //监听获取当前类型
@@ -97,11 +113,14 @@
             getMembers() {
                 let _this = this
                 fetch('get', '/users').then((params) => {
+                    let {data = '-'} = params
                     _this.members = params.data
                 })
             },
             //
             changeTrailOriginType: function (value) {
+                this.trailOriginPerson = ''
+                this.email = ''
                 this.trailOrigin = value
             },
             //

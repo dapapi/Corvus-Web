@@ -375,7 +375,7 @@
                                 </div>
                             </div>
                         </div>
-                        <div class="tab-pane animation-fade pb-20 fixed-button-father col-md-8" id="forum-trail-tasks"
+                        <div class="tab-pane animation-fade pb-20 fixed-button-father col-md-12" id="forum-trail-tasks"
                              role="tabpanel">
                             <table class="table table-hover is-indent example" data-plugin="animateList"
                                    data-animate="fade"
@@ -843,6 +843,9 @@
                 })
             },
             changeTrailOrigin: function (value) {
+                this.trailInfo.resource = ''
+                this.email = ''
+                this.trailOriginPerson = ''
                 this.changeInfo.resource_type = value
                 this.trailOrigin = value
             },
