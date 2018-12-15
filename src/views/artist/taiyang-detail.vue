@@ -828,6 +828,7 @@
                 fetch('get', '/stars/' + this.artistId, data).then(function (response) {
                     let doneTaskNum = 0
                     _this.artistInfo = response.data;
+                   
                     _this.artistTasksInfo = response.data.tasks.data
                     if(_this.artistTasksInfo.length>0){
                         for (let i = 0; i < _this.artistTasksInfo.length; i++) {

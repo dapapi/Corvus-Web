@@ -373,6 +373,7 @@
             this.getUser();
             this.getBlogType() //获取博主类型
             $('table').asSelectable();
+              console.log($('table'))
              let _this = this;
              $('#addArtist').on('hidden.bs.modal',function() {
                  
