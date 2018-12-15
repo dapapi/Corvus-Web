@@ -26,7 +26,7 @@
                                 <i class="md-plus pr-2" aria-hidden="true"></i>类型
                             </div>
                             <div class="font-weight-bold float-left" v-if="clientInfo.type">
-                                {{ clientTypeArr.find(item => item.value == clientInfo.type).name }}
+                                {{ clientTypeArr.filter(item => item.value == clientInfo.type).name }}
                             </div>
                         </div>
                     </div>
@@ -36,10 +36,10 @@
                                 <!-- {{newArray(clientTasksInfo).length}}/{{clientTasksInfo.length}} -->
                             </div>
                             <div class="clearfix example" v-for="(task, index) in newArray(clientTasksInfo)" :key="index">
-                                <div class="col-md-3 float-left">{{ task.title }}</div>
+                                <div class="col-md-3 float-left"><router-link :to="`/tasks/${task.id}`">{{ task.title }}</router-link></div>
                                 <div class="col-md-3 float-left">{{ task.principal?task.principal.data.name:'' }}</div>
-                                <div class="col-md-3 float-left">{{ task.end_at }}</div>
-                                <div class="col-md-3 float-left">
+                                <div class="col-md-4 float-left">{{ task.end_at }}</div>
+                                <div class="col-md-2 float-left">
                                     <template v-if="task.status === 1">进行中</template>
                                     <template v-if="task.status === 2">已完成</template>
                                     <template v-if="task.status === 3">已停止</template>
@@ -49,10 +49,10 @@
                         <div class="col-md-6 float-left pl-0 mb-20" v-if="clientProjectsInfo.length > 0">
                             <div class="col-md-6">项目</div>
                             <div class="clearfix example" v-for="(project, index) in newArray(clientProjectsInfo)" :key="index">
-                                <div class="col-md-3 float-left">{{project.title}}</div>
+                                <div class="col-md-3 float-left"><router-link :to="`/projects/${project.id}`">{{project.title}}</router-link></div>
                                 <div class="col-md-3 float-left">{{ clientTypeArr.find(item => item.value == project.type).name }}</div>
-                                <div class="col-md-3 float-left">{{ project.created_at }}</div>
-                                <div class="col-md-3 float-left">
+                                <div class="col-md-4 float-left">{{ project.created_at }}</div>
+                                <div class="col-md-2 float-left">
                                     <template v-if="project.status === 1">进行中</template>
                                     <template v-if="project.status === 2">完成</template>
                                     <template v-if="project.status === 3">终止</template>
@@ -81,8 +81,17 @@
                         </li>
                         <li class="nav-item" role="presentation" @click="getClientTask">
                             <a class="nav-link" data-toggle="tab" href="#forum-task"
-                               aria-controls="forum-present"
-                               aria-expanded="false" role="tab">任务</a>
+                                aria-controls="forum-present"
+                                aria-expanded="false" role="tab">
+                                <template v-if="clientTasksInfo.length > 0">
+                                    <ToolTips :title="`已完成数量${completeNum}`">
+                                        任务 ({{completeNum}}/{{clientTasksInfo.length}})
+                                    </ToolTips>
+                                </template>
+                                <template v-else>
+                                    任务
+                                </template>
+                            </a>
                         </li>
                         <li class="nav-item" role="presentation">
                             <a class="nav-link" data-toggle="tab" href="#forum-base"
@@ -584,8 +593,14 @@
                 _this.getClient();
                 _this.getClientTrail();
                 _this.getClientProject()
+                _this.getClientTask()
             }, 100);
             this.getTaskType()
+        },
+        computed: {
+            completeNum () {
+                return this.clientTasksInfo.filter( n => n.status === 2).length
+            }
         },
 
         watch: {
@@ -862,7 +877,6 @@
                 this.changeInfo.principal_id = value
             },
             changeEditStatus(value, config) {
-                // console.log(config.type)
                 this.$refs.contact.setValue(config.type)
                 this.editConfig = config || {
                     position: '',

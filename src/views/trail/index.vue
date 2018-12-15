@@ -34,10 +34,11 @@
                         ></selectors>
                     </div>
                     <div class="col-md-3 example float-left">
-                        <selectors placeholder="请选择负责人"
+                        <selectors placeholder="请选择负责人" ref='principal_id'
                                    :options="memberList" multiple='true'
                                    @valuelistener="principalFilter"
                         ></selectors>
+                        <span v-if="fetchData.principal_ids" class="clear-principal-filter" @click="clearPrincipalFilter">&nbsp;&nbsp;x</span>
                     </div>
                     <div class="col-md-3 example float-left">
                         <button type="button" class="btn btn-default waves-effect waves-classic float-right"
@@ -100,15 +101,6 @@
 
 
         <customize-filter :data="customizeInfo" :stararr='starsArr' @change="customize" :cleanup="cleanUp" @cleanupdone='cleanUp=false'></customize-filter>
-
-        <!--<div class="site-action" data-plugin="actionBtn" data-toggle="modal" data-target="#addTrail">-->
-        <!--<button type="button"-->
-        <!--class="site-action-toggle btn-raised btn btn-success btn-floating waves-effect waves-classic">-->
-        <!--<i class="front-icon md-plus animation-scale-up" aria-hidden="true"></i>-->
-        <!--<i class="back-icon md-plus animation-scale-up" aria-hidden="true"></i>-->
-        <!--</button>-->
-        <!--</div>-->
-
         <AddClientType @change="changeTrailType"></AddClientType>
 
         <div class="modal fade" id="addTrail" aria-hidden="true" aria-labelledby="addLabelForm"
@@ -181,14 +173,14 @@
                         <div class="example">
                             <div class="col-md-2 text-right float-left">目标艺人</div>
                             <div class="col-md-10 float-left pl-0" v-if="starsArr.length > 0">
-                                <selectors :options="starsArr" @change="changeTargetStars" :multiple="true"
+                                <selectors :options="starsArr" @valuelistener="changeTargetStars" :multiple="true"
                                            :placeholder="'请选择目标艺人'"></selectors>
                             </div>
                         </div>
                         <div class="example">
                             <div class="col-md-2 text-right float-left">推荐艺人</div>
                             <div class="col-md-10 float-left pl-0" v-if="starsArr.length > 0">
-                                <selectors :options="starsArr" @change="changeRecommendStars" :multiple="true"
+                                <selectors :options="starsArr" @valuelistener="changeRecommendStars" :multiple="true"
                                            :placeholder="'请选择推荐艺人'"></selectors>
                             </div>
                         </div>
@@ -451,6 +443,9 @@
                 fetch(methods, url, this.fetchData).then((response) => {
                     _this.trailsInfo = response.data
                     _this.total = response.meta.pagination.total;
+                    _this.current_page = response.meta.pagination.current_page;
+                    _this.total_pages = response.meta.pagination.total_pages;
+                    _this.isLoading = false;
                 })
             },
             filterGo() {
@@ -634,6 +629,7 @@
             },
 
             changeTargetStars: function (value) {
+                console.log(123);
                 this.targetStars = value
             },
 
@@ -669,7 +665,11 @@
             changeCooperationType: function (value) {
                 this.cooperation = value
             },
-
+            clearPrincipalFilter:function(){
+                this.fetchData.principal_ids = ''
+                this.fetchHandler('get', '/trails/filter')
+                this.$refs.principal_id.setValue('')
+            }
 
         }
     }
@@ -683,6 +683,9 @@
     .error {
         border: 1px solid red;
         border-radius: 5px;
+    }
+    .clear-principal-filter{
+        cursor: pointer;
     }
 </style>
 

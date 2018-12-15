@@ -185,7 +185,7 @@
                             </div>
                         </div>
                         <div class="modal-footer">
-                            <button class="btn btn-sm btn-white btn-pure" data-dismiss="modal">取消</button>
+                            <button class="btn btn-sm btn-white btn-pure" @click="cancelClient" data-dismiss="modal">取消</button>
                             <button class="btn btn-primary" type="submit" @click="addClient">确定</button>
                         </div>
 
@@ -239,11 +239,8 @@
             this.getClients();
             this.getCompanies();
             this.user = JSON.parse(Cookies.get('user'))
-            // 负责人默认值的设置
-            this.$store.commit('changeNewPrincipal', {
-                name: this.user.nickname,
-                id: this.user.id
-            })
+            // 清除负责人默认值的设置
+            this.clearDefaultPrincipal()
         },
 
         methods: {
@@ -292,6 +289,7 @@
             },
 
             addClient: function () {
+               
                 if (this.clientContactPhone.length !== 11) {
                     toastr.error('手机号码格式不对！');
                     return
@@ -382,6 +380,7 @@
                 this.clientPrincipalSearch = value
                 this.clientPrincipalIdSearch = this.$store.state.newPrincipalInfo.id
                 this.getClients()
+                console.log(value.id)
             },
 
             changeClientLevelSelect(value) {
@@ -402,12 +401,29 @@
             },
             // show add
             showAddModal (val) {
+                this.setDefaultPrincipal()
+                console.log(this.user)
                 $('#addClient').modal()
                 this.clientType = val
             },
             // 关键决策人
             changeContactClientType (val) {
                 this.clientContactType = val
+            },
+            // 设置默认负责人
+            setDefaultPrincipal () {
+                this.$store.commit('changeNewPrincipal', {
+                    name: this.user.nickname,
+                    id: this.user.id
+                })
+            },
+            // 清空默认负责人
+            clearDefaultPrincipal () {
+                this.$store.commit('changeNewPrincipal', {name: '', id: ''})
+            },
+            // 关闭弹窗
+            cancelClient () {
+                this.clearDefaultPrincipal()
             }
         }
     }

@@ -60,39 +60,25 @@
                 </div>
                 <div class="clearfix">
                     <div class="col-md-6 float-left pl-0 mb-20" style="border-right: 1px solid #eee">
-                        <div class="col-md-6">任务 5/12</div>
-                        <div class="clearfix example">
-                            <div class="col-md-3 float-left">电话会议</div>
-                            <div class="col-md-3 float-left">张佳佳</div>
-                            <div class="col-md-3 float-left">2018-12-03 11:10</div>
-                            <div class="col-md-3 float-left">进行中</div>
-                        </div>
-                        <div class="clearfix example">
-                            <div class="col-md-3 float-left">电话会议</div>
-                            <div class="col-md-3 float-left">张佳佳</div>
-                            <div class="col-md-3 float-left">2018-12-03 11:10</div>
-                            <div class="col-md-3 float-left">进行中</div>
-                        </div>
-                        <div class="clearfix example">
-                            <div class="col-md-3 float-left">电话会议</div>
-                            <div class="col-md-3 float-left">张佳佳</div>
-                            <div class="col-md-3 float-left">2018-12-03 11:10</div>
-                            <div class="col-md-3 float-left">进行中</div>
+                        <div class="col-md-6">任务 {{taskNum}}</div>
+                        <div class="clearfix example" v-for="(item,index) in artistTasksInfo" :key="index">
+                            <div class="col-md-3 float-left">{{item.title}}</div>
+                            <div class="col-md-3 float-left">{{item.principal.data.name}}</div>
+                            <div class="col-md-3 float-left">{{item.end_at}}</div>
+                            <div class="col-md-3 float-left">
+                                <template v-if="item.status === 1">进行中</template>
+                                <template v-if="item.status === 2">已完成</template>
+                                <template v-if="item.status === 3">已停止</template>
+                            </div>
                         </div>
                     </div>
                     <div class="col-md-6 float-left pl-0 mb-20">
                         <div class="col-md-6">项目</div>
-                        <div class="clearfix example">
-                            <div class="col-md-3 float-left">Ugg代言</div>
-                            <div class="col-md-3 float-left">商务项目</div>
-                            <div class="col-md-3 float-left">2018-12-03 11:10</div>
-                            <div class="col-md-3 float-left">进行中</div>
-                        </div>
-                        <div class="clearfix example">
-                            <div class="col-md-3 float-left">星巴克代言</div>
-                            <div class="col-md-3 float-left">商务项目</div>
-                            <div class="col-md-3 float-left">2018-12-03 11:10</div>
-                            <div class="col-md-3 float-left">进行中</div>
+                        <div class="clearfix example" v-for="(item,index) in artistProjectsInfo" :key="index">
+                            <div class="col-md-3 float-left">{{item.title}}</div>
+                            <div class="col-md-3 float-left">{{item.principal.data.name}}</div>
+                            <div class="col-md-3 float-left">{{item.end_at}}</div>
+                            <div class="col-md-3 float-left">{{item.status}}</div>
                         </div>
                     </div>
 
@@ -188,7 +174,7 @@
                                     <th class="cell-300" scope="col">负责人</th>
                                     <th class="cell-300" scope="col">截止时间</th>
                                 </tr>
-                                <tr v-for="task in artistTasksInfo">
+                                <tr v-for="(task,index) in artistTasksInfo" :key="index">
                                     <td>
                                         <router-link :to="{path:`/tasks/${task.id}`}">{{task.title}}</router-link>
                                     </td>
@@ -204,7 +190,7 @@
                                     <td>{{ task.principal.data.name }}</td>
                                     <td>{{ task.end_at }}</td>
                                 </tr>
-                                </tbody>
+                            
                             </table>
                             <div class="col-md-1" style="margin: 6rem auto" v-if="artistTasksInfo.length === 0">
                                 <img src="https://res.papitube.com/corvus/images/content-none.png" alt=""
@@ -469,7 +455,7 @@
                                                 <span v-show="isEdit" style="color:#01BCD4;cursor:pointer">上传附件</span>
                                                 <FileUploader v-show="isEdit" class="upload"  @change="uploadAttachment"></FileUploader>
                                                 <div class="mt-5" v-for="(attach,index) in affixes" :key="index">
-                                                    <span class="mr-10">{{attachmentTypeArr.find(item => item.value == attach.type).name}} - {{attach.title}}</span>
+                                                    <span class="mr-20">{{attachmentTypeArr.find(item => item.value == attach.type).name}} - {{attach.title}}</span>
                                                     <i class="icon md-delete mr-10" data-toggle="modal" data-target="#affix" @click="getAffixId(attach.id)"></i>
                                                     <a :href="attach.url" class="icon md-download"></a>
                                                 </div>
@@ -815,6 +801,7 @@
                 affixes:[], //附件
                 affixesType:'',//附件类型
                 affixId:'',
+                taskNum:''
             }
         },
 
@@ -839,8 +826,18 @@
                 };
                 let _this = this;
                 fetch('get', '/stars/' + this.artistId, data).then(function (response) {
+                    let doneTaskNum = 0
                     _this.artistInfo = response.data;
                     _this.artistTasksInfo = response.data.tasks.data
+                    if(_this.artistTasksInfo.length>0){
+                        for (let i = 0; i < _this.artistTasksInfo.length; i++) {
+                            if(_this.artistTasksInfo[i].status ==2){
+                                doneTaskNum = doneTaskNum+1
+                            }
+                            
+                        }
+                    }
+                    _this.taskNum =`${doneTaskNum}/${_this.artistTasksInfo.length}` 
                     _this.artistWorksInfo = response.data.works.data
                     _this.affixes = response.data.affixes.data
                     for (let i = 0; i < response.data.trails.data.length; i++) {

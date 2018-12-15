@@ -41,7 +41,7 @@
                             </div>
                         </div>
                     </div>
-                <briefright :type="type" @getDate="selectDate"></briefright>
+                <briefright :type="showType" @getDate="selectDate"></briefright>
                 </div>
                 <!-- <pagination :current_page="current_page" :method="getProjects" :total_pages="total_pages"
                             :total="total"></pagination> -->
@@ -68,7 +68,7 @@ export default {
             template_name:'',
             temId:'',
             status:'',
-            type:(this.$route.query.type-0),
+            // type:(this.$route.query.type-0),
             start_time:'',
             end_time:'',
             tempName:''
@@ -83,7 +83,18 @@ export default {
         //检测路由参数变化  调用函数
        "$route":"getlist",
     },
-   
+    computed:{
+        type:function(){
+            return (this.$route.query.type-0)
+        },
+        showType:function(){
+            if(this.$route.query.type == 3){
+                return 5
+            }else{
+                return (this.$route.query.type-0)
+            }
+        }
+    },
     methods:{
         selectDate:function(start,end){
             this.start_time = start
@@ -107,9 +118,7 @@ export default {
             fetch('get',`${config.apiUrl}/review/my/template`,data).then((res) => {
                 
                 this.list = res.data
-                // if(res.data.length>0){
-                //      this.template_name = res.data[0].template.template_name
-                // }
+                
                 for (let i = 0; i < this.list.length; i++) {
                     this.list[i].title = this.list[i].title.split(',');
                     

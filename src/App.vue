@@ -191,4 +191,8 @@
         background: #eee;
         border-radius: 3px;
     }
+    .bootstrap-select:not([class*=col-]):not([class*=form-control]):not(.input-group-btn) {
+        width: 100%;
+    }
+    
 </style>
