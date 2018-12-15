@@ -345,7 +345,7 @@ export default new Router({
         {
             path: '/my',
             name: 'my',
-            redirect: '/my/project',
+            redirect: '/my/message',
             component: () => import('./views/application/index.vue'),
             children: [
                 {
@@ -372,6 +372,11 @@ export default new Router({
                     path: '/my/schedule',
                     name: 'schedule',
                     component: () => import('./views/application/schedule.vue')
+                },
+                {  
+                    path: '/my/message',
+                    name: 'message',
+                    component: () => import('./views/messages/index.vue')
                 }
             ]
         }, {
