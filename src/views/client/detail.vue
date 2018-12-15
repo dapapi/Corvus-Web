@@ -83,7 +83,14 @@
                             <a class="nav-link" data-toggle="tab" href="#forum-task"
                                 aria-controls="forum-present"
                                 aria-expanded="false" role="tab">
-                                <ToolTips :title="`已完成数量${completeNum}`">任务 ({{completeNum}}/{{clientTasksInfo.length}})</ToolTips>
+                                <template v-if="clientTasksInfo.length > 0">
+                                    <ToolTips :title="`已完成数量${completeNum}`">
+                                        任务 ({{completeNum}}/{{clientTasksInfo.length}})
+                                    </ToolTips>
+                                </template>
+                                <template v-else>
+                                    任务
+                                </template>
                             </a>
                         </li>
                         <li class="nav-item" role="presentation">
@@ -870,7 +877,6 @@
                 this.changeInfo.principal_id = value
             },
             changeEditStatus(value, config) {
-                // console.log(config.type)
                 this.$refs.contact.setValue(config.type)
                 this.editConfig = config || {
                     position: '',

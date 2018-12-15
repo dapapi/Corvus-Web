@@ -150,19 +150,19 @@
                             </table>
                         </div>
                         <div class="tab-pane animation-fade" id="forum-power" role="tabpanel">
-                            <div class="title py-20" style="color:#999999;font-size:12px;font-weight:300;position: relative;">设置角色对应到功能操作、应用管理、后台管理权限<span  style="font-weight:600;position:absolute;right:10px"><input type="checkbox" class="mr-10">全选</span></div>
+                            <div class="title py-20" style="color:#999999;font-size:12px;font-weight:300;position: relative;">设置角色对应到功能操作、应用管理、后台管理权限<span  style="font-weight:600;position:absolute;right:10px"><input type="checkbox" class="mr-10" value="0" v-model="check" disabled="disabled">全选</span></div>
                             <table class="table table-hover" data-plugin="selectable" data-selectable="selectable"> 
                                 <tbody >
                                 <tr  class="pointer-cont" style="border:1px solid #e3e3e3;position: relative;" v-for="item in funDate" :key="item.id">
-                                    <td style="font-weight:400;border:1px solid #e3e3e3" class="p-30 text-center py-60"><input type="checkbox"  class="mr-10" >{{item.title}}</td>
+                                    <td style="font-weight:400;border:1px solid #e3e3e3" class="p-30 text-center py-60"><input type="checkbox"  class="mr-10" :value="item.id" v-model="check" disabled="disabled">{{item.title}}</td>
                                      <td>
-                                        <div v-for="one in item.contentone" :key="one.id" class="py-10 pl-20"><input type="checkbox"  class="mr-10" >{{one.name}}</div>                 
+                                        <div v-for="one in item.contentone" :key="one.id" class="py-10 pl-20"><input type="checkbox"   :value="item.id" v-model="check" disabled="disabled" class="mr-10">{{one.name}}</div>                 
                                     </td>
                                      <td>
-                                        <div v-for="tow in item.contentTow" :key="tow.id" class="py-10"><input type="checkbox"  class="mr-10" >{{tow.name}}</div>                 
+                                        <div v-for="tow in item.contentTow" :key="tow.id" class="py-10"><input type="checkbox"  :value="item.id" v-model="check" disabled="disabled" class="mr-10">{{tow.name}}</div>                 
                                     </td>
                                     <td>
-                                        <div v-for="tree in item.contentTree" :key="tree.id" class="py-10"><input type="checkbox"  class="mr-10" >{{tree.name}}</div>                 
+                                        <div v-for="tree in item.contentTree" :key="tree.id" class="py-10"><input type="checkbox"   :value="item.id" v-model="check" disabled="disabled" class="mr-10">{{tree.name}}</div>                 
                                     </td>
                                 </tr>
                                 </tbody>        
@@ -244,6 +244,7 @@
                                                    @change="selectArtists('all')">
                                             <label></label>
                                         </span>
+                                       
                                     </th>
                                     <th class="cell-300" scope="col">姓名</th>
                                     <th class="cell-300" scope="col">手机号</th>
@@ -266,17 +267,40 @@
                             </table>
                         </div>
                         <div class="tab-pane animation-fade " :id="'forum-authority'+item.id" role="tabpanel">
-                            <div class="title py-20" style="color:#999999;font-size:12px;font-weight:300;position: relative;">设置角色对应到功能操作、应用管理、后台管理权限<span  style="font-weight:600;position:absolute;right:10px"><input type="checkbox" class="mr-10">全选</span></div>
+                            <div class="title py-20" style="color:#999999;font-size:12px;font-weight:300;position: relative;">设置角色对应到功能操作、应用管理、后台管理权限
+                                <div style="font-weight:600;position:absolute;right:10px;top:9px;">
+                                     <span class="checkbox-custom checkbox-primary pr-10" >
+                                            <input class="selectable-all " type="checkbox"
+                                            >
+                                            <label></label>
+                                    </span>
+                                     <span>全选</span>
+                                     
+                                </div> 
+                            </div>
                             <table class="table table-hover" data-plugin="selectable" data-selectable="selectable"> 
                                 <tbody >
                                 <tr  class="pointer-cont" style="border:1px solid #e3e3e3;" v-for="item in powerDate" :key="item.id">
-                                    <td style="font-weight:400;border:1px solid #e3e3e3;position: relative;" class="cell-200" scope="col">
-                                        <div class="cont">
-                                             <input type="checkbox"  class="mr-10" >{{item.name}}   
+                                    <td class="cell-200" style="border:1px solid #e3e3e3;position: relative;">
+                                        <div class="cont text-left">
+                                            <span class="checkbox-custom checkbox-primary" style="">
+                                            <input class="selectable-item" type="checkbox" :id="'row-' + item.id"
+                                                   :value="item.id" @change="selectArtists('all')">
+                                            <label :for="'row-' + item.id"></label>
+                                            </span>
+                                           <span class="pl-10 pt-10">{{item.name}}</span>
                                         </div>
-                                    </td>  
+                                    </td> 
+                                    
                                      <td style="display:flex;flex-wrap:wrap;" class="cell-600" scope="col">
-                                    <div v-for="one in item.data" :key="one.id" class="py-5 text-left pl-10" style="width:33%;"><input type="checkbox"  class="mr-10" >{{one.name}}</div>                 
+                                       <div v-for="one in item.data" :key="one.id" class="text-left pl-10" style="width:33%;">
+                                            <span class="checkbox-custom checkbox-primary" style="">
+                                            <input class="selectable-item" type="checkbox" :id="'row-' + one.id"
+                                                   :value="one.id" @change="selectArtists(one.id)">
+                                            <label :for="'row-' + one.id"></label>
+                                            </span>
+                                            <span class="pl-10 pt-10">{{one.name}}</span>
+                                        </div>                 
                                     </td>
                                    
                                 </tr>
@@ -623,14 +647,13 @@
                 funDate:data,
                 switchId:[],
                 rolepower:'',
-                powerDate:''
+                powerDate:'',
+                powerInfo:[]
             }
         },
         mounted() {
             this.getroleDate();
             this.getgroupingDate();
-            this.getpower()
-            // console.log($('table'));
             $('table').asSelectable();
         },
         methods: {
@@ -639,8 +662,9 @@
                 let _this = this;
                 fetch('get', '/console/role').then(function (response) {
                     _this.roleDate = response.data;
-                   console.log(_this.roleDate)
+                   
                 });
+               
             },
            
             //获取分组数据
@@ -648,7 +672,7 @@
                 let _this = this;
                 fetch('get', '/console/group?Accept=application/vnd.Corvus.v1+json').then(function (response) {
                     _this.groupingDate = response.data;
-                    console.log(_this.groupingDate)
+                  
                 });
             },
             //获取成员数据
@@ -664,21 +688,15 @@
                     })
                     _this.$store.state.participantsInfo=datas
                 })       
-             },
-             //获取权限数据
-             getpower(){
-                
-             },       
+             },      
             //全选反选
             selectArtists: function (value) {
+                
                 if (value === 'all') {
                     this.selectedArtistsArr = [];
-                    for (let i = 0; i < this.list.length; i++) {
-                        this.selectedArtistsArr.push(this.list[i].id)
+                    for (let i = 0; i < this.powerDate.length; i++) {
+                        this.selectedArtistsArr.push(this.powerDate[i].id)
 
-                    }
-                    if(this.selectedArtistsArr.length==this.list.length){
-                        this.isSelectAll=true;
                     }
                 } else {
                     let index = this.selectedArtistsArr.indexOf(value);
@@ -688,6 +706,7 @@
                         this.selectedArtistsArr.push(value)
                     }
                 }
+                console.log(this.selectedArtistsArr)
             },
             //切换内容
             changeCont(value) {
@@ -695,8 +714,7 @@
                 this.defaultId=0
                 let _this = this;
                 fetch('get', '/console/feature/'+this.jobCont).then(function (response) {
-                    _this.powerDate = response;
-                    console.log(_this.powerDate)
+                     _this.powerDate = response;                    
                 });
             },
             //获取新增角色的类别
@@ -819,14 +837,12 @@
                 });
             },
             switchMenu: function (id) {   
-                console.log(id)
                 if(!this.switchId.includes(id)){
                     this.switchId.push(id)
 
                 }else{
                     this.switchId.splice(this.switchId.indexOf(id),1)
                 }
-                // this.visible = !this.visible
  
             },
             //删除的名字id获取
@@ -905,7 +921,7 @@
         font-size: 20px !important;
         
     } 
-    .pointer-content input:hover{
+    .pointer-content input[type=radio]:hover{
         cursor:no-drop;
     }
     .cont{
@@ -914,6 +930,12 @@
         left: 50%;
         -webkit-transform: translate(-50%, -50%);
         transform: translate(-50%, -50%);
+    }
+    .checkbox-custom, .radio-custom{
+        display: inline-block
+    }
+    .pointer-cont:hover{
+        background: #fff;
     }
 </style>
 
