@@ -20,8 +20,8 @@ export default {
         optionData:{
             type:Array,
             required: true
-        },
-        propCheck:'',
+        }, //数据
+        // propCheck:'',
         isLine:{
             type:Boolean,
             default:false
@@ -66,7 +66,7 @@ export default {
                     
                 }
             }
-            this.$emit('change', this.checkData)
+            this.$emit('change', this.checkData) //回传值
            
         },
         setAllCheck:function(){
@@ -76,7 +76,6 @@ export default {
                     this.optionData[i].isCheck = true
                     this.checkData[i] = this.optionData[i]
                 }else{
-                    // alert(111)
                     this.optionData[i].isCheck = false
                     this.checkData = []
                 }
@@ -84,6 +83,8 @@ export default {
             }
             this.$emit('change', this.checkData)
         },
+
+        //对象去重
         isObj:function (object) {
             return object && typeof(object) == 'object' && Object.prototype.toString.call(object).toLowerCase() == "[object object]";
         },

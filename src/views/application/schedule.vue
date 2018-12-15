@@ -1,10 +1,15 @@
 <template>
-    <div class="page-content container-fluid" style="border-left:1px solid #e3e3e3">
-        <div class="panel col-md-12 py-5 clearfix px-0 mb-0">
-        <div class="float-left p-0" style="width: 100%">
-            <calendar :gotoDate="selectedDate" v-show="!meetingRomeShow"></calendar>
-            <MeetingRoomCalendar v-show="meetingRomeShow" @change="displayMeetingRoom"></MeetingRoomCalendar>
+    <div class="page-main" style="background-color:#f3f4f5">
+        <div class="page-header page-header-bordered">
+            <h1 class="page-title">我的日程</h1>
         </div>
+        <div class="page-content container-fluid">
+            <div class="panel col-md-12 py-5 clearfix px-0 mb-0">
+            <div class="float-left p-0" style="width: 100%">
+                <calendar :gotoDate="selectedDate" v-show="!meetingRomeShow"></calendar>
+                <MeetingRoomCalendar v-show="meetingRomeShow" @change="displayMeetingRoom"></MeetingRoomCalendar>
+            </div>
+            </div>
         </div>
     </div>
 </template>

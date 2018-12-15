@@ -1,25 +1,30 @@
 <template>
-    <div class="panel col-md-12 col-lg-12 py-5" style="border-left:1px solid #e3e3e3">
+    <div class="page-main" style="background-color:#f3f4f5">
+        <div class="page-header page-header-bordered">
+            <h1 class="page-title">我的审批</h1>
+        </div>
+       <div class="page-content container-fluid">
+           <div class="panel col-md-12 col-lg-12 py-5">
                 <div class="col-md-12">
                     <ul class="nav nav-tabs nav-tabs-line" role="tablist">
                         <li class="nav-item" role="presentation" @click="getTasks(1)">
                             <a class="nav-link active" data-toggle="tab" href="#forum-task"
-                               aria-controls="forum-base"
-                               aria-expanded="true" role="tab">待审批</a>
+                                aria-controls="forum-base"
+                                aria-expanded="true" role="tab">待审批</a>
                         </li>
                         <li class="nav-item" role="presentation" @click="getTasks(1)">
                             <a class="nav-link" data-toggle="tab" href="#forum-task"
-                               aria-controls="forum-present"
-                               aria-expanded="false" role="tab">已审批</a>
+                                aria-controls="forum-present"
+                                aria-expanded="false" role="tab">已审批</a>
                         </li>
                     </ul>
                 </div>
                 <div class="page-content tab-content nav-tabs-animate bg-white">
                     <div class="tab-pane animation-fade active pt-20" id="forum-task" role="tabpanel">
                         <table class="table table-hover is-indent" data-plugin="animateList" data-animate="fade"
-                               data-child="tr"
-                               data-selectable="selectable">
-                             <tr class="animation-fade" style="animation-fill-mode: backwards; animation-duration: 250ms; animation-delay: 0ms;">
+                                data-child="tr"
+                                data-selectable="selectable">
+                                <tr class="animation-fade" style="animation-fill-mode: backwards; animation-duration: 250ms; animation-delay: 0ms;">
                                 <th class="cell-300" scope="col">审批编号</th>
                                 <th class="cell-300" scope="col">申请人</th>  
                                 <th class="cell-300" scope="col">
@@ -71,9 +76,9 @@
                             </template>
                     </div>
                 </div>
-
-
             </div>
+       </div>
+    </div>
 </template>
 <script>
 import fetch from '../../assets/utils/fetch.js';

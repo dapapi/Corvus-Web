@@ -1,26 +1,31 @@
 <template>
-    <div class="panel col-md-12 col-lg-12 py-5" style="border-left:1px solid #e3e3e3">
+    <div class="page-main" style="background-color:#f3f4f5">
+        <div class="page-header page-header-bordered">
+            <h1 class="page-title">我的任务</h1>
+        </div>
+        <div class="page-content container-fluid">
+            <div class="panel col-md-12 col-lg-12 py-5">
                 <div class="col-md-12">
                     <ul class="nav nav-tabs nav-tabs-line" role="tablist">
                         <li class="nav-item" role="presentation" @click="getTasks(1,0)">
                             <a class="nav-link active" data-toggle="tab" href="#forum-task"
-                               aria-controls="forum-base"
-                               aria-expanded="true" role="tab">所有任务</a>
+                                aria-controls="forum-base"
+                                aria-expanded="true" role="tab">所有任务</a>
                         </li>
                         <li class="nav-item" role="presentation" @click="getOther(1,3)">
                             <a class="nav-link" data-toggle="tab" href="#forum-task"
-                               aria-controls="forum-present"
-                               aria-expanded="false" role="tab">我负责的</a>
+                                aria-controls="forum-present"
+                                aria-expanded="false" role="tab">我负责的</a>
                         </li>
                         <li class="nav-item" role="presentation" @click="getOther(1,2)">
                             <a class="nav-link" data-toggle="tab" href="#forum-task"
-                               aria-controls="forum-present"
-                               aria-expanded="false" role="tab">我参与的</a>
+                                aria-controls="forum-present"
+                                aria-expanded="false" role="tab">我参与的</a>
                         </li>
                         <li class="nav-item" role="presentation" @click="getOther(1,1)">
                             <a class="nav-link" data-toggle="tab" href="#forum-task"
-                               aria-controls="forum-present"
-                               aria-expanded="false" role="tab">我创建的</a>
+                                aria-controls="forum-present"
+                                aria-expanded="false" role="tab">我创建的</a>
                         </li>
                     </ul>
                 </div>
@@ -28,8 +33,8 @@
                 <div class="page-content tab-content nav-tabs-animate bg-white ">
                     <div class="tab-pane animation-fade active pt-20" id="forum-task" role="tabpanel">
                         <table class="table table-hover is-indent" data-plugin="animateList" data-animate="fade"
-                               data-child="tr"
-                               data-selectable="selectable">
+                                data-child="tr"
+                                data-selectable="selectable">
                             <tr class="animation-fade"
                                 style="animation-fill-mode: backwards; animation-duration: 250ms; animation-delay: 0ms;">
                                 <th class="cell-300" scope="col">任务名称</th>
@@ -60,7 +65,7 @@
                             </tr>
                             </tbody>
                         </table>
-                         <div class="col-md-1" style="margin: 6rem auto"  v-if="taskInfo.length==0">
+                            <div class="col-md-1" style="margin: 6rem auto"  v-if="taskInfo.length==0">
                                 <img src="https://res.papitube.com/corvus/images/content-none.png" alt="" style="width: 100%">
                         </div>
                         <template v-if="!taskStatus">
@@ -74,6 +79,8 @@
                     </div>
                 </div>
             </div>
+        </div>
+    </div>
 </template>
 <script>
 import fetch from '../../assets/utils/fetch.js';

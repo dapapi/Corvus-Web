@@ -1219,6 +1219,37 @@ let config = {
                 name: '否',
                 value: 1
             }
+        ],
+        week:[
+            {
+                name:'日',
+                value:0
+
+            },
+            {
+                name:'一',
+                value:1
+            },
+            {
+                name: '二',
+                value: 2
+            },
+            {
+                name: '三',
+                value: 3
+            },
+            {
+                name: '四',
+                value: 4
+            },
+            {
+                name: '五',
+                value: 5
+            },
+            {
+                name: '六',
+                value: 6
+            }
         ]
     }
 ;
