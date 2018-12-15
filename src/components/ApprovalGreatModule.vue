@@ -11,7 +11,7 @@
                 </div>
                 <div class="modal-body modal-greater">
                     <div v-for="(item, index) in moduleInfo" :key="index" class="great-option">
-                        <div :is='sortChecker(i)'></div>
+                        <div :is='sortChecker(item)' :data='item'></div>
                     </div>
                 </div>
                 <div class="modal-footer">
@@ -26,48 +26,85 @@
 
 <script>
 import pageData from '@/views/approval/approval_form'
+import ApprovalSummerNote from '@/components/ForApproval/ApprovalSummerNote'
+import ApprovalUploader from '@/components/ForApproval/ApprovalUploader'
+import ApprovalImageUploader from '@/components/ForApproval/ApprovalImageUploader'
+import ApprovalMultiple from '@/components/ForApproval/ApprovalMultiple'
 import ApprovalTimePicker from '@/components/ForApproval/ApprovalTimePicker'
 import ApprovalText from '@/components/ForApproval/ApprovalText'
+import ApprovalTextArea from '@/components/ForApproval/ApprovalTextArea'
 import ApprovalSelector from '@/components/ForApproval/ApprovalSelector'
 export default {
     data(){
         return{
             pageInfo:{
                 title:'',
-                description:''
+                description:'',
             },
             moduleInfo:[]
         }
     },
     mounted(){
-        console.log(pageData);
+        // console.log(pageData);
+        console.log(this.$options.components,'par');
         this.dataInit()
     },
     components:{
-        ApprovalText,ApprovalSelector,ApprovalTimePicker
+        ApprovalMultiple,
+        ApprovalText,
+        ApprovalSelector,
+        ApprovalTimePicker,
+        ApprovalImageUploader,
+        ApprovalUploader,
+        ApprovalSummerNote,
+        ApprovalTextArea,
     },
     methods:{
         dataInit(){
             let {name,description,approval_form_controls} = pageData[0]
             let controlArr= Array.from(approval_form_controls)
-            this.moduleInfo = controlArr
             this.pageInfo.title = name
-            this.pageInfo.description= description
+            let descriptionArr = []
+            let tempArr = []
+            for (const key in controlArr) {
+                if (controlArr[key].form_control_pid === 0) {
+                    if(key>0){
+                        descriptionArr.push(tempArr)
+                    }
+                    tempArr = []
+                    tempArr.push(controlArr[key])
+                }else{
+                    tempArr.push(controlArr[key])
+                }
+            }
+            this.moduleInfo = descriptionArr
         },
         sortChecker(params){
-            switch (params){
-                case 1 :
-                    return this.$options.components.ApprovalTimePicker
-                    break
-                case 2 : 
+            if(params.length>1){
+                return this.$options.components.ApprovalMultiple
+            }else{
+                switch (params[0].control.data_dictionary_id){
+                case 78 :
                     return this.$options.components.ApprovalText
-                    break
-                case 3 : 
+                case 79 :
+                    return this.$options.components.ApprovalTextArea
+                case 80 :
+                    return this.$options.components.ApprovalTimePicker
+                case 82 :
                     return this.$options.components.ApprovalSelector
-                    break
+                case 86 :
+                    return this.$options.components.ApprovalTextArea
+                case 88 :
+                    return this.$options.components.ApprovalText
+                case 91 : 
+                    return this.$options.components.ApprovalImageUploader
+                case 92 : 
+                    return this.$options.components.ApprovalUploader
+                
+
                 default : 
-                    return this.$options.components.Selectors
-                    break
+                    return this.$options.components.Approvaltext
+                }
             }
         }
     }
@@ -81,6 +118,7 @@ export default {
     overflow-y:scroll;
 }
 .great-option{
+    display: flex;
     /* height: 50px; */
     
     margin: 20px 30px;
