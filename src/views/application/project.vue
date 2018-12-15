@@ -1,30 +1,35 @@
 <template>
-    <div class="panel col-md-12 col-lg-12 py-5" style="border-left:1px solid #e3e3e3">
+   <div class="page-main" style="background-color:#f3f4f5">
+        <div class="page-header page-header-bordered">
+            <h1 class="page-title">我的项目</h1>
+        </div>
+        <div class="page-content container-fluid">
+            <div class="panel p-20 col-md-12 col-lg-12 py-5">
                 <div class="col-md-12">
                     <ul class="nav nav-tabs nav-tabs-line" role="tablist">
                         <li class="nav-item" role="presentation" @click="getTasks(1,1)">
                             <a class="nav-link active" data-toggle="tab" href="#forum-task"
-                               aria-controls="forum-base"
-                               aria-expanded="true" role="tab">所有项目</a>
+                                aria-controls="forum-base"
+                                aria-expanded="true" role="tab">所有项目</a>
                         </li>
                         <li class="nav-item" role="presentation" @click="getDate(1,2)">
                             <a class="nav-link" data-toggle="tab" href="#forum-task"
-                               aria-controls="forum-present"
-                               aria-expanded="false" role="tab">我负责的</a>
+                                aria-controls="forum-present"
+                                aria-expanded="false" role="tab">我负责的</a>
                         </li>
                         <li class="nav-item" role="presentation" @click="getDate(1,3)">
                             <a class="nav-link" data-toggle="tab" href="#forum-task"
-                               aria-controls="forum-present"
-                               aria-expanded="false" role="tab">我参与的</a>
+                                aria-controls="forum-present"
+                                aria-expanded="false" role="tab">我参与的</a>
                         </li>
-                       
+                        
                     </ul>
                 </div>
                 <div class="page-content tab-content nav-tabs-animate bg-white">
                     <div class="tab-pane animation-fade active pt-20" id="forum-task" role="tabpanel">
                         <table class="table table-hover is-indent" data-plugin="animateList" data-animate="fade"
-                               data-child="tr"
-                               data-selectable="selectable" >
+                                data-child="tr"
+                                data-selectable="selectable" >
                             <tr class="animation-fade"
                                 style="animation-fill-mode: backwards; animation-duration: 250ms; animation-delay: 0ms;">
                                 <th class="cell-300" scope="col">项目名称</th>
@@ -48,28 +53,28 @@
                                 </td>
                                 <td v-if="item.trail">
                                     <template v-if="item.trail.data.cooperation_type ==1">
-                                       代言 
+                                        代言 
                                     </template>
                                     <template v-if="item.trail.data.cooperation_type ==2">
-                                       合作 
+                                        合作 
                                     </template>
-                                     <template v-if="item.trail.data.cooperation_type ==3">
-                                       活动 
+                                        <template v-if="item.trail.data.cooperation_type ==3">
+                                        活动 
                                     </template>
                                     <template v-if="item.trail.data.cooperation_type ==4">
-                                       微博 
+                                        微博 
                                     </template>
-                                     <template v-if="item.trail.data.cooperation_type ==5">
-                                       抖音 
+                                        <template v-if="item.trail.data.cooperation_type ==5">
+                                        抖音 
                                     </template>
-                                     <template v-if="item.trail.data.cooperation_type ==6">
-                                       短期代言 
+                                        <template v-if="item.trail.data.cooperation_type ==6">
+                                        短期代言 
                                     </template>
-                                      <template v-if="item.trail.data.cooperation_type ==7">
-                                       时装周 
+                                        <template v-if="item.trail.data.cooperation_type ==7">
+                                        时装周 
                                     </template>
-                                     <template v-if="item.trail.data.cooperation_type ==8">
-                                       未确定 
+                                        <template v-if="item.trail.data.cooperation_type ==8">
+                                        未确定 
                                     </template>
                                 </td>
                                 <td v-if="!item.trail"></td>
@@ -84,7 +89,7 @@
                             </tr>
                             </tbody>
                         </table>
-                          <div class="col-md-1" style="margin: 6rem auto"  v-if="projectInfo.length==0">
+                            <div class="col-md-1" style="margin: 6rem auto"  v-if="projectInfo.length==0">
                                 <img src="https://res.papitube.com/corvus/images/content-none.png" alt="" style="width: 100%">
                             </div>
                         <template>
@@ -94,6 +99,8 @@
                     </div>
                 </div>
             </div>
+        </div>
+   </div>
 </template>
 <script>
 import fetch from '../../assets/utils/fetch.js';

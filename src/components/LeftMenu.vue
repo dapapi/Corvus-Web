@@ -23,6 +23,10 @@
                                         </span>
                             </div>
                             <span class="site-menu-title">{{ menu.name }}</span>
+                            <!-- 建设中 -->
+                            <div v-if="menu.name === '审批'" class="ribbon ribbon-badge ribbon-warning ribbon-reverse">
+                                <span class="ribbon-inner">建设中</span>
+                            </div>
                         </router-link>
                     </template>
                     <template v-else>
@@ -43,6 +47,7 @@
                                 <router-link :to="'/' + subMenu.code"
                                              class="animsition-link">
                                     <span class="site-menu-title">{{ subMenu.name }}</span>
+                                    
                                 </router-link>
                             </li>
                         </ul>
@@ -144,10 +149,10 @@
                         image: 'https://res.papitube.com/corvus/images/yingyong.png',
                         hoverImage: 'https://res.papitube.com/corvus/images/select-yingyong.png',
                         data: [
-                             {
-                                name: '消息',
-                                code: 'messages'
-                            },
+                            //  {
+                            //     name: '消息',
+                            //     code: 'messages'
+                            // },
                             {
                                 name: '考勤',
                                 code: 'attendance'

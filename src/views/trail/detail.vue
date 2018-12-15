@@ -132,7 +132,9 @@
                         <li class="nav-item" role="presentation" @click="getTrailTask">
                             <a class="nav-link" data-toggle="tab" href="#forum-trail-tasks"
                                aria-controls="forum-present"
-                               aria-expanded="false" role="tab">任务(5/12)</a>
+                               aria-expanded="false" role="tab">
+                               <ToolTips :title="taskCount[0]">任务{{taskCount.finished}}/{{taskCount.count}}</ToolTips>
+                            </a>
                         </li>
                     </ul>
                     <div class="tab-content nav-tabs-animate bg-white col-md-12 row">
@@ -159,22 +161,12 @@
                                             </div>
                                         </div>
                                         <div class="card-text py-10 px-0 clearfix col-md-6 float-left edit-height">
-                                            <!-- <span v-show="!isEdit">{{trailInfo.resource_type}} {{trailInfo.resource}}</span> -->
-
                                             <TrailOrigin :trailType='trailType'
                                                          typeName='线索' :isEdit='isEdit' :content='trailInfo.resource'
                                                          @changeTrailOrigin='changeTrailOrigin'
                                                          :contentType='trailInfo.resource_type'
                                                          @changeEmail='changeEmail' detailPage='true'
                                                          @changeTrailOriginPerson='changeTrailOriginPerson'/>
-                                            <!-- <div class="col-md-2 float-left text-right pl-0">线索来源</div>
-                                            <div class="col-md-10 float-left font-weight-bold">
-                                                <div class="float-left" v-if="trailOriginArr.length > 0">
-                                                    <EditSelector :options="trailOriginArr"
-                                                                  :is-edit="isEdit"
-                                                                  @change="changeResourceType" :content='trailInfo.resource_type'></EditSelector>
-                                                </div>
-                                            </div> -->
                                         </div>
                                         <div class="card-text py-10 px-0 clearfix col-md-6 float-left"
                                              :class="isEdit ? 'edit-height':'' ">
@@ -419,19 +411,7 @@
                                     <i class="back-icon md-plus animation-scale-up" aria-hidden="true"></i>
                                 </button>
                             </div>
-
                         </div>
-                        <!-- <div class="col-md-4">
-                       <div class="card-header card-header-transparent card-header-bordered">
-                           <span><strong>销售线索跟进</strong></span>
-                       </div>
-                       <div class="card-block ">
-                           <div class="col-md-12 pl-0">
-                               <TaskFollowUp :follow-type="'线索'" :trailId="trailId" trailType='trails'
-                                               v-if="trailId"></TaskFollowUp>
-                           </div>
-                       </div>
-                   </div> -->
                     </div>
 
                 </div>
@@ -620,7 +600,8 @@
                 trailType: '',
                 isLoading: true,
                 email: '',
-                trailOriginPerson: ''
+                trailOriginPerson: '',
+                taskCount:{},
             }
         },
         created() {
@@ -756,6 +737,7 @@
 
         methods: {
             changeTrailOriginPerson(value) {
+                console.log(value);
                 this.trailOriginPerson = value
             },
             changeEmail(value) {
@@ -827,6 +809,10 @@
                         _this.$store.dispatch('changePrincipal', params);
                     }
                     _this.isLoading = false
+                    console.log(_this.trailInfo.resource);
+                    _this.$nextTick((params) => {
+                         _this.$store.state.newPrincipalInfo.id = Number(_this.trailInfo.resource)
+                    })
                 })
             },
 
@@ -843,6 +829,8 @@
                 })
             },
             changeTrailOrigin: function (value) {
+                this.$store.state.newPrincipalInfo.id = this.trailInfo.resource
+                console.log(this.trailInfo.resource);
                 this.trailInfo.resource = ''
                 this.email = ''
                 this.trailOriginPerson = ''
@@ -926,6 +914,16 @@
                 let _this = this;
                 fetch('get', '/trails/' + this.trailId + '/tasks').then(function (response) {
                     _this.trailTasksInfo = response.data
+                    let n = 0
+                    for (const key in response.data) {
+                        if (response.data[key].status==2) {
+                            n++   
+                        }
+                    }
+                    _this.taskCount = {
+                        count:response.data.length,
+                        finished:n
+                    }
                 })
             },
             changeLockStatus(value) {
