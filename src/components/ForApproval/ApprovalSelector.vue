@@ -1,14 +1,12 @@
 <template>
     <div class="approval-text-container col-md-12">
-        <span class="col-md-2 text-right">{{title || '测试文本下拉框'}}</span>
-        <select class="selectpicker col-md-10" data-plugin="selectpicker" :value="value" :data-live-search="isSelectable"
+        <span class="col-md-2 text-right">{{title || data[0].control_title}}</span>
+        <select class="good-picker selectpicker col-md-10" data-plugin="" :value="value" :data-live-search="isSelectable"
             :data-show-subtext="isSelectable"
             :multiple="multiple" :title="placeholder" v-model="valueListener">
-            <option value="">ceshi 111</option>
-            <option value="">ceshi 222</option>
-        <selectorsOptions v-for="option in options" :id="option.id" :val="option.value || option.id"
+        <selectorsOptions v-for="option in options || data[0].control_enums" :id="option.id" :val="option.enum_sort"
                           :key="option.id">
-            {{option.name || option.title}}
+            {{option.enum_value}}
             <!-- 增强组件扩展性和数据通用性 -->
         </selectorsOptions>
     </select>
@@ -20,10 +18,9 @@
 export default {
      // 凡是多选，都有搜索框；不是多选传入selectable为true也可以有搜索框
         // changeKey为父组件的data，且可以被改变
-        props: ['options', 'disable', 'multiple', 'placeholder', 'changeKey', 'value', 'resetinfo', 'selectable'],
+        props: ['options', 'n', 'multiple', 'placeholder', 'changeKey', 'value', 'resetinfo', 'selectable','title','data'],
         data() {
             return {
-                title:'',
                 isDisable: this.disable,
                 valueListener: [],
             }
@@ -56,10 +53,8 @@ export default {
            
         },
         watch: {
-            resetinfo: function (value) {
-                if (value) {
+            n:function(value){
 
-                }
             },
             valueListener: function (newValue) {
                 this.$emit('valuelistener', newValue)
@@ -99,6 +94,10 @@ export default {
 
             refresh() {
                 $(this.$el).selectpicker('refresh');
+            },
+            rerender(){
+                // $('.selectpicker').selectpicker('refresh');  
+                // $('.selectpicker').selectpicker('render');  
             }
 
         }

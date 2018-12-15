@@ -14,7 +14,7 @@
                         <input type="text" class="form-control" title="" v-model="email">
                     </div>
                 </template>
-                <template v-else-if="(trailOrigin === '4' || trailOrigin === '5') && members[0]">
+                <template v-else-if="(trailOrigin === '4' || trailOrigin === '5')">
                     <div class="col-md-5 float-left pr-0"> 
                         <input-selectors @change="changeTrailOrigin" :placeholder='memberFinder'
                                          :propSelectMemberName='trailOriginPerson.name'></input-selectors>
@@ -22,14 +22,14 @@
                 </template>
             </div>
         </div>
-        <div v-if="!isEditSituation && trailOriginArr[0] && contentType && !(trailOrigin === '4' || trailOrigin === '5')"
+        <div v-if="!isEditSituation  && !(trailOrigin === '4' || trailOrigin === '5')"
              class="col-md-10 float-left font-weight-bold expfee">
             <span>{{typeFinder}}</span>
             <span v-if="content"> - {{content.value || content}}</span>
         </div>
         <div v-if="!isEditSituation && (trailOrigin === '4' || trailOrigin === '5')"
              class="col-md-10 float-left font-weight-bold expfee">
-            <span>{{typeFinder}} - {{memberFinder}}</span>
+            <span>{{typeFinder}}  {{memberFinder}}</span>
         </div>
     </div>
 </template>
@@ -48,11 +48,11 @@
                 trailOriginPerson: '',                   //人员
                 email: '',                               //
                 isEditSituation: '',                     //编辑状态
-                members: {}
+                members: {},
+                tempStore:'',
             }
         },
         created() {
-            this.getMembers()
         },
         computed:{
             typeFinder(){
@@ -63,14 +63,19 @@
                 }
             },
             memberFinder(){
-                if(this.members && this.content){
-                   return this.members.find(item=>item.id == this.content).name
+                if(this.members && this.tempStore){
+                    return this.members.find(item=>item.id == this.tempStore).name
                 }else{
                     return ''
                 }
             }
         },
         watch: {
+            content(value){
+                if(value){
+                    this.getMembers(value)
+                }
+            },
             //监听获取当前类型
             contentType(value) {
                 this.trailOrigin = String(value)
@@ -110,11 +115,14 @@
             }
         },
         methods: {
-            getMembers() {
+            getMembers(value) {
                 let _this = this
                 fetch('get', '/users').then((params) => {
                     let {data = '-'} = params
                     _this.members = params.data
+                    if(_this.members.find(item=>item.id == value)){
+                        _this.tempStore = value
+                    }
                 })
             },
             //
