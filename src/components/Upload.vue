@@ -132,7 +132,7 @@ export default {
         min-height: 10px;
         left: 0;
         top: 0;
-        z-index: 1000;
+        z-index: 10;
         cursor: pointer;
     }
     &:before {

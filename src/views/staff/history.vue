@@ -17,7 +17,7 @@
                     <tbody>
                     <tr v-for="(item, index) in data" :key="index">
                         <!-- <th scope="row">1</th> -->
-                        <td>{{ item.name }}</td>
+                        <td><router-link :to="{name: 'staffDetail', params: { id: item.id }}">{{ item.name }}</router-link></td>
                         <td>{{ item.phone }}</td>
                         <td>{{ item.archive_time }}</td>
                     </tr>

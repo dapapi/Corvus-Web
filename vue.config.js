@@ -1,5 +1,23 @@
+const CompressionWebpackPlugin = require('compression-webpack-plugin')
+const productionGzipExtensions = ['js', 'css']
+
 module.exports = {
-    lintOnSave: false,
+    lintOnSave: false,  // 关闭代码检查
+    productionSourceMap: false, // 生产环境取消sourcemap
+    configureWebpack: config => { // 开启gzip
+      if (process.env.NODE_ENV === 'production') {
+          // 生产环境
+          config.plugins.push(
+              new CompressionWebpackPlugin({
+                  filename: '[path].gz[query]',
+                  algorithm: 'gzip',
+                  test: new RegExp('\\.(' + productionGzipExtensions.join('|') + ')$'),
+                  threshold: 10240,
+                  minRatio: 0.8
+              })
+          );
+      }
+    }
   //   devServer: {
   //   // 环境配置
   //   host: '',
