@@ -57,7 +57,7 @@
         computed:{
             typeFinder(){
                 if(this.contentType && this.trailOriginArr){
-                   return this.trailOriginArr.find(item=>item.value == contentType).name
+                   return this.trailOriginArr.find(item=>item.value == this.contentType).name
                 }else{
                     return ''
                 }
