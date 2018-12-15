@@ -161,7 +161,7 @@
                             },
                             {
                                 name: '在线编辑',
-                                code: 'online-edit'
+                                code: 'collaboration'
                             },
                             {
                                 name: '网盘',

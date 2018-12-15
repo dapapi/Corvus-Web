@@ -218,114 +218,119 @@
              role="dialog" tabindex="-1">
             <div class="modal-dialog modal-simple">
                 <div class="modal-content" v-if="scheduleData">
-                    <div class="" style="padding: 15px 20px;border-bottom: 1px solid #eee">
-                        <div class="float-right">
-                            <i class="md-delete pr-4 font-size-16" aria-hidden="true"></i>
-                            <i class="md-file pr-4 font-size-16" aria-hidden="true"></i>
-                            <i class="md-edit pr-4 font-size-16" aria-hidden="true"></i>
-                            <button type="button" class="close" aria-hidden="true">
-                                <i class="md-close" aria-hidden="true" data-dismiss="modal"></i>
-                            </button>
+                    <div class="modal-header">
+                        <div style="order: 2">
+                            <i class="md-edit pr-4 font-size-16 pointer-content" aria-hidden="true"></i>
+                            <i class="md-file pr-4 font-size-16 pointer-content" aria-hidden="true"></i>
+                            <i class="md-delete pr-4 font-size-16 pointer-content" aria-hidden="true"></i>
+                            <i class="md-close pointer-content" aria-hidden="true" data-dismiss="modal"></i>
                         </div>
-                        <h4 class="modal-title float-left">{{ scheduleData.calendar.data.title }}</h4>
+                        <h5 class="modal-title">{{ scheduleData.calendar.data.title }}</h5>
                     </div>
-                    <div class="modal-body">
-                        <div class="example">
-                            <div class="col-md-2 text-right float-left">标题</div>
-                            <div class="col-md-10 float-left pl-0">
-                                <input type="text" class="form-control" title="" placeholder="请输入标题"
-                                       v-model="scheduleName">
-                            </div>
+                    <div class="modal-body px-40">
+                        <div class="">
+                            <h4 class="my-20">{{ scheduleData.title }}</h4>
                         </div>
                         <div class="example">
-                            <div class="col-md-2 text-right float-left">日历</div>
-                            <div class="col-md-10 float-left pl-0">
-                                <selectors :placeholder="'请选择日历'"></selectors>
+                            <div class="">
+                                <div class="col-md-3 float-left px-0">
+                                    <div class="">{{ (scheduleData.start_at.split(' ')[0]).split('-')[1] }}月{{
+                                        (scheduleData.start_at.split(' ')[0]).split('-')[2] }}日
+                                        {{ scheduleData.start_at|getWeek(scheduleData.start_at) }}
+                                    </div>
+                                    <div class="big-time">{{ (scheduleData.start_at.split(' ')[1]).slice(0,5) }}</div>
+                                </div>
+                                <div class="col-md-2 float-left pl-0">
+                                    <div class="" style="color: white"> -</div>
+                                    <div class="big-time text-center"> -</div>
+                                </div>
+                                <div class="col-md-3 float-left px-0">
+                                    <div class="">{{ (scheduleData.end_at.split(' ')[0]).split('-')[1] }}月{{
+                                        (scheduleData.end_at.split(' ')[0]).split('-')[2] }}日
+                                        {{ scheduleData.end_at|getWeek(scheduleData.end_at) }}
+                                    </div>
+                                    <div class="big-time">{{ (scheduleData.end_at.split(' ')[1]).slice(0,5) }}</div>
+                                </div>
+                                <div class="col-md-2 float-left" v-show="scheduleData.is_allday">
+                                    <div class="" style="color: white"> -</div>
+                                    <div class="big-time font-size-18" style="line-height: 75px">全天</div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="example" v-if="scheduleData.position">
+                            <div class="col-md-1 px-0 float-left">地点</div>
+                            <div class="col-md-10 float-left">{{ scheduleData.position }}</div>
+                        </div>
+                        <div class="example" v-if="scheduleData.resource">
+                            <div class="col-md-1 px-0 float-left">资源</div>
+                            <div class="col-md-10 float-left">诺金1802会议室</div>
+                        </div>
+                        <div class="example">
+                            <div class="col-md-1 px-0 float-left">组织人</div>
+                            <div class="col-md-10 float-left">
+                                <div class="creator-avatar float-left">
+                                    <img src="https://res.papitube.com/no-icon.png" alt="">
+                                </div>
+                                <div class="float-left pl-2">{{ scheduleData.creator.data.name }}</div>
                             </div>
                         </div>
                         <div class="example">
-                            <div class="col-md-2 text-right float-left">开始时间</div>
-                            <div class="col-md-5 float-left pl-0">
-                                <datepicker @change="changeStartTime"></datepicker>
-                            </div>
-                            <div class="col-md-5 float-left pl-0">
-                                <timepicker :default="startMinutes" @change="changeStartMinutes"></timepicker>
+                            <div class="col-md-1 px-0 float-left">参与人</div>
+                            <div class="col-md-10 float-left">
+                                <AddMember></AddMember>
                             </div>
                         </div>
-                        <div class="clearfix">
-                            <div class="col-md-2 text-right float-left">结束时间</div>
-                            <div class="col-md-5 float-left pl-0">
-                                <datepicker @change="changeEndTime"></datepicker>
-                            </div>
-                            <div class="col-md-5 float-left pl-0">
-                                <timepicker :default="endMinutes" @change="changeEndMinutes"></timepicker>
-                            </div>
+                        <div class="example">
+                            <div class="col-md-1 px-0 float-left">备注</div>
+                            <div class="col-md-10 float-left">备注</div>
                         </div>
-                        <div class="clearfix">
-                            <div class="col-md-2 text-right float-left"></div>
-                            <div class="col-md-10 float-left pl-0">
-                                <div class="checkbox-custom checkbox-primary">
-                                    <input type="checkbox" id="isAllDay1" @change="changeIsAllDay">
-                                    <label for="isAllDay1">全天</label>
+                        <div class="example">
+                            <div>附件</div>
+                            <div class="">
+                                <div class="col-md-3 float-left text-center">
+                                    <div><i class="icon md-file" style="font-size: 36px"></i></div>
+                                    <div>泰洋川禾简介.docx</div>
+                                </div>
+                                <div class="col-md-3 float-left text-center">
+                                    <div><i class="icon md-file" style="font-size: 36px"></i></div>
+                                    <div>泰洋川禾泰洋川禾简介.docx</div>
                                 </div>
                             </div>
                         </div>
-                        <div class="clearfix pt-10">
-                            <div class="col-md-2 text-right float-left">参与人</div>
-                            <div class="col-md-10 float-left pl-0">
-                                <add-member></add-member>
+                        <div class="dividing-line"></div>
+                        <div class="example">
+                            <div class="">跟进记录</div>
+                            <div class="">
+                                <ul class="follow p-0">
+                                    <li class="clearfix example">
+                                        <div class="follow-avatar p-0 float-left">
+                                            <img src="https://res.papitube.com/no-icon.png" alt="" style="width: 100%;">
+                                        </div>
+                                        <div class="follow-item float-left pl-2">
+                                            <div class="change-time">陈晓禹 2018-02-12 10:10</div>
+                                            <div class="change-text">跟进记录啊啊啊啊啊</div>
+                                        </div>
+                                    </li>
+                                    <li class="clearfix example">
+                                        <div class="follow-avatar p-0 float-left">
+                                            <img src="https://res.papitube.com/no-icon.png" alt="" style="width: 100%;">
+                                        </div>
+                                        <div class="follow-item float-left pl-2">
+                                            <div class="change-time">陈晓禹 2018-02-12 10:10</div>
+                                            <div class="change-text">跟进记录啊啊啊啊啊</div>
+                                        </div>
+                                    </li>
+                                </ul>
                             </div>
                         </div>
-                        <div class="clearfix">
-                            <div class="col-md-2 text-right float-left"></div>
-                            <div class="col-md-10 float-left pl-0">
-                                <div class="checkbox-custom checkbox-primary">
-                                    <input type="checkbox" id="onlyParticipantVisible1"
-                                           @change="changeParticipantVisible">
-                                    <label for="onlyParticipantVisible1">仅参与人可见</label>
-                                </div>
+                        <div class="dividing-line"></div>
+
+                        <div class="example">
+                            <div class="col-md-1 pl-0 float-left">评论</div>
+                            <div class="col-md-11 float-left pr-0">
+                                <ChangeSizeInput></ChangeSizeInput>
                             </div>
                         </div>
-                        <div v-if="showMore">
-                            <div class="pt-10 mb-20 clearfix">
-                                <div class="col-md-2 text-right float-left">会议室</div>
-                                <div class="col-md-10 float-left pl-0">
-                                    <selectors :options="meetingRomeArr" :placeholder="'请选择会议室'"></selectors>
-                                </div>
-                            </div>
-                            <div class="example">
-                                <div class="col-md-2 text-right float-left">提醒</div>
-                                <div class="col-md-10 float-left pl-0">
-                                    <selectors :options="remindArr" :placeholder="''"></selectors>
-                                </div>
-                            </div>
-                            <div class="example">
-                                <div class="col-md-2 text-right float-left">重复</div>
-                                <div class="col-md-10 float-left pl-0">
-                                    <selectors :options="repeatArr" :placeholder="''"></selectors>
-                                </div>
-                            </div>
-                            <div class="example">
-                                <div class="col-md-2 text-right float-left">位置</div>
-                                <div class="col-md-10 float-left pl-0">
-                                    <input type="text" class="form-control" title="" v-model="eventPlace">
-                                </div>
-                            </div>
-                            <div class="example">
-                                <div class="col-md-2 text-right float-left">备注</div>
-                                <div class="col-md-10 float-left pl-0">
-                                    <textarea class="form-control" title="" v-model="eventDesc"></textarea>
-                                </div>
-                            </div>
-                        </div>
-                        <div class="col-md-3 text-right pointer-content hover-content" @click="isShowMore">
-                            <template v-if="showMore">隐藏更多选项</template>
-                            <template v-else>添加更多选项</template>
-                        </div>
-                    </div>
-                    <div class="modal-footer">
-                        <button class="btn btn-sm btn-white btn-pure" data-dismiss="modal">取消</button>
-                        <button class="btn btn-primary" type="submit" @click="addSchedule">确定</button>
                     </div>
                 </div>
             </div>
@@ -526,6 +531,37 @@
             }
         },
 
+        filters: {
+            getWeek: function (date) {
+                let week = new Date(date).getDay();
+                let value = '';
+                switch (week) {
+                    case 0:
+                        value = '周日';
+                        break;
+                    case 1:
+                        value = '周一';
+                        break;
+                    case 2:
+                        value = '周二';
+                        break;
+                    case 3:
+                        value = '周三';
+                        break;
+                    case 4:
+                        value = '周四';
+                        break;
+                    case 5:
+                        value = '周五';
+                        break;
+                    case 6:
+                        value = '周六';
+                        break;
+                }
+                return value;
+            }
+        },
+
         methods: {
             initCalendar: function () {
                 let data = Cookies.get('selectedCalendar');
@@ -599,6 +635,7 @@
 
             showSchedule: function (data) {
                 this.scheduleData = data;
+                // this.$store.dispatch('changeParticipantsInfo', {data: data.participantsInfo.data});
                 $('#changeSchedule').modal('show')
             },
 
@@ -842,5 +879,24 @@
         left: 5px;
     }
 
+    .big-time {
+        font-size: 48px;
+        color: #3F51B5;
+        font-weight: bold;
+    }
+
+    .follow-avatar {
+        border-radius: 100%;
+        overflow: hidden;
+        width: 40px;
+        height: 40px;
+    }
+
+    .creator-avatar {
+        width: 30px;
+        height: 30px;
+        overflow: hidden;
+        border-radius: 100%;
+    }
 
 </style>

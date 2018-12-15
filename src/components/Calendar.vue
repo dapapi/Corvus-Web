@@ -28,7 +28,7 @@
             },
             calendars: function (newValue) {
                 // console.log(newValue);
-                // $(this.$el).fullCalendar('refetchEvents')
+                $(this.$el).fullCalendar('refetchEvents')
             },
         },
         mounted() {
@@ -42,7 +42,7 @@
                 },
                 defaultView: 'month', //设置默认显示月，周，日
                 navLinks: true,
-                editable: true,
+                editable: false,
                 eventLimit: true,
                 firstDay: 1,
                 monthNames: ["1月", "2月", "3月", "4月", "5月", "6月", "7月", "8月", "9月", "10月", "11月", "12月"],
@@ -76,7 +76,7 @@
                         calendar_ids: self.calendars,
                         start_date: self.startDate,
                         end_date: self.endDate,
-                        include: 'calendar'
+                        include: 'calendar,participants,creator'
                     };
                     fetch('get', '/schedules', data).then(response => {
                         self.allScheduleInfo = response.data;

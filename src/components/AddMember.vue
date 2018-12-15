@@ -1,7 +1,7 @@
 <template>
     <div class="addMember">
         <ul class="addMember-items">
-            <li class="addMember-item mb-5" v-for="member in selectMemberArr" :key="member.id">
+            <li class="addMember-item" v-for="member in selectMemberArr" :key="member.id">
                 <img onerror="noneAvatar(this)" class="avatar" :src="member.avatar" title="Herman Beck" src="">
                 <span class="addMember-remove" @click="removeMember(member.id)">
                     <i class="md-minus-circle"></i>
@@ -9,7 +9,8 @@
             </li>
         </ul>
         <div class="addMember-trigger" :class="isMemberShow ? 'addMember-active': ''" :id="'selectStaff' + this._uid">
-            <div class="addMember-trigger-button" @click="showMember"><i class="md-plus"></i></div>
+            <div class="addMember-trigger-button" :class="selectMemberArr.length > 0 ? 'addMember-trigger-left' : ''"
+                 @click="showMember"><i class="md-plus"></i></div>
             <div class="addMember-trigger-dropdown">
                 <select-staff :multiple="true" :member-type="'participant'" :type="type"
                               @change="changeSelectedMember"></select-staff>
@@ -80,12 +81,16 @@
 
 </script>
 <style scoped>
-.addMember-trigger-button{
-   
-    margin-left:10px;
-  }
-  .addMember-item{
-    margin-left:10px;
-    margin-right: 0;
-  }
+    .addMember-trigger-left {
+        margin-left: 10px;
+    }
+
+    .addMember-item {
+        margin-left: 10px;
+        margin-right: 0;
+    }
+
+    .addMember-item:first-child {
+        margin-left: 0;
+    }
 </style>

@@ -387,17 +387,17 @@ export default new Router({
             path: '/management',
             name: 'management/index',
             component: () => import('./views/management/index.vue'),
-            children:[
+            children: [
                 {
-                    path:'/rolemanagement',
-                    component:()=>import('./views/management/rolemanagement.vue')
+                    path: '/rolemanagement',
+                    component: () => import('./views/management/rolemanagement.vue')
                 }, {
-                    path:'/organization',
+                    path: '/organization',
                     name: 'organization',
                     component: () => import('./views/organization/index.vue')
                 },
                 {
-                    path:'/organization/management',
+                    path: '/organization/management',
                     name: 'organization/management',
                     component: () => import('./views/organization/management.vue')
                 },
@@ -413,12 +413,17 @@ export default new Router({
             name: 'knowledgebase/detail',
             component: () => import('./views/knowledgebase/detail.vue')
         },
+        {
+            path: '/collaboration',
+            name: 'collaboration',
+            component: () => import('./views/tool/collaboration.vue')
+        },
     ],
-    scrollBehavior (to, from, savedPosition) {
+    scrollBehavior(to, from, savedPosition) {
         if (savedPosition) {
-         return savedPosition
+            return savedPosition
         } else {
-         return { x: 0, y: 0 }
+            return {x: 0, y: 0}
         }
     }
 });

@@ -112,6 +112,12 @@
         border-bottom: 1px dashed #E0E0E0;
     }
 
+    .dividing-line {
+        width: 100%;
+        height: 1px;
+        background-color: #E0E0E0;
+    }
+
     .hover-content:hover {
         color: #3f51b5;
     }
