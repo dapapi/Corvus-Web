@@ -5,7 +5,7 @@
 <script>
 export default {
     name: 'ToolTips',
-    props: ['title', 'placement'],
+    props: ['title', 'placement'], // title为内容 placement为展示位置，参数：top left bottom等
     data() {
         return {}
     },
