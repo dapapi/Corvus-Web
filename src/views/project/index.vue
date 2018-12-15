@@ -237,6 +237,13 @@
                             </div>
                         </div>
                         <div class="col-md-12 example clearfix" v-show="projectType != 5">
+                            <div class="col-md-2 text-right float-left pl-0">预计支出</div>
+                            <div class="col-md-10 float-left">
+                                <NumberSpinner ref="projectExpenditureFee"
+                                               @change="(value) => addProjectBaseInfo(value, 'expenditure_fee')"></NumberSpinner>
+                            </div>
+                        </div>
+                        <div class="col-md-12 example clearfix" v-show="projectType != 5">
                             <div class="col-md-2 text-right float-left pl-0">合同金额</div>
                             <div class="col-md-10 float-left">
                                 <NumberSpinner ref="projectFee"

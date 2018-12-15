@@ -89,6 +89,24 @@
                                 <div class="col-md-3 float-left">进行中</div>
                             </div>
                         </div>
+                        <div class="col-md-6 float-left pl-0 mb-20">
+                            <div class="mb-20 float-left clearfix col-md-6">
+                                <div class="float-left col-md-5 pr-0">预计订单收入</div>
+                                <div class="float-left col-md-7">100000元</div>
+                            </div>
+                            <div class="mb-20 float-left clearfix col-md-6">
+                                <div class="float-left col-md-5 pr-0">预计支出</div>
+                                <div class="float-left col-md-7">10000元</div>
+                            </div>
+                            <div class="mb-20 float-left clearfix col-md-6">
+                                <div class="float-left col-md-5 pr-0">实际收入</div>
+                                <div class="float-left col-md-7">100000元</div>
+                            </div>
+                            <div class="mb-20 float-left clearfix col-md-6">
+                                <div class="float-left col-md-5 pr-0">实际支出</div>
+                                <div class="float-left col-md-7">10000元</div>
+                            </div>
+                        </div>
                     </div>
 
                 </div>
@@ -101,7 +119,7 @@
                             <a class="nav-link" :class="projectInfo.type != 5 ? 'active' : ''" data-toggle="tab"
                                href="#forum-project-follow"
                                aria-controls="forum-base"
-                               aria-expanded="true" role="tab">项目跟进</a>
+                               aria-expanded="true" role="tab">项目进度</a>
                         </li>
                         <li class="nav-item" role="presentation" @click="getProjectTasks">
                             <a class="nav-link" data-toggle="tab" href="#forum-project-tasks"
@@ -131,70 +149,43 @@
                         </li>
                     </ul>
                     <div class="tab-content nav-tabs-animate bg-white">
-                        <div class="tab-pane animation-fade" v-if="projectInfo.type != 5"
+                        <!-- 项目进度 -->
+                        <div class="tab-pane animation-fade pb-10" v-if="projectInfo.type != 5"
                              :class="projectInfo.type != 5 ? 'active' : ''"
                              id="forum-project-follow" role="tabpanel">
-                            <div class="clearfix py-20">
-                                <div class="checkbox-custom checkbox-inline checkbox-primary checkbox-sm float-left">
-                                    <input type="checkbox" id="evaluation" name="remember">
-                                    <label for="evaluation">评估中</label>
-                                </div>
-                                <div class="checkbox-custom checkbox-inline checkbox-primary checkbox-sm float-left">
-                                    <input type="checkbox" id="evaluationCompleted" name="remember">
-                                    <label for="evaluationCompleted">评估完成</label>
-                                </div>
-                                <div class="checkbox-custom checkbox-inline checkbox-primary checkbox-sm float-left">
-                                    <input type="checkbox" id="sign" name="remember">
-                                    <label for="sign">签约中</label>
-                                </div>
-                                <div class="checkbox-custom checkbox-inline checkbox-primary checkbox-sm float-left">
-                                    <input type="checkbox" id="signCompleted" name="remember">
-                                    <label for="signCompleted">签约完成</label>
-                                </div>
-                                <div class="checkbox-custom checkbox-inline checkbox-primary checkbox-sm float-left">
-                                    <input type="checkbox" id="carry" name="remember">
-                                    <label for="carry">执行中</label>
-                                </div>
-                                <div class="checkbox-custom checkbox-inline checkbox-primary checkbox-sm float-left">
-                                    <input type="checkbox" id="carryCompleted" name="remember">
-                                    <label for="carryCompleted">执行完成</label>
-                                </div>
-                                <div class="checkbox-custom checkbox-inline checkbox-primary checkbox-sm float-left">
-                                    <input type="checkbox" id="payback" name="remember">
-                                    <label for="payback">回款中</label>
-                                </div>
-                                <div class="checkbox-custom checkbox-inline checkbox-primary checkbox-sm float-left">
-                                    <input type="checkbox" id="paybackComplated" name="remember">
-                                    <label for="paybackComplated">回款完成</label>
-                                </div>
-                            </div>
-                            <div class="clearfix pb-20">
-                                <div class="float-left col-md-3 px-0">
-                                    <div class="text-center py-10">2016-09-23 12:00</div>
-                                    <div class="project-time-item">
-                                        <div class="project-time-line"></div>
-                                        <div class="project-time-circle"></div>
+                            <div class="clearfix mt-20">
+                                <div class="project-progress" v-for="item in projectProgressInfo">
+                                    <div class="clearfix pointer-content">
+                                        <div class="col-md-4 p-0 float-left">
+                                            <div class="image-wraper">
+                                                <template v-if="item.isFinish == 1">
+                                                    <img src="https://res-crm.papitube.com/progress-selected.png"
+                                                         alt="">
+                                                </template>
+                                                <template v-else>
+                                                    <img src="https://res-crm.papitube.com/progress.png" alt="">
+                                                </template>
+                                            </div>
+                                        </div>
+                                        <div class="col-md-8 float-left pr-0 pl-10"
+                                             :class="item.isFinish == 1 ? 'finish-font-color' : ''"
+                                             style=" line-height: 40px;">
+                                            {{ item.name }}
+                                        </div>
                                     </div>
-                                    <div class="text-center py-10">张测试 评估中</div>
-                                </div>
-                                <div class="float-left col-md-3 px-0">
-                                    <div class="text-center py-10">2016-09-23 12:00</div>
-                                    <div class="project-time-item">
-                                        <div class="project-time-line"></div>
-                                        <div class="project-time-circle"></div>
+                                    <div class="pt-20">
+                                        <div class="points" :class="item.isFinish == 1 ? 'finish-color' : ''"></div>
+                                        <div class="line"
+                                             :class="item.isFinish == 1 ? 'finish-color' : 'unfinish-color'"></div>
                                     </div>
-                                    <div class="text-center py-10">张测试 评估完成</div>
-                                </div>
-                                <div class="float-left col-md-3 px-0">
-                                    <div class="text-center py-10">2016-09-23 12:00</div>
-                                    <div class="project-time-item">
-                                        <div class="project-time-line"></div>
-                                        <div class="project-time-circle"></div>
+                                    <div class="pt-10" v-if="item.finisher">
+                                        <div>张测试完成</div>
+                                        <div>2018-09-19 10:10</div>
                                     </div>
-                                    <div class="text-center py-10">张测试 评估中</div>
                                 </div>
                             </div>
                         </div>
+                        <!-- 任务 -->
                         <div class="tab-pane animation-fade pb-20 fixed-button-father" id="forum-project-tasks"
                              role="tabpanel">
                             <table class="table table-hover is-indent example" data-plugin="animateList"
@@ -234,6 +225,7 @@
                             </div>
 
                         </div>
+                        <!-- 合同 -->
                         <div class="tab-pane animation-fade py-10" v-if="projectInfo.type != 5"
                              id="forum-project-contract"
                              role="tabpanel">
@@ -273,50 +265,45 @@
                             </div>
 
                         </div>
+                        <!-- 账单 -->
                         <div class="tab-pane animation-fade py-10" v-if="projectInfo.type != 5" id="forum-project-bill"
                              role="tabpanel">
                             <div class="clearfix">
-                                <ul class="nav nav-tabs nav-tabs-line float-left" role="tablist"
-                                    style="border-bottom: 0">
-                                    <li class="nav-item" role="presentation">
-                                        <a class="nav-link active" data-toggle="tab" href="#forum-item-bill"
-                                           aria-controls="forum-base"
-                                           aria-expanded="true" role="tab">bigger研究所</a>
-                                    </li>
-                                    <li class="nav-item" role="presentation">
-                                        <a class="nav-link" data-toggle="tab" href="#forum-item-bill"
-                                           aria-controls="forum-base"
-                                           aria-expanded="true" role="tab">papi酱</a>
-                                    </li>
-                                </ul>
-                                <div class="float-right" style="padding: .715rem 1.429rem">
-                                    <div class="float-left pr-40">收款金额 <span class="money-color">10000</span></div>
-                                    <div class="float-left">付款金额 <span class="money-color">10000</span></div>
+                                <div class="float-left" style="padding: .715rem 1.429rem">
+                                    <div class="float-left pr-40">合同金额 <span class="money-color">10000元</span></div>
+                                    <div class="float-left pr-40">支出金额 <span class="money-color">1000元0</span></div>
+                                    <div class="float-left pr-40">税费 <span class="money-color">10000元</span></div>
+                                    <div class="float-left pr-40">papi分成 <span class="money-color">10000元</span></div>
+                                    <div class="float-left pr-40">bigger分成 <span class="money-color">10000元</span></div>
+                                    <div class="float-left pr-40">我司分成 <span class="money-color">10000元</span></div>
+                                </div>
+                                <div class="float-right" style="padding: .715rem 0">
+                                     <span class="pointer-content hover-content" data-toggle="modal"
+                                           data-target="#addBill">
+                                         <i class="icon md-plus pr-5"></i>新增结算单</span>
                                 </div>
                             </div>
-                            <div class="tab-pane animation-fade"
-                                 id="forum-item-bill">
-                                <table class="table table-hover example"
-                                       data-child="tr">
-                                    <tr>
-                                        <th class="cell-300" scope="col">科目类别</th>
-                                        <th class="cell-300" scope="col">金额</th>
-                                        <th class="cell-300" scope="col">收款时间</th>
-                                        <th class="cell-300" scope="col">付款时间</th>
-                                        <th class="cell-300" scope="col">操作人</th>
-                                    </tr>
-                                    <tbody>
-                                    <tr>
-                                        <td>测试类别</td>
-                                        <td>1233030</td>
-                                        <td>2018-10-31</td>
-                                        <td>2018-12-20</td>
-                                        <td>陈晓禹</td>
-                                    </tr>
-                                    </tbody>
-                                </table>
-                            </div>
+                            <table class="table table-hover"
+                                   data-child="tr">
+                                <tr>
+                                    <th class="cell-300" scope="col">费用类型</th>
+                                    <th class="cell-300" scope="col">艺人</th>
+                                    <th class="cell-300" scope="col">金额</th>
+                                    <th class="cell-300" scope="col">收款/付款时间</th>
+                                    <th class="cell-300" scope="col">操作人</th>
+                                </tr>
+                                <tbody>
+                                <tr>
+                                    <td>测试类别</td>
+                                    <td>1233030</td>
+                                    <td>2018-10-31</td>
+                                    <td>2018-12-20</td>
+                                    <td>陈晓禹</td>
+                                </tr>
+                                </tbody>
+                            </table>
                         </div>
+                        <!-- 回款 -->
                         <div class="tab-pane animation-fade pt-10 pb-20" v-if="projectInfo.type != 5"
                              id="forum-project-payback" role="tabpanel">
                             <div class="clearfix">
@@ -370,11 +357,13 @@
                                     <div class="clearfix">
                                         <div class="col-md-2 float-left pl-0">回款日期<span class="pl-5">2018-09-28</span>
                                         </div>
-                                        <div class="col-md-2 float-left pl-0">计划回款<span class="money-color pl-5">23492394元</span>
+                                        <div class="col-md-2 float-left pl-0">计划回款<span
+                                                class="money-color pl-5">23492394元</span>
                                         </div>
                                         <div class="col-md-2 float-left pl-0">实际回款<span class="money-color pl-5">22312031203元</span>
                                         </div>
-                                        <div class="col-md-2 float-left pl-0">开票金额<span class="money-color pl-5">12312222元</span>
+                                        <div class="col-md-2 float-left pl-0">开票金额<span
+                                                class="money-color pl-5">12312222元</span>
                                         </div>
                                         <div class="col-md-2 float-right pr-0 text-right" style="color: #cccccc;">
                                             <i class="icon md-eye pr-40 pointer-content"></i>
@@ -442,11 +431,13 @@
                                     <div class="clearfix">
                                         <div class="col-md-2 float-left pl-0">回款日期<span class="pl-5">2018-09-28</span>
                                         </div>
-                                        <div class="col-md-2 float-left pl-0">计划回款<span class="money-color pl-5">23492394元</span>
+                                        <div class="col-md-2 float-left pl-0">计划回款<span
+                                                class="money-color pl-5">23492394元</span>
                                         </div>
                                         <div class="col-md-2 float-left pl-0">实际回款<span class="money-color pl-5">22312031203元</span>
                                         </div>
-                                        <div class="col-md-2 float-left pl-0">开票金额<span class="money-color pl-5">12312222元</span>
+                                        <div class="col-md-2 float-left pl-0">开票金额<span
+                                                class="money-color pl-5">12312222元</span>
                                         </div>
                                         <div class="col-md-2 float-right pr-0 text-right" style="color: #cccccc;">
                                             <i class="icon md-eye pr-40 pointer-content"></i>
@@ -457,6 +448,7 @@
                                 </div>
                             </div>
                         </div>
+                        <!-- 概况 -->
                         <div class="tab-pane animation-fade" :class="projectInfo.type == 5 ? 'active' : ''"
                              id="forum-project-base"
                              role="tabpanel">
@@ -866,7 +858,7 @@
                 </div>
             </div>
         </div>
-
+        <!-- 新建回款期次 -->
         <div class="modal fade" id="addPaybackTime" aria-hidden="true" aria-labelledby="addLabelForm"
              role="dialog" tabindex="-1">
             <div class="modal-dialog modal-simple">
@@ -879,43 +871,43 @@
                     </div>
                     <div class="modal-body">
                         <div class="example" v-if="projectInfo.trail">
-                            <div class="col-md-2 text-right float-left">关联公司</div>
+                            <div class="col-md-2 text-right float-left px-0">关联公司</div>
                             <div class="col-md-10 float-left">
                                 {{ projectInfo.trail.data.client.data.company }}
                             </div>
                         </div>
                         <div class="example">
-                            <div class="col-md-2 text-right float-left">关联项目</div>
+                            <div class="col-md-2 text-right float-left px-0">关联项目</div>
                             <div class="col-md-10 float-left">
                                 {{ projectInfo.title }}
                             </div>
                         </div>
                         <div class="example">
-                            <div class="col-md-2 text-right float-left">负责人</div>
+                            <div class="col-md-2 text-right float-left px-0">负责人</div>
                             <div class="col-md-10 float-left">
                                 <InputSelectors></InputSelectors>
                             </div>
                         </div>
                         <div class="example">
-                            <div class="col-md-2 text-right float-left">期次名称</div>
+                            <div class="col-md-2 text-right float-left px-0">期次名称</div>
                             <div class="col-md-10 float-left">
                                 <input type="text" title="" class="form-control">
                             </div>
                         </div>
                         <div class="example">
-                            <div class="col-md-2 text-right float-left">计划回款金额</div>
+                            <div class="col-md-2 text-right float-left px-0">计划回款金额</div>
                             <div class="col-md-10 float-left">
                                 <NumberSpinner></NumberSpinner>
                             </div>
                         </div>
                         <div class="example">
-                            <div class="col-md-2 text-right float-left">计划回款日期</div>
+                            <div class="col-md-2 text-right float-left px-0">计划回款日期</div>
                             <div class="col-md-10 float-left">
                                 <Datepicker></Datepicker>
                             </div>
                         </div>
                         <div class="example">
-                            <div class="col-md-2 text-right float-left">备注</div>
+                            <div class="col-md-2 text-right float-left px-0">备注</div>
                             <div class="col-md-10 float-left">
                                 <textarea title="" class="form-control" placeholder="请输入备注"></textarea>
                             </div>
@@ -928,7 +920,7 @@
                 </div>
             </div>
         </div>
-
+        <!-- 新建回款记录 -->
         <div class="modal fade" id="addPayback" aria-hidden="true" aria-labelledby="addLabelForm"
              role="dialog" tabindex="-1">
             <div class="modal-dialog modal-simple">
@@ -941,49 +933,49 @@
                     </div>
                     <div class="modal-body">
                         <div class="example" v-if="companyArr.length > 0">
-                            <div class="col-md-2 text-right float-left">关联公司</div>
+                            <div class="col-md-2 text-right float-left px-0">关联公司</div>
                             <div class="col-md-10 float-left">
                                 <Selectors :options="companyArr"></Selectors>
                             </div>
                         </div>
                         <div class="example">
-                            <div class="col-md-2 text-right float-left">关联项目</div>
+                            <div class="col-md-2 text-right float-left px-0">关联项目</div>
                             <div class="col-md-10 float-left">
                                 <Selectors></Selectors>
                             </div>
                         </div>
                         <div class="example">
-                            <div class="col-md-2 text-right float-left">负责人</div>
+                            <div class="col-md-2 text-right float-left px-0">负责人</div>
                             <div class="col-md-10 float-left">
                                 <InputSelectors></InputSelectors>
                             </div>
                         </div>
                         <div class="example">
-                            <div class="col-md-2 text-right float-left">回款期次</div>
+                            <div class="col-md-2 text-right float-left px-0">回款期次</div>
                             <div class="col-md-10 float-left">
                                 <input type="text" title="" class="form-control">
                             </div>
                         </div>
                         <div class="example">
-                            <div class="col-md-2 text-right float-left">回款金额</div>
+                            <div class="col-md-2 text-right float-left px-0">回款金额</div>
                             <div class="col-md-10 float-left">
                                 <NumberSpinner></NumberSpinner>
                             </div>
                         </div>
                         <div class="example">
-                            <div class="col-md-2 text-right float-left">回款日期</div>
+                            <div class="col-md-2 text-right float-left px-0">回款日期</div>
                             <div class="col-md-10 float-left">
                                 <Datepicker></Datepicker>
                             </div>
                         </div>
                         <div class="example">
-                            <div class="col-md-2 text-right float-left">付款方式</div>
+                            <div class="col-md-2 text-right float-left px-0">付款方式</div>
                             <div class="col-md-10 float-left">
                                 <Selectors :options="payMethodsArr"></Selectors>
                             </div>
                         </div>
                         <div class="example">
-                            <div class="col-md-2 text-right float-left">备注</div>
+                            <div class="col-md-2 text-right float-left px-0">备注</div>
                             <div class="col-md-10 float-left">
                                 <textarea title="" class="form-control" placeholder="请输入备注"></textarea>
                             </div>
@@ -996,7 +988,7 @@
                 </div>
             </div>
         </div>
-
+        <!-- 新建开票记录 -->
         <div class="modal fade" id="addInvoice" aria-hidden="true" aria-labelledby="addLabelForm"
              role="dialog" tabindex="-1">
             <div class="modal-dialog modal-simple">
@@ -1009,49 +1001,49 @@
                     </div>
                     <div class="modal-body">
                         <div class="example" v-if="companyArr.length > 0">
-                            <div class="col-md-2 text-right float-left">关联公司</div>
+                            <div class="col-md-2 text-right float-left px-0">关联公司</div>
                             <div class="col-md-10 float-left">
                                 <Selectors :options="companyArr"></Selectors>
                             </div>
                         </div>
                         <div class="example">
-                            <div class="col-md-2 text-right float-left">关联项目</div>
+                            <div class="col-md-2 text-right float-left px-0">关联项目</div>
                             <div class="col-md-10 float-left">
                                 <Selectors></Selectors>
                             </div>
                         </div>
                         <div class="example">
-                            <div class="col-md-2 text-right float-left">负责人</div>
+                            <div class="col-md-2 text-right float-left px-0">负责人</div>
                             <div class="col-md-10 float-left">
                                 <InputSelectors></InputSelectors>
                             </div>
                         </div>
                         <div class="example">
-                            <div class="col-md-2 text-right float-left">回款期次</div>
+                            <div class="col-md-2 text-right float-left px-0">回款期次</div>
                             <div class="col-md-10 float-left">
                                 <input type="text" title="" class="form-control">
                             </div>
                         </div>
                         <div class="example">
-                            <div class="col-md-2 text-right float-left">开票金额</div>
+                            <div class="col-md-2 text-right float-left px-0">开票金额</div>
                             <div class="col-md-10 float-left">
                                 <NumberSpinner></NumberSpinner>
                             </div>
                         </div>
                         <div class="example">
-                            <div class="col-md-2 text-right float-left">开票日期</div>
+                            <div class="col-md-2 text-right float-left px-0">开票日期</div>
                             <div class="col-md-10 float-left">
                                 <Datepicker></Datepicker>
                             </div>
                         </div>
                         <div class="example">
-                            <div class="col-md-2 text-right float-left">票据类型</div>
+                            <div class="col-md-2 text-right float-left px-0">票据类型</div>
                             <div class="col-md-10 float-left">
                                 <Selectors :options="invoiceTypeArr"></Selectors>
                             </div>
                         </div>
                         <div class="example">
-                            <div class="col-md-2 text-right float-left">备注</div>
+                            <div class="col-md-2 text-right float-left px-0">备注</div>
                             <div class="col-md-10 float-left">
                                 <textarea title="" class="form-control" placeholder="请输入备注"></textarea>
                             </div>
@@ -1064,7 +1056,7 @@
                 </div>
             </div>
         </div>
-
+        <!-- 关联资源 -->
         <div class="modal fade" id="addLinkage" aria-hidden="true" aria-labelledby="addLabelForm"
              role="dialog" tabindex="-1">
             <div class="modal-dialog modal-simple">
@@ -1142,6 +1134,50 @@
                 </div>
             </div>
         </div>
+        <!-- 新增结算单 -->
+        <div class="modal fade" id="addBill" aria-hidden="true" aria-labelledby="addLabelForm"
+             role="dialog" tabindex="-1">
+            <div class="modal-dialog modal-simple">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <button type="button" class="close" aria-hidden="true" data-dismiss="modal">
+                            <i class="md-close" aria-hidden="true"></i>
+                        </button>
+                        <h4 class="modal-title">新增结算单</h4>
+                    </div>
+                    <div class="modal-body">
+                        <div class="example">
+                            <div class="col-md-2 text-right float-left px-0">税费</div>
+                            <div class="col-md-10 float-left">
+                                <input type="text" class="form-control" title="">
+                            </div>
+                        </div>
+                        <div class="example">
+                            <div class="col-md-2 text-right float-left px-0">papi分成</div>
+                            <div class="col-md-10 float-left">
+                                <input type="text" class="form-control" title="">
+                            </div>
+                        </div>
+                        <div class="example">
+                            <div class="col-md-2 text-right float-left px-0">bigger分成</div>
+                            <div class="col-md-10 float-left">
+                                <input type="text" class="form-control" title="">
+                            </div>
+                        </div>
+                        <div class="example">
+                            <div class="col-md-2 text-right float-left px-0">我司分成</div>
+                            <div class="col-md-10 float-left">
+                                <input type="text" class="form-control" title="">
+                            </div>
+                        </div>
+                    </div>
+                    <div class="modal-footer">
+                        <button class="btn btn-sm btn-white btn-pure" data-dismiss="modal">取消</button>
+                        <button class="btn btn-primary" type="submit" @click="">确定</button>
+                    </div>
+                </div>
+            </div>
+        </div>
 
         <Flag :typeText="changeProjectStatusText" @confirmFlag='changeProjectStatus'/>
 
@@ -1203,6 +1239,52 @@
                         child: []
                     }
                 ],
+                projectProgressInfo: [
+                    {
+                        name: '评估中',
+                        isFinish: 1,
+                        finisher: {
+                            data: {
+                                name: '张测试'
+                            }
+                        },
+                        finish_at: '2018-10-09 10:10'
+                    },
+                    {
+                        name: '评估完成',
+                        isFinish: 1,
+                        finisher: {
+                            data: {
+                                name: '张测试'
+                            }
+                        },
+                        finish_at: '2018-10-10 22:10'
+                    },
+                    {
+                        name: '签约中',
+                        isFinish: 0,
+                    },
+                    {
+                        name: '签约完成',
+                        isFinish: 0,
+                    },
+                    {
+                        name: '执行中',
+                        isFinish: 0,
+                    },
+                    {
+                        name: '执行完成',
+                        isFinish: 0,
+                    },
+                    {
+                        name: '回款中',
+                        isFinish: 0,
+                    },
+                    {
+                        name: '回款完成',
+                        isFinish: 0,
+                    }
+                ]
             }
         },
 
@@ -1578,6 +1660,45 @@
         -webkit-transform: translate(-50%, -50%);
         top: 50%;
         left: 50%;
+    }
+
+    .project-progress {
+        width: 11%;
+        float: left;
+    }
+
+    .image-wraper {
+        width: 40px;
+        height: 40px;
+    }
+
+    .image-wraper img {
+        width: 100%;
+    }
+
+    .project-progress .points {
+        width: 3px;
+        height: 3px;
+        border-radius: 100%;
+        position: relative;
+        top: 1.5px;
+    }
+
+    .project-progress .line {
+        width: 100%;
+        height: 1px;
+    }
+
+    .finish-color {
+        background-color: #3298DC;
+    }
+
+    .unfinish-color {
+        background-color: #EEEEEE;
+    }
+
+    .finish-font-color {
+        color: #3298DC;
     }
 
 </style>
