@@ -127,8 +127,7 @@
                                 aria-controls="forum-present"
                                 aria-expanded="false" role="tab">功能范围</a>
                             </li>
-                        </ul>
-                        
+                        </ul>    
                     </div>
                     <div class="page-content tab-content nav-tabs-animate bg-white pt-0 ml-2" >
                         <div class="tab-pane animation-fade active" id="forum-role" role="tabpanel">
@@ -216,8 +215,27 @@
                                                style="font-weight: 300">全部人员，共{{item.users.data.length}}人</span></h5>
 
                     </div>
-                    <div class="page-content tab-content nav-tabs-animate bg-white" >
-                        <div class="tab-pane animation-fade active" id="forum-artist" role="tabpanel">
+                    <div class="col-md-12">
+                        <ul class="nav nav-tabs nav-tabs-line" role="tablist">
+                            <li class="nav-item" role="presentation" >
+                                <a class="nav-link active" data-toggle="tab" :href="'#forum-member'+ item.id"
+                                aria-controls="forum-base"
+                                aria-expanded="true" role="tab">角色成员</a>
+                            </li>
+                            <li class="nav-item" role="presentation" >
+                                <a class="nav-link" data-toggle="tab" :href="'#forum-authority'+ item.id"
+                                aria-controls="forum-present"
+                                aria-expanded="false" role="tab">功能权限</a>
+                            </li>
+                            <li class="nav-item" role="presentation" >
+                                <a class="nav-link" data-toggle="tab" :href="'#forum-scope'+ item.id"
+                                aria-controls="forum-present"
+                                aria-expanded="false" role="tab">功能范围</a>
+                            </li>
+                        </ul>    
+                    </div>     
+                    <div class="page-content tab-content nav-tabs-animate bg-white pt-20" >
+                        <div class="tab-pane animation-fade active" :id="'forum-member'+item.id" role="tabpanel">
                             <table class="table table-hover" data-plugin="selectable" data-selectable="selectable">
                                 <tr>
                                     <th class="w-50">
@@ -247,7 +265,66 @@
                                 </tbody>
                             </table>
                         </div>
+                        <div class="tab-pane animation-fade " :id="'forum-authority'+item.id" role="tabpanel">
+                            <div class="title py-20" style="color:#999999;font-size:12px;font-weight:300;position: relative;">设置角色对应到功能操作、应用管理、后台管理权限<span  style="font-weight:600;position:absolute;right:10px"><input type="checkbox" class="mr-10">全选</span></div>
+                            <table class="table table-hover" data-plugin="selectable" data-selectable="selectable"> 
+                                <tbody >
+                                <tr  class="pointer-cont" style="border:1px solid #e3e3e3;" v-for="item in powerDate" :key="item.id">
+                                    <td style="font-weight:400;border:1px solid #e3e3e3;position: relative;" class="cell-200" scope="col">
+                                        <div class="cont">
+                                             <input type="checkbox"  class="mr-10" >{{item.name}}   
+                                        </div>
+                                    </td>  
+                                     <td style="display:flex;flex-wrap:wrap;" class="cell-600" scope="col">
+                                    <div v-for="one in item.data" :key="one.id" class="py-5 text-left pl-10" style="width:33%;"><input type="checkbox"  class="mr-10" >{{one.name}}</div>                 
+                                    </td>
+                                   
+                                </tr>
+                                </tbody>        
+                            </table>
+                         </div>
+                         <div class="tab-pane animation-fade "   :id="'forum-scope'+item.id" role="tabpanel">
+                            <div class="title py-20" style="color:#999999;font-size:12px;font-weight:300;">针对审批、考勤、简报、销售等应用、设置该查看、管理数据范围</div>
+                            <table class="table table-hover" data-plugin="selectable" data-selectable="selectable"> 
+                                <tr>
+                                    <th class="cell-300 pl-0" scope="col">应用名</th>
+                                    <th class="cell-300" scope="col">查看数据范围</th>
+                                    <th class="cell-300" scope="col">管理数据范围</th>
+                                </tr>
+                                 <tbody >
+                                <tr  class="pointer-content" style="border-top:1px solid #e3e3e3;position: relative;">
+                                    <td style="position: absolute;top:230px;left:50px;font-weight:400">简报</td>
+                                    <td style="color:#D4D4D4">
+                                        <div><input type="radio" value="0" v-model="radio" disabled="disabled" class="mr-10">本人相关</div>
+                                        <div><input type="radio" value="1" v-model="radio" disabled="disabled" class="mr-10">本部门</div>
+                                        <div><input type="radio" value="2" v-model="radio" disabled="disabled" class="mr-10">本部门以及下属部门</div>
+                                        <div><input type="radio" value="3" v-model="radio" disabled="disabled" class="mr-10">本部门以及下属部门</div>
+                                    </td>
+                                    <td>
+                                      
+                                    </td>
+                                </tr>
+                                <tr  class="pointer-content" style="border-top:1px solid #e3e3e3;position: relative;">
+                                    <td style="position: absolute;top:350px;left:50px;font-weight:400">简报</td>
+                                    <td style="color:#D4D4D4">
+                                        <div><input type="radio" value="4" v-model="radiotow" disabled="disabled" class="mr-10">本人相关</div>
+                                        <div><input type="radio" value="5" v-model="radiotow" disabled="disabled" class="mr-10">本部门</div>
+                                        <div><input type="radio" value="6" v-model="radiotow" disabled="disabled" class="mr-10">本部门以及下属部门</div>
+                                        <div><input type="radio" value="7" v-model="radiotow" disabled="disabled" class="mr-10">本部门以及下属部门</div>
+                                    </td>
+                                    <td style="color:#999999">
+                                        <div><input type="checkbox" v-model="check" disabled="disabled" class="mr-10" value="0">我负责的</div>
+                                        <div><input type="checkbox" v-model="check" disabled="disabled" class="mr-10" value="1">我创建的</div>
+                                        <div><input type="checkbox" v-model="check" disabled="disabled" class="mr-10" value="2">我参与的</div>
+                                        <div><input type="checkbox" v-model="check" disabled="disabled" class="mr-10" value="3">我可见的</div>
+                                    </td>
+                                </tr>
+                                </tbody>        
+                            </table>
+                        </div>
                     </div>
+                   
+                     
                 </div>
             
             </div>
@@ -538,7 +615,6 @@
                 groupingId: '',
                 updategrouping: '',
                 memberDate:'',
-                rolenameId:'',
                 radio:'3',
                 radiotow:'7',
                 check:['0','1','2','3'],
@@ -546,13 +622,14 @@
                 defaultpitchon:'1',
                 funDate:data,
                 switchId:[],
-                aaaaa:[],
+                rolepower:'',
+                powerDate:''
             }
         },
         mounted() {
             this.getroleDate();
             this.getgroupingDate();
-            this.getrolenameId()
+            this.getpower()
             // console.log($('table'));
             $('table').asSelectable();
         },
@@ -565,9 +642,7 @@
                    console.log(_this.roleDate)
                 });
             },
-            getrolenameId(){
-                console.log(this.roleDate)
-            },
+           
             //获取分组数据
             getgroupingDate() {
                 let _this = this;
@@ -589,6 +664,10 @@
                     })
                     _this.$store.state.participantsInfo=datas
                 })       
+             },
+             //获取权限数据
+             getpower(){
+                
              },       
             //全选反选
             selectArtists: function (value) {
@@ -611,9 +690,14 @@
                 }
             },
             //切换内容
-            changeCont(value,id) {
+            changeCont(value) {
                 this.jobCont = value
                 this.defaultId=0
+                let _this = this;
+                fetch('get', '/console/feature/'+this.jobCont).then(function (response) {
+                    _this.powerDate = response;
+                    console.log(_this.powerDate)
+                });
             },
             //获取新增角色的类别
             changeRolejob(value) {
@@ -752,10 +836,8 @@
             grouping(value) {
                 this.groupingId = value
             },
-            clickdefault(){
-              
+            clickdefault(){ 
                 this.conceal=!this.conceal;
-            
             },
             defaultcontent(value){
                 console.log(value)
@@ -825,6 +907,13 @@
     } 
     .pointer-content input:hover{
         cursor:no-drop;
+    }
+    .cont{
+        position:absolute;
+        top:50%;
+        left: 50%;
+        -webkit-transform: translate(-50%, -50%);
+        transform: translate(-50%, -50%);
     }
 </style>
 

@@ -45,29 +45,31 @@
                 </div>
                 <div class="clearfix">
                     <div class="col-md-6 float-left pl-0 mb-20" style="border-right: 1px solid #eee">
-                        <div class="col-md-6">任务 5/12</div>
-                        <div class="clearfix example">
-                            <div class="col-md-3 float-left">电话会议</div>
-                            <div class="col-md-3 float-left">张佳佳</div>
-                            <div class="col-md-3 float-left">2018-12-03 11:10</div>
-                            <div class="col-md-3 float-left">进行中</div>
+                        <div class="col-md-6">任务{{taskNum}}</div>
+                        <div class="clearfix example" v-for="(task,index) in tasksInfo" :key="index">
+                            <div class="col-md-3 float-left">{{task.title}}</div>
+                            <div class="col-md-3 float-left">{{task.principal.data.name}}</div>
+                            <div class="col-md-3 float-left">{{task.end_at}}</div>
+                            <div class="col-md-3 float-left">
+                                <template v-if="task.status === 1">进行中</template>
+                                <template v-if="task.status === 2">已完成</template>
+                                <template v-if="task.status === 3">已停止</template>
+                            </div>
                         </div>
                     </div>
                     <div class="col-md-6 float-left pl-0 mb-20">
                         <div class="col-md-6">项目</div>
-                        <div class="clearfix example">
-                            <div class="col-md-3 float-left">Ugg代言</div>
-                            <div class="col-md-3 float-left">商务项目</div>
-                            <div class="col-md-3 float-left">2018-12-03 11:10</div>
-                            <div class="col-md-3 float-left">进行中</div>
+                        <div class="clearfix example" v-for="(item,index) in ProjectsInfo" :key="index">
+                            <div class="col-md-3 float-left">{{item.title}}</div>
+                            <div class="col-md-3 float-left">{{item.principal.data.name}}</div>
+                            <div class="col-md-3 float-left">{{item.end_at}}</div>
+                            <div class="col-md-3 float-left">
+                                <template v-if="item.status === 1">进行中</template>
+                                <template v-if="item.status === 2">已完成</template>
+                                <template v-if="item.status === 3">已停止</template>
+                            </div>
                         </div>
-                        <div class="clearfix example">
-                            <div class="col-md-3 float-left">星巴克代言</div>
-                            <div class="col-md-3 float-left">商务项目</div>
-                            <div class="col-md-3 float-left">2018-12-03 11:10</div>
-                            <div class="col-md-3 float-left">进行中</div>
                         </div>
-                    </div>
                 </div>
             </div>
             
@@ -703,6 +705,9 @@
                 updatePlatform:'',//修改平台
                 isLoading:true,
                 participant:'',
+                tasksInfo:'',
+                taskNum:'',
+                ProjectsInfo:[]
             }
         },
 
@@ -813,9 +818,20 @@
                     include: 'creator,tasks,affixes,producer,type',
                 };
                 fetch('get', '/bloggers/' + this.artistId, data).then(function (response) {
-                    _this.artistInfo = response.data;
-                    console.log(_this.artistInfo)
                    
+                      let doneTaskNum = 0
+                    _this.artistInfo = response.data;
+                     
+                    _this.tasksInfo = response.data.tasks.data
+                    if(_this.tasksInfo.length>0){
+                        for (let i = 0; i < _this.tasksInfo.length; i++) {
+                            if(_this.tasksInfo[i].status ==2){
+                                doneTaskNum = doneTaskNum+1
+                            }
+                            
+                        }
+                    }
+                    _this.taskNum =`${doneTaskNum}/${_this.tasksInfo.length}` 
                     if(_this.artistInfo.intention==false){
                         _this.updateType=2
                     }else{
@@ -835,7 +851,14 @@
                 //项目
                 fetch('get','/bloggers/'+this.artistId+'?include=tasks.type,trails.project.principal,trails.client,producer,creator,affixes,type,publicity').then(function(response){
                     _this.totalData=response.data
+                    
                     _this.isLoading=false
+                     for (let i = 0; i < response.data.trails.data.length; i++) {
+                        if (response.data.trails.data[i].project) {
+                            response.data.trails.data[i].project.data.company = response.data.trails.data[i].client.data.company
+                            _this.ProjectsInfo.push(response.data.trails.data[i].project.data)
+                        }
+                    }
                 })
                 
                 //作品
@@ -854,14 +877,6 @@
                     _this.artistTypeArr=response.data                  
                 })
             },
-
-            // getArtistProjects: function () {
-            //     let _this = this;
-            //     fetch('get', '/stars/' + this.artistId).then(function (response) {
-            //         _this.artistProjectsInfo = response.data;
-            //     })
-            // },
-
             getArtistTasks: function () {
                 let _this = this;
                 fetch('get', '/stars/' + this.artistId).then(function (response) {
@@ -874,13 +889,7 @@
             },
 
             addPrivacy: function () {
-            //     let _this=this;
-            //     let data = { 
-            //         updateNickname:this.artistInfo.name 
-            //     }
-            //   fetch('put','/bloggers/1994731356',data).then(function(response){
-            //        _this.artistTasksInfo = response.data;
-            //   })
+           
             },
 
             editBaseInfo: function () {
