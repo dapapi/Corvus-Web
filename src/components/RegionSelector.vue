@@ -139,6 +139,22 @@ export default {
                 this.setCity()
                 $('#areaSelector').selectpicker('val', this.areaSelected);
             })
+        },
+        // 重置
+        reset () {
+            this.provinceSelected = ''
+            this.provinceSelectedId = ''
+            this.city = {}
+            this.citySelected = ''
+            this.citySelectedId = ''
+            this.area = {}
+            this.areaSelected = ''
+            this.areaSelectedId = ''
+            this.$nextTick(() => {
+                $('#provinceSelector').selectpicker('val', '')
+                $('#citySelector').selectpicker('val', '');
+                $('#areaSelector').selectpicker('val', '');
+            })
         }
     },
     watch:{
