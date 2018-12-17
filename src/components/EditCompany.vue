@@ -1,10 +1,10 @@
 <template>
     <div class="clearfix">
-        <div class="float-left">
+        <div class="float-left col-md-6 pl-0">
             <editable-search-box :options="clientArr" :type="'changeCompany'"
                                  @change="changeSelects"></editable-search-box>
         </div>
-        <div class="float-left col-md-6">
+        <div class="float-left col-md-6 pr-0">
             <selectors :options="clientLevelArr" ref="companyLevel" @change="changeCompanyLevel"
                        :disable="isDisable" placeholder='请选择类别'></selectors>
         </div>

@@ -26,7 +26,7 @@
                                 <i class="md-plus pr-2" aria-hidden="true"></i>类型
                             </div>
                             <div class="font-weight-bold float-left" v-if="clientInfo.type">
-                                {{ clientTypeArr.filter(item => item.value == clientInfo.type).name }}
+                                {{ clientTypeArr.find(item => item.value == clientInfo.type).name }}
                             </div>
                         </div>
                     </div>

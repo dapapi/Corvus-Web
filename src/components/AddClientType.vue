@@ -19,55 +19,69 @@
 </template>
 
 <script>
-import config from '../assets/js/config'
-export default {
-    name: 'AddClientType',
-    data () {
-        return {
-            clientTypeArr: config.clientTypeArr,
-            visible: false
-        }
-    },
-    methods: {
-        // 显示、隐藏
-        show() {
-            this.visible = !this.visible
+    import config from '../assets/js/config'
+
+    export default {
+        name: 'AddClientType',
+        props: ['type'],
+        data() {
+            return {
+                visible: false
+            }
         },
-        XPos (num) {
-            return `calc(12px + 2rem + ${Math.sin(Math.PI/4 * num ) * 78}px)`
+
+        computed: {
+            clientTypeArr: function () {
+                if (this.type === 'project') {
+                    let arr = config.clientTypeArr;
+                    arr.push({name: '基础客户', value: 5});
+                    return arr
+                } else {
+                    return config.clientTypeArr
+                }
+            }
         },
-        YPos (num) {
-            return `calc(35px + 2rem + ${Math.cos(Math.PI/4 * num ) * 78}px)`
-        },
-        handleClick (val) {
-            this.$emit('change', val)
-            this.show()
+
+        methods: {
+            // 显示、隐藏
+            show() {
+                this.visible = !this.visible
+            },
+            XPos(num) {
+                return `calc(12px + 2rem + ${Math.sin(Math.PI / 4 * num) * 78}px)`
+            },
+            YPos(num) {
+                return `calc(35px + 2rem + ${Math.cos(Math.PI / 4 * num) * 78}px)`
+            },
+            handleClick(val) {
+                this.$emit('change', val)
+                this.show()
+            }
         }
     }
-}
 </script>
 
 <style lang="scss" scoped>
-.client-type {
-    ul {
-        li {
-            display: inline-block;
-            width: 46px;
-            height: 46px;
-            line-height: 46px;
-            border-radius: 50%;
-            color: #fff;
-            font-weight: bold;
-            background: #4caf50;
-            text-align: center;
-            cursor: pointer;
-            position: fixed;
-            opacity: 0;
-            transition: opacity 0.8s;
-        }
-        li.show {
-            opacity: 1;
+    .client-type {
+        ul {
+            li {
+                display: inline-block;
+                width: 46px;
+                height: 46px;
+                line-height: 46px;
+                border-radius: 50%;
+                color: #fff;
+                font-weight: bold;
+                background: #4caf50;
+                text-align: center;
+                cursor: pointer;
+                position: fixed;
+                opacity: 0;
+                transition: opacity 0.8s;
+            }
+            li.show {
+                opacity: 1;
+            }
         }
     }
-}
 </style>

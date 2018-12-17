@@ -3,6 +3,7 @@ import App from './App.vue';
 import router from './router';
 import store from './store/index.js';
 import AddMember from './components/AddMember.vue';
+import BuildProject from './components/BuildProject.vue';
 import Calendar from './components/Calendar.vue';
 import Selectors from './components/Selectors.vue';
 import ChangeSizeInput from './components/ChangeSizeInput.vue';
@@ -60,9 +61,11 @@ import ToolTips from '@/components/ToolTips.vue'
 
 
 import DepartmentPicker from '@/components/DepartmentPicker'
+
 Vue.config.productionTip = false;
 
 Vue.component('AddMember', AddMember);
+Vue.component('BuildProject', BuildProject);
 Vue.component('Calendar', Calendar);
 Vue.component('ChangeSizeInput', ChangeSizeInput);
 Vue.component('ConditionalInput', ConditionalInput);
