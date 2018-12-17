@@ -49,7 +49,13 @@ export default {
         name: this.data.name,
         pId: this.data.department_pid
       });
-    }
+    },
+    showList () {
+        this.visible = !this.visible
+        if (this.dIndex || this.dIndex === 0) {
+            this.$emit('changeIndex', this.dIndex)
+        }
+    },
   }
 };
 </script>
@@ -83,7 +89,6 @@ export default {
 // }
 .name {
   color: #333;
-  font-size: 16px;
   cursor: pointer;
   height: 50px;
   line-height: 50px;

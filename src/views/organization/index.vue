@@ -7,7 +7,7 @@
 
         <div class="page-content container-fluid">
             <div class="panel col-md-12 clearfix py-5">
-                <div class="clearfix">
+                <div class="clearfix" style="padding-bottom: 20px;">
                     <div class="col-md-3 example float-left">
                         <div class="input-search">
                             <button type="button" class="input-search-btn"><i class="icon md-search" aria-hidden="true"></i>
@@ -17,11 +17,11 @@
                     </div>
 
                     <div class="col-md-12 float-left" style="magin-top: -20px;">
-                        <h4>泰洋系 
+                        <h5>泰洋系 
                             <span class="color999" style="font-weight: 300;">（{{count}}人）</span> 
                             <span class="principal">负责人</span>
                             <span style="float: right; cursor: pointer;"><router-link to="/organization/management">管理部门</router-link></span>
-                        </h4>
+                        </h5>
                         <template v-for="(item, index) in data">
                             <Department 
                                 :data="item" 
@@ -108,14 +108,14 @@
     .input-search i {
         cursor: pointer;
     }
-    h4 {
+    h5 {
         padding-bottom: 20px;
         border-bottom: 1px solid #eee;
     }
-    h4 a{
+    h5 a{
         color: #333;
     }
-    h4 a:hover {
+    h5 a:hover {
         text-decoration: none;
     }
     .principal {

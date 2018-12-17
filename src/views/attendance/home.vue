@@ -53,7 +53,7 @@ export default {
             ]
             this.leftData.bottomData=[
                 {
-                    value:1,
+                    value:6,
                     name:'我的考勤',
                     data:[
                         {
@@ -69,7 +69,7 @@ export default {
                     ]
                 },
                 {
-                    value:2,
+                    value:7,
                     name:'成员考勤',
                     data:[
                         {
@@ -85,7 +85,7 @@ export default {
                     ]
                 },
                 {
-                    value:3,
+                    value:8,
                     name:'考勤汇总',
                     data:[
                         {

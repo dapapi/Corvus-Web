@@ -33,5 +33,13 @@ export default {
             return false
         }
         return true;
+    },
+    // 邮箱校验
+    email (value) {
+        if (!(/^([A-Za-z0-9_\-\.])+\@([A-Za-z0-9_\-\.])+\.([A-Za-z]{2,4})$/.test(value))) {
+            toastr.error("邮箱错误");
+            return false
+        }
+        return true;
     }
 }

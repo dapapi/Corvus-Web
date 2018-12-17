@@ -11,6 +11,8 @@ export default {
 }
 </script>
 
-<style>
-
+<style scoped>
+    .col-md-10{
+        padding:0 !important;
+    }
 </style>

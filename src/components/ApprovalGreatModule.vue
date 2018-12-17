@@ -27,6 +27,7 @@
 
 <script>
 import pageData from '@/views/approval/approval_form'
+import contractConfig from '@/components/ForApproval/contractConfig'
 import ApprovalSummerNote from '@/components/ForApproval/ApprovalSummerNote'
 import ApprovalUploader from '@/components/ForApproval/ApprovalUploader'
 import ApprovalImageUploader from '@/components/ForApproval/ApprovalImageUploader'
@@ -113,8 +114,8 @@ export default {
 <style scoped>
 .modal-greater{
     margin-top: 20px !important;
-    height: 61.8vh;
-    overflow-y:scroll;
+    height: 100%;
+    /* overflow-y:scroll; */
 }
 .great-option{
     display: flex;

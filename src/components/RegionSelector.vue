@@ -131,20 +131,25 @@
                 this.provinceSelected = this.provinceVal
                 this.getProvinceId(this.provinceSelected)
                 this.setCity()
-                $('#provinceSelector').selectpicker('val', this.provinceSelected);
+
+                $('#areaSelector').selectpicker('val', this.areaSelected);
+            },
+            // 重置
+            reset() {
+                this.provinceSelected = ''
+                this.provinceSelectedId = ''
+                this.city = {}
+                this.citySelected = ''
+                this.citySelectedId = ''
+                this.area = {}
+                this.areaSelected = ''
+                this.areaSelectedId = ''
                 this.$nextTick(() => {
-                    this.citySelected = this.cityVal
-                    this.getCityId(this.citySelected)
-                    this.setCity()
-                    $('#citySelector').selectpicker('val', this.citySelected);
+                    $('#provinceSelector').selectpicker('val', '')
+                    $('#citySelector').selectpicker('val', '');
+                    $('#areaSelector').selectpicker('val', '');
                 })
-                this.$nextTick(() => {
-                    this.areaSelected = this.areaVal
-                    this.getAreaId(this.areaSelected)
-                    this.setCity()
-                    $('#areaSelector').selectpicker('val', this.areaSelected);
-                })
-            }
+            },
         },
         watch: {
             //监听一级列表变更
@@ -182,7 +187,7 @@
                     this.sendData()
                 }
             }
-        },
+        }
     }
 </script>
 

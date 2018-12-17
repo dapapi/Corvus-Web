@@ -25,5 +25,8 @@ export default {
 
     changeOtherSlot(state,data){
         state.otherSlot = data
+    },
+    changeUnReadMsg(state,data){
+        state.unReadMsg = data
     }
 }

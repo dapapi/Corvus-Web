@@ -27,5 +27,8 @@ export default {
     },
     changeOtherSlot: function(data,params){
         data.commit('changeOtherSlot',params)
+    },
+    changeUnReadMsg:function(data,params){
+        data.commit('changeUnReadMsg', params)
     }
 }
