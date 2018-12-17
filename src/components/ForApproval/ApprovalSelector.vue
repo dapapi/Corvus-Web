@@ -105,7 +105,7 @@ export default {
 </script>
 
 <style>
-.col-md-10{
+.good-picker{
     padding: 0;
 }
 </style>

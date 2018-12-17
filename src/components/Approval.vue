@@ -11,9 +11,9 @@
                     <h5 class="page-title pl-30 mb-50">审批</h5>
                     <div v-for="(item, index) in approvalSort" :key="index" class="col-md-10 ml-30">
                         
-                        <h5 @click="toggleSubSort(item.key)" class="approval-sort-title"> 
+                        <p @click="toggleSubSort(item.key)" class="approval-sort-title"> 
                             <span class="icon md-caret-right font-size-20 mr-10 leftImg" :class="!showSort.includes(item.key)?'anmite':''"></span>
-                            {{item.value}}</h5>
+                            {{item.value}}</p>
                         <transition name="sub">
                             <div v-if="!showSort.includes(item.key)" class="sub-box">
                                 <div>
@@ -316,7 +316,9 @@
 <style scoped>
 a:link,a:visited,a:hover,a:target{
     text-decoration: none;
-    color: #000;
+    /* color: #000; */
+      color: #838383;
+
 }
     .approval-sort-title{
         cursor: pointer;
