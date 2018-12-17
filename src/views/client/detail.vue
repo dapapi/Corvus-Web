@@ -475,7 +475,7 @@
                         <div class="example">
                             <div class="col-md-2 text-right float-left">任务类型</div>
                             <div class="col-md-10 float-left pl-0">
-                                <selectors :options="taskTypeArr" @change="changeTaskType"></selectors>
+                                <selectors ref="taskType" :options="taskTypeArr" @change="changeTaskType"></selectors>
                             </div>
                         </div>
                         <div class="example">
@@ -500,17 +500,17 @@
                         <div class="example">
                             <div class="col-md-2 text-right float-left pl-0">任务优先级</div>
                             <div class="col-md-10 float-left pl-0">
-                                <selectors :options="taskLevelArr" @change="changeTaskLevel"></selectors>
+                                <selectors ref="taskLevel" :options="taskLevelArr" @change="changeTaskLevel"></selectors>
                             </div>
                         </div>
                         <div class="example">
                             <div class="col-md-2 text-right float-left">开始时间</div>
                             <div class="col-md-4 float-left pl-0">
-                                <datepicker @change="changeStartTime"></datepicker>
+                                <datepicker ref="startTime" @change="changeStartTime"></datepicker>
                             </div>
                             <div class="col-md-2 text-right float-left">截止时间</div>
                             <div class="col-md-4 float-left pl-0">
-                                <datepicker @change="changeEndTime"></datepicker>
+                                <datepicker ref="endTime" @change="changeEndTime"></datepicker>
                             </div>
                         </div>
                         <div class="example">
@@ -582,6 +582,7 @@
                     type: '' // 是否是关键人
                 }, // 修改的联系人信息
                 contactId: '', // 联系人id
+                user: {},
             }
         },
         beforeMount() {
@@ -595,7 +596,17 @@
                 _this.getClientProject()
                 _this.getClientTask()
             }, 100);
+            this.user = JSON.parse(Cookies.get('user'))
+            this.setDefaultPrincipal()
             this.getTaskType()
+            $('#addTask').on('hidden.bs.modal', () => {
+                // 清空state
+                this.cancleTask()
+            })
+            $('#addContact').on('hidden.bs.modal', () => {
+                // 清空state
+                this.cancleContact()
+            })
         },
         computed: {
             completeNum () {
@@ -801,6 +812,7 @@
             },
 
             addTask: function () {
+                this.setDefaultPrincipal()
                 let _this = this;
                 let data = {
                     resource_type: 4,
@@ -877,7 +889,7 @@
                 this.changeInfo.principal_id = value
             },
             changeEditStatus(value, config) {
-                this.$refs.contact.setValue(config.type)
+                this.$refs.contact.setValue(config.type || '')
                 this.editConfig = config || {
                     position: '',
                     name: '',
@@ -918,7 +930,41 @@
                     arr.length = 5
                 }
                 return arr
-            }
+            },
+            // 关闭添加任务弹出层
+            cancleTask () {
+                this.taskName = ''
+                this.taskType = ''
+                this.$refs.taskType.setValue('')
+                // principal_id: this.taskPrincipalId, // 负责人 principal_id
+                this.taskLevel = ''
+                this.$refs.taskLevel.setValue(1)
+                this.taskIntroduce = ''
+                this.$refs.startTime.setValue('')
+                this.$refs.endTime.setValue('')
+                this.taskStartTime = ''
+                this.taskEndTime = ''
+                this.setDefaultPrincipal()
+                // participant_ids: this.participantIds
+            },
+            // 关闭新增联系人
+            cancleContact () {
+                this.editConfig = {
+                    position: '',
+                    name: '',
+                    phone: '',
+                    type: ''
+                }
+                this.$refs.contact.setValue('')
+            },
+            // 设置默认负责人
+            setDefaultPrincipal () {
+                this.$store.commit('changeNewPrincipal', {
+                    name: this.user.nickname,
+                    id: this.user.id
+                })
+                this.$store.commit('changeNewParticipantsInfo', [])
+            },
         }
     }
 </script>

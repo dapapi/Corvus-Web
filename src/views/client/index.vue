@@ -13,19 +13,14 @@
             <div class="panel col-md-12 py-5">
                 <div class="clearfix">
                     <div class="col-md-3 example float-left">
-                        <!-- <input type="text" class="form-control" placeholder="请输入公司名称"
-                               style="width: 220px" @change="changeCompany"> -->
                         <selectors :options="companiesArr" :placeholder="'请选择公司'"
                                    @change="changeCompany"></selectors>
-                               
                     </div>
                     <div class="col-md-3 example float-left">
                         <input-selectors :key="'inputSelect'" :placeholder="'请选择负责人'"
                                          @change="changePrincipalSelect"></input-selectors>
                     </div>
                     <div class="col-md-3 example float-left">
-                        <!-- <selectors @change=""
-                                   :placeholder="'请选择级别'"></selectors> -->
                         <selectors :options="clientLevelArr" :placeholder="'请选择公司级别'"
                                    @change="changeClientLevelSelect"></selectors>
                     </div>
@@ -81,13 +76,6 @@
 
         <customize-filter :data="customizeInfo" @change="customize"></customize-filter>
 
-        <!-- <div class="site-action" data-plugin="actionBtn" data-toggle="modal" data-target="#addClient">
-            <button type="button"
-                    class="site-action-toggle btn-raised btn btn-success btn-floating waves-effect waves-classic">
-                <i class="front-icon md-plus animation-scale-up" aria-hidden="true"></i>
-                <i class="back-icon md-plus animation-scale-up" aria-hidden="true"></i>
-            </button>
-        </div> -->
         <AddClientType @change="showAddModal" />
 
         <div class="modal fade" id="addClient" aria-hidden="true" aria-labelledby="addLabelForm"
@@ -102,20 +90,13 @@
                     </div>
                     <div class="modal-body">
 
-                        <!-- <div class="example">
-                            <div class="col-md-2 text-right float-left">客户类型</div>
-                            <div class="col-md-10 float-left pl-0">
-                                <selectors :options="clientTypeArr" :placeholder="'请选择客户类型'"
-                                           @change="changeClientType"></selectors>
-                            </div>
-                        </div> -->
                         <div class="example">
                             <div class="col-md-2 text-right float-left">公司名称</div>
                             <div class="col-md-5 float-left pl-0">
                                 <input type="text" class="form-control" title="" v-model="clientName">
                             </div>
                             <div class="col-md-5 float-left pl-0">
-                                <selectors :options="clientLevelArr" :placeholder="'请选择公司级别'"
+                                <selectors ref="clientLevel" :options="clientLevelArr" :placeholder="'请选择公司级别'"
                                            @change="changeClientLevel"></selectors>
                             </div>
                         </div>
@@ -123,7 +104,7 @@
                         <div class="example">
                             <div class="col-md-2 text-right float-left">地区</div>
                             <div class="col-md-10 float-left pl-0 region">
-                                <RegionSelector @setAreaData="changeAreaData" />
+                                <RegionSelector ref="region" @setAreaData="changeAreaData" />
                             </div>
                         </div>
                         <div class="example">
@@ -148,7 +129,7 @@
                         <div class="example">
                             <div class="col-md-2 text-right float-left">关键决策人</div>
                             <div class="col-md-10 float-left pl-0">
-                                <selectors :options="keyMasterArr" :placeholder="'请选择是否是关键决策人'"
+                                <selectors ref="clientContactType" :options="keyMasterArr" :placeholder="'请选择是否是关键决策人'"
                                            @change="changeContactClientType"></selectors>
                             </div>
                         </div>
@@ -167,17 +148,10 @@
                         <div class="example">
                             <div class="col-md-2 text-right float-left">规模</div>
                             <div class="col-md-10 float-left pl-0">
-                                <selectors :options="clientScaleArr" :placeholder="'请选择规模'"
+                                <selectors ref="clientScale" :options="clientScaleArr" :placeholder="'请选择规模'"
                                            @change="changeClientScale"></selectors>
                             </div>
                         </div>
-                        <!-- 注释掉 -->
-                        <!-- <div class="example">
-                            <div class="col-md-2 text-right float-left">决策关键人/部门</div>
-                            <div class="col-md-10 float-left pl-0">
-                                <input type="text" class="form-control" title="" v-model="clientDecision">
-                            </div>
-                        </div> -->
                         <div class="example">
                             <div class="col-md-2 text-right float-left">备注</div>
                             <div class="col-md-10 float-left pl-0">
@@ -185,7 +159,7 @@
                             </div>
                         </div>
                         <div class="modal-footer">
-                            <button class="btn btn-sm btn-white btn-pure" @click="cancelClient" data-dismiss="modal">取消</button>
+                            <button class="btn btn-sm btn-white btn-pure" data-dismiss="modal">取消</button>
                             <button class="btn btn-primary" type="submit" @click="addClient">确定</button>
                         </div>
 
@@ -232,6 +206,7 @@
                 companyName: '', // 公司名称
                 user: {}, // 个人信息
                 ragion: {}, // 区域
+                clientScale: ''
             }
         },
 
@@ -241,6 +216,10 @@
             this.user = JSON.parse(Cookies.get('user'))
             // 清除负责人默认值的设置
             this.clearDefaultPrincipal()
+            $('#addClient').on('hidden.bs.modal', () => {
+                // 清空state
+                this.cancelClient()
+            })
         },
 
         methods: {
@@ -326,8 +305,8 @@
                     province: this.ragion.province || '',
                     city: this.ragion.city || '',
                     district: this.ragion.district || '',
-                    address: 'test',
                     principal_id: this.$store.state.newPrincipalInfo.id,
+                    address: this.clientAddressDetail,
                     contact: {
                         name: this.clientContact,
                         phone: this.clientContactPhone,
@@ -365,7 +344,6 @@
 
             changeClientType: function (value) {
                 this.clientType = value;
-                console.log(value)
             },
 
             changeClientLevel: function (value) {
@@ -380,7 +358,6 @@
                 this.clientPrincipalSearch = value
                 this.clientPrincipalIdSearch = this.$store.state.newPrincipalInfo.id
                 this.getClients()
-                console.log(value.id)
             },
 
             changeClientLevelSelect(value) {
@@ -402,7 +379,6 @@
             // show add
             showAddModal (val) {
                 this.setDefaultPrincipal()
-                console.log(this.user)
                 $('#addClient').modal()
                 this.clientType = val
             },
@@ -423,6 +399,23 @@
             },
             // 关闭弹窗
             cancelClient () {
+                this.clientType = ''
+                this.clientName = ''
+                this.clientLevel = ''
+                this.clientContactType = ''
+                this.$refs.clientLevel.setValue('')
+                this.$refs.clientContactType.setValue('')
+                this.$refs.region.reset()
+                this.ragion.province = {}
+                    // principal_id: this.$store.state.newPrincipalInfo.id,
+                this.clientContact = ''
+                this.clientContactPhone = ''
+                this.clientContactPosition = ''
+                this.clientContactType = ''
+                this.clientScale = ''
+                this.$refs.clientScale.setValue('')
+                this.clientRemark = ''
+                this.clientAddressDetail = ''
                 this.clearDefaultPrincipal()
             }
         }

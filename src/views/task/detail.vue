@@ -140,7 +140,7 @@
                                 <div class="card-text py-5 clearfix">
                                     <div class="col-md-1 float-left text-right pl-0">优先级</div>
                                     <div class="col-md-11 float-left font-weight-bold">
-                                        <EditSelector :content="taskInfo.priority" :is-edit="isEdit"
+                                        <EditSelector :content="taskInfo.priority?taskInfo.priority: ''" :is-edit="isEdit"
                                                       :options="priorityArr" @change="changeTaskLevel"></EditSelector>
                                     </div>
                                 </div>
@@ -290,7 +290,7 @@
                         <div class="example">
                             <div class="col-md-2 text-right float-left">任务类型</div>
                             <div class="col-md-10 float-left pl-0">
-                                <selectors :options="taskTypeArr" @change="addTaskType"></selectors>
+                                <selectors ref="taskType" :options="taskTypeArr" @change="addTaskType"></selectors>
                             </div>
                         </div>
                         <div class="example">
@@ -315,25 +315,25 @@
                         <div class="example">
                             <div class="col-md-2 text-right float-left pl-0">任务优先级</div>
                             <div class="col-md-10 float-left pl-0">
-                                <selectors :options="taskLevelArr" @change="addTaskLevel"></selectors>
+                                <selectors :options="taskLevelArr" ref="taskLevel" @change="addTaskLevel"></selectors>
                             </div>
                         </div>
                         <div class="example">
                             <div class="col-md-2 text-right float-left">开始时间</div>
                             <div class="col-md-5 float-left pl-0">
-                                <datepicker @change="addStartTime"></datepicker>
+                                <datepicker ref='startTime' @change="addStartTime"></datepicker>
                             </div>
                             <div class="col-md-5 float-left pl-0">
-                                <timepicker :default="startMinutes" @change="addStartMinutes"></timepicker>
+                                <timepicker ref="startMinutes" :default="startMinutes" @change="addStartMinutes"></timepicker>
                             </div>
                         </div>
                         <div class="example">
                             <div class="col-md-2 text-right float-left">截止时间</div>
                             <div class="col-md-5 float-left pl-0">
-                                <datepicker @change="addEndTime"></datepicker>
+                                <datepicker ref="endTime" @change="addEndTime"></datepicker>
                             </div>
                             <div class="col-md-5 float-left pl-0">
-                                <timepicker :default="endMinutes" @change="addEndMinutes"></timepicker>
+                                <timepicker ref="endMinutes" :default="endMinutes" @change="addEndMinutes"></timepicker>
                             </div>
                         </div>
                         <div class="example">
@@ -423,6 +423,10 @@
                 id: this.user.id
             })
             this.getTaskType()
+            $('#addChildTask').on('hidden.bs.modal', () => {
+                // 清空state
+                this.closeAddTask()
+            })
         },
 
         watch: {
@@ -802,7 +806,35 @@
             },
             setDelInfo (id) {
                 this.attachmentId = id
-            }
+            },
+            // 关闭新增任务
+            closeAddTask () {
+                this.taskName = ''
+                this.taskLevel = ''
+                this.$refs.taskLevel.setValue('1')
+                this.taskType = ''
+                this.$refs.taskType.setValue('')
+                this.startTime = ''
+                this.endTime = ''
+                this.startMinutes = ''
+                this.endMinutes = ''
+                this.taskIntroduce = ''
+                this.$refs.startTime.setValue('')
+                this.$refs.startMinutes.setValue('00:00')
+                this.$refs.endTime.setValue('')
+                this.$refs.endMinutes.setValue('00:00')
+                this.linkData = []
+                this.getLinkData()
+                this.setDefaultPrincipal()
+            },
+            // 设置默认负责人
+            setDefaultPrincipal () {
+                this.$store.commit('changeNewPrincipal', {
+                    name: this.user.nickname,
+                    id: this.user.id
+                })
+                this.$store.commit('changeNewParticipantsInfo', [])
+            },
         }
     }
 </script>
