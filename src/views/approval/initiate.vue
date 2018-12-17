@@ -10,8 +10,8 @@
       </div>
       <div class="row py-5">
         <div class="col-lg-4 approval-module" v-for="item in dailog" :key="item.id">
-          <div class="card" @click="addAproval(item)">
-            <div class="card-block" data-toggle="modal" data-target="#approval">
+          <div class="card">
+            <div class="card-block" data-toggle="modal" data-target="#approval-great-module">
               <i class="icon md-file float-left" style="font-size:3rem"></i>
               <p class="my-10">{{item.key}}</p>
             </div>

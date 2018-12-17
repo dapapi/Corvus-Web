@@ -11,16 +11,18 @@ export default {
             propsTitle:''
         }
     },
+    mounted() {
+        this.getCount()
+    },
     watch:{
-       title:function(value){
-            this.propsTitle = value
-            this.renderTips()
-       }
+        title:function(){
+            this.getCount()
+        }
     },
     methods:{
-        renderTips(){
-             $('[data-toggle="tooltip"]').tooltip({
-                title: `<div>${this.propsTitle}</div>`, // 内容
+        getCount(){
+            $('[data-toggle="tooltip"]').tooltip({
+                title: `<div>${this.title}</div>`, // 内容
                 placement: this.placement ? this.placement : 'bottom', // 位置
                 template: `<div class="tooltip bs-tooltip-bottom"  // 模板
                     role="tooltip">
