@@ -424,6 +424,7 @@
                     _this.current_page = response.meta.pagination.current_page;
                     _this.total = response.meta.pagination.total;
                     _this.total_pages = response.meta.pagination.total_pages;
+                    console.log(_this.artistsInfo)
                 });
             },
 
