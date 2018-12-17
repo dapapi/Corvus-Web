@@ -9,11 +9,17 @@
             <div data-role="content" class="scrollable-content" style="width: 260px">
                 <section class="page-aside-section">
                     <h5 class="page-title pl-30 mb-50">审批</h5>
-                    <div class="list-group">
-                        <router-link class="list-group-item" to="/approval/initiate">发起审批</router-link>
-                        <router-link class="list-group-item" to="/approval/application">我的申请</router-link>
-                        <router-link class="list-group-item" to="/approval/my">我的审批</router-link>
-                        <router-link class="list-group-item" to="/approval/only">知会我的</router-link>
+                    <div v-for="(item, index) in approvalSort" :key="index" class="col-md-10 ml-30">
+                        <h5 @click="toggleSubSort(item.key)"> {{item.value}}</h5>
+                        <transition name="sub">
+                            <div v-if="!showSort.includes(item.key)" class="sub-box">
+                                <div>
+                                    <router-link v-for="(itemSub, index) in approvalSubSort" :key="index" :to="'/approval/'+item.url+'/'+itemSub.url">
+                                        <p>{{itemSub.value}}</p>
+                                    </router-link>
+                                </div>
+                            </div >
+                        </transition>
                     </div>
                 </section>
                 <section class="page-aside-section">
@@ -136,9 +142,13 @@
 <script>
     import fetch from "@/assets/utils/fetch";
     import config from "@/assets/js/config";
+    import {APPROVAL_CONFIG} from "@/components/ForApproval/config.js"
     export default {
         data() {
             return {
+                approvalSort:APPROVAL_CONFIG.approvalSort,
+                approvalSubSort:APPROVAL_CONFIG.approvalSubSort,
+                showSort:[],
                 list: [
                     {
                         id: "1",
@@ -221,6 +231,13 @@
                 
         },
         methods: {
+                toggleSubSort(params){
+                    if(this.showSort.includes(params)){
+                        this.showSort.splice(this.showSort.indexOf(params),1)
+                    }else{
+                        this.showSort.push(params)
+                    }
+                },
                 switchMenu: function (id) {
                     if (this.isShow == id) {
                         this.isShow = 0;
@@ -294,6 +311,23 @@
     }
 </script>
 <style scoped>
+a:link,a:visited,a:hover,a:target{
+    text-decoration: none;
+    color: #000;
+}
+    .sub-enter-active,.sub-leave-active{
+        transition: all 0.2s ease;
+    }
+    .sub-enter,.sub-leave-to{
+        height: 0px;
+    }
+    .sub-leave,.sub-enter-to{
+        height: 144px;
+    }
+    .sub-box{
+        overflow: hidden;
+        cursor: pointer;
+    }
     li {
       list-style: none;
     }

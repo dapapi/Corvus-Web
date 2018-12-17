@@ -93,6 +93,7 @@
             },
             //线索类型为4时切换博主
             trailType: function () {
+                this.trailOriginArr = config.trailOrigin
                 if (this.trailType == 4) {
                     this.trailOriginArr = config.trailBloggerOrigin
                 }

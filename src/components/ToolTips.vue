@@ -10,7 +10,15 @@ export default {
         return {}
     },
     mounted() {
-        this.$nextTick(() => {
+        this.getCount()
+    },
+    watch:{
+        title:function(){
+            this.getCount()
+        }
+    },
+    methods:{
+        getCount(){
             $('[data-toggle="tooltip"]').tooltip({
                 title: `<div>${this.title}</div>`, // 内容
                 placement: this.placement ? this.placement : 'bottom', // 位置
@@ -21,9 +29,8 @@ export default {
                     </div>`,
                 html: true
             });
-        })
-        
-    },
+        }
+    }
 }
 </script>
 

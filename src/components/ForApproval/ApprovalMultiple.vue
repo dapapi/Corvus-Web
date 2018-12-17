@@ -32,12 +32,18 @@ export default {
             n:1,
         }
     },
+    mounted(){
+        this.refresh()
+    },
     methods:{
         addOption(){
             this.n++
             this.$nextTick(() => {
-                $('.selectpicker').selectpicker('render');   
+                this.refresh()
             })
+        },
+        refresh(){
+            $('.selectpicker').selectpicker('render');   
         },
         sortChecker(params){
             switch (Number(params.control.data_dictionary_id)){

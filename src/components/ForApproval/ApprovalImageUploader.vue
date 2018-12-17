@@ -1,10 +1,15 @@
 <template>
     <div class="upload col-md-12">
         <div class="col-md-2">{{data[0].control_title}}</div>
+        <figure v-for="(item, index) in fileInfo" :key="index" >
+            <div class="image-show" v-if="fileInfo.length > 0" :style="'backgroundImage:url('+item.fileUrl+')'"></div>
+            <p>{{item.fileName}}</p>
+        </figure>
         <div class="image-show">
             <span class="plus-icon">+</span>
-            <input type="file" @change="uploadFile" />
+            <input type="file" @change="uploadFile" accept="image/png,image/gif,image/jpeg,image/tiff,application/pdf" />
          </div>
+         <DocPreview />
     </div>
 </template>
 
@@ -17,7 +22,7 @@ export default {
     name: 'ApprovalImageUploader',
     data(){
         return{
-            fileInfo:{},
+            fileInfo:[],
             fileExt:'',
             imgExt:['png','jpg','bmp','tif','gif']
         }
@@ -66,11 +71,10 @@ export default {
                 }, function (res) {
                     let fileUrl = config.imgUrl + res.key;
                     let fileName = file.name;
-                    
                     _this.$emit('change', fileUrl, fileName, fileSize,_this.fileExt,_this.id);
+                    _this.fileInfo.push({fileUrl, fileName, fileSize})
                 })
             });
-            this.fileInfo = file
         },
 
         getQiniuAccessToken: function (callback) {
@@ -109,7 +113,16 @@ export default {
 </script>
 
 <style lang="scss" scoped>
+p{
+    text-align: center;
+}
+figure{
+
+}
 .image-show{
+    cursor: pointer;
+    background-size: 80px;
+    background-repeat: no-repeat;
     width: 80px;
     height: 80px;
     border: 1px solid rgba(7,17,27,0.2);

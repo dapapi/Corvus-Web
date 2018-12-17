@@ -1,6 +1,6 @@
 <template>
     <div>
-        <div class="modal fade show" id="approval-great-module" aria-labelledby="approval-great-module" role="dialog" tabindex="-1" style="display: block;">
+        <div class="modal fade" id="approval-great-module" aria-labelledby="approval-great-module" role="dialog" tabindex="-1">
             <div class="modal-dialog modal-simple modal-top modal-lg">
                 <div class="modal-content">
                 <div class="modal-header">
@@ -12,6 +12,7 @@
                 <div class="modal-body modal-greater">
                     <div v-for="(item, index) in moduleInfo" :key="index" class="great-option">
                         <div :is='sortChecker(item)' :data='item'></div>
+                        <!-- ⬆️核心模块 -->
                     </div>
                 </div>
                 <div class="modal-footer">
@@ -45,8 +46,6 @@ export default {
         }
     },
     mounted(){
-        // console.log(pageData);
-        console.log(this.$options.components,'par');
         this.dataInit()
     },
     components:{

@@ -138,43 +138,43 @@ export default new Router({
             path: '/approval',
             name: 'approval',
             redirect: '/approval/initiate',
-            component: () => import(/* webpackChunkName: "about" */ './views/approval/index.vue'),
+            component: () => import('./views/approval/index.vue'),
             children: [
                 {
-                    path: '/approval/initiate',
+                    path: '/approval/common/initiate',
                     component: () => import('./views/approval/initiate.vue')
                 },
                 {
-                    path: '/approval/application',
+                    path: '/approval/common/application',
                     component: () => import('./views/approval/application.vue')
                 },
                 {
-                    path: '/approval/my',
+                    path: '/approval/common/my',
                     component: () => import('./views/approval/my.vue')
                 },
                 {
-                    path: '/approval/only',
+                    path: '/approval/common/only',
                     component: () => import('./views/approval/only.vue')
                 },
                 {
-                    path: '/approval/general',
+                    path: '/approval/common/general',
                     component: () => import('./views/approval/general.vue')
                 },
                 {
-                    path: '/approval/currency',
+                    path: '/approval/common/currency',
                     component: () => import('./views/approval/currency.vue')
                 },
                 {
-                    path: '/approval/cur',
+                    path: '/approval/common/cur',
                     component: () => import('./views/approval/cur.vue')
                 },
                 {
-                    path: '/approval/account',
+                    path: '/approval/common/account',
                     component: () => import('./views/approval/account.vue')
                 },
                 {
-                    path: '/application/:id',
-                    name: 'approval/detail',
+                    path: '/application/common/:id',
+                    name: 'approval/common/detail',
                     component: () => import('./views/approval/appdetail.vue')
                 },
             ],

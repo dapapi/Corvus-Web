@@ -1,7 +1,7 @@
 <template>
   <div class="page-container">
     <div class="page-aside">
-      <Approval></Approval>
+      <Approval />
       <ApprovalGreatModule />
     </div>
     <div class="page">
