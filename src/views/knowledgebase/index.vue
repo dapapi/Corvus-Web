@@ -63,7 +63,7 @@
                                     <td></td>
                                     <td>
                                         <span>{{item.created_at}}</span>
-                                        <i class="icon md-time ml-10" aria-hidden="true"></i>
+                                        <i class="md-time ml-10" aria-hidden="true"></i>
                                     </td>
                                     <td></td>
                                     <td></td>

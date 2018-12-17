@@ -86,15 +86,15 @@
                     <div class="card-block">
                        <div class="pearls row">
                       <div class="pearl current col-4">
-                        <div class="pearl-icon"><i class="icon wb-user" aria-hidden="true"></i></div>
+                        <div class="pearl-icon"><i class="wb-user" aria-hidden="true"></i></div>
                         <span class="pearl-title">Account Info</span>
                       </div>
                       <div class="pearl disabled col-4">
-                        <div class="pearl-icon"><i class="icon wb-payment" aria-hidden="true"></i></div>
+                        <div class="pearl-icon"><i class="wb-payment" aria-hidden="true"></i></div>
                         <span class="pearl-title">Billing Info</span>
                       </div>
                       <div class="pearl disabled col-4">
-                        <div class="pearl-icon"><i class="icon wb-check" aria-hidden="true"></i></div>
+                        <div class="pearl-icon"><i class="wb-check" aria-hidden="true"></i></div>
                         <span class="pearl-title">Confirmation</span>
                       </div>
                     </div>

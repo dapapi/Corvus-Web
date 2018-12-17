@@ -5,7 +5,7 @@
             <h1 class="page-title d-inline">项目详情</h1>
 
             <div class="page-header-actions dropdown show task-dropdown float-right">
-                <i class="icon md-more font-size-24" aria-hidden="true" id="taskDropdown"
+                <i class="iconfont icon-gengduo1 font-size-24" aria-hidden="true" id="taskDropdown"
                    data-toggle="dropdown" aria-expanded="false"></i>
                 <div class="dropdown-menu dropdown-menu-right task-dropdown-item" aria-labelledby="taskDropdown"
                      role="menu" x-placement="bottom-end">
@@ -280,7 +280,7 @@
                                 <div class="float-right" style="padding: .715rem 0">
                                      <span class="pointer-content hover-content" data-toggle="modal"
                                            data-target="#addBill">
-                                         <i class="icon md-plus pr-5"></i>新增结算单</span>
+                                         <i class="md-plus pr-5"></i>新增结算单</span>
                                 </div>
                             </div>
                             <table class="table table-hover"
@@ -323,7 +323,7 @@
                                 <div class="float-right" style="padding: .715rem 1.429rem">
                                     <span class="pointer-content hover-content" data-toggle="modal"
                                           data-target="#addPaybackTime">
-                                                <i class="icon md-plus pr-5"></i>新建回款期次</span>
+                                                <i class="md-plus pr-5"></i>新建回款期次</span>
                                 </div>
                             </div>
                             <div class="tab-pane animation-fade" id="forum-item-payback">
@@ -348,10 +348,10 @@
                                         <div class="float-right">
                                             <span class="mr-40 pointer-content hover-content" data-toggle="modal"
                                                   data-target="#addPayback">
-                                                <i class="icon md-plus pr-5"></i>回款记录</span>
+                                                <i class="md-plus pr-5"></i>回款记录</span>
                                             <span class="pointer-content hover-content" data-toggle="modal"
                                                   data-target="#addInvoice">
-                                                <i class="icon md-plus pr-5"></i>开票记录</span>
+                                                <i class="md-plus pr-5"></i>开票记录</span>
                                         </div>
                                     </div>
                                     <div class="clearfix">
@@ -366,9 +366,9 @@
                                                 class="money-color pl-5">12312222元</span>
                                         </div>
                                         <div class="col-md-2 float-right pr-0 text-right" style="color: #cccccc;">
-                                            <i class="icon md-eye pr-40 pointer-content"></i>
-                                            <i class="icon md-edit pr-40 pointer-content"></i>
-                                            <i class="icon md-delete pointer-content"></i>
+                                            <i class="md-eye pr-40 pointer-content"></i>
+                                            <i class="iconfont icon-bianji pr-40 pointer-content"></i>
+                                            <i class="md-delete pointer-content"></i>
                                         </div>
                                     </div>
 
@@ -386,9 +386,9 @@
                                                     class="pl-5">现金</span>
                                             </div>
                                             <div class="col-md-2 float-right pr-0 text-right" style="color: #cccccc;">
-                                                <i class="icon md-eye pr-40 pointer-content"></i>
-                                                <i class="icon md-edit pr-40 pointer-content"></i>
-                                                <i class="icon md-delete pointer-content"></i>
+                                                <i class="md-eye pr-40 pointer-content"></i>
+                                                <i class="iconfont icon-bianji pr-40 pointer-content"></i>
+                                                <i class="md-delete pointer-content"></i>
                                             </div>
                                         </div>
                                     </div>
@@ -406,9 +406,9 @@
                                             <div class="col-md-2 float-left pl-0">票据类型<span class="pl-5">增值税普通发票</span>
                                             </div>
                                             <div class="col-md-2 float-right pr-0 text-right" style="color: #cccccc;">
-                                                <i class="icon md-eye pr-40 pointer-content"></i>
-                                                <i class="icon md-edit pr-40 pointer-content"></i>
-                                                <i class="icon md-delete pointer-content"></i>
+                                                <i class="md-eye pr-40 pointer-content"></i>
+                                                <i class="iconfont icon-bianji pr-40 pointer-content"></i>
+                                                <i class="md-delete pointer-content"></i>
                                             </div>
                                         </div>
                                     </div>
@@ -422,10 +422,10 @@
                                         <div class="float-right">
                                             <span class="mr-40 pointer-content hover-content" data-toggle="modal"
                                                   data-target="#addPayback">
-                                                <i class="icon md-plus pr-5"></i>回款记录</span>
+                                                <i class="md-plus pr-5"></i>回款记录</span>
                                             <span class="pointer-content hover-content" data-toggle="modal"
                                                   data-target="#addInvoice">
-                                                <i class="icon md-plus pr-5"></i>开票记录</span>
+                                                <i class="md-plus pr-5"></i>开票记录</span>
                                         </div>
                                     </div>
                                     <div class="clearfix">
@@ -440,9 +440,9 @@
                                                 class="money-color pl-5">12312222元</span>
                                         </div>
                                         <div class="col-md-2 float-right pr-0 text-right" style="color: #cccccc;">
-                                            <i class="icon md-eye pr-40 pointer-content"></i>
-                                            <i class="icon md-edit pr-40 pointer-content"></i>
-                                            <i class="icon md-delete pointer-content"></i>
+                                            <i class="md-eye pr-40 pointer-content"></i>
+                                            <i class="iconfont icon-bianji pr-40 pointer-content"></i>
+                                            <i class="md-delete pointer-content"></i>
                                         </div>
                                     </div>
                                 </div>
@@ -456,7 +456,7 @@
                                 <div class="card-header card-header-transparent card-header-bordered">
                                     <div class="float-left font-weight-bold third-title">项目信息</div>
                                     <div class="float-right" v-show="!isEdit">
-                                        <i class="icon md-edit pointer-content" aria-hidden="true"
+                                        <i class="iconfont icon-bianji pointer-content" aria-hidden="true"
                                            @click="editBaseInfo"></i>
                                     </div>
                                     <div class="float-right mr-40" v-show="isEdit">
@@ -1086,7 +1086,7 @@
                                     <div class="tab-pane active" id="projectsPane" role="tabpanel">
                                         <div class="input-search mb-20" style="width: 70%">
                                             <button type="submit" class="input-search-btn">
-                                                <i class="icon md-search" aria-hidden="true"></i>
+                                                <i class="md-search" aria-hidden="true"></i>
                                             </button>
                                             <input type="text" class="form-control" name="" placeholder="搜索关键字..."
                                                    v-model="searchKeyWord">
@@ -1098,7 +1098,7 @@
                                                 @click="selectResource('projects', project.id)">{{ project.title }}
                                                 <span class="float-right"
                                                       v-show="linkageSelectedIds.projects.indexOf(project.id) > -1">
-                                                    <i class="icon md-check"></i>
+                                                    <i class="md-check"></i>
                                                 </span>
                                             </li>
                                         </ul>
@@ -1106,7 +1106,7 @@
                                     <div class="tab-pane" id="tasksPane" role="tabpanel">
                                         <div class="input-search mb-20" style="width: 70%">
                                             <button type="submit" class="input-search-btn">
-                                                <i class="icon md-search" aria-hidden="true"></i>
+                                                <i class="md-search" aria-hidden="true"></i>
                                             </button>
                                             <input type="text" class="form-control" name="" placeholder="搜索关键字..."
                                                    v-model="searchKeyWord">
@@ -1118,7 +1118,7 @@
                                                 @click="selectResource('tasks', task.id)">{{ task.title }}
                                                 <span class="float-right"
                                                       v-show="linkageSelectedIds.tasks.indexOf(task.id) > -1">
-                                                    <i class="icon md-check"></i>
+                                                    <i class="md-check"></i>
                                                 </span>
                                             </li>
                                         </ul>

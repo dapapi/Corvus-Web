@@ -15,8 +15,8 @@
         <div class="page-header page-header-bordered">
             <h1 class="page-title">销售线索管理</h1>
             <div class="page-header-actions">
-                <i class="icon md-download px-5 font-size-20 pr-20" aria-hidden="true"></i>
-                <i class="icon md-upload font-size-20" aria-hidden="true"></i>
+                <i class="md-download px-5 font-size-20 pr-20" aria-hidden="true"></i>
+                <i class="md-upload font-size-20" aria-hidden="true"></i>
             </div>
         </div>
 

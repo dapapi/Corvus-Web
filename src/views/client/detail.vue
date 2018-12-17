@@ -224,7 +224,7 @@
                             <div class="card-header card-header-transparent card-header-bordered">
                                 <div class="float-left font-weight-bold third-title">客户详情</div>
                                 <div class="float-right pointer-content">
-                                    <i class="icon md-edit" aria-hidden="true" @click="editBaseInfo"></i>
+                                    <i class="iconfont icon-bianji" aria-hidden="true" @click="editBaseInfo"></i>
                                 </div>
                                 <div class="float-right mr-40" v-show="isEdit">
                                     <button class="btn btn-sm btn-white btn-pure" @click="cancelEdit">取消</button>
@@ -349,14 +349,14 @@
                                           data-target="#addContact"
                                           @click="changeEditStatus(false,contact)"
                                     >
-                                        <i class="icon md-edit" aria-hidden="true"></i>
+                                        <i class="iconfont icon-bianji" aria-hidden="true"></i>
                                     </span>
                                     <span class="d-block float-left"
                                           style="width: 1px; height: 14px;border-right: 1px solid #b9b9b9;margin: 3px;"></span>
                                     <span class="pl-20 d-block float-left pointer-content" style="color: #b9b9b9"
                                           data-plugin="actionBtn" @click="setDelInfo(contact.id)" data-toggle="modal"
                                           data-target="#confirmFlag" typeText="删除">
-                                        <i class="icon md-delete" aria-hidden="true"></i>
+                                        <i class="md-delete" aria-hidden="true"></i>
                                     </span>
                                 </td>
                             </tr>

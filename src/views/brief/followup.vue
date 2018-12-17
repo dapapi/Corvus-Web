@@ -23,7 +23,7 @@
                         <ul class="list-group ">
                         <li class="list-group-item p-0 mb-10">
                             <p class="list-group-item-heading mt-0 mb-5">1.本周你完成了哪些工作？最有成就的是什么<span class="px-5" style="color:#01BCD4;cursor:pointer" data-toggle="modal" data-target="#submitReport">查看简报</span></p>
-                            <span class="float-right icon md-edit"></span>
+                            <span class="float-righticonfont icon-bianji"></span>
                             <p>文本</p>
                             <p>数字</p>
                             <p>链接</p>
@@ -31,7 +31,7 @@
                         </li>
                         <li class="list-group-item mb-10 p-0" >
                             <p class="list-group-item-heading mt-0 mb-5">1.本周你完成了哪些工作？最有成就的是什么<span class="px-5" style="color:#01BCD4;cursor:pointer" data-toggle="modal" data-target="#submitReport">查看简报</span></p>
-                            <span class="float-right icon md-edit"></span>
+                            <span class="float-righticonfont icon-bianji"></span>
                             <p>文本</p>
                             <p>数字</p>
                             <p>链接</p>
@@ -39,7 +39,7 @@
                         </li>
                         <li class="list-group-item mb-10 p-0" >
                             <p class="list-group-item-heading mt-0 mb-5">1.本周你完成了哪些工作？最有成就的是什么<span class="px-5" style="color:#01BCD4; cursor:pointer" data-toggle="modal" data-target="#submitReport">查看简报</span></p>
-                            <span class="float-right icon md-edit"></span>
+                            <span class="float-righticonfont icon-bianji"></span>
                             <p>文本</p>
                             <p>数字</p>
                             <p>链接</p>

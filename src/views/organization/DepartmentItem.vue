@@ -2,14 +2,14 @@
     <div class="department-item">
         <div class="name" :class="bgColor ? 'dark': ''" :style="{paddingLeft: paddingLeft + 'px'}">
             <span @click="showList">
-                <i v-show="visible" class="icon md-caret-down showList"></i>
-                <i v-show="!visible" class="icon md-caret-right showList"></i>
+                <i v-show="visible" class="md-caret-down showList"></i>
+                <i v-show="!visible" class="md-caret-right showList"></i>
                 <img src="../../assets/img/department@2x.png" />
                 {{ data.name }} <span>({{count}})</span> <span class="principal">{{principal ? principal.name:'无负责人'}}</span>
             </span>
-            <i v-if="!isEdit" class="icon md-plus edit" style="float: right;line-height: 50px;" @click.stop="check(data)"></i>
+            <i v-if="!isEdit" class="md-plus edit" style="float: right;line-height: 50px;" @click.stop="check(data)"></i>
             <div class="drop" v-else>
-                 <i class="icon md-more font-size-24" aria-hidden="true" id="org-dropdown"
+                 <i class="iconfont icon-gengduo1 font-size-24" aria-hidden="true" id="org-dropdown"
                     data-toggle="dropdown" aria-expanded="false" style="cursor: pointer; float: right;line-height: 50px;">
                 </i>
                 <div class="dropdown-menu dropdown-menu-left" aria-labelledby="org-dropdown" role="menu" x-placement="bottom-start" style="min-width: 0">
@@ -24,7 +24,7 @@
         <ul v-show="visible" v-if="!isEdit">
             <li v-for="(_item, _index) in data.users.data" :key="_index" :style="{paddingLeft: paddingLeft + 40 + 'px'}">
                 {{ _item.name }}
-                <i class="icon md-eye" style="float: right;line-height: 50px;" @click.stop></i>
+                <i class="md-eye" style="float: right;line-height: 50px;" @click.stop></i>
             </li>
         </ul>
          <template v-for="(item, index) in data.departments.data">

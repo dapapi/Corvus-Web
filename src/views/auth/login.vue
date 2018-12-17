@@ -35,7 +35,7 @@
                                 <div class="input-group input-group-icon">
                                     <span class="input-group-addon"
                                           style="background-color: white;border-top: 1px solid #e0e0e0;border-left: 1px solid #E0E0E0;border-bottom: 1px solid #E0E0E0;border-right: 0">
-                                        <i class="icon md-account" aria-hidden="true"></i>
+                                        <i class="md-account" aria-hidden="true"></i>
                                     </span>
                                     <input type="text" class="form-control" placeholder="用户名、手机号" v-model="username">
                                 </div>
@@ -44,7 +44,7 @@
                                 <div class="input-group input-group-icon">
                                     <span class="input-group-addon"
                                           style="background-color: white;border-top: 1px solid #e0e0e0;border-left: 1px solid #E0E0E0;border-bottom: 1px solid #E0E0E0;border-right: 0">
-                                        <i class="icon md-lock" aria-hidden="true"></i>
+                                        <i class="md-lock" aria-hidden="true"></i>
                                     </span>
                                     <input type="password" class="form-control" placeholder="密码" v-model="password">
                                 </div>
@@ -79,7 +79,7 @@
             <div class="panel">
                 <div class="panel-body">
                     <div class="example pate-title">
-                        <i class="icon md-smartphone-iphone pr-10"></i>绑定手机号
+                        <i class="md-smartphone-iphone pr-10"></i>绑定手机号
                     </div>
                     <div class="tab-content nav-tabs-animate">
                         <div class="tab-pane animation-fade active" id="forum-bind-phone" role="tabpanel">
@@ -107,7 +107,7 @@
             <div class="panel">
                 <div class="panel-body">
                     <div class="example pate-title">
-                        <i class="icon md-shield-check pr-10"></i>修改密码
+                        <i class="md-shield-check pr-10"></i>修改密码
                     </div>
                     <div class="tab-content nav-tabs-animate">
                         <div class="tab-pane animation-fade active" id="forum-reset" role="tabpanel">
@@ -134,7 +134,7 @@
                             </div>
                             <div class="text-center mt-20">
                                 <span class="pointer-content font-info" @click="returnLogin">
-                                    <i class="icon md-chevron-left pr-10 font-info"></i>返回登录
+                                    <i class="md-chevron-left pr-10 font-info"></i>返回登录
                                 </span>
                             </div>
 

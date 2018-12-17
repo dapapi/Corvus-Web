@@ -4,7 +4,7 @@
             <h1 class="page-title d-inline">艺人详情</h1>
 
             <div class="page-header-actions dropdown show task-dropdown float-right">
-                <i class="icon md-more font-size-24" aria-hidden="true" id="taskDropdown"
+                <i class="iconfont icon-gengduo1 font-size-24" aria-hidden="true" id="taskDropdown"
                    data-toggle="dropdown" aria-expanded="false"></i>
                 <div class="dropdown-menu dropdown-menu-right task-dropdown-item" aria-labelledby="taskDropdown"
                      role="menu" x-placement="bottom-end">
@@ -293,7 +293,7 @@
                                 <div class="card-header card-header-transparent card-header-bordered">
                                     <div class="float-left font-weight-bold third-title">艺人信息</div>
                                     <div class="float-right pointer-content" v-show="!isEdit">
-                                        <i class="icon md-edit" aria-hidden="true" @click="editBaseInfo"></i>
+                                        <i class="iconfont icon-bianji" aria-hidden="true" @click="editBaseInfo"></i>
                                     </div>
                                     <div class="float-right mr-40" v-show="isEdit">
                                         <button class="btn btn-sm btn-white btn-pure" @click="cancelEdit">取消</button>
@@ -456,8 +456,8 @@
                                                 <FileUploader v-show="isEdit" class="upload"  @change="uploadAttachment"></FileUploader>
                                                 <div class="mt-5" v-for="(attach,index) in affixes" :key="index">
                                                     <span class="mr-20">{{attachmentTypeArr.find(item => item.value == attach.type).name}} - {{attach.title}}</span>
-                                                    <i class="icon md-delete mr-10" data-toggle="modal" data-target="#affix" @click="getAffixId(attach.id)"></i>
-                                                    <a :href="attach.url" class="icon md-download"></a>
+                                                    <i class="md-delete mr-10" data-toggle="modal" data-target="#affix" @click="getAffixId(attach.id)"></i>
+                                                    <a :href="attach.url" class="md-download"></a>
                                                 </div>
                                             </div>
                                         </div>

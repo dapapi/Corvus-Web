@@ -11,7 +11,7 @@
                     <div class="col-lg-4" v-for="item in type" :key="item.id"  data-toggle="modal" data-target="#modalLeave" @click="getType(item.value,item.name)">
                         <div class="card">
                             <div class="card-block">
-                                <i class="icon md-file float-left" style="font-size:3rem"></i>
+                                <i class="md-file float-left" style="font-size:3rem"></i>
                                 <i></i>
                                 <p class="my-10">{{item.name}}</p>
                             </div>

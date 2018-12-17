@@ -13,7 +13,7 @@
                     </div>
                 </div>
                 <div class="text-right mark-all-read">
-                    <i class="icon md-circle-o" v-if="readFilter && !isNoUnread" data-target="#confirmFlag" 
+                    <i class="md-circle-o" v-if="readFilter && !isNoUnread" data-target="#confirmFlag"
                     data-toggle="modal"></i>&nbsp;
                     <span v-if="readFilter && !isNoUnread" 
                     data-target="#confirmFlag" 
@@ -47,8 +47,8 @@
                                 <li class="row">
                                     <div class="clearfix col-md-12 module">
                                         <div class="float-left mr-10 pic">
-                                            <i class="icon  font-size-30 icon-color" :class="iconList[moduleType]"></i>
-                                            <!-- <i class="icon md-layers font-size-30 icon-color"></i> -->
+                                            <i class=" font-size-30 icon-color" :class="iconList[moduleType]"></i>
+                                            <!-- <i class="md-layers font-size-30 icon-color"></i> -->
                                         </div>
                                         <div class="float-left mb-10">
                                             <p class="mb-5"><span class="module_title mr-5 title">考勤助手</span><i class="timesR">21:12</i></p>

@@ -11,7 +11,7 @@
           <div class="input-search">
             <i class="input-search-icon md-search" aria-hidden="true"></i>
             <input type="text" class="form-control" name="" placeholder="输入编号、类型、申请人">
-            <button type="button" class="input-search-close icon md-close" aria-label="Close"></button>
+            <button type="button" class="input-search-closemd-close" aria-label="Close"></button>
           </div>
         </div>
         <div class="col-md-12">
