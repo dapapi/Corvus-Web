@@ -24,6 +24,7 @@
                             </div>
                             <span class="site-menu-title">{{ menu.name }}</span>
                             <!-- 建设中 -->
+                            <span v-if="menu.name =='我的'&&unReadMsg>0" class="unRead ml-5">{{unReadMsg}}</span>
                             <div v-if="menu.name === '审批'" class="ribbon ribbon-badge ribbon-warning ribbon-reverse">
                                 <span class="ribbon-inner">建设中</span>
                             </div>
@@ -72,6 +73,7 @@
 </template>
 
 <script>
+    import {mapState, mapGetters} from 'vuex'
     export default {
         name: "LeftMenu",
         data() {
@@ -192,7 +194,11 @@
                 visible: false,
             }
         },
-
+        computed:{
+            ...mapState([
+                'unReadMsg'
+            ])      
+        },
         watch: {
             '$route'(to, from) {
                 this.pageRoute = to.path.split('/')[1];
@@ -313,5 +319,22 @@
         color: #3f51b5;
         background: rgba(40,53,147,.03);
     }
-    
+    .unRead{
+        display: inline-block;
+        width: 18px;
+        height: 18px;
+        background-color:red;
+        color:#fff;
+        font-size: 12px;
+        font-weight: bold;
+        text-align: center;
+        line-height: 18px;
+        border-radius: 50%;
+        position: absolute;
+        top:8px;
+        right: 26px;
+    }
+    .site-menu-item{
+        position: relative;
+    }
 </style>
