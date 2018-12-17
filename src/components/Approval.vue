@@ -1,16 +1,19 @@
 <template>
-    <div class="page-aside" >
-        <div class="page-aside-switch">
+    <div class="" >
+        <!-- <div class="page-aside-switch">
             <i class="icon wb-chevron-left" aria-hidden="true"></i>
             <i class="icon wb-chevron-right" aria-hidden="true"></i>
-        </div>
+        </div> -->
     <div class="page-aside-inner page-aside-scroll scrollable is-enabled scrollable-vertical" style="position: relative;">
         <div data-role="container" class="scrollable-container" >
             <div data-role="content" class="scrollable-content" style="width: 260px">
                 <section class="page-aside-section">
                     <h5 class="page-title pl-30 mb-50">审批</h5>
                     <div v-for="(item, index) in approvalSort" :key="index" class="col-md-10 ml-30">
-                        <h5 @click="toggleSubSort(item.key)"> {{item.value}}</h5>
+                        
+                        <h5 @click="toggleSubSort(item.key)" class="approval-sort-title"> 
+                            <span class="icon md-caret-right font-size-20 mr-10 leftImg" :class="!showSort.includes(item.key)?'anmite':''"></span>
+                            {{item.value}}</h5>
                         <transition name="sub">
                             <div v-if="!showSort.includes(item.key)" class="sub-box">
                                 <div>
@@ -22,7 +25,7 @@
                         </transition>
                     </div>
                 </section>
-                <section class="page-aside-section">
+                <!-- <section class="page-aside-section">
                     <div class="site-menubar-body" style="width:260px;">
                         <ul  class="menu pl-20">    
                             <li class="site-menu-item has-sub" v-for="item in list" :key="item.id" @click="switchMenu(item.id)">                     
@@ -46,12 +49,12 @@
                             </li>
                         </ul>
                     </div>   
-                </section>
+                </section> -->
             </div>
         </div>
-        <div class="scrollable-bar scrollable-bar-vertical is-disabled scrollable-bar-hide" draggable="false"><div class="scrollable-bar-handle"></div></div>
+        <!-- <div class="scrollable-bar scrollable-bar-vertical is-disabled scrollable-bar-hide" draggable="false"><div class="scrollable-bar-handle"></div></div> -->
     </div>
-    <div class="modal fade" aria-hidden="true" aria-labelledby="addLabelForm"
+    <!-- <div class="modal fade" aria-hidden="true" aria-labelledby="addLabelForm"
             role="dialog" tabindex="-1" id="addModel">
         <div class="modal-dialog modal-simple">
             <div class="modal-content">
@@ -135,7 +138,7 @@
                 </div>
                 </div>
             </div>
-        </div>
+        </div> -->
     </div>   
 </template>
 
@@ -315,6 +318,9 @@ a:link,a:visited,a:hover,a:target{
     text-decoration: none;
     color: #000;
 }
+    .approval-sort-title{
+        cursor: pointer;
+    }
     .sub-enter-active,.sub-leave-active{
         transition: all 0.2s ease;
     }
@@ -324,7 +330,11 @@ a:link,a:visited,a:hover,a:target{
     .sub-leave,.sub-enter-to{
         height: 144px;
     }
+    .page-aside{
+        height: 100% !important;
+    }
     .sub-box{
+        margin-left: 20px;
         overflow: hidden;
         cursor: pointer;
     }
