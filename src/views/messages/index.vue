@@ -4,9 +4,9 @@
             <h1 class="page-title float-left">我的消息</h1>
             <div class="filter-container float-right" >
                 <div class="text-right mark-all-read">
-                    <i class="icon md-circle-o" v-if="readFilter && messageList.length>0" data-target="#confirmFlag" 
+                    <i class="icon md-circle-o" v-show="readFilter && messageList" data-target="#confirmFlag" 
                     data-toggle="modal"></i>&nbsp;
-                    <span v-if="readFilter && messageList.length>0" 
+                    <span v-show="readFilter && messageList" 
                     data-target="#confirmFlag" 
                     data-toggle="modal">全部标记为已读</span> 
                 </div>
@@ -16,7 +16,7 @@
             <div class="row mx-0" style="background-color:#fff">
                 <div class="col-md-2">
                  <div class="list-group mt-20" style="border-right:1px solid #E0E0E0">
-                    <a :class="key == moduleType?'checked list-group-item mr-10':'list-group-item mr-10'" v-for="(item,key) in moduleList" :key="key" href="javascript:void(0)" role="menuitem" @click="renderMsg(key,state)">{{item}}</a>
+                    <a :class="item.id == moduleType?'checked list-group-item mr-10':'list-group-item mr-10'" v-for="(item,index) in moduleList" :key="index" href="javascript:void(0)" role="menuitem" @click="renderMsg(item.id,state)">{{item.name}}<span v-show="item.un_read>0" class="unRead ml-5">{{item.un_read}}</span></a>
                 </div>
             </div>
             <div class="col-md-10 py-5">
@@ -132,7 +132,7 @@ export default {
     //   this.dataInit()
       this.getModule()
       this.receive()
-      this.renderMsg('project',1)
+      
   },
   computed:{      
   },
@@ -143,7 +143,7 @@ export default {
             let user = JSON.parse(Cookies.get('user'))
             login.username = user.nickname
             login.userId = user.id
-            login.Authorization = 'Bearer ' + config.getAccessToken() || ''
+            login.authorization = 'Bearer ' + config.getAccessToken() || ''
             // console.log(login.username,login.userId)
             login.action = "login"
             // 初始化一个 WebSocket 对象
@@ -153,23 +153,29 @@ export default {
             ws.onopen = function () {
             // 使用 send() 方法发送数据
             ws.send(JSON.stringify(login));
-            console.log(login)
+            // console.log(login)
             console.log("数据发送中...");
             };
 
             // 接收服务端数据时触发事件
             ws.onmessage = function (evt) {
+                console.log(evt)
             var received_msg = evt.data;
             // console.log("数据已接收...");
             // console.log(evt.data)
+            alert(received_msg)
             let msg = eval("'" + evt.data + "'")
-            toastr.success(msg)
-            // console.log(msg)
+            console.log(typeof msg)
+            // msg = JSON.parse(msg)
+            toastr.success(msg.title)
+            // console.log(msg.title)
+            // console.log(typeof msg)
         
         };
     },
 
     renderMsg:function(type,state){
+        // console.log(type,state)
         if(type){
             this.moduleType = type
         }
@@ -180,13 +186,18 @@ export default {
             this.state = state
             this.readFilter = false
         }
+        
         fetch('get',`${config.apiUrl}/getmsg?include=recive.data&module=${this.moduleType}&state=${this.state}`).then((res) => {
             this.messageList = res.data
+            // console.log(this.readFilter,this.messageList.length)
+
         })
     },
     getModule:function(){
         fetch('get',`${config.apiUrl}/getmodules`).then((res) => {
             this.moduleList = res
+            // this.moduleType = this.moduleList[0]
+            this.renderMsg(this.moduleList[0].id,1)
         })
     },
     //消息模式变更
@@ -298,6 +309,18 @@ export default {
         padding-top:10px;
     }
     
+}
+.unRead{
+    display: inline-block;
+    width: 18px;
+    height: 18px;
+    background-color:red;
+    color:#fff;
+    font-size: 12px;
+    font-weight: bold;
+    text-align: center;
+    line-height: 18px;
+    border-radius: 50%;
 }
 .checked{
     background-color:#eee

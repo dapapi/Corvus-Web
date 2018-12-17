@@ -7,12 +7,20 @@ export default {
     name: 'ToolTips',
     props: ['title', 'placement'], // title为内容 placement为展示位置，参数：top left bottom等
     data() {
-        return {}
+        return {
+            propsTitle:''
+        }
     },
-    mounted() {
-        this.$nextTick(() => {
-            $('[data-toggle="tooltip"]').tooltip({
-                title: `<div>${this.title}</div>`, // 内容
+    watch:{
+       title:function(value){
+            this.propsTitle = value
+            this.renderTips()
+       }
+    },
+    methods:{
+        renderTips(){
+             $('[data-toggle="tooltip"]').tooltip({
+                title: `<div>${this.propsTitle}</div>`, // 内容
                 placement: this.placement ? this.placement : 'bottom', // 位置
                 template: `<div class="tooltip bs-tooltip-bottom"  // 模板
                     role="tooltip">
@@ -21,9 +29,8 @@ export default {
                     </div>`,
                 html: true
             });
-        })
-        
-    },
+        }
+    }
 }
 </script>
 

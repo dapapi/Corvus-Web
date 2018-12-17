@@ -11,7 +11,8 @@ export default {
     },
     methods:{
         receive:function(){
-            alert(222)
+            // alerta(222)
+            // alert(222)
             let login = {}
             let user = JSON.parse(Cookies.get('user'))
             login.username = user.nickname
@@ -30,10 +31,11 @@ export default {
 
             // 接收服务端数据时触发事件
             ws.onmessage = function (evt) {
-                alert(111)
+                // alert(111)
                 var received_msg = evt.data;
                 let msg = eval("'" + evt.data + "'")
-                toastr.success(msg)
+                toastr.success(msg.title)
+                console.log(msg.title)
                 
          
             };
