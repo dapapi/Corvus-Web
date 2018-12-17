@@ -16,7 +16,7 @@
             <div class="row mx-0" style="background-color:#fff">
                 <div class="col-md-2">
                  <div class="list-group mt-20" style="border-right:1px solid #E0E0E0">
-                    <a :class="item.id == moduleType?'checked list-group-item mr-10':'list-group-item mr-10'" v-for="(item,index) in moduleList" :key="index" href="javascript:void(0)" role="menuitem" @click="renderMsg(item.id,state)">{{item.name}}<span v-show="item.un_read>0" class="unRead ml-5">{{item.un_read}}</span></a>
+                    <a :class="item.id == moduleType?'checked list-group-item mr-10 px-10':'list-group-item mr-10 px-10'" v-for="(item,index) in moduleList" :key="index" href="javascript:void(0)" role="menuitem" @click="renderMsg(item.id,state)">{{item.name}}<span v-show="item.un_read>0" class="unRead ml-5">{{item.un_read}}</span></a>
                 </div>
             </div>
             <div class="col-md-10 py-5">
@@ -37,7 +37,7 @@
                 <div class="page-content tab-content nav-tabs-animate bg-white">
                     <div class="pt-10 list">
                         <!--list-->
-                        <div class="message" :class="moduleType" v-for="(item, key) in messageList" :key="key" @click="messageClickHandler(index)">
+                        <div class="message" :class="moduleList.find(item => item.id == moduleType).val" v-for="(item, key) in messageList" :key="key">
                             <div class="time_line">
                                 <span class="time_con bg-white font-size-18">{{key}} 星期{{week.find(item => item.value == new Date(key).getDay()).name}}</span>
                             </div>
@@ -46,22 +46,22 @@
                                     <!-- <router-link :to="item.url"> -->
                                         <div class="clearfix col-md-12 module">
                                             <div class="float-left mr-10 pic">
-                                                <i class="icon  font-size-30 icon-color" :class="iconList[moduleType]"></i>
+                                                <i class="icon  font-size-30 icon-color" :class="iconList[moduleList.find(item => item.id == moduleType).val]"></i>
                                             </div>
                                             <div class="float-left mb-10">
-                                                <p class="mb-5"><span class="module_title mr-5 title">{{moduleList[moduleType]}}助手</span><i class="timesR">{{item2.created_at.split(' ')[1]}}</i></p>
+                                                <p class="mb-5"><span class="module_title mr-5 title">{{moduleList[moduleType]}}助手</span><i class="timesR">{{item2.created_at}}</i></p>
                                                 <p class="desc txt font-size-16">{{item2.message_title}}</p>
                                             </div>
                                         </div>
-                                        <div class="content py-15 pl-40 col-md-8 ml-80">
+                                        <div class="content py-15 pl-40 col-md-8 ml-80" @click="msgStatus(item2.message_id)">
                                                 <span class="is_read" v-show="item2.state == 1"></span>
-                                                <div class="title font-size-16 mb-15">孙誉倬-加班</div>
+                                                <div class="title font-size-16 mb-15">{{item2.message_subheading}}</div>
                                                 <div class="row">
                                                      <div class="col-md-4" v-for="(item3,index3) in item2.body" :key="index3">
                                                          <div class="mb-5">{{item3.title}}</div>
                                                          <div>{{item3.value}}</div>
                                                      </div>
-                                                </div>                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                           
+                                                </div>                                                                                 
                                         </div>
                                     <!-- </router-link> -->
                                 </li>
@@ -76,7 +76,7 @@
             </div>
             </div>
         </div>
-        <Flag typeText="全部标记为已读" @confirmFlag='emitMarkasRead'/>
+        <Flag typeText="全部标记为已读" @confirmFlag="msgStatus('',moduleType)"/>
     </div>
 </template>
 
@@ -85,11 +85,14 @@ import Main from './detail.vue';
 import messagesData from './messages.json'
 import fetch from '@/assets/utils/fetch'
 import config from '@/assets/js/config'
-
+import {mapState, mapGetters} from 'vuex'
 export default {
   name: 'messagesIndex',
   components: {
     Main,
+  },
+  computed:{
+    
   },
   data() {
     return {
@@ -125,57 +128,29 @@ export default {
       },
       week:config.week,
       state:1,// 1未读 2已读
+      websocket:null
     };
   },
   mounted() {
       //数据初始化
-    //   this.dataInit()
       this.getModule()
-      this.receive()
       
   },
-  computed:{      
+  computed:{
+      ...mapState([
+          'unReadMsg'
+      ])      
+  },
+  watch:{
+       unReadMsg:function(){
+        //    alert(222)
+        //    console.log(this.unReadMsg)
+           this.getModule()
+       }
   },
   methods: {
-    
-    receive:function(){
-            let login = {}
-            let user = JSON.parse(Cookies.get('user'))
-            login.username = user.nickname
-            login.userId = user.id
-            login.authorization = 'Bearer ' + config.getAccessToken() || ''
-            // console.log(login.username,login.userId)
-            login.action = "login"
-            // 初始化一个 WebSocket 对象
-            var ws = new WebSocket(config.socketUrl);
-            
-            // 建立 web socket 连接成功触发事件
-            ws.onopen = function () {
-            // 使用 send() 方法发送数据
-            ws.send(JSON.stringify(login));
-            // console.log(login)
-            console.log("数据发送中...");
-            };
-
-            // 接收服务端数据时触发事件
-            ws.onmessage = function (evt) {
-                console.log(evt)
-            var received_msg = evt.data;
-            // console.log("数据已接收...");
-            // console.log(evt.data)
-            alert(received_msg)
-            let msg = eval("'" + evt.data + "'")
-            console.log(typeof msg)
-            // msg = JSON.parse(msg)
-            toastr.success(msg.title)
-            // console.log(msg.title)
-            // console.log(typeof msg)
-        
-        };
-    },
-
     renderMsg:function(type,state){
-        // console.log(type,state)
+       
         if(type){
             this.moduleType = type
         }
@@ -189,69 +164,41 @@ export default {
         
         fetch('get',`${config.apiUrl}/getmsg?include=recive.data&module=${this.moduleType}&state=${this.state}`).then((res) => {
             this.messageList = res.data
-            // console.log(this.readFilter,this.messageList.length)
+           
 
         })
     },
     getModule:function(){
         fetch('get',`${config.apiUrl}/getmodules`).then((res) => {
             this.moduleList = res
-            // this.moduleType = this.moduleList[0]
-            this.renderMsg(this.moduleList[0].id,1)
+            let num = 0
+            for (let i = 0; i < res.length; i++) {
+                num = num + res[i].un_read
+            }
+            this.$store.state.unReadMsg = num
+            if(this.moduleType){
+                this.renderMsg(this.moduleType,this.state)
+            }else{
+                this.renderMsg(this.moduleList[0].id,1)
+            }
         })
     },
-    //消息模式变更
-    // readTypeToggle() {
-    //   this.readTypeShow = !this.readTypeShow;
-    // },
-    //消息状态变更
-    // messageStatusChange(ref) {
-    //   this.messageStatus = ref;
-    // },
-    //初始化数据
-    // dataInit(){
-    //     for (const key in messagesData) {
-    //         let orignTime = messagesData[key].time
-    //         messagesData[key].timeYMD = this.timeFormat(orignTime).formatYMD
-    //         messagesData[key].timehms = this.timeFormat(orignTime).formathms
-    //     }
-    //     this.pageData = messagesData
-    // },
-    //日期格式化
-    // timeFormat(ref){
-    //     let date = new Date(ref);
-    //     let Y = date.getFullYear()
-    //     let M = (date.getMonth()+1 < 10 ? '0'+(date.getMonth()+1) : date.getMonth()+1)
-    //     let D = date.getDate()
-    //     let h = date.getHours()
-    //     let m = (date.getMinutes() < 10 ? '0'+(date.getMinutes()):date.getMinutes())
-    //     let s = (date.getSeconds()<10?'0'+(date.getSeconds()):date.getSeconds())
-    //     let formatYMD = Y+'-'+M+'-'+D
-    //     let formathms = h+':'+m+':'+s
-    //     return{
-    //         formatYMD,formathms
-    //     }
-    // },
-    //已读、未读控制器
-    messageClickHandler(ref){
-        this.pageData[ref].readflag = false
-    },
-    //全部消息已读接收器
-    emitMarkasRead(){
-        for (const key in this.pageData) {
-            this.pageData[key].readflag = false
+    msgStatus:function(id,type){
+        let data = {}
+        if(type){
+            data={
+                module:this.moduleType,
+                all:'yes'
+            }
+        }else{
+            data ={
+               message_id:id
+            }
         }
-    },
-    //设置当前消息为未读
-    // markAsUnread(ref){
-    //     for (const key in this.pageData) {
-    //         if(this.pageData[key].messageid == ref) {
-    //             this.pageData[key].readflag = true
-    //         }
-    //     }
-    // },
-    messageFilterHandler(ref){
-        this.messageFilter = ref
+
+        fetch('get',`${config.apiUrl}/changestae`,data).then((res) => {
+            this.getModule()
+        })
     }
   },
 };
