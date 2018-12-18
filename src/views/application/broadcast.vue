@@ -1,43 +1,50 @@
 <template>
-    <div class="panel" style="border-left:1px solid #e3e3e3">
-        <div class="panel-body">
-            <div class="">
-                <div class="table-responsive">
-                    <table class="table table-hover" data-role="content" data-plugin="selectable" data-row-selectable="true">
-                        <thead class="">    
-                            <tr class="animation-fade" style="animation-fill-mode: backwards; animation-duration: 250ms; animation-delay: 0ms;">
-                                <th class="cell-300" scope="col">标题</th>
-                                <th class="cell-300" scope="col">分类</th>
-                                <th class="cell-300" scope="col">发布时间</th>
-                                <th class="cell-300" scope="col">发布人</th>
-                            </tr>
-                        </thead>
-                        <tbody>
-                        <tr class="broadcast-tr" v-for="item in broadCastInfo" :key="item.id" v-if="memberList">
-                            <td class="broadcast-title">
-                                <span class="broadcast-title-div">
-                                    <router-link :to="{name:'broadcast/detail', params: {id: item.id}}">
-                                        <span class="">{{item.title}}</span>
-                                    </router-link>
-                                </span>
-                                <span class="broadcast-top-flag badge badge-outline badge-info" 
-                                    v-if="item.stick">置顶</span>
-                                <span class="broadcast-new-flag" v-if="!item.readflag">
-                                    <strong>NEW</strong>
-                                </span>
-                            </td>
-                            <td>{{classifyArr.find(classifyArr => classifyArr.value == item.classify).name}}</td>
-                            <td>
-                                <span>{{item.created_at}}</span> 
-                            </td>
-                            <td v-if="memberList[0]">
-                                {{memberList.find(memberList => memberList.id == item.creator.data.id).name}}
-                            </td>
-                        </tr>
-                        </tbody>
-                    </table>
-                    <div class="col-md-1" style="margin: 6rem auto" v-if="broadCastInfo.length === 0">
-                        <img src="https://res.papitube.com/corvus/images/content-none.png" alt="" style="width: 100%">
+    <div class="page-main" style="background-color:#f3f4f5" >
+        <div class="page-header page-header-bordered">
+           <h1 class="page-title">我的公告</h1>
+        </div>
+        <div class="page-content container-fluid">
+            <div class="panel">
+                <div class="panel-body">
+                    <div class="">
+                        <div class="table-responsive">
+                            <table class="table table-hover" data-role="content" data-plugin="selectable" data-row-selectable="true">
+                                <thead class="">    
+                                    <tr class="animation-fade" style="animation-fill-mode: backwards; animation-duration: 250ms; animation-delay: 0ms;">
+                                        <th class="cell-300" scope="col">标题</th>
+                                        <th class="cell-300" scope="col">分类</th>
+                                        <th class="cell-300" scope="col">发布时间</th>
+                                        <th class="cell-300" scope="col">发布人</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                <tr class="broadcast-tr" v-for="item in broadCastInfo" :key="item.id" v-if="memberList">
+                                    <td class="broadcast-title">
+                                        <span class="broadcast-title-div">
+                                            <router-link :to="{name:'broadcast/detail', params: {id: item.id}}">
+                                                <span class="">{{item.title}}</span>
+                                            </router-link>
+                                        </span>
+                                        <span class="broadcast-top-flag badge badge-outline badge-info" 
+                                            v-if="item.stick">置顶</span>
+                                        <span class="broadcast-new-flag" v-if="!item.readflag">
+                                            <strong>NEW</strong>
+                                        </span>
+                                    </td>
+                                    <td>{{classifyArr.find(classifyArr => classifyArr.value == item.classify).name}}</td>
+                                    <td>
+                                        <span>{{item.created_at}}</span> 
+                                    </td>
+                                    <td v-if="memberList[0]">
+                                        {{memberList.find(memberList => memberList.id == item.creator.data.id).name}}
+                                    </td>
+                                </tr>
+                                </tbody>
+                            </table>
+                            <div class="col-md-1" style="margin: 6rem auto" v-if="broadCastInfo.length === 0">
+                                <img src="https://res.papitube.com/corvus/images/content-none.png" alt="" style="width: 100%">
+                            </div>
+                        </div>
                     </div>
                 </div>
             </div>

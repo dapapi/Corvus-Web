@@ -1,6 +1,6 @@
 <template>
     <div class="page">
-        <div class="loader-overlay" v-if="isLoading" style="background:rgb(255,255,255,.4)">
+        <!-- <div class="loader-overlay" v-if="isLoading" style="background:rgb(255,255,255,.4)">
             <div class="loader-content">
                 <div class="loader-index">
                 <div></div>
@@ -10,7 +10,7 @@
                 <div></div>
                 <div></div>
         </div>
-        </div></div>
+        </div></div> -->
         <div class="page-header page-header-bordered">
             <h1 class="page-title d-inline">博主详情</h1>
 
@@ -30,7 +30,7 @@
         <div class="page-content container-fluid">
 
             <div class="panel col-md-12">
-                <div class="card-block">
+                <div class="card-block" v-if="artistInfo">
                     <h4 class="card-title">{{ artistInfo.nickname }}</h4>
                     <div class="card-text clearfix example">
                         <div class="col-md-6 float-left" v-if="totalData.publicity">
@@ -45,29 +45,31 @@
                 </div>
                 <div class="clearfix">
                     <div class="col-md-6 float-left pl-0 mb-20" style="border-right: 1px solid #eee">
-                        <div class="col-md-6">任务 5/12</div>
-                        <div class="clearfix example">
-                            <div class="col-md-3 float-left">电话会议</div>
-                            <div class="col-md-3 float-left">张佳佳</div>
-                            <div class="col-md-3 float-left">2018-12-03 11:10</div>
-                            <div class="col-md-3 float-left">进行中</div>
+                        <div class="col-md-6">任务{{taskNum}}</div>
+                        <div class="clearfix example" v-for="(task,index) in tasksInfo" :key="index">
+                            <div class="col-md-3 float-left">{{task.title}}</div>
+                            <div class="col-md-3 float-left">{{task.principal.data.name}}</div>
+                            <div class="col-md-3 float-left">{{task.end_at}}</div>
+                            <div class="col-md-3 float-left">
+                                <template v-if="task.status === 1">进行中</template>
+                                <template v-if="task.status === 2">已完成</template>
+                                <template v-if="task.status === 3">已停止</template>
+                            </div>
                         </div>
                     </div>
                     <div class="col-md-6 float-left pl-0 mb-20">
                         <div class="col-md-6">项目</div>
-                        <div class="clearfix example">
-                            <div class="col-md-3 float-left">Ugg代言</div>
-                            <div class="col-md-3 float-left">商务项目</div>
-                            <div class="col-md-3 float-left">2018-12-03 11:10</div>
-                            <div class="col-md-3 float-left">进行中</div>
+                        <div class="clearfix example" v-for="(item,index) in ProjectsInfo" :key="index">
+                            <div class="col-md-3 float-left">{{item.title}}</div>
+                            <div class="col-md-3 float-left">{{item.principal.data.name}}</div>
+                            <div class="col-md-3 float-left">{{item.end_at}}</div>
+                            <div class="col-md-3 float-left">
+                                <template v-if="item.status === 1">进行中</template>
+                                <template v-if="item.status === 2">已完成</template>
+                                <template v-if="item.status === 3">已停止</template>
+                            </div>
                         </div>
-                        <div class="clearfix example">
-                            <div class="col-md-3 float-left">星巴克代言</div>
-                            <div class="col-md-3 float-left">商务项目</div>
-                            <div class="col-md-3 float-left">2018-12-03 11:10</div>
-                            <div class="col-md-3 float-left">进行中</div>
                         </div>
-                    </div>
                 </div>
             </div>
             
@@ -87,7 +89,13 @@
                         <li class="nav-item" role="presentation">
                             <a class="nav-link" data-toggle="tab" href="#forum-artist-tasks"
                                aria-controls="forum-present"
-                               aria-expanded="false" role="tab">任务</a>
+                               aria-expanded="false" role="tab">
+                                <template v-if="tasksInfo.length > 0">
+                                    <ToolTips :title="`已完成数量${completeNum}`">
+                                        任务 ({{completeNum}}/{{tasksInfo.length}})
+                                    </ToolTips>
+                                </template>
+                            </a>
                         </li>
                         <li class="nav-item" role="presentation">
                             <a class="nav-link" data-toggle="tab" href="#forum-artist-work"
@@ -118,8 +126,8 @@
                             </div>
                         </div>
                         <div class="tab-pane animation-fade pb-20 fixed-button-father" id="forum-artist-projects"
-                             role="tabpanel" v-for="item in totalData.trails" :key="item.id">
-                            <table class="table  is-indent example" data-plugin="animateList"
+                             role="tabpanel">
+                            <table class="table table-hover is-indent example" data-plugin="animateList"
                                    data-animate="fade"
                                    data-child="tr"
                                    data-selectable="selectable">
@@ -131,34 +139,34 @@
                                     <th class="cell-300" scope="col">关联公司</th>
                                     <th class="cell-300" scope="col">录入日期</th>
                                 </tr>
-                                <tr v-for="v in item"  :key="v.id" v-if="v.project">
-                                    <td @click="projectdetil(v.project.data.id)" class="Jump">{{v.project.data.title}}</td>
+                                <tr v-for="(item,index) in ProjectsInfo" :key="index">
+                                    <td @click="projectdetil(v.project.data.id)" class="Jump">{{item.title}}</td>
                                     <td>
-                                        <template v-if="v.project.data.status==1">
+                                        <template v-if="item.status==1">
                                             初步接触
                                         </template>
-                                        <template v-if="v.project.data.status==2">
+                                        <template v-if="item.status==2">
                                             沟通中
                                         </template>
-                                        <template v-if="v.project.data.status==3">
+                                        <template v-if="item.status==3">
                                             合同中
                                         </template>
-                                        <template v-if="v.project.data.status==4">
+                                        <template v-if="item.status==4">
                                             沟通完成
                                         </template>
                                     </td>
-                                    <td>{{v.creator}}</td>
-                                    <td>{{v.client.data.company}}</td>
-                                    <td>{{v.project.data.created_at}}</td>
+                                    <td>{{item.principal.data.name}}</td>
+                                    <td>{{item.company}}</td>
+                                    <td>{{item.created_at}}</td>
                                 </tr>
-                               
                             </table>
-                             <div class="col-md-1" style="margin: 6rem auto"  v-if="totalData.trails.data.length==0">
-                                <img src="https://res.papitube.com/corvus/images/content-none.png" alt="" style="width: 100%">
+                            <div class="col-md-1" style="margin: 6rem auto" v-if="ProjectsInfo.length === 0">
+                                <img src="https://res.papitube.com/corvus/images/content-none.png" alt=""
+                                     style="width: 100%">
                             </div>
                         </div>
                         <div class="tab-pane animation-fade pb-20 fixed-button-father" id="forum-artist-tasks"
-                             role="tabpanel" v-for="item in totalData.tasks" :key="item.id">
+                             role="tabpanel">
                             <table class="table table-hover is-indent example" data-plugin="animateList"
                                    data-animate="fade"
                                    data-child="tr"
@@ -171,25 +179,26 @@
                                     <th class="cell-300" scope="col">负责人</th>
                                     <th class="cell-300" scope="col">截止日期</th>
                                 </tr>
-                                <tr v-for="v in item" :key="v.id" v-if="item">
-                                    <td @click="taskdetail(v.id)" class="Jump">{{v.title}}</td>
-                                    <td>{{v.type.data.title}}</td>
+                                <tr v-for="(task,index) in tasksInfo" :key="index" v-if="task">
+                                    <td @click="taskdetail()" class="Jump">{{task.title}}</td>
+                                    <td v-if="task.type">{{task.type.data.title}}</td>
+                                    <td v-if="!task.type">未选择</td>
                                     <td>
-                                        <template v-if="v.status==1">
-                                            开始
-                                        </template>
-                                        <template v-if="v.status==2">
+                                        <template v-if="task.status==1">
                                             进行中
                                         </template>
-                                        <template v-if="v.status==3">
+                                        <template v-if="task.status==2">
                                             已完成
                                         </template>
+                                        <template v-if="task.status==3">
+                                            已停止
+                                        </template>
                                     </td>
-                                    <td>{{v.principal.data.name}}</td>
-                                    <td>{{v.end_at}}</td>
+                                    <td>{{task.principal.data.name}}</td>
+                                    <td>{{task.end_at}}</td>
                                 </tr>
                             </table>
-                            <div class="col-md-1" style="margin: 6rem auto" v-if="totalData.tasks.data.length==0">
+                            <div class="col-md-1" style="margin: 6rem auto" v-if="tasksInfo.length==0">
                                 <img src="https://res.papitube.com/corvus/images/content-none.png" alt="" style="width: 100%">
                                </div>
                             <div class="site-action fixed-button" data-plugin="actionBtn" data-toggle="modal"
@@ -703,9 +712,16 @@
                 updatePlatform:'',//修改平台
                 isLoading:true,
                 participant:'',
+                tasksInfo:'',
+                taskNum:'',
+                ProjectsInfo:[]
             }
         },
-
+         computed: {
+            completeNum () {
+                return this.tasksInfo.filter( n => n.status === 2).length
+            }
+        },
         mounted() {
             this.getArtist()
             
@@ -737,6 +753,7 @@
                     _this.$refs.workReleaseTime.setValue('');
                 
              })
+           
         },
 
         methods: {
@@ -813,9 +830,21 @@
                     include: 'creator,tasks,affixes,producer,type',
                 };
                 fetch('get', '/bloggers/' + this.artistId, data).then(function (response) {
-                    _this.artistInfo = response.data;
-                    console.log(_this.artistInfo)
                    
+                      let doneTaskNum = 0
+                    _this.artistInfo = response.data;
+                      
+                    _this.tasksInfo = response.data.tasks.data
+                    console.log( _this.tasksInfo)
+                    if(_this.tasksInfo.length>0){
+                        for (let i = 0; i < _this.tasksInfo.length; i++) {
+                            if(_this.tasksInfo[i].status ==2){
+                                doneTaskNum = doneTaskNum+1
+                            }
+                            
+                        }
+                    }
+                    _this.taskNum =`${doneTaskNum}/${_this.tasksInfo.length}` 
                     if(_this.artistInfo.intention==false){
                         _this.updateType=2
                     }else{
@@ -835,7 +864,14 @@
                 //项目
                 fetch('get','/bloggers/'+this.artistId+'?include=tasks.type,trails.project.principal,trails.client,producer,creator,affixes,type,publicity').then(function(response){
                     _this.totalData=response.data
-                    _this.isLoading=false
+                    console.log(_this.totalData)
+                     for (let i = 0; i < response.data.trails.data.length; i++) {
+                        if (response.data.trails.data[i].project) {
+                            response.data.trails.data[i].project.data.company = response.data.trails.data[i].client.data.company
+                            _this.ProjectsInfo.push(response.data.trails.data[i].project.data)
+                        }
+                    }
+                    // _this.isLoading=false
                 })
                 
                 //作品
@@ -846,22 +882,14 @@
                 fetch('get','/users/').then(function(response){
                     _this.Users=response.data;
                 })
-                //任务状态跑组。试戏
-                fetch('get','/task_types').then(function(response){
-                    _this.tasksType=response.data;
-                })
+                // //任务状态跑组。试戏
+                // fetch('get','/task_types').then(function(response){
+                //     _this.tasksType=response.data;
+                // })
                  fetch('get','/bloggers/gettype').then(function(response){      
                     _this.artistTypeArr=response.data                  
                 })
             },
-
-            // getArtistProjects: function () {
-            //     let _this = this;
-            //     fetch('get', '/stars/' + this.artistId).then(function (response) {
-            //         _this.artistProjectsInfo = response.data;
-            //     })
-            // },
-
             getArtistTasks: function () {
                 let _this = this;
                 fetch('get', '/stars/' + this.artistId).then(function (response) {
@@ -874,13 +902,7 @@
             },
 
             addPrivacy: function () {
-            //     let _this=this;
-            //     let data = { 
-            //         updateNickname:this.artistInfo.name 
-            //     }
-            //   fetch('put','/bloggers/1994731356',data).then(function(response){
-            //        _this.artistTasksInfo = response.data;
-            //   })
+           
             },
 
             editBaseInfo: function () {

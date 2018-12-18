@@ -107,7 +107,7 @@
                 </div>
                 <div class="col-md-9 float-left"  style="border-left:1px solid #e3e3e3;" v-if="defaultId==1">
                     <div class="page-header py-10" >
-                        <h5>所有着<span class=" pl-10" style="font-weight:300;color:#999999;font-size:12px;">系统默认角色，默认具有企业功能权限和全部数据可见范围</span></h5>
+                        <h5>所有者<span class=" pl-10" style="font-weight:300;color:#999999;font-size:12px;">系统默认角色，默认具有企业功能权限和全部数据可见范围</span></h5>
 
                     </div>
                     <div class="col-md-12">
@@ -127,8 +127,7 @@
                                 aria-controls="forum-present"
                                 aria-expanded="false" role="tab">功能范围</a>
                             </li>
-                        </ul>
-                        
+                        </ul>    
                     </div>
                     <div class="page-content tab-content nav-tabs-animate bg-white pt-0 ml-2" >
                         <div class="tab-pane animation-fade active" id="forum-role" role="tabpanel">
@@ -143,27 +142,27 @@
                                  <tbody style="border-top:1px solid #e3e3e3">
                                 <tr  class="pointer-content" >
                                     <td class="pl-0"><em class="ml-0"></em>泰洋系</td>
-                                    <td>-</td>
-                                    <td>-</td>
+                                    <td></td>
+                                    <td></td>
                                     <td>example@xxxx.com</td>
                                 </tr>
                                 </tbody>        
                             </table>
                         </div>
                         <div class="tab-pane animation-fade" id="forum-power" role="tabpanel">
-                            <div class="title py-20" style="color:#999999;font-size:12px;font-weight:300;position: relative;">设置角色对应到功能操作、应用管理、后台管理权限<span  style="font-weight:600;position:absolute;right:10px"><input type="checkbox" class="mr-10">全选</span></div>
+                            <div class="title py-20" style="color:#999999;font-size:12px;font-weight:300;position: relative;">设置角色对应到功能操作、应用管理、后台管理权限<span  style="font-weight:600;position:absolute;right:10px"><input type="checkbox" class="mr-10" value="0" v-model="check" disabled="disabled">全选</span></div>
                             <table class="table table-hover" data-plugin="selectable" data-selectable="selectable"> 
                                 <tbody >
                                 <tr  class="pointer-cont" style="border:1px solid #e3e3e3;position: relative;" v-for="item in funDate" :key="item.id">
-                                    <td style="font-weight:400;border:1px solid #e3e3e3" class="p-30 text-center py-60"><input type="checkbox"  class="mr-10" >{{item.title}}</td>
+                                    <td style="font-weight:400;border:1px solid #e3e3e3" class="p-30 text-center py-60"><input type="checkbox"  class="mr-10" :value="item.id" v-model="check" disabled="disabled">{{item.title}}</td>
                                      <td>
-                                        <div v-for="one in item.contentone" :key="one.id" class="py-10 pl-20"><input type="checkbox"  class="mr-10" >{{one.name}}</div>                 
+                                        <div v-for="one in item.contentone" :key="one.id" class="py-10 pl-20"><input type="checkbox"   :value="item.id" v-model="check" disabled="disabled" class="mr-10">{{one.name}}</div>                 
                                     </td>
                                      <td>
-                                        <div v-for="tow in item.contentTow" :key="tow.id" class="py-10"><input type="checkbox"  class="mr-10" >{{tow.name}}</div>                 
+                                        <div v-for="tow in item.contentTow" :key="tow.id" class="py-10"><input type="checkbox"  :value="item.id" v-model="check" disabled="disabled" class="mr-10">{{tow.name}}</div>                 
                                     </td>
                                     <td>
-                                        <div v-for="tree in item.contentTree" :key="tree.id" class="py-10"><input type="checkbox"  class="mr-10" >{{tree.name}}</div>                 
+                                        <div v-for="tree in item.contentTree" :key="tree.id" class="py-10"><input type="checkbox"   :value="item.id" v-model="check" disabled="disabled" class="mr-10">{{tree.name}}</div>                 
                                     </td>
                                 </tr>
                                 </tbody>        
@@ -216,16 +215,36 @@
                                                style="font-weight: 300">全部人员，共{{item.users.data.length}}人</span></h5>
 
                     </div>
-                    <div class="page-content tab-content nav-tabs-animate bg-white" >
-                        <div class="tab-pane animation-fade active" id="forum-artist" role="tabpanel">
+                    <div class="col-md-12">
+                        <ul class="nav nav-tabs nav-tabs-line" role="tablist">
+                            <li class="nav-item" role="presentation" >
+                                <a class="nav-link active" data-toggle="tab" :href="'#forum-member'+ item.id"
+                                aria-controls="forum-base"
+                                aria-expanded="true" role="tab">角色成员</a>
+                            </li>
+                            <li class="nav-item" role="presentation" >
+                                <a class="nav-link" data-toggle="tab" :href="'#forum-authority'+ item.id"
+                                aria-controls="forum-present"
+                                aria-expanded="false" role="tab">功能权限</a>
+                            </li>
+                            <li class="nav-item" role="presentation" >
+                                <a class="nav-link" data-toggle="tab" :href="'#forum-scope'+ item.id"
+                                aria-controls="forum-present"
+                                aria-expanded="false" role="tab">功能范围</a>
+                            </li>
+                        </ul>    
+                    </div>     
+                    <div class="page-content tab-content nav-tabs-animate bg-white pt-20" >
+                        <div class="tab-pane animation-fade active" :id="'forum-member'+item.id" role="tabpanel">
                             <table class="table table-hover" data-plugin="selectable" data-selectable="selectable">
                                 <tr>
                                     <th class="w-50">
-                                        <span class="checkbox-custom checkbox-primary">
-                                            <input class="selectable-all" type="checkbox"
-                                                   @change="selectArtists('all')">
+                                       <span class="checkbox-custom checkbox-primary">
+                                            <input class="selectable-all" type="checkbox" 
+                                                   @change="selectArtists('all',item.id)">
                                             <label></label>
                                         </span>
+                                       
                                     </th>
                                     <th class="cell-300" scope="col">姓名</th>
                                     <th class="cell-300" scope="col">手机号</th>
@@ -236,7 +255,7 @@
                                     <td>
                                         <span class="checkbox-custom checkbox-primary">
                                             <input class="selectable-item" type="checkbox" :id="'row-' + v.id"
-                                                   :value="v.id" @change="selectArtists(v.id)">
+                                                   :value="v.id" @change="selectArtists(v.id)" >
                                             <label :for="'row-' + v.id"></label>
                                         </span>
                                     </td>
@@ -247,7 +266,72 @@
                                 </tbody>
                             </table>
                         </div>
+                        <div class="tab-pane animation-fade " :id="'forum-authority'+item.id" role="tabpanel">
+                            <div class="title py-20" style="color:#999999;font-size:12px;font-weight:300;position: relative;">设置角色对应到功能操作、应用管理、后台管理权限
+                                <div style="font-weight:600;position:absolute;right:10px;top:9px;">
+                                     <span class="checkbox-custom checkbox-primary pr-10" >
+                                            <input class="selectable-all " type="checkbox" @change="funSelect('all')">
+                                            <label></label>
+                                    </span>
+                                     <span>全选</span>
+                                     
+                                </div> 
+                            </div>
+                            <table class="table table-hover" data-plugin="selectable" data-selectable="selectable"> 
+                                <tbody >
+                                <tr  class="pointer-cont" style="border:1px solid #e3e3e3;" v-for="item in powerDate" :key="item.id">
+                                    <td class="cell-200" style="border:1px solid #e3e3e3;position: relative;">
+                                        <div class="power-cont text-left">
+                                            <span class="checkbox-custom checkbox-primary" style="">
+                                            <input class="selectable-item" type="checkbox" :id="'row-' + item.id"
+                                                   :value="item.id" @change="funSelect('all',item.id)">
+                                            <label :for="'row-' + item.id"></label>
+                                            </span>
+                                           <span class="pl-10 pt-10" :data="item.name.length">{{item.name}}</span>
+                                        </div>
+                                    </td> 
+                                    
+                                     <td style="display:flex;flex-wrap:wrap;" class="cell-600" scope="col">
+                                       <div v-for="one in item.data" :key="one.id" class="text-left pl-10" style="width:33%;">
+                                            <span class="checkbox-custom checkbox-primary" style="">
+                                            <input class="selectable-item" type="checkbox" :id="'row-' + one.id"
+                                                   :value="one.id" v-model="one.selected" @change="funSelect(one.id,item.id)">
+                                            <label :for="'row-' + one.id"></label>
+                                            </span>
+                                            <span class="pl-10 pt-10" >{{one.name}}</span>
+                                        </div>                 
+                                    </td>
+                                   
+                                </tr>
+                                </tbody>        
+                            </table>
+                         </div>
+                         <div class="tab-pane animation-fade "   :id="'forum-scope'+item.id" role="tabpanel">
+                            <div class="title py-20" style="color:#999999;font-size:12px;font-weight:300;">针对审批、考勤、简报、销售等应用、设置该查看、管理数据范围</div>
+                            <table class="table table-hover" data-plugin="selectable" data-selectable="selectable" > 
+                                <tr>
+                                    <th class="cell-300 pl-0" scope="col">应用名</th>
+                                    <th class="cell-300" scope="col">查看数据范围</th>
+                                    <th class="cell-300" scope="col">管理数据范围</th>
+                                </tr>
+                                 <tbody >
+                                <tr  class="pointer-content" style="border-top:1px solid #e3e3e3" v-for="(item,index) in rangeDate" :key="index">
+                                    <td style="font-weight:400;position: relative;" ><div class="range-cont">{{item.name}}</div></td>
+                                    <td>
+                                        <div v-for="(v,i) in item.data1" :key="i" >
+                                            <input type="radio"   class="mr-10"  @click="radioed(index,v.id)"   :value="index+v.id" :checked="v.selected">{{v.name}}</div>
+                                    </td>
+                                      <td style="color:#333" >
+                                        <div v-for="(n,m) in item.data2" :key="m"><input type="checkbox"  @click="checked(index,n.id)" :name="'radios'+item.id"  v-model="n.selected"  class="mr-10" >{{n.name}}</div>
+                                       
+                                    </td>
+                                </tr>
+                                </tbody>        
+                            </table>
+                        </div>
                     </div>
+                   
+                     
                 </div>
             
             </div>
@@ -538,22 +622,28 @@
                 groupingId: '',
                 updategrouping: '',
                 memberDate:'',
-                rolenameId:'',
-                radio:'3',
+                radio:[],
                 radiotow:'7',
-                check:['0','1','2','3'],
+                check:'',
                 defaultId:'1',
                 defaultpitchon:'1',
                 funDate:data,
                 switchId:[],
-                aaaaa:[],
+                rolepower:[],
+                powerDate:[],
+                powerInfo:[],
+                rangeDate:'',
+                rangecheck:[],
+                picked:'',
+                selected:[],
+                roleInfo:[]
             }
         },
         mounted() {
             this.getroleDate();
             this.getgroupingDate();
-            this.getrolenameId()
-            // console.log($('table'));
+        },
+        updated(){
             $('table').asSelectable();
         },
         methods: {
@@ -561,19 +651,18 @@
             getroleDate() {
                 let _this = this;
                 fetch('get', '/console/role').then(function (response) {
-                    _this.roleDate = response.data;
-                   console.log(_this.roleDate)
+                    _this.roleDate = response.data; 
                 });
+                
+                
             },
-            getrolenameId(){
-                console.log(this.roleDate)
-            },
+
             //获取分组数据
             getgroupingDate() {
                 let _this = this;
                 fetch('get', '/console/group?Accept=application/vnd.Corvus.v1+json').then(function (response) {
                     _this.groupingDate = response.data;
-                    console.log(_this.groupingDate)
+                  
                 });
             },
             //获取成员数据
@@ -589,18 +678,30 @@
                     })
                     _this.$store.state.participantsInfo=datas
                 })       
-             },       
+             },  
+              //切换内容
+            changeCont(value) {
+                this.jobCont = value
+                this.defaultId=0
+                let _this = this;
+                fetch('get', '/console/feature/'+1994731356).then(function (response) {
+                     _this.powerDate = response;  
+                });
+                fetch('get','/console/scope/'+this.jobCont).then(function(response){
+                    _this.rangeDate = response;     
+                })
+            },    
             //全选反选
-            selectArtists: function (value) {
+            selectArtists: function (value,id) {   
                 if (value === 'all') {
                     this.selectedArtistsArr = [];
-                    for (let i = 0; i < this.list.length; i++) {
-                        this.selectedArtistsArr.push(this.list[i].id)
-
-                    }
-                    if(this.selectedArtistsArr.length==this.list.length){
-                        this.isSelectAll=true;
-                    }
+                    this.roleDate.forEach(item=>{
+                        if(item.id==id){
+                             item.users.data.forEach(v=>{
+                                 this.selectedArtistsArr.push(v.id)
+                            })
+                        }
+                    })
                 } else {
                     let index = this.selectedArtistsArr.indexOf(value);
                     if (index > -1) {
@@ -608,12 +709,26 @@
                     } else {
                         this.selectedArtistsArr.push(value)
                     }
+                   
                 }
+                
             },
-            //切换内容
-            changeCont(value,id) {
-                this.jobCont = value
-                this.defaultId=0
+            funSelect(value,id){
+                let _this=this
+                if(value==='all'){
+                    _this.funArr= [];
+                    for(let i = 0;i<_this.powerDate.length;i++){
+                        if(id==_this.powerDate[i].id){
+                           for(let j=0;j<_this.powerDate[i].data.length;j++){
+                               _this.funArr.push(_this.powerDate[i].data[j].id)
+                                     console.log(_this.funArr)
+                           } 
+                        }
+                        
+                    }
+              
+                }
+              
             },
             //获取新增角色的类别
             changeRolejob(value) {
@@ -735,14 +850,12 @@
                 });
             },
             switchMenu: function (id) {   
-                console.log(id)
                 if(!this.switchId.includes(id)){
                     this.switchId.push(id)
 
                 }else{
                     this.switchId.splice(this.switchId.indexOf(id),1)
                 }
-                // this.visible = !this.visible
  
             },
             //删除的名字id获取
@@ -752,15 +865,23 @@
             grouping(value) {
                 this.groupingId = value
             },
-            clickdefault(){
-              
+            clickdefault(){ 
                 this.conceal=!this.conceal;
-            
             },
             defaultcontent(value){
                 console.log(value)
                 this.defaultId=value
                 this.jobCont =''
+            },
+            seerange(i,v){
+                this.valueId.push(i.toString()+v)
+                console.log(this.valueId)
+            },
+            radioed(i,v){
+                console.log(i+v)
+            },
+            checked(item,m){
+                console.log(item,m)
             }
         }
     }
@@ -815,16 +936,35 @@
         color: #3F51B5;
     }
 
-    .dropdown-item:hover {
+    /* .dropdown-item:hover {
         cursor: pointer;
-    }
+    } */
 
     #org-dropdown {
         font-size: 20px !important;
         
     } 
-    .pointer-content input:hover{
+    /* .pointer-content input[type=radio]:hover{
         cursor:no-drop;
+    } */
+    .power-cont{
+        position:absolute;
+        top:50%;
+        left: 50%;
+        -webkit-transform: translate(-50%, -50%);
+        transform: translate(-50%, -50%);
+    }
+    .range-cont{
+        position:absolute;
+        top:50%;
+        left:10px;
+        margin-top: -10px;
+    }
+    .checkbox-custom, .radio-custom{
+        display: inline-block
+    }
+    .pointer-cont:hover{
+        background: #fff;
     }
 </style>
 

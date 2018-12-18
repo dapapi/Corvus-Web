@@ -1,7 +1,7 @@
 <template>
     <div class="approval-text-container col-md-12">
         <span class="col-md-2 text-right">{{title || data[0].control_title || '测试文本输入框'}}</span>
-        <input type="text" v-model="textContent" class="form-control col-md-10">
+        <textarea name="" id="" class="form-control" v-model="textContent"></textarea>  
     </div>    
 </template>
 

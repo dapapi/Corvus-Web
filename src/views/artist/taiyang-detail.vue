@@ -102,7 +102,13 @@
                         <li class="nav-item" role="presentation">
                             <a class="nav-link" data-toggle="tab" href="#forum-artist-tasks"
                                aria-controls="forum-present"
-                               aria-expanded="false" role="tab">任务</a>
+                               aria-expanded="false" role="tab">
+                               <!-- <span>任务</span> -->
+                               <ToolTips :title="`${taskNum}`">
+                                        任务
+                                    </ToolTips>
+                               <!-- <tool-tips taskNum></tool-tips> -->
+                               </a>
                         </li>
                         <li class="nav-item" role="presentation">
                             <a class="nav-link" data-toggle="tab" href="#forum-artist-work"
@@ -804,9 +810,12 @@
                 taskNum:''
             }
         },
-
+        
+        created(){
+            this.getArtist()
+        },
         mounted() {
-            this.getArtist();
+            
             this.getTaskType();
             this.draw();
             let _this = this;
@@ -814,7 +823,11 @@
                 _this.$store.commit('changeParticipantsInfo', [])
             })
         },
-        
+        watch:{
+            taskNum:function(){
+                
+            }
+        },
         methods: {
 
             //获取艺人信息
@@ -828,6 +841,7 @@
                 fetch('get', '/stars/' + this.artistId, data).then(function (response) {
                     let doneTaskNum = 0
                     _this.artistInfo = response.data;
+                   
                     _this.artistTasksInfo = response.data.tasks.data
                     if(_this.artistTasksInfo.length>0){
                         for (let i = 0; i < _this.artistTasksInfo.length; i++) {

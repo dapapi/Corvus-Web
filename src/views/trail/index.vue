@@ -38,7 +38,8 @@
                                    :options="memberList" multiple='true'
                                    @valuelistener="principalFilter"
                         ></selectors>
-                        <span v-if="fetchData.principal_ids" class="clear-principal-filter" @click="clearPrincipalFilter">&nbsp;&nbsp;x</span>
+                        <span v-if="fetchData.principal_ids" class="clear-principal-filter"
+                              @click="clearPrincipalFilter">&nbsp;&nbsp;x</span>
                     </div>
                     <div class="col-md-3 example float-left">
                         <button type="button" class="btn btn-default waves-effect waves-classic float-right"
@@ -100,7 +101,8 @@
         </div>
 
 
-        <customize-filter :data="customizeInfo" :stararr='starsArr' @change="customize" :cleanup="cleanUp" @cleanupdone='cleanUp=false'></customize-filter>
+        <customize-filter :data="customizeInfo" :stararr='starsArr' @change="customize" :cleanup="cleanUp"
+                          @cleanupdone='cleanUp=false'></customize-filter>
         <AddClientType @change="changeTrailType"></AddClientType>
 
         <div class="modal fade" id="addTrail" aria-hidden="true" aria-labelledby="addLabelForm"
@@ -121,13 +123,6 @@
                                            :placeholder="'请选择合作类型'"></selectors>
                             </div>
                         </div>
-                        <!--<div class="example">-->
-                        <!--<div class="col-md-2 text-right float-left">线索类型</div>-->
-                        <!--<div class="col-md-5 float-left pl-0">-->
-                        <!--<selectors :placeholder="'请选择销售线索'" :options="trailTypeArr"-->
-                        <!--@change="changeTrailType"></selectors>-->
-                        <!--</div>-->
-                        <!--</div>-->
                         <div class="example">
                             <div class="col-md-2 text-right float-left">品牌名称</div>
                             <div class="col-md-10 float-left pl-0">
@@ -313,7 +308,7 @@
                 currentUser: {},
                 resetInfo: false,
                 isLoading: true,
-                cleanUp:false,
+                cleanUp: false,
             }
         },
         created() {
@@ -522,12 +517,12 @@
             customize: function (value) {
                 let _this = this
                 console.log(value);
-                fetch('post','/trails/filter?include=principal,client,contact,recommendations,expectations',value).then((params) => {
+                fetch('post', '/trails/filter?include=principal,client,contact,recommendations,expectations', value).then((params) => {
                     _this.trailsInfo = params.data
                     _this.total = params.meta.pagination.total;
                     _this.cleanUp = true
                 })
-                
+
             },
 
             addTrail: function () {
@@ -665,7 +660,7 @@
             changeCooperationType: function (value) {
                 this.cooperation = value
             },
-            clearPrincipalFilter:function(){
+            clearPrincipalFilter: function () {
                 this.fetchData.principal_ids = ''
                 this.fetchHandler('get', '/trails/filter')
                 this.$refs.principal_id.setValue('')
@@ -684,7 +679,8 @@
         border: 1px solid red;
         border-radius: 5px;
     }
-    .clear-principal-filter{
+
+    .clear-principal-filter {
         cursor: pointer;
     }
 </style>

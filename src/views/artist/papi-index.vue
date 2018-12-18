@@ -373,6 +373,7 @@
             this.getUser();
             this.getBlogType() //获取博主类型
             $('table').asSelectable();
+              console.log($('table'))
              let _this = this;
              $('#addArtist').on('hidden.bs.modal',function() {
                  
@@ -423,6 +424,7 @@
                     _this.current_page = response.meta.pagination.current_page;
                     _this.total = response.meta.pagination.total;
                     _this.total_pages = response.meta.pagination.total_pages;
+                    console.log(_this.artistsInfo)
                 });
             },
 

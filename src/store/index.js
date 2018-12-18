@@ -14,6 +14,7 @@ const state = {
     companyInfo: {},
     selectPrincipalInfo: {},
     otherSlot:{},
+    unReadMsg:0,//未读消息
 };
 
 export default new Vuex.Store({

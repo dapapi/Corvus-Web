@@ -17,7 +17,10 @@ export default {
          return {
             leftData:{
                topData:[],
-               bottomData:[] 
+               bottomData:[],
+               type:[
+
+               ]
             },
          }
      },
@@ -45,17 +48,17 @@ export default {
             ]
             this.leftData.bottomData=[
                 {
-                    value:1,
+                    value:3,
                     name:'我的简报',
                     data:[]
                 },
                 {
-                    value:2,
+                    value:4,
                     name:'成员简报',
                     data:[]
                 },
                 {
-                    value:3,
+                    value:5,
                     name:'简报统计',
                     data:[]
                 }
@@ -67,7 +70,7 @@ export default {
                 // console.log(res.data)
                 let data={}
                 for (let i = 0; i < this.leftData.bottomData.length; i++) {
-                    if(this.leftData.bottomData[i].value == 1){
+                    if(this.leftData.bottomData[i].value == 3){
                         
                         for (let t = 0; t < res.data.length; t++) {
                             data={
@@ -78,7 +81,7 @@ export default {
                             this.leftData.bottomData[i].data.push(data)
                             
                         }
-                    }else if(this.leftData.bottomData[i].value == 2){
+                    }else if(this.leftData.bottomData[i].value == 4){
                         for (let t = 0; t < res.data.length; t++) {
                             data={
                                 value:res.data[t].id,

@@ -169,7 +169,7 @@
                         <div class="example">
                             <div class="col-md-2 text-right float-left">任务类型</div>
                             <div class="col-md-10 float-left pl-0">
-                                <Selectors :options="taskTypeArr" :placeholder="'请选择任务类型'"
+                                <Selectors :options="taskTypeArr" :placeholder="'请选择任务类型'" ref="taskType"
                                            @change="changeTaskType"></Selectors>
                             </div>
                         </div>
@@ -198,25 +198,26 @@
                                         :options="taskLevelArr"
                                         :placeholder="'请选择任务优先级'"
                                         @change="changeTaskLevel"
+                                        ref="taskLevel"
                                 ></Selectors>
                             </div>
                         </div>
                         <div class="example">
                             <div class="col-md-2 text-right float-left">开始时间</div>
                             <div class="col-md-5 float-left pl-0">
-                                <Datepicker @change="changeStartTime"></Datepicker>
+                                <Datepicker ref="startTime" @change="changeStartTime"></Datepicker>
                             </div>
                             <div class="col-md-5 float-left pl-0">
-                                <Timepicker :default="startMinutes" @change="changeStartMinutes"></Timepicker>
+                                <Timepicker ref="startMinutes" :default="startMinutes" @change="changeStartMinutes"></Timepicker>
                             </div>
                         </div>
                         <div class="example">
                             <div class="col-md-2 text-right float-left">截止时间</div>
                             <div class="col-md-5 float-left pl-0">
-                                <Datepicker @change="changeEndTime"></Datepicker>
+                                <Datepicker ref="endTime" @change="changeEndTime"></Datepicker>
                             </div>
                             <div class="col-md-5 float-left pl-0">
-                                <Timepicker :default="endMinutes" @change="changeEndMinutes"></Timepicker>
+                                <Timepicker ref="endMinutes" :default="endMinutes" @change="changeEndMinutes"></Timepicker>
                             </div>
                         </div>
                         <div class="example">
@@ -295,6 +296,10 @@
                 id: this.user.id
             })
             this.getTaskType()
+            $('#addTask').on('hidden.bs.modal', () => {
+                // 清空state
+                this.closeAddTask()
+            })
         },
 
         methods: {
@@ -513,7 +518,35 @@
                     })
                     this.taskTypeArr.unshift({name: '全部', value: ''})
                 })
-            }
+            },
+            // 关闭新增任务
+            closeAddTask () {
+                this.taskName = ''
+                this.taskLevel = ''
+                this.$refs.taskLevel.setValue('')
+                this.taskType = ''
+                this.$refs.taskType.setValue('')
+                this.startTime = ''
+                this.endTime = ''
+                this.startMinutes = ''
+                this.endMinutes = ''
+                this.taskIntroduce = ''
+                this.$refs.startTime.setValue('')
+                this.$refs.startMinutes.setValue('00:00')
+                this.$refs.endTime.setValue('')
+                this.$refs.endMinutes.setValue('00:00')
+                this.linkData = []
+                this.getLinkData()
+                this.setDefaultPrincipal()
+            },
+            // 设置默认负责人
+            setDefaultPrincipal () {
+                this.$store.commit('changeNewPrincipal', {
+                    name: this.user.nickname,
+                    id: this.user.id
+                })
+                this.$store.commit('changeNewParticipantsInfo', [])
+            },
         }
     };
 </script>

@@ -2,6 +2,7 @@
     <div id="app">
         <template v-if="isLeftMenuShow">
             <LeftMenu/>
+            <get-message/>
         </template>
         <template v-else-if="isLeftManageShow">
             <LeftManage/>
@@ -11,7 +12,9 @@
 </template>
 
 <script>
+    
     import LeftMenu from '@/components/LeftMenu.vue'
+    import getMessage from '@/components/getMessage.vue'
     import LeftManage from '@/components/LeftManage.vue'
     export default {
         name: 'app',
@@ -23,7 +26,8 @@
         },
         components: {
             LeftMenu,
-            LeftManage
+            LeftManage,
+            getMessage
         },
         watch: {
             '$route': function (to, from) {

@@ -402,6 +402,11 @@
             changeTime(value) {
                 this.$emit('change', value)
             },
+
+            setValue (value) {
+                this.$refs.timepicker.setValue(value)
+            }
+
         }
     }
 </script>

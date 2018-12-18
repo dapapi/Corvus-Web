@@ -1,49 +1,114 @@
+<template>
+    <div>
+
+    </div>
+</template>
 
 <script>
+import config from '@/assets/js/config'
+import fetch from '@/assets/utils/fetch'
 export default {
     data(){
-       return {
-
-       }
+        return {
+            websocket:null
+        }
     },
-    mounted(){
-        this.receive()       
+    created(){
+      this.initWebSocket()
+      this.getModule()
+    },
+    destroyed(){
+        this.websocket.close()
     },
     methods:{
-        receive:function(){
-            alert(222)
+        initWebSocket:function(){
+            this.websocket = new WebSocket(config.socketUrl)
+            this.websocket.onmessage = this.websocketonmessage
+            this.websocket.onopen = this.websocketonopen
+            this.websocket.onerror = this.websocketonerror
+            this.websocket.onclose = this.websocketclose
+            
+        },
+        websocketonopen:function(){
+
+            //websoket 发送数据
             let login = {}
             let user = JSON.parse(Cookies.get('user'))
             login.username = user.nickname
             login.userId = user.id
-            // console.log(login.username,login.userId)
+            login.authorization = 'Bearer ' + config.getAccessToken() || ''
             login.action = "login"
-            // 初始化一个 WebSocket 对象
-            var ws = new WebSocket("ws://sandbox-corvus.papitube.com:8081");
 
-            // 建立 web socket 连接成功触发事件
-            ws.onopen = function () {
-            // 使用 send() 方法发送数据
-            ws.send(JSON.stringify(login));
-                console.log("数据发送中...");
-            };
+            this.websocketsend(JSON.stringify(login))
+        },
+        websocketonmessage:function(evt){
+            // console.log(evt)
+            var received_msg = evt.data;
+            let msg = eval("'" + evt.data + "'")
+            msg = JSON.parse(msg)
+            if(msg.action == 'sendmessage'){
+                toastr.success(msg.title)
+                this.suportNotify(msg.title)
+                this.getModule()
+            }
+        },
+        websocketsend:function(data){
+            this.websocket.send(data) 
+        },
+        websocketonerror:function(){
+            this.initWebSocket()
+        },
+        websocketclose:function(){
 
-            // 接收服务端数据时触发事件
-            ws.onmessage = function (evt) {
-                alert(111)
-                var received_msg = evt.data;
-                let msg = eval("'" + evt.data + "'")
-                toastr.success(msg)
+        },
+        getModule:function(){
+            fetch('get',`${config.apiUrl}/getmodules`).then((res) => {
+                let unRead =0
+                for (let i = 0; i < res.length; i++) {
+                    if(res[i].un_read){
+                        unRead = unRead+res[i].un_read
+                    }
+                }
+                this.$store.state.unReadMsg = unRead
                 
-         
-            };
-        
-        // 断开 web socket 连接成功触发事件
-        // ws.onclose = function () {
-        // console.log("连接已关闭...");
-        // };
-
-       },
+            })
+        },
+        suportNotify:function (content){
+            if (window.Notification) {
+                // 支持
+                console.log("支持"+"Web Notifications API");
+                //如果支持Web Notifications API，再判断浏览器是否支持弹出实例
+                this.showMess(content)
+            } else {
+                // 不支持
+                alert("不支持 Web Notifications API");
+            }
+        },
+        //判断浏览器是否支持弹出实例
+        showMess:function(content){
+            setTimeout(function () {
+                // console.log('1：'+Notification.permission);
+                //如果支持window.Notification 并且 许可不是拒绝状态
+                if(window.Notification && Notification.permission !== "denied") {
+                    //Notification.requestPermission这是一个静态方法，作用就是让浏览器出现是否允许通知的提示
+                    Notification.requestPermission(function(status) {
+                        // console.log('2: '+status);
+                        //如果状态是同意
+                        if (status === "granted") {
+                            var m = new Notification('收到信息', {
+                                body: content,　　//消息体内容
+                                icon:"https://res.papitube.com/corvus/images/taiyang-icon.png"　　//消息图片
+                            });
+                            m.onclick = function () {//点击当前消息提示框后，跳转到当前页面
+                                window.focus();
+                            }
+                        } else{
+                            console.log('当前浏览器不支持弹出消息')
+                        }
+                    });
+                }
+            },1000)
+        }
     }
 }
 </script>

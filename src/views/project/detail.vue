@@ -229,40 +229,32 @@
                         <div class="tab-pane animation-fade py-10" v-if="projectInfo.type != 5"
                              id="forum-project-contract"
                              role="tabpanel">
-                            <ul class="nav nav-tabs nav-tabs-line" role="tablist" style="border-bottom: 0">
-                                <li class="nav-item" role="presentation">
-                                    <a class="nav-link active" data-toggle="tab" href="#forum-item-contract"
-                                       aria-controls="forum-base"
-                                       aria-expanded="true" role="tab">bigger研究所</a>
-                                </li>
-                                <li class="nav-item" role="presentation">
-                                    <a class="nav-link" data-toggle="tab" href="#forum-item-contract"
-                                       aria-controls="forum-base"
-                                       aria-expanded="true" role="tab">papi酱</a>
-                                </li>
-                            </ul>
-                            <div class="tab-pane animation-fade"
-                                 id="forum-item-contract">
-                                <table class="table table-hover example"
-                                       data-child="tr">
-                                    <tr>
-                                        <th class="cell-300" scope="col">合同编号</th>
-                                        <th class="cell-300" scope="col">项目名称</th>
-                                        <th class="cell-300" scope="col">公司</th>
-                                        <th class="cell-300" scope="col">审批状态</th>
-                                        <th class="cell-300" scope="col">艺人</th>
-                                    </tr>
-                                    <tbody>
-                                    <tr>
-                                        <td>#12312sdf231</td>
-                                        <td>测试合同</td>
-                                        <td>泰洋川禾</td>
-                                        <td>审批中</td>
-                                        <td>papi</td>
-                                    </tr>
-                                    </tbody>
-                                </table>
-                            </div>
+                            <table class="table table-hover example"
+                                   data-child="tr">
+                                <tr>
+                                    <th class="cell-300" scope="col">合同编号</th>
+                                    <th class="cell-300" scope="col">项目名称</th>
+                                    <th class="cell-300" scope="col">公司</th>
+                                    <th class="cell-300" scope="col">审批状态</th>
+                                    <th class="cell-300" scope="col">艺人</th>
+                                </tr>
+                                <tbody>
+                                <tr>
+                                    <td>#12312sdf231</td>
+                                    <td>测试合同</td>
+                                    <td>泰洋川禾</td>
+                                    <td>审批中</td>
+                                    <td>papi、bigger</td>
+                                </tr>
+                                <tr>
+                                    <td>#12312sdf231</td>
+                                    <td>测试合同</td>
+                                    <td>泰洋川禾</td>
+                                    <td>审批中</td>
+                                    <td>周冬雨</td>
+                                </tr>
+                                </tbody>
+                            </table>
 
                         </div>
                         <!-- 账单 -->
@@ -312,12 +304,12 @@
                                     <li class="nav-item" role="presentation">
                                         <a class="nav-link active" data-toggle="tab" href="#forum-item-bill"
                                            aria-controls="forum-base"
-                                           aria-expanded="true" role="tab">bigger研究所</a>
+                                           aria-expanded="true" role="tab">bigger研究所/papi酱</a>
                                     </li>
                                     <li class="nav-item" role="presentation">
                                         <a class="nav-link" data-toggle="tab" href="#forum-item-bill"
                                            aria-controls="forum-base"
-                                           aria-expanded="true" role="tab">papi酱</a>
+                                           aria-expanded="true" role="tab">周冬雨</a>
                                     </li>
                                 </ul>
                                 <div class="float-right" style="padding: .715rem 1.429rem">
