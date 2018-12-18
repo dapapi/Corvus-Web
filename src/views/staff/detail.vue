@@ -7,7 +7,7 @@
         <div class="page-content container-fluid">
             <div class="panel col-md-12 clearfix py-5">
                 <div class="edit">
-                    <i v-if="!editInfo" @click="handleEdit('editInfo')" class="icon md-edit"></i>
+                    <i v-if="!editInfo" @click="handleEdit('editInfo')" class="iconfont icon-bianji"></i>
                     <template v-else>
                         <span class="save" @click="save('editInfo')">保存</span> <span class="cancel" @click="cancel('editInfo')">取消</span>
                     </template>
@@ -143,7 +143,7 @@
                     <div class="tab-content pt-10">
                         <div class="tab-pane active" id="infoTab" role="tabpanel">
                             <div class="edit">
-                                <i v-if="!editDetail" @click="handleEdit('editDetail')" class="icon md-edit"></i>
+                                <i v-if="!editDetail" @click="handleEdit('editDetail')" class="iconfont icon-bianji"></i>
                                 <template v-else>
                                     <span class="save" @click="save('editDetail')">保存</span> <span class="cancel" @click="cancel('editDetail')">取消</span>
                                 </template>
@@ -159,7 +159,7 @@
                                 <div class="col-md-6 float-left pl-0">
                                     <upload>
                                         <div class="id-upload">
-                                            <!-- <i class="icon md-plus" style="font-size: 50px" aria-hidden="true"></i> -->
+                                            <!-- <i class="md-plus" style="font-size: 50px" aria-hidden="true"></i> -->
                                             +
                                         </div>
                                     </upload>
@@ -264,7 +264,7 @@
 
                         <div class="tab-pane" id="workTab" role="tabpanel">
                             <div class="edit">
-                                <i v-if="!editJob" @click="handleEdit('editJob')" class="icon md-edit"></i>
+                                <i v-if="!editJob" @click="handleEdit('editJob')" class="iconfont icon-bianji"></i>
                                 <template v-else>
                                     <span class="save" @click="save('editJob')">保存</span> <span class="cancel" @click="cancel('editJob')">取消</span>
                                 </template>
@@ -393,7 +393,7 @@
 
                         <div class="tab-pane" id="salaryTab" role="tabpanel">
                             <div class="edit">
-                                <i v-if="!editSalary" @click="handleEdit('editSalary')" class="icon md-edit"></i>
+                                <i v-if="!editSalary" @click="handleEdit('editSalary')" class="iconfont icon-bianji"></i>
                                 <template v-else>
                                     <span class="save" @click="save('editSalary')">保存</span> <span class="cancel" @click="cancel('editSalary')">取消</span>
                                 </template>

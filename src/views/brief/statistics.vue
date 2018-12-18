@@ -9,7 +9,7 @@
             <div class="panel mb-0">
                 <div class="col-md-4  p-20">
                     <div class="input-search">
-                        <button type="button" class="input-search-btn"><i class="icon md-search" aria-hidden="true"></i>
+                        <button type="button" class="input-search-btn"><i class="md-search" aria-hidden="true"></i>
                         </button>
                         <input type="text" class="form-control" placeholder="搜索成员、周期">
                     </div>
@@ -44,7 +44,7 @@
                                 <!--季-->
                                 <td class="cell-300" v-if="showType ==4" v-for="(item2,index2) in season" :key="index2">
                                     <template v-if="item.titles.find(item => item == `${nowMonth}年${item2.name}`)">
-                                        <i class="icon md-check font-size-20" style="color:#11c26d"></i>
+                                        <i class="md-check font-size-20" style="color:#11c26d"></i>
                                     </template>
                                     <template v-else>
                                         <span>-</span>
@@ -53,7 +53,7 @@
                                 <!--月-->
                                 <td class="cell-200" v-if="showType ==3" v-for="item2 in 12" :key="item2">
                                     <template v-if="item.titles.find(item => item == `${nowMonth}年${item2}月`)">
-                                        <i class="icon md-check font-size-20" style="color:#11c26d"></i>
+                                        <i class="md-check font-size-20" style="color:#11c26d"></i>
                                     </template>
                                     <template v-else>
                                         <span>-</span>
@@ -63,7 +63,7 @@
                                 <td class="cell-300" v-if="showType ==2" v-for="(item2,index2) in monthWeek[nowYear-1]" :key="index2">
                                     <template v-if="item.titles.find(item => item == item2.name)">
                                         
-                                        <i class="icon md-check font-size-20" style="color:#11c26d"></i>
+                                        <i class="md-check font-size-20" style="color:#11c26d"></i>
                                     </template>
                                     <template v-else>
                                         <span>-</span>

@@ -138,8 +138,8 @@
         <div class="site-action" data-plugin="actionBtn" data-toggle="modal" data-target="#addTask">
             <button type="button"
                     class="site-action-toggle btn-raised btn btn-success btn-floating waves-effect waves-classic">
-                <i class="front-icon md-plus animation-scale-up" aria-hidden="true"></i>
-                <i class="back-icon md-plus animation-scale-up" aria-hidden="true"></i>
+                <i class="front-icon iconfont icon-tianjiajiahaowubiankuang1 animation-scale-up" aria-hidden="true"></i>
+                <i class="back-icon iconfont icon-tianjiajiahaowubiankuang1 animation-scale-up" aria-hidden="true"></i>
             </button>
         </div>
 
@@ -153,7 +153,7 @@
                 <div class="modal-content">
                     <div class="modal-header">
                         <button type="button" class="close" aria-hidden="true" data-dismiss="modal">
-                            <i class="md-close" aria-hidden="true"></i>
+                            <i class="iconfont icon-guanbi" aria-hidden="true"></i>
                         </button>
                         <h4 class="modal-title">新增任务</h4>
                     </div>

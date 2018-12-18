@@ -261,7 +261,7 @@
                                 <ul class="color-selector calendar-color-list">
                                     <li v-for="color in colorArr" :style="'background-color: #' + color"
                                         @click="changeCalendarColor(color)">
-                                        <i class="icon md-check" v-if="color === checkColor"></i>
+                                        <i class="md-check" v-if="color === checkColor"></i>
                                     </li>
                                 </ul>
                             </div>
@@ -318,7 +318,7 @@
                                 <ul class="color-selector calendar-color-list">
                                     <li v-for="color in colorArr" :style="'background-color: #' + color"
                                         @click="changeCalendarColor(color)">
-                                        <i class="icon md-check" v-if="color === checkColor"></i>
+                                        <i class="md-check" v-if="color === checkColor"></i>
                                     </li>
                                 </ul>
                             </div>

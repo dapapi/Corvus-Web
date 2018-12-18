@@ -5,7 +5,7 @@
             <h1 class="page-title">日历</h1>
             <div class="page-header-actions" data-toggle="modal" data-target="#addCalendar"
                  @click="changeCalendarActionType('add')">
-                <i class="icon md-plus font-size-20" aria-hidden="true"></i>
+                <i class="md-plus font-size-20" aria-hidden="true"></i>
             </div>
         </div>
 
@@ -18,18 +18,18 @@
                     <div class="calendar-list">
                         <div>
                             <div class="calendar-title position-relative" style="line-height: 20px">
-                                <i class="icon md-calendar pr-5"></i>
+                                <i class="md-calendar pr-5"></i>
                                 <span @click="displayMeetingRoom">所有日历</span>
                                 <span class="px-5 pointer-content" @click="allCalendarShow">
                                     <template v-if="showAllCalendar">
-                                        <i class="icon md-chevron-down"></i>
+                                        <i class="md-chevron-down"></i>
                                     </template>
                                     <template v-else>
-                                        <i class="icon md-chevron-up"></i>
+                                        <i class="md-chevron-up"></i>
                                     </template>
                                 </span>
                                 <span class="float-right pointer-content" data-toggle="modal" data-target="#addMembers">
-                                    <i class="icon md-accounts-add"></i>
+                                    <i class="md-accounts-add"></i>
                                 </span>
                             </div>
                             <div v-show="showAllCalendar">
@@ -38,17 +38,16 @@
                                         <div class="calendar-checkbox float-left pointer-content"
                                              :style="'background-color:' + calendar.color"
                                              @click="checkCalendar(calendar.id)">
-                                            <i class="icon md-check"
+                                            <i class="md-check"
                                                v-show="selectedCalendar.indexOf(calendar.id) > -1"></i>
                                         </div>
                                         <div class="float-left ml-10">{{ calendar.title }}</div>
-                                        <div class="float-right">
-                                            <i class="icon md-more" aria-hidden="true" id="taskDropdown"
+                                        <div class="float-right position-relative">
+                                            <i class="iconfont icon-gengduo1" aria-hidden="true" id="taskDropdown"
                                                data-toggle="dropdown" aria-expanded="false"></i>
                                             <div class="dropdown-menu" aria-labelledby="taskDropdown">
                                                 <a class="dropdown-item" @click="getCalendarDetail(calendar.id)"
-                                                   data-target="#addCalendar"
-                                                   data-toggle="modal">编辑</a>
+                                                   data-target="#addCalendar" data-toggle="modal">编辑</a>
                                                 <a class="dropdown-item" data-target="#delModel" data-toggle="modal"
                                                    @click="delCalendar(calendar)">删除</a>
                                             </div>
@@ -65,13 +64,13 @@
                         </div>
                         <div>
                             <div class="calendar-title">
-                                <i class="icon md-calendar pr-5"></i>资源
+                                <i class="md-calendar pr-5"></i>资源
                                 <span class="px-5 pointer-content" @click="allResourceShow">
                                     <template v-if="showAllResource">
-                                        <i class="icon md-chevron-down"></i>
+                                        <i class="md-chevron-down"></i>
                                     </template>
                                     <template v-else>
-                                        <i class="icon md-chevron-up"></i>
+                                        <i class="md-chevron-up"></i>
                                     </template>
                                 </span>
                             </div>
@@ -220,7 +219,7 @@
                 <div class="modal-content" v-if="scheduleData">
                     <div class="modal-header">
                         <div style="order: 2">
-                            <i class="md-edit pr-4 font-size-16 pointer-content" aria-hidden="true"></i>
+                            <i class="iconfont icon-bianji pr-4 font-size-16 pointer-content" aria-hidden="true"></i>
                             <i class="md-file pr-4 font-size-16 pointer-content" aria-hidden="true"></i>
                             <i class="md-delete pr-4 font-size-16 pointer-content" aria-hidden="true"></i>
                             <i class="md-close pointer-content" aria-hidden="true" data-dismiss="modal"></i>
@@ -288,11 +287,11 @@
                             <div>附件</div>
                             <div class="">
                                 <div class="col-md-3 float-left text-center">
-                                    <div><i class="icon md-file" style="font-size: 36px"></i></div>
+                                    <div><i class="md-file" style="font-size: 36px"></i></div>
                                     <div>泰洋川禾简介.docx</div>
                                 </div>
                                 <div class="col-md-3 float-left text-center">
-                                    <div><i class="icon md-file" style="font-size: 36px"></i></div>
+                                    <div><i class="md-file" style="font-size: 36px"></i></div>
                                     <div>泰洋川禾泰洋川禾简介.docx</div>
                                 </div>
                             </div>
@@ -366,7 +365,7 @@
                                 <ul class="color-selector calendar-color-list">
                                     <li v-for="color in colorArr" :style="'background-color: ' + color"
                                         @click="changeCalendarColor(color)">
-                                        <i class="icon md-check" v-if="color === checkColor"></i>
+                                        <i class="md-check" v-if="color === checkColor"></i>
                                     </li>
                                 </ul>
                             </div>

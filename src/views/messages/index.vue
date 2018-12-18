@@ -4,7 +4,7 @@
             <h1 class="page-title float-left">我的消息</h1>
             <div class="filter-container float-right" >
                 <div class="text-right mark-all-read">
-                    <i class="icon md-circle-o" v-show="readFilter && messageList" data-target="#confirmFlag" 
+                    <i class="icon md-circle-o" v-show="readFilter && messageList" data-target="#confirmFlag"
                     data-toggle="modal"></i>&nbsp;
                     <span v-show="readFilter && messageList" 
                     data-target="#confirmFlag" 

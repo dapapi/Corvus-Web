@@ -141,6 +141,10 @@ export default new Router({
             component: () => import('./views/approval/index.vue'),
             children: [
                 {
+                    path: '/approval/contract/initiate',
+                    component: () => import('./views/approval/contractIndex/contractIndex.vue')
+                },
+                {
                     path: '/approval/common/initiate',
                     component: () => import('./views/approval/initiate.vue')
                 },
@@ -176,6 +180,26 @@ export default new Router({
                     path: '/application/common/:id',
                     name: 'approval/common/detail',
                     component: () => import('./views/approval/appdetail.vue')
+                },
+                {
+                    path: '/approval/project/initiate',
+                    name: 'approval/project/initiate',
+                    component: () => import('./views/approval/project/initiate.vue')
+                },
+                {
+                    path: '/approval/project/application',
+                    name: 'approval/project/detail',
+                    component: () => import('./views/approval/project/application.vue')
+                },
+                {
+                    path: '/approval/project/my',
+                    name: 'approval/project/my',
+                    component: () => import('./views/approval/project/my.vue')
+                },
+                {
+                    path: '/approval/project/only',
+                    name: 'approval/project/only',
+                    component: () => import('./views/approval/project/only.vue')
                 },
             ],
         },
@@ -373,7 +397,7 @@ export default new Router({
                     name: 'schedule',
                     component: () => import('./views/application/schedule.vue')
                 },
-                {  
+                {
                     path: '/my/message',
                     name: 'message',
                     component: () => import('./views/messages/index.vue')

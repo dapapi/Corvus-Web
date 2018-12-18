@@ -24,12 +24,12 @@
                                 <td>
                                     <!--编辑模版-->
                                     <span class="pr-40 d-block float-left pointer-content" style="color: #b9b9b9;" data-toggle="modal" data-target="#addModelDetails" @click="changeModelType('edit',item.member,item.template_name,item.frequency,item.id)">
-                                        <i class="icon md-edit color" aria-hidden="true"></i>
+                                        <i class="iconfont icon-bianji color" aria-hidden="true"></i>
                                     </span>
                                     <!--编辑模版结束-->
                                     <!--删除模版-->
                                     <span class="pr-40 d-block float-left pointer-content" style="color: #b9b9b9" data-toggle="modal" data-target="#delModel" @click="getDelModelId(item.id,item.template_name)">
-                                        <i class="icon md-delete color" aria-hidden="true"></i>
+                                        <i class="md-delete color" aria-hidden="true"></i>
                                     </span>
                                     <!--删除模版结束-->
                                     
@@ -109,17 +109,17 @@
                                 <td>
                                     <span class="pr-20 d-block float-left pointer-content" style="color: #b9b9b9;" data-toggle="modal"
                                         data-target="#addQuesDetails" @click="changeQuesType('edit',item.issues,item.type,item.accessory,item.required,item.id)">
-                                        <i class="icon md-edit" aria-hidden="true"></i>
+                                        <i class="iconfont icon-bianji" aria-hidden="true"></i>
                                     </span>
                                     <span class="pr-20 d-block float-left pointer-content" style="color: #b9b9b9" data-toggle="modal"
                                         data-target="#delQues" @click="getDelQuesId(item.id)">
-                                        <i class="icon md-delete" aria-hidden="true"></i>
+                                        <i class="md-delete" aria-hidden="true"></i>
                                     </span>
                                     <span class="pr-20 d-block float-left pointer-content" style="color: #b9b9b9" @click="quesUpDown('top',item.id)">
                                         <i class="iicon md-caret-up-circle" aria-hidden="true"></i>
                                     </span>
                                     <span class="d-block float-left pointer-content" style="color: #b9b9b9" @click="quesUpDown('bottom',item.id)">
-                                        <i class="icon md-caret-down-circle" aria-hidden="true"></i>
+                                        <i class="md-caret-down-circle" aria-hidden="true"></i>
                                     </span>
                                 </td>
                             </tr>

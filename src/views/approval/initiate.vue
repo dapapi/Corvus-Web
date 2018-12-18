@@ -3,7 +3,7 @@
       <div class="page-header page-header-bordered mb-0">
         <h1 class="page-title">发起审批</h1>
       </div>
-    
+
     <div class="page-content container-fluid ">
       <div class="page-header">
         <h4 class="">泰洋人事审批</h4>
@@ -108,15 +108,22 @@
         </div>
       </div>
     </div>
+    <ApprovalGreatModule />
     </div>
 </template>
 <script>
   import fetch from "../../assets/utils/fetch.js";
   import config from "../../assets/js/config";
   import Modal from "../../components/Modal.vue";
+  import ApprovalGreatModule from '@/components/ApprovalGreatModule'
+
 
   export default {
+    components:{
+      ApprovalGreatModule
+    },
     data: function () {
+
       return {
         uploadUrl:'',
         total: 2,

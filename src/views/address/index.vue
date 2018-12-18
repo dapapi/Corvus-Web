@@ -28,7 +28,7 @@
                                         <div class="mt-20">
                                             <div class="input-search m-0">
                                                 <button type="submit" class="input-search-btn">
-                                                    <i class="icon md-search" aria-hidden="true"></i>
+                                                    <i class="md-search" aria-hidden="true"></i>
                                                 </button>
                                                 <input type="text" class="form-control" name="" placeholder="搜索成员..."
                                                        v-model="searchKeyWord">
@@ -81,21 +81,21 @@
                                 <div class="clearfix mb-20">
                                     <div class="col-md-4 float-left">
                                         <div class="float-left col-md-6">
-                                            <i class="icon md-plus pr-2"></i>
+                                            <i class="md-plus pr-2"></i>
                                             <span class="font-weight-bold">姓名</span>
                                         </div>
                                         <div class="float-left col-md-6 pl-0">{{ personalInfo.name ? personalInfo.name : ''}}</div>
                                     </div>
                                     <div class="col-md-4 float-left">
                                         <div class="float-left col-md-6">
-                                            <i class="icon md-plus pr-2"></i>
+                                            <i class="md-plus pr-2"></i>
                                             <span class="font-weight-bold">职位</span>
                                         </div>
                                         <div class="float-left col-md-6 pl-0">{{ personalInfo.position ? personalInfo.position : ''}}</div>
                                     </div>
                                     <div class="col-md-4 float-left">
                                         <div class="float-left col-md-6">
-                                            <i class="icon md-plus pr-2"></i>
+                                            <i class="md-plus pr-2"></i>
                                             <span class="font-weight-bold">部门</span>
                                         </div>
                                         <div class="float-left col-md-6 pl-0">{{ personalInfo.position ? personalInfo.position : ''}}</div>
@@ -104,21 +104,21 @@
                                 <div class="clearfix">
                                     <div class="col-md-4 float-left">
                                         <div class="float-left col-md-6">
-                                            <i class="icon md-email pr-2"></i>
+                                            <i class="md-email pr-2"></i>
                                             <span class="font-weight-bold">邮箱</span>
                                         </div>
                                         <div class="float-left col-md-6 pl-0">{{ personalInfo.work_email ? personalInfo.work_email : ''}}</div>
                                     </div>
                                     <div class="col-md-4 float-left">
                                         <div class="float-left col-md-6">
-                                            <i class="icon md-phone pr-2"></i>
+                                            <i class="md-phone pr-2"></i>
                                             <span class="font-weight-bold">电话</span>
                                         </div>
                                         <div class="float-left col-md-6 pl-0">{{ personalInfo.phone ? personalInfo.phone : ''}}</div>
                                     </div>
                                     <div class="col-md-4 float-left">
                                         <div class="float-left col-md-6">
-                                            <i class="icon md-plus pr-2"></i>
+                                            <i class="md-plus pr-2"></i>
                                             <span class="font-weight-bold">WeChat</span>
                                         </div>
                                         <div class="float-left col-md-6 pl-0">XXX</div>

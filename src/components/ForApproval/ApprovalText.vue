@@ -27,7 +27,7 @@ export default {
 }
 </script>
 
-<style>
+<style> 
 .approval-text-container{
     display: flex;
     /* margin: 20px; */
