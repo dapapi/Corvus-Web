@@ -34,22 +34,18 @@
         },
 
         mounted() {
-            if (!this.multiple) {
-                let self = this;
-                $(this.$el).selectpicker().on('hidden.bs.select', function () {
-                    if (!$(this).val()) {
-                        return
-                    }
-                    self.$emit('change', $(this).val(), $(this)[0].selectedOptions[0].label, $(this)[0].selectedOptions[0].id);
-                    // 可以通过调用select方法，去改变父组件传过来的changeKey
-                    if (self.changeKey) {
-                        self.$emit('select', self.changeKey, $(this).val(), $(this)[0].selectedOptions[0].label)
-                    }
-                });
-            } else {
-                $(this.$el).selectpicker()
-            }
-
+            let self = this;
+            $(this.$el).selectpicker().on('hidden.bs.select', function () {
+                if (!$(this).val() || $(this).val().length === 0) {
+                    self.$emit('change', $(this).val());
+                    return
+                }
+                self.$emit('change', $(this).val(), $(this)[0].selectedOptions[0].label, $(this)[0].selectedOptions[0].id);
+                // 可以通过调用select方法，去改变父组件传过来的changeKey
+                if (self.changeKey) {
+                    self.$emit('select', self.changeKey, $(this).val(), $(this)[0].selectedOptions[0].label)
+                }
+            });
         },
         watch: {
             resetinfo: function (value) {

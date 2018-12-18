@@ -11,7 +11,7 @@
                     <div class="col-md-3 example float-left">
                         <input type="text" class="form-control" id="inputPlaceholder" placeholder="请输入项目昵称"
                                v-model="projectKeyword"
-                               @blur="getFilterProjects(1)" style="width: 220px">
+                               @blur="getFilterProjects(1)">
                     </div>
                     <div class="col-md-3 example float-left">
                         <selectors @change="(value) => getFilterProjects(1, 'status', value)"
@@ -113,161 +113,6 @@
 
         <AddClientType type="project" @change="changeProjectType"></AddClientType>
 
-        <!--<div class="modal fade" id="addProject" aria-hidden="true" aria-labelledby="addLabelForm"-->
-        <!--role="dialog" tabindex="-1">-->
-        <!--<div class="modal-dialog modal-simple">-->
-        <!--<div class="modal-content">-->
-        <!--<div class="modal-header">-->
-        <!--<button type="button" class="close" aria-hidden="true" data-dismiss="modal">-->
-        <!--<i class="md-close" aria-hidden="true"></i>-->
-        <!--</button>-->
-        <!--<h4 class="modal-title">新增项目</h4>-->
-        <!--</div>-->
-        <!--<div class="modal-body">-->
-        <!--<div class="col-md-12 example clearfix" v-show="projectType != 5 && trailsArr.length > 0">-->
-        <!--<div class="col-md-2 text-right float-left pl-0">销售线索</div>-->
-        <!--<div class="col-md-10 float-left">-->
-        <!--<Selectors :options="trailsArr" @change="addProjectTrail" ref="trails"-->
-        <!--placeholder="请选择销售线索" selectable="true"></Selectors>-->
-        <!--</div>-->
-        <!--</div>-->
-        <!--<div class="col-md-12 example clearfix" v-show="projectType != 5">-->
-        <!--<div class="col-md-2 text-right float-left pl-0">项目来源</div>-->
-        <!--<div class="col-md-10 float-left">-->
-        <!--<div class="col-md-6 float-left pl-0" v-if="trailOriginArr.length > 0">-->
-        <!--<Selectors :options="trailOriginArr"-->
-        <!--@change="(value) => addProjectBaseInfo(value, 'resource_type')"-->
-        <!--ref="trailOrigin" placeholder="请选择项目来源"></Selectors>-->
-        <!--</div>-->
-        <!--<div class="col-md-6 float-left pr-0">-->
-        <!--<template v-if="trailOrigin == 1 || trailOrigin == 2 || trailOrigin == 3">-->
-        <!--<input type="text" class="form-control" title="" v-model="trailOriginContent">-->
-        <!--</template>-->
-        <!--<template v-else-if="trailOrigin == 4 || trailOrigin == 5">-->
-        <!--<InputSelectors type="selector"></InputSelectors>-->
-        <!--</template>-->
-        <!--</div>-->
-        <!--</div>-->
-        <!--</div>-->
-        <!--<div class="col-md-12 example clearfix">-->
-        <!--<div class="col-md-2 text-right float-left pl-0">项目名称</div>-->
-        <!--<div class="col-md-10 float-left">-->
-        <!--<EmitInput @change="(value) => addProjectBaseInfo(value, 'title')"-->
-        <!--ref="projectNameRef"></EmitInput>-->
-        <!--</div>-->
-        <!--</div>-->
-        <!--<div class="col-md-12 example clearfix">-->
-        <!--<div class="col-md-2 text-right float-left pl-0">项目负责人</div>-->
-        <!--<div class="col-md-10 float-left">-->
-        <!--<InputSelectors-->
-        <!--@change="(value) => addProjectBaseInfo(value, 'principal_id')"></InputSelectors>-->
-        <!--</div>-->
-        <!--</div>-->
-        <!--<div class="col-md-12 example clearfix" v-show="projectType != 5 && starsArr.length > 0">-->
-        <!--<div class="col-md-2 text-right float-left pl-0">目标艺人</div>-->
-        <!--<div class="col-md-10 float-left">-->
-        <!--<Selectors multiple="true" :options="starsArr" ref="intentionArtist"-->
-        <!--placeholder="请选择目标艺人"-->
-        <!--@change="(value) => addProjectBaseInfo(value, 'expectations')"></Selectors>-->
-        <!--</div>-->
-        <!--</div>-->
-        <!--<div class="col-md-12 example clearfix">-->
-        <!--<div class="col-md-2 text-right float-left pl-0">优先级</div>-->
-        <!--<div class="col-md-10 float-left">-->
-        <!--<Selectors :options="levelArr" ref="priorityLevel" placeholder="请选择优先级"-->
-        <!--@change="(value) => addProjectBaseInfo(value, 'priority')"></Selectors>-->
-        <!--</div>-->
-        <!--</div>-->
-        <!--<div class="col-md-12 example clearfix" v-show="projectType == 5">-->
-        <!--<div class="col-md-2 text-right float-left pl-0">可见范围</div>-->
-        <!--<div class="col-md-10 float-left">-->
-        <!--<Selectors :options="visibleRangeArr" placeholder="请选择可见范围" ref="visibleRange"-->
-        <!--@change="(value) => addProjectBaseInfo(value, 'privacy')"></Selectors>-->
-        <!--</div>-->
-        <!--</div>-->
-        <!--<div class="col-md-12 example clearfix">-->
-        <!--<div class="col-md-2 text-right float-left pl-0">开始时间</div>-->
-        <!--<div class="col-md-10 float-left">-->
-        <!--<Datepicker @change="(value) => addProjectBaseInfo(value, 'start_at')"-->
-        <!--ref="startTime"></Datepicker>-->
-        <!--</div>-->
-        <!--</div>-->
-        <!--<div class="col-md-12 example clearfix">-->
-        <!--<div class="col-md-2 text-right float-left pl-0">截止时间</div>-->
-        <!--<div class="col-md-10 float-left">-->
-        <!--<Datepicker @change="(value) => addProjectBaseInfo(value, 'end_at')"-->
-        <!--ref="endTime" :startDate="startTime"></Datepicker>-->
-        <!--</div>-->
-        <!--</div>-->
-        <!--<div class="col-md-12 example clearfix" v-show="projectType != 5">-->
-        <!--<div class="col-md-2 text-right float-left pl-0">预计支出</div>-->
-        <!--<div class="col-md-10 float-left">-->
-        <!--<NumberSpinner ref="projectExpenditureFee"-->
-        <!--@change="(value) => addProjectBaseInfo(value, 'expenditure_fee')"></NumberSpinner>-->
-        <!--</div>-->
-        <!--</div>-->
-        <!--<div class="col-md-12 example clearfix" v-show="projectType != 5">-->
-        <!--<div class="col-md-2 text-right float-left pl-0">合同金额</div>-->
-        <!--<div class="col-md-10 float-left">-->
-        <!--<NumberSpinner ref="projectFee"-->
-        <!--@change="(value) => addProjectBaseInfo(value, 'fee')"></NumberSpinner>-->
-        <!--</div>-->
-        <!--</div>-->
-        <!--<div class="col-md-12 example clearfix" v-for="field in projectFieldsArr">-->
-        <!--<div class="col-md-2 text-right float-left pl-0">{{ field.key }}</div>-->
-        <!--<div class="col-md-10 float-left">-->
-        <!--<template v-if="field.field_type === 1">-->
-        <!--<EmitInput @change="(value) => addInfo(value, field.id )"></EmitInput>-->
-        <!--</template>-->
-        <!--<template v-else-if="field.field_type === 2">-->
-        <!--<Selectors :options="field.contentArr" :placeholder="'请选择' + field.key"-->
-        <!--@change="(value) => addInfo(value, field.id )"></Selectors>-->
-        <!--</template>-->
-        <!--<template v-else-if="field.field_type === 3">-->
-        <!--<EditableSearchBox :options="starsArr" :multiple="true"-->
-        <!--@change="(value) => addInfo(value, field.id )"></EditableSearchBox>-->
-        <!--</template>-->
-        <!--<template v-else-if="field.field_type === 4">-->
-        <!--<Datepicker @change="(value) => addInfo(value, field.id )"></Datepicker>-->
-        <!--</template>-->
-        <!--<template v-else-if="field.field_type === 5">-->
-        <!--<NormalTextarea title="" class="form-control"-->
-        <!--@change="(value) => addInfo(value, field.id )"></NormalTextarea>-->
-        <!--</template>-->
-        <!--<template v-else-if="field.field_type === 6">-->
-        <!--<Selectors :options="field.contentArr" :multiple="true"-->
-        <!--:placeholder="'请选择' + field.key"-->
-        <!--@change="(value) => addInfo(value.join('|'), field.id )"></Selectors>-->
-        <!--</template>-->
-        <!--<template v-else-if="field.field_type === 8">-->
-        <!--<GroupDatepicker-->
-        <!--@change="(from, to) => addInfo(from + '|' + to, field.id )"></GroupDatepicker>-->
-        <!--</template>-->
-        <!--<template v-else-if="field.field_type === 10">-->
-        <!--<InputSelectors @change="(value) => addInfo(value, field.id )"></InputSelectors>-->
-        <!--</template>-->
-        <!--<template v-else-if="field.field_type === 11">-->
-        <!--<NumberSpinner @change="(value) => addInfo(value, field.id )"></NumberSpinner>-->
-        <!--</template>-->
-        <!--</div>-->
-        <!--</div>-->
-        <!--<div class="col-md-12 example clearfix">-->
-        <!--<div class="col-md-2 text-right float-left pl-0">备注</div>-->
-        <!--<div class="col-md-10 float-left">-->
-        <!--<emit-input @change="(value) => addProjectBaseInfo(value, 'desc')"-->
-        <!--ref="desc"></emit-input>-->
-        <!--</div>-->
-        <!--</div>-->
-        <!--</div>-->
-        <!--<div class="modal-footer">-->
-        <!--<button class="btn btn-sm btn-white btn-pure" data-dismiss="modal">取消</button>-->
-        <!--<button class="btn btn-primary" type="submit" @click="addProject">确定</button>-->
-        <!--</div>-->
-
-        <!--</div>-->
-        <!--</div>-->
-        <!--</div>-->
-
         <BuildProject></BuildProject>
     </div>
 
@@ -301,6 +146,9 @@
                 paginationType: '',
                 projectStatusArr: config.projectStatusArr,
                 allUsers: [],
+                principal_ids: '',
+                keyword: '',
+                status: '',
             }
         },
 
@@ -337,19 +185,30 @@
                     page: pageNum,
                     include: 'principal,trail.expectations'
                 };
+                if (type === 'status') {
+                    this.status = value;
+                    data.status = value;
+                }
+                if (type === 'principal' && value) {
+                    this.principal_ids = value.join(',');
+                    data.principal_ids = value.join(',');
+                }
                 if (this.projectKeyword) {
                     data.keyword = this.projectKeyword
                 }
-                if (type === 'status') {
-                    data.status = value
+                if (this.status) {
+                    data.status = this.status;
                 }
-                if (type === 'principal' && value) {
-                    data.principal_ids = value.join(',')
+                if (this.principal_ids) {
+                    data.principal_ids = this.principal_ids
                 }
                 let _this = this;
                 this.paginationType = 'getFilterProjects';
                 fetch('get', '/projects/filter', data).then(function (response) {
-                    _this.projectsInfo = response.data
+                    _this.projectsInfo = response.data;
+                    _this.total = response.meta.pagination.total;
+                    _this.current_page = response.meta.pagination.current_page;
+                    _this.total_pages = response.meta.pagination.total_pages;
                 })
             },
 

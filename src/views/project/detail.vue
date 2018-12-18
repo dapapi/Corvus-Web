@@ -136,7 +136,8 @@
                                aria-expanded="false" role="tab">合同</a>
                         </li>
                         <li class="nav-item" role="presentation"
-                            v-if="projectInfo.type != 5 && projectInfo.approval_status == 1">
+                            v-if="projectInfo.type != 5">
+                            <!--v-if="projectInfo.type != 5 && projectInfo.approval_status == 1">-->
                             <a class="nav-link" data-toggle="tab" href="#forum-project-bill"
                                aria-controls="forum-present"
                                aria-expanded="false" role="tab">账单</a>
@@ -267,8 +268,8 @@
                         </div>
                         <!-- 账单 -->
                         <div class="tab-pane animation-fade py-10"
-                             v-if="projectInfo.type != 5 && projectInfo.approval_status == 1" id="forum-project-bill"
-                             role="tabpanel">
+                             v-if="projectInfo.type != 5" id="forum-project-bill" role="tabpanel">
+                            <!--v-if="projectInfo.type != 5 && projectInfo.approval_status == 1" id="forum-project-bill" role="tabpanel">-->
                             <div class="clearfix">
                                 <div class="float-left" style="padding: .715rem 1.429rem">
                                     <div class="float-left pr-40">合同金额 <span class="money-color">10000元</span></div>
@@ -288,14 +289,38 @@
                                    data-child="tr">
                                 <tr>
                                     <th class="cell-300" scope="col">费用类型</th>
+                                    <th class="cell-300 position-relative" scope="col">
+                                        <template v-if="filterFee === 1">全部</template>
+                                        <template v-if="filterFee === 2">成本</template>
+                                        <template v-if="filterFee === 3">收入</template>
+                                        <i class="iconfont icon-gengduo1 pl-2" aria-hidden="true"
+                                           id="projectDropdown" data-toggle="dropdown" aria-expanded="false"></i>
+                                        <div class="dropdown-menu" aria-labelledby="projectDropdown" role="menu">
+                                            <a class="dropdown-item" role="menuitem" v-show="filterFee !== 1"
+                                               @click="filterProjectFee(1)">全部</a>
+                                            <a class="dropdown-item" role="menuitem" v-show="filterFee !== 2"
+                                               @click="filterProjectFee(2)">成本</a>
+                                            <a class="dropdown-item" role="menuitem" v-show="filterFee !== 3"
+                                               @click="filterProjectFee(3)">收入</a>
+                                        </div>
+                                    </th>
                                     <th class="cell-300" scope="col">艺人</th>
                                     <th class="cell-300" scope="col">金额</th>
-                                    <th class="cell-300" scope="col">收款/付款时间</th>
+                                    <th class="cell-300" scope="col">收款/审批时间</th>
                                     <th class="cell-300" scope="col">操作人</th>
                                 </tr>
                                 <tbody>
                                 <tr>
                                     <td>测试类别</td>
+                                    <td>成本</td>
+                                    <td>1233030</td>
+                                    <td>2018-10-31</td>
+                                    <td>2018-12-20</td>
+                                    <td>陈晓禹</td>
+                                </tr>
+                                <tr>
+                                    <td>测试类别</td>
+                                    <td>收入</td>
                                     <td>1233030</td>
                                     <td>2018-10-31</td>
                                     <td>2018-12-20</td>
@@ -1226,6 +1251,7 @@
                 projectChangeStatus: '',
                 linkageResource: '',
                 searchKeyWord: '',
+                filterFee: 1,
                 linkageSelectedIds: {
                     projects: [],
                     tasks: []
@@ -1388,6 +1414,10 @@
 
             redirectTask: function (taskId) {
                 this.$router.push({path: '/tasks/' + taskId})
+            },
+
+            filterProjectFee: function (value) {
+                this.filterFee = value;
             },
 
             addTask: function () {
