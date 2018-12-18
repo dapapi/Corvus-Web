@@ -6,7 +6,7 @@
         <div class="page-content container-fluid">
             <div class="">
                 <div class="row py-5">
-                    <div class="col-lg-4" v-for="item in list" :key="item.id" @click="addProject(item.value)">
+                    <div class="col-lg-4 pointer-content" v-for="item in list" :key="item.id" @click="addProject(item.value)">
                         <div class="card">
                             <div class="card-block clearfix">
                                 <div class="float-left" style="width: 40px;height: 40px;">
@@ -23,7 +23,7 @@
             </div>
         </div>
 
-        <BuildProject :project-type="projectType" :project-fieldsA-arr="projectFieldsArr"></BuildProject>
+        <BuildProject :project-type="projectType" :project-fields-arr="projectFieldsArr"></BuildProject>
     </div>
 </template>
 

@@ -42,13 +42,12 @@
                                                v-show="selectedCalendar.indexOf(calendar.id) > -1"></i>
                                         </div>
                                         <div class="float-left ml-10">{{ calendar.title }}</div>
-                                        <div class="float-right">
+                                        <div class="float-right position-relative">
                                             <i class="iconfont icon-gengduo1" aria-hidden="true" id="taskDropdown"
                                                data-toggle="dropdown" aria-expanded="false"></i>
                                             <div class="dropdown-menu" aria-labelledby="taskDropdown">
                                                 <a class="dropdown-item" @click="getCalendarDetail(calendar.id)"
-                                                   data-target="#addCalendar"
-                                                   data-toggle="modal">编辑</a>
+                                                   data-target="#addCalendar" data-toggle="modal">编辑</a>
                                                 <a class="dropdown-item" data-target="#delModel" data-toggle="modal"
                                                    @click="delCalendar(calendar)">删除</a>
                                             </div>

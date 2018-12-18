@@ -4,7 +4,8 @@
         <div class="page-header page-header-bordered">
             <h1 class="page-title d-inline">项目详情</h1>
 
-            <div class="page-header-actions dropdown show task-dropdown float-right">
+            <div class="page-header-actions dropdown show task-dropdown float-right"
+                 v-if="projectInfo.approval_status == 1">
                 <i class="iconfont icon-gengduo1 font-size-24" aria-hidden="true" id="taskDropdown"
                    data-toggle="dropdown" aria-expanded="false"></i>
                 <div class="dropdown-menu dropdown-menu-right task-dropdown-item" aria-labelledby="taskDropdown"
@@ -115,28 +116,33 @@
             <div class="col-md-12 panel" v-if="projectInfo.title">
                 <div class="col-md-12">
                     <ul class="nav nav-tabs nav-tabs-line" role="tablist">
-                        <li class="nav-item" role="presentation" v-if="projectInfo.type != 5">
+                        <li class="nav-item" role="presentation"
+                            v-if="projectInfo.type != 5 && projectInfo.approval_status == 1">
                             <a class="nav-link" :class="projectInfo.type != 5 ? 'active' : ''" data-toggle="tab"
                                href="#forum-project-follow"
                                aria-controls="forum-base"
                                aria-expanded="true" role="tab">项目进度</a>
                         </li>
-                        <li class="nav-item" role="presentation" @click="getProjectTasks">
+                        <li class="nav-item" role="presentation" @click="getProjectTasks"
+                            v-if="projectInfo.approval_status == 1">
                             <a class="nav-link" data-toggle="tab" href="#forum-project-tasks"
                                aria-controls="forum-present"
                                aria-expanded="false" role="tab">任务</a>
                         </li>
-                        <li class="nav-item" role="presentation" v-if="projectInfo.type != 5">
+                        <li class="nav-item" role="presentation"
+                            v-if="projectInfo.type != 5 && projectInfo.approval_status == 1">
                             <a class="nav-link" data-toggle="tab" href="#forum-project-contract"
                                aria-controls="forum-present"
                                aria-expanded="false" role="tab">合同</a>
                         </li>
-                        <li class="nav-item" role="presentation" v-if="projectInfo.type != 5">
+                        <li class="nav-item" role="presentation"
+                            v-if="projectInfo.type != 5 && projectInfo.approval_status == 1">
                             <a class="nav-link" data-toggle="tab" href="#forum-project-bill"
                                aria-controls="forum-present"
                                aria-expanded="false" role="tab">账单</a>
                         </li>
-                        <li class="nav-item" role="presentation" v-if="projectInfo.type != 5">
+                        <li class="nav-item" role="presentation"
+                            v-if="projectInfo.type != 5 && projectInfo.approval_status == 1">
                             <a class="nav-link" data-toggle="tab" href="#forum-project-payback"
                                aria-controls="forum-present"
                                aria-expanded="false" role="tab">回款</a>
@@ -150,7 +156,8 @@
                     </ul>
                     <div class="tab-content nav-tabs-animate bg-white">
                         <!-- 项目进度 -->
-                        <div class="tab-pane animation-fade pb-10" v-if="projectInfo.type != 5"
+                        <div class="tab-pane animation-fade pb-10"
+                             v-if="projectInfo.type != 5 && projectInfo.approval_status == 1"
                              :class="projectInfo.type != 5 ? 'active' : ''"
                              id="forum-project-follow" role="tabpanel">
                             <div class="clearfix mt-20">
@@ -187,7 +194,7 @@
                         </div>
                         <!-- 任务 -->
                         <div class="tab-pane animation-fade pb-20 fixed-button-father" id="forum-project-tasks"
-                             role="tabpanel">
+                             role="tabpanel" v-if="projectInfo.approval_status == 1">
                             <table class="table table-hover is-indent example" data-plugin="animateList"
                                    data-animate="fade"
                                    data-child="tr"
@@ -226,7 +233,8 @@
 
                         </div>
                         <!-- 合同 -->
-                        <div class="tab-pane animation-fade py-10" v-if="projectInfo.type != 5"
+                        <div class="tab-pane animation-fade py-10"
+                             v-if="projectInfo.type != 5 && projectInfo.approval_status == 1"
                              id="forum-project-contract"
                              role="tabpanel">
                             <table class="table table-hover example"
@@ -258,7 +266,8 @@
 
                         </div>
                         <!-- 账单 -->
-                        <div class="tab-pane animation-fade py-10" v-if="projectInfo.type != 5" id="forum-project-bill"
+                        <div class="tab-pane animation-fade py-10"
+                             v-if="projectInfo.type != 5 && projectInfo.approval_status == 1" id="forum-project-bill"
                              role="tabpanel">
                             <div class="clearfix">
                                 <div class="float-left" style="padding: .715rem 1.429rem">
@@ -296,7 +305,8 @@
                             </table>
                         </div>
                         <!-- 回款 -->
-                        <div class="tab-pane animation-fade pt-10 pb-20" v-if="projectInfo.type != 5"
+                        <div class="tab-pane animation-fade pt-10 pb-20"
+                             v-if="projectInfo.type != 5 && projectInfo.approval_status == 1"
                              id="forum-project-payback" role="tabpanel">
                             <div class="clearfix">
                                 <ul class="nav nav-tabs nav-tabs-line float-left" role="tablist"
@@ -441,13 +451,14 @@
                             </div>
                         </div>
                         <!-- 概况 -->
-                        <div class="tab-pane animation-fade" :class="projectInfo.type == 5 ? 'active' : ''"
+                        <div class="tab-pane animation-fade"
+                             :class="(projectInfo.type == 5 || projectInfo.approval_status != 1) ? 'active' : ''"
                              id="forum-project-base"
                              role="tabpanel">
                             <div class="card">
                                 <div class="card-header card-header-transparent card-header-bordered">
                                     <div class="float-left font-weight-bold third-title">项目信息</div>
-                                    <div class="float-right" v-show="!isEdit">
+                                    <div class="float-right" v-show="!isEdit && projectInfo.approval_status == 1">
                                         <i class="iconfont icon-bianji pointer-content" aria-hidden="true"
                                            @click="editBaseInfo"></i>
                                     </div>
