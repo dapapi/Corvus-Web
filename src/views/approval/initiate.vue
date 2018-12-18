@@ -108,15 +108,22 @@
         </div>
       </div>
     </div>
+    <ApprovalGreatModule />
     </div>
 </template>
 <script>
   import fetch from "../../assets/utils/fetch.js";
   import config from "../../assets/js/config";
   import Modal from "../../components/Modal.vue";
+  import ApprovalGreatModule from '@/components/ApprovalGreatModule'
+
 
   export default {
+    components:{
+      ApprovalGreatModule
+    },
     data: function () {
+
       return {
         uploadUrl:'',
         total: 2,

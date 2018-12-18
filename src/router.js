@@ -141,6 +141,10 @@ export default new Router({
             component: () => import('./views/approval/index.vue'),
             children: [
                 {
+                    path: '/approval/contract/initiate',
+                    component: () => import('./views/approval/contractIndex/contractIndex.vue')
+                },
+                {
                     path: '/approval/common/initiate',
                     component: () => import('./views/approval/initiate.vue')
                 },
