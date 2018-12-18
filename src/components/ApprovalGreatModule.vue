@@ -3,22 +3,22 @@
         <div class="modal fade" id="approval-great-module" aria-labelledby="approval-great-module" role="dialog" tabindex="-1">
             <div class="modal-dialog modal-simple modal-top modal-lg">
                 <div class="modal-content">
-                <div class="modal-header">
-                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-                    <span aria-hidden="true">×</span>
-                    </button>
-                    <h4 class="modal-title" id="exampleModalTitle">{{pageInfo.title}}</h4>
-                </div>
-                <div class="modal-body modal-greater">
-                    <div v-for="(item, index) in moduleInfo" :key="index" class="great-option">
-                        <div :is='sortChecker(item)' :data='item'></div>
-                        <!-- ⬆️核心模块 -->
+                    <div class="modal-header">
+                        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                            <span aria-hidden="true">×</span>
+                        </button>
+                        <h4 class="modal-title" id="exampleModalTitle">{{pageInfo.title}}</h4>
                     </div>
-                </div>
-                <div class="modal-footer">
-                    <button type="button" class="btn btn-default btn-pure waves-effect waves-light waves-round" data-dismiss="modal">取消</button>
-                    <button type="button" class="btn btn-primary waves-effect waves-light waves-round">提交</button>
-                </div>
+                    <div class="modal-body modal-greater">
+                        <div v-for="(item, index) in moduleInfo" :key="index" class="great-option">
+                            <div :is='sortChecker(item)' :data='item' :singlemode='singlemode'></div>
+                            <!-- ⬆️核心模块 -->
+                        </div>
+                    </div>
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-default btn-pure waves-effect waves-light waves-round" data-dismiss="modal">取消</button>
+                        <button type="button" class="btn btn-primary waves-effect waves-light waves-round">提交</button>
+                    </div>
                 </div>
             </div>
         </div>
@@ -27,7 +27,12 @@
 
 <script>
 import pageData from '@/views/approval/approval_form'
-import contractConfig from '@/components/ForApproval/contractConfig'
+import papiContractConfig from '@/components/ForApproval/papiContractConfig.json'
+import papiContractBrokenConfig from '@/components/ForApproval/papiContractBrokenConfig.json'
+import mttopContractConfig from '@/components/ForApproval/mttopContractConfig.json'
+import mttopContractBrokenConfig from '@/components/ForApproval/mttopContractBrokenConfig.json'
+import mttopProjectContract from '@/components/ForApproval/mttopProjectContract.json'
+import papiProjectContract from '@/components/ForApproval/papiProjectContract.json'
 import ApprovalSummerNote from '@/components/ForApproval/ApprovalSummerNote'
 import ApprovalUploader from '@/components/ForApproval/ApprovalUploader'
 import ApprovalImageUploader from '@/components/ForApproval/ApprovalImageUploader'
@@ -36,9 +41,13 @@ import ApprovalTimePicker from '@/components/ForApproval/ApprovalTimePicker'
 import ApprovalText from '@/components/ForApproval/ApprovalText'
 import ApprovalTextArea from '@/components/ForApproval/ApprovalTextArea'
 import ApprovalSelector from '@/components/ForApproval/ApprovalSelector'
+import ApprovalNumber from '@/components/ForApproval/ApprovalNumber'
+
 export default {
+    props:['type','singlemode'],
     data(){
         return{
+            importData:pageData,
             pageInfo:{
                 title:'',
                 description:'',
@@ -48,6 +57,7 @@ export default {
     },
     mounted(){
         this.dataInit()
+        this.refresh()
     },
     components:{
         ApprovalMultiple,
@@ -58,10 +68,44 @@ export default {
         ApprovalUploader,
         ApprovalSummerNote,
         ApprovalTextArea,
+        ApprovalNumber,
+    },
+    watch:{
+        type:function(){
+            this.typeWatcher()
+            this.dataInit()
+        }
     },
     methods:{
+        typeWatcher(){
+            switch (this.type){
+                case 1 : 
+                    this.importData = papiContractConfig
+                    break
+                case 2 :
+                    this.importData = papiContractBrokenConfig
+                    break
+                case 3 :
+                    this.importData = mttopContractConfig
+                    break
+                case 4 :
+                    this.importData = mttopContractBrokenConfig
+                    break
+                case 5 :
+                    this.importData = mttopProjectContract
+                    break
+                case 6 :
+                    this.importData = papiProjectContract
+                    break
+                default: this.importData = pageData
+            }
+        },
+        refresh(){
+            $('.selectpicker').selectpicker('render');
+            $('.selectpicker').selectpicker('refresh');   
+        },
         dataInit(){
-            let {name,description,approval_form_controls} = pageData[0]
+            let {name,description,approval_form_controls} = this.importData[0]
             let controlArr= Array.from(approval_form_controls)
             this.pageInfo.title = name
             let descriptionArr = []
@@ -77,7 +121,11 @@ export default {
                     tempArr.push(controlArr[key])
                 }
             }
+            descriptionArr.push(tempArr)
             this.moduleInfo = descriptionArr
+            this.$nextTick((params) => {
+                this.refresh()
+            })
         },
         sortChecker(params){
             if(params.length>1){
@@ -92,6 +140,8 @@ export default {
                     return this.$options.components.ApprovalTimePicker
                 case 82 :
                     return this.$options.components.ApprovalSelector
+                case 83 :
+                    return this.$options.components.ApprovalNumber
                 case 86 :
                     return this.$options.components.ApprovalTextArea
                 case 88 :
