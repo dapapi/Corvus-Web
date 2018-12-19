@@ -321,18 +321,16 @@
                                     <td>
                                         <div v-for="(v,i) in item.data1" :key="i" >
                                             <label :for="'rad'+item.id+v.id">
-                                                <input type="radio"   class="mr-10 "  @click="radioed(item.id,v.id)" :value="index+v.id" :checked="v.selected" :id="'rad'+item.id+v.id">{{v.name}}
+                                                <input type="radio"   class="mr-10 "  @change="radioed(item.id,v.id)"  :value="'rad'+item.id+v.id" :checked="v.selected" v-model="picked[item.id]" :id="'rad'+item.id+v.id" >{{v.name}}
                                             </label>
                                         </div>
                                     </td>
                                       <td style="color:#333" >
                                         <div v-for="(n,m) in item.data2" :key="m">   
                                         <label :for="'rad'+item.id+n.id">
-                                            <input type="checkbox"  @click="checked(item.id,n.id)" :name="'radios'+item.id"  :value="index+n.id" v-model="scope"  class="mr-10" :id="'rad'+item.id+n.id">{{n.name}}
+                                            <input type="checkbox"  @change="checked(item.id,n.id)" :name="'checks'+item.id"  :value="index+n.id" v-model="scope"  class="mr-10" :id="'rad'+item.id+n.id">{{n.name}}
                                         </label>
                                          </div>  
-                                        
-                                       
                                     </td>
                                 </tr>
                                 </tbody> 
@@ -643,13 +641,10 @@
                 powerDate:[],
                 powerInfo:[],
                 rangeDate:'',
-                rangecheck:[],
-                picked:'',
+                picked:[],
                 selected:[],
-                roleInfo:[],
                 funArr:[],
                 owmArr:[],
-                rangeId:'',
                 scope:[],
                 rangeoneId:'',
                 rangetowId:[],
@@ -715,7 +710,7 @@
                        
                     }  
                 });
-                fetch('get','/console/scope/'+1994731356).then(function(response){
+                fetch('get','/console/scope/'+this.jobCont).then(function(response){
                     _this.rangeDate = response; 
                     _this.rangelist=[];
                     for(_this.rangelist in response){
@@ -745,8 +740,10 @@
                 })
             },
             rangekeep(){
-                console.log(this.sendData)
-                fetch('post','/console/scope/'+this.jobCont,this.sendData ).then(function(response){
+                let data = []
+                
+                console.log(data)
+                fetch('post','/console/scope/'+this.jobCont,data ).then(function(response){
                     toastr.success('保存成功');
                     
                 })
@@ -964,13 +961,39 @@
                 console.log(this.valueId)
             },
             radioed(i,v){
-               
-       
+                //  if(this.sendData[this.rangeoneId].resource_id&&this.sendData[this.rangeoneId].resource_id==i){
+                //    this.rangeoneId=v
+                //    this.sendData[this.rangeoneId].scope=this.rangenoeId 
+                
+                // }
+               this.rangeoneId=i
+               this.sendData[this.rangeoneId]={
+                   resource_id:i,
+                   scope:v
+               }
+            //    if(this.sendData[this.rangeoneId].resource_id==i){
+            //        this.rangeoneId=v
+            //        this.sendData[this.rangeoneId].scope=this.rangeoneId 
+            //     }
+             console.log(this.sendData[this.rangeoneId])  
             },
             checked(item,m){ 
+                this.rangeoneId=item 
+            //     this.sendData[this.rangeoneId]={
+            //        resource_id:item,
+            //        manage:this.rangetowId 
+            //    }
+
+                if(this.sendData[this.rangeoneId].resource_id==item){
+                   this.rangetowId.push(m)
+                   this.sendData[this.rangeoneId].manage=this.rangetowId 
+                }
+                 console.log(this.sendData[this.rangeoneId])
+                }
+                
                
-              
-            }
+             
+            
         }
     }
 </script>

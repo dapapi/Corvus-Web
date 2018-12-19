@@ -30,7 +30,7 @@
                     <div class="card-text clearfix example">
                         <div class="col-md-6 float-left pl-0">
                             <div class="float-left pl-0 pr-2 col-md-2">
-                                <i class="md-plus pr-2" aria-hidden="true"></i>线索类型
+                                <i class="iconfont icon-laiyuanguanli" aria-hidden="true"></i>线索类型
                             </div>
                             <div class="font-weight-bold float-left">
                                 <template v-if="trailInfo.type === 1">影视线索</template>
