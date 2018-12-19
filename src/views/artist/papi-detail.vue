@@ -883,10 +883,10 @@
                 fetch('get','/users/').then(function(response){
                     _this.Users=response.data;
                 })
-                // //任务状态跑组。试戏
-                // fetch('get','/task_types').then(function(response){
-                //     _this.tasksType=response.data;
-                // })
+                //任务状态跑组。试戏
+                fetch('get','/task_types').then(function(response){
+                    _this.tasksType=response.data;
+                })
                  fetch('get','/bloggers/gettype').then(function(response){      
                     _this.artistTypeArr=response.data                  
                 })
