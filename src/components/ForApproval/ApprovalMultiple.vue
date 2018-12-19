@@ -1,5 +1,5 @@
 <template>
-    <div class="col-md-12">
+    <div class="col-md-12 pl-0 pr-0">
         <div v-for="i in n" :key="i" class="approval-multiple">
             <span v-if="!singlemode">{{data[0].control_title}}({{i}})</span>
             <hr v-if="!singlemode">
@@ -7,10 +7,12 @@
                 v-for="(item, index) in data" ref='selectpicker'
                 :key="index+Math.random()" 
                 :n="n"
+                :index = "index"
                 :title='item.control_title'
                 :options='item.control_enums'
                 :placeholder='item.control_placeholder'
-                v-if="isShow"></div>
+                v-show="!isShow[index]"
+                @change='saveChangeData'></div>
         </div>
         <span @click="addOption" class="add-option" v-if="!singlemode">添加选项+</span>
         <hr v-if="!singlemode">
@@ -44,21 +46,40 @@ export default {
     data(){
         return{
             n:1,
+            changeData:[],
+            isShow:{0:false,1:true},
         }
     },
     computed:{
-        isShow(){
-            if(this.data.form_control_pid == 1 && this.singlemode == true){
-                return false
-            }else{
-                return true
-            }
-        }
+        // isShow(params) {
+        //     return (params)=>{
+        //     console.log(this.changeData[0]==1);
+        //         if(this.data[params].form_control_pid == 1 && this.singlemode == 'true' && this.changeData[0] == 1){
+        //             return false
+        //         }else{
+        //             return  true
+        //         }
+        // }
+        // },
     },
     mounted(){
         this.refresh()
     },
     methods:{
+        saveChangeData(params,index){
+            this.changeData[index] = params
+            this.isShowhandler(1)
+        },
+        isShowhandler(params){
+            if(this.data[params].form_control_pid == 1 && this.singlemode == 'true' && this.changeData[0] == 1){
+                this.isShow[1] = false
+            }else{
+                this.isShow[1] = true
+            }
+            this.$nextTick(() => {
+                this.refresh()
+            })
+        },
         addOption(){
             this.n++
             this.$nextTick(() => {
