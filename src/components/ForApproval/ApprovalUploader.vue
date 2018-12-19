@@ -1,6 +1,6 @@
 <template>
     <div class="upload col-md-12">
-        <div class="col-md-2">{{data[0].control_title}}</div>
+        <div class="col-md-2 text-right">{{data[0].control_title}}</div>
         <div class="image-show">
             <span class="">请上传附件</span>
             <input type="file" @change="uploadFile" />

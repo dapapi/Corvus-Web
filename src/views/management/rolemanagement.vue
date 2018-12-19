@@ -318,15 +318,18 @@
                                 <tr  class="pointer-content" style="border-top:1px solid #e3e3e3" v-for="(item,index) in rangeDate" :key="index">
                                     <td style="font-weight:400;position: relative;" ><div class="range-cont">{{item.name}}</div></td>
                                     <td>
+                                    <form action="">
                                         <div v-for="(v,i) in item.data1" :key="i" >
-                                            <input type="radio"   class="mr-10"  @click="radioed(index,v.id)"   :value="index+v.id" :checked="v.selected">{{v.name}}</div>
+                                            <input type="radio"   class="mr-10"  @click="radioed(v,item)"  name='radio' :value="index+v.id" :checked="v.selected">{{v.name}}</div>
+                                    </form>
                                     </td>
                                       <td style="color:#333" >
-                                        <div v-for="(n,m) in item.data2" :key="m"><input type="checkbox"  @click="checked(index,n.id)" :name="'radios'+item.id"  v-model="n.selected"  class="mr-10" >{{n.name}}</div>
-                                       
+                                        <div v-for="(n,m) in item.data2" :key="m">
+                                            <input type="checkbox"  @click="checked(n,item)" :name="item.id"   :checked="n.selected" class="mr-10" >{{n.name}}</div>
                                     </td>
                                 </tr>
-                                </tbody>        
+                                </tbody>  
+                                 <button class="btn btn-primary m-20 px-30" type="submit" @click="rangekeep" style="border-radius: 20px">保存</button>      
                             </table>
                         </div>
                     </div>
@@ -634,9 +637,11 @@
                 powerInfo:[],
                 rangeDate:'',
                 rangecheck:[],
-                picked:'',
+                picked:[],
                 selected:[],
-                roleInfo:[]
+                roleInfo:[],
+                checkBox:[],
+                sendData:[],
             }
         },
         mounted() {
@@ -688,9 +693,19 @@
                      _this.powerDate = response;  
                 });
                 fetch('get','/console/scope/'+this.jobCont).then(function(response){
+                    console.log(response);
                     _this.rangeDate = response;     
                 })
             },    
+            rangekeep(){
+                let data = []
+                
+                console.log(data)
+                fetch('post','/console/scope/'+this.jobCont,data ).then(function(response){
+                    toastr.success('保存成功');
+                    
+                })
+            },
             //全选反选
             selectArtists: function (value,id) {   
                 if (value === 'all') {
@@ -875,13 +890,21 @@
             },
             seerange(i,v){
                 this.valueId.push(i.toString()+v)
-                console.log(this.valueId)
+                // console.log(this.valueId)
             },
-            radioed(i,v){
-                console.log(i+v)
+            radioed(params,value){
+                let index = this.sendData.find(item=>item.resource_id===value.id)
+                if(index){
+                    index.scope = params.id
+                }else{
+                    let tempObj = {}
+                    Object.assign(tempObj,{resource_id:value.id})
+                    Object.assign(tempObj,{scope:params.id})
+                    this.sendData.push(tempObj)
+                }
             },
-            checked(item,m){
-                console.log(item,m)
+            checked(params,value){
+                console.log(params,value)
             }
         }
     }
