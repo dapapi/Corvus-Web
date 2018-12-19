@@ -321,12 +321,12 @@
                                     <td>
                                     <form action="">
                                         <div v-for="(v,i) in item.data1" :key="i" >
-                                            <input type="radio"   class="mr-10"  @click="radioed(v,item)"  name='radio' :value="index+v.id" :checked="v.selected">{{v.name}}</div>
+                                            <input type="radio"   class="mr-10"  @change="radioed(v,item)"  name='radio' :value="index+v.id" :checked="v.selected">{{v.name}}</div>
                                     </form>
                                     </td>
                                       <td style="color:#333" >
                                         <div v-for="(n,m) in item.data2" :key="m">
-                                            <input type="checkbox"  @click="checked(n,item)" :name="item.id"   :checked="n.selected" class="mr-10" >{{n.name}}</div>
+                                            <input type="checkbox"  @change="checked(n,item)" :name="item.id"   :checked="n.selected" class="mr-10" >{{n.name}}</div>
                                     </td>
                                 </tr>
                                 </tbody>  
@@ -712,20 +712,35 @@
                 fetch('get','/console/scope/'+this.jobCont).then(function(response){
                     _this.rangeDate = response; 
                     _this.rangelist=[];
+                    let i=0;
                     for(_this.rangelist in response){
+                        let obj={
+                            resource_id:response[_this.rangelist].id,
+                            scope:'',
+                            manage:[]
+                        }
                         response[_this.rangelist].data1.forEach(item=>{
+                           
                             if(item.selected){
+                                obj.scope=item.id
                                 _this.picked= _this.rangeDate[_this.rangelist].id.toString()+item.id
                             }
                         })
                         response[_this.rangelist].data2.forEach(v=>{
                             if(v.selected){
+                                obj.manage.push(v.id)
                                 _this.scope.push(response[_this.rangelist].id.toString()+v.id)
                             }
                         })
-                    }    
+                        if(response[_this.rangelist].data1.length!==0&&response[_this.rangelist].data2.length!==0){
+                              _this.sendData.push(obj)
+                        }   
+                      
+                        i++;
+                    }   
+                    console.log(_this.sendData) 
                 })
-            
+
                 
             }, 
             powerkeep(){
@@ -739,10 +754,11 @@
                 })
             },    
             rangekeep(){
+                
                 let data = []
                 data.push(this.sendData)
                 console.log(data)
-                fetch('post','/console/scope/'+this.jobCont,data ).then(function(response){
+                fetch('post','/console/scope/'+this.jobCont,data[0] ).then(function(response){
                     toastr.success('保存成功');
                     
                 })
@@ -957,45 +973,36 @@
             },
             seerange(i,v){
                 this.valueId.push(i.toString()+v)
-                // console.log(this.valueId)
             },
             radioed(params,value){
                 let index = this.sendData.find(item=>item.resource_id===value.id)
-               
                 if(index){
-                    index.scope = params.id
-                     console.log(index)
+                    index.scope = params.id  
+                    console.log(index.scope )         
                 }else{
                     let tempObj = {}
                     Object.assign(tempObj,{resource_id:value.id})
                     Object.assign(tempObj,{scope:params.id})
                     this.sendData.push(tempObj)
-                }
-                
+                }       
             },
             checked(params,value){
                 let index = this.sendData.find(item=>item.resource_id===value.id)
                 console.log(index)
-                
-               
                 if(index){
-                    
-                    if(index.resource_id==value.id){
-                        this.checkarr.push(params.id)
-                        index.manage =  this.checkarr
-                    }   
-                }else{
-                    let tempObj = {}
-                     if(index.resource_id==value.id){
-                        this.checkarr.push(params.id)
-                        
+                    if(index.manage.indexOf(params.id)>-1){
+                        index.manage.splice(index.manage.indexOf(params.id),1)
+                    }else{
+                        index.manage.push(params.id)
                     }
-               
+                }else{
+                    let tempObj = {}   
+                    this.checkarr.push(params.id)
                     Object.assign(tempObj,{resource_id:value.id})
                     Object.assign(tempObj,{manage:this.checkarr})
                     this.sendData.push(tempObj)
                 }
-                console.log(params.id,value.id)
+           
             }
         }
     }
