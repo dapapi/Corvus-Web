@@ -76,6 +76,8 @@
             return {
                 keywords: '',
                 projectsInfo: [],
+                contractList:CONTRACT_INDEX_CONFIG.contractIndex,
+
             }
         },
         methods: {
