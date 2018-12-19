@@ -113,7 +113,7 @@
 
         <AddClientType type="project" @change="changeProjectType"></AddClientType>
 
-        <BuildProject></BuildProject>
+        <BuildProject :project-fields-arr="projectFieldsArr" :project-type="projectType"></BuildProject>
     </div>
 
 </template>
