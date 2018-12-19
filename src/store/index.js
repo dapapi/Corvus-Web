@@ -4,6 +4,7 @@ import getters from './getters.js';
 import Vuex from 'vuex';
 import Vue from 'vue';
 
+
 Vue.use(Vuex);
 
 const state = {
@@ -21,5 +22,5 @@ export default new Vuex.Store({
     state,
     actions,
     mutations,
-    getters
+    getters,
 });
