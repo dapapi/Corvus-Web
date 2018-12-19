@@ -217,7 +217,7 @@
                         <div class="example">
                             <div class="col-md-2 text-right float-left">预计订单收入</div>
                             <div class="col-md-5 float-left pl-0 pr-0">
-                                <number-spinner @change="changeTrailFee" :addtrail='true'></number-spinner>
+                                <number-spinner @change="changeTrailFee" ></number-spinner>
                             </div>
                             <div class="col-md-3 float-left" v-if="trailType == 4">
                                 <div class="checkbox-custom checkbox-primary">
