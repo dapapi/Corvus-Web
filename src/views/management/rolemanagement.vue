@@ -24,8 +24,8 @@
                             <ul class="menu pl-0 m-0 pb-10" style="width:260px;">
                                 <li class="site-menu-item has-sub" v-for="(item,index) in job" :key="index" style="width:260px;">
                                     <a href="javascript:void(0) " class="p-5" @click="clickdefault">
-                                        <i v-show="conceal" class="icon md-caret-down showList font-size:25px pr-10"></i>
-                                        <i v-show="!conceal" class="icon md-caret-right showList font-size:25px pr-10"></i>
+                                        <i v-show="conceal" class="md-caret-down showList font-size:25px pr-10"></i>
+                                        <i v-show="!conceal" class="md-caret-right showList font-size:25px pr-10"></i>
                                         <i class="iconfont icon-renyuan1 pr-10" style="vertical-align: middle;"></i>
                                         <span class="site-menu-title">{{item.name}}</span>
                                     </a>
@@ -46,14 +46,14 @@
                                 <li class="site-menu-item has-sub  pb-10" v-for="(item,index) in groupingDate"
                                     :key="index" style="width:260px;">
                                     <a href="javascript:void(0) " class="p-5" @click="switchMenu(item.id)">
-                                        <i v-show="visible" class="icon md-caret-down showList font-size:25px pr-10"></i>
-                                        <i v-show="!visible" class="icon md-caret-right showList font-size:25px pr-10"></i>
+                                        <i v-show="visible" class="md-caret-down showList font-size:25px pr-10"></i>
+                                        <i v-show="!visible" class="md-caret-right showList font-size:25px pr-10"></i>
                                         <i class="iconfont icon-renyuan1 pr-10" style="vertical-align: middle;"></i>
                                         <span class="site-menu-title">{{item.name}}</span>
                                     </a>
                                     <div class="drop-parent" style="position: absolute; right:23px;top:0;"
                                          v-if="item.id" @click="grouping(item.id)">
-                                        <i class="icon md-more font-size-20 parent" aria-hidden="true"
+                                        <i class="iconfont icon-gengduo1 font-size-20 parent" aria-hidden="true"
                                            data-toggle="dropdown" aria-expanded="false"
                                            style="cursor: pointer; float: right;line-height: 40px;">
                                         </i>
@@ -77,7 +77,7 @@
                                             </template>
                                             <div class="drop-son" style="position: absolute; right:23px;top:0px;"
                                                  @click="role(n.id)">
-                                                <i class="icon md-more font-size-20 son" aria-hidden="true"
+                                                <i class="iconfont icon-gengduo1 font-size-20 son" aria-hidden="true"
                                                    data-toggle="dropdown" aria-expanded="false"
                                                    style="cursor: pointer; float: right;line-height: 40px;">
                                                 </i>
@@ -270,7 +270,7 @@
                             <div class="title py-20" style="color:#999999;font-size:12px;font-weight:300;position: relative;">设置角色对应到功能操作、应用管理、后台管理权限
                                 <div style="font-weight:600;position:absolute;right:10px;top:9px;">
                                      <span class="checkbox-custom checkbox-primary pr-10" >
-                                            <input class="selectable-all " type="checkbox" @change="funSelect('all')">
+                                            <input class="selectable-all " type="checkbox" @change="funSelect('own')">
                                             <label></label>
                                     </span>
                                      <span>全选</span>
@@ -295,7 +295,7 @@
                                        <div v-for="one in item.data" :key="one.id" class="text-left pl-10" style="width:33%;">
                                             <span class="checkbox-custom checkbox-primary" style="">
                                             <input class="selectable-item" type="checkbox" :id="'row-' + one.id"
-                                                   :value="one.id" v-model="one.selected" @change="funSelect(one.id,item.id)">
+                                                   :value="one.id" v-model="one.selected" @change="funSelect(one.id)">
                                             <label :for="'row-' + one.id"></label>
                                             </span>
                                             <span class="pl-10 pt-10" >{{one.name}}</span>
@@ -303,12 +303,13 @@
                                     </td>
                                    
                                 </tr>
-                                </tbody>        
+                                </tbody> 
+                                     <button class="btn btn-primary m-20 px-30" type="submit" @click="powerkeep" style="border-radius: 20px">保存</button>
                             </table>
                          </div>
                          <div class="tab-pane animation-fade "   :id="'forum-scope'+item.id" role="tabpanel">
                             <div class="title py-20" style="color:#999999;font-size:12px;font-weight:300;">针对审批、考勤、简报、销售等应用、设置该查看、管理数据范围</div>
-                            <table class="table table-hover" data-plugin="selectable" data-selectable="selectable" > 
+                            <table class="table" data-plugin="selectable" data-selectable="selectable" > 
                                 <tr>
                                     <th class="cell-300 pl-0" scope="col">应用名</th>
                                     <th class="cell-300" scope="col">查看数据范围</th>
@@ -319,14 +320,23 @@
                                     <td style="font-weight:400;position: relative;" ><div class="range-cont">{{item.name}}</div></td>
                                     <td>
                                         <div v-for="(v,i) in item.data1" :key="i" >
-                                            <input type="radio"   class="mr-10"  @click="radioed(index,v.id)"   :value="index+v.id" :checked="v.selected">{{v.name}}</div>
+                                            <label :for="'rad'+item.id+v.id">
+                                                <input type="radio"   class="mr-10 "  @click="radioed(item.id,v.id)" :value="index+v.id" :checked="v.selected" :id="'rad'+item.id+v.id">{{v.name}}
+                                            </label>
+                                        </div>
                                     </td>
                                       <td style="color:#333" >
-                                        <div v-for="(n,m) in item.data2" :key="m"><input type="checkbox"  @click="checked(index,n.id)" :name="'radios'+item.id"  v-model="n.selected"  class="mr-10" >{{n.name}}</div>
+                                        <div v-for="(n,m) in item.data2" :key="m">   
+                                        <label :for="'rad'+item.id+n.id">
+                                            <input type="checkbox"  @click="checked(item.id,n.id)" :name="'radios'+item.id"  :value="index+n.id" v-model="scope"  class="mr-10" :id="'rad'+item.id+n.id">{{n.name}}
+                                        </label>
+                                         </div>  
+                                        
                                        
                                     </td>
                                 </tr>
-                                </tbody>        
+                                </tbody> 
+                                        <button class="btn btn-primary m-20 px-30" type="submit" @click="rangekeep" style="border-radius: 20px">保存</button>       
                             </table>
                         </div>
                     </div>
@@ -636,7 +646,15 @@
                 rangecheck:[],
                 picked:'',
                 selected:[],
-                roleInfo:[]
+                roleInfo:[],
+                funArr:[],
+                owmArr:[],
+                rangeId:'',
+                scope:[],
+                rangeoneId:'',
+                rangetowId:[],
+                powerId:[],
+                sendData:[],//改变的值
             }
         },
         mounted() {
@@ -646,6 +664,7 @@
         updated(){
             $('table').asSelectable();
         },
+       
         methods: {
             //获取角色数据
             getroleDate() {
@@ -656,7 +675,6 @@
                 
                 
             },
-
             //获取分组数据
             getgroupingDate() {
                 let _this = this;
@@ -684,15 +702,58 @@
                 this.jobCont = value
                 this.defaultId=0
                 let _this = this;
-                fetch('get', '/console/feature/'+1994731356).then(function (response) {
-                     _this.powerDate = response;  
+                fetch('get', '/console/feature/'+this.jobCont).then(function (response) {
+                     _this.powerDate = response;
+                     _this.powerlist=[]; 
+                     for(_this.powerlist in response){
+                        response[_this.powerlist].data.forEach(item=>{
+                            if(item.selected){
+                                _this.powerId.push(item.id) 
+                                _this.funArr.push(item.id)
+                            }
+                        })
+                       
+                    }  
                 });
-                fetch('get','/console/scope/'+this.jobCont).then(function(response){
-                    _this.rangeDate = response;     
+                fetch('get','/console/scope/'+1994731356).then(function(response){
+                    _this.rangeDate = response; 
+                    _this.rangelist=[];
+                    for(_this.rangelist in response){
+                        response[_this.rangelist].data1.forEach(item=>{
+                            if(item.selected){
+                                _this.picked= _this.rangeDate[_this.rangelist].id.toString()+item.id
+                            }
+                        })
+                        response[_this.rangelist].data2.forEach(v=>{
+                            if(v.selected){
+                                _this.scope.push(response[_this.rangelist].id.toString()+v.id)
+                            }
+                        })
+                    }    
                 })
-            },    
+            
+                
+            }, 
+            powerkeep(){
+                let data={
+                    
+                }
+                data.resouce=this.funArr,
+                fetch('post','/console/feature/'+this.jobCont,data).then(function(response){
+                    toastr.success('保存成功');
+                    
+                })
+            },
+            rangekeep(){
+                console.log(this.sendData)
+                fetch('post','/console/scope/'+this.jobCont,this.sendData ).then(function(response){
+                    toastr.success('保存成功');
+                    
+                })
+            },
             //全选反选
-            selectArtists: function (value,id) {   
+            selectArtists: function (value,id) {
+              
                 if (value === 'all') {
                     this.selectedArtistsArr = [];
                     this.roleDate.forEach(item=>{
@@ -703,6 +764,7 @@
                         }
                     })
                 } else {
+                    console.log(this.selectedArtistsArr)
                     let index = this.selectedArtistsArr.indexOf(value);
                     if (index > -1) {
                         this.selectedArtistsArr.splice(index, 1)
@@ -713,22 +775,47 @@
                 }
                 
             },
-            funSelect(value,id){
-                let _this=this
-                if(value==='all'){
-                    _this.funArr= [];
-                    for(let i = 0;i<_this.powerDate.length;i++){
-                        if(id==_this.powerDate[i].id){
-                           for(let j=0;j<_this.powerDate[i].data.length;j++){
-                               _this.funArr.push(_this.powerDate[i].data[j].id)
-                                     console.log(_this.funArr)
-                           } 
-                        }
-                        
+            funSelect: function (value,id){ 
+                if(value === 'own'){
+                    this.owmArr = [];
+                    this.list = [];
+                    for (this.list in this.powerDate){
+                        this.powerDate[this.list].data.forEach(item=>{
+                            this.owmArr.push(item.id) 
+                        })
+                        this.owmArr.push(this.powerDate[this.list].id) 
                     }
-              
+
                 }
-              
+                else if(value==='all'){
+                     this.funArr = [];
+                     this.list = [];
+                    for(this.list in this.powerDate){
+                        if(id==this.powerDate[this.list ].id){
+                            this.powerDate[this.list].data.forEach(item=>{
+                               this.funArr.push(item.id) 
+                            })
+                        }
+                    }
+                }else{
+                    
+                    console.log(this.funArr)
+                    let index = this.funArr.indexOf(value);
+                        if (index > -1) {
+                            this.funArr.splice(index, 1)
+                        } else {
+                            this.funArr.push(value)
+                              
+                        }
+                    let ownindex = this.owmArr.indexOf(id);
+                        if (ownindex > -1) {
+                            this.owmArr.splice(ownindex, 1)
+                        } else {
+                            this.owmArr.push(id)
+                              
+                        }
+                }
+                      
             },
             //获取新增角色的类别
             changeRolejob(value) {
@@ -869,7 +956,6 @@
                 this.conceal=!this.conceal;
             },
             defaultcontent(value){
-                console.log(value)
                 this.defaultId=value
                 this.jobCont =''
             },
@@ -878,10 +964,12 @@
                 console.log(this.valueId)
             },
             radioed(i,v){
-                console.log(i+v)
+               
+       
             },
-            checked(item,m){
-                console.log(item,m)
+            checked(item,m){ 
+               
+              
             }
         }
     }
@@ -950,9 +1038,9 @@
     .power-cont{
         position:absolute;
         top:50%;
-        left: 50%;
-        -webkit-transform: translate(-50%, -50%);
-        transform: translate(-50%, -50%);
+        left:10%;
+        -webkit-transform: translate(0,-50%);
+        transform: translate(0,-50%);
     }
     .range-cont{
         position:absolute;

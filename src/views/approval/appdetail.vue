@@ -85,7 +85,7 @@
                         <h6 class="page-title pb-20" style="border-bottom:1px solid #ccc">审批流程</h6>
                         <div class="setp pt-20">
                             <div class="left col-md-2">
-                                <em class="mr-10"><i class="icon md-check-circle pr-5" style="color:#4DAF50"></i></em>
+                                <em class="mr-10"><i class="md-check-circle pr-5" style="color:#4DAF50"></i></em>
                                 <div class="left-cont">
                                     <b class="branch">泰洋系</b>
                                     <b class="type" style="color:#999;width:48px;">提交审批</b>
@@ -93,7 +93,7 @@
                             </div>
                             <div class="middle col-md-2">
                                 <template v-if="item.type==0">
-                                    <em><i class="icon md-check-circle pr-5" style="color:#4DAF50"></i></em>
+                                    <em><i class="md-check-circle pr-5" style="color:#4DAF50"></i></em>
                                     <div class="middle-cont">
                                         <b class="branch">泰洋系</b>
                                         <b class="type" style="color:#999">待审批</b>
@@ -132,31 +132,31 @@
                              <div class="right col-md-2">
                                 <template v-if="item.type==0">
                                     <div class="right-cont" style="color:#4DAF50">
-                                        <i class="icon md-check-circle pr-5"></i>
+                                        <i class="md-check-circle pr-5"></i>
                                         <b>审批通过</b>
                                     </div>
                                 </template>
                                 <template v-if="item.type==1">
                                     <div class="right-cont" style="color:#E0E0E0">
-                                        <i class="icon md-check-circle pr-5"></i>
+                                        <i class="md-check-circle pr-5"></i>
                                         <b>审批通过</b>
                                     </div>
                                 </template>
                                 <template v-if="item.type==2">
                                     <div class="right-cont">
-                                        <i class="icon md-close-circle pr-5"></i>
+                                        <i class="md-close-circle pr-5"></i>
                                         <b>已撤回</b>
                                     </div>
                                 </template>
                                 <template v-if="item.type==3">               
                                     <div class="right-cont">
-                                        <i class="icon md-close-circle pr-5"></i>
+                                        <i class="md-close-circle pr-5"></i>
                                         <b>已作废</b>
                                     </div>
                                 </template>
                                 <template v-if="item.type==4">
                                     <div class="right-cont" style="color:red">
-                                        <i class="icon md-close-circle pr-5"></i>
+                                        <i class="md-close-circle pr-5"></i>
                                         <b>已拒绝</b>
                                     </div>
                                 </template>

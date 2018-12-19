@@ -15,7 +15,7 @@
             <h1 class="page-title d-inline">博主详情</h1>
 
             <div class="page-header-actions dropdown show task-dropdown float-right">
-                <i class="icon md-more font-size-24" aria-hidden="true" id="taskDropdown"
+                <i class="iconfont icon-gengduo1 font-size-24" aria-hidden="true" id="taskDropdown"
                    data-toggle="dropdown" aria-expanded="false"></i>
                 <div class="dropdown-menu dropdown-menu-right task-dropdown-item" aria-labelledby="taskDropdown"
                      role="menu" x-placement="bottom-end">
@@ -289,6 +289,7 @@
                                     <td>暂无</td>
                                 </tr>
                                 </tbody>
+                              
                             </table>
                         </div>
                         <div class="tab-pane animation-fade fixed-button-father" id="forum-artist-base"
@@ -297,7 +298,7 @@
                                 <div class="card-header card-header-transparent card-header-bordered">
                                     <div class="float-left font-weight-bold third-title">艺人信息</div>
                                     <div class="float-right pointer-content" v-show="isStatrtEdit">
-                                        <i class="icon md-edit" aria-hidden="true" @click="editBaseInfo"></i>
+                                        <i class="iconfont icon-bianji" aria-hidden="true" @click="editBaseInfo"></i>
                                     </div>
                                     <div class="float-right mr-40" v-show="isEdit">
                                         <button class="btn btn-sm btn-white btn-pure" @click="cancelEdit">取消</button>

@@ -1,0 +1,101 @@
+<template>
+    <div class="" style="background-color:#f3f4f5">
+        <div class="page-header page-header-bordered mb-0">
+            <h1 class="page-title">发起审批</h1>
+        </div>
+    
+        <div class="page-content container-fluid ">
+            <div class="page-header">
+                <h4 class="">合同审批</h4>
+            </div>
+            <div class="row py-5">
+                <div class="col-lg-4 approval-module" v-for="item in indexData" :key="item.id">
+                    <div class="card">
+                        <div class="card-block" data-toggle="modal" data-target="#approval-great-module" @click='changeType(item.key)'>
+                            <i class="icon md-file float-left" style="font-size:3rem"></i>
+                            <p class="my-10">{{item.value}}</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <ApprovalGreatModule :type='type' singlemode='true' />
+    </div>
+</template>
+
+<script>
+import{CONTRACT_INDEX_CONFIG} from '@/views/approval/contractIndex/contractIndexData.js'
+import ApprovalGreatModule from '@/components/ApprovalGreatModule'
+
+export default {
+    components:{
+        ApprovalGreatModule
+    },
+    data(){
+        return{
+            indexData:CONTRACT_INDEX_CONFIG.contractIndex,
+            type:'',
+        }
+    },
+    methods:{
+        changeType(params){
+            this.type = params
+        }
+    }
+}
+</script>
+
+<style scoped>
+ .upload-image{
+  display: flex;
+  width: 500px;
+  height: 100px;
+}
+  .page {
+    position: absolute;
+    left: 210px;
+    top: 0;
+  }
+  .page-header{
+    padding: 20px;
+  }
+  .puls {
+    display: inline-block;
+    background-size: 100px;
+    width: 100px;
+    height: 100px;
+    text-align: center;
+    line-height: 100px;
+    border: 1px dashed #eee;
+
+  }
+  .page-content{
+    padding: 10px 20
+  }
+  .puls span {
+    font-size: 30px;
+  }
+
+  .pearl-icon {
+    font-size: 12px;
+  }
+  .addMember {
+    padding-left: 20px;
+  }
+
+  .example {
+    margin-top: 0;
+  }
+  .lb{
+      padding-left: 0;
+  }
+  .pearl.done .pearl-icon, .pearl.done .pearl-number{
+      margin-left: -30px;
+  }
+  .approval-module{
+    cursor: pointer;
+  }
+  .card-block:hover{
+    box-shadow:4px 4px 12px 1px rgba(7,17,27,0.2);
+  }
+</style>

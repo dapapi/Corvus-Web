@@ -11,7 +11,7 @@
                         <div v-if="item.status === null" class="card" @click="redirectBriefDetails(item.id,item.frequency,item.template_name)">
                             <div class="card-block clearfix">
                                 
-                                <i class="icon md-file float-left" style="font-size:3rem"></i>
+                                <i class="md-file float-left" style="font-size:3rem"></i>
                                 
                                 <div class="float-left">
                                     <div >{{item.template_name}}</div>
@@ -22,7 +22,7 @@
                         <div v-else class="card" data-toggle="modal" data-target="#submitReport" @click="getId(item.status,item.template_name)">
                             <div class="card-block clearfix">
                                 
-                                <i class="icon md-file float-left" style="font-size:3rem"></i>
+                                <i class="md-file float-left" style="font-size:3rem"></i>
                                 
                                 <div class="float-left">
                                      <div>{{item.template_name}}</div>

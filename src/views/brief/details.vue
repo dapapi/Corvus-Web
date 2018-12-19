@@ -49,7 +49,7 @@
                             </div>
                             <div v-show="item.type == 4" class="taskList">
                                 <div class="ml-15"  v-for="(item,index) in submitAnswerData[`answer[${item.id}]`]" :key="index">
-                                    <i class="icon icon md-email-open"></i>
+                                    <i class="icon md-email-open"></i>
                                 <router-link class="mr-10" :to="`/tasks/${item.id}`">{{item.title}}</router-link>
                                 </div>
                             </div>

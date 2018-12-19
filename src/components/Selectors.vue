@@ -1,6 +1,6 @@
 <template>
     <select class="selectpicker show-tick" data-plugin="selectpicker" :value="value" :data-live-search="isSelectable"
-            :data-show-subtext="isSelectable"
+            :data-show-subtext="isSelectable" :id="_uid"
             :multiple="multiple" :title="placeholder" v-model="valueListener">
         <selectorsOptions v-for="option in options" v-bind:id="option.id" :val="option.value || option.id"
                           :key="option.id">
@@ -34,19 +34,18 @@
         },
 
         mounted() {
-            if(!this.multiple){
-                let self = this;
-                $(this.$el).selectpicker().on('hidden.bs.select', function () {
-                    self.$emit('change', $(this).val(), $(this)[0].selectedOptions[0].label, $(this)[0].selectedOptions[0].id);
-                    // 可以通过调用select方法，去改变父组件传过来的changeKey
-                    if (self.changeKey) {
-                        self.$emit('select', self.changeKey, $(this).val(), $(this)[0].selectedOptions[0].label)
-                    }
-                });
-            }else{
-                $(this.$el).selectpicker()
-            }
-           
+            let self = this;
+            $(this.$el).selectpicker().on('hidden.bs.select', function () {
+                if (!$(this).val() || $(this).val().length === 0) {
+                    self.$emit('change', $(this).val());
+                    return
+                }
+                self.$emit('change', $(this).val(), $(this)[0].selectedOptions[0].label, $(this)[0].selectedOptions[0].id);
+                // 可以通过调用select方法，去改变父组件传过来的changeKey
+                if (self.changeKey) {
+                    self.$emit('select', self.changeKey, $(this).val(), $(this)[0].selectedOptions[0].label)
+                }
+            });
         },
         watch: {
             resetinfo: function (value) {

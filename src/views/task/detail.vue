@@ -4,7 +4,7 @@
             <h1 class="page-title d-inline">任务</h1>
 
             <div class="page-header-actions dropdown show task-dropdown float-right">
-                <i class="icon md-more font-size-24" aria-hidden="true" id="taskDropdown"
+                <i class="iconfont icon-gengduo1 font-size-24" aria-hidden="true" id="taskDropdown"
                    data-toggle="dropdown" aria-expanded="false"></i>
                 <div class="dropdown-menu dropdown-menu-right task-dropdown-item" aria-labelledby="taskDropdown"
                      role="menu" x-placement="bottom-end">
@@ -24,13 +24,28 @@
                         <template v-if="!taskInfo.task_p">
                            <span class="font-size-14 pl-10 pointer-content hover-content"
                                  @click="redirectTaskDetail(taskInfo.pTask?taskInfo.pTask.data.id: '')">
-                           <i class="icon md-chevron-left"></i>回到主任务
+                           <i class="md-chevron-left"></i>回到主任务
                             </span>
                         </template>
                     </h4>
+                    <div>
+                        <i class="iconfont icon-tubiaochicundaochuSVGshangchuandaoalibaba- pr-2" aria-hidden="true"></i>
+                        <i class="iconfont icon-zuzhijiagou pr-2" aria-hidden="true"></i>
+                        <i class="iconfont icon-zhengque pr-2" aria-hidden="true"></i>
+                        <i class="iconfont icon-xiaoshoushichang pr-2" aria-hidden="true"></i>
+                        <i class="iconfont icon-tianjiajiahaowubiankuang pr-2" aria-hidden="true"></i>
+                        <i class="iconfont icon-tijiaoshenqing pr-2" aria-hidden="true"></i>
+                        <i class="iconfont icon-iconfontshijian pr-2" aria-hidden="true"></i>
+                        <i class="iconfont icon-xiaoshou pr-2" aria-hidden="true"></i>
+                        <i class="iconfont icon-tianjiarenyuan pr-2" aria-hidden="true"></i>
+                        <i class="iconfont icon-renyuanfenzu pr-2" aria-hidden="true"></i>
+                        <i class="iconfont icon-wenjian pr-2" aria-hidden="true"></i>
+                        <i class="iconfont icon-nianling pr-2" aria-hidden="true"></i>
+
+                    </div>
                     <div class="card-text clearfix example">
                         <div class="float-left pl-0 pr-2 col-md-1">
-                            <i class="md-plus pr-2" aria-hidden="true"></i>负责人
+                            <i class="iconfont icon-tubiaochicundaochuSVGshangchuandaoalibaba- pr-2" aria-hidden="true"></i>负责人
                         </div>
                         <div class="font-weight-bold float-left" v-if="taskInfo">
                             {{ taskInfo.principal?taskInfo.principal.data.name: '' }}
@@ -38,7 +53,7 @@
                     </div>
                     <div class="card-text clearfix example">
                         <div class="float-left pl-0 pr-2 col-md-1">
-                            <i class="md-plus pr-2" aria-hidden="true"></i>任务状态
+                            <i class="iconfont icon-tijiaoshenqing pr-2" aria-hidden="true"></i>任务状态
                         </div>
                         <div class="font-weight-bold float-left">
                             <template v-if="taskInfo.status === 1">进行中</template>
@@ -49,7 +64,7 @@
                     <div class="card-text clearfix example">
                         <div class="pl-0">
                             <div class="float-left pl-0 pr-2 col-md-1">
-                                <i class="md-plus pr-2" aria-hidden="true"></i>结束时间
+                                <i class="iconfont icon-tianjiajiahaowubiankuang1 pr-2" aria-hidden="true"></i>结束时间
                             </div>
                             <div class="font-weight-bold float-left">
                                 {{ taskInfo.end_at }}
@@ -96,7 +111,7 @@
                             <div class="card-header card-header-transparent card-header-bordered">
                                 <div class="float-left font-weight-bold third-title">任务详情</div>
                                 <div class="float-right pointer-content">
-                                    <i class="icon md-edit" aria-hidden="true" @click="editBaseInfo"></i>
+                                    <i class="iconfont icon-bianji" aria-hidden="true" @click="editBaseInfo"></i>
                                 </div>
                                 <div class="float-right mr-40" v-show="isEdit">
                                     <button class="btn btn-sm btn-white btn-pure" @click="cancelEdit">取消</button>
@@ -194,7 +209,7 @@
                                             data-target="#confirmFlag">删除</span>
 
                                         <!-- <span class="pl-20 d-block float-left pointer-content" style="color: #b9b9b9"typeText="删除">
-                                        <i class="icon md-delete" aria-hidden="true"></i> -->
+                                        <i class="md-delete" aria-hidden="true"></i> -->
                                     <!-- </span> -->
                                         <span class="float-right px-10">|</span>
                                         <span class="float-right px-10 pointer-content"
@@ -241,8 +256,8 @@
                              data-target="#addChildTask">
                             <button type="button"
                                     class="site-action-toggle btn-raised btn btn-success btn-floating waves-effect waves-classic">
-                                <i class="front-icon md-plus animation-scale-up" aria-hidden="true"></i>
-                                <i class="back-icon md-plus animation-scale-up" aria-hidden="true"></i>
+                                <i class="front-icon iconfont icon-tianjiajiahaowubiankuang1 animation-scale-up" aria-hidden="true"></i>
+                                <i class="back-icon iconfont icon-tianjiajiahaowubiankuang1 animation-scale-up" aria-hidden="true"></i>
                             </button>
                         </div>
 
@@ -275,7 +290,7 @@
                 <div class="modal-content">
                     <div class="modal-header">
                         <button type="button" class="close" aria-hidden="true" data-dismiss="modal">
-                            <i class="md-close" aria-hidden="true"></i>
+                            <i class="iconfont icon-guanbi" aria-hidden="true"></i>
                         </button>
                         <h4 class="modal-title">新增子任务</h4>
                     </div>

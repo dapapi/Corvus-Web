@@ -4,8 +4,9 @@
         <div class="page-header page-header-bordered">
             <h1 class="page-title d-inline">项目详情</h1>
 
-            <div class="page-header-actions dropdown show task-dropdown float-right">
-                <i class="icon md-more font-size-24" aria-hidden="true" id="taskDropdown"
+            <div class="page-header-actions dropdown show task-dropdown float-right"
+                 v-if="projectInfo.approval_status == 1">
+                <i class="iconfont icon-gengduo1 font-size-24" aria-hidden="true" id="taskDropdown"
                    data-toggle="dropdown" aria-expanded="false"></i>
                 <div class="dropdown-menu dropdown-menu-right task-dropdown-item" aria-labelledby="taskDropdown"
                      role="menu" x-placement="bottom-end">
@@ -115,28 +116,34 @@
             <div class="col-md-12 panel" v-if="projectInfo.title">
                 <div class="col-md-12">
                     <ul class="nav nav-tabs nav-tabs-line" role="tablist">
-                        <li class="nav-item" role="presentation" v-if="projectInfo.type != 5">
+                        <li class="nav-item" role="presentation"
+                            v-if="projectInfo.type != 5 && projectInfo.approval_status == 1">
                             <a class="nav-link" :class="projectInfo.type != 5 ? 'active' : ''" data-toggle="tab"
                                href="#forum-project-follow"
                                aria-controls="forum-base"
                                aria-expanded="true" role="tab">项目进度</a>
                         </li>
-                        <li class="nav-item" role="presentation" @click="getProjectTasks">
+                        <li class="nav-item" role="presentation" @click="getProjectTasks"
+                            v-if="projectInfo.approval_status == 1">
                             <a class="nav-link" data-toggle="tab" href="#forum-project-tasks"
                                aria-controls="forum-present"
                                aria-expanded="false" role="tab">任务</a>
                         </li>
-                        <li class="nav-item" role="presentation" v-if="projectInfo.type != 5">
+                        <li class="nav-item" role="presentation"
+                            v-if="projectInfo.type != 5 && projectInfo.approval_status == 1">
                             <a class="nav-link" data-toggle="tab" href="#forum-project-contract"
                                aria-controls="forum-present"
                                aria-expanded="false" role="tab">合同</a>
                         </li>
-                        <li class="nav-item" role="presentation" v-if="projectInfo.type != 5">
+                        <li class="nav-item" role="presentation"
+                            v-if="projectInfo.type != 5">
+                            <!--v-if="projectInfo.type != 5 && projectInfo.approval_status == 1">-->
                             <a class="nav-link" data-toggle="tab" href="#forum-project-bill"
                                aria-controls="forum-present"
                                aria-expanded="false" role="tab">账单</a>
                         </li>
-                        <li class="nav-item" role="presentation" v-if="projectInfo.type != 5">
+                        <li class="nav-item" role="presentation"
+                            v-if="projectInfo.type != 5 && projectInfo.approval_status == 1">
                             <a class="nav-link" data-toggle="tab" href="#forum-project-payback"
                                aria-controls="forum-present"
                                aria-expanded="false" role="tab">回款</a>
@@ -150,7 +157,8 @@
                     </ul>
                     <div class="tab-content nav-tabs-animate bg-white">
                         <!-- 项目进度 -->
-                        <div class="tab-pane animation-fade pb-10" v-if="projectInfo.type != 5"
+                        <div class="tab-pane animation-fade pb-10"
+                             v-if="projectInfo.type != 5 && projectInfo.approval_status == 1"
                              :class="projectInfo.type != 5 ? 'active' : ''"
                              id="forum-project-follow" role="tabpanel">
                             <div class="clearfix mt-20">
@@ -187,7 +195,7 @@
                         </div>
                         <!-- 任务 -->
                         <div class="tab-pane animation-fade pb-20 fixed-button-father" id="forum-project-tasks"
-                             role="tabpanel">
+                             role="tabpanel" v-if="projectInfo.approval_status == 1">
                             <table class="table table-hover is-indent example" data-plugin="animateList"
                                    data-animate="fade"
                                    data-child="tr"
@@ -226,7 +234,8 @@
 
                         </div>
                         <!-- 合同 -->
-                        <div class="tab-pane animation-fade py-10" v-if="projectInfo.type != 5"
+                        <div class="tab-pane animation-fade py-10"
+                             v-if="projectInfo.type != 5 && projectInfo.approval_status == 1"
                              id="forum-project-contract"
                              role="tabpanel">
                             <table class="table table-hover example"
@@ -258,8 +267,9 @@
 
                         </div>
                         <!-- 账单 -->
-                        <div class="tab-pane animation-fade py-10" v-if="projectInfo.type != 5" id="forum-project-bill"
-                             role="tabpanel">
+                        <div class="tab-pane animation-fade py-10"
+                             v-if="projectInfo.type != 5" id="forum-project-bill" role="tabpanel">
+                            <!--v-if="projectInfo.type != 5 && projectInfo.approval_status == 1" id="forum-project-bill" role="tabpanel">-->
                             <div class="clearfix">
                                 <div class="float-left" style="padding: .715rem 1.429rem">
                                     <div class="float-left pr-40">合同金额 <span class="money-color">10000元</span></div>
@@ -272,21 +282,45 @@
                                 <div class="float-right" style="padding: .715rem 0">
                                      <span class="pointer-content hover-content" data-toggle="modal"
                                            data-target="#addBill">
-                                         <i class="icon md-plus pr-5"></i>新增结算单</span>
+                                         <i class="md-plus pr-5"></i>新增结算单</span>
                                 </div>
                             </div>
                             <table class="table table-hover"
                                    data-child="tr">
                                 <tr>
                                     <th class="cell-300" scope="col">费用类型</th>
+                                    <th class="cell-300 position-relative" scope="col">
+                                        <template v-if="filterFee === 1">全部</template>
+                                        <template v-if="filterFee === 2">成本</template>
+                                        <template v-if="filterFee === 3">收入</template>
+                                        <i class="iconfont icon-gengduo1 pl-2" aria-hidden="true"
+                                           id="projectDropdown" data-toggle="dropdown" aria-expanded="false"></i>
+                                        <div class="dropdown-menu" aria-labelledby="projectDropdown" role="menu">
+                                            <a class="dropdown-item" role="menuitem" v-show="filterFee !== 1"
+                                               @click="filterProjectFee(1)">全部</a>
+                                            <a class="dropdown-item" role="menuitem" v-show="filterFee !== 2"
+                                               @click="filterProjectFee(2)">成本</a>
+                                            <a class="dropdown-item" role="menuitem" v-show="filterFee !== 3"
+                                               @click="filterProjectFee(3)">收入</a>
+                                        </div>
+                                    </th>
                                     <th class="cell-300" scope="col">艺人</th>
                                     <th class="cell-300" scope="col">金额</th>
-                                    <th class="cell-300" scope="col">收款/付款时间</th>
+                                    <th class="cell-300" scope="col">收款/审批时间</th>
                                     <th class="cell-300" scope="col">操作人</th>
                                 </tr>
                                 <tbody>
                                 <tr>
                                     <td>测试类别</td>
+                                    <td>成本</td>
+                                    <td>1233030</td>
+                                    <td>2018-10-31</td>
+                                    <td>2018-12-20</td>
+                                    <td>陈晓禹</td>
+                                </tr>
+                                <tr>
+                                    <td>测试类别</td>
+                                    <td>收入</td>
                                     <td>1233030</td>
                                     <td>2018-10-31</td>
                                     <td>2018-12-20</td>
@@ -296,7 +330,8 @@
                             </table>
                         </div>
                         <!-- 回款 -->
-                        <div class="tab-pane animation-fade pt-10 pb-20" v-if="projectInfo.type != 5"
+                        <div class="tab-pane animation-fade pt-10 pb-20"
+                             v-if="projectInfo.type != 5 && projectInfo.approval_status == 1"
                              id="forum-project-payback" role="tabpanel">
                             <div class="clearfix">
                                 <ul class="nav nav-tabs nav-tabs-line float-left" role="tablist"
@@ -315,7 +350,7 @@
                                 <div class="float-right" style="padding: .715rem 1.429rem">
                                     <span class="pointer-content hover-content" data-toggle="modal"
                                           data-target="#addPaybackTime">
-                                                <i class="icon md-plus pr-5"></i>新建回款期次</span>
+                                                <i class="md-plus pr-5"></i>新建回款期次</span>
                                 </div>
                             </div>
                             <div class="tab-pane animation-fade" id="forum-item-payback">
@@ -340,10 +375,10 @@
                                         <div class="float-right">
                                             <span class="mr-40 pointer-content hover-content" data-toggle="modal"
                                                   data-target="#addPayback">
-                                                <i class="icon md-plus pr-5"></i>回款记录</span>
+                                                <i class="md-plus pr-5"></i>回款记录</span>
                                             <span class="pointer-content hover-content" data-toggle="modal"
                                                   data-target="#addInvoice">
-                                                <i class="icon md-plus pr-5"></i>开票记录</span>
+                                                <i class="md-plus pr-5"></i>开票记录</span>
                                         </div>
                                     </div>
                                     <div class="clearfix">
@@ -358,9 +393,9 @@
                                                 class="money-color pl-5">12312222元</span>
                                         </div>
                                         <div class="col-md-2 float-right pr-0 text-right" style="color: #cccccc;">
-                                            <i class="icon md-eye pr-40 pointer-content"></i>
-                                            <i class="icon md-edit pr-40 pointer-content"></i>
-                                            <i class="icon md-delete pointer-content"></i>
+                                            <i class="md-eye pr-40 pointer-content"></i>
+                                            <i class="iconfont icon-bianji pr-40 pointer-content"></i>
+                                            <i class="md-delete pointer-content"></i>
                                         </div>
                                     </div>
 
@@ -378,9 +413,9 @@
                                                     class="pl-5">现金</span>
                                             </div>
                                             <div class="col-md-2 float-right pr-0 text-right" style="color: #cccccc;">
-                                                <i class="icon md-eye pr-40 pointer-content"></i>
-                                                <i class="icon md-edit pr-40 pointer-content"></i>
-                                                <i class="icon md-delete pointer-content"></i>
+                                                <i class="md-eye pr-40 pointer-content"></i>
+                                                <i class="iconfont icon-bianji pr-40 pointer-content"></i>
+                                                <i class="md-delete pointer-content"></i>
                                             </div>
                                         </div>
                                     </div>
@@ -398,9 +433,9 @@
                                             <div class="col-md-2 float-left pl-0">票据类型<span class="pl-5">增值税普通发票</span>
                                             </div>
                                             <div class="col-md-2 float-right pr-0 text-right" style="color: #cccccc;">
-                                                <i class="icon md-eye pr-40 pointer-content"></i>
-                                                <i class="icon md-edit pr-40 pointer-content"></i>
-                                                <i class="icon md-delete pointer-content"></i>
+                                                <i class="md-eye pr-40 pointer-content"></i>
+                                                <i class="iconfont icon-bianji pr-40 pointer-content"></i>
+                                                <i class="md-delete pointer-content"></i>
                                             </div>
                                         </div>
                                     </div>
@@ -414,10 +449,10 @@
                                         <div class="float-right">
                                             <span class="mr-40 pointer-content hover-content" data-toggle="modal"
                                                   data-target="#addPayback">
-                                                <i class="icon md-plus pr-5"></i>回款记录</span>
+                                                <i class="md-plus pr-5"></i>回款记录</span>
                                             <span class="pointer-content hover-content" data-toggle="modal"
                                                   data-target="#addInvoice">
-                                                <i class="icon md-plus pr-5"></i>开票记录</span>
+                                                <i class="md-plus pr-5"></i>开票记录</span>
                                         </div>
                                     </div>
                                     <div class="clearfix">
@@ -432,23 +467,24 @@
                                                 class="money-color pl-5">12312222元</span>
                                         </div>
                                         <div class="col-md-2 float-right pr-0 text-right" style="color: #cccccc;">
-                                            <i class="icon md-eye pr-40 pointer-content"></i>
-                                            <i class="icon md-edit pr-40 pointer-content"></i>
-                                            <i class="icon md-delete pointer-content"></i>
+                                            <i class="md-eye pr-40 pointer-content"></i>
+                                            <i class="iconfont icon-bianji pr-40 pointer-content"></i>
+                                            <i class="md-delete pointer-content"></i>
                                         </div>
                                     </div>
                                 </div>
                             </div>
                         </div>
                         <!-- 概况 -->
-                        <div class="tab-pane animation-fade" :class="projectInfo.type == 5 ? 'active' : ''"
+                        <div class="tab-pane animation-fade"
+                             :class="(projectInfo.type == 5 || projectInfo.approval_status != 1) ? 'active' : ''"
                              id="forum-project-base"
                              role="tabpanel">
                             <div class="card">
                                 <div class="card-header card-header-transparent card-header-bordered">
                                     <div class="float-left font-weight-bold third-title">项目信息</div>
-                                    <div class="float-right" v-show="!isEdit">
-                                        <i class="icon md-edit pointer-content" aria-hidden="true"
+                                    <div class="float-right" v-show="!isEdit && projectInfo.approval_status == 1">
+                                        <i class="iconfont icon-bianji pointer-content" aria-hidden="true"
                                            @click="editBaseInfo"></i>
                                     </div>
                                     <div class="float-right mr-40" v-show="isEdit">
@@ -1078,7 +1114,7 @@
                                     <div class="tab-pane active" id="projectsPane" role="tabpanel">
                                         <div class="input-search mb-20" style="width: 70%">
                                             <button type="submit" class="input-search-btn">
-                                                <i class="icon md-search" aria-hidden="true"></i>
+                                                <i class="md-search" aria-hidden="true"></i>
                                             </button>
                                             <input type="text" class="form-control" name="" placeholder="搜索关键字..."
                                                    v-model="searchKeyWord">
@@ -1090,7 +1126,7 @@
                                                 @click="selectResource('projects', project.id)">{{ project.title }}
                                                 <span class="float-right"
                                                       v-show="linkageSelectedIds.projects.indexOf(project.id) > -1">
-                                                    <i class="icon md-check"></i>
+                                                    <i class="md-check"></i>
                                                 </span>
                                             </li>
                                         </ul>
@@ -1098,7 +1134,7 @@
                                     <div class="tab-pane" id="tasksPane" role="tabpanel">
                                         <div class="input-search mb-20" style="width: 70%">
                                             <button type="submit" class="input-search-btn">
-                                                <i class="icon md-search" aria-hidden="true"></i>
+                                                <i class="md-search" aria-hidden="true"></i>
                                             </button>
                                             <input type="text" class="form-control" name="" placeholder="搜索关键字..."
                                                    v-model="searchKeyWord">
@@ -1110,7 +1146,7 @@
                                                 @click="selectResource('tasks', task.id)">{{ task.title }}
                                                 <span class="float-right"
                                                       v-show="linkageSelectedIds.tasks.indexOf(task.id) > -1">
-                                                    <i class="icon md-check"></i>
+                                                    <i class="md-check"></i>
                                                 </span>
                                             </li>
                                         </ul>
@@ -1215,6 +1251,7 @@
                 projectChangeStatus: '',
                 linkageResource: '',
                 searchKeyWord: '',
+                filterFee: 1,
                 linkageSelectedIds: {
                     projects: [],
                     tasks: []
@@ -1377,6 +1414,10 @@
 
             redirectTask: function (taskId) {
                 this.$router.push({path: '/tasks/' + taskId})
+            },
+
+            filterProjectFee: function (value) {
+                this.filterFee = value;
             },
 
             addTask: function () {

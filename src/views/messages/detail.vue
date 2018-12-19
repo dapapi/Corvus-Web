@@ -7,7 +7,7 @@
         :style="{ backgroundImage: 'url('+pageData.cover+')'}"></div>
         <div class="">
           <p class="">{{pageData.timeYMD}}  {{pageData.timehms}}&nbsp;&nbsp;&nbsp;
-            <i class="icon md-flag" 
+            <i class="md-flag"
             aria-hidden="true" 
             title="点击设为未读" 
             v-if="!pageData.readflag" 

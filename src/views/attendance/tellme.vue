@@ -8,7 +8,7 @@
             <div class="panel">
                 <div class="col-md-4  p-20">
                     <div class="input-search">
-                        <button type="button" class="input-search-btn"><i class="icon md-search" aria-hidden="true"></i>
+                        <button type="button" class="input-search-btn"><i class="md-search" aria-hidden="true"></i>
                         </button>
                         <input type="text" class="form-control" placeholder="输入编号、类型或申请人">
                     </div>

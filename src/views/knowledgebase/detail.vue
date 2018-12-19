@@ -14,8 +14,8 @@
       </div>
         <div class="page-header page-header-bordered">
             <h1 class="page-title">
-                <i class="icon md-chevron-left" @click="goBack"></i>知识库&nbsp;&nbsp;</h1>
-            <i class="icon md-flower" 
+                <i class="md-chevron-left" @click="goBack"></i>知识库&nbsp;&nbsp;</h1>
+            <i class="md-flower"
             data-plugin="actionBtn" 
             data-toggle="modal" 
             data-target="#addNewBroadcast"
@@ -46,9 +46,9 @@
                                 <span v-if="departments[0]" class="badge badge-round badge-dark">{{departments.find(departments => departments.id == item.department_id).name}}</span>
                             </span>
                             <div class="float-right row mr-20">
-                                <div class="mr-80 add-comment" @click='addComment'><i class="icon md-comment-more"></i>评论</div>
-                                <div class="mr-80"><i class="icon md-email"></i>未读 0</div>
-                                <div><i class="icon md-email-open"></i>已读 0</div>
+                                <div class="mr-80 add-comment" @click='addComment'><i class="md-comment-more"></i>评论</div>
+                                <div class="mr-80"><i class="md-email"></i>未读 0</div>
+                                <div><i class="md-email-open"></i>已读 0</div>
                             </div>
                         </h5>
                         <hr>

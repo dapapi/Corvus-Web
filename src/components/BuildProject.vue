@@ -99,40 +99,40 @@
                                            @change="(value) => addProjectBaseInfo(value, 'fee')"></NumberSpinner>
                         </div>
                     </div>
-                    <div class="col-md-12 example clearfix" v-for="field in projectFieldsArr">
+                    <div class="col-md-12 example clearfix" v-for="field in projectFields">
                         <div class="col-md-2 text-right float-left px-0">{{ field.key }}</div>
                         <div class="col-md-10 float-left">
                             <template v-if="field.field_type === 1">
                                 <EmitInput @change="(value) => addInfo(value, field.id )"></EmitInput>
                             </template>
-                            <template v-else-if="field.field_type === 2">
+                            <template v-if="field.field_type === 2">
                                 <Selectors :options="field.contentArr" :placeholder="'请选择' + field.key"
                                            @change="(value) => addInfo(value, field.id )"></Selectors>
                             </template>
-                            <template v-else-if="field.field_type === 3">
+                            <template v-if="field.field_type === 3">
                                 <EditableSearchBox :options="starsArr" :multiple="true"
                                                    @change="(value) => addInfo(value, field.id )"></EditableSearchBox>
                             </template>
-                            <template v-else-if="field.field_type === 4">
+                            <template v-if="field.field_type === 4">
                                 <Datepicker @change="(value) => addInfo(value, field.id )"></Datepicker>
                             </template>
-                            <template v-else-if="field.field_type === 5">
+                            <template v-if="field.field_type === 5">
                                 <NormalTextarea title="" class="form-control"
                                                 @change="(value) => addInfo(value, field.id )"></NormalTextarea>
                             </template>
-                            <template v-else-if="field.field_type === 6">
+                            <template v-if="field.field_type === 6">
                                 <Selectors :options="field.contentArr" :multiple="true"
                                            :placeholder="'请选择' + field.key"
                                            @change="(value) => addInfo(value.join('|'), field.id )"></Selectors>
                             </template>
-                            <template v-else-if="field.field_type === 8">
+                            <template v-if="field.field_type === 8">
                                 <GroupDatepicker
                                         @change="(from, to) => addInfo(from + '|' + to, field.id )"></GroupDatepicker>
                             </template>
-                            <template v-else-if="field.field_type === 10">
+                            <template v-if="field.field_type === 10">
                                 <InputSelectors @change="(value) => addInfo(value, field.id )"></InputSelectors>
                             </template>
-                            <template v-else-if="field.field_type === 11">
+                            <template v-if="field.field_type === 11">
                                 <NumberSpinner @change="(value) => addInfo(value, field.id )"></NumberSpinner>
                             </template>
                         </div>
@@ -174,14 +174,16 @@
                 startTime: '',
                 trailOriginContent: '',
                 trailsAllInfo: '',
+                addInfoArr: {},
                 projectBaseInfo: {
                     trail: {}
                 },
+                projectFields: [],
             }
         },
         watch: {
             projectFieldsArr(newValue) {
-                console.log(newValue)
+                return this.projectFields = newValue
             }
         },
         mounted() {
@@ -194,6 +196,9 @@
         },
         methods: {
             refreshAddProjectModal: function () {
+                if (!this.$refs.trails) {
+                    return
+                }
                 this.$refs.trails.setValue('');
                 this.$refs.projectNameRef.refresh();
                 this.$refs.priorityLevel.setValue('');
@@ -209,9 +214,13 @@
                 this.projectBaseInfo = {trail: {}};
                 this.$store.dispatch('changePrincipal', {data: {}});
                 this.$store.dispatch('changePrincipal', {type: 'selector', data: {}});
+                this.projectFields = [];
             },
 
             addProjectTrail: function (value) {
+                if (!value) {
+                    return
+                }
                 this.projectBaseInfo.trail = {
                     id: value[0]
                 };
@@ -296,7 +305,7 @@
                 fetch('post', '/projects', this.projectBaseInfo).then(function (response) {
                     $('#addProject').modal('hide');
                     $('#selectProjectType').modal('hide');
-                    _this.$router.push({path: 'projects/' + response.data.id});
+                    _this.$router.push({path: '/projects/' + response.data.id});
                 })
             },
 
@@ -317,6 +326,10 @@
                         return
                 }
                 this.projectBaseInfo[name] = value
+            },
+
+            addInfo: function (value, name) {
+                this.addInfoArr[name] = value
             },
         }
     }

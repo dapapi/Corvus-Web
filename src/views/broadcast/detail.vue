@@ -14,8 +14,8 @@
       </div>
         <div class="page-header page-header-bordered">
             <h1 class="page-title">
-                <i class="icon md-chevron-left" @click="goBack"></i>公告&nbsp;&nbsp;</h1>
-            <i class="icon md-flower" 
+                <i class="md-chevron-left" @click="goBack"></i>公告&nbsp;&nbsp;</h1>
+            <i class="md-flower"
             data-plugin="actionBtn" 
             data-toggle="modal" 
             data-target="#addNewBroadcast"
