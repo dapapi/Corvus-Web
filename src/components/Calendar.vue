@@ -26,9 +26,8 @@
             endDate: function () {
                 this.$emit('changeTime', this.startDate, this.endDate)
             },
-            calendars: function (newValue) {
-                // console.log(newValue);
-                $(this.$el).fullCalendar('refetchEvents')
+            calendars: function () {
+                this.refresh();
             },
         },
         mounted() {
@@ -68,10 +67,8 @@
                     }
                 },
                 events: function (start, end, timezone, callback) {
-                    this.startTime = start._d;
-                    this.endTime = start._d;
-                    self.startDate = `${start._d.getFullYear()}-${start._d.getMonth() + 1}-${start._d.getDate()}`;
-                    self.endDate = `${end._d.getFullYear()}-${end._d.getMonth() + 1}-${end._d.getDate()}`;
+                    self.startDate = self.timeReformat(start._d);
+                    self.endDate = self.timeReformat(end._d);
                     let data = {
                         calendar_ids: self.calendars,
                         start_date: self.startDate,
@@ -87,7 +84,7 @@
                                 start: response.data[i].start_at,
                                 end: response.data[i].end_at,
                                 color: response.data[i].calendar.data.color,
-                                allDay: response.data[i].is_allday,
+                                allDay: !!response.data[i].is_allday,
                                 id: response.data[i].id,
                             })
                         }
@@ -96,7 +93,8 @@
 
                 },
                 dayClick: function (date, allDay, jsEvent) {
-                    $('#addSchedule').modal('show')
+                    let formatDate = self.timeReformat(date._d);
+                    self.$emit('dayClick', formatDate);
                 },
                 eventClick: function (event, jsEvent, view) {
                     let data = self.allScheduleInfo.find(item => item.id === event.id);
@@ -105,7 +103,15 @@
             });
 
         },
-        methods: {}
+        methods: {
+            refresh() {
+                $(this.$el).fullCalendar('refetchEvents')
+            },
+
+            timeReformat(value) {
+                return `${value.getFullYear()}-${value.getMonth() + 1}-${value.getDate()}`
+            }
+        }
     }
 </script>
 

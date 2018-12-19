@@ -771,7 +771,7 @@ let config = {
         remindArr: [
             {
                 name: '无',
-                value: 0
+                value: '0'
             },
             {
                 name: '日程发生时',
@@ -809,20 +809,6 @@ let config = {
                 name: '2天前',
                 value: 9
             }
-        ],
-        meetingRomeArr: [
-            {
-                name: '1801会议室',
-                value: 1
-            },
-            {
-                name: '1802会议室',
-                value: 2
-            },
-            {
-                name: '1803会议室',
-                value: 3
-            },
         ],
         repeatArr: [
             {

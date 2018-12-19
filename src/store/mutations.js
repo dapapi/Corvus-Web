@@ -1,3 +1,4 @@
+import menusModule from "./menusModule"; 
 export default {
     changeParticipantsInfo(state, data) {
         state.participantsInfo = data

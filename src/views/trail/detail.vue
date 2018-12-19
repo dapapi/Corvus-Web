@@ -133,7 +133,8 @@
                             <a class="nav-link" data-toggle="tab" href="#forum-trail-tasks"
                                aria-controls="forum-present"
                                aria-expanded="false" role="tab">
-                               <ToolTips :title="taskCount.count">任务{{taskCount.finished}}/{{taskCount.count}}</ToolTips>
+                               <span v-if="!taskCount.count">任务</span>
+                               <ToolTips :title="taskCount.count" v-if="taskCount.count">任务{{taskCount.finished}}/{{taskCount.count}}</ToolTips>
                             </a>
                         </li>
                     </ul>

@@ -22,6 +22,92 @@
                 </div>
             </div>
         </div>
+        <div class="panel col-md-12 col-lg-12">
+                    <div class="caption" style="border:0;">
+                        <h6 class="page-title pb-20" style="border-bottom:1px solid #ccc">审批流程</h6>
+                        <div class="setp pt-20">
+                            <div class="left col-md-2">
+                                <em class="mr-10"><i class="md-check-circle pr-5" style="color:#4DAF50"></i></em>
+                                <div class="left-cont">
+                                    <b class="branch">泰洋系</b>
+                                    <b class="type" style="color:#999;width:48px;">提交审批</b>
+                                </div>
+                            </div>
+                            <div class="middle col-md-2">
+                                <template v-if="item.type==0">
+                                    <em><i class="md-check-circle pr-5" style="color:#4DAF50"></i></em>
+                                    <div class="middle-cont">
+                                        <b class="branch">泰洋系</b>
+                                        <b class="type" style="color:#999">待审批</b>
+                                    </div>
+                                </template>
+                                <template v-if="item.type==1">
+                                    <em></em>
+                                    <div class="middle-cont">
+                                        <b class="branch">泰洋系</b>
+                                        <b class="type" style="color:#999">待审批</b>
+                                    </div>
+                                </template>
+                                <template v-if="item.type==2">
+                                    <em></em>
+                                    <div class="middle-cont">
+                                        <b class="branch">泰洋系</b>
+                                        <b class="type" style="color:#999">待审批</b>
+                                    </div>
+                                </template>
+                                <template v-if="item.type==3">
+                                    <em></em>
+                                    <div class="middle-cont">
+                                        <b class="branch">泰洋系</b>
+                                        <b class="type" style="color:#999">已审批</b>
+                                    </div>
+                                </template>
+                                <template v-if="item.type==4">
+                                    <em></em>
+                                    <div class="middle-cont">
+                                        <b class="branch">泰洋系</b>
+                                        <b class="type" style="color:#999">已拒绝</b>
+                                    </div>
+                                </template>
+                                
+                            </div>
+                             <div class="right col-md-2">
+                                <template v-if="item.type==0">
+                                    <div class="right-cont" style="color:#4DAF50">
+                                        <i class="md-check-circle pr-5"></i>
+                                        <b>审批通过</b>
+                                    </div>
+                                </template>
+                                <template v-if="item.type==1">
+                                    <div class="right-cont" style="color:#E0E0E0">
+                                        <i class="md-check-circle pr-5"></i>
+                                        <b>审批通过</b>
+                                    </div>
+                                </template>
+                                <template v-if="item.type==2">
+                                    <div class="right-cont">
+                                        <i class="md-close-circle pr-5"></i>
+                                        <b>已撤回</b>
+                                    </div>
+                                </template>
+                                <template v-if="item.type==3">               
+                                    <div class="right-cont">
+                                        <i class="md-close-circle pr-5"></i>
+                                        <b>已作废</b>
+                                    </div>
+                                </template>
+                                <template v-if="item.type==4">
+                                    <div class="right-cont" style="color:red">
+                                        <i class="md-close-circle pr-5"></i>
+                                        <b>已拒绝</b>
+                                    </div>
+                                </template>
+                                
+                            </div>
+                        </div>
+                    </div> 
+                                
+                </div>
     </div>    
 </template>
 
@@ -52,7 +138,8 @@ export default {
                 title:'',
                 description:'',
             },
-            moduleInfo:[]
+            moduleInfo:[],
+            item:{type:1},
         }
     },
     mounted(){

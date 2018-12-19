@@ -319,22 +319,18 @@
                                 <tr  class="pointer-content" style="border-top:1px solid #e3e3e3" v-for="(item,index) in rangeDate" :key="index">
                                     <td style="font-weight:400;position: relative;" ><div class="range-cont">{{item.name}}</div></td>
                                     <td>
+                                    <form action="">
                                         <div v-for="(v,i) in item.data1" :key="i" >
-                                            <label :for="'rad'+item.id+v.id">
-                                                <input type="radio"   class="mr-10 "  @change="radioed(item.id,v.id)"  :value="'rad'+item.id+v.id" :checked="v.selected" v-model="picked[item.id]" :id="'rad'+item.id+v.id" >{{v.name}}
-                                            </label>
-                                        </div>
+                                            <input type="radio"   class="mr-10"  @click="radioed(v,item)"  name='radio' :value="index+v.id" :checked="v.selected">{{v.name}}</div>
+                                    </form>
                                     </td>
                                       <td style="color:#333" >
-                                        <div v-for="(n,m) in item.data2" :key="m">   
-                                        <label :for="'rad'+item.id+n.id">
-                                            <input type="checkbox"  @change="checked(item.id,n.id)" :name="'checks'+item.id"  :value="index+n.id" v-model="scope"  class="mr-10" :id="'rad'+item.id+n.id">{{n.name}}
-                                        </label>
-                                         </div>  
+                                        <div v-for="(n,m) in item.data2" :key="m">
+                                            <input type="checkbox"  @click="checked(n,item)" :name="item.id"   :checked="n.selected" class="mr-10" >{{n.name}}</div>
                                     </td>
                                 </tr>
-                                </tbody> 
-                                        <button class="btn btn-primary m-20 px-30" type="submit" @click="rangekeep" style="border-radius: 20px">保存</button>       
+                                </tbody>  
+                                 <button class="btn btn-primary m-20 px-30" type="submit" @click="rangekeep" style="border-radius: 20px">保存</button>      
                             </table>
                         </div>
                     </div>
@@ -641,6 +637,7 @@
                 powerDate:[],
                 powerInfo:[],
                 rangeDate:'',
+                rangecheck:[],
                 picked:[],
                 selected:[],
                 funArr:[],
@@ -650,6 +647,7 @@
                 rangetowId:[],
                 powerId:[],
                 sendData:[],//改变的值
+                checkBox:[],
             }
         },
         mounted() {
@@ -738,7 +736,7 @@
                     toastr.success('保存成功');
                     
                 })
-            },
+            },    
             rangekeep(){
                 let data = []
                 
@@ -958,42 +956,22 @@
             },
             seerange(i,v){
                 this.valueId.push(i.toString()+v)
-                console.log(this.valueId)
+                // console.log(this.valueId)
             },
-            radioed(i,v){
-                //  if(this.sendData[this.rangeoneId].resource_id&&this.sendData[this.rangeoneId].resource_id==i){
-                //    this.rangeoneId=v
-                //    this.sendData[this.rangeoneId].scope=this.rangenoeId 
-                
-                // }
-               this.rangeoneId=i
-               this.sendData[this.rangeoneId]={
-                   resource_id:i,
-                   scope:v
-               }
-            //    if(this.sendData[this.rangeoneId].resource_id==i){
-            //        this.rangeoneId=v
-            //        this.sendData[this.rangeoneId].scope=this.rangeoneId 
-            //     }
-             console.log(this.sendData[this.rangeoneId])  
+            radioed(params,value){
+                let index = this.sendData.find(item=>item.resource_id===value.id)
+                if(index){
+                    index.scope = params.id
+                }else{
+                    let tempObj = {}
+                    Object.assign(tempObj,{resource_id:value.id})
+                    Object.assign(tempObj,{scope:params.id})
+                    this.sendData.push(tempObj)
+                }
             },
-            checked(item,m){ 
-                this.rangeoneId=item 
-            //     this.sendData[this.rangeoneId]={
-            //        resource_id:item,
-            //        manage:this.rangetowId 
-            //    }
-
-                if(this.sendData[this.rangeoneId].resource_id==item){
-                   this.rangetowId.push(m)
-                   this.sendData[this.rangeoneId].manage=this.rangetowId 
-                }
-                 console.log(this.sendData[this.rangeoneId])
-                }
-                
-               
-             
-            
+            checked(params,value){
+                console.log(params,value)
+            }
         }
     }
 </script>

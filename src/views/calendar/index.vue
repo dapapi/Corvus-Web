@@ -49,7 +49,7 @@
                                                 <a class="dropdown-item" @click="getCalendarDetail(calendar.id)"
                                                    data-target="#addCalendar" data-toggle="modal">编辑</a>
                                                 <a class="dropdown-item" data-target="#delModel" data-toggle="modal"
-                                                   @click="delCalendar(calendar)">删除</a>
+                                                   @click="deleteToastr('calendar', calendar)">删除</a>
                                             </div>
                                         </div>
                                     </li>
@@ -88,8 +88,9 @@
                     </div>
                 </div>
                 <div class="float-left p-0" style="width: 80%;border-left: 1px solid #D8D8D8;">
-                    <calendar :gotoDate="selectedDate" v-show="!meetingRomeShow"
-                              :calendars="selectedCalendar" @scheduleClick="showSchedule"></calendar>
+                    <calendar :gotoDate="selectedDate" v-show="!meetingRomeShow" @dayClick="showAddScheduleModal"
+                              :calendars="selectedCalendar" ref="calendar"
+                              @scheduleClick="showScheduleModal"></calendar>
                     <MeetingRoomCalendar v-show="meetingRomeShow" ref="meetingRoom"
                                          @change="displayMeetingRoom"></MeetingRoomCalendar>
                 </div>
@@ -97,8 +98,8 @@
             </div>
         </div>
 
-        <!-- 新建日程 -->
-        <div class="modal fade" id="addSchedule" aria-hidden="true" aria-labelledby="addLabelForm"
+        <!-- 新建/修改 日程 -->
+        <div class="modal fade" id="changeSchedule" aria-hidden="true" aria-labelledby="addLabelForm"
              role="dialog" tabindex="-1">
             <div class="modal-dialog modal-simple">
                 <div class="modal-content">
@@ -106,7 +107,12 @@
                         <button type="button" class="close" aria-hidden="true" data-dismiss="modal">
                             <i class="md-close" aria-hidden="true"></i>
                         </button>
-                        <h4 class="modal-title">新建日程</h4>
+                        <template v-if="scheduleType === 'add'">
+                            <h4 class="modal-title">新建日程</h4>
+                        </template>
+                        <template v-else>
+                            <h4 class="modal-title">修改日程</h4>
+                        </template>
                     </div>
                     <div class="modal-body">
                         <div class="example">
@@ -119,70 +125,63 @@
                         <div class="example">
                             <div class="col-md-2 text-right float-left">日历</div>
                             <div class="col-md-10 float-left pl-0">
-                                <selectors :options="calendarList" :placeholder="'请选择日历'"
+                                <selectors :options="calendarList" :placeholder="'请选择日历'" ref="calendarSelector"
                                            @change="selectScheduleCalendar"></selectors>
                             </div>
                         </div>
                         <div class="example">
                             <div class="col-md-2 text-right float-left">开始时间</div>
                             <div class="col-md-5 float-left pl-0">
-                                <datepicker @change="changeStartTime"></datepicker>
+                                <datepicker @change="changeStartTime" ref="scheduleStartDate"></datepicker>
                             </div>
-                            <div class="col-md-5 float-left pl-0">
-                                <timepicker :default="startMinutes" @change="changeStartMinutes"></timepicker>
+                            <div class="col-md-5 float-left pl-0" v-show="!isAllday">
+                                <timepicker :default="startMinutes" @change="changeStartMinutes"
+                                            ref="scheduleStartMinute"></timepicker>
                             </div>
                         </div>
                         <div class="clearfix">
                             <div class="col-md-2 text-right float-left">结束时间</div>
                             <div class="col-md-5 float-left pl-0">
-                                <datepicker @change="changeEndTime"></datepicker>
+                                <datepicker @change="changeEndTime" ref="scheduleEndDate"></datepicker>
                             </div>
-                            <div class="col-md-5 float-left pl-0">
-                                <timepicker :default="endMinutes" @change="changeEndMinutes"></timepicker>
+                            <div class="col-md-5 float-left pl-0" v-show="!isAllday">
+                                <timepicker :default="endMinutes" @change="changeEndMinutes"
+                                            ref="scheduleEndMinute"></timepicker>
                             </div>
                         </div>
                         <div class="clearfix">
                             <div class="col-md-2 text-right float-left"></div>
                             <div class="col-md-10 float-left pl-0">
                                 <div class="checkbox-custom checkbox-primary">
-                                    <input type="checkbox" id="isAllDay" @change="changeIsAllDay">
+                                    <input type="checkbox" id="isAllDay" @change="changeIsAllDay" v-model="isAllday">
                                     <label for="isAllDay">全天</label>
                                 </div>
                             </div>
                         </div>
-                        <div class="clearfix pt-10">
+                        <div class="clearfix py-10">
                             <div class="col-md-2 text-right float-left">参与人</div>
                             <div class="col-md-10 float-left pl-0">
                                 <add-member></add-member>
                             </div>
                         </div>
-                        <div class="clearfix">
-                            <div class="col-md-2 text-right float-left"></div>
-                            <div class="col-md-10 float-left pl-0">
-                                <div class="checkbox-custom checkbox-primary">
-                                    <input type="checkbox" id="onlyParticipantVisible"
-                                           @change="changeParticipantVisible">
-                                    <label for="onlyParticipantVisible">仅参与人可见</label>
-                                </div>
-                            </div>
-                        </div>
-                        <div v-if="showMore">
+                        <div v-show="showMore">
                             <div class="pt-10 mb-20 clearfix">
                                 <div class="col-md-2 text-right float-left">会议室</div>
                                 <div class="col-md-10 float-left pl-0">
-                                    <selectors :options="meetingRomeArr" :placeholder="'请选择会议室'"></selectors>
+                                    <selectors :options="meetingRomeList" ref="scheduleResource"
+                                               :placeholder="'请选择会议室'"></selectors>
                                 </div>
                             </div>
                             <div class="example">
                                 <div class="col-md-2 text-right float-left">提醒</div>
                                 <div class="col-md-10 float-left pl-0">
-                                    <selectors :options="remindArr" :placeholder="''"></selectors>
+                                    <selectors :options="remindArr" ref="scheduleNotice"></selectors>
                                 </div>
                             </div>
                             <div class="example">
                                 <div class="col-md-2 text-right float-left">重复</div>
                                 <div class="col-md-10 float-left pl-0">
-                                    <selectors :options="repeatArr" :placeholder="''"
+                                    <selectors :options="repeatArr" ref="scheduleRepeat"
                                                @change="changeScheduleRepeat"></selectors>
                                 </div>
                             </div>
@@ -192,36 +191,56 @@
                                     <input type="text" class="form-control" title="" v-model="eventPlace">
                                 </div>
                             </div>
-                            <div class="example">
+                            <div class="mt-20">
                                 <div class="col-md-2 text-right float-left">备注</div>
                                 <div class="col-md-10 float-left pl-0">
                                     <textarea class="form-control" title="" v-model="eventDesc"></textarea>
                                 </div>
                             </div>
+                            <div class="clearfix">
+                                <div class="col-md-2 text-right float-left"></div>
+                                <div class="col-md-10 float-left pl-0">
+                                    <div class="checkbox-custom checkbox-primary">
+                                        <input type="checkbox" id="onlyParticipantVisible"
+                                               @change="changeParticipantVisible" v-model="schedulePrivacy">
+                                        <label for="onlyParticipantVisible">仅参与人可见</label>
+                                    </div>
+                                </div>
+                            </div>
                         </div>
-                        <div class="col-md-3 text-right pointer-content hover-content" @click="isShowMore">
-                            <template v-if="showMore">隐藏更多选项</template>
-                            <template v-else>添加更多选项</template>
+                        <div class="pointer-content hover-content mt-20" @click="isShowMore">
+                            <div class="col-md-2 float-left"></div>
+                            <div class="col-md-10 float-left pl-0">
+                                <template v-if="showMore">隐藏更多选项</template>
+                                <template v-else>添加更多选项</template>
+                            </div>
                         </div>
                     </div>
                     <div class="modal-footer">
                         <button class="btn btn-sm btn-white btn-pure" data-dismiss="modal">取消</button>
-                        <button class="btn btn-primary" type="submit" @click="addSchedule">确定</button>
+                        <template v-if="scheduleType === 'add'">
+                            <button class="btn btn-primary" type="submit" @click="addSchedule">确定</button>
+                        </template>
+                        <template v-if="scheduleType === 'edit'">
+                            <button class="btn btn-primary" type="submit" @click="changeSchedule">确定</button>
+                        </template>
                     </div>
                 </div>
             </div>
         </div>
 
         <!-- 查看日程 -->
-        <div class="modal fade" id="changeSchedule" aria-hidden="true" aria-labelledby="addLabelForm"
+        <div class="modal fade" id="checkSchedule" aria-hidden="true" aria-labelledby="addLabelForm"
              role="dialog" tabindex="-1">
             <div class="modal-dialog modal-simple">
                 <div class="modal-content" v-if="scheduleData">
                     <div class="modal-header">
                         <div style="order: 2">
-                            <i class="iconfont icon-bianji pr-4 font-size-16 pointer-content" aria-hidden="true"></i>
+                            <i class="iconfont icon-bianji pr-4 font-size-16 pointer-content" data-toggle="modal"
+                               data-target="#changeSchedule" @click="changeScheduleType('edit')" aria-hidden="true"></i>
                             <i class="md-file pr-4 font-size-16 pointer-content" aria-hidden="true"></i>
-                            <i class="md-delete pr-4 font-size-16 pointer-content" aria-hidden="true"></i>
+                            <i class="md-delete pr-4 font-size-16 pointer-content" data-toggle="modal"
+                               data-target="#delModel" aria-hidden="true" @click="deleteToastr('schedule')"></i>
                             <i class="md-close pointer-content" aria-hidden="true" data-dismiss="modal"></i>
                         </div>
                         <h5 class="modal-title">{{ scheduleData.calendar.data.title }}</h5>
@@ -281,7 +300,7 @@
                         </div>
                         <div class="example">
                             <div class="col-md-1 px-0 float-left">备注</div>
-                            <div class="col-md-10 float-left">备注</div>
+                            <div class="col-md-10 float-left">{{ scheduleData.desc }}</div>
                         </div>
                         <div class="example">
                             <div>附件</div>
@@ -294,40 +313,6 @@
                                     <div><i class="md-file" style="font-size: 36px"></i></div>
                                     <div>泰洋川禾泰洋川禾简介.docx</div>
                                 </div>
-                            </div>
-                        </div>
-                        <div class="dividing-line"></div>
-                        <div class="example">
-                            <div class="">跟进记录</div>
-                            <div class="">
-                                <ul class="follow p-0">
-                                    <li class="clearfix example">
-                                        <div class="follow-avatar p-0 float-left">
-                                            <img src="https://res.papitube.com/no-icon.png" alt="" style="width: 100%;">
-                                        </div>
-                                        <div class="follow-item float-left pl-2">
-                                            <div class="change-time">陈晓禹 2018-02-12 10:10</div>
-                                            <div class="change-text">跟进记录啊啊啊啊啊</div>
-                                        </div>
-                                    </li>
-                                    <li class="clearfix example">
-                                        <div class="follow-avatar p-0 float-left">
-                                            <img src="https://res.papitube.com/no-icon.png" alt="" style="width: 100%;">
-                                        </div>
-                                        <div class="follow-item float-left pl-2">
-                                            <div class="change-time">陈晓禹 2018-02-12 10:10</div>
-                                            <div class="change-text">跟进记录啊啊啊啊啊</div>
-                                        </div>
-                                    </li>
-                                </ul>
-                            </div>
-                        </div>
-                        <div class="dividing-line"></div>
-
-                        <div class="example">
-                            <div class="col-md-1 pl-0 float-left">评论</div>
-                            <div class="col-md-11 float-left pr-0">
-                                <ChangeSizeInput></ChangeSizeInput>
                             </div>
                         </div>
                     </div>
@@ -404,7 +389,7 @@
 
         </div>
 
-        <!-- 删除日历 -->
+        <!-- 删除日历/日程 -->
         <div class="modal fade" id="delModel" aria-hidden="true" aria-labelledby="addLabelForm" role="dialog"
              tabindex="-1">
             <div class="modal-dialog modal-simple">
@@ -416,13 +401,23 @@
                     </div>
                     <div class="modal-body clearfix">
                         <div class="example">
-                            <p>确认删除日历 “{{ delCalendarInfo.title }}” </p>
+                            <template v-if="delType === 'calendar'">
+                                <p>确认删除日历 “{{ delCalendarInfo.title }}” </p>
+                            </template>
+                            <template v-if="delType === 'schedule'">
+                                <p>确认删除日程 “{{ scheduleData.title }}” </p>
+                            </template>
                         </div>
 
                     </div>
                     <div class="modal-footer">
                         <button class="btn btn-sm btn-white btn-pure" data-dismiss="modal">取消</button>
-                        <button class="btn btn-primary" @click="deleteCalendar">确定</button>
+                        <template v-if="delType === 'calendar'">
+                            <button class="btn btn-primary" @click="deleteCalendar">确定</button>
+                        </template>
+                        <template v-if="delType === 'schedule'">
+                            <button class="btn btn-primary" @click="deleteSchedule">确定</button>
+                        </template>
                     </div>
                 </div>
             </div>
@@ -468,7 +463,6 @@
                 endTime: '',
                 endMinutes: '00:00',
                 remindArr: config.remindArr,
-                meetingRomeArr: config.meetingRomeArr,
                 repeatArr: config.repeatArr,
                 visibleRangeArr: config.visibleRangeArr,
                 colorArr: config.colorArr,
@@ -497,15 +491,21 @@
                 calendarActionType: '',
                 scheduleCalendar: '',
                 isScheduleAllday: 0,
-                privacy: '',
+                privacy: 1,
                 scheduleRepeat: 1,
                 scheduleData: '',
+                isAllday: false,
+                schedulePrivacy: false,
+                meetingRomeList: '',
+                delType: '',
+                scheduleType: 'add',
             }
         },
 
         mounted() {
             this.getStars();
             this.getCalendarList();
+            this.getResources();
             let _this = this;
             $('#addCalendar').on('hidden.bs.modal', function () {
                 _this.$store.dispatch('changeParticipantsInfo', {data: []});
@@ -517,8 +517,8 @@
                 _this.$refs.visibleSelector.setValue('');
             });
 
-            $('#addSchedule').on('hidden.bs.modal', function () {
-                _this.$store.dispatch('changeParticipantsInfo', {data: []});
+            $('#changeSchedule').on('hidden.bs.modal', function () {
+                _this.initAddScheduleModal();
             });
             this.globalClick(this.removeSelector);
             this.initCalendar();
@@ -579,6 +579,12 @@
                 })
             },
 
+            getResources() {
+                fetch('get', '/materials/all').then(response => {
+                    this.meetingRomeList = response.data
+                })
+            },
+
             getStars: function () {
                 if (Cookies.get('companyType') === '泰洋川禾') {
                     fetch('get', '/stars/all').then(response => {
@@ -603,6 +609,7 @@
             },
 
             getCalendarList: function () {
+                this.calendarList = [];
                 fetch('get', '/calendars/all').then(response => {
                     for (let i = 0; i < response.data.length; i++) {
                         response.data[i].name = response.data[i].title;
@@ -632,10 +639,43 @@
                 })
             },
 
-            showSchedule: function (data) {
+            showScheduleModal: function (data) {
                 this.scheduleData = data;
                 // this.$store.dispatch('changeParticipantsInfo', {data: data.participantsInfo.data});
+                $('#checkSchedule').modal('show')
+            },
+
+            showAddScheduleModal: function (date) {
+                this.$refs.scheduleStartDate.setValue(date);
+                this.$refs.scheduleEndDate.setValue(date);
                 $('#changeSchedule').modal('show')
+            },
+
+            deleteToastr: function (type, calendar = null) {
+                this.delType = type;
+                if (calendar) {
+                    this.delCalendarInfo = calendar
+                }
+                if (type === 'schedule') {
+                    $('#checkSchedule').modal('hide');
+                }
+            },
+
+            changeScheduleType: function (type) {
+                this.scheduleType = type;
+                $('#checkSchedule').modal('hide');
+            },
+
+            deleteSchedule: function () {
+                fetch('delete', '/schedules/' + this.scheduleData.id).then(response => {
+                    $('#delModel').modal('hide');
+                    toastr.success('删除成功');
+                    this.$refs.calendar.refresh()
+                })
+            },
+
+            changeSchedule: function () {
+                console.log('编辑日程')
             },
 
             selectScheduleCalendar: function (value) {
@@ -660,6 +700,10 @@
             },
 
             addSchedule: function () {
+                if (this.isScheduleAllday) {
+                    this.startMinutes = '00:00';
+                    this.endMinutes = '00:00';
+                }
                 let data = {
                     title: this.scheduleName,
                     calendar_id: this.scheduleCalendar,
@@ -672,10 +716,37 @@
                     desc: this.eventDesc,
                 };
                 fetch('post', '/schedules', data).then(response => {
-                    console.log(response);
-                    $('#addSchedule').modal('hide');
+                    this.$refs.calendar.refresh();
+                    $('#changeSchedule').modal('hide');
                     toastr.success('添加成功')
                 })
+            },
+
+            initAddScheduleModal: function () {
+                this.showMore = false;
+                this.$store.dispatch('changeParticipantsInfo', {data: []});
+                this.scheduleName = '';
+                this.scheduleCalendar = '';
+                this.isScheduleAllday = 0;
+                this.privacy = 1;
+                this.startTime = '';
+                this.startMinutes = '00:00';
+                this.endTime = '';
+                this.endMinutes = '00:00';
+                this.eventPlace = '';
+                this.scheduleRepeat = '';
+                this.eventDesc = '';
+                this.isAllday = false;
+                this.schedulePrivacy = false;
+                this.scheduleType = 'add';
+                this.$refs.calendarSelector.setValue('');
+                this.$refs.scheduleStartDate.setValue('');
+                this.$refs.scheduleEndDate.setValue('');
+                this.$refs.scheduleStartMinute.setValue('00:00');
+                this.$refs.scheduleEndMinute.setValue('00:00');
+                this.$refs.scheduleResource.setValue('');
+                this.$refs.scheduleRepeat.setValue(1);
+                this.$refs.scheduleNotice.setValue('0');
             },
 
             addCalendarVisible: function (value) {
@@ -755,6 +826,7 @@
                 }
                 fetch('put', '/calendars/' + this.calendarId, data).then(response => {
                     this.getCalendarList();
+                    this.$refs.calendar.refresh();
                     $('#addCalendar').modal('hide');
                     toastr.success('修改成功')
                 })
@@ -795,15 +867,12 @@
                 }
             },
 
-            delCalendar: function (calendar) {
-                this.delCalendarInfo = calendar
-            },
-
             deleteCalendar: function () {
                 fetch('delete', '/calendars/' + this.delCalendarInfo.id).then(response => {
                     toastr.success('删除成功');
                     $('#delModel').modal('hide');
                     this.getCalendarList();
+                    this.$refs.calendar.refresh()
                 })
             },
 
