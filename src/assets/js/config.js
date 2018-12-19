@@ -1236,6 +1236,16 @@ let config = {
                 name: '六',
                 value: 6
             }
+        ],
+        // 部门所属城市
+        departmentCityArr: [
+            {
+                name: '北京',
+                value: 1,
+            }, {
+                name: '上海',
+                value: 2
+            }
         ]
     }
 ;

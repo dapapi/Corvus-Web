@@ -192,6 +192,111 @@
                                     </div>
                                 </div>
                             </div>
+                            <div class="card-header card-header-transparent card-header-bordered">
+                                <div class="float-left font-weight-bold third-title">问卷详情</div>
+                                <div class="float-right">
+                                    <button type="button" class="btn btn-primary" @click="submit">提交</button>
+                                    <button type="button" class="btn btn-primary">推优</button>
+                                </div>
+                            </div>
+                             <div class="card-block">
+                                <h4 style="color: #3F51B5">平均分 75</h4>
+                                <div class="progress" data-labeltype="percentage" data-goal="-40" data-plugin="progress" style="width: 80%">
+                                    <div class="progress-bar progress-bar-warning" aria-valuemin="-100" aria-valuemax="0" aria-valuenow="-40" role="progressbar" style="width: 90%;">
+                                        <span class="progress-label">90%</span>
+                                    </div>
+                                </div>
+                                <div class="all-menber clearfix">
+                                    <div class="question-avatar"><div class="select-avatar"></div>庆鑫</div>
+                                    <div class="question-avatar"><div class="unselect-avatar"></div>庆鑫</div>
+                                    <div class="question-avatar"><div class="unselect-avatar"></div>庆鑫</div>
+                                    <div class="question-avatar"><div class="select-avatar"></div>庆鑫</div>
+                                    <div class="question-avatar"><div class="unselect-avatar"></div>庆鑫</div>
+                                </div>
+                                <div class="card-text py-5 clearfix">
+                                    <div class="col-md-1 float-left text-right pl-0">作者</div>
+                                    <div class="col-md-11 float-left font-weight-bold">
+                                        <div class="edit-wrap">
+                                            {{ questionInfo.creator ? questionInfo.creator.data.name : '' }}
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="card-text py-5 clearfix">
+                                    <div class="col-md-1 float-left text-right pl-0">视频名称</div>
+                                    <div class="col-md-11 float-left font-weight-bold">
+                                        <div class="edit-wrap">
+                                            {{ questionInfo.production ? questionInfo.production.data[0].nickname : '' }}
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="card-text py-5 clearfix">
+                                    <div class="col-md-1 float-left text-right pl-0">阅转比</div>
+                                    <div class="col-md-11 float-left font-weight-bold">
+                                        <div class="edit-wrap">
+                                            {{ questionInfo.production ? questionInfo.production.data[0].read_proportion : '' }}
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="card-text py-5 clearfix">
+                                    <div class="col-md-1 float-left text-right pl-0">推优分</div>
+                                    <div class="col-md-11 float-left font-weight-bold">
+                                        <div class="edit-wrap">
+                                            1
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="card-text py-5 clearfix">
+                                    <div class="col-md-1 float-left text-right pl-0">推优原因</div>
+                                    <div class="col-md-11 float-left font-weight-bold">
+                                        <div class="edit-wrap">
+                                            1
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="card-text py-5 clearfix">
+                                    <div class="col-md-1 float-left text-right pl-0">视频链接</div>
+                                    <div class="col-md-11 float-left font-weight-bold">
+                                        <router-link :to="questionInfo.production ? questionInfo.production.data[0].link : ''">
+                                            <div class="edit-wrap" style="color: #3298DC; cursor: pointer;">
+                                                {{ questionInfo.production ? questionInfo.production.data[0].link : '' }}
+                                            </div>
+                                        </router-link>
+                                    </div>
+                                </div>
+
+                                <div class="question" v-for="(items, index) in questionData" :key="index">
+                                    <div class="name">{{ items.title }}</div>
+                                    <div class="options clearfix" v-for="(item, _index) in items.items.data" :key="_index">
+                                        <div class="title">
+                                            <label>
+                                                <div class="radio-custom radio-primary" style="display: inline-block;">
+                                                    <input type="radio" @click="answerList[index] = item.value" :checked="answerList[index] === item.value" :name="items.id" />
+                                                    <label></label>
+                                                </div>
+                                                {{ item.value }}: {{ item.title }}
+                                            </label>
+                                        </div>
+                                        <div class="row">
+                                            <div class="col-md-8">
+                                                <div class="progress" data-labeltype="percentage" data-goal="-40" data-plugin="progress" style="width: calc(100% - 50px); float: left;">
+                                                    <div class="progress-bar progress-bar-warning" aria-valuemin="-100" aria-valuemax="0" aria-valuenow="-40" role="progressbar" style="width: 0%;">
+                                                        <span class="progress-label">0%</span>
+                                                    </div>
+                                                </div>
+                                                <div style="width: 50px; padding-left: 10px; float: right;">1票</div>
+                                            </div>
+                                            <div class="col-md-4 clearfix">
+                                                <template v-for="(_item, nameIndex) in items.selectrows.data">
+                                                    <div class="question-avatar" 
+                                                        v-if="_item.review_question_item_id === item.id" :key="nameIndex">
+                                                        {{_item.creator.data.name.substr(_item.creator.data.name.length - 2, 2)}}
+                                                    </div>
+                                                </template>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
                         </div>
                     </div>
                     <div class="tab-pane animation-fade" id="forum-task-annex" role="tabpanel">
@@ -420,6 +525,9 @@
                 user: {}, // 个人信息
                 attachmentId: '', // 附件id
                 // routerId: this.$route.params.id || '',// 路由
+                questionData: [], // 问卷列表
+                answerList: [], // 答题列表
+                questionInfo: {},
             }
         },
         created () {
@@ -445,6 +553,7 @@
                 // 清空state
                 this.closeAddTask()
             })
+            this.getQuestionData()
         },
 
         watch: {
@@ -853,11 +962,37 @@
                 })
                 this.$store.commit('changeNewParticipantsInfo', [])
             },
+            // 获取问卷内容
+            getQuestionData () {
+                fetch('get', '/reviews/383780212/questions/?include=items,selectrows.creator').then(res => {
+                    this.questionData = res.data
+                    this.answerList = new Array(this.questionData.length)
+                })
+                fetch('get', '/reviewquestionnaires/383780212/show?include=sum,creator,production,reviewanswer.users').then(res => {
+                    this.questionInfo = res.data[0]
+                })
+            },
+            // 试卷提交
+            submit () {
+                let count = 0
+                let canSubmit = true
+                for (const n of this.answerList) {
+                    if (isNaN(n)) {
+                        canSubmit = false
+                        break
+                    }
+                    count += n
+                }
+                if (!canSubmit) {
+                    toastr.error('您有未作答题目，请作答完成后提交！')
+                    return
+                }
+            }
         }
     }
 </script>
 
-<style>
+<style scoped>
     .task-dropdown {
         -moz-user-select: none;
         -webkit-user-select: none;
@@ -918,4 +1053,98 @@
         padding-bottom: 0;
     }
 
+    .progress-bar-warning {
+        background-color: #4253B6;
+        position: relative;
+    }
+    .question {
+        margin: 20px 0;
+    }
+    .question .name {
+        font-size: 14px;
+        color: #333;
+        font-weight: 500;
+        margin-bottom: 10px;
+    }
+    .progress {
+        height: 4px;
+        margin-bottom: 0;
+        margin-top: 10px;
+        overflow: unset;
+    }
+    .progress-label {
+        color: #333;
+        font-size: 14px;
+        top: -5px;
+        position: absolute;
+        right: -46px;
+    }
+    .progress-label:after {
+        content: '';
+        position: absolute;
+        width: 14px;
+        height: 14px;
+        background: #fff;
+        right: 38px;
+        border: 1px solid #eee;
+        border-radius: 50%;
+    }
+    .options {
+        margin: 10px 0;
+    }
+    .options .title label {
+        cursor: pointer;
+    }
+    .question-avatar {
+        /* display: inline-block; */
+        float: left;
+        width: 30px;
+        height: 30px;
+        border-radius: 50%;
+        font-size: 12px;
+        text-align: center;
+        line-height: 30px;
+        color: #fff;
+        background: #3188E6;
+        margin-right: 10px;
+        margin-bottom: 10px;
+        position: relative;
+        top: -4px;
+    }
+    .select-avatar {
+        position: absolute;
+        /* background: rgba(0, 0, 0, 0.2); */
+        left: 0;
+        top: 0;
+        width: 100%;
+        height: 100%;
+        border-radius: 50%;
+    }
+    .select-avatar:before, .unselect-avatar:before {
+        content: '';
+        position: absolute;
+        right: 0;
+        bottom: 0;
+        width: 14px;
+        height: 14px;
+        border-radius: 50%;
+        background: #fff;
+    }
+    .select-avatar:after, .unselect-avatar:after  {
+        content: '';
+        position: absolute;
+        width: 10px;
+        height: 10px;
+        border-radius: 50%;
+        right: 2px;
+        bottom: 2px;
+        background: #4CAF50;
+    }
+    .unselect-avatar:after {
+        background: #FF9800;
+    }
+
+    .all-menber {
+        margin-top: 20px;
+    }
 </style>
