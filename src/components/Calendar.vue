@@ -73,7 +73,7 @@
                         calendar_ids: self.calendars,
                         start_date: self.startDate,
                         end_date: self.endDate,
-                        include: 'calendar,participants,creator'
+                        include: 'calendar,participants,creator,material'
                     };
                     fetch('get', '/schedules', data).then(response => {
                         self.allScheduleInfo = response.data;
