@@ -28,24 +28,6 @@
                             </span>
                         </template>
                     </h4>
-<<<<<<< HEAD
-                    <div>
-                        <!-- <i class="iconfont icon-tubiaochicundaochuSVGshangchuandaoalibaba- pr-2" aria-hidden="true"></i>
-                        <i class="iconfont icon-zuzhijiagou pr-2" aria-hidden="true"></i>
-                        <i class="iconfont icon-zhengque pr-2" aria-hidden="true"></i>
-                        <i class="iconfont icon-xiaoshoushichang pr-2" aria-hidden="true"></i>
-                        <i class="iconfont icon-tianjiajiahaowubiankuang pr-2" aria-hidden="true"></i>
-                        <i class="iconfont icon-tijiaoshenqing pr-2" aria-hidden="true"></i>
-                        <i class="iconfont icon-iconfontshijian pr-2" aria-hidden="true"></i>
-                        <i class="iconfont icon-xiaoshou pr-2" aria-hidden="true"></i>
-                        <i class="iconfont icon-tianjiarenyuan pr-2" aria-hidden="true"></i>
-                        <i class="iconfont icon-renyuanfenzu pr-2" aria-hidden="true"></i>
-                        <i class="iconfont icon-wenjian pr-2" aria-hidden="true"></i>
-                        <i class="iconfont icon-nianling pr-2" aria-hidden="true"></i> -->
-
-                    </div>
-=======
->>>>>>> c0efbb502e4d332618058c7556baa0a871efeef9
                     <div class="card-text clearfix example">
                         <div class="float-left pl-0 pr-2 col-md-1">
                             <i class="iconfont icon-yonghu pr-2" aria-hidden="true"></i>负责人
