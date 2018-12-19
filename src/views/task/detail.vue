@@ -28,8 +28,9 @@
                             </span>
                         </template>
                     </h4>
+<<<<<<< HEAD
                     <div>
-                        <i class="iconfont icon-tubiaochicundaochuSVGshangchuandaoalibaba- pr-2" aria-hidden="true"></i>
+                        <!-- <i class="iconfont icon-tubiaochicundaochuSVGshangchuandaoalibaba- pr-2" aria-hidden="true"></i>
                         <i class="iconfont icon-zuzhijiagou pr-2" aria-hidden="true"></i>
                         <i class="iconfont icon-zhengque pr-2" aria-hidden="true"></i>
                         <i class="iconfont icon-xiaoshoushichang pr-2" aria-hidden="true"></i>
@@ -40,12 +41,14 @@
                         <i class="iconfont icon-tianjiarenyuan pr-2" aria-hidden="true"></i>
                         <i class="iconfont icon-renyuanfenzu pr-2" aria-hidden="true"></i>
                         <i class="iconfont icon-wenjian pr-2" aria-hidden="true"></i>
-                        <i class="iconfont icon-nianling pr-2" aria-hidden="true"></i>
+                        <i class="iconfont icon-nianling pr-2" aria-hidden="true"></i> -->
 
                     </div>
+=======
+>>>>>>> c0efbb502e4d332618058c7556baa0a871efeef9
                     <div class="card-text clearfix example">
                         <div class="float-left pl-0 pr-2 col-md-1">
-                            <i class="iconfont icon-tubiaochicundaochuSVGshangchuandaoalibaba- pr-2" aria-hidden="true"></i>负责人
+                            <i class="iconfont icon-yonghu pr-2" aria-hidden="true"></i>负责人
                         </div>
                         <div class="font-weight-bold float-left" v-if="taskInfo">
                             {{ taskInfo.principal?taskInfo.principal.data.name: '' }}
@@ -53,7 +56,7 @@
                     </div>
                     <div class="card-text clearfix example">
                         <div class="float-left pl-0 pr-2 col-md-1">
-                            <i class="iconfont icon-tijiaoshenqing pr-2" aria-hidden="true"></i>任务状态
+                            <i class="iconfont icon-initiate-task pr-2" aria-hidden="true"></i>任务状态
                         </div>
                         <div class="font-weight-bold float-left">
                             <template v-if="taskInfo.status === 1">进行中</template>
@@ -64,7 +67,7 @@
                     <div class="card-text clearfix example">
                         <div class="pl-0">
                             <div class="float-left pl-0 pr-2 col-md-1">
-                                <i class="iconfont icon-tianjiajiahaowubiankuang1 pr-2" aria-hidden="true"></i>结束时间
+                                <i class="iconfont icon-jieshushijian pr-2" aria-hidden="true"></i>结束时间
                             </div>
                             <div class="font-weight-bold float-left">
                                 {{ taskInfo.end_at }}

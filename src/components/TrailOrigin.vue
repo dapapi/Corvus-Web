@@ -15,8 +15,8 @@
                     </div>
                 </template>
                 <template v-else-if="(trailOrigin === '4' || trailOrigin === '5')">
-                    <div class="col-md-5 float-left pr-0"> 
-                        <input-selectors @change="changeTrailOrigin" :placeholder='memberFinder'
+                    <div class="col-md-5 float-left pr-0">
+                        <input-selectors @change="changeTrailOrigin" :placeholder='memberFinder' type="selector"
                                          :propSelectMemberName='trailOriginPerson.name'></input-selectors>
                     </div>
                 </template>
@@ -39,7 +39,7 @@
     import fetch from '@/assets/utils/fetch.js'
 
     export default {
-                    //线索类型   {{什么}}线索  编辑状态   详情页样式  当前线索值    当前线索来源     永久显示
+        //线索类型   {{什么}}线索  编辑状态   详情页样式  当前线索值    当前线索来源     永久显示
         props: ['trailType', 'typeName', 'isEdit', 'detailPage', 'content', 'contentType', 'alwaysShow'],
         data() {
             return {
@@ -49,23 +49,29 @@
                 email: '',                               //
                 isEditSituation: '',                     //编辑状态
                 members: {},
-                tempStore:'',
+                tempStore: '',
             }
         },
-        created() {
+        mounted() {
+            if (this.content) {
+                this.getMembers(this.content)
+            }
+            if (this.contentType) {
+                this.trailOrigin = String(this.contentType)
+            }
         },
-        computed:{
-            typeFinder(){
-                if(this.contentType && this.trailOriginArr){
-                   return this.trailOriginArr.find(item=>item.value == this.contentType).name
-                }else{
+        computed: {
+            typeFinder() {
+                if (this.contentType && this.trailOriginArr) {
+                    return this.trailOriginArr.find(item => item.value == this.contentType).name
+                } else {
                     return ''
                 }
             },
-            memberFinder(){
-                if(this.members && this.tempStore){
-                    return this.members.find(item=>item.id == this.tempStore).name
-                }else{
+            memberFinder() {
+                if (this.members && this.tempStore) {
+                    return this.members.find(item => item.id == this.tempStore).name
+                } else {
                     return ''
                 }
             }
@@ -121,7 +127,7 @@
                 fetch('get', '/users').then((params) => {
                     let {data = '-'} = params
                     _this.members = params.data
-                    if(_this.members.find(item=>item.id == value)){
+                    if (_this.members.find(item => item.id == value)) {
                         _this.tempStore = value
                     }
                 })

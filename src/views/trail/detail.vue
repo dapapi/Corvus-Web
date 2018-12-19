@@ -30,7 +30,7 @@
                     <div class="card-text clearfix example">
                         <div class="col-md-6 float-left pl-0">
                             <div class="float-left pl-0 pr-2 col-md-2">
-                                <i class="md-plus pr-2" aria-hidden="true"></i>线索类型
+                                <i class="iconfont icon-laiyuanguanli" aria-hidden="true"></i>线索类型
                             </div>
                             <div class="font-weight-bold float-left">
                                 <template v-if="trailInfo.type === 1">影视线索</template>
@@ -55,7 +55,7 @@
                             </div>
                             <div class="font-weight-bold float-left">
                                 <span v-if="trailInfo.progress_status === 1" style="color:#ff9800">未确定合作</span>
-                                <span v-else-if="trailInfo.progress_status === 2" style="color:#4caf50" >确定合作</span>
+                                <span v-else-if="trailInfo.progress_status === 2" style="color:#4caf50">确定合作</span>
                                 <span v-else-if="trailInfo.progress_status === 0" style="color:#f44336">已拒绝</span>
                             </div>
                         </div>
@@ -133,8 +133,10 @@
                             <a class="nav-link" data-toggle="tab" href="#forum-trail-tasks"
                                aria-controls="forum-present"
                                aria-expanded="false" role="tab">
-                               <span v-if="!taskCount.count">任务</span>
-                               <ToolTips :title="taskCount.count" v-if="taskCount.count">任务{{taskCount.finished}}/{{taskCount.count}}</ToolTips>
+                                <span v-if="!taskCount.count">任务</span>
+                                <ToolTips :title="taskCount.count" v-if="taskCount.count">
+                                    任务{{taskCount.finished}}/{{taskCount.count}}
+                                </ToolTips>
                             </a>
                         </li>
                     </ul>
@@ -183,7 +185,6 @@
                                             <div class="col-md-10 float-left font-weight-bold expfee">
                                                 <edit-number-spinner :content="trailInfo.fee" :is-edit="isEdit"
                                                                      @change="changeTrailFee"></edit-number-spinner>
-                                                元
                                             </div>
                                         </div>
                                         <div class="card-text py-10 px-0 clearfix col-md-6 float-left"
@@ -602,7 +603,7 @@
                 isLoading: true,
                 email: '',
                 trailOriginPerson: '',
-                taskCount:{},
+                taskCount: {},
             }
         },
         created() {
@@ -812,7 +813,7 @@
                     _this.isLoading = false
                     console.log(_this.trailInfo.resource);
                     _this.$nextTick((params) => {
-                         _this.$store.state.newPrincipalInfo.id = Number(_this.trailInfo.resource)
+                        _this.$store.state.newPrincipalInfo.id = Number(_this.trailInfo.resource)
                     })
                 })
             },
@@ -917,13 +918,13 @@
                     _this.trailTasksInfo = response.data
                     let n = 0
                     for (const key in response.data) {
-                        if (response.data[key].status==2) {
-                            n++   
+                        if (response.data[key].status == 2) {
+                            n++
                         }
                     }
                     _this.taskCount = {
-                        count:response.data.length,
-                        finished:n
+                        count: response.data.length,
+                        finished: n
                     }
                 })
             },

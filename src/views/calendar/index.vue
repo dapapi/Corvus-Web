@@ -169,7 +169,7 @@
                                 <div class="col-md-2 text-right float-left">会议室</div>
                                 <div class="col-md-10 float-left pl-0">
                                     <selectors :options="meetingRomeList" ref="scheduleResource"
-                                               :placeholder="'请选择会议室'"></selectors>
+                                               :placeholder="'请选择会议室'" @change="changeScheduleMaterial"></selectors>
                                 </div>
                             </div>
                             <div class="example">
@@ -279,9 +279,9 @@
                             <div class="col-md-1 px-0 float-left">地点</div>
                             <div class="col-md-10 float-left">{{ scheduleData.position }}</div>
                         </div>
-                        <div class="example" v-if="scheduleData.resource">
+                        <div class="example" v-if="scheduleData.material">
                             <div class="col-md-1 px-0 float-left">资源</div>
-                            <div class="col-md-10 float-left">诺金1802会议室</div>
+                            <div class="col-md-10 float-left">{{ scheduleData.material.data.name }}</div>
                         </div>
                         <div class="example">
                             <div class="col-md-1 px-0 float-left">组织人</div>
@@ -298,7 +298,7 @@
                                 <AddMember></AddMember>
                             </div>
                         </div>
-                        <div class="example">
+                        <div class="example" v-if="scheduleData.desc">
                             <div class="col-md-1 px-0 float-left">备注</div>
                             <div class="col-md-10 float-left">{{ scheduleData.desc }}</div>
                         </div>
@@ -499,6 +499,7 @@
                 meetingRomeList: '',
                 delType: '',
                 scheduleType: 'add',
+                scheduleMaterialId: '',
             }
         },
 
@@ -639,15 +640,21 @@
                 })
             },
 
+            changeScheduleMaterial: function (value) {
+                this.scheduleMaterialId = value;
+            },
+
             showScheduleModal: function (data) {
                 this.scheduleData = data;
-                // this.$store.dispatch('changeParticipantsInfo', {data: data.participantsInfo.data});
+                this.$store.dispatch('changeParticipantsInfo', {data: data.participants.data});
                 $('#checkSchedule').modal('show')
             },
 
             showAddScheduleModal: function (date) {
                 this.$refs.scheduleStartDate.setValue(date);
                 this.$refs.scheduleEndDate.setValue(date);
+                this.startTime = date;
+                this.endTime = date;
                 $('#changeSchedule').modal('show')
             },
 
@@ -664,6 +671,22 @@
             changeScheduleType: function (type) {
                 this.scheduleType = type;
                 $('#checkSchedule').modal('hide');
+                if (type === 'edit') {
+                    this.scheduleName = this.scheduleData.title;
+                    this.$refs.calendarSelector.setValue(this.scheduleData.calendar.data.id);
+                    this.$refs.scheduleStartDate.setValue(this.scheduleData.start_at.split(' ')[0]);
+                    this.$refs.scheduleEndDate.setValue(this.scheduleData.end_at.split(' ')[0]);
+                    let startMinutes = this.scheduleData.start_at.split(' ')[1].split(':');
+                    let endMinutes = this.scheduleData.end_at.split(' ')[1].split(':');
+                    this.$refs.scheduleStartMinute.setValue(startMinutes[0] + ':' + startMinutes[1]);
+                    this.$refs.scheduleEndMinute.setValue(endMinutes[0] + ':' + endMinutes[1]);
+                    this.isAllday = this.scheduleData.is_allday;
+                    this.eventDesc = this.scheduleData.desc;
+                    this.eventPlace = this.scheduleData.position;
+                    if (this.scheduleData.material) {
+                        this.$refs.scheduleResource.setValue(this.scheduleData.material.data.id)
+                    }
+                }
             },
 
             deleteSchedule: function () {
@@ -675,7 +698,37 @@
             },
 
             changeSchedule: function () {
-                console.log('编辑日程')
+                if (this.isScheduleAllday) {
+                    this.startMinutes = '00:00';
+                    this.endMinutes = '00:00';
+                }
+                let data = {
+                    title: this.scheduleName,
+                    calendar_id: this.scheduleCalendar,
+                    is_allday: this.isScheduleAllday,
+                    privacy: this.privacy,
+                    start_at: this.startTime + ' ' + this.startMinutes,
+                    end_at: this.endTime + ' ' + this.endMinutes,
+                    repeat: this.scheduleRepeat,
+                    desc: this.eventDesc,
+                    material_id: this.scheduleMaterialId
+                };
+                if (this.eventPlace) {
+                    data.position = this.eventPlace;
+                }
+                if (this.$store.state.newParticipantsInfo) {
+                    // todo  参与人的添加和修改参数没处理
+                    data.participant_ids = [];
+                    let newParticipantsInfo = this.$store.state.newParticipantsInfo;
+                    for (let i = 0; i < newParticipantsInfo.length; i++) {
+                        data.participant_ids.push(newParticipantsInfo[i].id)
+                    }
+                }
+                // fetch('put', '/schedules/' + this.scheduleData.id, data).then(response => {
+                //     this.$refs.calendar.refresh();
+                //     $('#changeSchedule').modal('hide');
+                //     toastr.success('修改成功')
+                // })
             },
 
             selectScheduleCalendar: function (value) {
@@ -711,10 +764,22 @@
                     privacy: this.privacy,
                     start_at: this.startTime + ' ' + this.startMinutes,
                     end_at: this.endTime + ' ' + this.endMinutes,
-                    position: this.eventPlace,
                     repeat: this.scheduleRepeat,
-                    desc: this.eventDesc,
+                    desc: this.eventDesc
                 };
+                if (this.eventPlace) {
+                    data.position = this.eventPlace;
+                }
+                if (this.scheduleMaterialId) {
+                    data.material_id = this.scheduleMaterialId;
+                }
+                if (this.$store.state.newParticipantsInfo) {
+                    data.participant_ids = [];
+                    let newParticipantsInfo = this.$store.state.newParticipantsInfo;
+                    for (let i = 0; i < newParticipantsInfo.length; i++) {
+                        data.participant_ids.push(newParticipantsInfo[i].id)
+                    }
+                }
                 fetch('post', '/schedules', data).then(response => {
                     this.$refs.calendar.refresh();
                     $('#changeSchedule').modal('hide');
@@ -734,7 +799,7 @@
                 this.endTime = '';
                 this.endMinutes = '00:00';
                 this.eventPlace = '';
-                this.scheduleRepeat = '';
+                this.scheduleRepeat = 1;
                 this.eventDesc = '';
                 this.isAllday = false;
                 this.schedulePrivacy = false;
