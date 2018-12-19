@@ -648,6 +648,7 @@
                 powerId:[],
                 sendData:[],//改变的值
                 checkBox:[],
+                checkarr:[]
             }
         },
         mounted() {
@@ -739,7 +740,7 @@
             },    
             rangekeep(){
                 let data = []
-                
+                data.push(this.sendData)
                 console.log(data)
                 fetch('post','/console/scope/'+this.jobCont,data ).then(function(response){
                     toastr.success('保存成功');
@@ -960,17 +961,41 @@
             },
             radioed(params,value){
                 let index = this.sendData.find(item=>item.resource_id===value.id)
+               
                 if(index){
                     index.scope = params.id
+                     console.log(index)
                 }else{
                     let tempObj = {}
                     Object.assign(tempObj,{resource_id:value.id})
                     Object.assign(tempObj,{scope:params.id})
                     this.sendData.push(tempObj)
                 }
+                
             },
             checked(params,value){
-                console.log(params,value)
+                let index = this.sendData.find(item=>item.resource_id===value.id)
+                console.log(index)
+                
+               
+                if(index){
+                    
+                    if(index.resource_id==value.id){
+                        this.checkarr.push(params.id)
+                        index.manage =  this.checkarr
+                    }   
+                }else{
+                    let tempObj = {}
+                     if(index.resource_id==value.id){
+                        this.checkarr.push(params.id)
+                        
+                    }
+               
+                    Object.assign(tempObj,{resource_id:value.id})
+                    Object.assign(tempObj,{manage:this.checkarr})
+                    this.sendData.push(tempObj)
+                }
+                console.log(params.id,value.id)
             }
         }
     }
