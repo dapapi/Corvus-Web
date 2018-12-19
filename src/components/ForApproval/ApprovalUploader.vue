@@ -1,10 +1,13 @@
 <template>
     <div class="upload col-md-12">
         <div class="col-md-2 text-right">{{data[0].control_title}}</div>
+        <div v-if="predata" v-for="(item, index) in predata.uploadfile" :key="index">
+            {{item.name}}
+        </div>
         <div class="image-show">
             <span class="">请上传附件</span>
             <input type="file" @change="uploadFile" />
-         </div>
+        </div>
     </div>
 </template>
 
@@ -13,7 +16,7 @@ import config from '@/assets/js/config'
 import * as qiniu from 'qiniu-js'
 
 export default {
-    props:['data'],
+    props:['data','uploaded','n','predata'],
     name: 'ApprovalImageUploader',
     data(){
         return{
@@ -66,7 +69,7 @@ export default {
                     let fileUrl = config.imgUrl + res.key;
                     let fileName = file.name;
                     
-                    _this.$emit('change', fileUrl, fileName, fileSize,_this.fileExt,_this.id);
+                    _this.$emit('change', {fileUrl, fileName, fileSize,'type':'upload'});
                 })
             });
             this.fileInfo = file
@@ -109,11 +112,7 @@ export default {
 
 <style lang="scss" scoped>
 .image-show{
-    // width: 80px;
-    // height: 80px;
-    // border: 1px solid rgba(7,17,27,0.2);
     display:flex;
-    // justify-content: center;
 }
 .plus-icon{
     font-size: 50px;

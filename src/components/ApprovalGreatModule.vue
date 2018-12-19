@@ -11,7 +11,10 @@
                     </div>
                     <div class="modal-body modal-greater">
                         <div v-for="(item, index) in moduleInfo" :key="index" class="great-option">
-                            <div :is='sortChecker(item)' :data='item' :singlemode='singlemode'></div>
+                            <div :is='sortChecker(item)' 
+                            :data='item' :predata='sendData'
+                            :singlemode='singlemode'
+                            @change="changeHandler"></div>
                             <!-- ⬆️核心模块 -->
                         </div>
                     </div>
@@ -140,6 +143,9 @@ export default {
             },
             moduleInfo:[],
             item:{type:1},
+            sendData:{
+
+            }
         }
     },
     mounted(){
@@ -164,6 +170,15 @@ export default {
         }
     },
     methods:{
+        changeHandler(params){
+            switch (params.type){
+                case 'upload':
+                    if(!this.sendData.uploadfile){
+                        this.sendData.uploadfile=[]
+                    }
+                    this.sendData.uploadfile.push({url:params.fileUrl,name:params.fileName})
+            }
+        },
         typeWatcher(){
             switch (this.type){
                 case 1 : 
