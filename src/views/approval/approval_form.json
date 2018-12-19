@@ -259,5 +259,11 @@
       "control_title": "附件",
       "control_placeholder": "请输入"
     }
+  ],
+  "apporvers":[
+    {
+      "name":"123",
+      "icon":"url"
+    }
   ]
 }]
