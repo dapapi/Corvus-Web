@@ -64,7 +64,8 @@
             <div class="example">
               <div class="col-md-2 text-right float-left">部门城市</div>
               <div class="col-md-10 float-left">
-                <input type="text" title class="form-control" placeholder="请选择" v-model="city">
+                <selectors ref="departmentCity" :options="cityArr" :placeholder="'请选择城市'"
+                                           @change="changeCity"></selectors>
               </div>
             </div>
             <div class="example">
@@ -123,25 +124,31 @@
 
 <script>
 import fetch from "../../assets/utils/fetch.js";
+import config from '../../assets/js/config'
 
 export default {
   data() {
     return {
-      keyword: "", // 搜索
-      data: [],
-      count: 0, // 人数
-      departmentName: "", // 部门名称
-      departmentId: 0, // 部门id
-      departmentPId: 0, // 父级部门id
-      city: "",
-      isEdit: false,
-      moveDepartmentId: 0,
-      dIndex: -1
+        keyword: "", // 搜索
+        data: [],
+        count: 0, // 人数
+        departmentName: "", // 部门名称
+        departmentId: 0, // 部门id
+        departmentPId: 0, // 父级部门id
+        city: "",
+        isEdit: false,
+        moveDepartmentId: 0,
+        dIndex: -1,
+        cityArr: config.departmentCityArr // 部门城市
     };
   },
 
   mounted() {
     this.getDepartment();
+    $('#add-department').on('hidden.bs.modal', () => {
+        // 清空state
+        this.cancelAdd()
+    })
   },
 
   methods: {
@@ -177,12 +184,14 @@ export default {
       ).then(res => {
         toastr.success(this.isEdit ? "添加成功" : "修改成功");
         $("#add-department").modal("hide");
-        this.getDepartment();
+        setTimeout(() => {
+            this.getDepartment();
+        }, 100)
       });
     },
     selectDepartment(data) {
       this.departmentId = data.id;
-      this.departmentPId = data.department_pid;
+      this.departmentPId = data.pId;
     },
     // 负责人
     principalChange(val) {
@@ -194,6 +203,8 @@ export default {
       this.departmentName = val.name;
       this.departmentId = val.id;
       this.departmentPId = val.department_pid;
+    //   departmentCity todo
+    //   this.city = val.
       $("#add-department").modal();
     },
     // 切换编辑状态
@@ -269,7 +280,15 @@ export default {
     },
     // index
     changeIndex(index) {
-      this.dIndex = index;
+        this.dIndex = index;
+    },
+    // 改变城市
+    changeCity (val, name) {
+        this.city = name
+    },
+    cancelAdd () {
+        this.$refs.departmentCity.setValue('')
+        this.city = ''
     }
   }
 };
