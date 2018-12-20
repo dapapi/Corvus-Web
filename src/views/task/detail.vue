@@ -40,10 +40,11 @@
                         <div class="float-left pl-0 pr-2 col-md-1">
                             <i class="iconfont icon-initiate-task pr-2" aria-hidden="true"></i>任务状态
                         </div>
-                        <div class="font-weight-bold float-left">
-                            <template v-if="taskInfo.status === 1">进行中</template>
-                            <template v-else-if="taskInfo.status === 2">已完成</template>
-                            <template v-else-if="taskInfo.status === 3">已停止</template>
+                        <div class="font-weight-bold float-left"> 
+                            <template v-if="taskInfo.status === 1"><span style="color:#FF9800">进行中</span></template>
+                            <template v-if="taskInfo.status === 2"><span style="color:#4CAF50">已完成</span></template>
+                            <template v-if="taskInfo.status === 3"><span style="color:#9E9E9E">已停止</span></template>
+                            <template v-if="taskInfo.status === 4"><span style="color:#F44336">延期</span></template>
                         </div>
                     </div>
                     <div class="card-text clearfix example">

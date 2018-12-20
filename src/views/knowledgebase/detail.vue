@@ -25,7 +25,7 @@
         <div class="page-content container-fluid">
             <div class="panel" id="">
                 <div class="panel-body">
-                    <div class="panel-title"><h4>{{currentData.title}}</h4></div>
+                    <div class="panel-title"><i class="iconfont icon-T"></i><h4>{{currentData.title}}</h4></div>
                     <div class="panel-content info" v-if="currentData.creator">
                         <div class="rounded-circle img-thumbnail messages-img" 
                             :style="{ backgroundImage: 'url('+currentData.cover+')'}">
@@ -46,9 +46,9 @@
                                 <span v-if="departments[0]" class="badge badge-round badge-dark">{{departments.find(departments => departments.id == item.department_id).name}}</span>
                             </span>
                             <div class="float-right row mr-20">
-                                <div class="mr-80 add-comment" @click='addComment'><i class="md-comment-more"></i>评论</div>
-                                <div class="mr-80"><i class="md-email"></i>未读 0</div>
-                                <div><i class="md-email-open"></i>已读 0</div>
+                                <div class="mr-80 add-comment" @click='addComment'><i class="iconfont icon-pinglun"></i>评论</div>
+                                <div class="mr-80"><i class="iconfont icon-weidu"></i>未读 0</div>
+                                <div><i class="iconfont icon-yiduxiaoxi"></i>已读 0</div>
                             </div>
                         </h5>
                         <hr>

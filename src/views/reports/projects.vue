@@ -98,7 +98,10 @@
                                 <td class="cell-100" scope="col"></td>
                                 <td class="cell-100" scope="col"></td>
                                 <td class="cell-100" scope="col">
-                                    {{ projectStatusArr.find(item => item.value == data.status).name }}
+                                    <span :style="{color:projectStatusArr.find(item => item.value == data.status).color}">
+                                        {{ projectStatusArr.find(item => item.value == data.status).name }}
+                                    </span>
+                                    
                                 </td>
                                 <td class="cell-100" scope="col">{{ data.principal_name }}</td>
                             </tr>

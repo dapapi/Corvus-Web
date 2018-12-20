@@ -64,7 +64,7 @@
                 </div>
                 <div class="clearfix">
                     <div class="col-md-6 float-left pl-0 mb-20" style="border-right: 1px solid #eee">
-                        <div class="col-md-6">任务 {{taskNum}}</div>
+                        <div class="col-md-6"><i class="iconfont icon-iconset0399"></i> 任务 {{taskNum}}</div>
                         <div class="clearfix example" v-for="(item,index) in artistTasksInfo" :key="index">
                             <div class="col-md-3 float-left">{{item.title}}</div>
                             <div class="col-md-3 float-left">{{item.principal.data.name}}</div>
@@ -77,7 +77,7 @@
                         </div>
                     </div>
                     <div class="col-md-6 float-left pl-0 mb-20">
-                        <div class="col-md-6">项目</div>
+                        <div class="col-md-6"><i class="iconfont icon-ego-box"></i>项目</div>
                         <div class="clearfix example" v-for="(item,index) in artistProjectsInfo" :key="index">
                             <div class="col-md-3 float-left">{{item.title}}</div>
                             <div class="col-md-3 float-left">{{item.principal.data.name}}</div>
@@ -161,7 +161,11 @@
                                 </tr>
                                 <tr v-for="(item,index) in artistProjectsInfo" :key="index">
                                     <td><router-link :to="{path:`/projects/${item.id}`}">{{item.title}}</router-link></td>
-                                    <td>{{item.status}}</td>
+                                    <td>
+                                        <template v-if="item.status === 1"><span style="color:#FF9800">进行中</span></template>
+                                        <template v-if="item.status === 2"><span style="color:#4CAF50">已完成</span></template>
+                                        <template v-if="item.status === 3"><span style="color:#9E9E9E">撤单</span></template>
+                                    </td>
                                     <td>{{item.principal.data.name}}</td>
                                     <td>{{item.company}}</td>
                                     <td>{{item.created_at}}</td>

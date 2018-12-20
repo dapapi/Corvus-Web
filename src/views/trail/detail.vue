@@ -41,7 +41,7 @@
                         </div>
                         <div class="col-md-6 float-left pl-0">
                             <div class="float-left pl-0 pr-2 col-md-2">
-                                <i class="md-plus pr-2" aria-hidden="true"></i>负责人
+                                <i class="iconfont icon-kehu pr-2" aria-hidden="true"></i>负责人
                             </div>
                             <div class="font-weight-bold float-left" v-if="trailInfo.principal">
                                 {{ trailInfo.principal.data.name }}
@@ -51,7 +51,7 @@
                     <div class="card-text clearfix example">
                         <div class="col-md-6 float-left pl-0">
                             <div class="float-left pl-0 pr-2 col-md-2">
-                                <i class="md-plus pr-2" aria-hidden="true"></i>销售进展
+                                <i class="iconfont icon-xiaoshouguanli pr-2" aria-hidden="true"></i>销售进展
                             </div>
                             <div class="font-weight-bold float-left">
                                 <span v-if="trailInfo.progress_status === 1" style="color:#ff9800">未确定合作</span>
@@ -61,7 +61,7 @@
                         </div>
                         <div class="col-md-6 float-left pl-0">
                             <div class="float-left pl-0 pr-2 col-md-2">
-                                <i class="md-plus pr-2" aria-hidden="true"></i>预计订单收入
+                                <i class="iconfont icon-renminbi1688 pr-2" aria-hidden="true"></i>预计收入
                             </div>
                             <div class="font-weight-bold float-left">
                                 <template v-if="trailInfo.fee">
@@ -77,7 +77,7 @@
                     <div class="card-text clearfix example">
                         <div class="col-md-6 float-left pl-0">
                             <div class="float-left pl-0 pr-2 col-md-2">
-                                <i class="md-plus pr-2" aria-hidden="true"></i>目标艺人
+                                <i class="iconfont icon-yiren pr-2" aria-hidden="true"></i>目标艺人
                             </div>
                             <div class="font-weight-bold float-left" v-if="trailInfo.expectations">
                             <span v-for="expectation in trailInfo.expectations.data" :key="expectation.name">
@@ -87,7 +87,7 @@
                         </div>
                         <div class="col-md-6 float-left pl-0">
                             <div class="float-left pl-0 pr-2 col-md-2">
-                                <i class="md-plus pr-2" aria-hidden="true"></i>推荐艺人
+                                <i class="iconfont icon-tuijian pr-2" aria-hidden="true"></i>推荐艺人
                             </div>
                             <div class="font-weight-bold float-left" v-if="trailInfo.recommendations">
                             <span v-for="recommendation in trailInfo.recommendations.data" :key="recommendation.name">
@@ -100,19 +100,19 @@
                     <div class="card-text clearfix example">
                         <div class="col-md-6 float-left pl-0">
                             <div class="float-left pl-0 pr-2 col-md-2">
-                                <i class="md-plus pr-2" aria-hidden="true"></i>公司
+                                <i class="iconfont icon-gongsiguanli pr-2" aria-hidden="true"></i>公司
                             </div>
                             <div class="font-weight-bold float-left pointer-content hover-content"
-                                 @click="redirectCompany(trailInfo.client.data.id)" v-if="trailInfo.client">
+                                 @click="redirectCompany(trailInfo.client.data.id)" v-if="trailInfo.client" style="color:#3298DC">
                                 {{ trailInfo.client.data.company }}
                             </div>
                         </div>
                         <div class="col-md-6 float-left pl-0">
                             <div class="float-left pl-0 pr-2 col-md-2">
-                                <i class="md-plus pr-2" aria-hidden="true"></i>项目
+                                <i class="iconfont icon-xiangmu1 pr-2" aria-hidden="true"></i>项目
                             </div>
                             <div class="font-weight-bold float-left pointer-content hover-content"
-                                 @click="redirectProject(trailInfo.project.data.id)" v-if="trailInfo.project">
+                                 @click="redirectProject(trailInfo.project.data.id)" v-if="trailInfo.project" style="color:#3298DC"> 
                                 {{ trailInfo.project.data.title }}
                             </div>
                         </div>
@@ -249,7 +249,7 @@
                                         <div class="card-text py-10 px-0 clearfix col-md-6 float-left"
                                              v-if="trailInfo.type !== 4" :class="isEdit ? 'edit-height':'' ">
                                             <div class="col-md-2 float-left text-right pl-0">线索状态</div>
-                                            <div class="col-md-10 float-left font-weight-bold">
+                                            <div class="col-md-10 float-left font-weight-bold" >
                                                 <!-- <span v-if="!isEdit">{{trailStatus}}</span> -->
                                                 <EditSelector :is-edit="isEdit"
                                                               :options="trailStatusArr"

@@ -19,89 +19,81 @@
                     </span>
                     </div>
                     <div class="clearfix py-50">
-                        <section class="page-aside-section">
-                            <div class="site-menubar-body" style="width:260px;">
-                                <!--默认分组-->
-                                <ul class="menu pl-0 m-0 pb-10" style="width:260px;">
-                                    <li class="site-menu-item has-sub" v-for="(item,index) in job" :key="index"
-                                        style="width:260px;">
-                                        <a href="javascript:void(0) " class="p-5" @click="clickdefault">
-                                            <i v-show="conceal" class="md-caret-down showList font-size:25px pr-10"></i>
-                                            <i v-show="!conceal"
-                                               class="md-caret-right showList font-size:25px pr-10"></i>
-                                            <i class="iconfont icon-renyuan1 pr-10" style="vertical-align: middle;"></i>
-                                            <span class="site-menu-title">{{item.name}}</span>
-                                        </a>
-                                    </li>
-                                    <ul class="administration-subordinate-item m-0" v-for="n in jobData" :key="n.id"
-                                        v-show="conceal" @click="defaultcontent(n.id)">
-                                        <li class="py-5" :class="defaultpitchon==n.id?'pitchon':''">
+                        <section class="page-aside-section" >
+                        <div class="site-menubar-body" style="width:260px;">
+                               <!--默认分组-->
+                            <ul class="menu pl-0 m-0 pb-10" style="width:260px;">
+                                <li class="site-menu-item has-sub" v-for="(item,index) in job" :key="index" style="width:260px;">
+                                    <a href="javascript:void(0) " class="p-5" @click="clickdefault">
+                                        <i v-show="conceal" class="md-caret-down showList font-size:25px pr-10"></i>
+                                        <i v-show="!conceal" class="md-caret-right showList font-size:25px pr-10"></i>
+                                        <i class="iconfont icon-chengyuannew pr-10" style="vertical-align: middle;"></i>
+                                        <span class="site-menu-title">{{item.name}}</span>
+                                    </a>
+                                </li>
+                                 <ul class="administration-subordinate-item m-0" v-for="n in jobData" :key="n.id" v-show="conceal" @click="defaultcontent(n.id)">
+                                        <li  class="py-5" :class="defaultpitchon==n.id?'pitchon':''">
                                             <template>
-                                                <i class="iconfont icon-renyuan1 pr-10"
+                                                <i class="iconfont icon-chengyuannew pr-10"
                                                    style="vertical-align: middle;"></i>
                                                 <span class="site-menu-title">{{n.name}}</span>
                                             </template>
                                         </li>
 
                                     </ul>
-                                </ul>
-                                <!--渲染分组 -->
-                                <ul class="menu pl-0">
-                                    <li class="site-menu-item has-sub  pb-10" v-for="(item,index) in groupingDate"
-                                        :key="index" style="width:260px;">
-                                        <a href="javascript:void(0) " class="p-5" @click="switchMenu(item.id)">
-                                            <i v-show="visible" class="md-caret-down showList font-size:25px pr-10"></i>
-                                            <i v-show="!visible"
-                                               class="md-caret-right showList font-size:25px pr-10"></i>
-                                            <i class="iconfont icon-renyuan1 pr-10" style="vertical-align: middle;"></i>
-                                            <span class="site-menu-title">{{item.name}}</span>
-                                        </a>
-                                        <div class="drop-parent" style="position: absolute; right:23px;top:0;"
-                                             v-if="item.id" @click="grouping(item.id)">
-                                            <i class="iconfont icon-gengduo1 font-size-20 parent" aria-hidden="true"
-                                               data-toggle="dropdown" aria-expanded="false"
-                                               style="cursor: pointer; float: right;line-height: 40px;">
-                                            </i>
-                                            <div class="dropdown-menu dropdown-menu-left" aria-labelledby="org-dropdown"
-                                                 role="menu" x-placement="bottom-start" style="min-width: 0;">
-                                                <a class="dropdown-item" role="menuitem" data-toggle="modal"
-                                                   data-target="#addRole">新增角色</a>
-                                                <a class="dropdown-item" role="menuitem" data-toggle="modal"
-                                                   data-target="#Rename">重命名</a>
-                                                <a class="dropdown-item" role="menuitem" data-toggle="modal"
-                                                   data-target="#deleteGrouping">删除分组</a>
-                                            </div>
+                            </ul>
+                              <!--渲染分组 -->
+                            <ul class="menu pl-0">
+                                <li class="site-menu-item has-sub  pb-10" v-for="(item,index) in groupingDate"
+                                    :key="index" style="width:260px;">
+                                    <a href="javascript:void(0) " class="p-5" @click="switchMenu(item.id)">
+                                        <i v-show="visible" class="md-caret-down showList font-size:25px pr-10"></i>
+                                        <i v-show="!visible" class="md-caret-right showList font-size:25px pr-10"></i>
+                                        <i class="iconfont icon-chengyuannew pr-10" style="vertical-align: middle;"></i>
+                                        <span class="site-menu-title">{{item.name}}</span>
+                                    </a>
+                                    <div class="drop-parent" style="position: absolute; right:23px;top:0;"
+                                         v-if="item.id" @click="grouping(item.id)">
+                                        <i class="iconfont icon-gengduo1 font-size-20 parent" aria-hidden="true"
+                                           data-toggle="dropdown" aria-expanded="false"
+                                           style="cursor: pointer; float: right;line-height: 40px;">
+                                        </i>
+                                        <div class="dropdown-menu dropdown-menu-left" aria-labelledby="org-dropdown"
+                                             role="menu" x-placement="bottom-start" style="min-width: 0;">
+                                            <a class="dropdown-item" role="menuitem" data-toggle="modal"
+                                               data-target="#addRole">新增角色</a>
+                                            <a class="dropdown-item" role="menuitem" data-toggle="modal"
+                                               data-target="#Rename">重命名</a>
+                                            <a class="dropdown-item" role="menuitem" data-toggle="modal"
+                                               data-target="#deleteGrouping">删除分组</a>
                                         </div>
-                                        <ul class="administration-subordinate-item m-0" v-for="n in roleDate"
-                                            :key="n.id">
-                                            <li v-show="item.id==n.group_id && switchId.includes(n.group_id)"
-                                                class="py-5"
-                                                style="position:relative;" @click="changeCont(n.id)">
-                                                <template>
-                                                    <i class="iconfont icon-renyuan1 pr-10"
-                                                       style="vertical-align: middle;"></i>
-                                                    <span class="site-menu-title">{{n.name}}</span>
-                                                </template>
-                                                <div class="drop-son" style="position: absolute; right:23px;top:0px;"
-                                                     @click="role(n.id)">
-                                                    <i class="iconfont icon-gengduo1 font-size-20 son"
-                                                       aria-hidden="true"
-                                                       data-toggle="dropdown" aria-expanded="false"
-                                                       style="cursor: pointer; float: right;line-height: 40px;">
-                                                    </i>
-                                                    <div class="dropdown-menu dropdown-menu-left "
-                                                         aria-labelledby="org-dropdown" role="menu"
-                                                         x-placement="bottom-start" style="">
-                                                        <a class="dropdown-item" role="menuitem" data-toggle="modal"
-                                                           data-target="#addMember"
-                                                           @click="getmemberDate(n.id)">添加成员</a>
-                                                        <a class="dropdown-item" role="menuitem" data-toggle="modal"
-                                                           data-target="#updateSubgroup">修改角色</a>
-                                                        <a class="dropdown-item" role="menuitem" data-toggle="modal"
-                                                           data-target="#moveSubgroup ">移动到分组</a>
-                                                        <a class="dropdown-item" role="menuitem" data-toggle="modal"
-                                                           data-target="#deleteRole">删除角色</a>
-                                                    </div>
+                                    </div>
+                                    
+                                    <ul class="administration-subordinate-item m-0" v-for="n in roleDate" :key="n.id" >
+                                        <li v-show="item.id==n.group_id && switchId.includes(n.group_id)" class="py-5" 
+                                            style="position:relative;" @click="changeCont(n.id)"  >
+                                            <template>
+                                                <i class="iconfont icon-chengyuannew pr-10"
+                                                   style="vertical-align: middle;"></i>
+                                                <span class="site-menu-title">{{n.name}}</span>
+                                            </template>
+                                            <div class="drop-son" style="position: absolute; right:23px;top:0px;"
+                                                 @click="role(n.id)">
+                                                <i class="iconfont icon-gengduo1 font-size-20 son" aria-hidden="true"
+                                                   data-toggle="dropdown" aria-expanded="false"
+                                                   style="cursor: pointer; float: right;line-height: 40px;">
+                                                </i>
+                                                <div class="dropdown-menu dropdown-menu-left "
+                                                     aria-labelledby="org-dropdown" role="menu"
+                                                     x-placement="bottom-start" style="">
+                                                    <a class="dropdown-item" role="menuitem" data-toggle="modal"
+                                                       data-target="#addMember" @click="getmemberDate(n.id)">添加成员</a>
+                                                    <a class="dropdown-item" role="menuitem" data-toggle="modal"
+                                                       data-target="#updateSubgroup">修改角色</a>
+                                                    <a class="dropdown-item" role="menuitem" data-toggle="modal"
+                                                       data-target="#moveSubgroup ">移动到分组</a>
+                                                    <a class="dropdown-item" role="menuitem" data-toggle="modal"
+                                                       data-target="#deleteRole">删除角色</a>
                                                 </div>
                                             </li>
 

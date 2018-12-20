@@ -1,9 +1,9 @@
 <template>
     <div class="">
         <div class="" style="background-color:#f3f4f5" v-for="item in list" :key="item.id">
-            <div class="page-header  page-header-bordered mb-0">
-                <h6 class="page-title nav-head">{{item.title}}
-                    <template v-if="item.form_status==232">
+            <div class="page-header  page-header-bordered mb-0">   
+                <h6 class="page-title nav-head"><i class="iconfont icon-zuojiantou"></i>{{item.title}}
+                    <template v-if="item.type==232">
                         <button class="btn btn-success py-5">已审批</button>
                     </template>
                     <template v-if="item.form_status==231">

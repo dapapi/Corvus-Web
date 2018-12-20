@@ -61,10 +61,10 @@
                                 <i class="md-plus pr-2" aria-hidden="true"></i>项目状态
                             </div>
                             <div class="font-weight-bold float-left">
-                                <template v-if="projectInfo.status === 1">进行中</template>
-                                <template v-if="projectInfo.status === 2">完成</template>
-                                <template v-if="projectInfo.status === 3">终止</template>
-                                <template v-if="projectInfo.status === 4">删除</template>
+                                <template v-if="projectInfo.status === 1"><span style="color:#FF9800">进行中</span> </template>
+                                <template v-if="projectInfo.status === 2"><span style="color:#4CAF50">已完成</span></template>
+                                <template v-if="projectInfo.status === 3"><span style="color:#9E9E9E">撤单</span></template>
+                                
                             </div>
                         </div>
                     </div>

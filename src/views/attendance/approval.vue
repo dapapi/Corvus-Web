@@ -70,7 +70,7 @@
                                 </td>
                                 <td>
                                     <div data-toggle="modal" data-target="#submitReport">
-                                        <button class="btn btn-primary">待审核</button>
+                                        <button class="btn btn-warning" >待审核</button>
                                         <!-- <button class="btn btn-warning">已同意</button>
                                         <button class="btn btn-danger">已拒绝</button> -->
 
