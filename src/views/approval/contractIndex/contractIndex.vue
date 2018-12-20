@@ -1,7 +1,7 @@
 <template>
     <div class="" style="background-color:#f3f4f5">
         <div class="page-header page-header-bordered mb-0">
-            <h1 class="page-title">发起审批</h1>
+            <h1 class="page-title ml-10">发起审批</h1>
         </div>
     
         <div class="page-content container-fluid ">
@@ -11,9 +11,12 @@
             <div class="row py-5">
                 <div class="col-lg-4 approval-module" v-for="item in indexData" :key="item.id">
                     <div class="card">
-                        <div class="card-block" data-toggle="modal" data-target="#approval-great-module" @click='changeType(item.key)'>
-                            <i class="icon md-file float-left" style="font-size:3rem"></i>
-                            <p class="my-10">{{item.value}}</p>
+                        <div class="card-block" style="display:flex" data-toggle="modal" data-target="#approval-great-module" @click='changeType(item.key)'>
+                             <img :src="item.type === 2?'https://res-crm.papitube.com/contract-dark-blue.png':'https://res-crm.papitube.com/contract-blue.png'" alt=""
+                                         style="width: 40px;height: 40px;">
+                            <!-- <i class="icon float-left" style="font-size:3rem"></i> -->
+                            
+                            <p class="my-10">&nbsp;&nbsp;{{item.value}}</p>
                         </div>
                     </div>
                 </div>
@@ -30,6 +33,9 @@ import ApprovalGreatModule from '@/components/ApprovalGreatModule'
 export default {
     components:{
         ApprovalGreatModule
+    },
+    computed:{
+        
     },
     data(){
         return{

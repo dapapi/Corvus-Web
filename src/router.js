@@ -137,12 +137,24 @@ export default new Router({
         {
             path: '/approval',
             name: 'approval',
-            redirect: '/approval/common/initiate',
+            redirect: '/approval/contract/initiate',
             component: () => import('./views/approval/index.vue'),
             children: [
                 {
                     path: '/approval/contract/initiate',
                     component: () => import('./views/approval/contractIndex/contractIndex.vue')
+                }, 
+                {
+                    path: '/approval/contract/my',
+                    component: () => import('./views/approval/contractIndex/my.vue')
+                },
+                {
+                    path: '/approval/contract/only',
+                    component: () => import('./views/approval/contractIndex/only.vue')
+                },
+                {
+                    path: '/approval/contract/application',
+                    component: () => import('./views/approval/contractIndex/application.vue')
                 },
                 {
                     path: '/approval/common/initiate',
