@@ -11,7 +11,8 @@
                         <div v-if="item.status === null" class="card" @click="redirectBriefDetails(item.id,item.frequency,item.template_name)">
                             <div class="card-block clearfix">
                                 
-                                <i class="md-file float-left" style="font-size:3rem"></i>
+                                <img :src="item.type === 2?'https://res-crm.papitube.com/contract-blue.png':'https://res-crm.papitube.com/contract-dark-blue.png'" alt=""
+                                         style="width: 40px;height: 40px;" class="float-left mr-10">
                                 
                                 <div class="float-left">
                                     <div >{{item.template_name}}</div>
@@ -22,7 +23,8 @@
                         <div v-else class="card" data-toggle="modal" data-target="#submitReport" @click="getId(item.status,item.template_name)">
                             <div class="card-block clearfix">
                                 
-                                <i class="md-file float-left" style="font-size:3rem"></i>
+                                 <img :src="item.type === 2?'https://res-crm.papitube.com/contract-blue.png':'https://res-crm.papitube.com/contract-dark-blue.png'" alt=""
+                                         style="width: 40px;height: 40px;" class="float-left mr-10">
                                 
                                 <div class="float-left">
                                      <div>{{item.template_name}}</div>

@@ -8,7 +8,7 @@
                     <i class="icon md-caret-right" v-show="!departmentsShow"></i>
                 </span>
                 <span>
-                    <i class="icon md-balance"></i>
+                    <i class="iconfont icon-hierarchy"></i>
                     {{ this.data.name }}（{{ this.total }}人)
                 </span>
             </span>

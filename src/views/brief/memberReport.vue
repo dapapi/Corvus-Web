@@ -39,10 +39,12 @@
                                 <td class="pointer-content">{{item.created_at}}</td>
                                 <td>
                                     <template v-if="item.status === null">未提交</template>
-                                    <template v-else-if="item.status == 1">未审核</template>
-                                    <template v-else>已审核</template>
+                                    <template v-else-if="item.status == 1" ><span style="background:#FF9800;color:#fff">未审核</span> </template>
+                                    <template v-else ><span style="background:#4CAF50;color:#fff">已审核</span></template>
                                 </td>
-                                
+                                <td>
+                                    <i class="iconfont icon-iconfontzhizuobiaozhun023132"></i>
+                                </td>
                             </tr>
                         </table>
                         <div v-if="list.length === 0" class="col-md-1" style="margin: 6rem auto">

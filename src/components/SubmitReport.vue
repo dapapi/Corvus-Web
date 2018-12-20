@@ -21,7 +21,7 @@
                                 <span v-show="templateStatus == 2">{{temDetails.reviewer_id}}已评审</span>
                             </div>
                             <button class="btn btn-primary" v-show="templateStatus == 1" @click="review(2)">评审</button>
-                            <button class="btn btn-primary" v-show="templateStatus == 2">评审通过</button>
+                            <div v-show="templateStatus == 2" style="color:#4DAF50">评审通过</div>
                          </div>
                     </div>
                     <!--问题列表开始-->
@@ -48,9 +48,11 @@
                                 </div>
                                 <div class="pt-10"  v-else>{{item.answer}}</div>
                             </div>
-                            <!-- <div class="float-right">
-                                <i class="icon md-flag" @click="getId(item.id)" :id="`id_${item.id}`"></i>
-                            </div> -->
+                            <div class="float-right">
+                            
+                                    <i class="iconfont icon-bianji1"></i>
+                             
+                            </div>
                             <!--填写答案-->
                         </li>
                     </ul>

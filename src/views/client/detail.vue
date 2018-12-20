@@ -161,10 +161,9 @@
                                     </router-link>
                                 </td>
                                 <td>
-                                    <template v-if="project.status === 1">进行中</template>
-                                    <template v-if="project.status === 2">完成</template>
-                                    <template v-if="project.status === 3">终止</template>
-                                    <template v-if="project.status === 4">删除</template>
+                                    <template v-if="project.status === 1"><span style="color:#FF9800">进行中</span></template>
+                                    <template v-if="project.status === 2"><span style="color:#4CAF50">已完成</span></template>
+                                    <template v-if="project.status === 3"><span style="color:#9E9E9E">撤单</span></template>
                                 </td>
                                 <td>{{ project.principal?project.principal.data.name:'' }}</td>
                                 <td>{{ project.trail.data.client.data.company}}</td>

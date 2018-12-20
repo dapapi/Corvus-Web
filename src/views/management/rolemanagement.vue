@@ -26,14 +26,14 @@
                                     <a href="javascript:void(0) " class="p-5" @click="clickdefault">
                                         <i v-show="conceal" class="md-caret-down showList font-size:25px pr-10"></i>
                                         <i v-show="!conceal" class="md-caret-right showList font-size:25px pr-10"></i>
-                                        <i class="iconfont icon-renyuan1 pr-10" style="vertical-align: middle;"></i>
+                                        <i class="iconfont icon-chengyuannew pr-10" style="vertical-align: middle;"></i>
                                         <span class="site-menu-title">{{item.name}}</span>
                                     </a>
                                 </li>
                                  <ul class="administration-subordinate-item m-0" v-for="n in jobData" :key="n.id" v-show="conceal" @click="defaultcontent(n.id)">
                                         <li  class="py-5" :class="defaultpitchon==n.id?'pitchon':''">
                                             <template>
-                                                <i class="iconfont icon-renyuan1 pr-10"
+                                                <i class="iconfont icon-chengyuannew pr-10"
                                                    style="vertical-align: middle;"></i>
                                                 <span class="site-menu-title">{{n.name}}</span>
                                             </template>
@@ -48,7 +48,7 @@
                                     <a href="javascript:void(0) " class="p-5" @click="switchMenu(item.id)">
                                         <i v-show="visible" class="md-caret-down showList font-size:25px pr-10"></i>
                                         <i v-show="!visible" class="md-caret-right showList font-size:25px pr-10"></i>
-                                        <i class="iconfont icon-renyuan1 pr-10" style="vertical-align: middle;"></i>
+                                        <i class="iconfont icon-chengyuannew pr-10" style="vertical-align: middle;"></i>
                                         <span class="site-menu-title">{{item.name}}</span>
                                     </a>
                                     <div class="drop-parent" style="position: absolute; right:23px;top:0;"
@@ -71,7 +71,7 @@
                                         <li v-show="item.id==n.group_id && switchId.includes(n.group_id)" class="py-5" 
                                             style="position:relative;" @click="changeCont(n.id)"  >
                                             <template>
-                                                <i class="iconfont icon-renyuan1 pr-10"
+                                                <i class="iconfont icon-chengyuannew pr-10"
                                                    style="vertical-align: middle;"></i>
                                                 <span class="site-menu-title">{{n.name}}</span>
                                             </template>
