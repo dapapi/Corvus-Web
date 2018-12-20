@@ -370,16 +370,15 @@
 
     export default {
         name: "MeetingRoomCalendar",
+        props: ['meetingRomeList'],
         data() {
             return {
                 numberDate: '',
                 currentDate: '',
-                meetingRomeList: []
             }
         },
 
         mounted() {
-            this.getResources();
             this.getCurrentDay()
         },
 
@@ -387,6 +386,12 @@
             date: function () {
                 let dateArr = this.numberDate.split('-');
                 return dateArr[0] + '年  ' + dateArr[1] + '月  ' + dateArr[2] + '日';
+            }
+        },
+
+        watch: {
+            meetingRomeList(newValue) {
+                this.getSchedules();
             }
         },
 
@@ -399,9 +404,31 @@
                 this.numberDate = value;
             },
 
-            getResources() {
-                fetch('get', '/materials/all').then(response => {
-                    this.meetingRomeList = response.data
+            getSchedules() {
+                let materialsIds = [];
+                for (let i = 0; i < this.meetingRomeList.length; i++) {
+                    materialsIds.push(this.meetingRomeList[i].id)
+                }
+                let data = {
+                    material_ids: materialsIds,
+                    start_at: this.currentDate,
+                    end_at: this.currentDate,
+                };
+                fetch('get', '/schedules', data).then(response => {
+                    // self.allScheduleInfo = response.data;
+                    // let events = [];
+                    // for (let i = 0; i < response.data.length; i++) {
+                    //     events.push({
+                    //         title: response.data[i].title,
+                    //         start: response.data[i].start_at,
+                    //         end: response.data[i].end_at,
+                    //         color: response.data[i].calendar.data.color,
+                    //         allDay: !!response.data[i].is_allday,
+                    //         id: response.data[i].id,
+                    //     })
+                    // }
+                    // callback(events)
+                    console.log(response)
                 })
             },
 

@@ -69,6 +69,9 @@
                 events: function (start, end, timezone, callback) {
                     self.startDate = self.timeReformat(start._d);
                     self.endDate = self.timeReformat(end._d);
+                    if (self.calendars.length === 0) {
+                        return
+                    }
                     let data = {
                         calendar_ids: self.calendars,
                         start_date: self.startDate,
@@ -100,6 +103,10 @@
                     let data = self.allScheduleInfo.find(item => item.id === event.id);
                     self.$emit('scheduleClick', data)
                 },
+                eventMouseover: function (event, jsEvent, view) {
+                    // console.log(jsEvent)
+                    // console.log(view)
+                }
             });
 
         },
@@ -109,7 +116,11 @@
             },
 
             timeReformat(value) {
-                return `${value.getFullYear()}-${value.getMonth() + 1}-${value.getDate()}`
+                let day = value.getDate();
+                if (Number(day) < 10) {
+                    day = '0' + day;
+                }
+                return `${value.getFullYear()}-${value.getMonth() + 1}-` + day
             }
         }
     }

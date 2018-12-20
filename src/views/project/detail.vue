@@ -1485,16 +1485,14 @@
             },
 
             getAllProjects: function () {
-                let _this = this;
-                fetch('get', '/projects/all').then(function (response) {
-                    _this.allProjectsInfo = response.data
+                fetch('get', '/projects/all').then(response => {
+                    this.allProjectsInfo = response.data
                 })
             },
 
             getAllTasks: function () {
-                let _this = this;
-                fetch('get', '/tasksAll').then(function (response) {
-                    _this.allTasksInfo = response.data
+                fetch('get', '/tasksAll').then(response => {
+                    this.allTasksInfo = response.data
                 })
             },
 
