@@ -3,7 +3,7 @@
         <div class="page-header page-header-bordered clearfix">
             <h1 class="page-title float-left">我的考勤统计</h1>
             <div class="float-right">
-                <switch-year @click="getYear"></switch-year>
+                <switch-year @click="getYear" :type="5"></switch-year>
             </div>
         </div>
         <div class="page-content container-fluid">
@@ -126,6 +126,7 @@ export default {
     },
     methods:{
         getYear:function(value){
+            console.log(value)
             this.year = value
             this.getList()
         },

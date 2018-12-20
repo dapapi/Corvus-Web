@@ -42,14 +42,14 @@
                                 <span class="time_con bg-white font-size-18">{{key}} 星期{{week.find(item => item.value == new Date(key).getDay()).name}}</span>
                             </div>
                             <ul class="list mt-40 ml-0 pl-0">
-                                <li class="row mb-30" v-for="(item2,index2) in item" :key="index2">
-                                    <!-- <router-link :to="item.url"> -->
+                                <li class="mb-30" v-for="(item2,index2) in item" :key="index2">
+                                    <router-link class="row" :to="item2.link">
                                         <div class="clearfix col-md-12 module">
                                             <div class="float-left mr-10 pic">
                                                 <i class="icon  font-size-30 icon-color" :class="iconList[moduleList.find(item => item.id == moduleType).val]"></i>
                                             </div>
                                             <div class="float-left mb-10">
-                                                <p class="mb-5"><span class="module_title mr-5 title">{{moduleList[moduleType]}}助手</span><i class="timesR">{{item2.created_at}}</i></p>
+                                                <p class="mb-5"><span class="module_title mr-5 title">{{moduleList.find(item=>item.id ==moduleType).name}}助手</span><i class="timesR">{{item2.created_at}}</i></p>
                                                 <p class="desc txt font-size-16">{{item2.message_title}}</p>
                                             </div>
                                         </div>
@@ -57,13 +57,13 @@
                                                 <span class="is_read" v-show="item2.state == 1"></span>
                                                 <div class="title font-size-16 mb-15">{{item2.message_subheading}}</div>
                                                 <div class="row">
-                                                     <div class="col-md-4" v-for="(item3,index3) in item2.body" :key="index3">
+                                                     <div class="col-md-5" v-for="(item3,index3) in item2.body" :key="index3">
                                                          <div class="mb-5">{{item3.title}}</div>
                                                          <div>{{item3.value}}</div>
                                                      </div>
                                                 </div>                                                                                 
                                         </div>
-                                    <!-- </router-link> -->
+                                    </router-link>
                                 </li>
                             </ul>
                         </div>
@@ -135,6 +135,7 @@ export default {
       //数据初始化
       this.getModule()
       
+      
   },
   computed:{
       ...mapState([
@@ -182,6 +183,8 @@ export default {
                 this.renderMsg(this.moduleList[0].id,1)
             }
         })
+        console.log(this.moduleList)
+      console.log(this.moduleType)
     },
     msgStatus:function(id,type){
         let data = {}
@@ -205,7 +208,10 @@ export default {
 </script>
 
 <style lang="scss" scoped>
-
+a:hover{
+    text-decoration: none;
+    cursor: pointer;
+}
 .message{
     .time_line{
         border-bottom:1px dashed #CECECE;
