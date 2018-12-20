@@ -348,7 +348,6 @@
                                                    v-model="item.selected">
                                             <label :for="'row-' + item.id">{{item.name}}</label>
                                             </span>
-                                            <!--<span class="pl-10 pt-10" :data="item.name.length"></span>-->
                                         </div>
                                     </td>
 
@@ -360,7 +359,6 @@
                                                    :value="one.id" v-model="one.selected" @change="selectedItem">
                                             <label :for="'row-' + one.id">{{one.name}}</label>
                                             </span>
-                                            <!--<span class="pl-10 pt-10"></span>-->
                                         </div>
                                     </td>
                                 </tr>
@@ -773,7 +771,6 @@
                 this.defaultId = 0
                 let _this = this;
                 fetch('get', '/console/feature/' + this.jobCont).then(function (response) {
-                    _this.powerDate = response;
                     _this.powerlist = [];
                     for (_this.powerlist in response) {
                         let selectedLength = 0;
@@ -783,6 +780,8 @@
                                 _this.funArr.push(item.id)
                                 selectedLength += 1;
                                 _this.selectedIds.push(item.id)
+                            } else {
+                                item.selected = false
                             }
                         });
                         if (selectedLength === response[_this.powerlist].data.length) {
@@ -791,6 +790,7 @@
                             response[_this.powerlist].selected = false;
                         }
                     }
+                    _this.powerDate = response;
                 });
                 fetch('get', '/console/scope/' + this.jobCont).then(function (response) {
                     _this.rangeDate = response;
@@ -812,7 +812,7 @@
 
             },
             powerkeep() {
-                fetch('post', '/console/feature/' + this.jobCont, {resource: this.selectedIds}).then(function (response) {
+                fetch('post', '/console/feature/' + this.jobCont, {resouce: this.selectedIds}).then(function (response) {
                     toastr.success('保存成功');
                 })
             },
