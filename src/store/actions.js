@@ -30,5 +30,12 @@ export default {
     },
     changeUnReadMsg:function(data,params){
         data.commit('changeUnReadMsg', params)
+    },
+    changeIsSelected:function(data,params){
+       
+        data.commit('changeIsSelected',params)
+    },
+    changeIsExpanded: function (data, params) {
+        data.commit('changeIsExpanded', params)
     }
 }

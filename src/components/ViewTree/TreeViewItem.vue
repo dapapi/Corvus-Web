@@ -1,21 +1,23 @@
 <template>
     <div class="tree-view-item">
        <div class="level" :class="`level-${menu.level}`" v-for="menu in menus" :key="menu.id">
-           <div v-if="menu.type ===link">
-               <router-link class="link" v-bind:to="menu.url" @click.native="toggle(menu)">{{menu.name}}</router-link>
+           <div v-if="menu.type ==='link'" :class="isSelected == menu.id?'selected':''">
+               <router-link class="link" v-bind:to="menu.url" @click.native="toggle(menu)">
+                   <span v-if="menu.level>1" class="icon md-file-text font-size-18 mr-10 ml-15"></span>
+                   {{menu.name}}
+                   <span v-if="menu.name == '我的消息'&&unReadMsg>0" class="unRead">{{unReadMsg}}</span>
+                </router-link>
            </div>
            <div v-if="menu.type === 'button'">
-                <div class="button heading" :class="{selected:menu.isSelected,expand:menu.isExpanded}" @click="toggle(menu)">
-                    <span>{{menu.name}}</span>
-                    <div class="icon">
-                        <svg xmlns="http://www.w3.org/2000/svg" focusable="false" viewBox="0 0 24 24">
-                            <path d="M8.59 16.34l4.58-4.59-4.58-4.59L10 5.75l6 6-6 6z "></path>
-                        </svg>
-                    </div>
+                <div class="button heading" :class="{selected:isSelected == menu.id,expand:isExpanded.includes(menu.id)}" @click="toggle(menu)">
+                    <i class="icon md-caret-right mr-10 font-size-20"></i>
+                    <span>{{menu.name}}
+                    </span>
+
                 </div>
                 <transition name="fade">
-                    <div class="heading-children" v-show="menu.isExpanded" v-if="menu.subMenu">
-                         <Tree-view-item :menu='menu.subMenu'></Tree-view-item>
+                    <div class="heading-children" v-if="menu.subMenu && isExpanded.includes(menu.id)">
+                        <tree-view-item :menus='menu.subMenu'></tree-view-item>
                     </div>
                 </transition>
            </div>
@@ -23,32 +25,105 @@
     </div>
 </template>
 <script>
+
+//命名空间
+import {mapState,mapGetters} from 'vuex'
 export default {
     name:"TreeViewItem",
     props:["menus"],
     data(){
         return {
-            startExpand:[]// 保存刷新后当前要展开的菜单项
+            canRun:true,
+            urlRoute:'',
         }
+    },
+    computed:{
+       ...mapState([
+           
+           'isSelected',//从vuex里获取切换之后的选中id
+           'isExpanded',//从vuex里获取切换之后需要展开菜单的id
+           'unReadMsg'
+       
+       ])
     },
     created(){
-        this.$store.commit("firstInit",{url:this.$route.path})
-    },
-    mothods:{
-        toggle(menus,payload){
-             
-            if (payload.menu.type === "button") {
-                payload.menu.isExpanded = !payload.menu.isExpanded;
-            } else if (payload.menu.type === "link") {
-                if (this.startExpand.length > 0) {
-                    for (let i = 0; i < startExpand.length; i++) {
-                    this.startExpand[i].isSelected = false
-                    }
-                }
-                this.startExpand = []; // 清空展开菜单记录项
-                setExpand(state.menus, payload.menu.url)
+
+       //获取完整的url地址
+       let query = ''
+       if(JSON.stringify(this.$route.query) !== "{}"){
+            let allQuery = this.$route.query
+            for (const key in allQuery) {
+                query = `${query}&${key}=${allQuery[key]}`
             }
+            query = query.substr(1)
+            this.urlRoute = `${this.$route.path}?${query}`
+       }else{
+           this.urlRoute = this.$route.path
+       }
+       
+    
+    },
+
+    mounted(){
+        // console.log()
+        this.$nextTick(()=>{
+           this.setExpand(this.menus,this.urlRoute)
+        })
+        
+    },
+    updated(){
+        if(this.canRun == true){
+            this.setExpand(this.menus,this.urlRoute)
         }
+    },
+    watch:{
+    },
+    methods:{
+        toggle(menu){
+            
+            if (menu.type === "button") {
+                let newExpanded = []
+                if(!this.$store.state.isExpanded.includes(menu.id)){
+                    this.$store.state.isExpanded.push(menu.id)
+                    this.$store.dispatch('changeIsExpanded',this.$store.state.isExpanded)
+                    
+                }else{
+                    this.$store.state.isExpanded.splice(this.$store.state.isExpanded.indexOf(menu.id),1)
+                    this.$store.dispatch('changeIsExpanded',this.$store.state.isExpanded)
+                }
+            } else if (menu.type === "link") {
+                
+                this.setExpand(this.menus, menu.url)
+                
+            }
+        },
+        setExpand:function(source, url) {
+            let sourceItem = '';
+            for (let i = 0; i < source.length; i++) {
+
+                sourceItem = JSON.stringify(source[i]); // 把菜单项转为字符串
+                if (sourceItem.indexOf(url) > -1) { // 查找当前 URL 所对应的子菜单属于哪一个祖先菜单
+                    this.canRun = false
+                    if (source[i].type === 'button') { // 导航菜单为按钮
+                        if(!this.$store.state.isExpanded.includes(source[i].id)){
+                            this.$store.state.isExpanded.push(source[i].id)
+                            this.$store.dispatch('changeIsExpanded',this.$store.state.isExpanded)
+                            this.$store.dispatch('changeIsSelected',source[i].id)
+                        }
+                        
+                        // 递归下一级菜单，以此类推
+                        this.setExpand(source[i].subMenu, url);
+                    }else{
+                        this.$store.dispatch('changeIsSelected',source[i].id)
+                        this.$store.state.isExpanded.push(source[i].id)
+                        this.$store.dispatch('changeIsExpanded',this.$store.state.isExpanded)
+                        
+                    }
+                break;
+                }
+            }
+        },
+        
     }
 }
 </script>
@@ -71,25 +146,19 @@ export default {
         position: relative;
     }
     .link:hover,.button:hover {
-        color: #1976d2;
+        /* color: #1976d2; */
         background-color: #eee;
         cursor: pointer;
     }
     .icon {
-        position: absolute;
-        right: 0;
-        display: inline-block;
-        height: 24px;
-        width: 24px;
-        fill: currentColor;
         transition: -webkit-transform 0.15s;
         transition: transform 0.15s;
         transition: transform 0.15s, -webkit-transform 0.15s;
         transition-timing-function: ease-in-out;
     }
     .heading-children {
-        padding-left: 14px;
-        overflow: hidden;
+        /* padding-left: 14px; */
+        /* overflow: hidden; */
     }
     .expand {
         display: block;
@@ -102,7 +171,7 @@ export default {
     transform: rotate(90deg);
     }
     .selected {
-    color: #1976d2;
+       background-color:#eee
     }
     .fade-enter-active {
     transition: all 0.5s ease 0s;
@@ -115,6 +184,23 @@ export default {
     }
     .fade-leave-to {
     height: 0;
+    }
+    .unRead {
+        display: inline-block;
+        width: 18px;
+        height: 18px;
+        background-color: red;
+        color: #fff;
+        font-size: 12px;
+        font-weight: bold;
+        text-align: center;
+        line-height: 18px;
+        border-radius: 50%;
+        position: relative;
+        bottom:1px;
+        /* position: absolute;
+        top: 8px;
+        right: 26px; */
     }
 </style>
 

@@ -15,6 +15,10 @@
                        data-target="#distributionBroker" @click="distributionPerson('publicity')">分配宣传人</a>
                     <a class="dropdown-item" role="menuitem" @click="">自定义字段</a>
                     <a class="dropdown-item" role="menuitem" @click="" data-toggle="modal" data-target="#addPrivacy">隐私设置</a>
+                    <a class="dropdown-item" role="menuitem" @click="" data-toggle="modal" data-target="#addPrivacy">
+                        <template v-if="artistInfo.sign_contract_status == 1">签约</template>
+                        <template v-if="artistInfo.sign_contract_status == 2">解约</template>
+                    </a>
                 </div>
             </div>
         </div>
@@ -89,38 +93,39 @@
             <div class="col-md-12 panel">
                 <div class="col-md-12">
                     <ul class="nav nav-tabs nav-tabs-line" role="tablist">
-                        <li class="nav-item" role="presentation">
-                            <a class="nav-link active" data-toggle="tab" href="#forum-artist-schedule"
+                        <li class="nav-item" role="presentation" v-show="artistInfo.sign_contract_status == 2">
+                            <a class="nav-link" :class="artistInfo.sign_contract_status == 2?'active':''" data-toggle="tab" href="#forum-artist-schedule"
                                aria-controls="forum-base"
-                               aria-expanded="true" role="tab">日程</a>
+                               aria-expanded="false" role="tab">日程</a>
                         </li>
-                        <li class="nav-item" role="presentation">
+                        <li class="nav-item" role="presentation" v-show="artistInfo.sign_contract_status == 2">
                             <a class="nav-link" data-toggle="tab" href="#forum-artist-projects"
                                aria-controls="forum-present"
                                aria-expanded="false" role="tab">项目</a>
                         </li>
-                        <li class="nav-item" role="presentation">
-                            <a class="nav-link" data-toggle="tab" href="#forum-artist-tasks"
+                        <li class="nav-item" role="presentation" >
+                            <a class="nav-link" :class="artistInfo.sign_contract_status == 2?'':'active'" data-toggle="tab" href="#forum-artist-tasks"
                                aria-controls="forum-present"
-                               aria-expanded="false" role="tab">
-                               <!-- <span>任务</span> -->
-                               <ToolTips :title="`${taskNum}`">
+                               aria-expanded="true" role="tab">
+                              
+                               <ToolTips v-if="doneTaskNum>0" :title="`${taskNum}`">
                                         任务
                                     </ToolTips>
+                                      <span v-else>任务</span>
                                <!-- <tool-tips taskNum></tool-tips> -->
                                </a>
                         </li>
-                        <li class="nav-item" role="presentation">
+                        <li class="nav-item" role="presentation" v-show="artistInfo.sign_contract_status == 2">
                             <a class="nav-link" data-toggle="tab" href="#forum-artist-work"
                                aria-controls="forum-present"
                                aria-expanded="false" role="tab">作品库</a>
                         </li>
-                        <li class="nav-item" role="presentation">
+                        <li class="nav-item" role="presentation" v-show="artistInfo.sign_contract_status == 2">
                             <a class="nav-link" data-toggle="tab" href="#forum-artist-fans"
                                aria-controls="forum-present"
                                aria-expanded="false" role="tab">粉丝数据</a>
                         </li>
-                        <li class="nav-item" role="presentation">
+                        <li class="nav-item" role="presentation" v-show="artistInfo.sign_contract_status == 2">
                             <a class="nav-link" data-toggle="tab" href="#forum-artist-bill"
                                aria-controls="forum-present"
                                aria-expanded="false" role="tab">账单</a>
@@ -133,7 +138,7 @@
                     </ul>
                     <div class="tab-content nav-tabs-animate bg-white col-md-12">
                         <!--日历日程-->
-                        <div class="tab-pane animation-fade active pb-20 fixed-button-father" id="forum-artist-schedule"
+                        <div class="tab-pane animation-fade pb-20 fixed-button-father" id="forum-artist-schedule"
                              role="tabpanel">
                             <div class="col-md-12">
                                 <calendar></calendar>
@@ -168,7 +173,7 @@
                             </div>
                         </div>
                         <!--任务-->
-                        <div class="tab-pane animation-fade pb-20 fixed-button-father" id="forum-artist-tasks"
+                        <div class="tab-pane animation-fade pb-20 fixed-button-father" :class="artistInfo.sign_contract_status == 2?'':'active'" id="forum-artist-tasks"
                              role="tabpanel">
                             <table class="table table-hover is-indent example" data-plugin="animateList"
                                    data-animate="fade" data-child="tr">
@@ -260,30 +265,61 @@
                         <!--账单-->
                         <div class="tab-pane animation-fade  pb-20 fixed-button-father" id="forum-artist-bill"
                              role="tabpanel">
-                            <div class="example">
-                                <div class="col-md-1 float-left pl-0">收款金额</div>
-                                <div class="col-md-2 float-left">10000000元</div>
-                                <div class="col-md-1 float-left pl-0">付款金额</div>
-                                <div class="col-md-2 float-left">10000000元</div>
+                            <div class="clearfix my-10">
+                                <div class="float-left" style="padding: .715rem 1.429rem">
+                                    <div class="float-left pr-40">合同金额 <span class="money-color">10000元</span></div>
+                                    <div class="float-left pr-40">支出金额 <span class="money-color">1000元0</span></div>
+                                    <div class="float-left pr-40">税费 <span class="money-color">10000元</span></div>
+                                    <div class="float-left pr-40">papi分成 <span class="money-color">10000元</span></div>
+                                    <div class="float-left pr-40">bigger分成 <span class="money-color">10000元</span></div>
+                                    <div class="float-left pr-40">我司分成 <span class="money-color">10000元</span></div>
+                                </div>
+                                <div class="float-right" style="padding: .715rem 0">
+                                     <span class="pointer-content hover-content" data-toggle="modal"
+                                           data-target="#addBill">
+                                         <i class="md-plus pr-5"></i>新增结算单</span>
+                                </div>
                             </div>
-
-                            <table class="table table-hover is-indent example" data-plugin="animateList"
-                                   data-animate="fade" data-child="tr">
-                                <tr class="animation-fade"
-                                    style="animation-fill-mode: backwards; animation-duration: 250ms; animation-delay: 0ms;">
-                                    <th class="cell-300" scope="col">科目类别</th>
+                            <table class="table table-hover"
+                                   data-child="tr">
+                                <tr>
+                                    <th class="cell-300" scope="col">费用类型</th>
+                                    <th class="cell-300 position-relative" scope="col">
+                                        <template v-if="filterFee === 1">全部</template>
+                                        <template v-if="filterFee === 2">成本</template>
+                                        <template v-if="filterFee === 3">收入</template>
+                                        <i class="iconfont icon-gengduo1 pl-2" aria-hidden="true"
+                                           id="projectDropdown" data-toggle="dropdown" aria-expanded="false"></i>
+                                        <div class="dropdown-menu" aria-labelledby="projectDropdown" role="menu">
+                                            <a class="dropdown-item" role="menuitem" v-show="filterFee !== 1"
+                                               @click="filterProjectFee(1)">全部</a>
+                                            <a class="dropdown-item" role="menuitem" v-show="filterFee !== 2"
+                                               @click="filterProjectFee(2)">成本</a>
+                                            <a class="dropdown-item" role="menuitem" v-show="filterFee !== 3"
+                                               @click="filterProjectFee(3)">收入</a>
+                                        </div>
+                                    </th>
+                                    <th class="cell-300" scope="col">艺人</th>
                                     <th class="cell-300" scope="col">金额</th>
-                                    <th class="cell-300" scope="col">收款时间</th>
-                                    <th class="cell-300" scope="col">付款时间</th>
+                                    <th class="cell-300" scope="col">收款/审批时间</th>
                                     <th class="cell-300" scope="col">操作人</th>
                                 </tr>
                                 <tbody>
-                                <tr v-for="work in artistBillsInfo">
-                                    <td>暂无</td>
-                                    <td>暂无</td>
-                                    <td>暂无</td>
-                                    <td>暂无</td>
-                                    <td>暂无</td>
+                                <tr>
+                                    <td>测试类别</td>
+                                    <td>成本</td>
+                                    <td>1233030</td>
+                                    <td>2018-10-31</td>
+                                    <td>2018-12-20</td>
+                                    <td>陈晓禹</td>
+                                </tr>
+                                <tr>
+                                    <td>测试类别</td>
+                                    <td>收入</td>
+                                    <td>1233030</td>
+                                    <td>2018-10-31</td>
+                                    <td>2018-12-20</td>
+                                    <td>陈晓禹</td>
                                 </tr>
                                 </tbody>
                             </table>
@@ -760,6 +796,50 @@
                 </div>
             </div>
         </div>
+        <!-- 新增结算单 -->
+        <div class="modal fade" id="addBill" aria-hidden="true" aria-labelledby="addLabelForm"
+             role="dialog" tabindex="-1">
+            <div class="modal-dialog modal-simple">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <button type="button" class="close" aria-hidden="true" data-dismiss="modal">
+                            <i class="md-close" aria-hidden="true"></i>
+                        </button>
+                        <h4 class="modal-title">新增结算单</h4>
+                    </div>
+                    <div class="modal-body">
+                        <div class="example">
+                            <div class="col-md-2 text-right float-left px-0">税费</div>
+                            <div class="col-md-10 float-left">
+                                <input type="text" class="form-control" title="">
+                            </div>
+                        </div>
+                        <div class="example">
+                            <div class="col-md-2 text-right float-left px-0">papi分成</div>
+                            <div class="col-md-10 float-left">
+                                <input type="text" class="form-control" title="">
+                            </div>
+                        </div>
+                        <div class="example">
+                            <div class="col-md-2 text-right float-left px-0">bigger分成</div>
+                            <div class="col-md-10 float-left">
+                                <input type="text" class="form-control" title="">
+                            </div>
+                        </div>
+                        <div class="example">
+                            <div class="col-md-2 text-right float-left px-0">我司分成</div>
+                            <div class="col-md-10 float-left">
+                                <input type="text" class="form-control" title="">
+                            </div>
+                        </div>
+                    </div>
+                    <div class="modal-footer">
+                        <button class="btn btn-sm btn-white btn-pure" data-dismiss="modal">取消</button>
+                        <button class="btn btn-primary" type="submit" @click="">确定</button>
+                    </div>
+                </div>
+            </div>
+        </div>
 
     </div>
 </template>
@@ -807,7 +887,9 @@
                 affixes:[], //附件
                 affixesType:'',//附件类型
                 affixId:'',
-                taskNum:''
+                taskNum:'',
+                doneTaskNum:0,
+                filterFee: 1,
             }
         },
         
@@ -823,11 +905,6 @@
                 _this.$store.commit('changeParticipantsInfo', [])
             })
         },
-        watch:{
-            taskNum:function(){
-                
-            }
-        },
         methods: {
 
             //获取艺人信息
@@ -839,19 +916,19 @@
                 };
                 let _this = this;
                 fetch('get', '/stars/' + this.artistId, data).then(function (response) {
-                    let doneTaskNum = 0
+                    
                     _this.artistInfo = response.data;
                    
                     _this.artistTasksInfo = response.data.tasks.data
                     if(_this.artistTasksInfo.length>0){
                         for (let i = 0; i < _this.artistTasksInfo.length; i++) {
                             if(_this.artistTasksInfo[i].status ==2){
-                                doneTaskNum = doneTaskNum+1
+                                _this.doneTaskNum = _this.doneTaskNum+1
                             }
                             
                         }
                     }
-                    _this.taskNum =`${doneTaskNum}/${_this.artistTasksInfo.length}` 
+                    _this.taskNum =`${_this.doneTaskNum}/${_this.artistTasksInfo.length}` 
                     _this.artistWorksInfo = response.data.works.data
                     _this.affixes = response.data.affixes.data
                     for (let i = 0; i < response.data.trails.data.length; i++) {
@@ -861,6 +938,7 @@
                         }
                     }
                 })
+                
             },
 
             getTaskType: function () {
@@ -1200,7 +1278,10 @@
                     _this.isEdit = false;
                     _this.getArtist();
                 })
-            }
+            },
+            filterProjectFee: function (value) {
+                this.filterFee = value;
+            },
            
         }
     }
@@ -1236,5 +1317,8 @@
         left:0px;
         opacity: 0;
 
+    }
+    .money-color {
+        color: #ff9800;
     }
 </style>

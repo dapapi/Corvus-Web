@@ -3,7 +3,7 @@
         <div class="page-header page-header-bordered clearfix">
             <h1 class="page-title float-left">我的请假统计</h1>
             <div class="float-right">
-                <switch-year @click="getYear"></switch-year>
+                <switch-year @click="getYear" :type="5"></switch-year>
             </div>
         </div>
         <div class="page-content container-fluid">
