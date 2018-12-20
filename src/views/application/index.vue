@@ -2,33 +2,6 @@
 <div class="page  page-aside-left">
     <second-left :leftData="leftData" :title="'工作台'"></second-left>
     <router-view/>
-    <!-- <div class="page-header page-header-bordered mt-0 mb-0">
-        <h1 class="page-title">工作台</h1>
-    </div> -->
-    <!-- <div class="page-content container-fluid pt-30" style="height:auto">
-          <div class="panel col-md-12 p-20 clearfix " style="height:auto ">
-          <div class="col-md-2 float-left py-0" >
-            <div class="page-aside-inner page-aside-scroll scrollable is-enabled scrollable-vertical" style="position: relative;">
-            <div data-role="container" class="scrollable-container" >
-            <div data-role="content" class="scrollable-content">
-              <section class="page-aside-section pt-0 m-0">
-                <div class="list-group text-left mb-0">
-                  <router-link class="list-group-item " to="/my/project" >我的项目</router-link>
-                  <router-link class="list-group-item " to="/my/task">我的任务</router-link>
-                  <router-link class="list-group-item " to="/my/schedule">我的日程</router-link>
-                  <router-link class="list-group-item " to="/my/approval">我的审批</router-link>
-                  <router-link class="list-group-item " to="/my/broadcast">我的公告</router-link>
-                </div>
-              </section>
-            </div> 
-          </div> 
-          </div>    
-          </div> 
-          <div class="col-md-10  float-left py-0 pr-0">
-           <router-view></router-view>
-          </div>
-          </div>
-    </div>  -->
 </div>
 </template>
 
@@ -42,9 +15,7 @@ export default {
      },
      data(){
          return {
-            leftData:{
-               topData:[]
-            },
+            leftData:[]
          }
      },
      mounted(){
@@ -52,36 +23,48 @@ export default {
      },
      methods:{
         setData:function(){
-            this.leftData.topData =[
+            this.leftData =[
                 {
-                value:1,
+                id:1,
                 name:'我的消息',
-                url:'/my/message'
+                url:'/my/message',
+                type:'link',
+                level:1
                 },
                 {
-                value:2,
+                id:2,
                 name:'我的项目',
-                url:'/my/project'
+                url:'/my/project',
+                type:'link',
+                level:1
                 },
                 {
-                value:3,
+                id:3,
                 name:'我的任务',
-                url:'/my/task'
+                url:'/my/task',
+                type:'link',
+                level:1
                 },
                  {
-                value:4,
+                id:4,
                 name:'我的日程',
-                url:'/my/schedule'
+                url:'/my/schedule',
+                type:'link',
+                level:1
                 },
                 {
-                value:5,
+                id:5,
                 name:'我审批的',
-                url:'/my/approval'
+                url:'/my/approval',
+                type:'link',
+                level:1
                 },
                 {
-                value:6,
+                id:6,
                 name:'我的公告',
-                url:'/my/broadcast'
+                url:'/my/broadcast',
+                type:'link',
+                level:1
                 }
             ]
         }

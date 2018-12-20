@@ -16,6 +16,8 @@ const state = {
     selectPrincipalInfo: {},
     otherSlot:{},
     unReadMsg:0,//未读消息
+    isSelected:'',
+    isExpanded:[]
 };
 
 export default new Vuex.Store({

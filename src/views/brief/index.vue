@@ -11,9 +11,9 @@
                         <div v-if="item.status === null" class="card" @click="redirectBriefDetails(item.id,item.frequency,item.template_name)">
                             <div class="card-block clearfix">
                                 
-                                <i class="md-file float-left" style="font-size:3rem"></i>
+                                <i class="md-file float-left mr-10" style="font-size:3rem"></i>
                                 
-                                <div class="float-left">
+                                <div class="float-left my-10">
                                     <div >{{item.template_name}}</div>
                                     <div class="lightColor">未提交</div>
                                 </div>
@@ -22,9 +22,9 @@
                         <div v-else class="card" data-toggle="modal" data-target="#submitReport" @click="getId(item.status,item.template_name)">
                             <div class="card-block clearfix">
                                 
-                                <i class="md-file float-left" style="font-size:3rem"></i>
+                                <i class="md-file float-left mr-10" style="font-size:3rem"></i>
                                 
-                                <div class="float-left">
+                                <div class="float-left my-10">
                                      <div>{{item.template_name}}</div>
                                      <div class="lightColor">
                                         <template v-if="item.status.status == 1">未审核</template>

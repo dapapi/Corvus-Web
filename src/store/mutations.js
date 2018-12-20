@@ -1,4 +1,4 @@
-import menusModule from "./menusModule"; 
+// import menusModule from "./menusModule"; 
 export default {
     changeParticipantsInfo(state, data) {
         state.participantsInfo = data
@@ -29,5 +29,11 @@ export default {
     },
     changeUnReadMsg(state,data){
         state.unReadMsg = data
-    }
+    },
+    changeIsSelected(state,data){
+        state.isSelected = data
+    },
+    changeIsExpanded(state, data) {
+        state.isExpanded = data
+    },
 }

@@ -10,12 +10,16 @@ import fetch from '@/assets/utils/fetch'
 export default {
     data(){
         return {
-            websocket:null
+            websocket:null,
+            errorNum:0
         }
     },
     created(){
-      this.initWebSocket()
-      this.getModule()
+      if(JSON.parse(Cookies.get('user')&&this.errorNum<=3)){
+          this.initWebSocket()
+          this.getModule()
+      }
+      
     },
     destroyed(){
         this.websocket.close()
@@ -27,7 +31,6 @@ export default {
             this.websocket.onopen = this.websocketonopen
             this.websocket.onerror = this.websocketonerror
             this.websocket.onclose = this.websocketclose
-            
         },
         websocketonopen:function(){
 
@@ -56,6 +59,7 @@ export default {
             this.websocket.send(data) 
         },
         websocketonerror:function(){
+            this.errorNum = this.errorNum+1
             this.initWebSocket()
         },
         websocketclose:function(){

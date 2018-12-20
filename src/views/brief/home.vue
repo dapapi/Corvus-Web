@@ -12,16 +12,11 @@ import config from '@/assets/js/config'
 export default {
      components:{
        secondLeft
+       
      },
      data(){
          return {
-            leftData:{
-               topData:[],
-               bottomData:[],
-               type:[
-
-               ]
-            },
+            leftData:[],
          }
      },
      mounted(){
@@ -29,39 +24,52 @@ export default {
      },
      methods:{
         setData:function(){
-            this.leftData.topData =[
+            this.leftData=[
                 {
-                value:1,
-                name:'提交简报',
-                url:'/brief'
+                    id:1,
+                    level:1,
+                    name:'提交简报',
+                    url:'/brief/index',
+                    type:'link',
+                    
+                    isSelected:false,
                 },
                 {
-                value:2,
-                name:'我审批的',
-                url:'/brief/myapproval'
+                    id:2,
+                    level:1,
+                    name:'我审批的',
+                    url:'/brief/myapproval',
+                    type:'link',
+                    
+                    isSelected:false,
                 },
-                // {
-                // value:3,
-                // name:'跟进的问题',
-                // url:'/brief/followup'
-                // }
-            ]
-            this.leftData.bottomData=[
                 {
-                    value:3,
+                    id:3,
+                    level:1,
                     name:'我的简报',
-                    data:[]
+                    type:'button',
+                    isExpanded:false,
+                    isSelected:false,
+                    subMenu:[]
                 },
                 {
-                    value:4,
+                    id:4,
+                    level:1,
                     name:'成员简报',
-                    data:[]
+                    type:'button',
+                    isExpanded:false,
+                    isSelected:false,
+                    subMenu:[]
                 },
                 {
-                    value:5,
+                    id:5,
+                    level:1,
                     name:'简报统计',
-                    data:[]
-                }
+                    type:'button',
+                    isExpanded:false,
+                    isSelected:false,
+                    subMenu:[]
+                },
             ]
             this.getlist()
         },
@@ -69,41 +77,54 @@ export default {
             fetch('get',`${config.apiUrl}/launch`).then((res) => {
                 // console.log(res.data)
                 let data={}
-                for (let i = 0; i < this.leftData.bottomData.length; i++) {
-                    if(this.leftData.bottomData[i].value == 3){
+                for (let i = 0; i < this.leftData.length; i++) {
+                    if(this.leftData[i].id == 3){
                         
                         for (let t = 0; t < res.data.length; t++) {
                             data={
-                                value:res.data[t].id,
+                                id:`3${res.data[t].id}`,
                                 name:`我的${res.data[t].template_name}`,
-                                url:`/brief/list?id=${res.data[t].id}&type=${res.data[t].frequency}&name=${res.data[t].template_name}`
+                                url:`/brief/list?id=${res.data[t].id}&type=${res.data[t].frequency}&name=${res.data[t].template_name}`,
+                                type:'link',
+                                level:2,
+                                isExpanded:false,
+                                isSelected:false,
                             }
-                            this.leftData.bottomData[i].data.push(data)
+                            this.leftData[i].subMenu.push(data)
                             
                         }
-                    }else if(this.leftData.bottomData[i].value == 4){
+                    }else if(this.leftData[i].id == 4){
                         for (let t = 0; t < res.data.length; t++) {
                             data={
-                                value:res.data[t].id,
+                                id:`4${res.data[t].id}`,
                                 name:`成员${res.data[t].template_name}`,
-                                url:`/brief/memberReport?id=${res.data[t].id}&type=${res.data[t].frequency}&name=${res.data[t].template_name}`
+                                url:`/brief/memberReport?id=${res.data[t].id}&type=${res.data[t].frequency}&name=${res.data[t].template_name}`,
+                                type:'link',
+                                level:2,
+                                isExpanded:false,
+                                isSelected:false,
                             }
-                            this.leftData.bottomData[i].data.push(data)
+                            this.leftData[i].subMenu.push(data)
                             
                         }
-                    }else{
+                    }else if(this.leftData[i].id == 5){
                         for (let t = 0; t < res.data.length; t++) {
                             data={
-                                value:res.data[t].id,
+                                id:`5${res.data[t].id}`,
                                 name:`统计${res.data[t].template_name}`,
-                                url:`/brief/statistics?id=${res.data[t].id}&type=${res.data[t].frequency}&name=${res.data[t].template_name}`
+                                url:`/brief/statistics?id=${res.data[t].id}&type=${res.data[t].frequency}&name=${res.data[t].template_name}`,
+                                type:'link',
+                                level:2,
+                                isExpanded:false,
+                                isSelected:false,
                             }
-                            this.leftData.bottomData[i].data.push(data)
+                            this.leftData[i].subMenu.push(data)
                             
                         }
                     }
                     
                 }
+                // console.log(this.leftData)
             })
         }
      }
