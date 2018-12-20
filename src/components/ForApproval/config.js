@@ -36,6 +36,11 @@ export const APPROVAL_CONFIG = {
             key: 4,
             value: '知会我的',
             url: 'only'
+        },
+        {
+            key:5,
+            value:'详情页测试用接口',
+            url:'detail'
         }
     ]
 }
