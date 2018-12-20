@@ -50,8 +50,13 @@
                                     <th class="cell-300" scope="col">审批状态</th>
                                 </tr>
                                 <tbody>
-                                <tr v-for="prpject in projectsInfo">
+                                <tr v-for="project in projectsInfo" :key='project.project_number'>
+                                    <router-link :to="'123'"><td>{{project.project_number}}</td></router-link>
+                                    <td>{{project.title}}</td>
+                                    <td>{{project.name}}</td>
                                     <td></td>
+                                    <td>{{project.created_at}}</td>
+                                    <td>{{getProgressName(project.form_status)}}</td>
                                 </tr>
                                 </tbody>
                             </table>
@@ -70,17 +75,35 @@
 </template>
 
 <script>
+     import fetch from '@/assets/utils/fetch.js'
+    import config from '@/assets/js/config'
+    import {PROJECT_CONFIG} from '@/views/approval/project/projectConfig.js'
     export default {
-        name: "only",
+        name: "application",
         data() {
             return {
                 keywords: '',
                 projectsInfo: [],
+                projectProgress:PROJECT_CONFIG.approvalProgress
+            }
+        },
+        mounted(){
+            this.getList()
+        },
+        computed:{
+            getProgressName(){
+                return function(params){
+                   return  this.projectProgress.find(item=>item.id = params).value
+                }
             }
         },
         methods: {
-            getList(value) {
-
+            getList() {
+                let _this = this
+                fetch('get','/approvals_project/notify').then((params) => {
+                    console.log(params.data)
+                    _this.projectsInfo = params.data
+                })
             }
         }
     }

@@ -218,6 +218,7 @@
             },
 
             addProjectTrail: function (value) {
+                console.log(value);
                 if (!value) {
                     return
                 }
