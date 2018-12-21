@@ -38,6 +38,7 @@
                <div class="font-size-12" style="color:#ccc">{{item.start}} - {{item.end}}</div>
            </li>
        </ul>
+       
        <!--切换年-->
        <!-- <ul v-show="showDetails&&type == 5" class="mt-20">
            <li v-for="(item,index) in monthWeek[nowMonth-1]" :key="index" class="py-5">

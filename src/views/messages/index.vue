@@ -183,8 +183,8 @@ export default {
                 this.renderMsg(this.moduleList[0].id,1)
             }
         })
-        console.log(this.moduleList)
-      console.log(this.moduleType)
+        // console.log(this.moduleList)
+        // console.log(this.moduleType)
     },
     msgStatus:function(id,type){
         let data = {}
