@@ -167,7 +167,7 @@
                                     <th class="cell-300" scope="col">截止日期</th>
                                 </tr>
                                 <tr v-for="(task,index) in tasksInfo" :key="index" v-if="task">
-                                    <td @click="taskdetail()" class="Jump">{{task.title}}</td>
+                                    <td @click="taskdetail(task.id)" class="Jump">{{task.title}}</td>
                                     <td v-if="task.type">{{task.type.data.title}}</td>
                                     <td v-if="!task.type">未选择</td>
                                     <td>
@@ -212,7 +212,7 @@
                                     <td>{{work.release_time}}</td>
                                     <td>{{work.read_proportion}}</td>
                                     <td @click="Jump(work.link)">
-                                        <template v-show="wock.link">
+                                        <template v-show="work.link">
                                            {{work.link}}
                                         </template>
                                     </td>
@@ -1011,8 +1011,6 @@
                     hatch_star_at:_this.artistInfo.hatch_star_at,
                     hatch_end_at:_this.artistInfo.hatch_end_at
                 }
-                console.log(data.hatch_star_at)
-                console.log(data.hatch_end_at)
                 fetch('put','/bloggers/'+ this.artistId,data).then(function(response){
                     toastr.success('修改成功');
                     _this.artistTasksInfo = response.data;
@@ -1250,6 +1248,7 @@
                 this.updatedemand = value
             },
             taskdetail(id){
+                console.log(id)
              this.$router.push({path: '/tasks/' + id})
             },
             projectdetil(id){

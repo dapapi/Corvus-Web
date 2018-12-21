@@ -763,9 +763,12 @@
                 this.jobCont = value
                 this.defaultId = 0
                 let _this = this;
+                console.log(this.jobCont)
                 fetch('get', '/console/feature/' + this.jobCont).then(function (response) {
+                     console.log(response)
                     _this.powerlist = [];
                     for (_this.powerlist in response) {
+                       
                         let selectedLength = 0;
                         response[_this.powerlist].data.forEach(item => {
                             if (item.selected) {
@@ -777,13 +780,14 @@
                                 item.selected = false
                             }
                         });
-                        if (selectedLength === response[_this.powerlist].data.length) {
+                        if (selectedLength === response[_this.powerlist].data.length && response[_this.powerlist].length>0) {
                             response[_this.powerlist].selected = true;
                         } else {
                             response[_this.powerlist].selected = false;
                         }
                     }
                     _this.powerDate = response;
+                   
                 });
                 this.sendData=[];
                fetch('get','/console/scope/'+this.jobCont).then(function(response){
@@ -818,7 +822,7 @@
                         
                         i++;
                     }  
-                    console.log(_this.sendData) 
+                   
                 })
 
 
