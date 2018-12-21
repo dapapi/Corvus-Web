@@ -51,7 +51,7 @@
                                 </tr>
                                 <tbody>
                                 <tr v-for="project in projectsInfo" :key='project.project_number'>
-                                    <router-link :to="'123'"><td>{{project.project_number}}</td></router-link>
+                                    <router-link :to="'/approval/'+project.id"><td>{{project.form_instance_number}}</td></router-link>
                                     <td>{{project.title}}</td>
                                     <td>{{project.name}}</td>
                                     <td></td>

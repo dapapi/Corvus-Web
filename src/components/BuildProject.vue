@@ -145,11 +145,12 @@
                         </div>
                     </div>
                 </div>
+                <ApprovalProgress :approver='approver' />
+
                 <div class="modal-footer">
                     <button class="btn btn-sm btn-white btn-pure" data-dismiss="modal">取消</button>
                     <button class="btn btn-primary" type="submit" @click="addProject">确定</button>
                 </div>
-
             </div>
         </div>
     </div>
@@ -159,8 +160,11 @@
 <script>
     import config from '../assets/js/config.js'
     import fetch from '../assets/utils/fetch.js'
-
+    import ApprovalProgress from '@/components/ForApproval/ApprovalProgress'
     export default {
+        components:{
+            ApprovalProgress
+        },
         name: "BuildProject",
         props: ['projectType', 'projectFieldsArr'],
         data() {
@@ -179,22 +183,33 @@
                     trail: {}
                 },
                 projectFields: [],
+                approver:[],
             }
         },
         watch: {
             projectFieldsArr(newValue) {
                 return this.projectFields = newValue
+            },
+            projectType(newValue){
+                this.getApprover()
             }
         },
         mounted() {
             this.getStars();
             this.getTrail();
+            // this.getApprover();
             let _this = this;
             $('#addProject').on('hidden.bs.modal', function () {
                 _this.refreshAddProjectModal()
             })
         },
         methods: {
+            getApprover(){
+                let _this = this
+                fetch('get','/approvals/chains?form_id='+this.projectType+'&change_type=222&value').then((params) => {
+                    _this.approver = params.data
+                })
+            },
             refreshAddProjectModal: function () {
                 if (!this.$refs.trails) {
                     return

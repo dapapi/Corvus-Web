@@ -1,43 +1,43 @@
 <template>
     <div class="">
-        <div class="" style="background-color:#f3f4f5" v-for="item in list" :key="item.id">
+        <div class="" style="background-color:#f3f4f5">
             <div class="page-header  page-header-bordered mb-0">
-                <h6 class="page-title nav-head">{{item.title}}
-                    <template v-if="item.form_status==232">
+                <h6 class="page-title nav-head">{{list.title}}
+                    <template v-if="info.approval[0].form_status==232">
                         <button class="btn btn-success py-5">已审批</button>
                     </template>
-                    <template v-if="item.form_status==231">
+                    <template v-if="info.approval[0].form_status==231">
                         <button class="btn btn-warning py-5">待审批</button>
                     </template>
-                    <template v-if="item.form_status==234">
+                    <template v-if="info.approval[0].form_status==234">
                         <button class="btn py-5">已撤销</button>
                     </template>
-                    <template v-if="item.form_status==235">
+                    <template v-if="info.approval[0].form_status==235">
                         <button class="btn py-5">已作废</button>
                     </template>
-                    <template v-if="item.form_status==233">
+                    <template v-if="info.approval[0].form_status==233">
                         <button class="btn btn-danger py-5 ">已拒绝</button>
                     </template>
                 </h6>
             </div>
             <div class="page-header  page-header-bordered m-20 pl-10">
                 <h6 class="page-title title-status">当前状态<em></em><span>待审批</span>
-                    <i v-if="item.form_status==232">
+                    <i v-if="info.approval[0].form_status==232">
                         <button class="btn btn-primary">作废</button>
                     </i>
-                    <i v-if="item.form_status==231">
+                    <i v-if="info.approval[0].form_status==231">
                         <button class="btn btn-primary">撤销</button>
                         <button class="btn btn-danger" type="submit" 
                                 data-toggle="modal" data-target="#addProject">提醒
                         </button>
                     </i>
-                    <i v-if="item.form_status==234">
+                    <i v-if="info.approval[0].form_status==234">
                         <button class="btn btn-primary">重新提交</button>
                     </i>
-                    <i v-if="item.form_status==235">
+                    <i v-if="info.approval[0].form_status==235">
                         <button class="btn btn-primary">重新提交</button>
                     </i>
-                    <i v-if="item.form_status==233">
+                    <i v-if="info.approval[0].form_status==233">
                         <button class="btn btn-primary">作废</button>
                     </i>
                 </h6>
@@ -45,42 +45,30 @@
             <div class="page-content container-fluid mt-20">
                 <div class="panel col-md-12 col-lg-12 pb-10">
                     <div class="caption">
-                        <h6 class="page-title">{{item.title}}</h6>
-                        <span>编号：{{item.form_instance_number}}</span>
+                        <h6 class="page-title">{{info.approval[0].title}}</h6>
+                        <span>编号：{{info.approval[0].project_number}}</span>
                     </div>
                     <div class="example">
                         <div class="col-md-2 float-left">申请人</div>
-                        <div class="col-md-2 float-left">{{item.applicant}}</div>
+                        <div class="col-md-2 float-left">{{info.approval[0].name}}</div>
                         <div class="col-md-2 float-left">部门</div>
-                        <div class="col-md-2 float-left">{{item.department}}</div>
+                        <div class="col-md-2 float-left">{{info.approval[0].department_name }}</div>
                     </div>
                     <div class="example">
                         <div class="col-md-2 float-left">部门</div>
-                        <div class="col-md-2 float-left">{{item.fieldlocation}}</div>
+                        <div class="col-md-2 float-left">{{info.approval[0].department_name}}</div>
                         <div class="col-md-2 float-left">申请时间</div>
-                        <div class="col-md-2 float-left">{{item.time}}</div>
+                        <div class="col-md-2 float-left">{{info.approval[0].created_at}}</div>
                     </div>
                     <div class="example pt-20" style="border-top:1px solid #ccc">
-                        <div class="col-md-2 float-left">外勤地点</div>
-                        <div class="col-md-2 float-left">{{item.fieldlocation}}</div>
-                        <div class="col-md-2 float-left">外勤天数</div>
-                        <div class="col-md-2 float-left">{{item.fieldDays}}天</div>
+                       
                     </div>
-                    <div class="example">
-                        <div class="col-md-2 float-left">开始时间</div>
-                        <div class="col-md-2 float-left">{{item.startTime}}</div>
-                        <div class="col-md-2 float-left">结束时间</div>
-                        <div class="col-md-2 float-left">{{item.endTime}}</div>
-                    </div>
-                    <div class="example">
-                        <div class="col-md-2 float-left">外勤事由</div>
-                        <div class="col-md-2 float-left">{{item.fieldwork}}</div>
-                        <div class="col-md-2 float-left">附件</div>
-                        <div class="col-md-2 float-left">{{item.department}}</div>
-                    </div>
-                    
+                    <div class="example col-md-12" v-for="(item, index) in detailData" :key="index" v-if="item.values">
+                        <div class="col-md-6 float-left">{{item.key}}</div>
+                        <div class="col-md-6 float-left" v-if="item.values">{{item.values.data.value || ''}}</div>
+                    </div>    
                 </div>
-                <div class="panel col-md-12 col-lg-12">
+                <!-- <div class="panel col-md-12 col-lg-12">
                     <div class="caption" style="border:0;">
                         <h6 class="page-title pb-20" style="border-bottom:1px solid #ccc">审批流程</h6>
                         <div class="setp pt-20">
@@ -130,31 +118,31 @@
                                 
                             </div>
                              <div class="right col-md-2">
-                                <template v-if="item.type==0">
+                                <template v-if="info.approval.form_status==231">
                                     <div class="right-cont" style="color:#4DAF50">
                                         <i class="md-check-circle pr-5"></i>
                                         <b>审批通过</b>
                                     </div>
                                 </template>
-                                <template v-if="item.type==1">
+                                <template v-if="info.approval.form_status==232">
                                     <div class="right-cont" style="color:#E0E0E0">
                                         <i class="md-check-circle pr-5"></i>
                                         <b>审批通过</b>
                                     </div>
                                 </template>
-                                <template v-if="item.type==2">
+                                <template v-if="info.approval.form_status==233">
                                     <div class="right-cont">
                                         <i class="md-close-circle pr-5"></i>
                                         <b>已撤回</b>
                                     </div>
                                 </template>
-                                <template v-if="item.type==3">               
+                                <template v-if="info.approval.form_status==3">               
                                     <div class="right-cont">
                                         <i class="md-close-circle pr-5"></i>
                                         <b>已作废</b>
                                     </div>
                                 </template>
-                                <template v-if="item.type==4">
+                                <template v-if="info.approval.form_status==4">
                                     <div class="right-cont" style="color:red">
                                         <i class="md-close-circle pr-5"></i>
                                         <b>已拒绝</b>
@@ -163,10 +151,10 @@
                                 
                             </div>
                         </div>
-                    </div> 
+                    </div>  -->
                                 
                 </div>
-                <div class="panel col-md-12 col-lg-12 py-10">
+                <!-- <div class="panel col-md-12 col-lg-12 py-10">
                     <div class="content" >
                         <div class="example" >
                             <div class="col-md-1 float-left">审批</div>
@@ -200,15 +188,15 @@
                             <div class="col-md-2 float-left">审批时间</div>
                             <div class="col-md-2 float-left">2018-12-13</div>
                         </div>
-                    </div>
+                    </div> -->
                      <div class="notify pl-15">
-                        <div>知会人</div>
-                        <AddMember @change="participantChange"></AddMember>
+                        <!-- <div>知会人</div> -->
+                        <!-- <AddMember @change="participantChange"></AddMember> -->
                     </div>
                 </div>
             </div> 
-        </div>
-    </div>
+        <!-- </div> -->
+    <!-- </div> -->
 </template>
 <script>
  import fetch from '@/assets/utils/fetch.js'
@@ -218,23 +206,24 @@
 export default {
     data(){
         return{
-           list:[]
+           list:{},
+           info:{},
+           detailData:{},
         }
     },
     mounted(){
         this.getData()
-        // data.forEach((item)=>{
-        //   if(this.$route.params.id==item.number){
-        //       this.list.push(item)
-        //   }
-        // });  
     },
     methods:{
         getData(){
             let _this = this
             fetch('get','/approvals_project/detail/'+this.$route.params.id).then((params) => {
-                _this.list = params
-                console.log(params)
+                // _this.list = params
+                let {meta}=params
+                _this.list = params.data
+                _this.info = meta
+                let {fields:{data}} = meta
+                _this.detailData = data
             })
         },
         participantChange: function (value) {

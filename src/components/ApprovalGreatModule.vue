@@ -14,7 +14,8 @@
                             <div :is='sortChecker(item)' 
                             :data='item' :predata='sendData'
                             :singlemode='singlemode'
-                            @change="changeHandler"></div>
+                            @change="changeHandler"
+                            :formid='form_id'></div>
                             <!-- ⬆️核心模块 -->
                         </div>
                         <ApprovalProgress />
@@ -62,7 +63,8 @@ export default {
             item:{type:1},
             sendData:{
 
-            }
+            },
+            form_id:''
         }
     },
     mounted(){
@@ -126,7 +128,8 @@ export default {
             $('.selectpicker').selectpicker('refresh');   
         },
         dataInit(){
-            let {name,description,approval_form_controls} = this.importData[0]
+            let {name,description,approval_form_controls,form_id} = this.importData[0]
+            this.form_id = form_id
             let controlArr= Array.from(approval_form_controls)
             this.pageInfo.title = name
             let descriptionArr = []
