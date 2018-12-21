@@ -24,6 +24,7 @@
                     <div class="card-text clearfix example">
                         <div class="col-md-6 float-left" v-if="totalData.publicity">
                             <div class="float-left pl-0 pr-2 col-md-2 pt-10">
+                                <i class="iconfont icon-yonghu"></i>
                               制作人
                             </div>
                             <div class="font-weight-bold float-left p-10"  v-for="item in totalData.publicity.data" :key="item.id" >
@@ -83,6 +84,11 @@
                                 <template v-if="tasksInfo.length > 0">
                                     <ToolTips :title="`已完成数量${completeNum}`">
                                         任务 ({{completeNum}}/{{tasksInfo.length}})
+                                    </ToolTips>
+                                </template>
+                                 <template v-if="tasksInfo.length == 0">
+                                    <ToolTips :title="`已完成数量${0}`">
+                                        任务 ({{0}}/{{tasksInfo.length}})
                                     </ToolTips>
                                 </template>
                             </a>
@@ -205,9 +211,9 @@
                                     <td>{{work.videoname}}</td>
                                     <td>{{work.release_time}}</td>
                                     <td>{{work.read_proportion}}</td>
-                                    <td>
+                                    <td @click="Jump(work.link)">
                                         <template v-show="wock.link">
-                                            www.baidu.com
+                                           {{work.link}}
                                         </template>
                                     </td>
                                     <td v-if="work.advertising==1">
@@ -385,6 +391,29 @@
                                                               @change="changeArtistDesc"></EditInput>
                                             </div>
                                         </div>
+                                         <div class="card-text py-10 px-0 clearfix col-md-6 float-left edit-height">
+                                            <div class="col-md-2 float-left text-right pl-0">博主级别</div>
+                                            <div class="col-md-10 float-left font-weight-bold">
+                                                <EditSelector :content="artistInfo.level"
+                                                              :options="taskLevelArr"
+                                                              :is-edit="isEdit"
+                                                              @change="changeArtistLevel"></EditSelector>
+                                            </div>
+                                        </div>
+                                         <div class="card-text py-10 px-0 clearfix col-md-6 float-left edit-height">
+                                            <div class="col-md-2 float-left text-right pl-0">孵化期</div>
+                                            <div class="col-md-10 float-left font-weight-bold">
+                                                <EditGroupDatePicker :content="Incubationperiod" :is-edit="isEdit"
+                                                              @change="changeArtistHatch" ></EditGroupDatePicker>
+                                            </div>
+                                        </div>
+                                         <div class="card-text py-10 px-0 clearfix col-md-6 float-left edit-height">
+                                            <div class="col-md-2 float-left text-right pl-0">商务合作要求</div>
+                                            <div class="col-md-10 float-left font-weight-bold">
+                                                <EditInput :content="artistInfo.cooperation_demand" :is-edit="isEdit"
+                                                              @change="changeArtistDemand"></EditInput>
+                                            </div>
+                                        </div>
                                     </div>
 
                                     <div class="segmentation-line example"></div>
@@ -439,7 +468,7 @@
                 <div class="modal-content">
                     <div class="modal-header">
                         <button type="button" class="close" aria-hidden="true" data-dismiss="modal">
-                            <i class="md-close" aria-hidden="true"></i>
+                            <i class="iconfont icon-guanbi" aria-hidden="true"></i>
                         </button>
                         <h4 class="modal-title">新增任务</h4>
                     </div>
@@ -528,7 +557,7 @@
                 <div class="modal-content">
                     <div class="modal-header">
                         <button type="button" class="close" aria-hidden="true" data-dismiss="modal">
-                            <i class="md-close" aria-hidden="true"></i>
+                            <i class="iconfont icon-guanbi" aria-hidden="true"></i>
                         </button>
                         <h4 class="modal-title">新增视频</h4>
                     </div>
@@ -587,7 +616,7 @@
                 <div class="modal-content">
                     <div class="modal-header">
                         <button type="button" class="close" aria-hidden="true" data-dismiss="modal">
-                            <i class="md-close" aria-hidden="true"></i>
+                            <i class="iconfont icon-guanbi" aria-hidden="true"></i>
                         </button>
                         <h4 class="modal-title">隐私设置</h4>
                     </div>
@@ -694,7 +723,14 @@
                 ProjectsInfo:[],
                 start_Time:'',
                 end_Time:'',
-                principalId:''
+                principalId:'',
+                principalIds:[],
+                taskLevelArr:config.taskLevelArr,
+                updatelevel:'',//博主级别
+                updatedemand:'',//合作需求
+                updatehatch_start:'',//孵化期开始
+                updatehatch_end:'',//孵化期截止
+                Incubationperiod:''
             }
         },
          computed: {
@@ -733,7 +769,7 @@
                     _this.$refs.workReleaseTime.setValue('');
                 
              })
-             this.getTime()
+             this.getTimes()
            
         },
 
@@ -811,10 +847,8 @@
                     include: 'creator,tasks,affixes,producer,type',
                 };
                 fetch('get', '/bloggers/' + this.artistId, data).then(function (response) {
-                   
-                      let doneTaskNum = 0
+                    let doneTaskNum = 0
                     _this.artistInfo = response.data;
-                      
                     _this.tasksInfo = response.data.tasks.data
                     if(_this.tasksInfo.length>0){
                         for (let i = 0; i < _this.tasksInfo.length; i++) {
@@ -824,6 +858,9 @@
                             
                         }
                     }
+                    if(_this.artistInfo.hatch_star_at&&_this.artistInfo.hatch_end_at){
+                        _this.Incubationperiod = _this.artistInfo.hatch_star_at+'|'+_this.artistInfo.hatch_end_at
+                    } 
                     _this.taskNum =`${doneTaskNum}/${_this.tasksInfo.length}` 
                     if(_this.artistInfo.intention==false){
                         _this.updateType=2
@@ -840,6 +877,8 @@
                     }else{
                         _this.artistInfo.artistWorkProportion=false
                     }
+                      
+                    
                 });
                 //项目
                 fetch('get','/bloggers/'+this.artistId+'?include=tasks.type,trails.project.principal,trails.client,producer,creator,affixes,type,publicity').then(function(response){
@@ -859,7 +898,7 @@
                 });
                 //负责人
                 fetch('get','/users/').then(function(response){
-                    console.log(response.data)
+                    
                     _this.Users=response.data;
                 })
                 //任务状态跑组。试戏
@@ -870,7 +909,13 @@
                     _this.artistTypeArr=response.data                  
                 })
                 fetch('get','/users/my?include=department').then(function(response){
-                    _this.principalId=response.id  
+                    _this.principalId=response.data.id 
+                })
+                 fetch('get','/bloggers/select?include=users').then(function(response){ 
+                    response.data.forEach(item=>{
+                         _this.principalIds.push(item.users.data.id)  
+                    })
+                   
                 })
             },
             getArtistTasks: function () {
@@ -961,10 +1006,14 @@
                     star_weibo_infos:this.updateStar_weibo_infos,
                     star_xiaohongshu_infos:this.updateStar_xiaohongshu_infos,
                     platform: this.updatePlatform,
+                    // level:this.updatelevel,
+                    cooperation_demand:this.updatedemand,
+                    hatch_star_at:this.updatehatch_start,
+                    hatch_end_at:this.updatehatch_end
                 }
                 fetch('put','/bloggers/'+ this.artistId,data).then(function(response){
-                     toastr.success('修改成功');
-                   _this.artistTasksInfo = response.data;
+                    toastr.success('修改成功');
+                    _this.artistTasksInfo = response.data;
                    
                    if(_this.artistInfo.intention==false){
                         _this.updateType=2
@@ -976,6 +1025,7 @@
                     }else{
                         _this.updateSign_contract_other=1
                     }
+                   
                     _this.getArtist()
                     $('.selectpicker').selectpicker('refresh')
               })
@@ -1016,11 +1066,11 @@
                         
                 })
                 let obj={
-                    title:'制作人视频评分任务',
+                    title:'制作人视屏评分-视频评分',
                     principal_id:this.principalId,
                     start_at:this.start_Time,
                     end_at:this.end_Time,
-                    // participant_ids:
+                    participant_ids:this.principalIds,
                     resource_type:1,
                     resourceable_id:this.artistId,
                     desc:'这是一个评分问卷任务',//默认
@@ -1030,7 +1080,7 @@
                      _this.getArtist()
                 })
             },
-            getTime:function(){
+            getTimes:function(){
                 let end_date='';
                 let end_hour='';
                 let end_minute='';
@@ -1057,12 +1107,12 @@
                         start_minute="0"+start_minute;
                     }
                     let start_second=time.getSeconds();
-                    end_second=(59-start_second)*1000
+                    end_second=(60-start_second)*1000
                     if(start_minute<10){
                         start_minute="0"+start_minute;
                     }
                     this.start_Time = start_year+"-"+start_month+"-"+start_date+" "+start_hour+":"+start_minute+":"+start_second
-                     if(time.getDay()<5){
+                     if(time.getDay()<=5){
                         end_date = (5-time.getDay())*60*60*1000*24
                         end_timeStamp = time.getTime()+end_date+end_hour+end_minute+end_second
                         
@@ -1177,12 +1227,37 @@
             changeArtistDesc: function (value) {
                 this.artistInfo.desc = value
             },
-
+            //博主级别
+            changeArtistLevel:function(value){
+                console.log(value)
+                
+                this.updatelevel = value
+            },
+            //孵化期
+            changeArtistHatch:function(start,end){
+               
+                console.log(start,end)
+                this.updatehatch_start = start
+                this.updatehatch_end = end  
+                
+                 if(this.artistInfo.hatch_star_at&&this.artistInfo.hatch_end_at){
+                        this.Incubationperiod = this.updatehatch_start+'|'+this.updatehatch_end
+                } 
+                console.log( this.updatehatch_start ,this.updatehatch_end)
+            },
+            //合作需求
+            changeArtistDemand:function(value){
+                this.updatedemand = value
+            },
             taskdetail(id){
              this.$router.push({path: '/tasks/' + id})
             },
             projectdetil(id){
              this.$router.push({path: '/projects/' + id}) 
+            },
+            Jump(value){
+                console.log(value)
+                window.open(value)
             }
         }
     }

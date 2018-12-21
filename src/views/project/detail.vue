@@ -33,7 +33,7 @@
                     <div class="card-text clearfix example">
                         <div class="col-md-6 float-left pl-0">
                             <div class="float-left pl-0 pr-2 col-md-3">
-                                <i class="md-plus pr-2" aria-hidden="true"></i>负责人
+                                <i class="iconfont icon-yonghu pr-2" aria-hidden="true"></i>负责人
                             </div>
                             <div class="font-weight-bold float-left" v-if="projectInfo.principal">
                                 {{ projectInfo.principal.data.name }}
@@ -41,7 +41,7 @@
                         </div>
                         <div class="col-md-6 float-left pl-0" v-if="projectInfo.type != 5">
                             <div class="float-left pl-0 pr-2 col-md-3">
-                                <i class="md-plus pr-2" aria-hidden="true"></i>目标艺人
+                                <i class="iconfont icon-yonghu pr-2" aria-hidden="true"></i>目标艺人
                             </div>
                             <div class="font-weight-bold float-left" v-if="projectInfo.trail.data.expectations">
                                 <template v-for="artist in projectInfo.trail.data.expectations.data">
@@ -58,7 +58,7 @@
                     <div class="card-text clearfix example">
                         <div class="col-md-6 float-left pl-0">
                             <div class="float-left pl-0 pr-2 col-md-3">
-                                <i class="md-plus pr-2" aria-hidden="true"></i>项目状态
+                                <i class="iconfont icon-tubiao- pr-2" aria-hidden="true"></i>项目状态
                             </div>
                             <div class="font-weight-bold float-left">
                                 <template v-if="projectInfo.status === 1"><span style="color:#FF9800">进行中</span> </template>
@@ -70,7 +70,7 @@
                     </div>
                     <div class="clearfix">
                         <div class="col-md-6 float-left pl-0 mb-20" style="border-right: 1px solid #eee">
-                            <div class="col-md-6">任务 5/12</div>
+                            <div class="col-md-6"><i class="iconfont icon-iconset0399"></i> 任务 5/12</div>
                             <div class="clearfix example">
                                 <div class="col-md-3 float-left">电话会议</div>
                                 <div class="col-md-3 float-left">张佳佳</div>

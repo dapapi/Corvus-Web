@@ -216,7 +216,7 @@
 
                         <div class="formName pd-b-15">
                             任职履历<span class="note" style="margin-left: 16px;">从最近的任职单位开始填写</span>
-                            <i class="md-plus add-icon" @click="tableAdd('work')"></i>
+                            <i class="icon-tianjia add-icon" @click="tableAdd('work')"></i>
                         </div>
                         <div class="example table-responsive padding15">
                             <table class="table table-hover table-bordered">
@@ -237,7 +237,7 @@
 
                         <div class="formName pd-b-15">家庭资料
                             <span class="note" style="margin-left: 16px;">请列出直系亲属资料和紧急联系人信息</span>
-                            <i class="md-plus add-icon" @click="tableAdd('home')"></i>
+                            <i class="icon-tianjia add-icon" @click="tableAdd('home')"></i>
                         </div>
                         <div class="example table-responsive padding15">
                             <table class="table table-hover table-bordered">

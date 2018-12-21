@@ -5,7 +5,7 @@
             <div class="modal-content">
                 <div class="modal-header">
                     <button type="button" class="close" aria-hidden="true" data-dismiss="modal">
-                        <i class="md-close" aria-hidden="true"></i>
+                        <i class="iconfont icon-guanbi" aria-hidden="true"></i>
                     </button>
                     <h4 class="modal-title">自定义筛选</h4>
                 </div>
@@ -23,7 +23,7 @@
                                                           @change="conditionChange"></customize-linkage-selectors>
                             </div>
                             <div class="float-left col-md-1 pb-5">
-                                <i class="md-close font-size-18" aria-hidden="true" style="line-height: 36px;"
+                                <i class="iconfont icon-guanbi font-size-18" aria-hidden="true" style="line-height: 36px;"
                                    @click="delSelector('selector' + n)"></i>
                             </div>
                         </div>
