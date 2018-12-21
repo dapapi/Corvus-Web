@@ -1,16 +1,5 @@
 <template>
     <div class="page">
-        <!-- <div class="loader-overlay" v-if="isLoading" style="background:rgb(255,255,255,.4)">
-            <div class="loader-content">
-                <div class="loader-index">
-                <div></div>
-                <div></div>
-                <div></div>
-                <div></div>
-                <div></div>
-                <div></div>
-        </div>
-        </div></div> -->
         <div class="page-header page-header-bordered">
             <h1 class="page-title d-inline">博主详情</h1>
 
@@ -35,7 +24,8 @@
                     <div class="card-text clearfix example">
                         <div class="col-md-6 float-left" v-if="totalData.publicity">
                             <div class="float-left pl-0 pr-2 col-md-2 pt-10">
-                                <i class="md-plus pr-2" aria-hidden="true"></i>制作人
+                                <i class="iconfont icon-yonghu"></i>
+                              制作人
                             </div>
                             <div class="font-weight-bold float-left p-10"  v-for="item in totalData.publicity.data" :key="item.id" >
                                 <span >{{item.name}}</span>
@@ -45,28 +35,29 @@
                 </div>
                 <div class="clearfix">
                     <div class="col-md-6 float-left pl-0 mb-20" style="border-right: 1px solid #eee">
-                        <div class="col-md-6">任务{{taskNum}}</div>
+                        <div class="col-md-6"><i class="iconfont icon-iconset0399"></i> 任务{{taskNum}}</div>
                         <div class="clearfix example" v-for="(task,index) in tasksInfo" :key="index">
                             <div class="col-md-3 float-left">{{task.title}}</div>
                             <div class="col-md-3 float-left">{{task.principal.data.name}}</div>
                             <div class="col-md-3 float-left">{{task.end_at}}</div>
                             <div class="col-md-3 float-left">
-                                <template v-if="task.status === 1">进行中</template>
-                                <template v-if="task.status === 2">已完成</template>
-                                <template v-if="task.status === 3">已停止</template>
+                                <template v-if="task.status === 1"><span style="color:#FF9800">进行中</span></template>
+                                <template v-if="task.status === 2"><span style="color:#4CAF50">已完成</span></template>
+                                <template v-if="task.status === 3"><span style="color:#9E9E9E">已停止</span></template>
+                                <template v-if="task.status === 4"><span style="color:#F44336">延期</span></template>
                             </div>
                         </div>
                     </div>
                     <div class="col-md-6 float-left pl-0 mb-20">
-                        <div class="col-md-6">项目</div>
+                        <div class="col-md-6"><i class="iconfont icon-ego-box"></i>项目</div>
                         <div class="clearfix example" v-for="(item,index) in ProjectsInfo" :key="index">
                             <div class="col-md-3 float-left">{{item.title}}</div>
                             <div class="col-md-3 float-left">{{item.principal.data.name}}</div>
                             <div class="col-md-3 float-left">{{item.end_at}}</div>
                             <div class="col-md-3 float-left">
-                                <template v-if="item.status === 1">进行中</template>
-                                <template v-if="item.status === 2">已完成</template>
-                                <template v-if="item.status === 3">已停止</template>
+                                <template v-if="item.status === 1"><span style="color:#FF9800">进行中</span></template>
+                                <template v-if="item.status === 2"><span style="color:#4CAF50">已完成</span></template>
+                                <template v-if="item.status === 3"><span style="color:#9E9E9E">撤单</span></template>
                             </div>
                         </div>
                         </div>
@@ -93,6 +84,11 @@
                                 <template v-if="tasksInfo.length > 0">
                                     <ToolTips :title="`已完成数量${completeNum}`">
                                         任务 ({{completeNum}}/{{tasksInfo.length}})
+                                    </ToolTips>
+                                </template>
+                                 <template v-if="tasksInfo.length == 0">
+                                    <ToolTips :title="`已完成数量${0}`">
+                                        任务 ({{0}}/{{tasksInfo.length}})
                                     </ToolTips>
                                 </template>
                             </a>
@@ -142,18 +138,9 @@
                                 <tr v-for="(item,index) in ProjectsInfo" :key="index">
                                     <td @click="projectdetil(v.project.data.id)" class="Jump">{{item.title}}</td>
                                     <td>
-                                        <template v-if="item.status==1">
-                                            初步接触
-                                        </template>
-                                        <template v-if="item.status==2">
-                                            沟通中
-                                        </template>
-                                        <template v-if="item.status==3">
-                                            合同中
-                                        </template>
-                                        <template v-if="item.status==4">
-                                            沟通完成
-                                        </template>
+                                        <template v-if="item.status === 1"><span style="color:#FF9800">进行中</span></template>
+                                        <template v-if="item.status === 2"><span style="color:#4CAF50">已完成</span></template>
+                                        <template v-if="item.status === 3"><span style="color:#9E9E9E">撤单</span></template>
                                     </td>
                                     <td>{{item.principal.data.name}}</td>
                                     <td>{{item.company}}</td>
@@ -184,15 +171,10 @@
                                     <td v-if="task.type">{{task.type.data.title}}</td>
                                     <td v-if="!task.type">未选择</td>
                                     <td>
-                                        <template v-if="task.status==1">
-                                            进行中
-                                        </template>
-                                        <template v-if="task.status==2">
-                                            已完成
-                                        </template>
-                                        <template v-if="task.status==3">
-                                            已停止
-                                        </template>
+                                        <template v-if="task.status === 1"><span style="color:#FF9800">进行中</span></template>
+                                        <template v-if="task.status === 2"><span style="color:#4CAF50">已完成</span></template>
+                                        <template v-if="task.status === 3"><span style="color:#9E9E9E">已停止</span></template>
+                                        <template v-if="task.status === 4"><span style="color:#F44336">延期</span></template>
                                     </td>
                                     <td>{{task.principal.data.name}}</td>
                                     <td>{{task.end_at}}</td>
@@ -229,9 +211,9 @@
                                     <td>{{work.videoname}}</td>
                                     <td>{{work.release_time}}</td>
                                     <td>{{work.read_proportion}}</td>
-                                    <td>
+                                    <td @click="Jump(work.link)">
                                         <template v-show="wock.link">
-                                            www.baidu.com
+                                           {{work.link}}
                                         </template>
                                     </td>
                                     <td v-if="work.advertising==1">
@@ -409,6 +391,29 @@
                                                               @change="changeArtistDesc"></EditInput>
                                             </div>
                                         </div>
+                                         <div class="card-text py-10 px-0 clearfix col-md-6 float-left edit-height">
+                                            <div class="col-md-2 float-left text-right pl-0">博主级别</div>
+                                            <div class="col-md-10 float-left font-weight-bold">
+                                                <EditSelector :content="artistInfo.level"
+                                                              :options="taskLevelArr"
+                                                              :is-edit="isEdit"
+                                                              @change="changeArtistLevel"></EditSelector>
+                                            </div>
+                                        </div>
+                                         <div class="card-text py-10 px-0 clearfix col-md-6 float-left edit-height">
+                                            <div class="col-md-2 float-left text-right pl-0">孵化期</div>
+                                            <div class="col-md-10 float-left font-weight-bold">
+                                                <EditGroupDatePicker :content="Incubationperiod" :is-edit="isEdit"
+                                                              @change="changeArtistHatch" ></EditGroupDatePicker>
+                                            </div>
+                                        </div>
+                                         <div class="card-text py-10 px-0 clearfix col-md-6 float-left edit-height">
+                                            <div class="col-md-2 float-left text-right pl-0">商务合作要求</div>
+                                            <div class="col-md-10 float-left font-weight-bold">
+                                                <EditInput :content="artistInfo.cooperation_demand" :is-edit="isEdit"
+                                                              @change="changeArtistDemand"></EditInput>
+                                            </div>
+                                        </div>
                                     </div>
 
                                     <div class="segmentation-line example"></div>
@@ -463,7 +468,7 @@
                 <div class="modal-content">
                     <div class="modal-header">
                         <button type="button" class="close" aria-hidden="true" data-dismiss="modal">
-                            <i class="md-close" aria-hidden="true"></i>
+                            <i class="iconfont icon-guanbi" aria-hidden="true"></i>
                         </button>
                         <h4 class="modal-title">新增任务</h4>
                     </div>
@@ -552,7 +557,7 @@
                 <div class="modal-content">
                     <div class="modal-header">
                         <button type="button" class="close" aria-hidden="true" data-dismiss="modal">
-                            <i class="md-close" aria-hidden="true"></i>
+                            <i class="iconfont icon-guanbi" aria-hidden="true"></i>
                         </button>
                         <h4 class="modal-title">新增视频</h4>
                     </div>
@@ -611,7 +616,7 @@
                 <div class="modal-content">
                     <div class="modal-header">
                         <button type="button" class="close" aria-hidden="true" data-dismiss="modal">
-                            <i class="md-close" aria-hidden="true"></i>
+                            <i class="iconfont icon-guanbi" aria-hidden="true"></i>
                         </button>
                         <h4 class="modal-title">隐私设置</h4>
                     </div>
@@ -715,7 +720,17 @@
                 participant:'',
                 tasksInfo:'',
                 taskNum:'',
-                ProjectsInfo:[]
+                ProjectsInfo:[],
+                start_Time:'',
+                end_Time:'',
+                principalId:'',
+                principalIds:[],
+                taskLevelArr:config.taskLevelArr,
+                updatelevel:'',//博主级别
+                updatedemand:'',//合作需求
+                updatehatch_start:'',//孵化期开始
+                updatehatch_end:'',//孵化期截止
+                Incubationperiod:''
             }
         },
          computed: {
@@ -754,6 +769,7 @@
                     _this.$refs.workReleaseTime.setValue('');
                 
              })
+             this.getTimes()
            
         },
 
@@ -831,12 +847,9 @@
                     include: 'creator,tasks,affixes,producer,type',
                 };
                 fetch('get', '/bloggers/' + this.artistId, data).then(function (response) {
-                   
-                      let doneTaskNum = 0
+                    let doneTaskNum = 0
                     _this.artistInfo = response.data;
-                      
                     _this.tasksInfo = response.data.tasks.data
-                    console.log( _this.tasksInfo)
                     if(_this.tasksInfo.length>0){
                         for (let i = 0; i < _this.tasksInfo.length; i++) {
                             if(_this.tasksInfo[i].status ==2){
@@ -845,6 +858,9 @@
                             
                         }
                     }
+                   
+                    _this.Incubationperiod = _this.artistInfo.hatch_star_at+'|'+_this.artistInfo.hatch_end_at
+                     
                     _this.taskNum =`${doneTaskNum}/${_this.tasksInfo.length}` 
                     if(_this.artistInfo.intention==false){
                         _this.updateType=2
@@ -861,11 +877,12 @@
                     }else{
                         _this.artistInfo.artistWorkProportion=false
                     }
+                      
+                    
                 });
                 //项目
                 fetch('get','/bloggers/'+this.artistId+'?include=tasks.type,trails.project.principal,trails.client,producer,creator,affixes,type,publicity').then(function(response){
                     _this.totalData=response.data
-                    console.log(_this.totalData)
                      for (let i = 0; i < response.data.trails.data.length; i++) {
                         if (response.data.trails.data[i].project) {
                             response.data.trails.data[i].project.data.company = response.data.trails.data[i].client.data.company
@@ -881,6 +898,7 @@
                 });
                 //负责人
                 fetch('get','/users/').then(function(response){
+                    
                     _this.Users=response.data;
                 })
                 //任务状态跑组。试戏
@@ -889,6 +907,15 @@
                 })
                  fetch('get','/bloggers/gettype').then(function(response){      
                     _this.artistTypeArr=response.data                  
+                })
+                fetch('get','/users/my?include=department').then(function(response){
+                    _this.principalId=response.data.id 
+                })
+                 fetch('get','/bloggers/select?include=users').then(function(response){ 
+                    response.data.forEach(item=>{
+                         _this.principalIds.push(item.users.data.id)  
+                    })
+                   
                 })
             },
             getArtistTasks: function () {
@@ -979,10 +1006,16 @@
                     star_weibo_infos:this.updateStar_weibo_infos,
                     star_xiaohongshu_infos:this.updateStar_xiaohongshu_infos,
                     platform: this.updatePlatform,
+                    level:this.artistInfo.level,
+                    cooperation_demand:this.updatedemand,
+                    hatch_star_at:_this.artistInfo.hatch_star_at,
+                    hatch_end_at:_this.artistInfo.hatch_end_at
                 }
+                console.log(data.hatch_star_at)
+                console.log(data.hatch_end_at)
                 fetch('put','/bloggers/'+ this.artistId,data).then(function(response){
-                     toastr.success('修改成功');
-                   _this.artistTasksInfo = response.data;
+                    toastr.success('修改成功');
+                    _this.artistTasksInfo = response.data;
                    
                    if(_this.artistInfo.intention==false){
                         _this.updateType=2
@@ -994,6 +1027,7 @@
                     }else{
                         _this.updateSign_contract_other=1
                     }
+                   
                     _this.getArtist()
                     $('.selectpicker').selectpicker('refresh')
               })
@@ -1033,7 +1067,70 @@
                         _this.getArtist()
                         
                 })
-              
+                let obj={
+                    title:'制作人视屏评分-视频评分',
+                    principal_id:this.principalId,
+                    start_at:this.start_Time,
+                    end_at:this.end_Time,
+                    participant_ids:this.principalIds,
+                    resource_type:1,
+                    resourceable_id:this.artistId,
+                    desc:'这是一个评分问卷任务',//默认
+                    type:1609922710//评分问卷
+                }
+                fetch('post','/tasks',obj).then(function(response){
+                     _this.getArtist()
+                })
+            },
+            getTimes:function(){
+                let end_date='';
+                let end_hour='';
+                let end_minute='';
+                let end_second='';
+                let end_timeStamp ='';
+                let time = new Date;
+                let start_year = time.getFullYear();
+                let start_month = time.getMonth()+1;
+                    if(start_month<10){
+                        start_month="0"+start_month;
+                    }
+                    let start_date=time.getDate();
+                    if(start_date<10){
+                        start_date="0"+start_date;
+                    }
+                    let start_hour=time.getHours();
+                    end_hour=(23-start_hour)*60*60*1000
+                    if(start_hour<10){
+                        start_hour="0"+start_hour;
+                    }
+                    let start_minute=time.getMinutes();
+                    end_minute=(59-start_minute)*60*1000
+                    if(start_minute<10){
+                        start_minute="0"+start_minute;
+                    }
+                    let start_second=time.getSeconds();
+                    end_second=(60-start_second)*1000
+                    if(start_minute<10){
+                        start_minute="0"+start_minute;
+                    }
+                    this.start_Time = start_year+"-"+start_month+"-"+start_date+" "+start_hour+":"+start_minute+":"+start_second
+                     if(time.getDay()<=5){
+                        end_date = (5-time.getDay())*60*60*1000*24
+                        end_timeStamp = time.getTime()+end_date+end_hour+end_minute+end_second
+                        
+                    }else if(time.getDay()>5){
+                        end_date = (7-time.getDay()+5)*60*60*1000*24
+                        end_timeStamp = time.getTime()+end_date+end_hour+end_minute+end_second
+                       
+                    }
+                    let end = new Date(end_timeStamp)
+                    let Y = end.getFullYear() + '-';
+                    let M = (end.getMonth()+1 < 10 ? '0'+(end.getMonth()+1) : end.getMonth()+1) + '-';
+                    let D = end.getDate() + ' ';
+                    let h = end.getHours() + ':';
+                    let m = end.getMinutes() + ':';
+                    let s = end.getSeconds();
+                    this.end_Time=Y+M+D+h+m+s
             },
             //添加任务
             addTask: function () {
@@ -1132,12 +1229,35 @@
             changeArtistDesc: function (value) {
                 this.artistInfo.desc = value
             },
-
+            //博主级别
+            changeArtistLevel:function(value){
+                console.log(value)
+                
+                this.artistInfo.level= value
+            },
+            //孵化期
+            changeArtistHatch:function(start,end){
+               
+                console.log(start,end)
+                this.artistInfo.hatch_star_at = start
+                this.artistInfo.hatch_end_at = end  
+                
+               
+                console.log( this.updatehatch_start ,this.updatehatch_end)
+            },
+            //合作需求
+            changeArtistDemand:function(value){
+                this.updatedemand = value
+            },
             taskdetail(id){
              this.$router.push({path: '/tasks/' + id})
             },
             projectdetil(id){
              this.$router.push({path: '/projects/' + id}) 
+            },
+            Jump(value){
+                console.log(value)
+                window.open(value)
             }
         }
     }

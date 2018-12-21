@@ -32,9 +32,9 @@
                                 <th class="cell-300" v-if="showType ==2||showType ==1" v-for="(item,index) in monthWeek[nowYear-1]" :key="index">第{{index+1}}周</th>
                             </tr>
                             <tr v-for="(item,index) in list" :key="index">
-                                <td class="pointer-content">{{item.member}}</td>
-                                <td>{{item.titles.length}}</td>
-                                <td>
+                                <td class="pointer-content" >{{item.member}}</td>
+                                <td style="color:#4DAF50">{{item.titles.length}}</td>
+                                <td style="color:#F7A127">
                                     <template v-if="showType == 1">{{monthDay[nowYear-1]-(item.titles.length)}}</template>
                                     <template v-if="showType == 2">{{(monthWeek[nowYear-1].length) - (item.titles.length)}}</template>
                                     <template v-if="showType == 3">{{12-(item.titles.length)}}</template>

@@ -94,8 +94,12 @@
                                 <td>{{ artist.type.data.name }}</td>
                                 <td>
                                     <template v-if="artist.communication_status">
-                                        {{ papiCommunicationStatusArr.find(item => item.value ==
-                                        artist.communication_status).name}}
+                                        <span :style="{color:papiCommunicationStatusArr.find(item => item.value ==
+                                            artist.communication_status).color}">
+                                            {{ papiCommunicationStatusArr.find(item => item.value ==
+                                            artist.communication_status).name}}
+                                        </span>
+                                        
                                     </template>
                                 </td>
                                 <td >
@@ -138,7 +142,7 @@
                 <div class="modal-content">
                     <div class="modal-header">
                         <button type="button" class="close" aria-hidden="true" data-dismiss="modal">
-                            <i class="md-close" aria-hidden="true"></i>
+                            <i class="iconfont icon-guanbi" aria-hidden="true"></i>
                         </button>
                         <h4 class="modal-title">新增博主</h4>
                     </div>
@@ -247,7 +251,7 @@
                 <div class="modal-content">
                     <div class="modal-header">
                         <button type="button" class="close" aria-hidden="true" data-dismiss="modal">
-                            <i class="md-close" aria-hidden="true"></i>
+                            <i class="iconfont icon-guanbi" aria-hidden="true"></i>
                         </button>
                         <h4 class="modal-title">分配制作人</h4>
                     </div>

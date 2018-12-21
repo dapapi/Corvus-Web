@@ -15,8 +15,8 @@
         <div class="page-header page-header-bordered">
             <h1 class="page-title">销售线索管理</h1>
             <div class="page-header-actions">
-                <i class="md-download px-5 font-size-20 pr-20" aria-hidden="true"></i>
-                <i class="md-upload font-size-20" aria-hidden="true"></i>
+                <i class="iconfont icon-download px-5 font-size-20 pr-20" aria-hidden="true"></i>
+                <i class="iconfont icon-daochu font-size-20" aria-hidden="true"></i>
             </div>
         </div>
 
@@ -111,7 +111,7 @@
                 <div class="modal-content">
                     <div class="modal-header">
                         <button type="button" class="close" aria-hidden="true" data-dismiss="modal">
-                            <i class="md-close" aria-hidden="true"></i>
+                            <i class="iconfont icon-guanbi" aria-hidden="true"></i>
                         </button>
                         <h4 class="modal-title">新增销售线索</h4>
                     </div>

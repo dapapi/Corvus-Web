@@ -46,9 +46,9 @@
                                 </td>
                                 <td >{{item.principal.data.name}}</td>
                                 <td>
-                                    <template v-if="item.status === 1">进行中</template>
-                                    <template v-if="item.status === 2">已完成</template>
-                                    <template v-if="item.status === 3">已停止</template>
+                                    <template v-if="item.status === 1"><span style="color:#FF9800">进行中</span></template>
+                                    <template v-if="item.status === 2"><span style="color:#4CAF50">已完成</span></template>
+                                    <template v-if="item.status === 3"><span style="color:#9E9E9E">撤单</span></template>
                                     
                                 </td>
                                 <td v-if="item.trail">

@@ -99,7 +99,7 @@
         <div class="modal-content">
           <div class="modal-header">
             <button type="button" class="close" aria-hidden="true" data-dismiss="modal">
-              <i class="md-close" aria-hidden="true"></i>
+              <i class="iconfont icon-guanbi" aria-hidden="true"></i>
             </button>
             <h4 class="modal-title">新增任务</h4>
           </div>

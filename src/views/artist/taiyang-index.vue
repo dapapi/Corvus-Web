@@ -45,7 +45,7 @@
                         <li class="nav-item" role="presentation" @click="getArtists(1,1)">
                             <a class="nav-link active" data-toggle="tab" href="#forum-artist"
                                aria-controls="forum-base"
-                               aria-expanded="true" role="tab">签约中</a>
+                               aria-expanded="true" role="tab">签约中 </a>
                         </li>
                         <li class="nav-item" role="presentation" @click="getArtists(1,2)">
                             <a class="nav-link" data-toggle="tab" href="#forum-artist"
@@ -94,19 +94,25 @@
                                     <td>{{artist.birthday|jsGetAge}}</td>
                                     <td>
                                         <template v-if="artist.source">
-                                            {{ artistSourceArr.find(item => item.value == artist.source).name}}
+                                            <span style="color:artistSourceArr.find(item => item.value == artist.source).color">
+                                                {{ artistSourceArr.find(item => item.value == artist.source).name}}
+                                            </span>
                                         </template>
                                     </td>
                                     <td>
                                         <template v-if="artist.communication_status">
-                                            {{ taiyangCommunicationStatusArr.find(item => item.value ==
-                                            artist.communication_status).name}}
+                                            <span :style="{color:taiyangCommunicationStatusArr.find(item => item.value ==
+                                                    artist.communication_status).color}">
+                                                 {{ taiyangCommunicationStatusArr.find(item => item.value ==
+                                                    artist.communication_status).name}}
+                                            </span>
+                                           
                                         </template>
                                     </td>
                                     <td>
-                                        <template v-if="artist.sign_contract_status ==1">签约中</template>
-                                        <template v-if="artist.sign_contract_status ==2">已签约</template>
-                                        <template v-if="artist.sign_contract_status ==3">已解约</template>
+                                        <template v-if="artist.sign_contract_status ==1"><span style="color:#FF9800">签约中</span></template>
+                                        <template v-if="artist.sign_contract_status ==2"><span style="color:#4CAF50">已签约</span></template>
+                                        <template v-if="artist.sign_contract_status ==3"><span style="color:#F44336">已解约</span></template>
                                         <!-- {{ artistSourceArr.find(item => item.value == artist.source).name}} -->
                                     </td>
                                     <td>{{artist.created_at}}</td>
@@ -144,7 +150,7 @@
                 <div class="modal-content">
                     <div class="modal-header">
                         <button type="button" class="close" aria-hidden="true" data-dismiss="modal">
-                            <i class="md-close" aria-hidden="true"></i>
+                            <i class="iconfont icon-guanbi" aria-hidden="true"></i>
                         </button>
                         <h4 class="modal-title">新增艺人</h4>
                     </div>
@@ -317,7 +323,7 @@
                 <div class="modal-content">
                     <div class="modal-header">
                         <button type="button" class="close" aria-hidden="true" data-dismiss="modal">
-                            <i class="md-close" aria-hidden="true"></i>
+                            <i class="iconfont icon-guanbi" aria-hidden="true"></i>
                         </button>
                         <h4 class="modal-title">
                             <template v-if="giveType == 1">分配经纪人</template>

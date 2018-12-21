@@ -161,10 +161,9 @@
                                     </router-link>
                                 </td>
                                 <td>
-                                    <template v-if="project.status === 1">进行中</template>
-                                    <template v-if="project.status === 2">完成</template>
-                                    <template v-if="project.status === 3">终止</template>
-                                    <template v-if="project.status === 4">删除</template>
+                                    <template v-if="project.status === 1"><span style="color:#FF9800">进行中</span></template>
+                                    <template v-if="project.status === 2"><span style="color:#4CAF50">已完成</span></template>
+                                    <template v-if="project.status === 3"><span style="color:#9E9E9E">撤单</span></template>
                                 </td>
                                 <td>{{ project.principal?project.principal.data.name:'' }}</td>
                                 <td>{{ project.trail.data.client.data.company}}</td>
@@ -404,7 +403,7 @@
                 <div class="modal-content">
                     <div class="modal-header">
                         <button type="button" class="close" aria-hidden="true" data-dismiss="modal">
-                            <i class="md-close" aria-hidden="true"></i>
+                            <i class="iconfont icon-guanbi" aria-hidden="true"></i>
                         </button>
                         <h4 class="modal-title">{{isEditContact?'新增联系人':'修改联系人'}}</h4>
                     </div>
@@ -460,7 +459,7 @@
                 <div class="modal-content">
                     <div class="modal-header">
                         <button type="button" class="close" aria-hidden="true" data-dismiss="modal">
-                            <i class="md-close" aria-hidden="true"></i>
+                            <i class="iconfont icon-guanbi" aria-hidden="true"></i>
                         </button>
                         <h4 class="modal-title">新增任务</h4>
                     </div>

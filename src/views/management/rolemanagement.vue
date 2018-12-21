@@ -10,99 +10,92 @@
                     <div class=" py-20 px-0 float-left fuound col-md-12 clearfix"
                          style="border-bottom:1px solid #e3e3e3">
                         <span class="pl-0" style="color:#3F51B5" data-toggle="modal" data-target="#addRole">
-                      <i class="iconfont icon-tianjiarenyuan pr-5" style="font-size:12px"></i>
-                       <a href="javascript:0;">新增角色</a>
-                    </span>
+                            <i class="iconfont icon-tianjiarenyuan pr-5" style="font-size:12px"></i>
+                            <a href="javascript:0;">新增角色</a>
+                        </span>
                         <span class="pl-60" style="color:#3F51B5" data-toggle="modal" data-target="#addSubgroup">
-                       <i class="iconfont icon-renyuanfenzu pr-5" style="font-size:12px"></i>
-                       <a href="javascript:0;">新建分组</a> 
-                    </span>
+                            <i class="iconfont icon-renyuanfenzu pr-5" style="font-size:12px"></i>
+                            <a href="javascript:0;">新建分组</a> 
+                        </span>
                     </div>
                     <div class="clearfix py-50">
-                        <section class="page-aside-section">
-                            <div class="site-menubar-body" style="width:260px;">
-                                <!--默认分组-->
-                                <ul class="menu pl-0 m-0 pb-10" style="width:260px;">
-                                    <li class="site-menu-item has-sub" v-for="(item,index) in job" :key="index"
-                                        style="width:260px;">
-                                        <a href="javascript:void(0) " class="p-5" @click="clickdefault">
-                                            <i v-show="conceal" class="md-caret-down showList font-size:25px pr-10"></i>
-                                            <i v-show="!conceal"
-                                               class="md-caret-right showList font-size:25px pr-10"></i>
-                                            <i class="iconfont icon-renyuan1 pr-10" style="vertical-align: middle;"></i>
-                                            <span class="site-menu-title">{{item.name}}</span>
-                                        </a>
-                                    </li>
-                                    <ul class="administration-subordinate-item m-0" v-for="n in jobData" :key="n.id"
-                                        v-show="conceal" @click="defaultcontent(n.id)">
-                                        <li class="py-5" :class="defaultpitchon==n.id?'pitchon':''">
+                        <section class="page-aside-section" >
+                        <div class="site-menubar-body" style="width:260px;">
+                               <!--默认分组-->
+                            <ul class="menu pl-0 m-0 pb-10" style="width:260px;">
+                                <li class="site-menu-item has-sub" v-for="(item,index) in job" :key="index" style="width:260px;">
+                                    <a href="javascript:void(0) " class="p-5" @click="clickdefault">
+                                        <i v-show="conceal" class="md-caret-down showList font-size:25px pr-10"></i>
+                                        <i v-show="!conceal" class="md-caret-right showList font-size:25px pr-10"></i>
+                                        <i class="iconfont icon-chengyuannew pr-10" style="vertical-align: middle;"></i>
+                                        <span class="site-menu-title">{{item.name}}</span>
+                                    </a>
+                                </li>
+                                 <ul class="administration-subordinate-item m-0" v-for="n in jobData" :key="n.id" v-show="conceal" @click="defaultcontent(n.id)">
+                                        <li  class="py-5" :class="defaultpitchon==n.id?'pitchon':''">
                                             <template>
-                                                <i class="iconfont icon-renyuan1 pr-10"
+                                                <i class="iconfont icon-chengyuannew pr-10"
                                                    style="vertical-align: middle;"></i>
                                                 <span class="site-menu-title">{{n.name}}</span>
                                             </template>
                                         </li>
 
                                     </ul>
-                                </ul>
-                                <!--渲染分组 -->
-                                <ul class="menu pl-0">
-                                    <li class="site-menu-item has-sub  pb-10" v-for="(item,index) in groupingDate"
-                                        :key="index" style="width:260px;">
-                                        <a href="javascript:void(0) " class="p-5" @click="switchMenu(item.id)">
-                                            <i v-show="visible" class="md-caret-down showList font-size:25px pr-10"></i>
-                                            <i v-show="!visible"
-                                               class="md-caret-right showList font-size:25px pr-10"></i>
-                                            <i class="iconfont icon-renyuan1 pr-10" style="vertical-align: middle;"></i>
-                                            <span class="site-menu-title">{{item.name}}</span>
-                                        </a>
-                                        <div class="drop-parent" style="position: absolute; right:23px;top:0;"
-                                             v-if="item.id" @click="grouping(item.id)">
-                                            <i class="iconfont icon-gengduo1 font-size-20 parent" aria-hidden="true"
-                                               data-toggle="dropdown" aria-expanded="false"
-                                               style="cursor: pointer; float: right;line-height: 40px;">
-                                            </i>
-                                            <div class="dropdown-menu dropdown-menu-left" aria-labelledby="org-dropdown"
-                                                 role="menu" x-placement="bottom-start" style="min-width: 0;">
-                                                <a class="dropdown-item" role="menuitem" data-toggle="modal"
-                                                   data-target="#addRole">新增角色</a>
-                                                <a class="dropdown-item" role="menuitem" data-toggle="modal"
-                                                   data-target="#Rename">重命名</a>
-                                                <a class="dropdown-item" role="menuitem" data-toggle="modal"
-                                                   data-target="#deleteGrouping">删除分组</a>
-                                            </div>
+                            </ul>
+                              <!--渲染分组 -->
+                            <ul class="menu pl-0">
+                                <li class="site-menu-item has-sub  pb-10" v-for="(item,index) in groupingDate"
+                                    :key="index" style="width:260px;">
+                                    <a href="javascript:void(0) " class="p-5" @click="switchMenu(item.id)">
+                                        <i v-show="visible" class="md-caret-down showList font-size:25px pr-10"></i>
+                                        <i v-show="!visible" class="md-caret-right showList font-size:25px pr-10"></i>
+                                        <i class="iconfont icon-chengyuannew pr-10" style="vertical-align: middle;"></i>
+                                        <span class="site-menu-title">{{item.name}}</span>
+                                    </a>
+                                    <div class="drop-parent" style="position: absolute; right:23px;top:0;"
+                                         v-if="item.id" @click="grouping(item.id)">
+                                        <i class="iconfont icon-gengduo1 font-size-20 parent" aria-hidden="true"
+                                           data-toggle="dropdown" aria-expanded="false"
+                                           style="cursor: pointer; float: right;line-height: 40px;">
+                                        </i>
+                                        <div class="dropdown-menu dropdown-menu-left" aria-labelledby="org-dropdown"
+                                             role="menu" x-placement="bottom-start" style="min-width: 0;">
+                                            <a class="dropdown-item" role="menuitem" data-toggle="modal"
+                                               data-target="#addRole">新增角色</a>
+                                            <a class="dropdown-item" role="menuitem" data-toggle="modal"
+                                               data-target="#Rename">重命名</a>
+                                            <a class="dropdown-item" role="menuitem" data-toggle="modal"
+                                               data-target="#deleteGrouping">删除分组</a>
                                         </div>
-                                        <ul class="administration-subordinate-item m-0" v-for="n in roleDate"
-                                            :key="n.id">
-                                            <li v-show="item.id==n.group_id && switchId.includes(n.group_id)"
-                                                class="py-5"
-                                                style="position:relative;" @click="changeCont(n.id)">
-                                                <template>
-                                                    <i class="iconfont icon-renyuan1 pr-10"
-                                                       style="vertical-align: middle;"></i>
-                                                    <span class="site-menu-title">{{n.name}}</span>
-                                                </template>
-                                                <div class="drop-son" style="position: absolute; right:23px;top:0px;"
-                                                     @click="role(n.id)">
-                                                    <i class="iconfont icon-gengduo1 font-size-20 son"
-                                                       aria-hidden="true"
-                                                       data-toggle="dropdown" aria-expanded="false"
-                                                       style="cursor: pointer; float: right;line-height: 40px;">
-                                                    </i>
-                                                    <div class="dropdown-menu dropdown-menu-left "
-                                                         aria-labelledby="org-dropdown" role="menu"
-                                                         x-placement="bottom-start" style="">
-                                                        <a class="dropdown-item" role="menuitem" data-toggle="modal"
-                                                           data-target="#addMember"
-                                                           @click="getmemberDate(n.id)">添加成员</a>
-                                                        <a class="dropdown-item" role="menuitem" data-toggle="modal"
-                                                           data-target="#updateSubgroup">修改角色</a>
-                                                        <a class="dropdown-item" role="menuitem" data-toggle="modal"
-                                                           data-target="#moveSubgroup ">移动到分组</a>
-                                                        <a class="dropdown-item" role="menuitem" data-toggle="modal"
-                                                           data-target="#deleteRole">删除角色</a>
-                                                    </div>
+                                    </div>
+                                    
+                                    <ul class="administration-subordinate-item m-0" v-for="n in roleDate" :key="n.id" >
+                                        <li v-show="item.id==n.group_id && switchId.includes(n.group_id)" class="py-5" 
+                                            style="position:relative;" @click="changeCont(n.id)"  >
+                                            <template>
+                                                <i class="iconfont icon-chengyuannew pr-10"
+                                                   style="vertical-align: middle;"></i>
+                                                <span class="site-menu-title">{{n.name}}</span>
+                                            </template>
+                                            <div class="drop-son" style="position: absolute; right:23px;top:0px;"
+                                                 @click="role(n.id)">
+                                                <i class="iconfont icon-gengduo1 font-size-20 son" aria-hidden="true"
+                                                   data-toggle="dropdown" aria-expanded="false"
+                                                   style="cursor: pointer; float: right;line-height: 40px;">
+                                                </i>
+                                                <div class="dropdown-menu dropdown-menu-left "
+                                                     aria-labelledby="org-dropdown" role="menu"
+                                                     x-placement="bottom-start" style="">
+                                                    <a class="dropdown-item" role="menuitem" data-toggle="modal"
+                                                       data-target="#addMember" @click="getmemberDate(n.id)">添加成员</a>
+                                                    <a class="dropdown-item" role="menuitem" data-toggle="modal"
+                                                       data-target="#updateSubgroup">修改角色</a>
+                                                    <a class="dropdown-item" role="menuitem" data-toggle="modal"
+                                                       data-target="#moveSubgroup ">移动到分组</a>
+                                                    <a class="dropdown-item" role="menuitem" data-toggle="modal"
+                                                       data-target="#deleteRole">删除角色</a>
                                                 </div>
+                                            </div>
                                             </li>
 
                                         </ul>
@@ -409,7 +402,6 @@
 
 
                 </div>
-
             </div>
         </div>
         <div class="site-action" data-plugin="actionBtn" data-toggle="modal" data-target="#addRole">
@@ -426,7 +418,7 @@
                 <div class="modal-content">
                     <div class="modal-header">
                         <button type="button" class="close" aria-hidden="true" data-dismiss="modal">
-                            <i class="md-close" aria-hidden="true"></i>
+                            <i class="iconfont icon-guanbi" aria-hidden="true"></i>
                         </button>
                         <h4 class="modal-title">新增角色</h4>
                     </div>
@@ -465,7 +457,7 @@
                 <div class="modal-content">
                     <div class="modal-header">
                         <button type="button" class="close" aria-hidden="true" data-dismiss="modal">
-                            <i class="md-close" aria-hidden="true"></i>
+                            <i class="iconfont icon-guanbi" aria-hidden="true"></i>
                         </button>
                         <h4 class="modal-title">新增分组</h4>
                     </div>
@@ -491,7 +483,7 @@
                 <div class="modal-content">
                     <div class="modal-header">
                         <button type="button" class="close" aria-hidden="true" data-dismiss="modal">
-                            <i class="md-close" aria-hidden="true"></i>
+                            <i class="iconfont icon-guanbi" aria-hidden="true"></i>
                         </button>
                         <h4 class="modal-title">移动到分组</h4>
                     </div>
@@ -518,7 +510,7 @@
                 <div class="modal-content">
                     <div class="modal-header">
                         <button type="button" class="close" aria-hidden="true" data-dismiss="modal">
-                            <i class="md-close" aria-hidden="true"></i>
+                            <i class="iconfont icon-guanbi" aria-hidden="true"></i>
                         </button>
                         <h4 class="modal-title">修改角色</h4>
                     </div>
@@ -557,7 +549,7 @@
                 <div class="modal-content">
                     <div class="modal-header">
                         <button type="button" class="close" aria-hidden="true" data-dismiss="modal">
-                            <i class="md-close" aria-hidden="true"></i>
+                            <i class="iconfont icon-guanbi" aria-hidden="true"></i>
                         </button>
                         <h4 class="modal-title">重命名</h4>
                     </div>
@@ -583,7 +575,7 @@
                 <div class="modal-content">
                     <div class="modal-header">
                         <button type="button" class="close" aria-hidden="true" data-dismiss="modal">
-                            <i class="md-close" aria-hidden="true"></i>
+                            <i class="iconfont icon-guanbi" aria-hidden="true"></i>
                         </button>
                         <h4 class="modal-title">删除</h4>
                     </div>
@@ -608,7 +600,7 @@
                 <div class="modal-content">
                     <div class="modal-header">
                         <button type="button" class="close" aria-hidden="true" data-dismiss="modal">
-                            <i class="md-close" aria-hidden="true"></i>
+                            <i class="iconfont icon-guanbi" aria-hidden="true"></i>
                         </button>
                         <h4 class="modal-title">删除</h4>
                     </div>
@@ -633,7 +625,7 @@
                 <div class="modal-content">
                     <div class="modal-header">
                         <button type="button" class="close" aria-hidden="true" data-dismiss="modal">
-                            <i class="md-close" aria-hidden="true"></i>
+                            <i class="iconfont icon-guanbi" aria-hidden="true"></i>
                         </button>
                         <h4 class="modal-title">选择成员</h4>
                     </div>
@@ -648,6 +640,7 @@
             </div>
         </div>
     </div>
+    
 </template>
 <script>
     import fetch from '../../assets/utils/fetch.js'
@@ -792,21 +785,40 @@
                     }
                     _this.powerDate = response;
                 });
-                fetch('get', '/console/scope/' + this.jobCont).then(function (response) {
-                    _this.rangeDate = response;
-                    _this.rangelist = [];
-                    for (_this.rangelist in response) {
-                        response[_this.rangelist].data1.forEach(item => {
-                            if (item.selected) {
-                                _this.picked = _this.rangeDate[_this.rangelist].id.toString() + item.id
+                this.sendData=[];
+               fetch('get','/console/scope/'+this.jobCont).then(function(response){
+                    _this.rangeDate = response; 
+                    _this.rangelist=[];
+                    let i=0;
+                    for(_this.rangelist in response){
+                        
+                        let obj={
+                            resource_id:response[_this.rangelist].id,
+                            scope:'',
+                            manage:[]
+                        }
+                        response[_this.rangelist].data1.forEach(item=>{
+                            
+                            if(item.selected){
+                              obj.scope=item.id 
+                                _this.picked= _this.rangeDate[_this.rangelist].id.toString()+item.id
                             }
                         })
-                        response[_this.rangelist].data2.forEach(v => {
-                            if (v.selected) {
-                                _this.scope.push(response[_this.rangelist].id.toString() + v.id)
+                        response[_this.rangelist].data2.forEach(v=>{
+                            
+                            if(v.selected){
+                                 obj.manage.push(v.id)
+                              
+                                _this.scope.push(response[_this.rangelist].id.toString()+v.id)
                             }
                         })
-                    }
+                        if(response[_this.rangelist].data1.length!==0||response[_this.rangelist].data2.length!==0){
+                            _this.sendData.push(obj) 
+                        }   
+                        
+                        i++;
+                    }  
+                    console.log(_this.sendData) 
                 })
 
 
@@ -817,10 +829,9 @@
                 })
             },
             rangekeep() {
-                let data = []
-                data.push(this.sendData)
-                console.log(data)
-                fetch('post', '/console/scope/' + this.jobCont, data).then(function (response) {
+                console.log('this.sendData:')
+                console.log(this.sendData)
+                fetch('post', '/console/scope/' + this.jobCont, this.sendData).then(function (response) {
                     toastr.success('保存成功');
 
                 })
@@ -1062,43 +1073,37 @@
                 this.valueId.push(i.toString() + v)
                 // console.log(this.valueId)
             },
-            radioed(params, value) {
-                let index = this.sendData.find(item => item.resource_id === value.id)
-
-                if (index) {
-                    index.scope = params.id
-                    console.log(index)
-                } else {
+             radioed(params,value){
+                let index = this.sendData.find(item=>item.resource_id===value.id)
+                if(index){
+                    index.scope = params.id  
+                    console.log(index.scope )         
+                }else{
                     let tempObj = {}
-                    Object.assign(tempObj, {resource_id: value.id})
-                    Object.assign(tempObj, {scope: params.id})
+                    Object.assign(tempObj,{resource_id:value.id})
+                    Object.assign(tempObj,{scope:params.id})
                     this.sendData.push(tempObj)
-                }
-
+                }       
             },
-            checked(params, value) {
-                let index = this.sendData.find(item => item.resource_id === value.id)
-                console.log(index)
-
-
-                if (index) {
-
-                    if (index.resource_id == value.id) {
-                        this.checkarr.push(params.id)
-                        index.manage = this.checkarr
-                    }
-                } else {
-                    let tempObj = {}
-                    if (index.resource_id == value.id) {
-                        this.checkarr.push(params.id)
-
+            checked(params,value){
+                let index = this.sendData.find(item=>item.resource_id===value.id)
+                if(index){
+                    if(index.manage.indexOf(params.id)>-1){
+                        
+                        index.manage.splice(index.manage.indexOf(params.id),1)
+                    }else{
+                        index.manage.push(params.id)
                     }
 
-                    Object.assign(tempObj, {resource_id: value.id})
-                    Object.assign(tempObj, {manage: this.checkarr})
+                    console.log(this.sendData)
+                }else{
+                    let tempObj = {}   
+                    this.checkarr.push(params.id)
+                    Object.assign(tempObj,{resource_id:value.id})
+                    Object.assign(tempObj,{manage:this.checkarr})
                     this.sendData.push(tempObj)
                 }
-                console.log(params.id, value.id)
+           
             }
         }
     }

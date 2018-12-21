@@ -4,8 +4,12 @@
         <div class="page-header page-header-bordered">
             <h1 class="page-title">客户管理</h1>
             <div class="page-header-actions">
-                <i class="md-download px-5 font-size-20 pr-20" aria-hidden="true"></i>
-                <i class="md-upload font-size-20" aria-hidden="true"></i>
+                <import-and-export :type="'export'" :moduleName="'clients'">
+                    <i class="md-download px-5 font-size-20 pr-20" aria-hidden="true"></i>
+                </import-and-export>
+                <import-and-export :type="'import'" :moduleName="'clients'">
+                    <i class="md-upload font-size-20" aria-hidden="true"></i>
+                </import-and-export>
             </div>
         </div>
 
@@ -84,7 +88,7 @@
                 <div class="modal-content">
                     <div class="modal-header">
                         <button type="button" class="close" aria-hidden="true" data-dismiss="modal">
-                            <i class="md-close" aria-hidden="true"></i>
+                            <i class="iconfont icon-guanbi" aria-hidden="true"></i>
                         </button>
                         <h4 class="modal-title">新增客户</h4>
                     </div>
@@ -174,9 +178,13 @@
 <script>
     import fetch from '../../assets/utils/fetch.js'
     import config from '../../assets/js/config'
+    import ImportAndExport from '../../components/ImportAndExport.vue'
 
     const clientLevelArr = [{name: '全部', value: ''}, ...config.clientLevelArr]
     export default {
+        components:{
+            ImportAndExport
+        },
         data: function () {
             return {
                 total: 0,

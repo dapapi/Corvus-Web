@@ -107,7 +107,7 @@
                                 <td>{{ data.deparment_name }}</td>
                                 <td>{{ data.star_name }}</td>
                                 <td>{{ data.fee }}元</td>
-                                <td>{{ trailStatusArr.find(item => item.value == data.status).name }}</td>
+                                <td><span :style="{color:trailStatusArr.find(item => item.value == data.status).color}">{{ trailStatusArr.find(item => item.value == data.status).name }}</span> </td>
                                 <td>{{ priorityArr.find(item => item.value == data.priority).name }}</td>
                                 <td>{{ data.principal_user }}</td>
                             </tr>

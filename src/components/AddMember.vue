@@ -10,7 +10,7 @@
         </ul>
         <div class="addMember-trigger" :class="isMemberShow ? 'addMember-active': ''" :id="'selectStaff' + this._uid">
             <div class="addMember-trigger-button" :class="selectMemberArr.length > 0 ? 'addMember-trigger-left' : ''"
-                 @click="showMember"><i class="md-plus"></i></div>
+                 @click="showMember"><i class="iconfont icon-tianjia"></i></div>
             <div class="addMember-trigger-dropdown">
                 <select-staff :multiple="true" :member-type="'participant'" :type="type"
                               @change="changeSelectedMember"></select-staff>

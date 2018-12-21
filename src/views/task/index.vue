@@ -101,9 +101,10 @@
                                 <!-- <td>暂无</td> -->
                                 <td>{{ task.type ? task.type.data ? task.type.data.title : '' : '' }}</td>
                                 <td>
-                                    <template v-if="task.status === 1">进行中</template>
-                                    <template v-if="task.status === 2">已完成</template>
-                                    <template v-if="task.status === 3">已停止</template>
+                                    <template v-if="task.status === 1"><span style="color:#FF9800">进行中</span> </template>
+                                    <template v-if="task.status === 2"><span style="color:#4CAF50">已完成</span></template>
+                                    <template v-if="task.status === 3"><span style="color:#9E9E9E">已停止</span></template>
+                                    <template v-if="task.status === 4"><span style="color:#F44336">延期</span></template>
                                 </td>
                                 <td>
                                     <template v-if="task.principal">{{ task.principal.data.name }}</template>

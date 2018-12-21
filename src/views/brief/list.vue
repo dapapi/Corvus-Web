@@ -25,7 +25,7 @@
                                     <td>{{item.updated_at}}</td>
                                     <td>
                                         <button class="btn-warning" v-if="item.status === null">未提交</button>
-                                        <button class="btn-primary" v-else-if="item.status ==1">未审核</button>
+                                        <button class="btn-warning" v-else-if="item.status ==1">未审核</button>
                                         <button class="btn-success" v-else>已审核</button>
                                     </td>
                                     <td>

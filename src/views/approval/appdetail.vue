@@ -2,7 +2,7 @@
     <div class="">
         <div class="" style="background-color:#f3f4f5">
             <div class="page-header  page-header-bordered mb-0">
-                <h6 class="page-title nav-head">{{list.title}}
+                <h6 class="page-title nav-head"><i class="iconfont icon-zuojiantou"></i>{{list.title}}
                     <template v-if="info.approval[0].form_status==232">
                         <button class="btn btn-success py-5">已审批</button>
                     </template>
