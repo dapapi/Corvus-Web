@@ -174,111 +174,148 @@
                                     </div>
                                 </div>
                             </div>
-                            <div class="card-header card-header-transparent card-header-bordered">
-                                <div class="float-left font-weight-bold third-title">问卷详情</div>
-                                <div class="float-right">
-                                    <button type="button" class="btn btn-primary" @click="submit">提交</button>
-                                    <button type="button" class="btn btn-primary">推优</button>
-                                </div>
-                            </div>
-                             <div class="card-block">
-                                <h4 style="color: #3F51B5">平均分 75</h4>
-                                <div class="progress" data-labeltype="percentage" data-goal="-40" data-plugin="progress" style="width: 80%">
-                                    <div class="progress-bar progress-bar-warning" aria-valuemin="-100" aria-valuemax="0" aria-valuenow="-40" role="progressbar" style="width: 90%;">
-                                        <span class="progress-label">90%</span>
+                            <!-- 当task_type为视频任务时展示 -->
+                            <template v-if="">
+                                <div class="card-header card-header-transparent card-header-bordered">
+                                    <div class="float-left font-weight-bold third-title">问卷详情</div>
+                                    <div class="float-right">
+                                        <button type="button" 
+                                            class="btn btn-primary" 
+                                            v-if="!~hasAnsweredArr.indexOf(user.id)"
+                                            @click="submit">提交
+                                        </button>
+                                        <button type="button" class="btn btn-primary" data-plugin="actionBtn" data-toggle="modal"
+                                            v-if=" true || questionInfo.reviewanswer 
+                                                && principalId === user.id 
+                                                && hasAnsweredArr.length > 0 
+                                                && hasAnsweredArr.length === questionInfo.reviewanswer.data.length"
+                                            data-target="#push-reason">推优
+                                        </button>
                                     </div>
                                 </div>
-                                <div class="all-menber clearfix">
-                                    <div class="question-avatar"><div class="select-avatar"></div>庆鑫</div>
-                                    <div class="question-avatar"><div class="unselect-avatar"></div>庆鑫</div>
-                                    <div class="question-avatar"><div class="unselect-avatar"></div>庆鑫</div>
-                                    <div class="question-avatar"><div class="select-avatar"></div>庆鑫</div>
-                                    <div class="question-avatar"><div class="unselect-avatar"></div>庆鑫</div>
-                                </div>
-                                <div class="card-text py-5 clearfix">
-                                    <div class="col-md-1 float-left text-right pl-0">作者</div>
-                                    <div class="col-md-11 float-left font-weight-bold">
-                                        <div class="edit-wrap">
-                                            {{ questionInfo.creator ? questionInfo.creator.data.name : '' }}
-                                        </div>
-                                    </div>
-                                </div>
-                                <div class="card-text py-5 clearfix">
-                                    <div class="col-md-1 float-left text-right pl-0">视频名称</div>
-                                    <div class="col-md-11 float-left font-weight-bold">
-                                        <div class="edit-wrap">
-                                            {{ questionInfo.production ? questionInfo.production.data[0].nickname : '' }}
-                                        </div>
-                                    </div>
-                                </div>
-                                <div class="card-text py-5 clearfix">
-                                    <div class="col-md-1 float-left text-right pl-0">阅转比</div>
-                                    <div class="col-md-11 float-left font-weight-bold">
-                                        <div class="edit-wrap">
-                                            {{ questionInfo.production ? questionInfo.production.data[0].read_proportion : '' }}
-                                        </div>
-                                    </div>
-                                </div>
-                                <div class="card-text py-5 clearfix">
-                                    <div class="col-md-1 float-left text-right pl-0">推优分</div>
-                                    <div class="col-md-11 float-left font-weight-bold">
-                                        <div class="edit-wrap">
-                                            1
-                                        </div>
-                                    </div>
-                                </div>
-                                <div class="card-text py-5 clearfix">
-                                    <div class="col-md-1 float-left text-right pl-0">推优原因</div>
-                                    <div class="col-md-11 float-left font-weight-bold">
-                                        <div class="edit-wrap">
-                                            1
-                                        </div>
-                                    </div>
-                                </div>
-                                <div class="card-text py-5 clearfix">
-                                    <div class="col-md-1 float-left text-right pl-0">视频链接</div>
-                                    <div class="col-md-11 float-left font-weight-bold">
-                                        <router-link :to="questionInfo.production ? questionInfo.production.data[0].link : ''">
-                                            <div class="edit-wrap" style="color: #3298DC; cursor: pointer;">
-                                                {{ questionInfo.production ? questionInfo.production.data[0].link : '' }}
+                                <div class="card-block">
+                                    <h4 style="color: #3F51B5">平均分 
+                                        {{ questionInfo.sum ? (questionInfo.sum.data[0]
+                                            ?questionInfo.sum.data[0].truncate : 0) : 0}}
+                                    </h4>
+                                    <div class="row">
+                                        <div class="col-md-8 clearfix" style="padding-right: 0;">
+                                            <div class="progress" data-labeltype="percentage" data-goal="-40" data-plugin="progress"  style="width: calc(100% - 100px); float:left;">
+                                                <div class="progress-bar progress-bar-warning" aria-valuemin="-100" aria-valuemax="0" aria-valuenow="-40" role="progressbar" 
+                                                    :style="{width: `${questionInfo.reviewanswer.length === 0 ? 0 : hasAnsweredArr.length / questionInfo.reviewanswer.data.length * 100}%`}">
+                                                    <!-- <span class="progress-label">{{questionInfo.reviewanswer.length === 0 ? 0 : ~~((hasAnsweredArr.length / questionInfo.reviewanswer.data.length * 100))}}%</span> -->
+                                                </div>
                                             </div>
-                                        </router-link>
+                                            <div style="width: 50px; padding-left: 10px; float: left;">
+                                                {{questionInfo.reviewanswer.length === 0 ? 0 : ~~((hasAnsweredArr.length / questionInfo.reviewanswer.data.length * 100))}}%
+                                            </div>
+                                        </div>
                                     </div>
-                                </div>
+                                    <div class="all-menber clearfix">
+                                        <div class="question-avatar" v-for="(item, index) in questionInfo.reviewanswer.data" :key="index">
+                                            <div :class="~hasAnsweredArr.indexOf(item.users.data.id) ? 'unselect-avatar':'select-avatar'"></div> 
+                                            {{ item.users.data.name.substr(item.users.data.name.length - 2, 2) }}
+                                        </div>
+                                        <!-- reviewanswer -->
+                                    </div>
+                                    <div class="card-text py-5 clearfix">
+                                        <div class="col-md-1 float-left text-right pl-0">作者</div>
+                                        <div class="col-md-11 float-left font-weight-bold">
+                                            <div class="edit-wrap">
+                                                {{ questionInfo.creator ? questionInfo.creator.data.name : '' }}
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="card-text py-5 clearfix">
+                                        <div class="col-md-1 float-left text-right pl-0">视频名称</div>
+                                        <div class="col-md-11 float-left font-weight-bold">
+                                            <div class="edit-wrap">
+                                                {{ questionInfo.production ? questionInfo.production.data[0].nickname : '' }}
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="card-text py-5 clearfix">
+                                        <div class="col-md-1 float-left text-right pl-0">阅转比</div>
+                                        <div class="col-md-11 float-left font-weight-bold">
+                                            <div class="edit-wrap">
+                                                {{ questionInfo.production ? questionInfo.production.data[0].read_proportion : '' }}
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="card-text py-5 clearfix">
+                                        <div class="col-md-1 float-left text-right pl-0">推优分</div>
+                                        <div class="col-md-11 float-left font-weight-bold">
+                                            <div class="edit-wrap">
+                                                1
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="card-text py-5 clearfix">
+                                        <div class="col-md-1 float-left text-right pl-0">推优原因</div>
+                                        <div class="col-md-11 float-left font-weight-bold">
+                                            <div class="edit-wrap">
+                                                1
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="card-text py-5 clearfix">
+                                        <div class="col-md-1 float-left text-right pl-0">视频链接</div>
+                                        <div class="col-md-11 float-left font-weight-bold">
+                                            <router-link :to="questionInfo.production ? questionInfo.production.data[0].link : ''">
+                                                <div class="edit-wrap" style="color: #3298DC; cursor: pointer;">
+                                                    {{ questionInfo.production ? questionInfo.production.data[0].link : '' }}
+                                                </div>
+                                            </router-link>
+                                        </div>
+                                    </div>
 
-                                <div class="question" v-for="(items, index) in questionData" :key="index">
-                                    <div class="name">{{ items.title }}</div>
-                                    <div class="options clearfix" v-for="(item, _index) in items.items.data" :key="_index">
-                                        <div class="title">
-                                            <label>
-                                                <div class="radio-custom radio-primary" style="display: inline-block;">
-                                                    <input type="radio" @click="answerList[index] = item.value" :checked="answerList[index] === item.value" :name="items.id" />
-                                                    <label></label>
-                                                </div>
-                                                {{ item.value }}: {{ item.title }}
-                                            </label>
-                                        </div>
-                                        <div class="row">
-                                            <div class="col-md-8">
-                                                <div class="progress" data-labeltype="percentage" data-goal="-40" data-plugin="progress" style="width: calc(100% - 50px); float: left;">
-                                                    <div class="progress-bar progress-bar-warning" aria-valuemin="-100" aria-valuemax="0" aria-valuenow="-40" role="progressbar" style="width: 0%;">
-                                                        <span class="progress-label">0%</span>
+                                    <div class="question" v-for="(items, index) in questionData" :key="index">
+                                        <div class="name">{{index + 1}}. {{ items.title }}</div>
+                                        <div class="options clearfix" v-for="(item, _index) in items.items.data" :key="_index">
+                                            <div class="title">
+                                                <label>
+                                                    <div class="radio-custom radio-primary" style="display: inline-block;">
+                                                        <input type="radio" @click="answerList[index] = item" 
+                                                            :disabled="~hasAnsweredArr.includes(user.id)" 
+                                                            :checked="answerList[index] === item.value 
+                                                                || items.selectrows.data.find(n => n.review_question_item_id === item.id && n.creator.data.id === user.id)" 
+                                                            :name="items.id" />
+                                                        <label></label>
                                                     </div>
-                                                </div>
-                                                <div style="width: 50px; padding-left: 10px; float: right;">1票</div>
+                                                    {{ item.value }}: {{ item.title }}
+                                                </label>
                                             </div>
-                                            <div class="col-md-4 clearfix">
-                                                <template v-for="(_item, nameIndex) in items.selectrows.data">
-                                                    <div class="question-avatar" 
-                                                        v-if="_item.review_question_item_id === item.id" :key="nameIndex">
-                                                        {{_item.creator.data.name.substr(_item.creator.data.name.length - 2, 2)}}
+                                            <div class="row">
+                                                <div class="col-md-8" style="padding-right: 0;">
+                                                    <div class="progress" data-labeltype="percentage" data-goal="-40" data-plugin="progress" style="width: calc(100% - 100px); float: left;">
+                                                        <div class="progress-bar progress-bar-warning" aria-valuemin="-100" 
+                                                            aria-valuemax="0" aria-valuenow="-40" role="progressbar" 
+                                                            :style="{width: `${items.selectrows.data.filter(n => n.review_question_item_id === item.id).length / hasAnsweredArr.length * 100}%`}">
+                                                            <!-- <span class="progress-label">100%</span> -->
+                                                        </div>
                                                     </div>
-                                                </template>
+                                                    <div style="width: 50px; padding-left: 10px; float: left;">
+                                                       {{ items.selectrows.data.filter(n => n.review_question_item_id === item.id).length / hasAnsweredArr.length * 100 }}%
+                                                    </div>
+                                                    <div style="width: 50px; padding-left: 10px; float: right;">
+                                                        {{items.selectrows.data.filter(n => n.review_question_item_id === item.id)?
+                                                            items.selectrows.data.filter(n => n.review_question_item_id === item.id).length
+                                                        :0}}票
+                                                    </div>
+                                                </div>
+                                                <div class="col-md-4 clearfix" style="padding-left: 0;">
+                                                    <template v-for="(_item, nameIndex) in items.selectrows.data">
+                                                        <div class="question-avatar" 
+                                                            v-if="_item.review_question_item_id === item.id" :key="nameIndex">
+                                                            {{_item.creator.data.name.substr(_item.creator.data.name.length - 2, 2)}}
+                                                        </div>
+                                                    </template>
+                                                </div>
                                             </div>
                                         </div>
                                     </div>
                                 </div>
-                            </div>
+                            </template>
                         </div>
                     </div>
                     <div class="tab-pane animation-fade" id="forum-task-annex" role="tabpanel">
@@ -459,7 +496,15 @@
             </div>
         </div>
         <flag @confirmFlag="deleteAttachment" />
-
+        <Modal id="push-reason" title="推荐原因" @onOK="submitPush">
+            <div class="example">
+                <div class="col-md-2 text-right float-left">推荐原因</div>
+                <div class="col-md-10 float-left pl-0">
+                    <textarea class="form-control" id="" cols="30" rows="5"
+                        title="" v-model="pushReason"></textarea>
+                </div>
+            </div>
+        </Modal>
         <customize-field></customize-field>
 
     </div>
@@ -509,7 +554,12 @@
                 // routerId: this.$route.params.id || '',// 路由
                 questionData: [], // 问卷列表
                 answerList: [], // 答题列表
-                questionInfo: {},
+                questionInfo: {
+                    reviewanswer: [], // 部门人员列表
+                }, // 问卷信息
+                hasAnsweredArr: [], // 答过题的人
+                pushReason: '', // 推荐原因
+                principalId: '', // 负责人id
             }
         },
         created () {
@@ -536,6 +586,9 @@
                 this.closeAddTask()
             })
             this.getQuestionData()
+            $('#push-reason').on('hidden.bs.modal', () => {
+                this.pushReason = ''
+            })
         },
 
         watch: {
@@ -580,7 +633,7 @@
             },
             routerId () {
                 return this.$route.params.id
-            }
+            },
         },
 
         methods: {
@@ -944,13 +997,23 @@
                 })
                 this.$store.commit('changeNewParticipantsInfo', [])
             },
-            // 获取问卷内容
+            // 获取问卷内容 
             getQuestionData () {
-                fetch('get', '/reviews/383780212/questions/?include=items,selectrows.creator').then(res => {
+                fetch('get', '/reviews/164827231/questions/?include=items,selectrows.creator').then(res => {
                     this.questionData = res.data
                     this.answerList = new Array(this.questionData.length)
+                    res.data.map(n => {
+                        n.selectrows.data.map(m => {
+                            if (m.creator.data.is_department_principal === 1) {
+                                this.principalId = m.creator.data.id
+                            }
+                            if (!~this.hasAnsweredArr.indexOf(m.creator.data.id)) {
+                                this.hasAnsweredArr.push(m.creator.data.id)
+                            }
+                        })
+                    })
                 })
-                fetch('get', '/reviewquestionnaires/383780212/show?include=sum,creator,production,reviewanswer.users').then(res => {
+                fetch('get', '/reviewquestionnaires/164827231/show?include=sum,creator,production,reviewanswer.users').then(res => {
                     this.questionInfo = res.data[0]
                 })
             },
@@ -958,17 +1021,43 @@
             submit () {
                 let count = 0
                 let canSubmit = true
+                const params = {
+                    review_question_item: {}
+                }
+    
                 for (const n of this.answerList) {
-                    if (isNaN(n)) {
+                    if (!n || isNaN(n.value)) {
                         canSubmit = false
                         break
                     }
-                    count += n
+                    params.review_question_item[n.review_question_id] = n.id
+                    count += n.value
                 }
                 if (!canSubmit) {
                     toastr.error('您有未作答题目，请作答完成后提交！')
                     return
                 }
+               
+                fetch('post', '/reviews/383780212/store/Answer', params).then(res => {
+                    toastr.success('问卷提交成功！')
+                    this.getQuestionData()
+
+                })
+            },
+            // 推优原因提交
+            submitPush () {
+                if (!this.pushReason) {
+                    toastr.error('请填写推优原因！')
+                    return
+                }
+                const params = {
+                    excellent: this.pushReason
+                }
+                fetch('post', '/reviewquestionnaires/845846719/create/excellent', params).then(res => {
+                    $("#push-reason").modal("hide");
+                    toastr.success('推优成功！')
+                    this.getQuestionData()
+                })
             }
         }
     }
@@ -1062,14 +1151,14 @@
         right: -46px;
     }
     .progress-label:after {
-        content: '';
+        /* content: '';
         position: absolute;
         width: 14px;
         height: 14px;
         background: #fff;
         right: 38px;
         border: 1px solid #eee;
-        border-radius: 50%;
+        border-radius: 50%; */
     }
     .options {
         margin: 10px 0;
@@ -1107,16 +1196,16 @@
         position: absolute;
         right: 0;
         bottom: 0;
-        width: 14px;
-        height: 14px;
+        width: 10px;
+        height: 10px;
         border-radius: 50%;
         background: #fff;
     }
     .select-avatar:after, .unselect-avatar:after  {
         content: '';
         position: absolute;
-        width: 10px;
-        height: 10px;
+        width: 7px;
+        height: 7px;
         border-radius: 50%;
         right: 2px;
         bottom: 2px;
@@ -1128,5 +1217,20 @@
 
     .all-menber {
         margin-top: 20px;
+    }
+    .radio-custom label::before {
+        width: 14px;
+        height: 14px;
+    }
+    .radio-custom input[type=radio]:checked+input[type=hidden]+label::before, .radio-custom input[type=radio]:checked+label::before {
+        border-width: 7px;
+        border-color: #3298DC;
+    }
+    .radio-custom label::after {
+        top: 4px;
+        left: 4px;
+    }
+    .radio-custom label {
+        top: 2px;
     }
 </style>
