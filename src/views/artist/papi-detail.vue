@@ -212,7 +212,7 @@
                                     <td>{{work.release_time}}</td>
                                     <td>{{work.read_proportion}}</td>
                                     <td @click="Jump(work.link)">
-                                        <template v-show="wock.link">
+                                        <template v-show="work.link">
                                            {{work.link}}
                                         </template>
                                     </td>
