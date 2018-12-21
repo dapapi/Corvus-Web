@@ -141,6 +141,10 @@ export default new Router({
             component: () => import('./views/approval/index.vue'),
             children: [
                 {
+                    path: '/approval/contract/detail',
+                    component: () => import('./views/approval/contractIndex/appdetail.vue')
+                },
+                {
                     path: '/approval/contract/initiate',
                     component: () => import('./views/approval/contractIndex/contractIndex.vue')
                 }, 
@@ -189,8 +193,8 @@ export default new Router({
                     component: () => import('./views/approval/account.vue')
                 },
                 {
-                    path: '/application/common/:id',
-                    name: 'approval/common/detail',
+                    path: '/approval/:id',
+                    name: 'approval/detail',
                     component: () => import('./views/approval/appdetail.vue')
                 },
                 {

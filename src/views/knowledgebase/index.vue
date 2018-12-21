@@ -30,7 +30,7 @@
                             <table class="table table-hover" data-role="content" data-plugin="selectable" data-row-selectable="true">
                                 <thead class="">
                                 <tr>
-                                    <td class="broadcast-title"><strong>标题</strong>
+                                    <td class="broadcast-title"><i class="iconfont icon-T"></i><strong>标题</strong>
                                     </td>
                                     <td>
                                     </td>

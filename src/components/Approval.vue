@@ -1,5 +1,5 @@
 <template>
-    <div class="" >
+    <div class="noselect" >
         <!-- <div class="page-aside-switch">
             <i class="icon wb-chevron-left" aria-hidden="true"></i>
             <i class="icon wb-chevron-right" aria-hidden="true"></i>
@@ -319,6 +319,14 @@ a:link,a:visited,a:hover,a:target{
     /* color: #000; */
       color: #838383;
 
+}
+.noselect{
+     -webkit-touch-callout: none;
+     -webkit-user-select: none;
+     -khtml-user-select: none;
+     -moz-user-select: none;
+     -ms-user-select: none;
+     user-select: none;
 }
     .approval-sort-title{
         cursor: pointer;

@@ -31,7 +31,7 @@
                                 <i class="icon md-caret-right" v-show="!teamShow"></i>
                             </span>
                             <span>
-                                 <i class="icon md-account pl-2"></i>
+                                 <i class="iconfont icon-chengyuannew pl-2"></i>
                             泰洋系（{{ normalUsers.length }}人)
                             </span>
                             <span class="team-add-all pl-2" @click="selectAllMember" v-if="multiple">

@@ -115,11 +115,13 @@ export default {
 }
 .broadcast-top-flag{
     margin-left: 20px;
+    font-size: 20px;
     color: #3298DC !important;
 }
 .broadcast-new-flag{
     margin-left: 20px;
     color: #F44336;
+    font-size: 22px;
 }
 .loader-overlay{
         margin-left: 100px;

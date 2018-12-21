@@ -1,43 +1,43 @@
 <template>
     <div class="">
         <div class="" style="background-color:#f3f4f5" v-for="item in list" :key="item.id">
-            <div class="page-header  page-header-bordered mb-0">   
-                <h6 class="page-title nav-head"><i class="iconfont icon-zuojiantou"></i>{{item.title}}
-                    <template v-if="item.type==232">
+            <div class="page-header  page-header-bordered mb-0">
+                <h6 class="page-title nav-head">{{item.title}}
+                    <template v-if="item.type==0">
                         <button class="btn btn-success py-5">已审批</button>
                     </template>
-                    <template v-if="item.form_status==231">
+                    <template v-if="item.type==1">
                         <button class="btn btn-warning py-5">待审批</button>
                     </template>
-                    <template v-if="item.form_status==234">
+                    <template v-if="item.type==2">
                         <button class="btn py-5">已撤销</button>
                     </template>
-                    <template v-if="item.form_status==235">
+                    <template v-if="item.type==3">
                         <button class="btn py-5">已作废</button>
                     </template>
-                    <template v-if="item.form_status==233">
+                    <template v-if="item.type==4">
                         <button class="btn btn-danger py-5 ">已拒绝</button>
                     </template>
                 </h6>
             </div>
             <div class="page-header  page-header-bordered m-20 pl-10">
-                <h6 class="page-title title-status">当前状态<em></em><span>待审批</span>
-                    <i v-if="item.form_status==232">
+                <h6 class="page-title title-status">当前状态<em></em><span>待测试审批</span>
+                    <i v-if="item.type==0">
                         <button class="btn btn-primary">作废</button>
                     </i>
-                    <i v-if="item.form_status==231">
+                    <i v-if="item.type==1">
                         <button class="btn btn-primary">撤销</button>
                         <button class="btn btn-danger" type="submit" 
                                 data-toggle="modal" data-target="#addProject">提醒
                         </button>
                     </i>
-                    <i v-if="item.form_status==234">
+                    <i v-if="item.type==2">
                         <button class="btn btn-primary">重新提交</button>
                     </i>
-                    <i v-if="item.form_status==235">
+                    <i v-if="item.type==3">
                         <button class="btn btn-primary">重新提交</button>
                     </i>
-                    <i v-if="item.form_status==233">
+                    <i v-if="item.type==4">
                         <button class="btn btn-primary">作废</button>
                     </i>
                 </h6>
@@ -45,8 +45,8 @@
             <div class="page-content container-fluid mt-20">
                 <div class="panel col-md-12 col-lg-12 pb-10">
                     <div class="caption">
-                        <h6 class="page-title">{{item.title}}</h6>
-                        <span>编号：{{item.form_instance_number}}</span>
+                        <h6 class="page-title">{{item.caption}}</h6>
+                        <span>编号：{{item.number}}</span>
                     </div>
                     <div class="example">
                         <div class="col-md-2 float-left">申请人</div>
@@ -211,10 +211,7 @@
     </div>
 </template>
 <script>
- import fetch from '@/assets/utils/fetch.js'
-    import config from '@/assets/js/config'
-    import {PROJECT_CONFIG} from '@/views/approval/project/projectConfig.js'
-// import data from './data.json'
+import data from '@/views/approval/data.json'
 export default {
     data(){
         return{
@@ -222,21 +219,13 @@ export default {
         }
     },
     mounted(){
-        this.getData()
-        // data.forEach((item)=>{
-        //   if(this.$route.params.id==item.number){
-        //       this.list.push(item)
-        //   }
-        // });  
+        data.forEach((item)=>{
+          if(706971350==item.number){
+              this.list.push(item)
+          }
+        });  
     },
     methods:{
-        getData(){
-            let _this = this
-            fetch('get','/approvals_project/detail/'+this.$route.params.id).then((params) => {
-                _this.list = params
-                console.log(params)
-            })
-        },
         participantChange: function (value) {
         let flagArr = [];
         for (let i = 0; i < value.length; i++) {
@@ -274,7 +263,7 @@ export default {
     width: 25px;
     height:25px;
     display: inline-block;
-    background-image: url('../../assets/head.jpg');
+    /* background-image: url('@/assets/head.jpg'); */
     background-size:25px;
     border-radius: 50%;
     margin: 0 10px;

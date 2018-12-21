@@ -134,14 +134,14 @@
         {
             "form_control_id": 4,
             "control": {
-            "data_dictionary_id": 78,
+            "data_dictionary_id": 200,
             "data_dictionary_val": 0,
             "data_dictionary_name": "单行文本"
             },
             "form_control_pid": 0,
             "sort_number": 4,
             "required": 1,
-            "control_title": "艺人/工作室",
+            "control_title": "签约主体",
             "control_placeholder": "请输入"
         },
         {

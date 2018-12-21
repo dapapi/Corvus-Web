@@ -94,8 +94,12 @@
                                 <td>{{ artist.type.data.name }}</td>
                                 <td>
                                     <template v-if="artist.communication_status">
-                                        {{ papiCommunicationStatusArr.find(item => item.value ==
-                                        artist.communication_status).name}}
+                                        <span :style="{color:papiCommunicationStatusArr.find(item => item.value ==
+                                            artist.communication_status).color}">
+                                            {{ papiCommunicationStatusArr.find(item => item.value ==
+                                            artist.communication_status).name}}
+                                        </span>
+                                        
                                     </template>
                                 </td>
                                 <td >
