@@ -46,7 +46,7 @@
                                     <router-link class="row" :to="item2.link">
                                         <div class="clearfix col-md-12 module">
                                             <div class="float-left mr-10 pic">
-                                                <i class="icon  font-size-30 icon-color" :class="iconList[moduleList.find(item => item.id == moduleType).val]"></i>
+                                                <i class="iconfont  font-size-30 icon-color" :class="iconList[moduleList.find(item => item.id == moduleType).val]"></i>
                                             </div>
                                             <div class="float-left mb-10">
                                                 <p class="mb-5"><span class="module_title mr-5 title">{{moduleList.find(item=>item.id ==moduleType).name}}助手</span><i class="timesR">{{item2.created_at}}</i></p>
@@ -105,26 +105,30 @@ export default {
       moduleType:'',
       messageList:[],//消息list
       iconList:{//每个模块的icon
-        announcement: "md-time",
-        attendance: "md-time",
-        blogger: "md-time",
-        calendar: "md-time",
-        client: "md-time",
+        announcenment: "icon-notice",
+        attendance: "icon-shijian",
+        blogger: "icon-huangguan1",
+        calendar: "icon-richeng",
+        client: "icon-kehu1",
         contact: "md-time",
         department: "md-time",
         groupRoles: "md-time",
         issues: "md-time",
         personalJob: "md-time",
         personalSalary: "md-time",
-        project: "md-layers",
-        report: "md-time",
+        project: "icon-xiangmu1",
+        report: "icon-wenzhang",
         role: "md-time",
-        schedule: "md-time",
-        star: "md-time",
-        task: "md-flag",
-        trail: "md-time",
+        schedule: "icon-richeng",
+        star: "icon-yiren",
+        task: "icon-qizi",
+        trails: "icon-xiaoshoushichang",
         user: "md-time",
-        work: "md-time"
+        work: "md-time",
+        contract:"icon-hetong",
+        approval:'icon-shenqingshenpi',
+        repository:'icon-xiangzi',
+        personnelmanage:'icon-renshi'
       },
       week:config.week,
       state:1,// 1未读 2已读
@@ -164,6 +168,7 @@ export default {
         }
         
         fetch('get',`${config.apiUrl}/getmsg?include=recive.data&module=${this.moduleType}&state=${this.state}`).then((res) => {
+        
             this.messageList = res.data
            
 
@@ -183,8 +188,8 @@ export default {
                 this.renderMsg(this.moduleList[0].id,1)
             }
         })
-        console.log(this.moduleList)
-      console.log(this.moduleType)
+        // console.log(this.moduleList)
+        // console.log(this.moduleType)
     },
     msgStatus:function(id,type){
         let data = {}
@@ -239,8 +244,8 @@ a:hover{
         position: absolute;
         top:0px;
         right: 0px;
-        width: 14px;
-        height: 14px;
+        width: 10px;
+        height: 10px;
         border-radius: 50%;
         background-color: #F44336;
     }
@@ -259,26 +264,29 @@ a:hover{
         height: 50px;
         border-radius: 50%;
         text-align: center;
-        padding-top:10px;
+        
     }
     
 }
 .unRead{
     display: inline-block;
-    width: 18px;
-    height: 18px;
+    width: 16px;
+    height: 16px;
     background-color:red;
     color:#fff;
     font-size: 12px;
     font-weight: bold;
     text-align: center;
-    line-height: 18px;
+    line-height: 16px;
     border-radius: 50%;
+    position: absolute;
+    right:10px;
+    top:15px
 }
 .checked{
     background-color:#eee
 }
-.announcement{
+.announcenment{
     .pic{
         background-color:#B53FAF
     }
@@ -308,7 +316,7 @@ a:hover{
     }
     
 }
-.trail{
+.trails{
     
     .pic{
         background-color:#E040FB
@@ -341,6 +349,88 @@ a:hover{
 }
 .personalJob{
     
+    .pic{
+        background-color:#3F51B5
+    }
+    .content{
+        background:rgba(63,81,181,0.02);
+        border-left:2px solid #3F51B5;
+    }
+}
+.blogger{
+    .pic{
+        background-color:#FF5252
+    }
+    .content{
+        background:rgba(255,82,82,0.02);
+        border-left:2px solid #FF5252;
+    }
+}
+.client{
+    .pic{
+        background-color:#7C4DFF
+    }
+    .content{
+        background:rgba(124,77,255,0.02);
+        border-left:2px solid #7C4DFF;
+    }
+    
+}
+.contract{
+    .pic{
+        background-color:#40C4FE
+    }
+    .content{
+        background:rgba(64,196,254,0.02);
+        border-left:2px solid #40C4FE;
+    }
+}
+.schedule{
+    .pic{
+        background-color:#40C4FE
+    }
+    .content{
+        background:rgba(64,196,254,0.02);
+        border-left:2px solid #40C4FE;
+    }
+}
+.attendance{
+    .pic{
+        background-color:#FF9800
+    }
+    .content{
+        background:rgba(255,152,0,0.02);
+        border-left:2px solid #FF9800;
+    }
+}
+.approval{
+    .pic{
+        background-color:#00BCD4
+    }
+    .content{
+        background:rgba(0,188,212,0.02);
+        border-left:2px solid #00BCD4;
+    }
+}
+.repository{
+    .pic{
+        background-color:#B53FAF
+    }
+    .content{
+        background:rgba(181,63,175,0.02);
+        border-left:2px solid #B53FAF;
+    }
+}
+.report{
+    .pic{
+        background-color:#AF4C4C
+    }
+    .content{
+        background:rgba(175,76,76,0.02);
+        border-left:2px solid #AF4C4C;
+    }
+}
+.personnelmanage{
     .pic{
         background-color:#3F51B5
     }
