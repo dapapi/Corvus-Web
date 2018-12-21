@@ -10,13 +10,13 @@
                     <div class=" py-20 px-0 float-left fuound col-md-12 clearfix"
                          style="border-bottom:1px solid #e3e3e3">
                         <span class="pl-0" style="color:#3F51B5" data-toggle="modal" data-target="#addRole">
-                      <i class="iconfont icon-tianjiarenyuan pr-5" style="font-size:12px"></i>
-                       <a href="javascript:0;">新增角色</a>
-                    </span>
+                            <i class="iconfont icon-tianjiarenyuan pr-5" style="font-size:12px"></i>
+                            <a href="javascript:0;">新增角色</a>
+                        </span>
                         <span class="pl-60" style="color:#3F51B5" data-toggle="modal" data-target="#addSubgroup">
-                       <i class="iconfont icon-renyuanfenzu pr-5" style="font-size:12px"></i>
-                       <a href="javascript:0;">新建分组</a> 
-                    </span>
+                            <i class="iconfont icon-renyuanfenzu pr-5" style="font-size:12px"></i>
+                            <a href="javascript:0;">新建分组</a> 
+                        </span>
                     </div>
                     <div class="clearfix py-50">
                         <section class="page-aside-section" >
@@ -95,6 +95,7 @@
                                                     <a class="dropdown-item" role="menuitem" data-toggle="modal"
                                                        data-target="#deleteRole">删除角色</a>
                                                 </div>
+                                            </div>
                                             </li>
 
                                         </ul>
@@ -401,7 +402,6 @@
 
 
                 </div>
-
             </div>
         </div>
         <div class="site-action" data-plugin="actionBtn" data-toggle="modal" data-target="#addRole">
@@ -640,6 +640,7 @@
             </div>
         </div>
     </div>
+    
 </template>
 <script>
     import fetch from '../../assets/utils/fetch.js'
