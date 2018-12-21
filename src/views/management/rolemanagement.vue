@@ -809,12 +809,11 @@
                             }
                         })
                         if(response[_this.rangelist].data1.length!==0&&response[_this.rangelist].data2.length!==0){
-                              _this.sendData.push(obj)
+                            _this.sendData.push(obj) 
                         }   
-                      
+                        
                         i++;
                     }   
-                    console.log(_this.sendData) 
                 })
 
 
