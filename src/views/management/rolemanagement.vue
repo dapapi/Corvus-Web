@@ -10,13 +10,13 @@
                     <div class=" py-20 px-0 float-left fuound col-md-12 clearfix"
                          style="border-bottom:1px solid #e3e3e3">
                         <span class="pl-0" style="color:#3F51B5" data-toggle="modal" data-target="#addRole">
-                      <i class="iconfont icon-tianjiarenyuan pr-5" style="font-size:12px"></i>
-                       <a href="javascript:0;">新增角色</a>
-                    </span>
+                            <i class="iconfont icon-tianjiarenyuan pr-5" style="font-size:12px"></i>
+                            <a href="javascript:0;">新增角色</a>
+                        </span>
                         <span class="pl-60" style="color:#3F51B5" data-toggle="modal" data-target="#addSubgroup">
-                       <i class="iconfont icon-renyuanfenzu pr-5" style="font-size:12px"></i>
-                       <a href="javascript:0;">新建分组</a> 
-                    </span>
+                            <i class="iconfont icon-renyuanfenzu pr-5" style="font-size:12px"></i>
+                            <a href="javascript:0;">新建分组</a> 
+                        </span>
                     </div>
                     <div class="clearfix py-50">
                         <section class="page-aside-section" >
@@ -95,6 +95,7 @@
                                                     <a class="dropdown-item" role="menuitem" data-toggle="modal"
                                                        data-target="#deleteRole">删除角色</a>
                                                 </div>
+                                            </div>
                                             </li>
 
                                         </ul>
@@ -401,7 +402,6 @@
 
 
                 </div>
-
             </div>
         </div>
         <div class="site-action" data-plugin="actionBtn" data-toggle="modal" data-target="#addRole">
@@ -640,6 +640,7 @@
             </div>
         </div>
     </div>
+    
 </template>
 <script>
     import fetch from '../../assets/utils/fetch.js'
@@ -784,21 +785,36 @@
                     }
                     _this.powerDate = response;
                 });
-                fetch('get', '/console/scope/' + this.jobCont).then(function (response) {
-                    _this.rangeDate = response;
-                    _this.rangelist = [];
-                    for (_this.rangelist in response) {
-                        response[_this.rangelist].data1.forEach(item => {
-                            if (item.selected) {
-                                _this.picked = _this.rangeDate[_this.rangelist].id.toString() + item.id
+               fetch('get','/console/scope/'+this.jobCont).then(function(response){
+                    _this.rangeDate = response; 
+                    _this.rangelist=[];
+                    let i=0;
+                    for(_this.rangelist in response){
+                        let obj={
+                            resource_id:response[_this.rangelist].id,
+                            scope:'',
+                            manage:[]
+                        }
+                        response[_this.rangelist].data1.forEach(item=>{
+                           
+                            if(item.selected){
+                                obj.scope=item.id
+                                _this.picked= _this.rangeDate[_this.rangelist].id.toString()+item.id
                             }
                         })
-                        response[_this.rangelist].data2.forEach(v => {
-                            if (v.selected) {
-                                _this.scope.push(response[_this.rangelist].id.toString() + v.id)
+                        response[_this.rangelist].data2.forEach(v=>{
+                            if(v.selected){
+                                obj.manage.push(v.id)
+                                _this.scope.push(response[_this.rangelist].id.toString()+v.id)
                             }
                         })
-                    }
+                        if(response[_this.rangelist].data1.length!==0&&response[_this.rangelist].data2.length!==0){
+                              _this.sendData.push(obj)
+                        }   
+                      
+                        i++;
+                    }   
+                    console.log(_this.sendData) 
                 })
 
 
@@ -1054,43 +1070,35 @@
                 this.valueId.push(i.toString() + v)
                 // console.log(this.valueId)
             },
-            radioed(params, value) {
-                let index = this.sendData.find(item => item.resource_id === value.id)
-
-                if (index) {
-                    index.scope = params.id
-                    console.log(index)
-                } else {
+             radioed(params,value){
+                let index = this.sendData.find(item=>item.resource_id===value.id)
+                if(index){
+                    index.scope = params.id  
+                    console.log(index.scope )         
+                }else{
                     let tempObj = {}
-                    Object.assign(tempObj, {resource_id: value.id})
-                    Object.assign(tempObj, {scope: params.id})
+                    Object.assign(tempObj,{resource_id:value.id})
+                    Object.assign(tempObj,{scope:params.id})
                     this.sendData.push(tempObj)
-                }
-
+                }       
             },
-            checked(params, value) {
-                let index = this.sendData.find(item => item.resource_id === value.id)
+            checked(params,value){
+                let index = this.sendData.find(item=>item.resource_id===value.id)
                 console.log(index)
-
-
-                if (index) {
-
-                    if (index.resource_id == value.id) {
-                        this.checkarr.push(params.id)
-                        index.manage = this.checkarr
+                if(index){
+                    if(index.manage.indexOf(params.id)>-1){
+                        index.manage.splice(index.manage.indexOf(params.id),1)
+                    }else{
+                        index.manage.push(params.id)
                     }
-                } else {
-                    let tempObj = {}
-                    if (index.resource_id == value.id) {
-                        this.checkarr.push(params.id)
-
-                    }
-
-                    Object.assign(tempObj, {resource_id: value.id})
-                    Object.assign(tempObj, {manage: this.checkarr})
+                }else{
+                    let tempObj = {}   
+                    this.checkarr.push(params.id)
+                    Object.assign(tempObj,{resource_id:value.id})
+                    Object.assign(tempObj,{manage:this.checkarr})
                     this.sendData.push(tempObj)
                 }
-                console.log(params.id, value.id)
+           
             }
         }
     }
