@@ -339,7 +339,7 @@
                                             <input class="selectable-item" type="checkbox" :id="'row-' + item.id"
                                                    :value="item.id" @change="selectAllItem"
                                                    v-model="item.selected">
-                                            <label :for="'row-' + item.id">{{item.name}}</label>
+                                            <label :for="'row-' + item.id">{{item.selected}}</label>
                                             </span>
                                         </div>
                                     </td>
