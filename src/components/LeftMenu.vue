@@ -48,7 +48,7 @@
                                 <router-link :to="'/' + subMenu.code"
                                              class="animsition-link">
                                     <span class="site-menu-title">{{ subMenu.name }}</span>
-                                    
+
                                 </router-link>
                             </li>
                         </ul>
@@ -59,10 +59,9 @@
             <div class="user-wrap">
                 <img src="https://res.papitube.com/no-icon.png" alt="">
             </div>
-            <input id="console-model" type="text" @blur="blur" />
+            <input id="console-model" type="text" @blur="blur"/>
             <div class="console" v-show="visible" @click="blur">
                 <ul>
-                    <!-- <li @click="goManagement"><router-link target="_blank" to="/management">进入企业后台</router-link></li> -->
                     <li @click="goManagement">进入企业后台</li>
                     <li @click="layout">退出当前账号</li>
                 </ul>
@@ -74,6 +73,8 @@
 
 <script>
     import {mapState, mapGetters} from 'vuex'
+    import Cookies from 'js-cookie'
+
     export default {
         name: "LeftMenu",
         data() {
@@ -128,10 +129,6 @@
                                 name: '任务',
                                 code: 'tasks'
                             },
-                            {
-                                name: '合同',
-                                code: 'contracts'
-                            },
                         ]
                     },
                     {
@@ -151,10 +148,6 @@
                         image: 'https://res.papitube.com/corvus/images/yingyong.png',
                         hoverImage: 'https://res.papitube.com/corvus/images/select-yingyong.png',
                         data: [
-                            //  {
-                            //     name: '消息',
-                            //     code: 'messages'
-                            // },
                             {
                                 name: '考勤',
                                 code: 'attendance'
@@ -194,10 +187,10 @@
                 visible: false,
             }
         },
-        computed:{
+        computed: {
             ...mapState([
                 'unReadMsg'
-            ])      
+            ])
         },
         watch: {
             '$route'(to, from) {
@@ -205,23 +198,21 @@
             },
         },
         methods: {
-            showBackModel () {
+            showBackModel() {
                 this.visible = !this.visible
             },
-            blur () {
+            blur() {
                 this.visible = false
             },
             // 退出登录
-            layout () {
+            layout() {
                 Cookies.remove('user');
                 Cookies.remove('companyType');
                 Cookies.remove('CORVUS-ACCESS-TOKEN');
-                // 可以？
                 window.location.href = '/login'
             },
-            goManagement () {
+            goManagement() {
                 window.open('/management')
-                // this.$router.go('')
             }
         }
     }
@@ -261,13 +252,14 @@
         overflow: hidden;
         margin: 0 auto;
     }
+
     .menu-icon .icon-wrap label {
         margin: 0;
     }
 
-     .menu-icon .icon-wrap img {
+    .menu-icon .icon-wrap img {
         cursor: pointer;
-     }
+    }
 
     .user-wrap {
         width: 50px;
@@ -291,11 +283,13 @@
     .active .hover-icon {
         display: block !important;
     }
+
     #console-model {
         opacity: 0;
         position: absolute;
         z-index: -1000;
     }
+
     .console {
         padding: 10px 0;
         width: 200px;
@@ -306,35 +300,40 @@
         z-index: 100000;
         border: 1px solid #f7f7f7;
     }
+
     .console ul li {
         height: 40px;
         line-height: 40px;
         padding: 0 30px;
     }
+
     .console ul li a {
         color: rgba(117, 117, 117, 0.9);
     }
+
     .console ul li:hover, .console ul li:hover a {
         cursor: pointer;
         color: #3f51b5;
-        background: rgba(40,53,147,.03);
+        background: rgba(40, 53, 147, .03);
     }
-    .unRead{
+
+    .unRead {
         display: inline-block;
         width: 18px;
         height: 18px;
-        background-color:red;
-        color:#fff;
+        background-color: red;
+        color: #fff;
         font-size: 12px;
         font-weight: bold;
         text-align: center;
         line-height: 18px;
         border-radius: 50%;
         position: absolute;
-        top:8px;
+        top: 8px;
         right: 26px;
     }
-    .site-menu-item{
+
+    .site-menu-item {
         position: relative;
     }
 </style>
