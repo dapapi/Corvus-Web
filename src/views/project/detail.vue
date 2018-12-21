@@ -127,7 +127,16 @@
                             v-if="projectInfo.approval_status == 1">
                             <a class="nav-link" data-toggle="tab" href="#forum-project-tasks"
                                aria-controls="forum-present"
-                               aria-expanded="false" role="tab">任务</a>
+                               aria-expanded="false" role="tab">
+                                <template v-if="projectTasksInfo.length > 0">
+                                    <ToolTips :title="`已完成数量${completeNum}`">
+                                        任务 ({{completeNum}}/{{projectTasksInfo.length}})
+                                    </ToolTips>
+                                </template>
+                                <template v-else>
+                                    任务
+                                </template>
+                            </a>
                         </li>
                         <li class="nav-item" role="presentation"
                             v-if="projectInfo.type != 5 && projectInfo.approval_status == 1">
@@ -136,8 +145,7 @@
                                aria-expanded="false" role="tab">合同</a>
                         </li>
                         <li class="nav-item" role="presentation"
-                            v-if="projectInfo.type != 5">
-                            <!--v-if="projectInfo.type != 5 && projectInfo.approval_status == 1">-->
+                            v-if="projectInfo.type != 5 && projectInfo.approval_status == 1">
                             <a class="nav-link" data-toggle="tab" href="#forum-project-bill"
                                aria-controls="forum-present"
                                aria-expanded="false" role="tab">账单</a>
@@ -149,7 +157,9 @@
                                aria-expanded="false" role="tab">回款</a>
                         </li>
                         <li class="nav-item" role="presentation">
-                            <a class="nav-link" :class="projectInfo.type == 5 ? 'active' : ''" data-toggle="tab"
+                            <a class="nav-link"
+                               :class="(projectInfo.type == 5 || projectInfo.approval_status != 1) ? 'active' : ''"
+                               data-toggle="tab"
                                href="#forum-project-base"
                                aria-controls="forum-base"
                                aria-expanded="true" role="tab">概况</a>
@@ -268,8 +278,8 @@
                         </div>
                         <!-- 账单 -->
                         <div class="tab-pane animation-fade py-10"
-                             v-if="projectInfo.type != 5" id="forum-project-bill" role="tabpanel">
-                            <!--v-if="projectInfo.type != 5 && projectInfo.approval_status == 1" id="forum-project-bill" role="tabpanel">-->
+                             v-if="projectInfo.type != 5 && projectInfo.approval_status == 1" id="forum-project-bill"
+                             role="tabpanel">
                             <div class="clearfix">
                                 <div class="float-left" style="padding: .715rem 1.429rem">
                                     <div class="float-left pr-40">合同金额 <span class="money-color">10000元</span></div>
@@ -517,14 +527,14 @@
                                         </div>
                                         <div class="card-text py-10 px-0 clearfix col-md-6 float-left edit-height"
                                              v-if="projectInfo.type != 5">
-                                            <!--<div class="col-md-2 float-left text-right pl-0">项目来源</div>-->
-                                            <!--<div class="col-md-10 float-left font-weight-bold">-->
-                                            <!---->
-                                            <!--</div>-->
-                                            <TrailOrigin :is-edit="isEdit"
-                                                         :trailType="projectInfo.trail.data.resource_type"
-                                                         typeName="项目"
-                                                         @change="(value) => changeProjectBaseInfo(value, 'trail_origin')"></TrailOrigin>
+                                            <TrailOrigin :trailType='projectInfo.trail.data.type'
+                                                         typeName='项目' :isEdit='isEdit'
+                                                         :content='projectInfo.trail.data.resource'
+                                                         @changeTrailOrigin="(value) => changeProjectBaseInfo(value, 'resource_type')"
+                                                         :contentType='projectInfo.trail.data.resource_type'
+                                                         @changeEmail="(value) => changeProjectBaseInfo(value, 'resource')"
+                                                         detailPage='true'
+                                                         @changeTrailOriginPerson="(value) => changeProjectBaseInfo(value.id, 'resource')"/>
                                         </div>
                                         <div class="card-text py-10 px-0 clearfix col-md-6 float-left edit-height"
                                              v-if="projectInfo.type != 5">
@@ -739,7 +749,8 @@
                         <div class="example" v-if="taskTypeArr.length > 0">
                             <div class="col-md-2 text-right float-left">任务类型</div>
                             <div class="col-md-10 float-left pl-0">
-                                <selectors :options="taskTypeArr" @change="changeTaskType"></selectors>
+                                <selectors :options="taskTypeArr" ref="projectTaskType" placeholder="请选择任务类型"
+                                           @change="changeTaskType"></selectors>
                             </div>
                         </div>
                         <div class="example">
@@ -1325,6 +1336,11 @@
         },
 
         watch: {},
+        computed: {
+            completeNum() {
+                return this.projectTasksInfo.filter(n => n.status === 2).length
+            }
+        },
 
         methods: {
 
@@ -1332,7 +1348,7 @@
                 this.projectId = this.$route.params.id;
                 let _this = this;
                 let data = {
-                    include: 'principal,participants,creator,fields,trail.expectations,trail.client,relate_tasks,relate_projects',
+                    include: 'principal,participants,creator,fields,trail.expectations,trail.client,relate_tasks,relate_projects,type',
                 };
                 fetch('get', '/projects/' + this.projectId, data).then(function (response) {
                     let fieldsArr = response.meta.fields.data;
@@ -1349,6 +1365,7 @@
                     }
                     response.data.fields = fieldsArr;
                     _this.projectInfo = response.data;
+                    _this.projectInfo.approval_status = 1;
                     let params = {
                         type: 'change',
                     };
@@ -1420,6 +1437,16 @@
                 this.filterFee = value;
             },
 
+            changeTrailOrigin: function (value) {
+                console.log(value)
+                // this.$store.state.newPrincipalInfo.id = this.trailInfo.resource;
+                this.trailInfo.resource = '';
+                this.email = '';
+                this.trailOriginPerson = '';
+                this.changeInfo.resource_type = value;
+                this.trailOrigin = value
+            },
+
             addTask: function () {
                 let participant_ids = [];
                 for (let i = 0; i < this.$store.state.newParticipantsInfo.length; i++) {
@@ -1458,16 +1485,14 @@
             },
 
             getAllProjects: function () {
-                let _this = this;
-                fetch('get', '/projects/all').then(function (response) {
-                    _this.allProjectsInfo = response.data
+                fetch('get', '/projects/all').then(response => {
+                    this.allProjectsInfo = response.data
                 })
             },
 
             getAllTasks: function () {
-                let _this = this;
-                fetch('get', '/tasksAll').then(function (response) {
-                    _this.allTasksInfo = response.data
+                fetch('get', '/tasksAll').then(response => {
+                    this.allTasksInfo = response.data
                 })
             },
 
@@ -1501,16 +1526,44 @@
                         if (value == this.projectInfo.trail.data.fee) {
                             return
                         }
-                        this.changeInfo['trail'] = {
-                            id: this.projectInfo.trail.data.id,
-                            fee: value
-                        };
+                        if (this.changeInfo.trail) {
+                            this.changeInfo.trail.fee = value
+                        } else {
+                            this.changeInfo['trail'] = {
+                                id: this.projectInfo.trail.data.id,
+                                fee: value
+                            };
+                        }
                         return;
                     case 'expectations':
-                        this.changeInfo['trail'] = {
-                            id: this.projectInfo.trail.data.id,
-                            expectations: value
-                        };
+                        if (this.changeInfo.trail) {
+                            this.changeInfo.trail.expectations = value
+                        } else {
+                            this.changeInfo['trail'] = {
+                                id: this.projectInfo.trail.data.id,
+                                expectations: value
+                            };
+                        }
+                        return;
+                    case 'resource_type':
+                        if (this.changeInfo.trail) {
+                            this.changeInfo.trail.resource_type = value
+                        } else {
+                            this.changeInfo['trail'] = {
+                                id: this.projectInfo.trail.data.id,
+                                resource_type: value
+                            };
+                        }
+                        return;
+                    case 'resource':
+                        if (this.changeInfo.trail) {
+                            this.changeInfo.trail.resource = value
+                        } else {
+                            this.changeInfo['trail'] = {
+                                id: this.projectInfo.trail.data.id,
+                                resource: value
+                            };
+                        }
                         return;
                     default:
                         break

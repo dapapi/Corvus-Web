@@ -40,18 +40,23 @@
                                         <i class="iconfont icon-gengduo1" aria-hidden="true"
                                            id="taskDropdown" data-toggle="dropdown" aria-expanded="false"></i>
                                         <div class="dropdown-menu" aria-labelledby="taskDropdown" role="menu">
-                                            <a class="dropdown-item" role="menuitem" @click="">影视项目立项</a>
-                                            <a class="dropdown-item" role="menuitem" @click="">综艺项目立项</a>
-                                            <a class="dropdown-item" role="menuitem" @click="">商务项目立项</a>
-                                            <a class="dropdown-item" role="menuitem" @click="">papi项目立项</a>
+                                            <a class="dropdown-item" role="menuitem" >影视项目立项</a>
+                                            <a class="dropdown-item" role="menuitem" >综艺项目立项</a>
+                                            <a class="dropdown-item" role="menuitem" >商务项目立项</a>
+                                            <a class="dropdown-item" role="menuitem" >papi项目立项</a>
                                         </div>
                                     </th>
                                     <th class="cell-300" scope="col">申请时间</th>
                                     <th class="cell-300" scope="col">审批状态</th>
                                 </tr>
                                 <tbody>
-                                <tr v-for="prpject in projectsInfo">
+                                <tr v-for="project in projectsInfo" :key='project.project_number'>
+                                    <td>{{project.project_number}}</td>
+                                    <td>{{project.title}}</td>
+                                    <td>{{project.name}}</td>
                                     <td></td>
+                                    <td>{{project.created_at}}</td>
+                                    <td>{{getProgressName(project.form_status)}}</td>
                                 </tr>
                                 </tbody>
                             </table>
@@ -70,17 +75,35 @@
 </template>
 
 <script>
+    import fetch from '@/assets/utils/fetch.js'
+    import config from '@/assets/js/config'
+    import {PROJECT_CONFIG} from '@/views/approval/project/projectConfig.js'
     export default {
         name: "application",
         data() {
             return {
                 keywords: '',
                 projectsInfo: [],
+                projectProgress:PROJECT_CONFIG.approvalProgress
+            }
+        },
+        mounted(){
+            this.getList()
+        },
+        computed:{
+            getProgressName(){
+                return function(params){
+                   return  this.projectProgress.find(item=>item.id = params).value
+                }
             }
         },
         methods: {
-            getList(value) {
-
+            getList() {
+                let _this = this
+                fetch('get','/approvals_project/my').then((params) => {
+                    console.log(params.data)
+                    _this.projectsInfo = params.data
+                })
             }
         }
     }

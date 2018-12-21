@@ -91,7 +91,7 @@
                     <calendar :gotoDate="selectedDate" v-show="!meetingRomeShow" @dayClick="showAddScheduleModal"
                               :calendars="selectedCalendar" ref="calendar"
                               @scheduleClick="showScheduleModal"></calendar>
-                    <MeetingRoomCalendar v-show="meetingRomeShow" ref="meetingRoom"
+                    <MeetingRoomCalendar v-show="meetingRomeShow" :meetingRomeList="meetingRomeList" ref="meetingRoom"
                                          @change="displayMeetingRoom"></MeetingRoomCalendar>
                 </div>
 
@@ -104,15 +104,19 @@
             <div class="modal-dialog modal-simple">
                 <div class="modal-content">
                     <div class="modal-header">
-                        <button type="button" class="close" aria-hidden="true" data-dismiss="modal">
-                            <i class="md-close" aria-hidden="true"></i>
-                        </button>
-                        <template v-if="scheduleType === 'add'">
-                            <h4 class="modal-title">新建日程</h4>
-                        </template>
-                        <template v-else>
-                            <h4 class="modal-title">修改日程</h4>
-                        </template>
+                        <div style="order: 2">
+                            <span class="pointer-content hover-content mr-4" data-toggle="modal"
+                                  data-target="#addLinkage" @click="selectProjectLinkage">关联</span>
+                            <i class="md-close pointer-content" aria-hidden="true" data-dismiss="modal"></i>
+                        </div>
+                        <h5 class="modal-title">
+                            <template v-if="scheduleType === 'add'">
+                                <h4 class="modal-title">新建日程</h4>
+                            </template>
+                            <template v-else>
+                                <h4 class="modal-title">修改日程</h4>
+                            </template>
+                        </h5>
                     </div>
                     <div class="modal-body">
                         <div class="example">
@@ -161,7 +165,27 @@
                         <div class="clearfix py-10">
                             <div class="col-md-2 text-right float-left">参与人</div>
                             <div class="col-md-10 float-left pl-0">
-                                <add-member></add-member>
+                                <AddMember type="add"></AddMember>
+                            </div>
+                        </div>
+                        <div class="my-10 clearfix"
+                             v-show="linkageSelectedIds.projects.length > 0 || linkageSelectedIds.tasks.length > 0">
+                            <div class="col-md-2 text-right float-left">关联资源</div>
+                            <div class="col-md-10 float-left pl-0">
+                                <div class="clearfix" v-for="id in linkageSelectedIds.projects">
+                                    <span class="float-left">
+                                        项目 - {{ allProjectsInfo.find(item => item.id == id).title }}
+                                    </span>
+                                    <span class="float-right icon md-delete"
+                                          @click="delNewScheduleLinkage('projects', id)"></span>
+                                </div>
+                                <div class="clearfix" v-for="id in linkageSelectedIds.tasks">
+                                    <span class="float-left">
+                                        任务 - {{ allTasksInfo.find(item => item.id == id).title }}
+                                    </span>
+                                    <span class="float-right icon md-delete"
+                                          @click="delNewScheduleLinkage('tasks', id)"></span>
+                                </div>
                             </div>
                         </div>
                         <div v-show="showMore">
@@ -169,7 +193,7 @@
                                 <div class="col-md-2 text-right float-left">会议室</div>
                                 <div class="col-md-10 float-left pl-0">
                                     <selectors :options="meetingRomeList" ref="scheduleResource"
-                                               :placeholder="'请选择会议室'"></selectors>
+                                               :placeholder="'请选择会议室'" @change="changeScheduleMaterial"></selectors>
                                 </div>
                             </div>
                             <div class="example">
@@ -201,8 +225,7 @@
                                 <div class="col-md-2 text-right float-left"></div>
                                 <div class="col-md-10 float-left pl-0">
                                     <div class="checkbox-custom checkbox-primary">
-                                        <input type="checkbox" id="onlyParticipantVisible"
-                                               @change="changeParticipantVisible" v-model="schedulePrivacy">
+                                        <input type="checkbox" id="onlyParticipantVisible" v-model="schedulePrivacy">
                                         <label for="onlyParticipantVisible">仅参与人可见</label>
                                     </div>
                                 </div>
@@ -279,9 +302,9 @@
                             <div class="col-md-1 px-0 float-left">地点</div>
                             <div class="col-md-10 float-left">{{ scheduleData.position }}</div>
                         </div>
-                        <div class="example" v-if="scheduleData.resource">
+                        <div class="example" v-if="scheduleData.material">
                             <div class="col-md-1 px-0 float-left">资源</div>
-                            <div class="col-md-10 float-left">诺金1802会议室</div>
+                            <div class="col-md-10 float-left">{{ scheduleData.material.data.name }}</div>
                         </div>
                         <div class="example">
                             <div class="col-md-1 px-0 float-left">组织人</div>
@@ -295,10 +318,10 @@
                         <div class="example">
                             <div class="col-md-1 px-0 float-left">参与人</div>
                             <div class="col-md-10 float-left">
-                                <AddMember></AddMember>
+                                <AddMember type="add" @change="changeScheduleParticipants"></AddMember>
                             </div>
                         </div>
-                        <div class="example">
+                        <div class="example" v-if="scheduleData.desc">
                             <div class="col-md-1 px-0 float-left">备注</div>
                             <div class="col-md-10 float-left">{{ scheduleData.desc }}</div>
                         </div>
@@ -444,6 +467,84 @@
             </div>
         </div>
 
+        <!-- 关联资源 -->
+        <div class="modal fade" id="addLinkage" aria-hidden="true" aria-labelledby="addLabelForm"
+             role="dialog" tabindex="-1">
+            <div class="modal-dialog modal-simple">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <button type="button" class="close" aria-hidden="true" data-dismiss="modal">
+                            <i class="md-close" aria-hidden="true"></i>
+                        </button>
+                        <h4 class="modal-title">关联资源</h4>
+                    </div>
+                    <div class="modal-body">
+                        <div class="tab-pane p-20" role="tabpanel">
+                            <div class="nav-tabs-vertical" data-plugin="tabs" style="margin: 0 -20px -30px  -20px ">
+                                <ul class="nav nav-tabs nav-tabs-line mr-25" role="tablist">
+                                    <li class="nav-item" role="presentation" @click="selectProjectLinkage('project')">
+                                        <a class="nav-link active" data-toggle="tab" href="#projectsPane"
+                                           aria-controls="exampleTabsLineLeftOne" role="tab" aria-selected="false">
+                                            项目</a>
+                                    </li>
+                                    <li class="nav-item" role="presentation" @click="selectProjectLinkage('task')">
+                                        <a class="nav-link" data-toggle="tab" href="#tasksPane"
+                                           aria-controls="exampleTabsLineLeftOne" role="tab" aria-selected="false">
+                                            任务</a>
+                                    </li>
+                                </ul>
+                                <div class="tab-content" style="max-height: 70vh;overflow-y: auto">
+                                    <div class="tab-pane active" id="projectsPane" role="tabpanel">
+                                        <div class="input-search mb-20" style="width: 70%">
+                                            <button type="submit" class="input-search-btn">
+                                                <i class="md-search" aria-hidden="true"></i>
+                                            </button>
+                                            <input type="text" class="form-control" name="" placeholder="搜索关键字..."
+                                                   v-model="searchKeyWord">
+                                        </div>
+                                        <ul class="nav">
+                                            <li class="nav-link pointer-content" style="width: 95%"
+                                                v-for="project in allProjectsInfo"
+                                                v-show="project.title.indexOf(searchKeyWord) > -1"
+                                                @click="selectResource('projects', project.id)">{{ project.title }}
+                                                <span class="float-right"
+                                                      v-show="linkageSelectedIds.projects.indexOf(project.id) > -1">
+                                                    <i class="md-check"></i>
+                                                </span>
+                                            </li>
+                                        </ul>
+                                    </div>
+                                    <div class="tab-pane" id="tasksPane" role="tabpanel">
+                                        <div class="input-search mb-20" style="width: 70%">
+                                            <button type="submit" class="input-search-btn">
+                                                <i class="md-search" aria-hidden="true"></i>
+                                            </button>
+                                            <input type="text" class="form-control" name="" placeholder="搜索关键字..."
+                                                   v-model="searchKeyWord">
+                                        </div>
+                                        <ul class="nav">
+                                            <li class="nav-link pointer-content" style="width: 95%"
+                                                v-for="task in allTasksInfo"
+                                                v-show="task.title.indexOf(searchKeyWord) > -1"
+                                                @click="selectResource('tasks', task.id)">{{ task.title }}
+                                                <span class="float-right"
+                                                      v-show="linkageSelectedIds.tasks.indexOf(task.id) > -1">
+                                                    <i class="md-check"></i>
+                                                </span>
+                                            </li>
+                                        </ul>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="modal-footer">
+                        <button class="btn btn-sm btn-white btn-pure" data-dismiss="modal">取消</button>
+                        <button class="btn btn-primary" type="submit" @click="addLinkageResource">确定</button>
+                    </div>
+                </div>
+            </div>
+        </div>
 
     </div>
 
@@ -491,21 +592,30 @@
                 calendarActionType: '',
                 scheduleCalendar: '',
                 isScheduleAllday: 0,
-                privacy: 1,
                 scheduleRepeat: 1,
                 scheduleData: '',
+                scheduleParticipants: '',
                 isAllday: false,
                 schedulePrivacy: false,
                 meetingRomeList: '',
                 delType: '',
                 scheduleType: 'add',
+                scheduleMaterialId: '',
+                linkageResource: '',
+                allProjectsInfo: '',
+                allTasksInfo: '',
+                searchKeyWord: '',
+                linkageSelectedIds: {
+                    projects: [],
+                    tasks: []
+                },
+                materialsIds: [],
             }
         },
 
         mounted() {
             this.getStars();
             this.getCalendarList();
-            this.getResources();
             let _this = this;
             $('#addCalendar').on('hidden.bs.modal', function () {
                 _this.$store.dispatch('changeParticipantsInfo', {data: []});
@@ -579,9 +689,12 @@
                 })
             },
 
-            getResources() {
-                fetch('get', '/materials/all').then(response => {
-                    this.meetingRomeList = response.data
+            getResources(type) {
+                let data = {
+                    type: type
+                };
+                fetch('get', '/materials/all', data).then(response => {
+                    this.meetingRomeList = response.data;
                 })
             },
 
@@ -639,15 +752,89 @@
                 })
             },
 
+            getAllProjects: function () {
+                fetch('get', '/projects/all').then(response => {
+                    this.allProjectsInfo = response.data
+                })
+            },
+
+            getAllTasks: function () {
+                fetch('get', '/tasksAll').then(response => {
+                    this.allTasksInfo = response.data
+                })
+            },
+
+            selectProjectLinkage: function (value) {
+                this.linkageResource = value;
+                if (!this.allProjectsInfo) {
+                    this.getAllProjects()
+                }
+                if (!this.allTasksInfo) {
+                    this.getAllTasks()
+                }
+            },
+
+            selectResource: function (type, value) {
+                let index = this.linkageSelectedIds[type].indexOf(value);
+                if (index > -1) {
+                    this.linkageSelectedIds[type].splice(index, 1)
+                } else {
+                    this.linkageSelectedIds[type].push(value)
+                }
+            },
+
+            delNewScheduleLinkage: function (type, value) {
+                console.log(this.linkageSelectedIds[type]);
+                let index = this.linkageSelectedIds[type].indexOf(value);
+                this.linkageSelectedIds[type].splice(index, 1)
+            },
+
+            addLinkageResource: function () {
+                console.log(this.linkageSelectedIds);
+                $('#addLinkage').modal('hide');
+            },
+
+            changeScheduleMaterial: function (value) {
+                this.scheduleMaterialId = value;
+            },
+
+            changeScheduleParticipants: function (value) {
+                let data = {};
+                if (value) {
+                    data.participant_del_ids = [value];
+                } else {
+                    let participantsInfo = this.$store.state.newParticipantsInfo;
+                    data.participant_ids = [];
+                    data.participant_del_ids = [];
+                    for (let i = 0; i < participantsInfo.length; i++) {
+                        if (this.scheduleParticipants.indexOf(participantsInfo[i].id) === -1) {
+                            data.participant_ids.push(participantsInfo[i].id)
+                        }
+                    }
+                    for (let i = 0; i < this.scheduleParticipants.length; i++) {
+                        if (participantsInfo.indexOf(this.scheduleParticipants[i].id) === -1) {
+                            data.participant_del_ids.push(this.scheduleParticipants[i].id)
+                        }
+                    }
+                }
+                fetch('put', '/schedules/' + this.scheduleData.id, data).then(response => {
+                    this.$refs.calendar.refresh();
+                    this.scheduleParticipants = JSON.parse(JSON.stringify(this.$store.state.newParticipantsInfo));
+                })
+            },
+
             showScheduleModal: function (data) {
                 this.scheduleData = data;
-                // this.$store.dispatch('changeParticipantsInfo', {data: data.participantsInfo.data});
+                this.scheduleParticipants = JSON.parse(JSON.stringify(data.participants.data));
+                this.$store.dispatch('changeParticipantsInfo', {data: data.participants.data});
                 $('#checkSchedule').modal('show')
             },
 
             showAddScheduleModal: function (date) {
                 this.$refs.scheduleStartDate.setValue(date);
                 this.$refs.scheduleEndDate.setValue(date);
+                this.startTime = date;
+                this.endTime = date;
                 $('#changeSchedule').modal('show')
             },
 
@@ -664,6 +851,28 @@
             changeScheduleType: function (type) {
                 this.scheduleType = type;
                 $('#checkSchedule').modal('hide');
+                if (type === 'edit') {
+                    this.scheduleName = this.scheduleData.title;
+                    this.$refs.calendarSelector.setValue(this.scheduleData.calendar.data.id);
+                    this.scheduleCalendar = this.scheduleData.calendar.data.id;
+                    this.$refs.scheduleStartDate.setValue(this.scheduleData.start_at.split(' ')[0]);
+                    let startMinutes = this.scheduleData.start_at.split(' ')[1].split(':');
+                    this.$refs.scheduleStartMinute.setValue(startMinutes[0] + ':' + startMinutes[1]);
+                    this.startTime = this.scheduleData.start_at.split(' ')[0];
+                    this.startMinutes = startMinutes[0] + ':' + startMinutes[1];
+                    this.$refs.scheduleEndDate.setValue(this.scheduleData.end_at.split(' ')[0]);
+                    let endMinutes = this.scheduleData.end_at.split(' ')[1].split(':');
+                    this.$refs.scheduleEndMinute.setValue(endMinutes[0] + ':' + endMinutes[1]);
+                    this.endTime = this.scheduleData.end_at.split(' ')[0];
+                    this.endMinutes = endMinutes[0] + ':' + endMinutes[1];
+                    this.isAllday = this.scheduleData.is_allday;
+                    this.eventDesc = this.scheduleData.desc;
+                    this.eventPlace = this.scheduleData.position;
+                    if (this.scheduleData.material) {
+                        this.$refs.scheduleResource.setValue(this.scheduleData.material.data.id);
+                        this.scheduleMaterialId = this.scheduleData.material.data.id;
+                    }
+                }
             },
 
             deleteSchedule: function () {
@@ -675,7 +884,49 @@
             },
 
             changeSchedule: function () {
-                console.log('编辑日程')
+                let startTime = '';
+                let endTime = '';
+                if (this.isScheduleAllday) {
+                    startTime = this.startTime;
+                    endTime = this.endTime;
+                } else {
+                    startTime = this.startTime + ' ' + this.startMinutes;
+                    endTime = this.endTime + ' ' + this.endMinutes;
+                }
+                let data = {
+                    title: this.scheduleName,
+                    calendar_id: this.scheduleCalendar,
+                    is_allday: this.isScheduleAllday,
+                    privacy: Number(this.schedulePrivacy),
+                    start_at: startTime,
+                    end_at: endTime,
+                    repeat: this.scheduleRepeat,
+                    desc: this.eventDesc,
+                    material_id: this.scheduleMaterialId
+                };
+                if (this.eventPlace) {
+                    data.position = this.eventPlace;
+                }
+
+                data.participant_del_ids = [];
+                data.participant_ids = [];
+                let flagInfo = this.$store.state.newParticipantsInfo;
+                for (let i = 0; i < this.scheduleParticipants.length; i++) {
+                    if (flagInfo.map(item => item.id).indexOf(this.scheduleParticipants[i].id) === -1) {
+                        data.participant_del_ids.push(this.scheduleParticipants[i].id)
+                    }
+                }
+                for (let i = 0; i < flagInfo.length; i++) {
+                    if (this.scheduleParticipants.map(item => item.id).indexOf(flagInfo[i].id) === -1) {
+                        data.participant_ids.push(flagInfo[i].id)
+                    }
+                }
+
+                fetch('put', '/schedules/' + this.scheduleData.id, data).then(response => {
+                    this.$refs.calendar.refresh();
+                    $('#changeSchedule').modal('hide');
+                    toastr.success('修改成功')
+                })
             },
 
             selectScheduleCalendar: function (value) {
@@ -700,21 +951,44 @@
             },
 
             addSchedule: function () {
+                let startTime = '';
+                let endTime = '';
                 if (this.isScheduleAllday) {
-                    this.startMinutes = '00:00';
-                    this.endMinutes = '00:00';
+                    startTime = this.startTime;
+                    endTime = this.endTime;
+                } else {
+                    startTime = this.startTime + ' ' + this.startMinutes;
+                    endTime = this.endTime + ' ' + this.endMinutes;
                 }
                 let data = {
                     title: this.scheduleName,
                     calendar_id: this.scheduleCalendar,
                     is_allday: this.isScheduleAllday,
-                    privacy: this.privacy,
-                    start_at: this.startTime + ' ' + this.startMinutes,
-                    end_at: this.endTime + ' ' + this.endMinutes,
-                    position: this.eventPlace,
+                    privacy: Number(this.schedulePrivacy),
+                    start_at: startTime,
+                    end_at: endTime,
                     repeat: this.scheduleRepeat,
-                    desc: this.eventDesc,
+                    desc: this.eventDesc
                 };
+                if (this.eventPlace) {
+                    data.position = this.eventPlace;
+                }
+                if (this.scheduleMaterialId) {
+                    data.material_id = this.scheduleMaterialId;
+                }
+                if (this.$store.state.newParticipantsInfo) {
+                    data.participant_ids = [];
+                    let newParticipantsInfo = this.$store.state.newParticipantsInfo;
+                    for (let i = 0; i < newParticipantsInfo.length; i++) {
+                        data.participant_ids.push(newParticipantsInfo[i].id)
+                    }
+                }
+                if (this.linkageSelectedIds.projects.length > 0) {
+                    data.project_ids = this.linkageSelectedIds.projects;
+                }
+                if (this.linkageSelectedIds.tasks.length > 0) {
+                    data.task_ids = this.linkageSelectedIds.tasks;
+                }
                 fetch('post', '/schedules', data).then(response => {
                     this.$refs.calendar.refresh();
                     $('#changeSchedule').modal('hide');
@@ -734,11 +1008,15 @@
                 this.endTime = '';
                 this.endMinutes = '00:00';
                 this.eventPlace = '';
-                this.scheduleRepeat = '';
+                this.scheduleRepeat = 1;
                 this.eventDesc = '';
                 this.isAllday = false;
                 this.schedulePrivacy = false;
                 this.scheduleType = 'add';
+                this.linkageSelectedIds = {
+                    projects: [],
+                    tasks: []
+                };
                 this.$refs.calendarSelector.setValue('');
                 this.$refs.scheduleStartDate.setValue('');
                 this.$refs.scheduleEndDate.setValue('');
@@ -775,10 +1053,6 @@
 
             changeIsAllDay: function (e) {
                 this.isScheduleAllday = Number(e.target.checked);
-            },
-
-            changeParticipantVisible: function (e) {
-                this.privacy = Number(e.target.checked);
             },
 
             isShowMore: function () {
@@ -876,7 +1150,8 @@
                 })
             },
 
-            checkMeetingRoom: function () {
+            checkMeetingRoom: function (type) {
+                this.getResources(type);
                 this.meetingRomeShow = true
             },
 

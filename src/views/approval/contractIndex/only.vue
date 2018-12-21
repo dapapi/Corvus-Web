@@ -55,11 +55,11 @@
                                 </tr>
                                 </tbody>
                             </table>
-
+<!-- 
                             <div v-if="projectsInfo.length === 0" class="col-md-1" style="margin: 6rem auto">
                                 <img src="https://res.papitube.com/corvus/images/content-none.png" alt=""
                                      style="width: 100%">
-                            </div>
+                            </div> -->
                         </div>
                     </div>
                 </div>
@@ -76,6 +76,8 @@
             return {
                 keywords: '',
                 projectsInfo: [],
+                contractList:CONTRACT_INDEX_CONFIG.contractIndex,
+
             }
         },
         methods: {

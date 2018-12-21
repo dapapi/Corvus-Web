@@ -2,7 +2,7 @@
     <div id="app">
         <template v-if="isLeftMenuShow">
             <LeftMenu/>
-            <!-- <get-message/> -->
+            <get-message/>
         </template>
         <template v-else-if="isLeftManageShow">
             <LeftManage/>

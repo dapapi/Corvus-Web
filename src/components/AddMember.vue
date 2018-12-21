@@ -70,6 +70,7 @@
                     data: participantInfo
                 };
                 this.$store.dispatch('changeParticipantsInfo', params);
+                this.$emit('change', userId)
             },
 
             changeSelectedMember: function () {

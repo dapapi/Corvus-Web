@@ -92,7 +92,7 @@ export default {
                 }else{
 
                 }
-                this.$emit('click',`${this.year}-1-1 00:00:00`,`${this.year}-12-31 23:59:59`,this.year)
+                this.$emit('click',`${this.year}`,`${this.year}`,this.year)
             }else if(this.type == 3||this.type == 2){
                 if(move == 'left'){
                
@@ -115,7 +115,7 @@ export default {
 
                 }
                 this.content = `${this.year}-${this.nowMonth}月`
-                this.$emit('click',`${this.month.find(item => item.value == this.nowMonth).startDate} 00:00:00`,`${this.month.find(item => item.value == this.nowMonth).endDate} 23:59:59`,this.year,this.nowMonth)
+                this.$emit('click',`${this.month.find(item => item.value == this.nowMonth).startDate}`,`${this.month.find(item => item.value == this.nowMonth).endDate}`,this.year,this.nowMonth)
             }else if(this.type ==1){
                 if(move == 'left'){
                     if(this.nowDay <=1){
@@ -127,7 +127,7 @@ export default {
                             this.nowDay  = this.monthDay[this.nowMonth-1]
                         }
                     }else{
-                        this.nowDay = this.nowDay-1
+                        this.nowDay = this.f-1
                     }
                     
                 }else if(move == 'right'){
@@ -145,7 +145,7 @@ export default {
                    } 
                 }else{}
                 this.day = `${this.year}-${this.nowMonth}-${this.nowDay}`
-                this.$emit('click',`${this.day} 00:00:00`,`${this.day} 23:59:59`,this.nowMonth)
+                this.$emit('click',`${this.day}`,`${this.day}`,this.nowMonth)
             }else if(this.type == 4){
                 if(move == 'left'){
                     if(this.nowSeason<=1){
@@ -162,7 +162,7 @@ export default {
                         this.nowSeason = this.nowSeason+1
                     }
                 }else{}
-                this.$emit('click',`${this.year}-${this.season.find(item=> item.value == this.nowSeason).startTime} 00:00:00`,`${this.year}-${this.season.find(item=> item.value == this.nowSeason).endTime} 23:59:59`,this.year)
+                this.$emit('click',`${this.year}-${this.season.find(item=> item.value == this.nowSeason).startTime}`,`${this.year}-${this.season.find(item=> item.value == this.nowSeason).endTime}`,this.year)
             }
             
             

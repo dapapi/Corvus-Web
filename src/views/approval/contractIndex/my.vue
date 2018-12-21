@@ -40,10 +40,7 @@
                                         <i class="iconfont icon-gengduo1" aria-hidden="true"
                                            id="taskDropdown" data-toggle="dropdown" aria-expanded="false"></i>
                                         <div class="dropdown-menu" aria-labelledby="taskDropdown" role="menu">
-                                            <a class="dropdown-item" role="menuitem" >影视项目立项</a>
-                                            <a class="dropdown-item" role="menuitem" >综艺项目立项</a>
-                                            <a class="dropdown-item" role="menuitem" >商务项目立项</a>
-                                            <a class="dropdown-item" role="menuitem">papi项目立项</a>
+                                            <a class="dropdown-item" role="menuitem" v-for="(item, index) in contractList" :key="index">{{item.value}}</a>
                                         </div>
                                     </th>
                                     <th class="cell-300" scope="col">申请时间</th>
@@ -69,12 +66,15 @@
 </template>
 
 <script>
+import {CONTRACT_INDEX_CONFIG} from '@/views/approval/contractIndex/contractIndexData.js'
+
     export default {
         name: "my",
         data() {
             return {
                 keywords: '',
                 projectsInfo: [],
+                contractList:CONTRACT_INDEX_CONFIG.contractIndex,
             }
         },
         methods: {
