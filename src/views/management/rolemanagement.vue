@@ -785,35 +785,40 @@
                     }
                     _this.powerDate = response;
                 });
+                this.sendData=[];
                fetch('get','/console/scope/'+this.jobCont).then(function(response){
                     _this.rangeDate = response; 
                     _this.rangelist=[];
                     let i=0;
                     for(_this.rangelist in response){
+                        
                         let obj={
                             resource_id:response[_this.rangelist].id,
                             scope:'',
                             manage:[]
                         }
                         response[_this.rangelist].data1.forEach(item=>{
-                           
+                            
                             if(item.selected){
-                                obj.scope=item.id
+                              obj.scope=item.id 
                                 _this.picked= _this.rangeDate[_this.rangelist].id.toString()+item.id
                             }
                         })
                         response[_this.rangelist].data2.forEach(v=>{
+                            
                             if(v.selected){
-                                obj.manage.push(v.id)
+                                 obj.manage.push(v.id)
+                              
                                 _this.scope.push(response[_this.rangelist].id.toString()+v.id)
                             }
                         })
-                        if(response[_this.rangelist].data1.length!==0&&response[_this.rangelist].data2.length!==0){
+                        if(response[_this.rangelist].data1.length!==0||response[_this.rangelist].data2.length!==0){
                             _this.sendData.push(obj) 
                         }   
                         
                         i++;
-                    }   
+                    }  
+                    console.log(_this.sendData) 
                 })
 
 
@@ -824,10 +829,9 @@
                 })
             },
             rangekeep() {
-                let data = []
-                data.push(this.sendData)
-                console.log(data)
-                fetch('post', '/console/scope/' + this.jobCont, data).then(function (response) {
+                console.log('this.sendData:')
+                console.log(this.sendData)
+                fetch('post', '/console/scope/' + this.jobCont, this.sendData).then(function (response) {
                     toastr.success('保存成功');
 
                 })
@@ -1083,13 +1087,15 @@
             },
             checked(params,value){
                 let index = this.sendData.find(item=>item.resource_id===value.id)
-                console.log(index)
                 if(index){
                     if(index.manage.indexOf(params.id)>-1){
+                        
                         index.manage.splice(index.manage.indexOf(params.id),1)
                     }else{
                         index.manage.push(params.id)
                     }
+
+                    console.log(this.sendData)
                 }else{
                     let tempObj = {}   
                     this.checkarr.push(params.id)

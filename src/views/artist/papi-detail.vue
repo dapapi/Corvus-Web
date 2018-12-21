@@ -858,9 +858,9 @@
                             
                         }
                     }
-                    if(_this.artistInfo.hatch_star_at&&_this.artistInfo.hatch_end_at){
-                        _this.Incubationperiod = _this.artistInfo.hatch_star_at+'|'+_this.artistInfo.hatch_end_at
-                    } 
+                   
+                    _this.Incubationperiod = _this.artistInfo.hatch_star_at+'|'+_this.artistInfo.hatch_end_at
+                     
                     _this.taskNum =`${doneTaskNum}/${_this.tasksInfo.length}` 
                     if(_this.artistInfo.intention==false){
                         _this.updateType=2
@@ -1006,11 +1006,13 @@
                     star_weibo_infos:this.updateStar_weibo_infos,
                     star_xiaohongshu_infos:this.updateStar_xiaohongshu_infos,
                     platform: this.updatePlatform,
-                    // level:this.updatelevel,
+                    level:this.artistInfo.level,
                     cooperation_demand:this.updatedemand,
-                    hatch_star_at:this.updatehatch_start,
-                    hatch_end_at:this.updatehatch_end
+                    hatch_star_at:_this.artistInfo.hatch_star_at,
+                    hatch_end_at:_this.artistInfo.hatch_end_at
                 }
+                console.log(data.hatch_star_at)
+                console.log(data.hatch_end_at)
                 fetch('put','/bloggers/'+ this.artistId,data).then(function(response){
                     toastr.success('修改成功');
                     _this.artistTasksInfo = response.data;
@@ -1231,18 +1233,16 @@
             changeArtistLevel:function(value){
                 console.log(value)
                 
-                this.updatelevel = value
+                this.artistInfo.level= value
             },
             //孵化期
             changeArtistHatch:function(start,end){
                
                 console.log(start,end)
-                this.updatehatch_start = start
-                this.updatehatch_end = end  
+                this.artistInfo.hatch_star_at = start
+                this.artistInfo.hatch_end_at = end  
                 
-                 if(this.artistInfo.hatch_star_at&&this.artistInfo.hatch_end_at){
-                        this.Incubationperiod = this.updatehatch_start+'|'+this.updatehatch_end
-                } 
+               
                 console.log( this.updatehatch_start ,this.updatehatch_end)
             },
             //合作需求
