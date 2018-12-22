@@ -159,7 +159,7 @@
                                 <div class="col-md-6 float-left pl-0">
                                     <upload>
                                         <div class="id-upload">
-                                            <!-- <i class="md-plus" style="font-size: 50px" aria-hidden="true"></i> -->
+                                            <!-- <i class="iconfont icon-tianjia" style="font-size: 50px" aria-hidden="true"></i> -->
                                             +
                                         </div>
                                     </upload>

@@ -51,6 +51,19 @@
                         </div>
 
                     </div>
+<<<<<<< HEAD
+                    <!--<div class="card-text clearfix example">-->
+                    <!--<div class="col-md-6 float-left pl-0">-->
+                    <!--<div class="float-left pl-0 pr-2 col-md-2">-->
+                    <!--<i class="iconfont icon-tianjia pr-2" aria-hidden="true"></i>艺人状态-->
+                    <!--</div>-->
+                    <!--<div class="font-weight-bold float-left">-->
+                    <!--5/12-->
+                    <!--</div>-->
+                    <!--</div>-->
+                    <!--</div>-->
+=======
+>>>>>>> e5f9bd2594fd28b47335e52bbdd3b66cb9401f7d
                 </div>
                 <div class="clearfix">
                     <div class="col-md-6 float-left pl-0 mb-20" style="border-right: 1px solid #eee">

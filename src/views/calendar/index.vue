@@ -5,7 +5,7 @@
             <h1 class="page-title">日历</h1>
             <div class="page-header-actions" data-toggle="modal" data-target="#addCalendar"
                  @click="changeCalendarActionType('add')">
-                <i class="md-plus font-size-20" aria-hidden="true"></i>
+                <i class="iconfont icon-tianjia font-size-20" aria-hidden="true"></i>
             </div>
         </div>
 
@@ -18,18 +18,18 @@
                     <div class="calendar-list">
                         <div>
                             <div class="calendar-title position-relative" style="line-height: 20px">
-                                <i class="md-calendar pr-5"></i>
+                                <i class="iconfont icon-richeng pr-5"></i>
                                 <span @click="displayMeetingRoom">所有日历</span>
                                 <span class="px-5 pointer-content" @click="allCalendarShow">
                                     <template v-if="showAllCalendar">
-                                        <i class="md-chevron-down"></i>
+                                        <i class="iconfont icon-xiajiantou" style="font-size:12px"></i>
                                     </template>
                                     <template v-else>
-                                        <i class="md-chevron-up"></i>
+                                        <i class="iconfont icon-xiangshangjiantou" style="font-size:12px"></i>
                                     </template>
                                 </span>
                                 <span class="float-right pointer-content" data-toggle="modal" data-target="#addMembers">
-                                    <i class="md-accounts-add"></i>
+                                    <i class="iconfont icon-tianjiarenyuan"></i>
                                 </span>
                             </div>
                             <div v-show="showAllCalendar">
@@ -64,13 +64,13 @@
                         </div>
                         <div>
                             <div class="calendar-title">
-                                <i class="md-calendar pr-5"></i>资源
+                                <i class="iconfont icon-richeng pr-5"></i>资源
                                 <span class="px-5 pointer-content" @click="allResourceShow">
                                     <template v-if="showAllResource">
-                                        <i class="md-chevron-down"></i>
+                                        <i class="iconfont icon-xiajiantou" style="font-size:12px"></i>
                                     </template>
                                     <template v-else>
-                                        <i class="md-chevron-up"></i>
+                                        <i class="iconfont icon-xiangshangjiantou" style="font-size:12px"></i>
                                     </template>
                                 </span>
                             </div>
