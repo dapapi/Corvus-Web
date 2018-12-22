@@ -5,7 +5,7 @@
         </span>
         <span v-if="type === 'import'">
             <form action="" style="display:inline-block">
-                <input type="file" :id="`import_${this.getRandom}`" name="avatar" style="display:none" @change="importFile($event)">
+                <input type="file" :id="`import_${this.getRandom}`" name="avatar" accept=".xlsx" style="display:none" @change="importFile($event)">
                 <label :for="`import_${this.getRandom}`">
                 <slot></slot>
                 </label>
@@ -16,7 +16,6 @@
 </template>
 <script>
 import axios from 'axios'
-
 import config from '../assets/js/config'
 import fetch from '../assets/utils/fetch.js'
 //导入和导出调通的模块只有 客户
@@ -42,28 +41,19 @@ export default {
         }
     },
     mounted(){
-    //    console.log(config.getHeaders())
     },
     methods:{
-        
         importFile:function(event){
-
-            // let dom = document.getElementById(`import_${this.getRandom}`)
-            console.log(this.header)
             this.header['Content-Type'] = 'multipart/form-data;boundary = ' + new Date().getTime()
             this.file = event.target.files[0];
             let importUrl = `${config.apiUrl}/${this.moduleName}/import`
             let formData = new FormData();
-            
-            // let blob = new Blob([event.target.files[0]], {type: 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet;charset=utf-8'})
             formData.append('file', this.file);
-            console.log(event.target.files[0])
-            // console.log(formData.getAll('file'))
             var instance = axios.create();
             instance.defaults.headers = this.header
             instance.post(importUrl, formData)
             .then(function (response) {
-                console.log(response);
+               toastr.success('导入成功')
             })
             .catch(function (error) {
                 console.log(error);

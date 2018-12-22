@@ -33,10 +33,30 @@
         },
 
         computed: {
+            //collectInfo:[],//收款金额
+            //payInfo:[],//付款金额
+            //contractInfo:[],//合同类型
+            //divisionInfo:[],//分成比例
+            //incubationInfo:[],//孵化期
+            //billInfo:[],//账单
             selectMemberArr: function () {
                 if (this.type === 'change') {
                     return this.$store.state.participantsInfo
-                } else {
+                }else if(this.type ==='collect'){
+                    return this.$store.state.collectInfo
+                }else if(this.type === 'pay'){
+                    return this.$store.state.payInfo
+                }else if(this.type === 'contract'){
+                    return this.$store.state.contractInfo
+                }else if(this.type === 'division'){
+                    return this.$store.state.divisionInfo
+                }else if(this.type === 'incubation'){
+                    return this.$store.state.incubationInfo
+                }else if(this.type === 'bill'){
+                    return this.$store.state.billInfo
+                }
+                
+                else {
                     return this.$store.state.newParticipantsInfo
                 }
             }
@@ -58,10 +78,30 @@
             },
 
             removeMember: function (userId) {
+                //collectInfo:[],//收款金额
+                //payInfo:[],//付款金额
+                //contractInfo:[],//合同类型
+                //divisionInfo:[],//分成比例
+                //incubationInfo:[],//孵化期
+                //billInfo:[],//账单
                 let participantInfo = '';
                 if (this.type === 'add') {
                     participantInfo = this.$store.state.newParticipantsInfo;
-                } else {
+                }else if(this.type === 'collect'){
+                    participantInfo = this.$store.state.collectInfo;
+                }else if(this.type === 'pay'){
+                    participantInfo = this.$store.state.payInfo;
+                }else if(this.type === 'contract'){
+                    participantInfo = this.$store.state.contractInfo;
+                }else if(this.type === 'division'){
+                    participantInfo = this.$store.state.divisionInfo;
+                }else if(this.type === 'incubation'){
+                    participantInfo = this.$store.state.incubationInfo;
+                }else if(this.type === 'bill'){
+                    participantInfo = this.$store.state.billInfo;
+                }
+                    
+                else {
                     participantInfo = this.$store.state.participantsInfo;
                 }
                 participantInfo.splice(participantInfo.map(item => item.id).indexOf(userId), 1);
