@@ -259,8 +259,8 @@
                 <div class="modal-content" v-if="scheduleData">
                     <div class="modal-header">
                         <div style="order: 2">
-                            <i class="iconfont icon-bianji pr-4 font-size-16 pointer-content" data-toggle="modal"
-                               data-target="#changeSchedule" @click="changeScheduleType('edit')" aria-hidden="true"></i>
+                            <i class="iconfont icon-bianji pr-4 font-size-16 pointer-content"
+                               @click="changeScheduleType('edit')" aria-hidden="true"></i>
                             <i class="md-file pr-4 font-size-16 pointer-content" aria-hidden="true"></i>
                             <i class="md-delete pr-4 font-size-16 pointer-content" data-toggle="modal"
                                data-target="#delModel" aria-hidden="true" @click="deleteToastr('schedule')"></i>
@@ -275,8 +275,8 @@
                         <div class="example">
                             <div class="">
                                 <div class="col-md-3 float-left px-0">
-                                    <div class="">{{ (scheduleData.start_at.split(' ')[0]).split('-')[1] }}月{{
-                                        (scheduleData.start_at.split(' ')[0]).split('-')[2] }}日
+                                    <div class="">{{ (scheduleData.start_at.split(' ')[0]).split('-')[1] }}月
+                                        {{ (scheduleData.start_at.split(' ')[0]).split('-')[2] }}日
                                         {{ scheduleData.start_at|getWeek(scheduleData.start_at) }}
                                     </div>
                                     <div class="big-time">{{ (scheduleData.start_at.split(' ')[1]).slice(0,5) }}</div>
@@ -286,8 +286,8 @@
                                     <div class="big-time text-center"> -</div>
                                 </div>
                                 <div class="col-md-3 float-left px-0">
-                                    <div class="">{{ (scheduleData.end_at.split(' ')[0]).split('-')[1] }}月{{
-                                        (scheduleData.end_at.split(' ')[0]).split('-')[2] }}日
+                                    <div class="">{{ (scheduleData.end_at.split(' ')[0]).split('-')[1] }}月
+                                        {{ (scheduleData.end_at.split(' ')[0]).split('-')[2] }}日
                                         {{ scheduleData.end_at|getWeek(scheduleData.end_at) }}
                                     </div>
                                     <div class="big-time">{{ (scheduleData.end_at.split(' ')[1]).slice(0,5) }}</div>
@@ -851,6 +851,9 @@
             changeScheduleType: function (type) {
                 this.scheduleType = type;
                 $('#checkSchedule').modal('hide');
+                setTimeout(function () {
+                    $('#changeSchedule').modal('show');
+                }, 400);
                 if (type === 'edit') {
                     this.scheduleName = this.scheduleData.title;
                     this.$refs.calendarSelector.setValue(this.scheduleData.calendar.data.id);
