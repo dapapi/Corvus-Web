@@ -827,39 +827,39 @@
                         <div class="example">
                             <div class="col-md-2 text-right float-left">合同金额</div>
                             <div class="col-md-10 float-left">
-                                <add-member></add-member>
+                                <add-member :type="'contract'"></add-member>
 
                             </div>
                         </div>
                         <div class="example">
                             <div class="col-md-2 text-right float-left">收款金额</div>
                             <div class="col-md-10 float-left">
-                                <add-member></add-member>
+                                <add-member :type="'collect'"></add-member>
                             </div>
                         </div>
                         <div class="example">
                             <div class="col-md-2 text-right float-left">付款金额</div>
                             <div class="col-md-10 float-left">
-                                <add-member></add-member>
+                                <add-member :type="'pay'"></add-member>
 
                             </div>
                         </div>
                         <div class="example">
                             <div class="col-md-2 text-right float-left">税</div>
                             <div class="col-md-10 float-left">
-                                <add-member></add-member>
+                                <add-member :type="'incubation'"></add-member>
                             </div>
                         </div>
                         <div class="example">
                             <div class="col-md-2 text-right float-left">账单</div>
                             <div class="col-md-10 float-left">
-                                <add-member></add-member>
+                                <add-member :type="'bill'"></add-member>
                             </div>
                         </div>
                         <div class="example">
                             <div class="col-md-2 text-right float-left">回款</div>
                             <div class="col-md-10 float-left">
-                                <add-member></add-member>
+                                <add-member :type="'division'"></add-member>
                             </div>
                         </div>
                     </div>
@@ -1497,7 +1497,14 @@
             },
 
             addPrivacy: function () {
-
+                   
+                $('#addPrivacy').modal('hide')
+                this.$store.state.collectInfo = []
+                this.$store.state.payInfo = []
+                this.$store.state.contractInfo =[]
+                this.$store.state.divisionInfo=[]
+                this.$store.state.incubationInfo=[]
+                this.$store.state.billInfo=[]
             },
 
             editBaseInfo: function () {
