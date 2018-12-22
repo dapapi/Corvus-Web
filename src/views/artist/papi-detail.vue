@@ -654,39 +654,38 @@
                         <div class="example">
                             <div class="col-md-2 text-right float-left">收款金额</div>
                             <div class="col-md-10 float-left">
-                                <add-member></add-member>
+                                <add-member :type="'collect'"></add-member>
                             </div>
                         </div>
                         <div class="example">
                             <div class="col-md-2 text-right float-left">付款金额</div>
                             <div class="col-md-10 float-left">
-                                <add-member></add-member>
-
+                                <add-member :type="'pay'"></add-member>
                             </div>
                         </div>
                         <div class="example">
                             <div class="col-md-2 text-right float-left">合同类型</div>
                             <div class="col-md-10 float-left">
-                                <add-member></add-member>
+                                <add-member :type="'contract'"></add-member>
 
                             </div>
                         </div>
                         <div class="example">
                             <div class="col-md-2 text-right float-left">分成比例</div>
                             <div class="col-md-10 float-left">
-                                <add-member></add-member>
+                                <add-member :type="'division'"></add-member>
                             </div>
                         </div>
                         <div class="example">
                             <div class="col-md-2 text-right float-left">孵化期</div>
                             <div class="col-md-10 float-left">
-                                <add-member></add-member>
+                                <add-member :type="'incubation'"></add-member>
                             </div>
                         </div>
                         <div class="example">
                             <div class="col-md-2 text-right float-left">账单</div>
                             <div class="col-md-10 float-left">
-                                <add-member></add-member>
+                                <add-member :type="'bill'"></add-member>
                             </div>
                         </div>
                     </div>
@@ -971,7 +970,13 @@
             },
 
             addPrivacy: function () {
-
+                $('#addPrivacy').modal('hide')
+                this.$store.state.collectInfo = []
+                this.$store.state.payInfo = []
+                this.$store.state.contractInfo = []
+                this.$store.state.divisionInfo = []
+                this.$store.state.incubationInfo = []
+                this.$store.state.billInfo = []
             },
 
             editBaseInfo: function () {
@@ -1117,7 +1122,8 @@
                     desc: '这是一个评分问卷任务',//默认
                     type: 1609922710//评分问卷
                 }
-                fetch('post', '/tasks', obj).then(function (response) {
+                fetch('post', '/tasks', obj
+                ).then(function (response) {
                     _this.getArtist()
                 })
             },
@@ -1170,7 +1176,8 @@
                 let m = end.getMinutes() + ':';
                 let s = end.getSeconds();
                 this.end_Time = Y + M + D + h + m + s
-            },
+            }
+            ,
             //添加任务
             addTask: function () {
                 let _this = this;
@@ -1193,86 +1200,105 @@
                     $('.selectpicker').selectpicker('refresh')
                 })
 
-            },
+            }
+            ,
 
             changeTaskType: function (value) {
                 this.taskType = value
 
-            },
+            }
+            ,
 
             principalChange: function (value) {
                 this.Person_id = value = this.$store.state.newPrincipalInfo.id
-            },
+            }
+            ,
 
             participantChange: function (value) {
                 this.participant = value
-            },
+            }
+            ,
 
             changeTaskLevel: function (value) {
                 this.taskLevel = value
-            },
+            }
+            ,
 
             changeStartTime: function (value) {
                 this.startTime = value
-            },
+            }
+            ,
 
             changeStartMinutes: function (value) {
                 this.startMinutes = value
-            },
+            }
+            ,
 
             changeEndTime: function (value) {
                 this.endTime = value
-            },
+            }
+            ,
 
             changeEndMinutes: function (value) {
                 this.endMinutes = value
-            },
+            }
+            ,
             //视频时间
             changeWorkReleaseTime: function (value) {
                 this.workReleaseTime = value
-            },
+            }
+            ,
             //昵称
             changArtistName: function (value) {
                 this.artistInfo.name = value
-            },
+            }
+            ,
 
 
             //微博地址
             changeArtistWeibo_url(value) {
                 this.updateStar_weibo_infos.url = value
 
-            },
+            }
+            ,
             //微博粉丝
             changeArtistWeibo_fans_num(value) {
 
                 this.updateStar_weibo_infos.avatar = value
-            },
+            }
+            ,
             //抖音id
             changeArtistDouyin_id(value) {
                 this.updateStar_douyin_infos.url = value
-            },
+            }
+            ,
             //抖音粉丝数
             changeArtistDouyin_fans_num(value) {
                 this.updateStar_douyin_infos.avatar = value
-            },
+            }
+            ,
             //小红书地址
             changeArtistXiaohongshu_url(value) {
                 this.updateStar_xiaohongshu_infos.url = value
-            },
+            }
+            ,
             //小红书粉丝数
             changeArtistXiaohongshu_fans_num(value) {
                 this.updateStar_xiaohongshu_infos.avatar = value
-            },
+            }
+            ,
             //备注
             changeArtistDesc: function (value) {
                 this.artistInfo.desc = value
-            },
+            }
+            ,
             //博主级别
             changeArtistLevel: function (value) {
                 console.log(value)
 
                 this.artistInfo.level = value
-            },
+            }
+            ,
             //孵化期
             changeArtistHatch: function (start, end) {
 
@@ -1282,18 +1308,22 @@
 
 
                 console.log(this.updatehatch_start, this.updatehatch_end)
-            },
+            }
+            ,
             //合作需求
             changeArtistDemand: function (value) {
                 this.updatedemand = value
-            },
+            }
+            ,
             taskdetail(id) {
                 console.log(id)
                 this.$router.push({path: '/tasks/' + id})
-            },
+            }
+            ,
             projectdetil(id) {
                 this.$router.push({path: '/projects/' + id})
-            },
+            }
+            ,
             Jump(value) {
                 console.log(value)
                 window.open(value)

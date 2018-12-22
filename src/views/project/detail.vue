@@ -240,8 +240,8 @@
                                  data-target="#addTask">
                                 <button type="button"
                                         class="site-action-toggle btn-raised btn btn-success btn-floating waves-effect waves-classic">
-                                    <i class="front-icon md-plus animation-scale-up" aria-hidden="true"></i>
-                                    <i class="back-icon md-plus animation-scale-up" aria-hidden="true"></i>
+                                    <i class="front-icon iconfont icon-tianjia animation-scale-up" aria-hidden="true"></i>
+                                    <i class="back-icon iconfont icon-tianjia animation-scale-up" aria-hidden="true"></i>
                                 </button>
                             </div>
 
@@ -295,7 +295,7 @@
                                 <div class="float-right" style="padding: .715rem 0">
                                      <span class="pointer-content hover-content" data-toggle="modal"
                                            data-target="#addBill">
-                                         <i class="md-plus pr-5"></i>新增结算单</span>
+                                         <i class="iconfont icon-tianjia pr-5"></i>新增结算单</span>
                                 </div>
                             </div>
                             <table class="table table-hover" data-child="tr">
@@ -358,7 +358,7 @@
                                 <div class="float-right" style="padding: .715rem 1.429rem">
                                     <span class="pointer-content hover-content" data-toggle="modal"
                                           data-target="#addPaybackTime">
-                                                <i class="md-plus pr-5"></i>新建回款期次</span>
+                                                <i class="iconfont icon-tianjia pr-5"></i>新建回款期次</span>
                                 </div>
                             </div>
                             <div class="tab-pane animation-fade" id="forum-item-payback">
@@ -383,10 +383,10 @@
                                         <div class="float-right">
                                             <span class="mr-40 pointer-content hover-content" data-toggle="modal"
                                                   data-target="#addPayback">
-                                                <i class="md-plus pr-5"></i>回款记录</span>
+                                                <i class="iconfont icon-tianjia pr-5"></i>回款记录</span>
                                             <span class="pointer-content hover-content" data-toggle="modal"
                                                   data-target="#addInvoice">
-                                                <i class="md-plus pr-5"></i>开票记录</span>
+                                                <i class="iconfont icon-tianjia pr-5"></i>开票记录</span>
                                         </div>
                                     </div>
                                     <div class="clearfix">
@@ -401,9 +401,9 @@
                                                 class="money-color pl-5">12312222元</span>
                                         </div>
                                         <div class="col-md-2 float-right pr-0 text-right" style="color: #cccccc;">
-                                            <i class="md-eye pr-40 pointer-content"></i>
+                                            <i class="iconfont icon-liulan pr-40 pointer-content"></i>
                                             <i class="iconfont icon-bianji pr-40 pointer-content"></i>
-                                            <i class="md-delete pointer-content"></i>
+                                            <i class="iconfont icon-shanchu1 pointer-content"></i>
                                         </div>
                                     </div>
 
@@ -421,9 +421,9 @@
                                                     class="pl-5">现金</span>
                                             </div>
                                             <div class="col-md-2 float-right pr-0 text-right" style="color: #cccccc;">
-                                                <i class="md-eye pr-40 pointer-content"></i>
+                                                <i class="iconfont icon-liulan pr-40 pointer-content"></i>
                                                 <i class="iconfont icon-bianji pr-40 pointer-content"></i>
-                                                <i class="md-delete pointer-content"></i>
+                                                <i class="iconfont icon-shanchu1 pointer-content"></i>
                                             </div>
                                         </div>
                                     </div>
@@ -441,9 +441,9 @@
                                             <div class="col-md-2 float-left pl-0">票据类型<span class="pl-5">增值税普通发票</span>
                                             </div>
                                             <div class="col-md-2 float-right pr-0 text-right" style="color: #cccccc;">
-                                                <i class="md-eye pr-40 pointer-content"></i>
+                                                <i class="iconfont icon-liulan pr-40 pointer-content"></i>
                                                 <i class="iconfont icon-bianji pr-40 pointer-content"></i>
-                                                <i class="md-delete pointer-content"></i>
+                                                <i class="iconfont icon-shanchu1 pointer-content"></i>
                                             </div>
                                         </div>
                                     </div>
@@ -457,10 +457,10 @@
                                         <div class="float-right">
                                             <span class="mr-40 pointer-content hover-content" data-toggle="modal"
                                                   data-target="#addPayback">
-                                                <i class="md-plus pr-5"></i>回款记录</span>
+                                                <i class="iconfont icon-tianjia pr-5"></i>回款记录</span>
                                             <span class="pointer-content hover-content" data-toggle="modal"
                                                   data-target="#addInvoice">
-                                                <i class="md-plus pr-5"></i>开票记录</span>
+                                                <i class="iconfont icon-tianjia pr-5"></i>开票记录</span>
                                         </div>
                                     </div>
                                     <div class="clearfix">
@@ -475,9 +475,9 @@
                                                 class="money-color pl-5">12312222元</span>
                                         </div>
                                         <div class="col-md-2 float-right pr-0 text-right" style="color: #cccccc;">
-                                            <i class="md-eye pr-40 pointer-content"></i>
+                                            <i class="iconfont icon-liulan pr-40 pointer-content"></i>
                                             <i class="iconfont icon-bianji pr-40 pointer-content"></i>
-                                            <i class="md-delete pointer-content"></i>
+                                            <i class="iconfont icon-shanchu1 pointer-content"></i>
                                         </div>
                                     </div>
                                 </div>
@@ -732,7 +732,7 @@
                 <div class="modal-content">
                     <div class="modal-header">
                         <button type="button" class="close" aria-hidden="true" data-dismiss="modal">
-                            <i class="md-close" aria-hidden="true"></i>
+                            <i class="iconfont icon-guanbi" aria-hidden="true"></i>
                         </button>
                         <h4 class="modal-title">新增任务</h4>
                     </div>
@@ -817,7 +817,7 @@
                 <div class="modal-content">
                     <div class="modal-header">
                         <button type="button" class="close" aria-hidden="true" data-dismiss="modal">
-                            <i class="md-close" aria-hidden="true"></i>
+                            <i class="iconfont icon-guanbi" aria-hidden="true"></i>
                         </button>
                         <h4 class="modal-title">隐私设置</h4>
                     </div>
@@ -825,39 +825,39 @@
                         <div class="example">
                             <div class="col-md-2 text-right float-left">合同金额</div>
                             <div class="col-md-10 float-left">
-                                <add-member></add-member>
+                                <add-member :type="'contract'"></add-member>
 
                             </div>
                         </div>
                         <div class="example">
                             <div class="col-md-2 text-right float-left">收款金额</div>
                             <div class="col-md-10 float-left">
-                                <add-member></add-member>
+                                <add-member :type="'collect'"></add-member>
                             </div>
                         </div>
                         <div class="example">
                             <div class="col-md-2 text-right float-left">付款金额</div>
                             <div class="col-md-10 float-left">
-                                <add-member></add-member>
+                                <add-member :type="'pay'"></add-member>
 
                             </div>
                         </div>
                         <div class="example">
                             <div class="col-md-2 text-right float-left">税</div>
                             <div class="col-md-10 float-left">
-                                <add-member></add-member>
+                                <add-member :type="'incubation'"></add-member>
                             </div>
                         </div>
                         <div class="example">
                             <div class="col-md-2 text-right float-left">账单</div>
                             <div class="col-md-10 float-left">
-                                <add-member></add-member>
+                                <add-member :type="'bill'"></add-member>
                             </div>
                         </div>
                         <div class="example">
                             <div class="col-md-2 text-right float-left">回款</div>
                             <div class="col-md-10 float-left">
-                                <add-member></add-member>
+                                <add-member :type="'division'"></add-member>
                             </div>
                         </div>
                     </div>
@@ -875,7 +875,7 @@
                 <div class="modal-content">
                     <div class="modal-header">
                         <button type="button" class="close" aria-hidden="true" data-dismiss="modal">
-                            <i class="md-close" aria-hidden="true"></i>
+                            <i class="iconfont icon-guanbi" aria-hidden="true"></i>
                         </button>
                         <h4 class="modal-title">撤单原因</h4>
                     </div>
@@ -902,7 +902,7 @@
                 <div class="modal-content">
                     <div class="modal-header">
                         <button type="button" class="close" aria-hidden="true" data-dismiss="modal">
-                            <i class="md-close" aria-hidden="true"></i>
+                            <i class="iconfont icon-guanbi" aria-hidden="true"></i>
                         </button>
                         <h4 class="modal-title">新建回款期次</h4>
                     </div>
@@ -964,7 +964,7 @@
                 <div class="modal-content">
                     <div class="modal-header">
                         <button type="button" class="close" aria-hidden="true" data-dismiss="modal">
-                            <i class="md-close" aria-hidden="true"></i>
+                            <i class="iconfont icon-guanbi" aria-hidden="true"></i>
                         </button>
                         <h4 class="modal-title">新建回款记录</h4>
                     </div>
@@ -1032,7 +1032,7 @@
                 <div class="modal-content">
                     <div class="modal-header">
                         <button type="button" class="close" aria-hidden="true" data-dismiss="modal">
-                            <i class="md-close" aria-hidden="true"></i>
+                            <i class="iconfont icon-guanbi" aria-hidden="true"></i>
                         </button>
                         <h4 class="modal-title">新建开票记录</h4>
                     </div>
@@ -1100,7 +1100,7 @@
                 <div class="modal-content">
                     <div class="modal-header">
                         <button type="button" class="close" aria-hidden="true" data-dismiss="modal">
-                            <i class="md-close" aria-hidden="true"></i>
+                            <i class="iconfont icon-guanbi" aria-hidden="true"></i>
                         </button>
                         <h4 class="modal-title">关联资源</h4>
                     </div>
@@ -1123,7 +1123,7 @@
                                     <div class="tab-pane active" id="projectsPane" role="tabpanel">
                                         <div class="input-search mb-20" style="width: 70%">
                                             <button type="submit" class="input-search-btn">
-                                                <i class="md-search" aria-hidden="true"></i>
+                                                <i class="iconfont icon-buoumaotubiao13" aria-hidden="true"></i>
                                             </button>
                                             <input type="text" class="form-control" name="" placeholder="搜索关键字..."
                                                    v-model="searchKeyWord">
@@ -1143,7 +1143,7 @@
                                     <div class="tab-pane" id="tasksPane" role="tabpanel">
                                         <div class="input-search mb-20" style="width: 70%">
                                             <button type="submit" class="input-search-btn">
-                                                <i class="md-search" aria-hidden="true"></i>
+                                                <i class="iconfont icon-buoumaotubiao13" aria-hidden="true"></i>
                                             </button>
                                             <input type="text" class="form-control" name="" placeholder="搜索关键字..."
                                                    v-model="searchKeyWord">
@@ -1178,7 +1178,7 @@
                 <div class="modal-content">
                     <div class="modal-header">
                         <button type="button" class="close" aria-hidden="true" data-dismiss="modal">
-                            <i class="md-close" aria-hidden="true"></i>
+                            <i class="iconfont icon-guanbi" aria-hidden="true"></i>
                         </button>
                         <h4 class="modal-title">新增结算单</h4>
                     </div>
@@ -1504,7 +1504,14 @@
             },
 
             addPrivacy: function () {
-
+                   
+                $('#addPrivacy').modal('hide')
+                this.$store.state.collectInfo = []
+                this.$store.state.payInfo = []
+                this.$store.state.contractInfo =[]
+                this.$store.state.divisionInfo=[]
+                this.$store.state.incubationInfo=[]
+                this.$store.state.billInfo=[]
             },
 
             editBaseInfo: function () {

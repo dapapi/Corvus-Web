@@ -31,7 +31,7 @@
                     <div class="card-text clearfix example">
                         <div class="col-md-6 float-left pl-0">
                             <div class="float-left pl-0 pr-2 col-md-2">
-                                <i class="md-plus pr-2" aria-hidden="true"></i>经理人
+                                <i class="iconfont icon-yonghu pr-2" aria-hidden="true"></i>经理人
                             </div>
                             <div class="font-weight-bold float-left" v-if="artistInfo.broker">
                                 <template v-for="broker in artistInfo.broker.data">
@@ -41,7 +41,7 @@
                         </div>
                         <div class="col-md-6 float-left pl-0">
                             <div class="float-left pl-0 pr-2 col-md-2">
-                                <i class="md-plus pr-2" aria-hidden="true"></i>宣传人
+                                <i class="iconfont icon-yonghu pr-2" aria-hidden="true"></i>宣传人
                             </div>
                             <div class="font-weight-bold float-left" v-if="artistInfo.publicity">
                                 <template v-for="publicity in artistInfo.publicity.data">
@@ -51,16 +51,6 @@
                         </div>
 
                     </div>
-                    <!--<div class="card-text clearfix example">-->
-                    <!--<div class="col-md-6 float-left pl-0">-->
-                    <!--<div class="float-left pl-0 pr-2 col-md-2">-->
-                    <!--<i class="md-plus pr-2" aria-hidden="true"></i>艺人状态-->
-                    <!--</div>-->
-                    <!--<div class="font-weight-bold float-left">-->
-                    <!--5/12-->
-                    <!--</div>-->
-                    <!--</div>-->
-                    <!--</div>-->
                 </div>
                 <div class="clearfix">
                     <div class="col-md-6 float-left pl-0 mb-20" style="border-right: 1px solid #eee">
@@ -224,8 +214,10 @@
                                  data-target="#addTask">
                                 <button type="button"
                                         class="site-action-toggle btn-raised btn btn-success btn-floating waves-effect waves-classic">
-                                    <i class="front-icon md-plus animation-scale-up" aria-hidden="true"></i>
-                                    <i class="back-icon md-plus animation-scale-up" aria-hidden="true"></i>
+                                    <i class="front-icon iconfont icon-tianjia animation-scale-up"
+                                       aria-hidden="true"></i>
+                                    <i class="back-icon iconfont icon-tianjia animation-scale-up"
+                                       aria-hidden="true"></i>
                                 </button>
                             </div>
                         </div>
@@ -263,7 +255,8 @@
                                  data-target="#addWork">
                                 <button type="button"
                                         class="site-action-toggle btn-raised btn btn-success btn-floating waves-effect waves-classic">
-                                    <i class="front-icon md-plus animation-scale-up" aria-hidden="true"></i>
+                                    <i class="front-icon iconfont icon-tianjia animation-scale-up"
+                                       aria-hidden="true"></i>
                                     <i class="back-icon md-close animation-scale-up" aria-hidden="true"></i>
                                 </button>
                             </div>
@@ -332,10 +325,12 @@
                                 <div class="card-header card-header-transparent card-header-bordered">
                                     <div class="float-left font-weight-bold third-title">艺人信息</div>
                                     <div class="float-right pointer-content" v-show="!isEdit">
-                                        <i class="iconfont icon-bianji" aria-hidden="true" @click="editBaseInfo"></i>
+                                        <i class="iconfont icon-bianji" aria-hidden="true"
+                                           @click="editBaseInfo"></i>
                                     </div>
                                     <div class="float-right mr-40" v-show="isEdit">
-                                        <button class="btn btn-sm btn-white btn-pure" @click="cancelEdit">取消</button>
+                                        <button class="btn btn-sm btn-white btn-pure" @click="cancelEdit">取消
+                                        </button>
                                         <button class="btn btn-primary" @click="changeArtist">确定</button>
                                     </div>
                                 </div>
@@ -367,7 +362,8 @@
                                         <div class="card-text py-10 px-0 clearfix col-md-6 float-left edit-height">
                                             <div class="col-md-2 float-left text-right pl-0">艺人来源</div>
                                             <div class="col-md-10 float-left font-weight-bold">
-                                                <EditSelector :content="artistInfo.source" :options="artistSourceArr"
+                                                <EditSelector :content="artistInfo.source"
+                                                              :options="artistSourceArr"
                                                               :is-edit="isEdit"
                                                               @change="(value) => changeArtistBaseInfo(value, 'source')"></EditSelector>
                                             </div>
@@ -494,12 +490,14 @@
                                              style="min-height:57px">
                                             <div class="col-md-2 float-left text-right pl-0">附件</div>
                                             <div class="col-md-10 float-left font-weight-bold">
-                                                <span v-show="isEdit" style="color:#01BCD4;cursor:pointer">上传附件</span>
+                                                    <span v-show="isEdit"
+                                                          style="color:#01BCD4;cursor:pointer">上传附件</span>
                                                 <FileUploader v-show="isEdit" class="upload"
                                                               @change="uploadAttachment"></FileUploader>
                                                 <div class="mt-5" v-for="(attach,index) in affixes" :key="index">
                                                     <span class="mr-20">{{attachmentTypeArr.find(item => item.value == attach.type).name}} - {{attach.title}}</span>
-                                                    <i class="md-delete mr-10" data-toggle="modal" data-target="#affix"
+                                                    <i class="md-delete mr-10" data-toggle="modal"
+                                                       data-target="#affix"
                                                        @click="getAffixId(attach.id)"></i>
                                                     <a :href="attach.url" class="md-download"></a>
                                                 </div>
@@ -726,39 +724,39 @@
                         <div class="example">
                             <div class="col-md-2 text-right float-left">收款金额</div>
                             <div class="col-md-10 float-left">
-                                <add-member></add-member>
+                                <add-member :type="'collect'"></add-member>
                             </div>
                         </div>
                         <div class="example">
                             <div class="col-md-2 text-right float-left">付款金额</div>
                             <div class="col-md-10 float-left">
-                                <add-member></add-member>
+                                <add-member :type="'pay'"></add-member>
 
                             </div>
                         </div>
                         <div class="example">
                             <div class="col-md-2 text-right float-left">合同类型</div>
                             <div class="col-md-10 float-left">
-                                <add-member></add-member>
+                                <add-member :type="'contract'"></add-member>
 
                             </div>
                         </div>
                         <div class="example">
                             <div class="col-md-2 text-right float-left">分成比例</div>
                             <div class="col-md-10 float-left">
-                                <add-member></add-member>
+                                <add-member :type="'division'"></add-member>
                             </div>
                         </div>
                         <div class="example">
                             <div class="col-md-2 text-right float-left">孵化期</div>
                             <div class="col-md-10 float-left">
-                                <add-member></add-member>
+                                <add-member :type="'incubation'"></add-member>
                             </div>
                         </div>
                         <div class="example">
                             <div class="col-md-2 text-right float-left">账单</div>
                             <div class="col-md-10 float-left">
-                                <add-member></add-member>
+                                <add-member :type="'bill'"></add-member>
                             </div>
                         </div>
                     </div>
@@ -798,7 +796,6 @@
                 </div>
             </div>
         </div>
-
     </div>
 </template>
 
@@ -1081,7 +1078,13 @@
             },
 
             addPrivacy: function () {
-
+                $('#addPrivacy').modal('hide')
+                this.$store.state.collectInfo = []
+                this.$store.state.payInfo = []
+                this.$store.state.contractInfo = []
+                this.$store.state.divisionInfo = []
+                this.$store.state.incubationInfo = []
+                this.$store.state.billInfo = []
             },
 
             changeWorkReleaseTime: function (value) {
