@@ -51,6 +51,7 @@
                         </div>
 
                     </div>
+<<<<<<< HEAD
                     <!--<div class="card-text clearfix example">-->
                     <!--<div class="col-md-6 float-left pl-0">-->
                     <!--<div class="float-left pl-0 pr-2 col-md-2">-->
@@ -61,6 +62,8 @@
                     <!--</div>-->
                     <!--</div>-->
                     <!--</div>-->
+=======
+>>>>>>> e5f9bd2594fd28b47335e52bbdd3b66cb9401f7d
                 </div>
                 <div class="clearfix">
                     <div class="col-md-6 float-left pl-0 mb-20" style="border-right: 1px solid #eee">
@@ -94,7 +97,8 @@
                 <div class="col-md-12">
                     <ul class="nav nav-tabs nav-tabs-line" role="tablist">
                         <li class="nav-item" role="presentation" v-show="artistInfo.sign_contract_status == 2">
-                            <a class="nav-link" :class="artistInfo.sign_contract_status == 2?'active':''" data-toggle="tab" href="#forum-artist-schedule"
+                            <a class="nav-link" :class="artistInfo.sign_contract_status == 2?'active':''"
+                               data-toggle="tab" href="#forum-artist-schedule"
                                aria-controls="forum-base"
                                aria-expanded="false" role="tab">日程</a>
                         </li>
@@ -103,17 +107,18 @@
                                aria-controls="forum-present"
                                aria-expanded="false" role="tab">项目</a>
                         </li>
-                        <li class="nav-item" role="presentation" >
-                            <a class="nav-link" :class="artistInfo.sign_contract_status == 2?'':'active'" data-toggle="tab" href="#forum-artist-tasks"
+                        <li class="nav-item" role="presentation">
+                            <a class="nav-link" :class="artistInfo.sign_contract_status == 2?'':'active'"
+                               data-toggle="tab" href="#forum-artist-tasks"
                                aria-controls="forum-present"
                                aria-expanded="true" role="tab">
-                              
-                               <ToolTips v-if="doneTaskNum>0" :title="`${taskNum}`">
-                                        任务
-                                    </ToolTips>
-                                      <span v-else>任务</span>
-                               <!-- <tool-tips taskNum></tool-tips> -->
-                               </a>
+
+                                <ToolTips v-if="doneTaskNum>0" :title="`${taskNum}`">
+                                    任务
+                                </ToolTips>
+                                <span v-else>任务</span>
+                                <!-- <tool-tips taskNum></tool-tips> -->
+                            </a>
                         </li>
                         <li class="nav-item" role="presentation" v-show="artistInfo.sign_contract_status == 2">
                             <a class="nav-link" data-toggle="tab" href="#forum-artist-work"
@@ -125,7 +130,8 @@
                                aria-controls="forum-present"
                                aria-expanded="false" role="tab">粉丝数据</a>
                         </li>
-                        <li class="nav-item" role="presentation" v-show="artistInfo.sign_contract_status == 2">
+                        <li class="nav-item" role="presentation" @click="getArtistsBill"
+                            v-show="artistInfo.sign_contract_status == 2">
                             <a class="nav-link" data-toggle="tab" href="#forum-artist-bill"
                                aria-controls="forum-present"
                                aria-expanded="false" role="tab">账单</a>
@@ -160,11 +166,16 @@
                                     <th class="cell-300" scope="col">录入日期</th>
                                 </tr>
                                 <tr v-for="(item,index) in artistProjectsInfo" :key="index">
-                                    <td><router-link :to="{path:`/projects/${item.id}`}">{{item.title}}</router-link></td>
                                     <td>
-                                        <template v-if="item.status === 1"><span style="color:#FF9800">进行中</span></template>
-                                        <template v-if="item.status === 2"><span style="color:#4CAF50">已完成</span></template>
-                                        <template v-if="item.status === 3"><span style="color:#9E9E9E">撤单</span></template>
+                                        <router-link :to="{path:`/projects/${item.id}`}">{{item.title}}</router-link>
+                                    </td>
+                                    <td>
+                                        <template v-if="item.status === 1"><span style="color:#FF9800">进行中</span>
+                                        </template>
+                                        <template v-if="item.status === 2"><span style="color:#4CAF50">已完成</span>
+                                        </template>
+                                        <template v-if="item.status === 3"><span style="color:#9E9E9E">撤单</span>
+                                        </template>
                                     </td>
                                     <td>{{item.principal.data.name}}</td>
                                     <td>{{item.company}}</td>
@@ -177,7 +188,8 @@
                             </div>
                         </div>
                         <!--任务-->
-                        <div class="tab-pane animation-fade pb-20 fixed-button-father" :class="artistInfo.sign_contract_status == 2?'':'active'" id="forum-artist-tasks"
+                        <div class="tab-pane animation-fade pb-20 fixed-button-father"
+                             :class="artistInfo.sign_contract_status == 2?'':'active'" id="forum-artist-tasks"
                              role="tabpanel">
                             <table class="table table-hover is-indent example" data-plugin="animateList"
                                    data-animate="fade" data-child="tr">
@@ -205,7 +217,7 @@
                                     <td>{{ task.principal.data.name }}</td>
                                     <td>{{ task.end_at }}</td>
                                 </tr>
-                            
+
                             </table>
                             <div class="col-md-1" style="margin: 6rem auto" v-if="artistTasksInfo.length === 0">
                                 <img src="https://res.papitube.com/corvus/images/content-none.png" alt=""
@@ -215,8 +227,10 @@
                                  data-target="#addTask">
                                 <button type="button"
                                         class="site-action-toggle btn-raised btn btn-success btn-floating waves-effect waves-classic">
-                                    <i class="front-icon iconfont icon-tianjia animation-scale-up" aria-hidden="true"></i>
-                                    <i class="back-icon iconfont icon-tianjia animation-scale-up" aria-hidden="true"></i>
+                                    <i class="front-icon iconfont icon-tianjia animation-scale-up"
+                                       aria-hidden="true"></i>
+                                    <i class="back-icon iconfont icon-tianjia animation-scale-up"
+                                       aria-hidden="true"></i>
                                 </button>
                             </div>
                         </div>
@@ -254,7 +268,8 @@
                                  data-target="#addWork">
                                 <button type="button"
                                         class="site-action-toggle btn-raised btn btn-success btn-floating waves-effect waves-classic">
-                                    <i class="front-icon iconfont icon-tianjia animation-scale-up" aria-hidden="true"></i>
+                                    <i class="front-icon iconfont icon-tianjia animation-scale-up"
+                                       aria-hidden="true"></i>
                                     <i class="back-icon md-close animation-scale-up" aria-hidden="true"></i>
                                 </button>
                             </div>
@@ -270,22 +285,14 @@
                         <div class="tab-pane animation-fade  pb-20 fixed-button-father" id="forum-artist-bill"
                              role="tabpanel">
                             <div class="clearfix my-10">
-                                <div class="float-left" style="padding: .715rem 1.429rem">
-                                    <div class="float-left pr-40">合同金额 <span class="money-color">10000元</span></div>
-                                    <div class="float-left pr-40">支出金额 <span class="money-color">1000元0</span></div>
-                                    <div class="float-left pr-40">税费 <span class="money-color">10000元</span></div>
-                                    <div class="float-left pr-40">papi分成 <span class="money-color">10000元</span></div>
-                                    <div class="float-left pr-40">bigger分成 <span class="money-color">10000元</span></div>
-                                    <div class="float-left pr-40">我司分成 <span class="money-color">10000元</span></div>
-                                </div>
-                                <div class="float-right" style="padding: .715rem 0">
-                                     <span class="pointer-content hover-content" data-toggle="modal"
-                                           data-target="#addBill">
-                                         <i class="iconfont icon-tianjia pr-5"></i>新增结算单</span>
+                                <div style="padding: .715rem 1.429rem">
+                                    <div class="float-left pr-40">收款金额</div>
+                                    <div class="float-left pr-40 money-color">10000000元</div>
+                                    <div class="float-left pr-40">付款金额</div>
+                                    <div class="float-left pr-40 money-color">10000000元</div>
                                 </div>
                             </div>
-                            <table class="table table-hover"
-                                   data-child="tr">
+                            <table class="table table-hover" data-child="tr">
                                 <tr>
                                     <th class="cell-300" scope="col">费用类型</th>
                                     <th class="cell-300 position-relative" scope="col">
@@ -303,27 +310,19 @@
                                                @click="filterProjectFee(3)">收入</a>
                                         </div>
                                     </th>
-                                    <th class="cell-300" scope="col">艺人</th>
+                                    <th class="cell-300" scope="col">项目名称</th>
                                     <th class="cell-300" scope="col">金额</th>
                                     <th class="cell-300" scope="col">收款/审批时间</th>
                                     <th class="cell-300" scope="col">操作人</th>
                                 </tr>
                                 <tbody>
-                                <tr>
-                                    <td>测试类别</td>
-                                    <td>成本</td>
-                                    <td>1233030</td>
-                                    <td>2018-10-31</td>
-                                    <td>2018-12-20</td>
-                                    <td>陈晓禹</td>
-                                </tr>
-                                <tr>
-                                    <td>测试类别</td>
-                                    <td>收入</td>
-                                    <td>1233030</td>
-                                    <td>2018-10-31</td>
-                                    <td>2018-12-20</td>
-                                    <td>陈晓禹</td>
+                                <tr v-for="bill in artistBillsInfo">
+                                    <td>{{ bill.expence_name }}</td>
+                                    <td>{{ bill.expense_type }}</td>
+                                    <td>{{ bill.project_kd_name }}</td>
+                                    <td>{{ bill.money }}</td>
+                                    <td>{{ bill.pay_rec_time }}</td>
+                                    <td>{{ bill.action_user }}</td>
                                 </tr>
                                 </tbody>
                             </table>
@@ -339,10 +338,12 @@
                                 <div class="card-header card-header-transparent card-header-bordered">
                                     <div class="float-left font-weight-bold third-title">艺人信息</div>
                                     <div class="float-right pointer-content" v-show="!isEdit">
-                                        <i class="iconfont icon-bianji" aria-hidden="true" @click="editBaseInfo"></i>
+                                        <i class="iconfont icon-bianji" aria-hidden="true"
+                                           @click="editBaseInfo"></i>
                                     </div>
                                     <div class="float-right mr-40" v-show="isEdit">
-                                        <button class="btn btn-sm btn-white btn-pure" @click="cancelEdit">取消</button>
+                                        <button class="btn btn-sm btn-white btn-pure" @click="cancelEdit">取消
+                                        </button>
                                         <button class="btn btn-primary" @click="changeArtist">确定</button>
                                     </div>
                                 </div>
@@ -374,7 +375,8 @@
                                         <div class="card-text py-10 px-0 clearfix col-md-6 float-left edit-height">
                                             <div class="col-md-2 float-left text-right pl-0">艺人来源</div>
                                             <div class="col-md-10 float-left font-weight-bold">
-                                                <EditSelector :content="artistInfo.source" :options="artistSourceArr"
+                                                <EditSelector :content="artistInfo.source"
+                                                              :options="artistSourceArr"
                                                               :is-edit="isEdit"
                                                               @change="(value) => changeArtistBaseInfo(value, 'source')"></EditSelector>
                                             </div>
@@ -487,22 +489,29 @@
                                                               @change="(value) => changeArtistBaseInfo(value, 'desc')"></editTextarea>
                                             </div>
                                         </div>
-                                        <div v-show="isEdit" class="card-text py-10 px-0 clearfix col-md-6 float-left edit-height">
+                                        <div v-show="isEdit"
+                                             class="card-text py-10 px-0 clearfix col-md-6 float-left edit-height">
                                             <div class="col-md-2 float-left text-right pl-0">附件类型</div>
-                                            <div class="col-md-10 float-left font-weight-bold">            
-                                                    <selectors  v-show="isEdit" :options="attachmentTypeArr" :placeholder="'请选择附件类型'"
-                                           @change="changeAttachmentType"></selectors> 
-                                               
+                                            <div class="col-md-10 float-left font-weight-bold">
+                                                <selectors v-show="isEdit" :options="attachmentTypeArr"
+                                                           :placeholder="'请选择附件类型'"
+                                                           @change="changeAttachmentType"></selectors>
+
                                             </div>
                                         </div>
-                                        <div class="card-text py-10 px-0 clearfix col-md-6 float-left mt-10" style="min-height:57px">
+                                        <div class="card-text py-10 px-0 clearfix col-md-6 float-left mt-10"
+                                             style="min-height:57px">
                                             <div class="col-md-2 float-left text-right pl-0">附件</div>
                                             <div class="col-md-10 float-left font-weight-bold">
-                                                <span v-show="isEdit" style="color:#01BCD4;cursor:pointer">上传附件</span>
-                                                <FileUploader v-show="isEdit" class="upload"  @change="uploadAttachment"></FileUploader>
+                                                    <span v-show="isEdit"
+                                                          style="color:#01BCD4;cursor:pointer">上传附件</span>
+                                                <FileUploader v-show="isEdit" class="upload"
+                                                              @change="uploadAttachment"></FileUploader>
                                                 <div class="mt-5" v-for="(attach,index) in affixes" :key="index">
                                                     <span class="mr-20">{{attachmentTypeArr.find(item => item.value == attach.type).name}} - {{attach.title}}</span>
-                                                    <i class="iconfont icon-iconfonttubiao mr-10" data-toggle="modal" data-target="#affix" @click="getAffixId(attach.id)"></i>
+                                                    <i class="md-delete mr-10" data-toggle="modal"
+                                                       data-target="#affix"
+                                                       @click="getAffixId(attach.id)"></i>
                                                     <a :href="attach.url" class="md-download"></a>
                                                 </div>
                                             </div>
@@ -555,7 +564,7 @@
             </div>
 
         </div>
-        
+
 
         <modal :id="'affix'" :title="'删除附件'" @onOK="deleteAffix">
             <div class="text-center m-20">您确认删除该附件吗？</div>
@@ -583,7 +592,7 @@
                             <div class="col-md-2 text-right float-left">任务类型</div>
                             <div class="col-md-10 float-left pl-0">
                                 <selectors :options="taskTypeArr" :placeholder="'请选择任务类型'"
-                                           @change="changeTaskType" ></selectors>
+                                           @change="changeTaskType"></selectors>
                             </div>
                         </div>
                         <div class="example">
@@ -617,7 +626,7 @@
                                 <datepicker @change="changeStartTime" :placeholder="'请输入开始时间'"></datepicker>
                             </div>
                             <div class="col-md-5 float-left pl-0">
-                                <timepicker :default="startMinutes" @change="changeStartMinutes" ></timepicker>
+                                <timepicker :default="startMinutes" @change="changeStartMinutes"></timepicker>
                             </div>
                         </div>
                         <div class="example">
@@ -741,7 +750,7 @@
                         <div class="example">
                             <div class="col-md-2 text-right float-left">合同类型</div>
                             <div class="col-md-10 float-left">
-                                <add-member :type ="'contract'"></add-member>
+                                <add-member :type="'contract'"></add-member>
 
                             </div>
                         </div>
@@ -800,51 +809,6 @@
                 </div>
             </div>
         </div>
-        <!-- 新增结算单 -->
-        <div class="modal fade" id="addBill" aria-hidden="true" aria-labelledby="addLabelForm"
-             role="dialog" tabindex="-1">
-            <div class="modal-dialog modal-simple">
-                <div class="modal-content">
-                    <div class="modal-header">
-                        <button type="button" class="close" aria-hidden="true" data-dismiss="modal">
-                            <i class="iconfont icon-guanbi" aria-hidden="true"></i>
-                        </button>
-                        <h4 class="modal-title">新增结算单</h4>
-                    </div>
-                    <div class="modal-body">
-                        <div class="example">
-                            <div class="col-md-2 text-right float-left px-0">税费</div>
-                            <div class="col-md-10 float-left">
-                                <input type="text" class="form-control" title="">
-                            </div>
-                        </div>
-                        <div class="example">
-                            <div class="col-md-2 text-right float-left px-0">papi分成</div>
-                            <div class="col-md-10 float-left">
-                                <input type="text" class="form-control" title="">
-                            </div>
-                        </div>
-                        <div class="example">
-                            <div class="col-md-2 text-right float-left px-0">bigger分成</div>
-                            <div class="col-md-10 float-left">
-                                <input type="text" class="form-control" title="">
-                            </div>
-                        </div>
-                        <div class="example">
-                            <div class="col-md-2 text-right float-left px-0">我司分成</div>
-                            <div class="col-md-10 float-left">
-                                <input type="text" class="form-control" title="">
-                            </div>
-                        </div>
-                    </div>
-                    <div class="modal-footer">
-                        <button class="btn btn-sm btn-white btn-pure" data-dismiss="modal">取消</button>
-                        <button class="btn btn-primary" type="submit" @click="">确定</button>
-                    </div>
-                </div>
-            </div>
-        </div>
-
     </div>
 </template>
 
@@ -859,7 +823,7 @@
                 artistInfo: {},
                 taskTypeArr: [],
                 taskLevelArr: config.taskLevelArr,
-                attachmentTypeArr:config.attachmentTypeArr,
+                attachmentTypeArr: config.attachmentTypeArr,
                 taskType: '',
                 taskName: '',
                 taskLevel: '',
@@ -888,20 +852,20 @@
                 changeArtistInfo: {},
                 artistSocialPlatform: config.artistSocialPlatform,
                 distributionType: '',
-                affixes:[], //附件
-                affixesType:'',//附件类型
-                affixId:'',
-                taskNum:'',
-                doneTaskNum:0,
+                affixes: [], //附件
+                affixesType: '',//附件类型
+                affixId: '',
+                taskNum: '',
+                doneTaskNum: 0,
                 filterFee: 1,
             }
         },
-        
-        created(){
+
+        created() {
             this.getArtist()
         },
         mounted() {
-            
+
             this.getTaskType();
             this.draw();
             let _this = this;
@@ -920,19 +884,19 @@
                 };
                 let _this = this;
                 fetch('get', '/stars/' + this.artistId, data).then(function (response) {
-                    
+
                     _this.artistInfo = response.data;
-                   _this.artistProjectsInfo=[]
+                    _this.artistProjectsInfo = []
                     _this.artistTasksInfo = response.data.tasks.data
-                    if(_this.artistTasksInfo.length>0){
+                    if (_this.artistTasksInfo.length > 0) {
                         for (let i = 0; i < _this.artistTasksInfo.length; i++) {
-                            if(_this.artistTasksInfo[i].status ==2){
-                                _this.doneTaskNum = _this.doneTaskNum+1
+                            if (_this.artistTasksInfo[i].status == 2) {
+                                _this.doneTaskNum = _this.doneTaskNum + 1
                             }
-                            
+
                         }
                     }
-                    _this.taskNum =`${_this.doneTaskNum}/${_this.artistTasksInfo.length}` 
+                    _this.taskNum = `${_this.doneTaskNum}/${_this.artistTasksInfo.length}`
                     _this.artistWorksInfo = response.data.works.data
                     _this.affixes = response.data.affixes.data
                     for (let i = 0; i < response.data.trails.data.length; i++) {
@@ -942,7 +906,16 @@
                         }
                     }
                 })
-                
+
+            },
+
+            getArtistsBill: function () {
+                if (this.artistBillsInfo.length > 0) {
+                    return;
+                }
+                fetch('get', '/artists/' + this.projectId + '/bill').then(response => {
+                    this.artistBillsInfo = response.data
+                })
             },
 
             getTaskType: function () {
@@ -1041,7 +1014,7 @@
             },
 
             changeStartTime: function (value) {
-                
+
                 this.startTime = value
 
             },
@@ -1060,7 +1033,7 @@
 
             addTask: function () {
                 let participant_ids = [];
-                let start,end,startMin,endMin
+                let start, end, startMin, endMin
                 for (let i = 0; i < this.$store.state.newParticipantsInfo.length; i++) {
                     participant_ids.push(this.$store.state.newParticipantsInfo[i].id)
                 }
@@ -1068,9 +1041,9 @@
                 //判断开始时间必须早于结束时间
                 startMin = this.startMinutes.split(':')
                 endMin = this.endMinutes.split(':')
-                start =new Date(this.startTime).getTime()+startMin[0]*60*60*1000+startMin[1]*60*1000
-                end = new Date(this.endTime).getTime()+endMin[0]*60*60*1000+endMin[1]*60*1000
-                if(start>end){
+                start = new Date(this.startTime).getTime() + startMin[0] * 60 * 60 * 1000 + startMin[1] * 60 * 1000
+                end = new Date(this.endTime).getTime() + endMin[0] * 60 * 60 * 1000 + endMin[1] * 60 * 1000
+                if (start > end) {
                     toastr.error('结束时间必须晚于开始时间,请重新选择时间');
                     return false;
                 }
@@ -1121,10 +1094,10 @@
                 $('#addPrivacy').modal('hide')
                 this.$store.state.collectInfo = []
                 this.$store.state.payInfo = []
-                this.$store.state.contractInfo =[]
-                this.$store.state.divisionInfo=[]
-                this.$store.state.incubationInfo=[]
-                this.$store.state.billInfo=[]
+                this.$store.state.contractInfo = []
+                this.$store.state.divisionInfo = []
+                this.$store.state.incubationInfo = []
+                this.$store.state.billInfo = []
             },
 
             changeWorkReleaseTime: function (value) {
@@ -1145,7 +1118,7 @@
             },
             //修改基本信息
             changeArtistBaseInfo: function (value, name) {
-                if(name === 'platform'){
+                if (name === 'platform') {
                     value = value.join(',')
                 }
                 if (name === 'broker_id') {
@@ -1184,8 +1157,8 @@
 
             distributionPerson: function (value) {
                 this.distributionType = value;
-                if(this.artistInfo[value].data.length>0){
-                    this.$store.state.participantsInfo = Object.assign([],this.artistInfo[value].data)
+                if (this.artistInfo[value].data.length > 0) {
+                    this.$store.state.participantsInfo = Object.assign([], this.artistInfo[value].data)
                 }
                 // if (value === 'broker') {
                 //     if (this.artistInfo.broker) {
@@ -1208,18 +1181,18 @@
 
             addDistributionPerson: function () {
                 let data = {
-                    person_ids:[],
+                    person_ids: [],
                     del_person_ids: [],
                     moduleable_type: 'star',
                     moduleable_ids: [this.artistId]
                 };
-                
-                
+
+
                 let personInfo = this.$store.state.participantsInfo;
                 let oldPersonInfo = this.artistInfo[this.distributionType].data
                 //todo 删除和新增的数据有问题
                 if (this.artistInfo[this.distributionType].data.length > 0) {
-                    
+
                     for (let i = 0; i < this.artistInfo[this.distributionType].data.length; i++) {
 
                         if (personInfo.map(item => item.id).indexOf(this.artistInfo[this.distributionType].data[i].id) === -1) {
@@ -1228,9 +1201,9 @@
                         }
                     }
                 }
-                for (let  i= 0;  i< this.$store.state.participantsInfo.length; i++) {
+                for (let i = 0; i < this.$store.state.participantsInfo.length; i++) {
                     data.person_ids.push(this.$store.state.participantsInfo[i].id)
-                    
+
                 }
 
 
@@ -1247,40 +1220,40 @@
                 })
             },
             //获取附件类型
-            changeAttachmentType:function(value){
-               this.affixesType = value
+            changeAttachmentType: function (value) {
+                this.affixesType = value
             },
             //上传附件
-            uploadAttachment:function(url,name,size){
-               if(!this.affixesType){
-                   toastr.error('请选择上传附件类型');
-                   return false
-               }
+            uploadAttachment: function (url, name, size) {
+                if (!this.affixesType) {
+                    toastr.error('请选择上传附件类型');
+                    return false
+                }
 
-               //删除已存在的数据
-               for (let i = 0; i < this.affixes.length; i++) {
-                    if(this.affixes[i].type == this.affixesType){
+                //删除已存在的数据
+                for (let i = 0; i < this.affixes.length; i++) {
+                    if (this.affixes[i].type == this.affixesType) {
 
-                        this.affixes.splice(i,1)
+                        this.affixes.splice(i, 1)
                     }
-                    
+
                 }
                 //添加新的数据
-                this.affixes.push ({
-                    title:name,
-                    size:size,
-                    url:url,
-                    type:this.affixesType
-                }) 
-                this.changeArtistBaseInfo(this.affixes,'affix')
+                this.affixes.push({
+                    title: name,
+                    size: size,
+                    url: url,
+                    type: this.affixesType
+                })
+                this.changeArtistBaseInfo(this.affixes, 'affix')
 
             },
             //获取附件id
-            getAffixId:function(id){
-                this.affixId =id
+            getAffixId: function (id) {
+                this.affixId = id
             },
             //删除附件
-            deleteAffix:function(){
+            deleteAffix: function () {
                 let _this = this
                 fetch('delete', `/star/${this.$route.params.id}/affixes/${this.affixId}`).then(function (response) {
                     $('#affix').modal('hide');
@@ -1292,7 +1265,7 @@
             filterProjectFee: function (value) {
                 this.filterFee = value;
             },
-           
+
         }
     }
 
@@ -1318,16 +1291,19 @@
     .edit-height {
         height: 57px;
     }
-    .uploadContent{
+
+    .uploadContent {
         position: relative;
     }
-    .upload{
+
+    .upload {
         position: absolute;
-        top:0px;
-        left:0px;
+        top: 0px;
+        left: 0px;
         opacity: 0;
 
     }
+
     .money-color {
         color: #ff9800;
     }
