@@ -84,8 +84,7 @@
         },
         methods: {
             back(){
-                 this.$router.push({path: '/my/message'})
-                location.reload() 
+                window.location.href='/my/message'
             }
         }
     }

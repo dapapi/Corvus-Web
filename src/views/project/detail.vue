@@ -286,7 +286,7 @@
                             <div class="clearfix">
                                 <div class="float-left" style="padding: .715rem 1.429rem">
                                     <div class="float-left pr-40">合同金额 <span class="money-color">10000元</span></div>
-                                    <div class="float-left pr-40">支出金额 <span class="money-color">1000元0</span></div>
+                                    <div class="float-left pr-40">支出金额 <span class="money-color">1000元</span></div>
                                     <div class="float-left pr-40">税费 <span class="money-color">10000元</span></div>
                                     <div class="float-left pr-40">papi分成 <span class="money-color">10000元</span></div>
                                     <div class="float-left pr-40">bigger分成 <span class="money-color">10000元</span></div>
