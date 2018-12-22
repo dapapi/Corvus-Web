@@ -145,7 +145,7 @@
                         </div>
                     </div>
                 </div>
-                <ApprovalProgress :approver='approver' />
+                <ApprovalProgress :formid='projectType' />
 
                 <div class="modal-footer">
                     <button class="btn btn-sm btn-white btn-pure" data-dismiss="modal">取消</button>
@@ -166,7 +166,7 @@
             ApprovalProgress
         },
         name: "BuildProject",
-        props: ['projectType', 'projectFieldsArr'],
+        props: ['projectType', 'projectFieldsArr','defaultData'],
         data() {
             return {
                 visibleRangeArr: config.visibleRangeArr,
@@ -184,30 +184,31 @@
                 },
                 projectFields: [],
                 approver:[],
+                newArray:[],
             }
         },
         watch: {
             projectFieldsArr(newValue) {
                 return this.projectFields = newValue
             },
-            projectType(newValue){
-                this.getApprover()
-            }
+            // projectType(newValue){
+            //     this.getApprover()
+            // }
         },
         mounted() {
             this.getStars();
             this.getTrail();
             // this.getApprover();
             let _this = this;
+            this.defaultDataFilter()
             $('#addProject').on('hidden.bs.modal', function () {
                 _this.refreshAddProjectModal()
             })
         },
         methods: {
-            getApprover(){
-                let _this = this
-                fetch('get','/approvals/chains?form_id='+this.projectType+'&change_type=222&value').then((params) => {
-                    _this.approver = params.data
+            defaultDataFilter(){
+                this.newArray = this.defaultData.data.filter((params) => {
+                   return  params.hasOwnProperty('values')
                 })
             },
             refreshAddProjectModal: function () {
@@ -221,8 +222,9 @@
                 this.$refs.intentionArtist.setValue('');
                 this.$refs.startTime.setValue('');
                 this.$refs.endTime.setValue('');
+                
                 this.$refs.desc.refresh();
-                this.$refs.projectFee.setValue('0');
+                this.$refs.projectFee.setValue('');
                 this.$refs.trailOrigin.setValue('');
                 this.trailOriginContent = '';
                 this.trailOrigin = '';

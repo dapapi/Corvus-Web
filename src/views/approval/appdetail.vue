@@ -1,8 +1,9 @@
 <template>
-    <div class="">
+    <div class="" v-if="info.approval">
         <div class="" style="background-color:#f3f4f5">
-            <div class="page-header  page-header-bordered mb-0">
-                <h6 class="page-title nav-head"><i class="iconfont icon-zuojiantou"></i>{{list.title}}
+            <div class="page-header  page-header-bordered mb-0" >
+                <h6 class="page-title nav-head" v-if="info">
+                    <i class="iconfont icon-zuojiantou"></i>{{list.title}}
                     <template v-if="info.approval[0].form_status==232">
                         <button class="btn btn-success py-5">已审批</button>
                     </template>
@@ -20,207 +21,183 @@
                     </template>
                 </h6>
             </div>
-            <div class="page-header  page-header-bordered m-20 pl-10">
-                <h6 class="page-title title-status">当前状态<em></em><span>待审批</span>
+            <div class="page-header  page-header-bordered m-20 pl-10" >
+                <h6 class="page-title title-status">当前状态<em></em><span>{{currentStatus}}</span>
+                <div v-if="!isApproverMode">
                     <i v-if="info.approval[0].form_status==232">
-                        <button class="btn btn-primary">作废</button>
+                        <button class="btn btn-primary" @click='approvalHandler("discard")'>作废</button>
                     </i>
                     <i v-if="info.approval[0].form_status==231">
-                        <button class="btn btn-primary">撤销</button>
-                        <button class="btn btn-danger" type="submit" 
-                                data-toggle="modal" data-target="#addProject">提醒
+                        <button class="btn btn-primary" @click='approvalHandler("cancel")'>撤销</button>
+                        <button class="btn btn-danger" type="submit"
+                                data-toggle="modal" >提醒
                         </button>
                     </i>
                     <i v-if="info.approval[0].form_status==234">
-                        <button class="btn btn-primary">重新提交</button>
+                        <button class="btn btn-primary" @click="addProject(list.type)">重新提交</button>
                     </i>
                     <i v-if="info.approval[0].form_status==235">
-                        <button class="btn btn-primary">重新提交</button>
+                        <button class="btn btn-primary" @click="addProject(list.type)" >重新提交</button>
                     </i>
                     <i v-if="info.approval[0].form_status==233">
                         <button class="btn btn-primary">作废</button>
                     </i>
+                </div>
+                <div v-if="isApproverMode">
+                    <i v-if="info.approval[0].form_status==231">
+                        <button class="btn btn-success" @click='approvalHandler("agree")'>同意</button>
+                        <button class="btn btn-danger" @click='approvalHandler("refuse")'>拒绝</button>
+                        <button class="btn btn-primary">转交</button>
+
+                    </i>
+                    <i v-if="info.approval[0].form_status==232">
+                        <button class="btn btn-info" @click='approvalHandler("discard")' >作废</button>
+                    </i>
+                </div>
                 </h6>
             </div>
-            <div class="page-content container-fluid mt-20">
+            <div class="page-content container-fluid mt-20" v-if="info">
                 <div class="panel col-md-12 col-lg-12 pb-10">
                     <div class="caption">
-                        <h6 class="page-title">{{info.approval[0].title}}</h6>
+                        <h6 class="page-title">{{list.title}}</h6>
                         <span>编号：{{info.approval[0].project_number}}</span>
                     </div>
                     <div class="example">
-                        <div class="col-md-2 float-left">申请人</div>
-                        <div class="col-md-2 float-left">{{info.approval[0].name}}</div>
-                        <div class="col-md-2 float-left">部门</div>
-                        <div class="col-md-2 float-left">{{info.approval[0].department_name }}</div>
+                        <div class="col-md-3 float-left">申请人</div>
+                        <div class="col-md-3 float-left">{{info.approval[0].name}}</div>
+                        <div class="col-md-3 float-left">部门</div>
+                        <div class="col-md-3 float-left">{{info.approval[0].department_name }}</div>
                     </div>
                     <div class="example">
-                        <div class="col-md-2 float-left">部门</div>
-                        <div class="col-md-2 float-left">{{info.approval[0].department_name}}</div>
-                        <div class="col-md-2 float-left">申请时间</div>
-                        <div class="col-md-2 float-left">{{info.approval[0].created_at}}</div>
+                        <div class="col-md-3 float-left">部门</div>
+                        <div class="col-md-3 float-left">{{info.approval[0].department_name}}</div>
+                        <div class="col-md-3 float-left">申请时间</div>
+                        <div class="col-md-3 float-left">{{info.approval[0].created_at}}</div>
                     </div>
                     <div class="example pt-20" style="border-top:1px solid #ccc">
-                       
+
                     </div>
-                    <div class="example col-md-12" v-for="(item, index) in detailData" :key="index" v-if="item.values">
-                        <div class="col-md-6 float-left">{{item.key}}</div>
-                        <div class="col-md-6 float-left" v-if="item.values">{{item.values.data.value || ''}}</div>
-                    </div>    
+                    <div class="example">
+                        <div >审批详情</div>
+                        <div class="col-md-12 detail-container px-0" v-for="(item, index) in detailData" :key="index" v-if="item.values">
+                            <div class="col-md-3 float-left detail-key mx-0">{{item.key}}</div>
+                            <div class="col-md-9 float-left detail-value" v-if="item.values">{{item.values.data.value || ''}}</div>
+                        </div>
+                    </div>
                 </div>
-                <!-- <div class="panel col-md-12 col-lg-12">
+                </div>
+                <div class="panel col-md-12 col-lg-12">
                     <div class="caption" style="border:0;">
                         <h6 class="page-title pb-20" style="border-bottom:1px solid #ccc">审批流程</h6>
-                        <div class="setp pt-20">
-                            <div class="left col-md-2">
-                                <em class="mr-10"><i class="md-check-circle pr-5" style="color:#4DAF50"></i></em>
-                                <div class="left-cont">
-                                    <b class="branch">泰洋系</b>
-                                    <b class="type" style="color:#999;width:48px;">提交审批</b>
-                                </div>
-                            </div>
-                            <div class="middle col-md-2">
-                                <template v-if="item.type==0">
-                                    <em><i class="md-check-circle pr-5" style="color:#4DAF50"></i></em>
-                                    <div class="middle-cont">
-                                        <b class="branch">泰洋系</b>
-                                        <b class="type" style="color:#999">待审批</b>
-                                    </div>
-                                </template>
-                                <template v-if="item.type==1">
-                                    <em></em>
-                                    <div class="middle-cont">
-                                        <b class="branch">泰洋系</b>
-                                        <b class="type" style="color:#999">待审批</b>
-                                    </div>
-                                </template>
-                                <template v-if="item.type==2">
-                                    <em></em>
-                                    <div class="middle-cont">
-                                        <b class="branch">泰洋系</b>
-                                        <b class="type" style="color:#999">待审批</b>
-                                    </div>
-                                </template>
-                                <template v-if="item.type==3">
-                                    <em></em>
-                                    <div class="middle-cont">
-                                        <b class="branch">泰洋系</b>
-                                        <b class="type" style="color:#999">已审批</b>
-                                    </div>
-                                </template>
-                                <template v-if="item.type==4">
-                                    <em></em>
-                                    <div class="middle-cont">
-                                        <b class="branch">泰洋系</b>
-                                        <b class="type" style="color:#999">已拒绝</b>
-                                    </div>
-                                </template>
-                                
-                            </div>
-                             <div class="right col-md-2">
-                                <template v-if="info.approval.form_status==231">
-                                    <div class="right-cont" style="color:#4DAF50">
-                                        <i class="md-check-circle pr-5"></i>
-                                        <b>审批通过</b>
-                                    </div>
-                                </template>
-                                <template v-if="info.approval.form_status==232">
-                                    <div class="right-cont" style="color:#E0E0E0">
-                                        <i class="md-check-circle pr-5"></i>
-                                        <b>审批通过</b>
-                                    </div>
-                                </template>
-                                <template v-if="info.approval.form_status==233">
-                                    <div class="right-cont">
-                                        <i class="iconfont icon-guanbi-circle pr-5"></i>
-                                        <b>已撤回</b>
-                                    </div>
-                                </template>
-                                <template v-if="info.approval.form_status==3">               
-                                    <div class="right-cont">
-                                        <i class="iconfont icon-guanbi-circle pr-5"></i>
-                                        <b>已作废</b>
-                                    </div>
-                                </template>
-                                <template v-if="info.approval.form_status==4">
-                                    <div class="right-cont" style="color:red">
-                                        <i class="iconfont icon-guanbi-circle pr-5"></i>
-                                        <b>已拒绝</b>
-                                    </div>
-                                </template>
-                                
-                            </div>
+                        <div class=" pt-20">
+                            <ApprovalProgress mode='detail' :formid='info.approval[0].project_number' :formstatus='currentStatus' />
                         </div>
-                    </div>  -->
-                                
-                </div>
-                <!-- <div class="panel col-md-12 col-lg-12 py-10">
-                    <div class="content" >
-                        <div class="example" >
-                            <div class="col-md-1 float-left">审批</div>
-                            <em></em>
-                            <div class="col-md-2 float-left">{{item.applicant}}</div>
-                            <div class="col-md-1 float-left">操作</div>
-                            <div class="col-md-2 float-left">同意审批</div>
-                            <div class="col-md-2 float-left">审批时间</div>
-                            <div class="col-md-2 float-left">2018-12-13</div>
-                        </div>
-                        <div class="example">
-                            <div class="col-md-1 float-left">审批</div>
-                            <em></em>
-                            <div class="col-md-2 float-left">{{item.applicant}}</div>
-                            <div class="col-md-1 float-left">操作</div>
-                            <template v-if="item.type==0">
-                                <div class="col-md-2 float-left">{{item.approval}}</div>
-                            </template> 
-                            <template v-if="item.type==1">
-                                <div class="col-md-2 float-left">{{item.approval}}</div>
-                            </template> 
-                             <template v-if="item.type==2">
-                                <div class="col-md-2 float-left">{{item.approval}}</div>
-                            </template> 
-                            <template v-if="item.type==3">
-                                <div class="col-md-2 float-left">{{item.approval}}</div>
-                            </template>   
-                            <template v-if="item.type==4">
-                                <div class="col-md-2 float-left">{{item.approval}}</div>
-                            </template>          
-                            <div class="col-md-2 float-left">审批时间</div>
-                            <div class="col-md-2 float-left">2018-12-13</div>
-                        </div>
-                    </div> -->
-                     <div class="notify pl-15">
-                        <!-- <div>知会人</div> -->
-                        <!-- <AddMember @change="participantChange"></AddMember> -->
                     </div>
                 </div>
-            </div> 
-        <!-- </div> -->
-    <!-- </div> -->
+            </div>
+        <BuildProject :project-type="projectType" :project-fields-arr="projectFieldsArr"
+        :default-data='info.fields'></BuildProject>
+
+    </div>
+
 </template>
 <script>
- import fetch from '@/assets/utils/fetch.js'
-    import config from '@/assets/js/config'
-    import {PROJECT_CONFIG} from '@/views/approval/project/projectConfig.js'
-// import data from './data.json'
+import fetch from '@/assets/utils/fetch.js'
+import config from '@/assets/js/config'
+import {PROJECT_CONFIG} from '@/views/approval/project/projectConfig.js'
+import ApprovalProgress from '@/components/ForApproval/ApprovalProgress'
 export default {
+    name:'approvalDetail',
+    components:{
+        ApprovalProgress
+    },
     data(){
         return{
            list:{},
            info:{},
            detailData:{},
+           projectType:'',
+           projectFieldsArr:[],
         }
     },
+
     mounted(){
         this.getData()
+        // this.isApproverMode()
+    },
+    computed:{
+         isApproverMode(){
+            if(this.$route.query.mode === 'approver'){
+                console.log('ture');
+                return true
+            }else{
+                console.log('false');
+                return false
+            }
+        },
+         currentStatus(){
+            // console.log(this.info.approval[0].form_status);
+            switch(this.info.approval[0].form_status){
+                case 232:
+                    return '已审批'
+                case 231:
+                    return '待审批'
+                case 233:
+                    return '已拒绝'
+                case 234:
+                    return '已撤销'
+                case 235:
+                    return '已作废'
+            }
+        }
     },
     methods:{
+        addProject(value) {
+                console.log(value);
+                this.projectType = value;
+                this.selectProjectType(function () {
+                    $('#addProject').modal('show')
+                });
+            },
+
+            selectProjectType(callback) {
+                fetch('get', '/project_fields', {
+                    type: this.projectType,
+                    status: 1,
+                }).then(response => {
+                    for (let i = 0; i < response.data.length; i++) {
+                        if (response.data[i].field_type === 2 || response.data[i].field_type === 6) {
+                            response.data[i].contentArr = [];
+                            for (let j = 0; j < response.data[i].content.length; j++) {
+                                response.data[i].contentArr.push({
+                                    value: response.data[i].content[j],
+                                    name: response.data[i].content[j]
+                                })
+                            }
+                        }
+                    }
+                    this.projectFieldsArr = response.data;
+                    console.log(this.projectFieldsArr);
+                    callback();
+                });
+            },
+        approvalHandler(params){
+            let _this = this
+            console.log(this.info.approval[0].project_number);
+            console.log(params);
+            fetch('put','/approval_instances/'+this.info.approval[0].project_number+'/'+params).then((params) => {
+            // console.log(params);
+                _this.getData()
+
+            })
+        },
         getData(){
             let _this = this
             fetch('get','/approvals_project/detail/'+this.$route.params.id).then((params) => {
                 // _this.list = params
                 let {meta}=params
                 _this.list = params.data
+                _this.projectType = params.data.type
                 _this.info = meta
                 let {fields:{data}} = meta
                 _this.detailData = data
@@ -254,7 +231,7 @@ export default {
 }
 .title-status{
     position: relative;
-   
+
 }
 .page-title{
     font-size: 1rem;
@@ -344,6 +321,16 @@ export default {
 }
 .nav-head{
     font-size: 26px;
+}
+.detail-container{
+    border: 1px solid #eeeeee;
+    height: 40px;
+    line-height: 40px;
+}
+.detail-key{
+    height: 40px;
+    background: #f5f5f5;
+
 }
 </style>
 
