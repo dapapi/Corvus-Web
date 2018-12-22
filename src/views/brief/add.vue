@@ -29,7 +29,7 @@
                                     <!--编辑模版结束-->
                                     <!--删除模版-->
                                     <span class="pr-40 d-block float-left pointer-content" style="color: #b9b9b9" data-toggle="modal" data-target="#delModel" @click="getDelModelId(item.id,item.template_name)">
-                                        <i class="md-delete color" aria-hidden="true"></i>
+                                        <i class="iconfont icon-shanchu1 color" aria-hidden="true"></i>
                                     </span>
                                     <!--删除模版结束-->
                                     
@@ -54,7 +54,7 @@
             <div class="modal-dialog modal-simple">
                 <div class="modal-content">
                     <div class="modal-header">
-                        <button type="button" aria-hidden="true" data-dismiss="modal" class="close"><i aria-hidden="true" class="md-close"></i></button>
+                        <button type="button" aria-hidden="true" data-dismiss="modal" class="close"><i aria-hidden="true" class="iconfont icon-guanbi"></i></button>
                         <h4 class="modal-title" v-if="modelType == 'add'">添加模版</h4>
                         <h4 class="modal-title" v-else>编辑模版</h4>
                     </div>
@@ -91,7 +91,7 @@
             <div class="modal-dialog modal-simple">
                 <div class="modal-content">
                     <div class="modal-header">
-                        <button type="button" aria-hidden="true" data-dismiss="modal" class="close"><i aria-hidden="true" class="md-close"></i></button>
+                        <button type="button" aria-hidden="true" data-dismiss="modal" class="close"><i aria-hidden="true" class="iconfont icon-guanbi"></i></button>
                         <h4 class="modal-title">设置问题</h4>
                     </div>
                     <div class="modal-body clearfix">
@@ -113,7 +113,7 @@
                                     </span>
                                     <span class="pr-20 d-block float-left pointer-content" style="color: #b9b9b9" data-toggle="modal"
                                         data-target="#delQues" @click="getDelQuesId(item.id)">
-                                        <i class="md-delete" aria-hidden="true"></i>
+                                        <i class="iconfont icon-shanchu1" aria-hidden="true"></i>
                                     </span>
                                     <span class="pr-20 d-block float-left pointer-content" style="color: #b9b9b9" @click="quesUpDown('top',item.id)">
                                         <i class="iicon md-caret-up-circle" aria-hidden="true"></i>
@@ -138,7 +138,7 @@
             <div class="modal-dialog modal-simple">
                 <div class="modal-content">
                     <div class="modal-header">
-                        <button type="button" aria-hidden="true" data-dismiss="modal" class="close"><i aria-hidden="true" class="md-close"></i></button>
+                        <button type="button" aria-hidden="true" data-dismiss="modal" class="close"><i aria-hidden="true" class="iconfont icon-guanbi"></i></button>
                         <h4 class="modal-title">
                             <template v-if="modelType == 'add'">设置问题</template>
                             <template v-else>编辑问题</template>
@@ -189,7 +189,7 @@
             <div class="modal-dialog modal-simple">
                 <div class="modal-content">
                     <div class="modal-header">
-                        <button type="button" aria-hidden="true" data-dismiss="modal" class="close"><i aria-hidden="true" class="md-close"></i></button>
+                        <button type="button" aria-hidden="true" data-dismiss="modal" class="close"><i aria-hidden="true" class="iconfont icon-guanbi"></i></button>
                         <h4 class="modal-title">确认删除</h4>
                     </div>
                     <div class="modal-body clearfix">
@@ -211,7 +211,7 @@
             <div class="modal-dialog modal-simple">
                 <div class="modal-content">
                     <div class="modal-header">
-                        <button type="button" aria-hidden="true" data-dismiss="modal" class="close"><i aria-hidden="true" class="md-close"></i></button>
+                        <button type="button" aria-hidden="true" data-dismiss="modal" class="close"><i aria-hidden="true" class="iconfont icon-guanbi"></i></button>
                         <h4 class="modal-title">确认删除</h4>
                     </div>
                     <div class="modal-body clearfix">

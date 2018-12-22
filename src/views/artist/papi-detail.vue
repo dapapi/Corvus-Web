@@ -244,10 +244,17 @@
                                  data-target="#addWork">
                                 <button type="button"
                                         class="site-action-toggle btn-raised btn btn-success btn-floating waves-effect waves-classic">
+                                    <<<<<<< HEAD
                                     <i class="front-icon iconfont icon-tianjia animation-scale-up"
                                        aria-hidden="true"></i>
                                     <i class="back-icon iconfont icon-tianjia animation-scale-up"
                                        aria-hidden="true"></i>
+                                    =======
+                                    <i class="front-icon iconfont icon-tianjia animation-scale-up"
+                                       aria-hidden="true"></i>
+                                    <i class="back-icon iconfont icon-tianjia animation-scale-up"
+                                       aria-hidden="true"></i>
+                                    >>>>>>> cxy
                                 </button>
                             </div>
                         </div>

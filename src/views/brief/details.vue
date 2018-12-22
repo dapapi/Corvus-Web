@@ -77,7 +77,7 @@
         <div class="modal-dialog modal-simple">
             <div class="modal-content">
                 <div class="modal-header">
-                    <button type="button" aria-hidden="true" data-dismiss="modal" class="close"><i aria-hidden="true" class="md-close"></i></button>
+                    <button type="button" aria-hidden="true" data-dismiss="modal" class="close"><i aria-hidden="true" class="iconfont icon-guanbi"></i></button>
                     <h4 class="modal-title">任务</h4>
                 </div>
                 <div class="modal-body clearfix">

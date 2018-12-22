@@ -132,19 +132,19 @@
                                 </template>
                                 <template v-if="info.approval.form_status==233">
                                     <div class="right-cont">
-                                        <i class="md-close-circle pr-5"></i>
+                                        <i class="iconfont icon-guanbi-circle pr-5"></i>
                                         <b>已撤回</b>
                                     </div>
                                 </template>
                                 <template v-if="info.approval.form_status==3">               
                                     <div class="right-cont">
-                                        <i class="md-close-circle pr-5"></i>
+                                        <i class="iconfont icon-guanbi-circle pr-5"></i>
                                         <b>已作废</b>
                                     </div>
                                 </template>
                                 <template v-if="info.approval.form_status==4">
                                     <div class="right-cont" style="color:red">
-                                        <i class="md-close-circle pr-5"></i>
+                                        <i class="iconfont icon-guanbi-circle pr-5"></i>
                                         <b>已拒绝</b>
                                     </div>
                                 </template>
