@@ -12,16 +12,17 @@
 </template>
 
 <script>
-    
+
     import LeftMenu from '@/components/LeftMenu.vue'
     import getMessage from '@/components/getMessage.vue'
     import LeftManage from '@/components/LeftManage.vue'
+
     export default {
         name: 'app',
         data: function () {
             return {
                 isLeftMenuShow: true,
-                isLeftManageShow:false
+                isLeftManageShow: false
             }
         },
         components: {
@@ -33,18 +34,18 @@
             '$route': function (to, from) {
                 if (this.$route.path === '/login') {
                     this.isLeftMenuShow = false
-                   
+
                 }
-                else if(this.$route.path === '/management'
+                else if (this.$route.path === '/management'
                     || this.$route.path === '/rolemanagement'
-                    || this.$route.path === '/appmanagement' 
+                    || this.$route.path === '/appmanagement'
                     || this.$route.path === '/organization'
-                    || this.$route.path === '/organization/management'){
-                     this.isLeftMenuShow = false
-                     this.isLeftManageShow = true
+                    || this.$route.path === '/organization/management') {
+                    this.isLeftMenuShow = false
+                    this.isLeftManageShow = true
                 }
             },
-          
+
         },
         methods: {}
     };
@@ -195,8 +196,13 @@
         background: #eee;
         border-radius: 3px;
     }
+
     .bootstrap-select:not([class*=col-]):not([class*=form-control]):not(.input-group-btn) {
         width: 100%;
     }
-    
+
+    .money-color {
+        color: #ff9800;
+    }
+
 </style>

@@ -88,11 +88,11 @@
                     </div>
                 </div>
                 <div class="float-left p-0" style="width: 80%;border-left: 1px solid #D8D8D8;">
-                    <calendar :gotoDate="selectedDate" v-show="!meetingRomeShow" @dayClick="showAddScheduleModal"
-                              :calendars="selectedCalendar" ref="calendar"
+                    <calendar :goto-date="selectedDate" v-show="!meetingRomeShow" @dayClick="showAddScheduleModal"
+                              :calendars="selectedCalendar" :meeting-rome-list="meetingRomeList" ref="calendar"
                               @scheduleClick="showScheduleModal"></calendar>
                     <MeetingRoomCalendar v-show="meetingRomeShow" :meetingRomeList="meetingRomeList" ref="meetingRoom"
-                                         @change="displayMeetingRoom"></MeetingRoomCalendar>
+                                         @change="changeToCalendar"></MeetingRoomCalendar>
                 </div>
 
             </div>
@@ -192,7 +192,7 @@
                             <div class="pt-10 mb-20 clearfix">
                                 <div class="col-md-2 text-right float-left">会议室</div>
                                 <div class="col-md-10 float-left pl-0">
-                                    <selectors :options="meetingRomeList" ref="scheduleResource"
+                                    <selectors :options="allMeetingRomeList" ref="scheduleResource"
                                                :placeholder="'请选择会议室'" @change="changeScheduleMaterial"></selectors>
                                 </div>
                             </div>
@@ -261,7 +261,7 @@
                         <div style="order: 2">
                             <i class="iconfont icon-bianji pr-4 font-size-16 pointer-content"
                                @click="changeScheduleType('edit')" aria-hidden="true"></i>
-                            <i class="md-file pr-4 font-size-16 pointer-content" aria-hidden="true"></i>
+                            <FileUploader is-icon="true" class="float-left" @change="fileUpload"></FileUploader>
                             <i class="md-delete pr-4 font-size-16 pointer-content" data-toggle="modal"
                                data-target="#delModel" aria-hidden="true" @click="deleteToastr('schedule')"></i>
                             <i class="md-close pointer-content" aria-hidden="true" data-dismiss="modal"></i>
@@ -325,19 +325,16 @@
                             <div class="col-md-1 px-0 float-left">备注</div>
                             <div class="col-md-10 float-left">{{ scheduleData.desc }}</div>
                         </div>
-                        <div class="example">
-                            <div>附件</div>
-                            <div class="">
-                                <div class="col-md-3 float-left text-center">
-                                    <div><i class="md-file" style="font-size: 36px"></i></div>
-                                    <div>泰洋川禾简介.docx</div>
-                                </div>
-                                <div class="col-md-3 float-left text-center">
-                                    <div><i class="md-file" style="font-size: 36px"></i></div>
-                                    <div>泰洋川禾泰洋川禾简介.docx</div>
-                                </div>
-                            </div>
-                        </div>
+                        <!--<div class="example" v-if="scheduleData.affixes.data.length > 0">-->
+                        <!--<div>附件</div>-->
+                        <!--<div>-->
+                        <!--<div class="col-md-3 float-left text-center"-->
+                        <!--v-for="affix in scheduleData.affixes.data">-->
+                        <!--<div><i class="md-file" style="font-size: 36px"></i></div>-->
+                        <!--<div>{{ affix.title }}</div>-->
+                        <!--</div>-->
+                        <!--</div>-->
+                        <!--</div>-->
                     </div>
                 </div>
             </div>
@@ -598,6 +595,7 @@
                 isAllday: false,
                 schedulePrivacy: false,
                 meetingRomeList: '',
+                allMeetingRomeList: '',
                 delType: '',
                 scheduleType: 'add',
                 scheduleMaterialId: '',
@@ -616,6 +614,7 @@
         mounted() {
             this.getStars();
             this.getCalendarList();
+            this.getResources();
             let _this = this;
             $('#addCalendar').on('hidden.bs.modal', function () {
                 _this.$store.dispatch('changeParticipantsInfo', {data: []});
@@ -690,11 +689,17 @@
             },
 
             getResources(type) {
-                let data = {
-                    type: type
-                };
+                let data = {};
+                if (type) {
+                    data = {
+                        type: type
+                    };
+                }
                 fetch('get', '/materials/all', data).then(response => {
-                    this.meetingRomeList = response.data;
+                    this.allMeetingRomeList = response.data;
+                    if (type) {
+                        this.meetingRomeList = response.data;
+                    }
                 })
             },
 
@@ -761,6 +766,26 @@
             getAllTasks: function () {
                 fetch('get', '/tasksAll').then(response => {
                     this.allTasksInfo = response.data
+                })
+            },
+
+            fileUpload: function (url, name, size) {
+                console.log(url);
+                console.log(name)
+                let data = {
+                    title: name,
+                    url: url,
+                    size: size,
+                    type: 1
+                };
+                fetch('post', '/schedules/' + this.scheduleData.id + '/affix', data).then(response => {
+                    toastr.success('上传成功');
+                    if (this.scheduleData.affixes) {
+                        this.scheduleData.affixes.data.push(response.data)
+                    } else {
+                        this.scheduleData.affixes = {data: []};
+                        this.scheduleData.affixes.data.push(response.data)
+                    }
                 })
             },
 
@@ -1159,7 +1184,12 @@
             },
 
             displayMeetingRoom: function () {
-                this.meetingRomeShow = false
+                this.meetingRomeShow = false;
+                this.meetingRomeList = '';
+            },
+
+            changeToCalendar: function () {
+                this.meetingRomeShow = false;
             },
 
             allCalendarShow: function () {

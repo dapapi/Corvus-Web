@@ -328,20 +328,36 @@
                                         <table>
                                             <tbody>
                                             <tr>
-                                                <td class="fc-axis" style="width: 36px;"></td>
-                                                <td v-for="meetingRome in meetingRomeList" style="width: 100px">
-                                                    <div class="fc-content-col">
+                                                <td class="fc-axis" style="width: 39px;"></td>
+                                                <td v-for="meetingRome in meetingRomeListInfo" style="width: 100px">
+                                                    <div class="fc-content-col" v-if="meetingRome.events">
                                                         <div class="fc-event-container fc-helper-container"></div>
                                                         <div class="fc-event-container">
-                                                            <a class="fc-time-grid-event fc-v-event fc-event fc-start fc-end fc-draggable fc-resizable"
-                                                               style="top: 449px; bottom: -539px; z-index: 1; left: 0%; right: 0%; margin-right: 20px;background-color: red;border: red">
+                                                            <a v-for="event in meetingRome.events"
+                                                               class="fc-time-grid-event fc-v-event fc-event fc-start fc-end"
+                                                               style="top: 449px; bottom: -539px; z-index: 1; left: 0; right: 0; margin-right: 20px;"
+                                                               :style="'background-color: ' + event.color + ';border: ' + event.color">
                                                                 <div class="fc-content">
-                                                                    <div class="fc-time" data-start="10:00"
-                                                                         data-full="10:00 AM"><span>10:00</span></div>
-                                                                    <div class="fc-title">Repeating Event</div>
+                                                                    <div class="fc-time" data-start="10:30"
+                                                                         data-full="10:30 AM - 10:45 AM">
+                                                                        <span>{{ event.start }} - {{ event.end }}</span>
+                                                                    </div>
+                                                                    <div class="fc-title">{{ event.title }}</div>
                                                                 </div>
                                                                 <div class="fc-bg"></div>
-                                                                <div class="fc-resizer fc-end-resizer"></div>
+                                                            </a>
+                                                            <a v-for="event in meetingRome.events"
+                                                               class="fc-time-grid-event fc-v-event fc-event fc-start fc-end fc-draggable fc-resizable"
+                                                               style="top: 449px; bottom: -539px; z-index: 1; left: 0; right: 0; margin-right: 20px;"
+                                                               :style="'background-color: ' + event.color + ';border: ' + event.color">
+                                                                <div class="fc-content">
+                                                                    <div class="fc-time" data-start="10:30"
+                                                                         data-full="1:30 PM - 2:45 PM">
+                                                                        <span>{{ event.start }} - {{ event.end }}</span>
+                                                                    </div>
+                                                                    <div class="fc-title">{{ event.title }}</div>
+                                                                </div>
+                                                                <div class="fc-bg"></div>
                                                             </a>
                                                         </div>
                                                         <div class="fc-highlight-container"></div>
@@ -375,6 +391,7 @@
             return {
                 numberDate: '',
                 currentDate: '',
+                meetingRomeListInfo: []
             }
         },
 
@@ -386,12 +403,15 @@
             date: function () {
                 let dateArr = this.numberDate.split('-');
                 return dateArr[0] + '年  ' + dateArr[1] + '月  ' + dateArr[2] + '日';
-            }
+            },
         },
 
         watch: {
             meetingRomeList(newValue) {
-                this.getSchedules();
+                console.log(newValue);
+                if (newValue) {
+                    this.getSchedules();
+                }
             }
         },
 
@@ -411,23 +431,31 @@
                 }
                 let data = {
                     material_ids: materialsIds,
-                    start_at: this.currentDate,
-                    end_at: this.currentDate,
+                    start_date: this.currentDate,
+                    end_date: this.currentDate,
+                    include: 'calendar,participants,creator,material'
                 };
                 fetch('get', '/schedules', data).then(response => {
-                    // self.allScheduleInfo = response.data;
-                    // let events = [];
-                    // for (let i = 0; i < response.data.length; i++) {
-                    //     events.push({
-                    //         title: response.data[i].title,
-                    //         start: response.data[i].start_at,
-                    //         end: response.data[i].end_at,
-                    //         color: response.data[i].calendar.data.color,
-                    //         allDay: !!response.data[i].is_allday,
-                    //         id: response.data[i].id,
-                    //     })
-                    // }
-                    // callback(events)
+                    for (let i = 0; i < response.data.length; i++) {
+                        let start_time = response.data[i].start_at.split(' ')[1];
+                        let end_time = response.data[i].end_at.split(' ')[1];
+                        start_time = start_time.split(':')[0] + ':' + start_time.split(':')[1];
+                        end_time = end_time.split(':')[0] + ':' + end_time.split(':')[1];
+                        let event = {
+                            title: response.data[i].title,
+                            start: start_time,
+                            end: end_time,
+                            color: response.data[i].calendar.data.color,
+                            allDay: !!response.data[i].is_allday,
+                            id: response.data[i].id,
+                        };
+                        if (this.meetingRomeList.find(item => item.id == response.data[i].material.data.id).events) {
+                            this.meetingRomeList.find(item => item.id == response.data[i].material.data.id).events.push(event)
+                        } else {
+                            this.meetingRomeList.find(item => item.id == response.data[i].material.data.id).events = [event];
+                        }
+                    }
+                    this.meetingRomeListInfo = this.meetingRomeList
                     console.log(response)
                 })
             },
@@ -443,7 +471,8 @@
                 if (strDate >= 0 && strDate <= 9) {
                     strDate = "0" + strDate;
                 }
-                this.currentDate = year + '-' + month + '-' + strDate;
+                // this.currentDate = year + '-' + month + '-' + strDate;
+                this.currentDate = '2018-12-26';
                 this.numberDate = year + '-' + month + '-' + strDate;
             },
 
