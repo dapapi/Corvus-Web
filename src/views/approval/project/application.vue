@@ -84,24 +84,24 @@
             return {
                 keywords: '',
                 projectsInfo: [],
-                projectProgress:PROJECT_CONFIG.approvalProgress
+                projectProgress:PROJECT_CONFIG.approvalProgress,
+
             }
         },
         mounted(){
-            this.getList()
+            this.getList(1)
         },
         computed:{
             getProgressName(){
                 return function(params){
-                   return  this.projectProgress.find(item=>item.id = params).value
+                   return  this.projectProgress.find(item=>item.id == params).value
                 }
             }
         },
         methods: {
-            getList() {
+            getList(params) {
                 let _this = this
-                fetch('get','/approvals_project/my').then((params) => {
-                    console.log(params.data)
+                fetch('get','/approvals_project/my?status='+params).then((params) => {
                     _this.projectsInfo = params.data
                 })
             }

@@ -58,6 +58,7 @@
         },
         methods: {
             addProject(value) {
+                console.log(value);
                 this.projectType = value;
                 this.selectProjectType(function () {
                     $('#addProject').modal('show')
@@ -81,6 +82,7 @@
                         }
                     }
                     this.projectFieldsArr = response.data;
+                    console.log(this.projectFieldsArr);
                     callback();
                 });
             },
