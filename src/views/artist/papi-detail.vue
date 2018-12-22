@@ -196,8 +196,10 @@
                                  data-target="#addTask">
                                 <button type="button"
                                         class="site-action-toggle btn-raised btn btn-success btn-floating waves-effect waves-classic">
-                                    <i class="front-icon iconfont icon-tianjia animation-scale-up" aria-hidden="true"></i>
-                                    <i class="back-icon iconfont icon-tianjia animation-scale-up" aria-hidden="true"></i>
+                                    <i class="front-icon iconfont icon-tianjia animation-scale-up"
+                                       aria-hidden="true"></i>
+                                    <i class="back-icon iconfont icon-tianjia animation-scale-up"
+                                       aria-hidden="true"></i>
                                 </button>
                             </div>
                         </div>
@@ -242,8 +244,10 @@
                                  data-target="#addWork">
                                 <button type="button"
                                         class="site-action-toggle btn-raised btn btn-success btn-floating waves-effect waves-classic">
-                                    <i class="front-icon iconfont icon-tianjia animation-scale-up" aria-hidden="true"></i>
-                                    <i class="back-icon iconfont icon-tianjia animation-scale-up" aria-hidden="true"></i>
+                                    <i class="front-icon iconfont icon-tianjia animation-scale-up"
+                                       aria-hidden="true"></i>
+                                    <i class="back-icon iconfont icon-tianjia animation-scale-up"
+                                       aria-hidden="true"></i>
                                 </button>
                             </div>
                         </div>
@@ -298,14 +302,10 @@
                                 </tr>
                                 </tbody>
                             </table>
-<<<<<<< HEAD
-                            
-=======
                             <div class="col-md-1" style="margin: 6rem auto" v-if="artistBillsInfo.length === 0">
                                 <img src="https://res.papitube.com/corvus/images/content-none.png" alt=""
                                      style="width: 100%">
                             </div>
->>>>>>> e5f9bd2594fd28b47335e52bbdd3b66cb9401f7d
                         </div>
                         <div class="tab-pane animation-fade fixed-button-father" id="forum-artist-base"
                              role="tabpanel">
@@ -739,7 +739,6 @@
                 worksData: '',
                 advertisingType: '',
                 Person_id: '',
-                Users: '',
                 tasksType: '',
                 tasksData: '',
                 artistTypeArr: '',
@@ -930,15 +929,6 @@
                 fetch('get', '/bloggers/index/production?blogger_id=' + this.artistId + '').then(function (response) {
                     _this.worksData = response.data
                 });
-<<<<<<< HEAD
-                
-=======
-                //负责人
-                fetch('get', '/users/').then(function (response) {
-
-                    _this.Users = response.data;
-                })
->>>>>>> e5f9bd2594fd28b47335e52bbdd3b66cb9401f7d
                 //任务状态跑组。试戏
                 fetch('get', '/task_types').then(function (response) {
                     _this.tasksType = response.data;
@@ -1143,52 +1133,6 @@
                 let end_timeStamp = '';
                 let time = new Date;
                 let start_year = time.getFullYear();
-<<<<<<< HEAD
-                let start_month = time.getMonth()+1;
-                    if(start_month<10){
-                        start_month="0"+start_month;
-                    }
-                    let start_date=time.getDate();
-                    if(start_date<10){
-                        start_date="0"+start_date;
-                    }
-                    let start_hour=time.getHours();
-                    end_hour=(23-start_hour)*60*60*1000
-                    if(start_hour<10){
-                        start_hour="0"+start_hour;
-                    }
-                    let start_minute=time.getMinutes();
-                    console.log(start_minute)
-                    end_minute=(59-start_minute)*60*1000
-                    if(start_minute<10){
-                        start_minute=start_minute;
-                    }
-                    let start_second=time.getSeconds();
-                    
-                    end_second=(60-start_second)*1000
-                    if(start_minute<10){
-                        start_minute="0"+start_minute;
-                    }
-                    this.start_Time = start_year+"-"+start_month+"-"+start_date+" "+start_hour+":"+start_minute+":"+start_second
-                     if(time.getDay()<=5){
-                        end_date = (5-time.getDay())*60*60*1000*24
-                        end_timeStamp = time.getTime()+end_date+end_hour+end_minute+end_second
-                        
-                    }else if(time.getDay()>5){
-                        end_date = (7-time.getDay()+5)*60*60*1000*24
-                        end_timeStamp = time.getTime()+end_date+end_hour+end_minute+end_second
-                       
-                    }
-                    let end = new Date(end_timeStamp)
-                    let Y = end.getFullYear() + '-';
-                    let M = (end.getMonth()+1 < 10 ? '0'+(end.getMonth()+1) : end.getMonth()+1) + '-';
-                    let D = end.getDate() + ' ';
-                    let h = end.getHours() + ':';
-                    let m = end.getMinutes() + ':';
-                    let s = end.getSeconds();
-                    this.end_Time=Y+M+D+h+m+s
-            },
-=======
                 let start_month = time.getMonth() + 1;
                 if (start_month < 10) {
                     start_month = "0" + start_month;
@@ -1203,11 +1147,13 @@
                     start_hour = "0" + start_hour;
                 }
                 let start_minute = time.getMinutes();
+                console.log(start_minute)
                 end_minute = (59 - start_minute) * 60 * 1000
                 if (start_minute < 10) {
-                    start_minute = "0" + start_minute;
+                    start_minute = start_minute;
                 }
                 let start_second = time.getSeconds();
+
                 end_second = (60 - start_second) * 1000
                 if (start_minute < 10) {
                     start_minute = "0" + start_minute;
@@ -1230,9 +1176,7 @@
                 let m = end.getMinutes() + ':';
                 let s = end.getSeconds();
                 this.end_Time = Y + M + D + h + m + s
-            }
-            ,
->>>>>>> e5f9bd2594fd28b47335e52bbdd3b66cb9401f7d
+            },
             //添加任务
             addTask: function () {
                 let _this = this;
@@ -1371,46 +1315,31 @@
             }
             ,
             taskdetail(id) {
-                console.log(id)
-<<<<<<< HEAD
-             this.$router.push({path: '/tasks/' + id})
-            },
-            projectdetil(id){
-             this.$router.push({path: '/projects/' + id}) 
-            },
-            Jump(value){
-              let price = value;
-              let str=/[a-zA-Z0-9][-a-zA-Z0-9]{0,62}(\.[a-zA-Z0-9][-a-zA-Z0-9]{0,62})+\.?///网址是否合法检测
-              let regex = /(https?:\/\/)?(\w+\.?)+(\/[a-zA-Z0-9\?%=_\-\+\/]+)?/gi//http,https有无检测
-              var re=new RegExp(str); 
-                
-                if (!re.test(value)) { 
-                     alert('您的网址不正确')
-                }else{
-                   value = value.replace(regex, function (match, capture) {
-                    if (capture) {
-                        console.log(price)
-                         window.open(price)
-                    }
-                    else {
-                         window.open('http://' + match)
-                    }
-                   })
-                  
-                } 
-                
-=======
                 this.$router.push({path: '/tasks/' + id})
-            }
-            ,
+            },
             projectdetil(id) {
                 this.$router.push({path: '/projects/' + id})
-            }
-            ,
+            },
             Jump(value) {
-                console.log(value)
-                window.open(value)
->>>>>>> e5f9bd2594fd28b47335e52bbdd3b66cb9401f7d
+                let price = value;
+                let str = /[a-zA-Z0-9][-a-zA-Z0-9]{0,62}(\.[a-zA-Z0-9][-a-zA-Z0-9]{0,62})+\.?///网址是否合法检测
+                let regex = /(https?:\/\/)?(\w+\.?)+(\/[a-zA-Z0-9\?%=_\-\+\/]+)?/gi//http,https有无检测
+                var re = new RegExp(str);
+
+                if (!re.test(value)) {
+                    alert('您的网址不正确')
+                } else {
+                    value = value.replace(regex, function (match, capture) {
+                        if (capture) {
+                            console.log(price)
+                            window.open(price)
+                        }
+                        else {
+                            window.open('http://' + match)
+                        }
+                    })
+
+                }
             }
         }
     }
