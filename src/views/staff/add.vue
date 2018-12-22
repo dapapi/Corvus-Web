@@ -36,12 +36,12 @@
                                 <span class="save" @click="save">保存</span> <span class="cancel" @click="cancel">取消</span>
                             </template>
                         </div>
-                        <div class="formName pd-b-15">个人资料 <span class="point"></span><span class="note">为必填项</span></div>
+                        <div class="formName pd-b-15">个人资料 <span class="note require" style="margin-left: 10px;">为必填项</span></div>
                         <div class="row">
                             <div class="col-md-6">
                                 <div class="example">
-                                    <div class="col-md-3 text-right float-left">姓名(中文)</div>
-                                    <div class="col-md-8 float-left pl-0 require">
+                                    <div class="col-md-3 text-right float-left require">姓名(中文)</div>
+                                    <div class="col-md-8 float-left pl-0">
                                         <input type="text" :disabled="(!!userId) && !isEdit" v-model="nameCN" placeholder="1-30个字符" class="form-control">
                                     </div>
                                 </div>
@@ -52,8 +52,8 @@
                                     </div>
                                 </div>
                                 <div class="example">
-                                    <div class="col-md-3 text-right float-left">性别</div>
-                                    <div class="col-md-8 float-left pl-0 require">
+                                    <div class="col-md-3 text-right float-left require">性别</div>
+                                    <div class="col-md-8 float-left pl-0">
                                         <selectors :options="genderArr" change-key="gender" @select="changeState" placeholder="请选择" :defaultValue="0"></selectors>
                                     </div>
                                 </div>
@@ -175,7 +175,7 @@
                             </div>
                         </div>
 
-                        <div class="formName pd-b-15">教育背景 <i class="md-plus add-icon" @click="tableAdd('education')"></i></div>
+                        <div class="formName pd-b-15">教育背景 <i class="iconfont icon-tianjia add-icon" @click="tableAdd('education')"></i></div>
                         <div class="example table-responsive padding15">
                             <!-- <mtp-table :data-source="education" :columns="eduColumns" /> -->
                             <table class="table table-hover table-bordered">
@@ -196,7 +196,7 @@
                             </table>
                         </div>
 
-                        <div class="formName pd-b-15">培训经历<i class="md-plus add-icon" @click="tableAdd('train')"></i></div>
+                        <div class="formName pd-b-15">培训经历<i class="iconfont icon-tianjia add-icon" @click="tableAdd('train')"></i></div>
                         <div class="example table-responsive padding15">
                             <table class="table table-hover table-bordered">
                                 <thead>
@@ -216,7 +216,7 @@
 
                         <div class="formName pd-b-15">
                             任职履历<span class="note" style="margin-left: 16px;">从最近的任职单位开始填写</span>
-                            <i class="icon-tianjia add-icon" @click="tableAdd('work')"></i>
+                            <i class="iconfont icon-tianjia add-icon" @click="tableAdd('work')"></i>
                         </div>
                         <div class="example table-responsive padding15">
                             <table class="table table-hover table-bordered">
@@ -237,7 +237,7 @@
 
                         <div class="formName pd-b-15">家庭资料
                             <span class="note" style="margin-left: 16px;">请列出直系亲属资料和紧急联系人信息</span>
-                            <i class="icon-tianjia add-icon" @click="tableAdd('home')"></i>
+                            <i class="iconfont icon-tianjia add-icon" @click="tableAdd('home')"></i>
                         </div>
                         <div class="example table-responsive padding15">
                             <table class="table table-hover table-bordered">
@@ -555,17 +555,17 @@ export default {
 		},
 		// 提交
 		submit () {
-            let canSend = true
-            for (let n of this.formCheck) {
-                if (!this[n.name]) {
-                    toastr.error(n.msg)
-                    canSend = false
-                    break
-                }
-            }
-            if (!canSend) {
-                return
-            }
+            // let canSend = true
+            // for (let n of this.formCheck) {
+            //     if (!this[n.name]) {
+            //         toastr.error(n.msg)
+            //         canSend = false
+            //         break
+            //     }
+            // }
+            // if (!canSend) {
+            //     return
+            // }
             let params = {
 				name: this.nameCN,
 				en_name: this.nameEN,
@@ -631,10 +631,10 @@ export default {
 					// }
 				]
 			}
-	
-			fetch('post', '/personnel' ,params).then(result => {
-                toastr.success('添加成功')
-			})
+            console.log(params)
+			// fetch('post', '/personnel' ,params).then(result => {
+            //     toastr.success('添加成功')
+			// })
         },
         // 获取员工数据
         getData () {

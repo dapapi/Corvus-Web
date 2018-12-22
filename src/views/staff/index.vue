@@ -105,7 +105,6 @@ import config from "../../assets/js/config";
 // import redirect from './bootstrap';
 const { staffStatus, staffType, employment, workStatus } = config;
 import fetch from "../../assets/utils/fetch";
-import axios from 'axios'
 
 const monthArr = Array.from(new Array(12)).map((n, i) => {
     let obj = {}

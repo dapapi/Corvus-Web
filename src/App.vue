@@ -141,7 +141,7 @@
         min-height: 100vh;
     }
 
-    .require {
+    /* .require {
         position: relative;
     }
 
@@ -155,6 +155,15 @@
         right: -4px;
         top: 50%;
         transform: translateY(-50%);
+    } */
+    .require::before {
+        content: '*';
+        position: relative;
+        left: -4px;
+        vertical-align: middle;
+        color: #F44336;
+        font-size: 16px;
+        /* line-height: 1; */
     }
 
     .point {
