@@ -10,13 +10,13 @@
                     <div class=" py-20 px-0 float-left fuound col-md-12 clearfix"
                          style="border-bottom:1px solid #e3e3e3">
                         <span class="pl-0" style="color:#3F51B5" data-toggle="modal" data-target="#addRole">
-                      <i class="iconfont icon-tianjiarenyuan pr-5" style="font-size:12px"></i>
-                       <a href="javascript:0;">新增角色</a>
-                    </span>
+                            <i class="iconfont icon-tianjiarenyuan pr-5" style="font-size:12px"></i>
+                            <a href="javascript:0;">新增角色</a>
+                        </span>
                         <span class="pl-60" style="color:#3F51B5" data-toggle="modal" data-target="#addSubgroup">
-                       <i class="iconfont icon-renyuanfenzu pr-5" style="font-size:12px"></i>
-                       <a href="javascript:0;">新建分组</a> 
-                    </span>
+                            <i class="iconfont icon-renyuanfenzu pr-5" style="font-size:12px"></i>
+                            <a href="javascript:0;">新建分组</a> 
+                        </span>
                     </div>
                     <div class="clearfix py-50">
                         <section class="page-aside-section" >
@@ -95,6 +95,7 @@
                                                     <a class="dropdown-item" role="menuitem" data-toggle="modal"
                                                        data-target="#deleteRole">删除角色</a>
                                                 </div>
+                                            </div>
                                             </li>
 
                                         </ul>
@@ -401,7 +402,6 @@
 
 
                 </div>
-
             </div>
         </div>
         <div class="site-action" data-plugin="actionBtn" data-toggle="modal" data-target="#addRole">
@@ -418,7 +418,7 @@
                 <div class="modal-content">
                     <div class="modal-header">
                         <button type="button" class="close" aria-hidden="true" data-dismiss="modal">
-                            <i class="md-close" aria-hidden="true"></i>
+                            <i class="iconfont icon-guanbi" aria-hidden="true"></i>
                         </button>
                         <h4 class="modal-title">新增角色</h4>
                     </div>
@@ -457,7 +457,7 @@
                 <div class="modal-content">
                     <div class="modal-header">
                         <button type="button" class="close" aria-hidden="true" data-dismiss="modal">
-                            <i class="md-close" aria-hidden="true"></i>
+                            <i class="iconfont icon-guanbi" aria-hidden="true"></i>
                         </button>
                         <h4 class="modal-title">新增分组</h4>
                     </div>
@@ -483,7 +483,7 @@
                 <div class="modal-content">
                     <div class="modal-header">
                         <button type="button" class="close" aria-hidden="true" data-dismiss="modal">
-                            <i class="md-close" aria-hidden="true"></i>
+                            <i class="iconfont icon-guanbi" aria-hidden="true"></i>
                         </button>
                         <h4 class="modal-title">移动到分组</h4>
                     </div>
@@ -510,7 +510,7 @@
                 <div class="modal-content">
                     <div class="modal-header">
                         <button type="button" class="close" aria-hidden="true" data-dismiss="modal">
-                            <i class="md-close" aria-hidden="true"></i>
+                            <i class="iconfont icon-guanbi" aria-hidden="true"></i>
                         </button>
                         <h4 class="modal-title">修改角色</h4>
                     </div>
@@ -549,7 +549,7 @@
                 <div class="modal-content">
                     <div class="modal-header">
                         <button type="button" class="close" aria-hidden="true" data-dismiss="modal">
-                            <i class="md-close" aria-hidden="true"></i>
+                            <i class="iconfont icon-guanbi" aria-hidden="true"></i>
                         </button>
                         <h4 class="modal-title">重命名</h4>
                     </div>
@@ -575,7 +575,7 @@
                 <div class="modal-content">
                     <div class="modal-header">
                         <button type="button" class="close" aria-hidden="true" data-dismiss="modal">
-                            <i class="md-close" aria-hidden="true"></i>
+                            <i class="iconfont icon-guanbi" aria-hidden="true"></i>
                         </button>
                         <h4 class="modal-title">删除</h4>
                     </div>
@@ -600,7 +600,7 @@
                 <div class="modal-content">
                     <div class="modal-header">
                         <button type="button" class="close" aria-hidden="true" data-dismiss="modal">
-                            <i class="md-close" aria-hidden="true"></i>
+                            <i class="iconfont icon-guanbi" aria-hidden="true"></i>
                         </button>
                         <h4 class="modal-title">删除</h4>
                     </div>
@@ -625,7 +625,7 @@
                 <div class="modal-content">
                     <div class="modal-header">
                         <button type="button" class="close" aria-hidden="true" data-dismiss="modal">
-                            <i class="md-close" aria-hidden="true"></i>
+                            <i class="iconfont icon-guanbi" aria-hidden="true"></i>
                         </button>
                         <h4 class="modal-title">选择成员</h4>
                     </div>
@@ -640,6 +640,7 @@
             </div>
         </div>
     </div>
+    
 </template>
 <script>
     import fetch from '../../assets/utils/fetch.js'
@@ -762,9 +763,12 @@
                 this.jobCont = value
                 this.defaultId = 0
                 let _this = this;
+                console.log(this.jobCont)
                 fetch('get', '/console/feature/' + this.jobCont).then(function (response) {
+                     console.log(response)
                     _this.powerlist = [];
                     for (_this.powerlist in response) {
+                       
                         let selectedLength = 0;
                         response[_this.powerlist].data.forEach(item => {
                             if (item.selected) {
@@ -776,29 +780,49 @@
                                 item.selected = false
                             }
                         });
-                        if (selectedLength === response[_this.powerlist].data.length) {
+                        if (selectedLength === response[_this.powerlist].data.length && response[_this.powerlist].length>0) {
                             response[_this.powerlist].selected = true;
                         } else {
                             response[_this.powerlist].selected = false;
                         }
                     }
                     _this.powerDate = response;
+                   
                 });
-                fetch('get', '/console/scope/' + this.jobCont).then(function (response) {
-                    _this.rangeDate = response;
-                    _this.rangelist = [];
-                    for (_this.rangelist in response) {
-                        response[_this.rangelist].data1.forEach(item => {
-                            if (item.selected) {
-                                _this.picked = _this.rangeDate[_this.rangelist].id.toString() + item.id
+                this.sendData=[];
+               fetch('get','/console/scope/'+this.jobCont).then(function(response){
+                    _this.rangeDate = response; 
+                    _this.rangelist=[];
+                    let i=0;
+                    for(_this.rangelist in response){
+                        
+                        let obj={
+                            resource_id:response[_this.rangelist].id,
+                            scope:'',
+                            manage:[]
+                        }
+                        response[_this.rangelist].data1.forEach(item=>{
+                            
+                            if(item.selected){
+                              obj.scope=item.id 
+                                _this.picked= _this.rangeDate[_this.rangelist].id.toString()+item.id
                             }
                         })
-                        response[_this.rangelist].data2.forEach(v => {
-                            if (v.selected) {
-                                _this.scope.push(response[_this.rangelist].id.toString() + v.id)
+                        response[_this.rangelist].data2.forEach(v=>{
+                            
+                            if(v.selected){
+                                 obj.manage.push(v.id)
+                              
+                                _this.scope.push(response[_this.rangelist].id.toString()+v.id)
                             }
                         })
-                    }
+                        if(response[_this.rangelist].data1.length!==0||response[_this.rangelist].data2.length!==0){
+                            _this.sendData.push(obj) 
+                        }   
+                        
+                        i++;
+                    }  
+                   
                 })
 
 
@@ -809,10 +833,9 @@
                 })
             },
             rangekeep() {
-                let data = []
-                data.push(this.sendData)
-                console.log(data)
-                fetch('post', '/console/scope/' + this.jobCont, data).then(function (response) {
+                console.log('this.sendData:')
+                console.log(this.sendData)
+                fetch('post', '/console/scope/' + this.jobCont, this.sendData).then(function (response) {
                     toastr.success('保存成功');
 
                 })
@@ -1054,43 +1077,37 @@
                 this.valueId.push(i.toString() + v)
                 // console.log(this.valueId)
             },
-            radioed(params, value) {
-                let index = this.sendData.find(item => item.resource_id === value.id)
-
-                if (index) {
-                    index.scope = params.id
-                    console.log(index)
-                } else {
+             radioed(params,value){
+                let index = this.sendData.find(item=>item.resource_id===value.id)
+                if(index){
+                    index.scope = params.id  
+                    console.log(index.scope )         
+                }else{
                     let tempObj = {}
-                    Object.assign(tempObj, {resource_id: value.id})
-                    Object.assign(tempObj, {scope: params.id})
+                    Object.assign(tempObj,{resource_id:value.id})
+                    Object.assign(tempObj,{scope:params.id})
                     this.sendData.push(tempObj)
-                }
-
+                }       
             },
-            checked(params, value) {
-                let index = this.sendData.find(item => item.resource_id === value.id)
-                console.log(index)
-
-
-                if (index) {
-
-                    if (index.resource_id == value.id) {
-                        this.checkarr.push(params.id)
-                        index.manage = this.checkarr
-                    }
-                } else {
-                    let tempObj = {}
-                    if (index.resource_id == value.id) {
-                        this.checkarr.push(params.id)
-
+            checked(params,value){
+                let index = this.sendData.find(item=>item.resource_id===value.id)
+                if(index){
+                    if(index.manage.indexOf(params.id)>-1){
+                        
+                        index.manage.splice(index.manage.indexOf(params.id),1)
+                    }else{
+                        index.manage.push(params.id)
                     }
 
-                    Object.assign(tempObj, {resource_id: value.id})
-                    Object.assign(tempObj, {manage: this.checkarr})
+                    console.log(this.sendData)
+                }else{
+                    let tempObj = {}   
+                    this.checkarr.push(params.id)
+                    Object.assign(tempObj,{resource_id:value.id})
+                    Object.assign(tempObj,{manage:this.checkarr})
                     this.sendData.push(tempObj)
                 }
-                console.log(params.id, value.id)
+           
             }
         }
     }

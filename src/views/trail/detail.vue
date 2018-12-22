@@ -30,7 +30,7 @@
                     <div class="card-text clearfix example">
                         <div class="col-md-6 float-left pl-0">
                             <div class="float-left pl-0 pr-2 col-md-2">
-                                <i class="iconfont icon-laiyuanguanli" aria-hidden="true"></i>线索类型
+                                <i class="iconfont icon-laiyuanguanli pr-5" aria-hidden="true"></i>线索类型
                             </div>
                             <div class="font-weight-bold float-left">
                                 <template v-if="trailInfo.type === 1">影视线索</template>
@@ -443,7 +443,7 @@
                 <div class="modal-content">
                     <div class="modal-header">
                         <button type="button" class="close" aria-hidden="true" data-dismiss="modal">
-                            <i class="md-close" aria-hidden="true"></i>
+                            <i class="iconfont icon-guanbi" aria-hidden="true"></i>
                         </button>
                         <h4 class="modal-title">新增任务</h4>
                     </div>
@@ -521,7 +521,7 @@
                 <div class="modal-content">
                     <div class="modal-header">
                         <button type="button" class="close" aria-hidden="true" data-dismiss="modal">
-                            <i class="md-close" aria-hidden="true"></i>
+                            <i class="iconfont icon-guanbi" aria-hidden="true"></i>
                         </button>
                         <h4 class="modal-title">拒绝原因</h4>
                     </div>
