@@ -19,7 +19,7 @@
                 <div class="modal-content">
                     <div class="modal-header">
                         <button type="button" class="close" aria-hidden="true" data-dismiss="modal">
-                            <i class="md-close" aria-hidden="true"></i>
+                            <i class="iconfont icon-guanbi" aria-hidden="true"></i>
                         </button>
                         <h4 class="modal-title">新建日程</h4>
                     </div>
@@ -243,7 +243,7 @@
                 <div class="modal-content">
                     <div class="modal-header">
                         <button type="button" class="close" aria-hidden="true" data-dismiss="modal">
-                            <i class="md-close" aria-hidden="true"></i>
+                            <i class="iconfont icon-guanbi" aria-hidden="true"></i>
                         </button>
                         <h4 class="modal-title">添加日历</h4>
                     </div>
@@ -300,7 +300,7 @@
                 <div class="modal-content">
                     <div class="modal-header">
                         <button type="button" class="close" aria-hidden="true" data-dismiss="modal">
-                            <i class="md-close" aria-hidden="true"></i>
+                            <i class="iconfont icon-guanbi" aria-hidden="true"></i>
                         </button>
                         <h4 class="modal-title">添加日历</h4>
                     </div>
@@ -357,7 +357,7 @@
                 <div class="modal-content">
                     <div class="modal-header">
                         <button type="button" aria-hidden="true" data-dismiss="modal" class="close"><i
-                                aria-hidden="true" class="md-close"></i></button>
+                                aria-hidden="true" class="iconfont icon-guanbi"></i></button>
                         <h4 class="modal-title">确认删除</h4>
                     </div>
                     <div class="modal-body clearfix">

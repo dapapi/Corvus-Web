@@ -69,15 +69,15 @@
     </div>
     <!-- <div class="site-action" data-plugin="actionBtn" @click="redirectBriefAdd()">
         <button type="button" class="site-action-toggle btn-raised btn btn-success btn-floating waves-effect waves-classic">
-            <i class="front-icon md-plus animation-scale-up" aria-hidden="true"></i>
-            <i class="back-icon md-plus animation-scale-up" aria-hidden="true"></i>
+            <i class="front-icon iconfont icon-tianjia animation-scale-up" aria-hidden="true"></i>
+            <i class="back-icon iconfont icon-tianjia animation-scale-up" aria-hidden="true"></i>
         </button>
     </div> -->
     <div class="modal fade" id="selectTask" aria-hidden="true" aria-labelledby="addLabelForm" role="dialog" tabindex="-1">
         <div class="modal-dialog modal-simple">
             <div class="modal-content">
                 <div class="modal-header">
-                    <button type="button" aria-hidden="true" data-dismiss="modal" class="close"><i aria-hidden="true" class="md-close"></i></button>
+                    <button type="button" aria-hidden="true" data-dismiss="modal" class="close"><i aria-hidden="true" class="iconfont icon-guanbi"></i></button>
                     <h4 class="modal-title">任务</h4>
                 </div>
                 <div class="modal-body clearfix">

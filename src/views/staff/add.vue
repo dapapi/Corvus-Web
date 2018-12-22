@@ -175,7 +175,7 @@
                             </div>
                         </div>
 
-                        <div class="formName pd-b-15">教育背景 <i class="md-plus add-icon" @click="tableAdd('education')"></i></div>
+                        <div class="formName pd-b-15">教育背景 <i class="iconfont icon-tianjia add-icon" @click="tableAdd('education')"></i></div>
                         <div class="example table-responsive padding15">
                             <!-- <mtp-table :data-source="education" :columns="eduColumns" /> -->
                             <table class="table table-hover table-bordered">
@@ -196,7 +196,7 @@
                             </table>
                         </div>
 
-                        <div class="formName pd-b-15">培训经历<i class="md-plus add-icon" @click="tableAdd('train')"></i></div>
+                        <div class="formName pd-b-15">培训经历<i class="iconfont icon-tianjia add-icon" @click="tableAdd('train')"></i></div>
                         <div class="example table-responsive padding15">
                             <table class="table table-hover table-bordered">
                                 <thead>

@@ -13,7 +13,7 @@
                     <div class="card-text clearfix example">
                         <div class="col-md-6 float-left clearfix pl-0">
                             <div class="float-left pl-0 pr-2 col-md-2">
-                                <i class="md-plus pr-2" aria-hidden="true"></i>负责人
+                                <i class="iconfont icon-tianjia pr-2" aria-hidden="true"></i>负责人
                             </div>
                             <div class="font-weight-bold float-left" v-if="clientInfo.principal">
                                 {{ clientInfo.principal?clientInfo.principal.data.name:'' }}
@@ -23,7 +23,7 @@
                     <div class="card-text clearfix example">
                         <div class="col-md-6 float-left clearfix pl-0">
                             <div class="float-left pl-0 pr-2 col-md-2">
-                                <i class="md-plus pr-2" aria-hidden="true"></i>类型
+                                <i class="iconfont icon-tianjia pr-2" aria-hidden="true"></i>类型
                             </div>
                             <div class="font-weight-bold float-left" v-if="clientInfo.type">
                                 {{ clientTypeArr.find(item => item.value == clientInfo.type).name }}
@@ -213,8 +213,8 @@
                              data-target="#addTask">
                             <button type="button"
                                     class="site-action-toggle btn-raised btn btn-success btn-floating waves-effect waves-classic">
-                                <i class="front-icon md-plus animation-scale-up" aria-hidden="true"></i>
-                                <i class="back-icon md-plus animation-scale-up" aria-hidden="true"></i>
+                                <i class="front-icon iconfont icon-tianjia animation-scale-up" aria-hidden="true"></i>
+                                <i class="back-icon iconfont icon-tianjia animation-scale-up" aria-hidden="true"></i>
                             </button>
                         </div>
                     </div>
@@ -355,7 +355,7 @@
                                     <span class="pl-20 d-block float-left pointer-content" style="color: #b9b9b9"
                                           data-plugin="actionBtn" @click="setDelInfo(contact.id)" data-toggle="modal"
                                           data-target="#confirmFlag" typeText="删除">
-                                        <i class="md-delete" aria-hidden="true"></i>
+                                        <i class="iconfont icon-shanchu1" aria-hidden="true"></i>
                                     </span>
                                 </td>
                             </tr>
@@ -370,8 +370,8 @@
                              @click="changeEditStatus(true)">
                             <button type="button"
                                     class="site-action-toggle btn-raised btn btn-success btn-floating waves-effect waves-classic">
-                                <i class="front-icon md-plus animation-scale-up" aria-hidden="true"></i>
-                                <i class="back-icon md-plus animation-scale-up" aria-hidden="true"></i>
+                                <i class="front-icon iconfont icon-tianjia animation-scale-up" aria-hidden="true"></i>
+                                <i class="back-icon iconfont icon-tianjia animation-scale-up" aria-hidden="true"></i>
                             </button>
                         </div>
 

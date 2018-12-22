@@ -11,7 +11,7 @@
           <div class="input-search">
             <i class="input-search-icon md-search" aria-hidden="true"></i>
             <input type="text" class="form-control" name="" placeholder="输入编号、类型、申请人">
-            <button type="button" class="input-search-closemd-close" aria-label="Close"></button>
+            <button type="button" class="input-search-closeiconfont icon-guanbi" aria-label="Close"></button>
           </div>
         </div>
         <div class="col-md-12">
@@ -88,8 +88,8 @@
 
     <div class="site-action" data-plugin="actionBtn" data-toggle="modal" data-target="#addTask">
       <button type="button" class="site-action-toggle btn-raised btn btn-success btn-floating waves-effect waves-classic">
-        <i class="front-icon md-plus animation-scale-up" aria-hidden="true"></i>
-        <i class="back-icon md-plus animation-scale-up" aria-hidden="true"></i>
+        <i class="front-icon iconfont icon-tianjia animation-scale-up" aria-hidden="true"></i>
+        <i class="back-icon iconfont icon-tianjia animation-scale-up" aria-hidden="true"></i>
       </button>
     </div>
 

@@ -35,7 +35,7 @@
                                 </a>
                                 <div class="action" data-plugin="actionBtn" data-toggle="modal" data-target="#addModel" >
                                     <button type="button" class="site-action-toggle btn-raised btn  btn-floating waves-effect waves-classic">
-                                        <i class="front-icon md-plus"  aria-hidden="true"></i>
+                                        <i class="front-icon iconfont icon-tianjia"  aria-hidden="true"></i>
                                     </button>
                                 </div> 
                                 <ul class="site-menu-sub" v-show="isShow == item.id">
@@ -60,7 +60,7 @@
             <div class="modal-content">
                 <div class="modal-header" style="border:1px solid #ccc">
                     <button type="button" class="close" aria-hidden="true" data-dismiss="modal" @click="close(setp.iSactive)">
-                        <i class="md-close" aria-hidden="true"></i>
+                        <i class="iconfont icon-guanbi" aria-hidden="true"></i>
                     </button>
                     <h4 class="modal-title">创建新审批报表</h4>
                 </div>
@@ -111,7 +111,7 @@
                                                                 @change="conditionChange"></customize-linkage-selectors>
                                 </div>
                                 <div class="float-left col-md-1 pb-5">
-                                    <i class="md-close font-size-18" aria-hidden="true" style="line-height: 36px;"
+                                    <i class="iconfont icon-guanbifont-size-18" aria-hidden="true" style="line-height: 36px;"
                                         @click="delSelector('selector' + n)"></i>
                                 </div>
                                 </div>

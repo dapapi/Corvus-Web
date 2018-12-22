@@ -5,7 +5,7 @@
             <h1 class="page-title">日历</h1>
             <div class="page-header-actions" data-toggle="modal" data-target="#addCalendar"
                  @click="changeCalendarActionType('add')">
-                <i class="md-plus font-size-20" aria-hidden="true"></i>
+                <i class="iconfont icon-tianjia font-size-20" aria-hidden="true"></i>
             </div>
         </div>
 
@@ -107,7 +107,7 @@
                         <div style="order: 2">
                             <span class="pointer-content hover-content mr-4" data-toggle="modal"
                                   data-target="#addLinkage" @click="selectProjectLinkage">关联</span>
-                            <i class="md-close pointer-content" aria-hidden="true" data-dismiss="modal"></i>
+                            <i class="iconfont icon-guanbipointer-content" aria-hidden="true" data-dismiss="modal"></i>
                         </div>
                         <h5 class="modal-title">
                             <template v-if="scheduleType === 'add'">
@@ -176,14 +176,14 @@
                                     <span class="float-left">
                                         项目 - {{ allProjectsInfo.find(item => item.id == id).title }}
                                     </span>
-                                    <span class="float-right icon md-delete"
+                                    <span class="float-right icon iconfont icon-shanchu1"
                                           @click="delNewScheduleLinkage('projects', id)"></span>
                                 </div>
                                 <div class="clearfix" v-for="id in linkageSelectedIds.tasks">
                                     <span class="float-left">
                                         任务 - {{ allTasksInfo.find(item => item.id == id).title }}
                                     </span>
-                                    <span class="float-right icon md-delete"
+                                    <span class="float-right icon iconfont icon-shanchu1"
                                           @click="delNewScheduleLinkage('tasks', id)"></span>
                                 </div>
                             </div>
@@ -262,9 +262,9 @@
                             <i class="iconfont icon-bianji pr-4 font-size-16 pointer-content"
                                @click="changeScheduleType('edit')" aria-hidden="true"></i>
                             <FileUploader is-icon="true" class="float-left" @change="fileUpload"></FileUploader>
-                            <i class="md-delete pr-4 font-size-16 pointer-content" data-toggle="modal"
+                            <i class="iconfont icon-shanchu1 pr-4 font-size-16 pointer-content" data-toggle="modal"
                                data-target="#delModel" aria-hidden="true" @click="deleteToastr('schedule')"></i>
-                            <i class="md-close pointer-content" aria-hidden="true" data-dismiss="modal"></i>
+                            <i class="iconfont icon-guanbipointer-content" aria-hidden="true" data-dismiss="modal"></i>
                         </div>
                         <h5 class="modal-title">{{ scheduleData.calendar.data.title }}</h5>
                     </div>
@@ -347,7 +347,7 @@
                 <div class="modal-content">
                     <div class="modal-header">
                         <button type="button" class="close" aria-hidden="true" data-dismiss="modal">
-                            <i class="md-close" aria-hidden="true"></i>
+                            <i class="iconfont icon-guanbi" aria-hidden="true"></i>
                         </button>
                         <template v-if="calendarActionType === 'add'">
                             <h4 class="modal-title">添加日历</h4>
@@ -416,7 +416,7 @@
                 <div class="modal-content">
                     <div class="modal-header">
                         <button type="button" aria-hidden="true" data-dismiss="modal" class="close"><i
-                                aria-hidden="true" class="md-close"></i></button>
+                                aria-hidden="true" class="iconfont icon-guanbi"></i></button>
                         <h4 class="modal-title">确认删除</h4>
                     </div>
                     <div class="modal-body clearfix">
@@ -450,7 +450,7 @@
                 <div class="modal-content">
                     <div class="modal-header">
                         <button type="button" aria-hidden="true" data-dismiss="modal" class="close"><i
-                                aria-hidden="true" class="md-close"></i></button>
+                                aria-hidden="true" class="iconfont icon-guanbi"></i></button>
                         <h4 class="modal-title">批量添加成员</h4>
                     </div>
                     <div class="modal-body clearfix pt-10">
@@ -471,7 +471,7 @@
                 <div class="modal-content">
                     <div class="modal-header">
                         <button type="button" class="close" aria-hidden="true" data-dismiss="modal">
-                            <i class="md-close" aria-hidden="true"></i>
+                            <i class="iconfont icon-guanbi" aria-hidden="true"></i>
                         </button>
                         <h4 class="modal-title">关联资源</h4>
                     </div>

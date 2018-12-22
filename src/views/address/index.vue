@@ -81,21 +81,21 @@
                                 <div class="clearfix mb-20">
                                     <div class="col-md-4 float-left">
                                         <div class="float-left col-md-6">
-                                            <i class="md-plus pr-2"></i>
+                                            <i class="iconfont icon-tianjia pr-2"></i>
                                             <span class="font-weight-bold">姓名</span>
                                         </div>
                                         <div class="float-left col-md-6 pl-0">{{ personalInfo.name ? personalInfo.name : ''}}</div>
                                     </div>
                                     <div class="col-md-4 float-left">
                                         <div class="float-left col-md-6">
-                                            <i class="md-plus pr-2"></i>
+                                            <i class="iconfont icon-tianjia pr-2"></i>
                                             <span class="font-weight-bold">职位</span>
                                         </div>
                                         <div class="float-left col-md-6 pl-0">{{ personalInfo.position ? personalInfo.position : ''}}</div>
                                     </div>
                                     <div class="col-md-4 float-left">
                                         <div class="float-left col-md-6">
-                                            <i class="md-plus pr-2"></i>
+                                            <i class="iconfont icon-tianjia pr-2"></i>
                                             <span class="font-weight-bold">部门</span>
                                         </div>
                                         <div class="float-left col-md-6 pl-0">{{ personalInfo.position ? personalInfo.position : ''}}</div>
@@ -118,7 +118,7 @@
                                     </div>
                                     <div class="col-md-4 float-left">
                                         <div class="float-left col-md-6">
-                                            <i class="md-plus pr-2"></i>
+                                            <i class="iconfont icon-tianjia pr-2"></i>
                                             <span class="font-weight-bold">WeChat</span>
                                         </div>
                                         <div class="float-left col-md-6 pl-0">XXX</div>

@@ -31,7 +31,7 @@
                     <div class="card-text clearfix example">
                         <div class="col-md-6 float-left pl-0">
                             <div class="float-left pl-0 pr-2 col-md-2">
-                                <i class="md-plus pr-2" aria-hidden="true"></i>经理人
+                                <i class="iconfont icon-tianjia pr-2" aria-hidden="true"></i>经理人
                             </div>
                             <div class="font-weight-bold float-left" v-if="artistInfo.broker">
                                 <template v-for="broker in artistInfo.broker.data">
@@ -41,7 +41,7 @@
                         </div>
                         <div class="col-md-6 float-left pl-0">
                             <div class="float-left pl-0 pr-2 col-md-2">
-                                <i class="md-plus pr-2" aria-hidden="true"></i>宣传人
+                                <i class="iconfont icon-tianjia pr-2" aria-hidden="true"></i>宣传人
                             </div>
                             <div class="font-weight-bold float-left" v-if="artistInfo.publicity">
                                 <template v-for="publicity in artistInfo.publicity.data">
@@ -54,7 +54,7 @@
                     <!--<div class="card-text clearfix example">-->
                     <!--<div class="col-md-6 float-left pl-0">-->
                     <!--<div class="float-left pl-0 pr-2 col-md-2">-->
-                    <!--<i class="md-plus pr-2" aria-hidden="true"></i>艺人状态-->
+                    <!--<i class="iconfont icon-tianjia pr-2" aria-hidden="true"></i>艺人状态-->
                     <!--</div>-->
                     <!--<div class="font-weight-bold float-left">-->
                     <!--5/12-->
@@ -224,8 +224,8 @@
                                  data-target="#addTask">
                                 <button type="button"
                                         class="site-action-toggle btn-raised btn btn-success btn-floating waves-effect waves-classic">
-                                    <i class="front-icon md-plus animation-scale-up" aria-hidden="true"></i>
-                                    <i class="back-icon md-plus animation-scale-up" aria-hidden="true"></i>
+                                    <i class="front-icon iconfont icon-tianjia animation-scale-up" aria-hidden="true"></i>
+                                    <i class="back-icon iconfont icon-tianjia animation-scale-up" aria-hidden="true"></i>
                                 </button>
                             </div>
                         </div>
@@ -263,8 +263,8 @@
                                  data-target="#addWork">
                                 <button type="button"
                                         class="site-action-toggle btn-raised btn btn-success btn-floating waves-effect waves-classic">
-                                    <i class="front-icon md-plus animation-scale-up" aria-hidden="true"></i>
-                                    <i class="back-icon md-close animation-scale-up" aria-hidden="true"></i>
+                                    <i class="front-icon iconfont icon-tianjia animation-scale-up" aria-hidden="true"></i>
+                                    <i class="back-icon iconfont icon-guanbianimation-scale-up" aria-hidden="true"></i>
                                 </button>
                             </div>
 
@@ -499,7 +499,7 @@
                                                               @change="uploadAttachment"></FileUploader>
                                                 <div class="mt-5" v-for="(attach,index) in affixes" :key="index">
                                                     <span class="mr-20">{{attachmentTypeArr.find(item => item.value == attach.type).name}} - {{attach.title}}</span>
-                                                    <i class="md-delete mr-10" data-toggle="modal" data-target="#affix"
+                                                    <i class="iconfont icon-shanchu1 mr-10" data-toggle="modal" data-target="#affix"
                                                        @click="getAffixId(attach.id)"></i>
                                                     <a :href="attach.url" class="md-download"></a>
                                                 </div>
