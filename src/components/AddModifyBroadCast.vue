@@ -17,9 +17,9 @@
                 class="site-action-toggle btn-raised btn btn-success btn-floating waves-effect waves-classic"
                 @click='setNote'>
                 <i aria-hidden="true" 
-                    class="front-icon md-plus animation-scale-up"></i>
+                    class="front-icon iconfont icon-tianjia animation-scale-up"></i>
                     <i aria-hidden="true" 
-                    class="back-icon md-plus animation-scale-up"></i>
+                    class="back-icon iconfont icon-tianjia animation-scale-up"></i>
             </button>
         </div>
         <div id="addNewBroadcast" 

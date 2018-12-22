@@ -54,7 +54,7 @@
                     <!--<div class="card-text clearfix example">-->
                     <!--<div class="col-md-6 float-left pl-0">-->
                     <!--<div class="float-left pl-0 pr-2 col-md-2">-->
-                    <!--<i class="md-plus pr-2" aria-hidden="true"></i>艺人状态-->
+                    <!--<i class="iconfont icon-tianjia pr-2" aria-hidden="true"></i>艺人状态-->
                     <!--</div>-->
                     <!--<div class="font-weight-bold float-left">-->
                     <!--5/12-->
