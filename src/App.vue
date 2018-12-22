@@ -42,6 +42,9 @@
                     || this.$route.path === '/organization/management'){
                      this.isLeftMenuShow = false
                      this.isLeftManageShow = true
+                }else{
+                    this.isLeftMenuShow = true
+                    this.isLeftManageShow = false 
                 }
             },
           
