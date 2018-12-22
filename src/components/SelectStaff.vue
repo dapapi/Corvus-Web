@@ -19,7 +19,7 @@
             <div class="page-content tab-content nav-tabs-animate bg-white selector-page-content">
                 <div class="tab-pane animation-fade active" :id="'forum-team' + this._uid" role="tabpanel">
                     <div class="input-search example">
-                        <button type="submit" class="input-search-btn"><i class="icon md-search" aria-hidden="true"></i>
+                        <button type="submit" class="input-search-btn"><i class="iconfont icon-buoumaotubiao13" aria-hidden="true"></i>
                         </button>
                         <input type="text" class="form-control" name="" placeholder="搜索成员..." v-model="searchKeyWord">
                     </div>

@@ -1066,7 +1066,7 @@
                         
                 })
                 let obj={
-                    title:'制作人视屏评分-视频评分',
+                    title:'制作人视频评分-视频评分',
                     principal_id:this.principalId,
                     start_at:this.start_Time,
                     end_at:this.end_Time,

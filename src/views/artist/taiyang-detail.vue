@@ -31,7 +31,7 @@
                     <div class="card-text clearfix example">
                         <div class="col-md-6 float-left pl-0">
                             <div class="float-left pl-0 pr-2 col-md-2">
-                                <i class="md-plus pr-2" aria-hidden="true"></i>经理人
+                                <i class="iconfont icon-yonghu pr-2" aria-hidden="true"></i>经理人
                             </div>
                             <div class="font-weight-bold float-left" v-if="artistInfo.broker">
                                 <template v-for="broker in artistInfo.broker.data">
@@ -41,7 +41,7 @@
                         </div>
                         <div class="col-md-6 float-left pl-0">
                             <div class="float-left pl-0 pr-2 col-md-2">
-                                <i class="md-plus pr-2" aria-hidden="true"></i>宣传人
+                                <i class="iconfont icon-yonghu pr-2" aria-hidden="true"></i>宣传人
                             </div>
                             <div class="font-weight-bold float-left" v-if="artistInfo.publicity">
                                 <template v-for="publicity in artistInfo.publicity.data">
@@ -215,8 +215,8 @@
                                  data-target="#addTask">
                                 <button type="button"
                                         class="site-action-toggle btn-raised btn btn-success btn-floating waves-effect waves-classic">
-                                    <i class="front-icon md-plus animation-scale-up" aria-hidden="true"></i>
-                                    <i class="back-icon md-plus animation-scale-up" aria-hidden="true"></i>
+                                    <i class="front-icon iconfont icon-tianjia animation-scale-up" aria-hidden="true"></i>
+                                    <i class="back-icon iconfont icon-tianjia animation-scale-up" aria-hidden="true"></i>
                                 </button>
                             </div>
                         </div>
@@ -254,7 +254,7 @@
                                  data-target="#addWork">
                                 <button type="button"
                                         class="site-action-toggle btn-raised btn btn-success btn-floating waves-effect waves-classic">
-                                    <i class="front-icon md-plus animation-scale-up" aria-hidden="true"></i>
+                                    <i class="front-icon iconfont icon-tianjia animation-scale-up" aria-hidden="true"></i>
                                     <i class="back-icon md-close animation-scale-up" aria-hidden="true"></i>
                                 </button>
                             </div>
@@ -281,7 +281,7 @@
                                 <div class="float-right" style="padding: .715rem 0">
                                      <span class="pointer-content hover-content" data-toggle="modal"
                                            data-target="#addBill">
-                                         <i class="md-plus pr-5"></i>新增结算单</span>
+                                         <i class="iconfont icon-tianjia pr-5"></i>新增结算单</span>
                                 </div>
                             </div>
                             <table class="table table-hover"
@@ -502,7 +502,7 @@
                                                 <FileUploader v-show="isEdit" class="upload"  @change="uploadAttachment"></FileUploader>
                                                 <div class="mt-5" v-for="(attach,index) in affixes" :key="index">
                                                     <span class="mr-20">{{attachmentTypeArr.find(item => item.value == attach.type).name}} - {{attach.title}}</span>
-                                                    <i class="md-delete mr-10" data-toggle="modal" data-target="#affix" @click="getAffixId(attach.id)"></i>
+                                                    <i class="iconfont icon-iconfonttubiao mr-10" data-toggle="modal" data-target="#affix" @click="getAffixId(attach.id)"></i>
                                                     <a :href="attach.url" class="md-download"></a>
                                                 </div>
                                             </div>
@@ -807,7 +807,7 @@
                 <div class="modal-content">
                     <div class="modal-header">
                         <button type="button" class="close" aria-hidden="true" data-dismiss="modal">
-                            <i class="md-close" aria-hidden="true"></i>
+                            <i class="iconfont icon-guanbi" aria-hidden="true"></i>
                         </button>
                         <h4 class="modal-title">新增结算单</h4>
                     </div>
