@@ -13,7 +13,7 @@
                 </span>
             </span>
             <span class="team-add-all pl-2" @click="selectAllMember" v-if="multiple">
-                <i class="icon md-plus"></i>
+                <i class="icon iconfont icon-tianjia"></i>
             </span>
         </div>
 
@@ -80,7 +80,21 @@
             participantsInfo: function () {
                 if (this.type === 'change') {
                     return this.$store.state.participantsInfo
-                } else {
+                }else if(this.type ==='collect'){
+                    return this.$store.state.collectInfo
+                }else if(this.type === 'pay'){
+                    return this.$store.state.payInfo
+                }else if(this.type === 'contract'){
+                    return this.$store.state.contractInfo
+                }else if(this.type === 'division'){
+                    return this.$store.state.divisionInfo
+                }else if(this.type === 'incubation'){
+                    return this.$store.state.incubationInfo
+                }else if(this.type === 'bill'){
+                    return this.$store.state.billInfo
+                }
+                
+                else {
                     return this.$store.state.newParticipantsInfo
                 }
             },
@@ -110,7 +124,20 @@
                     let participantInfo = '';
                     if (this.type === 'change') {
                         participantInfo = this.$store.state.participantsInfo;
-                    } else {
+                    }else if(this.type ==='collect'){
+                        participantInfo = this.$store.state.collectInfo
+                    }else if(this.type === 'pay'){
+                        participantInfo = this.$store.state.payInfo
+                    }else if(this.type === 'contract'){
+                        participantInfo = this.$store.state.contractInfo
+                    }else if(this.type === 'division'){
+                        participantInfo = this.$store.state.divisionInfo
+                    }else if(this.type === 'incubation'){
+                        participantInfo = this.$store.state.incubationInfo
+                    }else if(this.type === 'bill'){
+                        participantInfo = this.$store.state.billInfo
+                    } 
+                    else {
                         participantInfo = this.$store.state.newParticipantsInfo;
                     }
                     if (!participantInfo.find(item => item.id == user.id)) {
@@ -131,7 +158,20 @@
                 let participantInfo = '';
                 if (this.type === 'change') {
                     participantInfo = this.$store.state.participantsInfo;
-                } else {
+                } else if(this.type ==='collect'){
+                    participantInfo = this.$store.state.collectInfo
+                }else if(this.type === 'pay'){
+                    participantInfo = this.$store.state.payInfo
+                }else if(this.type === 'contract'){
+                    participantInfo = this.$store.state.contractInfo
+                }else if(this.type === 'division'){
+                    participantInfo = this.$store.state.divisionInfo
+                }else if(this.type === 'incubation'){
+                    participantInfo = this.$store.state.incubationInfo
+                }else if(this.type === 'bill'){
+                    participantInfo = this.$store.state.billInfo
+                }
+                else {
                     participantInfo = this.$store.state.newParticipantsInfo;
                 }
                 for (let i = 0; i < data.users.data.length; i++) {

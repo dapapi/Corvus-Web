@@ -23,7 +23,7 @@
                     </div>
                     <div class="col-md-3 example float-left">
                         <div class="input-search">
-                            <button type="button" @click="getStaffList" class="input-search-btn"><i class="md-search" aria-hidden="true"></i>
+                            <button type="button" @click="getStaffList" class="input-search-btn"><i class="iconfont icon-buoumaotubiao13" aria-hidden="true"></i>
                             </button>
                             <input type="text" class="form-control" @keyup.enter="getStaffList" v-model="search" placeholder="请搜索姓名/手机号/职位">
                         </div>
@@ -88,8 +88,8 @@
                 <router-link to="/staff/add">
                     <button type="button"
                             class="site-action-toggle btn-raised btn btn-success btn-floating waves-effect waves-classic">
-                        <i class="front-icon md-plus animation-scale-up" aria-hidden="true"></i>
-                        <!-- <i class="back-icon md-plus animation-scale-up" aria-hidden="true"></i> -->
+                        <i class="front-icon iconfont icon-tianjia animation-scale-up" aria-hidden="true"></i>
+                        <!-- <i class="back-icon iconfont icon-tianjia animation-scale-up" aria-hidden="true"></i> -->
                     </button>
                 </router-link>
             </div>

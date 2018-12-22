@@ -5,7 +5,7 @@
             <h1 class="page-title">日历</h1>
             <div class="page-header-actions" data-toggle="modal" data-target="#addCalendar"
                  @click="changeCalendarActionType('add')">
-                <i class="md-plus font-size-20" aria-hidden="true"></i>
+                <i class="iconfont icon-tianjia font-size-20" aria-hidden="true"></i>
             </div>
         </div>
 
@@ -18,18 +18,18 @@
                     <div class="calendar-list">
                         <div>
                             <div class="calendar-title position-relative" style="line-height: 20px">
-                                <i class="md-calendar pr-5"></i>
+                                <i class="iconfont icon-richeng pr-5"></i>
                                 <span @click="displayMeetingRoom">所有日历</span>
                                 <span class="px-5 pointer-content" @click="allCalendarShow">
                                     <template v-if="showAllCalendar">
-                                        <i class="md-chevron-down"></i>
+                                        <i class="iconfont icon-xiajiantou" style="font-size:12px"></i>
                                     </template>
                                     <template v-else>
-                                        <i class="md-chevron-up"></i>
+                                        <i class="iconfont icon-xiangshangjiantou" style="font-size:12px"></i>
                                     </template>
                                 </span>
                                 <span class="float-right pointer-content" data-toggle="modal" data-target="#addMembers">
-                                    <i class="md-accounts-add"></i>
+                                    <i class="iconfont icon-tianjiarenyuan"></i>
                                 </span>
                             </div>
                             <div v-show="showAllCalendar">
@@ -64,13 +64,13 @@
                         </div>
                         <div>
                             <div class="calendar-title">
-                                <i class="md-calendar pr-5"></i>资源
+                                <i class="iconfont icon-richeng pr-5"></i>资源
                                 <span class="px-5 pointer-content" @click="allResourceShow">
                                     <template v-if="showAllResource">
-                                        <i class="md-chevron-down"></i>
+                                        <i class="iconfont icon-xiajiantou" style="font-size:12px"></i>
                                     </template>
                                     <template v-else>
-                                        <i class="md-chevron-up"></i>
+                                        <i class="iconfont icon-xiangshangjiantou" style="font-size:12px"></i>
                                     </template>
                                 </span>
                             </div>
@@ -88,11 +88,11 @@
                     </div>
                 </div>
                 <div class="float-left p-0" style="width: 80%;border-left: 1px solid #D8D8D8;">
-                    <calendar :gotoDate="selectedDate" v-show="!meetingRomeShow" @dayClick="showAddScheduleModal"
-                              :calendars="selectedCalendar" ref="calendar"
+                    <calendar :goto-date="selectedDate" v-show="!meetingRomeShow" @dayClick="showAddScheduleModal"
+                              :calendars="selectedCalendar" :meeting-rome-list="meetingRomeList" ref="calendar"
                               @scheduleClick="showScheduleModal"></calendar>
                     <MeetingRoomCalendar v-show="meetingRomeShow" :meetingRomeList="meetingRomeList" ref="meetingRoom"
-                                         @change="displayMeetingRoom"></MeetingRoomCalendar>
+                                         @change="changeToCalendar"></MeetingRoomCalendar>
                 </div>
 
             </div>
@@ -192,7 +192,7 @@
                             <div class="pt-10 mb-20 clearfix">
                                 <div class="col-md-2 text-right float-left">会议室</div>
                                 <div class="col-md-10 float-left pl-0">
-                                    <selectors :options="meetingRomeList" ref="scheduleResource"
+                                    <selectors :options="allMeetingRomeList" ref="scheduleResource"
                                                :placeholder="'请选择会议室'" @change="changeScheduleMaterial"></selectors>
                                 </div>
                             </div>
@@ -259,9 +259,9 @@
                 <div class="modal-content" v-if="scheduleData">
                     <div class="modal-header">
                         <div style="order: 2">
-                            <i class="iconfont icon-bianji pr-4 font-size-16 pointer-content" data-toggle="modal"
-                               data-target="#changeSchedule" @click="changeScheduleType('edit')" aria-hidden="true"></i>
-                            <i class="md-file pr-4 font-size-16 pointer-content" aria-hidden="true"></i>
+                            <i class="iconfont icon-bianji pr-4 font-size-16 pointer-content"
+                               @click="changeScheduleType('edit')" aria-hidden="true"></i>
+                            <FileUploader is-icon="true" class="float-left" @change="fileUpload"></FileUploader>
                             <i class="md-delete pr-4 font-size-16 pointer-content" data-toggle="modal"
                                data-target="#delModel" aria-hidden="true" @click="deleteToastr('schedule')"></i>
                             <i class="md-close pointer-content" aria-hidden="true" data-dismiss="modal"></i>
@@ -275,8 +275,8 @@
                         <div class="example">
                             <div class="">
                                 <div class="col-md-3 float-left px-0">
-                                    <div class="">{{ (scheduleData.start_at.split(' ')[0]).split('-')[1] }}月{{
-                                        (scheduleData.start_at.split(' ')[0]).split('-')[2] }}日
+                                    <div class="">{{ (scheduleData.start_at.split(' ')[0]).split('-')[1] }}月
+                                        {{ (scheduleData.start_at.split(' ')[0]).split('-')[2] }}日
                                         {{ scheduleData.start_at|getWeek(scheduleData.start_at) }}
                                     </div>
                                     <div class="big-time">{{ (scheduleData.start_at.split(' ')[1]).slice(0,5) }}</div>
@@ -286,8 +286,8 @@
                                     <div class="big-time text-center"> -</div>
                                 </div>
                                 <div class="col-md-3 float-left px-0">
-                                    <div class="">{{ (scheduleData.end_at.split(' ')[0]).split('-')[1] }}月{{
-                                        (scheduleData.end_at.split(' ')[0]).split('-')[2] }}日
+                                    <div class="">{{ (scheduleData.end_at.split(' ')[0]).split('-')[1] }}月
+                                        {{ (scheduleData.end_at.split(' ')[0]).split('-')[2] }}日
                                         {{ scheduleData.end_at|getWeek(scheduleData.end_at) }}
                                     </div>
                                     <div class="big-time">{{ (scheduleData.end_at.split(' ')[1]).slice(0,5) }}</div>
@@ -325,19 +325,16 @@
                             <div class="col-md-1 px-0 float-left">备注</div>
                             <div class="col-md-10 float-left">{{ scheduleData.desc }}</div>
                         </div>
-                        <div class="example">
-                            <div>附件</div>
-                            <div class="">
-                                <div class="col-md-3 float-left text-center">
-                                    <div><i class="md-file" style="font-size: 36px"></i></div>
-                                    <div>泰洋川禾简介.docx</div>
-                                </div>
-                                <div class="col-md-3 float-left text-center">
-                                    <div><i class="md-file" style="font-size: 36px"></i></div>
-                                    <div>泰洋川禾泰洋川禾简介.docx</div>
-                                </div>
-                            </div>
-                        </div>
+                        <!--<div class="example" v-if="scheduleData.affixes.data.length > 0">-->
+                        <!--<div>附件</div>-->
+                        <!--<div>-->
+                        <!--<div class="col-md-3 float-left text-center"-->
+                        <!--v-for="affix in scheduleData.affixes.data">-->
+                        <!--<div><i class="md-file" style="font-size: 36px"></i></div>-->
+                        <!--<div>{{ affix.title }}</div>-->
+                        <!--</div>-->
+                        <!--</div>-->
+                        <!--</div>-->
                     </div>
                 </div>
             </div>
@@ -497,7 +494,7 @@
                                     <div class="tab-pane active" id="projectsPane" role="tabpanel">
                                         <div class="input-search mb-20" style="width: 70%">
                                             <button type="submit" class="input-search-btn">
-                                                <i class="md-search" aria-hidden="true"></i>
+                                                <i class="iconfont icon-buoumaotubiao13" aria-hidden="true"></i>
                                             </button>
                                             <input type="text" class="form-control" name="" placeholder="搜索关键字..."
                                                    v-model="searchKeyWord">
@@ -517,7 +514,7 @@
                                     <div class="tab-pane" id="tasksPane" role="tabpanel">
                                         <div class="input-search mb-20" style="width: 70%">
                                             <button type="submit" class="input-search-btn">
-                                                <i class="md-search" aria-hidden="true"></i>
+                                                <i class="iconfont icon-buoumaotubiao13" aria-hidden="true"></i>
                                             </button>
                                             <input type="text" class="form-control" name="" placeholder="搜索关键字..."
                                                    v-model="searchKeyWord">
@@ -598,6 +595,7 @@
                 isAllday: false,
                 schedulePrivacy: false,
                 meetingRomeList: '',
+                allMeetingRomeList: '',
                 delType: '',
                 scheduleType: 'add',
                 scheduleMaterialId: '',
@@ -616,6 +614,7 @@
         mounted() {
             this.getStars();
             this.getCalendarList();
+            this.getResources();
             let _this = this;
             $('#addCalendar').on('hidden.bs.modal', function () {
                 _this.$store.dispatch('changeParticipantsInfo', {data: []});
@@ -690,11 +689,17 @@
             },
 
             getResources(type) {
-                let data = {
-                    type: type
-                };
+                let data = {};
+                if (type) {
+                    data = {
+                        type: type
+                    };
+                }
                 fetch('get', '/materials/all', data).then(response => {
-                    this.meetingRomeList = response.data;
+                    this.allMeetingRomeList = response.data;
+                    if (type) {
+                        this.meetingRomeList = response.data;
+                    }
                 })
             },
 
@@ -761,6 +766,26 @@
             getAllTasks: function () {
                 fetch('get', '/tasksAll').then(response => {
                     this.allTasksInfo = response.data
+                })
+            },
+
+            fileUpload: function (url, name, size) {
+                console.log(url);
+                console.log(name)
+                let data = {
+                    title: name,
+                    url: url,
+                    size: size,
+                    type: 1
+                };
+                fetch('post', '/schedules/' + this.scheduleData.id + '/affix', data).then(response => {
+                    toastr.success('上传成功');
+                    if (this.scheduleData.affixes) {
+                        this.scheduleData.affixes.data.push(response.data)
+                    } else {
+                        this.scheduleData.affixes = {data: []};
+                        this.scheduleData.affixes.data.push(response.data)
+                    }
                 })
             },
 
@@ -851,6 +876,9 @@
             changeScheduleType: function (type) {
                 this.scheduleType = type;
                 $('#checkSchedule').modal('hide');
+                setTimeout(function () {
+                    $('#changeSchedule').modal('show');
+                }, 400);
                 if (type === 'edit') {
                     this.scheduleName = this.scheduleData.title;
                     this.$refs.calendarSelector.setValue(this.scheduleData.calendar.data.id);
@@ -1156,7 +1184,12 @@
             },
 
             displayMeetingRoom: function () {
-                this.meetingRomeShow = false
+                this.meetingRomeShow = false;
+                this.meetingRomeList = '';
+            },
+
+            changeToCalendar: function () {
+                this.meetingRomeShow = false;
             },
 
             allCalendarShow: function () {

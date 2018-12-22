@@ -8,7 +8,7 @@
     import fetch from '../assets/utils/fetch.js'
 
     export default {
-        props: ['calendars', 'gotoDate'],
+        props: ['calendars', 'gotoDate', 'meetingRomeList'],
         data() {
             return {
                 startDate: '', //获取开始时间
@@ -29,6 +29,9 @@
             calendars: function () {
                 this.refresh();
             },
+            meetingRomeList: function () {
+                this.refresh();
+            }
         },
         mounted() {
             let self = this;
@@ -49,6 +52,7 @@
                 dayNames: ["星期日", "星期一", "星期二", "星期三", "星期四", "星期五", "星期六"],
                 dayNamesShort: ["周日", "周一", "周二", "周三", "周四", "周五", "周六"],
                 allDayText: '全天',
+                slotLabelFormat: 'H(:mm)a',
                 buttonText: {
                     today: '今天',
                     month: '月',
@@ -73,11 +77,19 @@
                         return
                     }
                     let data = {
-                        calendar_ids: self.calendars,
                         start_date: self.startDate,
                         end_date: self.endDate,
                         include: 'calendar,participants,creator,material'
                     };
+                    if (self.meetingRomeList) {
+                        let materialsIds = [];
+                        for (let i = 0; i < self.meetingRomeList.length; i++) {
+                            materialsIds.push(self.meetingRomeList[i].id)
+                        }
+                        data.material_ids = materialsIds
+                    } else {
+                        data.calendar_ids = self.calendars
+                    }
                     fetch('get', '/schedules', data).then(response => {
                         self.allScheduleInfo = response.data;
                         let events = [];

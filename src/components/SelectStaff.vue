@@ -19,7 +19,7 @@
             <div class="page-content tab-content nav-tabs-animate bg-white selector-page-content">
                 <div class="tab-pane animation-fade active" :id="'forum-team' + this._uid" role="tabpanel">
                     <div class="input-search example">
-                        <button type="submit" class="input-search-btn"><i class="icon md-search" aria-hidden="true"></i>
+                        <button type="submit" class="input-search-btn"><i class="iconfont icon-buoumaotubiao13" aria-hidden="true"></i>
                         </button>
                         <input type="text" class="form-control" name="" placeholder="搜索成员..." v-model="searchKeyWord">
                     </div>
@@ -35,7 +35,7 @@
                             泰洋系（{{ normalUsers.length }}人)
                             </span>
                             <span class="team-add-all pl-2" @click="selectAllMember" v-if="multiple">
-                                <i class="icon md-plus"></i>
+                                <i class="icon iconfont icon-tianjia"></i>
                             </span>
                         </div>
                         <div v-show="teamShow">
@@ -107,7 +107,21 @@
             participantsInfo: function () {
                 if (this.type === 'change') {
                     return this.$store.state.participantsInfo
-                } else {
+                } else if(this.type ==='collect'){
+                    return this.$store.state.collectInfo
+                }else if(this.type === 'pay'){
+                    return this.$store.state.payInfo
+                }else if(this.type === 'contract'){
+                    return this.$store.state.contractInfo
+                }else if(this.type === 'division'){
+                    return this.$store.state.divisionInfo
+                }else if(this.type === 'incubation'){
+                    return this.$store.state.incubationInfo
+                }else if(this.type === 'bill'){
+                    return this.$store.state.billInfo
+                }
+                
+                else {
                     return this.$store.state.newParticipantsInfo
                 }
             }
@@ -131,7 +145,21 @@
                 let participantInfo = '';
                 if (this.type === 'change') {
                     participantInfo = this.$store.state.participantsInfo;
-                } else {
+                } else if(this.type ==='collect'){
+                    participantInfo = this.$store.state.collectInfo
+                }else if(this.type === 'pay'){
+                    participantInfo = this.$store.state.payInfo
+                }else if(this.type === 'contract'){
+                    participantInfo = this.$store.state.contractInfo
+                }else if(this.type === 'division'){
+                    participantInfo = this.$store.state.divisionInfo
+                }else if(this.type === 'incubation'){
+                    participantInfo = this.$store.state.incubationInfo
+                }else if(this.type === 'bill'){
+                    participantInfo = this.$store.state.billInfo
+                }
+                
+                else {
                     participantInfo = this.$store.state.newParticipantsInfo;
                 }
                 for (let i = 0; i < this.normalUsers.length; i++) {
@@ -152,7 +180,20 @@
                     let participantInfo = '';
                     if (this.type === 'change') {
                         participantInfo = this.$store.state.participantsInfo;
-                    } else {
+                    } else if(this.type ==='collect'){
+                        participantInfo = this.$store.state.collectInfo
+                    }else if(this.type === 'pay'){
+                        participantInfo = this.$store.state.payInfo
+                    }else if(this.type === 'contract'){
+                        participantInfo = this.$store.state.contractInfo
+                    }else if(this.type === 'division'){
+                        participantInfo = this.$store.state.divisionInfo
+                    }else if(this.type === 'incubation'){
+                        participantInfo = this.$store.state.incubationInfo
+                    }else if(this.type === 'bill'){
+                        participantInfo = this.$store.state.billInfo
+                    }
+                    else {
                         participantInfo = this.$store.state.newParticipantsInfo;
                     }
 

@@ -8,7 +8,7 @@
             <div class="panel mb-0 pb-10">
                 <div class="col-md-4  p-20">
                     <div class="input-search">
-                        <button type="button" class="input-search-btn"><i class="md-search" aria-hidden="true"></i>
+                        <button type="button" class="input-search-btn"><i class="iconfont icon-buoumaotubiao13" aria-hidden="true"></i>
                         </button>
                         <input type="text" class="form-control" placeholder="搜索成员、简报类型" v-model="search" @blur="getlist()">
                     </div>
@@ -68,8 +68,8 @@
         </div>
         <div class="site-action" data-plugin="actionBtn" @click="redirectBriefAdd()">
             <button type="button"  class="site-action-toggle btn-raised btn btn-success btn-floating waves-effect waves-classic">
-                <i class="front-icon md-plus animation-scale-up" aria-hidden="true"></i>
-                <i class="back-icon md-plus animation-scale-up" aria-hidden="true"></i>
+                <i class="front-icon iconfont icon-tianjia animation-scale-up" aria-hidden="true"></i>
+                <i class="back-icon iconfont icon-tianjia animation-scale-up" aria-hidden="true"></i>
             </button>
         </div>
         <submit-report :templateId="temId" :templateStatus="status" @refresh="getlist"></submit-report>

@@ -25,8 +25,8 @@
                             <ul class="menu pl-0 m-0 pb-10" style="width:260px;">
                                 <li class="site-menu-item has-sub" v-for="(item,index) in job" :key="index" style="width:260px;">
                                     <a href="javascript:void(0) " class="p-5" @click="clickdefault">
-                                        <i v-show="conceal" class="md-caret-down showList font-size:25px pr-10"></i>
-                                        <i v-show="!conceal" class="md-caret-right showList font-size:25px pr-10"></i>
+                                        <i v-show="conceal" class="iconfont icon-plus-select-down showList font-size:25px pr-10"></i>
+                                        <i v-show="!conceal" class="iconfont icon-yousanjiao showList font-size:25px pr-10"></i>
                                         <i class="iconfont icon-chengyuannew pr-10" style="vertical-align: middle;"></i>
                                         <span class="site-menu-title">{{item.name}}</span>
                                     </a>
@@ -47,8 +47,8 @@
                                 <li class="site-menu-item has-sub  pb-10" v-for="(item,index) in groupingDate"
                                     :key="index" style="width:260px;">
                                     <a href="javascript:void(0) " class="p-5" @click="switchMenu(item.id)">
-                                        <i v-show="visible" class="md-caret-down showList font-size:25px pr-10"></i>
-                                        <i v-show="!visible" class="md-caret-right showList font-size:25px pr-10"></i>
+                                        <i v-show="visible" class="iconfont icon-plus-select-down showList font-size:25px pr-10"></i>
+                                        <i v-show="!visible" class="iconfont icon-yousanjiao  showList font-size:25px pr-10"></i>
                                         <i class="iconfont icon-chengyuannew pr-10" style="vertical-align: middle;"></i>
                                         <span class="site-menu-title">{{item.name}}</span>
                                     </a>
@@ -407,8 +407,8 @@
         <div class="site-action" data-plugin="actionBtn" data-toggle="modal" data-target="#addRole">
             <button type="button"
                     class="site-action-toggle btn-raised btn btn-success btn-floating waves-effect waves-classic">
-                <i class="front-icon md-plus animation-scale-up" aria-hidden="true"></i>
-                <i class="back-icon md-plus animation-scale-up" aria-hidden="true"></i>
+                <i class="front-icon iconfont icon-tianjia animation-scale-up" aria-hidden="true"></i>
+                <i class="back-icon iconfont icon-tianjia animation-scale-up" aria-hidden="true"></i>
             </button>
         </div>
         <!--新增角色 -->
@@ -763,9 +763,12 @@
                 this.jobCont = value
                 this.defaultId = 0
                 let _this = this;
+                console.log(this.jobCont)
                 fetch('get', '/console/feature/' + this.jobCont).then(function (response) {
+                     console.log(response)
                     _this.powerlist = [];
                     for (_this.powerlist in response) {
+                       
                         let selectedLength = 0;
                         response[_this.powerlist].data.forEach(item => {
                             if (item.selected) {
@@ -777,13 +780,14 @@
                                 item.selected = false
                             }
                         });
-                        if (selectedLength === response[_this.powerlist].data.length) {
+                        if (selectedLength === response[_this.powerlist].data.length && response[_this.powerlist].length>0) {
                             response[_this.powerlist].selected = true;
                         } else {
                             response[_this.powerlist].selected = false;
                         }
                     }
                     _this.powerDate = response;
+                   
                 });
                 this.sendData=[];
                fetch('get','/console/scope/'+this.jobCont).then(function(response){
@@ -818,7 +822,7 @@
                         
                         i++;
                     }  
-                    console.log(_this.sendData) 
+                   
                 })
 
 
