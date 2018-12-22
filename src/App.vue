@@ -188,6 +188,10 @@
     .edit-height {
         height: 57px;
     }
+    .label-name {
+        display: flex;
+        align-items: center;
+    }
 
     *::-webkit-scrollbar {
         width: 6px;

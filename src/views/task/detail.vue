@@ -341,7 +341,7 @@
                                 <div class="col-md-1 float-left text-right pl-0">视频链接</div>
                                 <div class="col-md-11 float-left font-weight-bold">
                                     <router-link :to="questionInfo.production ? questionInfo.production.data[0].link : ''">
-                                        <div class="edit-wrap" style="color: #3298DC; cursor: pointer;">
+                                        <div class="edit-wrap" style="color: #3298DC; cursor: pointer; width: 100%;">
                                             {{ questionInfo.production ? questionInfo.production.data[0].link : '' }}
                                         </div>
                                     </router-link>
@@ -1067,8 +1067,10 @@
             // 根据任务id获取是否有问卷
             getQuestionId () {
                 fetch('get', `/bloggers/${this.taskId}/taskblogger`).then(res => {
+                    console.log(res)
                     if (res.data) {
                         this.questionId = res.data.id
+                        console.log(this.questionId)
                         this.getQuestionData(res.data.id)
                     }
                 })
