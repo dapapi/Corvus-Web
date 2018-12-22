@@ -187,8 +187,8 @@
                                  data-target="#addTask">
                                 <button type="button"
                                         class="site-action-toggle btn-raised btn btn-success btn-floating waves-effect waves-classic">
-                                    <i class="front-icon md-plus animation-scale-up" aria-hidden="true"></i>
-                                    <i class="back-icon md-plus animation-scale-up" aria-hidden="true"></i>
+                                    <i class="front-icon iconfont icon-tianjia animation-scale-up" aria-hidden="true"></i>
+                                    <i class="back-icon iconfont icon-tianjia animation-scale-up" aria-hidden="true"></i>
                                 </button>
                             </div>
                         </div>
@@ -232,8 +232,8 @@
                                  data-target="#addWork">
                                 <button type="button"
                                         class="site-action-toggle btn-raised btn btn-success btn-floating waves-effect waves-classic">
-                                    <i class="front-icon md-plus animation-scale-up" aria-hidden="true"></i>
-                                    <i class="back-icon md-plus animation-scale-up" aria-hidden="true"></i>
+                                    <i class="front-icon iconfont icon-tianjia animation-scale-up" aria-hidden="true"></i>
+                                    <i class="back-icon iconfont icon-tianjia animation-scale-up" aria-hidden="true"></i>
                                 </button>
                             </div>
                         </div>
@@ -273,6 +273,7 @@
                                 </tbody>
                               
                             </table>
+                            
                         </div>
                         <div class="tab-pane animation-fade fixed-button-father" id="forum-artist-base"
                              role="tabpanel">
@@ -896,11 +897,7 @@
                 fetch('get','/bloggers/index/production?blogger_id='+this.artistId+'').then(function(response){
                     _this.worksData=response.data
                 });
-                //负责人
-                fetch('get','/users/').then(function(response){
-                    
-                    _this.Users=response.data;
-                })
+                
                 //任务状态跑组。试戏
                 fetch('get','/task_types').then(function(response){
                     _this.tasksType=response.data;
@@ -1102,11 +1099,13 @@
                         start_hour="0"+start_hour;
                     }
                     let start_minute=time.getMinutes();
+                    console.log(start_minute)
                     end_minute=(59-start_minute)*60*1000
                     if(start_minute<10){
-                        start_minute="0"+start_minute;
+                        start_minute=start_minute;
                     }
                     let start_second=time.getSeconds();
+                    
                     end_second=(60-start_second)*1000
                     if(start_minute<10){
                         start_minute="0"+start_minute;
@@ -1255,8 +1254,26 @@
              this.$router.push({path: '/projects/' + id}) 
             },
             Jump(value){
-                console.log(value)
-                window.open(value)
+              let price = value;
+              let str=/[a-zA-Z0-9][-a-zA-Z0-9]{0,62}(\.[a-zA-Z0-9][-a-zA-Z0-9]{0,62})+\.?///网址是否合法检测
+              let regex = /(https?:\/\/)?(\w+\.?)+(\/[a-zA-Z0-9\?%=_\-\+\/]+)?/gi//http,https有无检测
+              var re=new RegExp(str); 
+                
+                if (!re.test(value)) { 
+                     alert('您的网址不正确')
+                }else{
+                   value = value.replace(regex, function (match, capture) {
+                    if (capture) {
+                        console.log(price)
+                         window.open(price)
+                    }
+                    else {
+                         window.open('http://' + match)
+                    }
+                   })
+                  
+                } 
+                
             }
         }
     }

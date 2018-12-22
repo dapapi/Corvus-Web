@@ -5,7 +5,7 @@
                  style="position: relative;background-color: #3f51b5;z-index: 2">
                 <div class="icon-wrap pl-20" >
                     <label for="console-model" >
-                        <img src="https://res.papitube.com/corvus/images/taiyang-icon.png" alt="" style="border-radius:5px">
+                        <img src="https://res.papitube.com/corvus/images/taiyang-icon.png" alt="" style="border-radius:5px" @click="back">
                     </label>
                 </div>
             </div>
@@ -83,6 +83,10 @@
             }
         },
         methods: {
+            back(){
+                 this.$router.push({path: '/my/message'})
+                location.reload() 
+            }
         }
     }
 </script>

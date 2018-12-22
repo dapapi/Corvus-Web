@@ -36,8 +36,8 @@
               type="button"
               class="site-action-toggle btn-raised btn btn-success btn-floating waves-effect waves-classic"
             >
-              <i class="front-icon md-plus animation-scale-up" aria-hidden="true"></i>
-              <i class="back-icon md-plus animation-scale-up" aria-hidden="true"></i>
+              <i class="front-icon iconfont icon-tianjia animation-scale-up" aria-hidden="true"></i>
+              <i class="back-icon iconfont icon-tianjia animation-scale-up" aria-hidden="true"></i>
             </button>
           </div>
 

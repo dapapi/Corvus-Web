@@ -1137,7 +1137,7 @@
                                                 @click="selectResource('projects', project.id)">{{ project.title }}
                                                 <span class="float-right"
                                                       v-show="linkageSelectedIds.projects.indexOf(project.id) > -1">
-                                                    <i class="md-check"></i>
+                                                    <i class="iconfont icon-queren-zhengqu"></i>
                                                 </span>
                                             </li>
                                         </ul>
@@ -1157,7 +1157,7 @@
                                                 @click="selectResource('tasks', task.id)">{{ task.title }}
                                                 <span class="float-right"
                                                       v-show="linkageSelectedIds.tasks.indexOf(task.id) > -1">
-                                                    <i class="md-check"></i>
+                                                    <i class="iconfont icon-queren-zhengque"></i>
                                                 </span>
                                             </li>
                                         </ul>
