@@ -240,6 +240,7 @@ export default {
                 toastr.success("调岗成功");
                 $("#move-department").modal("hide");
                 this.getDepartment();
+                this.getStaffList()
             });
         }
     }
