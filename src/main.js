@@ -58,11 +58,13 @@ import Department from './components/Department.vue'
 import AddClientType from './components/AddClientType.vue'
 import DocPreview from '@/components/DocPreview.vue'
 import ToolTips from '@/components/ToolTips.vue'
+import ApprovalGoModal from '@/components/ForApproval/ApprovalGoModal.vue'
 
 
 import DepartmentPicker from '@/components/DepartmentPicker'
 
 Vue.config.productionTip = false;
+Vue.component('ApprovalGoModal', ApprovalGoModal);
 
 Vue.component('AddMember', AddMember);
 Vue.component('BuildProject', BuildProject);

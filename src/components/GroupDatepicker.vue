@@ -12,12 +12,15 @@
 </template>
 <script>
     export default {
-        props: ['placeholder'],
+        props: ['placeholder','default'],
         data() {
-            return {}
+            return {
+                timeGroup:[],
+            }
         },
         mounted() {
-
+            this.defaultDataHandler()
+            this.setValue(this.timeGroup[0],this.timeGroup[1])
             let self = this;
 
             $(this.$el).datepicker({
@@ -29,6 +32,17 @@
 
         },
         methods: {
+            defaultDataHandler(){
+                if(this.default){
+                    let timeGroupA = this.default.values.data.value.split('|')
+                    this.timeGroup = timeGroupA.map((params) => {
+                        let tempGroup = params.split('-')
+                        tempGroup.push(tempGroup.shift())
+                        let finalGroup = tempGroup.join('/')
+                        return finalGroup
+                        })
+                }
+            },
             setValue(start, end) {
                 $('#start').datepicker('update', start);
                 $('#end').datepicker('update', end);
