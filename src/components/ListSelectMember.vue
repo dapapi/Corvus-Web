@@ -20,7 +20,7 @@
                         </a>
                         <span class="pl-1">{{ item.name }}</span>
                         <span class="float-right" @click="delMember(item.id)">
-                            <i class="icon md-close"></i>
+                            <i class="icon iconfont icon-guanbi"></i>
                         </span>
                     </li>
                 </ul>

@@ -22,7 +22,7 @@
                 <div class="card-block" v-if="artistInfo">
                     <h4 class="card-title">{{ artistInfo.nickname }}</h4>
                     <div class="card-text clearfix example">
-                        <div class="col-md-6 float-left" v-if="totalData.publicity">
+                        <div class="col-md-6 float-left pl-0" v-if="totalData.publicity">
                             <div class="float-left pl-0 pr-2 col-md-2 pt-10">
                                 <i class="iconfont icon-yonghu"></i>
                                 制作人
@@ -35,7 +35,7 @@
                     </div>
                 </div>
                 <div class="clearfix">
-                    <div class="col-md-6 float-left pl-0 mb-20" style="border-right: 1px solid #eee">
+                    <div class="col-md-6 float-left pl-0 mb-20" style="border-right: 1px solid #eee" v-if="tasksInfo.length>0">
                         <div class="col-md-6"><i class="iconfont icon-iconset0399"></i> 任务{{taskNum}}</div>
                         <div class="clearfix example" v-for="(task,index) in tasksInfo" :key="index">
                             <div class="col-md-3 float-left">{{task.title}}</div>
@@ -49,7 +49,7 @@
                             </div>
                         </div>
                     </div>
-                    <div class="col-md-6 float-left pl-0 mb-20">
+                    <div class="col-md-6 float-left pl-0 mb-20" v-if="ProjectsInfo.length>0">
                         <div class="col-md-6"><i class="iconfont icon-ego-box"></i>项目</div>
                         <div class="clearfix example" v-for="(item,index) in ProjectsInfo" :key="index">
                             <div class="col-md-3 float-left">{{item.title}}</div>
@@ -78,7 +78,7 @@
                                aria-controls="forum-present"
                                aria-expanded="false" role="tab">项目</a>
                         </li>
-                        <li class="nav-item" role="presentation">
+                        <li class="nav-item" role="presentation" >
                             <a class="nav-link" data-toggle="tab" href="#forum-artist-tasks"
                                aria-controls="forum-present"
                                aria-expanded="false" role="tab">
@@ -196,8 +196,10 @@
                                  data-target="#addTask">
                                 <button type="button"
                                         class="site-action-toggle btn-raised btn btn-success btn-floating waves-effect waves-classic">
-                                    <i class="front-icon iconfont icon-tianjia animation-scale-up" aria-hidden="true"></i>
-                                    <i class="back-icon iconfont icon-tianjia animation-scale-up" aria-hidden="true"></i>
+                                    <i class="front-icon iconfont icon-tianjia animation-scale-up"
+                                       aria-hidden="true"></i>
+                                    <i class="back-icon iconfont icon-tianjia animation-scale-up"
+                                       aria-hidden="true"></i>
                                 </button>
                             </div>
                         </div>
@@ -242,8 +244,11 @@
                                  data-target="#addWork">
                                 <button type="button"
                                         class="site-action-toggle btn-raised btn btn-success btn-floating waves-effect waves-classic">
-                                    <i class="front-icon iconfont icon-tianjia animation-scale-up" aria-hidden="true"></i>
-                                    <i class="back-icon iconfont icon-tianjia animation-scale-up" aria-hidden="true"></i>
+                                    <i class="front-icon iconfont icon-tianjia animation-scale-up"
+                                       aria-hidden="true"></i>
+                                    <i class="back-icon iconfont icon-tianjia animation-scale-up"
+                                       aria-hidden="true"></i>
+                                    
                                 </button>
                             </div>
                         </div>
@@ -728,17 +733,16 @@
                 isEdit: false,
                 isStatrtEdit: true,
                 papiCommunicationStatusArr: config.papiCommunicationStatusArr,
-                updateNickname: '',
-                updateType: '',
-                updateSign_contract_other: '',
-                totalData: '',
-                worksData: '',
-                advertisingType: '',
-                Person_id: '',
-                Users: '',
-                tasksType: '',
-                tasksData: '',
-                artistTypeArr: '',
+                updateNickname:'',
+                updateType:'',
+                updateSign_contract_other:'',
+                totalData:'',
+                worksData:'',
+                advertisingType:'',
+                Person_id:'',
+                tasksType:'',
+                tasksData:'',
+                artistTypeArr:'',
                 trueOrFalse: config.trueOrFalse,
                 artistSocialPlatform: config.artistSocialPlatform,
                 updateStar_weibo_infos: {},//修改微博
@@ -965,10 +969,7 @@
                 })
             },
 
-            getArtistWorks: function () {
-
-            },
-
+         
             addPrivacy: function () {
                 $('#addPrivacy').modal('hide')
                 this.$store.state.collectInfo = []
@@ -1111,16 +1112,17 @@
                     _this.getArtist()
 
                 })
-                let obj = {
-                    title: '制作人视屏评分-视频评分',
-                    principal_id: this.principalId,
-                    start_at: this.start_Time,
-                    end_at: this.end_Time,
-                    participant_ids: this.principalIds,
-                    resource_type: 1,
-                    resourceable_id: this.artistId,
-                    desc: '这是一个评分问卷任务',//默认
-                    type: 1609922710//评分问卷
+               
+                let obj={
+                    title:'制作人视频评分-视频评分',
+                    principal_id:this.principalId,
+                    start_at:this.start_Time,
+                    end_at:this.end_Time,
+                    participant_ids:this.principalIds,
+                    resource_type:1,
+                    resourceable_id:this.artistId,
+                    desc:'这是一个评分问卷任务',//默认
+                    type:1609922710//评分问卷
                 }
                 fetch('post', '/tasks', obj
                 ).then(function (response) {
@@ -1149,11 +1151,13 @@
                     start_hour = "0" + start_hour;
                 }
                 let start_minute = time.getMinutes();
+                console.log(start_minute)
                 end_minute = (59 - start_minute) * 60 * 1000
                 if (start_minute < 10) {
-                    start_minute = "0" + start_minute;
+                    start_minute = start_minute;
                 }
                 let start_second = time.getSeconds();
+
                 end_second = (60 - start_second) * 1000
                 if (start_minute < 10) {
                     start_minute = "0" + start_minute;
@@ -1176,8 +1180,7 @@
                 let m = end.getMinutes() + ':';
                 let s = end.getSeconds();
                 this.end_Time = Y + M + D + h + m + s
-            }
-            ,
+            },
             //添加任务
             addTask: function () {
                 let _this = this;
@@ -1318,15 +1321,30 @@
             taskdetail(id) {
                 console.log(id)
                 this.$router.push({path: '/tasks/' + id})
-            }
-            ,
+            },
             projectdetil(id) {
                 this.$router.push({path: '/projects/' + id})
-            }
-            ,
+            },
             Jump(value) {
-                console.log(value)
-                window.open(value)
+                let price = value;
+                let str = /[a-zA-Z0-9][-a-zA-Z0-9]{0,62}(\.[a-zA-Z0-9][-a-zA-Z0-9]{0,62})+\.?///网址是否合法检测
+                let regex = /(https?:\/\/)?(\w+\.?)+(\/[a-zA-Z0-9\?%=_\-\+\/]+)?/gi//http,https有无检测
+                var re = new RegExp(str);
+
+                if (!re.test(value)) {
+                    alert('您的网址不正确')
+                } else {
+                    value = value.replace(regex, function (match, capture) {
+                        if (capture) {
+                            console.log(price)
+                            window.open(price)
+                        }
+                        else {
+                            window.open('http://' + match)
+                        }
+                    })
+
+                }
             }
         }
     }

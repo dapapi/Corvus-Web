@@ -25,7 +25,7 @@
             <div class="modal-dialog modal-simple">
                 <div class="modal-content">
                     <div class="modal-header">
-                        <button type="button" aria-hidden="true" data-dismiss="modal" class="close"><i aria-hidden="true" class="md-close"></i></button>
+                        <button type="button" aria-hidden="true" data-dismiss="modal" class="close"><i aria-hidden="true" class="iconfont icon-guanbi"></i></button>
                         <h4 class="modal-title">
                             <template v-if="typeCheck == 1">请假申请</template>
                             <template v-else-if="typeCheck ==2">加班申请</template>
@@ -263,8 +263,8 @@ export default {
         },
         add:function(){
             let _this = this
-            this.addData.start_at = `${this.startDate} ${this.startTime}`
-            this.addData.end_at = `${this.endDate} ${this.endTime}`
+            this.addData.start_at = `${this.startDate} ${this.startTime}:00`
+            this.addData.end_at = `${this.endDate} ${this.endTime}:00`
             let approval = []
             let notification = []
             for (let i = 0; i < this.$store.state.participantsInfo.length; i++) {

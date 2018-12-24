@@ -214,10 +214,8 @@
                                  data-target="#addTask">
                                 <button type="button"
                                         class="site-action-toggle btn-raised btn btn-success btn-floating waves-effect waves-classic">
-                                    <i class="front-icon iconfont icon-tianjia animation-scale-up"
-                                       aria-hidden="true"></i>
-                                    <i class="back-icon iconfont icon-tianjia animation-scale-up"
-                                       aria-hidden="true"></i>
+                                    <i class="front-icon md-plus animation-scale-up" aria-hidden="true"></i>
+                                    <i class="back-icon md-plus animation-scale-up" aria-hidden="true"></i>
                                 </button>
                             </div>
                         </div>
@@ -253,11 +251,9 @@
 
                             <div class="site-action fixed-button" data-plugin="actionBtn" data-toggle="modal"
                                  data-target="#addWork">
-                                <button type="button"
-                                        class="site-action-toggle btn-raised btn btn-success btn-floating waves-effect waves-classic">
-                                    <i class="front-icon iconfont icon-tianjia animation-scale-up"
-                                       aria-hidden="true"></i>
-                                    <i class="back-icon md-close animation-scale-up" aria-hidden="true"></i>
+                                <button type="button" class="site-action-toggle btn-raised btn btn-success btn-floating waves-effect waves-classic">
+                                    <i class="front-icon md-plus animation-scale-up" aria-hidden="true"></i>
+                                    <i class="back-icon md-plus animation-scale-up" aria-hidden="true"></i>
                                 </button>
                             </div>
 
@@ -496,9 +492,8 @@
                                                               @change="uploadAttachment"></FileUploader>
                                                 <div class="mt-5" v-for="(attach,index) in affixes" :key="index">
                                                     <span class="mr-20">{{attachmentTypeArr.find(item => item.value == attach.type).name}} - {{attach.title}}</span>
-                                                    <i class="md-delete mr-10" data-toggle="modal"
-                                                       data-target="#affix"
-                                                       @click="getAffixId(attach.id)"></i>
+                                                    <i class="iconfont icon-shanchu1 mr-10" data-toggle="modal"
+                                                       data-target="#affix" @click="getAffixId(attach.id)"></i>
                                                     <a :href="attach.url" class="md-download"></a>
                                                 </div>
                                             </div>

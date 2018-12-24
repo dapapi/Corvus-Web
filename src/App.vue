@@ -40,9 +40,12 @@
                     || this.$route.path === '/rolemanagement'
                     || this.$route.path === '/appmanagement'
                     || this.$route.path === '/organization'
-                    || this.$route.path === '/organization/management') {
-                    this.isLeftMenuShow = false
-                    this.isLeftManageShow = true
+                    || this.$route.path === '/organization/management'){
+                     this.isLeftMenuShow = false
+                     this.isLeftManageShow = true
+                }else{
+                    this.isLeftMenuShow = true
+                    this.isLeftManageShow = false 
                 }
             },
 

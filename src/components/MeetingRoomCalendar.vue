@@ -471,8 +471,7 @@
                 if (strDate >= 0 && strDate <= 9) {
                     strDate = "0" + strDate;
                 }
-                // this.currentDate = year + '-' + month + '-' + strDate;
-                this.currentDate = '2018-12-26';
+                this.currentDate = year + '-' + month + '-' + strDate;
                 this.numberDate = year + '-' + month + '-' + strDate;
             },
 

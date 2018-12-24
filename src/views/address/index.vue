@@ -48,7 +48,7 @@
                                                 <span class="pl-1 user-name">{{ user.name }}</span>
                                             </div>
                                         </div>
-                                        
+
 
                                     </div>
                                     <div class="tab-pane animation-fade" id="forum-department"

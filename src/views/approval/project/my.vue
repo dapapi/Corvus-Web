@@ -52,7 +52,7 @@
                                 <tbody>
                                 <tr v-for="project in projectsInfo" :key='project.form_instance_number'>
                                     
-                                    <router-link :to="'/approval/'+project.id"><td>{{project.form_instance_number}}</td></router-link>
+                                    <router-link :to="{path:'/approval/'+project.id,query:{mode:'approver'}}"><td>{{project.form_instance_number}}</td></router-link>
                                     <td>{{project.title}}</td>
                                     <td>{{project.name}}</td>
                                     <td></td>
@@ -93,7 +93,7 @@
         computed:{
             getProgressName(){
                 return function(params){
-                   return  this.projectProgress.find(item=>item.id = params).value
+                   return  this.projectProgress.find(item=>item.id == params).value
                 }
             }
         },

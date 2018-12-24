@@ -6,13 +6,13 @@
         <div class="page-content container-fluid">
             <div class="panel p-20 clearfix">
                 <!-- <div class="col-md-4  p-20"> -->
-                    <div class="col-md-4 input-search float-left">
-                        <selectors :option='companyArr' @change="getCompany"></selectors>
+                    <div class="col-md-3 input-search float-left">
+                        <selectors :options='companyArr' @change="getCompany"></selectors>
                     </div>
-                    <div class="col-md-4 float-left">
+                    <div class="col-md-3 float-left">
                         <Datepicker :placeholder="'开始时间'" @change="getStartTime"></Datepicker>
                     </div>
-                    <div class="col-md-4 float-left">
+                    <div class="col-md-3 float-left">
                         <Datepicker :placeholder="'结束时间'" @change="getEndTime"></Datepicker>
                     </div>
                 <!-- </div> -->
