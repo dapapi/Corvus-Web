@@ -275,6 +275,7 @@
                                         && principalId === user.id 
                                         && hasAnsweredArr.length > 0 
                                         && hasAnsweredArr.length === questionInfo.reviewanswer.data.length"
+                                        && !questionInfo.excellent
                                         data-target="#push-reason">推优
                                 </button>
                             </div>
@@ -333,19 +334,19 @@
                                     </div>
                                 </div>
                             </div>
-                            <div class="card-text py-5 clearfix">
+                            <div class="card-text py-5 clearfix" v-if="questionInfo.excellent">
                                 <div class="col-md-1 float-left text-right pl-0">推优分</div>
                                 <div class="col-md-11 float-left font-weight-bold">
                                     <div class="edit-wrap">
-                                        1
+                                        {{ questionInfo.excellent_sum }}
                                     </div>
                                 </div>
                             </div>
-                            <div class="card-text py-5 clearfix">
+                            <div class="card-text py-5 clearfix" v-if="questionInfo.excellent">
                                 <div class="col-md-1 float-left text-right pl-0">推优原因</div>
                                 <div class="col-md-11 float-left font-weight-bold">
                                     <div class="edit-wrap">
-                                        1
+                                        {{ questionInfo.excellent }}
                                     </div>
                                 </div>
                             </div>
