@@ -263,8 +263,8 @@ export default {
         },
         add:function(){
             let _this = this
-            this.addData.start_at = `${this.startDate} ${this.startTime}`
-            this.addData.end_at = `${this.endDate} ${this.endTime}`
+            this.addData.start_at = `${this.startDate} ${this.startTime}:00`
+            this.addData.end_at = `${this.endDate} ${this.endTime}:00`
             let approval = []
             let notification = []
             for (let i = 0; i < this.$store.state.participantsInfo.length; i++) {
