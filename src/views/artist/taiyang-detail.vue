@@ -214,17 +214,8 @@
                                  data-target="#addTask">
                                 <button type="button"
                                         class="site-action-toggle btn-raised btn btn-success btn-floating waves-effect waves-classic">
-                                    <<<<<<< HEAD
-                                    <i class="front-icon iconfont icon-tianjia animation-scale-up"
-                                       aria-hidden="true"></i>
-                                    <i class="back-icon iconfont icon-tianjia animation-scale-up"
-                                       aria-hidden="true"></i>
-                                    =======
-                                    <i class="front-icon iconfont icon-tianjia animation-scale-up"
-                                       aria-hidden="true"></i>
-                                    <i class="back-icon iconfont icon-tianjia animation-scale-up"
-                                       aria-hidden="true"></i>
-                                    >>>>>>> cxy
+                                    <i class="front-icon md-plus animation-scale-up" aria-hidden="true"></i>
+                                    <i class="back-icon md-plus animation-scale-up" aria-hidden="true"></i>
                                 </button>
                             </div>
                         </div>
@@ -260,17 +251,9 @@
 
                             <div class="site-action fixed-button" data-plugin="actionBtn" data-toggle="modal"
                                  data-target="#addWork">
-                                <button type="button"
-                                        class="site-action-toggle btn-raised btn btn-success btn-floating waves-effect waves-classic">
-                                    <<<<<<< HEAD
-                                    <i class="front-icon iconfont icon-tianjia animation-scale-up"
-                                       aria-hidden="true"></i>
-                                    <i class="back-icon md-close animation-scale-up" aria-hidden="true"></i>
-                                    =======
-                                    <i class="front-icon iconfont icon-tianjia animation-scale-up"
-                                       aria-hidden="true"></i>
-                                    <i class="back-icon iconfont icon-guanbianimation-scale-up" aria-hidden="true"></i>
-                                    >>>>>>> cxy
+                                <button type="button" class="site-action-toggle btn-raised btn btn-success btn-floating waves-effect waves-classic">
+                                    <i class="front-icon md-plus animation-scale-up" aria-hidden="true"></i>
+                                    <i class="back-icon md-plus animation-scale-up" aria-hidden="true"></i>
                                 </button>
                             </div>
 
