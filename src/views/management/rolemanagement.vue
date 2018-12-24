@@ -71,7 +71,7 @@
                                     
                                     <ul class="administration-subordinate-item m-0" v-for="n in roleDate" :key="n.id" >
                                         <li v-show="item.id==n.group_id && switchId.includes(n.group_id)" class="py-5" 
-                                            style="position:relative;" @click="changeCont(n.id)"  >
+                                            style="position:relative;" @click="changeCont(n.id)" :class="n.id==jobCont?'back':''">
                                             <template>
                                                 <i class="iconfont icon-chengyuannew pr-10"
                                                    style="vertical-align: middle;"></i>
@@ -89,7 +89,7 @@
                                                     <a class="dropdown-item" role="menuitem" data-toggle="modal"
                                                        data-target="#addMember" @click="getmemberDate(n.id)">添加成员</a>
                                                     <a class="dropdown-item" role="menuitem" data-toggle="modal"
-                                                       data-target="#updateSubgroup">修改角色</a>
+                                                       data-target="#updateSubgroup" @click="Modifyingroles(n.id)">修改角色</a>
                                                     <a class="dropdown-item" role="menuitem" data-toggle="modal"
                                                        data-target="#moveSubgroup ">移动到分组</a>
                                                     <a class="dropdown-item" role="menuitem" data-toggle="modal"
@@ -128,7 +128,7 @@
                             <li class="nav-item" role="presentation">
                                 <a class="nav-link" data-toggle="tab" href="#forum-fun"
                                    aria-controls="forum-present"
-                                   aria-expanded="false" role="tab">功能范围</a>
+                                   aria-expanded="false" role="tab">数据范围</a>
                             </li>
                         </ul>
                     </div>
@@ -432,8 +432,8 @@
                         <div class="example">
                             <div class="col-md-2 text-right float-left">资源类型</div>
                             <div class="col-md-10 float-left pl-0">
-                                <Selectors :placeholder="'职务'" @change="changeRolejob"
-                                           :options="groupingDate"></Selectors>
+                                <Selectors @change="changeRolejob"
+                                           :options="groupingDate" :placeholder="panelName" v-model="panelName"></Selectors>
                             </div>
                         </div>
                         <div class="example">
@@ -524,8 +524,8 @@
                         <div class="example">
                             <div class="col-md-2 text-right float-left">角色组</div>
                             <div class="col-md-10 float-left pl-0">
-                                <Selectors :placeholder="'职务'" @change="updateRolejob"
-                                           :options="groupingDate"></Selectors>
+                                <Selectors  @change="updateRolejob"
+                                           :options="groupingDate" ></Selectors>
                             </div>
                         </div>
                         <div class="example">
@@ -659,18 +659,6 @@
                         id: 1,
                         name: '所有者',
                     },
-                    // {
-                    //     id: 2,
-                    //     name: '管理员',
-                    // },
-                    // {
-                    //     id: 3,
-                    //     name: '部门主管',
-                    // },
-                    // {
-                    //     id: 4,
-                    //     name: '成员',
-                    // }
                 ],
                 visible: false,//渲染部分隐藏显示管理
                 conceal: true,//默认部分隐藏显示管理
@@ -716,11 +704,15 @@
                 checkBox: [],
                 checkarr: [],
                 selectedIds: [],
+                panelName:''
             }
         },
         mounted() {
             this.getroleDate();
             this.getgroupingDate();
+             $('#addRole').on('hidden.bs.modal',function() {
+                    this.roleName="请输入角色称"
+             })
         },
         updated() {
             $('.selectable-wrap').asSelectable();
@@ -733,15 +725,13 @@
                 fetch('get', '/console/role').then(function (response) {
                     _this.roleDate = response.data;
                 });
-
-
             },
             //获取分组数据
             getgroupingDate() {
                 let _this = this;
                 fetch('get', '/console/group?Accept=application/vnd.Corvus.v1+json').then(function (response) {
                     _this.groupingDate = response.data;
-
+                    console.log(_this.groupingDate)
                 });
             },
             //获取成员数据
@@ -761,11 +751,10 @@
             //切换内容
             changeCont(value) {
                 this.jobCont = value
+            
                 this.defaultId = 0
                 let _this = this;
-                console.log(this.jobCont)
                 fetch('get', '/console/feature/' + this.jobCont).then(function (response) {
-                     console.log(response)
                     _this.powerlist = [];
                     for (_this.powerlist in response) {
                        
@@ -833,11 +822,8 @@
                 })
             },
             rangekeep() {
-                console.log('this.sendData:')
-                console.log(this.sendData)
                 fetch('post', '/console/scope/' + this.jobCont, this.sendData).then(function (response) {
                     toastr.success('保存成功');
-
                 })
             },
             //全选反选
@@ -1065,6 +1051,8 @@
             },
             grouping(value) {
                 this.groupingId = value
+                this.panelName=this.groupingDate.find(item=>item.id==this.groupingId).name
+                console.log( this.panelName)
             },
             clickdefault() {
                 this.conceal = !this.conceal;
@@ -1075,13 +1063,11 @@
             },
             seerange(i, v) {
                 this.valueId.push(i.toString() + v)
-                // console.log(this.valueId)
             },
              radioed(params,value){
                 let index = this.sendData.find(item=>item.resource_id===value.id)
                 if(index){
-                    index.scope = params.id  
-                    console.log(index.scope )         
+                    index.scope = params.id         
                 }else{
                     let tempObj = {}
                     Object.assign(tempObj,{resource_id:value.id})
@@ -1098,8 +1084,6 @@
                     }else{
                         index.manage.push(params.id)
                     }
-
-                    console.log(this.sendData)
                 }else{
                     let tempObj = {}   
                     this.checkarr.push(params.id)
@@ -1108,6 +1092,9 @@
                     this.sendData.push(tempObj)
                 }
            
+            },
+            Modifyingroles(id){
+                console.log(id)
             }
         }
     }
@@ -1193,6 +1180,9 @@
 
     .pointer-cont:hover {
         background: #fff;
+    }
+    .back{
+        background: #F5F5F5;
     }
 </style>
 

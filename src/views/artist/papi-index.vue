@@ -108,7 +108,7 @@
                                     </span>
                                 </td>
                                 <td>{{artist.created_at}}</td>
-                                <td>{{artist.updated_at}}</td>
+                                <td v-for="(v,index) in artist.operatelogs.data" :key="index">{{v.created_at}}</td>
                             </tr>
                             
                             </tbody>
@@ -377,7 +377,6 @@
             this.getUser();
             this.getBlogType() //获取博主类型
             $('table').asSelectable();
-              console.log($('table'))
              let _this = this;
              $('#addArtist').on('hidden.bs.modal',function() {
                  
@@ -399,7 +398,7 @@
         methods: {
             getArtists: function (page = 1,signStatus) {
                 let data={
-                    include:'type,creator,tasks,affixes,producer,publicity',
+                    include:'type,creator,tasks,affixes,producer,publicity,operatelogs',
         
                 }
                 let _this = this;
@@ -428,7 +427,6 @@
                     _this.current_page = response.meta.pagination.current_page;
                     _this.total = response.meta.pagination.total;
                     _this.total_pages = response.meta.pagination.total_pages;
-                    console.log(_this.artistsInfo)
                 });
             },
 
@@ -511,7 +509,7 @@
             addArtist: function () {
                 let _this=this;
                 if(!this.artistName){
-                    toastr.success('请输入博主名称');
+                    toastr.error('请输入博主名称');
                     return false
                 }
                 let platform = this.platformType.join(',');
@@ -563,6 +561,7 @@
             },
             //分配制作人
             giveBroker:function(){
+               
                 let _this = this
                 let data = {}
                 data = {
@@ -577,9 +576,17 @@
                     
                 }
                 fetch('post', 'distribution/person', data).then(function (response) {
+                    if(_this.selectedArtistsArr.length==0){
+                        toastr.error('请先选择博主，再进行分配')
+                        $('#giveBroker').modal('hide')
+                        _this.$store.state.participantsInfo = []
+                        return  false
+                    }
                     toastr.success('分配制作人成功')
                     $('#giveBroker').modal('hide')
+                    _this.getArtists()
                     _this.$store.state.participantsInfo = []
+                    _this.selectedArtistsArr=[]
                 })
                
             }
