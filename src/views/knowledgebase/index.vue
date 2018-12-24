@@ -17,7 +17,7 @@
             <div class="department-picker" @click.stop="departmentShow = !departmentShow">
                 选择部门 
                 <i class="icon"
-                    :class="departmentShow?'md-chevron-up':'md-chevron-down'"></i>
+                    :class=" departmentShow?'iconfont icon-xiangshangjiantou':'iconfont icon-xiajiantou'"></i>
                 <DepartmentPicker @departmentsget='departmentsGet' v-show="departmentShow"/>
             </div>
         </div> 
@@ -63,7 +63,7 @@
                                     <td></td>
                                     <td>
                                         <span>{{item.created_at}}</span>
-                                        <i class="md-time ml-10" aria-hidden="true"></i>
+                                        <i class="iconfont icon-shijian ml-10" aria-hidden="true"></i>
                                     </td>
                                     <td></td>
                                     <td></td>

@@ -28,7 +28,7 @@
                                         <div class="mt-20">
                                             <div class="input-search m-0">
                                                 <button type="submit" class="input-search-btn">
-                                                    <i class="md-search" aria-hidden="true"></i>
+                                                    <i class="iconfont icon-buoumaotubiao13" aria-hidden="true"></i>
                                                 </button>
                                                 <input type="text" class="form-control" name="" placeholder="搜索成员..."
                                                        v-model="searchKeyWord">
@@ -81,21 +81,21 @@
                                 <div class="clearfix mb-20">
                                     <div class="col-md-4 float-left">
                                         <div class="float-left col-md-6">
-                                            <i class="md-plus pr-2"></i>
+                                            <i class="iconfont icon-yonghu pr-2"></i>
                                             <span class="font-weight-bold">姓名</span>
                                         </div>
                                         <div class="float-left col-md-6 pl-0">{{ personalInfo.name ? personalInfo.name : ''}}</div>
                                     </div>
                                     <div class="col-md-4 float-left">
                                         <div class="float-left col-md-6">
-                                            <i class="md-plus pr-2"></i>
+                                            <i class="iconfont icon-tianjia pr-2"></i>
                                             <span class="font-weight-bold">职位</span>
                                         </div>
                                         <div class="float-left col-md-6 pl-0">{{ personalInfo.position ? personalInfo.position : ''}}</div>
                                     </div>
                                     <div class="col-md-4 float-left">
                                         <div class="float-left col-md-6">
-                                            <i class="md-plus pr-2"></i>
+                                            <i class="iconfont icon-tianjia pr-2"></i>
                                             <span class="font-weight-bold">部门</span>
                                         </div>
                                         <div class="float-left col-md-6 pl-0">{{ personalInfo.position ? personalInfo.position : ''}}</div>
@@ -111,14 +111,14 @@
                                     </div>
                                     <div class="col-md-4 float-left">
                                         <div class="float-left col-md-6">
-                                            <i class="md-phone pr-2"></i>
+                                            <i class="iconfont icon-dianhua pr-2"></i>
                                             <span class="font-weight-bold">电话</span>
                                         </div>
                                         <div class="float-left col-md-6 pl-0">{{ personalInfo.phone ? personalInfo.phone : ''}}</div>
                                     </div>
                                     <div class="col-md-4 float-left">
                                         <div class="float-left col-md-6">
-                                            <i class="md-plus pr-2"></i>
+                                            <i class="iconfont icon-Wechat pr-2"></i>
                                             <span class="font-weight-bold">WeChat</span>
                                         </div>
                                         <div class="float-left col-md-6 pl-0">XXX</div>

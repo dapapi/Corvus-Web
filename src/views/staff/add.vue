@@ -188,7 +188,7 @@
                         <div class="formName pd-b-15">教育背景 <i class="iconfont icon-tianjia add-icon" @click="tableAdd('education')"></i></div>
                         <div class="example table-responsive padding15">
                             <!-- <mtp-table :data-source="education" :columns="eduColumns" /> -->
-                            <table class="table table-bordered">
+                            <table class="table table-hover table-bordered">
                                 <thead>
                                     <tr>
                                         <th v-for="(item, index) in education.tHead" :key="index">{{ item.value }}</th>
@@ -208,7 +208,7 @@
 
                         <div class="formName pd-b-15">培训经历<i class="iconfont icon-tianjia add-icon" @click="tableAdd('train')"></i></div>
                         <div class="example table-responsive padding15">
-                            <table class="table table-bordered">
+                            <table class="table table-hover table-bordered">
                                 <thead>
                                     <tr>
                                         <th v-for="(item, index) in train.tHead" :key="index">{{ item.value }}</th>
@@ -229,7 +229,7 @@
                             <i class="iconfont icon-tianjia add-icon" @click="tableAdd('work')"></i>
                         </div>
                         <div class="example table-responsive padding15">
-                            <table class="table table-bordered">
+                            <table class="table table-hover table-bordered">
                                 <thead>
                                     <tr>
                                         <th v-for="(item, index) in work.tHead" :key="index">{{ item.value }}</th>
@@ -250,7 +250,7 @@
                             <i class="iconfont icon-tianjia add-icon" @click="tableAdd('home')"></i>
                         </div>
                         <div class="example table-responsive padding15">
-                            <table class="table table-bordered">
+                            <table class="table table-hover table-bordered">
                                 <thead>
                                     <tr>
                                         <th v-for="(item, index) in home.tHead" :key="index">{{ item.value }}</th>
@@ -326,6 +326,7 @@
 import config from "../../assets/js/config";
 const { genderArr, maritalStatusArr, nationalityArr, bloodTypeArr } = config;
 import fetch from "../../assets/utils/fetch";
+import qs from 'qs'
 
 let tempArr = []
 for (let i = 0; i < nationalityArr.length; i++) {
@@ -548,6 +549,7 @@ export default {
             this.userId = route.params.id
             this.getData()
         }
+
     },
 
 	methods: {
@@ -565,21 +567,23 @@ export default {
 		},
 		// 提交
 		submit () {
-            // let canSend = true
-            // for (let n of this.formCheck) {
-            //     if (!this[n.name]) {
-            //         toastr.error(n.msg)
-            //         canSend = false
-            //         break
-            //     }
-            // }
-            let _education = this.education.tBody.map(n => {
-                // Object.entries(n)
-            })
+            let canSend = true
+            for (let n of this.formCheck) {
+                if (!this[n.name]) {
+                    toastr.error(n.msg)
+                    canSend = false
+                    break
+                }
+            }
 
-            // if (!canSend) {
-            //     return
-            // }
+            const _education = this.filterData(this.education.tBody)
+            const _training = this.filterData(this.train.tBody)
+            const _record = this.filterData(this.work.tBody)
+            const _family= this.filterData(this.home.tBody)
+
+            if (!canSend) {
+                return
+            }
             let params = {
 				name: this.nameCN,
 				en_name: this.nameEN,
@@ -605,15 +609,15 @@ export default {
 				migration: this.agreeMove,
 				icon_url: this.avatar,
 				status_type: 1, // 默认
-				education: this.education.tBody,
-				training: this.train.tBody,
-				record: this.work.tBody,
-				family: this.home.tBody
-			}
-            console.log(params)
-			// fetch('post', '/personnel' ,params).then(result => {
-            //     toastr.success('添加成功')
-			// })
+				education: _education,
+				training: _training,
+				record: _record,
+				family: _family
+            }
+            
+			fetch('post', '/personnel' ,params).then(result => {
+                toastr.success('添加成功')
+			})
         },
         // 获取员工数据
         getData () {
@@ -652,6 +656,20 @@ export default {
         },
         cancel () {
             this.editInfo()
+        },
+        // 过滤有用数据
+        filterData (data) {
+            return JSON.parse(JSON.stringify(data)).filter(n => {
+                let canPush = false
+                Object.entries(n).map((m) => {
+                    if (m[1]) {
+                        canPush = true
+                    } else {
+                        n[m[0]] = 0
+                    }
+                })
+                return canPush
+            })
         }
 	}
 }

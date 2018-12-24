@@ -11,7 +11,8 @@
                     <a class="dropdown-item" role="menuitem" @click="changeTaskStatus(3)">终止</a>
                     <a class="dropdown-item" role="menuitem" @click="changeTaskStatus(2)">完成</a>
                     <a class="dropdown-item" role="menuitem" data-toggle="modal" data-target="#customizeFieldContent">自定义字段</a>
-                    <a class="dropdown-item" role="menuitem" @click="privacyTask">{{taskInfo.privacy == 1?'转公开':'转私密'}}</a>
+                    <a class="dropdown-item" role="menuitem" @click="privacyTask">
+                        {{taskInfo.privacy == 1 ? '转公开':'转私密'}}</a>
                     <a class="dropdown-item" role="menuitem" @click="deleteTask">删除</a>
                 </div>
             </div>
@@ -40,7 +41,7 @@
                         <div class="float-left pl-0 pr-2 col-md-1">
                             <i class="iconfont icon-initiate-task pr-2" aria-hidden="true"></i>任务状态
                         </div>
-                        <div class="font-weight-bold float-left"> 
+                        <div class="font-weight-bold float-left">
                             <template v-if="taskInfo.status === 1"><span style="color:#FF9800">进行中</span></template>
                             <template v-if="taskInfo.status === 2"><span style="color:#4CAF50">已完成</span></template>
                             <template v-if="taskInfo.status === 3"><span style="color:#9E9E9E">已停止</span></template>
@@ -141,7 +142,8 @@
                                 <div class="card-text py-5 clearfix">
                                     <div class="col-md-1 float-left text-right pl-0">优先级</div>
                                     <div class="col-md-11 float-left font-weight-bold">
-                                        <EditSelector :content="taskInfo.priority?taskInfo.priority: ''" :is-edit="isEdit"
+                                        <EditSelector :content="taskInfo.priority?taskInfo.priority: ''"
+                                                      :is-edit="isEdit"
                                                       :options="priorityArr" @change="changeTaskLevel"></EditSelector>
                                     </div>
                                 </div>
@@ -182,8 +184,7 @@
                             <div class="card-header card-header-transparent card-header-bordered attachment-upload">
                                 <div class="float-left font-weight-bold third-title">上传附件</div>
                                 <div class="d-inline float-right">
-                                    <i class="md-attachment-alt" aria-hidden="true"></i>
-                                    <FileUploader @change="uploadAttachment"></FileUploader>
+                                    <FileUploader is-icon="true" @change="uploadAttachment"></FileUploader>
                                 </div>
                             </div>
                             <div class="card-block">
@@ -191,18 +192,20 @@
                                     <li v-for="attachment in taskInfo.affixes?taskInfo.affixes.data:[]">
                                         <i class="md-file pr-5"></i>{{ attachment.title }}
                                         <span class="float-right pl-10 pointer-content"
-                                         data-plugin="actionBtn" @click="setDelInfo(attachment.id)" data-toggle="modal"
-                                            data-target="#confirmFlag">删除</span>
-
-                                        <!-- <span class="pl-20 d-block float-left pointer-content" style="color: #b9b9b9"typeText="删除">
-                                        <i class="md-delete" aria-hidden="true"></i> -->
-                                    <!-- </span> -->
+                                              data-plugin="actionBtn" @click="setDelInfo(attachment.id)"
+                                              data-toggle="modal"
+                                              data-target="#confirmFlag">删除</span>
                                         <span class="float-right px-10">|</span>
                                         <span class="float-right px-10 pointer-content"
                                               @click="downloadAttachment(attachment.id, attachment.url)">下载</span>
                                         <span class="float-right px-10">{{ attachment.size }}</span>
                                     </li>
                                 </ul>
+                                <div class="col-md-1" style="margin: 6rem auto"
+                                     v-if="taskInfo.affixes&&taskInfo.affixes.data.length === 0">
+                                    <img src="https://res.papitube.com/corvus/images/content-none.png" alt=""
+                                         style="width: 100%">
+                                </div>
                             </div>
                         </div>
                     </div>
@@ -234,16 +237,18 @@
                             </tbody>
                         </table>
 
-                        <div class="col-md-1" style="margin: 6rem auto" v-if="taskInfo.tasks&&taskInfo.tasks.data.length === 0">
-                            <img src="https://res.papitube.com/corvus/images/content-none.png" alt="" style="width: 100%">
+                        <div class="col-md-1" style="margin: 6rem auto"
+                             v-if="taskInfo.tasks&&taskInfo.tasks.data.length === 0">
+                            <img src="https://res.papitube.com/corvus/images/content-none.png" alt=""
+                                 style="width: 100%">
                         </div>
 
                         <div class="site-action fixed-button" data-plugin="actionBtn" data-toggle="modal"
                              data-target="#addChildTask">
                             <button type="button"
                                     class="site-action-toggle btn-raised btn btn-success btn-floating waves-effect waves-classic">
-                                <i class="front-icon iconfont icon-tianjiajiahaowubiankuang1 animation-scale-up" aria-hidden="true"></i>
-                                <i class="back-icon iconfont icon-tianjiajiahaowubiankuang1 animation-scale-up" aria-hidden="true"></i>
+                                <i class="front-icon iconfont icon-tianjia animation-scale-up" aria-hidden="true"></i>
+                                <i class="back-icon iconfont icon-tianjia animation-scale-up" aria-hidden="true"></i>
                             </button>
                         </div>
 
@@ -252,47 +257,53 @@
 
             </div>
 
-             <div class="panel col-md-12 col-lg-12" v-if="questionId">
-                <div class="tab-content nav-tabs-animate bg-white" >
+            <div class="panel col-md-12 col-lg-12" v-if="questionId && visible">
+                <div class="tab-content nav-tabs-animate bg-white">
                     <div class="card">
-                        <div class="card-header card-header-transparent card-header-bordered" style="display: flex; justify-content: space-between; align-items: center;">
+                        <div class="card-header card-header-transparent card-header-bordered"
+                             style="display: flex; justify-content: space-between; align-items: center;">
                             <div class="font-weight-bold third-title">问卷详情</div>
                             <div class="">
-                                <button type="button" 
-                                    class="btn btn-primary" 
-                                    v-if="!~hasAnsweredArr.indexOf(user.id)"
-                                    @click="submit">提交
+                                <button type="button"
+                                        class="btn btn-primary"
+                                        v-if="!~hasAnsweredArr.indexOf(user.id)"
+                                        @click="submit">提交
                                 </button>
-                                <button type="button" class="btn btn-primary" data-plugin="actionBtn" data-toggle="modal"
-                                    v-if="questionInfo.reviewanswer 
+                                <button type="button" class="btn btn-primary" data-plugin="actionBtn"
+                                        data-toggle="modal"
+                                        v-if="questionInfo.reviewanswer
                                         && principalId === user.id 
                                         && hasAnsweredArr.length > 0 
                                         && hasAnsweredArr.length === questionInfo.reviewanswer.data.length"
-                                    data-target="#push-reason">推优
+                                        data-target="#push-reason">推优
                                 </button>
                             </div>
                         </div>
                         <div class="card-block">
-                            <h4 style="color: #3F51B5">平均分 
+                            <h4 style="color: #3F51B5">平均分
                                 {{ questionInfo.sum ? (questionInfo.sum.data[0]
-                                    ?questionInfo.sum.data[0].truncate : 0) : 0}}
+                                ?questionInfo.sum.data[0].truncate : 0) : 0}}
                             </h4>
                             <div class="row">
                                 <div class="col-md-8 clearfix" style="padding-right: 0;">
-                                    <div class="progress" data-labeltype="percentage" data-goal="-40" data-plugin="progress"  style="width: calc(100% - 100px); float:left;">
-                                        <div class="progress-bar progress-bar-warning" aria-valuemin="-100" aria-valuemax="0" aria-valuenow="-40" role="progressbar" 
-                                            :style="{width: `${questionInfo.reviewanswer.length === 0 ? 0 : hasAnsweredArr.length / questionInfo.reviewanswer.data.length * 100}%`}">
+                                    <div class="progress" data-labeltype="percentage" data-goal="-40"
+                                         data-plugin="progress" style="width: calc(100% - 100px); float:left;">
+                                        <div class="progress-bar progress-bar-warning" aria-valuemin="-100"
+                                             aria-valuemax="0" aria-valuenow="-40" role="progressbar"
+                                             :style="{width: `${questionInfo.reviewanswer.length === 0 ? 0 : hasAnsweredArr.length / questionInfo.reviewanswer.data.length * 100}%`}">
                                             <!-- <span class="progress-label">{{questionInfo.reviewanswer.length === 0 ? 0 : ~~((hasAnsweredArr.length / questionInfo.reviewanswer.data.length * 100))}}%</span> -->
                                         </div>
                                     </div>
                                     <div style="width: 50px; padding-left: 10px; float: left;">
-                                        {{questionInfo.reviewanswer.length === 0 ? 0 : ~~((hasAnsweredArr.length / questionInfo.reviewanswer.data.length * 100))}}%
+                                        {{questionInfo.reviewanswer.length === 0 ? 0 : ~~((hasAnsweredArr.length /
+                                        questionInfo.reviewanswer.data.length * 100))}}%
                                     </div>
                                 </div>
                             </div>
                             <div class="all-menber clearfix">
-                                <div class="question-avatar" v-for="(item, index) in questionInfo.reviewanswer.data" :key="index">
-                                    <div :class="~hasAnsweredArr.indexOf(item.users.data.id) ? 'unselect-avatar':'select-avatar'"></div> 
+                                <div class="question-avatar" v-for="(item, index) in questionInfo.reviewanswer.data"
+                                     :key="index">
+                                    <div :class="~hasAnsweredArr.indexOf(item.users.data.id) ? 'unselect-avatar':'select-avatar'"></div>
                                     {{ item.users.data.name.substr(item.users.data.name.length - 2, 2) }}
                                 </div>
                                 <!-- reviewanswer -->
@@ -317,7 +328,8 @@
                                 <div class="col-md-1 float-left text-right pl-0">阅转比</div>
                                 <div class="col-md-11 float-left font-weight-bold">
                                     <div class="edit-wrap">
-                                        {{ questionInfo.production ? questionInfo.production.data[0].read_proportion : '' }}
+                                        {{ questionInfo.production ? questionInfo.production.data[0].read_proportion :
+                                        '' }}
                                     </div>
                                 </div>
                             </div>
@@ -354,11 +366,11 @@
                                     <div class="title">
                                         <label>
                                             <div class="radio-custom radio-primary" style="display: inline-block;">
-                                                <input type="radio" @click="answerList[index] = item" 
-                                                    :disabled="~hasAnsweredArr.includes(user.id)" 
-                                                    :checked="answerList[index] === item.value 
-                                                        || items.selectrows.data.find(n => n.review_question_item_id === item.id && n.creator.data.id === user.id)" 
-                                                    :name="items.id" />
+                                                <input type="radio" @click="answerList[index] = item"
+                                                       :disabled="hasAnsweredArr.includes(user.id)"
+                                                       :checked="answerList[index] === item.value
+                                                        || items.selectrows.data.find(n => n.review_question_item_id === item.id && n.creator.data.id === user.id)"
+                                                       :name="items.id"/>
                                                 <label></label>
                                             </div>
                                             {{ item.value }}: {{ item.title }}
@@ -366,27 +378,34 @@
                                     </div>
                                     <div class="row">
                                         <div class="col-md-8" style="padding-right: 0;">
-                                            <div class="progress" data-labeltype="percentage" data-goal="-40" data-plugin="progress" style="width: calc(100% - 100px); float: left;">
-                                                <div class="progress-bar progress-bar-warning" aria-valuemin="-100" 
-                                                    aria-valuemax="0" aria-valuenow="-40" role="progressbar" 
-                                                    :style="{width: `${items.selectrows.data.filter(n => n.review_question_item_id === item.id).length / hasAnsweredArr.length * 100}%`}">
+                                            <div class="progress" data-labeltype="percentage" data-goal="-40"
+                                                 data-plugin="progress" style="width: calc(100% - 100px); float: left;">
+                                                <div class="progress-bar progress-bar-warning" aria-valuemin="-100"
+                                                     aria-valuemax="0" aria-valuenow="-40" role="progressbar"
+                                                     :style="{width: `${items.selectrows.data.filter(n => n.review_question_item_id === item.id).length / hasAnsweredArr.length * 100}%`}">
                                                     <!-- <span class="progress-label">100%</span> -->
                                                 </div>
                                             </div>
                                             <div style="width: 50px; padding-left: 10px; float: left;">
-                                                {{ items.selectrows.data.filter(n => n.review_question_item_id === item.id).length / hasAnsweredArr.length * 100 }}%
+                                                <!-- {{ items.selectrows.data.filter(n => n.review_question_item_id ===
+                                                item.id).length / hasAnsweredArr.length * 100 }}% -->
+                                                 {{ hasAnsweredArr.length > 0 ? items.selectrows.data.filter(n => n.review_question_item_id ===
+                                                item.id).length / hasAnsweredArr.length * 100: '0' }}%
                                             </div>
                                             <div style="width: 50px; padding-left: 10px; float: right;">
-                                                {{items.selectrows.data.filter(n => n.review_question_item_id === item.id)?
-                                                    items.selectrows.data.filter(n => n.review_question_item_id === item.id).length
+                                                {{items.selectrows.data.filter(n => n.review_question_item_id ===
+                                                item.id)?
+                                                items.selectrows.data.filter(n => n.review_question_item_id ===
+                                                item.id).length
                                                 :0}}票
                                             </div>
                                         </div>
                                         <div class="col-md-4 clearfix" style="padding-left: 0;">
                                             <template v-for="(_item, nameIndex) in items.selectrows.data">
-                                                <div class="question-avatar" 
-                                                    v-if="_item.review_question_item_id === item.id" :key="nameIndex">
-                                                    {{_item.creator.data.name.substr(_item.creator.data.name.length - 2, 2)}}
+                                                <div class="question-avatar"
+                                                     v-if="_item.review_question_item_id === item.id" :key="nameIndex">
+                                                    {{_item.creator.data.name.substr(_item.creator.data.name.length - 2,
+                                                    2)}}
                                                 </div>
                                             </template>
                                         </div>
@@ -396,7 +415,7 @@
                         </div>
                     </div>
                 </div>
-             </div>
+            </div>
 
             <div class="panel">
                 <div class="col-md-12">
@@ -431,7 +450,9 @@
                         <div class="example">
                             <div class="col-md-2 text-right float-left">关联资源</div>
                             <div class="col-md-10 float-left">
-                                <normal-linkage-selectors ref="linkage" v-if="linkData.length>0" :myData="linkData" :data="linkData" @change="addLinkage"></normal-linkage-selectors>
+                                <normal-linkage-selectors ref="linkage" v-if="linkData.length>0" :myData="linkData"
+                                                          :data="linkData"
+                                                          @change="addLinkage"></normal-linkage-selectors>
                             </div>
                         </div>
                         <div class="example">
@@ -471,7 +492,8 @@
                                 <datepicker ref='startTime' @change="addStartTime"></datepicker>
                             </div>
                             <div class="col-md-5 float-left pl-0">
-                                <timepicker ref="startMinutes" :default="startMinutes" @change="addStartMinutes"></timepicker>
+                                <timepicker ref="startMinutes" :default="startMinutes"
+                                            @change="addStartMinutes"></timepicker>
                             </div>
                         </div>
                         <div class="example">
@@ -500,13 +522,13 @@
                 </div>
             </div>
         </div>
-        <flag @confirmFlag="deleteAttachment" />
+        <flag @confirmFlag="deleteAttachment"/>
         <Modal id="push-reason" title="推荐原因" @onOK="submitPush">
             <div class="example">
                 <div class="col-md-2 text-right float-left">推荐原因</div>
                 <div class="col-md-10 float-left pl-0">
-                    <textarea class="form-control" id="" cols="30" rows="5"
-                        title="" v-model="pushReason"></textarea>
+                    <textarea class="form-control" cols="30" rows="5"
+                              title="" v-model="pushReason"></textarea>
                 </div>
             </div>
         </Modal>
@@ -566,9 +588,10 @@
                 pushReason: '', // 推荐原因
                 principalId: '', // 负责人id
                 questionId: '', // 问卷id
+                visible: false, // 是否展示问卷
             }
         },
-        created () {
+        created() {
             this.getLinkData()
         },
 
@@ -591,7 +614,7 @@
                 // 清空state
                 this.closeAddTask()
             })
-            
+
             $('#push-reason').on('hidden.bs.modal', () => {
                 this.pushReason = ''
             })
@@ -625,7 +648,7 @@
             'taskInfo.end_at': function (newValue) {
                 this.changeInfo.end_at = newValue
             },
-            routerId (id) {
+            routerId(id) {
                 this.taskId = id
                 setTimeout(() => {
                     this.getTask();
@@ -638,7 +661,7 @@
             principalName: function () {
                 return this.$store.state.principalInfo.name
             },
-            routerId () {
+            routerId() {
                 return this.$route.params.id
             },
         },
@@ -711,7 +734,7 @@
             privacyTask: function () {
                 let self = this
                 fetch('put', '/tasks/' + this.taskId + '/privacy').then(function () {
-                    toastr.success(self.taskInfo.privacy == 1?'转公开成功!':'转私密成功!');
+                    toastr.success(self.taskInfo.privacy == 1 ? '转公开成功!' : '转私密成功!');
                     self.getTask()
                 })
             },
@@ -837,8 +860,8 @@
                 let data = {
                     title: this.taskName,
                     type: this.taskType,
-                    resource_type: this.resourceType?this.resourceType:this.linkData[0].id,
-                    resourceable_id: this.resourceableId?this.resourceableId:this.linkData[0].child[0].id,
+                    resource_type: this.resourceType ? this.resourceType : this.linkData[0].id,
+                    resourceable_id: this.resourceableId ? this.resourceableId : this.linkData[0].child[0].id,
                     principal_id: this.$store.state.newPrincipalInfo.id,
                     participant_ids: participant_ids,
                     priority: this.taskLevel,
@@ -925,7 +948,7 @@
                 // this.$router.replace({path: '/tasks/' + taskId})
             },
             // 获取关联父资源数据
-            getLinkData () {
+            getLinkData() {
                 fetch('get', '/resources').then(res => {
                     let code = 0
                     this.linkData = res.data.map((n, i) => {
@@ -946,7 +969,7 @@
                 })
             },
             // 获取关联子资源数据
-            getChildLinkData (url, index) {
+            getChildLinkData(url, index) {
                 fetch('get', `/${url}`).then(res => {
                     const temp = this.linkData[index]
                     temp.child = res.data.map(n => {
@@ -964,7 +987,7 @@
                 })
             },
             // 获取任务类型列表
-            getTaskType () {
+            getTaskType() {
                 fetch('get', '/task_types').then(res => {
                     const data = res.data
                     this.taskTypeArr = data.map(n => {
@@ -973,11 +996,11 @@
                     this.taskTypeArr.unshift({name: '全部', value: ''})
                 })
             },
-            setDelInfo (id) {
+            setDelInfo(id) {
                 this.attachmentId = id
             },
             // 关闭新增任务
-            closeAddTask () {
+            closeAddTask() {
                 this.taskName = ''
                 this.taskLevel = ''
                 this.$refs.taskLevel.setValue('1')
@@ -997,7 +1020,7 @@
                 this.setDefaultPrincipal()
             },
             // 设置默认负责人
-            setDefaultPrincipal () {
+            setDefaultPrincipal() {
                 this.$store.commit('changeNewPrincipal', {
                     name: this.user.nickname,
                     id: this.user.id
@@ -1005,32 +1028,47 @@
                 this.$store.commit('changeNewParticipantsInfo', [])
             },
             // 获取问卷内容 
-            getQuestionData (id) {
-                fetch('get', `/reviews/${id}/questions/?include=items,selectrows.creator`).then(res => {
-                    this.questionData = res.data
-                    this.answerList = new Array(this.questionData.length)
-                    res.data.map(n => {
-                        n.selectrows.data.map(m => {
-                            if (m.creator.data.is_department_principal === 1) {
-                                this.principalId = m.creator.data.id
-                            }
-                            if (!~this.hasAnsweredArr.indexOf(m.creator.data.id)) {
-                                this.hasAnsweredArr.push(m.creator.data.id)
-                            }
-                        })
-                    })
-                })
+            getQuestionData(id) {
                 fetch('get', `/reviewquestionnaires/${id}/show?include=sum,creator,production,reviewanswer.users`).then(res => {
                     this.questionInfo = res.data[0]
+                    // 如果res为空表示无权限访问问卷
+                    if (!this.questionInfo) {
+                        return
+                    }
+                    for(const n of this.questionInfo.reviewanswer.data) {
+                        if (n.user_id === this.user.id) {
+                            this.visible = true
+                            fetch('get', `/reviews/${id}/questions/?include=items,selectrows.creator`).then(res => {
+                                // if (res.meta.error) {
+                                    // 此处为问卷过期判断
+                                // }
+                                this.questionData = res.data
+                                this.answerList = new Array(this.questionData.length)
+                                res.data.map(n => {
+                                    n.selectrows.data.map(m => {
+                                        if (m.creator.data.is_department_principal === 1) {
+                                            this.principalId = m.creator.data.id
+                                        }
+                                        if (!~this.hasAnsweredArr.indexOf(m.creator.data.id)) {
+                                            this.hasAnsweredArr.push(m.creator.data.id)
+                                        }
+                                    })
+                                })
+                            })
+                            break
+                        } else {
+                            this.visible = false
+                        }
+                    }
                 })
             },
             // 试卷提交
-            submit () {
+            submit() {
                 let canSubmit = true
                 const params = {
                     review_question_item: {}
                 }
-    
+
                 for (const n of this.answerList) {
                     if (!n || isNaN(n.value)) {
                         canSubmit = false
@@ -1042,7 +1080,6 @@
                     toastr.error('您有未作答题目，请作答完成后提交！')
                     return
                 }
-               
                 fetch('post', `/reviews/${this.questionId}/store/Answer`, params).then(res => {
                     toastr.success('问卷提交成功！')
                     this.getQuestionData()
@@ -1050,13 +1087,14 @@
                 })
             },
             // 推优原因提交
-            submitPush () {
+            submitPush() {
                 if (!this.pushReason) {
                     toastr.error('请填写推优原因！')
                     return
                 }
                 const params = {
-                    excellent: this.pushReason
+                    excellent: this.pushReason,
+                    excellent_sum: this.questionInfo.sum.data[0].truncate
                 }
                 fetch('post', `/reviewquestionnaires/${this.questionId}/create/excellent`, params).then(res => {
                     $("#push-reason").modal("hide");
@@ -1065,12 +1103,10 @@
                 })
             },
             // 根据任务id获取是否有问卷
-            getQuestionId () {
+            getQuestionId() {
                 fetch('get', `/bloggers/${this.taskId}/taskblogger`).then(res => {
-                    console.log(res)
                     if (res.data) {
                         this.questionId = res.data.id
-                        console.log(this.questionId)
                         this.getQuestionData(res.data.id)
                     }
                 })
@@ -1144,21 +1180,25 @@
         background-color: #4253B6;
         position: relative;
     }
+
     .question {
         margin: 20px 0;
     }
+
     .question .name {
         font-size: 14px;
         color: #333;
         font-weight: 500;
         margin-bottom: 10px;
     }
+
     .progress {
         height: 4px;
         margin-bottom: 0;
         margin-top: 10px;
         overflow: unset;
     }
+
     .progress-label {
         color: #333;
         font-size: 14px;
@@ -1166,6 +1206,7 @@
         position: absolute;
         right: -46px;
     }
+
     .progress-label:after {
         /* content: '';
         position: absolute;
@@ -1176,12 +1217,15 @@
         border: 1px solid #eee;
         border-radius: 50%; */
     }
+
     .options {
         margin: 10px 0;
     }
+
     .options .title label {
         cursor: pointer;
     }
+
     .question-avatar {
         /* display: inline-block; */
         float: left;
@@ -1198,6 +1242,7 @@
         position: relative;
         top: -4px;
     }
+
     .select-avatar {
         position: absolute;
         /* background: rgba(0, 0, 0, 0.2); */
@@ -1207,6 +1252,7 @@
         height: 100%;
         border-radius: 50%;
     }
+
     .select-avatar:before, .unselect-avatar:before {
         content: '';
         position: absolute;
@@ -1217,7 +1263,8 @@
         border-radius: 50%;
         background: #fff;
     }
-    .select-avatar:after, .unselect-avatar:after  {
+
+    .select-avatar:after, .unselect-avatar:after {
         content: '';
         position: absolute;
         width: 7px;
@@ -1227,6 +1274,7 @@
         bottom: 2px;
         background: #4CAF50;
     }
+
     .unselect-avatar:after {
         background: #FF9800;
     }
@@ -1234,18 +1282,22 @@
     .all-menber {
         margin-top: 20px;
     }
+
     .radio-custom label::before {
         width: 14px;
         height: 14px;
     }
-    .radio-custom input[type=radio]:checked+input[type=hidden]+label::before, .radio-custom input[type=radio]:checked+label::before {
+
+    .radio-custom input[type=radio]:checked + input[type=hidden] + label::before, .radio-custom input[type=radio]:checked + label::before {
         border-width: 7px;
         border-color: #3298DC;
     }
+
     .radio-custom label::after {
         top: 4px;
         left: 4px;
     }
+
     .radio-custom label {
         top: 2px;
     }
