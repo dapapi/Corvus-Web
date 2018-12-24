@@ -1,5 +1,17 @@
 <template>
     <div class="" v-if="info.approval">
+        <div class="loader-overlay" v-if="isLoading">
+            <div class="loader-content">
+                <div class="loader-index">
+                    <div></div>
+                    <div></div>
+                    <div></div>
+                    <div></div>
+                    <div></div>
+                    <div></div>
+                </div>
+            </div>
+        </div>
         <div class="" style="background-color:#f3f4f5">
             <div class="page-header  page-header-bordered mb-0" >
                 <h6 class="page-title nav-head" v-if="info">
@@ -34,10 +46,10 @@
                         </button>
                     </i>
                     <i v-if="info.approval[0].form_status==234">
-                        <button class="btn btn-primary" @click="addProject(list.type)">重新提交</button>
+                        <button class="btn btn-primary" @click="addProjectTimeout(list.type)">重新提交</button>
                     </i>
                     <i v-if="info.approval[0].form_status==235">
-                        <button class="btn btn-primary" @click="addProject(list.type)" >重新提交</button>
+                        <button class="btn btn-primary" @click="addProjectTimeout(list.type)" >重新提交</button>
                     </i>
                     <i v-if="info.approval[0].form_status==233">
                         <button class="btn btn-primary">作废</button>
@@ -47,7 +59,7 @@
                     <i v-if="info.approval[0].form_status==231">
                         <button class="btn btn-success" @click='approvalHandler("agree")'>同意</button>
                         <button class="btn btn-danger" @click='approvalHandler("refuse")'>拒绝</button>
-                        <button class="btn btn-primary">转交</button>
+                        <button class="btn btn-primary" @click='approvalHandler("transfer")'>转交</button>
 
                     </i>
                     <i v-if="info.approval[0].form_status==232">
@@ -96,8 +108,8 @@
                 </div>
             </div>
         <BuildProject :project-type="projectType" :project-fields-arr="projectFieldsArr" 
-        :default-data='info.fields'></BuildProject>
-
+        :default-data='{fields:info.fields.data,list:list,trailInfo:trailInfo}'></BuildProject>
+        <ApprovalGoModal :mode='approvalMode' :id='this.info.approval[0].project_number' @approvaldone='getData()' />
     </div>
 
 </template>
@@ -118,6 +130,10 @@ export default {
            detailData:{},
            projectType:'',
            projectFieldsArr:[],
+           trailInfo:{},
+           firstFlag:true,
+           isLoading:false,
+           approvalMode:'',
         }
     },
 
@@ -152,6 +168,27 @@ export default {
         }
     },
     methods:{
+        // approverTrans(){
+        //     let _this = this
+        //         fetch('put','/approval_instances/'+this.info.approval[0].project_number+'/transfer',{next_id:383780212}).then((params) => {
+        //             console.log(params);
+        //         }
+        //     )
+        // },
+        addProjectTimeout(params){
+            this.isLoading = true
+            if(this.firstFlag === true){
+                setTimeout(() => {
+                    this.addProject(params)
+                    this.firstFlag = false
+                    this.isLoading = false
+            }, 3000);
+            }else{
+                this.addProject(params)
+                this.isLoading = false
+            }
+           
+        },
         addProject(value) {
                 console.log(value);
                 this.projectType = value;
@@ -182,18 +219,12 @@ export default {
                 });
             },
         approvalHandler(params){
-            let _this = this
-            console.log(this.info.approval[0].project_number);
-            console.log(params);
-            fetch('put','/approval_instances/'+this.info.approval[0].project_number+'/'+params).then((params) => {
-            // console.log(params);
-                _this.getData()
-
-            })
+            this.approvalMode = params
+            $('#approvalGo').modal('show')
         },
         getData(){
             let _this = this
-            fetch('get','/approvals_project/detail/'+this.$route.params.id).then((params) => {
+            fetch('get','/approvals_project/detail/'+this.$route.params.id+'?include=principal,creator,fields,trail').then((params) => {
                 // _this.list = params
                 let {meta}=params
                 _this.list = params.data
@@ -201,6 +232,7 @@ export default {
                 _this.info = meta
                 let {fields:{data}} = meta
                 _this.detailData = data
+                _this.trailInfo = params.data.trail
             })
         },
         participantChange: function (value) {
@@ -219,6 +251,10 @@ export default {
     font-style: normal;
     font-weight: normal;
 }
+ .loader-overlay {
+        margin-left: 320px;
+        background-color: rgba(7, 17, 27, 0.2)
+    }
 .detail {
     width: 82%;
     position: absolute;
