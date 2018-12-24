@@ -402,7 +402,7 @@
                                         </div>
                                         <div class="col-md-2 float-right pr-0 text-right" style="color: #cccccc;">
                                             <i class="iconfont icon-liulan pr-40 pointer-content"></i>
-                                            <i class="iconfont icon-bianji pr-40 pointer-content"></i>
+                                            <i class="iconfont icon-bianji2 pr-40 pointer-content"></i>
                                             <i class="iconfont icon-shanchu1 pointer-content"></i>
                                         </div>
                                     </div>
@@ -422,7 +422,7 @@
                                             </div>
                                             <div class="col-md-2 float-right pr-0 text-right" style="color: #cccccc;">
                                                 <i class="iconfont icon-liulan pr-40 pointer-content"></i>
-                                                <i class="iconfont icon-bianji pr-40 pointer-content"></i>
+                                                <i class="iconfont icon-bianji2 pr-40 pointer-content"></i>
                                                 <i class="iconfont icon-shanchu1 pointer-content"></i>
                                             </div>
                                         </div>
@@ -442,7 +442,7 @@
                                             </div>
                                             <div class="col-md-2 float-right pr-0 text-right" style="color: #cccccc;">
                                                 <i class="iconfont icon-liulan pr-40 pointer-content"></i>
-                                                <i class="iconfont icon-bianji pr-40 pointer-content"></i>
+                                                <i class="iconfont icon-bianji2 pr-40 pointer-content"></i>
                                                 <i class="iconfont icon-shanchu1 pointer-content"></i>
                                             </div>
                                         </div>
@@ -476,7 +476,7 @@
                                         </div>
                                         <div class="col-md-2 float-right pr-0 text-right" style="color: #cccccc;">
                                             <i class="iconfont icon-liulan pr-40 pointer-content"></i>
-                                            <i class="iconfont icon-bianji pr-40 pointer-content"></i>
+                                            <i class="iconfont icon-bianji2 pr-40 pointer-content"></i>
                                             <i class="iconfont icon-shanchu1 pointer-content"></i>
                                         </div>
                                     </div>
@@ -492,7 +492,7 @@
                                 <div class="card-header card-header-transparent card-header-bordered">
                                     <div class="float-left font-weight-bold third-title">项目信息</div>
                                     <div class="float-right" v-show="!isEdit && projectInfo.approval_status == 1">
-                                        <i class="iconfont icon-bianji pointer-content" aria-hidden="true"
+                                        <i class="iconfont icon-bianji2 pointer-content" aria-hidden="true"
                                            @click="editBaseInfo"></i>
                                     </div>
                                     <div class="float-right mr-40" v-show="isEdit">

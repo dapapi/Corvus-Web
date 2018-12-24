@@ -31,7 +31,7 @@
                     <div class="tab-content pt-20">
                       <div class="tab-pane active" id="exampleTabsOne" role="tabpanel">
                         <div class="edit">
-                            <i v-if="!isEdit" @click="editInfo" class="iconfont icon-bianji"></i>
+                            <i v-if="!isEdit" @click="editInfo" class="iconfont icon-bianji2"></i>
                             <template v-else>
                                 <span class="save" @click="save">保存</span> <span class="cancel" @click="cancel">取消</span>
                             </template>

@@ -262,15 +262,9 @@
                                  data-target="#addWork">
                                 <button type="button"
                                         class="site-action-toggle btn-raised btn btn-success btn-floating waves-effect waves-classic">
-                                    <<<<<<< HEAD
                                     <i class="front-icon iconfont icon-tianjia animation-scale-up"
                                        aria-hidden="true"></i>
-                                    <i class="back-icon md-close animation-scale-up" aria-hidden="true"></i>
-                                    =======
-                                    <i class="front-icon iconfont icon-tianjia animation-scale-up"
-                                       aria-hidden="true"></i>
-                                    <i class="back-icon iconfont icon-guanbianimation-scale-up" aria-hidden="true"></i>
-                                    >>>>>>> cxy
+                                    <i class="back-icon iconfont icon-guanbi animation-scale-up" aria-hidden="true"></i>
                                 </button>
                             </div>
 
@@ -338,7 +332,7 @@
                                 <div class="card-header card-header-transparent card-header-bordered">
                                     <div class="float-left font-weight-bold third-title">艺人信息</div>
                                     <div class="float-right pointer-content" v-show="!isEdit">
-                                        <i class="iconfont icon-bianji" aria-hidden="true"
+                                        <i class="iconfont icon-bianji2" aria-hidden="true"
                                            @click="editBaseInfo"></i>
                                     </div>
                                     <div class="float-right mr-40" v-show="isEdit">

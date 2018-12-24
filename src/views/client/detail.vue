@@ -223,7 +223,7 @@
                             <div class="card-header card-header-transparent card-header-bordered">
                                 <div class="float-left font-weight-bold third-title">客户详情</div>
                                 <div class="float-right pointer-content">
-                                    <i class="iconfont icon-bianji" aria-hidden="true" @click="editBaseInfo"></i>
+                                    <i class="iconfont icon-bianji2" aria-hidden="true" @click="editBaseInfo"></i>
                                 </div>
                                 <div class="float-right mr-40" v-show="isEdit">
                                     <button class="btn btn-sm btn-white btn-pure" @click="cancelEdit">取消</button>
@@ -348,7 +348,7 @@
                                           data-target="#addContact"
                                           @click="changeEditStatus(false,contact)"
                                     >
-                                        <i class="iconfont icon-bianji" aria-hidden="true"></i>
+                                        <i class="iconfont icon-bianji2" aria-hidden="true"></i>
                                     </span>
                                     <span class="d-block float-left"
                                           style="width: 1px; height: 14px;border-right: 1px solid #b9b9b9;margin: 3px;"></span>

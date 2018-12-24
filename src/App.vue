@@ -205,4 +205,10 @@
         color: #ff9800;
     }
 
+    .vertical-line {
+        width: 1px;
+        height: 100%;
+        background-color: #eee;
+    }
+
 </style>
