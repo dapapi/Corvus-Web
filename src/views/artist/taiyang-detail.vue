@@ -27,8 +27,8 @@
 
             <div class="panel col-md-12">
                 <div class="card-block">
-                    <h4 class="card-title">{{artistInfo.name}}</h4>
-                    <div class="card-text clearfix example">
+                    <h4 class="card-title"><img width="40px" height="40px" style="border-radius:50%" class="mr-5" :src="avatar" alt="">{{artistInfo.name}}</h4>
+                    <div class="card-text clearfix example ml-50">
                         <div class="col-md-6 float-left pl-0">
                             <div class="float-left pl-0 pr-2 col-md-2">
                                 <i class="iconfont icon-yonghu pr-2" aria-hidden="true"></i>经理人
@@ -52,11 +52,11 @@
 
                     </div>
                 </div>
-                <div class="clearfix">
+                <div class="clearfix ml-50">
                     <div class="col-md-6 float-left pl-0 mb-20" style="border-right: 1px solid #eee">
                         <div class="col-md-6"><i class="iconfont icon-iconset0399"></i> 任务 {{taskNum}}</div>
-                        <div class="clearfix example" v-for="(item,index) in artistTasksInfo" :key="index">
-                            <div class="col-md-3 float-left">{{item.title}}</div>
+                        <div class="clearfix example" v-for="(item,index) in artistTasksInfo" :key="index" @click="goTask(item.id)">
+                            <div class="col-md-3 float-left"><router-link :to="{path:`/tasks/${item.id}`}">{{item.title}}</router-link></div>
                             <div class="col-md-3 float-left">{{item.principal.data.name}}</div>
                             <div class="col-md-3 float-left">{{item.end_at}}</div>
                             <div class="col-md-3 float-left">
@@ -69,7 +69,7 @@
                     <div class="col-md-6 float-left pl-0 mb-20">
                         <div class="col-md-6"><i class="iconfont icon-ego-box"></i>项目</div>
                         <div class="clearfix example" v-for="(item,index) in artistProjectsInfo" :key="index">
-                            <div class="col-md-3 float-left">{{item.title}}</div>
+                            <div class="col-md-3 float-left"><router-link :to="{path:`/projects/${item.id}`}">{{item.title}}</router-link></div>
                             <div class="col-md-3 float-left">{{item.principal.data.name}}</div>
                             <div class="col-md-3 float-left">{{item.end_at}}</div>
                             <div class="col-md-3 float-left">{{item.status}}</div>
@@ -132,7 +132,7 @@
                     <div class="tab-content nav-tabs-animate bg-white col-md-12">
                         <!--日历日程-->
                         <div class="tab-pane animation-fade pb-20 fixed-button-father" id="forum-artist-schedule"
-                             role="tabpanel">
+                             role="tabpanel" :class="artistInfo.sign_contract_status == 2?'active':''">
                             <div class="col-md-12">
                                 <calendar></calendar>
                             </div>
@@ -840,6 +840,7 @@
                 taskNum: '',
                 doneTaskNum: 0,
                 filterFee: 1,
+                avatar:''
             }
         },
 
@@ -868,6 +869,7 @@
                 fetch('get', '/stars/' + this.artistId, data).then(function (response) {
 
                     _this.artistInfo = response.data;
+                    _this.avatar = _this.artistInfo.avatar
                     _this.artistProjectsInfo = []
                     _this.artistTasksInfo = response.data.tasks.data
                     if (_this.artistTasksInfo.length > 0) {
@@ -890,7 +892,7 @@
                 })
 
             },
-
+            
             getArtistsBill: function () {
                 if (this.artistBillsInfo.length > 0) {
                     return;
@@ -929,13 +931,21 @@
                     },
                     grid: {
                         left: '3%',
-                        right: '4%',
+                        right: '5%',
                         bottom: '3%',
                         containLabel: true
                     },
                     toolbox: {
                         feature: {
-                            saveAsImage: {}
+                            saveAsImage: {
+                                show:true,
+                                title:'保存',
+                                iconStyle:{
+                                    textPosition:10000,
+                                    textAlign:'left'
+                                }
+        
+                            }
                         }
                     },
                     xAxis: {
@@ -1019,7 +1029,30 @@
                 for (let i = 0; i < this.$store.state.newParticipantsInfo.length; i++) {
                     participant_ids.push(this.$store.state.newParticipantsInfo[i].id)
                 }
-
+                if(!this.taskType){
+                    toastr.error('请选择任务类型')
+                    return false
+                }
+                if(!this.taskName){
+                    toastr.error('请输入任务名称')
+                    return false
+                }
+                if(!this.$store.state.newPrincipalInfo.id){
+                    toastr.error('请选择负责人')
+                    return false
+                }
+                if(!this.startMinutes){
+                    toastr.error('请选择任务开始时间')
+                    return false
+                }
+                if(!this.endMinutes){
+                    toastr.error('请选择任务结束时间')
+                    return false
+                }
+                if(!this.priority){
+                    toastr.error('请选择任务优先级')
+                    return false
+                }
                 //判断开始时间必须早于结束时间
                 startMin = this.startMinutes.split(':')
                 endMin = this.endMinutes.split(':')
@@ -1028,6 +1061,10 @@
                 if (start > end) {
                     toastr.error('结束时间必须晚于开始时间,请重新选择时间');
                     return false;
+                }
+                if(participant_ids.length<=0){
+                    toastr.error('请选择参与人')
+                    return false
                 }
                 let data = {
                     title: this.taskName,
@@ -1046,10 +1083,28 @@
                     toastr.success('创建成功');
                     $('#addTask').modal('hide');
                     _this.artistTasksInfo.push(response.data)
+                    _this.$store.state.newPrincipalInfo = []
+                    _this.$store.state.newParticipantsInfo = []
                 })
             },
 
             addWork: function () {
+                // if(!this.artistWorkName){
+                //     toastr.error('请填写作品名称')
+                //     return false
+                // }
+                // if(!this.artistWorkDirector){
+                //     toastr.error('请选择作品类型')
+                //     return false
+                // }
+                // if(!this.character){
+                //     toastr.error('请选择任务类型')
+                //     return false
+                // }
+                // if(!this.workReleaseTime){
+                //     toastr.error('请选择任务类型')
+                //     return false
+                // }
                 let data = {
                     name: this.artistWorkName,
                     director: this.artistWorkDirector,

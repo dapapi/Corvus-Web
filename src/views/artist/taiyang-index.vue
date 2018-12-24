@@ -75,7 +75,7 @@
                                 <th class="cell-300" scope="col">年龄</th>
                                 <th class="cell-300" scope="col">艺人来源</th>
                                 <th class="cell-300" scope="col">沟通状态</th>
-                                <th class="cell-300" scope="col">签约状态</th>
+                                <!-- <th class="cell-300" scope="col">签约状态</th> -->
                                 <th class="cell-300" scope="col">录入时间</th>
                                 <th class="cell-300" scope="col">最后跟进时间</th>
                             </tr>
@@ -109,12 +109,12 @@
                                            
                                         </template>
                                     </td>
-                                    <td>
+                                    <!-- <td>
                                         <template v-if="artist.sign_contract_status ==1"><span style="color:#FF9800">签约中</span></template>
                                         <template v-if="artist.sign_contract_status ==2"><span style="color:#4CAF50">已签约</span></template>
                                         <template v-if="artist.sign_contract_status ==3"><span style="color:#F44336">已解约</span></template>
-                                        <!-- {{ artistSourceArr.find(item => item.value == artist.source).name}} -->
-                                    </td>
+                                        {{ artistSourceArr.find(item => item.value == artist.source).name}}
+                                    </td> -->
                                     <td>{{artist.created_at}}</td>
                                     <td>{{artist.updated_at}}</td>
                                 </tr>
@@ -149,7 +149,7 @@
             <div class="modal-dialog modal-simple">
                 <div class="modal-content">
                     <div class="modal-header">
-                        <button type="button" class="close" aria-hidden="true" data-dismiss="modal">
+                        <button type="button" class="close" aria-hidden="true" data-dismiss="modal" @click="cancleData">
                             <i class="iconfont icon-guanbi" aria-hidden="true"></i>
                         </button>
                         <h4 class="modal-title">新增艺人</h4>
@@ -158,7 +158,7 @@
                         <div class="example">
                             <div class="col-md-2 text-right float-left">姓名</div>
                             <div class="col-md-10 float-left pl-0">
-                                <input type="text" class="form-control" placeholder="请输入姓名" v-model="artistName">
+                                <input type="text" class="form-control" placeholder="请输入姓名" v-model="artistName" >
                             </div>
                         </div>
                         <div class="example">
@@ -297,8 +297,20 @@
                             <div class="col-md-2 text-right float-left">上传附件</div>
                             <div class="col-md-5 float-left pl-0">
                                 <span style="color:#01BCD4;cursor:pointer">上传附件</span>
-                                <FileUploader class="upload"  @change="uploadAttachment"></FileUploader>
+                                <FileUploader class="fileupload"  @change="uploadAttachment"></FileUploader>
                                 <div class="mt-5" v-for="(attach,index) in affixes" :key="index">{{attachmentTypeArr.find(item => item.value == attach.type).name}} - {{attach.title}}</div>
+                            </div>
+                        </div>
+                        <div class="example">
+                            <div class="col-md-2 text-right float-left">头像</div>
+                            <div class="col-md-5 float-left pl-0" style="height:50px">
+                                <Upload @change='getUploadUrl' class="upload-image">
+                                    <div class="puls" :style="{ backgroundImage: 'url(' + uploadUrl + ')' }" v-if="uploadUrl">
+                                    </div>
+                                    <div class="puls" v-if="!uploadUrl">
+                                    <span>+</span>
+                                    </div>
+                                </Upload>
                             </div>
                         </div>
                         <div class="example">
@@ -309,7 +321,7 @@
                         </div>
                     </div>
                     <div class="modal-footer">
-                        <button class="btn btn-sm btn-white btn-pure" data-dismiss="modal">取消</button>
+                        <button class="btn btn-sm btn-white btn-pure" data-dismiss="modal" @click="cancleData">取消</button>
                         <button class="btn btn-primary" type="submit" @click="addArtist">确定</button>
                     </div>
 
@@ -352,6 +364,7 @@
     export default {
         data: function () {
             return {
+                uploadUrl:'',
                 total: 0,
                 current_page: 1,
                 total_pages: 1,
@@ -541,7 +554,20 @@
                     return false
                 }
                 if(!this.artistBirthday){
+                    
                     toastr.error('请选择艺人出生日期');
+                    return false
+                }
+                if(new Date(this.artistBirthday).getTime()>new Date().getTime()){
+                    toastr.error('出生日期不能晚于当前日期');
+                    return false
+                }
+                if(!this.artistSource){
+                    toastr.error('请选择艺人来源');
+                    return false
+                }
+                if(!this.platformType){
+                    toastr.error('请选择沟通平台');
                     return false
                 }
                 if(!this.communicationStatus){
@@ -556,6 +582,15 @@
                     toastr.error('请选择是否与其他公司签约');
                     return false
                 }
+                if(!this.affixes){
+                    toastr.error('请上传附件');
+                    return false
+                }
+                // if(!this.uploadUrl){
+                //     toastr.error('请上传头像')
+                //     return false
+                // }
+
                 let platform = this.platformType.join(',');
                 let data = {
                     name: this.artistName,//名字
@@ -583,7 +618,8 @@
                     qita_url:this.qitaUrl,
                     qita_fans_num:this.qitaFansNum,
                     affix:this.affixes,//附件
-                    desc:this.artistDesc//  备注
+                    desc:this.artistDesc,//  备注
+                    avatar:this.uploadUrl
 
                 };
                 let _this = this;
@@ -591,9 +627,14 @@
                     toastr.success('创建成功');
                     $('#addArtist').modal('hide');
                     _this.$router.push({path: 'artists/' + response.data.id});
+                    _this.cancleData()
                 })
             },
-            
+            cancleData:function(){
+                this.uploadUrl = ''
+                this.artistDesc= ''
+                this.artistName = ''
+            },
             //选择附件类型
             changeAttachmentType: function (value) {
                   this.affixesType = value
@@ -602,6 +643,10 @@
 
             },
 
+            //上传头像
+            getUploadUrl(res){
+                this.uploadUrl = res
+            },
             redirectArtistDetail: function (artistId) {
                 this.$router.push({path: 'artists/' + artistId});
             },
@@ -624,9 +669,14 @@
             changeMember:function(type){
                 this.giveType =type
             },
+            //分配经纪人和宣传人
             giveBroker:function(){
                 let url,toast,data
                 let _this = this
+                if(!this.selectedArtistsArr){
+                    toastr.error('请选择分配艺人')
+                    return false
+                }
                 if(this.giveType == 1){
                    url = 'distribution/person' 
                    toast = '分配经纪人成功'
@@ -749,7 +799,22 @@
     .uploadContent{
         position: relative;
     }
-    .upload{
+    
+    .puls {
+        display: inline-block;
+        background-size: 100px;
+        width: 50px;
+        height: 50px;
+        text-align: center;
+        line-height: 46px;
+        border-radius: 50%;
+        border: 1px dashed #eee;
+
+    }
+    .puls span {
+        font-size: 30px;
+    }
+    .fileupload{
         position: absolute;
         top:0px;
         left:0px;

@@ -14,7 +14,7 @@
     export default {
         // 凡是多选，都有搜索框；不是多选传入selectable为true也可以有搜索框
         // changeKey为父组件的data，且可以被改变
-        props: ['options', 'disable', 'multiple', 'placeholder', 'changeKey', 'value', 'resetinfo', 'selectable'],
+        props: ['options', 'disable', 'multiple', 'placeholder', 'changeKey', 'value', 'resetinfo', 'selectable','default'],
         data() {
             return {
                 isDisable: this.disable,
@@ -47,6 +47,12 @@
                 self.$emit('change', $(this).val(), $(this)[0].selectedOptions[0].label, $(this)[0].selectedOptions[0].id);
                
             });
+            if(this.default){
+                this.setValue(this.default.values.data.value)
+            }
+            if(this.getValue()){
+                this.$emit('change',this.getValue())                
+            }
         },
         watch: {
             resetinfo: function (value) {
@@ -84,6 +90,7 @@
              * */
             setValue(value) {
                 $(this.$el).selectpicker('val', value);
+                
             },
 
             getValue() {

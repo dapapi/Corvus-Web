@@ -46,6 +46,7 @@ export default {
         return{
             colorArr:['#F23E7C','#FF68E2','#FB8C00','#B53FAF','#27D3A8','#2CCCDA','#38BA5D','#3F51B5'],
             approver:[],
+            cover:[]
         }
     },
     computed:{
@@ -64,6 +65,9 @@ export default {
     },
     methods:{
           getApprover(value){
+              if(!value){
+                  return
+              }
                 let _this = this
                 if(!this.mode){
                     fetch('get','/approvals/chains?form_id='+value+'&change_type=222&value').then((params) => {
@@ -72,10 +76,12 @@ export default {
                 }else{
                     fetch('get','/approval_instances/'+value+'/chains').then((params) => {
                         _this.approver = params.data
+                        
+                        // _this.cover = _this.approver.map.split('|')
                     })
                 }
             },
-         randomColor(){
+        randomColor(){
             let n = Math.floor(Math.random()*5+1)
             return {backgroundColor:this.colorArr[n]}
         }
@@ -97,15 +103,6 @@ export default {
 .approval-detail-title{
     background: #f5f5f5;
 }
-/* .detail-container{
-    border: 1px solid rgba(7, 17, 27, 0.2); 
-    height: 40px;
-    line-height: 40px;
-}
-.detail-key{
-    height: 40px;
-    background-color: rgba(7, 17, 27, 0.1);
-} */
 .approver_texts{
     margin-top: 5px;
 }

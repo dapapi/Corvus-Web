@@ -4,10 +4,16 @@
 
 <script>
     export default {
+        props:['default'],
         name: "emit-input",
         data() {
             return {
                 value: ''
+            }
+        },
+        mounted(){
+            if(this.default){
+                this.value = this.default.values.data.value
             }
         },
         watch: {
@@ -19,9 +25,14 @@
             /**
              * 清空input内容
              * */
-            refresh() {
-                this.value = ''
-            }
+            refresh(params) {
+                this.value = params
+            },
+            // setValue(params){
+            //     this.$nextTick(() => {
+            //         this.value = params   
+            //     })
+            // }
         }
     }
 </script>
