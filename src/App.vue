@@ -32,9 +32,8 @@
         },
         watch: {
             '$route': function (to, from) {
-                if (this.$route.path === '/login') {
+                if (this.$route.path === '/login' || this.$route.path === '/informationForm') {
                     this.isLeftMenuShow = false
-
                 }
                 else if (this.$route.path === '/management'
                     || this.$route.path === '/rolemanagement'
@@ -43,7 +42,7 @@
                     || this.$route.path === '/organization/management'){
                      this.isLeftMenuShow = false
                      this.isLeftManageShow = true
-                }else{
+                } else{
                     this.isLeftMenuShow = true
                     this.isLeftManageShow = false 
                 }

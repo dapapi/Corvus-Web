@@ -119,7 +119,7 @@
                                     </div>
                                 </div>
                             </div>
-                            <div class="col-md-6" style="margin-top: -20px;">
+                            <div class="col-md-6">
                                 <div class="example">
                                     <div class="col-md-3 text-right float-left require">出生日期</div>
                                     <div class="col-md-8 float-left pl-0">
@@ -309,11 +309,14 @@
                     </div>
 
                     <div class="tab-pane" id="exampleTabsTwo" role="tabpanel">
-                        <div style="color: #01bcd4; cursor: pointer">http://www.iconfont.cn/search/index?q=</div>
-                        点击复制此链接
+                        <div style="color: #01bcd4;">
+                            {{ addUrl }}
+                            <button class="btn btn-primary" style="margin-left: 10px" @click="copy">复制链接</button>
+                            <input ref="input" id="demoInput" :value="addUrl" style="opacity: 0" />
+                            </div>
                       </div>
                     </div>
-                  </div>
+                </div>
             </div>
 
         </div>
@@ -346,6 +349,7 @@ export default {
             maritalStatusArr: maritalStatusArr,
             nationalityArr: tempArr,
             bloodTypeArr: bloodTypeArr,
+            addUrl: window.location.origin + '/informationForm',
             nameCN: '',
             nameEN: '',
             gender: '',
@@ -670,6 +674,13 @@ export default {
                 })
                 return canPush
             })
+        },
+        copy () {
+            this.$refs.input.select()
+            if (document.execCommand('copy')) {
+                document.execCommand('copy')
+                toastr.success('复制成功!')
+            }
         }
 	}
 }
