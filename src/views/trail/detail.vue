@@ -1139,11 +1139,4 @@
         user-select: none;
         z-index: 2;
     }
-
-    /* .edit-height {
-        height: 57px;
-    } */
-    .py-10 {
-        height: 57px;
-    }
 </style>

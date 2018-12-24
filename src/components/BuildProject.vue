@@ -93,7 +93,7 @@
                         </div>
                     </div>
                     <div class="col-md-12 example clearfix" v-show="projectType != 5">
-                        <div class="col-md-2 text-right float-left px-0">合同金额</div>
+                        <div class="col-md-2 text-right float-left px-0">预计订单收入</div>
                         <div class="col-md-10 float-left">
                             <NumberSpinner ref="projectFee"
                                            @change="(value) => addProjectBaseInfo(value, 'fee')"></NumberSpinner>
@@ -145,7 +145,9 @@
                         </div>
                     </div>
                 </div>
-                <ApprovalProgress :formid='projectType' />
+                <template v-if="projectType != 5">
+                    <ApprovalProgress :formid='projectType' />
+                </template>
 
                 <div class="modal-footer">
                     <button class="btn btn-sm btn-white btn-pure" data-dismiss="modal">取消</button>

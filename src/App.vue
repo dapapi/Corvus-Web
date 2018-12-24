@@ -70,7 +70,7 @@
     }
 
     .asSpinner {
-        height: 36px;
+        height: 36.02px;
     }
 
     .site-menubar-body {
@@ -178,7 +178,7 @@
     }
 
     .edit-height {
-        height: 57px;
+        /*height: 57px;*/
     }
 
     *::-webkit-scrollbar {
@@ -209,6 +209,10 @@
         width: 1px;
         height: 100%;
         background-color: #eee;
+    }
+
+    .bootstrap-select:not([class*=col-]):not([class*=form-control]):not(.input-group-btn) {
+        height: 36.02px;
     }
 
 </style>
