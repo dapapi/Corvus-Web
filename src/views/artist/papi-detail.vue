@@ -8,10 +8,12 @@
                    data-toggle="dropdown" aria-expanded="false"></i>
                 <div class="dropdown-menu dropdown-menu-right task-dropdown-item" aria-labelledby="taskDropdown"
                      role="menu" x-placement="bottom-end">
-                    <a class="dropdown-item" role="menuitem" >分享</a>
                     <a class="dropdown-item" role="menuitem" >分配制作人</a>
-                    <a class="dropdown-item" role="menuitem">自定义字段</a>
                     <a class="dropdown-item" role="menuitem" data-toggle="modal" data-target="#addPrivacy">隐私设置</a>
+                    <a class="dropdown-item" role="menuitem" data-toggle="modal" data-target="#addPrivacy">
+                        <template v-if="artistInfo.sign_contract_status == 1">签约</template>
+                        <template v-if="artistInfo.sign_contract_status == 2">解约</template>
+                    </a>
                 </div>
             </div>
         </div>
@@ -27,7 +29,7 @@
                                 <i class="iconfont icon-yonghu"></i>
                               制作人
                             </div>
-                            <div class="font-weight-bold float-left p-10"  v-for="item in totalData.publicity.data" :key="item.id" >
+                            <div class="font-weight-bold float-left p-10"  v-for="item in artistInfo.publicity.data" :key="item.id" >
                                 <span >{{item.name}}</span>
                             </div>
                         </div>
@@ -35,8 +37,8 @@
                 </div>
                 <div class="clearfix">
                     <div class="col-md-6 float-left pl-0 mb-20" style="border-right: 1px solid #eee" v-if="tasksInfo.length>0">
-                        <div class="col-md-6"><i class="iconfont icon-iconset0399"></i> 任务{{taskNum}}</div>
-                        <div class="clearfix example" v-for="(task,index) in tasksInfo" :key="index">
+                        <div class="col-md-6"><i class="iconfont icon-iconset0399"></i> 任务</div>
+                        <div class="clearfix example taskshow" v-for="(task,index) in tasksInfo" :key="index" @click="JumpDetails(task.id)">
                             <div class="col-md-3 float-left">{{task.title}}</div>
                             <div class="col-md-3 float-left">{{task.principal.data.name}}</div>
                             <div class="col-md-3 float-left">{{task.end_at}}</div>
@@ -50,7 +52,7 @@
                     </div>
                     <div class="col-md-6 float-left pl-0 mb-20" v-if="ProjectsInfo.length>0">
                         <div class="col-md-6"><i class="iconfont icon-ego-box"></i>项目</div>
-                        <div class="clearfix example" v-for="(item,index) in ProjectsInfo" :key="index">
+                        <div class="clearfix example projectshow" v-for="(item,index) in ProjectsInfo" :key="index" @click="projectDetails(item.id)">
                             <div class="col-md-3 float-left">{{item.title}}</div>
                             <div class="col-md-3 float-left">{{item.principal.data.name}}</div>
                             <div class="col-md-3 float-left">{{item.end_at}}</div>
@@ -70,17 +72,17 @@
                         <li class="nav-item" role="presentation">
                             <a class="nav-link active" data-toggle="tab" href="#forum-artist-schedule"
                                aria-controls="forum-base"
-                               aria-expanded="true" role="tab">日程</a>
+                               aria-expanded="true" role="tab" >日程</a>
                         </li>
                         <li class="nav-item" role="presentation">
                             <a class="nav-link" data-toggle="tab" href="#forum-artist-projects"
                                aria-controls="forum-present"
-                               aria-expanded="false" role="tab">项目</a>
+                               aria-expanded="false" role="tab" >项目</a>
                         </li>
                         <li class="nav-item" role="presentation" >
                             <a class="nav-link" data-toggle="tab" href="#forum-artist-tasks"
                                aria-controls="forum-present"
-                               aria-expanded="false" role="tab">
+                               aria-expanded="false" role="tab"  :class="artistInfo.sign_contract_status == 2?'active':''">
                                 <template v-if="tasksInfo.length > 0">
                                     <ToolTips :title="`已完成数量${completeNum}`">
                                         任务 ({{completeNum}}/{{tasksInfo.length}})
@@ -96,17 +98,17 @@
                         <li class="nav-item" role="presentation">
                             <a class="nav-link" data-toggle="tab" href="#forum-artist-work"
                                aria-controls="forum-present"
-                               aria-expanded="false" role="tab">作品库</a>
+                               aria-expanded="false" role="tab" >作品库</a>
                         </li>
                         <li class="nav-item" role="presentation">
                             <a class="nav-link" data-toggle="tab" href="#forum-artist-fans"
                                aria-controls="forum-present"
-                               aria-expanded="false" role="tab">粉丝数据</a>
+                               aria-expanded="false" role="tab" >粉丝数据</a>
                         </li>
                         <li class="nav-item" role="presentation">
                             <a class="nav-link" data-toggle="tab" href="#forum-artist-bill"
                                aria-controls="forum-present"
-                               aria-expanded="false" role="tab">账单</a>
+                               aria-expanded="false" role="tab" >账单</a>
                         </li>
                         <li class="nav-item" role="presentation">
                             <a class="nav-link" data-toggle="tab" href="#forum-artist-base"
@@ -239,7 +241,6 @@
                         </div>
                         <div class="tab-pane animation-fade pb-20 fixed-button-father" id="forum-artist-fans"
                              role="tabpanel">
-                            粉丝
                             <div id="myChart"
                                  style="width:80vw ;height:400px; margin-top:30px;padding-bottom: 20px"></div>
                         </div>
@@ -252,26 +253,48 @@
                                 <div class="col-md-2 float-left">10000000元</div>
                             </div>
 
-                            <table class="table table-hover is-indent example" data-plugin="animateList"
-                                   data-animate="fade" data-child="tr">
-                                <tr class="animation-fade"
-                                    style="animation-fill-mode: backwards; animation-duration: 250ms; animation-delay: 0ms;">
-                                    <th class="cell-300" scope="col">科目类别</th>
+                           <table class="table table-hover"
+                                   data-child="tr">
+                                <tr>
+                                    <th class="cell-300" scope="col">费用类型</th>
+                                    <th class="cell-300 position-relative" scope="col">
+                                        <template v-if="filterFee === 1">全部</template>
+                                        <template v-if="filterFee === 2">成本</template>
+                                        <template v-if="filterFee === 3">收入</template>
+                                        <i class="iconfont icon-gengduo1 pl-2" aria-hidden="true"
+                                           id="projectDropdown" data-toggle="dropdown" aria-expanded="false"></i>
+                                        <div class="dropdown-menu" aria-labelledby="projectDropdown" role="menu">
+                                            <a class="dropdown-item" role="menuitem" v-show="filterFee !== 1"
+                                               @click="filterProjectFee(1)">全部</a>
+                                            <a class="dropdown-item" role="menuitem" v-show="filterFee !== 2"
+                                               @click="filterProjectFee(2)">成本</a>
+                                            <a class="dropdown-item" role="menuitem" v-show="filterFee !== 3"
+                                               @click="filterProjectFee(3)">收入</a>
+                                        </div>
+                                    </th>
+                                    <th class="cell-300" scope="col">项目名称</th>
                                     <th class="cell-300" scope="col">金额</th>
-                                    <th class="cell-300" scope="col">收款时间</th>
-                                    <th class="cell-300" scope="col">付款时间</th>
+                                    <th class="cell-300" scope="col">收款/审批时间</th>
                                     <th class="cell-300" scope="col">操作人</th>
                                 </tr>
                                 <tbody>
-                                <tr v-for="work in artistWorksInfo">
-                                    <td>暂无</td>
-                                    <td>暂无</td>
-                                    <td>暂无</td>
-                                    <td>暂无</td>
-                                    <td>暂无</td>
+                                <tr>
+                                    <td>宣传费</td>
+                                    <td>成本</td>
+                                    <td>我们不一样</td>
+                                    <td>10000元</td>
+                                    <td>2018-07-23 10:00</td>
+                                    <td>测试</td>
+                                </tr>
+                                 <tr>
+                                    <td>项目收入</td>
+                                    <td>收入</td>
+                                    <td>喜欢你</td>
+                                    <td>10000元</td>
+                                    <td>2018-07-23 10:00</td>
+                                    <td>测试</td>
                                 </tr>
                                 </tbody>
-                              
                             </table>
                             
                         </div>
@@ -324,6 +347,7 @@
                                                               @change="changeArtistIntention"></EditSelector>
                                             </div>
                                         </div>
+
                                         <div class="card-text py-10 px-0 clearfix col-md-6 float-left edit-height">
                                             <div class="col-md-2 float-left text-right pl-0">是否签约其他公司</div>
                                             <div class="col-md-10 float-left font-weight-bold">
@@ -403,7 +427,7 @@
                                         </div>
                                          <div class="card-text py-10 px-0 clearfix col-md-6 float-left edit-height">
                                             <div class="col-md-2 float-left text-right pl-0">孵化期</div>
-                                            <div class="col-md-10 float-left font-weight-bold">
+                                            <div class="col-md-10 float-left font-weight-bold" >
                                                 <EditGroupDatePicker :content="Incubationperiod" :is-edit="isEdit"
                                                               @change="changeArtistHatch" ></EditGroupDatePicker>
                                             </div>
@@ -498,7 +522,7 @@
                             <div class="col-md-2 text-right float-left">负责人</div>
                             <div class="col-md-5 float-left pl-0">
                                     <InputSelectors
-                                        :placeholder="'请选择负责人'"
+                                        :placeholder="principalName"
                                         @change="principalChange">
                                     </InputSelectors>
                             </div>
@@ -623,39 +647,7 @@
                     </div>
                     <div class="modal-body">
                         <div class="example">
-                            <div class="col-md-2 text-right float-left">收款金额</div>
-                            <div class="col-md-10 float-left">
-                                <add-member ></add-member>
-                            </div>
-                        </div>
-                        <div class="example">
-                            <div class="col-md-2 text-right float-left">付款金额</div>
-                            <div class="col-md-10 float-left">
-                                <add-member ></add-member>
-
-                            </div>
-                        </div>
-                        <div class="example">
-                            <div class="col-md-2 text-right float-left">合同类型</div>
-                            <div class="col-md-10 float-left">
-                                <add-member></add-member>
-
-                            </div>
-                        </div>
-                        <div class="example">
-                            <div class="col-md-2 text-right float-left">分成比例</div>
-                            <div class="col-md-10 float-left">
-                                <add-member></add-member>
-                            </div>
-                        </div>
-                        <div class="example">
                             <div class="col-md-2 text-right float-left">孵化期</div>
-                            <div class="col-md-10 float-left">
-                                <add-member></add-member>
-                            </div>
-                        </div>
-                        <div class="example">
-                            <div class="col-md-2 text-right float-left">账单</div>
                             <div class="col-md-10 float-left">
                                 <add-member></add-member>
                             </div>
@@ -719,7 +711,6 @@
                 isLoading:true,
                 participant:'',
                 tasksInfo:'',
-                taskNum:'',
                 ProjectsInfo:[],
                 start_Time:'',
                 end_Time:'',
@@ -730,7 +721,9 @@
                 updatedemand:'',//合作需求
                 updatehatch_start:'',//孵化期开始
                 updatehatch_end:'',//孵化期截止
-                Incubationperiod:''
+                Incubationperiod:'',
+                principalName:'',
+                filterFee:1
             }
         },
          computed: {
@@ -738,9 +731,11 @@
                 return this.tasksInfo.filter( n => n.status === 2).length
             }
         },
-        mounted() {
+        created(){
             this.getArtist()
-            
+        },
+        mounted() {
+            this.getTaskDate();  
             this.charts()
             let _this = this;
             //  清空任务
@@ -796,7 +791,9 @@
                     },
                     toolbox: {
                         feature: {
-                            saveAsImage: {}
+                            saveAsImage: {
+                              title:'保存'
+                            }
                         }
                     },
                     xAxis: {
@@ -849,6 +846,7 @@
                 fetch('get', '/bloggers/' + this.artistId, data).then(function (response) {
                     let doneTaskNum = 0
                     _this.artistInfo = response.data;
+                    console.log(_this.artistInfo)
                     _this.tasksInfo = response.data.tasks.data
                     if(_this.tasksInfo.length>0){
                         for (let i = 0; i < _this.tasksInfo.length; i++) {
@@ -858,10 +856,21 @@
                             
                         }
                     }
-                   
-                    _this.Incubationperiod = _this.artistInfo.hatch_star_at+'|'+_this.artistInfo.hatch_end_at
-                     
-                    _this.taskNum =`${doneTaskNum}/${_this.tasksInfo.length}` 
+                     //项目
+                     if(response.data.trails){
+                        for (let i = 0; i < response.data.trails.data.length; i++) {
+                            if (response.data.trails.data[i].project) {
+                                response.data.trails.data[i].project.data.company = response.data.trails.data[i].client.data.company
+                                _this.ProjectsInfo.push(response.data.trails.data[i].project.data)
+                            }
+                        }
+                     }
+                    
+                    //孵化期时间 
+                    if(_this.artistInfo.hatch_star_at&&_this.artistInfo.hatch_end_at){
+                        _this.Incubationperiod = _this.artistInfo.hatch_star_at+'|'+_this.artistInfo.hatch_end_at
+                    }   
+                    //状态转换
                     if(_this.artistInfo.intention==false){
                         _this.updateType=2
                     }else{
@@ -880,23 +889,6 @@
                       
                     
                 });
-                //项目
-                fetch('get','/bloggers/'+this.artistId+'?include=tasks.type,trails.project.principal,trails.client,producer,creator,affixes,type,publicity').then(function(response){
-                    _this.totalData=response.data
-                     for (let i = 0; i < response.data.trails.data.length; i++) {
-                        if (response.data.trails.data[i].project) {
-                            response.data.trails.data[i].project.data.company = response.data.trails.data[i].client.data.company
-                            _this.ProjectsInfo.push(response.data.trails.data[i].project.data)
-                        }
-                    }
-                    // _this.isLoading=false
-                })
-                
-                //作品
-                fetch('get','/bloggers/index/production?blogger_id='+this.artistId+'').then(function(response){
-                    _this.worksData=response.data
-                });
-                
                 //任务状态跑组。试戏
                 fetch('get','/task_types').then(function(response){
                     _this.tasksType=response.data;
@@ -905,14 +897,33 @@
                     _this.artistTypeArr=response.data                  
                 })
                 fetch('get','/users/my?include=department').then(function(response){
-                    _this.principalId=response.data.id 
+                    _this.principalId = response.data.id 
+                    _this.principalName = response.data.name
                 })
                  fetch('get','/bloggers/select?include=users').then(function(response){ 
                     response.data.forEach(item=>{
-                         _this.principalIds.push(item.users.data.id)  
+                         _this.principalIds.push(item.users.data.id)
+                        
                     })
                    
                 })
+            },
+           
+          
+            //作品
+            getTaskDate:function(){
+                let _this = this;
+                fetch('get','/bloggers/index/production?blogger_id='+this.artistId+'').then(function(response){
+                    _this.worksData=response.data
+                    response.data.forEach(item=>{
+                        let time=new Date(item.release_time)
+                        let Y = time.getFullYear() + '-';
+                        let M = (time.getMonth()+1 < 10 ? '0'+(time.getMonth()+1) : time.getMonth()+1) + '-';
+                        let D = time.getDate() + ' '; 
+                        item.release_time=Y+M+D
+                    })
+                    
+                });
             },
             getArtistTasks: function () {
                 let _this = this;
@@ -978,7 +989,7 @@
                 this.isStatrtEdit=true; 
                 let _this = this;
                 this.artistId = this.$route.params.id;
-                 if(this.artistInfo.intention==1){
+                if(this.artistInfo.intention==1){
                         this.updateType=true
                     }else{
                         this.updateType=false
@@ -1074,6 +1085,7 @@
                      _this.getArtist()
                 })
             },
+            //孵化期截止时间计算
             getTimes:function(){
                 let end_date='';
                 let end_hour='';
@@ -1096,7 +1108,6 @@
                         start_hour="0"+start_hour;
                     }
                     let start_minute=time.getMinutes();
-                    console.log(start_minute)
                     end_minute=(59-start_minute)*60*1000
                     if(start_minute<10){
                         start_minute=start_minute;
@@ -1128,12 +1139,21 @@
             },
             //添加任务
             addTask: function () {
+                let start,end,startMin,endMin
+                startMin = this.startMinutes.split(':')
+                endMin = this.endMinutes.split(':')
+                start =new Date(this.startTime).getTime()+startMin[0]*60*60*1000+startMin[1]*60*1000
+                end = new Date(this.endTime).getTime()+endMin[0]*60*60*1000+endMin[1]*60*1000
+                if(start>end){
+                    toastr.error('结束时间必须晚于开始时间,请重新选择时间');
+                    return false;
+                }
                 let _this=this;
                 let data={
                    title:this.taskName,
                    principal_id:this.Person_id,
-                   start_at:this.startTime ,
-                   end_at:this.endTime,
+                   start_at: this.startTime + ' ' + this.startMinutes,
+                   end_at: this.endTime + ' ' + this.endMinutes,
                    resource_type:1,
                    resourceable_id:this.artistInfo.id,
                    desc:this.taskIntroduce,
@@ -1271,6 +1291,12 @@
                   
                 } 
                 
+            },
+            JumpDetails(id){
+                this.$router.push({path: '/tasks/' + id})
+            },
+            projectDetails(id){
+                this.$router.push({path: '/projects/' + id})
             }
         }
     }
@@ -1295,7 +1321,7 @@
     .edit-height {
         height: 57px;
     }
-    .Jump{
+    .Jump,.taskshow,.projectshow{
         cursor:pointer;
     }
 </style>
