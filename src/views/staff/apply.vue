@@ -3,7 +3,6 @@
     <div class="page">
 
         <NavBack title="添加员工" href="/staff"></NavBack>
-
         <div class="page-content container-fluid">
             <div class="panel col-md-12 clearfix py-5">
                 <ul class="nav nav-tabs nav-tabs-line" role="tablist">
@@ -41,14 +40,14 @@
                     </li>
                 </ul>
 
-                <div class="tab-content pt-20">
+                <div class="tab-content">
                 </div>
 
                 <div class="task-follow">
                     <ul class="list-group list-group-dividered list-group-full">
                         <li class="list-group-item" v-for="(item, index) in data" :key="index">
-                            <div class="content" style="display: flex; justify-content: start">
-                                <img :src="item.icon_url?item.icon_url:require('../../assets/head.jpg')" />
+                            <div class="content" style="display: flex; justify-content: start; align-items: center;">
+                                <Avatar :imgUrl="item.icon_url" style="margin-right: 10px; font-size: 14px; width: 40px; height: 40px" />
                                 <div>
                                     <template v-if="status === 1">
                                         <div>{{item.name}}已发起入职申请，是否同意加入泰洋系？</div>
@@ -89,7 +88,7 @@ export default {
     data() {
         return {
             status: 1,
-            data: []
+            data: [],
         };
     },
 

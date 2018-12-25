@@ -21,7 +21,7 @@
             <div>
                 <div class="users" v-for="user in data.users.data" @click="selectMember(user)">
                     <a class="avatar" href="javascript:void(0)">
-                        <img src="https://res.papitube.com/no-icon.png" alt="...">
+                        <Avatar :imgUrl="user.icon_url" style="margin-right: 10px;"/>
                     </a>
                     <span class="pl-1">{{ user.name }}</span>
                     <template v-if="!selectHidden">
