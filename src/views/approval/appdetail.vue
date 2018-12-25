@@ -34,7 +34,10 @@
                 </h6>
             </div>
             <div class="page-header  page-header-bordered m-20 pl-10" >
-                <h6 class="page-title title-status">当前状态<em></em><span>{{currentStatus}}</span>
+                <h6 class="page-title title-status">当前状态
+                    <div class="approver">{{String(pending.name).slice(-2)}}</div>
+                    <span v-if="info.approval[0].form_status=== 231">{{currentStatus.slice(0,1)}}{{pending.name}}{{currentStatus.slice(1)}}</span>
+                    <span v-if="info.approval[0].form_status !== 231">{{pending.name}}{{currentStatus}}</span>
                 <div v-if="!isApproverMode">
                     <i v-if="info.approval[0].form_status==232">
                         <button class="btn btn-primary" @click='approvalHandler("discard")'>作废</button>
@@ -42,7 +45,7 @@
                     <i v-if="info.approval[0].form_status==231">
                         <button class="btn btn-primary" @click='approvalHandler("cancel")'>撤销</button>
                         <button class="btn btn-danger" type="submit"
-                                data-toggle="modal" >提醒
+                                data-toggle="modal">提醒
                         </button>
                     </i>
                     <i v-if="info.approval[0].form_status==234">
@@ -55,7 +58,7 @@
                         <button class="btn btn-primary">作废</button>
                     </i>
                 </div>
-                <div v-if="isApproverMode">
+                <div v-if="isCurrentApprover">
                     <i v-if="info.approval[0].form_status==231">
                         <button class="btn btn-success" @click='approvalHandler("agree")'>同意</button>
                         <button class="btn btn-danger" @click='approvalHandler("refuse")'>拒绝</button>
@@ -95,21 +98,25 @@
                             <div class="col-md-3 float-left detail-key mx-0">{{item.key}}</div>
                             <div class="col-md-9 float-left detail-value" v-if="item.values">{{item.values.data.value || ''}}</div>
                         </div>
-                    </div>
-                </div>
-                </div>
-                <div class="panel col-md-12 col-lg-12">
-                    <div class="caption" style="border:0;">
-                        <h6 class="page-title pb-20" style="border-bottom:1px solid #ccc">审批流程</h6>
-                        <div class=" pt-20">
-                            <ApprovalProgress mode='detail' :formid='info.approval[0].project_number' :formstatus='currentStatus' />
+                        <div class="panel col-md-12 col-lg-12">
+                            <div class="caption" style="border:0;">
+                                <h6 class="page-title pb-20" style="border-bottom:1px solid #ccc">审批流程</h6>
+                                <div class=" pt-20">
+                                    <ApprovalProgress mode='detail' 
+                                            :formid='info.approval[0].project_number' 
+                                            :formstatus='currentStatus' 
+                                            @waitingfor='waitingFor'
+                                            ref='approvalProgress' />
+                                </div>
+                            </div>
                         </div>
                     </div>
                 </div>
             </div>
+        </div>
         <BuildProject :project-type="projectType" :project-fields-arr="projectFieldsArr" 
         :default-data='{fields:info.fields.data,list:list,trailInfo:trailInfo}'></BuildProject>
-        <ApprovalGoModal :mode='approvalMode' :id='this.info.approval[0].project_number' @approvaldone='getData()' />
+        <ApprovalGoModal :mode='approvalMode' :id='info.approval[0].project_number' @approvaldone='approvalDone' />
     </div>
 
 </template>
@@ -134,25 +141,24 @@ export default {
            firstFlag:true,
            isLoading:false,
            approvalMode:'',
+           pending:{},
+           currentId:'',
+           isCurrentApprover:false,
         }
     },
 
     mounted(){
         this.getData()
-        // this.isApproverMode()
     },
     computed:{
          isApproverMode(){
             if(this.$route.query.mode === 'approver'){
-                console.log('ture');
                 return true
             }else{
-                console.log('false');
                 return false
             }
         },
          currentStatus(){
-            // console.log(this.info.approval[0].form_status);
             switch(this.info.approval[0].form_status){
                 case 232:
                     return '已审批'
@@ -165,16 +171,33 @@ export default {
                 case 235:
                     return '已作废'
             }
-        }
+        },
+        
     },
     methods:{
-        // approverTrans(){
-        //     let _this = this
-        //         fetch('put','/approval_instances/'+this.info.approval[0].project_number+'/transfer',{next_id:383780212}).then((params) => {
-        //             console.log(params);
-        //         }
-        //     )
-        // },
+        approvalDone(){
+            this.getData()
+            this.$refs.approvalProgress.getApprover(this.info.approval[0].project_number)
+            toastr.success('审批成功')
+        },
+        getCurrentApprover(){
+            let _this = this
+            fetch('get','/users/my?include=department').then((params) => {
+                _this.currentId = params.data.id
+                if(_this.currentId === _this.pending.id){
+                    _this.isCurrentApprover = true
+                }else{
+                    _this.isCurrentApprover = false
+                }
+            })
+        },
+        waitingFor(params){
+            if(params){
+                this.pending = params
+                this.getCurrentApprover()
+            }
+            
+        },
         addProjectTimeout(params){
             this.isLoading = true
             if(this.firstFlag === true){
@@ -197,27 +220,26 @@ export default {
                 });
             },
 
-            selectProjectType(callback) {
-                fetch('get', '/project_fields', {
-                    type: this.projectType,
-                    status: 1,
-                }).then(response => {
-                    for (let i = 0; i < response.data.length; i++) {
-                        if (response.data[i].field_type === 2 || response.data[i].field_type === 6) {
-                            response.data[i].contentArr = [];
-                            for (let j = 0; j < response.data[i].content.length; j++) {
-                                response.data[i].contentArr.push({
-                                    value: response.data[i].content[j],
-                                    name: response.data[i].content[j]
-                                })
-                            }
+        selectProjectType(callback) {
+            fetch('get', '/project_fields', {
+                type: this.projectType,
+                status: 1,
+            }).then(response => {
+                for (let i = 0; i < response.data.length; i++) {
+                    if (response.data[i].field_type === 2 || response.data[i].field_type === 6) {
+                        response.data[i].contentArr = [];
+                        for (let j = 0; j < response.data[i].content.length; j++) {
+                            response.data[i].contentArr.push({
+                                value: response.data[i].content[j],
+                                name: response.data[i].content[j]
+                            })
                         }
                     }
-                    this.projectFieldsArr = response.data;
-                    console.log(this.projectFieldsArr);
-                    callback();
-                });
-            },
+                }
+                this.projectFieldsArr = response.data;
+                callback();
+            });
+        },
         approvalHandler(params){
             this.approvalMode = params
             $('#approvalGo').modal('show')
@@ -225,7 +247,6 @@ export default {
         getData(){
             let _this = this
             fetch('get','/approvals_project/detail/'+this.$route.params.id+'?include=principal,creator,fields,trail').then((params) => {
-                // _this.list = params
                 let {meta}=params
                 _this.list = params.data
                 _this.projectType = params.data.type
@@ -250,6 +271,18 @@ export default {
     list-style: none;
     font-style: normal;
     font-weight: normal;
+}
+.approver{
+    display: inline-block;
+    font-size: 12px;
+    font-weight: 800;
+    color: white;
+    width: 30px;
+    height: 30px;
+    border-radius: 100%;
+    background-color: rgba(7, 17, 27, 0.2);
+    text-align: center;
+    line-height: 30px;
 }
  .loader-overlay {
         margin-left: 320px;

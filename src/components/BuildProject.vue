@@ -196,10 +196,10 @@
         created(){
             this.getStars();
             this.getTrail();
-            this.setDefaultValue()
         },
         mounted() {
             let _this = this;
+            this.setDefaultValue()
             this.defaultDataFilter()
             $('#addProject').on('hidden.bs.modal', function () {
                 _this.refreshAddProjectModal()
@@ -246,7 +246,7 @@
                 this.projectFields = [];
             },
             setDefaultValue(){
-                if(this.defaultData){
+                if(this.defaultData && this.$refs){
                     this.$refs.projectNameRef.refresh(this.defaultData.list.title);
                     this.$refs.priorityLevel.setValue(this.defaultData.list.priority);
                     Object.assign(this.projectBaseInfo,{'priority':this.defaultData.list.priority})
@@ -261,7 +261,6 @@
                         }
                     }
                 }
-
             },
             addProjectTrail: function (value) {
                 if (!value) {

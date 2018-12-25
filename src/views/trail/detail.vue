@@ -134,7 +134,7 @@
                                aria-controls="forum-present"
                                aria-expanded="false" role="tab">
                                 <span v-if="!taskCount.count">任务</span>
-                                <ToolTips :title="taskCount.count" v-if="taskCount.count">
+                                <ToolTips :title="'已完成数量'+taskCount.finished" v-if="taskCount.count">
                                     任务{{taskCount.finished}}/{{taskCount.count}}
                                 </ToolTips>
                             </a>
@@ -250,7 +250,6 @@
                                              v-if="trailInfo.type !== 4" :class="isEdit ? 'edit-height':'' ">
                                             <div class="col-md-2 float-left text-right pl-0">线索状态</div>
                                             <div class="col-md-10 float-left font-weight-bold" >
-                                                <!-- <span v-if="!isEdit">{{trailStatus}}</span> -->
                                                 <EditSelector :is-edit="isEdit"
                                                               :options="trailStatusArr"
                                                               @change="changeTrailStatus"
@@ -471,7 +470,7 @@
                         <div class="example">
                             <div class="col-md-2 text-right float-left">负责人</div>
                             <div class="col-md-5 float-left pl-0">
-                                <input-selectors :placeholder="'请选择负责人'"
+                                <input-selectors :placeholder="currentUser.name || '请选择负责人'"
                                                  @change="principalChange"></input-selectors>
                             </div>
                         </div>
@@ -813,7 +812,6 @@
                         _this.$store.dispatch('changePrincipal', params);
                     }
                     _this.isLoading = false
-                    console.log(_this.trailInfo.resource);
                     _this.$nextTick((params) => {
                         _this.$store.state.newPrincipalInfo.id = Number(_this.trailInfo.resource)
                     })
@@ -834,12 +832,12 @@
             },
             changeTrailOrigin: function (value) {
                 this.$store.state.newPrincipalInfo.id = this.trailInfo.resource
-                console.log(this.trailInfo.resource);
                 this.trailInfo.resource = ''
                 this.email = ''
                 this.trailOriginPerson = ''
                 this.changeInfo.resource_type = value
                 this.trailOrigin = value
+                this.trailInfo.resource = this.$store.state.newPrincipalInfo.id
             },
 
             changeTrailBaseInfo: function () {
@@ -934,17 +932,20 @@
                 this.trailInfo.lock_status = value
             },
             getCurrentUser() {
+                let _this = this
                 fetch('get', '/users/my').then((response) => {
-                    this.currentUser = response.data
+                    _this.currentUser = response.data
+                     if (!_this.$store.state.newPrincipalInfo.id && _this.currentUser) {
+                    _this.principal = _this.currentUser.id
+                    console.log('true',_this.currentUser.id);
+                } else {
+                    _this.principal = _this.$store.state.newPrincipalInfo.id
+                    console.log('none',_this.$store.state.newPrincipalInfo.id);
+                }
                 })
             },
             addTask: function () {
                 let _this = this;
-                if (!this.$store.state.newPrincipalInfo.id && this.currentUser) {
-                    this.principal = this.currentUser.id
-                } else {
-                    this.principal = this.$store.state.newPrincipalInfo.id
-                }
                 let data = {
                     resource_type: 5,
                     resourceable_id: this.trailId,
