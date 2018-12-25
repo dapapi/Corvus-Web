@@ -9,8 +9,8 @@
                    data-toggle="dropdown" aria-expanded="false"></i>
                 <div class="dropdown-menu dropdown-menu-right task-dropdown-item" aria-labelledby="taskDropdown"
                      role="menu" x-placement="bottom-end">
-                    <a class="dropdown-item" role="menuitem" @click="">导入</a>
-                    <a class="dropdown-item" role="menuitem" @click="">导出</a>
+                    <!-- <a class="dropdown-item" role="menuitem" @click="">导入</a>
+                    <a class="dropdown-item" role="menuitem" @click="">导出</a> -->
                     <a class="dropdown-item" role="menuitem" data-toggle="modal" data-target="#giveBroker" @click="changeMember(1)">分配经纪人</a>
                     <a class="dropdown-item" role="menuitem" data-toggle="modal" data-target="#giveBroker" @click="changeMember(2)">分配宣传人</a>
                 </div>
@@ -80,7 +80,7 @@
                                 <th class="cell-300" scope="col">最后跟进时间</th>
                             </tr>
                             <tbody >
-                                <tr  v-for="artist in artistsInfo">
+                                <tr  v-for="(artist,index) in artistsInfo" :key="index">
                                     <td>
                                         <span class="checkbox-custom checkbox-primary">
                                             <input class="selectable-item" type="checkbox" :id="'row-' + artist.id"
@@ -91,15 +91,15 @@
                                     <td class="pointer-content" @click="redirectArtistDetail(artist.id)">
                                         {{ artist.name }}
                                     </td>
-                                    <td>{{artist.birthday|jsGetAge}}</td>
-                                    <td>
+                                    <td @click="redirectArtistDetail(artist.id)">{{artist.birthday|jsGetAge}}</td>
+                                    <td @click="redirectArtistDetail(artist.id)">
                                         <template v-if="artist.source">
                                             <span style="color:artistSourceArr.find(item => item.value == artist.source).color">
                                                 {{ artistSourceArr.find(item => item.value == artist.source).name}}
                                             </span>
                                         </template>
                                     </td>
-                                    <td>
+                                    <td @click="redirectArtistDetail(artist.id)">
                                         <template v-if="artist.communication_status">
                                             <span :style="{color:taiyangCommunicationStatusArr.find(item => item.value ==
                                                     artist.communication_status).color}">
@@ -115,8 +115,8 @@
                                         <template v-if="artist.sign_contract_status ==3"><span style="color:#F44336">已解约</span></template>
                                         {{ artistSourceArr.find(item => item.value == artist.source).name}}
                                     </td> -->
-                                    <td>{{artist.created_at}}</td>
-                                    <td>{{artist.updated_at}}</td>
+                                    <td @click="redirectArtistDetail(artist.id)">{{artist.created_at}}</td>
+                                    <td @click="redirectArtistDetail(artist.id)">{{artist.updated_at}}</td>
                                 </tr>
                             </tbody>
                             
@@ -442,6 +442,7 @@
             platformType:function(){
                 return  this.platformType
             }
+            
         },
         mounted() {
             this.getArtists();
@@ -626,7 +627,7 @@
                 fetch('post', '/stars', data).then(function (response) {
                     toastr.success('创建成功');
                     $('#addArtist').modal('hide');
-                    _this.$router.push({path: 'artists/' + response.data.id});
+                    _this.$router.push({path: '/artists/' + response.data.id});
                     _this.cancleData()
                 })
             },
@@ -673,7 +674,7 @@
             giveBroker:function(){
                 let url,toast,data
                 let _this = this
-                if(!this.selectedArtistsArr){
+                if(this.selectedArtistsArr.length<=0){
                     toastr.error('请选择分配艺人')
                     return false
                 }

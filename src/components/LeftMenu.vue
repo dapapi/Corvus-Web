@@ -57,7 +57,8 @@
                 <li class="site-menu-item" style="height: 150px;">&nbsp;</li>
             </ul>
             <div class="user-wrap">
-                <img src="https://res.papitube.com/no-icon.png" alt="">
+                <!-- <img src="https://res.papitube.com/no-icon.png" alt=""> -->
+                <Avatar :imgUrl="avatar" style="width: 40px; height: 40px; font-size: 14px" />
             </div>
             <input id="console-model" type="text" @blur="blur"/>
             <div class="console" v-show="visible" @click="blur">
@@ -185,12 +186,17 @@
                 ],
                 pageRoute: '',
                 visible: false,
+                avatar: ''
             }
         },
         computed: {
             ...mapState([
                 'unReadMsg'
             ])
+        },
+        mounted () {
+            this.avatar = JSON.parse(Cookies.get('user')).avatar
+            console.log(this.avatar)
         },
         watch: {
             '$route'(to, from) {
@@ -265,17 +271,11 @@
         width: 50px;
         height: 50px;
         border-radius: 100%;
-        overflow: hidden;
         position: absolute;
-        bottom: 30px;
-        left: 25px;
+        bottom: 24px;
+        left: 30px;
     }
-
-    .user-wrap img {
-        height: auto;
-        width: 100%;
-    }
-
+   
     .active .base-icon {
         display: none !important;
     }

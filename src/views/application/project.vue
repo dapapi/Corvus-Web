@@ -4,7 +4,7 @@
             <h1 class="page-title">我的项目</h1>
         </div>
         <div class="page-content container-fluid">
-            <div class="panel p-20 col-md-12 col-lg-12 py-5">
+            <div class="panel col-md-12 col-lg-12 py-5">
                 <div class="col-md-12">
                     <ul class="nav nav-tabs nav-tabs-line" role="tablist">
                         <li class="nav-item" role="presentation" @click="getTasks(1,1)">

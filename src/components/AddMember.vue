@@ -1,8 +1,9 @@
 <template>
     <div class="addMember">
         <ul class="addMember-items">
-            <li class="addMember-item mt-10" v-for="member in selectMemberArr" :key="member.id">
-                <img onerror="noneAvatar(this)" class="avatar" :src="member.avatar" title="Herman Beck" src="">
+            <li class="addMember-item" v-for="member in selectMemberArr" :key="member.id">
+                <!-- <img onerror="noneAvatar(this)" class="avatar" :src="member.avatar" title="Herman Beck" src=""> -->
+                <Avatar :imgUrl="member.icon_url"/>
                 <span class="addMember-remove" @click="removeMember(member.id)">
                     <i class="md-minus-circle"></i>
                 </span>
@@ -10,7 +11,7 @@
         </ul>
         <div class="addMember-trigger" :class="isMemberShow ? 'addMember-active': ''" :id="'selectStaff' + this._uid">
             <div class="addMember-trigger-button" :class="selectMemberArr.length > 0 ? 'addMember-trigger-left' : ''"
-                 @click="showMember"><i class="iconfont icon-tianjia1"></i></div>
+                 @click="showMember"><i class="iconfont icon-tianjia"></i></div>
             <div class="addMember-trigger-dropdown">
                 <select-staff :multiple="true" :member-type="'participant'" :type="type"
                               @change="changeSelectedMember"></select-staff>
@@ -129,6 +130,7 @@
     .addMember-item {
         margin-left: 10px;
         margin-right: 0;
+        vertical-align: middle;
     }
 
     .addMember-item:first-child {

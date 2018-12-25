@@ -5,7 +5,7 @@
             <h1 class="page-title">日历</h1>
             <div class="page-header-actions" data-toggle="modal" data-target="#addCalendar"
                  @click="changeCalendarActionType('add')">
-                <i class="iconfont icon-tianjia1 font-size-20" aria-hidden="true"></i>
+                <i class="iconfont icon-tianjia font-size-20" aria-hidden="true"></i>
             </div>
         </div>
 
@@ -313,6 +313,8 @@
                             <div class="col-md-10 float-left">
                                 <div class="creator-avatar float-left">
                                     <img src="https://res.papitube.com/no-icon.png" alt="">
+                                    <!-- {{ scheduleData.creator.data.name }} -->
+                                    <Avatar :imgUrl="scheduleData.creator.data.user.icon_url" style="margin-right: 10px; "/>
                                 </div>
                                 <div class="float-left pl-2">{{ scheduleData.creator.data.name }}</div>
                             </div>

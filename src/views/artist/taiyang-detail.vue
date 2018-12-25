@@ -8,17 +8,17 @@
                    data-toggle="dropdown" aria-expanded="false"></i>
                 <div class="dropdown-menu dropdown-menu-right task-dropdown-item" aria-labelledby="taskDropdown"
                      role="menu" x-placement="bottom-end">
-                    <a class="dropdown-item" role="menuitem" >分享</a>
+                    <!-- <a class="dropdown-item" role="menuitem" >分享</a> -->
                     <a class="dropdown-item" role="menuitem" data-toggle="modal"
                        data-target="#distributionBroker" @click="distributionPerson('broker')">分配经理人</a>
                     <a class="dropdown-item" role="menuitem" data-toggle="modal"
                        data-target="#distributionBroker" @click="distributionPerson('publicity')">分配宣传人</a>
-                    <a class="dropdown-item" role="menuitem" >自定义字段</a>
+                    <!-- <a class="dropdown-item" role="menuitem" >自定义字段</a>
                     <a class="dropdown-item" role="menuitem"  data-toggle="modal" data-target="#addPrivacy">隐私设置</a>
                     <a class="dropdown-item" role="menuitem"  data-toggle="modal" data-target="#addPrivacy">
                         <template v-if="artistInfo.sign_contract_status == 1">签约</template>
                         <template v-if="artistInfo.sign_contract_status == 2">解约</template>
-                    </a>
+                    </a> -->
                 </div>
             </div>
         </div>
@@ -57,9 +57,9 @@
                     <div class="col-md-6 float-left pl-0 mb-20" style="border-right: 1px solid #eee">
                         <div class="col-md-6"><i class="iconfont icon-iconset0399"></i> 任务 {{taskNum}}</div>
                         <div class="clearfix example" v-for="(item,index) in artistTasksInfo" :key="index"
-                             @click="goTask(item.id)">
+                             @click="toTask(item.id)" style="cursor: pointer;">
                             <div class="col-md-3 float-left">
-                                <router-link :to="{path:`/tasks/${item.id}`}">{{item.title}}</router-link>
+                                {{item.title}}
                             </div>
                             <div class="col-md-3 float-left">{{item.principal.data.name}}</div>
                             <div class="col-md-3 float-left">{{item.end_at}}</div>
@@ -72,9 +72,9 @@
                     </div>
                     <div class="col-md-6 float-left pl-0 mb-20">
                         <div class="col-md-6"><i class="iconfont icon-ego-box"></i>项目</div>
-                        <div class="clearfix example" v-for="(item,index) in artistProjectsInfo" :key="index">
+                        <div class="clearfix example" v-for="(item,index) in artistProjectsInfo" :key="index" style="cursor: pointer">
                             <div class="col-md-3 float-left">
-                                <router-link :to="{path:`/projects/${item.id}`}">{{item.title}}</router-link>
+                                {{item.title}}
                             </div>
                             <div class="col-md-3 float-left">{{item.principal.data.name}}</div>
                             <div class="col-md-3 float-left">{{item.end_at}}</div>
@@ -158,9 +158,9 @@
                                     <th class="cell-300" scope="col">关联公司</th>
                                     <th class="cell-300" scope="col">录入日期</th>
                                 </tr>
-                                <tr v-for="(item,index) in artistProjectsInfo" :key="index">
+                                <tr v-for="(item,index) in artistProjectsInfo" :key="index" @click="toProject(item.id)">
                                     <td>
-                                        <router-link :to="{path:`/projects/${item.id}`}">{{item.title}}</router-link>
+                                        {{item.title}}
                                     </td>
                                     <td>
                                         <template v-if="item.status === 1"><span style="color:#FF9800">进行中</span>
@@ -194,9 +194,9 @@
                                     <th class="cell-300" scope="col">负责人</th>
                                     <th class="cell-300" scope="col">截止时间</th>
                                 </tr>
-                                <tr v-for="(task,index) in artistTasksInfo" :key="index">
+                                <tr v-for="(task,index) in artistTasksInfo" :key="index" @click="toTask(task.id)">
                                     <td>
-                                        <router-link :to="{path:`/tasks/${task.id}`}">{{task.title}}</router-link>
+                                        {{task.title}}
                                     </td>
                                     <td>
                                         <template v-if="task.type">{{task.type.data.title}}</template>
@@ -286,7 +286,7 @@
                                 <div class="float-right" style="padding: .715rem 0">
                                      <span class="pointer-content hover-content" data-toggle="modal"
                                            data-target="#addBill">
-                                         <i class="iconfont icon-tianjia1 pr-5"></i>新增结算单</span>
+                                         <i class="iconfont icon-tianjia pr-5"></i>新增结算单</span>
                                 </div>
                             </div>
                             <table class="table table-hover" data-child="tr">
@@ -527,11 +527,14 @@
                                     <div class="card-text py-5 clearfix">
                                         <div class="col-md-1 float-left text-right pl-0">最近更新人</div>
                                         <div class="col-md-5 float-left font-weight-bold">
-                                            {{artistInfo.last_updated_user}}
+                                            <template v-if="artistInfo.last_updated_user">{{artistInfo.last_updated_user}}</template>
+                                            <template v-else>{{ artistInfo.created_at }}</template>
+                                            
                                         </div>
                                         <div class="col-md-1 float-left text-right pl-0">最近更新时间</div>
                                         <div class="col-md-5 float-left font-weight-bold">
-                                            {{artistInfo.last_updated_at}}
+                                            <template v-if="artistInfo.last_follow_up_at">{{artistInfo.last_follow_up_at}}</template>
+                                            <template v-else>{{ artistInfo.created_at }}</template>
                                         </div>
                                     </div>
                                 </div>
@@ -934,7 +937,24 @@
                 taiyangCommunicationStatusArr: config.taiyangCommunicationStatusArr,
                 yesOrNoArr: config.yesOrNoArr,
                 changeArtistInfo: {},
-                artistSocialPlatform: config.artistSocialPlatform,
+                artistSocialPlatform:[
+                    {
+                        value:1,
+                        name:'微博'
+                    },
+                    {
+                        value:2,
+                        name:'百科'
+                    },
+                    {
+                        value:3,
+                        name:'抖音'
+                    },
+                    {
+                        value:4,
+                        name:'其他'
+                    },
+                ],
                 distributionType: '',
                 affixes: [], //附件
                 affixesType: '',//附件类型
@@ -952,21 +972,31 @@
 
         created() {
             this.getArtist()
+            // this.selectedCalendar[0] = this.$route.params.id
             
         },
         mounted() {
 
             this.getTaskType();
             this.draw();
-            this.getSchedules()
-            this.selectedCalendar[0] = this.$route.params.id
+            // this.getSchedules()
+            this.selectedCalendar.push(this.$route.params.id)
             let _this = this;
             $('#distributionBroker').on('hidden.bs.modal', function () {
                 _this.$store.commit('changeParticipantsInfo', [])
             })
         },
+        // computed:{
+        //     selectedCalendar:function(){
+        //         let arr = new Array()
+        //         arr[0] = this.$route.params.id
+        //         return arr
+        //     }
+        // },
         methods: {
-
+            changeCalender:function(){
+                this.selectedCalendar[0] = this.$route.params.id
+            },
             //获取艺人信息
             getArtist: function () {
                 this.artistId = this.$route.params.id;
@@ -1151,7 +1181,12 @@
             changeEndMinutes: function (value) {
                 this.endMinutes = value
             },
+            //设置默认负责人
+            // setDefault:function(){
+            //     // let defaultParams = 
 
+            //     this.$store.state.newPrincipalInfo = {id:this.$route.params.id}
+            // },
             addTask: function () {
                 let participant_ids = [];
                 let start, end, startMin, endMin
@@ -1178,7 +1213,7 @@
                     toastr.error('请选择任务结束时间')
                     return false
                 }
-                if (!this.priority) {
+                if (!this.taskLevel) {
                     toastr.error('请选择任务优先级')
                     return false
                 }
@@ -1431,6 +1466,13 @@
             filterProjectFee: function (value) {
                 this.filterFee = value;
             },
+            toProject:function(id){
+                this.$router.push({path: '/projects/' + id});
+               
+            },
+            toTask:function(id){
+                this.$router.push({path: '/tasks/' + id});
+            }
 
         },
         filters: {
@@ -1467,7 +1509,7 @@
 
 </script>
 
-<style>
+<style scoped>
     .task-dropdown {
         -moz-user-select: none;
         -webkit-user-select: none;
@@ -1546,6 +1588,7 @@
     .calendar-list ul {
         padding: 0 20px;
         margin-top: 10px;
+        
     }
 
     .calendar-list ul li .calendar-checkbox i {

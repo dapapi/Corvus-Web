@@ -2,7 +2,8 @@
     <div class="addMember">
         <ul class="addMember-items">
             <li class="addMember-item mb-5" v-for="(member,index) in selectMemberArr" :key="index">
-                <img onerror="noneAvatar(this)" class="avatar" :src="member.avatar" title="Herman Beck">
+                <!-- <img onerror="noneAvatar(this)" class="avatar" :src="member.avatar" title="Herman Beck"> -->
+                <Avatar :imgUrl="member.icon_url" style=""/>
                 <span class="addMember-remove" @click="removeMember(member.id)">
                     <i class="md-minus-circle"></i>
                 </span>
@@ -15,7 +16,7 @@
             </li>
         </ul>
         <div class="addMember-trigger" :class="isMemberShow ? 'addMember-active': ''" :id="'selectStaff' + this._uid">
-            <div class="addMember-trigger-button" @click="showMember"><i class="icon-tianjia1"></i></div>
+            <div class="addMember-trigger-button" @click="showMember"><i class="icon-tianjia"></i></div>
             <div class="addMember-trigger-dropdown">
                 <select-staff :multiple="true" :member-type="'participant'" :type="type"
                               @change="changeSelectedMember"></select-staff>

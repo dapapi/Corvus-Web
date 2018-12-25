@@ -14,7 +14,7 @@
     export default {
         // 凡是多选，都有搜索框；不是多选传入selectable为true也可以有搜索框
         // changeKey为父组件的data，且可以被改变
-        props: ['options', 'disable', 'multiple', 'placeholder', 'changeKey', 'value', 'resetinfo', 'selectable','default'],
+        props: ['options', 'disable', 'multiple', 'placeholder', 'changeKey', 'value', 'resetinfo', 'selectable','default', 'defaultFirst'],
         data() {
             return {
                 isDisable: this.disable,
@@ -54,6 +54,12 @@
                 self.$emit('change', $(this).val(), $(this)[0].selectedOptions[0].label, $(this)[0].selectedOptions[0].id);
                
             });
+            // 默认选中第一项
+            if (this.options && this.options.length > 0 && this.defaultFirst) {
+                this.setValue(0)
+                // this.$emit('change', this.options[0].value, this.options[0].name, this.options[0].id);
+                // self.$emit('select', this.options[0].value, this.options[0].name)
+            }
             if(this.default){
                 this.setValue(this.default.values.data.value)
             }

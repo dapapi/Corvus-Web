@@ -43,7 +43,8 @@
                                                 @click="handelMemberClick(index + '' + _index, user)"
                                                 :key='user.name+Math.random()'>
                                                 <a class="avatar" href="javascript:void(0)">
-                                                    <img src="https://res.papitube.com/no-icon.png" alt="...">
+                                                    <!-- <img src="https://res.papitube.com/no-icon.png" alt="..."> -->
+                                                    <Avatar :imgUrl="user.icon_url" style="margin-right: 10px; "/>
                                                 </a>
                                                 <span class="pl-1 user-name">{{ user.name }}</span>
                                             </div>
@@ -75,7 +76,7 @@
                     <div class="col-md-12">
                         <div class="py-25 clearfix position-relative">
                             <div class="col-md-2 float-left head-img">
-                                <img :src="personalInfo.icon_url ? personalInfo.icon_url : 'https://res.papitube.com/no-icon.png'" alt="">
+                                <Avatar :imgUrl="personalInfo.icon_url" style="width: 90px; height: 90px; font-size: 24px;" />
                             </div>
                             <div class="col-md-10 float-left position-absolute" style="bottom: 25px;right: 0;">
                                 <div class="clearfix mb-20">
@@ -116,13 +117,13 @@
                                         </div>
                                         <div class="float-left col-md-6 pl-0">{{ personalInfo.phone ? personalInfo.phone : ''}}</div>
                                     </div>
-                                    <div class="col-md-4 float-left">
+                                    <!-- <div class="col-md-4 float-left">
                                         <div class="float-left col-md-6">
                                             <i class="iconfont icon-Wechat pr-2"></i>
                                             <span class="font-weight-bold">WeChat</span>
                                         </div>
                                         <div class="float-left col-md-6 pl-0">XXX</div>
-                                    </div>
+                                    </div> -->
                                 </div>
                             </div>
                         </div>

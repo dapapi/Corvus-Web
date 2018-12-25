@@ -7,7 +7,7 @@
                 <img src="../../assets/img/department@2x.png" />
                 {{ data.name }} <span>({{count}})</span> <span class="principal">{{principal ? principal.name:'无负责人'}}</span>
             </span>
-            <i v-if="!isEdit" class="iconfont icon-tianjia1 edit" style="float: right;line-height: 50px;" @click.stop="check(data)"></i>
+            <i v-if="!isEdit" class="iconfont icon-tianjia edit" style="float: right;line-height: 50px;" @click.stop="check(data)"></i>
             <div class="drop" v-else>
                  <i class="iconfont icon-gengduo1 font-size-24" aria-hidden="true" id="org-dropdown"
                     data-toggle="dropdown" aria-expanded="false" style="cursor: pointer; float: right;line-height: 50px;">
@@ -23,7 +23,7 @@
         </div>
         <ul v-show="visible" v-if="!isEdit">
             <li v-for="(_item, _index) in data.users.data" :key="_index" :style="{paddingLeft: paddingLeft + 40 + 'px'}">
-                {{ _item.name }}
+                <Avatar :imgUrl="_item.icon_url" style="margin-right: 10px; vertical-align: unset" />{{ _item.name }}
                 <router-link :to="`/staff/detail/${_item.id}`"><i class="icon md-eye" style="float: right;line-height: 50px;" @click.stop></i></router-link>
             </li>
         </ul>

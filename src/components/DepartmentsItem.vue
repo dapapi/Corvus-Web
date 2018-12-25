@@ -13,7 +13,7 @@
                 </span>
             </span>
             <span class="team-add-all pl-2" @click="selectAllMember" v-if="multiple">
-                <i class="icon iconfont icon-tianjia1"></i>
+                <i class="icon iconfont icon-tianjia"></i>
             </span>
         </div>
 
@@ -21,7 +21,7 @@
             <div>
                 <div class="users" v-for="user in data.users.data" @click="selectMember(user)">
                     <a class="avatar" href="javascript:void(0)">
-                        <img src="https://res.papitube.com/no-icon.png" alt="...">
+                        <Avatar :imgUrl="user.icon_url" style="margin-right: 10px;"/>
                     </a>
                     <span class="pl-1">{{ user.name }}</span>
                     <template v-if="!selectHidden">
