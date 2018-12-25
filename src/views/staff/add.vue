@@ -36,30 +36,40 @@
                                 <span class="save" @click="save">保存</span> <span class="cancel" @click="cancel">取消</span>
                             </template>
                         </div>
-                        <div class="formName pd-b-15">个人资料 <span class="point"></span><span class="note">为必填项</span></div>
+                        <div class="formName pd-b-15">个人资料 <span class="note require" style="margin-left: 10px;">为必填项</span></div>
                         <div class="row">
                             <div class="col-md-6">
                                 <div class="example">
-                                    <div class="col-md-3 text-right float-left">姓名(中文)</div>
-                                    <div class="col-md-8 float-left pl-0 require">
-                                        <input type="text" :disabled="(!!userId) && !isEdit" v-model="nameCN" placeholder="1-30个字符" class="form-control">
+                                    <div class="col-md-3 text-right float-left require">姓名(中文)</div>
+                                    <div class="col-md-8 float-left pl-0">
+                                        <input type="text" 
+                                            :disabled="(!!userId) && !isEdit" 
+                                            v-model="nameCN" 
+                                            placeholder="1-30个字符" 
+                                            maxlength="30"
+                                            class="form-control">
                                     </div>
                                 </div>
                                 <div class="example">
                                     <div class="col-md-3 text-right float-left">姓名(英文)</div>
                                     <div class="col-md-8 float-left pl-0">
-                                        <input type="text" :disabled="(!!userId) && !isEdit" v-model="nameEN" placeholder="1-30个字符" class="form-control">
+                                        <input type="text" 
+                                            :disabled="(!!userId) && !isEdit" 
+                                            v-model="nameEN" 
+                                            placeholder="1-30个字符" 
+                                            maxlength="30"
+                                            class="form-control">
                                     </div>
                                 </div>
                                 <div class="example">
-                                    <div class="col-md-3 text-right float-left">性别</div>
-                                    <div class="col-md-8 float-left pl-0 require">
+                                    <div class="col-md-3 text-right float-left require">性别</div>
+                                    <div class="col-md-8 float-left pl-0">
                                         <selectors :options="genderArr" change-key="gender" @select="changeState" placeholder="请选择" :defaultValue="0"></selectors>
                                     </div>
                                 </div>
                                 <div class="example">
-                                    <div class="col-md-3 text-right float-left">身份证号</div>
-                                    <div class="col-md-8 float-left pl-0 require">
+                                    <div class="col-md-3 text-right float-left require">身份证号</div>
+                                    <div class="col-md-8 float-left pl-0">
                                         <input type="text" :disabled="(!!userId) && !isEdit" placeholder="" v-model="IDNum" class="form-control">
                                     </div>
                                 </div>
@@ -79,64 +89,64 @@
                             </div>
                             <div class="col-md-6" style="margin-top: -20px;">
                                 <div class="example">
-                                    <div class="col-md-3 text-right float-left">手机号</div>
-                                    <div class="col-md-8 float-left pl-0 require">
+                                    <div class="col-md-3 text-right float-left require">手机号</div>
+                                    <div class="col-md-8 float-left pl-0">
                                         <input type="text" v-model="phoneNum" placeholder="" class="form-control">
                                     </div>
                                 </div>
                                 <div class="example">
-                                    <div class="col-md-3 text-right float-left">入职时间</div>
-                                    <div class="col-md-8 float-left pl-0 require">
+                                    <div class="col-md-3 text-right float-left require">入职时间</div>
+                                    <div class="col-md-8 float-left pl-0">
                                     <datepicker change-key="entryTime" @select="changeState"></datepicker>
                                     </div>
                                 </div>
                                 <div class="example">
-                                    <div class="col-md-3 text-right float-left">政治面目</div>
-                                    <div class="col-md-8 float-left pl-0 require">
+                                    <div class="col-md-3 text-right float-left require">政治面目</div>
+                                    <div class="col-md-8 float-left pl-0">
                                         <input type="text" v-model="politicalFace" placeholder="" class="form-control">
                                     </div>
                                 </div>
                                 <div class="example">
-                                    <div class="col-md-3 text-right float-left">婚姻状况</div>
-                                    <div class="col-md-8 float-left pl-0 require">
+                                    <div class="col-md-3 text-right float-left require">婚姻状况</div>
+                                    <div class="col-md-8 float-left pl-0">
                                         <selectors :options="maritalStatusArr" change-key="maritalStatus" @select="changeState" placeholder="请选择" :defaultValue="0"></selectors>
                                     </div>
                                 </div>
                                 <div class="example">
-                                    <div class="col-md-3 text-right float-left">电子邮件</div>
-                                    <div class="col-md-8 float-left pl-0 require">
+                                    <div class="col-md-3 text-right float-left require">电子邮件</div>
+                                    <div class="col-md-8 float-left pl-0">
                                         <input type="text" v-model="email" placeholder="" class="form-control">
                                     </div>
                                 </div>
                             </div>
-                            <div class="col-md-6" style="margin-top: -20px;">
+                            <div class="col-md-6">
                                 <div class="example">
-                                    <div class="col-md-3 text-right float-left">出生日期</div>
-                                    <div class="col-md-8 float-left pl-0 require">
+                                    <div class="col-md-3 text-right float-left require">出生日期</div>
+                                    <div class="col-md-8 float-left pl-0">
                                         <datepicker change-key="birthDay" @select="changeState"></datepicker>
                                     </div>
                                 </div>
                                 <div class="example">
-                                    <div class="col-md-3 text-right float-left">户籍所在地详细地址</div>
-                                    <div class="col-md-8 float-left pl-0 require">
+                                    <div class="col-md-3 text-right float-left require">户籍所在地详细地址</div>
+                                    <div class="col-md-8 float-left pl-0">
                                         <input type="text" placeholder="" v-model="householdAddress" class="form-control">
                                     </div>
                                 </div>
                                 <div class="example">
-                                    <div class="col-md-3 text-right float-left">民族</div>
-                                    <div class="col-md-8 float-left pl-0 require">
+                                    <div class="col-md-3 text-right float-left require">民族</div>
+                                    <div class="col-md-8 float-left pl-0">
                                         <selectors :options="nationalityArr" change-key="nationality" @select="changeState" placeholder="请选择" :defaultValue="0"></selectors>
                                     </div>
                                 </div>
                                 <div class="example">
-                                    <div class="col-md-3 text-right float-left">血型</div>
-                                    <div class="col-md-8 float-left pl-0 require">
+                                    <div class="col-md-3 text-right float-left require">血型</div>
+                                    <div class="col-md-8 float-left pl-0">
                                         <selectors :options="bloodTypeArr" change-key="bloodType" @select="changeState" placeholder="请选择" :defaultValue="0"></selectors>
                                     </div>
                                 </div>
                                 <div class="example">
-                                    <div class="col-md-3 text-right float-left">现居住地址</div>
-                                    <div class="col-md-8 float-left pl-0 require">
+                                    <div class="col-md-3 text-right float-left require">现居住地址</div>
+                                    <div class="col-md-8 float-left pl-0">
                                         <input type="text" v-model="homeAddress" placeholder="" class="form-control">
                                     </div>
                                 </div>
@@ -216,7 +226,7 @@
 
                         <div class="formName pd-b-15">
                             任职履历<span class="note" style="margin-left: 16px;">从最近的任职单位开始填写</span>
-                            <i class="icon-tianjia add-icon" @click="tableAdd('work')"></i>
+                            <i class="iconfont icon-tianjia add-icon" @click="tableAdd('work')"></i>
                         </div>
                         <div class="example table-responsive padding15">
                             <table class="table table-hover table-bordered">
@@ -237,7 +247,7 @@
 
                         <div class="formName pd-b-15">家庭资料
                             <span class="note" style="margin-left: 16px;">请列出直系亲属资料和紧急联系人信息</span>
-                            <i class="icon-tianjia add-icon" @click="tableAdd('home')"></i>
+                            <i class="iconfont icon-tianjia add-icon" @click="tableAdd('home')"></i>
                         </div>
                         <div class="example table-responsive padding15">
                             <table class="table table-hover table-bordered">
@@ -299,11 +309,14 @@
                     </div>
 
                     <div class="tab-pane" id="exampleTabsTwo" role="tabpanel">
-                        <div style="color: #01bcd4; cursor: pointer">http://www.iconfont.cn/search/index?q=</div>
-                        点击复制此链接
+                        <div style="color: #01bcd4;">
+                            {{ addUrl }}
+                            <button class="btn btn-primary" style="margin-left: 10px" @click="copy">复制链接</button>
+                            <input ref="input" id="demoInput" :value="addUrl" style="opacity: 0" />
+                            </div>
                       </div>
                     </div>
-                  </div>
+                </div>
             </div>
 
         </div>
@@ -316,6 +329,7 @@
 import config from "../../assets/js/config";
 const { genderArr, maritalStatusArr, nationalityArr, bloodTypeArr } = config;
 import fetch from "../../assets/utils/fetch";
+import qs from 'qs'
 
 let tempArr = []
 for (let i = 0; i < nationalityArr.length; i++) {
@@ -335,6 +349,7 @@ export default {
             maritalStatusArr: maritalStatusArr,
             nationalityArr: tempArr,
             bloodTypeArr: bloodTypeArr,
+            addUrl: window.location.origin + '/informationForm',
             nameCN: '',
             nameEN: '',
             gender: '',
@@ -356,34 +371,34 @@ export default {
             specialty: '', // 特长,
             educationInfo: {
                 school: '',
-                profession: '',
-                beginDate: '',
-                endDate: '',
-                graduation: '',
+                specialty: '',
+                start_time: '',
+                end_time: '',
+                graduate: '',
                 degree: ''
             },
             trainInfo: {
-                trainCourse: '',
-                trainOrg: '',
-                place: '',
-                trainDate: '',
+                course_name: '',
+                certificate: '',
+                address: '',
+                trained_time: '',
             },
             workInfo: {
-                companyName: '',
+                unit_name: '',
                 department: '',
                 position: '',
-                entryDate: '',
-                separationTime: '',
-                salary: '',
-                reason: '',
+                entry_time: '',
+                departure_time: '',
+                monthly_pay: '',
+                departure_why: '',
             },
             homeInfo: {
                 name: '',
-                relationShip: '',
-                birthDay: '',
-                employer: '',
+                relation: '',
+                birth_time: '',
+                work_units: '',
                 position: '',
-                phoneNum: '',
+                contact_phone: '',
             },
             education: {
                 tHead: [
@@ -391,16 +406,16 @@ export default {
                         key: 'school',
                         value: '学校',
                     }, {
-                        key: 'profession',
+                        key: 'specialty',
                         value: '专业',
                     }, {
-                        key: 'beginDate',
+                        key: 'start_time',
                         value: '入学时间',
                     }, {
-                        key: 'endDate',
+                        key: 'end_time',
                         value: '离校时间',
                     }, {
-                        key: 'graduation',
+                        key: 'graduate',
                         value: '是否毕业',
                     }, {
                         key: 'degree',
@@ -412,16 +427,16 @@ export default {
             train: {
                 tHead: [
                     {
-                        key: 'trainCourse',
+                        key: 'course_name',
                         value: '培训课程名称',
                     }, {
-                        key: 'trainOrg',
+                        key: 'certificate',
                         value: '培训机构名称',
                     }, {
-                        key: 'place',
+                        key: 'address',
                         value: '地点',
                     }, {
-                        key: 'trainDate',
+                        key: 'trained_time',
                         value: '受训时间',
                     }
                 ],
@@ -430,7 +445,7 @@ export default {
             work: {
                 tHead: [
                     {
-                        key: 'companyName',
+                        key: 'unit_name',
                         value: '单位名称',
                     }, {
                         key: 'department',
@@ -439,16 +454,16 @@ export default {
                         key: 'position',
                         value: '职位',
                     }, {
-                        key: 'entryDate',
+                        key: 'entry_time',
                         value: '入职时间',
                     }, {
-                        key: 'separationTime',
+                        key: 'departure_time',
                         value: '离职时间'
                     }, {
-                        key: 'salary',
+                        key: 'monthly_pay',
                         value: '月薪'
                     }, {
-                        key: 'reason',
+                        key: 'departure_why',
                         value: '离职原因'
                     }
                 ],
@@ -460,19 +475,19 @@ export default {
                         key: 'name',
                         value: '姓名',
                     }, {
-                        key: 'relationShip',
+                        key: 'relation',
                         value: '与本人关系',
                     }, {
-                        key: 'birthDay',
+                        key: 'birth_time',
                         value: '出生日期',
                     }, {
-                        key: 'employer',
+                        key: 'work_units',
                         value: '工作单位',
                     }, {
                         key: 'position',
                         value: '职务'
                     }, {
-                        key: 'phoneNum',
+                        key: 'contact_phone',
                         value: '联系电话'
                     }
                 ],
@@ -538,6 +553,7 @@ export default {
             this.userId = route.params.id
             this.getData()
         }
+
     },
 
 	methods: {
@@ -563,6 +579,12 @@ export default {
                     break
                 }
             }
+
+            const _education = this.filterData(this.education.tBody)
+            const _training = this.filterData(this.train.tBody)
+            const _record = this.filterData(this.work.tBody)
+            const _family= this.filterData(this.home.tBody)
+
             if (!canSend) {
                 return
             }
@@ -591,47 +613,12 @@ export default {
 				migration: this.agreeMove,
 				icon_url: this.avatar,
 				status_type: 1, // 默认
-				education: [
-					// {
-					// 	school: 'xx',
-					// 	specialty: '',
-					// 	start_time: '',
-					// 	end_time: '',
-					// 	graduate: '',
-					// 	degree: '',
-					// }
-				],
-				training: [
-					// {
-					// 	address: '',
-					// 	course_name: '',
-					// 	certificate: '',
-					// 	trained_time: '',
-					// }
-				],
-				record: [
-					// {
-					// 	unit_name: '',
-					// 	department: '',
-					// 	position: '',
-					// 	entry_time: '',
-					// 	departure_time: '',
-					// 	monthly_pay: '',
-					// 	departure_why: ''
-					// }
-				],
-				family: [
-					// {
-					// 	name: '',
-					// 	relation: '',
-					// 	birth_time: '',
-					// 	work_units: '',
-					// 	position: '',
-					// 	contact_phone: ''
-					// }
-				]
-			}
-	
+				education: _education,
+				training: _training,
+				record: _record,
+				family: _family
+            }
+            
 			fetch('post', '/personnel' ,params).then(result => {
                 toastr.success('添加成功')
 			})
@@ -673,6 +660,27 @@ export default {
         },
         cancel () {
             this.editInfo()
+        },
+        // 过滤有用数据
+        filterData (data) {
+            return JSON.parse(JSON.stringify(data)).filter(n => {
+                let canPush = false
+                Object.entries(n).map((m) => {
+                    if (m[1]) {
+                        canPush = true
+                    } else {
+                        n[m[0]] = 0
+                    }
+                })
+                return canPush
+            })
+        },
+        copy () {
+            this.$refs.input.select()
+            if (document.execCommand('copy')) {
+                document.execCommand('copy')
+                toastr.success('复制成功!')
+            }
         }
 	}
 }
@@ -706,6 +714,10 @@ export default {
     .cancel {
         color: #e0e0e0;
     }
+}
+.example {
+    display: flex;
+    align-items: center;
 }
 </style>
 

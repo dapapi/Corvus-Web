@@ -604,12 +604,14 @@
                 email: '',
                 trailOriginPerson: '',
                 taskCount: {},
+                currentUser:{},
             }
         },
         created() {
             this.getAllType()
             this.getTrail();
             this.getTrailTask()
+            this.getCurrentUser()
 
         },
         mounted() {
@@ -931,8 +933,18 @@
             changeLockStatus(value) {
                 this.trailInfo.lock_status = value
             },
+            getCurrentUser() {
+                fetch('get', '/users/my').then((response) => {
+                    this.currentUser = response.data
+                })
+            },
             addTask: function () {
                 let _this = this;
+                if (!this.$store.state.newPrincipalInfo.id && this.currentUser) {
+                    this.principal = this.currentUser.id
+                } else {
+                    this.principal = this.$store.state.newPrincipalInfo.id
+                }
                 let data = {
                     resource_type: 5,
                     resourceable_id: this.trailId,
@@ -945,6 +957,7 @@
                     desc: this.taskIntroduce,
                     participants: this.$store.state.newParticipantsInfo,
                 };
+                
                 if (!this.taskName) {
                     toastr.error('请输入任务名称');
                 } else if (!this.taskType) {

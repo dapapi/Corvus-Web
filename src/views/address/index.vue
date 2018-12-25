@@ -118,11 +118,7 @@
                                     </div>
                                     <div class="col-md-4 float-left">
                                         <div class="float-left col-md-6">
-<<<<<<< HEAD
                                             <i class="iconfont icon-Wechat pr-2"></i>
-=======
-                                            <i class="iconfont icon-tianjia pr-2"></i>
->>>>>>> cxy
                                             <span class="font-weight-bold">WeChat</span>
                                         </div>
                                         <div class="float-left col-md-6 pl-0">XXX</div>

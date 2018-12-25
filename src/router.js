@@ -100,6 +100,11 @@ export default new Router({
             component: () => import('./views/artist/papi-detail.vue')
         },
         {
+            path: '/informationForm',
+            name: 'informationForm',
+            component: () => import('./views/staff/informationForm.vue')
+        },
+        {
             path: '/staff',
             name: 'staff',
             component: () => import('./views/staff/index.vue')

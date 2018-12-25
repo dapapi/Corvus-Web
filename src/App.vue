@@ -32,17 +32,19 @@
         },
         watch: {
             '$route': function (to, from) {
-                if (this.$route.path === '/login') {
+                if (this.$route.path === '/login' || this.$route.path === '/informationForm') {
                     this.isLeftMenuShow = false
-
                 }
                 else if (this.$route.path === '/management'
                     || this.$route.path === '/rolemanagement'
                     || this.$route.path === '/appmanagement'
                     || this.$route.path === '/organization'
-                    || this.$route.path === '/organization/management') {
-                    this.isLeftMenuShow = false
-                    this.isLeftManageShow = true
+                    || this.$route.path === '/organization/management'){
+                     this.isLeftMenuShow = false
+                     this.isLeftManageShow = true
+                } else{
+                    this.isLeftMenuShow = true
+                    this.isLeftManageShow = false 
                 }
             },
 
@@ -142,7 +144,7 @@
         min-height: 100vh;
     }
 
-    .require {
+    /* .require {
         position: relative;
     }
 
@@ -156,6 +158,15 @@
         right: -4px;
         top: 50%;
         transform: translateY(-50%);
+    } */
+    .require::before {
+        content: '*';
+        position: relative;
+        left: -4px;
+        vertical-align: middle;
+        color: #F44336;
+        font-size: 16px;
+        /* line-height: 1; */
     }
 
     .point {
@@ -179,6 +190,10 @@
 
     .edit-height {
         /*height: 57px;*/
+    }
+    .label-name {
+        display: flex;
+        align-items: center;
     }
 
     *::-webkit-scrollbar {

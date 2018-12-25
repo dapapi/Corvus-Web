@@ -4,10 +4,16 @@
 
 <script>
     export default {
+        props:['default'],
         name: "NormalTextarea",
         data() {
             return {
                 content: '',
+            }
+        },
+        mounted(){
+            if(this.default){
+                this.content = this.default.values.data.value   
             }
         },
         watch: {

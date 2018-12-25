@@ -7,13 +7,17 @@
         <div class="page-content container-fluid">
             <div class="panel p-20 clearfix">
                 <!-- <div class="col-md-4  p-20"> -->
-                    <div class="col-md-4 input-search float-left">
+                    <div class="col-md-3 input-search float-left">
                         <selectors :options="companyArr" @change="getCompany"></selectors>
                     </div>
-                    <div class="col-md-4 float-left">
+                    <div v-if="this.$route.query.id == 1" class="col-md-3 float-left">
+                        <selectors :options='leaveType' @change="getLeave"></selectors>
+                        
+                    </div>
+                    <div class="col-md-3 float-left">
                         <Datepicker :placeholder="'开始时间'" @change="getStartTime"></Datepicker>
                     </div>
-                    <div class="col-md-4 float-left">
+                    <div class="col-md-3 float-left">
                         <Datepicker :placeholder="'结束时间'" @change="getEndTime"></Datepicker>
                     </div>
                 <!-- </div> -->
@@ -72,11 +76,52 @@ export default {
             list:[], 
             allType:{1:'请假',2:'加班',3:'出差',4:'外勤'},
             companyArr:config.companyArr,
+            leaveType:[
+                {
+                    value:1,
+                    name:'事假'
+                },
+                {
+                    value:2,
+                    name:'病假'
+                },
+                {
+                    value:3,
+                    name:'调休假'
+                },
+                {
+                    value:4,
+                    name:'年假'
+                },
+                {
+                    value:5,
+                    name:'婚假'
+                },
+                {
+                    value:6,
+                    name:'产假'
+                },
+                {
+                    value:7,
+                    name:'陪产假'
+                },
+                {
+                    value:8,
+                    name:'丧假'
+                },
+                {
+                    value:9,
+                    name:'其他'
+                },
+                
+            ],
             searchData:{
                 type:'',
                 start_time:'2018-10-11',
                 end_time:'2018-11-29',
-                department:6
+                department:6,
+                leaveType:1  //后台还没有添加字段
+                
             },
         }
     },
@@ -94,6 +139,10 @@ export default {
         getCompany:function(value){
             this.searchData.department = value
             this.getlist()
+        },
+        getLeave:function(value){
+            this.searchData.leaveType = value
+            this.getlist() 
         },
         getStartTime:function(value){
             this.searchData.start_time = value

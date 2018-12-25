@@ -14,7 +14,7 @@
     export default {
         // 凡是多选，都有搜索框；不是多选传入selectable为true也可以有搜索框
         // changeKey为父组件的data，且可以被改变
-        props: ['options', 'disable', 'multiple', 'placeholder', 'changeKey', 'value', 'resetinfo', 'selectable'],
+        props: ['options', 'disable', 'multiple', 'placeholder', 'changeKey', 'value', 'resetinfo', 'selectable','default'],
         data() {
             return {
                 isDisable: this.disable,
@@ -36,16 +36,23 @@
         mounted() {
             let self = this;
             $(this.$el).selectpicker().on('hidden.bs.select', function () {
+                 // 可以通过调用select方法，去改变父组件传过来的changeKey
+                if (self.changeKey) {
+                    self.$emit('select', self.changeKey, $(this).val(), $(this)[0].selectedOptions[0].label)
+                }
                 if (!$(this).val() || $(this).val().length === 0) {
                     self.$emit('change', $(this).val());
                     return
                 }
                 self.$emit('change', $(this).val(), $(this)[0].selectedOptions[0].label, $(this)[0].selectedOptions[0].id);
-                // 可以通过调用select方法，去改变父组件传过来的changeKey
-                if (self.changeKey) {
-                    self.$emit('select', self.changeKey, $(this).val(), $(this)[0].selectedOptions[0].label)
-                }
+               
             });
+            if(this.default){
+                this.setValue(this.default.values.data.value)
+            }
+            if(this.getValue()){
+                this.$emit('change',this.getValue())                
+            }
         },
         watch: {
             resetinfo: function (value) {
@@ -83,6 +90,7 @@
              * */
             setValue(value) {
                 $(this.$el).selectpicker('val', value);
+                
             },
 
             getValue() {

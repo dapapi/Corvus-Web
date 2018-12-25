@@ -12,26 +12,28 @@
         <div class="page-content container-fluid">
             <div class="panel col-md-12 clearfix py-5">
                 <div class="clearfix">
+                     <div class="col-md-2 example float-left">
+                        <selectors :options="hireShapeArr" changeKey="hireShape" @select="changeState"></selectors>
+                    </div>
                     <div class="col-md-2 example float-left">
                         <selectors :options="staffStatus" :value="1" changeKey="status" @select="changeState"></selectors>
                     </div>
                     <div class="col-md-2 example float-left">
-                        <selectors :options="monthArr" :value="month" changeKey="month" @select="changeState"></selectors>
+                        <selectors :options="staffPositionStatus" :value="1" changeKey="positionType" @select="changeState"></selectors>
                     </div>
-                    <div class="col-md-2 example float-left">
-                        <selectors :options="staffTypeArr" changeKey="staffType" @select="changeState"></selectors>
-                    </div>
+                   
                     <div class="col-md-3 example float-left">
                         <div class="input-search">
                             <button type="button" @click="getStaffList" class="input-search-btn"><i class="iconfont icon-buoumaotubiao13" aria-hidden="true"></i>
                             </button>
-                            <input type="text" class="form-control" @keyup.enter="getStaffList" v-model="search" placeholder="请搜索姓名/手机号/职位">
+                            <input type="text" class="form-control" @keyup.enter="getStaffList" v-model="search" placeholder="请搜索姓名/手机号">
                         </div>
                     </div>
                     <div class="col-md-3 example float-left" 
                         style="height: 36px; line-height: 36px; text-align: right; font-size: 14px;"
                     >
-                        <span style="cursor: pointer; margin-right: 24px;" data-target="#examplePositionCenter" data-toggle="modal">报表</span>
+                        <!-- 隐藏报表 -->
+                        <!-- <span style="cursor: pointer; margin-right: 24px;" data-target="#examplePositionCenter" data-toggle="modal">报表</span> -->
                         <span style="cursor: pointer"><router-link to="/staff/apply">申请表</router-link></span>
                         <!-- <button class="btn btn-primary" data-target="#examplePositionCenter"  type="button">Generate</button> -->
                     </div>
@@ -60,9 +62,9 @@
                     <tr v-for="(item, index) in staffList" :key="index">
                         <td><router-link :to="{name: 'staffDetail', params: { id: item.id }}">{{item.name}}</router-link></td>
                         <td>{{ item.phone }}</td>
-                        <td>{{ workStatus[item.status] }}</td>
-                        <td>{{ employment[item.hire_shape] }}</td>
-                        <td>{{ item.department }}</td>
+                        <td>{{ staffStatus.find(n => n.value == item.status)?staffStatus.find(n => n.value == item.status).name:'' }}</td>
+                        <td>{{ hireShapeArr.find(n => n.value == item.hire_shape)?hireShapeArr.find(n => n.value == item.hire_shape).name:'' }}</td>
+                        <td>{{ item.company?item.company:'' }}</td>
                         <td>{{ item.entry_time }}</td>
                         <td>
                             <div class="dropdown show task-dropdown">
@@ -70,10 +72,10 @@
                                    data-toggle="dropdown" aria-expanded="false" style="cursor: pointer"></i>
                                 <div class="dropdown-menu dropdown-menu-left task-dropdown-item" aria-labelledby="taskDropdown"
                                      role="menu" x-placement="bottom-end" style="min-width: 0;">
-                                    <a v-if="item.status !== 2" class="dropdown-item" role="menuitem" @click="changeStaffStatus(item.id, 1)">转正</a>
-                                    <a class="dropdown-item" role="menuitem" @click="changeStaffStatus(item.id, 3)">调岗</a>
-                                    <a class="dropdown-item" role="menuitem" @click="changeStaffStatus(item.id, 2)">离职</a>
-                                    <a class="dropdown-item" role="menuitem" @click="changeStaffStatus(item.id, 6)">归档</a>
+                                    <a v-if="item.status != 2" class="dropdown-item" role="menuitem" @click="changeStaffStatus(item.id, 2)">转正</a>
+                                    <a class="dropdown-item" role="menuitem" @click="showEditPos(item.id)">调岗</a>
+                                    <a class="dropdown-item" role="menuitem" @click="changeStaffStatus(item.id, 3)">离职</a>
+                                    <a class="dropdown-item" role="menuitem" @click="changeStaffStatus(item.id, 5)">归档</a>
                                 </div>
                             </div>
                         </td>
@@ -81,7 +83,7 @@
                     </tbody>
                 </table>
 
-                <pagination :current_page="currentPage" :method="getStaffList" :total_pages="totalPages"
+                <pagination :current_page="current_page" :method="getStaffList" :total_pages="total_pages"
                             :total="total"></pagination>
             </div>
             <div class="site-action">
@@ -93,6 +95,12 @@
                     </button>
                 </router-link>
             </div>
+
+            <Modal id="move-department" title="调岗" @onOK="moveDepartment">
+                <div class="example">
+                    <DropDepartment :data="data" @change="selectDepartment"/>
+                </div>
+            </Modal>
         </div>
 
         <!-- <Modal /> -->
@@ -102,18 +110,8 @@
 
 <script>
 import config from "../../assets/js/config";
-// import redirect from './bootstrap';
-const { staffStatus, staffType, employment, workStatus } = config;
+const { employment, workStatus } = config;
 import fetch from "../../assets/utils/fetch";
-import axios from 'axios'
-
-const monthArr = Array.from(new Array(12)).map((n, i) => {
-    let obj = {}
-    obj.name = (i + 1) + '月'
-    obj.value = i + 1
-    return obj
-})
-
 export default {
     name: 'Staff',
     data() {
@@ -121,13 +119,10 @@ export default {
             total: 0,
             current_page: 1,
             total_pages: 1,
-            currentPage: 1,
-            totalPages: 1,
             total: 1,
-            // customizeInfo: config.customizeInfo,
-            staffStatus: staffStatus,
-            monthArr: monthArr,
-            staffTypeArr: staffType,
+            staffStatus: config.staffStatus, // 员工状态
+            hireShapeArr: config.hireShape, // 聘用形式
+            staffPositionStatus: config.staffPositionStatus, // 员工在职状态
             filterConditions: [
                 {
                     name: '年龄',
@@ -162,62 +157,100 @@ export default {
             departure: 0,
             search: '',
             entryTime: '',
-            staffType: staffType[0].value,
-            month: new Date().getMonth() + 1, // 1-12月份，
-            status: 1, // 1在职， 2离职，全部 '',
+            status: '', // 员工状态 1在职， 2离职，全部 '',
             page: 1, // 分页
             employment: employment, // 聘用形式
             workStatus: workStatus, // 当前工作状态
+            hireShape: config.hireShape[0].value, // 聘用形式
+            positionType: '', // 在职状态
+            data: [],
+            departmentPId: '',
+            departmentId: '',
+            useId: '',
         };
     },
 
   mounted() {
-    this.getStaffList();
+    this.getStaffList()
+    this.getDepartment()
   },
 
-  methods: {
-    // 改变data的值
-    changeState (name, value) {
-        this[name] = value
-        this.getStaffList()
-    },
-
-    getStaffList() {
-        const params = {
-            // position_type: this.status,
-            // status: this.staffType,
-            // page: this.page,
-            // search: this.search,
-            // entry_time: this.month
-        }
-        fetch("get", "/personnel_list", params).then(result => {
-            this.staffList = result.data;
-            const meta = result.meta
-            this.currentPage = meta.pagination.current_page || 1;
-            this.totalPages = meta.pagination.total_pages || 1;
-            this.total = meta.pagination.total || 1;
-            this.onJob = meta.date.onjob || 0
-            this.departure = meta.date.departure || 0
-        });
-    },
-    // 改变报表筛选条件
-    changeSelectOption(newArr) {
-      this.checkedNames = newArr;
-    },
-    // 改变员工状态
-    changeStaffStatus (useId, status) {
-        const params = {
-            status: status // 1.转正，2.离职，3.调岗，6.归档
-        }
-        fetch('put', `/personnel/${useId}/status`, params).then((data) => {
-            toastr.success('操作成功');
+    methods: {
+        // 改变data的值
+        changeState (name, value) {
+            this[name] = value
             this.getStaffList()
-        })
+        },
+
+        getStaffList (page = 1) {
+            const params = {
+                status: this.status,
+                position_type: this.positionType,
+                hire_shape: this.hireShape,
+                page: page,
+                search: this.search,
+            }
+            fetch("get", "/personnel_list", params).then(result => {
+                this.staffList = result.data;
+                const meta = result.meta
+                this.current_page = meta.pagination.current_page || 1;
+                this.total_pages = meta.pagination.total_pages || 1;
+                this.total = meta.pagination.total || 1;
+                this.onJob = meta.date.onjob || 0
+                this.departure = meta.date.departure || 0
+            });
+        },
+        // 改变报表筛选条件
+        changeSelectOption(newArr) {
+        this.checkedNames = newArr;
+        },
+        // 改变员工状态
+        changeStaffStatus (useId, status) {
+            const params = {
+                status: status // 2.转正，3.离职，5.归档
+            }
+            fetch('put', `/personnel/${useId}`, params).then((data) => {
+                toastr.success('操作成功');
+                this.getStaffList()
+            })
+        },
+        // 展示部门
+        showEditPos (id) {
+            this.useId = id
+            $('#move-department').modal()
+        },
+        // 获取部门数据
+        getDepartment() {
+        fetch("get", "/departments").then(res => {
+                this.data = res.data;
+                this.departmentPId = res.data[0].department_pid;
+                this.departmentId = res.data[0].id;
+            });
+        }, 
+        // 选择部门
+        selectDepartment (data) {
+            this.departmentId = data.id;
+        },
+        // 移动部门
+        moveDepartment () {
+            const params = {
+                department_id: this.departmentId
+            };
+            fetch("put", `/personnel/position/${this.useId}`, params).then( res => {
+                toastr.success("调岗成功");
+                $("#move-department").modal("hide");
+                this.getDepartment();
+                this.getStaffList()
+            });
+        }
     }
-  }
 };
 </script>
 
-<style>
+<style lang="css" scoped>
 @import '../../assets/css/staff.scss';
+.table td, .table th {
+    vertical-align: middle;
+}
 </style>
+

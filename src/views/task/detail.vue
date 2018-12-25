@@ -257,7 +257,7 @@
 
             </div>
 
-            <div class="panel col-md-12 col-lg-12" v-if="questionId">
+            <div class="panel col-md-12 col-lg-12" v-if="questionId && visible">
                 <div class="tab-content nav-tabs-animate bg-white">
                     <div class="card">
                         <div class="card-header card-header-transparent card-header-bordered"
@@ -275,6 +275,7 @@
                                         && principalId === user.id 
                                         && hasAnsweredArr.length > 0 
                                         && hasAnsweredArr.length === questionInfo.reviewanswer.data.length"
+                                        && !questionInfo.excellent
                                         data-target="#push-reason">推优
                                 </button>
                             </div>
@@ -333,28 +334,27 @@
                                     </div>
                                 </div>
                             </div>
-                            <div class="card-text py-5 clearfix">
+                            <div class="card-text py-5 clearfix" v-if="questionInfo.excellent">
                                 <div class="col-md-1 float-left text-right pl-0">推优分</div>
                                 <div class="col-md-11 float-left font-weight-bold">
                                     <div class="edit-wrap">
-                                        1
+                                        {{ questionInfo.excellent_sum }}
                                     </div>
                                 </div>
                             </div>
-                            <div class="card-text py-5 clearfix">
+                            <div class="card-text py-5 clearfix" v-if="questionInfo.excellent">
                                 <div class="col-md-1 float-left text-right pl-0">推优原因</div>
                                 <div class="col-md-11 float-left font-weight-bold">
                                     <div class="edit-wrap">
-                                        1
+                                        {{ questionInfo.excellent }}
                                     </div>
                                 </div>
                             </div>
                             <div class="card-text py-5 clearfix">
                                 <div class="col-md-1 float-left text-right pl-0">视频链接</div>
                                 <div class="col-md-11 float-left font-weight-bold">
-                                    <router-link
-                                            :to="questionInfo.production ? questionInfo.production.data[0].link : ''">
-                                        <div class="edit-wrap" style="color: #3298DC; cursor: pointer;">
+                                    <router-link :to="questionInfo.production ? questionInfo.production.data[0].link : ''">
+                                        <div class="edit-wrap" style="color: #3298DC; cursor: pointer; width: 100%;">
                                             {{ questionInfo.production ? questionInfo.production.data[0].link : '' }}
                                         </div>
                                     </router-link>
@@ -368,7 +368,7 @@
                                         <label>
                                             <div class="radio-custom radio-primary" style="display: inline-block;">
                                                 <input type="radio" @click="answerList[index] = item"
-                                                       :disabled="~hasAnsweredArr.includes(user.id)"
+                                                       :disabled="hasAnsweredArr.includes(user.id)"
                                                        :checked="answerList[index] === item.value
                                                         || items.selectrows.data.find(n => n.review_question_item_id === item.id && n.creator.data.id === user.id)"
                                                        :name="items.id"/>
@@ -388,8 +388,10 @@
                                                 </div>
                                             </div>
                                             <div style="width: 50px; padding-left: 10px; float: left;">
-                                                {{ items.selectrows.data.filter(n => n.review_question_item_id ===
-                                                item.id).length / hasAnsweredArr.length * 100 }}%
+                                                <!-- {{ items.selectrows.data.filter(n => n.review_question_item_id ===
+                                                item.id).length / hasAnsweredArr.length * 100 }}% -->
+                                                 {{ hasAnsweredArr.length > 0 ? items.selectrows.data.filter(n => n.review_question_item_id ===
+                                                item.id).length / hasAnsweredArr.length * 100: '0' }}%
                                             </div>
                                             <div style="width: 50px; padding-left: 10px; float: right;">
                                                 {{items.selectrows.data.filter(n => n.review_question_item_id ===
@@ -587,6 +589,7 @@
                 pushReason: '', // 推荐原因
                 principalId: '', // 负责人id
                 questionId: '', // 问卷id
+                visible: false, // 是否展示问卷
             }
         },
         created() {
@@ -1027,22 +1030,37 @@
             },
             // 获取问卷内容 
             getQuestionData(id) {
-                fetch('get', `/reviews/${id}/questions/?include=items,selectrows.creator`).then(res => {
-                    this.questionData = res.data
-                    this.answerList = new Array(this.questionData.length)
-                    res.data.map(n => {
-                        n.selectrows.data.map(m => {
-                            if (m.creator.data.is_department_principal === 1) {
-                                this.principalId = m.creator.data.id
-                            }
-                            if (!~this.hasAnsweredArr.indexOf(m.creator.data.id)) {
-                                this.hasAnsweredArr.push(m.creator.data.id)
-                            }
-                        })
-                    })
-                })
                 fetch('get', `/reviewquestionnaires/${id}/show?include=sum,creator,production,reviewanswer.users`).then(res => {
                     this.questionInfo = res.data[0]
+                    // 如果res为空表示无权限访问问卷
+                    if (!this.questionInfo) {
+                        return
+                    }
+                    for(const n of this.questionInfo.reviewanswer.data) {
+                        if (n.user_id === this.user.id) {
+                            this.visible = true
+                            fetch('get', `/reviews/${id}/questions/?include=items,selectrows.creator`).then(res => {
+                                // if (res.meta.error) {
+                                    // 此处为问卷过期判断
+                                // }
+                                this.questionData = res.data
+                                this.answerList = new Array(this.questionData.length)
+                                res.data.map(n => {
+                                    n.selectrows.data.map(m => {
+                                        if (m.creator.data.is_department_principal === 1) {
+                                            this.principalId = m.creator.data.id
+                                        }
+                                        if (!~this.hasAnsweredArr.indexOf(m.creator.data.id)) {
+                                            this.hasAnsweredArr.push(m.creator.data.id)
+                                        }
+                                    })
+                                })
+                            })
+                            break
+                        } else {
+                            this.visible = false
+                        }
+                    }
                 })
             },
             // 试卷提交
@@ -1063,7 +1081,6 @@
                     toastr.error('您有未作答题目，请作答完成后提交！')
                     return
                 }
-
                 fetch('post', `/reviews/${this.questionId}/store/Answer`, params).then(res => {
                     toastr.success('问卷提交成功！')
                     this.getQuestionData()
@@ -1077,7 +1094,8 @@
                     return
                 }
                 const params = {
-                    excellent: this.pushReason
+                    excellent: this.pushReason,
+                    excellent_sum: this.questionInfo.sum.data[0].truncate
                 }
                 fetch('post', `/reviewquestionnaires/${this.questionId}/create/excellent`, params).then(res => {
                     $("#push-reason").modal("hide");

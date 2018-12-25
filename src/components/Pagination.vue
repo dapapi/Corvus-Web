@@ -87,3 +87,10 @@
         methods: {}
     }
 </script>
+
+<style scoped>
+.page-item {
+    cursor: pointer;
+}
+</style>
+
