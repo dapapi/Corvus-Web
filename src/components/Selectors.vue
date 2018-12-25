@@ -1,7 +1,7 @@
 <template>
     <select class="selectpicker show-tick form-control" data-plugin="selectpicker" :value="value" :data-live-search="isSelectable"
             :data-show-subtext="isSelectable" :id="_uid"
-            :multiple="multiple" :title="placeholder" v-model="valueListener">
+            :multiple="multiple" :title="title" v-model="valueListener">
         <selectorsOptions v-for="option in options" v-bind:id="option.id" :val="option.value || option.id"
                           :key="option.id">
             {{option.name || option.title}}
@@ -31,6 +31,13 @@
                 }
                 return false
             },
+            title: function () {
+                if (this.placeholder) {
+                    return this.placeholder
+                } else {
+                    return "请选择"
+                }
+            }
         },
 
         mounted() {
