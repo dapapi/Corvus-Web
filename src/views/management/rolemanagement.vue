@@ -89,7 +89,7 @@
                                                     <a class="dropdown-item" role="menuitem" data-toggle="modal"
                                                        data-target="#addMember" @click="getmemberDate(n.id)">添加成员</a>
                                                     <a class="dropdown-item" role="menuitem" data-toggle="modal"
-                                                       data-target="#updateSubgroup" @click="Modifyingroles(n.id)">修改角色</a>
+                                                       data-target="#updateSubgroup" @click="Modifyingroles(n.id,item.id)">修改角色</a>
                                                     <a class="dropdown-item" role="menuitem" data-toggle="modal"
                                                        data-target="#moveSubgroup ">移动到分组</a>
                                                     <a class="dropdown-item" role="menuitem" data-toggle="modal"
@@ -407,8 +407,8 @@
         <div class="site-action" data-plugin="actionBtn" data-toggle="modal" data-target="#addRole">
             <button type="button"
                     class="site-action-toggle btn-raised btn btn-success btn-floating waves-effect waves-classic">
-                <i class="front-icon iconfont icon-tianjia animation-scale-up" aria-hidden="true"></i>
-                <i class="back-icon iconfont icon-tianjia animation-scale-up" aria-hidden="true"></i>
+                <i class="front-icon iconfont icon-tianjia1 animation-scale-up" aria-hidden="true" style="font-size:30px"></i>
+                <i class="back-icon iconfont icon-tianjia1 animation-scale-up" aria-hidden="true" style="font-size:30px"></i>
             </button>
         </div>
         <!--新增角色 -->
@@ -433,13 +433,13 @@
                             <div class="col-md-2 text-right float-left">资源类型</div>
                             <div class="col-md-10 float-left pl-0">
                                 <Selectors @change="changeRolejob"
-                                           :options="groupingDate" :placeholder="panelName" v-model="panelName"></Selectors>
+                                           :options="groupingDate" ref="resourceType"></Selectors>
                             </div>
                         </div>
                         <div class="example">
                             <div class="col-md-2 text-right float-left">描述</div>
                             <div class="col-md-10 float-left pl-0">
-                                <textarea name="" rows="5" class="form-control" @change="describe"></textarea>
+                                <textarea name="" rows="5" class="form-control" @change="describe" v-model="emptydescribe"></textarea>
                             </div>
                         </div>
                     </div>
@@ -525,13 +525,13 @@
                             <div class="col-md-2 text-right float-left">角色组</div>
                             <div class="col-md-10 float-left pl-0">
                                 <Selectors  @change="updateRolejob"
-                                           :options="groupingDate" ></Selectors>
+                                           :options="groupingDate" ref="roleGroup"></Selectors>
                             </div>
                         </div>
                         <div class="example">
                             <div class="col-md-2 text-right float-left">描述</div>
                             <div class="col-md-10 float-left pl-0">
-                                <textarea name="" rows="5" class="form-control" @change="updateDescribe"></textarea>
+                                <textarea name="" rows="5" class="form-control" @change="updateDescribe" v-model="emptyrole_describe"></textarea>
                             </div>
                         </div>
                     </div>
@@ -704,7 +704,12 @@
                 checkBox: [],
                 checkarr: [],
                 selectedIds: [],
-                panelName:''
+                panelName:'',
+                emptydescribe:'',
+                modifyName:'',
+                roleGroupId:'',
+                rolegroupName:'',
+                emptyrole_describe:''
             }
         },
         mounted() {
@@ -724,6 +729,7 @@
                 let _this = this;
                 fetch('get', '/console/role').then(function (response) {
                     _this.roleDate = response.data;
+                    console.log(_this.roleDate)
                 });
             },
             //获取分组数据
@@ -1008,7 +1014,7 @@
                     name: this.groupingName
                 }
                 fetch('post', '/console/group/', data).then(function (response) {
-                    toastr.success('删除成功');
+                    toastr.success('新增成功');
                     $('#addSubgroup').modal('hide');
                     _this.getgroupingDate()
 
@@ -1052,7 +1058,18 @@
             grouping(value) {
                 this.groupingId = value
                 this.panelName=this.groupingDate.find(item=>item.id==this.groupingId).name
-                console.log( this.panelName)
+                this.$refs.resourceType.setValue(value,this.panelName)
+                this.roleName=""
+                this.emptydescribe = ""
+            },
+             Modifyingroles(value,id){
+                 console.log(id)
+                this.roleGroupId=value;
+                this.modifyName=this.roleDate.find(item=>item.id==this.roleGroupId).name
+                this.rolegroupName = this.groupingDate.find(item=>item.id==id).name
+                this.updateName = this.modifyName
+                this.$refs.roleGroup.setValue(id,this.rolegroupName)
+                this.emptyrole_describe=""
             },
             clickdefault() {
                 this.conceal = !this.conceal;
@@ -1064,7 +1081,7 @@
             seerange(i, v) {
                 this.valueId.push(i.toString() + v)
             },
-             radioed(params,value){
+            radioed(params,value){
                 let index = this.sendData.find(item=>item.resource_id===value.id)
                 if(index){
                     index.scope = params.id         
@@ -1092,10 +1109,9 @@
                     this.sendData.push(tempObj)
                 }
            
-            },
-            Modifyingroles(id){
-                console.log(id)
             }
+           
+           
         }
     }
 </script>

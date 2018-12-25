@@ -87,7 +87,7 @@
                         </div>
                         <div class="col-md-6 float-left pl-0">
                             <div class="float-left pl-0 pr-2 col-md-2">
-                                <i class="iconfont icon-tuijian pr-2" aria-hidden="true"></i>推荐艺人
+                                <i class="iconfont icon-tuijian pr-2" aria-hidden="true" style="font-size:17px;"></i>推荐艺人
                             </div>
                             <div class="font-weight-bold float-left" v-if="trailInfo.recommendations">
                             <span v-for="recommendation in trailInfo.recommendations.data" :key="recommendation.name">
@@ -409,8 +409,8 @@
                                  data-target="#addTask">
                                 <button type="button"
                                         class="site-action-toggle btn-raised btn btn-success btn-floating waves-effect waves-classic">
-                                    <i class="front-icon iconfont icon-tianjia animation-scale-up" aria-hidden="true"></i>
-                                    <i class="back-icon iconfont icon-tianjia animation-scale-up" aria-hidden="true"></i>
+                                    <i class="front-icon iconfont icon-tianjia1 animation-scale-up" aria-hidden="true"></i>
+                                    <i class="back-icon iconfont icon-tianjia1 animation-scale-up" aria-hidden="true"></i>
                                 </button>
                             </div>
                         </div>

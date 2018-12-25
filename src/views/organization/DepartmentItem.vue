@@ -7,7 +7,7 @@
                 <img src="../../assets/img/department@2x.png" />
                 {{ data.name }} <span>({{count}})</span> <span class="principal">{{principal ? principal.name:'无负责人'}}</span>
             </span>
-            <i v-if="!isEdit" class="iconfont icon-tianjia edit" style="float: right;line-height: 50px;" @click.stop="check(data)"></i>
+            <i v-if="!isEdit" class="iconfont icon-tianjia1 edit" style="float: right;line-height: 50px;" @click.stop="check(data)"></i>
             <div class="drop" v-else>
                  <i class="iconfont icon-gengduo1 font-size-24" aria-hidden="true" id="org-dropdown"
                     data-toggle="dropdown" aria-expanded="false" style="cursor: pointer; float: right;line-height: 50px;">

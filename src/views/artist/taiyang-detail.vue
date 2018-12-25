@@ -220,8 +220,8 @@
                                  data-target="#addTask">
                                 <button type="button"
                                         class="site-action-toggle btn-raised btn btn-success btn-floating waves-effect waves-classic">
-                                    <i class="front-icon md-plus animation-scale-up" aria-hidden="true"></i>
-                                    <i class="back-icon md-plus animation-scale-up" aria-hidden="true"></i>
+                                    <i class="front-icon iconfont icon-tianjia1 animation-scale-up" aria-hidden="true" style="font-size:30px"></i>
+                                    <i class="back-icon iconfont icon-tianjia1 animation-scale-up" aria-hidden="true" style="font-size:30px"></i>
                                 </button>
                             </div>
                         </div>
@@ -259,9 +259,8 @@
                                  data-target="#addWork">
                                 <button type="button"
                                         class="site-action-toggle btn-raised btn btn-success btn-floating waves-effect waves-classic">
-                                    <i class="front-icon iconfont icon-tianjia animation-scale-up"
-                                       aria-hidden="true"></i>
-                                    <i class="back-icon iconfont icon-guanbi animation-scale-up" aria-hidden="true"></i>
+                                    <i class="front-icon iconfont icon-tianjia1 animation-scale-up" aria-hidden="true"></i>
+                                    <i class="back-icon md-close animation-scale-up" aria-hidden="true"></i>
                                 </button>
                             </div>
 
@@ -276,11 +275,18 @@
                         <div class="tab-pane animation-fade  pb-20 fixed-button-father" id="forum-artist-bill"
                              role="tabpanel">
                             <div class="clearfix my-10">
-                                <div style="padding: .715rem 1.429rem">
-                                    <div class="float-left pr-40">收款金额</div>
-                                    <div class="float-left pr-40 money-color">10000000元</div>
-                                    <div class="float-left pr-40">付款金额</div>
-                                    <div class="float-left pr-40 money-color">10000000元</div>
+                                <div class="float-left" style="padding: .715rem 1.429rem">
+                                    <div class="float-left pr-40">合同金额 <span class="money-color">10000元</span></div>
+                                    <div class="float-left pr-40">支出金额 <span class="money-color">1000元0</span></div>
+                                    <div class="float-left pr-40">税费 <span class="money-color">10000元</span></div>
+                                    <div class="float-left pr-40">papi分成 <span class="money-color">10000元</span></div>
+                                    <div class="float-left pr-40">bigger分成 <span class="money-color">10000元</span></div>
+                                    <div class="float-left pr-40">我司分成 <span class="money-color">10000元</span></div>
+                                </div>
+                                <div class="float-right" style="padding: .715rem 0">
+                                     <span class="pointer-content hover-content" data-toggle="modal"
+                                           data-target="#addBill">
+                                         <i class="iconfont icon-tianjia1 pr-5"></i>新增结算单</span>
                                 </div>
                             </div>
                             <table class="table table-hover" data-child="tr">
@@ -329,8 +335,7 @@
                                 <div class="card-header card-header-transparent card-header-bordered">
                                     <div class="float-left font-weight-bold third-title">艺人信息</div>
                                     <div class="float-right pointer-content" v-show="!isEdit">
-                                        <i class="iconfont icon-bianji2" aria-hidden="true"
-                                           @click="editBaseInfo"></i>
+                                        <i class="iconfont icon-bianji2" aria-hidden="true" @click="editBaseInfo"></i>
                                     </div>
                                     <div class="float-right mr-40" v-show="isEdit">
                                         <button class="btn btn-sm btn-white btn-pure" @click="cancelEdit">取消

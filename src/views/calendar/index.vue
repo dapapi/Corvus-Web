@@ -5,7 +5,7 @@
             <h1 class="page-title">日历</h1>
             <div class="page-header-actions" data-toggle="modal" data-target="#addCalendar"
                  @click="changeCalendarActionType('add')">
-                <i class="iconfont icon-tianjia font-size-20" aria-hidden="true"></i>
+                <i class="iconfont icon-tianjia1 font-size-20" aria-hidden="true"></i>
             </div>
         </div>
 

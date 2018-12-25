@@ -13,7 +13,7 @@
                     <div class="card-text clearfix example">
                         <div class="col-md-6 float-left clearfix pl-0">
                             <div class="float-left pl-0 pr-2 col-md-2">
-                                <i class="iconfont icon-yonghu pr-2" aria-hidden="true"></i>负责人
+                                <i class="iconfont icon-kehu pr-2" aria-hidden="true"></i>负责人
                             </div>
                             <div class="font-weight-bold float-left" v-if="clientInfo.principal">
                                 {{ clientInfo.principal?clientInfo.principal.data.name:'' }}
@@ -23,7 +23,7 @@
                     <div class="card-text clearfix example">
                         <div class="col-md-6 float-left clearfix pl-0">
                             <div class="float-left pl-0 pr-2 col-md-2">
-                                <i class="iconfont icon-kehu pr-2" aria-hidden="true"></i>类型
+                                <i class="iconfont icon-labelbiaoqian pr-2" aria-hidden="true"></i>类型
                             </div>
                             <div class="font-weight-bold float-left" v-if="clientInfo.type">
                                 {{ clientTypeArr.find(item => item.value == clientInfo.type).name }}
@@ -213,8 +213,8 @@
                              data-target="#addTask">
                             <button type="button"
                                     class="site-action-toggle btn-raised btn btn-success btn-floating waves-effect waves-classic">
-                                <i class="front-icon iconfont icon-tianjia animation-scale-up" aria-hidden="true"></i>
-                                <i class="back-icon iconfont icon-tianjia animation-scale-up" aria-hidden="true"></i>
+                                <i class="front-icon iconfont icon-tianjia1 animation-scale-up" aria-hidden="true" style="font-size:30px"></i>
+                                <i class="back-icon iconfont icon-tianjia1 animation-scale-up" aria-hidden="true" style="font-size:30px"></i>
                             </button>
                         </div>
                     </div>
@@ -370,8 +370,8 @@
                              @click="changeEditStatus(true)">
                             <button type="button"
                                     class="site-action-toggle btn-raised btn btn-success btn-floating waves-effect waves-classic">
-                                <i class="front-icon iconfont icon-tianjia animation-scale-up" aria-hidden="true"></i>
-                                <i class="back-icon iconfont icon-tianjia animation-scale-up" aria-hidden="true"></i>
+                                <i class="front-icon iconfont icon-tianjia1 animation-scale-up" aria-hidden="true" style="font-size:30px"></i>
+                                <i class="back-icon iconfont icon-tianjia1 animation-scale-up" aria-hidden="true" style="font-size:30px"></i>
                             </button>
                         </div>
 

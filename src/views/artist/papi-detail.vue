@@ -40,8 +40,8 @@
                         <div class="col-md-6"><i class="iconfont icon-iconset0399"></i> 任务</div>
                         <div class="clearfix example taskshow" v-for="(task,index) in tasksInfo" :key="index" @click="JumpDetails(task.id)">
                             <div class="col-md-3 float-left">{{task.title}}</div>
-                            <div class="col-md-3 float-left">{{task.principal.data.name}}</div>
-                            <div class="col-md-3 float-left">{{task.end_at}}</div>
+                            <div class="col-md-2 float-left">{{task.principal.data.name}}</div>
+                            <div class="col-md-4 float-left">{{task.end_at}}</div>
                             <div class="col-md-3 float-left">
                                 <template v-if="task.status === 1"><span style="color:#FF9800">进行中</span></template>
                                 <template v-if="task.status === 2"><span style="color:#4CAF50">已完成</span></template>
@@ -171,8 +171,8 @@
                                     <th class="cell-300" scope="col">负责人</th>
                                     <th class="cell-300" scope="col">截止日期</th>
                                 </tr>
-                                <tr v-for="(task,index) in tasksInfo" :key="index" v-if="task">
-                                    <td @click="taskdetail(task.id)" class="Jump">{{task.title}}</td>
+                                <tr v-for="(task,index) in tasksInfo" :key="index" v-if="task" @click="taskdetail(task.id)" class="Jump">
+                                    <td>{{task.title}}</td>
                                     <td v-if="task.type">{{task.type.data.title}}</td>
                                     <td v-if="!task.type">未选择</td>
                                     <td>
@@ -197,10 +197,8 @@
                                  data-target="#addTask">
                                 <button type="button"
                                         class="site-action-toggle btn-raised btn btn-success btn-floating waves-effect waves-classic">
-                                    <i class="front-icon iconfont icon-tianjia animation-scale-up"
-                                       aria-hidden="true"></i>
-                                    <i class="back-icon iconfont icon-tianjia animation-scale-up"
-                                       aria-hidden="true"></i>
+                                    <i class="front-icon iconfont icon-tianjia1 animation-scale-up" aria-hidden="true" style="font-size:30px"></i>
+                                    <i class="back-icon iconfont icon-tianjia1 animation-scale-up" aria-hidden="true" style="font-size:30px"></i>
                                 </button>
                             </div>
                         </div>
@@ -245,11 +243,8 @@
                                  data-target="#addWork">
                                 <button type="button"
                                         class="site-action-toggle btn-raised btn btn-success btn-floating waves-effect waves-classic">
-                                    <i class="front-icon iconfont icon-tianjia animation-scale-up"
-                                       aria-hidden="true"></i>
-                                    <i class="back-icon iconfont icon-tianjia animation-scale-up"
-                                       aria-hidden="true"></i>
-                                    
+                                    <i class="front-icon iconfont icon-tianjia1 animation-scale-up" aria-hidden="true" style="font-size:30px"></i>
+                                    <i class="back-icon iconfont icon-tianjia1 animation-scale-up" aria-hidden="true" style="font-size:30px"></i>
                                 </button>
                             </div>
                         </div>
@@ -359,23 +354,31 @@
                                         </div>
                                         <div class="card-text py-10 px-0 clearfix col-md-6 float-left edit-height">
                                             <div class="col-md-2 float-left text-right pl-0">与我司签约意向</div>
-                                            <div class="col-md-10 float-left font-weight-bold">
+                                            <div class="col-md-5 float-left font-weight-bold">
                                                 <EditSelector :content="updateType"
                                                               :options="yesOrNoArr"
                                                               :is-edit="isEdit"
                                                               @change="changeArtistIntention"></EditSelector>
                                             </div>
+                                            <div class="col-md-5 float-left font-weight-bold" >
+                                                <EditInput  :is-edit="isEdit"
+                                                           @change="changArtistName"></EditInput>
+                                            </div>
                                         </div>
 
                                         <div class="card-text py-10 px-0 clearfix col-md-6 float-left edit-height">
                                             <div class="col-md-2 float-left text-right pl-0">是否签约其他公司</div>
-                                            <div class="col-md-10 float-left font-weight-bold">
+                                            <div class="col-md-5 float-left font-weight-bold">
                                                 <EditSelector :content="updateSign_contract_other"
                                                               :options="yesOrNoArr"
                                                               :is-edit="isEdit"
                                                               @change="changeArtistSignStatus"></EditSelector>
                                             </div>
-                                        </div>
+                                            <div class="col-md-5 float-left font-weight-bold">
+                                                <EditInput  :is-edit="isEdit"
+                                                           @change="changArtistName"></EditInput>
+                                            </div>
+                                        </div> 
                                         <div class="card-text py-10 px-0 clearfix col-md-6 float-left edit-height">
                                             <div class="col-md-2 float-left text-right pl-0">社交平台</div>
                                             <div class="col-md-10 float-left font-weight-bold">
