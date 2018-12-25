@@ -8,17 +8,17 @@
                    data-toggle="dropdown" aria-expanded="false"></i>
                 <div class="dropdown-menu dropdown-menu-right task-dropdown-item" aria-labelledby="taskDropdown"
                      role="menu" x-placement="bottom-end">
-                    <a class="dropdown-item" role="menuitem" >分享</a>
+                    <!-- <a class="dropdown-item" role="menuitem" >分享</a> -->
                     <a class="dropdown-item" role="menuitem" data-toggle="modal"
                        data-target="#distributionBroker" @click="distributionPerson('broker')">分配经理人</a>
                     <a class="dropdown-item" role="menuitem" data-toggle="modal"
                        data-target="#distributionBroker" @click="distributionPerson('publicity')">分配宣传人</a>
-                    <a class="dropdown-item" role="menuitem" >自定义字段</a>
+                    <!-- <a class="dropdown-item" role="menuitem" >自定义字段</a>
                     <a class="dropdown-item" role="menuitem"  data-toggle="modal" data-target="#addPrivacy">隐私设置</a>
                     <a class="dropdown-item" role="menuitem"  data-toggle="modal" data-target="#addPrivacy">
                         <template v-if="artistInfo.sign_contract_status == 1">签约</template>
                         <template v-if="artistInfo.sign_contract_status == 2">解约</template>
-                    </a>
+                    </a> -->
                 </div>
             </div>
         </div>
@@ -158,9 +158,9 @@
                                     <th class="cell-300" scope="col">关联公司</th>
                                     <th class="cell-300" scope="col">录入日期</th>
                                 </tr>
-                                <tr v-for="(item,index) in artistProjectsInfo" :key="index">
+                                <tr v-for="(item,index) in artistProjectsInfo" :key="index" @click="toProject(item.id)">
                                     <td>
-                                        <router-link :to="{path:`/projects/${item.id}`}">{{item.title}}</router-link>
+                                        {{item.title}}
                                     </td>
                                     <td>
                                         <template v-if="item.status === 1"><span style="color:#FF9800">进行中</span>
@@ -194,9 +194,9 @@
                                     <th class="cell-300" scope="col">负责人</th>
                                     <th class="cell-300" scope="col">截止时间</th>
                                 </tr>
-                                <tr v-for="(task,index) in artistTasksInfo" :key="index">
+                                <tr v-for="(task,index) in artistTasksInfo" :key="index" @click="toTask(task.id)">
                                     <td>
-                                        <router-link :to="{path:`/tasks/${task.id}`}">{{task.title}}</router-link>
+                                        {{task.title}}
                                     </td>
                                     <td>
                                         <template v-if="task.type">{{task.type.data.title}}</template>
@@ -934,7 +934,24 @@
                 taiyangCommunicationStatusArr: config.taiyangCommunicationStatusArr,
                 yesOrNoArr: config.yesOrNoArr,
                 changeArtistInfo: {},
-                artistSocialPlatform: config.artistSocialPlatform,
+                artistSocialPlatform:[
+                    {
+                        value:1,
+                        name:'微博'
+                    },
+                    {
+                        value:2,
+                        name:'百科'
+                    },
+                    {
+                        value:3,
+                        name:'抖音'
+                    },
+                    {
+                        value:4,
+                        name:'其他'
+                    },
+                ],
                 distributionType: '',
                 affixes: [], //附件
                 affixesType: '',//附件类型
@@ -952,14 +969,15 @@
 
         created() {
             this.getArtist()
+            this.selectedCalendar[0] = this.$route.params.id
             
         },
         mounted() {
 
             this.getTaskType();
             this.draw();
-            this.getSchedules()
-            this.selectedCalendar[0] = this.$route.params.id
+            // this.getSchedules()
+            
             let _this = this;
             $('#distributionBroker').on('hidden.bs.modal', function () {
                 _this.$store.commit('changeParticipantsInfo', [])
@@ -1178,7 +1196,7 @@
                     toastr.error('请选择任务结束时间')
                     return false
                 }
-                if (!this.priority) {
+                if (!this.taskLevel) {
                     toastr.error('请选择任务优先级')
                     return false
                 }
@@ -1431,6 +1449,13 @@
             filterProjectFee: function (value) {
                 this.filterFee = value;
             },
+            toProject:function(id){
+                this.$router.push({path: 'projects/' + id});
+               
+            },
+            toTask:function(id){
+                this.$router.push({path: 'tasks/' + id});
+            }
 
         },
         filters: {
