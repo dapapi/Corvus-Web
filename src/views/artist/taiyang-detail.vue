@@ -57,9 +57,9 @@
                     <div class="col-md-6 float-left pl-0 mb-20" style="border-right: 1px solid #eee">
                         <div class="col-md-6"><i class="iconfont icon-iconset0399"></i> 任务 {{taskNum}}</div>
                         <div class="clearfix example" v-for="(item,index) in artistTasksInfo" :key="index"
-                             @click="goTask(item.id)">
+                             @click="toTask(item.id)" style="cursor: pointer;">
                             <div class="col-md-3 float-left">
-                                <router-link :to="{path:`/tasks/${item.id}`}">{{item.title}}</router-link>
+                                {{item.title}}
                             </div>
                             <div class="col-md-3 float-left">{{item.principal.data.name}}</div>
                             <div class="col-md-3 float-left">{{item.end_at}}</div>
@@ -72,9 +72,9 @@
                     </div>
                     <div class="col-md-6 float-left pl-0 mb-20">
                         <div class="col-md-6"><i class="iconfont icon-ego-box"></i>项目</div>
-                        <div class="clearfix example" v-for="(item,index) in artistProjectsInfo" :key="index">
+                        <div class="clearfix example" v-for="(item,index) in artistProjectsInfo" :key="index" style="cursor: pointer">
                             <div class="col-md-3 float-left">
-                                <router-link :to="{path:`/projects/${item.id}`}">{{item.title}}</router-link>
+                                {{item.title}}
                             </div>
                             <div class="col-md-3 float-left">{{item.principal.data.name}}</div>
                             <div class="col-md-3 float-left">{{item.end_at}}</div>
@@ -527,11 +527,14 @@
                                     <div class="card-text py-5 clearfix">
                                         <div class="col-md-1 float-left text-right pl-0">最近更新人</div>
                                         <div class="col-md-5 float-left font-weight-bold">
-                                            {{artistInfo.last_updated_user}}
+                                            <template v-if="artistInfo.last_updated_user">{{artistInfo.last_updated_user}}</template>
+                                            <template v-else>{{ artistInfo.created_at }}</template>
+                                            
                                         </div>
                                         <div class="col-md-1 float-left text-right pl-0">最近更新时间</div>
                                         <div class="col-md-5 float-left font-weight-bold">
-                                            {{artistInfo.last_updated_at}}
+                                            <template v-if="artistInfo.last_follow_up_at">{{artistInfo.last_follow_up_at}}</template>
+                                            <template v-else>{{ artistInfo.created_at }}</template>
                                         </div>
                                     </div>
                                 </div>
@@ -969,7 +972,7 @@
 
         created() {
             this.getArtist()
-            this.selectedCalendar[0] = this.$route.params.id
+            // this.selectedCalendar[0] = this.$route.params.id
             
         },
         mounted() {
@@ -977,14 +980,23 @@
             this.getTaskType();
             this.draw();
             // this.getSchedules()
-            
+            this.selectedCalendar.push(this.$route.params.id)
             let _this = this;
             $('#distributionBroker').on('hidden.bs.modal', function () {
                 _this.$store.commit('changeParticipantsInfo', [])
             })
         },
+        // computed:{
+        //     selectedCalendar:function(){
+        //         let arr = new Array()
+        //         arr[0] = this.$route.params.id
+        //         return arr
+        //     }
+        // },
         methods: {
-
+            changeCalender:function(){
+                this.selectedCalendar[0] = this.$route.params.id
+            },
             //获取艺人信息
             getArtist: function () {
                 this.artistId = this.$route.params.id;
@@ -1169,7 +1181,12 @@
             changeEndMinutes: function (value) {
                 this.endMinutes = value
             },
+            //设置默认负责人
+            // setDefault:function(){
+            //     // let defaultParams = 
 
+            //     this.$store.state.newPrincipalInfo = {id:this.$route.params.id}
+            // },
             addTask: function () {
                 let participant_ids = [];
                 let start, end, startMin, endMin
@@ -1450,11 +1467,11 @@
                 this.filterFee = value;
             },
             toProject:function(id){
-                this.$router.push({path: 'projects/' + id});
+                this.$router.push({path: '/projects/' + id});
                
             },
             toTask:function(id){
-                this.$router.push({path: 'tasks/' + id});
+                this.$router.push({path: '/tasks/' + id});
             }
 
         },
@@ -1492,7 +1509,7 @@
 
 </script>
 
-<style>
+<style scoped>
     .task-dropdown {
         -moz-user-select: none;
         -webkit-user-select: none;
@@ -1571,6 +1588,7 @@
     .calendar-list ul {
         padding: 0 20px;
         margin-top: 10px;
+        
     }
 
     .calendar-list ul li .calendar-checkbox i {

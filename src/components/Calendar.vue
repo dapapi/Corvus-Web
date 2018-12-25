@@ -36,7 +36,6 @@
         },
         mounted() {
             let self = this;
-            // console.log(this.calendars)
             $(this.$el).fullCalendar({
                 header: {
                     right: 'prev,next today',
@@ -75,7 +74,6 @@
                 events: function (start, end, timezone, callback) {
                     self.startDate = self.timeReformat(start._d);
                     self.endDate = self.timeReformat(end._d);
-                    // console.log(self.calendars)
                     if (self.calendars.length === 0) {
                         callback([]);
                         return
@@ -93,7 +91,6 @@
                         data.material_ids = materialsIds
                     } else {
                         data.calendar_ids = self.calendars
-                        // data.calendar_ids = [609204190,1569976395]
                     }
                     fetch('get', '/schedules', data).then(response => {
                         self.allScheduleInfo = response.data;
