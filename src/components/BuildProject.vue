@@ -1,7 +1,7 @@
 <template>
     <div class="modal fade" id="addProject" aria-hidden="true" aria-labelledby="addLabelForm"
          role="dialog" tabindex="-1">
-        <div class="modal-dialog modal-simple">
+        <div class="modal-dialog modal-simple" >
             <div class="modal-content">
                 <div class="modal-header">
                     <button type="button" class="close" aria-hidden="true" data-dismiss="modal">
@@ -93,7 +93,7 @@
                         </div>
                     </div>
                     <div class="col-md-12 example clearfix" v-show="projectType != 5">
-                        <div class="col-md-2 text-right float-left px-0">合同金额</div>
+                        <div class="col-md-2 text-right float-left px-0">预计订单收入</div>
                         <div class="col-md-10 float-left">
                             <NumberSpinner ref="projectFee"
                                            @change="(value) => addProjectBaseInfo(value, 'fee')"></NumberSpinner>
@@ -102,38 +102,38 @@
                     <div class="col-md-12 example clearfix" v-for="field in projectFields">
                         <div class="col-md-2 text-right float-left px-0">{{ field.key }}</div>
                         <div class="col-md-10 float-left">
-                            <template v-if="field.field_type === 1">
-                                <EmitInput @change="(value) => addInfo(value, field.id )"></EmitInput>
+                            <template v-if="field.field_type === 1" >
+                                <EmitInput :default='newArray.find(item=>item.id === field.id)' @change="(value) => addInfo(value, field.id )"></EmitInput>
                             </template>
                             <template v-if="field.field_type === 2">
-                                <Selectors :options="field.contentArr" :placeholder="'请选择' + field.key"
+                                <Selectors :default='newArray.find(item=>item.id === field.id)' :options="field.contentArr" :placeholder="'请选择' + field.key"
                                            @change="(value) => addInfo(value, field.id )"></Selectors>
                             </template>
                             <template v-if="field.field_type === 3">
-                                <EditableSearchBox :options="starsArr" :multiple="true"
+                                <EditableSearchBox :default='newArray.find(item=>item.id === field.id)' :options="starsArr" :multiple="true"
                                                    @change="(value) => addInfo(value, field.id )"></EditableSearchBox>
                             </template>
                             <template v-if="field.field_type === 4">
-                                <Datepicker @change="(value) => addInfo(value, field.id )"></Datepicker>
+                                <Datepicker :default='newArray.find(item=>item.id === field.id)' @change="(value) => addInfo(value, field.id )"></Datepicker>
                             </template>
                             <template v-if="field.field_type === 5">
-                                <NormalTextarea title="" class="form-control"
+                                <NormalTextarea :default='newArray.find(item=>item.id == field.id)' title="" class="form-control"
                                                 @change="(value) => addInfo(value, field.id )"></NormalTextarea>
                             </template>
                             <template v-if="field.field_type === 6">
-                                <Selectors :options="field.contentArr" :multiple="true"
+                                <Selectors :default='newArray.find(item=>item.id === field.id)' :options="field.contentArr" :multiple="true"
                                            :placeholder="'请选择' + field.key"
                                            @change="(value) => addInfo(value.join('|'), field.id )"></Selectors>
                             </template>
                             <template v-if="field.field_type === 8">
                                 <GroupDatepicker
-                                        @change="(from, to) => addInfo(from + '|' + to, field.id )"></GroupDatepicker>
+                                        :default='newArray.find(item=>item.id === field.id)' @change="(from, to) => addInfo(from + '|' + to, field.id )"></GroupDatepicker>
                             </template>
                             <template v-if="field.field_type === 10">
-                                <InputSelectors @change="(value) => addInfo(value, field.id )"></InputSelectors>
+                                <InputSelectors :default='newArray.find(item=>item.id === field.id)' @change="(value) => addInfo(value, field.id )"></InputSelectors>
                             </template>
                             <template v-if="field.field_type === 11">
-                                <NumberSpinner @change="(value) => addInfo(value, field.id )"></NumberSpinner>
+                                <NumberSpinner :default='newArray.find(item=>item.id === field.id)' @change="(value) => addInfo(value, field.id )"></NumberSpinner>
                             </template>
                         </div>
                     </div>
@@ -145,7 +145,9 @@
                         </div>
                     </div>
                 </div>
-                <ApprovalProgress :formid='projectType' />
+                <template v-if="projectType != 5">
+                    <ApprovalProgress :formid='projectType' />
+                </template>
 
                 <div class="modal-footer">
                     <button class="btn btn-sm btn-white btn-pure" data-dismiss="modal">取消</button>
@@ -185,29 +187,42 @@
                 projectFields: [],
                 approver:[],
                 newArray:[],
+                isShow:false,
             }
         },
         watch: {
             projectFieldsArr(newValue) {
                 return this.projectFields = newValue
             },
-            // projectType(newValue){
-            //     this.getApprover()
-            // }
         },
-        mounted() {
+        created(){
             this.getStars();
             this.getTrail();
-            // this.getApprover();
+            this.setDefaultValue()
+        },
+        mounted() {
             let _this = this;
             this.defaultDataFilter()
             $('#addProject').on('hidden.bs.modal', function () {
                 _this.refreshAddProjectModal()
             })
+            $('#addProject').on('show.bs.modal', function () {
+                _this.setDefaultValue()
+                 _this.$nextTick(() => {
+                    _this.$refs.trails.setValue(_this.defaultData.trailInfo.data.id)   
+                    _this.$nextTick(function(){
+                        _this.addProjectTrail(_this.defaultData.trailInfo.data.id)
+                        _this.$forceUpdate()
+                    })
+                })  
+            })
         },
         methods: {
             defaultDataFilter(){
-                this.newArray = this.defaultData.data.filter((params) => {
+                if(!this.defaultData) {
+                    return
+                }
+                this.newArray = this.defaultData.fields.filter((params) => {
                    return  params.hasOwnProperty('values')
                 })
             },
@@ -222,7 +237,6 @@
                 this.$refs.intentionArtist.setValue('');
                 this.$refs.startTime.setValue('');
                 this.$refs.endTime.setValue('');
-                
                 this.$refs.desc.refresh();
                 this.$refs.projectFee.setValue('');
                 this.$refs.trailOrigin.setValue('');
@@ -233,9 +247,25 @@
                 this.$store.dispatch('changePrincipal', {type: 'selector', data: {}});
                 this.projectFields = [];
             },
+            setDefaultValue(){
+                if(this.defaultData){
+                    this.$refs.projectNameRef.refresh(this.defaultData.list.title);
+                    this.$refs.priorityLevel.setValue(this.defaultData.list.priority);
+                    Object.assign(this.projectBaseInfo,{'priority':this.defaultData.list.priority})
+                    this.$refs.startTime.setValue(this.defaultData.list.start_at);
+                    this.$refs.endTime.setValue(this.defaultData.list.end_at);
+                    this.$refs.projectExpenditureFee.setValue(this.defaultData.list.expenditure_fee)
+                    this.$store.dispatch('changePrincipal', this.defaultData.list.principal);
+                    for (const key in this.newArr) {
+                        if (object.hasOwnProperty(key)) {
+                            const element = object[key];
+                            
+                        }
+                    }
+                }
 
+            },
             addProjectTrail: function (value) {
-                console.log(value);
                 if (!value) {
                     return
                 }

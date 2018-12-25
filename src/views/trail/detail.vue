@@ -146,7 +146,7 @@
                                 <div class="card-header card-header-transparent card-header-bordered">
                                     <div class="float-left font-weight-bold third-title">销售线索信息</div>
                                     <div class="float-right pointer-content">
-                                        <i class="iconfont icon-bianji" aria-hidden="true" @click="editBaseInfo"></i>
+                                        <i class="iconfont icon-bianji2" aria-hidden="true" @click="editBaseInfo"></i>
                                     </div>
                                     <div class="float-right mr-40" v-show="isEdit">
                                         <button class="btn btn-sm btn-white btn-pure" @click="cancelEdit">取消</button>
@@ -604,12 +604,14 @@
                 email: '',
                 trailOriginPerson: '',
                 taskCount: {},
+                currentUser:{},
             }
         },
         created() {
             this.getAllType()
             this.getTrail();
             this.getTrailTask()
+            this.getCurrentUser()
 
         },
         mounted() {
@@ -931,8 +933,18 @@
             changeLockStatus(value) {
                 this.trailInfo.lock_status = value
             },
+            getCurrentUser() {
+                fetch('get', '/users/my').then((response) => {
+                    this.currentUser = response.data
+                })
+            },
             addTask: function () {
                 let _this = this;
+                if (!this.$store.state.newPrincipalInfo.id && this.currentUser) {
+                    this.principal = this.currentUser.id
+                } else {
+                    this.principal = this.$store.state.newPrincipalInfo.id
+                }
                 let data = {
                     resource_type: 5,
                     resourceable_id: this.trailId,
@@ -945,6 +957,7 @@
                     desc: this.taskIntroduce,
                     participants: this.$store.state.newParticipantsInfo,
                 };
+                
                 if (!this.taskName) {
                     toastr.error('请输入任务名称');
                 } else if (!this.taskType) {
@@ -1138,12 +1151,5 @@
         -ms-user-select: none;
         user-select: none;
         z-index: 2;
-    }
-
-    /* .edit-height {
-        height: 57px;
-    } */
-    .py-10 {
-        height: 57px;
     }
 </style>

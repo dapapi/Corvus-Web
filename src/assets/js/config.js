@@ -339,30 +339,45 @@ let config = {
         staffStatus: [
             {
                 value: 1,
+                name: '试用期',
+            },
+            {
+                value: 2,
+                name: '已转正',
+            },
+            {
+                value: 3,
+                name: '已离职',
+            },
+            {
+                value: 4,
+                name: '实习期',
+            },
+        ],
+        // 员工在职状态
+        staffPositionStatus: [
+            {
+                value: 1,
                 name: '在职',
             },
             {
                 value: 2,
                 name: '离职',
             },
-            {
-                value: '',
-                name: '全部',
-            }
         ],
-        // 员工类型
-        staffType: [
+        // 聘用形式
+        hireShape: [
             {
                 value: 1,
-                name: '正式员工'
+                name: '劳务'
             },
             {
                 value: 2,
-                name: '实习生'
+                name: '劳动'
             },
             {
                 value: 3,
-                name: '管培生'
+                name: '实习'
             },
             {
                 value: 4,

@@ -8,7 +8,7 @@
 </template>
 <script>
     export default {
-        props: ['placeholder', 'changeKey', 'startDate'],
+        props: ['placeholder', 'changeKey', 'startDate','default'],
         data() {
             return {}
         },
@@ -25,6 +25,9 @@
                     self.$emit('select', self.changeKey, $(this)[0].children[0].value)
                 }
             });
+            if(this.default){
+                this.setValue(this.default.values.data.value)
+            }
 
         },
         watch: {
