@@ -392,7 +392,7 @@
                     console.log(response);
                     let json = {
                         id: userData.id,
-                        avatar: userData.avatar,
+                        avatar: userData.icon_url,
                         nickname: userData.name
                     };
                     callback(json, userData.company)

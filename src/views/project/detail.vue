@@ -1872,4 +1872,9 @@
         color: #3298DC;
     }
 
+    .nav-tabs-animate .tab-content {
+        overflow-x: hidden;
+        overflow-y: auto;
+    }
+
 </style>
