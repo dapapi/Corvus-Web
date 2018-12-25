@@ -60,6 +60,7 @@ import DocPreview from '@/components/DocPreview.vue'
 import ToolTips from '@/components/ToolTips.vue'
 import ApprovalGoModal from '@/components/ForApproval/ApprovalGoModal.vue'
 import AppDetail from  '@/views/approval/appdetail.vue'
+import Avatar from '@/components/Avatar.vue'
 
 import DepartmentPicker from '@/components/DepartmentPicker'
 
@@ -124,6 +125,7 @@ Vue.component('DropDepartment', DropDepartment);
 Vue.component('AddClientType', AddClientType);
 Vue.component('DocPreview', DocPreview)
 Vue.component('ToolTips', ToolTips)
+Vue.component('Avatar', Avatar)
 
 Vue.prototype.globalClick = function (callback) {
     document.getElementById('app').addEventListener('click', () => {

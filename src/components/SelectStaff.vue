@@ -41,9 +41,9 @@
                         <div v-show="teamShow">
                             <div class="users" v-for="user in normalUsers"
                                  v-show="user.name.indexOf(searchKeyWord) > -1"
-                                 @click="selectMember(user)" :key='user.name+Math.random()'>
+                                 @click="selectMember(user)" :key='user.id+Math.random()'>
                                 <a class="avatar" href="javascript:void(0)">
-                                    <img src="https://res.papitube.com/no-icon.png" alt="...">
+                                    <Avatar :imgUrl="user.icon_url" style="margin-right: 10px;"/>
                                 </a>
                                 <span class="pl-1">{{ user.name }}</span>
                                 <template v-if="memberType === 'principal'">
@@ -257,7 +257,7 @@
     .users .avatar {
         width: 30px;
         height: 30px;
-        overflow: hidden;
+        /* overflow: hidden; */
     }
 
     .selector-page-content {

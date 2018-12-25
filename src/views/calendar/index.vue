@@ -313,6 +313,8 @@
                             <div class="col-md-10 float-left">
                                 <div class="creator-avatar float-left">
                                     <img src="https://res.papitube.com/no-icon.png" alt="">
+                                    <!-- {{ scheduleData.creator.data.name }} -->
+                                    <Avatar :imgUrl="scheduleData.creator.data.user.icon_url" style="margin-right: 10px; "/>
                                 </div>
                                 <div class="float-left pl-2">{{ scheduleData.creator.data.name }}</div>
                             </div>

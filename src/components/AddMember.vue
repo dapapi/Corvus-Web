@@ -1,8 +1,9 @@
 <template>
     <div class="addMember">
         <ul class="addMember-items">
-            <li class="addMember-item mt-10" v-for="member in selectMemberArr" :key="member.id">
-                <img onerror="noneAvatar(this)" class="avatar" :src="member.avatar" title="Herman Beck" src="">
+            <li class="addMember-item" v-for="member in selectMemberArr" :key="member.id">
+                <!-- <img onerror="noneAvatar(this)" class="avatar" :src="member.avatar" title="Herman Beck" src=""> -->
+                <Avatar :imgUrl="member.icon_url"/>
                 <span class="addMember-remove" @click="removeMember(member.id)">
                     <i class="md-minus-circle"></i>
                 </span>
@@ -129,6 +130,7 @@
     .addMember-item {
         margin-left: 10px;
         margin-right: 0;
+        vertical-align: middle;
     }
 
     .addMember-item:first-child {
