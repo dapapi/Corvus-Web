@@ -8,14 +8,14 @@
                    data-toggle="dropdown" aria-expanded="false"></i>
                 <div class="dropdown-menu dropdown-menu-right task-dropdown-item" aria-labelledby="taskDropdown"
                      role="menu" x-placement="bottom-end">
-                    <a class="dropdown-item" role="menuitem" @click="">分享</a>
+                    <a class="dropdown-item" role="menuitem" >分享</a>
                     <a class="dropdown-item" role="menuitem" data-toggle="modal"
                        data-target="#distributionBroker" @click="distributionPerson('broker')">分配经理人</a>
                     <a class="dropdown-item" role="menuitem" data-toggle="modal"
                        data-target="#distributionBroker" @click="distributionPerson('publicity')">分配宣传人</a>
-                    <a class="dropdown-item" role="menuitem" @click="">自定义字段</a>
-                    <a class="dropdown-item" role="menuitem" @click="" data-toggle="modal" data-target="#addPrivacy">隐私设置</a>
-                    <a class="dropdown-item" role="menuitem" @click="" data-toggle="modal" data-target="#addPrivacy">
+                    <a class="dropdown-item" role="menuitem" >自定义字段</a>
+                    <a class="dropdown-item" role="menuitem"  data-toggle="modal" data-target="#addPrivacy">隐私设置</a>
+                    <a class="dropdown-item" role="menuitem"  data-toggle="modal" data-target="#addPrivacy">
                         <template v-if="artistInfo.sign_contract_status == 1">签约</template>
                         <template v-if="artistInfo.sign_contract_status == 2">解约</template>
                     </a>
@@ -134,7 +134,7 @@
                         <div class="tab-pane animation-fade pb-20 fixed-button-father" id="forum-artist-schedule"
                              role="tabpanel" :class="artistInfo.sign_contract_status == 2?'active':''">
                             <div class="col-md-12">
-                                <calendar></calendar>
+                                <calendar :goto-date="selectedDate"  :meeting-rome-list="getSchedules" ref="calendar"></calendar>
                             </div>
                         </div>
                         <!--项目-->
@@ -234,7 +234,7 @@
                                     <th class="cell-300" scope="col">合作演员</th>
                                 </tr>
                                 <tbody>
-                                <tr v-for="work in artistWorksInfo">
+                                <tr v-for="(work,index) in artistWorksInfo" :key="index">
                                     <td>{{work.name}}</td>
                                     <td>{{work.director}}</td>
                                     <td>{{work.release_time}}</td>
@@ -299,7 +299,7 @@
                                     <th class="cell-300" scope="col">操作人</th>
                                 </tr>
                                 <tbody>
-                                <tr v-for="bill in artistBillsInfo">
+                                <tr v-for="(bill,index) in artistBillsInfo" :key="index">
                                     <td>{{ bill.expence_name }}</td>
                                     <td>{{ bill.expense_type }}</td>
                                     <td>{{ bill.project_kd_name }}</td>
@@ -840,7 +840,8 @@
                 taskNum: '',
                 doneTaskNum: 0,
                 filterFee: 1,
-                avatar:''
+                avatar:'',
+                selectedDate:''
             }
         },
 
@@ -851,6 +852,7 @@
 
             this.getTaskType();
             this.draw();
+            this.getSchedules()
             let _this = this;
             $('#distributionBroker').on('hidden.bs.modal', function () {
                 _this.$store.commit('changeParticipantsInfo', [])
@@ -892,14 +894,24 @@
                 })
 
             },
+            getSchedules:function(){
+                let data={
+                    starable_type:'star',
+                    starable_id:this.$route.params.id,
+                    date:'2018-12-11'
+                }
+                fetch('get', '/schedules/getcalendar',data).then(function (response) {
+                    console.log(res)
+                })
+            },
             
             getArtistsBill: function () {
-                if (this.artistBillsInfo.length > 0) {
-                    return;
-                }
-                fetch('get', '/artists/' + this.projectId + '/bill').then(response => {
-                    this.artistBillsInfo = response.data
-                })
+                // if (this.artistBillsInfo.length > 0) {
+                //     return;
+                // }
+                // fetch('get', '/artists/' + this.projectId + '/bill').then(response => {
+                //     this.artistBillsInfo = response.data
+                // })
             },
 
             getTaskType: function () {
@@ -913,7 +925,10 @@
                     }
                 })
             },
-
+            selectDate: function (value) {
+                this.selectedDate = value;
+                this.$refs.meetingRoom.setDate(value)
+            },
             //粉丝数据
             draw: function () {
                 let myChart = echarts.init(document.getElementById('myChart'));
