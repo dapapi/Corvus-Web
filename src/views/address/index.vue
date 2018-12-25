@@ -88,14 +88,14 @@
                                     </div>
                                     <div class="col-md-4 float-left">
                                         <div class="float-left col-md-6">
-                                            <i class="iconfont icon-tianjia pr-2"></i>
+                                            <i class="iconfont icon-gongwenbao1 pr-2"></i>
                                             <span class="font-weight-bold">职位</span>
                                         </div>
                                         <div class="float-left col-md-6 pl-0">{{ personalInfo.position ? personalInfo.position : ''}}</div>
                                     </div>
                                     <div class="col-md-4 float-left">
                                         <div class="float-left col-md-6">
-                                            <i class="iconfont icon-tianjia pr-2"></i>
+                                            <i class="iconfont icon-hierarchy pr-2"></i>
                                             <span class="font-weight-bold">部门</span>
                                         </div>
                                         <div class="float-left col-md-6 pl-0">{{ personalInfo.position ? personalInfo.position : ''}}</div>

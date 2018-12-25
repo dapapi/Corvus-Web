@@ -31,7 +31,7 @@
                     <div class="tab-content pt-20">
                       <div class="tab-pane active" id="exampleTabsOne" role="tabpanel">
                         <div class="edit">
-                            <i v-if="!isEdit" @click="editInfo" class="iconfont icon-bianji"></i>
+                            <i v-if="!isEdit" @click="editInfo" class="iconfont icon-bianji2"></i>
                             <template v-else>
                                 <span class="save" @click="save">保存</span> <span class="cancel" @click="cancel">取消</span>
                             </template>
@@ -175,7 +175,7 @@
                             </div>
                         </div>
 
-                        <div class="formName pd-b-15">教育背景 <i class="iconfont icon-tianjia add-icon" @click="tableAdd('education')"></i></div>
+                        <div class="formName pd-b-15">教育背景 <i class="iconfont icon-tianjia1 add-icon" @click="tableAdd('education')"></i></div>
                         <div class="example table-responsive padding15">
                             <!-- <mtp-table :data-source="education" :columns="eduColumns" /> -->
                             <table class="table table-hover table-bordered">
@@ -196,7 +196,7 @@
                             </table>
                         </div>
 
-                        <div class="formName pd-b-15">培训经历<i class="iconfont icon-tianjia add-icon" @click="tableAdd('train')"></i></div>
+                        <div class="formName pd-b-15">培训经历<i class="iconfont icon-tianjia1 add-icon" @click="tableAdd('train')"></i></div>
                         <div class="example table-responsive padding15">
                             <table class="table table-hover table-bordered">
                                 <thead>
@@ -216,7 +216,7 @@
 
                         <div class="formName pd-b-15">
                             任职履历<span class="note" style="margin-left: 16px;">从最近的任职单位开始填写</span>
-                            <i class="icon-tianjia add-icon" @click="tableAdd('work')"></i>
+                            <i class="icon-tianjia1 add-icon" @click="tableAdd('work')"></i>
                         </div>
                         <div class="example table-responsive padding15">
                             <table class="table table-hover table-bordered">
@@ -237,7 +237,7 @@
 
                         <div class="formName pd-b-15">家庭资料
                             <span class="note" style="margin-left: 16px;">请列出直系亲属资料和紧急联系人信息</span>
-                            <i class="icon-tianjia add-icon" @click="tableAdd('home')"></i>
+                            <i class="icon-tianjia1 add-icon" @click="tableAdd('home')"></i>
                         </div>
                         <div class="example table-responsive padding15">
                             <table class="table table-hover table-bordered">

@@ -5,7 +5,7 @@
             <h1 class="page-title">日历</h1>
             <div class="page-header-actions" data-toggle="modal" data-target="#addCalendar"
                  @click="changeCalendarActionType('add')">
-                <i class="iconfont icon-tianjia font-size-20" aria-hidden="true"></i>
+                <i class="iconfont icon-tianjia1 font-size-20" aria-hidden="true"></i>
             </div>
         </div>
 
@@ -259,7 +259,7 @@
                 <div class="modal-content" v-if="scheduleData">
                     <div class="modal-header">
                         <div style="order: 2">
-                            <i class="iconfont icon-bianji pr-4 font-size-16 pointer-content"
+                            <i class="iconfont icon-bianji2 pr-4 font-size-16 pointer-content"
                                @click="changeScheduleType('edit')" aria-hidden="true"></i>
                             <i class="md-file pr-4 font-size-16 pointer-content" aria-hidden="true"></i>
                             <i class="md-delete pr-4 font-size-16 pointer-content" data-toggle="modal"

@@ -24,7 +24,7 @@
                                 <td>
                                     <!--编辑模版-->
                                     <span class="pr-40 d-block float-left pointer-content" style="color: #b9b9b9;" data-toggle="modal" data-target="#addModelDetails" @click="changeModelType('edit',item.member,item.template_name,item.frequency,item.id)">
-                                        <i class="iconfont icon-bianji color" aria-hidden="true"></i>
+                                        <i class="iconfont icon-bianji2 color" aria-hidden="true"></i>
                                     </span>
                                     <!--编辑模版结束-->
                                     <!--删除模版-->
@@ -45,8 +45,8 @@
         </div>
         <div class="site-action" data-plugin="actionBtn" data-toggle="modal" data-target="#addModelDetails" @click="changeModelType('add')">
             <button type="button" class="site-action-toggle btn-raised btn btn-success btn-floating waves-effect waves-classic">
-                <i class="front-icon iconfont icon-tianjia animation-scale-up" aria-hidden="true"></i>
-                <i class="back-icon iconfont icon-tianjia animation-scale-up" aria-hidden="true"></i>
+                <i class="front-icon iconfont icon-tianjia1 animation-scale-up" aria-hidden="true" style="font-size:30px"></i>
+                <i class="back-icon iconfont icon-tianjia1 animation-scale-up" aria-hidden="true" style="font-size:30px"></i>
             </button>
         </div>
         <!--添加模版弹框开始-->
@@ -109,7 +109,7 @@
                                 <td>
                                     <span class="pr-20 d-block float-left pointer-content" style="color: #b9b9b9;" data-toggle="modal"
                                         data-target="#addQuesDetails" @click="changeQuesType('edit',item.issues,item.type,item.accessory,item.required,item.id)">
-                                        <i class="iconfont icon-bianji" aria-hidden="true"></i>
+                                        <i class="iconfont icon-bianji2" aria-hidden="true"></i>
                                     </span>
                                     <span class="pr-20 d-block float-left pointer-content" style="color: #b9b9b9" data-toggle="modal"
                                         data-target="#delQues" @click="getDelQuesId(item.id)">
