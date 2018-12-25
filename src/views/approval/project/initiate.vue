@@ -11,7 +11,7 @@
                             <div class="card-block clearfix">
                                 <div class="float-left" style="width: 40px;height: 40px;">
                                     <img src="https://res-crm.papitube.com/contract-dark-blue.png" alt=""
-                                         style="width: 100%">
+                                        style="width: 100%">
                                 </div>
                                 <div class="float-left" style="line-height: 40px;margin-left: 1rem">
                                     <div>{{item.name}}</div>

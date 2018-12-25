@@ -46,7 +46,8 @@ export default {
         return{
             colorArr:['#F23E7C','#FF68E2','#FB8C00','#B53FAF','#27D3A8','#2CCCDA','#38BA5D','#3F51B5'],
             approver:[],
-            cover:[]
+            cover:[],
+            waitingFor:''
         }
     },
     computed:{
@@ -76,8 +77,12 @@ export default {
                 }else{
                     fetch('get','/approval_instances/'+value+'/chains').then((params) => {
                         _this.approver = params.data
-                        
-                        // _this.cover = _this.approver.map.split('|')
+                        _this.waitingFor = params.data.find(item=>item.approval_stage === "doing")
+                        if(_this.waitingFor){
+                            _this.$emit("waitingfor", _this.waitingFor)
+                        }else{
+                            _this.$emit("waitingfor", params.data[params.data.length-1])
+                        }
                     })
                 }
             },

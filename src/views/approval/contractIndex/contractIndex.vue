@@ -22,7 +22,7 @@
                 </div>
             </div>
         </div>
-        <ApprovalGreatModule :type='type' singlemode='true' />
+        <ApprovalGreatModule :type='type' singlemode='true'  />
     </div>
 </template>
 
@@ -44,6 +44,7 @@ export default {
         }
     },
     methods:{
+       
         changeType(params){
             this.type = params
         }

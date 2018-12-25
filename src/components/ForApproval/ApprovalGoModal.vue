@@ -10,11 +10,11 @@
                 </div>
                 <div class="modal-body col-md-12 row px-50 pt-20" v-if="mode === 'transfer'">
                     <span class="col-md-4">请选择转交目标</span>
-                    <InputSelectors />
+                    <InputSelectors @change='transferTo()' />
                 </div>
                 <div class="col-md-12 px-50">
                     <span>审批留言</span>
-                    <textarea class="approval-comment" name="" id=""  rows="10" v-model="approvalComment"></textarea>
+                    <textarea class="approval-comment" name="" id=""  rows="5" v-model="approvalComment"></textarea>
                 </div>
                 <div class="modal-footer">
                     <button type="button" class="btn btn-default btn-pure waves-effect waves-light waves-round" data-dismiss="modal">取消</button>
@@ -32,20 +32,31 @@ export default {
     props:['mode','id'],
     data(){
         return {
-            approvalComment:''
+            approvalComment:'',
+            next_id:'',
         }
     },
     methods:{
+        transferTo(params){
+            this.next_id = this.$store.state.newPrincipalInfo.id
+        },
         approvalGo(){
+            let data = {}
+            Object.assign(data,{comment:this.approvalComment})
+            if(this.next_id){
+                Object.assign(data,{next_id:this.next_id})
+            }
             let _this = this
-            fetch('put','/approval_instances/'+this.id+'/'+this.mode,{comment:this.approvalComment}).then((params) => {
+            fetch('put','/approval_instances/'+this.id+'/'+this.mode,data).then((params) => {
                 _this.$emit('approvaldone')
             })
             $('#approvalGo').modal('hide')
-
-        }
+            this.approvalComment = ''
+        },
+        
     }
 }
+
 </script>
 
 <style>
