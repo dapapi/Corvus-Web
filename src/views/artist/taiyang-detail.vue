@@ -286,7 +286,7 @@
                                 <div class="float-right" style="padding: .715rem 0">
                                      <span class="pointer-content hover-content" data-toggle="modal"
                                            data-target="#addBill">
-                                         <i class="iconfont icon-tianjia1 pr-5"></i>新增结算单</span>
+                                         <i class="iconfont icon-tianjia pr-5"></i>新增结算单</span>
                                 </div>
                             </div>
                             <table class="table table-hover" data-child="tr">

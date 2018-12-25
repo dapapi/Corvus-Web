@@ -1060,7 +1060,7 @@
                 this.panelName=this.groupingDate.find(item=>item.id==this.groupingId).name
                 this.$refs.resourceType.setValue(value,this.panelName)
                 this.roleName=""
-                this.emptydescribe = ""
+           
             },
              Modifyingroles(value,id){
                  console.log(id)
@@ -1069,7 +1069,7 @@
                 this.rolegroupName = this.groupingDate.find(item=>item.id==id).name
                 this.updateName = this.modifyName
                 this.$refs.roleGroup.setValue(id,this.rolegroupName)
-                this.emptyrole_describe=""
+                this.emptyrole_describe=this.emptydescribe
             },
             clickdefault() {
                 this.conceal = !this.conceal;
@@ -1138,7 +1138,7 @@
         vertical-align: middle;
 
     }
-
+    
     .leftImg {
         transition: All 0.4s ease-in-out;
         -webkit-transition: All 0.4s ease-in-out;

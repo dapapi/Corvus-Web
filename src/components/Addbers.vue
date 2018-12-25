@@ -15,7 +15,7 @@
             </li>
         </ul>
         <div class="addMember-trigger" :class="isMemberShow ? 'addMember-active': ''" :id="'selectStaff' + this._uid">
-            <div class="addMember-trigger-button" @click="showMember"><i class="icon-tianjia1"></i></div>
+            <div class="addMember-trigger-button" @click="showMember"><i class="icon-tianjia"></i></div>
             <div class="addMember-trigger-dropdown">
                 <select-staff :multiple="true" :member-type="'participant'" :type="type"
                               @change="changeSelectedMember"></select-staff>

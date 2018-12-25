@@ -292,7 +292,7 @@
                                 <div class="float-right" style="padding: .715rem 0">
                                      <span class="pointer-content hover-content" data-toggle="modal"
                                            data-target="#addBill">
-                                         <i class="iconfont icon-tianjia1 pr-5"></i>新增结算单</span>
+                                         <i class="iconfont icon-tianjia pr-5"></i>新增结算单</span>
                                 </div>
                             </div>
                             <table class="table table-hover" data-child="tr">
@@ -355,7 +355,7 @@
                                 <div class="float-right" style="padding: .715rem 1.429rem">
                                     <span class="pointer-content hover-content" data-toggle="modal"
                                           data-target="#addPaybackTime">
-                                                <i class="iconfont icon-tianjia1 pr-5"></i>新建回款期次</span>
+                                                <i class="iconfont icon-tianjia pr-5"></i>新建回款期次</span>
                                 </div>
                             </div>
                             <div class="tab-pane animation-fade" id="forum-item-payback">
@@ -380,10 +380,10 @@
                                         <div class="float-right">
                                             <span class="mr-40 pointer-content hover-content" data-toggle="modal"
                                                   data-target="#addPayback">
-                                                <i class="iconfont icon-tianjia1 pr-5"></i>回款记录</span>
+                                                <i class="iconfont icon-tianjia pr-5"></i>回款记录</span>
                                             <span class="pointer-content hover-content" data-toggle="modal"
                                                   data-target="#addInvoice">
-                                                <i class="iconfont icon-tianjia1 pr-5"></i>开票记录</span>
+                                                <i class="iconfont icon-tianjia pr-5"></i>开票记录</span>
                                         </div>
                                     </div>
                                     <div class="clearfix">
@@ -482,10 +482,10 @@
                                         <div class="float-right">
                                             <span class="mr-40 pointer-content hover-content" data-toggle="modal"
                                                   data-target="#addPayback">
-                                                <i class="iconfont icon-tianjia1 pr-5"></i>回款记录</span>
+                                                <i class="iconfont icon-tianjia pr-5"></i>回款记录</span>
                                             <span class="pointer-content hover-content" data-toggle="modal"
                                                   data-target="#addInvoice">
-                                                <i class="iconfont icon-tianjia1 pr-5"></i>开票记录</span>
+                                                <i class="iconfont icon-tianjia pr-5"></i>开票记录</span>
                                         </div>
                                     </div>
                                     <div class="clearfix">
@@ -1247,6 +1247,8 @@
         <Flag :typeText="changeProjectStatusText" @confirmFlag='changeProjectStatus'/>
 
     </div>
+</div>
+</div>
 </template>
 
 <script>

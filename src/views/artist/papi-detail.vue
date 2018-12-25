@@ -21,11 +21,11 @@
         <div class="page-content container-fluid">
 
             <div class="panel col-md-12">
-                <div class="card-block" v-if="artistInfo">
+                <div class="card-block">
                     <h4 class="card-title">{{ artistInfo.nickname }}</h4>
                     <div class="card-text clearfix example">
                         <div class="col-md-6 float-left pl-0" v-if="totalData.publicity">
-                            <div class="float-left pl-0 pr-2 col-md-2 pt-10">
+                            <div class="float-left pl-0 p-10 col-md-2">
                                 <i class="iconfont icon-yonghu"></i>
                                 制作人
                             </div>
@@ -33,10 +33,60 @@
                                 <span >{{item.name}}</span>
                             </div>
                         </div>
+                       
+                        <div class="card-text clearfix example " v-show="artistInfo.sign_contract_status == 1">
+                            <div class="float-left pl-0 pr-2 col-md-1">
+                                <i class="iconfont icon-yonghu pr-1" aria-hidden="true"></i>录入人
+                            </div>
+                            <div class="font-weight-bold float-left" v-if="principalName">
+                                {{ principalName}}
+                            </div>
+                        </div>
+                        <div class="card-text clearfix example  " v-show="artistInfo.sign_contract_status == 1">
+                            <div class="float-left pl-0 pr-2 col-md-1">
+                                <i class="iconfont icon-shijian pr-1" aria-hidden="true"></i>录入时间
+                            </div>
+                            <div class="font-weight-bold float-left" v-if="principalName">
+                                {{artistInfo.created_at}}
+                            </div>
+                        </div>
                     </div>
+                    <!-- <div class="card-text clearfix example">
+                        <div class="col-md-6 float-right pl-0">
+                            <div class="float-left pl-0 pr-2 col-md-2">
+                                <i class="iconfont icon-yonghu pr-2" aria-hidden="true"></i>沟通状态
+                            </div>
+                            <div class="font-weight-bold float-left" v-if="artistInfo.publicity">
+                                <template v-for="publicity in artistInfo.publicity.data">
+                                    {{ publicity.name }}
+                                </template>
+                            </div>
+                        </div>
+                         <div class="col-md-6 float-right pl-0">
+                            <div class="float-left pl-0 pr-2 col-md-2">
+                                <i class="iconfont icon-yonghu pr-2" aria-hidden="true"></i>平台
+                            </div>
+                            <div class="font-weight-bold float-left" v-if="artistInfo.publicity">
+                                <template v-for="publicity in artistInfo.publicity.data">
+                                    {{ publicity.name }}
+                                </template>
+                            </div>
+                        </div>
+                         <div class="col-md-6 float-right pl-0">
+                            <div class="float-left pl-0 pr-2 col-md-2">
+                                <i class="iconfont icon-yonghu pr-2" aria-hidden="true"></i>微博地址
+                            </div>
+                            <div class="font-weight-bold float-left" v-if="artistInfo.publicity">
+                                <template v-for="publicity in artistInfo.publicity.data">
+                                    {{ publicity.name }}
+                                </template>
+                            </div>
+                        </div>
+                    </div> -->
                 </div>
+                  
                 <div class="clearfix">
-                    <div class="col-md-6 float-left pl-0 mb-20" style="border-right: 1px solid #eee" v-if="tasksInfo.length>0">
+                    <div class="col-md-6 float-left pl-1 mb-20" style="border-right: 1px solid #eee" v-if="tasksInfo.length>0">
                         <div class="col-md-6"><i class="iconfont icon-iconset0399"></i> 任务</div>
                         <div class="clearfix example taskshow" v-for="(task,index) in tasksInfo" :key="index" @click="JumpDetails(task.id)">
                             <div class="col-md-3 float-left">{{task.title}}</div>
@@ -50,7 +100,7 @@
                             </div>
                         </div>
                     </div>
-                    <div class="col-md-6 float-left pl-0 mb-20" v-if="ProjectsInfo.length>0">
+                    <div class="col-md-6 float-left pl-0 mb-20" v-if="ProjectsInfo.length>0&&artistInfo.sign_contract_status == 2">
                         <div class="col-md-6"><i class="iconfont icon-ego-box"></i>项目</div>
                         <div class="clearfix example projectshow" v-for="(item,index) in ProjectsInfo" :key="index" @click="projectDetails(item.id)">
                             <div class="col-md-3 float-left">{{item.title}}</div>
@@ -69,12 +119,12 @@
             <div class="col-md-12 panel">
                 <div class="col-md-12">
                     <ul class="nav nav-tabs nav-tabs-line" role="tablist">
-                        <li class="nav-item" role="presentation">
-                            <a class="nav-link active" data-toggle="tab" href="#forum-artist-schedule"
+                        <li class="nav-item" role="presentation" v-show="artistInfo.sign_contract_status == 2">
+                            <a class="nav-link" data-toggle="tab" href="#forum-artist-schedule"
                                aria-controls="forum-base"
-                               aria-expanded="true" role="tab" >日程</a>
+                               aria-expanded="true" role="tab"  >日程</a>
                         </li>
-                        <li class="nav-item" role="presentation">
+                        <li class="nav-item" role="presentation" v-show="artistInfo.sign_contract_status == 2">
                             <a class="nav-link" data-toggle="tab" href="#forum-artist-projects"
                                aria-controls="forum-present"
                                aria-expanded="false" role="tab" >项目</a>
@@ -82,7 +132,7 @@
                         <li class="nav-item" role="presentation" >
                             <a class="nav-link" data-toggle="tab" href="#forum-artist-tasks"
                                aria-controls="forum-present"
-                               aria-expanded="false" role="tab"  :class="artistInfo.sign_contract_status == 2?'active':''">
+                               aria-expanded="false" role="tab" :class="artistInfo.sign_contract_status == 2?'':'active'">
                                 <template v-if="tasksInfo.length > 0">
                                     <ToolTips :title="`已完成数量${completeNum}`">
                                         任务 ({{completeNum}}/{{tasksInfo.length}})
@@ -95,30 +145,30 @@
                                 </template>
                             </a>
                         </li>
-                        <li class="nav-item" role="presentation">
+                        <li class="nav-item" role="presentation" v-show="artistInfo.sign_contract_status == 2">
                             <a class="nav-link" data-toggle="tab" href="#forum-artist-work"
                                aria-controls="forum-present"
                                aria-expanded="false" role="tab" >作品库</a>
                         </li>
-                        <li class="nav-item" role="presentation">
+                        <li class="nav-item" role="presentation" v-show="artistInfo.sign_contract_status == 2">
                             <a class="nav-link" data-toggle="tab" href="#forum-artist-fans"
                                aria-controls="forum-present"
                                aria-expanded="false" role="tab" >粉丝数据</a>
                         </li>
-                        <li class="nav-item" role="presentation">
+                        <li class="nav-item" role="presentation" v-show="artistInfo.sign_contract_status == 2">
                             <a class="nav-link" data-toggle="tab" href="#forum-artist-bill"
                                aria-controls="forum-present"
                                aria-expanded="false" role="tab" >账单</a>
                         </li>
-                        <li class="nav-item" role="presentation">
+                        <li class="nav-item" role="presentation" >
                             <a class="nav-link" data-toggle="tab" href="#forum-artist-base"
                                aria-controls="forum-present"
                                aria-expanded="false" role="tab">概况</a>
                         </li>
                     </ul>
                     <div class="tab-content nav-tabs-animate bg-white col-md-12">
-                        <div class="tab-pane animation-fade active pb-20 fixed-button-father" id="forum-artist-schedule"
-                             role="tabpanel">
+                        <div class="tab-pane animation-fade pb-20 fixed-button-father" id="forum-artist-schedule"
+                             role="tabpanel" :class="artistInfo.sign_contract_status == 2?'active':''">
                             <div class="col-md-12">
                                 <calendar></calendar>
                             </div>
@@ -158,7 +208,7 @@
                             </div>
                         </div>
                         <div class="tab-pane animation-fade pb-20 fixed-button-father" id="forum-artist-tasks"
-                             role="tabpanel">
+                             role="tabpanel" :class="artistInfo.sign_contract_status == 2?'':'active'">
                             <table class="table table-hover is-indent example" data-plugin="animateList"
                                    data-animate="fade"
                                    data-child="tr"
