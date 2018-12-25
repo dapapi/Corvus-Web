@@ -35,7 +35,7 @@
                             泰洋系（{{ normalUsers.length }}人)
                             </span>
                             <span class="team-add-all pl-2" @click="selectAllMember" v-if="multiple">
-                                <i class="icon iconfont icon-tianjia1"></i>
+                                <i class="icon iconfont icon-tianjia"></i>
                             </span>
                         </div>
                         <div v-show="teamShow">

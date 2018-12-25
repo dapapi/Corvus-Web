@@ -47,7 +47,7 @@
                             </div>
                         </div>
                         <div class="col-md-6 float-left pl-0 mb-20" v-if="clientProjectsInfo.length > 0">
-                            <div class="col-md-6">项目</div>
+                            <div class="col-md-6 p-0"><i class="iconfont icon-ego-box pr-2 " aria-hidden="true"></i>项目</div>
                             <div class="clearfix example" v-for="(project, index) in newArray(clientProjectsInfo)" :key="index">
                                 <div class="col-md-3 float-left"><router-link :to="`/projects/${project.id}`">{{project.title}}</router-link></div>
                                 <div class="col-md-3 float-left">{{ clientTypeArr.find(item => item.value == project.type).name }}</div>
