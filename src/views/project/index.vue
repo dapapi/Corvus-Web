@@ -122,6 +122,8 @@
     import fetch from '../../assets/utils/fetch.js'
     import config from '../../assets/js/config'
 
+    const projectStatusArr = [{name: '全部', value: ''}, ...config.projectStatusArr];
+
     export default {
 
         data: function () {
@@ -144,7 +146,7 @@
                 trailOriginContent: '',
                 projectKeyword: '',
                 paginationType: '',
-                projectStatusArr: config.projectStatusArr,
+                projectStatusArr: projectStatusArr,
                 allUsers: [],
                 principal_ids: '',
                 keyword: '',
@@ -187,7 +189,9 @@
                 };
                 if (type === 'status') {
                     this.status = value;
-                    data.status = value;
+                    if (value) {
+                        data.status = value;
+                    }
                 }
                 if (type === 'principal' && value) {
                     this.principal_ids = value.join(',');

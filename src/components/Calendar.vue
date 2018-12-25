@@ -27,7 +27,6 @@
                 this.$emit('changeTime', this.startDate, this.endDate)
             },
             calendars: function () {
-                
                 this.refresh();
             },
             meetingRomeList: function () {
@@ -36,7 +35,9 @@
         },
         mounted() {
             let self = this;
-            // console.log(this.calendars)
+            if (!this.calendars) {
+                this.calendars = [];
+            }
             $(this.$el).fullCalendar({
                 header: {
                     right: 'prev,next today',
