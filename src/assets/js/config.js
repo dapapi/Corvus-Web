@@ -338,10 +338,6 @@ let config = {
         // 员工状态
         staffStatus: [
             {
-                value: '',
-                name: '全部',
-            },
-            {
                 value: 1,
                 name: '试用期',
             },
@@ -361,10 +357,6 @@ let config = {
         // 员工在职状态
         staffPositionStatus: [
             {
-                value: '',
-                name: '全部',
-            },
-            {
                 value: 1,
                 name: '在职',
             },
@@ -375,10 +367,6 @@ let config = {
         ],
         // 聘用形式
         hireShape: [
-            {
-                value: '',
-                name: '全部'
-            },
             {
                 value: 1,
                 name: '劳务'
