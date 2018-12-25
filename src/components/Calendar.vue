@@ -27,6 +27,7 @@
                 this.$emit('changeTime', this.startDate, this.endDate)
             },
             calendars: function () {
+                
                 this.refresh();
             },
             meetingRomeList: function () {
@@ -35,7 +36,7 @@
         },
         mounted() {
             let self = this;
-
+            // console.log(this.calendars)
             $(this.$el).fullCalendar({
                 header: {
                     right: 'prev,next today',
@@ -92,6 +93,7 @@
                         data.material_ids = materialsIds
                     } else {
                         data.calendar_ids = self.calendars
+                        // data.calendar_ids = [609204190,1569976395]
                     }
                     fetch('get', '/schedules', data).then(response => {
                         self.allScheduleInfo = response.data;

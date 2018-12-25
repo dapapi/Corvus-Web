@@ -140,7 +140,7 @@
                         <div class="tab-pane animation-fade pb-20 fixed-button-father" id="forum-artist-schedule"
                              role="tabpanel" :class="artistInfo.sign_contract_status == 2?'active':''">
                             <div class="col-md-12">
-                                <calendar :goto-date="selectedDate"  :meeting-rome-list="getSchedules" ref="calendar"></calendar>
+                                <calendar :goto-date="selectedDate" :calendars="selectedCalendar" ref="calendar" @scheduleClick="showScheduleModal"></calendar>
                             </div>
                         </div>
                         <!--项目-->
@@ -775,7 +775,7 @@
                 </div>
             </div>
         </div>
-
+        <!--分配经纪人和宣传人-->
         <div class="modal fade" id="distributionBroker" aria-hidden="true" aria-labelledby="addLabelForm"
              role="dialog" tabindex="-1">
             <div class="modal-dialog modal-simple" style="max-width: 50rem;">
@@ -800,6 +800,95 @@
                     <div class="modal-footer">
                         <button class="btn btn-sm btn-white btn-pure" data-dismiss="modal">取消</button>
                         <button class="btn btn-primary" type="submit" @click="addDistributionPerson">确定</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <!-- 查看日程 -->
+        <div class="modal fade" id="checkSchedule" aria-hidden="true" aria-labelledby="addLabelForm"
+             role="dialog" tabindex="-1">
+            <div class="modal-dialog modal-simple">
+                <div class="modal-content" v-if="scheduleData">
+                    <div class="modal-header">
+                        <div style="order: 2">
+                            <!-- <i class="iconfont icon-bianji2 pr-4 font-size-16 pointer-content"
+                               @click="changeScheduleType('edit')" aria-hidden="true"></i>
+                            <FileUploader is-icon="true" class="float-left" @change="fileUpload"></FileUploader>
+                            <i class="iconfont icon-shanchu1 pr-4 font-size-16 pointer-content" data-toggle="modal"
+                               data-target="#delModel" aria-hidden="true" @click="deleteToastr('schedule')"></i> -->
+                            <i class="iconfont icon-guanbi pointer-content" aria-hidden="true" data-dismiss="modal"></i>
+                        </div>
+                        <h5 class="modal-title">{{ scheduleData.calendar.data.title }}</h5>
+                    </div>
+                    <div class="modal-body px-40">
+                        <div class="">
+                            <h4 class="my-20">{{ scheduleData.title }}</h4>
+                        </div>
+                        <div class="example">
+                            <div class="">
+                                <div class="col-md-3 float-left px-0">
+                                    <div class="">{{ (scheduleData.start_at.split(' ')[0]).split('-')[1] }}月
+                                        {{ (scheduleData.start_at.split(' ')[0]).split('-')[2] }}日
+                                        {{ scheduleData.start_at|getWeek(scheduleData.start_at) }}
+                                    </div>
+                                    <div class="big-time">{{ (scheduleData.start_at.split(' ')[1]).slice(0,5) }}</div>
+                                </div>
+                                <div class="col-md-2 float-left pl-0">
+                                    <div class="" style="color: white"> -</div>
+                                    <div class="big-time text-center"> -</div>
+                                </div>
+                                <div class="col-md-3 float-left px-0">
+                                    <div class="">{{ (scheduleData.end_at.split(' ')[0]).split('-')[1] }}月
+                                        {{ (scheduleData.end_at.split(' ')[0]).split('-')[2] }}日
+                                        {{ scheduleData.end_at|getWeek(scheduleData.end_at) }}
+                                    </div>
+                                    <div class="big-time">{{ (scheduleData.end_at.split(' ')[1]).slice(0,5) }}</div>
+                                </div>
+                                <div class="col-md-2 float-left" v-show="scheduleData.is_allday">
+                                    <div class="" style="color: white"> -</div>
+                                    <div class="big-time font-size-18" style="line-height: 75px">全天</div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="example" v-if="scheduleData.position">
+                            <div class="col-md-1 px-0 float-left">地点</div>
+                            <div class="col-md-10 float-left">{{ scheduleData.position }}</div>
+                        </div>
+                        <div class="example" v-if="scheduleData.material">
+                            <div class="col-md-1 px-0 float-left">资源</div>
+                            <div class="col-md-10 float-left">{{ scheduleData.material.data.name }}</div>
+                        </div>
+                        <div class="example">
+                            <div class="col-md-1 px-0 float-left">组织人</div>
+                            <div class="col-md-10 float-left">
+                                <div class="creator-avatar float-left">
+                                    <img src="https://res.papitube.com/no-icon.png" alt="">
+                                </div>
+                                <div class="float-left pl-2">{{ scheduleData.creator.data.name }}</div>
+                            </div>
+                        </div>
+                        <div class="example">
+                            <div class="col-md-1 px-0 float-left">参与人</div>
+                            <div class="col-md-10 float-left">
+                                <span class="mr-5" v-for="(item,index) in scheduleParticipants" :key="index">{{item.name}}</span>
+                                <!-- <AddMember type="add" @change="changeScheduleParticipants"></AddMember> -->
+                            </div>
+                        </div>
+                        <div class="example" v-if="scheduleData.desc">
+                            <div class="col-md-1 px-0 float-left">备注</div>
+                            <div class="col-md-10 float-left">{{ scheduleData.desc }}</div>
+                        </div>
+                        <div class="example" v-if="scheduleData.affixes.data.length > 0">
+                            <div>附件</div>
+                            <div>
+                                <div class="col-md-3 float-left text-center position-relative file-item"
+                                     v-for="affix in scheduleData.affixes.data">
+                                    
+                                    <div><i class="iconfont icon-wenjian" style="font-size: 36px"></i></div>
+                                    <div @click="openFile(affix.url)" class="pointer-content">{{ affix.title }}</div>
+                                </div>
+                            </div>
+                        </div>
                     </div>
                 </div>
             </div>
@@ -854,18 +943,23 @@
                 doneTaskNum: 0,
                 filterFee: 1,
                 avatar:'',
-                selectedDate:''
+                selectedDate:'',
+                scheduleData:'',
+                selectedCalendar:[],
+                scheduleParticipants:[]
             }
         },
 
         created() {
             this.getArtist()
+            
         },
         mounted() {
 
             this.getTaskType();
             this.draw();
             this.getSchedules()
+            this.selectedCalendar[0] = this.$route.params.id
             let _this = this;
             $('#distributionBroker').on('hidden.bs.modal', function () {
                 _this.$store.commit('changeParticipantsInfo', [])
@@ -913,11 +1007,18 @@
                     starable_id:this.$route.params.id,
                     date:'2018-12-11'
                 }
-                fetch('get', '/schedules/getcalendar',data).then(function (response) {
+                fetch('get', '/schedules/getcalendar',data).then(function (res) {
                     console.log(res)
                 })
             },
-            
+            showScheduleModal: function (data) {
+                this.scheduleData = data;
+                // console.log(this.scheduleData)
+                if(data.participants.data){
+                    this.scheduleParticipants = JSON.parse(JSON.stringify(data.participants.data));
+                }
+                $('#checkSchedule').modal('show')
+            },
             getArtistsBill: function () {
                 // if (this.artistBillsInfo.length > 0) {
                 //     return;
@@ -1331,7 +1432,37 @@
                 this.filterFee = value;
             },
 
-        }
+        },
+        filters: {
+            getWeek: function (date) {
+                let week = new Date(date).getDay();
+                let value = '';
+                switch (week) {
+                    case 0:
+                        value = '周日';
+                        break;
+                    case 1:
+                        value = '周一';
+                        break;
+                    case 2:
+                        value = '周二';
+                        break;
+                    case 3:
+                        value = '周三';
+                        break;
+                    case 4:
+                        value = '周四';
+                        break;
+                    case 5:
+                        value = '周五';
+                        break;
+                    case 6:
+                        value = '周六';
+                        break;
+                }
+                return value;
+            }
+        },
     }
 
 </script>
@@ -1371,5 +1502,85 @@
 
     .money-color {
         color: #ff9800;
+    }
+    .creator-avatar {
+        width: 30px;
+        height: 30px;
+        overflow: hidden;
+        border-radius: 100%;
+    }
+    li {
+        list-style: none;
+    }
+
+    .calendar-color-list li {
+        width: 20px;
+        height: 20px;
+        border-radius: 100%;
+        margin-right: 10px;
+    }
+
+    .calendar-color-list li i {
+        line-height: 20px;
+        color: white;
+        text-align: center;
+        position: absolute;
+        left: 5px;
+    }
+
+    .calendar-checkbox {
+        width: 20px;
+        height: 20px;
+        border-radius: 2px;
+    }
+
+    .calendar-title {
+        padding: 20px 20px 10px;
+    }
+
+    .calendar-list ul li {
+        padding: 7px 0;
+        border-bottom: 1px solid #E0E0E0;
+    }
+
+    .calendar-list ul {
+        padding: 0 20px;
+        margin-top: 10px;
+    }
+
+    .calendar-list ul li .calendar-checkbox i {
+        color: white;
+        text-align: center;
+        left: 5px;
+    }
+
+    .big-time {
+        font-size: 48px;
+        color: #3F51B5;
+        font-weight: bold;
+    }
+
+    .follow-avatar {
+        border-radius: 100%;
+        overflow: hidden;
+        width: 40px;
+        height: 40px;
+    }
+
+    .creator-avatar {
+        width: 30px;
+        height: 30px;
+        overflow: hidden;
+        border-radius: 100%;
+    }
+
+    .del-affix {
+        right: 15px;
+        display: none;
+        color: red;
+    }
+
+    .file-item:hover .del-affix {
+        display: block;
     }
 </style>

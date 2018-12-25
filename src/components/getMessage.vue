@@ -16,6 +16,7 @@ export default {
     },
     created(){
       if(JSON.parse(Cookies.get('user')&&this.errorNum<=3)){
+        //   alert(this.errorNum)
           this.initWebSocket()
           this.getModule()
       }

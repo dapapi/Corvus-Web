@@ -743,6 +743,7 @@
                         this.calendarList.push(response.data[i])
                     }
                 })
+                
             },
 
             getCalendarDetail: function (calendarId) {
