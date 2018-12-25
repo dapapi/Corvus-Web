@@ -442,6 +442,7 @@
             platformType:function(){
                 return  this.platformType
             }
+            
         },
         mounted() {
             this.getArtists();
@@ -626,7 +627,7 @@
                 fetch('post', '/stars', data).then(function (response) {
                     toastr.success('创建成功');
                     $('#addArtist').modal('hide');
-                    _this.$router.push({path: 'artists/' + response.data.id});
+                    _this.$router.push({path: '/artists/' + response.data.id});
                     _this.cancleData()
                 })
             },
