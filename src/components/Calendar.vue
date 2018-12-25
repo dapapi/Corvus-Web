@@ -93,7 +93,7 @@
                         data.material_ids = materialsIds
                     } else {
                         data.calendar_ids = self.calendars
-                        data.calendar_ids = [609204190,1569976395]
+                        // data.calendar_ids = [609204190,1569976395]
                     }
                     fetch('get', '/schedules', data).then(response => {
                         self.allScheduleInfo = response.data;

@@ -940,7 +940,7 @@
                 avatar:'',
                 selectedDate:'',
                 scheduleData:'',
-                selectedCalendar:[this.$route.params.id],
+                selectedCalendar:[],
                 scheduleParticipants:[]
             }
         },
@@ -954,6 +954,7 @@
             this.getTaskType();
             this.draw();
             this.getSchedules()
+            this.selectedCalendar[0] = this.$route.params.id
             let _this = this;
             $('#distributionBroker').on('hidden.bs.modal', function () {
                 _this.$store.commit('changeParticipantsInfo', [])
