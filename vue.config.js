@@ -30,6 +30,10 @@ module.exports = {
 //       //配置多个代理(配置一个 proxy: 'http://localhost:4000' )
 //       '/api': {
 //             target: 'https://api.corvus.dev',
+//             pathRewrite: {
+//                 '^/api': ''
+//             },
+//             changeOrigin: true
 //       }
 //     }
 //   },
