@@ -66,7 +66,7 @@ export default {
 
         },
         getModule:function(){
-            fetch('get',`${config.apiUrl}/getmodules`).then((res) => {
+            fetch('get',`/getmodules`).then((res) => {
                 let unRead =0
                 for (let i = 0; i < res.length; i++) {
                     if(res[i].un_read){
