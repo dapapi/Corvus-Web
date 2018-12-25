@@ -43,7 +43,8 @@
                                                 @click="handelMemberClick(index + '' + _index, user)"
                                                 :key='user.name+Math.random()'>
                                                 <a class="avatar" href="javascript:void(0)">
-                                                    <img src="https://res.papitube.com/no-icon.png" alt="...">
+                                                    <!-- <img src="https://res.papitube.com/no-icon.png" alt="..."> -->
+                                                    <Avatar :imgUrl="user.icon_url" style="margin-right: 10px; "/>
                                                 </a>
                                                 <span class="pl-1 user-name">{{ user.name }}</span>
                                             </div>

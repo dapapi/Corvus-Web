@@ -16,7 +16,7 @@
                 <ul class="pointer-content selected-member">
                     <li v-for="(item,index) in participantsInfo" :key="index" class="users">
                         <a class="avatar" href="javascript:void(0)">
-                            <img src="https://res.papitube.com/no-icon.png" alt="...">
+                            <Avatar :imgUrl="item.icon_url" style="margin-right: 10px;"/>
                         </a>
                         <span class="pl-1">{{ item.name }}</span>
                         <span class="float-right" @click="delMember(item.id)">
