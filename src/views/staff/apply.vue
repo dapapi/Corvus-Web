@@ -149,4 +149,7 @@ export default {
         }
     }
 }
+.page {
+    margin-left: 0px!important;
+}
 </style>

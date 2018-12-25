@@ -719,5 +719,9 @@ export default {
     display: flex;
     align-items: center;
 }
+
+.page {
+    margin-left: 0px!important;
+}
 </style>
 

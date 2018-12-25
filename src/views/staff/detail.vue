@@ -814,4 +814,7 @@ export default {
     padding-bottom: 10px;
     border-left: 1px solid #E0E0E0;
 }
+.page {
+    margin-left: 0px!important;
+}
 </style>

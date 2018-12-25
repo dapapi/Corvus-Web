@@ -72,10 +72,11 @@
                                    data-toggle="dropdown" aria-expanded="false" style="cursor: pointer"></i>
                                 <div class="dropdown-menu dropdown-menu-left task-dropdown-item" aria-labelledby="taskDropdown"
                                      role="menu" x-placement="bottom-end" style="min-width: 0;">
-                                    <a v-if="item.status != 2" class="dropdown-item" role="menuitem" @click="changeStaffStatus(item.id, 2)">转正</a>
+                                    <a class="dropdown-item" role="menuitem" @click="changeStaffStatus(item.id, 2)">转正</a>
                                     <a class="dropdown-item" role="menuitem" @click="showEditPos(item.id)">调岗</a>
                                     <a class="dropdown-item" role="menuitem" @click="changeStaffStatus(item.id, 3)">离职</a>
-                                    <a class="dropdown-item" role="menuitem" @click="changeStaffStatus(item.id, 5)">归档</a>
+                                    <a v-if="(item.hire_shape == 2 || item.hire_shape == 4) && item.status == 3" class="dropdown-item" role="menuitem" @click="changeStaffStatus(item.id, 5)">归档</a>
+                                    <!-- 劳务外包 -->
                                 </div>
                             </div>
                         </td>
@@ -202,7 +203,7 @@ export default {
         },
         // 改变报表筛选条件
         changeSelectOption(newArr) {
-        this.checkedNames = newArr;
+            this.checkedNames = newArr;
         },
         // 改变员工状态
         changeStaffStatus (useId, status) {
@@ -251,6 +252,9 @@ export default {
 @import '../../assets/css/staff.scss';
 .table td, .table th {
     vertical-align: middle;
+}
+.page {
+    margin-left: 0px!important;
 }
 </style>
 
