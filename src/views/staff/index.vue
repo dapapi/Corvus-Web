@@ -13,13 +13,13 @@
             <div class="panel col-md-12 clearfix py-5">
                 <div class="clearfix">
                      <div class="col-md-2 example float-left">
-                        <selectors :options="hireShapeArr" changeKey="hireShape" @select="changeState"></selectors>
+                        <selectors :options="[{value: '',name: '全部'}, ...hireShapeArr]" changeKey="hireShape" value="" @select="changeState"></selectors>
                     </div>
                     <div class="col-md-2 example float-left">
-                        <selectors :options="staffStatus" :value="1" changeKey="status" @select="changeState"></selectors>
+                        <selectors :options="[{value: '',name: '全部'}, ...staffStatus]" value="" changeKey="status" @select="changeState"></selectors>
                     </div>
                     <div class="col-md-2 example float-left">
-                        <selectors :options="staffPositionStatus" :value="1" changeKey="positionType" @select="changeState"></selectors>
+                        <selectors :options="[{value: '',name: '全部'}, ...staffPositionStatus]" value="" changeKey="positionType" @select="changeState"></selectors>
                     </div>
                    
                     <div class="col-md-3 example float-left">
@@ -72,10 +72,12 @@
                                    data-toggle="dropdown" aria-expanded="false" style="cursor: pointer"></i>
                                 <div class="dropdown-menu dropdown-menu-left task-dropdown-item" aria-labelledby="taskDropdown"
                                      role="menu" x-placement="bottom-end" style="min-width: 0;">
-                                    <a v-if="item.status != 2" class="dropdown-item" role="menuitem" @click="changeStaffStatus(item.id, 2)">转正</a>
+                                    <a class="dropdown-item" role="menuitem" @click="changeStaffStatus(item, 2)">转正</a>
                                     <a class="dropdown-item" role="menuitem" @click="showEditPos(item.id)">调岗</a>
-                                    <a class="dropdown-item" role="menuitem" @click="changeStaffStatus(item.id, 3)">离职</a>
-                                    <a class="dropdown-item" role="menuitem" @click="changeStaffStatus(item.id, 5)">归档</a>
+                                    <a class="dropdown-item" role="menuitem" @click="changeStaffStatus(item, 3)">离职</a>
+                                    <a v-if="(item.hire_shape == 2 || item.hire_shape == 4) && item.status == 3" 
+                                        class="dropdown-item" role="menuitem" @click="changeStaffStatus(item, 5)">归档</a>
+                                    <!-- 劳务外包 -->
                                 </div>
                             </div>
                         </td>
@@ -110,7 +112,6 @@
 
 <script>
 import config from "../../assets/js/config";
-const { employment, workStatus } = config;
 import fetch from "../../assets/utils/fetch";
 export default {
     name: 'Staff',
@@ -159,9 +160,8 @@ export default {
             entryTime: '',
             status: '', // 员工状态 1在职， 2离职，全部 '',
             page: 1, // 分页
-            employment: employment, // 聘用形式
-            workStatus: workStatus, // 当前工作状态
-            hireShape: config.hireShape[0].value, // 聘用形式
+            // hireShape: config.hireShape[0].value, // 聘用形式
+            hireShape: '', // 聘用形式
             positionType: '', // 在职状态
             data: [],
             departmentPId: '',
@@ -202,14 +202,25 @@ export default {
         },
         // 改变报表筛选条件
         changeSelectOption(newArr) {
-        this.checkedNames = newArr;
+            this.checkedNames = newArr;
         },
         // 改变员工状态
-        changeStaffStatus (useId, status) {
+        changeStaffStatus (user, status) {
             const params = {
                 status: status // 2.转正，3.离职，5.归档
             }
-            fetch('put', `/personnel/${useId}`, params).then((data) => {
+            if (status == 2) {
+                if (user.status == 2|| user.status == 3) {
+                    toastr.success('当前状态不可转正！')
+                    return
+                }
+            } else if (status == 3) {
+                if (user.status == 3) {
+                    toastr.success('当前状态不可离职！')
+                    return
+                }
+            }
+            fetch('put', `/personnel/${user.id}`, params).then((data) => {
                 toastr.success('操作成功');
                 this.getStaffList()
             })
@@ -221,7 +232,7 @@ export default {
         },
         // 获取部门数据
         getDepartment() {
-        fetch("get", "/departments").then(res => {
+            fetch("get", "/departments").then(res => {
                 this.data = res.data;
                 this.departmentPId = res.data[0].department_pid;
                 this.departmentId = res.data[0].id;
@@ -251,6 +262,9 @@ export default {
 @import '../../assets/css/staff.scss';
 .table td, .table th {
     vertical-align: middle;
+}
+.page {
+    margin-left: 0px!important;
 }
 </style>
 

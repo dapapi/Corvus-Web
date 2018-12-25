@@ -43,18 +43,27 @@
 
                 <div class="tab-content pt-20">
                 </div>
+
                 <div class="task-follow">
                     <ul class="list-group list-group-dividered list-group-full">
                         <li class="list-group-item" v-for="(item, index) in data" :key="index">
                             <div class="content" style="display: flex; justify-content: start">
                                 <img :src="item.icon_url?item.icon_url:require('../../assets/head.jpg')" />
                                 <div>
-                                    <div>{{item.name}}已发起入职申请，是否同意加入太阳系？</div>
+                                    <template v-if="status === 1">
+                                        <div>{{item.name}}已发起入职申请，是否同意加入泰洋系？</div>
+                                    </template>
+                                    <template v-if="status === 2">
+                                        <div>您已删除{{item.name}}的入职申请</div>
+                                    </template>
+                                    <template v-if="status === 3">
+                                        <div>您已同意{{item.name}}的入职申请</div>
+                                    </template>
                                     <div class="time">{{item.created_at?item.created_at:''}}</div>
                                 </div>
                             </div>
                             <div class="edit">
-                                <span>查看</span> 
+                                <span>查看</span>
                                 <span v-if="status === 1" @click="agreeApply(item.id, 2)">删除</span> 
                                 <span v-if="status === 1" @click="agreeApply(item.id, 3)">同意</span>
                             </div>
@@ -148,5 +157,8 @@ export default {
             }
         }
     }
+}
+.page {
+    margin-left: 0px!important;
 }
 </style>

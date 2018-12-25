@@ -168,10 +168,10 @@
                                 name: '网盘',
                                 code: 'pan'
                             },
-                            {
-                                name: '员工档案',
-                                code: 'staff'
-                            },
+                            // {
+                            //     name: '员工档案',
+                            //     code: 'staff'
+                            // },
                             {
                                 name: '通讯录',
                                 code: 'address'
