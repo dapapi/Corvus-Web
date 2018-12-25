@@ -27,7 +27,8 @@
 
             <div class="panel col-md-12">
                 <div class="card-block">
-                    <h4 class="card-title"><img width="40px" height="40px" style="border-radius:50%" class="mr-5" :src="avatar" alt="">{{artistInfo.name}}</h4>
+                    <h4 class="card-title"><img width="40px" height="40px" style="border-radius:50%" class="mr-5"
+                                                :src="avatar" alt="">{{artistInfo.name}}</h4>
                     <div class="card-text clearfix example ml-50">
                         <div class="col-md-6 float-left pl-0">
                             <div class="float-left pl-0 pr-2 col-md-2">
@@ -55,8 +56,11 @@
                 <div class="clearfix ml-50">
                     <div class="col-md-6 float-left pl-0 mb-20" style="border-right: 1px solid #eee">
                         <div class="col-md-6"><i class="iconfont icon-iconset0399"></i> 任务 {{taskNum}}</div>
-                        <div class="clearfix example" v-for="(item,index) in artistTasksInfo" :key="index" @click="goTask(item.id)">
-                            <div class="col-md-3 float-left"><router-link :to="{path:`/tasks/${item.id}`}">{{item.title}}</router-link></div>
+                        <div class="clearfix example" v-for="(item,index) in artistTasksInfo" :key="index"
+                             @click="goTask(item.id)">
+                            <div class="col-md-3 float-left">
+                                <router-link :to="{path:`/tasks/${item.id}`}">{{item.title}}</router-link>
+                            </div>
                             <div class="col-md-3 float-left">{{item.principal.data.name}}</div>
                             <div class="col-md-3 float-left">{{item.end_at}}</div>
                             <div class="col-md-3 float-left">
@@ -69,7 +73,9 @@
                     <div class="col-md-6 float-left pl-0 mb-20">
                         <div class="col-md-6"><i class="iconfont icon-ego-box"></i>项目</div>
                         <div class="clearfix example" v-for="(item,index) in artistProjectsInfo" :key="index">
-                            <div class="col-md-3 float-left"><router-link :to="{path:`/projects/${item.id}`}">{{item.title}}</router-link></div>
+                            <div class="col-md-3 float-left">
+                                <router-link :to="{path:`/projects/${item.id}`}">{{item.title}}</router-link>
+                            </div>
                             <div class="col-md-3 float-left">{{item.principal.data.name}}</div>
                             <div class="col-md-3 float-left">{{item.end_at}}</div>
                             <div class="col-md-3 float-left">{{item.status}}</div>
@@ -251,9 +257,11 @@
 
                             <div class="site-action fixed-button" data-plugin="actionBtn" data-toggle="modal"
                                  data-target="#addWork">
-                                <button type="button" class="site-action-toggle btn-raised btn btn-success btn-floating waves-effect waves-classic">
-                                    <i class="front-icon md-plus animation-scale-up" aria-hidden="true"></i>
-                                    <i class="back-icon md-plus animation-scale-up" aria-hidden="true"></i>
+                                <button type="button"
+                                        class="site-action-toggle btn-raised btn btn-success btn-floating waves-effect waves-classic">
+                                    <i class="front-icon iconfont icon-tianjia animation-scale-up"
+                                       aria-hidden="true"></i>
+                                    <i class="back-icon iconfont icon-guanbi animation-scale-up" aria-hidden="true"></i>
                                 </button>
                             </div>
 
@@ -321,7 +329,7 @@
                                 <div class="card-header card-header-transparent card-header-bordered">
                                     <div class="float-left font-weight-bold third-title">艺人信息</div>
                                     <div class="float-right pointer-content" v-show="!isEdit">
-                                        <i class="iconfont icon-bianji" aria-hidden="true"
+                                        <i class="iconfont icon-bianji2" aria-hidden="true"
                                            @click="editBaseInfo"></i>
                                     </div>
                                     <div class="float-right mr-40" v-show="isEdit">
@@ -840,7 +848,7 @@
                 taskNum: '',
                 doneTaskNum: 0,
                 filterFee: 1,
-                avatar:''
+                avatar: ''
             }
         },
 
@@ -892,7 +900,7 @@
                 })
 
             },
-            
+
             getArtistsBill: function () {
                 if (this.artistBillsInfo.length > 0) {
                     return;
@@ -938,13 +946,13 @@
                     toolbox: {
                         feature: {
                             saveAsImage: {
-                                show:true,
-                                title:'保存',
-                                iconStyle:{
-                                    textPosition:10000,
-                                    textAlign:'left'
+                                show: true,
+                                title: '保存',
+                                iconStyle: {
+                                    textPosition: 10000,
+                                    textAlign: 'left'
                                 }
-        
+
                             }
                         }
                     },
@@ -1029,27 +1037,27 @@
                 for (let i = 0; i < this.$store.state.newParticipantsInfo.length; i++) {
                     participant_ids.push(this.$store.state.newParticipantsInfo[i].id)
                 }
-                if(!this.taskType){
+                if (!this.taskType) {
                     toastr.error('请选择任务类型')
                     return false
                 }
-                if(!this.taskName){
+                if (!this.taskName) {
                     toastr.error('请输入任务名称')
                     return false
                 }
-                if(!this.$store.state.newPrincipalInfo.id){
+                if (!this.$store.state.newPrincipalInfo.id) {
                     toastr.error('请选择负责人')
                     return false
                 }
-                if(!this.startMinutes){
+                if (!this.startMinutes) {
                     toastr.error('请选择任务开始时间')
                     return false
                 }
-                if(!this.endMinutes){
+                if (!this.endMinutes) {
                     toastr.error('请选择任务结束时间')
                     return false
                 }
-                if(!this.priority){
+                if (!this.priority) {
                     toastr.error('请选择任务优先级')
                     return false
                 }
@@ -1062,7 +1070,7 @@
                     toastr.error('结束时间必须晚于开始时间,请重新选择时间');
                     return false;
                 }
-                if(participant_ids.length<=0){
+                if (participant_ids.length <= 0) {
                     toastr.error('请选择参与人')
                     return false
                 }

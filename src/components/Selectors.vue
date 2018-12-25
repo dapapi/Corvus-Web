@@ -1,5 +1,5 @@
 <template>
-    <select class="selectpicker show-tick" data-plugin="selectpicker" :value="value" :data-live-search="isSelectable"
+    <select class="selectpicker show-tick form-control" data-plugin="selectpicker" :value="value" :data-live-search="isSelectable"
             :data-show-subtext="isSelectable" :id="_uid"
             :multiple="multiple" :title="placeholder" v-model="valueListener">
         <selectorsOptions v-for="option in options" v-bind:id="option.id" :val="option.value || option.id"
@@ -108,6 +108,10 @@
 <style>
     .btn-default {
         background: white;
+    }
+
+    .btn-group .bootstrap-select .show-tick {
+        height: 36.02px;
     }
 </style>
 

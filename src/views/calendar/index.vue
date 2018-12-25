@@ -11,7 +11,7 @@
 
         <div class="page-content container-fluid">
             <div class="panel col-md-12 py-5 clearfix px-0 mb-0">
-                <div class=" float-left py-30" style="width: 20%;">
+                <div class="float-left py-30" style="width: 20%;">
                     <div style="border-bottom: 1px solid #D8D8D8;width: 90%;margin: 0 auto">
                         <InlineDatepicker @change="selectDate"></InlineDatepicker>
                     </div>
@@ -19,7 +19,7 @@
                         <div>
                             <div class="calendar-title position-relative" style="line-height: 20px">
                                 <i class="iconfont icon-richeng pr-5"></i>
-                                <span @click="displayMeetingRoom">所有日历</span>
+                                <span @click="displayMeetingRoom" class="pointer-content">所有日历</span>
                                 <span class="px-5 pointer-content" @click="allCalendarShow">
                                     <template v-if="showAllCalendar">
                                         <i class="iconfont icon-xiajiantou" style="font-size:12px"></i>
@@ -87,9 +87,11 @@
                         </div>
                     </div>
                 </div>
-                <div class="float-left p-0" style="width: 80%;border-left: 1px solid #D8D8D8;">
+                <div class="vertical-line float-left"></div>
+                <div class="float-left p-0" style="width: 79%;">
                     <calendar :goto-date="selectedDate" v-show="!meetingRomeShow" @dayClick="showAddScheduleModal"
                               :calendars="selectedCalendar" :meeting-rome-list="meetingRomeList" ref="calendar"
+                              :is-meeting="isMeeting" @calendarDisplay="checkMeetingRoom"
                               @scheduleClick="showScheduleModal"></calendar>
                     <MeetingRoomCalendar v-show="meetingRomeShow" :meetingRomeList="meetingRomeList" ref="meetingRoom"
                                          @change="changeToCalendar"></MeetingRoomCalendar>
@@ -107,7 +109,7 @@
                         <div style="order: 2">
                             <span class="pointer-content hover-content mr-4" data-toggle="modal"
                                   data-target="#addLinkage" @click="selectProjectLinkage">关联</span>
-                            <i class="iconfont icon-guanbipointer-content" aria-hidden="true" data-dismiss="modal"></i>
+                            <i class="iconfont icon-guanbi pointer-content" aria-hidden="true" data-dismiss="modal"></i>
                         </div>
                         <h5 class="modal-title">
                             <template v-if="scheduleType === 'add'">
@@ -259,12 +261,12 @@
                 <div class="modal-content" v-if="scheduleData">
                     <div class="modal-header">
                         <div style="order: 2">
-                            <i class="iconfont icon-bianji pr-4 font-size-16 pointer-content"
+                            <i class="iconfont icon-bianji2 pr-4 font-size-16 pointer-content"
                                @click="changeScheduleType('edit')" aria-hidden="true"></i>
                             <FileUploader is-icon="true" class="float-left" @change="fileUpload"></FileUploader>
                             <i class="iconfont icon-shanchu1 pr-4 font-size-16 pointer-content" data-toggle="modal"
                                data-target="#delModel" aria-hidden="true" @click="deleteToastr('schedule')"></i>
-                            <i class="iconfont icon-guanbipointer-content" aria-hidden="true" data-dismiss="modal"></i>
+                            <i class="iconfont icon-guanbi pointer-content" aria-hidden="true" data-dismiss="modal"></i>
                         </div>
                         <h5 class="modal-title">{{ scheduleData.calendar.data.title }}</h5>
                     </div>
@@ -325,16 +327,18 @@
                             <div class="col-md-1 px-0 float-left">备注</div>
                             <div class="col-md-10 float-left">{{ scheduleData.desc }}</div>
                         </div>
-                        <!--<div class="example" v-if="scheduleData.affixes.data.length > 0">-->
-                        <!--<div>附件</div>-->
-                        <!--<div>-->
-                        <!--<div class="col-md-3 float-left text-center"-->
-                        <!--v-for="affix in scheduleData.affixes.data">-->
-                        <!--<div><i class="md-file" style="font-size: 36px"></i></div>-->
-                        <!--<div>{{ affix.title }}</div>-->
-                        <!--</div>-->
-                        <!--</div>-->
-                        <!--</div>-->
+                        <div class="example" v-if="scheduleData.affixes.data.length > 0">
+                            <div>附件</div>
+                            <div>
+                                <div class="col-md-3 float-left text-center position-relative file-item"
+                                     v-for="affix in scheduleData.affixes.data">
+                                    <div class="del-affix iconfont icon-zuofei position-absolute pointer-content"
+                                         @click="delAffix(affix.id)"></div>
+                                    <div><i class="iconfont icon-wenjian" style="font-size: 36px"></i></div>
+                                    <div @click="openFile(affix.url)" class="pointer-content">{{ affix.title }}</div>
+                                </div>
+                            </div>
+                        </div>
                     </div>
                 </div>
             </div>
@@ -607,7 +611,9 @@
                     projects: [],
                     tasks: []
                 },
+                isMeeting: false,
                 materialsIds: [],
+                meetingRomeType: '',
             }
         },
 
@@ -631,6 +637,8 @@
             });
             this.globalClick(this.removeSelector);
             this.initCalendar();
+            let pageContent = $('.container-fluid');
+            $('.vertical-line').css('height', (pageContent[0].offsetHeight - 60) + 'px');
         },
 
         watch: {
@@ -789,6 +797,10 @@
                 })
             },
 
+            openFile: function (url) {
+                window.open(url)
+            },
+
             selectProjectLinkage: function (value) {
                 this.linkageResource = value;
                 if (!this.allProjectsInfo) {
@@ -806,6 +818,13 @@
                 } else {
                     this.linkageSelectedIds[type].push(value)
                 }
+            },
+
+            delAffix: function (affixId) {
+                fetch('post', '/schedules/' + this.scheduleData.id + '/affixes/' + affixId).then(response => {
+                    toastr.success('删除成功')
+                    this.schedule.affix.data.splice(this.scheduleData.affix.data.map(item => item.id).indexOf(affixId), 1)
+                })
             },
 
             delNewScheduleLinkage: function (type, value) {
@@ -1179,17 +1198,23 @@
             },
 
             checkMeetingRoom: function (type) {
-                this.getResources(type);
+                if (type) {
+                    this.meetingRomeType = type;
+                }
+                this.getResources(this.meetingRomeType);
+                this.isMeeting = true;
                 this.meetingRomeShow = true
             },
 
             displayMeetingRoom: function () {
                 this.meetingRomeShow = false;
+                this.isMeeting = false;
                 this.meetingRomeList = '';
             },
 
-            changeToCalendar: function () {
+            changeToCalendar: function (type) {
                 this.meetingRomeShow = false;
+                this.$refs.calendar.changeView(type)
             },
 
             allCalendarShow: function () {
@@ -1273,6 +1298,16 @@
         height: 30px;
         overflow: hidden;
         border-radius: 100%;
+    }
+
+    .del-affix {
+        right: 15px;
+        display: none;
+        color: red;
+    }
+
+    .file-item:hover .del-affix {
+        display: block;
     }
 
 </style>

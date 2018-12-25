@@ -5,17 +5,17 @@
             <!-- ⬆️判断是否永久显示 -->
             <div :class="detailPage?'col-md-10 float-left font-weight-bold expfee':''">
                 <!-- ⬆️启用详情页样式 -->
-                <div class="float-left" v-if="trailOriginArr.length > 0">
+                <div class="float-left col-md-6 px-0" v-if="trailOriginArr.length > 0">
                     <selectors :options="trailOriginArr" @change="changeTrailOriginType" ref='contentType'
                                :placeholder="'请选择线索来源'"></selectors>
                 </div>
                 <template v-if="trailOrigin === '1' || trailOrigin === '2' || trailOrigin === '3'">
-                    <div class="col-md-5 float-left pr-0">
-                        <input type="text" class="form-control" title="" v-model="email">
+                    <div class="col-md-6 float-left pr-0">
+                        <input type="text" class="form-control" title="" v-model="email" ref="focus" @blur="editInput">
                     </div>
                 </template>
                 <template v-else-if="(trailOrigin === '4' || trailOrigin === '5')">
-                    <div class="col-md-5 float-left pr-0">
+                    <div class="col-md-6 float-left pr-0">
                         <input-selectors @change="changeTrailOrigin" :placeholder='memberFinder' type="selector"
                                          :propSelectMemberName='trailOriginPerson.name'></input-selectors>
                     </div>
@@ -37,6 +37,7 @@
 <script>
     import config from '@/assets/js/config'
     import fetch from '@/assets/utils/fetch.js'
+    import verify from '@/assets/utils/verify.js'
 
     export default {
         //线索类型   {{什么}}线索  编辑状态   详情页样式  当前线索值    当前线索来源     永久显示
@@ -50,6 +51,7 @@
                 isEditSituation: '',                     //编辑状态
                 members: {},
                 tempStore: '',
+                inputFocus: false
             }
         },
         mounted() {
@@ -77,8 +79,8 @@
             }
         },
         watch: {
-            content(value){
-                if(value){
+            content(value) {
+                if (value) {
                     this.getMembers(value)
                 }
             },
@@ -142,6 +144,14 @@
             changeTrailOrigin: function (value) {
                 this.trailOriginPerson = value
             },
+
+            editInput: function () {
+                if ((this.trailOrigin == 1 || this.trailOrigin == 2 ) && !verify.email(this.email)) {
+                    this.$refs.focus.focus();
+                    return
+                }
+
+            }
         }
     }
 </script>

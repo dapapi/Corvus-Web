@@ -73,7 +73,7 @@
                     </div>
                     <div class="clearfix">
                         <div class="col-md-6 float-left pl-0 mb-20" style="border-right: 1px solid #eee">
-                            <div class="col-md-6"><i class="iconfont icon-iconset0399"></i> 任务 5/12</div>
+                            <div class="col-md-6 pl-0"><i class="iconfont icon-iconset0399"></i> 任务 5/12</div>
                             <div class="clearfix example">
                                 <div class="col-md-3 float-left">电话会议</div>
                                 <div class="col-md-3 float-left">张佳佳</div>
@@ -240,8 +240,10 @@
                                  data-target="#addTask">
                                 <button type="button"
                                         class="site-action-toggle btn-raised btn btn-success btn-floating waves-effect waves-classic">
-                                    <i class="front-icon iconfont icon-tianjia animation-scale-up" aria-hidden="true"></i>
-                                    <i class="back-icon iconfont icon-tianjia animation-scale-up" aria-hidden="true"></i>
+                                    <i class="front-icon iconfont icon-tianjia animation-scale-up"
+                                       aria-hidden="true"></i>
+                                    <i class="back-icon iconfont icon-tianjia animation-scale-up"
+                                       aria-hidden="true"></i>
                                 </button>
                             </div>
 
@@ -402,7 +404,7 @@
                                         </div>
                                         <div class="col-md-2 float-right pr-0 text-right" style="color: #cccccc;">
                                             <i class="iconfont icon-liulan pr-40 pointer-content"></i>
-                                            <i class="iconfont icon-bianji pr-40 pointer-content"></i>
+                                            <i class="iconfont icon-bianji2 pr-40 pointer-content"></i>
                                             <i class="iconfont icon-shanchu1 pointer-content"></i>
                                         </div>
                                     </div>
@@ -422,7 +424,7 @@
                                             </div>
                                             <div class="col-md-2 float-right pr-0 text-right" style="color: #cccccc;">
                                                 <i class="iconfont icon-liulan pr-40 pointer-content"></i>
-                                                <i class="iconfont icon-bianji pr-40 pointer-content"></i>
+                                                <i class="iconfont icon-bianji2 pr-40 pointer-content"></i>
                                                 <i class="iconfont icon-shanchu1 pointer-content"></i>
                                             </div>
                                         </div>
@@ -442,7 +444,7 @@
                                             </div>
                                             <div class="col-md-2 float-right pr-0 text-right" style="color: #cccccc;">
                                                 <i class="iconfont icon-liulan pr-40 pointer-content"></i>
-                                                <i class="iconfont icon-bianji pr-40 pointer-content"></i>
+                                                <i class="iconfont icon-bianji2 pr-40 pointer-content"></i>
                                                 <i class="iconfont icon-shanchu1 pointer-content"></i>
                                             </div>
                                         </div>
@@ -476,7 +478,7 @@
                                         </div>
                                         <div class="col-md-2 float-right pr-0 text-right" style="color: #cccccc;">
                                             <i class="iconfont icon-liulan pr-40 pointer-content"></i>
-                                            <i class="iconfont icon-bianji pr-40 pointer-content"></i>
+                                            <i class="iconfont icon-bianji2 pr-40 pointer-content"></i>
                                             <i class="iconfont icon-shanchu1 pointer-content"></i>
                                         </div>
                                     </div>
@@ -492,7 +494,7 @@
                                 <div class="card-header card-header-transparent card-header-bordered">
                                     <div class="float-left font-weight-bold third-title">项目信息</div>
                                     <div class="float-right" v-show="!isEdit && projectInfo.approval_status == 1">
-                                        <i class="iconfont icon-bianji pointer-content" aria-hidden="true"
+                                        <i class="iconfont icon-bianji2 pointer-content" aria-hidden="true"
                                            @click="editBaseInfo"></i>
                                     </div>
                                     <div class="float-right mr-40" v-show="isEdit">
@@ -1433,6 +1435,19 @@
                 }
                 fetch('get', '/projects/' + this.projectId + '/bill').then(response => {
                     this.projectBillsInfo = response.data
+                });
+
+                // fetch('get', '/projects/' + this.projectId + '/store/bill').then(response => {
+                //     console.log(response)
+                // })
+            },
+
+            addProjectBill: function () {
+                let data = {
+                    expenses: '',
+                };
+                fetch('post', '/projects/' + this.projectId + '/store/bill', data).then(response => {
+
                 })
             },
 
@@ -1504,14 +1519,14 @@
             },
 
             addPrivacy: function () {
-                   
+
                 $('#addPrivacy').modal('hide')
                 this.$store.state.collectInfo = []
                 this.$store.state.payInfo = []
-                this.$store.state.contractInfo =[]
-                this.$store.state.divisionInfo=[]
-                this.$store.state.incubationInfo=[]
-                this.$store.state.billInfo=[]
+                this.$store.state.contractInfo = []
+                this.$store.state.divisionInfo = []
+                this.$store.state.incubationInfo = []
+                this.$store.state.billInfo = []
             },
 
             editBaseInfo: function () {
