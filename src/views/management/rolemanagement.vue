@@ -308,7 +308,7 @@
                                             <label :for="'row-' + v.id"></label>
                                         </span>
                                     </td>
-                                    <td><em></em>{{v.name}}</td>
+                                    <td><Avatar :imgUrl="v.icon_url" style="margin-right: 10px; width: 28px;height: 28px;" />{{v.name}}</td>
                                     <td>{{v.phone}}</td>
                                     <td>{{v.email}}</td>
                                 </tr>
@@ -1199,6 +1199,10 @@
     }
     .back{
         background: #F5F5F5;
+    }
+    .avatar {
+        vertical-align: inherit;
+        margin-top: -2px;
     }
 </style>
 

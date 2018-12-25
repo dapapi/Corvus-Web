@@ -13,13 +13,13 @@
             <div class="panel col-md-12 clearfix py-5">
                 <div class="clearfix">
                      <div class="col-md-2 example float-left">
-                        <selectors :options="[{value: '',name: '全部'}, ...hireShapeArr]" changeKey="hireShape" value="" @select="changeState"></selectors>
+                        <selectors :options="[{value: '',name: '全部'}, ...hireShapeArr]" :defaultFirst="true" changeKey="hireShape" @select="changeState"></selectors>
                     </div>
                     <div class="col-md-2 example float-left">
-                        <selectors :options="[{value: '',name: '全部'}, ...staffStatus]" value="" changeKey="status" @select="changeState"></selectors>
+                        <selectors :options="[{value: '',name: '全部'}, ...staffStatus]" :defaultFirst="true" changeKey="status" @select="changeState"></selectors>
                     </div>
                     <div class="col-md-2 example float-left">
-                        <selectors :options="[{value: '',name: '全部'}, ...staffPositionStatus]" value="" changeKey="positionType" @select="changeState"></selectors>
+                        <selectors :options="[{value: '',name: '全部'}, ...staffPositionStatus]" :defaultFirst="true" changeKey="positionType" @select="changeState"></selectors>
                     </div>
                    
                     <div class="col-md-3 example float-left">
