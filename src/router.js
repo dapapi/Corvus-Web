@@ -100,35 +100,40 @@ export default new Router({
             component: () => import('./views/artist/papi-detail.vue')
         },
         {
-            path: '/staff',
-            name: 'staff',
-            component: () => import('./views/staff/index.vue')
+            path: '/informationForm',
+            name: 'informationForm',
+            component: () => import('./views/staff/informationForm.vue')
         },
-        {
-            path: '/staff/add',
-            name: 'staffAdd',
-            component: () => import('./views/staff/add.vue')
-        },
-        {
-            path: '/staff/edit/:id',
-            name: 'staffEdit',
-            component: () => import('./views/staff/add.vue')
-        },
-        {
-            path: '/staff/detail/:id',
-            name: 'staffDetail',
-            component: () => import('./views/staff/detail.vue'),
-        },
-        {
-            path: '/staff/history',
-            name: 'staffHistory',
-            component: () => import('./views/staff/history.vue'),
-        },
-        {
-            path: '/staff/apply',
-            name: 'staffApply',
-            component: () => import('./views/staff/apply.vue'),
-        },
+        // {
+        //     path: '/staff',
+        //     name: 'staff',
+        //     component: () => import('./views/staff/index.vue')
+        // },
+        // {
+        //     path: '/staff/add',
+        //     name: 'staffAdd',
+        //     component: () => import('./views/staff/add.vue')
+        // },
+        // {
+        //     path: '/staff/edit/:id',
+        //     name: 'staffEdit',
+        //     component: () => import('./views/staff/add.vue')
+        // },
+        // {
+        //     path: '/staff/detail/:id',
+        //     name: 'staffDetail',
+        //     component: () => import('./views/staff/detail.vue'),
+        // },
+        // {
+        //     path: '/staff/history',
+        //     name: 'staffHistory',
+        //     component: () => import('./views/staff/history.vue'),
+        // },
+        // {
+        //     path: '/staff/apply',
+        //     name: 'staffApply',
+        //     component: () => import('./views/staff/apply.vue'),
+        // },
         {
             path: '/address',
             name: 'address',
@@ -446,6 +451,36 @@ export default new Router({
                     path: '/organization/management',
                     name: 'organization/management',
                     component: () => import('./views/organization/management.vue')
+                },
+                {
+                    path: '/staff',
+                    name: 'staff',
+                    component: () => import('./views/staff/index.vue')
+                },
+                {
+                    path: '/staff/add',
+                    name: 'staffAdd',
+                    component: () => import('./views/staff/add.vue')
+                },
+                {
+                    path: '/staff/edit/:id',
+                    name: 'staffEdit',
+                    component: () => import('./views/staff/add.vue')
+                },
+                {
+                    path: '/staff/detail/:id',
+                    name: 'staffDetail',
+                    component: () => import('./views/staff/detail.vue'),
+                },
+                {
+                    path: '/staff/history',
+                    name: 'staffHistory',
+                    component: () => import('./views/staff/history.vue'),
+                },
+                {
+                    path: '/staff/apply',
+                    name: 'staffApply',
+                    component: () => import('./views/staff/apply.vue'),
                 },
             ]
         },

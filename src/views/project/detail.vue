@@ -73,7 +73,7 @@
                     </div>
                     <div class="clearfix">
                         <div class="col-md-6 float-left pl-0 mb-20" style="border-right: 1px solid #eee">
-                            <div class="col-md-6"><i class="iconfont icon-iconset0399"></i> 任务 5/12</div>
+                            <div class="col-md-6 pl-0"><i class="iconfont icon-iconset0399"></i> 任务 5/12</div>
                             <div class="clearfix example">
                                 <div class="col-md-3 float-left">电话会议</div>
                                 <div class="col-md-3 float-left">张佳佳</div>
@@ -153,7 +153,7 @@
                                aria-controls="forum-present"
                                aria-expanded="false" role="tab">账单</a>
                         </li>
-                        <li class="nav-item" role="presentation"
+                        <li class="nav-item" role="presentation" @click="getProjectReturned"
                             v-if="projectInfo.type != 5 && projectInfo.approval_status == 1">
                             <a class="nav-link" data-toggle="tab" href="#forum-project-payback"
                                aria-controls="forum-present"
@@ -240,8 +240,10 @@
                                  data-target="#addTask">
                                 <button type="button"
                                         class="site-action-toggle btn-raised btn btn-success btn-floating waves-effect waves-classic">
-                                    <i class="front-icon iconfont icon-tianjia animation-scale-up" aria-hidden="true"></i>
-                                    <i class="back-icon iconfont icon-tianjia animation-scale-up" aria-hidden="true"></i>
+                                    <i class="front-icon iconfont icon-tianjia animation-scale-up"
+                                       aria-hidden="true"></i>
+                                    <i class="back-icon iconfont icon-tianjia animation-scale-up"
+                                       aria-hidden="true"></i>
                                 </button>
                             </div>
 
@@ -256,24 +258,21 @@
                                 <tr>
                                     <th class="cell-300" scope="col">合同编号</th>
                                     <th class="cell-300" scope="col">项目名称</th>
-                                    <th class="cell-300" scope="col">公司</th>
-                                    <th class="cell-300" scope="col">审批状态</th>
                                     <th class="cell-300" scope="col">艺人</th>
+                                    <th class="cell-300" scope="col">合同类型</th>
+                                    <th class="cell-300" scope="col">创建人</th>
+                                    <th class="cell-300" scope="col">创建时间</th>
+                                    <th class="cell-300" scope="col">审批状态</th>
                                 </tr>
                                 <tbody>
                                 <tr>
                                     <td>#12312sdf231</td>
                                     <td>测试合同</td>
-                                    <td>泰洋川禾</td>
-                                    <td>审批中</td>
                                     <td>papi、bigger</td>
-                                </tr>
-                                <tr>
-                                    <td>#12312sdf231</td>
-                                    <td>测试合同</td>
-                                    <td>泰洋川禾</td>
+                                    <td>收入</td>
+                                    <td>陈晓禹</td>
+                                    <td>2018-12-27</td>
                                     <td>审批中</td>
-                                    <td>周冬雨</td>
                                 </tr>
                                 </tbody>
                             </table>
@@ -305,7 +304,7 @@
                                         <template v-if="filterFee === 1">全部</template>
                                         <template v-if="filterFee === 2">成本</template>
                                         <template v-if="filterFee === 3">收入</template>
-                                        <i class="iconfont icon-gengduo1 pl-2" aria-hidden="true"
+                                        <i class="iconfont icon-plus-select-down pl-2" aria-hidden="true"
                                            id="projectDropdown" data-toggle="dropdown" aria-expanded="false"></i>
                                         <div class="dropdown-menu" aria-labelledby="projectDropdown" role="menu">
                                             <a class="dropdown-item" role="menuitem" v-show="filterFee !== 1"
@@ -377,9 +376,9 @@
                                     </div>
                                 </div>
                                 <div class="dividing-line"></div>
-                                <div>
+                                <div v-for="returnMoney in projectReturnInfo">
                                     <div class="clearfix py-20">
-                                        <div class="float-left font-weight-bold">第一期</div>
+                                        <div class="float-left font-weight-bold">{{ returnMoney.issue_name }}</div>
                                         <div class="float-right">
                                             <span class="mr-40 pointer-content hover-content" data-toggle="modal"
                                                   data-target="#addPayback">
@@ -390,10 +389,12 @@
                                         </div>
                                     </div>
                                     <div class="clearfix">
-                                        <div class="col-md-2 float-left pl-0">回款日期<span class="pl-5">2018-09-28</span>
+                                        <div class="col-md-2 float-left pl-0">回款日期<span class="pl-5">{{ returnMoney.plan_returned_time }}</span>
                                         </div>
-                                        <div class="col-md-2 float-left pl-0">计划回款<span
-                                                class="money-color pl-5">23492394元</span>
+                                        <div class="col-md-2 float-left pl-0">计划回款
+                                            <span class="money-color pl-5">
+                                                {{ returnMoney.plan_returned_money }}元
+                                            </span>
                                         </div>
                                         <div class="col-md-2 float-left pl-0">实际回款<span class="money-color pl-5">22312031203元</span>
                                         </div>
@@ -402,84 +403,60 @@
                                         </div>
                                         <div class="col-md-2 float-right pr-0 text-right" style="color: #cccccc;">
                                             <i class="iconfont icon-liulan pr-40 pointer-content"></i>
-                                            <i class="iconfont icon-bianji pr-40 pointer-content"></i>
+                                            <i class="iconfont icon-bianji2 pr-40 pointer-content"></i>
                                             <i class="iconfont icon-shanchu1 pointer-content"></i>
                                         </div>
                                     </div>
 
-                                    <div class="segmentation-line example"></div>
-
-                                    <div>
-                                        <div class="font-weight-bold">回款记录</div>
-                                        <div class="clearfix">
-                                            <div class="col-md-2 float-left pl-0">计划回款<span class="money-color pl-5">23492394元</span>
+                                    <div v-for="item in returnMoney.money.data">
+                                        <div class="segmentation-line example"></div>
+                                        <div v-if="item.type.data.type === 1">
+                                            <div class="font-weight-bold">
+                                                <template>回款记录</template>
                                             </div>
-                                            <div class="col-md-2 float-left pl-0">回款日期<span
-                                                    class="pl-5">2018-12-30</span>
-                                            </div>
-                                            <div class="col-md-2 float-left pl-0">付款方式<span
-                                                    class="pl-5">现金</span>
-                                            </div>
-                                            <div class="col-md-2 float-right pr-0 text-right" style="color: #cccccc;">
-                                                <i class="iconfont icon-liulan pr-40 pointer-content"></i>
-                                                <i class="iconfont icon-bianji pr-40 pointer-content"></i>
-                                                <i class="iconfont icon-shanchu1 pointer-content"></i>
-                                            </div>
-                                        </div>
-                                    </div>
-
-                                    <div class="segmentation-line example"></div>
-
-                                    <div>
-                                        <div class="font-weight-bold">开票记录</div>
-                                        <div class="clearfix">
-                                            <div class="col-md-2 float-left pl-0">开票日期<span
-                                                    class="pl-5">2018-12-30</span>
-                                            </div>
-                                            <div class="col-md-2 float-left pl-0">计划回款<span class="money-color pl-5">23492394元</span>
-                                            </div>
-                                            <div class="col-md-2 float-left pl-0">票据类型<span class="pl-5">增值税普通发票</span>
-                                            </div>
-                                            <div class="col-md-2 float-right pr-0 text-right" style="color: #cccccc;">
-                                                <i class="iconfont icon-liulan pr-40 pointer-content"></i>
-                                                <i class="iconfont icon-bianji pr-40 pointer-content"></i>
-                                                <i class="iconfont icon-shanchu1 pointer-content"></i>
+                                            <div class="clearfix">
+                                                <div class="col-md-2 float-left pl-0">计划回款<span
+                                                        class="money-color pl-5">{{ item.plan_returned_money }}元</span>
+                                                </div>
+                                                <div class="col-md-2 float-left pl-0">回款日期<span
+                                                        class="pl-5">{{ item.plan_returned_time }}</span>
+                                                </div>
+                                                <div class="col-md-2 float-left pl-0">付款方式<span
+                                                        class="pl-5">{{ item.type.data.plan_returned_money }}</span>
+                                                </div>
+                                                <div class="col-md-2 float-right pr-0 text-right"
+                                                     style="color: #cccccc;">
+                                                    <i class="iconfont icon-liulan pr-40 pointer-content"></i>
+                                                    <i class="iconfont icon-bianji2 pr-40 pointer-content"></i>
+                                                    <i class="iconfont icon-shanchu1 pointer-content"></i>
+                                                </div>
                                             </div>
                                         </div>
+                                        <div v-if="item.type.data.type === 2">
+                                            <div class="font-weight-bold">开票记录</div>
+                                            <div class="clearfix">
+                                                <div class="col-md-2 float-left pl-0">开票日期<span
+                                                        class="pl-5">{{ item.plan_returned_time }}</span>
+                                                </div>
+                                                <div class="col-md-2 float-left pl-0">计划回款<span
+                                                        class="money-color pl-5">{{ item.plan_returned_money }}元</span>
+                                                </div>
+                                                <div class="col-md-2 float-left pl-0">票据类型<span class="pl-5">{{ item.type.data.plan_returned_money }}</span>
+                                                </div>
+                                                <div class="col-md-2 float-right pr-0 text-right"
+                                                     style="color: #cccccc;">
+                                                    <i class="iconfont icon-liulan pr-40 pointer-content"></i>
+                                                    <i class="iconfont icon-bianji2 pr-40 pointer-content"></i>
+                                                    <i class="iconfont icon-shanchu1 pointer-content"></i>
+                                                </div>
+                                            </div>
+                                        </div>
+
+
                                     </div>
 
                                     <div class="dividing-line example"></div>
 
-                                </div>
-                                <div>
-                                    <div class="clearfix py-20">
-                                        <div class="float-left font-weight-bold">第二期</div>
-                                        <div class="float-right">
-                                            <span class="mr-40 pointer-content hover-content" data-toggle="modal"
-                                                  data-target="#addPayback">
-                                                <i class="iconfont icon-tianjia pr-5"></i>回款记录</span>
-                                            <span class="pointer-content hover-content" data-toggle="modal"
-                                                  data-target="#addInvoice">
-                                                <i class="iconfont icon-tianjia pr-5"></i>开票记录</span>
-                                        </div>
-                                    </div>
-                                    <div class="clearfix">
-                                        <div class="col-md-2 float-left pl-0">回款日期<span class="pl-5">2018-09-28</span>
-                                        </div>
-                                        <div class="col-md-2 float-left pl-0">计划回款<span
-                                                class="money-color pl-5">23492394元</span>
-                                        </div>
-                                        <div class="col-md-2 float-left pl-0">实际回款<span class="money-color pl-5">22312031203元</span>
-                                        </div>
-                                        <div class="col-md-2 float-left pl-0">开票金额<span
-                                                class="money-color pl-5">12312222元</span>
-                                        </div>
-                                        <div class="col-md-2 float-right pr-0 text-right" style="color: #cccccc;">
-                                            <i class="iconfont icon-liulan pr-40 pointer-content"></i>
-                                            <i class="iconfont icon-bianji pr-40 pointer-content"></i>
-                                            <i class="iconfont icon-shanchu1 pointer-content"></i>
-                                        </div>
-                                    </div>
                                 </div>
                             </div>
                         </div>
@@ -492,7 +469,7 @@
                                 <div class="card-header card-header-transparent card-header-bordered">
                                     <div class="float-left font-weight-bold third-title">项目信息</div>
                                     <div class="float-right" v-show="!isEdit && projectInfo.approval_status == 1">
-                                        <i class="iconfont icon-bianji pointer-content" aria-hidden="true"
+                                        <i class="iconfont icon-bianji2 pointer-content" aria-hidden="true"
                                            @click="editBaseInfo"></i>
                                     </div>
                                     <div class="float-right mr-40" v-show="isEdit">
@@ -681,9 +658,11 @@
                                     <div class="card-text py-5 clearfix edit-height">
                                         <div class="col-md-1 float-left text-right pl-0">最近更新人</div>
                                         <div class="col-md-5 float-left font-weight-bold">
+                                            {{ projectInfo.last_follow_up_user }}
                                         </div>
                                         <div class="col-md-1 float-left text-right pl-0">最近更新时间</div>
                                         <div class="col-md-5 float-left font-weight-bold">
+                                            {{ projectInfo.last_updated_at }}
                                         </div>
                                     </div>
                                     <div class="card-text py-5 clearfix edit-height">
@@ -726,6 +705,7 @@
 
         </div>
 
+        <!-- 新建任务 -->
         <div class="modal fade" id="addTask" aria-hidden="true" aria-labelledby="addLabelForm"
              role="dialog" tabindex="-1">
             <div class="modal-dialog modal-simple">
@@ -810,7 +790,7 @@
                 </div>
             </div>
         </div>
-
+        <!-- 隐私设置 -->
         <div class="modal fade" id="addPrivacy" aria-hidden="true" aria-labelledby="addLabelForm"
              role="dialog" tabindex="-1">
             <div class="modal-dialog modal-simple">
@@ -868,7 +848,7 @@
                 </div>
             </div>
         </div>
-
+        <!-- 撤单原因 -->
         <div class="modal fade" id="withdrawal" aria-hidden="true" aria-labelledby="addLabelForm"
              role="dialog" tabindex="-1">
             <div class="modal-dialog modal-simple">
@@ -1262,6 +1242,7 @@
                 searchKeyWord: '',
                 filterFee: 1,
                 projectBillsInfo: [],
+                projectReturnInfo: [],
                 linkageSelectedIds: {
                     projects: [],
                     tasks: []
@@ -1433,6 +1414,29 @@
                 }
                 fetch('get', '/projects/' + this.projectId + '/bill').then(response => {
                     this.projectBillsInfo = response.data
+                });
+
+                // fetch('get', '/projects/' + this.projectId + '/store/bill').then(response => {
+                //     console.log(response)
+                // })
+            },
+
+            addProjectBill: function () {
+                let data = {
+                    expenses: '',
+                };
+                fetch('post', '/projects/' + this.projectId + '/store/bill', data).then(response => {
+
+                })
+            },
+
+            getProjectReturned: function () {
+                let data = {
+                    include: 'money.type'
+                };
+                fetch('get', '/projects/' + this.projectId + '/returned/money', data).then(response => {
+                    console.log(response);
+                    this.projectReturnInfo = response.data
                 })
             },
 
@@ -1504,14 +1508,14 @@
             },
 
             addPrivacy: function () {
-                   
+
                 $('#addPrivacy').modal('hide')
                 this.$store.state.collectInfo = []
                 this.$store.state.payInfo = []
-                this.$store.state.contractInfo =[]
-                this.$store.state.divisionInfo=[]
-                this.$store.state.incubationInfo=[]
-                this.$store.state.billInfo=[]
+                this.$store.state.contractInfo = []
+                this.$store.state.divisionInfo = []
+                this.$store.state.incubationInfo = []
+                this.$store.state.billInfo = []
             },
 
             editBaseInfo: function () {

@@ -8,7 +8,7 @@
     import fetch from '../assets/utils/fetch.js'
 
     export default {
-        props: ['calendars', 'gotoDate', 'meetingRomeList'],
+        props: ['calendars', 'gotoDate', 'meetingRomeList', 'isMeeting'],
         data() {
             return {
                 startDate: '', //获取开始时间
@@ -53,6 +53,7 @@
                 dayNamesShort: ["周日", "周一", "周二", "周三", "周四", "周五", "周六"],
                 allDayText: '全天',
                 slotLabelFormat: 'H(:mm)a',
+                firstHour: '0',
                 buttonText: {
                     today: '今天',
                     month: '月',
@@ -75,12 +76,13 @@
                     self.endDate = self.timeReformat(end._d);
                     // console.log(self.calendars)
                     if (self.calendars.length === 0) {
+                        callback([]);
                         return
                     }
                     let data = {
                         start_date: self.startDate,
                         end_date: self.endDate,
-                        include: 'calendar,participants,creator,material'
+                        include: 'calendar,participants,creator,material,affixes'
                     };
                     if (self.meetingRomeList) {
                         let materialsIds = [];
@@ -122,6 +124,11 @@
                 }
             });
 
+            $('.fc-agendaDay-button').click(function () {
+                if (self.isMeeting) {
+                    self.$emit('calendarDisplay')
+                }
+            })
         },
         methods: {
             refresh() {
@@ -134,6 +141,10 @@
                     day = '0' + day;
                 }
                 return `${value.getFullYear()}-${value.getMonth() + 1}-` + day
+            },
+
+            changeView(value) {
+                $(this.$el).fullCalendar('changeView', value)
             }
         }
     }

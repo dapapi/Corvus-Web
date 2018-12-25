@@ -314,7 +314,7 @@
                                 <div class="card-header card-header-transparent card-header-bordered">
                                     <div class="float-left font-weight-bold third-title">艺人信息</div>
                                     <div class="float-right pointer-content" v-show="isStatrtEdit">
-                                        <i class="iconfont icon-bianji" aria-hidden="true" @click="editBaseInfo"></i>
+                                        <i class="iconfont icon-bianji2" aria-hidden="true" @click="editBaseInfo"></i>
                                     </div>
                                     <div class="float-right mr-40" v-show="isEdit">
                                         <button class="btn btn-sm btn-white btn-pure" @click="cancelEdit">取消</button>

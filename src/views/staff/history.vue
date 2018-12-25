@@ -55,3 +55,10 @@ export default {
     }
 }
 </script>
+
+<style scoped>
+.page {
+    margin-left: 0px!important;
+}
+</style>
+

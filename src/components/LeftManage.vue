@@ -77,6 +77,12 @@
                         code: 'organization',
                         image: 'https://res.papitube.com/corvus/images/talent.png',
                         hoverImage: 'https://res.papitube.com/corvus/images/select-talent.png',
+                    },
+                    {
+                        name: '员工档案',
+                        code: 'staff',
+                        image: 'https://res.papitube.com/corvus/images/talent.png',
+                        hoverImage: 'https://res.papitube.com/corvus/images/select-talent.png',
                     }
                 ],
                 pageRoute: '',

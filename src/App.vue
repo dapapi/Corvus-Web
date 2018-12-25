@@ -32,18 +32,18 @@
         },
         watch: {
             '$route': function (to, from) {
-                if (this.$route.path === '/login') {
+                if (this.$route.path === '/login' || this.$route.path === '/informationForm') {
                     this.isLeftMenuShow = false
-
                 }
                 else if (this.$route.path === '/management'
                     || this.$route.path === '/rolemanagement'
                     || this.$route.path === '/appmanagement'
                     || this.$route.path === '/organization'
+                    || this.$route.path.indexOf('staff') > 0
                     || this.$route.path === '/organization/management'){
                      this.isLeftMenuShow = false
                      this.isLeftManageShow = true
-                }else{
+                } else{
                     this.isLeftMenuShow = true
                     this.isLeftManageShow = false 
                 }
@@ -73,7 +73,7 @@
     }
 
     .asSpinner {
-        height: 36px;
+        height: 36.02px;
     }
 
     .site-menubar-body {
@@ -190,7 +190,7 @@
     }
 
     .edit-height {
-        height: 57px;
+        /*height: 57px;*/
     }
     .label-name {
         display: flex;
@@ -219,6 +219,16 @@
 
     .money-color {
         color: #ff9800;
+    }
+
+    .vertical-line {
+        width: 1px;
+        height: 100%;
+        background-color: #eee;
+    }
+
+    .bootstrap-select:not([class*=col-]):not([class*=form-control]):not(.input-group-btn) {
+        height: 36.02px;
     }
 
 </style>
