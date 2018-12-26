@@ -67,7 +67,7 @@
 </template>
 
 <script>
-import { mapState, mapActions } from 'vuex'
+import { mapState } from 'vuex'
 import fetch from '../../assets/utils/fetch.js'
 import config from '../../assets/js/config'
 export default {
@@ -86,12 +86,8 @@ export default {
     created() { 
         this.getCurrentId()
         this.dataInit()
-
     },
     mounted(){
-        if (this.department.length === 0) {
-            this.getDepartment()
-        }
     },
     computed: {
         ...mapState([
@@ -100,9 +96,6 @@ export default {
     },
 
     methods:{
-        ...mapActions([
-            'getDepartment', // 获取部门数据
-        ]),
         //初始化数据
         dataInit(){
             let _this = this

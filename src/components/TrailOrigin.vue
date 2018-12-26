@@ -38,6 +38,7 @@
     import config from '@/assets/js/config'
     import fetch from '@/assets/utils/fetch.js'
     import verify from '@/assets/utils/verify.js'
+    import {mapState} from 'vuex'
 
     export default {
         //线索类型   {{什么}}线索  编辑状态   详情页样式  当前线索值    当前线索来源     永久显示
@@ -49,15 +50,12 @@
                 trailOriginPerson: '',                   //人员
                 email: '',                               //
                 isEditSituation: '',                     //编辑状态
-                members: {},
+                members: [],
                 tempStore: '',
                 inputFocus: false
             }
         },
         mounted() {
-            if (this.content) {
-                this.getMembers(this.content)
-            }
             if (this.contentType) {
                 this.trailOrigin = String(this.contentType)
             }
@@ -76,12 +74,27 @@
                 } else {
                     return ''
                 }
+            },
+            ...mapState([
+                'userList'
+            ]),
+            _userList () {
+                return this.userList
+            },
+            contentAndUserList () {
+                return this.members.length > 0 && this.content
             }
         },
         watch: {
-            content(value) {
-                if (value) {
-                    this.getMembers(value)
+            _userList () {
+                this.members = this.userList
+            },
+            // 当userList和content同时存在时执行
+            contentAndUserList () {
+                if (this.contentAndUserList) {
+                    if (this.members.find(item => item.id == this.content)) {
+                        this.tempStore = this.content
+                    }
                 }
             },
             //监听获取当前类型
@@ -124,17 +137,6 @@
             }
         },
         methods: {
-            getMembers(value) {
-                let _this = this
-                fetch('get', '/users').then((params) => {
-                    let {data = '-'} = params
-                    _this.members = params.data
-                    if (_this.members.find(item => item.id == value)) {
-                        _this.tempStore = value
-                    }
-                })
-            },
-            //
             changeTrailOriginType: function (value) {
                 this.trailOriginPerson = ''
                 this.email = ''

@@ -65,5 +65,5 @@ export default {
     // 设置用户列表
     setUserList (state, data) {
         state.userList = data
-    }
+    },
 }

@@ -68,9 +68,6 @@ import { mapState, mapActions } from 'vuex'
         },
 
         mounted () {
-            if (this.department.length === 0) {
-                this.getDepartment()
-            }
         },
 
         watch: {

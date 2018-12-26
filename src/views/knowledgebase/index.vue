@@ -90,7 +90,7 @@
 <script>
 import fetch from '../../assets/utils/fetch.js'
 import config from '../../assets/js/config'
-import {mapState, mapActions} from 'vuex'
+import {mapState} from 'vuex'
 
 export default {
     data(){
@@ -105,9 +105,7 @@ export default {
           
     },
     created() {
-        if (this.userList.length === 0) {
-            this.getUserList()
-        } else {
+        if (this.userList.length > 0) {
             this.memberList = this.userList
         }
         this.dataInit()    
@@ -128,9 +126,6 @@ export default {
         }
     },
     methods:{
-        ...mapActions([
-            'getUserList'
-        ]),
         //初始化数据
         dataInit(){
             let _this = this

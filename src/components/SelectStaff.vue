@@ -77,7 +77,7 @@
 
 <script>
     import fetch from '../assets/utils/fetch.js'
-    import { mapState, mapActions } from 'vuex'
+    import { mapState } from 'vuex'
 
     export default {
         props: ['multiple', 'member-type', 'type', 'otherslot'],
@@ -140,14 +140,10 @@
         },
 
         mounted() {
-            if (this.department.length === 0) {
-                this.getDepartment()
-            } else {
+            if (this.department.length >0) {
                 this.departmentUsers = this.department
             }
-            if (this.userList.length === 0) {
-                this.getUserList()
-            } else {
+            if (this.userList.length > 0) {
                 this.normalUsers = this.userList
             }
         },
@@ -162,10 +158,6 @@
         },
 
         methods: {
-            ...mapActions([
-                'getDepartment', // 获取部门数据
-                'getUserList',
-            ]),
             closeTeam: function () {
                 this.teamShow = !this.teamShow
             },

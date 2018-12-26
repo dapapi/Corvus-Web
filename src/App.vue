@@ -12,7 +12,7 @@
 </template>
 
 <script>
-
+    import { mapActions } from 'vuex'
     import LeftMenu from '@/components/LeftMenu.vue'
     import getMessage from '@/components/getMessage.vue'
     import LeftManage from '@/components/LeftManage.vue'
@@ -50,7 +50,16 @@
             },
 
         },
-        methods: {}
+        beforeMount () {
+            this.getUserList()
+            this.getDepartment()
+        },
+        methods: {
+            ...mapActions([
+                'getUserList',
+                'getDepartment'
+            ])
+        }
     };
 </script>
 

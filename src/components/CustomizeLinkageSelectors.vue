@@ -40,7 +40,7 @@
 
 </template>
 <script>
-import { mapState, mapActions } from 'vuex'
+import { mapState } from 'vuex'
 import fetch from '@/assets/utils/fetch.js'
 import config from '@/assets/js/config'
 
@@ -110,14 +110,10 @@ import config from '@/assets/js/config'
             }
         },
         created(){
-            if (this.department.length === 0) {
-                this.getDepartment()
-            } else {
+            if (this.department.length > 0) {
                 this.departments = this.department
             }
-            if (this.userList.length === 0) {
-                this.getUserList()
-            } else {
+            if (this.userList.length > 0) {
                 this.users = this.userList
             }
         },
@@ -162,10 +158,6 @@ import config from '@/assets/js/config'
         },
 
         methods: {
-            ...mapActions([
-                'getDepartment', // 获取部门数据
-                'getUserList'
-            ]),
             refresh: function () {
                 $('#child' + this.n).selectpicker('refresh');
             },

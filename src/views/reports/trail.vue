@@ -150,7 +150,7 @@
 </template>
 
 <script>
-    import { mapState, mapActions } from 'vuex'
+    import { mapState } from 'vuex'
     import fetch from '../../assets/utils/fetch.js'
     import config from '../../assets/js/config'
 
@@ -220,9 +220,7 @@
         },
         mounted() {
             this.getReport();
-            if (this.department.length === 0) {
-                this.getDepartment()
-            } else {
+            if (this.department.length > 0) {
                 this.departmentsInfo = this.departmentsInfo.concat(this.department)
             }
             this.getStars();
@@ -242,9 +240,6 @@
             }
         },
         methods: {
-            ...mapActions([
-                'getDepartment', // 获取部门数据
-            ]),
             getReport(start_time = null, end_time = null) {
                 if (!start_time) {
                     if (!this.start_time) {

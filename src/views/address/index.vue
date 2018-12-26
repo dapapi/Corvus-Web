@@ -203,7 +203,7 @@
 <script>
     import fetch from '../../assets/utils/fetch.js'
     import Cookies from 'js-cookie'
-    import { mapState, mapActions } from 'vuex'
+    import { mapState } from 'vuex'
 
     export default {
         name: 'portal',
@@ -220,9 +220,6 @@
                 this.normalUsers = res;
                 this.setDefaultInfo(JSON.parse(Cookies.get('user')).id)
             })
-            if (this.department.length === 0) {
-                this.getDepartment()
-            }
         },
         computed: {
             ...mapState([
@@ -230,9 +227,6 @@
             ]),
         },
         methods: {
-            ...mapActions([
-                'getDepartment', // 获取部门数据
-            ]),
             memberChange() {
                 this.setDefaultInfo(this.$store.state.newPrincipalInfo.id)
             },

@@ -147,9 +147,7 @@ export default {
             // 清空state
             this.cancelAdd()
         })
-        if (this.department.length === 0) {
-            this.getDepartment()
-        } else {
+        if (this.department.length > 0) {
             this.departmentPId = this.department[0].department_pid;
             this.departmentId = this.department[0].id;
         }

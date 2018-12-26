@@ -121,7 +121,7 @@
 <script>
     import fetch from '../../assets/utils/fetch.js'
     import config from '../../assets/js/config'
-    import {mapState, mapActions} from 'vuex'
+    import {mapState} from 'vuex'
 
     const projectStatusArr = [{name: '全部', value: ''}, ...config.projectStatusArr];
 
@@ -158,17 +158,13 @@
         mounted() {
             this.getClients();
             this.getProjects();
-            // this.getAllMembers();
-            if (this.userList.length === 0) {
-                this.getUserList()
-            } else {
+            if (this.userList.length > 0) {
                 for (let i = 0; i < this.userList.length; i++) {
                     this.allUsers.push({
                         name: this.userList[i].name,
                         value: this.userList[i].id
                     })
                 }
-                console.log(this.allUsers)
             }
         },
 
@@ -189,14 +185,10 @@
                         value: this.userList[i].id
                     })
                 }
-                console.log(this.allUsers)
             }
         },
 
         methods: {
-            ...mapActions([
-                'getUserList'
-            ]),
             getProjects: function (pageNum = 1, type = null) {
                 let data = {
                     page: pageNum,
@@ -250,18 +242,6 @@
                     _this.total_pages = response.meta.pagination.total_pages;
                 })
             },
-
-            // getAllMembers: function () {
-            //     let _this = this;
-            //     fetch('get', '/users').then(function (response) {
-            //         for (let i = 0; i < response.data.length; i++) {
-            //             _this.allUsers.push({
-            //                 name: response.data[i].name,
-            //                 value: response.data[i].id
-            //             })
-            //         }
-            //     })
-            // },
 
             getClients: function () {
                 let _this = this;

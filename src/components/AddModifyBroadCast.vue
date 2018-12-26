@@ -71,7 +71,7 @@
 </template>
 
 <script>
-import { mapState, mapActions } from 'vuex'
+import { mapState } from 'vuex'
 import fetch from '@/assets/utils/fetch.js'
 import config from '@/assets/js/config'
 
@@ -97,9 +97,7 @@ export default {
         }
     },
     created(){
-        if (this.department.length === 0) {
-            this.getDepartment()
-        } else {
+        if (this.department.length > 0) {
             this.departments = this.department
         }
     },
@@ -136,9 +134,6 @@ export default {
         }
     },
     methods:{
-        ...mapActions([
-            'getDepartment', // 获取部门数据
-        ]),
         //数据初始化
         noteInit(){
             if(this.notedata){
