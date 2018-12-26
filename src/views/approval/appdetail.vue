@@ -35,7 +35,7 @@
             </div>
             <div class="page-header  page-header-bordered m-20 pl-10" >
                 <h6 class="page-title title-status">当前状态
-                    <div class="approver">{{String(pending.name).slice(-2)}}</div>
+                    <div class="approver" :style="{backgroundColor:String(pending.icon_url).split('|')[0]}">{{String(pending.icon_url).split('|')[1]}}</div>
                     <span v-if="info.approval[0].form_status=== 231">{{currentStatus.slice(0,1)}}{{pending.name}}{{currentStatus.slice(1)}}</span>
                     <span v-if="info.approval[0].form_status !== 231">{{pending.name}}{{currentStatus}}</span>
                 <div v-if="!isApproverMode">
@@ -106,6 +106,7 @@
                                             :formid='info.approval[0].project_number' 
                                             :formstatus='currentStatus' 
                                             @waitingfor='waitingFor'
+                                            :notice="info.participant"
                                             ref='approvalProgress' />
                                 </div>
                             </div>

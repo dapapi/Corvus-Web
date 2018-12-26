@@ -10,7 +10,6 @@
                 <section class="page-aside-section">
                     <h5 class="page-title pl-30 mb-50">审批</h5>
                     <div v-for="(item, index) in approvalSort" :key="index" class="col-md-10 ml-30">
-                        
                         <p @click="toggleSubSort(item.key)" class="approval-sort-title"> 
                             <span class="icon md-caret-right font-size-20 mr-10 leftImg" :class="!showSort.includes(item.key)?'anmite':''"></span>
                             {{item.value}}</p>

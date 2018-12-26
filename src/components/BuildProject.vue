@@ -146,7 +146,7 @@
                     </div>
                 </div>
                 <template v-if="projectType != 5">
-                    <ApprovalProgress :formid='projectType' />
+                    <ApprovalProgress :formid='projectType'/>
                 </template>
 
                 <div class="modal-footer">
@@ -182,7 +182,8 @@
                 trailsAllInfo: '',
                 addInfoArr: {},
                 projectBaseInfo: {
-                    trail: {}
+                    trail: {},
+                    notice:[]
                 },
                 projectFields: [],
                 approver:[],
@@ -206,16 +207,18 @@
             $('#addProject').on('hidden.bs.modal', function () {
                 _this.refreshAddProjectModal()
             })
-            $('#addProject').on('show.bs.modal', function () {
-                _this.setDefaultValue()
-                 _this.$nextTick(() => {
-                    _this.$refs.trails.setValue(_this.defaultData.trailInfo.data.id)   
-                    _this.$nextTick(function(){
-                        _this.addProjectTrail(_this.defaultData.trailInfo.data.id)
-                        _this.$forceUpdate()
-                    })
-                })  
-            })
+            if(this.defaultData){
+                $('#addProject').on('show.bs.modal', function () {
+                    _this.setDefaultValue()
+                    _this.$nextTick(() => {
+                        _this.$refs.trails.setValue(_this.defaultData.trailInfo.data.id)   
+                        _this.$nextTick(function(){
+                            _this.addProjectTrail(_this.defaultData.trailInfo.data.id)
+                            _this.$forceUpdate()
+                        })
+                    })  
+                })
+            }
         },
         methods: {
             defaultDataFilter(){
@@ -347,6 +350,10 @@
                     } else if (resource == 4 || resource == 5) {
                         this.projectBaseInfo.trail.resource = this.$store.state.selectPrincipalInfo.id
                     }
+                }
+                let tempPart = this.$store.state.newParticipantsInfo
+                for (const key in tempPart) {
+                     this.projectBaseInfo.notice.push(tempPart.id)
                 }
                 let _this = this;
                 fetch('post', '/projects', this.projectBaseInfo).then(function (response) {
