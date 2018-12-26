@@ -52,7 +52,7 @@
                     <div class="col-md-12 example clearfix" v-show="projectType != 5 && starsArr.length > 0">
                         <div class="col-md-2 text-right float-left px-0">目标艺人</div>
                         <div class="col-md-10 float-left">
-                            <Selectors multiple="true" :options="starsArr" ref="intentionArtist"
+                            <Selectors multiple="true" :options="allStarsArr" ref="intentionArtist"
                                        placeholder="请选择目标艺人"
                                        @change="(value) => addProjectBaseInfo(value, 'expectations')"></Selectors>
                         </div>
@@ -168,6 +168,7 @@
             ApprovalProgress
         },
         name: "BuildProject",
+        //projectType 项目类型   projectFieldsArr 不同项目类型的数据   
         props: ['projectType', 'projectFieldsArr','defaultData'],
         data() {
             return {
@@ -177,6 +178,7 @@
                 trailOrigin: '',
                 trailOriginArr: config.trailOrigin,
                 starsArr: [],
+                bloggerArr:[],
                 startTime: '',
                 trailOriginContent: '',
                 trailsAllInfo: '',
@@ -196,9 +198,17 @@
                 return this.projectFields = newValue
             },
         },
+        computed:{
+            allStarsArr(){
+                console.log([...this.starsArr,...this.bloggerArr]);
+                return [...this.starsArr,...this.bloggerArr]
+            }
+        
+        },
         created(){
             this.getStars();
             this.getTrail();
+            this.getBloggers()
         },
         mounted() {
             let _this = this;
@@ -221,6 +231,12 @@
             }
         },
         methods: {
+            getBloggers(){
+                let _this = this
+                fetch('get','/bloggers/all').then((params) => {
+                    this.bloggerArr = params.data
+                })
+            },
             defaultDataFilter(){
                 if(!this.defaultData) {
                     return
@@ -278,6 +294,7 @@
                     artistsArr.push(trailInfo.expectations.data[i].id)
                 }
                 this.$refs.intentionArtist.setValue(artistsArr);
+                console.log(artistsArr);
                 this.projectBaseInfo.expectations = artistsArr;
                 this.$refs.priorityLevel.setValue(trailInfo.priority);
                 this.projectBaseInfo.priority = trailInfo.priority;
@@ -337,6 +354,7 @@
             addProject: function () {
                 this.projectBaseInfo.fields = this.addInfoArr;
                 this.projectBaseInfo.type = this.projectType;
+                
                 if (this.projectBaseInfo.trail && this.projectBaseInfo.trail.resource_type) {
                     let resource = this.projectBaseInfo.trail.resource_type;
                     if (resource == 1 || resource == 2 || resource == 3) {
@@ -346,7 +364,6 @@
                     }
                 }
                 let tempPart = this.$store.state.newParticipantsInfo
-                console.log(tempPart);
                 if(tempPart.length>0){
                     this.projectBaseInfo.notice= []
                     for (const key in tempPart) {
