@@ -55,7 +55,7 @@
                         <button class="btn btn-primary" @click="addProjectTimeout(list.type)" >重新提交</button>
                     </i>
                     <i v-if="info.approval[0].form_status==233">
-                        <button class="btn btn-primary">作废</button>
+                        <button class="btn btn-primary" @click="addProjectTimeout(list.type)" >重新提交</button>
                     </i>
                 </div>
                 <div v-if="isCurrentApprover">

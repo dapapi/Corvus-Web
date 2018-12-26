@@ -14,7 +14,16 @@ axios.defaults.baseURL = config.apiUrl;
 //POST传参序列化
 axios.interceptors.request.use((config) => {
     if (config.method === 'post') {
-        config.data = qs.stringify(config.data);
+        let flag = true
+        for (const key in config.data) {
+            if (config.data[key].length ==0) {
+                flag = false
+                break
+            }
+        }
+        if(flag == true){
+            config.data = qs.stringify(config.data);
+        }
     }
     return config;
 }, (error) => {

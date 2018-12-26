@@ -44,7 +44,7 @@
                                 <i class="iconfont icon-kehu pr-2" aria-hidden="true"></i>负责人
                             </div>
                             <div class="font-weight-bold float-left" v-if="trailInfo.principal">
-                                {{ trailInfo.principal.data.name }}
+                                {{ principalName }}
                             </div>
                         </div>
                     </div>
@@ -604,6 +604,7 @@
                 trailOriginPerson: '',
                 taskCount: {},
                 currentUser:{},
+                principalName:'',
             }
         },
         created() {
@@ -661,9 +662,6 @@
                     }
                 },
                 deep: true
-            },
-            'trailInfo.fee': function (newValue) {
-                this.changeInfo.fee = newValue
             },
             'trailInfo.brand': function (newValue) {
                 this.changeInfo.brand = newValue
@@ -816,6 +814,7 @@
                         _this.$store.state.newPrincipalInfo.id = Number(_this.trailInfo.resource)
                         _this.$store.state.principalInfo = _this.trailInfo.principal.data
                     })
+                    _this.principalName = _this.trailInfo.principal.data.name
                 })
             },
 
@@ -1044,7 +1043,7 @@
             },
 
             changeTrailFee: function (value) {
-                this.trailInfo.fee = value
+                this.changeInfo.fee = value
             },
 
             changeTrailBrand: function (value) {

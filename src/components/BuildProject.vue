@@ -245,7 +245,7 @@
                 this.$refs.trailOrigin.setValue('');
                 this.trailOriginContent = '';
                 this.trailOrigin = '';
-                this.projectBaseInfo = {trail: {}};
+                this.projectBaseInfo = {trail: {},notice:[]};
                 this.$store.dispatch('changePrincipal', {data: {}});
                 this.$store.dispatch('changePrincipal', {type: 'selector', data: {}});
                 this.projectFields = [];
@@ -259,12 +259,6 @@
                     this.$refs.endTime.setValue(this.defaultData.list.end_at);
                     this.$refs.projectExpenditureFee.setValue(this.defaultData.list.expenditure_fee)
                     this.$store.dispatch('changePrincipal', this.defaultData.list.principal);
-                    for (const key in this.newArr) {
-                        if (object.hasOwnProperty(key)) {
-                            const element = object[key];
-                            
-                        }
-                    }
                 }
             },
             addProjectTrail: function (value) {
@@ -352,9 +346,16 @@
                     }
                 }
                 let tempPart = this.$store.state.newParticipantsInfo
-                for (const key in tempPart) {
-                     this.projectBaseInfo.notice.push(tempPart.id)
+                if(tempPart.length>0){
+                    for (const key in tempPart) {
+                        this.projectBaseInfo.notice = []
+                        this.projectBaseInfo.notice.push(tempPart[key].id)
+                    }
+                }else{
+                    // Object.assign(this.projectBaseInfo,{'notice':['adsfsadfasdfasd']})
+                    // this.projectBaseInfo.notice = JSON.stringify(this.projectBaseInfo.notice)
                 }
+                console.log(this.projectBaseInfo);
                 let _this = this;
                 fetch('post', '/projects', this.projectBaseInfo).then(function (response) {
                     $('#addProject').modal('hide');
