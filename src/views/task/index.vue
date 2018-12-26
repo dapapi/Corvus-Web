@@ -13,8 +13,7 @@
                                @blur="changeTaskName"
                                id="inputPlaceholder"
                                v-model="taskNameSearch"
-                               placeholder="请输入任务名称"
-                               style="width: 220px">
+                               placeholder="请输入任务名称">
                     </div>
                     <div class="col-md-3 example float-left">
                         <Selectors :options="taskTypeArr"
@@ -71,6 +70,14 @@
                                aria-controls="forum-present"
                                aria-expanded="false"
                                role="tab">我创建的</a>
+                        </li>
+                        <li class="nav-item" role="presentation" @click="getMyTasks(1,4)">
+                            <a class="nav-link"
+                               data-toggle="tab"
+                               href="#forum-task"
+                               aria-controls="forum-present"
+                               aria-expanded="false"
+                               role="tab">我分配的</a>
                         </li>
                     </ul>
                 </div>
@@ -316,6 +323,7 @@
                     params.keyword = this.taskNameSearch;
                 }
                 if (this.taskStatusSearch) {
+                    console.log(this.taskStatusSearch)
                     params.status = this.taskStatusSearch;
                 }
                 if (this.taskTypeSearch) {

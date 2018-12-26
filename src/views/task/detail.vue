@@ -8,8 +8,9 @@
                    data-toggle="dropdown" aria-expanded="false"></i>
                 <div class="dropdown-menu dropdown-menu-right task-dropdown-item" aria-labelledby="taskDropdown"
                      role="menu" x-placement="bottom-end">
-                    <a class="dropdown-item" role="menuitem" @click="changeTaskStatus(3)">终止</a>
-                    <a class="dropdown-item" role="menuitem" @click="changeTaskStatus(2)">完成</a>
+                    <a class="dropdown-item" role="menuitem" @click="changeTaskStatus(3)" v-show="taskInfo.status != 3">终止</a>
+                    <a class="dropdown-item" role="menuitem" @click="changeTaskStatus(1)" v-show="taskInfo.status != 1">激活</a>
+                    <a class="dropdown-item" role="menuitem" @click="changeTaskStatus(2)" v-show="taskInfo.status != 2">完成</a>
                     <!-- <a class="dropdown-item" role="menuitem" data-toggle="modal" data-target="#customizeFieldContent">自定义字段</a> -->
                     <a class="dropdown-item" role="menuitem" @click="privacyTask">
                         {{taskInfo.privacy == 1 ? '转公开':'转私密'}}</a>
@@ -57,14 +58,14 @@
                                 {{ taskInfo.end_at }}
                             </div>
                         </div>
-                        <div class="float-right text-right pr-0">
+                        <div class="float-right text-right pr-0" v-if="taskInfo.resource">
                             <span>关联资源</span>
                             <span class="pl-2 font-weight-bold">
-                                {{taskInfo.resource?taskInfo.resource.data.resource.data.title:''}}-
-                                {{taskInfo.resource? taskInfo.resource.data.resourceable.data.name
-                                                    || taskInfo.resource.data.resourceable.data.nickname
-                                                    || taskInfo.resource.data.resourceable.data.title
-                                                    || taskInfo.resource.data.resourceable.data.company:''}}
+                                {{taskInfo.resource.data.resource.data.title}} -
+                                <template v-if="taskInfo.resource.data.resourceable_type === 'project'">{{ taskInfo.resource.data.resource.data.title }}</template>
+                                <template v-if="taskInfo.resource.data.resourceable_type === 'client'">{{ taskInfo.resource.data.resource.data.company }}</template>
+                                <template v-if="taskInfo.resource.data.resourceable_type === 'artist'">{{ taskInfo.resource.data.resource.data.name }}</template>
+                                <template v-if="taskInfo.resource.data.resourceable_type === 'blogger'">{{ taskInfo.resource.data.resource.data.nickname }}</template>
                             </span>
                         </div>
                     </div>
@@ -247,8 +248,10 @@
                              data-target="#addChildTask">
                             <button type="button"
                                     class="site-action-toggle btn-raised btn btn-success btn-floating waves-effect waves-classic">
-                                <i class="front-icon iconfont icon-tianjia1 animation-scale-up" aria-hidden="true" style="font-size:30px"></i>
-                                <i class="back-icon iconfont icon-tianjia1 animation-scale-up" aria-hidden="true" style="font-size:30px"></i>
+                                <i class="front-icon iconfont icon-tianjia1 animation-scale-up" aria-hidden="true"
+                                   style="font-size:30px"></i>
+                                <i class="back-icon iconfont icon-tianjia1 animation-scale-up" aria-hidden="true"
+                                   style="font-size:30px"></i>
                             </button>
                         </div>
 
@@ -353,7 +356,8 @@
                             <div class="card-text py-5 clearfix">
                                 <div class="col-md-1 float-left text-right pl-0">视频链接</div>
                                 <div class="col-md-11 float-left font-weight-bold">
-                                    <router-link :to="questionInfo.production ? questionInfo.production.data[0].link : ''">
+                                    <router-link
+                                            :to="questionInfo.production ? questionInfo.production.data[0].link : ''">
                                         <div class="edit-wrap" style="color: #3298DC; cursor: pointer; width: 100%;">
                                             {{ questionInfo.production ? questionInfo.production.data[0].link : '' }}
                                         </div>
@@ -390,7 +394,8 @@
                                             <div style="width: 50px; padding-left: 10px; float: left;">
                                                 <!-- {{ items.selectrows.data.filter(n => n.review_question_item_id ===
                                                 item.id).length / hasAnsweredArr.length * 100 }}% -->
-                                                 {{ hasAnsweredArr.length > 0 ? items.selectrows.data.filter(n => n.review_question_item_id ===
+                                                {{ hasAnsweredArr.length > 0 ? items.selectrows.data.filter(n =>
+                                                n.review_question_item_id ===
                                                 item.id).length / hasAnsweredArr.length * 100: '0' }}%
                                             </div>
                                             <div style="width: 50px; padding-left: 10px; float: right;">
@@ -725,10 +730,12 @@
                     if (status === 2) {
                         _this.taskInfo.status = status;
                         toastr.success("完成任务成功");
-
                     } else if (status === 3) {
                         toastr.success("暂停任务成功");
+                    } else if (status === 1) {
+                        toastr.success("激活任务成功");
                     }
+                    _this.getTask();
                 })
             },
 
@@ -744,7 +751,7 @@
                 let _this = this;
                 fetch('delete', '/tasks/' + this.taskId).then(function () {
                     toastr.success("删除任务成功");
-                    this.$router.push({path: '/tasks'})
+                    _this.$router.push({path: '/tasks'})
                 })
             },
 
@@ -1036,12 +1043,12 @@
                     if (!this.questionInfo) {
                         return
                     }
-                    for(const n of this.questionInfo.reviewanswer.data) {
+                    for (const n of this.questionInfo.reviewanswer.data) {
                         if (n.user_id === this.user.id) {
                             this.visible = true
                             fetch('get', `/reviews/${id}/questions/?include=items,selectrows.creator`).then(res => {
                                 // if (res.meta.error) {
-                                    // 此处为问卷过期判断
+                                // 此处为问卷过期判断
                                 // }
                                 this.questionData = res.data
                                 this.answerList = new Array(this.questionData.length)
