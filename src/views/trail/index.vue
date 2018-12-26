@@ -396,7 +396,7 @@
                     toastr.error("线索名称为必填")
                     return false;
                 } else if (!this.trailOrigin) {
-                    toastr.error("线索为必填")
+                    toastr.error("线索来源为必填")
                     return false;
                 } else if (!this.trailPrincipal && !this.currentUser) {
                     toastr.error("负责人为必填")

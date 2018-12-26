@@ -277,10 +277,7 @@
 
             addClient: function () {
                
-                if (this.clientContactPhone.length !== 11) {
-                    toastr.error('手机号码格式不对！');
-                    return
-                }
+                
                 if (!this.clientName) {
                     toastr.error('请输入公司名称！');
                     return
@@ -299,6 +296,10 @@
                 }
                 if (!this.clientContactType) {
                     toastr.error('请选择关键决策人！')
+                    return
+                }
+                if (this.clientContactPhone.length !== 11) {
+                    toastr.error('手机号码格式不对！');
                     return
                 }
                 if (!this.clientContactPosition) {

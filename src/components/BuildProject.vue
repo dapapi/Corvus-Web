@@ -168,6 +168,7 @@
             ApprovalProgress
         },
         name: "BuildProject",
+        //projectType 项目类型   projectFieldsArr 不同项目类型的数据   
         props: ['projectType', 'projectFieldsArr','defaultData'],
         data() {
             return {
@@ -343,6 +344,7 @@
             addProject: function () {
                 this.projectBaseInfo.fields = this.addInfoArr;
                 this.projectBaseInfo.type = this.projectType;
+                
                 if (this.projectBaseInfo.trail && this.projectBaseInfo.trail.resource_type) {
                     let resource = this.projectBaseInfo.trail.resource_type;
                     if (resource == 1 || resource == 2 || resource == 3) {
