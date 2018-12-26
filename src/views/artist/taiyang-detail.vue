@@ -26,36 +26,52 @@
         <div class="page-content container-fluid">
 
             <div class="panel col-md-12">
-                <div class="card-block">
-                    <h4 class="card-title"><img width="40px" height="40px" style="border-radius:50%" class="mr-5"
-                                                :src="avatar" alt="">{{artistInfo.name}}</h4>
-                    <div class="card-text clearfix example ml-50">
-                        <div class="col-md-6 float-left pl-0">
-                            <div class="float-left pl-0 pr-2 col-md-2">
-                                <i class="iconfont icon-yonghu pr-2" aria-hidden="true"></i>经理人
-                            </div>
-                            <div class="font-weight-bold float-left" v-if="artistInfo.broker">
-                                <template v-for="broker in artistInfo.broker.data">
-                                    {{ broker.name }}
-                                </template>
-                            </div>
+                <div class="card-block clearfix">
+                    <!-- <img  v-if="avatar" width="80px" height="80px" style="border-radius:50%" class="mr-5 float-left"
+                                                :src="avatar" alt="">
+                    <img v-else width="80px" height="80px" style="border-radius:50%" class="mr-5 float-left"> -->
+                    <Upload @change='getUploadUrl' class="upload-image float-left mr-5" style="width:80px;height:80px;border-radius:50%;position:relative">
+                        <div  class="puls" :style="{ backgroundImage: 'url(' + avatar + ')' }" v-if="avatar">
                         </div>
-                        <div class="col-md-6 float-left pl-0">
-                            <div class="float-left pl-0 pr-2 col-md-2">
-                                <i class="iconfont icon-yonghu pr-2" aria-hidden="true"></i>宣传人
-                            </div>
-                            <div class="font-weight-bold float-left" v-if="artistInfo.publicity">
-                                <template v-for="publicity in artistInfo.publicity.data">
-                                    {{ publicity.name }}
-                                </template>
-                            </div>
+                        <!-- <div class="puls plus_hover">
+                            <span>+</span>
+                        </div> -->
+                        <div class="puls" v-if="!avatar">
+                            <img src="https://res-crm.papitube.com/image/artist-no-avatar.png" alt="">
                         </div>
+                        
+                    </Upload>
+                    <!-- src="https://res.papitube.com/corvus/images/taiyang-icon.png" alt=""> -->
+                    <div class="float-left ml-10" style="width:calc(100% - 100px)">
+                        <h4 class="card-title">{{artistInfo.name}}</h4>
+                        <div class=" clearfix example">
+                            <div class="col-md-6 float-left pl-0">
+                                <div class="float-left pl-0 pr-2 col-md-2">
+                                    <i class="iconfont icon-yonghu pr-2" aria-hidden="true"></i>经理人
+                                </div>
+                                <div class="font-weight-bold float-left" v-if="artistInfo.broker">
+                                    <template v-for="broker in artistInfo.broker.data">
+                                        {{ broker.name }}
+                                    </template>
+                                </div>
+                            </div>
+                            <div class="col-md-6 float-left pl-0">
+                                <div class="float-left pl-0 pr-2 col-md-2">
+                                    <i class="iconfont icon-yonghu pr-2" aria-hidden="true"></i>宣传人
+                                </div>
+                                <div class="font-weight-bold float-left" v-if="artistInfo.publicity">
+                                    <template v-for="publicity in artistInfo.publicity.data">
+                                        {{ publicity.name }}
+                                    </template>
+                                </div>
+                            </div>
 
+                        </div>
                     </div>
                 </div>
-                <div class="clearfix ml-50">
+                <div class="clearfix ml-10">
                     <div class="col-md-6 float-left pl-0 mb-20" style="border-right: 1px solid #eee">
-                        <div class="col-md-6"><i class="iconfont icon-iconset0399"></i> 任务 {{taskNum}}</div>
+                        <div class="col-md-6"><i class="iconfont icon-iconset0399"></i> 任务</div>
                         <div class="clearfix example" v-for="(item,index) in artistTasksInfo" :key="index"
                              @click="toTask(item.id)" style="cursor: pointer;">
                             <div class="col-md-3 float-left">
@@ -275,18 +291,9 @@
                         <div class="tab-pane animation-fade  pb-20 fixed-button-father" id="forum-artist-bill"
                              role="tabpanel">
                             <div class="clearfix my-10">
-                                <div class="float-left" style="padding: .715rem 1.429rem">
-                                    <div class="float-left pr-40">合同金额 <span class="money-color">10000元</span></div>
-                                    <div class="float-left pr-40">支出金额 <span class="money-color">1000元0</span></div>
-                                    <div class="float-left pr-40">税费 <span class="money-color">10000元</span></div>
-                                    <div class="float-left pr-40">papi分成 <span class="money-color">10000元</span></div>
-                                    <div class="float-left pr-40">bigger分成 <span class="money-color">10000元</span></div>
-                                    <div class="float-left pr-40">我司分成 <span class="money-color">10000元</span></div>
-                                </div>
-                                <div class="float-right" style="padding: .715rem 0">
-                                     <span class="pointer-content hover-content" data-toggle="modal"
-                                           data-target="#addBill">
-                                         <i class="iconfont icon-tianjia pr-5"></i>新增结算单</span>
+                                <div class="float-left my-10 ml-10">
+                                    <div class="float-left pr-40">收款金额 <span class="money-color">10000元</span></div>
+                                    <div class="float-left pr-40">付款金额 <span class="money-color">1000元0</span></div>
                                 </div>
                             </div>
                             <table class="table table-hover" data-child="tr">
@@ -314,7 +321,7 @@
                                 </tr>
                                 <tbody>
                                 <tr v-for="(bill,index) in artistBillsInfo" :key="index">
-                                    <td>{{ bill.expence_name }}</td>
+                                    <td>{{ bill.expense_name }}</td>
                                     <td>{{ bill.expense_type }}</td>
                                     <td>{{ bill.project_kd_name }}</td>
                                     <td>{{ bill.money }}</td>
@@ -323,10 +330,13 @@
                                 </tr>
                                 </tbody>
                             </table>
+                            
                             <div class="col-md-1" style="margin: 6rem auto" v-if="artistBillsInfo.length === 0">
                                 <img src="https://res.papitube.com/corvus/images/content-none.png" alt=""
                                      style="width: 100%">
                             </div>
+                            <pagination :current_page="current_page" :method="getArtistsBill" :total_pages="total_pages"
+                                    :total="total"></pagination>
                         </div>
                         <!--概况-->
                         <div class="tab-pane animation-fade  pb-20 fixed-button-father" id="forum-artist-base"
@@ -501,7 +511,7 @@
                                             <div class="col-md-10 float-left font-weight-bold">
                                                     <span v-show="isEdit"
                                                           style="color:#01BCD4;cursor:pointer">上传附件</span>
-                                                <FileUploader v-show="isEdit" class="upload"
+                                                <FileUploader v-show="isEdit" class="uploadAttach"
                                                               @change="uploadAttachment"></FileUploader>
                                                 <div class="mt-5" v-for="(attach,index) in affixes" :key="index">
                                                     <span class="mr-20"  >{{attachmentTypeArr.find(item => item.value == attach.type).name}} - {{attach.title}}</span>
@@ -971,20 +981,28 @@
                 selectedCalendar:[],
                 scheduleParticipants:[],
                 previewUrl:'',
-                previewName:''
+                previewName:'',
+                user:{},
+                total: 0,
+                current_page: 1,
+                total_pages: 1,
             }
         },
 
         created() {
             this.getArtist()
-            // this.selectedCalendar[0] = this.$route.params.id
             
         },
         mounted() {
 
             this.getTaskType();
             this.draw();
-            // this.getSchedules()
+            this.getArtistsBill()
+            this.user = JSON.parse(Cookies.get('user'))
+            this.$store.commit('changeNewPrincipal', {
+                name: this.user.nickname,
+                id: this.user.id
+            })
             this.selectedCalendar.push(this.$route.params.id)
             let _this = this;
             $('#distributionBroker').on('hidden.bs.modal', function () {
@@ -1054,13 +1072,18 @@
                 }
                 $('#checkSchedule').modal('show')
             },
-            getArtistsBill: function () {
+            getArtistsBill: function (page = 1) {
                 // if (this.artistBillsInfo.length > 0) {
                 //     return;
                 // }
-                // fetch('get', '/artists/' + this.projectId + '/bill').then(response => {
-                //     this.artistBillsInfo = response.data
-                // })
+                let _this = this
+                
+                fetch('get', `/stars/${this.$route.params.id}/bill`,{page:page}).then(response => {
+                    _this.artistBillsInfo = response.data
+                    _this.current_page = response.meta.pagination.current_page;
+                    _this.total = response.meta.pagination.total;
+                    _this.total_pages = response.meta.pagination.total_pages;
+                })
             },
 
             getTaskType: function () {
@@ -1160,7 +1183,10 @@
             getArtistWorks: function () {
 
             },
-
+            //上传头像 ---修改头像
+            getUploadUrl(res){
+                this.uploadUrl = res
+            },
             changeTaskType: function (value) {
                 this.taskType = value
             },
@@ -1265,8 +1291,9 @@
                     toastr.success('创建成功');
                     $('#addTask').modal('hide');
                     _this.artistTasksInfo.push(response.data)
-                    _this.$store.state.newPrincipalInfo = []
-                    _this.$store.state.newParticipantsInfo = []
+                    _this.setDefaultPrincipal()
+                    // _this.$store.state.newPrincipalInfo = []
+                    // _this.$store.state.newParticipantsInfo = []
                     _this.taskType = ''
                     _this.taskName = ''
                     _this.taskLevel = ''
@@ -1281,6 +1308,14 @@
                     _this.$refs.taskEndTime.setValue('')
                     _this.$refs.taskLevel.setValue('')
                 })
+            },
+            //设置默认负责人
+            setDefaultPrincipal () {
+                this.$store.commit('changeNewPrincipal', {
+                    name: this.user.nickname,
+                    id: this.user.id
+                })
+                this.$store.commit('changeNewParticipantsInfo', [])
             },
             //添加作品
             addWork: function () {
@@ -1576,7 +1611,7 @@
         position: relative;
     }
 
-    .upload {
+    .uploadAttach {
         position: absolute;
         top: 0px;
         left: 0px;
@@ -1668,4 +1703,40 @@
     .file-item:hover .del-affix {
         display: block;
     }
+    .uploadContent{
+        position: relative;
+    }
+    
+    .puls {
+        display: inline-block;
+        background-size: 100px;
+        width: 80px;
+        height: 80px;
+        text-align: center;
+        line-height: 76px;
+        border-radius: 50%;
+        border: 1px dashed #eee;
+
+    }
+    .puls span {
+        font-size: 30px;
+    }
+    .fileupload{
+        position: absolute;
+        top:0px;
+        left:0px;
+        opacity: 0;
+
+    }
+    /* .plus_hover{
+        display:none;
+       position: absolute;
+        left: 0px;
+        top:0px;
+        z-index:99
+    } */
+    /* .plus_hover:hover{
+        display: block;
+        
+    } */
 </style>
