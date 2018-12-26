@@ -4,7 +4,7 @@
             :multiple="multiple" :title="title" v-model="valueListener">
         <selectorsOptions v-for="option in options" v-bind:id="option.id" :val="option.value || option.id"
                           :key="option.id">
-            {{option.name || option.title}}
+            {{option.name || option.title || option.nickname}}
             <!-- 增强组件扩展性和数据通用性 -->
         </selectorsOptions>
     </select>
