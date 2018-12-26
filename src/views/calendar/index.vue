@@ -825,7 +825,7 @@
             delAffix: function (affixId) {
                 fetch('delete', '/schedules/' + this.scheduleData.id + '/affixes/' + affixId).then(response => {
                     toastr.success('删除成功')
-                    this.schedule.affix.data.splice(this.scheduleData.affix.data.map(item => item.id).indexOf(affixId), 1)
+                    this.scheduleData.affixes.data.splice(this.scheduleData.affixes.data.map(item => item.id).indexOf(affixId), 1)
                 })
             },
 
