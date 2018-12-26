@@ -38,12 +38,12 @@
                     <br>
                     <hr/>
                     <br>
-                    <div class="panel-content" v-if="currentData.scope && departments">
+                    <div class="panel-content" v-if="currentData.scope && department">
                         <h5 v-html="currentData.desc" class="broadcast-content"></h5>
                         <div v-if="currentData.accessory"><a :href="currentData.accessory">查看附件</a></div>
                         <h5 class="">公告范围
                             <span  v-for=" item in currentData.scope.data" :key="item.department_id">&nbsp;&nbsp;
-                                <span v-if="departments[0]" class="badge badge-round badge-dark">{{departments.find(departments => departments.id == item.department_id).name}}</span>
+                                <span v-if="department[0]" class="badge badge-round badge-dark">{{department.find(department => department.id == item.department_id).name}}</span>
                             </span>
                             <div class="float-right row mr-20">
                                 <div class="mr-80 add-comment" @click='addComment'><i class="iconfont icon-pinglun"></i>评论</div>
@@ -67,6 +67,7 @@
 </template>
 
 <script>
+import { mapState, mapActions } from 'vuex'
 import fetch from '../../assets/utils/fetch.js'
 import config from '../../assets/js/config'
 export default {
@@ -79,20 +80,29 @@ export default {
             broadCastPost:{},
             paramsId:'',
             isLoading:true,
-            departments:[],
             isComment:false,
         } 
     },
     created() { 
         this.getCurrentId()
         this.dataInit()
-        this.getDepartments()
 
     },
     mounted(){
-        
+        if (this.department.length === 0) {
+            this.getDepartment()
+        }
     },
+    computed: {
+        ...mapState([
+            'department',
+        ]),
+    },
+
     methods:{
+        ...mapActions([
+            'getDepartment', // 获取部门数据
+        ]),
         //初始化数据
         dataInit(){
             let _this = this
@@ -109,12 +119,7 @@ export default {
         goBack(){
             history.go(-1)
         },
-        //获取部门数据
-        getDepartments(){
-            fetch('get','/departments').then((params) => {
-                this.departments = params.data
-            })
-        },
+
         addComment(){
             this.isComment = !this.isComment;
         },

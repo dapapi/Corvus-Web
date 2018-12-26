@@ -122,6 +122,7 @@
 </template>
 
 <script>
+    import { mapState, mapActions } from 'vuex'
     import fetch from '../../assets/utils/fetch.js'
 
     export default {
@@ -205,9 +206,32 @@
         mounted() {
             this.getReport();
             this.getStars();
-            this.getDepartments();
+            if (this.department.length === 0) {
+                this.getDepartment()
+            } else {
+                this.departmentsInfo = this.departmentsInfo.concat(this.department)
+            }
         },
+
+        computed: {
+            ...mapState([
+                'department',
+            ]),
+            _department () {
+                return this.department
+            }
+        },
+
+         watch: {
+            _department () {
+                this.departmentsInfo = this.departmentsInfo.concat(this.department);
+            }
+        },
+
         methods: {
+             ...mapActions([
+                'getDepartment', // 获取部门数据
+            ]),
             getReport(start_time = null, end_time = null) {
                 if (!start_time) {
                     if (!this.start_time) {
@@ -249,12 +273,6 @@
                             name: response.data[i].name
                         })
                     }
-                })
-            },
-
-            getDepartments() {
-                fetch('get', '/departments').then(res => {
-                    this.departmentsInfo = this.departmentsInfo.concat(res.data);
                 })
             },
 

@@ -1,3 +1,5 @@
+import fetch from '../assets/utils/fetch'
+
 export default {
     changeParticipantsInfo: function (data, params) {
 
@@ -55,5 +57,12 @@ export default {
     },
     changeIsExpanded: function (data, params) {
         data.commit('changeIsExpanded', params)
+    },
+
+    // 获取部门数据
+    getDepartment ({commit}, params) {
+        fetch('get', '/departments').then(res => {
+            commit('setDepartment', res.data)
+        })
     }
 }
