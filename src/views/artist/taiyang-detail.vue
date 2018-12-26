@@ -491,7 +491,7 @@
                                             <div class="col-md-10 float-left font-weight-bold">
                                                 <selectors v-show="isEdit" :options="attachmentTypeArr"
                                                            :placeholder="'请选择附件类型'"
-                                                           @change="changeAttachmentType"></selectors>
+                                                           @change="changeAttachmentType" ref="attachType"></selectors>
 
                                             </div>
                                         </div>
@@ -504,10 +504,11 @@
                                                 <FileUploader v-show="isEdit" class="upload"
                                                               @change="uploadAttachment"></FileUploader>
                                                 <div class="mt-5" v-for="(attach,index) in affixes" :key="index">
-                                                    <span class="mr-20">{{attachmentTypeArr.find(item => item.value == attach.type).name}} - {{attach.title}}</span>
+                                                    <span class="mr-20"  >{{attachmentTypeArr.find(item => item.value == attach.type).name}} - {{attach.title}}</span>
+                                                    
                                                     <i class="iconfont icon-shanchu1 mr-10" data-toggle="modal"
                                                        data-target="#affix" @click="getAffixId(attach.id)"></i>
-                                                    <a :href="attach.url" class="md-download"></a>
+                                                    <a data-toggle="modal" data-target='#docPreview' @click="previewFile(attach.url,attach.title)" class="md-download"></a>
                                                 </div>
                                             </div>
                                         </div>
@@ -590,7 +591,7 @@
                             <div class="col-md-2 text-right float-left">任务类型</div>
                             <div class="col-md-10 float-left pl-0">
                                 <selectors :options="taskTypeArr" :placeholder="'请选择任务类型'"
-                                           @change="changeTaskType"></selectors>
+                                           @change="changeTaskType" ref="taskType"></selectors>
                             </div>
                         </div>
                         <div class="example">
@@ -615,25 +616,25 @@
                             <div class="col-md-2 text-right float-left pl-0">任务优先级</div>
                             <div class="col-md-10 float-left pl-0">
                                 <selectors :options="taskLevelArr" :placeholder="'请选择任务优先级'"
-                                           @change="changeTaskLevel"></selectors>
+                                           @change="changeTaskLevel" ref="taskLevel"></selectors>
                             </div>
                         </div>
                         <div class="example">
                             <div class="col-md-2 text-right float-left">开始时间</div>
                             <div class="col-md-5 float-left pl-0">
-                                <datepicker @change="changeStartTime" :placeholder="'请输入开始时间'"></datepicker>
+                                <datepicker @change="changeStartTime" :placeholder="'请输入开始时间'" ref="taskStartDate"></datepicker>
                             </div>
                             <div class="col-md-5 float-left pl-0">
-                                <timepicker :default="startMinutes" @change="changeStartMinutes"></timepicker>
+                                <timepicker :default="startMinutes" @change="changeStartMinutes" ref="taskStartTime"></timepicker>
                             </div>
                         </div>
                         <div class="example">
                             <div class="col-md-2 text-right float-left">截止时间</div>
                             <div class="col-md-5 float-left pl-0">
-                                <datepicker @change="changeEndTime" :placeholder="'请输入结束时间'"></datepicker>
+                                <datepicker @change="changeEndTime" :placeholder="'请输入结束时间'" ref="taskEndDate"></datepicker>
                             </div>
                             <div class="col-md-5 float-left pl-0">
-                                <timepicker :default="endMinutes" @change="changeEndMinutes"></timepicker>
+                                <timepicker :default="endMinutes" @change="changeEndMinutes" ref="taskEndTime"></timepicker>
                             </div>
                         </div>
                         <div class="example">
@@ -688,13 +689,13 @@
                         <div class="example">
                             <div class="col-md-2 text-right float-left">作品发布时间</div>
                             <div class="col-md-10 float-left">
-                                <datepicker @change="changeWorkReleaseTime"></datepicker>
+                                <datepicker @change="changeWorkReleaseTime" ref="workTime" :placeholder="'请输入时间'"></datepicker>
                             </div>
                         </div>
                         <div class="example">
                             <div class="col-md-2 text-right float-left">作品类型</div>
                             <div class="col-md-10 float-left">
-                                <selectors :options="workTypeArr" @change="changeWorkType"></selectors>
+                                <selectors :options="workTypeArr" @change="changeWorkType" ref="workType"></selectors>
                             </div>
                         </div>
                         <div class="example">
@@ -720,7 +721,7 @@
                 </div>
             </div>
         </div>
-
+        <!--隐私设置-->
         <div class="modal fade" id="addPrivacy" aria-hidden="true" aria-labelledby="addLabelForm"
              role="dialog" tabindex="-1">
             <div class="modal-dialog modal-simple">
@@ -896,6 +897,8 @@
                 </div>
             </div>
         </div>
+        <!--附件预览-->
+        <DocPreview :url="previewUrl" :givenFileName="previewName" />
     </div>
 </template>
 
@@ -966,7 +969,9 @@
                 selectedDate:'',
                 scheduleData:'',
                 selectedCalendar:[],
-                scheduleParticipants:[]
+                scheduleParticipants:[],
+                previewUrl:'',
+                previewName:''
             }
         },
 
@@ -1187,12 +1192,15 @@
 
             //     this.$store.state.newPrincipalInfo = {id:this.$route.params.id}
             // },
+
+            //添加任务
             addTask: function () {
                 let participant_ids = [];
                 let start, end, startMin, endMin
                 for (let i = 0; i < this.$store.state.newParticipantsInfo.length; i++) {
                     participant_ids.push(this.$store.state.newParticipantsInfo[i].id)
                 }
+
                 if (!this.taskType) {
                     toastr.error('请选择任务类型')
                     return false
@@ -1205,18 +1213,31 @@
                     toastr.error('请选择负责人')
                     return false
                 }
-                if (!this.startMinutes) {
-                    toastr.error('请选择任务开始时间')
-                    return false
-                }
-                if (!this.endMinutes) {
-                    toastr.error('请选择任务结束时间')
+                if (participant_ids.length <= 0) {
+                    toastr.error('请选择参与人')
                     return false
                 }
                 if (!this.taskLevel) {
                     toastr.error('请选择任务优先级')
                     return false
                 }
+                if(!this.startTime){
+                    toastr.error('请选择任务开始日期')
+                    return false
+                }
+                if (!this.startMinutes) {
+                    toastr.error('请选择任务开始时间')
+                    return false
+                }
+                if(!this.endTime){
+                    toastr.error('请选择任务结束日期')
+                    return false
+                }
+                if (!this.endMinutes) {
+                    toastr.error('请选择任务结束时间')
+                    return false
+                }
+                
                 //判断开始时间必须早于结束时间
                 startMin = this.startMinutes.split(':')
                 endMin = this.endMinutes.split(':')
@@ -1226,10 +1247,7 @@
                     toastr.error('结束时间必须晚于开始时间,请重新选择时间');
                     return false;
                 }
-                if (participant_ids.length <= 0) {
-                    toastr.error('请选择参与人')
-                    return false
-                }
+                
                 let data = {
                     title: this.taskName,
                     principal_id: this.$store.state.newPrincipalInfo.id,
@@ -1249,26 +1267,43 @@
                     _this.artistTasksInfo.push(response.data)
                     _this.$store.state.newPrincipalInfo = []
                     _this.$store.state.newParticipantsInfo = []
+                    _this.taskType = ''
+                    _this.taskName = ''
+                    _this.taskLevel = ''
+                    _this.startTime = ''
+                    _this.endTime = ''
+                    _this.startMinutes = ''
+                    _this.endMinutes = ''
+                    _this.$refs.taskType.setValue('')
+                    _this.$refs.taskStartTime.setValue('')
+                    _this.$refs.taskStartDate.setValue('')
+                    _this.$refs.taskEndDate.setValue('')
+                    _this.$refs.taskEndTime.setValue('')
+                    _this.$refs.taskLevel.setValue('')
                 })
             },
-
+            //添加作品
             addWork: function () {
-                // if(!this.artistWorkName){
-                //     toastr.error('请填写作品名称')
-                //     return false
-                // }
-                // if(!this.artistWorkDirector){
-                //     toastr.error('请选择作品类型')
-                //     return false
-                // }
-                // if(!this.character){
-                //     toastr.error('请选择任务类型')
-                //     return false
-                // }
-                // if(!this.workReleaseTime){
-                //     toastr.error('请选择任务类型')
-                //     return false
-                // }
+                if(!this.artistWorkName){
+                    toastr.error('请填写作品名称')
+                    return false
+                }
+                if(!this.workReleaseTime){
+                    toastr.error('请选择作品发布时间')
+                    return false
+                }
+                if(!this.workType){
+                    toastr.error('请选择作品类型')
+                    return false
+                }
+                if(!this.character){
+                    toastr.error('请选择角色')
+                    return false
+                }
+                if(!this.coActor){
+                    toastr.error('请填写合作演员')
+                    return false
+                }
                 let data = {
                     name: this.artistWorkName,
                     director: this.artistWorkDirector,
@@ -1288,6 +1323,8 @@
                     _this.coActor = ''
                     _this.workReleaseTime = ''
                     _this.workType = ''
+                    _this.$refs.workType.setValue('')
+                    _this.$refs.workTime.setValue('');
                 })
             },
 
@@ -1452,6 +1489,11 @@
             //获取附件id
             getAffixId: function (id) {
                 this.affixId = id
+            },
+            previewFile:function(url,name){
+                console.log(url,name)
+                this.previewUrl = url
+                this.previewName = name
             },
             //删除附件
             deleteAffix: function () {
