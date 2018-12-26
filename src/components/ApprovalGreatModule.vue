@@ -33,12 +33,14 @@
 
 <script>
 import pageData from '@/views/approval/approval_form'
-import papiContractConfig from '@/components/ForApproval/papiContractConfig.json'
-import papiContractBrokenConfig from '@/components/ForApproval/papiContractBrokenConfig.json'
-import mttopContractConfig from '@/components/ForApproval/mttopContractConfig.json'
-import mttopContractBrokenConfig from '@/components/ForApproval/mttopContractBrokenConfig.json'
-import mttopProjectContract from '@/components/ForApproval/mttopProjectContract.json'
-import papiProjectContract from '@/components/ForApproval/papiProjectContract.json'
+// import papiContractConfig from '@/components/ForApproval/papiContractConfig.json'
+// import papiContractBrokenConfig from '@/components/ForApproval/papiContractBrokenConfig.json'
+// import mttopContractConfig from '@/components/ForApproval/mttopContractConfig.json'
+// import mttopContractBrokenConfig from '@/components/ForApproval/mttopContractBrokenConfig.json'
+// import mttopProjectContract from '@/components/ForApproval/mttopProjectContract.json'
+// import papiProjectContract from '@/components/ForApproval/papiProjectContract.json'
+import config from '@/assets/js/config.js'
+import fetch from '@/assets/utils/fetch.js'
 import ApprovalSummerNote from '@/components/ForApproval/ApprovalSummerNote'
 import ApprovalUploader from '@/components/ForApproval/ApprovalUploader'
 import ApprovalImageUploader from '@/components/ForApproval/ApprovalImageUploader'
@@ -51,10 +53,10 @@ import ApprovalNumber from '@/components/ForApproval/ApprovalNumber'
 import ApprovalProgress from '@/components/ForApproval/ApprovalProgress'
 import ApprovalDouble from '@/components/ForApproval/ApprovalDouble'
 export default {
-    props:['type','singlemode'],
+    props:['formData','singlemode'],
     data(){
         return{
-            importData:pageData,
+            importData:'',
             pageInfo:{
                 title:'',
                 description:'',
@@ -67,7 +69,12 @@ export default {
             form_id:''
         }
     },
+    created(){
+        // this.getFormContractor()
+
+    },
     mounted(){
+
         this.dataInit()
         this.refresh()
     },
@@ -85,12 +92,21 @@ export default {
         ApprovalDouble
     },
     watch:{
-        type:function(){
-            this.typeWatcher()
+        formData:function(){
+            // this.typeWatcher()
             this.dataInit()
+            this.getFormContractor()
         }
     },
     methods:{
+        getFormContractor(){
+            console.log(this.form_id);
+            let _this = this
+            fetch('get','/approvals/'+this.formData.form_id+'/form_control?include=approval_form_controls').then((params) => {
+                console.log(params);
+                _this.importData = params.data
+            })
+        },
         changeHandler(params){
             switch (params.type){
                 case 'upload':
@@ -100,40 +116,41 @@ export default {
                     this.sendData.uploadfile.push({url:params.fileUrl,name:params.fileName})
             }
         },
-        typeWatcher(){
-            switch (this.type){
-                case 1 : 
-                    this.importData = papiContractConfig
-                    break
-                case 2 :
-                    this.importData = papiContractBrokenConfig
-                    break
-                case 3 :
-                    this.importData = mttopContractConfig
-                    break
-                case 4 :
-                    this.importData = mttopContractBrokenConfig
-                    break
-                case 5 :
-                    this.importData = mttopProjectContract
-                    break
-                case 6 :
-                    this.importData = papiProjectContract
-                    break
-                default: this.importData = pageData
-            }
-        },
+        // typeWatcher(){
+        //     switch (this.type){
+        //         case 1 : 
+        //             this.importData = papiContractConfig
+        //             break
+        //         case 2 :
+        //             this.importData = papiContractBrokenConfig
+        //             break
+        //         case 3 :
+        //             this.importData = mttopContractConfig
+        //             break
+        //         case 4 :
+        //             this.importData = mttopContractBrokenConfig
+        //             break
+        //         case 5 :
+        //             this.importData = mttopProjectContract
+        //             break
+        //         case 6 :
+        //             this.importData = papiProjectContract
+        //             break
+        //         default: this.importData = pageData
+        //     }
+        // },
         refresh(){
             $('.selectpicker').selectpicker('render');
             $('.selectpicker').selectpicker('refresh');   
         },
         dataInit(){
-            let {name,description,approval_form_controls,form_id} = this.importData[0]
+            let {name,description,approval_form_controls,form_id} = this.importData
             this.form_id = form_id
             let controlArr= Array.from(approval_form_controls)
             this.pageInfo.title = name
             let descriptionArr = []
             let tempArr = []
+            console.log(controlArr);
             for (const key in controlArr) {
                 if (controlArr[key].form_control_pid === 0) {
                     if(key>0){

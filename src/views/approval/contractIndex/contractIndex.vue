@@ -6,31 +6,31 @@
     
         <div class="page-content container-fluid ">
             <div class="page-header">
-                <!-- <h4 class="">合同审批</h4> -->
             </div>
             <div class="row py-5">
                 <div class="col-lg-4 approval-module" v-for="item in indexData" :key="item.id">
                     <div class="card">
-                        <div class="card-block" style="display:flex" data-toggle="modal" data-target="#approval-great-module" @click='changeType(item.key)'>
-                             <img :src="item.type === 2?'https://res-crm.papitube.com/contract-dark-blue.png':'https://res-crm.papitube.com/contract-blue.png'" alt=""
+                        <div class="card-block" style="display:flex" @click='pullUp(item)'>
+                             <img :src="!item.name.includes('Papi')?'https://res-crm.papitube.com/contract-dark-blue.png':'https://res-crm.papitube.com/contract-blue.png'" alt=""
                                          style="width: 40px;height: 40px;">
                             <!-- <i class="icon float-left" style="font-size:3rem"></i> -->
                             
-                            <p class="my-10">&nbsp;&nbsp;{{item.value}}</p>
+                            <p class="my-10">&nbsp;&nbsp;{{item.name}}</p>
                         </div>
                     </div>
                 </div>
             </div>
         </div>
-        <ApprovalGreatModule :type='type' singlemode='true'  />
+        <ApprovalGreatModule :form-data='formData' singlemode='true'  />
     </div>
 </template>
 
 <script>
-import{CONTRACT_INDEX_CONFIG} from '@/views/approval/contractIndex/contractIndexData.js'
 import ApprovalGreatModule from '@/components/ApprovalGreatModule'
-
+import config from '@/assets/js/config.js'
+import fetch from '@/assets/utils/fetch.js'
 export default {
+    
     components:{
         ApprovalGreatModule
     },
@@ -39,14 +39,23 @@ export default {
     },
     data(){
         return{
-            indexData:CONTRACT_INDEX_CONFIG.contractIndex,
-            type:'',
+            indexData:{},
+            formData:{},
         }
     },
+    mounted(){
+        this.getFormList()
+    },
     methods:{
-       
-        changeType(params){
-            this.type = params
+        getFormList(){
+            let _this = this
+            fetch('get','/approvals?type=0').then((params) => {
+                _this.indexData = params.data
+            })
+        },
+        pullUp(params){
+            this.formData = params
+            $('#approval-great-module').modal('show')
         }
     }
 }
