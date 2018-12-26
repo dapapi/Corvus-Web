@@ -38,7 +38,8 @@ axios.interceptors.response.use((res) => {
         return Promise.reject(res);
     }
     return res;
-}, (error) => {
+},(error) => {
+    console.log(error);
     const {response: {status}} = error
     const {response} = error
     if (status === 401) {
