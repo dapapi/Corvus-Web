@@ -55,6 +55,7 @@
                 dayNamesShort: ["周日", "周一", "周二", "周三", "周四", "周五", "周六"],
                 allDayText: '全天',
                 slotLabelFormat: 'H(:mm)a',
+                timeFormat: 'H:mma',
                 firstHour: '0',
                 buttonText: {
                     today: '今天',
@@ -76,7 +77,6 @@
                 events: function (start, end, timezone, callback) {
                     self.startDate = self.timeReformat(start._d);
                     self.endDate = self.timeReformat(end._d);
-                    // console.log(self.calendars)
                     if (self.calendars.length === 0) {
                         callback([]);
                         return
@@ -94,7 +94,6 @@
                         data.material_ids = materialsIds
                     } else {
                         data.calendar_ids = self.calendars
-                        // data.calendar_ids = [609204190,1569976395]
                     }
                     fetch('get', '/schedules', data).then(response => {
                         self.allScheduleInfo = response.data;

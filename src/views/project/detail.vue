@@ -1141,7 +1141,7 @@
                                                 }}
                                                 <span class="float-right"
                                                       v-show="linkageSelectedIds.projects.indexOf(project.id) > -1">
-                                                    <i class="iconfont icon-queren-zhengqu"></i>
+                                                    <i class="iconfont icon-queren-zhengque"></i>
                                                 </span>
                                             </li>
                                         </ul>

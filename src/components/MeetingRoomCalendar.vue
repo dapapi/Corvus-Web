@@ -12,6 +12,8 @@
                     <button type="button"
                             class="fc-agendaDay-button fc-button fc-state-default fc-corner-right fc-state-active">日
                     </button>
+
+                    <span class="ml-4 hover-content pointer-content" @click="returnNormalCalendar">回到日历</span>
                 </div>
             </div>
             <div class="fc-right">
@@ -79,6 +81,7 @@
 
         watch: {
             meetingRomeList(newValue) {
+                console.log(newValue)
                 if (newValue) {
                     this.getSchedules();
                 }
@@ -95,6 +98,9 @@
             },
 
             getSchedules(date) {
+                if (!this.meetingRomeList) {
+                    return
+                }
                 let materialsIds = [];
                 for (let i = 0; i < this.meetingRomeList.length; i++) {
                     materialsIds.push(this.meetingRomeList[i].id)
@@ -178,6 +184,10 @@
                 d = new Date(d);
                 this.numberDate = d.getFullYear() + "-" + (d.getMonth() + 1) + "-" + d.getDate();
                 this.getSchedules(this.numberDate)
+            },
+
+            returnNormalCalendar() {
+                this.$emit('return', true)
             }
         }
     }

@@ -94,7 +94,7 @@
                               :is-meeting="isMeeting" @calendarDisplay="checkMeetingRoom"
                               @scheduleClick="showScheduleModal"></calendar>
                     <MeetingRoomCalendar v-show="meetingRomeShow" :meetingRomeList="meetingRomeList" ref="meetingRoom"
-                                         @change="changeToCalendar"></MeetingRoomCalendar>
+                                         @change="changeToCalendar" @return="displayMeetingRoom"></MeetingRoomCalendar>
                 </div>
 
             </div>
@@ -311,12 +311,7 @@
                         <div class="example">
                             <div class="col-md-1 px-0 float-left">组织人</div>
                             <div class="col-md-10 float-left">
-                                <div class="creator-avatar float-left">
-                                    <img src="https://res.papitube.com/no-icon.png" alt="">
-                                    <!-- {{ scheduleData.creator.data.name }} -->
-                                    <Avatar :imgUrl="scheduleData.creator.data.user.icon_url" style="margin-right: 10px; "/>
-                                </div>
-                                <div class="float-left pl-2">{{ scheduleData.creator.data.name }}</div>
+                                {{ scheduleData.creator.data.name }}
                             </div>
                         </div>
                         <div class="example">
@@ -637,6 +632,10 @@
             $('#changeSchedule').on('hidden.bs.modal', function () {
                 _this.initAddScheduleModal();
             });
+
+            $('#checkSchedule').on('hidden.bs.modal', function () {
+                _this.$store.dispatch('changeParticipantsInfo', {data: []});
+            });
             this.globalClick(this.removeSelector);
             this.initCalendar();
             let pageContent = $('.container-fluid');
@@ -745,7 +744,7 @@
                         this.calendarList.push(response.data[i])
                     }
                 })
-                
+
             },
 
             getCalendarDetail: function (calendarId) {
@@ -824,7 +823,7 @@
             },
 
             delAffix: function (affixId) {
-                fetch('post', '/schedules/' + this.scheduleData.id + '/affixes/' + affixId).then(response => {
+                fetch('delete', '/schedules/' + this.scheduleData.id + '/affixes/' + affixId).then(response => {
                     toastr.success('删除成功')
                     this.schedule.affix.data.splice(this.scheduleData.affix.data.map(item => item.id).indexOf(affixId), 1)
                 })

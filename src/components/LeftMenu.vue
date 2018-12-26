@@ -196,7 +196,6 @@
         },
         mounted () {
             this.avatar = JSON.parse(Cookies.get('user')).avatar
-            console.log(this.avatar)
         },
         watch: {
             '$route'(to, from) {
