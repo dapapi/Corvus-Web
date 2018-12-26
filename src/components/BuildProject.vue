@@ -346,16 +346,18 @@
                     }
                 }
                 let tempPart = this.$store.state.newParticipantsInfo
+                console.log(tempPart);
                 if(tempPart.length>0){
+                    this.projectBaseInfo.notice= []
                     for (const key in tempPart) {
-                        this.projectBaseInfo.notice = []
-                        this.projectBaseInfo.notice.push(tempPart[key].id)
+                        if(tempPart[key].notice_id){
+                            this.projectBaseInfo.notice.push(tempPart[key].notice_id)
+                        }else{
+                            this.projectBaseInfo.notice.push(tempPart[key].id)
+                        }
                     }
-                }else{
-                    // Object.assign(this.projectBaseInfo,{'notice':['adsfsadfasdfasd']})
-                    // this.projectBaseInfo.notice = JSON.stringify(this.projectBaseInfo.notice)
+                    console.log(this.projectBaseInfo.notice);
                 }
-                console.log(this.projectBaseInfo);
                 let _this = this;
                 fetch('post', '/projects', this.projectBaseInfo).then(function (response) {
                     $('#addProject').modal('hide');
