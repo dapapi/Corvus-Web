@@ -364,22 +364,22 @@
                                 <div class="example" v-if="projectReturnInfo.meta">
                                     <div class="col-md-3 float-left pl-0">
                                         <div>合同金额<span class="money-color pl-5">
-                                            {{ projectReturnInfo.meta.contractReturnedMoney }}</span>/元
+                                            {{ projectReturnInfo.meta.contractReturnedMoney ? projectReturnInfo.meta.contractReturnedMoney : 0}}</span>/元
                                         </div>
                                     </div>
                                     <div class="col-md-3 float-left pl-0">
                                         <div>已回款<span class="money-color pl-5">
-                                            {{ projectReturnInfo.meta.alreadyReturnedMoney }}</span>/元
+                                            {{ projectReturnInfo.meta.alreadyReturnedMoney ? projectReturnInfo.meta.alreadyReturnedMoney : 0}}</span>/元
                                         </div>
                                     </div>
                                     <div class="col-md-3 float-left pl-0">
                                         <div>未回款<span class="money-color pl-5">
-                                            {{ projectReturnInfo.meta.notReturnedMoney }}</span>/元
+                                            {{ projectReturnInfo.meta.notReturnedMoney ? projectReturnInfo.meta.notReturnedMoney : 0}}</span>/元
                                         </div>
                                     </div>
                                     <div class="col-md-3 float-left pl-0">
                                         <div>已开票<span class="money-color pl-5">
-                                            {{ projectReturnInfo.meta.alreadyinvoice }}</span>/元
+                                            {{ projectReturnInfo.meta.alreadyinvoice ? projectReturnInfo.meta.alreadyinvoice : 0}}</span>/元
                                         </div>
                                     </div>
                                 </div>
@@ -389,10 +389,10 @@
                                         <div class="float-left font-weight-bold">{{ returnMoney.issue_name }}</div>
                                         <div class="float-right">
                                             <span class="mr-40 pointer-content hover-content" data-toggle="modal"
-                                                  data-target="#addPayback">
+                                                  data-target="#addPayback" @click="selectedPaybackTime(returnMoney)">
                                                 <i class="iconfont icon-tianjia pr-5"></i>回款记录</span>
                                             <span class="pointer-content hover-content" data-toggle="modal"
-                                                  data-target="#addInvoice">
+                                                  data-target="#addInvoice" @click="selectedPaybackTime(returnMoney)">
                                                 <i class="iconfont icon-tianjia pr-5"></i>开票记录</span>
                                         </div>
                                     </div>
@@ -414,6 +414,7 @@
                                                data-target="#addPaybackTime"
                                                @click="editProjectPaybackTime(true, returnMoney)"></i>
                                             <i class="iconfont icon-shanchu1 pointer-content"
+                                               data-toggle="modal" data-target="#paybackDel"
                                                @click="delProjectPayback(returnMoney.id)"></i>
                                         </div>
                                     </div>
@@ -423,11 +424,11 @@
                                         <div v-if="item.type.data.type === 1">
                                             <div class="font-weight-bold">回款记录</div>
                                             <div class="clearfix">
-                                                <div class="col-md-2 float-left pl-0">计划回款<span
-                                                        class="money-color pl-5">{{ item.plan_returned_money }}元</span>
-                                                </div>
                                                 <div class="col-md-2 float-left pl-0">回款日期<span
                                                         class="pl-5">{{ item.plan_returned_time }}</span>
+                                                </div>
+                                                <div class="col-md-2 float-left pl-0">回款金额<span
+                                                        class="money-color pl-5">{{ item.plan_returned_money }}元</span>
                                                 </div>
                                                 <div class="col-md-2 float-left pl-0">付款方式<span
                                                         class="pl-5">{{ item.type.data.plan_returned_money }}</span>
@@ -435,8 +436,10 @@
                                                 <div class="col-md-2 float-right pr-0 text-right"
                                                      style="color: #cccccc;">
                                                     <i class="iconfont icon-bianji2 pr-40 pointer-content"
-                                                       @click="editProjectPaybackRecording(item.id)"></i>
+                                                       data-toggle="modal" data-target="#addPayback"
+                                                       @click="editProjectPaybackRecording(item, returnMoney, 'payback')"></i>
                                                     <i class="iconfont icon-shanchu1 pointer-content"
+                                                       data-toggle="modal" data-target="#paybackDel"
                                                        @click="delProjectPayback(item.id)"></i>
                                                 </div>
                                             </div>
@@ -447,7 +450,7 @@
                                                 <div class="col-md-2 float-left pl-0">开票日期<span
                                                         class="pl-5">{{ item.plan_returned_time }}</span>
                                                 </div>
-                                                <div class="col-md-2 float-left pl-0">计划回款<span
+                                                <div class="col-md-2 float-left pl-0">开票金额<span
                                                         class="money-color pl-5">{{ item.plan_returned_money }}元</span>
                                                 </div>
                                                 <div class="col-md-2 float-left pl-0">票据类型<span class="pl-5">{{ item.type.data.plan_returned_money }}</span>
@@ -455,8 +458,10 @@
                                                 <div class="col-md-2 float-right pr-0 text-right"
                                                      style="color: #cccccc;">
                                                     <i class="iconfont icon-bianji2 pr-40 pointer-content"
-                                                       @click="editProjectPaybackRecording(item.id)"></i>
+                                                       data-toggle="modal" data-target="#addInvoice"
+                                                       @click="editProjectPaybackRecording(item, returnMoney)"></i>
                                                     <i class="iconfont icon-shanchu1 pointer-content"
+                                                       data-toggle="modal" data-target="#paybackDel"
                                                        @click="delProjectPayback(item.id)"></i>
                                                 </div>
                                             </div>
@@ -679,13 +684,13 @@
                                         <div class="col-md-1 float-left text-right pl-0">关联项目</div>
                                         <div class="col-md-5 float-left font-weight-bold">
                                             <template v-for="project in projectInfo.relate_projects.data">
-                                                {{project.title }}
+                                                <span @click="redirectProject(project.id)">{{project.title }}</span>
                                             </template>
                                         </div>
                                         <div class="col-md-1 float-left text-right pl-0">关联任务</div>
                                         <div class="col-md-5 float-left font-weight-bold">
                                             <template v-for="task in projectInfo.relate_tasks.data">
-                                                {{ task.title }}
+                                                <span @click="redirectTask(task.id)">{{ task.title }}</span>
                                             </template>
                                         </div>
                                     </div>
@@ -886,7 +891,7 @@
         <!-- 新建/修改回款期次 -->
         <div class="modal fade" id="addPaybackTime" aria-hidden="true" aria-labelledby="addLabelForm"
              role="dialog" tabindex="-1">
-            <div class="modal-dialog modal-simple">
+            <div class="modal-dialog modal-simple" v-if="projectInfo.title">
                 <div class="modal-content">
                     <div class="modal-header">
                         <button type="button" class="close" aria-hidden="true" data-dismiss="modal">
@@ -913,13 +918,14 @@
                         <div class="example">
                             <div class="col-md-2 text-right float-left px-0">负责人</div>
                             <div class="col-md-10 float-left">
-                                <InputSelectors @change="addProjectReturn(false, 'principal_id')"></InputSelectors>
+                                {{ projectInfo.creator.data.name }}
                             </div>
                         </div>
                         <div class="example">
                             <div class="col-md-2 text-right float-left px-0">期次名称</div>
                             <div class="col-md-10 float-left">
-                                <input type="text" title="" class="form-control" v-model="projectReturnName">
+                                <template v-if="!isEditProjectPayback">第{{ paybackLength }}期</template>
+                                <template v-else>{{ projectReturnName }}</template>
                             </div>
                         </div>
                         <div class="example">
@@ -956,78 +962,93 @@
                 </div>
             </div>
         </div>
-        <!-- 新建回款记录 -->
+        <!-- 新建/修改回款记录 -->
         <div class="modal fade" id="addPayback" aria-hidden="true" aria-labelledby="addLabelForm"
              role="dialog" tabindex="-1">
-            <div class="modal-dialog modal-simple">
+            <div class="modal-dialog modal-simple" v-if="projectInfo.title">
                 <div class="modal-content">
                     <div class="modal-header">
                         <button type="button" class="close" aria-hidden="true" data-dismiss="modal">
                             <i class="iconfont icon-guanbi" aria-hidden="true"></i>
                         </button>
-                        <h4 class="modal-title">新建回款记录</h4>
+                        <template v-if="!isEditProjectPaybackTime">
+                            <h4 class="modal-title">新建回款记录</h4>
+                        </template>
+                        <template v-else>
+                            <h4 class="modal-title">修改回款记录</h4>
+                        </template>
                     </div>
                     <div class="modal-body">
                         <div class="example" v-if="companyArr.length > 0">
                             <div class="col-md-2 text-right float-left px-0">关联公司</div>
                             <div class="col-md-10 float-left">
-                                <Selectors :options="companyArr"></Selectors>
+                                {{ projectInfo.trail.data.client.data.company }}
                             </div>
                         </div>
                         <div class="example">
                             <div class="col-md-2 text-right float-left px-0">关联项目</div>
                             <div class="col-md-10 float-left">
-                                <Selectors></Selectors>
+                                {{ projectInfo.title }}
                             </div>
                         </div>
                         <div class="example">
                             <div class="col-md-2 text-right float-left px-0">负责人</div>
                             <div class="col-md-10 float-left">
-                                <InputSelectors></InputSelectors>
+                                {{ projectInfo.creator.data.name }}
                             </div>
                         </div>
                         <div class="example">
                             <div class="col-md-2 text-right float-left px-0">回款期次</div>
                             <div class="col-md-10 float-left">
-                                <input type="text" title="" class="form-control">
+                                {{ paybackTime.issue_name }}
                             </div>
                         </div>
                         <div class="example">
                             <div class="col-md-2 text-right float-left px-0">回款金额</div>
                             <div class="col-md-10 float-left">
-                                <NumberSpinner></NumberSpinner>
+                                <NumberSpinner ref="paybackMoney1"
+                                               @change="(value) => addProjectReturn(value, 'plan_returned_money')"></NumberSpinner>
                             </div>
                         </div>
                         <div class="example">
                             <div class="col-md-2 text-right float-left px-0">回款日期</div>
                             <div class="col-md-10 float-left">
-                                <Datepicker></Datepicker>
+                                <Datepicker ref="paybackTime1"
+                                            @change="(value) => addProjectReturn(value, 'plan_returned_time')"></Datepicker>
                             </div>
                         </div>
                         <div class="example">
                             <div class="col-md-2 text-right float-left px-0">付款方式</div>
                             <div class="col-md-10 float-left">
-                                <Selectors :options="payMethodsArr"></Selectors>
+                                <Selectors :options="payMethodsArr" ref="payMethod" placeholder="请选择付款方式"
+                                           @change="(value) => addProjectReturn(value, 'project_returned_money_type_id')"></Selectors>
                             </div>
                         </div>
                         <div class="example">
                             <div class="col-md-2 text-right float-left px-0">备注</div>
                             <div class="col-md-10 float-left">
-                                <textarea title="" class="form-control" placeholder="请输入备注"></textarea>
+                                <textarea title="" class="form-control" placeholder="请输入备注"
+                                          v-model="projectReturnDesc"></textarea>
                             </div>
                         </div>
                     </div>
                     <div class="modal-footer">
-                        <button class="btn btn-sm btn-white btn-pure" data-dismiss="modal">取消</button>
-                        <button class="btn btn-primary" type="submit" @click="doWithdrawal">确定</button>
+                        <button class="btn btn-sm btn-white btn-pure" data-dismiss="modal">取消
+                        </button>
+                        <template v-if="!isEditProjectPaybackTime">
+                            <button class="btn btn-primary" type="submit" @click="addProjectPaybackTime">确定</button>
+                        </template>
+                        <template v-else>
+                            <button class="btn btn-primary" type="submit" @click="editProjectPayback">确定</button>
+                        </template>
                     </div>
                 </div>
             </div>
         </div>
-        <!-- 新建开票记录 -->
+        <!-- 新建/修改开票记录 -->
         <div class="modal fade" id="addInvoice" aria-hidden="true" aria-labelledby="addLabelForm"
              role="dialog" tabindex="-1">
-            <div class="modal-dialog modal-simple">
+            <div class="modal-dialog modal-simple" v-if="projectInfo.title">
                 <div class="modal-content">
                     <div class="modal-header">
                         <button type="button" class="close" aria-hidden="true" data-dismiss="modal">
@@ -1039,55 +1060,64 @@
                         <div class="example" v-if="companyArr.length > 0">
                             <div class="col-md-2 text-right float-left px-0">关联公司</div>
                             <div class="col-md-10 float-left">
-                                <Selectors :options="companyArr"></Selectors>
+                                {{ projectInfo.trail.data.client.data.company }}
                             </div>
                         </div>
                         <div class="example">
                             <div class="col-md-2 text-right float-left px-0">关联项目</div>
                             <div class="col-md-10 float-left">
-                                <Selectors></Selectors>
+                                {{ projectInfo.title }}
                             </div>
                         </div>
                         <div class="example">
                             <div class="col-md-2 text-right float-left px-0">负责人</div>
                             <div class="col-md-10 float-left">
-                                <InputSelectors></InputSelectors>
+                                {{ projectInfo.creator.data.name }}
                             </div>
                         </div>
                         <div class="example">
                             <div class="col-md-2 text-right float-left px-0">回款期次</div>
                             <div class="col-md-10 float-left">
-                                <input type="text" title="" class="form-control">
+                                {{ paybackTime.issue_name }}
                             </div>
                         </div>
                         <div class="example">
                             <div class="col-md-2 text-right float-left px-0">开票金额</div>
                             <div class="col-md-10 float-left">
-                                <NumberSpinner></NumberSpinner>
+                                <NumberSpinner ref="paybackMoney2"
+                                               @change="(value) => addProjectReturn(value, 'plan_returned_money')"></NumberSpinner>
                             </div>
                         </div>
                         <div class="example">
                             <div class="col-md-2 text-right float-left px-0">开票日期</div>
                             <div class="col-md-10 float-left">
-                                <Datepicker></Datepicker>
+                                <Datepicker ref="paybackTime2"
+                                            @change="(value) => addProjectReturn(value, 'plan_returned_time')"></Datepicker>
                             </div>
                         </div>
                         <div class="example">
                             <div class="col-md-2 text-right float-left px-0">票据类型</div>
                             <div class="col-md-10 float-left">
-                                <Selectors :options="invoiceTypeArr"></Selectors>
+                                <Selectors :options="invoiceTypeArr" ref="payMethod1" placeholder="请选择票据类型"
+                                           @change="(value) => addProjectReturn(value, 'project_returned_money_type_id')"></Selectors>
                             </div>
                         </div>
                         <div class="example">
                             <div class="col-md-2 text-right float-left px-0">备注</div>
                             <div class="col-md-10 float-left">
-                                <textarea title="" class="form-control" placeholder="请输入备注"></textarea>
+                                <textarea title="" class="form-control" placeholder="请输入备注"
+                                          v-model="projectReturnDesc"></textarea>
                             </div>
                         </div>
                     </div>
                     <div class="modal-footer">
                         <button class="btn btn-sm btn-white btn-pure" data-dismiss="modal">取消</button>
-                        <button class="btn btn-primary" type="submit" @click="doWithdrawal">确定</button>
+                        <template v-if="!isEditProjectPaybackTime">
+                            <button class="btn btn-primary" type="submit" @click="addProjectPaybackTime">确定</button>
+                        </template>
+                        <template v-else>
+                            <button class="btn btn-primary" type="submit" @click="editProjectPayback">确定</button>
+                        </template>
                     </div>
                 </div>
             </div>
@@ -1224,6 +1254,33 @@
         </div>
 
         <Flag :typeText="changeProjectStatusText" @confirmFlag='changeProjectStatus'/>
+        <!-- 删除回款相关 -->
+        <div class="modal fade" id="paybackDel" aria-hidden="true" aria-labelledby="addLabelForm"
+             role="dialog" tabindex="-1">
+            <div class="modal-dialog modal-simple">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                            <span aria-hidden="true">×</span>
+                        </button>
+                        <h4 class="modal-title">确认删除{{delText}}</h4>
+                    </div>
+                    <div class="modal-body">
+                        <p class="mt-20">此更改不可撤销</p>
+                    </div>
+                    <div class="modal-footer">
+                        <button type="button"
+                                class="btn btn-default btn-pure waves-effect waves-classic"
+                                data-dismiss="modal">取消
+                        </button>
+                        <button type="button"
+                                class="btn btn-primary waves-effect waves-classic"
+                                data-dismiss="modal" @click='delProjectPaybackCallback'>确认
+                        </button>
+                    </div>
+                </div>
+            </div>
+        </div>
     </div>
 </template>
 
@@ -1251,8 +1308,8 @@
                 projectTasksInfo: [],
                 withdrawalReason: '',
                 companyArr: [],
-                payMethodsArr: config.payMethodsArr,
-                invoiceTypeArr: config.invoiceTypeArr,
+                payMethodsArr: [],
+                invoiceTypeArr: [],
                 visibleRangeArr: config.visibleRangeArr,
                 levelArr: config.levelArr,
                 selectedExpectationsArr: [],
@@ -1336,6 +1393,10 @@
                 projectReturnName: '',
                 isEditProjectPayback: false,
                 projectReturnId: '',
+                isEditProjectPaybackTime: false,
+                paybackTime: '',
+                delText: '',
+                paybackLength: 0,
             }
         },
 
@@ -1346,22 +1407,31 @@
             this.getStars();
             let _this = this;
             $('#addPaybackTime').on('hidden.bs.modal', function () {
-                _this.projectReturnName = '';
                 _this.projectReturnDesc = '';
-                _this.$store.dispatch('changePrincipal', {data: []});
                 _this.$refs.paybackMoney.setValue('0');
                 _this.$refs.paybackTime.setValue();
                 _this.projectReturnData = {};
-            })
+            });
+
+            $('#addPayback').on('hidden.bs.modal', function () {
+                _this.$refs.paybackMoney1.setValue('0');
+                _this.$refs.paybackTime1.setValue();
+                _this.$refs.payMethod.setValue();
+                _this.projectReturnData = {};
+            });
+
+            $('#addInvoice').on('hidden.bs.modal', function () {
+                _this.$refs.paybackMoney2.setValue('0');
+                _this.$refs.paybackTime2.setValue();
+                _this.$refs.payMethod1.setValue();
+                _this.projectReturnData = {};
+            });
         },
 
         watch: {
             projectReturnDesc: function (newValue) {
                 this.addProjectReturn(newValue, 'desc')
             },
-            projectReturnName: function (newValue) {
-                this.addProjectReturn(newValue, 'issue_name')
-            }
         },
         computed: {
             completeNum() {
@@ -1482,8 +1552,28 @@
                     include: 'money.type'
                 };
                 fetch('get', '/projects/' + this.projectId + '/returned/money', data).then(response => {
-                    console.log(response);
-                    this.projectReturnInfo = response
+                    this.projectReturnInfo = response;
+                    this.paybackLength = response.data.length + 1
+                });
+
+                if (this.payMethodsArr.length > 0) {
+                    return
+                }
+
+                fetch('get', '/money/type').then(response => {
+                    for (let i = 0; i < response.data.length; i++) {
+                        if (response.data[i].type === 1) {
+                            this.payMethodsArr.push({
+                                name: response.data[i].plan_returned_money,
+                                value: response.data[i].id
+                            })
+                        } else if (response.data[i].type === 2) {
+                            this.invoiceTypeArr.push({
+                                name: response.data[i].plan_returned_money,
+                                value: response.data[i].id
+                            })
+                        }
+                    }
                 })
             },
 
@@ -1497,6 +1587,8 @@
             addProjectPayback: function () {
                 // todo 合同id没有做修改，需要等合同确定才可以
                 this.projectReturnData.contract_id = 22;
+                this.projectReturnData.principal_id = this.projectInfo.creator.data.id;
+                this.projectReturnData.issue_name = this.paybackLength;
                 fetch('post', '/projects/' + this.projectId + '/returned/money', this.projectReturnData).then(response => {
                     $('#addPaybackTime').modal('hide');
                     toastr.success('添加成功');
@@ -1507,38 +1599,78 @@
             editProjectPayback: function () {
                 fetch('put', '/returned/money/' + this.projectReturnId, this.projectReturnData).then(response => {
                     $('#addPaybackTime').modal('hide');
+                    $('#addPayback').modal('hide');
+                    $('#addInvoice').modal('hide');
                     toastr.success('修改成功');
                     this.getProjectReturned()
                 })
             },
 
             delProjectPayback: function (paybackId) {
-                fetch('delete', '/returned/money/' + paybackId).then(response => {
+                this.delPaybackId = paybackId
+            },
+
+            delProjectPaybackCallback: function () {
+                fetch('delete', '/returned/money/' + this.delPaybackId).then(response => {
                     toastr.success('删除成功');
                     this.getProjectReturned()
                 })
             },
 
             editProjectPaybackTime: function (type, payback) {
-                console.log(type);
                 this.isEditProjectPayback = type;
                 if (type) {
                     this.projectReturnName = payback.issue_name;
                     this.projectReturnDesc = payback.desc;
-                    // todo 负责人要对象 或者ID和名字，现在只有id
-                    this.$store.state.newPrincipalInfo.id = payback.principal_id;
                     this.$refs.paybackMoney.setValue(payback.plan_returned_money);
                     this.$refs.paybackTime.setValue(payback.plan_returned_time);
                     this.projectReturnId = payback.id;
                 }
             },
 
-            editProjectPaybackRecording: function (recordingId) {
+            addProjectPaybackTime: function () {
+                if (!this.projectReturnData.project_returned_money_type_id) {
+                    toastr.error('请选择票据类型或付款方式')
+                    return
+                }
+                this.projectReturnData.contract_id = 22;
+                this.projectReturnData.principal_id = this.projectInfo.creator.data.id;
+                fetch('post', '/projects/' + this.projectId + '/returned/' + this.paybackTime.id + '/money', this.projectReturnData).then(response => {
+                    $('#addPayback').modal('hide');
+                    $('#addInvoice').modal('hide');
+                    toastr.success('添加成功');
+                    this.getProjectReturned()
+                })
+            },
 
+            selectedPaybackTime: function (payback) {
+                this.paybackTime = payback;
+            },
+
+            editProjectPaybackRecording: function (recording, payback, type) {
+                this.isEditProjectPaybackTime = true;
+                this.projectReturnName = recording.issue_name;
+                this.projectReturnDesc = recording.desc;
+                if (type === 'payback') {
+                    this.$refs.paybackMoney1.setValue(recording.plan_returned_money);
+                    this.$refs.paybackTime1.setValue(recording.plan_returned_time);
+                    this.$refs.payMethod.setValue(recording.type.data.id);
+                } else {
+                    this.$refs.paybackMoney2.setValue(recording.plan_returned_money);
+                    this.$refs.paybackTime2.setValue(recording.plan_returned_time);
+                    this.$refs.payMethod1.setValue(recording.type.data.id);
+                }
+                this.projectReturnId = recording.id;
+                this.paybackTime = payback;
             },
 
             redirectTask: function (taskId) {
                 this.$router.push({path: '/tasks/' + taskId})
+            },
+
+            redirectProject: function (projectId) {
+                // todo 跳转到同样的路由下，只有id变化，页面内容不刷新
+                this.$router.push({path: '/projects/' + projectId})
             },
 
             filterProjectFee: function (value) {

@@ -17,7 +17,6 @@
             </div>
 
         </div>
-
         <div class="page-content container-fluid">
             <div class="panel col-md-12 clearfix py-5">
                 <div class="clearfix">
@@ -133,9 +132,7 @@
             </div>
 
         </div>
-
         <customize-filter :data="customizeInfo" @change="customize"></customize-filter>
-
         <div class="site-action" data-plugin="actionBtn" data-toggle="modal" data-target="#addArtist">
             <button type="button"
                     class="site-action-toggle btn-raised btn btn-success btn-floating waves-effect waves-classic">
@@ -143,7 +140,6 @@
                 <i class="back-icon iconfont icon-tianjia1 animation-scale-up" aria-hidden="true" style="font-size:30px"></i>
             </button>
         </div>
-
         <div class="modal fade" id="addArtist" aria-hidden="true" aria-labelledby="addLabelForm"
              role="dialog" tabindex="-1">
             <div class="modal-dialog modal-simple">
@@ -164,18 +160,18 @@
                         <div class="example">
                             <div class="col-md-2 text-right float-left">性别</div>
                             <div class="col-md-4 float-left row">
-                                <selectors :options="genderArr" placeholder="请选择性别" @change="changeGender"></selectors>
+                                <selectors :options="genderArr" placeholder="请选择性别" @change="changeGender" ref="gender"></selectors>
                             </div>
                             <div class="col-md-2 text-right float-left pr-0">出生日期</div>
                             <div class="col-md-4 float-left pr-0">
-                                <datepicker @change="changeBirthday" :placeholder="'请选择日期'"></datepicker>
+                                <datepicker @change="changeBirthday" :placeholder="'请选择日期'" ref="birthday"></datepicker>
                             </div>
                         </div>
                         <div class="example">
                             <div class="col-md-2 text-right float-left">艺人来源</div>
                             <div class="col-md-4 float-left row">
                                 <selectors :options="artistSourceArr" placeholder="请选择艺人来源"
-                                           @change="changeSource"></selectors>
+                                           @change="changeSource" ref="source"></selectors>
                             </div>
                             <div class="col-md-2 text-right float-left pr-0">邮箱</div>
                             <div class="col-md-4 float-left pr-0">
@@ -262,14 +258,14 @@
                             <div class="col-md-2 text-right float-left">沟通状态</div>
                             <div class="col-md-3 float-left pl-0">
                                 <selectors :options="taiyangCommunicationStatusArr"
-                                           @change="changeCommunicationType" :placeholder="'请选择沟通状态'"></selectors>
+                                           @change="changeCommunicationType" :placeholder="'请选择沟通状态'" ref="communicationType"></selectors>
                             </div>
                         </div>
                         <div class="example">
                             <div class="col-md-2 text-right float-left">与我司签约意向</div>
                             <div class="col-md-5 float-left pl-0">
                                 <selectors :options="yesOrNoArr" :placeholder="'请选择签约意向'"
-                                           @change="changeSignIntention"></selectors>
+                                           @change="changeSignIntention" ref="signIntention"></selectors>
                             </div>
                             <div class="col-md-5 float-left pl-0" v-show="signIntention == 2">
                                 <textarea name="" class="form-control" rows="1" placeholder="请填写不签约理由"
@@ -280,7 +276,7 @@
                             <div class="col-md-2 text-right float-left">是否签约其他公司</div>
                             <div class="col-md-5 float-left pl-0">
                                 <selectors :options="yesOrNoArr" :placeholder="'请选择是否签约其他公司'"
-                                           @change="isSignCompany"></selectors>
+                                           @change="isSignCompany" ref="signCompany"></selectors>
                             </div>
                             <div class="col-md-5 float-left pl-0" v-if="signCompany == 1">
                                 <input type="text" class="form-control" v-model="sign_contract_other_name" placeholder="请输入已签约公司名称">
@@ -290,7 +286,7 @@
                             <div class="col-md-2 text-right float-left">附件类型</div>
                             <div class="col-md-5 float-left pl-0">
                                 <selectors :options="attachmentTypeArr" :placeholder="'请选择附件类型'"
-                                           @change="changeAttachmentType"></selectors>
+                                           @change="changeAttachmentType" ref="attachmentType"></selectors>
                             </div>
                         </div>
                         <div class="example" v-show="affixesType>0">
@@ -631,10 +627,40 @@
                     _this.cancleData()
                 })
             },
+
+            //清空数据
             cancleData:function(){
-                this.uploadUrl = ''
-                this.artistDesc= ''
                 this.artistName = ''
+                this.artistGender = ''
+                this.artistBirthday = ''
+                this.artistSource = ''
+                this.artistEmail = ''
+                this.artistPhone = ''
+                this.artistWeiXin = ''
+                this.artistScoutName = ''
+                this.artistLocation = ''
+                this.weiboUrl = ''
+                this.weiboFansNum = ''
+                this.baikeUrl = ''
+                this.baikeFansNum = ''
+                this.douyinId = ''
+                this.douyinFansNum = ''
+                this.qitaUrl =''
+                this.qita_fans_num = ''
+                this.communicationStatus = ''
+                this.signIntention = ''
+                this.notSignReason = ''
+                this.signCompany = ''
+                this.sign_contract_other_name = ''
+                this.affixesType = ''
+                this.uploadUrl = ''
+                this.$refs.gender.setValue('')
+                this.$refs.birthday.setValue('')
+                this.$refs.source.setValue('')
+                this.$refs.communicationType.setValue('')
+                this.$refs.signIntention.setValue('')
+                this.$refs.signCompany.setValue('')
+                this.$refs.attachmentType.setValue('')
             },
             //选择附件类型
             changeAttachmentType: function (value) {
