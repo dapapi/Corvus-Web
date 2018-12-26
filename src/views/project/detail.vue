@@ -1020,7 +1020,7 @@
                         <div class="example">
                             <div class="col-md-2 text-right float-left px-0">付款方式</div>
                             <div class="col-md-10 float-left">
-                                <Selectors :options="payMethodsArr" ref="payMethod"
+                                <Selectors :options="payMethodsArr" ref="payMethod" placeholder="请选择付款方式"
                                            @change="(value) => addProjectReturn(value, 'project_returned_money_type_id')"></Selectors>
                             </div>
                         </div>
@@ -1098,7 +1098,7 @@
                         <div class="example">
                             <div class="col-md-2 text-right float-left px-0">票据类型</div>
                             <div class="col-md-10 float-left">
-                                <Selectors :options="invoiceTypeArr" ref="payMethod1"
+                                <Selectors :options="invoiceTypeArr" ref="payMethod1" placeholder="请选择票据类型"
                                            @change="(value) => addProjectReturn(value, 'project_returned_money_type_id')"></Selectors>
                             </div>
                         </div>
@@ -1629,6 +1629,10 @@
             },
 
             addProjectPaybackTime: function () {
+                if (!this.projectReturnData.project_returned_money_type_id) {
+                    toastr.error('请选择票据类型或付款方式')
+                    return
+                }
                 this.projectReturnData.contract_id = 22;
                 this.projectReturnData.principal_id = this.projectInfo.creator.data.id;
                 fetch('post', '/projects/' + this.projectId + '/returned/' + this.paybackTime.id + '/money', this.projectReturnData).then(response => {
