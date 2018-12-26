@@ -72,42 +72,34 @@
                         </div>
                     </div>
                     <div class="clearfix">
-                        <div class="col-md-6 float-left pl-0 mb-20" style="border-right: 1px solid #eee">
-                            <div class="col-md-6 pl-0"><i class="iconfont icon-iconset0399"></i> 任务 5/12</div>
-                            <div class="clearfix example">
-                                <div class="col-md-3 float-left">电话会议</div>
-                                <div class="col-md-3 float-left">张佳佳</div>
-                                <div class="col-md-3 float-left">2018-12-03 11:10</div>
-                                <div class="col-md-3 float-left">进行中</div>
-                            </div>
-                            <div class="clearfix example">
-                                <div class="col-md-3 float-left">电话会议</div>
-                                <div class="col-md-3 float-left">张佳佳</div>
-                                <div class="col-md-3 float-left">2018-12-03 11:10</div>
-                                <div class="col-md-3 float-left">进行中</div>
-                            </div>
-                            <div class="clearfix example">
-                                <div class="col-md-3 float-left">电话会议</div>
-                                <div class="col-md-3 float-left">张佳佳</div>
-                                <div class="col-md-3 float-left">2018-12-03 11:10</div>
-                                <div class="col-md-3 float-left">进行中</div>
+                        <div v-if="projectTaskingInfo.length > 0" class="col-md-6 float-left pl-0 mb-20">
+                            <div class="col-md-6 pl-0"><i class="iconfont icon-iconset0399"></i> 任务</div>
+                            <div class="clearfix example" v-for="task in projectTaskingInfo">
+                                <div class="col-md-3 float-left pl-0">{{ task.title }}</div>
+                                <div class="col-md-3 float-left pl-0">{{ task.principal.data.name }}</div>
+                                <div class="col-md-3 float-left pl-0">{{ task.end_at }}</div>
+                                <div class="col-md-3 float-left pl-0">
+                                    <template v-if="task.status === 1">进行中</template>
+                                    <template v-if="task.status === 2">已完成</template>
+                                    <template v-if="task.status === 3">已停止</template>
+                                </div>
                             </div>
                         </div>
-                        <div class="col-md-6 float-left pl-0 mb-20">
-                            <div class="mb-20 float-left clearfix col-md-6">
-                                <div class="float-left col-md-5 pr-0">预计订单收入</div>
+                        <div class="col-md-6 float-left pl-0 mb-20 px-0">
+                            <div class="mb-20 float-left clearfix col-md-6 pl-0">
+                                <div class="float-left col-md-5 px-0">预计订单收入</div>
                                 <div class="float-left col-md-7">100000元</div>
                             </div>
-                            <div class="mb-20 float-left clearfix col-md-6">
-                                <div class="float-left col-md-5 pr-0">预计支出</div>
+                            <div class="mb-20 float-left clearfix col-md-6 pl-0">
+                                <div class="float-left col-md-5 px-0">预计支出</div>
                                 <div class="float-left col-md-7">10000元</div>
                             </div>
-                            <div class="mb-20 float-left clearfix col-md-6">
-                                <div class="float-left col-md-5 pr-0">实际收入</div>
+                            <div class="mb-20 float-left clearfix col-md-6 pl-0">
+                                <div class="float-left col-md-5 px-0">实际收入</div>
                                 <div class="float-left col-md-7">100000元</div>
                             </div>
-                            <div class="mb-20 float-left clearfix col-md-6">
-                                <div class="float-left col-md-5 pr-0">实际支出</div>
+                            <div class="mb-20 float-left clearfix col-md-6 pl-0">
+                                <div class="float-left col-md-5 px-0">实际支出</div>
                                 <div class="float-left col-md-7">10000元</div>
                             </div>
                         </div>
@@ -225,7 +217,11 @@
                                 <tr v-for="task in projectTasksInfo">
                                     <td class="pointer-content" @click="redirectTask(task.id)">{{ task.title }}</td>
                                     <td>{{ task.type.data.title }}</td>
-                                    <td>{{ task.status }}</td>
+                                    <td>
+                                        <template v-if="task.status === 1">进行中</template>
+                                        <template v-if="task.status === 2">已完成</template>
+                                        <template v-if="task.status === 3">已停止</template>
+                                    </td>
                                     <td>{{ task.principal.data.name }}</td>
                                     <td>{{ task.end_at }}</td>
                                 </tr>
@@ -1402,14 +1398,18 @@
                 delText: '',
                 paybackLength: 1,
                 user: '',
+                projectTaskingInfo: [],
             }
         },
 
         mounted() {
+            this.projectId = this.$route.params.id;
             this.getProject();
             this.getClients();
             this.getTaskType();
             this.getStars();
+            this.getProjectTasks();
+            this.getProjectTasking();
             this.user = JSON.parse(Cookies.get('user'));
             let _this = this;
             $('#addPaybackTime').on('hidden.bs.modal', function () {
@@ -1470,7 +1470,6 @@
         methods: {
 
             getProject: function () {
-                this.projectId = this.$route.params.id;
                 let _this = this;
                 let data = {
                     include: 'principal,participants,creator,fields,trail.expectations,trail.client,relate_tasks,relate_projects,type',
@@ -1550,6 +1549,15 @@
             getProjectTasks: function () {
                 fetch('get', '/projects/' + this.projectId + '/tasks').then(response => {
                     this.projectTasksInfo = response.data
+                })
+            },
+
+            getProjectTasking: function () {
+                let data = {
+                    status: 1,
+                };
+                fetch('get', '/projects/' + this.projectId + '/tasks', data).then(response => {
+                    this.projectTaskingInfo = response.data.slice(0, 5)
                 })
             },
 
@@ -1727,7 +1735,6 @@
                 for (let i = 0; i < this.$store.state.newParticipantsInfo.length; i++) {
                     participant_ids.push(this.$store.state.newParticipantsInfo[i].id)
                 }
-                let _this = this;
                 let data = {
                     resource_type: 3,
                     resourceable_id: this.projectId,
@@ -1740,18 +1747,18 @@
                     end_at: this.endTime + ' ' + this.endMinutes,
                     desc: this.taskIntroduce
                 };
-                fetch('post', '/tasks', data).then(function (response) {
+                fetch('post', '/tasks', data).then(response => {
                     toastr.success('创建成功');
                     $('#addTask').modal('hide');
-                    _this.projectTasksInfo.push(response.data)
+                    this.projectTasksInfo.push(response.data);
+                    this.getProjectTasking();
                 })
             },
 
             getTaskType: function () {
-                let _this = this;
-                fetch('get', '/task_types').then(function (response) {
+                fetch('get', '/task_types').then(response => {
                     for (let i = 0; i < response.data.length; i++) {
-                        _this.taskTypeArr.push({
+                        this.taskTypeArr.push({
                             name: response.data[i].title,
                             value: response.data[i].id
                         })
@@ -1875,6 +1882,8 @@
                         }
                     }
                 }
+
+                console.log(data);
 
                 fetch('put', '/projects/' + this.projectId, data).then(function () {
                     toastr.success('修改成功');
