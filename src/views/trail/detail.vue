@@ -175,7 +175,7 @@
                                              :class="isEdit ? 'edit-height':'' ">
                                             <div class="col-md-2 float-left text-right pl-0">负责人</div>
                                             <div class="col-md-10 float-left font-weight-bold">
-                                                <EditInput-selector :is-edit="isEdit"
+                                                <EditInput-selector :is-edit="isEdit" 
                                                                     @change="changeTrailPrincipal"></EditInput-selector>
                                             </div>
                                         </div>
@@ -814,6 +814,7 @@
                     _this.isLoading = false
                     _this.$nextTick((params) => {
                         _this.$store.state.newPrincipalInfo.id = Number(_this.trailInfo.resource)
+                        _this.$store.state.principalInfo = _this.trailInfo.principal.data
                     })
                 })
             },

@@ -5,8 +5,9 @@
             <span>审批人</span>
             <div class="approver-container" v-for="(item, index) in approver" :key="index">
                 <div class="approver-container">
+                    <!-- {{item}} -->
                     <div class="splicer" v-if="index !== 0"></div>
-                    <div class="approver" :style="randomColor()">{{item.name.slice(-1)}}</div>
+                    <div class="approver" :style="{backgroundColor:randomColor(item.icon_url).color}">{{randomColor(item.icon_url).name}}</div>
                 </div>
                 <div class="approver_texts" v-if="item.change_state_obj">
                     <p class="approver_text">{{item.name}}</p>
@@ -32,7 +33,8 @@
         </div>
         <div class="approver-row">
             <span>知会人</span>
-            <AddMember />
+            <div class="approver ml-10" :style="{backgroundColor:randomColor(item.icon_url).color}" v-if="mode" v-for="(item, index) in notice" :key="index">{{randomColor(item.icon_url).name}}</div>
+            <AddMember v-if="!mode"/>
         </div>
     </div>
 </template>
@@ -41,7 +43,7 @@
 import config from '@/assets/js/config.js'
 import fetch from '@/assets/utils/fetch.js'
 export default {
-    props:['formid','mode','formstatus'],
+    props:['formid','mode','formstatus','notice'],
     data(){
         return{
             colorArr:['#F23E7C','#FF68E2','#FB8C00','#B53FAF','#27D3A8','#2CCCDA','#38BA5D','#3F51B5'],
@@ -86,10 +88,19 @@ export default {
                     })
                 }
             },
-        randomColor(){
-            let n = Math.floor(Math.random()*5+1)
-            return {backgroundColor:this.colorArr[n]}
-        }
+        randomColor(params){
+            if(params){
+                 console.log(params);
+            let tempArr = params.split('|')
+            console.log(tempArr);
+            console.log(tempArr[0]);
+            return {color:tempArr[0],name:tempArr[1]}
+           
+            }else{
+                let n = Math.floor(Math.random()*5+1)
+                return {backgroundColor:this.colorArr[n]}
+            }
+        },
     }
 }
 </script>
@@ -100,10 +111,6 @@ export default {
     display: flex;
     line-height: 40px;
     border: 1px solid #eeeeee;
-}
-.approval-detail-container div,.approval-detail-title div{
-    /* border: 1px solid #eeeeee; */
-    
 }
 .approval-detail-title{
     background: #f5f5f5;

@@ -153,7 +153,7 @@
                         <div class="example">
                             <div class="col-md-2 text-right float-left">行业</div>
                             <div class="col-md-10 float-left pl-0" v-if="industriesArr.length > 0">
-                                <selectors :options="industriesArr" :placeholder="'请选择行业'"
+                                <selectors ref='industries' :options="industriesArr" :placeholder="'请选择行业'"
                                            @change="changeIndustry"></selectors>
                             </div>
                         </div>
@@ -321,6 +321,10 @@
             this.getClients();
             this.getStars();
             this.getIndustries();
+        },
+        update(){
+
+
         },
         watch: {
             trailType: function () {
@@ -526,6 +530,7 @@
             },
 
             addTrail: function () {
+                
                 let data = {
                     title: this.trailName,
                     brand: this.brandName,
@@ -651,6 +656,9 @@
             changeTrailType: function (value) {
                 this.trailType = value;
                 $('#addTrail').modal('show')
+                setTimeout(() => {
+                    $('.selectpicker').selectpicker('refresh');
+                }, 500);
             },
 
             changeTrailStatus: function (value) {
