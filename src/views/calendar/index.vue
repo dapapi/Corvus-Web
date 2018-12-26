@@ -405,7 +405,7 @@
                             <template v-if="calendarActionType === 'add'">
                                 <button class="btn btn-primary" type="submit" @click="addCalendar">确定</button>
                             </template>
-                            <template>
+                            <template v-else>
                                 <button class="btn btn-primary" type="submit" @click="changeCalendar">确定</button>
                             </template>
                         </div>
