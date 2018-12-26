@@ -22,7 +22,7 @@
                             <span class="principal">负责人</span>
                             <span style="float: right; cursor: pointer;"><router-link to="/organization/management">管理部门</router-link></span>
                         </h5>
-                        <template v-for="(item, index) in data">
+                        <template v-for="(item, index) in department">
                             <Department 
                                 :data="item" 
                                 :dIndex="index"
@@ -45,30 +45,45 @@
 </template>
 
 <script>
-    import fetch from '../../assets/utils/fetch.js'
+import fetch from '../../assets/utils/fetch.js'
+import { mapState, mapActions } from 'vuex'
 
     export default {
+        name: 'Organization',
         data() {
             return {
                 keyword: '',
-                data: [],
                 count: 0,
                 dIndex: -1,
             }
         },
 
-        mounted() {
-            this.getDepartment()
+        computed: {
+            ...mapState([
+                'department',
+            ]),
+            _department () {
+                return this.department
+            }
+        },
+
+        mounted () {
+            if (this.department.length === 0) {
+                this.getDepartment()
+            }
+        },
+
+        watch: {
+            _department () {
+                this.count = this.countNum(this._department)
+            }
         },
 
         methods: {
-            // 获取部门数据
-            getDepartment () {
-                fetch('get', '/departments').then(res => {
-                    this.data = res.data
-                    this.count = this.countNum(this.data)
-                })
-            },
+            ...mapActions([
+                'getDepartment', // 获取部门数据
+            ]),
+            // 计算人数
             countNum (data) {
                 let count = 0
                 data.map(n => {

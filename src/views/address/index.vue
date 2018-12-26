@@ -54,8 +54,8 @@
                                     </div>
                                     <div class="tab-pane animation-fade" id="forum-department"
                                          role="tabpanel">
-                                        <div v-for="department in departmentUsers" :key='department.id + Math.random()'>
-                                            <departments-item :data="department" @change="memberChange"
+                                        <div v-for="item in department" :key='item.id + Math.random()'>
+                                            <departments-item :data="item" @change="memberChange"
                                                               select-hidden="true"
                                                               member-type="principal"></departments-item>
                                         </div>
@@ -203,6 +203,7 @@
 <script>
     import fetch from '../../assets/utils/fetch.js'
     import Cookies from 'js-cookie'
+    import { mapState, mapActions } from 'vuex'
 
     export default {
         name: 'portal',
@@ -210,21 +211,28 @@
             return {
                 searchKeyWord: '',
                 normalUsers: '',
-                departmentUsers: '',
                 personalInfo: {},
                 checkedIndex: '',
             }
         },
         mounted() {
-            fetch('get', '/departments').then(response => {
-                this.departmentUsers = response.data;
-            });
             fetch('get', '/departments/crew').then(res => {
                 this.normalUsers = res;
                 this.setDefaultInfo(JSON.parse(Cookies.get('user')).id)
             })
+            if (this.department.length === 0) {
+                this.getDepartment()
+            }
+        },
+        computed: {
+            ...mapState([
+                'department',
+            ]),
         },
         methods: {
+            ...mapActions([
+                'getDepartment', // 获取部门数据
+            ]),
             memberChange() {
                 this.setDefaultInfo(this.$store.state.newPrincipalInfo.id)
             },

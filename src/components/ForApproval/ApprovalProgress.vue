@@ -62,9 +62,18 @@ export default {
         formstatus:function(value){
             this.getApprover(this.formid)
         },
+        // notice:function(value){
+            
+        //    this.$store.state.newParticipantsInfo = 1111
+
+            
+        // }
     },
     mounted(){
+
         this.getApprover(this.formid)
+         this.$store.state.newParticipantsInfo = Array.from(this.notice)
+
     },
     methods:{
           getApprover(value){
@@ -90,12 +99,8 @@ export default {
             },
         randomColor(params){
             if(params){
-                 console.log(params);
-            let tempArr = params.split('|')
-            console.log(tempArr);
-            console.log(tempArr[0]);
-            return {color:tempArr[0],name:tempArr[1]}
-           
+                let tempArr = params.split('|')
+                return {color:tempArr[0],name:tempArr[1]}
             }else{
                 let n = Math.floor(Math.random()*5+1)
                 return {backgroundColor:this.colorArr[n]}

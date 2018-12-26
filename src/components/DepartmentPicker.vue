@@ -12,8 +12,10 @@
 </template>
 
 <script>
+import { mapState, mapActions } from 'vuex'
 import fetch from '@/assets/utils/fetch.js'
 import config from '@/assets/js/config'
+
 export default {
     data(){
         return {
@@ -21,15 +23,30 @@ export default {
         }
     },
     created(){
-        this.getDepartments()        
+        if (this.department.length === 0) {
+            this.getDepartment()
+        } else {
+            this.departments = this.department
+        }
+    },
+    computed: {
+        ...mapState([
+            'department',
+        ]),
+
+        _department () {
+            return this.department
+        },
+    },
+    watch: {
+        _department () {
+            this.departments = this.department
+        }
     },
     methods:{
-        getDepartments(){
-            let _this = this
-            fetch('get','/departments').then((params) => {
-                _this.departments = params.data
-            })
-        },
+        ...mapActions([
+            'getDepartment', // 获取部门数据
+        ]),
         clickHandler(params){
             this.$emit('departmentsget',params)
         }

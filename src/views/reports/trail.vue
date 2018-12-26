@@ -150,6 +150,7 @@
 </template>
 
 <script>
+    import { mapState, mapActions } from 'vuex'
     import fetch from '../../assets/utils/fetch.js'
     import config from '../../assets/js/config'
 
@@ -219,10 +220,31 @@
         },
         mounted() {
             this.getReport();
-            this.getDepartments();
+            if (this.department.length === 0) {
+                this.getDepartment()
+            } else {
+                this.departmentsInfo = this.departmentsInfo.concat(this.department)
+            }
             this.getStars();
         },
+        computed: {
+            ...mapState([
+                'department',
+            ]),
+            _department () {
+                return this.department
+            }
+        },
+
+        watch: {
+            _department () {
+                this.departmentsInfo = this.departmentsInfo.concat(this.department);
+            }
+        },
         methods: {
+            ...mapActions([
+                'getDepartment', // 获取部门数据
+            ]),
             getReport(start_time = null, end_time = null) {
                 if (!start_time) {
                     if (!this.start_time) {
@@ -254,12 +276,6 @@
                 this.$refs.timeInterval.setValue(start_time, end_time);
                 fetch('get', '/reportfrom/trail', data).then(response => {
                     this.tableData = response
-                })
-            },
-
-            getDepartments() {
-                fetch('get', '/departments').then(res => {
-                    this.departmentsInfo = this.departmentsInfo.concat(res.data);
                 })
             },
 

@@ -40,8 +40,10 @@
 
 </template>
 <script>
+import { mapState, mapActions } from 'vuex'
 import fetch from '@/assets/utils/fetch.js'
 import config from '@/assets/js/config'
+
     export default {
         props: ['data', 'n','stararr'],
         data() {
@@ -70,10 +72,19 @@ import config from '@/assets/js/config'
                 },
             }
         },
-        computed:{
-           
+        computed: {
+            ...mapState([
+                'department',
+            ]),
+
+            _department () {
+                return this.department
+            },
         },
         watch:{
+            _department () {
+                this.departments = this.department
+            },
             'sendData.value':function(value){
                 this.$emit('sendcusdata',this.sendData,this.n)
             },
@@ -93,7 +104,11 @@ import config from '@/assets/js/config'
             }
         },
         created(){
-            this.getDepartmets()   
+            if (this.department.length === 0) {
+                this.getDepartment()
+            } else {
+                this.departments = this.department
+            }
             this.getUsers() 
         },
         beforeMount() {
@@ -139,6 +154,9 @@ import config from '@/assets/js/config'
         },
 
         methods: {
+            ...mapActions([
+                'getDepartment', // 获取部门数据
+            ]),
             refresh: function () {
                 $('#child' + this.n).selectpicker('refresh');
             },
@@ -162,12 +180,6 @@ import config from '@/assets/js/config'
             },
             changeTargetStars(params){
                 this.sendData.value = params 
-            },
-            getDepartmets(value){
-                let _this = this
-                fetch('get','/departments').then((params) => {
-                    _this.departments = params.data
-                })
             },
             changeDepartments(value){
                 this.sendData.value = value 
