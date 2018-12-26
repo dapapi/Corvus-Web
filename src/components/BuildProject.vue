@@ -346,9 +346,9 @@
                     }
                 }
                 let tempPart = this.$store.state.newParticipantsInfo
+
                 if(tempPart.length>0){
                     for (const key in tempPart) {
-                        this.projectBaseInfo.notice = []
                         this.projectBaseInfo.notice.push(tempPart[key].id)
                     }
                 }else{

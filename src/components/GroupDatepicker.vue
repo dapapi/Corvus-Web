@@ -19,10 +19,11 @@
             }
         },
         mounted() {
-            this.defaultDataHandler()
-            this.setValue(this.timeGroup[0],this.timeGroup[1])
+            if(this.default){
+                this.defaultDataHandler()
+                this.setValue(this.timeGroup[0],this.timeGroup[1])
+            }
             let self = this;
-
             $(this.$el).datepicker({
                 format: "yyyy-mm-dd",
                 language: "zh-CN",
