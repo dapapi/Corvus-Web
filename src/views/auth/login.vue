@@ -343,7 +343,6 @@
             },
 
             checkLogin: function () {
-                alert(1)
                 if (!Verify.username(this.username) || !Verify.password(this.password)) {
                     return
                 }
