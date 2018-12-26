@@ -72,7 +72,10 @@ export default {
     mounted(){
 
         this.getApprover(this.formid)
-         this.$store.state.newParticipantsInfo = Array.from(this.notice)
+        if(this.notice){
+
+        this.$store.state.newParticipantsInfo = Array.from(this.notice)
+        }
 
     },
     methods:{
