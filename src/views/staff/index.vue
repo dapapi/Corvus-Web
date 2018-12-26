@@ -100,7 +100,7 @@
 
             <Modal id="move-department" title="调岗" @onOK="moveDepartment">
                 <div class="example">
-                    <DropDepartment :data="data" @change="selectDepartment"/>
+                    <DropDepartment :data="department" @change="selectDepartment"/>
                 </div>
             </Modal>
         </div>
@@ -111,8 +111,10 @@
 </template>
 
 <script>
+import { mapState, mapActions } from 'vuex'
 import config from "../../assets/js/config";
 import fetch from "../../assets/utils/fetch";
+
 export default {
     name: 'Staff',
     data() {
@@ -163,19 +165,43 @@ export default {
             // hireShape: config.hireShape[0].value, // 聘用形式
             hireShape: '', // 聘用形式
             positionType: '', // 在职状态
-            data: [],
             departmentPId: '',
             departmentId: '',
             useId: '',
         };
     },
 
-  mounted() {
-    this.getStaffList()
-    this.getDepartment()
-  },
+    computed: {
+        ...mapState([
+            'department'
+        ]),
+        _department () {
+            return this.department
+        }
+    },
+
+    watch: {
+        _department () {
+            this.departmentPId = this.department[0].department_pid;
+            this.departmentId = this.department[0].id;
+        }
+    },
+
+    mounted() {
+        this.getStaffList()
+        this.getDepartment()
+        if (this.department.length === 0) {
+            this.getDepartment()
+        } else {
+            this.departmentPId = this.department[0].department_pid;
+            this.departmentId = this.department[0].id;
+        }
+    },
 
     methods: {
+        ...mapActions([
+            'getDepartment', // 获取部门数据
+        ]),
         // 改变data的值
         changeState (name, value) {
             this[name] = value
@@ -230,14 +256,6 @@ export default {
             this.useId = id
             $('#move-department').modal()
         },
-        // 获取部门数据
-        getDepartment() {
-            fetch("get", "/departments").then(res => {
-                this.data = res.data;
-                this.departmentPId = res.data[0].department_pid;
-                this.departmentId = res.data[0].id;
-            });
-        }, 
         // 选择部门
         selectDepartment (data) {
             this.departmentId = data.id;

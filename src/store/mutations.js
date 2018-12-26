@@ -58,4 +58,8 @@ export default {
     changeIsExpanded(state, data) {
         state.isExpanded = data
     },
+    // 设置部门数据
+    setDepartment (state, data) {
+        state.department = data
+    }
 }

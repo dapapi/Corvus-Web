@@ -71,8 +71,10 @@
 </template>
 
 <script>
+import { mapState, mapActions } from 'vuex'
 import fetch from '@/assets/utils/fetch.js'
 import config from '@/assets/js/config'
+
 export default {
     props:['notedata','givenfilename'],
     data(){
@@ -95,15 +97,25 @@ export default {
         }
     },
     created(){
-        this.getDepartments()
+        if (this.department.length === 0) {
+            this.getDepartment()
+        } else {
+            this.departments = this.department
+        }
     },
     mounted(){
         this.noteInit()
         this.getSummernote()
         this.setNote()
         this.modalInit()
-        
-       
+    },
+    computed: {
+        ...mapState([
+            'department',
+        ]),
+        _department () {
+            return this.department
+        },
     },
     watch:{
         notedata:function(value){
@@ -119,8 +131,14 @@ export default {
                 this.is_accessory = false
             }
         },
+        _department () {
+            this.departments = this.department
+        }
     },
     methods:{
+        ...mapActions([
+            'getDepartment', // 获取部门数据
+        ]),
         //数据初始化
         noteInit(){
             if(this.notedata){
@@ -147,13 +165,6 @@ export default {
         modalInit(){
             $('.summernoteUploadModal').click(() => {
                 $('.summernoteUploadModal').modal('hide');
-            })
-        },
-        //获取部门数据
-        getDepartments(){
-            let _this = this
-            fetch('get','/departments').then((params) => {
-                _this.departments = params.data
             })
         },
         //公告范围选择（数组）

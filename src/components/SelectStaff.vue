@@ -77,6 +77,7 @@
 
 <script>
     import fetch from '../assets/utils/fetch.js'
+    import { mapState, mapActions } from 'vuex'
 
     export default {
         props: ['multiple', 'member-type', 'type', 'otherslot'],
@@ -94,6 +95,13 @@
         },
 
         computed: {
+            ...mapState([
+                'department',
+            ]),
+
+            _department () {
+                return this.department
+            },
             principalInfo: function () {
                 if (this.type === 'change') {
                     return this.$store.state.principalInfo
@@ -131,12 +139,23 @@
             fetch('get', '/users').then(response => {
                 this.normalUsers = response.data;
             });
-            fetch('get', '/departments').then(response => {
-                this.departmentUsers = response.data;
-            });
+            if (this.department.length === 0) {
+                this.getDepartment()
+            } else {
+                this.departmentUsers = this.department
+            }
+        },
+
+        watch: {
+            _department () {
+                this.departmentUsers = this.department
+            }
         },
 
         methods: {
+            ...mapActions([
+                'getDepartment', // 获取部门数据
+            ]),
             closeTeam: function () {
                 this.teamShow = !this.teamShow
             },
@@ -263,8 +282,8 @@
     .selector-page-content {
         padding: 0 30px;
         height: 355px;
-        overflow-x: hidden;
-        overflow-y: auto;
+        overflow-x: hidden!important;
+        overflow-y: auto!important;
         position: relative;
         top: 45px;
     }

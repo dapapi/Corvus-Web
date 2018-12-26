@@ -24,7 +24,8 @@ const state = {
     otherSlot:{},
     unReadMsg:0,//未读消息
     isSelected:'',
-    isExpanded:[]
+    isExpanded:[],
+    department: [], // 部门数据
 };
 
 export default new Vuex.Store({
