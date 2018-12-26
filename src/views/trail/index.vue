@@ -250,6 +250,7 @@
 <script>
     import fetch from '../../assets/utils/fetch.js'
     import config from '../../assets/js/config'
+    import {mapState, mapActions} from 'vuex'
 
     export default {
         data: function () {
@@ -313,7 +314,11 @@
         },
         created() {
             this.getField()
-            this.getMembers()
+            if (this.userList.length === 0) {
+                this.getUserList()
+            } else {
+                this.memberList = this.userList
+            }
             this.getCurrentUser()
         },
         mounted() {
@@ -322,11 +327,20 @@
             this.getStars();
             this.getIndustries();
         },
-        update(){
 
-
+        computed: {
+            ...mapState([
+                'userList'
+            ]),
+            _userList () {
+                return this.userList
+            }
         },
+
         watch: {
+            _userList () {
+                this.memberList = this.userList
+            },
             trailType: function () {
                 this.trailOriginArr = config.trailOrigin
                 if (this.trailType == 4) {
@@ -346,6 +360,9 @@
             }
         },
         methods: {
+            ...mapActions([
+                'getUserList'
+            ]),
             getField() {
                 let _this = this
                 fetch('get', '/trails/filter_fields').then((params) => {
@@ -361,12 +378,6 @@
             getCurrentUser() {
                 fetch('get', '/users/my').then((response) => {
                     this.currentUser = response.data
-                })
-            },
-            getMembers() {
-                let _this = this
-                fetch('get', '/users').then(function (response) {
-                    _this.memberList = response.data
                 })
             },
             principalFilter(value) {

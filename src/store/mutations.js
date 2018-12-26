@@ -61,5 +61,9 @@ export default {
     // 设置部门数据
     setDepartment (state, data) {
         state.department = data
+    },
+    // 设置用户列表
+    setUserList (state, data) {
+        state.userList = data
     }
 }

@@ -63,7 +63,7 @@ import config from '@/assets/js/config'
                 childData:'',
                 detailData:'',
                 trailTypeArr:config.trailTypeArr,
-                users:'',
+                users: [],
                 sendData:{
                     value:[],
                     field:'',
@@ -75,15 +75,22 @@ import config from '@/assets/js/config'
         computed: {
             ...mapState([
                 'department',
+                'userList'
             ]),
 
             _department () {
                 return this.department
             },
+            _userList () {
+                return this.userList
+            }
         },
         watch:{
             _department () {
                 this.departments = this.department
+            },
+            _userList () {
+                this.users = this.userList
             },
             'sendData.value':function(value){
                 this.$emit('sendcusdata',this.sendData,this.n)
@@ -98,7 +105,6 @@ import config from '@/assets/js/config'
                 this.sendData.value = ''
             },
             childData:function(){
-                console.log(this.item);
                 let currentData = this.item.find(item =>item.value == this.childData)
                 this.sendData.operator = currentData.code
             }
@@ -109,7 +115,11 @@ import config from '@/assets/js/config'
             } else {
                 this.departments = this.department
             }
-            this.getUsers() 
+            if (this.userList.length === 0) {
+                this.getUserList()
+            } else {
+                this.users = this.userList
+            }
         },
         beforeMount() {
             if(this.data[0]){
@@ -149,13 +159,12 @@ import config from '@/assets/js/config'
             child.selectpicker().on('hidden.bs.select', function () {
                 _this.conditionId = $(this)[0].value;
             });
-
-
         },
 
         methods: {
             ...mapActions([
                 'getDepartment', // 获取部门数据
+                'getUserList'
             ]),
             refresh: function () {
                 $('#child' + this.n).selectpicker('refresh');
@@ -183,12 +192,6 @@ import config from '@/assets/js/config'
             },
             changeDepartments(value){
                 this.sendData.value = value 
-            },
-            getUsers(value){
-                let _this = this
-                fetch('get','/users').then((params) => {
-                    _this.users = params.data
-                })
             },
             changeUsers(params){
                 this.sendData.value = params 

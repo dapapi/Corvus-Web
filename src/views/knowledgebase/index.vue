@@ -90,6 +90,8 @@
 <script>
 import fetch from '../../assets/utils/fetch.js'
 import config from '../../assets/js/config'
+import {mapState, mapActions} from 'vuex'
+
 export default {
     data(){
         return{
@@ -103,30 +105,38 @@ export default {
           
     },
     created() {
-        this.getMemberList()
+        if (this.userList.length === 0) {
+            this.getUserList()
+        } else {
+            this.memberList = this.userList
+        }
         this.dataInit()    
+    },
+    computed: {
+        ...mapState([
+            'userList'
+        ]),
+        _userList () {
+            return this.userList
+        }
     },
     mounted(){
     },
     watch:{
-      memberList:function(){
-          
-      }  
+        _userList () {
+            this.memberList = this.userList
+        }
     },
     methods:{
+        ...mapActions([
+            'getUserList'
+        ]),
         //初始化数据
         dataInit(){
             let _this = this
                 fetch('get', '/announcements?include=creator').then(function (response) {
                     _this.broadCastInfo = response.data
                     _this.isLoading = false
-            })
-        },
-        //获取人员信息
-        getMemberList(){
-            let _this = this
-            fetch('get','/users').then((params) => {
-                _this.memberList = params.data
             })
         },
         // 重新请求

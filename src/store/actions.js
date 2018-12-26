@@ -60,9 +60,15 @@ export default {
     },
 
     // 获取部门数据
-    getDepartment ({commit}, params) {
+    getDepartment ({commit}) {
         fetch('get', '/departments').then(res => {
             commit('setDepartment', res.data)
+        })
+    },
+    // 获取用户列表
+    getUserList ({commit}) {
+        fetch('get', '/users').then(res => {
+            commit('setUserList', res.data)
         })
     }
 }

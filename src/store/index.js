@@ -26,6 +26,7 @@ const state = {
     isSelected:'',
     isExpanded:[],
     department: [], // 部门数据
+    userList: [], // 用户列表
 };
 
 export default new Vuex.Store({

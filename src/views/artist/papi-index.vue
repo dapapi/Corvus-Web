@@ -374,7 +374,6 @@
         },
         mounted() {
             this.getArtists();
-            this.getUser();
             this.getBlogType() //获取博主类型
             $('table').asSelectable();
              let _this = this;
@@ -457,12 +456,6 @@
             },
             customize: function (value) {
 
-            },
-            getUser() {
-                let _this = this;
-                fetch('get', '/users').then(function (response) {
-                    _this.userData = response.data
-                })
             },
             changeArtistStatus: function (value) {
                 this.artistStatus = value
