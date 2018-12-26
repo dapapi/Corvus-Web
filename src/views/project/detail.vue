@@ -238,7 +238,7 @@
 
                             <div class="site-action fixed-button" data-plugin="actionBtn" data-toggle="modal"
                                  data-target="#addTask">
-                                <button type="button"
+                                <button type="button" @click="setTaskPrincipal"
                                         class="site-action-toggle btn-raised btn btn-success btn-floating waves-effect waves-classic">
                                     <i class="front-icon iconfont icon-tianjia1 animation-scale-up" aria-hidden="true"
                                        style="font-size:30px"></i>
@@ -739,7 +739,7 @@
                         <div class="example" v-if="taskTypeArr.length > 0">
                             <div class="col-md-2 text-right float-left">任务类型</div>
                             <div class="col-md-10 float-left pl-0">
-                                <selectors :options="taskTypeArr" ref="projectTaskType" placeholder="请选择任务类型"
+                                <selectors :options="taskTypeArr" ref="taskType" placeholder="请选择任务类型"
                                            @change="changeTaskType"></selectors>
                             </div>
                         </div>
@@ -766,25 +766,28 @@
                         <div class="example">
                             <div class="col-md-2 text-right float-left pl-0">任务优先级</div>
                             <div class="col-md-10 float-left pl-0">
-                                <selectors :options="taskLevelArr" @change="changeTaskLevel"></selectors>
+                                <selectors :options="taskLevelArr" ref="taskLevel"
+                                           @change="changeTaskLevel"></selectors>
                             </div>
                         </div>
                         <div class="example">
                             <div class="col-md-2 text-right float-left">开始时间</div>
                             <div class="col-md-5 float-left pl-0">
-                                <datepicker @change="changeStartTime"></datepicker>
+                                <datepicker ref="startTime" @change="changeStartTime"></datepicker>
                             </div>
                             <div class="col-md-5 float-left pl-0">
-                                <timepicker :default="startMinutes" @change="changeStartMinutes"></timepicker>
+                                <timepicker ref="startMinutes" :default="startMinutes"
+                                            @change="changeStartMinutes"></timepicker>
                             </div>
                         </div>
                         <div class="example">
                             <div class="col-md-2 text-right float-left">截止时间</div>
                             <div class="col-md-5 float-left pl-0">
-                                <datepicker @change="changeEndTime"></datepicker>
+                                <datepicker ref="endTime" @change="changeEndTime"></datepicker>
                             </div>
                             <div class="col-md-5 float-left pl-0">
-                                <timepicker :default="endMinutes" @change="changeEndMinutes"></timepicker>
+                                <timepicker ref="endMinutes" :default="endMinutes"
+                                            @change="changeEndMinutes"></timepicker>
                             </div>
                         </div>
                         <div class="example">
@@ -918,14 +921,14 @@
                         <div class="example">
                             <div class="col-md-2 text-right float-left px-0">负责人</div>
                             <div class="col-md-10 float-left">
-                                {{ projectInfo.creator.data.name }}
+                                {{ user.nickname }}
                             </div>
                         </div>
                         <div class="example">
                             <div class="col-md-2 text-right float-left px-0">期次名称</div>
                             <div class="col-md-10 float-left">
                                 <template v-if="!isEditProjectPayback">第{{ paybackLength }}期</template>
-                                <template v-else>{{ projectReturnName }}</template>
+                                <template v-else>第{{ projectReturnName }}期</template>
                             </div>
                         </div>
                         <div class="example">
@@ -994,7 +997,7 @@
                         <div class="example">
                             <div class="col-md-2 text-right float-left px-0">负责人</div>
                             <div class="col-md-10 float-left">
-                                {{ projectInfo.creator.data.name }}
+                                {{ user.nickname }}
                             </div>
                         </div>
                         <div class="example">
@@ -1072,7 +1075,7 @@
                         <div class="example">
                             <div class="col-md-2 text-right float-left px-0">负责人</div>
                             <div class="col-md-10 float-left">
-                                {{ projectInfo.creator.data.name }}
+                                {{ user.nickname }}
                             </div>
                         </div>
                         <div class="example">
@@ -1287,6 +1290,7 @@
 <script>
     import fetch from '../../assets/utils/fetch.js'
     import config from '../../assets/js/config'
+    import Cookies from 'js-cookie'
 
     export default {
         data: function () {
@@ -1396,7 +1400,8 @@
                 isEditProjectPaybackTime: false,
                 paybackTime: '',
                 delText: '',
-                paybackLength: 0,
+                paybackLength: 1,
+                user: '',
             }
         },
 
@@ -1405,6 +1410,7 @@
             this.getClients();
             this.getTaskType();
             this.getStars();
+            this.user = JSON.parse(Cookies.get('user'));
             let _this = this;
             $('#addPaybackTime').on('hidden.bs.modal', function () {
                 _this.projectReturnDesc = '';
@@ -1426,11 +1432,33 @@
                 _this.$refs.payMethod1.setValue();
                 _this.projectReturnData = {};
             });
+
+            $('#addTask').on('hidden.bs.modal', function () {
+                _this.taskName = '';
+                _this.taskLevel = '';
+                _this.$refs.taskLevel.setValue('');
+                _this.taskType = '';
+                _this.$refs.taskType.setValue('');
+                _this.startTime = '';
+                _this.endTime = '';
+                _this.startMinutes = '';
+                _this.endMinutes = '';
+                _this.taskIntroduce = '';
+                _this.$refs.startTime.setValue('');
+                _this.$refs.startMinutes.setValue('00:00');
+                _this.$refs.endTime.setValue('');
+                _this.$refs.endMinutes.setValue('00:00');
+                _this.$store.commit('changeNewPrincipal', {});
+                _this.$store.commit('changeNewParticipantsInfo', [])
+            })
         },
 
         watch: {
             projectReturnDesc: function (newValue) {
                 this.addProjectReturn(newValue, 'desc')
+            },
+            "$route": function () {
+                this.getProject();
             },
         },
         computed: {
@@ -1553,7 +1581,11 @@
                 };
                 fetch('get', '/projects/' + this.projectId + '/returned/money', data).then(response => {
                     this.projectReturnInfo = response;
-                    this.paybackLength = response.data.length + 1
+                    for (let i = 0; i < response.data.length; i++) {
+                        if (Number(response.data[i].issue_name) >= this.paybackLength) {
+                            this.paybackLength = Number(response.data[i].issue_name) + 1
+                        }
+                    }
                 });
 
                 if (this.payMethodsArr.length > 0) {
@@ -1587,7 +1619,7 @@
             addProjectPayback: function () {
                 // todo 合同id没有做修改，需要等合同确定才可以
                 this.projectReturnData.contract_id = 22;
-                this.projectReturnData.principal_id = this.projectInfo.creator.data.id;
+                this.projectReturnData.principal_id = this.user.id;
                 this.projectReturnData.issue_name = this.paybackLength;
                 fetch('post', '/projects/' + this.projectId + '/returned/money', this.projectReturnData).then(response => {
                     $('#addPaybackTime').modal('hide');
@@ -1634,7 +1666,7 @@
                     return
                 }
                 this.projectReturnData.contract_id = 22;
-                this.projectReturnData.principal_id = this.projectInfo.creator.data.id;
+                this.projectReturnData.principal_id = this.user.id;
                 fetch('post', '/projects/' + this.projectId + '/returned/' + this.paybackTime.id + '/money', this.projectReturnData).then(response => {
                     $('#addPayback').modal('hide');
                     $('#addInvoice').modal('hide');
@@ -1662,6 +1694,10 @@
                 }
                 this.projectReturnId = recording.id;
                 this.paybackTime = payback;
+            },
+
+            setTaskPrincipal: function () {
+                this.$store.dispatch('changePrincipal', {data: {id: this.user.id, name: this.user.nickname}})
             },
 
             redirectTask: function (taskId) {

@@ -44,7 +44,8 @@
                                 <div class="input-group input-group-icon">
                                     <span class="input-group-addon"
                                           style="background-color: white;border-top: 1px solid #e0e0e0;border-left: 1px solid #E0E0E0;border-bottom: 1px solid #E0E0E0;border-right: 0">
-                                        <i class="iconfont icon-buoumaotubiao32" aria-hidden="true" style="font-size:12px;"></i>
+                                        <i class="iconfont icon-buoumaotubiao32" aria-hidden="true"
+                                           style="font-size:12px;"></i>
                                     </span>
                                     <input type="password" class="form-control" placeholder="密码" v-model="password">
                                 </div>
@@ -254,14 +255,9 @@
                 if (!Verify.phone(this.phone)) {
                     return
                 }
-                if (!this.smsRequestToken) {
-                    let _this = this;
-                    this.getServicesToken(function (token) {
-                        _this.sendMessage(token)
-                    })
-                } else {
-                    this.sendMessage(this.smsRequestToken)
-                }
+                this.getServicesToken(token => {
+                    this.sendMessage(token)
+                })
             },
 
             getServicesToken(callback) {
@@ -283,7 +279,7 @@
                 }
                 let data = {
                     telephone: this.phone,
-                    device: Cookies.get('deviceId'),
+                    device: this.getDevice(),
                     bind_token: this.bindToken,
                     sms_code: this.smsCode,
                     token: this.smsRequestToken
@@ -338,7 +334,7 @@
                 }, 1000);
                 let data = {
                     telephone: this.phone,
-                    device: Cookies.get('deviceId'),
+                    device: this.getDevice(),
                     token: token
                 };
                 fetch('get', '/services/send_sms_code', data).then(function () {
