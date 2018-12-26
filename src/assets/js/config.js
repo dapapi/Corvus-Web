@@ -663,16 +663,16 @@ let config = {
         //社交平台
         platformArr: [{
             value: 1,
-            name: '抖音'
+            name: '微博'
         }, {
             value: 2,
-            name: '微博'
+            name: '抖音'
         }, {
             value: 3,
             name: '小红书',
         }, {
             value: ["1", "2", "3"],
-            name: ('抖音', '微博', '小红书')
+            name: ('微博', '抖音', '小红书')
         }],
         // 性别
         genderArr: [

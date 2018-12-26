@@ -11,7 +11,7 @@
                      role="menu" x-placement="bottom-end">
                     <a class="dropdown-item" role="menuitem" >导入</a>
                     <a class="dropdown-item" role="menuitem" >导出</a>
-                    <a class="dropdown-item" role="menuitem" data-toggle="modal" data-target="#giveBroker">分配制作人</a>
+                    <a class="dropdown-item" role="menuitem" data-toggle="modal" :data-target="selectedArtistsArr.length>0&&'#giveBroker'" @click="judge">分配制作人</a>
                 </div>
             </div>
         </div>
@@ -578,9 +578,6 @@
                 }
                 fetch('post', 'distribution/person', data).then(function (response) {
                     if(_this.selectedArtistsArr.length==0){
-                        toastr.error('请先选择博主，再进行分配')
-                        $('#giveBroker').modal('hide')
-                        _this.$store.state.participantsInfo = []
                         return  false
                     }
                     toastr.success('分配制作人成功')
@@ -590,6 +587,14 @@
                     _this.selectedArtistsArr=[]
                 })
                
+            },
+            judge(){
+                 if(this.selectedArtistsArr.length==0){
+                        toastr.error('请先选择博主，再进行分配')
+                        $('#giveBroker').modal('hide')
+                        this.$store.state.participantsInfo = []
+                        return  false
+                    }
             }
         }
     }
@@ -617,7 +622,6 @@
         position: relative;
         border:0px
     }
-    
 </style>
 
 

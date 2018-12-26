@@ -279,7 +279,7 @@
                             <li class="nav-item" role="presentation">
                                 <a class="nav-link" data-toggle="tab" :href="'#forum-scope'+ item.id"
                                    aria-controls="forum-present"
-                                   aria-expanded="false" role="tab">功能范围</a>
+                                   aria-expanded="false" role="tab">数据范围</a>
                             </li>
                         </ul>
                     </div>

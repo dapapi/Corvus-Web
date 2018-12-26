@@ -22,71 +22,45 @@
 
             <div class="panel col-md-12">
                 <div class="card-block">
-                    <h4 class="card-title">{{ artistInfo.nickname }}</h4>
-                    <div class="card-text clearfix example">
-                        <div class="col-md-6 float-left pl-0" v-if="totalData.publicity">
-                            <div class="float-left pl-0 p-10 col-md-2">
-                                <i class="iconfont icon-yonghu"></i>
-                                制作人
+                    <h4 class="card-title">{{artistInfo.nickname}}</h4>
+                     <div class="card-text clearfix">
+                        <div class="card-text clearfix example">
+                        <div class="col-md-6 float-left pl-0"  v-show="artistInfo.sign_contract_status == 2&&artistInfo.publicity.data.length>0">
+                            <div class="float-left pl-0 col-md-2">
+                                <i class="iconfont icon-yonghu pr-2"></i>
+                                <span>制作人</span>
                             </div>
-                            <div class="font-weight-bold float-left p-10"  v-for="item in artistInfo.publicity.data" :key="item.id" >
-                                <span >{{item.name}}</span>
-                            </div>
+                            <!-- <div class="font-weight-bold float-left" >
+                                <template v-if="artistInfo.publicity.data.length>0" v-for="item in artistInfo.publicity.data">
+                                    {{item.name}}
+                                </template>
+                            </div> -->
                         </div>
-                       
-                        <div class="card-text clearfix example " v-show="artistInfo.sign_contract_status == 1">
-                            <div class="float-left pl-0 pr-2 col-md-1">
-                                <i class="iconfont icon-yonghu pr-1" aria-hidden="true"></i>录入人
+                         <div class="col-md-6 float-left pl-0" v-show="artistInfo.sign_contract_status == 1">
+                            <div class="float-left pl-0 pr-2 col-md-2">
+                                <i class="iconfont icon-yonghu pr-2" aria-hidden="true"></i>录入人
                             </div>
                             <div class="font-weight-bold float-left" v-if="principalName">
-                                {{ principalName}}
+                                <template>
+                                    {{ principalName}}
+                                </template>
                             </div>
                         </div>
-                        <div class="card-text clearfix example  " v-show="artistInfo.sign_contract_status == 1">
-                            <div class="float-left pl-0 pr-2 col-md-1">
-                                <i class="iconfont icon-shijian pr-1" aria-hidden="true"></i>录入时间
+                        <div class="col-md-6 float-left pl-0" v-show="artistInfo.sign_contract_status == 1">
+                            <div class="float-left pl-0 pr-2 col-md-2">
+                                <i class="iconfont icon-yonghu pr-2" aria-hidden="true"></i>录入时间
                             </div>
                             <div class="font-weight-bold float-left" v-if="principalName">
-                                {{artistInfo.created_at}}
+                                <template>
+                                     {{artistInfo.created_at}}
+                                </template>
                             </div>
+                        </div>
                         </div>
                     </div>
-                    <!-- <div class="card-text clearfix example">
-                        <div class="col-md-6 float-right pl-0">
-                            <div class="float-left pl-0 pr-2 col-md-2">
-                                <i class="iconfont icon-yonghu pr-2" aria-hidden="true"></i>沟通状态
-                            </div>
-                            <div class="font-weight-bold float-left" v-if="artistInfo.publicity">
-                                <template v-for="publicity in artistInfo.publicity.data">
-                                    {{ publicity.name }}
-                                </template>
-                            </div>
-                        </div>
-                         <div class="col-md-6 float-right pl-0">
-                            <div class="float-left pl-0 pr-2 col-md-2">
-                                <i class="iconfont icon-yonghu pr-2" aria-hidden="true"></i>平台
-                            </div>
-                            <div class="font-weight-bold float-left" v-if="artistInfo.publicity">
-                                <template v-for="publicity in artistInfo.publicity.data">
-                                    {{ publicity.name }}
-                                </template>
-                            </div>
-                        </div>
-                         <div class="col-md-6 float-right pl-0">
-                            <div class="float-left pl-0 pr-2 col-md-2">
-                                <i class="iconfont icon-yonghu pr-2" aria-hidden="true"></i>微博地址
-                            </div>
-                            <div class="font-weight-bold float-left" v-if="artistInfo.publicity">
-                                <template v-for="publicity in artistInfo.publicity.data">
-                                    {{ publicity.name }}
-                                </template>
-                            </div>
-                        </div>
-                    </div> -->
-                </div>
-                  
+                </div>  
                 <div class="clearfix">
-                    <div class="col-md-6 float-left pl-1 mb-20" style="border-right: 1px solid #eee" v-if="tasksInfo.length>0">
+                    <div class="col-md-6 float-left pl-1 mb-20 pr-1" style="border-right: 1px solid #eee" >
                         <div class="col-md-6"><i class="iconfont icon-iconset0399"></i> 任务</div>
                         <div class="clearfix example taskshow" v-for="(task,index) in tasksInfo" :key="index" @click="JumpDetails(task.id)">
                             <div class="col-md-3 float-left">{{task.title}}</div>
@@ -100,16 +74,77 @@
                             </div>
                         </div>
                     </div>
-                    <div class="col-md-6 float-left pl-0 mb-20" v-if="ProjectsInfo.length>0&&artistInfo.sign_contract_status == 2">
-                        <div class="col-md-6"><i class="iconfont icon-ego-box"></i>项目</div>
-                        <div class="clearfix example projectshow" v-for="(item,index) in ProjectsInfo" :key="index" @click="projectDetails(item.id)">
-                            <div class="col-md-3 float-left">{{item.title}}</div>
-                            <div class="col-md-3 float-left">{{item.principal.data.name}}</div>
-                            <div class="col-md-3 float-left">{{item.end_at}}</div>
-                            <div class="col-md-3 float-left">
-                                <template v-if="item.status === 1"><span style="color:#FF9800">进行中</span></template>
-                                <template v-if="item.status === 2"><span style="color:#4CAF50">已完成</span></template>
-                                <template v-if="item.status === 3"><span style="color:#9E9E9E">撤单</span></template>
+                    <div class="col-md-6 float-left pl-0 mb-20" >
+                        <div class="col-md-6" v-if="artistInfo.sign_contract_status == 2">                    
+                            <div class="col-md-6"><i class="iconfont icon-ego-box"></i>项目</div>
+                            <div class="clearfix example projectshow" v-for="(item,index) in ProjectsInfo" :key="index" @click="projectDetails(item.id)">
+                                <div class="col-md-3 float-left">{{item.title}}</div>
+                                <div class="col-md-3 float-left">{{item.principal.data.name}}</div>
+                                <div class="col-md-3 float-left">{{item.end_at}}</div>
+                                <div class="col-md-3 float-left">
+                                    <template v-if="item.status === 1"><span style="color:#FF9800">进行中</span></template>
+                                    <template v-if="item.status === 2"><span style="color:#4CAF50">已完成</span></template>
+                                    <template v-if="item.status === 3"><span style="color:#9E9E9E">撤单</span></template>
+                                </div>
+                            </div>
+                        </div>
+                       <div class="col-md-6" v-show="artistInfo.sign_contract_status == 1">                    
+                            <div class="clearfix">
+                                <div class="col-md-6 float-left"><span>沟通状态</span></div>
+                                <div class="col-md-6 float-left font-weight-bold "  v-if="artistInfo.type">
+                                    <template >
+                                            {{artistInfo.type.data.name}}
+                                    </template>  
+                                </div>
+                            </div>
+                            <div class="clearfix example ">
+                                <div class="col-md-6 float-left"><span>平台</span></div>
+                                <div class="col-md-6 float-left font-weight-bold " v-if="artistInfo.platform">   
+                                            <template v-if="artistInfo.platform==1">
+                                                    微博
+                                            </template>
+                                            <template v-else-if="artistInfo.platform==2">
+                                                    抖音
+                                            </template>
+                                            <template v-else-if="artistInfo.platform==3">
+                                                    小红书
+                                            </template> 
+                                            <template v-else>
+                                                微博,抖音,小红书
+                                            </template>                
+                                </div>
+                            </div> 
+                            <div class="clearfix example " >
+                                <div class="col-md-6 float-left" >
+                                    <template v-if="artistInfo.platform==1">
+                                            微博地址
+                                    </template>
+                                    <template v-else-if="artistInfo.platform==2">
+                                            抖音地址
+                                    </template>
+                                    <template v-else-if="artistInfo.platform==3">
+                                            小红书地址
+                                    </template> 
+                                    <template v-else>
+                                            微博,抖音,小红书地址
+                                    </template> 
+                                </div>
+                                <div class="col-md-6 float-left font-weight-bold ">
+                                    <template v-if="artistInfo.platform==1">
+                                            {{artistInfo.weibo_url}}
+                                    </template>
+                                    <template v-else-if="artistInfo.platform==2">
+                                            {{artistInfo.douyin_id}}
+                                    </template>
+                                    <template v-else-if="artistInfo.platform==3">
+                                            {{artistInfo.xiaohongshu_url}}
+                                    </template> 
+                                    <template v-else>
+                                            {{artistInfo.weibo_url}}
+                                            {{artistInfo.douyin_id}}
+                                            {{artistInfo.xiaohongshu_url}}
+                                    </template> 
+                                </div>
                             </div>
                         </div>
                     </div>
@@ -187,8 +222,8 @@
                                     <th class="cell-300" scope="col">关联公司</th>
                                     <th class="cell-300" scope="col">录入日期</th>
                                 </tr>
-                                <tr v-for="(item,index) in ProjectsInfo" :key="index">
-                                    <td @click="projectdetil(v.project.data.id)" class="Jump">{{item.title}}</td>
+                                <tr v-for="(item,index) in ProjectsInfo" :key="index" @click="projectdetil(item.id)" class="Jump">
+                                    <td>{{item.title}}</td>
                                     <td>
                                         <template v-if="item.status === 1"><span style="color:#FF9800">进行中</span>
                                         </template>
@@ -306,7 +341,7 @@
                         <div class="tab-pane animation-fade pb-20 fixed-button-father" id="forum-artist-bill"
                              role="tabpanel">
                             <div class="clearfix my-10">
-                                <div style="padding: .715rem 1.429rem">
+                                <div style="padding: .715rem .6rem">
                                     <div class="float-left pr-40">收款金额</div>
                                     <div class="float-left pr-40 money-color">10000000元</div>
                                     <div class="float-left pr-40">付款金额</div>
@@ -357,10 +392,10 @@
                                 </tr>
                                 </tbody>
                             </table>
-                            <div class="col-md-1" style="margin: 6rem auto" v-if="artistBillsInfo.length === 0">
+                            <!-- <div class="col-md-1" style="margin: 6rem auto" v-if="artistBillsInfo.length === 0">
                                 <img src="https://res.papitube.com/corvus/images/content-none.png" alt=""
                                      style="width: 100%">
-                            </div>
+                            </div> -->
                         </div>
                         <div class="tab-pane animation-fade fixed-button-father" id="forum-artist-base"
                              role="tabpanel">
@@ -404,30 +439,40 @@
                                         </div>
                                         <div class="card-text py-10 px-0 clearfix col-md-6 float-left edit-height">
                                             <div class="col-md-2 float-left text-right pl-0">与我司签约意向</div>
-                                            <div class="col-md-5 float-left font-weight-bold">
+                                            <div class="col-md-4 float-left font-weight-bold">
                                                 <EditSelector :content="updateType"
                                                               :options="yesOrNoArr"
                                                               :is-edit="isEdit"
                                                               @change="changeArtistIntention"></EditSelector>
                                             </div>
-                                            <div class="col-md-5 float-left font-weight-bold" >
-                                                <EditInput  :is-edit="isEdit"
-                                                           @change="changArtistName"></EditInput>
+                                            <div class="col-md-6 float-left" v-show="artistInfo.intention==false">
+                                                <div class="col-md-6 float-left text-right pl-10">不签约原因</div>
+                                                <div class="col-md-6 float-left font-weight-bold" >
+                                                    <EditInput :content="artistInfo.intention_desc"
+                                                            :is-edit="isEdit"
+                                                            @change="changReason" ></EditInput>
+                                                </div>
                                             </div>
+                                           
                                         </div>
 
                                         <div class="card-text py-10 px-0 clearfix col-md-6 float-left edit-height">
                                             <div class="col-md-2 float-left text-right pl-0">是否签约其他公司</div>
-                                            <div class="col-md-5 float-left font-weight-bold">
+                                            <div class="col-md-4 float-left font-weight-bold">
                                                 <EditSelector :content="updateSign_contract_other"
                                                               :options="yesOrNoArr"
                                                               :is-edit="isEdit"
                                                               @change="changeArtistSignStatus"></EditSelector>
                                             </div>
-                                            <div class="col-md-5 float-left font-weight-bold">
-                                                <EditInput  :is-edit="isEdit"
-                                                           @change="changArtistName"></EditInput>
+                                            <div class="col-md-6 float-left" v-show="artistInfo.sign_contract_other==true">
+                                                <div class="col-md-6 float-left text-right pl-10">签约公司</div>
+                                                <div class="col-md-6 float-left font-weight-bold">
+                                                    <EditInput :content="artistInfo.sign_contract_other_name"
+                                                            :is-edit="isEdit"
+                                                            @change="changSigningCompany" ></EditInput>
+                                                </div>
                                             </div>
+                                            
                                         </div> 
                                         <div class="card-text py-10 px-0 clearfix col-md-6 float-left edit-height">
                                             <div class="col-md-2 float-left text-right pl-0">社交平台</div>
@@ -574,7 +619,7 @@
                         <div class="example">
                             <div class="col-md-2 text-right float-left">关联资源</div>
                             <div class="col-md-10 float-left">
-                                艺人 - {{ artistInfo.name }}
+                                博主 - {{ artistInfo.name }}
                             </div>
                         </div>
                         <div class="example">
@@ -595,8 +640,9 @@
                             <div class="col-md-5 float-left pl-0">
                                     <InputSelectors
                                         :placeholder="principalName"
+                                        v-model="principalName"
                                         @change="principalChange">
-                                </InputSelectors>
+                                    </InputSelectors>
                             </div>
 
                         </div>
@@ -796,7 +842,8 @@
                 updatehatch_end:'',//孵化期截止
                 Incubationperiod:'',
                 principalName:'',
-                filterFee:1
+                filterFee:1,
+                platformArr:config.platformArr
             }
         },
         computed: {
@@ -914,7 +961,7 @@
                 this.artistId = this.$route.params.id;
                 let _this = this;
                 let data = {
-                    include: 'creator,tasks,affixes,producer,type',
+                    include: 'creator,tasks,affixes,producer,type,publicity',
                 };
                 fetch('get', '/bloggers/' + this.artistId, data).then(function (response) {
                     let doneTaskNum = 0
@@ -941,6 +988,7 @@
                     
                     //孵化期时间 
                     if(_this.artistInfo.hatch_star_at&&_this.artistInfo.hatch_end_at){
+                        
                         _this.Incubationperiod = _this.artistInfo.hatch_star_at+'|'+_this.artistInfo.hatch_end_at
                     }   
                     //状态转换
@@ -1092,7 +1140,9 @@
                     level: this.artistInfo.level,
                     cooperation_demand: this.updatedemand,
                     hatch_star_at: _this.artistInfo.hatch_star_at,
-                    hatch_end_at: _this.artistInfo.hatch_end_at
+                    hatch_end_at: _this.artistInfo.hatch_end_at,
+                    intention_desc:_this.artistInfo.intention_desc,
+                    sign_contract_other_name:_this.artistInfo.sign_contract_other_name
                 }
                 fetch('put', '/bloggers/' + this.artistId, data).then(function (response) {
                     toastr.success('修改成功');
@@ -1397,6 +1447,12 @@
             },
             projectDetails(id){
                 this.$router.push({path: '/projects/' + id})
+            },
+            changReason(value){
+                this.artistInfo.intention_desc = value
+            },
+            changSigningCompany(value){
+                this.artistInfo.sign_contract_other_name = value
             }
         }
     }
