@@ -28,7 +28,7 @@ export default {
         state.billInfo = data
     },
     changePrincipal:function(state,data){
-        state.principal = data
+        state.principalInfo = data
     },
     changeNewParticipantsInfo(state, data) {
         state.newParticipantsInfo = data

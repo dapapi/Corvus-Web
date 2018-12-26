@@ -10,7 +10,7 @@
                      role="menu" x-placement="bottom-end">
                     <a class="dropdown-item" role="menuitem" @click="changeTaskStatus(3)">终止</a>
                     <a class="dropdown-item" role="menuitem" @click="changeTaskStatus(2)">完成</a>
-                    <a class="dropdown-item" role="menuitem" data-toggle="modal" data-target="#customizeFieldContent">自定义字段</a>
+                    <!-- <a class="dropdown-item" role="menuitem" data-toggle="modal" data-target="#customizeFieldContent">自定义字段</a> -->
                     <a class="dropdown-item" role="menuitem" @click="privacyTask">
                         {{taskInfo.privacy == 1 ? '转公开':'转私密'}}</a>
                     <a class="dropdown-item" role="menuitem" @click="deleteTask">删除</a>
