@@ -684,13 +684,13 @@
                                         <div class="col-md-1 float-left text-right pl-0">关联项目</div>
                                         <div class="col-md-5 float-left font-weight-bold">
                                             <template v-for="project in projectInfo.relate_projects.data">
-                                                {{project.title }}
+                                                <span @click="redirectProject(project.id)">{{project.title }}</span>
                                             </template>
                                         </div>
                                         <div class="col-md-1 float-left text-right pl-0">关联任务</div>
                                         <div class="col-md-5 float-left font-weight-bold">
                                             <template v-for="task in projectInfo.relate_tasks.data">
-                                                {{ task.title }}
+                                                <span @click="redirectTask(task.id)">{{ task.title }}</span>
                                             </template>
                                         </div>
                                     </div>
@@ -1662,6 +1662,11 @@
 
             redirectTask: function (taskId) {
                 this.$router.push({path: '/tasks/' + taskId})
+            },
+
+            redirectProject: function (projectId) {
+                // todo 跳转到同样的路由下，只有id变化，页面内容不刷新
+                this.$router.push({path: '/projects/' + projectId})
             },
 
             filterProjectFee: function (value) {
