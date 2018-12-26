@@ -1,5 +1,5 @@
 <template>
-    <div class="" data-animsition-in="fade-in" data-animsition-out="fade-out">
+    <div class="" data-animsition-in="fade-in" data-animsition-out="fade-out" @keyup.enter="alert(2)">
 
         <div class="col-md-7 float-left left-bg">
             <div class="bg-top-image">
@@ -343,6 +343,7 @@
             },
 
             checkLogin: function () {
+                alert(1)
                 if (!Verify.username(this.username) || !Verify.password(this.password)) {
                     return
                 }

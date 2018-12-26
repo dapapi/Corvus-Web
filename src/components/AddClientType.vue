@@ -26,19 +26,15 @@
         props: ['type'],
         data() {
             return {
-                visible: false
+                visible: false,
+                clientTypeArr: []
             }
         },
-
-        computed: {
-            clientTypeArr: function () {
-                if (this.type === 'project') {
-                    let arr = config.clientTypeArr;
-                    arr.push({name: '基础客户', value: 5});
-                    return arr
-                } else {
-                    return config.clientTypeArr
-                }
+        mounted () {
+            if (this.type === 'project') {
+                this.clientTypeArr = [...config.clientTypeArr, {name: '基础客户', value: 5}]
+            } else {
+                this.clientTypeArr = config.clientTypeArr
             }
         },
 

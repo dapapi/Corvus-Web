@@ -13,6 +13,7 @@
 
 <script>
     import { mapActions } from 'vuex'
+    import Cookies from 'js-cookie'
     import LeftMenu from '@/components/LeftMenu.vue'
     import getMessage from '@/components/getMessage.vue'
     import LeftManage from '@/components/LeftManage.vue'
@@ -51,8 +52,10 @@
 
         },
         beforeMount () {
-            this.getUserList()
-            this.getDepartment()
+            if (Cookies.get('user')) {
+                this.getUserList()
+                this.getDepartment()
+            }
         },
         methods: {
             ...mapActions([
