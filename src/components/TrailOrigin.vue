@@ -3,7 +3,7 @@
         <div class="col-md-2 text-right float-left">{{typeName}}来源</div>
         <div v-if="isEditSituation || alwaysShow">
             <!-- ⬆️判断是否永久显示 -->
-            <div :class="detailPage?'col-md-10 float-left font-weight-bold expfee':''">
+            <div :class="detailPage?'col-md-10 float-left font-weight-bold expfee':'col-md-10 float-left pl-0'">
                 <!-- ⬆️启用详情页样式 -->
                 <div class="float-left col-md-6 px-0" v-if="trailOriginArr.length > 0">
                     <selectors :options="trailOriginArr" @change="changeTrailOriginType" ref='contentType'
@@ -15,7 +15,7 @@
                     </div>
                 </template>
                 <template v-else-if="(trailOrigin === '4' || trailOrigin === '5')">
-                    <div class="col-md-6 float-left pr-0">
+                    <div class="col-md-6 float-left pr-0 pl-45">
                         <input-selectors @change="changeTrailOrigin" :placeholder='memberFinder' type="selector"
                                          :propSelectMemberName='trailOriginPerson.name'></input-selectors>
                     </div>
