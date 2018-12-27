@@ -1,6 +1,6 @@
 <template>
     <div class="page">
-
+        <Loading :is-loading="isLoading"></Loading>
         <div class="page-header page-header-bordered">
             <h1 class="page-title">项目管理</h1>
         </div>
@@ -14,11 +14,11 @@
                                @blur="getFilterProjects(1)">
                     </div>
                     <div class="col-md-3 example float-left">
-                        <selectors @change="(value) => getFilterProjects(1, 'status', value)"
+                        <selectors @change="(value) => getFilterProjects(1, 'status', value)" placeholder="请选择项目状态"
                                    :options="projectStatusArr"></selectors>
                     </div>
                     <div class="col-md-3 example float-left" v-if="allUsers.length > 0">
-                        <selectors @change="(value) => getFilterProjects(1, 'principal', value)"
+                        <selectors @change="(value) => getFilterProjects(1, 'principal', value)" placeholder="请选择项目负责人"
                                    :options="allUsers" multiple="true"></selectors>
                     </div>
                     <div class="col-md-3 example float-left">
@@ -150,6 +150,7 @@
                 principal_ids: '',
                 keyword: '',
                 status: '',
+                isLoading: true,
             }
         },
 
@@ -170,13 +171,13 @@
             ...mapState([
                 'userList'
             ]),
-            _userList () {
+            _userList() {
                 return this.userList
             }
         },
 
-        watch:{
-            _userList () {
+        watch: {
+            _userList() {
                 for (let i = 0; i < this.userList.length; i++) {
                     this.allUsers.push({
                         name: this.userList[i].name,
@@ -203,7 +204,7 @@
                     this.total = response.meta.pagination.total;
                     this.current_page = response.meta.pagination.current_page;
                     this.total_pages = response.meta.pagination.total_pages;
-
+                    this.isLoading = false;
                 })
             },
 

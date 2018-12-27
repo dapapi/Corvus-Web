@@ -192,14 +192,18 @@
                             <div class="card-block">
                                 <ul class="file-list">
                                     <li v-for="attachment in taskInfo.affixes?taskInfo.affixes.data:[]">
+<<<<<<< HEAD
                                         <i class="iconfont icon-wenjian pr-5" style="color: #3298dc;"></i>{{ attachment.title }}
+=======
+                                        <i class="iconfont icon-wenjian pr-5"></i>{{ attachment.title }}
+>>>>>>> hp
                                         <span class="float-right pl-10 pointer-content"
                                               data-plugin="actionBtn" @click="setDelInfo(attachment.id)"
                                               data-toggle="modal"
-                                              data-target="#confirmFlag">删除</span>
+                                              data-target="#confirmFlag"><i class="iconfont icon-iconfonttubiao"></i> 删除</span>
                                         <span class="float-right px-10">|</span>
                                         <span class="float-right px-10 pointer-content"
-                                              @click="downloadAttachment(attachment.id, attachment.url)">下载</span>
+                                              @click="downloadAttachment(attachment.id, attachment.url)"><i class="iconfont icon-download"></i> 下载</span>
                                         <span class="float-right px-10">{{ attachment.size }}</span>
                                     </li>
                                 </ul>

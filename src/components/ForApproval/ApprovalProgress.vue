@@ -46,6 +46,7 @@
 import config from '@/assets/js/config.js'
 import fetch from '@/assets/utils/fetch.js'
 export default {
+        //这是啥    提交页/详情页   231/232...   知会人
     props:['formid','mode','formstatus','notice'],
     data(){
         return{
@@ -129,6 +130,7 @@ export default {
     font-size: 5px;
 }
 .approver-row{
+    overflow: auto;
     display: flex;
     margin-top: 30px; 
     /* margin-left: 10%;   */

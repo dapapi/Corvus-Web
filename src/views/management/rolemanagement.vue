@@ -19,20 +19,25 @@
                         </span>
                     </div>
                     <div class="clearfix py-50">
-                        <section class="page-aside-section" >
-                        <div class="site-menubar-body" style="width:260px;">
-                               <!--默认分组-->
-                            <ul class="menu pl-0 m-0 pb-10" style="width:260px;">
-                                <li class="site-menu-item has-sub" v-for="(item,index) in job" :key="index" style="width:260px;">
-                                    <a href="javascript:void(0) " class="p-5" @click="clickdefault">
-                                        <i v-show="conceal" class="iconfont icon-plus-select-down showList font-size:25px pr-10"></i>
-                                        <i v-show="!conceal" class="iconfont icon-yousanjiao showList font-size:25px pr-10"></i>
-                                        <i class="iconfont icon-chengyuannew pr-10" style="vertical-align: middle;"></i>
-                                        <span class="site-menu-title">{{item.name}}</span>
-                                    </a>
-                                </li>
-                                 <ul class="administration-subordinate-item m-0" v-for="n in jobData" :key="n.id" v-show="conceal" @click="defaultcontent(n.id)">
-                                        <li  class="py-5" :class="defaultpitchon==n.id?'pitchon':''">
+                        <section class="page-aside-section">
+                            <div class="site-menubar-body" style="width:260px;">
+                                <!--默认分组-->
+                                <ul class="menu pl-0 m-0 pb-10" style="width:260px;">
+                                    <li class="site-menu-item has-sub" v-for="(item,index) in job" :key="index"
+                                        style="width:260px;">
+                                        <a href="javascript:void(0) " class="p-5" @click="clickdefault">
+                                            <i v-show="conceal"
+                                               class="iconfont icon-plus-select-down showList font-size:25px pr-10"></i>
+                                            <i v-show="!conceal"
+                                               class="iconfont icon-yousanjiao showList font-size:25px pr-10"></i>
+                                            <i class="iconfont icon-chengyuannew pr-10"
+                                               style="vertical-align: middle;"></i>
+                                            <span class="site-menu-title">{{item.name}}</span>
+                                        </a>
+                                    </li>
+                                    <ul class="administration-subordinate-item m-0" v-for="n in jobData" :key="n.id"
+                                        v-show="conceal" @click="defaultcontent(n.id)">
+                                        <li class="py-5" :class="defaultpitchon==n.id?'pitchon':''">
                                             <template>
                                                 <i class="iconfont icon-chengyuannew pr-10"
                                                    style="vertical-align: middle;"></i>
@@ -41,61 +46,70 @@
                                         </li>
 
                                     </ul>
-                            </ul>
-                              <!--渲染分组 -->
-                            <ul class="menu pl-0">
-                                <li class="site-menu-item has-sub  pb-10" v-for="(item,index) in groupingDate"
-                                    :key="index" style="width:260px;">
-                                    <a href="javascript:void(0) " class="p-5" @click="switchMenu(item.id)">
-                                        <i v-show="visible" class="iconfont icon-plus-select-down showList font-size:25px pr-10"></i>
-                                        <i v-show="!visible" class="iconfont icon-yousanjiao  showList font-size:25px pr-10"></i>
-                                        <i class="iconfont icon-chengyuannew pr-10" style="vertical-align: middle;"></i>
-                                        <span class="site-menu-title">{{item.name}}</span>
-                                    </a>
-                                    <div class="drop-parent" style="position: absolute; right:23px;top:0;"
-                                         v-if="item.id" @click="grouping(item.id)">
-                                        <i class="iconfont icon-gengduo1 font-size-20 parent" aria-hidden="true"
-                                           data-toggle="dropdown" aria-expanded="false"
-                                           style="cursor: pointer; float: right;line-height: 40px;">
-                                        </i>
-                                        <div class="dropdown-menu dropdown-menu-left" aria-labelledby="org-dropdown"
-                                             role="menu" x-placement="bottom-start" style="min-width: 0;">
-                                            <a class="dropdown-item" role="menuitem" data-toggle="modal"
-                                               data-target="#addRole">新增角色</a>
-                                            <a class="dropdown-item" role="menuitem" data-toggle="modal"
-                                               data-target="#Rename">重命名</a>
-                                            <a class="dropdown-item" role="menuitem" data-toggle="modal"
-                                               data-target="#deleteGrouping">删除分组</a>
-                                        </div>
-                                    </div>
-                                    
-                                    <ul class="administration-subordinate-item m-0" v-for="n in roleDate" :key="n.id" >
-                                        <li v-show="item.id==n.group_id && switchId.includes(n.group_id)" class="py-5" 
-                                            style="position:relative;" @click="changeCont(n.id)" :class="n.id==jobCont?'back':''">
-                                            <template>
-                                                <i class="iconfont icon-chengyuannew pr-10"
-                                                   style="vertical-align: middle;"></i>
-                                                <span class="site-menu-title">{{n.name}}</span>
-                                            </template>
-                                            <div class="drop-son" style="position: absolute; right:23px;top:0px;"
-                                                 @click="role(n.id)">
-                                                <i class="iconfont icon-gengduo1 font-size-20 son" aria-hidden="true"
-                                                   data-toggle="dropdown" aria-expanded="false"
-                                                   style="cursor: pointer; float: right;line-height: 40px;">
-                                                </i>
-                                                <div class="dropdown-menu dropdown-menu-left "
-                                                     aria-labelledby="org-dropdown" role="menu"
-                                                     x-placement="bottom-start" style="">
-                                                    <a class="dropdown-item" role="menuitem" data-toggle="modal"
-                                                       data-target="#addMember" @click="getmemberDate(n.id)">添加成员</a>
-                                                    <a class="dropdown-item" role="menuitem" data-toggle="modal"
-                                                       data-target="#updateSubgroup" @click="Modifyingroles(n.id,item.id)">修改角色</a>
-                                                    <a class="dropdown-item" role="menuitem" data-toggle="modal"
-                                                       data-target="#moveSubgroup ">移动到分组</a>
-                                                    <a class="dropdown-item" role="menuitem" data-toggle="modal"
-                                                       data-target="#deleteRole">删除角色</a>
-                                                </div>
+                                </ul>
+                                <!--渲染分组 -->
+                                <ul class="menu pl-0">
+                                    <li class="site-menu-item has-sub  pb-10" v-for="(item,index) in groupingDate"
+                                        :key="index" style="width:260px;">
+                                        <a href="javascript:void(0) " class="p-5" @click="switchMenu(item.id)">
+                                            <i v-show="visible"
+                                               class="iconfont icon-plus-select-down showList font-size:25px pr-10"></i>
+                                            <i v-show="!visible"
+                                               class="iconfont icon-yousanjiao  showList font-size:25px pr-10"></i>
+                                            <i class="iconfont icon-chengyuannew pr-10"
+                                               style="vertical-align: middle;"></i>
+                                            <span class="site-menu-title">{{item.name}}</span>
+                                        </a>
+                                        <div class="drop-parent" style="position: absolute; right:23px;top:0;"
+                                             v-if="item.id" @click="grouping(item.id)">
+                                            <i class="iconfont icon-gengduo1 font-size-20 parent" aria-hidden="true"
+                                               data-toggle="dropdown" aria-expanded="false"
+                                               style="cursor: pointer; float: right;line-height: 40px;">
+                                            </i>
+                                            <div class="dropdown-menu dropdown-menu-left" aria-labelledby="org-dropdown"
+                                                 role="menu" x-placement="bottom-start" style="min-width: 0;">
+                                                <a class="dropdown-item" role="menuitem" data-toggle="modal"
+                                                   data-target="#addRole">新增角色</a>
+                                                <a class="dropdown-item" role="menuitem" data-toggle="modal"
+                                                   data-target="#Rename">重命名</a>
+                                                <a class="dropdown-item" role="menuitem" data-toggle="modal"
+                                                   data-target="#deleteGrouping">删除分组</a>
                                             </div>
+                                        </div>
+
+                                        <ul class="administration-subordinate-item m-0" v-for="n in roleDate"
+                                            :key="n.id">
+                                            <li v-show="item.id==n.group_id && switchId.includes(n.group_id)"
+                                                class="py-5"
+                                                style="position:relative;" @click="changeCont(n.id)"
+                                                :class="n.id==jobCont?'back':''">
+                                                <template>
+                                                    <i class="iconfont icon-chengyuannew pr-10"
+                                                       style="vertical-align: middle;"></i>
+                                                    <span class="site-menu-title">{{n.name}}</span>
+                                                </template>
+                                                <div class="drop-son" style="position: absolute; right:23px;top:0px;"
+                                                     @click="role(n.id)">
+                                                    <i class="iconfont icon-gengduo1 font-size-20 son"
+                                                       aria-hidden="true"
+                                                       data-toggle="dropdown" aria-expanded="false"
+                                                       style="cursor: pointer; float: right;line-height: 40px;">
+                                                    </i>
+                                                    <div class="dropdown-menu dropdown-menu-left "
+                                                         aria-labelledby="org-dropdown" role="menu"
+                                                         x-placement="bottom-start" style="">
+                                                        <a class="dropdown-item" role="menuitem" data-toggle="modal"
+                                                           data-target="#addMember"
+                                                           @click="getmemberDate(n.id)">添加成员</a>
+                                                        <a class="dropdown-item" role="menuitem" data-toggle="modal"
+                                                           data-target="#updateSubgroup"
+                                                           @click="Modifyingroles(n.id,item.id)">修改角色</a>
+                                                        <a class="dropdown-item" role="menuitem" data-toggle="modal"
+                                                           data-target="#moveSubgroup ">移动到分组</a>
+                                                        <a class="dropdown-item" role="menuitem" data-toggle="modal"
+                                                           data-target="#deleteRole">删除角色</a>
+                                                    </div>
+                                                </div>
                                             </li>
 
                                         </ul>
@@ -308,7 +322,11 @@
                                             <label :for="'row-' + v.id"></label>
                                         </span>
                                     </td>
-                                    <td><Avatar :imgUrl="v.icon_url" style="margin-right: 10px; width: 28px;height: 28px;" />{{v.name}}</td>
+                                    <td>
+                                        <Avatar :imgUrl="v.icon_url"
+                                                style="margin-right: 10px; width: 28px;height: 28px;"/>
+                                        {{v.name}}
+                                    </td>
                                     <td>{{v.phone}}</td>
                                     <td>{{v.email}}</td>
                                 </tr>
@@ -407,8 +425,10 @@
         <div class="site-action" data-plugin="actionBtn" data-toggle="modal" data-target="#addRole">
             <button type="button"
                     class="site-action-toggle btn-raised btn btn-success btn-floating waves-effect waves-classic">
-                <i class="front-icon iconfont icon-tianjia1 animation-scale-up" aria-hidden="true" style="font-size:30px"></i>
-                <i class="back-icon iconfont icon-tianjia1 animation-scale-up" aria-hidden="true" style="font-size:30px"></i>
+                <i class="front-icon iconfont icon-tianjia1 animation-scale-up" aria-hidden="true"
+                   style="font-size:30px"></i>
+                <i class="back-icon iconfont icon-tianjia1 animation-scale-up" aria-hidden="true"
+                   style="font-size:30px"></i>
             </button>
         </div>
         <!--新增角色 -->
@@ -439,7 +459,7 @@
                         <div class="example">
                             <div class="col-md-2 text-right float-left">描述</div>
                             <div class="col-md-10 float-left pl-0">
-                                <textarea name="" rows="5" class="form-control" @change="describe" v-model="emptydescribe"></textarea>
+                                <textarea name="" rows="5" class="form-control" v-model="emptydescribe"></textarea>
                             </div>
                         </div>
                     </div>
@@ -524,14 +544,15 @@
                         <div class="example">
                             <div class="col-md-2 text-right float-left">角色组</div>
                             <div class="col-md-10 float-left pl-0">
-                                <Selectors  @change="updateRolejob"
+                                <Selectors @change="updateRolejob"
                                            :options="groupingDate" ref="roleGroup"></Selectors>
                             </div>
                         </div>
                         <div class="example">
                             <div class="col-md-2 text-right float-left">描述</div>
                             <div class="col-md-10 float-left pl-0">
-                                <textarea name="" rows="5" class="form-control" @change="updateDescribe" v-model="emptyrole_describe" :placeholder="emptydescribe"></textarea>
+                                <textarea name="" rows="5" class="form-control" @change="updateDescribe"
+                                          v-model="emptyrole_describe" :placeholder="emptydescribe"></textarea>
                             </div>
                         </div>
                     </div>
@@ -640,7 +661,7 @@
             </div>
         </div>
     </div>
-    
+
 </template>
 <script>
     import fetch from '../../assets/utils/fetch.js'
@@ -704,20 +725,20 @@
                 checkBox: [],
                 checkarr: [],
                 selectedIds: [],
-                panelName:'',
-                emptydescribe:'',
-                modifyName:'',
-                roleGroupId:'',
-                rolegroupName:'',
-                emptyrole_describe:''
+                panelName: '',
+                emptydescribe: '',
+                modifyName: '',
+                roleGroupId: '',
+                rolegroupName: '',
+                emptyrole_describe: ''
             }
         },
         mounted() {
             this.getroleDate();
             this.getgroupingDate();
-             $('#addRole').on('hidden.bs.modal',function() {
-                    this.roleName="请输入角色称"
-             })
+            $('#addRole').on('hidden.bs.modal', function () {
+                this.roleName = "请输入角色称"
+            })
         },
         updated() {
             $('.selectable-wrap').asSelectable();
@@ -729,7 +750,6 @@
                 let _this = this;
                 fetch('get', '/console/role').then(function (response) {
                     _this.roleDate = response.data;
-                    console.log(_this.roleDate)
                 });
             },
             //获取分组数据
@@ -757,72 +777,87 @@
             //切换内容
             changeCont(value) {
                 this.jobCont = value
-            
+                this.selectedIds = []
                 this.defaultId = 0
-                let _this = this;
-                fetch('get', '/console/feature/' + this.jobCont).then(function (response) {
-                    _this.powerlist = [];
-                    for (_this.powerlist in response) {
-                       
+                fetch('get', '/console/feature/' + this.jobCont).then(response => {
+                    this.powerlist = [];
+                    for (this.powerlist in response) {
+
                         let selectedLength = 0;
-                        response[_this.powerlist].data.forEach(item => {
+                        response[this.powerlist].data.forEach(item => {
                             if (item.selected) {
-                                _this.powerId.push(item.id)
-                                _this.funArr.push(item.id)
+                                this.powerId.push(item.id)
+                                this.funArr.push(item.id)
                                 selectedLength += 1;
-                                _this.selectedIds.push(item.id)
+                                this.selectedIds.push(item.id)
                             } else {
                                 item.selected = false
                             }
                         });
-                        if (selectedLength === response[_this.powerlist].data.length && response[_this.powerlist].length>0) {
-                            response[_this.powerlist].selected = true;
+                        if (selectedLength === response[this.powerlist].data.length && response[this.powerlist].length > 0) {
+                            response[this.powerlist].selected = true;
                         } else {
-                            response[_this.powerlist].selected = false;
+                            response[this.powerlist].selected = false;
                         }
                     }
-                    _this.powerDate = response;
-                   
-                });
-                this.sendData=[];
-               fetch('get','/console/scope/'+this.jobCont).then(function(response){
-                    _this.rangeDate = response; 
-                    _this.rangelist=[];
-                    let i=0;
-                    for(_this.rangelist in response){
-                        
-                        let obj={
-                            resource_id:response[_this.rangelist].id,
-                            scope:'',
-                            manage:[]
+                    this.powerDate = response;
+                    let list = [];
+                    let item = [];
+                    for (list in this.powerDate) {
+                        let selectedLength = 0;
+                        for (item in this.powerDate[list].data) {
+                            if (this.powerDate[list].data[item].selected) {
+                                selectedLength += 1
+                            }
                         }
-                        response[_this.rangelist].data1.forEach(item=>{
-                            
-                            if(item.selected){
-                              obj.scope=item.id 
-                                _this.picked= _this.rangeDate[_this.rangelist].id.toString()+item.id
+                        if (selectedLength === this.powerDate[list].data.length) {
+                            this.powerDate[list].selected = true
+                        } else {
+                            this.powerDate[list].selected = false
+                        }
+                    }
+
+                });
+                this.sendData = [];
+                fetch('get', '/console/scope/' + this.jobCont).then(response => {
+                    this.rangeDate = response;
+                    this.rangelist = [];
+                    let i = 0;
+                    for (this.rangelist in response) {
+
+                        let obj = {
+                            resource_id: response[this.rangelist].id,
+                            scope: '',
+                            manage: []
+                        }
+                        response[this.rangelist].data1.forEach(item => {
+
+                            if (item.selected) {
+                                obj.scope = item.id
+                                this.picked = this.rangeDate[this.rangelist].id.toString() + item.id
                             }
                         })
-                        response[_this.rangelist].data2.forEach(v=>{
-                            
-                            if(v.selected){
-                                 obj.manage.push(v.id)
-                              
-                                _this.scope.push(response[_this.rangelist].id.toString()+v.id)
+                        response[this.rangelist].data2.forEach(v => {
+
+                            if (v.selected) {
+                                obj.manage.push(v.id)
+
+                                this.scope.push(response[this.rangelist].id.toString() + v.id)
                             }
                         })
-                        if(response[_this.rangelist].data1.length!==0||response[_this.rangelist].data2.length!==0){
-                            _this.sendData.push(obj) 
-                        }   
-                        
+                        if (response[this.rangelist].data1.length !== 0 || response[this.rangelist].data2.length !== 0) {
+                            this.sendData.push(obj)
+                        }
+
                         i++;
-                    }  
-                   
+                    }
+
                 })
 
 
             },
             powerkeep() {
+                console.log(this.selectedIds)
                 fetch('post', '/console/feature/' + this.jobCont, {resouce: this.selectedIds}).then(function (response) {
                     toastr.success('保存成功');
                 })
@@ -906,7 +941,7 @@
                             if (selectedStatus) {
                                 this.selectedIds.push(this.powerDate[list].data[item].id)
                             } else {
-                                let index = this.selectedIds.indexOf(id);
+                                let index = this.selectedIds.indexOf(Number(id));
                                 this.selectedIds.splice(index, 1)
                             }
                             this.powerDate[list].data[item].selected = selectedStatus;
@@ -925,27 +960,22 @@
 
             //获取新增角色的类别
             changeRolejob(value) {
-                this.roleType = value
+                this.groupingId = value
             },
-            //获取新增角色的描述
-            describe(value) {
-                console.log(value)
-                this.roledescribe = value
-            },
+
             //新增角色
             addrole() {
                 let _this = this;
                 let data = {
                     name: this.roleName,
                     group_id: this.roleType,
-                    description:this.emptydescribe
-
+                    description: this.emptydescribe
                 }
                 fetch('post', '/console/role', data).then(function (response) {
                     toastr.success('创建成功');
                     $('#addRole').modal('hide');
-                    _this.roleName=""
-                    // _this.emptydescribe=""
+                    _this.roleName = ""
+                    _this.emptydescribe = ""
                     _this.$refs.resourceType.setValue("")
                     _this.getroleDate()
 
@@ -969,12 +999,21 @@
             },
             //修改类型
             updateRolejob(value) {
+                console.log(value)
                 this.updateType = value
             },
             //修改描述
             updateDescribe(value) {
-    
-               
+                console.log(value)
+            },
+            Modifyingroles(value, id) {
+                this.updateType = id
+                this.roleGroupId = value;
+                this.modifyName = this.roleDate.find(item => item.id == this.roleGroupId).name
+                this.rolegroupName = this.groupingDate.find(item => item.id == id).name
+                this.updateName = this.modifyName
+                this.$refs.roleGroup.setValue(id, this.rolegroupName)
+                // this.emptyrole_describe=this.emptydescribe
             },
             //修改角色
             updaterole() {
@@ -1064,19 +1103,20 @@
                 this.roleId = value
             },
             grouping(value) {
+                console.log(value)
                 this.groupingId = value
-                this.panelName=this.groupingDate.find(item=>item.id==this.groupingId).name
-                this.$refs.resourceType.setValue(value,this.panelName)
-                this.roleName=""
-           
+                this.panelName = this.groupingDate.find(item => item.id == this.groupingId).name
+                this.$refs.resourceType.setValue(value, this.panelName)
+                this.roleName = ""
+
             },
-             Modifyingroles(value,id){
-                 console.log(id)
-                this.roleGroupId=value;
-                this.modifyName=this.roleDate.find(item=>item.id==this.roleGroupId).name
-                this.rolegroupName = this.groupingDate.find(item=>item.id==id).name
+            Modifyingroles(value, id) {
+                console.log(id)
+                this.roleGroupId = value;
+                this.modifyName = this.roleDate.find(item => item.id == this.roleGroupId).name
+                this.rolegroupName = this.groupingDate.find(item => item.id == id).name
                 this.updateName = this.modifyName
-                this.$refs.roleGroup.setValue(id,this.rolegroupName)
+                this.$refs.roleGroup.setValue(id, this.rolegroupName)
                 // this.emptyrole_describe=this.emptydescribe
             },
             clickdefault() {
@@ -1089,37 +1129,37 @@
             seerange(i, v) {
                 this.valueId.push(i.toString() + v)
             },
-            radioed(params,value){
-                let index = this.sendData.find(item=>item.resource_id===value.id)
-                if(index){
-                    index.scope = params.id         
-                }else{
+            radioed(params, value) {
+                let index = this.sendData.find(item => item.resource_id === value.id)
+                if (index) {
+                    index.scope = params.id
+                } else {
                     let tempObj = {}
-                    Object.assign(tempObj,{resource_id:value.id})
-                    Object.assign(tempObj,{scope:params.id})
-                    this.sendData.push(tempObj)
-                }       
-            },
-            checked(params,value){
-                let index = this.sendData.find(item=>item.resource_id===value.id)
-                if(index){
-                    if(index.manage.indexOf(params.id)>-1){
-                        
-                        index.manage.splice(index.manage.indexOf(params.id),1)
-                    }else{
-                        index.manage.push(params.id)
-                    }
-                }else{
-                    let tempObj = {}   
-                    this.checkarr.push(params.id)
-                    Object.assign(tempObj,{resource_id:value.id})
-                    Object.assign(tempObj,{manage:this.checkarr})
+                    Object.assign(tempObj, {resource_id: value.id})
+                    Object.assign(tempObj, {scope: params.id})
                     this.sendData.push(tempObj)
                 }
-           
+            },
+            checked(params, value) {
+                let index = this.sendData.find(item => item.resource_id === value.id)
+                if (index) {
+                    if (index.manage.indexOf(params.id) > -1) {
+
+                        index.manage.splice(index.manage.indexOf(params.id), 1)
+                    } else {
+                        index.manage.push(params.id)
+                    }
+                } else {
+                    let tempObj = {}
+                    this.checkarr.push(params.id)
+                    Object.assign(tempObj, {resource_id: value.id})
+                    Object.assign(tempObj, {manage: this.checkarr})
+                    this.sendData.push(tempObj)
+                }
+
             }
-           
-           
+
+
         }
     }
 </script>
@@ -1146,7 +1186,7 @@
         vertical-align: middle;
 
     }
-    
+
     .leftImg {
         transition: All 0.4s ease-in-out;
         -webkit-transition: All 0.4s ease-in-out;
@@ -1205,9 +1245,11 @@
     .pointer-cont:hover {
         background: #fff;
     }
-    .back{
+
+    .back {
         background: #F5F5F5;
     }
+
     .avatar {
         vertical-align: inherit;
         margin-top: -2px;

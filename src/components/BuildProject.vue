@@ -13,7 +13,8 @@
                     <div class="col-md-12 example clearfix" v-show="projectType != 5 && trailsArr.length > 0">
                         <div class="col-md-2 text-right float-left px-0">销售线索</div>
                         <div class="col-md-10 float-left">
-                            <Selectors :options="trailsArr" @change="addProjectTrail" ref="trails" selectable="true"></Selectors>
+                            <Selectors :options="trailsArr" @change="addProjectTrail" ref="trails"
+                                       selectable="true"></Selectors>
                         </div>
                     </div>
                     <div class="col-md-12 example clearfix" v-show="projectType != 5">
@@ -22,7 +23,7 @@
                             <div class="col-md-6 float-left pl-0" v-if="trailOriginArr.length > 0">
                                 <Selectors :options="trailOriginArr"
                                            @change="(value) => addProjectBaseInfo(value, 'resource_type')"
-                                           ref="trailOrigin" ></Selectors>
+                                           ref="trailOrigin"></Selectors>
                             </div>
                             <div class="col-md-6 float-left pr-0">
                                 <template v-if="trailOrigin == 1 || trailOrigin == 2 || trailOrigin == 3">
@@ -204,17 +205,18 @@
             projectFieldsArr(newValue) {
                 return this.projectFields = newValue
             },
+            projectType() {
+                this.getTrail()
+            },
         },
         computed: {
             allStarsArr() {
-                console.log([...this.starsArr, ...this.bloggerArr]);
                 return [...this.starsArr, ...this.bloggerArr]
             }
 
         },
         created() {
             this.getStars();
-            this.getTrail();
             this.getBloggers()
         },
         mounted() {
@@ -239,7 +241,6 @@
         },
         methods: {
             getBloggers() {
-                let _this = this
                 fetch('get', '/bloggers/all').then((params) => {
                     this.bloggerArr = params.data
                 })
@@ -301,7 +302,6 @@
                     artistsArr.push(trailInfo.expectations.data[i].id)
                 }
                 this.$refs.intentionArtist.setValue(artistsArr);
-                console.log(artistsArr);
                 this.projectBaseInfo.expectations = artistsArr;
                 this.$refs.priorityLevel.setValue(trailInfo.priority);
                 this.projectBaseInfo.priority = trailInfo.priority;
@@ -345,16 +345,21 @@
             },
 
             getTrail: function () {
-                let _this = this;
-                fetch('get', '/trails/all', {include: 'principal,expectations'}).then(function (response) {
+                let data = {
+                    include: 'principal,expectations',
+                    type: this.projectType
+                };
+                this.trailsArr = [];
+                fetch('get', '/trails/all', data).then(response => {
                     for (let i = 0; i < response.data.length; i++) {
-                        _this.trailsArr.push({
+                        this.trailsArr.push({
                             name: response.data[i].title,
                             id: response.data[i].id,
                             value: response.data[i].id
                         })
                     }
-                    _this.trailsAllInfo = response.data;
+                    this.trailsAllInfo = response.data;
+                    this.$refs.trails.refresh();
                 })
             },
 
@@ -384,7 +389,6 @@
                             this.projectBaseInfo.notice.push(tempPart[key].id)
                         }
                     }
-                    console.log(this.projectBaseInfo.notice);
                 }
                 let _this = this;
                 fetch('post', '/projects', this.projectBaseInfo).then(function (response) {

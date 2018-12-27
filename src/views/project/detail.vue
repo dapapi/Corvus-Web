@@ -1,11 +1,11 @@
 <template>
     <div class="page">
-
+        <Loading :is-loading="isLoading"></Loading>
         <div class="page-header page-header-bordered">
             <h1 class="page-title d-inline">项目详情</h1>
 
             <div class="page-header-actions dropdown show task-dropdown float-right"
-                 v-if="projectInfo.approval_status == 1">
+                 v-if="projectInfo.approval_status == 232">
                 <i class="iconfont icon-gengduo1 font-size-24" aria-hidden="true" id="taskDropdown"
                    data-toggle="dropdown" aria-expanded="false"></i>
                 <div class="dropdown-menu dropdown-menu-right task-dropdown-item" aria-labelledby="taskDropdown"
@@ -27,7 +27,7 @@
         <div class="page-content container-fluid">
 
             <div class="panel col-md-12">
-                <div class="card-block" v-if="projectInfo.title">
+                <div class="card-block">
                     <h4 class="card-title">{{ projectInfo.title }}</h4>
 
                     <div class="card-text clearfix example">
@@ -43,7 +43,8 @@
                             <div class="float-left pl-0 pr-2 col-md-3">
                                 <i class="iconfont icon-yonghu pr-2" aria-hidden="true"></i>目标艺人
                             </div>
-                            <div class="font-weight-bold float-left" v-if="projectInfo.trail.data.expectations">
+                            <div class="font-weight-bold float-left"
+                                 v-if="projectInfo.trail && projectInfo.trail.data.expectations">
                                 <template v-for="artist in projectInfo.trail.data.expectations.data">
                                     <template v-if="artist.name">
                                         {{ artist.name }}
@@ -120,14 +121,14 @@
                 <div class="col-md-12">
                     <ul class="nav nav-tabs nav-tabs-line" role="tablist">
                         <li class="nav-item" role="presentation"
-                            v-if="projectInfo.type != 5 && projectInfo.approval_status == 1">
+                            v-if="projectInfo.type != 5 && projectInfo.approval_status == 232">
                             <a class="nav-link" :class="projectInfo.type != 5 ? 'active' : ''" data-toggle="tab"
                                href="#forum-project-follow"
                                aria-controls="forum-base"
                                aria-expanded="true" role="tab">项目进度</a>
                         </li>
                         <li class="nav-item" role="presentation" @click="getProjectTasks"
-                            v-if="projectInfo.approval_status == 1">
+                            v-if="projectInfo.approval_status == 232">
                             <a class="nav-link" data-toggle="tab" href="#forum-project-tasks"
                                aria-controls="forum-present"
                                aria-expanded="false" role="tab">
@@ -142,26 +143,26 @@
                             </a>
                         </li>
                         <li class="nav-item" role="presentation"
-                            v-if="projectInfo.type != 5 && projectInfo.approval_status == 1">
+                            v-if="projectInfo.type != 5 && projectInfo.approval_status == 232">
                             <a class="nav-link" data-toggle="tab" href="#forum-project-contract"
                                aria-controls="forum-present"
                                aria-expanded="false" role="tab">合同</a>
                         </li>
                         <li class="nav-item" role="presentation" @click="getProjectBill"
-                            v-if="projectInfo.type != 5 && projectInfo.approval_status == 1">
+                            v-if="projectInfo.type != 5 && projectInfo.approval_status == 232">
                             <a class="nav-link" data-toggle="tab" href="#forum-project-bill"
                                aria-controls="forum-present"
                                aria-expanded="false" role="tab">账单</a>
                         </li>
                         <li class="nav-item" role="presentation" @click="getProjectReturned"
-                            v-if="projectInfo.type != 5 && projectInfo.approval_status == 1">
+                            v-if="projectInfo.type != 5 && projectInfo.approval_status == 232">
                             <a class="nav-link" data-toggle="tab" href="#forum-project-payback"
                                aria-controls="forum-present"
                                aria-expanded="false" role="tab">回款</a>
                         </li>
                         <li class="nav-item" role="presentation">
                             <a class="nav-link"
-                               :class="(projectInfo.type == 5 || projectInfo.approval_status != 1) ? 'active' : ''"
+                               :class="(projectInfo.type == 5 || projectInfo.approval_status != 232) ? 'active' : ''"
                                data-toggle="tab"
                                href="#forum-project-base"
                                aria-controls="forum-base"
@@ -170,45 +171,67 @@
                     </ul>
                     <div class="tab-content nav-tabs-animate bg-white">
                         <!-- 项目进度 -->
-                        <div class="tab-pane animation-fade pb-10"
-                             v-if="projectInfo.type != 5 && projectInfo.approval_status == 1"
+                        <div class="tab-pane animation-fade pb-10" @click="getProjectProgress"
+                             v-if="projectInfo.type != 5 && projectInfo.approval_status == 232"
                              :class="projectInfo.type != 5 ? 'active' : ''"
                              id="forum-project-follow" role="tabpanel">
                             <div class="clearfix mt-20">
                                 <div class="project-progress" v-for="item in projectProgressInfo">
-                                    <div class="clearfix pointer-content">
-                                        <div class="col-md-4 p-0 float-left">
-                                            <div class="image-wraper">
-                                                <template v-if="item.isFinish == 1">
-                                                    <img src="https://res-crm.papitube.com/progress-selected.png"
-                                                         alt="">
-                                                </template>
-                                                <template v-else>
-                                                    <img src="https://res-crm.papitube.com/progress.png" alt="">
-                                                </template>
+                                    <template v-if="!item.isFinish">
+                                        <div class="clearfix pointer-content" @click="addProjectProgress(item.status)">
+                                            <div class="col-md-4 p-0 float-left">
+                                                <div class="image-wraper">
+                                                    <template v-if="item.isFinish == 1">
+                                                        <img src="https://res-crm.papitube.com/progress-selected.png"
+                                                             alt="">
+                                                    </template>
+                                                    <template v-else>
+                                                        <img src="https://res-crm.papitube.com/progress.png" alt="">
+                                                    </template>
+                                                </div>
+                                            </div>
+                                            <div class="col-md-8 float-left pr-0 pl-10"
+                                                 :class="item.isFinish == 1 ? 'finish-font-color' : ''"
+                                                 style=" line-height: 40px;">
+                                                {{ item.name }}
                                             </div>
                                         </div>
-                                        <div class="col-md-8 float-left pr-0 pl-10"
-                                             :class="item.isFinish == 1 ? 'finish-font-color' : ''"
-                                             style=" line-height: 40px;">
-                                            {{ item.name }}
+                                    </template>
+                                    <template v-else>
+                                        <div class="clearfix">
+                                            <div class="col-md-4 p-0 float-left">
+                                                <div class="image-wraper">
+                                                    <template v-if="item.isFinish == 1">
+                                                        <img src="https://res-crm.papitube.com/progress-selected.png"
+                                                             alt="">
+                                                    </template>
+                                                    <template v-else>
+                                                        <img src="https://res-crm.papitube.com/progress.png" alt="">
+                                                    </template>
+                                                </div>
+                                            </div>
+                                            <div class="col-md-8 float-left pr-0 pl-10"
+                                                 :class="item.isFinish == 1 ? 'finish-font-color' : ''"
+                                                 style=" line-height: 40px;">
+                                                {{ item.name }}
+                                            </div>
                                         </div>
-                                    </div>
+                                    </template>
                                     <div class="pt-20">
                                         <div class="points" :class="item.isFinish == 1 ? 'finish-color' : ''"></div>
                                         <div class="line"
                                              :class="item.isFinish == 1 ? 'finish-color' : 'unfinish-color'"></div>
                                     </div>
-                                    <div class="pt-10" v-if="item.finisher">
-                                        <div>张测试完成</div>
-                                        <div>2018-09-19 10:10</div>
+                                    <div class="pt-10" v-if="item.isFinish">
+                                        <div>{{ item.finisher }}</div>
+                                        <div>{{ item.finish_at }}</div>
                                     </div>
                                 </div>
                             </div>
                         </div>
                         <!-- 任务 -->
                         <div class="tab-pane animation-fade pb-20 fixed-button-father" id="forum-project-tasks"
-                             role="tabpanel" v-if="projectInfo.approval_status == 1">
+                             role="tabpanel" v-if="projectInfo.approval_status == 232">
                             <table class="table table-hover is-indent example" data-plugin="animateList"
                                    data-animate="fade"
                                    data-child="tr"
@@ -254,7 +277,7 @@
                         </div>
                         <!-- 合同 -->
                         <div class="tab-pane animation-fade py-10"
-                             v-if="projectInfo.type != 5 && projectInfo.approval_status == 1"
+                             v-if="projectInfo.type != 5 && projectInfo.approval_status == 232"
                              id="forum-project-contract"
                              role="tabpanel">
                             <table class="table table-hover example"
@@ -284,7 +307,7 @@
                         </div>
                         <!-- 账单 -->
                         <div class="tab-pane animation-fade py-10"
-                             v-if="projectInfo.type != 5 && projectInfo.approval_status == 1" id="forum-project-bill"
+                             v-if="projectInfo.type != 5 && projectInfo.approval_status == 232" id="forum-project-bill"
                              role="tabpanel">
                             <div class="clearfix">
                                 <div class="float-left" style="padding: .715rem 1.429rem">
@@ -342,7 +365,7 @@
                         </div>
                         <!-- 回款 -->
                         <div class="tab-pane animation-fade pt-10 pb-20"
-                             v-if="projectInfo.type != 5 && projectInfo.approval_status == 1"
+                             v-if="projectInfo.type != 5 && projectInfo.approval_status == 232"
                              id="forum-project-payback" role="tabpanel">
                             <div class="clearfix">
                                 <ul class="nav nav-tabs nav-tabs-line float-left" role="tablist"
@@ -478,14 +501,14 @@
                         </div>
                         <!-- 概况 -->
                         <div class="tab-pane animation-fade"
-                             :class="(projectInfo.type == 5 || projectInfo.approval_status != 1) ? 'active' : ''"
+                             :class="(projectInfo.type == 5 || projectInfo.approval_status != 232) ? 'active' : ''"
                              id="forum-project-base"
                              role="tabpanel">
                             <div class="card">
                                 <div class="card-header card-header-transparent card-header-bordered">
                                     <div class="float-left font-weight-bold third-title">项目信息</div>
                                     <div class="float-right"
-                                         v-show="!isEdit && projectInfo.approval_status == 1">
+                                         v-show="!isEdit && projectInfo.approval_status == 232">
                                         <i class="iconfont icon-bianji2 pointer-content" aria-hidden="true"
                                            @click="editBaseInfo"></i>
                                     </div>
@@ -698,6 +721,14 @@
                                             </template>
                                         </div>
                                     </div>
+
+                                    <div class="segmentation-line example"></div>
+
+                                    <div>
+                                        <ApprovalProgress :formid="projectInfo.project_number"
+                                                          :formstatus="projectInfo.approval_status.id"
+                                                          mode="detail"></ApprovalProgress>
+                                    </div>
                                 </div>
                             </div>
                         </div>
@@ -769,7 +800,8 @@
                         <div class="example">
                             <div class="col-md-2 text-right float-left pl-0">任务优先级</div>
                             <div class="col-md-10 float-left pl-0">
-                                <selectors :options="taskLevelArr" ref="taskLevel" @change="changeTaskLevel"></selectors>
+                                <selectors :options="taskLevelArr" ref="taskLevel"
+                                           @change="changeTaskLevel"></selectors>
                             </div>
                         </div>
                         <div class="example">
@@ -1297,6 +1329,7 @@
     export default {
         data: function () {
             return {
+                isLoading: true,
                 projectId: '',
                 changeInfo: {},
                 isEdit: false,
@@ -1350,48 +1383,52 @@
                 ],
                 projectProgressInfo: [
                     {
+                        status: 1,
                         name: '评估中',
-                        isFinish: 1,
-                        finisher: {
-                            data: {
-                                name: '张测试'
-                            }
-                        },
-                        finish_at: '2018-10-09 10:10'
+                        isFinish: 0,
+                        finish_at: ''
                     },
                     {
+                        status: 2,
                         name: '评估完成',
-                        isFinish: 1,
-                        finisher: {
-                            data: {
-                                name: '张测试'
-                            }
-                        },
-                        finish_at: '2018-10-10 22:10'
+                        isFinish: 0,
+                        finish_at: ''
                     },
                     {
+                        status: 3,
                         name: '签约中',
                         isFinish: 0,
+                        finish_at: ''
                     },
                     {
+                        status: 4,
                         name: '签约完成',
                         isFinish: 0,
+                        finish_at: ''
                     },
                     {
+                        status: 5,
                         name: '执行中',
                         isFinish: 0,
+                        finish_at: ''
                     },
                     {
+                        status: 6,
                         name: '执行完成',
                         isFinish: 0,
+                        finish_at: ''
                     },
                     {
+                        status: 7,
                         name: '回款中',
                         isFinish: 0,
+                        finish_at: ''
                     },
                     {
+                        status: 8,
                         name: '回款完成',
                         isFinish: 0,
+                        finish_at: ''
                     }
                 ],
                 projectReturnDesc: '',
@@ -1417,6 +1454,7 @@
             this.getStars();
             this.getProjectTasks();
             this.getProjectTasking();
+            this.getProjectProgress();
             this.user = JSON.parse(Cookies.get('user'));
             let _this = this;
             $('#addPaybackTime').on('hidden.bs.modal', function () {
@@ -1496,7 +1534,6 @@
                     }
                     response.data.fields = fieldsArr;
                     this.projectInfo = response.data;
-                    this.projectInfo.approval_status = 1;
                     let params = {
                         type: 'change',
                     };
@@ -1522,6 +1559,7 @@
                         }
                     }
 
+                    this.isLoading = false
                 })
             },
 
@@ -1620,6 +1658,40 @@
                                 value: response.data[i].id
                             })
                         }
+                    }
+                })
+            },
+
+            addProjectProgress: function (status) {
+                fetch('put', '/projects/' + this.projectId + '/course', {status: status}).then(response => {
+                    console.log(response)
+                    let flagInfo = this.projectProgressInfo.find(item => item.status == status);
+                    flagInfo['finisher'] = response.data.user;
+                    flagInfo['finish_at'] = response.data.updated_at;
+                    flagInfo['isFinish'] = 1;
+                    toastr.success('修改成功');
+                    this.getProjectProgress();
+                })
+            },
+
+            getProjectProgress: function () {
+                fetch('get', '/projects/' + this.projectId + '/course').then(response => {
+                    if (response.data.length > 0) {
+                        let courses = response.data;
+                        let flagArr = [];
+                        for (let i = 0; i < courses.length; i++) {
+                            let projectProgress = this.projectProgressInfo.find(item => item.status == courses[i].content);
+                            projectProgress.isFinish = 1;
+                            projectProgress['finish_at'] = courses[i].updated_at;
+                            projectProgress['finisher'] = courses[i].user;
+                            flagArr.push(projectProgress);
+                        }
+                        for (let i = 0; i < this.projectProgressInfo.length; i++) {
+                            if (!flagArr.find(item => item.status == this.projectProgressInfo[i].status)) {
+                                flagArr.push(this.projectProgressInfo[i])
+                            }
+                        }
+                        this.projectProgressInfo = flagArr;
                     }
                 })
             },
@@ -1869,6 +1941,24 @@
 
             changeProjectInfo: function () {
                 let data = this.changeInfo;
+                if (data.start_at) {
+                    if (data.end_at && (data.start_at > data.end_at)) {
+                        toastr.error('开始时间不能晚于截止时间')
+                        return
+                    } else if (!data.end_at && (data.start_at > this.projectInfo.end_at)) {
+                        toastr.error('开始时间不能晚于截止时间')
+                        return
+                    }
+                }
+                if (data.end_at) {
+                    if (data.start_at && (data.start_at > data.end_at)) {
+                        toastr.error('开始时间不能晚于截止时间')
+                        return
+                    } else if (!data.start_at && (data.start_at > this.projectInfo.end_at)) {
+                        toastr.error('开始时间不能晚于截止时间')
+                        return
+                    }
+                }
                 if (JSON.stringify(this.addInfoArr) !== "{}") {
                     data.fields = this.addInfoArr;
                 }

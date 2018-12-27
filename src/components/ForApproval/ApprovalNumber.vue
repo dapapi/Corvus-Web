@@ -8,10 +8,15 @@
 
 <script>
     export default {
-        props: ['shortInput'],
+        props: ['shortInput','data'],
+        data(){
+            return {
+
+            }
+        },
         mounted() {
             console.log(this.$el);
-            let self = this;
+            let _this = this;
             $(this.$refs.number).asSpinner(
                 {
                     format: function format(value) {
@@ -21,7 +26,8 @@
                     max: 100000000,
                 }
             ).on('asSpinner::change', function (e) {
-                self.$emit('change', e.currentTarget.value)
+                let {id} = _this.data[0]
+                _this.$emit('change', {key:id,value:e.currentTarget.value,type:null})
             });
             $('.asSpinner').parent().css('width', '50%')
         },

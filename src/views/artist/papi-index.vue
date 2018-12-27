@@ -24,10 +24,10 @@
                                style="width: 220px" v-model="blogName" @blur='getArtists()'>
                     </div>
                     <div class="col-md-3 example float-left">
-                        <selectors :options="artistTypeArr" @change="typeFilter"></selectors>
+                        <selectors :options="artistTypeArr" @change="typeFilter" placeholder="请选择博主分类"></selectors>
                     </div>
                     <div class="col-md-3 example float-left">
-                        <selectors :options="papiCommunicationStatusArr" @change="CommunicationStatus"></selectors>
+                        <selectors :options="papiCommunicationStatusArr" @change="CommunicationStatus" placeholder="请选择沟通状态"></selectors>
                     </div>
                     <div class="col-md-3 example float-left">
                         <button type="button" class="btn btn-default waves-effect waves-classic float-right"
@@ -388,7 +388,6 @@
                     _this.$refs.isSign.setValue('')//其他公司意向 
                     _this.artistDesc='';//备注
                     _this.platformType=[];
-                    _this.selectedArtistsArr=[]
              })
         },
         methods: {

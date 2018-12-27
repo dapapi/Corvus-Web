@@ -1,17 +1,6 @@
 <template>
     <div class="page">
-        <div class="loader-overlay" v-if="isLoading">
-            <div class="loader-content">
-                <div class="loader-index">
-                    <div></div>
-                    <div></div>
-                    <div></div>
-                    <div></div>
-                    <div></div>
-                    <div></div>
-                </div>
-            </div>
-        </div>
+        <Loading :is-loading="isLoading"></Loading>
         <div class="page-header page-header-bordered">
             <h1 class="page-title">销售线索管理</h1>
             <!-- <div class="page-header-actions">
@@ -25,14 +14,15 @@
                 <div class="clearfix">
                     <div class="col-md-3 example float-left">
                         <input type="text" class="form-control" id="inputPlaceholder" placeholder="请输入销售线索名称"
-                               style="width: 220px" v-model="trailFilter" @keyup.enter='filterGo' @blur='filterGo'>
+                               v-model="trailFilter" @keyup.enter='filterGo' @blur='filterGo'>
                     </div>
                     <div class="col-md-3 example float-left">
                         <selectors :options="progressStatus" :resetinfo='resetInfo' @change="progressStatusFilter"
-                        ></selectors>
+                                   placeholder="请选择销售进展"></selectors>
                     </div>
                     <div class="col-md-3 example float-left">
-                        <selectors ref='principal_id' :options="memberList" multiple='true' @valuelistener="principalFilter"></selectors>
+                        <selectors ref='principal_id' :options="memberList" multiple='true'
+                                   @valuelistener="principalFilter" placeholder="请选择负责人"></selectors>
                         <span v-if="fetchData.principal_ids" class="clear-principal-filter"
                               @click="clearPrincipalFilter">&nbsp;&nbsp;x</span>
                     </div>
@@ -147,7 +137,8 @@
                         <div class="example">
                             <div class="col-md-2 text-right float-left">行业</div>
                             <div class="col-md-10 float-left pl-0" v-if="industriesArr.length > 0">
-                                <selectors ref='industries' :options="industriesArr" @change="changeIndustry"></selectors>
+                                <selectors ref='industries' :options="industriesArr"
+                                           @change="changeIndustry"></selectors>
                             </div>
                         </div>
                         <div class="example">
@@ -161,13 +152,15 @@
                         <div class="example">
                             <div class="col-md-2 text-right float-left">目标艺人</div>
                             <div class="col-md-10 float-left pl-0" v-if="starsArr.length > 0">
-                                <selectors :options="starsArr" @valuelistener="changeTargetStars" :multiple="true"></selectors>
+                                <selectors :options="starsArr" @valuelistener="changeTargetStars"
+                                           :multiple="true"></selectors>
                             </div>
                         </div>
                         <div class="example">
                             <div class="col-md-2 text-right float-left">推荐艺人</div>
                             <div class="col-md-10 float-left pl-0" v-if="starsArr.length > 0">
-                                <selectors :options="starsArr" @valuelistener="changeRecommendStars" :multiple="true"></selectors>
+                                <selectors :options="starsArr" @valuelistener="changeRecommendStars"
+                                           :multiple="true"></selectors>
                             </div>
                         </div>
                         <div class="example">
@@ -206,7 +199,7 @@
                         <div class="example">
                             <div class="col-md-2 text-right float-left">预计订单收入</div>
                             <div class="col-md-5 float-left pl-0 pr-0">
-                                <number-spinner @change="changeTrailFee" ></number-spinner>
+                                <number-spinner @change="changeTrailFee"></number-spinner>
                             </div>
                             <div class="col-md-3 float-left" v-if="trailType == 4">
                                 <div class="checkbox-custom checkbox-primary">
@@ -319,13 +312,13 @@
             ...mapState([
                 'userList'
             ]),
-            _userList () {
+            _userList() {
                 return this.userList
             }
         },
 
         watch: {
-            _userList () {
+            _userList() {
                 this.memberList = this.userList
             },
             trailType: function () {
@@ -525,7 +518,7 @@
             },
 
             addTrail: function () {
-                
+
                 let data = {
                     title: this.trailName,
                     brand: this.brandName,
@@ -673,10 +666,6 @@
     }
 </script>
 <style scoped>
-    .loader-overlay {
-        margin-left: 100px;
-        background-color: rgba(7, 17, 27, 0.2)
-    }
 
     .error {
         border: 1px solid red;

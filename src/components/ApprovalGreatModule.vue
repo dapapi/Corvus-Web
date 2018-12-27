@@ -18,12 +18,12 @@
                             :formid='form_id'></div>
                             <!-- ⬆️核心模块 -->
                         </div>
-                        <ApprovalProgress />
+                        <ApprovalProgress :formid='form_id'/>
 
                     </div>
                     <div class="modal-footer">
                         <button type="button" class="btn btn-default btn-pure waves-effect waves-light waves-round" data-dismiss="modal">取消</button>
-                        <button type="button" class="btn btn-primary waves-effect waves-light waves-round">提交</button>
+                        <button type="button" class="btn btn-primary waves-effect waves-light waves-round" @click='approvalSubmit'>提交</button>
                     </div>
                 </div>
             </div>
@@ -64,7 +64,7 @@ export default {
             moduleInfo:[],
             item:{type:1},
             sendData:{
-
+                values:[]
             },
             form_id:''
         }
@@ -96,23 +96,28 @@ export default {
         ApprovalDouble
     },
     watch:{
-        formData:function(){
-            this.dataInit()
+        formData:function(value){
+            if(value){
+                this.dataInit()
             this.getFormContractor()
+            }
+            
         }
     },
     methods:{
+        approvalSubmit(){
+            fetch('post','/approvals/'+this.formData.form_id,this.sendData).then((params) => {
+                console.log(params)
+            })
+        },
         getFormContractor(){
-            console.log(this.formData.form_id);
             let _this = this
-
             if(this.formData.form_id){
                 fetch('get','/approvals/'+this.formData.form_id+'/form_control?include=approval_form_controls').then((params) => {
                 _this.importData = params.data
                 _this.dataInit()
-            })
-            }
-            
+                })
+            }   
         },
     
         changeHandler(params){
@@ -123,30 +128,12 @@ export default {
                     }
                     this.sendData.uploadfile.push({url:params.fileUrl,name:params.fileName})
             }
+            if(!this.sendData.values.find(item=>item.key === params.key)){
+                this.sendData.values.push(params)
+            }else{
+                Object.assign(this.sendData.values.find(item=>item.key === params.key),params)
+            }
         },
-        // typeWatcher(){
-        //     switch (this.type){
-        //         case 1 : 
-        //             this.importData = papiContractConfig
-        //             break
-        //         case 2 :
-        //             this.importData = papiContractBrokenConfig
-        //             break
-        //         case 3 :
-        //             this.importData = mttopContractConfig
-        //             break
-        //         case 4 :
-        //             this.importData = mttopContractBrokenConfig
-        //             break
-        //         case 5 :
-        //             this.importData = mttopProjectContract
-        //             break
-        //         case 6 :
-        //             this.importData = papiProjectContract
-        //             break
-        //         default: this.importData = pageData
-        //     }
-        // },
         refresh(){
             $('.selectpicker').selectpicker('render');
             $('.selectpicker').selectpicker('refresh');   
@@ -158,7 +145,6 @@ export default {
             this.pageInfo.title = name
             let descriptionArr = []
             let tempArr = []
-            console.log(controlArr);
             for (const key in controlArr) {
                 if (controlArr[key].form_control_pid === 0) {
                     if(key>0){
