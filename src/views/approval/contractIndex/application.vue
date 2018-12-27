@@ -9,7 +9,7 @@
                     <div class="input-search">
                         <button type="button" class="input-search-btn"><i class="iconfont icon-buoumaotubiao13" aria-hidden="true"></i>
                         </button>
-                        <input v-model="keywords" type="text" class="form-control" placeholder="输入编号、类型或申请人"
+                        <input v-model="keywords" type="text" class="form-control project-search" placeholder="输入编号、类型或申请人"
                                @blur="getList">
                     </div>
                 </div>
@@ -34,21 +34,29 @@
                                    data-selectable="selectable">
                                 <tr>
                                     <th class="cell-300" scope="col">审批编号</th>
-                                    <th class="cell-300" scope="col">项目名称</th>
+                                    <th class="cell-300" scope="col">合同名称</th>
                                     <th class="cell-300" scope="col">申请人</th>
                                     <th class="cell-300 position-relative" scope="col">类型
                                         <i class="iconfont icon-gengduo1" aria-hidden="true"
                                            id="taskDropdown" data-toggle="dropdown" aria-expanded="false"></i>
                                         <div class="dropdown-menu" aria-labelledby="taskDropdown" role="menu">
-                                            <a class="dropdown-item" role="menuitem" v-for="(item, index) in contractList" :key="index">{{item.value}}</a>
+                                            <a class="dropdown-item" role="menuitem" >影视项目立项</a>
+                                            <a class="dropdown-item" role="menuitem" >综艺项目立项</a>
+                                            <a class="dropdown-item" role="menuitem" >商务项目立项</a>
+                                            <a class="dropdown-item" role="menuitem" >papi项目立项</a>
                                         </div>
                                     </th>
                                     <th class="cell-300" scope="col">申请时间</th>
                                     <th class="cell-300" scope="col">审批状态</th>
                                 </tr>
                                 <tbody>
-                                <tr v-for="project in projectsInfo" :key='project.id'>
+                                <tr v-for="project in projectsInfo" :key='project.project_number'>
+                                    <router-link :to="'/approval/'+project.id"><td>{{project.form_instance_number}}</td></router-link>                                    
+                                    <td>{{project.title}}</td>
+                                    <td>{{project.name}}</td>
                                     <td></td>
+                                    <td>{{project.created_at}}</td>
+                                    <td>{{getProgressName(project.form_status)}}</td>
                                 </tr>
                                 </tbody>
                             </table>
@@ -67,24 +75,45 @@
 </template>
 
 <script>
-import {CONTRACT_INDEX_CONFIG} from '@/views/approval/contractIndex/contractIndexData.js'
+    import fetch from '@/assets/utils/fetch.js'
+    import config from '@/assets/js/config'
+    import {PROJECT_CONFIG} from '@/views/approval/project/projectConfig.js'
     export default {
         name: "application",
         data() {
             return {
                 keywords: '',
                 projectsInfo: [],
-                contractList:CONTRACT_INDEX_CONFIG.contractIndex,
+                projectProgress:PROJECT_CONFIG.approvalProgress,
+
+            }
+        },
+        mounted(){
+            this.getList(1)
+        },
+        computed:{
+            getProgressName(){
+                return function(params){
+                   return  this.projectProgress.find(item=>item.id == params).value
+                }
             }
         },
         methods: {
-            getList(value) {
-
+            getList(params) {
+                let _this = this
+                fetch('get','/approvals_contract/my?status='+params).then((params) => {
+                    _this.projectsInfo = params.data
+                })
             }
         }
     }
 </script>
 
-<style scoped>
-
+<style>
+    /* input::-webkit-input-placeholder{
+    　　color: #000;
+    } */
+    .project-search::-webkit-input-placeholder{
+        font-weight: 200;
+    }
 </style>

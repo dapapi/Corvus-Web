@@ -1962,25 +1962,24 @@
                 if (JSON.stringify(this.addInfoArr) !== "{}") {
                     data.fields = this.addInfoArr;
                 }
-                let _this = this;
                 let participantsInfo = this.$store.state.participantsInfo;
                 data.participant_ids = [];
                 data.participant_del_ids = [];
                 for (let i = 0; i < participantsInfo.length; i++) {
-                    if (this.projectInfo.participants.data.indexOf(participantsInfo[i].id) === -1) {
+                    if (this.projectInfo.participants.data.map(item => item.id).indexOf(participantsInfo[i].id) === -1) {
                         data.participant_ids.push(participantsInfo[i].id)
                     }
                 }
                 for (let i = 0; i < this.projectInfo.participants.data.length; i++) {
-                    if (participantsInfo.indexOf(this.projectInfo.participants.data[i].id) === -1) {
+                    if (participantsInfo.map(item => item.id).indexOf(this.projectInfo.participants.data[i].id) === -1) {
                         data.participant_del_ids.push(this.projectInfo.participants.data[i].id)
                     }
                 }
 
-                fetch('put', '/projects/' + this.projectId, data).then(function () {
+                fetch('put', '/projects/' + this.projectId, data).then(() => {
                     toastr.success('修改成功');
-                    _this.isEdit = false;
-                    _this.getProject()
+                    this.isEdit = false;
+                    this.getProject()
                 })
             },
 

@@ -131,7 +131,8 @@
                         <div class="example">
                             <div class="col-md-2 text-right float-left">日历</div>
                             <div class="col-md-10 float-left pl-0">
-                                <selectors :options="calendarList" ref="calendarSelector" @change="selectScheduleCalendar"></selectors>
+                                <selectors :options="calendarList" ref="calendarSelector"
+                                           @change="selectScheduleCalendar"></selectors>
                             </div>
                         </div>
                         <div class="example">
@@ -194,7 +195,7 @@
                                 <div class="col-md-2 text-right float-left">会议室</div>
                                 <div class="col-md-10 float-left pl-0">
                                     <selectors :options="allMeetingRomeList" ref="scheduleResource"
-                                                @change="changeScheduleMaterial"></selectors>
+                                               @change="changeScheduleMaterial"></selectors>
                                 </div>
                             </div>
                             <div class="example">
@@ -206,7 +207,8 @@
                             <div class="example">
                                 <div class="col-md-2 text-right float-left">重复</div>
                                 <div class="col-md-10 float-left pl-0">
-                                    <selectors :options="repeatArr" ref="scheduleRepeat" @change="changeScheduleRepeat"></selectors>
+                                    <selectors :options="repeatArr" ref="scheduleRepeat"
+                                               @change="changeScheduleRepeat"></selectors>
                                 </div>
                             </div>
                             <div class="example">
@@ -377,7 +379,8 @@
                         <div class="example">
                             <div class="col-md-2 text-right float-left">可见范围</div>
                             <div class="col-md-10 float-left pl-0">
-                                <selectors :options="visibleRangeArr" ref="visibleSelector" @change="addCalendarVisible"></selectors>
+                                <selectors :options="visibleRangeArr" ref="visibleSelector"
+                                           @change="addCalendarVisible"></selectors>
                             </div>
                         </div>
                         <div class="example">
@@ -630,8 +633,10 @@
                 _this.initAddScheduleModal();
             });
 
-            $('#checkSchedule').on('hidden.bs.modal', function () {
-                _this.$store.dispatch('changeParticipantsInfo', {data: []});
+            $('#checkSchedule').on('hide.bs.modal', function () {
+                if (this.scheduleType !== 'edit') {
+                    _this.$store.dispatch('changeParticipantsInfo', {data: []});
+                }
             });
             this.globalClick(this.removeSelector);
             this.initCalendar();
@@ -686,12 +691,6 @@
                     }
                     this.selectedCalendar = data;
                 }
-            },
-
-            getClients: function () {
-                fetch('get', '/clients').then(function (response) {
-                    console.log(response)
-                })
             },
 
             getResources(type) {
@@ -777,8 +776,6 @@
             },
 
             fileUpload: function (url, name, size) {
-                console.log(url);
-                console.log(name)
                 let data = {
                     title: name,
                     url: url,
@@ -827,13 +824,11 @@
             },
 
             delNewScheduleLinkage: function (type, value) {
-                console.log(this.linkageSelectedIds[type]);
                 let index = this.linkageSelectedIds[type].indexOf(value);
                 this.linkageSelectedIds[type].splice(index, 1)
             },
 
             addLinkageResource: function () {
-                console.log(this.linkageSelectedIds);
                 $('#addLinkage').modal('hide');
             },
 
@@ -914,6 +909,8 @@
                     this.isAllday = this.scheduleData.is_allday;
                     this.eventDesc = this.scheduleData.desc;
                     this.eventPlace = this.scheduleData.position;
+                    console.log(this.scheduleData.participants.data);
+                    this.$store.dispatch('changeParticipantsInfo', {data: this.scheduleData.participants.data});
                     if (this.scheduleData.material) {
                         this.$refs.scheduleResource.setValue(this.scheduleData.material.data.id);
                         this.scheduleMaterialId = this.scheduleData.material.data.id;
@@ -1005,6 +1002,23 @@
                 } else {
                     startTime = this.startTime + ' ' + this.startMinutes;
                     endTime = this.endTime + ' ' + this.endMinutes;
+
+                    if (startTime > endTime) {
+                        toastr.error('开始时间不能晚于截止时间');
+                        return
+                    }
+
+                    if (this.startTime === this.endTime) {
+                        let startMinutesArr = this.startMinutes.split(':');
+                        let endMinutesArr = this.endMinutes.split(':');
+                        if (startMinutesArr[0] === endMinutesArr[0]) {
+                            if ((Number(endMinutesArr[1]) - Number(startMinutesArr[1])) < 30) {
+                                toastr.error('日程时间不能小于30分钟');
+                                return
+                            }
+
+                        }
+                    }
                 }
                 let data = {
                     title: this.scheduleName,
