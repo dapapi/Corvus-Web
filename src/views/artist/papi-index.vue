@@ -392,6 +392,7 @@
                     _this.$refs.isSign.setValue('')//其他公司意向 
                     _this.artistDesc='';//备注
                     _this.platformType=[];
+                    _this.selectedArtistsArr=[]
              })
         },
         methods: {
@@ -426,7 +427,6 @@
                     _this.current_page = response.meta.pagination.current_page;
                     _this.total = response.meta.pagination.total;
                     _this.total_pages = response.meta.pagination.total_pages;
-                    console.log(_this.artistsInfo)
                 });
             },
 
@@ -521,7 +521,7 @@
                     platform:platform,//平台id
                     star_douyin_infos:this.star_douyin_infos,
                     star_weibo_infos:this.star_weibo_infos,
-                    star_xiaohongshu_infos:this.star_xiaohongshu_infos
+                    star_xiaohongshu_infos:this.star_xiaohongshu_infos,
                     
                 };
                 fetch('post', '/bloggers', data).then(function (response) {
