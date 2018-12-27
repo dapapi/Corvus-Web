@@ -1,6 +1,7 @@
 import Vue from 'vue';
 import Router from 'vue-router';
 import Home from './views/Home.vue';
+import Cookies from 'js-cookie'
 
 Vue.use(Router);
 
@@ -8,6 +9,10 @@ export default new Router({
     mode: 'history',
     base: process.env.BASE_URL,
     routes: [
+        {
+            path: "*",
+            redirect: "/"
+        },
         {
             path: '/',
             // name: 'home',
@@ -18,6 +23,16 @@ export default new Router({
             path: '/login',
             name: 'login',
             component: () => import('./views/auth/login.vue'),
+            beforeEnter: (to, from, next) => {
+                if (Cookies.get('user') && Cookies.get('CORVUS-ACCESS-TOKEN')) {
+                    next('/')
+                } else {
+                    next()
+                }
+                // console.log('to', to)
+                // console.log('from', to)
+                // console.log('next', to)
+            }
         },
         {
             path: '/tasks',

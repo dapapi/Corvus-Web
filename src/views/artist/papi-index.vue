@@ -9,9 +9,9 @@
                    data-toggle="dropdown" aria-expanded="false"></i>
                 <div class="dropdown-menu dropdown-menu-right task-dropdown-item" aria-labelledby="taskDropdown"
                      role="menu" x-placement="bottom-end">
-                    <!-- <a class="dropdown-item" role="menuitem" >导入</a>
-                    <a class="dropdown-item" role="menuitem" >导出</a> -->
-                    <a class="dropdown-item" role="menuitem" data-toggle="modal" data-target="#giveBroker">分配制作人</a>
+                    <a class="dropdown-item" role="menuitem" >导入</a>
+                    <a class="dropdown-item" role="menuitem" >导出</a>
+                    <a class="dropdown-item" role="menuitem" data-toggle="modal" :data-target="selectedArtistsArr.length>0&&'#giveBroker'" @click="judge">分配制作人</a>
                 </div>
             </div>
         </div>
@@ -392,6 +392,7 @@
                     _this.$refs.isSign.setValue('')//其他公司意向 
                     _this.artistDesc='';//备注
                     _this.platformType=[];
+                    _this.selectedArtistsArr=[]
              })
         },
         methods: {
@@ -426,7 +427,6 @@
                     _this.current_page = response.meta.pagination.current_page;
                     _this.total = response.meta.pagination.total;
                     _this.total_pages = response.meta.pagination.total_pages;
-                    console.log(_this.artistsInfo)
                 });
             },
 
@@ -521,7 +521,7 @@
                     platform:platform,//平台id
                     star_douyin_infos:this.star_douyin_infos,
                     star_weibo_infos:this.star_weibo_infos,
-                    star_xiaohongshu_infos:this.star_xiaohongshu_infos
+                    star_xiaohongshu_infos:this.star_xiaohongshu_infos,
                     
                 };
                 fetch('post', '/bloggers', data).then(function (response) {
@@ -571,9 +571,6 @@
                 }
                 fetch('post', 'distribution/person', data).then(function (response) {
                     if(_this.selectedArtistsArr.length==0){
-                        toastr.error('请先选择博主，再进行分配')
-                        $('#giveBroker').modal('hide')
-                        _this.$store.state.participantsInfo = []
                         return  false
                     }
                     toastr.success('分配制作人成功')
@@ -583,6 +580,14 @@
                     _this.selectedArtistsArr=[]
                 })
                
+            },
+            judge(){
+                 if(this.selectedArtistsArr.length==0){
+                        toastr.error('请先选择博主，再进行分配')
+                        $('#giveBroker').modal('hide')
+                        this.$store.state.participantsInfo = []
+                        return  false
+                    }
             }
         }
     }
@@ -610,7 +615,6 @@
         position: relative;
         border:0px
     }
-    
 </style>
 
 
