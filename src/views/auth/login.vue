@@ -1,5 +1,5 @@
 <template>
-    <div class="" data-animsition-in="fade-in" data-animsition-out="fade-out">
+    <div class="" data-animsition-in="fade-in" data-animsition-out="fade-out" @keyup.enter="alert(2)">
 
         <div class="col-md-7 float-left left-bg">
             <div class="bg-top-image">
@@ -47,7 +47,7 @@
                                         <i class="iconfont icon-buoumaotubiao32" aria-hidden="true"
                                            style="font-size:12px;"></i>
                                     </span>
-                                    <input type="password" class="form-control" placeholder="密码" v-model="password">
+                                    <input type="password" class="form-control" placeholder="密码" v-model="password" @keyup.enter="checkLogin">
                                 </div>
                             </div>
                             <div class="form-group clearfix">

@@ -1270,7 +1270,7 @@
                 start = new Date(this.startTime).getTime() + startMin[0] * 60 * 60 * 1000 + startMin[1] * 60 * 1000
                 end = new Date(this.endTime).getTime() + endMin[0] * 60 * 60 * 1000 + endMin[1] * 60 * 1000
                 if (start > end) {
-                    toastr.error('结束时间必须晚于开始时间,请重新选择时间');
+                    toastr.error('开始时间不能晚于截止时间');
                     return false;
                 }
                 

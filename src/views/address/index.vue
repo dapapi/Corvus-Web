@@ -105,7 +105,7 @@
                                 <div class="clearfix">
                                     <div class="col-md-4 float-left">
                                         <div class="float-left col-md-6">
-                                            <i class="md-email pr-2"></i>
+                                            <i class="iconfont icon-weidu pr-2"></i>
                                             <span class="font-weight-bold">邮箱</span>
                                         </div>
                                         <div class="float-left col-md-6 pl-0">{{ personalInfo.work_email ? personalInfo.work_email : ''}}</div>
