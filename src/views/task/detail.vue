@@ -8,12 +8,12 @@
                    data-toggle="dropdown" aria-expanded="false"></i>
                 <div class="dropdown-menu dropdown-menu-right task-dropdown-item" aria-labelledby="taskDropdown"
                      role="menu" x-placement="bottom-end">
-                    <a class="dropdown-item" role="menuitem" @click="changeTaskStatus(3)" v-show="taskInfo.status != 3">终止</a>
-                    <a class="dropdown-item" role="menuitem" @click="changeTaskStatus(1)" v-show="taskInfo.status != 1">激活</a>
-                    <a class="dropdown-item" role="menuitem" @click="changeTaskStatus(2)" v-show="taskInfo.status != 2">完成</a>
+                    <a class="dropdown-item" role="menuitem" @click="changeTaskStatus(3)" v-show="oldInfo.status != 3">终止</a>
+                    <a class="dropdown-item" role="menuitem" @click="changeTaskStatus(1)" v-show="oldInfo.status != 1">激活</a>
+                    <a class="dropdown-item" role="menuitem" @click="changeTaskStatus(2)" v-show="oldInfo.status != 2">完成</a>
                     <!-- <a class="dropdown-item" role="menuitem" data-toggle="modal" data-target="#customizeFieldContent">自定义字段</a> -->
                     <a class="dropdown-item" role="menuitem" @click="privacyTask">
-                        {{taskInfo.privacy == 1 ? '转公开':'转私密'}}</a>
+                        {{oldInfo.privacy == 1 ? '转公开':'转私密'}}</a>
                     <a class="dropdown-item" role="menuitem" @click="deleteTask">删除</a>
                 </div>
             </div>
@@ -22,10 +22,10 @@
         <div class="page-content container-fluid">
             <div class="panel col-md-12 col-lg-12">
                 <div class="card-block">
-                    <h4 class="card-title">{{ taskInfo.title }}
-                        <template v-if="!taskInfo.task_p">
+                    <h4 class="card-title">{{ oldInfo.title }}
+                        <template v-if="!oldInfo.task_p">
                            <span class="font-size-14 pl-10 pointer-content hover-content"
-                                 @click="redirectTaskDetail(taskInfo.pTask?taskInfo.pTask.data.id: '')">
+                                 @click="redirectTaskDetail(oldInfo.pTask?oldInfo.pTask.data.id: '')">
                            <i class="md-chevron-left"></i>回到主任务
                             </span>
                         </template>
@@ -34,8 +34,8 @@
                         <div class="float-left pl-0 pr-2 col-md-1">
                             <i class="iconfont icon-yonghu pr-2" aria-hidden="true"></i>负责人
                         </div>
-                        <div class="font-weight-bold float-left" v-if="taskInfo">
-                            {{ taskInfo.principal?taskInfo.principal.data.name: '' }}
+                        <div class="font-weight-bold float-left" v-if="oldInfo">
+                            {{ oldInfo.principal?oldInfo.principal.data.name: '' }}
                         </div>
                     </div>
                     <div class="card-text clearfix example">
@@ -43,10 +43,10 @@
                             <i class="iconfont icon-initiate-task pr-2" aria-hidden="true"></i>任务状态
                         </div>
                         <div class="font-weight-bold float-left">
-                            <template v-if="taskInfo.status === 1"><span style="color:#FF9800">进行中</span></template>
-                            <template v-if="taskInfo.status === 2"><span style="color:#4CAF50">已完成</span></template>
-                            <template v-if="taskInfo.status === 3"><span style="color:#9E9E9E">已停止</span></template>
-                            <template v-if="taskInfo.status === 4"><span style="color:#F44336">延期</span></template>
+                            <template v-if="oldInfo.status === 1"><span style="color:#FF9800">进行中</span></template>
+                            <template v-if="oldInfo.status === 2"><span style="color:#4CAF50">已完成</span></template>
+                            <template v-if="oldInfo.status === 3"><span style="color:#9E9E9E">已停止</span></template>
+                            <template v-if="oldInfo.status === 4"><span style="color:#F44336">延期</span></template>
                         </div>
                     </div>
                     <div class="card-text clearfix example">
@@ -55,18 +55,18 @@
                                 <i class="iconfont icon-jieshushijian pr-2" aria-hidden="true"></i>结束时间
                             </div>
                             <div class="font-weight-bold float-left">
-                                {{ taskInfo.end_at }}
+                                {{ oldInfo.end_at }}
                             </div>
                         </div>
-                        <div class="float-right text-right pr-0" v-if="taskInfo.resource">
+                        <div class="float-right text-right pr-0" v-if="oldInfo.resource">
                             <span>关联资源</span>
                             <span class="pl-2 font-weight-bold">
-                                {{taskInfo.resource.data.resource.data.title}} -
-                                <template v-if="taskInfo.resource.data.resourceable_type === 'project'">{{ taskInfo.resource.data.resourceable.data.title }}</template>
-                                <template v-if="taskInfo.resource.data.resourceable_type === 'client'">{{ taskInfo.resource.data.resourceable.data.company }}</template>
-                                <template v-if="taskInfo.resource.data.resourceable_type === 'star'">{{ taskInfo.resource.data.resourceable.data.name }}</template>
-                                <template v-if="taskInfo.resource.data.resourceable_type === 'blogger'">{{ taskInfo.resource.data.resourceable.data.nickname }}</template>
-                                <template v-if="taskInfo.resource.data.resourceable_type === 'trail'">{{ taskInfo.resource.data.resourceable.data.title }}</template>
+                                {{oldInfo.resource.data.resource.data.title}} -
+                                <template v-if="oldInfo.resource.data.resourceable_type === 'project'">{{ oldInfo.resource.data.resourceable.data.title }}</template>
+                                <template v-if="oldInfo.resource.data.resourceable_type === 'client'">{{ oldInfo.resource.data.resourceable.data.company }}</template>
+                                <template v-if="oldInfo.resource.data.resourceable_type === 'star'">{{ oldInfo.resource.data.resourceable.data.name }}</template>
+                                <template v-if="oldInfo.resource.data.resourceable_type === 'blogger'">{{ oldInfo.resource.data.resourceable.data.nickname }}</template>
+                                <template v-if="oldInfo.resource.data.resourceable_type === 'trail'">{{ oldInfo.resource.data.resourceable.data.title }}</template>
                             </span>
                         </div>
                     </div>
@@ -712,8 +712,9 @@
 
             cancelEdit: function () {
                 this.isEdit = false;
+                 this.getTask();
                 // this.taskInfo = JSON.parse(JSON.stringify(this.oldInfo))
-                this.taskInfo = this.oldInfo
+                // this.taskInfo = this.oldInfo
             },
 
             changeTaskStatus: function (status) {
