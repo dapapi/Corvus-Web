@@ -16,15 +16,11 @@
                                placeholder="请输入任务名称">
                     </div>
                     <div class="col-md-3 example float-left">
-                        <Selectors :options="taskTypeArr"
-                                   @change="changeTaskTypeSearch"
-                                   :placeholder="'请选择任务类型'"></Selectors>
+                        <Selectors :options="taskTypeArr" @change="changeTaskTypeSearch"></Selectors>
                     </div>
                     <!-- todo 任务类型暂无 -->
                     <div class="col-md-3 example float-left">
-                        <Selectors :options="taskStatusArr"
-                                   @change="changeTaskStatusSearch"
-                                   :placeholder="'请选择任务状态'"></Selectors>
+                        <Selectors :options="taskStatusArr" @change="changeTaskStatusSearch"></Selectors>
                     </div>
                     <div class="col-md-3 example float-left">
                         <button type="button"
@@ -179,7 +175,7 @@
                         <div class="example">
                             <div class="col-md-2 text-right float-left">任务类型</div>
                             <div class="col-md-10 float-left pl-0">
-                                <Selectors :options="taskTypeArr" :placeholder="'请选择任务类型'" ref="taskType"
+                                <Selectors :options="taskTypeArr" ref="taskType"
                                            @change="changeTaskType"></Selectors>
                             </div>
                         </div>
@@ -206,7 +202,6 @@
                             <div class="col-md-10 float-left pl-0">
                                 <Selectors
                                         :options="taskLevelArr"
-                                        :placeholder="'请选择任务优先级'"
                                         @change="changeTaskLevel"
                                         ref="taskLevel"
                                 ></Selectors>
@@ -268,7 +263,6 @@
                 total: 0,
                 current_page: 1,
                 total_pages: 1,
-                memberPlaceholder: "请选择负责人",
                 participants: [],
                 multiple: false,
                 taskIntroduce: "",

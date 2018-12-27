@@ -131,8 +131,7 @@
                         <div class="example">
                             <div class="col-md-2 text-right float-left">日历</div>
                             <div class="col-md-10 float-left pl-0">
-                                <selectors :options="calendarList" :placeholder="'请选择日历'" ref="calendarSelector"
-                                           @change="selectScheduleCalendar"></selectors>
+                                <selectors :options="calendarList" ref="calendarSelector" @change="selectScheduleCalendar"></selectors>
                             </div>
                         </div>
                         <div class="example">
@@ -195,7 +194,7 @@
                                 <div class="col-md-2 text-right float-left">会议室</div>
                                 <div class="col-md-10 float-left pl-0">
                                     <selectors :options="allMeetingRomeList" ref="scheduleResource"
-                                               :placeholder="'请选择会议室'" @change="changeScheduleMaterial"></selectors>
+                                                @change="changeScheduleMaterial"></selectors>
                                 </div>
                             </div>
                             <div class="example">
@@ -207,8 +206,7 @@
                             <div class="example">
                                 <div class="col-md-2 text-right float-left">重复</div>
                                 <div class="col-md-10 float-left pl-0">
-                                    <selectors :options="repeatArr" ref="scheduleRepeat"
-                                               @change="changeScheduleRepeat"></selectors>
+                                    <selectors :options="repeatArr" ref="scheduleRepeat" @change="changeScheduleRepeat"></selectors>
                                 </div>
                             </div>
                             <div class="example">
@@ -379,8 +377,7 @@
                         <div class="example">
                             <div class="col-md-2 text-right float-left">可见范围</div>
                             <div class="col-md-10 float-left pl-0">
-                                <selectors :options="visibleRangeArr" ref="visibleSelector"
-                                           @change="addCalendarVisible"></selectors>
+                                <selectors :options="visibleRangeArr" ref="visibleSelector" @change="addCalendarVisible"></selectors>
                             </div>
                         </div>
                         <div class="example">

@@ -1,6 +1,6 @@
 <template>
     <!-- Page -->
-    <div class="" style="background-color:##f3f4f5">
+    <div class="" style="background-color:#f3f4f5">
         <div class="page-header page-header-bordered">
             <h1 class="page-title">我的审批</h1>
         </div>
@@ -8,7 +8,7 @@
                <div class="panel col-md-12 clearfix p-10 mt-0">
                 <!-- <div class="clearfix"> -->
                 <div class="col-md-3 example float-left " >
-                        <selectors :placeholder="'太阳系'" :options="data"></selectors>
+                        <selectors  :options="data"></selectors>
                 </div>
                  <div class="col-md-3 example float-left" >
                          <datepicker :placeholder="'开始时间'"></datepicker>

@@ -426,7 +426,7 @@
                         <div class="example">
                             <div class="col-md-2 text-right float-left">关键决策人</div>
                             <div class="col-md-10 float-left">
-                                <selectors ref="contact" :options="keyMasterArr" :value="editConfig.type" :placeholder="'请选择是否是关键决策人'"
+                                <selectors ref="contact" :options="keyMasterArr" :value="editConfig.type"
                                     @change="changeContactClientType"></selectors>
                             </div>
                         </div>

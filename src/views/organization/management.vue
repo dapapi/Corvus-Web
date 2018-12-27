@@ -64,8 +64,7 @@
                 <div class="example">
                 <div class="col-md-2 text-right float-left">部门城市</div>
                 <div class="col-md-10 float-left">
-                    <selectors ref="departmentCity" :options="cityArr" :placeholder="'请选择城市'"
-                                            @change="changeCity"></selectors>
+                    <selectors ref="departmentCity" :options="cityArr" @change="changeCity"></selectors>
                 </div>
                 </div>
                 <div class="example">

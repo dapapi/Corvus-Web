@@ -13,8 +13,7 @@
                     <div class="col-md-12 example clearfix" v-show="projectType != 5 && trailsArr.length > 0">
                         <div class="col-md-2 text-right float-left px-0">销售线索</div>
                         <div class="col-md-10 float-left">
-                            <Selectors :options="trailsArr" @change="addProjectTrail" ref="trails"
-                                       placeholder="请选择销售线索" selectable="true"></Selectors>
+                            <Selectors :options="trailsArr" @change="addProjectTrail" ref="trails" selectable="true"></Selectors>
                         </div>
                     </div>
                     <div class="col-md-12 example clearfix" v-show="projectType != 5">
@@ -23,7 +22,7 @@
                             <div class="col-md-6 float-left pl-0" v-if="trailOriginArr.length > 0">
                                 <Selectors :options="trailOriginArr"
                                            @change="(value) => addProjectBaseInfo(value, 'resource_type')"
-                                           ref="trailOrigin" placeholder="请选择项目来源"></Selectors>
+                                           ref="trailOrigin" ></Selectors>
                             </div>
                             <div class="col-md-6 float-left pr-0">
                                 <template v-if="trailOrigin == 1 || trailOrigin == 2 || trailOrigin == 3">
@@ -53,21 +52,20 @@
                         <div class="col-md-2 text-right float-left px-0">目标艺人</div>
                         <div class="col-md-10 float-left">
                             <Selectors multiple="true" :options="allStarsArr" ref="intentionArtist"
-                                       placeholder="请选择目标艺人"
                                        @change="(value) => addProjectBaseInfo(value, 'expectations')"></Selectors>
                         </div>
                     </div>
                     <div class="col-md-12 example clearfix">
                         <div class="col-md-2 text-right float-left px-0">优先级</div>
                         <div class="col-md-10 float-left">
-                            <Selectors :options="levelArr" ref="priorityLevel" placeholder="请选择优先级"
+                            <Selectors :options="levelArr" ref="priorityLevel"
                                        @change="(value) => addProjectBaseInfo(value, 'priority')"></Selectors>
                         </div>
                     </div>
                     <div class="col-md-12 example clearfix" v-show="projectType == 5">
                         <div class="col-md-2 text-right float-left px-0">可见范围</div>
                         <div class="col-md-10 float-left">
-                            <Selectors :options="visibleRangeArr" placeholder="请选择可见范围" ref="visibleRange"
+                            <Selectors :options="visibleRangeArr" ref="visibleRange"
                                        @change="(value) => addProjectBaseInfo(value, 'privacy')"></Selectors>
                         </div>
                     </div>
@@ -108,7 +106,7 @@
                             </template>
                             <template v-if="field.field_type === 2">
                                 <Selectors :default='newArray.find(item=>item.id === field.id)'
-                                           :options="field.contentArr" :placeholder="'请选择' + field.key"
+                                           :options="field.contentArr"
                                            @change="(value) => addInfo(value, field.id )"></Selectors>
                             </template>
                             <template v-if="field.field_type === 3">
@@ -128,7 +126,6 @@
                             <template v-if="field.field_type === 6">
                                 <Selectors :default='newArray.find(item=>item.id === field.id)'
                                            :options="field.contentArr" :multiple="true"
-                                           :placeholder="'请选择' + field.key"
                                            @change="(value) => addInfo(value.join('|'), field.id )"></Selectors>
                             </template>
                             <template v-if="field.field_type === 8">

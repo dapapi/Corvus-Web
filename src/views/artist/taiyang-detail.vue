@@ -30,8 +30,9 @@
                     <!-- <img  v-if="avatar" width="80px" height="80px" style="border-radius:50%" class="mr-5 float-left"
                                                 :src="avatar" alt="">
                     <img v-else width="80px" height="80px" style="border-radius:50%" class="mr-5 float-left"> -->
-                    <Upload @change='getUploadUrl' class="upload-image float-left mr-5" style="width:80px;height:80px;border-radius:50%;position:relative">
-                        <div  class="puls" :style="{ backgroundImage: 'url(' + avatar + ')' }" v-if="avatar">
+                    <Upload @change='getUploadUrl' class="upload-image float-left mr-5"
+                            style="width:80px;height:80px;border-radius:50%;position:relative">
+                        <div class="puls" :style="{ backgroundImage: 'url(' + avatar + ')' }" v-if="avatar">
                         </div>
                         <!-- <div class="puls plus_hover">
                             <span>+</span>
@@ -39,7 +40,7 @@
                         <div class="puls" v-if="!avatar">
                             <img src="https://res-crm.papitube.com/image/artist-no-avatar.png" alt="">
                         </div>
-                        
+
                     </Upload>
                     <!-- src="https://res.papitube.com/corvus/images/taiyang-icon.png" alt=""> -->
                     <div class="float-left ml-10" style="width:calc(100% - 100px)">
@@ -88,7 +89,8 @@
                     </div>
                     <div class="col-md-6 float-left pl-0 mb-20">
                         <div class="col-md-6"><i class="iconfont icon-ego-box"></i>项目</div>
-                        <div class="clearfix example" v-for="(item,index) in artistProjectsInfo" :key="index" style="cursor: pointer">
+                        <div class="clearfix example" v-for="(item,index) in artistProjectsInfo" :key="index"
+                             style="cursor: pointer">
                             <div class="col-md-3 float-left">
                                 {{item.title}}
                             </div>
@@ -156,7 +158,8 @@
                         <div class="tab-pane animation-fade pb-20 fixed-button-father" id="forum-artist-schedule"
                              role="tabpanel" :class="artistInfo.sign_contract_status == 2?'active':''">
                             <div class="col-md-12">
-                                <calendar :goto-date="selectedDate" :calendars="selectedCalendar" ref="calendar" @scheduleClick="showScheduleModal"></calendar>
+                                <calendar :goto-date="selectedDate" :calendars="selectedCalendar" ref="calendar"
+                                          @scheduleClick="showScheduleModal"></calendar>
                             </div>
                         </div>
                         <!--项目-->
@@ -236,8 +239,10 @@
                                  data-target="#addTask">
                                 <button type="button"
                                         class="site-action-toggle btn-raised btn btn-success btn-floating waves-effect waves-classic">
-                                    <i class="front-icon iconfont icon-tianjia1 animation-scale-up" aria-hidden="true" style="font-size:30px"></i>
-                                    <i class="back-icon iconfont icon-tianjia1 animation-scale-up" aria-hidden="true" style="font-size:30px"></i>
+                                    <i class="front-icon iconfont icon-tianjia1 animation-scale-up" aria-hidden="true"
+                                       style="font-size:30px"></i>
+                                    <i class="back-icon iconfont icon-tianjia1 animation-scale-up" aria-hidden="true"
+                                       style="font-size:30px"></i>
                                 </button>
                             </div>
                         </div>
@@ -275,7 +280,8 @@
                                  data-target="#addWork">
                                 <button type="button"
                                         class="site-action-toggle btn-raised btn btn-success btn-floating waves-effect waves-classic">
-                                    <i class="front-icon iconfont icon-tianjia1 animation-scale-up" aria-hidden="true"></i>
+                                    <i class="front-icon iconfont icon-tianjia1 animation-scale-up"
+                                       aria-hidden="true"></i>
                                     <i class="back-icon md-close animation-scale-up" aria-hidden="true"></i>
                                 </button>
                             </div>
@@ -330,13 +336,13 @@
                                 </tr>
                                 </tbody>
                             </table>
-                            
+
                             <div class="col-md-1" style="margin: 6rem auto" v-if="artistBillsInfo.length === 0">
                                 <img src="https://res.papitube.com/corvus/images/content-none.png" alt=""
                                      style="width: 100%">
                             </div>
                             <pagination :current_page="current_page" :method="getArtistsBill" :total_pages="total_pages"
-                                    :total="total"></pagination>
+                                        :total="total"></pagination>
                         </div>
                         <!--概况-->
                         <div class="tab-pane animation-fade  pb-20 fixed-button-father" id="forum-artist-base"
@@ -500,7 +506,6 @@
                                             <div class="col-md-2 float-left text-right pl-0">附件类型</div>
                                             <div class="col-md-10 float-left font-weight-bold">
                                                 <selectors v-show="isEdit" :options="attachmentTypeArr"
-                                                           :placeholder="'请选择附件类型'"
                                                            @change="changeAttachmentType" ref="attachType"></selectors>
 
                                             </div>
@@ -514,11 +519,13 @@
                                                 <FileUploader v-show="isEdit" class="uploadAttach"
                                                               @change="uploadAttachment"></FileUploader>
                                                 <div class="mt-5" v-for="(attach,index) in affixes" :key="index">
-                                                    <span class="mr-20"  >{{attachmentTypeArr.find(item => item.value == attach.type).name}} - {{attach.title}}</span>
-                                                    
+                                                    <span class="mr-20">{{attachmentTypeArr.find(item => item.value == attach.type).name}} - {{attach.title}}</span>
+
                                                     <i class="iconfont icon-shanchu1 mr-10" data-toggle="modal"
                                                        data-target="#affix" @click="getAffixId(attach.id)"></i>
-                                                    <a data-toggle="modal" data-target='#docPreview' @click="previewFile(attach.url,attach.title)" class="md-download"></a>
+                                                    <a data-toggle="modal" data-target='#docPreview'
+                                                       @click="previewFile(attach.url,attach.title)"
+                                                       class="md-download"></a>
                                                 </div>
                                             </div>
                                         </div>
@@ -538,13 +545,17 @@
                                     <div class="card-text py-5 clearfix">
                                         <div class="col-md-1 float-left text-right pl-0">最近更新人</div>
                                         <div class="col-md-5 float-left font-weight-bold">
-                                            <template v-if="artistInfo.last_updated_user">{{artistInfo.last_updated_user}}</template>
+                                            <template v-if="artistInfo.last_updated_user">
+                                                {{artistInfo.last_updated_user}}
+                                            </template>
                                             <template v-else>{{ artistInfo.created_at }}</template>
-                                            
+
                                         </div>
                                         <div class="col-md-1 float-left text-right pl-0">最近更新时间</div>
                                         <div class="col-md-5 float-left font-weight-bold">
-                                            <template v-if="artistInfo.last_follow_up_at">{{artistInfo.last_follow_up_at}}</template>
+                                            <template v-if="artistInfo.last_follow_up_at">
+                                                {{artistInfo.last_follow_up_at}}
+                                            </template>
                                             <template v-else>{{ artistInfo.created_at }}</template>
                                         </div>
                                     </div>
@@ -600,8 +611,7 @@
                         <div class="example">
                             <div class="col-md-2 text-right float-left">任务类型</div>
                             <div class="col-md-10 float-left pl-0">
-                                <selectors :options="taskTypeArr" :placeholder="'请选择任务类型'"
-                                           @change="changeTaskType" ref="taskType"></selectors>
+                                <selectors :options="taskTypeArr" @change="changeTaskType" ref="taskType"></selectors>
                             </div>
                         </div>
                         <div class="example">
@@ -625,26 +635,29 @@
                         <div class="example">
                             <div class="col-md-2 text-right float-left pl-0">任务优先级</div>
                             <div class="col-md-10 float-left pl-0">
-                                <selectors :options="taskLevelArr" :placeholder="'请选择任务优先级'"
-                                           @change="changeTaskLevel" ref="taskLevel"></selectors>
+                                <selectors :options="taskLevelArr" @change="changeTaskLevel" ref="taskLevel"></selectors>
                             </div>
                         </div>
                         <div class="example">
                             <div class="col-md-2 text-right float-left">开始时间</div>
                             <div class="col-md-5 float-left pl-0">
-                                <datepicker @change="changeStartTime" :placeholder="'请输入开始时间'" ref="taskStartDate"></datepicker>
+                                <datepicker @change="changeStartTime" :placeholder="'请输入开始时间'"
+                                            ref="taskStartDate"></datepicker>
                             </div>
                             <div class="col-md-5 float-left pl-0">
-                                <timepicker :default="startMinutes" @change="changeStartMinutes" ref="taskStartTime"></timepicker>
+                                <timepicker :default="startMinutes" @change="changeStartMinutes"
+                                            ref="taskStartTime"></timepicker>
                             </div>
                         </div>
                         <div class="example">
                             <div class="col-md-2 text-right float-left">截止时间</div>
                             <div class="col-md-5 float-left pl-0">
-                                <datepicker @change="changeEndTime" :placeholder="'请输入结束时间'" ref="taskEndDate"></datepicker>
+                                <datepicker @change="changeEndTime" :placeholder="'请输入结束时间'"
+                                            ref="taskEndDate"></datepicker>
                             </div>
                             <div class="col-md-5 float-left pl-0">
-                                <timepicker :default="endMinutes" @change="changeEndMinutes" ref="taskEndTime"></timepicker>
+                                <timepicker :default="endMinutes" @change="changeEndMinutes"
+                                            ref="taskEndTime"></timepicker>
                             </div>
                         </div>
                         <div class="example">
@@ -699,7 +712,8 @@
                         <div class="example">
                             <div class="col-md-2 text-right float-left">作品发布时间</div>
                             <div class="col-md-10 float-left">
-                                <datepicker @change="changeWorkReleaseTime" ref="workTime" :placeholder="'请输入时间'"></datepicker>
+                                <datepicker @change="changeWorkReleaseTime" ref="workTime"
+                                            placeholder="请选择时间"></datepicker>
                             </div>
                         </div>
                         <div class="example">
@@ -897,7 +911,7 @@
                             <div>
                                 <div class="col-md-3 float-left text-center position-relative file-item"
                                      v-for="affix in scheduleData.affixes.data">
-                                    
+
                                     <div><i class="iconfont icon-wenjian" style="font-size: 36px"></i></div>
                                     <div @click="openFile(affix.url)" class="pointer-content">{{ affix.title }}</div>
                                 </div>
@@ -908,7 +922,7 @@
             </div>
         </div>
         <!--附件预览-->
-        <DocPreview :url="previewUrl" :givenFileName="previewName" />
+        <DocPreview :url="previewUrl" :givenFileName="previewName"/>
     </div>
 </template>
 
@@ -950,22 +964,22 @@
                 taiyangCommunicationStatusArr: config.taiyangCommunicationStatusArr,
                 yesOrNoArr: config.yesOrNoArr,
                 changeArtistInfo: {},
-                artistSocialPlatform:[
+                artistSocialPlatform: [
                     {
-                        value:1,
-                        name:'微博'
+                        value: 1,
+                        name: '微博'
                     },
                     {
-                        value:2,
-                        name:'百科'
+                        value: 2,
+                        name: '百科'
                     },
                     {
-                        value:3,
-                        name:'抖音'
+                        value: 3,
+                        name: '抖音'
                     },
                     {
-                        value:4,
-                        name:'其他'
+                        value: 4,
+                        name: '其他'
                     },
                 ],
                 distributionType: '',
@@ -975,14 +989,14 @@
                 taskNum: '',
                 doneTaskNum: 0,
                 filterFee: 1,
-                avatar:'',
-                selectedDate:'',
-                scheduleData:'',
-                selectedCalendar:[],
-                scheduleParticipants:[],
-                previewUrl:'',
-                previewName:'',
-                user:{},
+                avatar: '',
+                selectedDate: '',
+                scheduleData: '',
+                selectedCalendar: [],
+                scheduleParticipants: [],
+                previewUrl: '',
+                previewName: '',
+                user: {},
                 total: 0,
                 current_page: 1,
                 total_pages: 1,
@@ -991,7 +1005,7 @@
 
         created() {
             this.getArtist()
-            
+
         },
         mounted() {
 
@@ -1017,7 +1031,7 @@
         //     }
         // },
         methods: {
-            changeCalender:function(){
+            changeCalender: function () {
                 this.selectedCalendar[0] = this.$route.params.id
             },
             //获取艺人信息
@@ -1054,20 +1068,20 @@
                 })
 
             },
-            getSchedules:function(){
-                let data={
-                    starable_type:'star',
-                    starable_id:this.$route.params.id,
-                    date:'2018-12-11'
+            getSchedules: function () {
+                let data = {
+                    starable_type: 'star',
+                    starable_id: this.$route.params.id,
+                    date: '2018-12-11'
                 }
-                fetch('get', '/schedules/getcalendar',data).then(function (res) {
+                fetch('get', '/schedules/getcalendar', data).then(function (res) {
                     console.log(res)
                 })
             },
             showScheduleModal: function (data) {
                 this.scheduleData = data;
                 // console.log(this.scheduleData)
-                if(data.participants.data){
+                if (data.participants.data) {
                     this.scheduleParticipants = JSON.parse(JSON.stringify(data.participants.data));
                 }
                 $('#checkSchedule').modal('show')
@@ -1077,8 +1091,8 @@
                 //     return;
                 // }
                 let _this = this
-                
-                fetch('get', `/stars/${this.$route.params.id}/bill`,{page:page}).then(response => {
+
+                fetch('get', `/stars/${this.$route.params.id}/bill`, {page: page}).then(response => {
                     _this.artistBillsInfo = response.data
                     _this.current_page = response.meta.pagination.current_page;
                     _this.total = response.meta.pagination.total;
@@ -1184,7 +1198,7 @@
 
             },
             //上传头像 ---修改头像
-            getUploadUrl(res){
+            getUploadUrl(res) {
                 this.uploadUrl = res
             },
             changeTaskType: function (value) {
@@ -1247,7 +1261,7 @@
                     toastr.error('请选择任务优先级')
                     return false
                 }
-                if(!this.startTime){
+                if (!this.startTime) {
                     toastr.error('请选择任务开始日期')
                     return false
                 }
@@ -1255,7 +1269,7 @@
                     toastr.error('请选择任务开始时间')
                     return false
                 }
-                if(!this.endTime){
+                if (!this.endTime) {
                     toastr.error('请选择任务结束日期')
                     return false
                 }
@@ -1263,7 +1277,7 @@
                     toastr.error('请选择任务结束时间')
                     return false
                 }
-                
+
                 //判断开始时间必须早于结束时间
                 startMin = this.startMinutes.split(':')
                 endMin = this.endMinutes.split(':')
@@ -1273,7 +1287,7 @@
                     toastr.error('开始时间不能晚于截止时间');
                     return false;
                 }
-                
+
                 let data = {
                     title: this.taskName,
                     principal_id: this.$store.state.newPrincipalInfo.id,
@@ -1310,7 +1324,7 @@
                 })
             },
             //设置默认负责人
-            setDefaultPrincipal () {
+            setDefaultPrincipal() {
                 this.$store.commit('changeNewPrincipal', {
                     name: this.user.nickname,
                     id: this.user.id
@@ -1319,23 +1333,23 @@
             },
             //添加作品
             addWork: function () {
-                if(!this.artistWorkName){
+                if (!this.artistWorkName) {
                     toastr.error('请填写作品名称')
                     return false
                 }
-                if(!this.workReleaseTime){
+                if (!this.workReleaseTime) {
                     toastr.error('请选择作品发布时间')
                     return false
                 }
-                if(!this.workType){
+                if (!this.workType) {
                     toastr.error('请选择作品类型')
                     return false
                 }
-                if(!this.character){
+                if (!this.character) {
                     toastr.error('请选择角色')
                     return false
                 }
-                if(!this.coActor){
+                if (!this.coActor) {
                     toastr.error('请填写合作演员')
                     return false
                 }
@@ -1525,8 +1539,8 @@
             getAffixId: function (id) {
                 this.affixId = id
             },
-            previewFile:function(url,name){
-                console.log(url,name)
+            previewFile: function (url, name) {
+                console.log(url, name)
                 this.previewUrl = url
                 this.previewName = name
             },
@@ -1543,11 +1557,11 @@
             filterProjectFee: function (value) {
                 this.filterFee = value;
             },
-            toProject:function(id){
+            toProject: function (id) {
                 this.$router.push({path: '/projects/' + id});
-               
+
             },
-            toTask:function(id){
+            toTask: function (id) {
                 this.$router.push({path: '/tasks/' + id});
             }
 
@@ -1622,12 +1636,14 @@
     .money-color {
         color: #ff9800;
     }
+
     .creator-avatar {
         width: 30px;
         height: 30px;
         overflow: hidden;
         border-radius: 100%;
     }
+
     li {
         list-style: none;
     }
@@ -1665,7 +1681,7 @@
     .calendar-list ul {
         padding: 0 20px;
         margin-top: 10px;
-        
+
     }
 
     .calendar-list ul li .calendar-checkbox i {
@@ -1703,10 +1719,11 @@
     .file-item:hover .del-affix {
         display: block;
     }
-    .uploadContent{
+
+    .uploadContent {
         position: relative;
     }
-    
+
     .puls {
         display: inline-block;
         background-size: 100px;
@@ -1718,16 +1735,19 @@
         border: 1px dashed #eee;
 
     }
+
     .puls span {
         font-size: 30px;
     }
-    .fileupload{
+
+    .fileupload {
         position: absolute;
-        top:0px;
-        left:0px;
+        top: 0px;
+        left: 0px;
         opacity: 0;
 
     }
+
     /* .plus_hover{
         display:none;
        position: absolute;

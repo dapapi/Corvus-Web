@@ -626,8 +626,7 @@
                         <div class="example">
                             <div class="col-md-2 text-right float-left">任务类型</div>
                             <div class="col-md-10 float-left pl-0">
-                                <selectors :options="tasksType" :placeholder="'请选择任务类型'"
-                                           @change="changeTaskType" ref="mold"></selectors>
+                                <selectors :options="tasksType" @change="changeTaskType" ref="mold"></selectors>
                             </div>
                         </div>
                         <div class="example">
@@ -656,8 +655,7 @@
                         <div class="example">
                             <div class="col-md-2 text-right float-left pl-0">任务优先级</div>
                             <div class="col-md-10 float-left pl-0">
-                                <selectors :options="taskLevelArr" :placeholder="'请选择任务优先级'"
-                                           @change="changeTaskLevel" ref="taskpriority"></selectors>
+                                <selectors :options="taskLevelArr" @change="changeTaskLevel" ref="taskpriority"></selectors>
                             </div>
                         </div>
                         <div class="example">
@@ -741,8 +739,7 @@
                         <div class="example">
                             <div class="col-md-2 text-right float-left">是否广告</div>
                             <div class="col-md-10 float-left">
-                                <selectors :options="yesOrNoArr" @change="changeWorkAd" placeholder="请选择是否广告"
-                                           ref="advertisingType"></selectors>
+                                <selectors :options="yesOrNoArr" @change="changeWorkAd" ref="advertisingType"></selectors>
                             </div>
                         </div>
                     </div>
