@@ -108,7 +108,7 @@
                                 <!-- <td>暂无</td> -->
                                 <td>{{ task.type ? task.type.data ? task.type.data.title : '' : '' }}</td>
                                 <td>
-                                    <template v-if="task.status === 1"><span style="color:#FF9800">进行中</span> </template>
+                                    <template v-if="task.status === 1"><span style="color:#FF9800">进行中</span></template>
                                     <template v-if="task.status === 2"><span style="color:#4CAF50">已完成</span></template>
                                     <template v-if="task.status === 3"><span style="color:#9E9E9E">已停止</span></template>
                                     <template v-if="task.status === 4"><span style="color:#F44336">延期</span></template>
@@ -146,8 +146,10 @@
         <div class="site-action" data-plugin="actionBtn" data-toggle="modal" data-target="#addTask">
             <button type="button"
                     class="site-action-toggle btn-raised btn btn-success btn-floating waves-effect waves-classic">
-                <i class="front-icon iconfont icon-tianjia1 animation-scale-up" aria-hidden="true" style="font-size:30px"></i>
-                <i class="back-icon iconfont icon-tianjia1 animation-scale-up" aria-hidden="true" style="font-size:30px"></i>
+                <i class="front-icon iconfont icon-tianjia1 animation-scale-up" aria-hidden="true"
+                   style="font-size:30px"></i>
+                <i class="back-icon iconfont icon-tianjia1 animation-scale-up" aria-hidden="true"
+                   style="font-size:30px"></i>
             </button>
         </div>
 
@@ -216,7 +218,8 @@
                                 <Datepicker ref="startTime" @change="changeStartTime"></Datepicker>
                             </div>
                             <div class="col-md-5 float-left pl-0">
-                                <Timepicker ref="startMinutes" :default="startMinutes" @change="changeStartMinutes"></Timepicker>
+                                <Timepicker ref="startMinutes" :default="startMinutes"
+                                            @change="changeStartMinutes"></Timepicker>
                             </div>
                         </div>
                         <div class="example">
@@ -225,7 +228,8 @@
                                 <Datepicker ref="endTime" @change="changeEndTime"></Datepicker>
                             </div>
                             <div class="col-md-5 float-left pl-0">
-                                <Timepicker ref="endMinutes" :default="endMinutes" @change="changeEndMinutes"></Timepicker>
+                                <Timepicker ref="endMinutes" :default="endMinutes"
+                                            @change="changeEndMinutes"></Timepicker>
                             </div>
                         </div>
                         <div class="example">
@@ -370,7 +374,28 @@
             },
 
             addTask() {
-                let _this = this;
+                // 校验
+                if (!this.taskName) {
+                    toastr.error('请填写任务名称！')
+                    return
+                }
+                if (!this.taskType) {
+                    toastr.error('请选择任务类型！')
+                    return
+                }
+                if (!this.taskLevel) {
+                    toastr.error('请选择任务优先级！')
+                    return
+                }
+                if (!this.startTime || !this.endTime) {
+                    toastr.error('请选择时间!')
+                    return
+                }
+                if ((this.startTime + " " + this.startMinutes) > (this.endTime + " " + this.endMinutes)) {
+                    toastr.error('开始时间不能晚于截止时间');
+                    return
+                }
+
                 let participant_ids = [];
                 for (let i = 0; i < this.$store.state.newParticipantsInfo.length; i++) {
                     participant_ids.push(this.$store.state.newParticipantsInfo[i].id);
@@ -380,40 +405,19 @@
                     resource_type: this.resourceType ? this.resourceType : this.linkData[0].id,
                     resourceable_id: this.resourceableId ? this.resourceableId : this.linkData[0].child[0].id,
                     type: this.taskType,
-                    title: _this.taskName,
+                    title: this.taskName,
                     principal_id: this.$store.state.newPrincipalInfo.id,
                     participant_ids: participant_ids,
-                    priority: _this.taskLevel,
-                    start_at: _this.startTime + " " + _this.startMinutes,
-                    end_at: _this.endTime + " " + _this.endMinutes,
-                    desc: _this.taskIntroduce
+                    priority: this.taskLevel,
+                    start_at: this.startTime + " " + this.startMinutes,
+                    end_at: this.endTime + " " + this.endMinutes,
+                    desc: this.taskIntroduce
                 };
-                // 校验
-                if (!data.title) {
-                    toastr.error('请填写任务名称！')
-                    return
-                }
-                if (!data.type) {
-                    toastr.error('请选择任务类型！')
-                    return
-                }
-                if (!data.priority) {
-                    toastr.error('请选择任务优先级！')
-                    return
-                }
-                if (!this.startTime || !this.endTime) {
-                    toastr.error('请选择时间!')
-                    return
-                }
-                if (data.start_at > data.end_at) {
-                    toastr.error('开始时间不能晚于截止时间!')
-                    return
-                }
 
                 fetch('post', '/tasks', data).then(res => {
                     toastr.success("创建成功");
-                    this.getTasks();
                     $("#addTask").modal("hide");
+                    this.$router.push({path: '/tasks/' + res.data.id});
                 })
             },
 
@@ -529,7 +533,7 @@
                 })
             },
             // 关闭新增任务
-            closeAddTask () {
+            closeAddTask() {
                 this.taskName = ''
                 this.taskLevel = ''
                 this.$refs.taskLevel.setValue('')
@@ -549,7 +553,7 @@
                 this.setDefaultPrincipal()
             },
             // 设置默认负责人
-            setDefaultPrincipal () {
+            setDefaultPrincipal() {
                 this.$store.commit('changeNewPrincipal', {
                     name: this.user.nickname,
                     id: this.user.id

@@ -62,10 +62,11 @@
                             <span>关联资源</span>
                             <span class="pl-2 font-weight-bold">
                                 {{taskInfo.resource.data.resource.data.title}} -
-                                <template v-if="taskInfo.resource.data.resourceable_type === 'project'">{{ taskInfo.resource.data.resource.data.title }}</template>
-                                <template v-if="taskInfo.resource.data.resourceable_type === 'client'">{{ taskInfo.resource.data.resource.data.company }}</template>
-                                <template v-if="taskInfo.resource.data.resourceable_type === 'artist'">{{ taskInfo.resource.data.resource.data.name }}</template>
-                                <template v-if="taskInfo.resource.data.resourceable_type === 'blogger'">{{ taskInfo.resource.data.resource.data.nickname }}</template>
+                                <template v-if="taskInfo.resource.data.resourceable_type === 'project'">{{ taskInfo.resource.data.resourceable.data.title }}</template>
+                                <template v-if="taskInfo.resource.data.resourceable_type === 'client'">{{ taskInfo.resource.data.resourceable.data.company }}</template>
+                                <template v-if="taskInfo.resource.data.resourceable_type === 'star'">{{ taskInfo.resource.data.resourceable.data.name }}</template>
+                                <template v-if="taskInfo.resource.data.resourceable_type === 'blogger'">{{ taskInfo.resource.data.resourceable.data.nickname }}</template>
+                                <template v-if="taskInfo.resource.data.resourceable_type === 'trail'">{{ taskInfo.resource.data.resourceable.data.title }}</template>
                             </span>
                         </div>
                     </div>
@@ -861,6 +862,27 @@
             },
             // 添加子任务
             addChildTask: function () {
+                // 校验
+                if (!this.taskName) {
+                    toastr.error('请填写任务名称！')
+                    return
+                }
+                if (!this.taskType) {
+                    toastr.error('请选择任务类型！')
+                    return
+                }
+                if (!this.taskLevel) {
+                    toastr.error('请选择任务优先级！')
+                    return
+                }
+                if (!this.startTime || !this.endTime) {
+                    toastr.error('请选择时间!')
+                    return
+                }
+                if ((this.startTime + " " + this.startMinutes) > (this.endTime + " " + this.endMinutes)) {
+                    toastr.error('开始时间不能晚于截止时间');
+                    return
+                }
                 let participant_ids = [];
                 for (let i = 0; i < this.$store.state.newParticipantsInfo.length; i++) {
                     participant_ids.push(this.$store.state.newParticipantsInfo[i].id)
@@ -877,27 +899,6 @@
                     end_at: this.endTime + ' ' + this.endMinutes,
                     desc: this.taskIntroduce,
                 };
-                // 校验
-                if (!data.title) {
-                    toastr.error('请填写任务名称！')
-                    return
-                }
-                if (!data.type) {
-                    toastr.error('请选择任务类型！')
-                    return
-                }
-                if (!data.priority) {
-                    toastr.error('请选择任务优先级！')
-                    return
-                }
-                if (!this.startTime || !this.endTime) {
-                    toastr.error('请选择时间!')
-                    return
-                }
-                if (data.start_at > data.end_at) {
-                    toastr.error('开始时间不能晚于截止时间!')
-                    return
-                }
                 let self = this
                 fetch('post', '/tasks/' + this.taskId + '/subtask', data).then(function (response) {
                     toastr.success('添加成功');

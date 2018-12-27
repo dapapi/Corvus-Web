@@ -88,19 +88,27 @@
                         <div class="col-md-6 float-left pl-0 mb-20 px-0">
                             <div class="mb-20 float-left clearfix col-md-6 pl-0">
                                 <div class="float-left col-md-5 px-0">预计订单收入</div>
-                                <div class="float-left col-md-7">100000元</div>
+                                <div class="float-left col-md-7">
+                                    {{ projectInfo.trail ? projectInfo.trail.data.fee : 0 }}元
+                                </div>
                             </div>
                             <div class="mb-20 float-left clearfix col-md-6 pl-0">
                                 <div class="float-left col-md-5 px-0">预计支出</div>
-                                <div class="float-left col-md-7">10000元</div>
+                                <div class="float-left col-md-7">
+                                    {{ projectInfo.projected_expenditure ? projectInfo.projected_expenditure : 0 }}元
+                                </div>
                             </div>
                             <div class="mb-20 float-left clearfix col-md-6 pl-0">
                                 <div class="float-left col-md-5 px-0">实际收入</div>
-                                <div class="float-left col-md-7">100000元</div>
+                                <div class="float-left col-md-7">
+                                    {{ metaInfo.contractmoney ? metaInfo.contractmoney : 0 }}元
+                                </div>
                             </div>
                             <div class="mb-20 float-left clearfix col-md-6 pl-0">
                                 <div class="float-left col-md-5 px-0">实际支出</div>
-                                <div class="float-left col-md-7">10000元</div>
+                                <div class="float-left col-md-7">
+                                    {{ metaInfo.expendituresum ? metaInfo.expendituresum : 0 }}元
+                                </div>
                             </div>
                         </div>
                     </div>
@@ -1399,6 +1407,7 @@
                 paybackLength: 1,
                 user: '',
                 projectTaskingInfo: [],
+                metaInfo: '',
             }
         },
 
@@ -1470,12 +1479,12 @@
         methods: {
 
             getProject: function () {
-                let _this = this;
                 let data = {
                     include: 'principal,participants,creator,fields,trail.expectations,trail.client,relate_tasks,relate_projects,type',
                 };
-                fetch('get', '/projects/' + this.projectId, data).then(function (response) {
+                fetch('get', '/projects/' + this.projectId, data).then(response => {
                     let fieldsArr = response.meta.fields.data;
+                    this.metaInfo = response.meta;
                     for (let i = 0; i < fieldsArr.length; i++) {
                         if (fieldsArr[i].field_type === 2 || fieldsArr[i].field_type === 6) {
                             fieldsArr[i].contentArr = [];
@@ -1488,30 +1497,30 @@
                         }
                     }
                     response.data.fields = fieldsArr;
-                    _this.projectInfo = response.data;
-                    _this.projectInfo.approval_status = 1;
+                    this.projectInfo = response.data;
+                    this.projectInfo.approval_status = 1;
                     let params = {
                         type: 'change',
                     };
                     params.data = response.data.principal.data;
-                    _this.$store.dispatch('changePrincipal', params);
+                    this.$store.dispatch('changePrincipal', params);
                     if (response.data.participants) {
                         for (let i = 0; i < response.data.participants.data.length; i++) {
-                            _this.flagParticipantsIdArr.push(response.data.participants.data[i].id)
+                            this.flagParticipantsIdArr.push(response.data.participants.data[i].id)
                         }
                         params.data = JSON.parse(JSON.stringify(response.data.participants.data));
-                        _this.$store.dispatch('changeParticipantsInfo', params);
+                        this.$store.dispatch('changeParticipantsInfo', params);
                     }
 
                     for (let i = 0; i < response.data.relate_tasks.data.length; i++) {
-                        _this.linkageSelectedIds.tasks.push(response.data.relate_tasks.data[i].id)
+                        this.linkageSelectedIds.tasks.push(response.data.relate_tasks.data[i].id)
                     }
                     for (let i = 0; i < response.data.relate_projects.data.length; i++) {
-                        _this.linkageSelectedIds.projects.push(response.data.relate_projects.data[i].id)
+                        this.linkageSelectedIds.projects.push(response.data.relate_projects.data[i].id)
                     }
                     if (response.data.trail) {
                         for (let i = 0; i < response.data.trail.data.expectations.data.length; i++) {
-                            _this.selectedExpectationsArr.push(response.data.trail.data.expectations.data[i].id)
+                            this.selectedExpectationsArr.push(response.data.trail.data.expectations.data[i].id)
                         }
                     }
 

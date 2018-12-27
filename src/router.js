@@ -70,11 +70,6 @@ export default new Router({
             component: () => import('./views/calendar/index.vue')
         },
         {
-            path: '/artists/index',
-            name: 'artists/index',
-            component: () => import('./views/artist/index.vue')
-        },
-        {
             path: '/artists',
             name: 'usArtists',
             component: () => import('./views/artist/taiyang-index.vue')
@@ -83,11 +78,6 @@ export default new Router({
             path: '/blogger',
             name: 'usBlogger',
             component: () => import('./views/artist/papi-index.vue')
-        },
-        {
-            path: '/artists/detail',
-            name: 'artists/detail/:id',
-            component: () => import('./views/artist/detail.vue')
         },
         {
             path: '/artists/:id',

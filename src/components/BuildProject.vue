@@ -1,7 +1,7 @@
 <template>
     <div class="modal fade" id="addProject" aria-hidden="true" aria-labelledby="addLabelForm"
          role="dialog" tabindex="-1">
-        <div class="modal-dialog modal-simple" >
+        <div class="modal-dialog modal-simple">
             <div class="modal-content">
                 <div class="modal-header">
                     <button type="button" class="close" aria-hidden="true" data-dismiss="modal">
@@ -102,38 +102,47 @@
                     <div class="col-md-12 example clearfix" v-for="field in projectFields">
                         <div class="col-md-2 text-right float-left px-0">{{ field.key }}</div>
                         <div class="col-md-10 float-left">
-                            <template v-if="field.field_type === 1" >
-                                <EmitInput :default='newArray.find(item=>item.id === field.id)' @change="(value) => addInfo(value, field.id )"></EmitInput>
+                            <template v-if="field.field_type === 1">
+                                <EmitInput :default='newArray.find(item=>item.id === field.id)'
+                                           @change="(value) => addInfo(value, field.id )"></EmitInput>
                             </template>
                             <template v-if="field.field_type === 2">
-                                <Selectors :default='newArray.find(item=>item.id === field.id)' :options="field.contentArr" :placeholder="'请选择' + field.key"
+                                <Selectors :default='newArray.find(item=>item.id === field.id)'
+                                           :options="field.contentArr" :placeholder="'请选择' + field.key"
                                            @change="(value) => addInfo(value, field.id )"></Selectors>
                             </template>
                             <template v-if="field.field_type === 3">
-                                <EditableSearchBox :default='newArray.find(item=>item.id === field.id)' :options="starsArr" :multiple="true"
+                                <EditableSearchBox :default='newArray.find(item=>item.id === field.id)'
+                                                   :options="starsArr" :multiple="true"
                                                    @change="(value) => addInfo(value, field.id )"></EditableSearchBox>
                             </template>
                             <template v-if="field.field_type === 4">
-                                <Datepicker :default='newArray.find(item=>item.id === field.id)' @change="(value) => addInfo(value, field.id )"></Datepicker>
+                                <Datepicker :default='newArray.find(item=>item.id === field.id)'
+                                            @change="(value) => addInfo(value, field.id )"></Datepicker>
                             </template>
                             <template v-if="field.field_type === 5">
-                                <NormalTextarea :default='newArray.find(item=>item.id == field.id)' title="" class="form-control"
+                                <NormalTextarea :default='newArray.find(item=>item.id == field.id)' title=""
+                                                class="form-control"
                                                 @change="(value) => addInfo(value, field.id )"></NormalTextarea>
                             </template>
                             <template v-if="field.field_type === 6">
-                                <Selectors :default='newArray.find(item=>item.id === field.id)' :options="field.contentArr" :multiple="true"
+                                <Selectors :default='newArray.find(item=>item.id === field.id)'
+                                           :options="field.contentArr" :multiple="true"
                                            :placeholder="'请选择' + field.key"
                                            @change="(value) => addInfo(value.join('|'), field.id )"></Selectors>
                             </template>
                             <template v-if="field.field_type === 8">
                                 <GroupDatepicker
-                                        :default='newArray.find(item=>item.id === field.id)' @change="(from, to) => addInfo(from + '|' + to, field.id )"></GroupDatepicker>
+                                        :default='newArray.find(item=>item.id === field.id)'
+                                        @change="(from, to) => addInfo(from + '|' + to, field.id )"></GroupDatepicker>
                             </template>
                             <template v-if="field.field_type === 10">
-                                <InputSelectors :default='newArray.find(item=>item.id === field.id)' @change="(value) => addInfo(value, field.id )"></InputSelectors>
+                                <InputSelectors :default='newArray.find(item=>item.id === field.id)'
+                                                @change="(value) => addInfo(value, field.id )"></InputSelectors>
                             </template>
                             <template v-if="field.field_type === 11">
-                                <NumberSpinner :default='newArray.find(item=>item.id === field.id)' @change="(value) => addInfo(value, field.id )"></NumberSpinner>
+                                <NumberSpinner :default='newArray.find(item=>item.id === field.id)'
+                                               @change="(value) => addInfo(value, field.id )"></NumberSpinner>
                             </template>
                         </div>
                     </div>
@@ -163,13 +172,14 @@
     import config from '../assets/js/config.js'
     import fetch from '../assets/utils/fetch.js'
     import ApprovalProgress from '@/components/ForApproval/ApprovalProgress'
+
     export default {
-        components:{
+        components: {
             ApprovalProgress
         },
         name: "BuildProject",
         //projectType 项目类型   projectFieldsArr 不同项目类型的数据   
-        props: ['projectType', 'projectFieldsArr','defaultData'],
+        props: ['projectType', 'projectFieldsArr', 'defaultData'],
         data() {
             return {
                 visibleRangeArr: config.visibleRangeArr,
@@ -178,19 +188,19 @@
                 trailOrigin: '',
                 trailOriginArr: config.trailOrigin,
                 starsArr: [],
-                bloggerArr:[],
+                bloggerArr: [],
                 startTime: '',
                 trailOriginContent: '',
                 trailsAllInfo: '',
                 addInfoArr: {},
                 projectBaseInfo: {
                     trail: {},
-                    notice:[]
+                    notice: []
                 },
                 projectFields: [],
-                approver:[],
-                newArray:[],
-                isShow:false,
+                approver: [],
+                newArray: [],
+                isShow: false,
             }
         },
         watch: {
@@ -198,14 +208,14 @@
                 return this.projectFields = newValue
             },
         },
-        computed:{
-            allStarsArr(){
-                console.log([...this.starsArr,...this.bloggerArr]);
-                return [...this.starsArr,...this.bloggerArr]
+        computed: {
+            allStarsArr() {
+                console.log([...this.starsArr, ...this.bloggerArr]);
+                return [...this.starsArr, ...this.bloggerArr]
             }
-        
+
         },
-        created(){
+        created() {
             this.getStars();
             this.getTrail();
             this.getBloggers()
@@ -217,32 +227,32 @@
             $('#addProject').on('hidden.bs.modal', function () {
                 _this.refreshAddProjectModal()
             })
-            if(this.defaultData){
+            if (this.defaultData) {
                 $('#addProject').on('show.bs.modal', function () {
                     _this.setDefaultValue()
                     _this.$nextTick(() => {
-                        _this.$refs.trails.setValue(_this.defaultData.trailInfo.data.id)   
-                        _this.$nextTick(function(){
+                        _this.$refs.trails.setValue(_this.defaultData.trailInfo.data.id)
+                        _this.$nextTick(function () {
                             _this.addProjectTrail(_this.defaultData.trailInfo.data.id)
                             _this.$forceUpdate()
                         })
-                    })  
+                    })
                 })
             }
         },
         methods: {
-            getBloggers(){
+            getBloggers() {
                 let _this = this
-                fetch('get','/bloggers/all').then((params) => {
+                fetch('get', '/bloggers/all').then((params) => {
                     this.bloggerArr = params.data
                 })
             },
-            defaultDataFilter(){
-                if(!this.defaultData) {
+            defaultDataFilter() {
+                if (!this.defaultData) {
                     return
                 }
                 this.newArray = this.defaultData.fields.filter((params) => {
-                   return  params.hasOwnProperty('values')
+                    return params.hasOwnProperty('values')
                 })
             },
             refreshAddProjectModal: function () {
@@ -261,16 +271,16 @@
                 this.$refs.trailOrigin.setValue('');
                 this.trailOriginContent = '';
                 this.trailOrigin = '';
-                this.projectBaseInfo = {trail: {},notice:[]};
+                this.projectBaseInfo = {trail: {}, notice: []};
                 this.$store.dispatch('changePrincipal', {data: {}});
                 this.$store.dispatch('changePrincipal', {type: 'selector', data: {}});
                 this.projectFields = [];
             },
-            setDefaultValue(){
-                if(this.defaultData && this.$refs){
+            setDefaultValue() {
+                if (this.defaultData && this.$refs) {
                     this.$refs.projectNameRef.refresh(this.defaultData.list.title);
                     this.$refs.priorityLevel.setValue(this.defaultData.list.priority);
-                    Object.assign(this.projectBaseInfo,{'priority':this.defaultData.list.priority})
+                    Object.assign(this.projectBaseInfo, {'priority': this.defaultData.list.priority})
                     this.$refs.startTime.setValue(this.defaultData.list.start_at);
                     this.$refs.endTime.setValue(this.defaultData.list.end_at);
                     this.$refs.projectExpenditureFee.setValue(this.defaultData.list.expenditure_fee)
@@ -352,9 +362,13 @@
             },
 
             addProject: function () {
+                if (this.projectBaseInfo.start_at > this.projectBaseInfo.end_at) {
+                    toastr.error('结束时间必须晚于开始时间,请重新选择时间');
+                    return
+                }
                 this.projectBaseInfo.fields = this.addInfoArr;
                 this.projectBaseInfo.type = this.projectType;
-                
+
                 if (this.projectBaseInfo.trail && this.projectBaseInfo.trail.resource_type) {
                     let resource = this.projectBaseInfo.trail.resource_type;
                     if (resource == 1 || resource == 2 || resource == 3) {
@@ -364,12 +378,12 @@
                     }
                 }
                 let tempPart = this.$store.state.newParticipantsInfo
-                if(tempPart.length>0){
-                    this.projectBaseInfo.notice= []
+                if (tempPart.length > 0) {
+                    this.projectBaseInfo.notice = []
                     for (const key in tempPart) {
-                        if(tempPart[key].notice_id){
+                        if (tempPart[key].notice_id) {
                             this.projectBaseInfo.notice.push(tempPart[key].notice_id)
-                        }else{
+                        } else {
                             this.projectBaseInfo.notice.push(tempPart[key].id)
                         }
                     }
