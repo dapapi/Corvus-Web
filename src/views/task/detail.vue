@@ -192,7 +192,7 @@
                             <div class="card-block">
                                 <ul class="file-list">
                                     <li v-for="attachment in taskInfo.affixes?taskInfo.affixes.data:[]">
-                                        <i class="md-file pr-5"></i>{{ attachment.title }}
+                                        <i class="iconfont icon-wenjian pr-5" style="color: #3298dc;"></i>{{ attachment.title }}
                                         <span class="float-right pl-10 pointer-content"
                                               data-plugin="actionBtn" @click="setDelInfo(attachment.id)"
                                               data-toggle="modal"
