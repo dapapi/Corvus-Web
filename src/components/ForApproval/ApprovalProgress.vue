@@ -34,7 +34,7 @@
                 <div class="col-md-3">{{item.change_at}}</div>
             </div>  
         </div>
-        <div class="approver-row">
+        <div class="approver-row" style="overflow: unset;">
             <span>知会人</span>
             <div class="approver ml-10" :style="randomColor(item.icon_url).color" v-if="mode" v-for="(item, index) in notice" :key="index">{{randomColor(item.icon_url).name}}</div>
             <AddMember v-if="!mode"/>
