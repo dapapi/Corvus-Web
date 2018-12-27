@@ -1941,6 +1941,24 @@
 
             changeProjectInfo: function () {
                 let data = this.changeInfo;
+                if (data.start_at) {
+                    if (data.end_at && (data.start_at > data.end_at)) {
+                        toastr.error('开始时间不能晚于截止时间')
+                        return
+                    } else if (!data.end_at && (data.start_at > this.projectInfo.end_at)) {
+                        toastr.error('开始时间不能晚于截止时间')
+                        return
+                    }
+                }
+                if (data.end_at) {
+                    if (data.start_at && (data.start_at > data.end_at)) {
+                        toastr.error('开始时间不能晚于截止时间')
+                        return
+                    } else if (!data.start_at && (data.start_at > this.projectInfo.end_at)) {
+                        toastr.error('开始时间不能晚于截止时间')
+                        return
+                    }
+                }
                 if (JSON.stringify(this.addInfoArr) !== "{}") {
                     data.fields = this.addInfoArr;
                 }

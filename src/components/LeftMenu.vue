@@ -54,7 +54,7 @@
             </ul>
             <div class="user-wrap">
                 <!-- <img src="https://res.papitube.com/no-icon.png" alt=""> -->
-                <Avatar :imgUrl="avatar" style="width: 40px; height: 40px; font-size: 14px" />
+                <Avatar :imgUrl="avatar" style="width: 40px; height: 40px; font-size: 14px"/>
             </div>
             <input id="console-model" type="text" @blur="blur"/>
             <div class="console" v-show="visible" @click="blur">
@@ -157,17 +157,13 @@
                                 name: '简报',
                                 code: 'brief'
                             },
-                            {
-                                name: '在线编辑',
-                                code: 'collaboration'
-                            },
-                            {
-                                name: '网盘',
-                                code: 'pan'
-                            },
                             // {
-                            //     name: '员工档案',
-                            //     code: 'staff'
+                            //     name: '在线编辑',
+                            //     code: 'collaboration'
+                            // },
+                            // {
+                            //     name: '网盘',
+                            //     code: 'pan'
                             // },
                             {
                                 name: '通讯录',
@@ -190,7 +186,7 @@
                 'unReadMsg'
             ])
         },
-        mounted () {
+        mounted() {
             this.avatar = JSON.parse(Cookies.get('user')).avatar
         },
         watch: {
@@ -210,6 +206,7 @@
                 Cookies.remove('user');
                 Cookies.remove('companyType');
                 Cookies.remove('CORVUS-ACCESS-TOKEN');
+                Cookies.remove('selectedCalendar');
                 window.location.href = '/login'
             },
             goManagement() {
@@ -270,7 +267,7 @@
         bottom: 24px;
         left: 30px;
     }
-   
+
     .active .base-icon {
         display: none !important;
     }
