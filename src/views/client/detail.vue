@@ -222,10 +222,10 @@
                         <div class="card" v-if="clientInfo.company">
                             <div class="card-header card-header-transparent card-header-bordered">
                                 <div class="float-left font-weight-bold third-title">客户详情</div>
-                                <div class="float-right pointer-content">
+                                <div class="float-right pointer-content" v-show="!isEdit">
                                     <i class="iconfont icon-bianji2" aria-hidden="true" @click="editBaseInfo"></i>
                                 </div>
-                                <div class="float-right mr-40" v-show="isEdit">
+                                <div class="float-right" v-show="isEdit">
                                     <button class="btn btn-sm btn-white btn-pure" @click="cancelEdit">取消</button>
                                     <button class="btn btn-primary" @click="changeClientBaseInfo">确定</button>
                                 </div>
