@@ -91,9 +91,10 @@
                        <div class="col-md-6" v-show="artistInfo.sign_contract_status == 1">                    
                             <div class="clearfix">
                                 <div class="col-md-6 float-left"><span>沟通状态</span></div>
-                                <div class="col-md-6 float-left font-weight-bold "  v-if="artistInfo.type">
+                                <div class="col-md-6 float-left font-weight-bold "  v-if="artistInfo.communication_status">
                                     <template >
-                                            {{artistInfo.type.data.name}}
+                                            {{ papiCommunicationStatusArr.find(item => item.value ==
+                                            artistInfo.communication_status).name}}
                                     </template>  
                                 </div>
                             </div>
@@ -223,7 +224,7 @@
                                     <th class="cell-300" scope="col">录入日期</th>
                                 </tr>
                                 <tr v-for="(item,index) in ProjectsInfo" :key="index" @click="projectdetil(item.id)" class="Jump">
-                                    <td>{{item.title}}</td>
+                                    <td>{{item}}</td>
                                     <td>
                                         <template v-if="item.status === 1"><span style="color:#FF9800">进行中</span>
                                         </template>
@@ -446,8 +447,8 @@
                                                               @change="changeArtistIntention"></EditSelector>
                                             </div>
                                             <div class="col-md-6 float-left" v-show="artistInfo.intention==false">
-                                                <div class="col-md-2 float-left text-right pl-10">不签约原因</div>
-                                                <div class="col-md-10 float-left font-weight-bold" >
+                                                <div class="col-md-5 float-left text-right pl-10">不签约原因</div>
+                                                <div class="col-md-7 float-left font-weight-bold" >
                                                     <EditInput :content="artistInfo.intention_desc"
                                                             :is-edit="isEdit"
                                                             @change="changReason" ></EditInput>
@@ -465,8 +466,8 @@
                                                               @change="changeArtistSignStatus"></EditSelector>
                                             </div>
                                             <div class="col-md-6 float-left" v-show="artistInfo.sign_contract_other==true">
-                                                <div class="col-md-2 float-left text-right pl-10">签约公司</div>
-                                                <div class="col-md-10 float-left font-weight-bold">
+                                                <div class="col-md-5 float-left text-right pl-10">签约公司</div>
+                                                <div class="col-md-7 float-left font-weight-bold">
                                                     <EditInput :content="artistInfo.sign_contract_other_name"
                                                             :is-edit="isEdit"
                                                             @change="changSigningCompany" ></EditInput>
@@ -856,7 +857,7 @@
         },
         mounted() {
             this.getTaskDate();  
-            this.charts()
+            this.charts();
             let _this = this;
             //  清空任务
             $('#addTask').on('hidden.bs.modal', function () {
@@ -961,7 +962,7 @@
                 this.artistId = this.$route.params.id;
                 let _this = this;
                 let data = {
-                    include: 'creator,tasks,affixes,producer,type,publicity',
+                    include: 'creator,tasks,affixes,producer,type,publicity,trails.project,trails.client',
                 };
                 fetch('get', '/bloggers/' + this.artistId, data).then(function (response) {
                     let doneTaskNum = 0
@@ -977,14 +978,15 @@
                         }
                     }
                      //项目
-                     if(response.data.trails){
-                        for (let i = 0; i < response.data.trails.data.length; i++) {
-                            if (response.data.trails.data[i].project) {
-                                response.data.trails.data[i].project.data.company = response.data.trails.data[i].client.data.company
-                                _this.ProjectsInfo.push(response.data.trails.data[i].project.data)
-                            }
-                        }
-                     }
+                    //  if(response.data.trails){
+                    //     for (let i = 0; i < response.data.trails.data.length; i++) {                        
+                    //         if (response.data.trails.data[i].project&&response.data.trails.data[i].client) {                        
+                    //             response.data.trails.data[i].project.data.company = response.data.trails.data[i].client.data.company                        
+                    //             _this.ProjectsInfo.push(response.data.trails.data[i].project.data)
+                    //             console.log(_this.ProjectsInfo)
+                    //         }
+                    //     }
+                    //  }
                     
                     //孵化期时间 
                     if(_this.artistInfo.hatch_star_at&&_this.artistInfo.hatch_end_at){
