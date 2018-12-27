@@ -159,10 +159,10 @@
                                     </div>
                                 </div>
 
-                                <div class="card-text py-5 clearfix">
+                                <div class="card-text py-5 clearfix" v-if="taskInfo.complete_at">
                                     <div class="col-md-1 float-left text-right pl-0">完成时间</div>
                                     <div class="col-md-11 float-left font-weight-bold">
-                                        暂无
+                                        {{ taskInfo.complete_at }}
                                     </div>
                                 </div>
                                 <div class="card-text py-5 clearfix" v-if="taskInfo.stop_at">
@@ -305,12 +305,9 @@
                                 </div>
                             </div>
                             <div class="all-menber clearfix">
-                                <div class="question-avatar" v-for="(item, index) in questionInfo.reviewanswer.data"
-                                     :key="index">
-                                    <div :class="~hasAnsweredArr.indexOf(item.users.data.id) ? 'unselect-avatar':'select-avatar'"></div>
-                                    {{ item.users.data.name.substr(item.users.data.name.length - 2, 2) }}
-                                </div>
-                                <!-- reviewanswer -->
+                                <template v-for="(item, index) in questionInfo.reviewanswer.data">
+                                    <Avatar :imgUrl="item.users.data.icon_url" :key="index" style="margin: 5px;" />
+                                </template>
                             </div>
                             <div class="card-text py-5 clearfix">
                                 <div class="col-md-1 float-left text-right pl-0">作者</div>
@@ -388,12 +385,9 @@
                                                 <div class="progress-bar progress-bar-warning" aria-valuemin="-100"
                                                      aria-valuemax="0" aria-valuenow="-40" role="progressbar"
                                                      :style="{width: `${items.selectrows.data.filter(n => n.review_question_item_id === item.id).length / hasAnsweredArr.length * 100}%`}">
-                                                    <!-- <span class="progress-label">100%</span> -->
                                                 </div>
                                             </div>
                                             <div style="width: 50px; padding-left: 10px; float: left;">
-                                                <!-- {{ items.selectrows.data.filter(n => n.review_question_item_id ===
-                                                item.id).length / hasAnsweredArr.length * 100 }}% -->
                                                 {{ hasAnsweredArr.length > 0 ? items.selectrows.data.filter(n =>
                                                 n.review_question_item_id ===
                                                 item.id).length / hasAnsweredArr.length * 100: '0' }}%
@@ -406,13 +400,10 @@
                                                 :0}}票
                                             </div>
                                         </div>
-                                        <div class="col-md-4 clearfix" style="padding-left: 0;">
+                                        <div class="col-md-4 clearfix" style="padding-left: 0; margin-top: -9px;">
                                             <template v-for="(_item, nameIndex) in items.selectrows.data">
-                                                <div class="question-avatar"
-                                                     v-if="_item.review_question_item_id === item.id" :key="nameIndex">
-                                                    {{_item.creator.data.name.substr(_item.creator.data.name.length - 2,
-                                                    2)}}
-                                                </div>
+                                                <Avatar v-if="_item.review_question_item_id === item.id"
+                                                    :imgUrl="_item.creator.data.icon_url" :key="nameIndex" style="margin: 5px;" />
                                             </template>
                                         </div>
                                     </div>
@@ -1232,59 +1223,6 @@
 
     .options .title label {
         cursor: pointer;
-    }
-
-    .question-avatar {
-        /* display: inline-block; */
-        float: left;
-        width: 30px;
-        height: 30px;
-        border-radius: 50%;
-        font-size: 12px;
-        text-align: center;
-        line-height: 30px;
-        color: #fff;
-        background: #3188E6;
-        margin-right: 10px;
-        margin-bottom: 10px;
-        position: relative;
-        top: -4px;
-    }
-
-    .select-avatar {
-        position: absolute;
-        /* background: rgba(0, 0, 0, 0.2); */
-        left: 0;
-        top: 0;
-        width: 100%;
-        height: 100%;
-        border-radius: 50%;
-    }
-
-    .select-avatar:before, .unselect-avatar:before {
-        content: '';
-        position: absolute;
-        right: 0;
-        bottom: 0;
-        width: 10px;
-        height: 10px;
-        border-radius: 50%;
-        background: #fff;
-    }
-
-    .select-avatar:after, .unselect-avatar:after {
-        content: '';
-        position: absolute;
-        width: 7px;
-        height: 7px;
-        border-radius: 50%;
-        right: 2px;
-        bottom: 2px;
-        background: #4CAF50;
-    }
-
-    .unselect-avatar:after {
-        background: #FF9800;
     }
 
     .all-menber {

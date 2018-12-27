@@ -31,6 +31,9 @@
 
             context(newValue) {
                 this.$emit('change', newValue)
+            },
+            content () {
+                this.context = this.content
             }
         },
     }
