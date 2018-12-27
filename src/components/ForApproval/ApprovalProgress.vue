@@ -7,7 +7,10 @@
                 <div class="approver-container">
                     <!-- {{item}} -->
                     <div class="splicer" v-if="index !== 0"></div>
-                    <div class="approver" :style="{backgroundColor:randomColor(item.icon_url).color}">{{randomColor(item.icon_url).name}}</div>
+                    <div>
+                        <div class="approver" :style="{backgroundImage:'url('+randomColor(item.icon_url).color+')',backgroundColor:randomColor(item.icon_url).color}">{{randomColor(item.icon_url).name}}</div>
+                        <div v-if="!mode">{{item.name}}</div>
+                    </div>
                 </div>
                 <div class="approver_texts" v-if="item.change_state_obj">
                     <p class="approver_text">{{item.name}}</p>
@@ -33,7 +36,7 @@
         </div>
         <div class="approver-row">
             <span>知会人</span>
-            <div class="approver ml-10" :style="{backgroundColor:randomColor(item.icon_url).color}" v-if="mode" v-for="(item, index) in notice" :key="index">{{randomColor(item.icon_url).name}}</div>
+            <div class="approver ml-10" :style="randomColor(item.icon_url).color" v-if="mode" v-for="(item, index) in notice" :key="index">{{randomColor(item.icon_url).name}}</div>
             <AddMember v-if="!mode"/>
         </div>
     </div>
@@ -62,48 +65,42 @@ export default {
         formstatus:function(value){
             this.getApprover(this.formid)
         },
-        // notice:function(value){
-            
-        //    this.$store.state.newParticipantsInfo = 1111
-
-            
-        // }
     },
     mounted(){
-
         this.getApprover(this.formid)
         if(this.notice){
-
-        this.$store.state.newParticipantsInfo = Array.from(this.notice)
+            this.$store.state.newParticipantsInfo = Array.from(this.notice)
         }
 
     },
     methods:{
-          getApprover(value){
-              if(!value){
-                  return
-              }
-                let _this = this
-                if(!this.mode){
-                    fetch('get','/approvals/chains?form_id='+value+'&change_type=222&value').then((params) => {
-                        _this.approver = params.data
-                    })
-                }else{
-                    fetch('get','/approval_instances/'+value+'/chains').then((params) => {
-                        _this.approver = params.data
-                        _this.waitingFor = params.data.find(item=>item.approval_stage === "doing")
-                        if(_this.waitingFor){
-                            _this.$emit("waitingfor", _this.waitingFor)
-                        }else{
-                            _this.$emit("waitingfor", params.data[params.data.length-1])
-                        }
-                    })
-                }
-            },
+        getApprover(value){
+            if(!value){
+                return
+            }
+            let _this = this
+            if(!this.mode){
+                fetch('get','/approvals/chains?form_id='+value+'&change_type=222&value').then((params) => {
+                    _this.approver = params.data
+                })
+            }else{
+                fetch('get','/approval_instances/'+value+'/chains').then((params) => {
+                    _this.approver = params.data
+                    _this.waitingFor = params.data.find(item=>item.approval_stage === "doing")
+                    if(_this.waitingFor){
+                        _this.$emit("waitingfor", _this.waitingFor)
+                    }else{
+                        _this.$emit("waitingfor", params.data[params.data.length-1])
+                    }
+                })
+            }
+        },
         randomColor(params){
             if(params){
                 let tempArr = params.split('|')
-                return {color:tempArr[0],name:tempArr[1]}
+                    
+                    return {color:tempArr[0],name:tempArr[1]}
+
             }else{
                 let n = Math.floor(Math.random()*5+1)
                 return {backgroundColor:this.colorArr[n]}
@@ -134,7 +131,7 @@ export default {
 .approver-row{
     display: flex;
     margin-top: 30px; 
-    margin-left: 10%;  
+    /* margin-left: 10%;   */
 }
 .approver-row span{
     margin-right: 20px;
@@ -147,10 +144,11 @@ export default {
 .splicer{
     width: 60px;
     height: 2px;
-    margin: 20px 20px 0 20px;
+    margin: 20px 10px 0 10px;
     background-color: #E0E0E0;
 }
 .approver{
+    background-size: 40px;
     font-size: 18px;
     font-weight: 800;
     color: white;

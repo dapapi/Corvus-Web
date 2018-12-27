@@ -16,7 +16,7 @@ axios.interceptors.request.use((config) => {
     if (config.method === 'post') {
         let flag = true
         for (const key in config.data) {
-            if (Array.isArray(config.data[key]&&config.data[key].length ==0)) {
+            if (Array.isArray(config.data[key]) && config.data[key].length === 0) {
                 flag = false
                 break
             }

@@ -1,7 +1,7 @@
 <template>
     <div>
         <div class="modal fade" id="approval-great-module" aria-labelledby="approval-great-module" role="dialog" tabindex="-1">
-            <div class="modal-dialog modal-simple modal-top modal-lg">
+            <div class="modal-dialog modal-simple modal-top">
                 <div class="modal-content">
                     <div class="modal-header">
                         <button type="button" class="close" data-dismiss="modal" aria-label="Close">
@@ -70,11 +70,15 @@ export default {
         }
     },
     created(){
-        // this.getFormContractor()
 
     },
     mounted(){
-
+        let _this = this
+        $('#approval-great-module').on('show.bs.modal',function(){
+                _this.$nextTick((params) => {
+                    _this.getFormContractor() 
+                })
+        })
         this.dataInit()
         this.refresh()
     },
@@ -93,20 +97,24 @@ export default {
     },
     watch:{
         formData:function(){
-            // this.typeWatcher()
             this.dataInit()
             this.getFormContractor()
         }
     },
     methods:{
         getFormContractor(){
-            console.log(this.form_id);
+            console.log(this.formData.form_id);
             let _this = this
-            fetch('get','/approvals/'+this.formData.form_id+'/form_control?include=approval_form_controls').then((params) => {
-                console.log(params);
+
+            if(this.formData.form_id){
+                fetch('get','/approvals/'+this.formData.form_id+'/form_control?include=approval_form_controls').then((params) => {
                 _this.importData = params.data
+                _this.dataInit()
             })
+            }
+            
         },
+    
         changeHandler(params){
             switch (params.type){
                 case 'upload':
@@ -146,7 +154,7 @@ export default {
         dataInit(){
             let {name,description,approval_form_controls,form_id} = this.importData
             this.form_id = form_id
-            let controlArr= Array.from(approval_form_controls)
+            let controlArr= Array.from(approval_form_controls.data)
             this.pageInfo.title = name
             let descriptionArr = []
             let tempArr = []
@@ -212,6 +220,6 @@ export default {
     display: flex;
     /* height: 50px; */
     
-    margin: 20px 120px;
+    margin: 20px 5px ;
 }
 </style>

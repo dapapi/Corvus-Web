@@ -23,11 +23,7 @@
                                         </span>
                             </div>
                             <span class="site-menu-title">{{ menu.name }}</span>
-                            <!-- 建设中 -->
                             <span v-if="menu.name =='我的'&&unReadMsg>0" class="unRead ml-5">{{unReadMsg}}</span>
-                            <div v-if="menu.name === '审批'" class="ribbon ribbon-badge ribbon-warning ribbon-reverse">
-                                <span class="ribbon-inner">建设中</span>
-                            </div>
                         </router-link>
                     </template>
                     <template v-else>
