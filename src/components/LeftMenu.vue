@@ -1,5 +1,5 @@
 <template>
-    <div class="site-menubar" style="height: 100%!important;top: 0;width: 100px">
+    <div class="site-menubar" style="height: 100%!important;top: 0;width: 100px" @click="hideBackModel">
         <div class="site-menubar-body">
             <div class="py-10 menu-icon"
                  style="position: relative;background-color: #3f51b5;z-index: 2">
@@ -9,7 +9,7 @@
                     </label>
                 </div>
             </div>
-            <ul class="site-menu" data-plugin="menu" style="transform: translate3d(0px, -1.03409px, 0px);">
+            <ul class="site-menu" @click.stop="hideBackModel" data-plugin="menu" style="transform: translate3d(0px, -1.03409px, 0px);">
                 <li class="site-menu-item" v-for="menu in menuData"
                     :class="{'has-sub': menu.data, 'active' : pageRoute === menu.code || ( menu.data && menu.data.find(item => item.code === pageRoute))}">
                     <template v-if="!menu.data">
@@ -53,11 +53,9 @@
                 <li class="site-menu-item" style="height: 150px;">&nbsp;</li>
             </ul>
             <div class="user-wrap">
-                <!-- <img src="https://res.papitube.com/no-icon.png" alt=""> -->
                 <Avatar :imgUrl="avatar" style="width: 40px; height: 40px; font-size: 14px"/>
             </div>
-            <input id="console-model" type="text" @blur="blur"/>
-            <div class="console" v-show="visible" @click="blur">
+            <div class="console" v-if="visible">
                 <ul>
                     <li @click="goManagement">进入企业后台</li>
                     <li @click="layout">退出当前账号</li>
@@ -188,6 +186,9 @@
         },
         mounted() {
             this.avatar = JSON.parse(Cookies.get('user')).avatar
+            document.body.onclick = () => {
+                this.visible = false
+            }
         },
         watch: {
             '$route'(to, from) {
@@ -195,14 +196,12 @@
             },
         },
         methods: {
-            showBackModel() {
+            showBackModel () {
                 this.visible = !this.visible
-            },
-            blur() {
-                this.visible = false
             },
             // 退出登录
             layout() {
+                this.visible = false
                 Cookies.remove('user');
                 Cookies.remove('companyType');
                 Cookies.remove('CORVUS-ACCESS-TOKEN');
@@ -210,7 +209,11 @@
                 window.location.href = '/login'
             },
             goManagement() {
+                this.visible = false
                 window.open('/management')
+            },
+            hideBackModel () {
+                this.visible = false
             }
         }
     }
