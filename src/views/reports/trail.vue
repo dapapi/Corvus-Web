@@ -67,8 +67,7 @@
                     <div class="tab-pane animation-fade active" id="forum-trail-report" role="tabpanel">
                         <div class="clearfix">
                             <div class="col-md-2 float-left pl-0">
-                                <Selectors :options="trailTypeArr"
-                                           @change="changeTrailType"></Selectors>
+                                <Selectors :options="trailTypeArr" @change="changeTrailType"></Selectors>
                             </div>
                             <div class="col-md-3 float-left pl-0" v-if="departmentsInfo.length > 1">
                                 <DropDepartment name="组别" :data="departmentsInfo" @change="selectDepartment"/>

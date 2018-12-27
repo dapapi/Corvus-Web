@@ -743,8 +743,7 @@
                         <div class="example" v-if="taskTypeArr.length > 0">
                             <div class="col-md-2 text-right float-left">任务类型</div>
                             <div class="col-md-10 float-left pl-0">
-                                <selectors :options="taskTypeArr" ref="taskType" placeholder="请选择任务类型"
-                                           @change="changeTaskType"></selectors>
+                                <selectors :options="taskTypeArr" ref="taskType" @change="changeTaskType"></selectors>
                             </div>
                         </div>
                         <div class="example">
@@ -770,8 +769,7 @@
                         <div class="example">
                             <div class="col-md-2 text-right float-left pl-0">任务优先级</div>
                             <div class="col-md-10 float-left pl-0">
-                                <selectors :options="taskLevelArr" ref="taskLevel"
-                                           @change="changeTaskLevel"></selectors>
+                                <selectors :options="taskLevelArr" ref="taskLevel" @change="changeTaskLevel"></selectors>
                             </div>
                         </div>
                         <div class="example">
@@ -1027,7 +1025,7 @@
                         <div class="example">
                             <div class="col-md-2 text-right float-left px-0">付款方式</div>
                             <div class="col-md-10 float-left">
-                                <Selectors :options="payMethodsArr" ref="payMethod" placeholder="请选择付款方式"
+                                <Selectors :options="payMethodsArr" ref="payMethod"
                                            @change="(value) => addProjectReturn(value, 'project_returned_money_type_id')"></Selectors>
                             </div>
                         </div>
@@ -1105,7 +1103,7 @@
                         <div class="example">
                             <div class="col-md-2 text-right float-left px-0">票据类型</div>
                             <div class="col-md-10 float-left">
-                                <Selectors :options="invoiceTypeArr" ref="payMethod1" placeholder="请选择票据类型"
+                                <Selectors :options="invoiceTypeArr" ref="payMethod1"
                                            @change="(value) => addProjectReturn(value, 'project_returned_money_type_id')"></Selectors>
                             </div>
                         </div>
@@ -1875,24 +1873,19 @@
                     data.fields = this.addInfoArr;
                 }
                 let _this = this;
-                let flagInfo = this.projectInfo.participants;
+                let participantsInfo = this.$store.state.participantsInfo;
+                data.participant_ids = [];
                 data.participant_del_ids = [];
-                if (data.participant_ids && flagInfo) {
-                    for (let j = 0; j < flagInfo.data.length; j++) {
-                        if (data.participant_ids.map(item => item.id).indexOf(flagInfo.data[j].id) === -1) {
-                            data.participant_del_ids.push(flagInfo.data[j].id)
-                        }
-                    }
-                } else if (flagInfo && !data.participant_ids) {
-                    let participantsInfo = this.$store.state.participantsInfo;
-                    for (let i = 0; i < flagInfo.data.length; i++) {
-                        if (participantsInfo.map(item => item.id).indexOf(flagInfo.data[i].id) === -1) {
-                            data.participant_del_ids.push(flagInfo.data[i].id)
-                        }
+                for (let i = 0; i < participantsInfo.length; i++) {
+                    if (this.projectInfo.participants.data.indexOf(participantsInfo[i].id) === -1) {
+                        data.participant_ids.push(participantsInfo[i].id)
                     }
                 }
-
-                console.log(data);
+                for (let i = 0; i < this.projectInfo.participants.data.length; i++) {
+                    if (participantsInfo.indexOf(this.projectInfo.participants.data[i].id) === -1) {
+                        data.participant_del_ids.push(this.projectInfo.participants.data[i].id)
+                    }
+                }
 
                 fetch('put', '/projects/' + this.projectId, data).then(function () {
                     toastr.success('修改成功');

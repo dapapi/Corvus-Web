@@ -491,7 +491,7 @@
                         <div class="example">
                             <div class="col-md-2 text-right float-left">角色组</div>
                             <div class="col-md-10 float-left pl-0">
-                                <selectors class="form-control" placeholder="职务" @change="moveGrouping"
+                                <selectors class="form-control" @change="moveGrouping"
                                            :options="groupingDate"></selectors>
                             </div>
                         </div>

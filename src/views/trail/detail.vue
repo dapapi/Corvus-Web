@@ -457,8 +457,7 @@
                         <div class="example">
                             <div class="col-md-2 text-right float-left">任务类型</div>
                             <div class="col-md-10 float-left pl-0">
-                                <selectors :options="taskTypeArr" @change="changeTaskType"
-                                           placeholder='请选择任务类型'></selectors>
+                                <selectors :options="taskTypeArr" @change="changeTaskType"></selectors>
                             </div>
                         </div>
                         <div class="example">
@@ -483,8 +482,7 @@
                         <div class="example">
                             <div class="col-md-2 text-right float-left pl-0">任务优先级</div>
                             <div class="col-md-10 float-left pl-0">
-                                <selectors :options="taskLevelArr" @change="changeTaskLevel"
-                                           placeholder='请选择任务优先级'></selectors>
+                                <selectors :options="taskLevelArr" @change="changeTaskLevel"></selectors>
                             </div>
                         </div>
                         <div class="example">
@@ -529,8 +527,7 @@
                         <div class="example">
                             <div class="col-md-2 text-right float-left">拒绝类型</div>
                             <div class="col-md-10 float-left pl-0">
-                                <selectors :options="refuseTypeArr" @change="changeRefuseType"
-                                           placeholder="请选择拒绝种类"></selectors>
+                                <selectors :options="refuseTypeArr" @change="changeRefuseType"></selectors>
                             </div>
                         </div>
                         <div class="example">

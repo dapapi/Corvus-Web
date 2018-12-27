@@ -8,20 +8,20 @@
 
                     <ul class="nav nav-tabs nav-tabs-line" role="tablist">
                         <li class="nav-item" role="presentation">
-                            <a class="nav-link active" 
-                                data-toggle="tab" 
-                                href="#exampleTabsOne" 
-                                aria-controls="exampleTabsOne" 
+                            <a class="nav-link active"
+                                data-toggle="tab"
+                                href="#exampleTabsOne"
+                                aria-controls="exampleTabsOne"
                                 role="tab" aria-selected="true">
                                 添加员工
                             </a>
                         </li>
                         <li class="nav-item" role="presentation">
-                            <a class="nav-link" 
-                                data-toggle="tab" 
-                                href="#exampleTabsTwo" 
-                                aria-controls="exampleTabsTwo" 
-                                role="tab" 
+                            <a class="nav-link"
+                                data-toggle="tab"
+                                href="#exampleTabsTwo"
+                                aria-controls="exampleTabsTwo"
+                                role="tab"
                                 aria-selected="false">
                                 邀请员工
                             </a>
@@ -42,10 +42,10 @@
                                 <div class="example">
                                     <div class="col-md-3 text-right float-left require">姓名(中文)</div>
                                     <div class="col-md-8 float-left pl-0">
-                                        <input type="text" 
-                                            :disabled="(!!userId) && !isEdit" 
-                                            v-model="nameCN" 
-                                            placeholder="1-30个字符" 
+                                        <input type="text"
+                                            :disabled="(!!userId) && !isEdit"
+                                            v-model="nameCN"
+                                            placeholder="1-30个字符"
                                             maxlength="30"
                                             class="form-control">
                                     </div>
@@ -53,10 +53,10 @@
                                 <div class="example">
                                     <div class="col-md-3 text-right float-left">姓名(英文)</div>
                                     <div class="col-md-8 float-left pl-0">
-                                        <input type="text" 
-                                            :disabled="(!!userId) && !isEdit" 
-                                            v-model="nameEN" 
-                                            placeholder="1-30个字符" 
+                                        <input type="text"
+                                            :disabled="(!!userId) && !isEdit"
+                                            v-model="nameEN"
+                                            placeholder="1-30个字符"
                                             maxlength="30"
                                             class="form-control">
                                     </div>
@@ -64,7 +64,7 @@
                                 <div class="example">
                                     <div class="col-md-3 text-right float-left require">性别</div>
                                     <div class="col-md-8 float-left pl-0">
-                                        <selectors :options="genderArr" change-key="gender" @select="changeState" placeholder="请选择" :defaultValue="0"></selectors>
+                                        <selectors :options="genderArr" change-key="gender" @select="changeState"  :defaultValue="0"></selectors>
                                     </div>
                                 </div>
                                 <div class="example">
@@ -109,7 +109,7 @@
                                 <div class="example">
                                     <div class="col-md-3 text-right float-left require">婚姻状况</div>
                                     <div class="col-md-8 float-left pl-0">
-                                        <selectors :options="maritalStatusArr" change-key="maritalStatus" @select="changeState" placeholder="请选择" :defaultValue="0"></selectors>
+                                        <selectors :options="maritalStatusArr" change-key="maritalStatus" @select="changeState" :defaultValue="0"></selectors>
                                     </div>
                                 </div>
                                 <div class="example">
@@ -135,13 +135,13 @@
                                 <div class="example">
                                     <div class="col-md-3 text-right float-left require">民族</div>
                                     <div class="col-md-8 float-left pl-0">
-                                        <selectors :options="nationalityArr" change-key="nationality" @select="changeState" placeholder="请选择" :defaultValue="0"></selectors>
+                                        <selectors :options="nationalityArr" change-key="nationality" @select="changeState" :defaultValue="0"></selectors>
                                     </div>
                                 </div>
                                 <div class="example">
                                     <div class="col-md-3 text-right float-left require">血型</div>
                                     <div class="col-md-8 float-left pl-0">
-                                        <selectors :options="bloodTypeArr" change-key="bloodType" @select="changeState" placeholder="请选择" :defaultValue="0"></selectors>
+                                        <selectors :options="bloodTypeArr" change-key="bloodType" @select="changeState" :defaultValue="0"></selectors>
                                     </div>
                                 </div>
                                 <div class="example">
@@ -296,12 +296,12 @@
                                 </div>
                             </div>
                         </div>
-                        
+
                         <div class="formName pd-b-15">其他备注</div>
                         <div class="example padding15">
                             <textarea class="form-control" rows="4" v-model="remarks"></textarea>
                         </div>
-                        
+
                         <div class="modal-footer">
                             <!-- <button class="btn btn-sm btn-white btn-pure waves-effect waves-classic" data-dismiss="modal"  @click="handleCancel">取消</button> -->
                             <button class="btn btn-primary waves-effect waves-classic" type="submit" @click="submit">提交</button>
@@ -618,7 +618,7 @@ export default {
 				record: _record,
 				family: _family
             }
-            
+
 			fetch('post', '/personnel' ,params).then(result => {
                 toastr.success('添加成功')
 			})

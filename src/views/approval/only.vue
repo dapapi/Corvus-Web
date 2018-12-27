@@ -115,7 +115,7 @@
             <div class="example">
               <div class="col-md-2 text-right float-left">任务类型</div>
               <div class="col-md-10 float-left pl-0">
-                <Selectors :options="taskTypeArr" :placeholder="'请选择任务类型'" @change="changeTaskType"></Selectors>
+                <Selectors :options="taskTypeArr" @change="changeTaskType"></Selectors>
               </div>
             </div>
             <div class="example">
@@ -139,7 +139,7 @@
             <div class="example">
               <div class="col-md-2 text-right float-left pl-0">任务优先级</div>
               <div class="col-md-10 float-left pl-0">
-                <Selectors :options="taskLevelArr" :placeholder="'请选择任务优先级'" @change="changeTaskLevel"></Selectors>
+                <Selectors :options="taskLevelArr" @change="changeTaskLevel"></Selectors>
               </div>
             </div>
             <div class="example">

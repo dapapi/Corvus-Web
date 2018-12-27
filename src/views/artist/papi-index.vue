@@ -24,11 +24,10 @@
                                style="width: 220px" v-model="blogName" @blur='getArtists()'>
                     </div>
                     <div class="col-md-3 example float-left">
-                        <selectors :options="artistTypeArr"
-                                   :placeholder="'请选择博主类型'"  @change="typeFilter"></selectors>
+                        <selectors :options="artistTypeArr" @change="typeFilter"></selectors>
                     </div>
                     <div class="col-md-3 example float-left">
-                        <selectors :placeholder="'请选择沟通状态'" :options="papiCommunicationStatusArr" @change="CommunicationStatus"></selectors>
+                        <selectors :options="papiCommunicationStatusArr" @change="CommunicationStatus"></selectors>
                     </div>
                     <div class="col-md-3 example float-left">
                         <button type="button" class="btn btn-default waves-effect waves-classic float-right"
@@ -197,8 +196,7 @@
                         <div class="example">
                             <div class="col-md-2 text-right float-left">类型</div>
                             <div class="col-md-10 float-left pl-0">
-                                <selectors :options="artistTypeArr" :placeholder="'请选择类型'"
-                                           @change="changeArtistType" ref="papitype"></selectors>
+                                <selectors :options="artistTypeArr" @change="changeArtistType" ref="papitype"></selectors>
                             </div>
                         </div>
                         <div class="example">
@@ -211,8 +209,7 @@
                         <div class="example">
                             <div class="col-md-2 text-right float-left">与我司签约意向</div>
                             <div class="col-md-5 float-left pl-0">
-                                <selectors :options="yesOrNoArr" :placeholder="'请选择签约意向'"
-                                           @change="changeSignIntention" ref="signIntention"></selectors>
+                                <selectors :options="yesOrNoArr" @change="changeSignIntention" ref="signIntention"></selectors>
                             </div>
                             <div class="col-md-5 float-left pl-0" v-if="signIntention === '0'">
                                 <textarea name="" rows="1" class="form-control" placeholder="请填写不签约理由"
@@ -222,8 +219,7 @@
                         <div class="example">
                             <div class="col-md-2 text-right float-left">是否签约其他公司</div>
                             <div class="col-md-5 float-left pl-0">
-                                <selectors :options="yesOrNoArr" :placeholder="'请选择是否签约其他公司'"
-                                           @change="isSignCompany" ref="isSign"></selectors>
+                                <selectors :options="yesOrNoArr" @change="isSignCompany" ref="isSign"></selectors>
                             </div>
                             <div class="col-md-5 float-left pl-0" v-if="signCompany == 1">
                                 <input type="text" class="form-control" placeholder="请输入已签约公司名称"

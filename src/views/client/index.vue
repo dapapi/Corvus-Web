@@ -17,16 +17,14 @@
             <div class="panel col-md-12 py-5">
                 <div class="clearfix">
                     <div class="col-md-3 example float-left">
-                        <selectors :options="companiesArr" :placeholder="'请选择公司'"
-                                   @change="changeCompany"></selectors>
+                        <selectors :options="companiesArr" @change="changeCompany"></selectors>
                     </div>
                     <div class="col-md-3 example float-left">
                         <input-selectors :key="'inputSelect'" :placeholder="'请选择负责人'"
                                          @change="changePrincipalSelect"></input-selectors>
                     </div>
                     <div class="col-md-3 example float-left">
-                        <selectors :options="clientLevelArr" :placeholder="'请选择公司级别'"
-                                   @change="changeClientLevelSelect"></selectors>
+                        <selectors :options="clientLevelArr" @change="changeClientLevelSelect"></selectors>
                     </div>
                     <div class="col-md-3 example float-left">
                         <button type="button" class="btn btn-default waves-effect waves-classic float-right"
@@ -100,8 +98,7 @@
                                 <input type="text" class="form-control" title="" v-model="clientName">
                             </div>
                             <div class="col-md-5 float-left pl-0">
-                                <selectors ref="clientLevel" :options="clientLevelArr" :placeholder="'请选择公司级别'"
-                                           @change="changeClientLevel"></selectors>
+                                <selectors ref="clientLevel" :options="clientLevelArr" @change="changeClientLevel"></selectors>
                             </div>
                         </div>
                         <!-- 暂时隐藏 -->
@@ -133,8 +130,7 @@
                         <div class="example">
                             <div class="col-md-2 text-right float-left">关键决策人</div>
                             <div class="col-md-10 float-left pl-0">
-                                <selectors ref="clientContactType" :options="keyMasterArr" :placeholder="'请选择是否是关键决策人'"
-                                           @change="changeContactClientType"></selectors>
+                                <selectors ref="clientContactType" :options="keyMasterArr" @change="changeContactClientType"></selectors>
                             </div>
                         </div>
                         <div class="example">
@@ -152,8 +148,7 @@
                         <div class="example">
                             <div class="col-md-2 text-right float-left">规模</div>
                             <div class="col-md-10 float-left pl-0">
-                                <selectors ref="clientScale" :options="clientScaleArr" :placeholder="'请选择规模'"
-                                           @change="changeClientScale"></selectors>
+                                <selectors ref="clientScale" :options="clientScaleArr" @change="changeClientScale"></selectors>
                             </div>
                         </div>
                         <div class="example">
