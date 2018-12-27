@@ -713,7 +713,7 @@
                             <div class="col-md-2 text-right float-left">作品发布时间</div>
                             <div class="col-md-10 float-left">
                                 <datepicker @change="changeWorkReleaseTime" ref="workTime"
-                                            :placeholder="'请输入时间'"></datepicker>
+                                            placeholder="请选择时间"></datepicker>
                             </div>
                         </div>
                         <div class="example">

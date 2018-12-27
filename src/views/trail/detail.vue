@@ -568,7 +568,6 @@
                 isEdit: false,
                 starsArr: [],
                 industriesArr: [],
-                memberPlaceholder: '请选择负责人',
                 companyType: config.companyType,
                 customizeInfo: config.customizeInfo,
                 taskTypeArr: {},

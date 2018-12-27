@@ -263,7 +263,6 @@
                 total: 0,
                 current_page: 1,
                 total_pages: 1,
-                memberPlaceholder: "请选择负责人",
                 participants: [],
                 multiple: false,
                 taskIntroduce: "",
