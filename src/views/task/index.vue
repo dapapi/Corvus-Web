@@ -16,11 +16,11 @@
                                placeholder="请输入任务名称">
                     </div>
                     <div class="col-md-3 example float-left">
-                        <Selectors :options="taskTypeArr" @change="changeTaskTypeSearch"></Selectors>
+                        <Selectors :options="taskTypeArr" @change="changeTaskTypeSearch" placeholder="请选择任务类型"></Selectors>
                     </div>
                     <!-- todo 任务类型暂无 -->
                     <div class="col-md-3 example float-left">
-                        <Selectors :options="taskStatusArr" @change="changeTaskStatusSearch"></Selectors>
+                        <Selectors :options="taskStatusArr" @change="changeTaskStatusSearch" placeholder="请选择任务状态"></Selectors>
                     </div>
                     <div class="col-md-3 example float-left">
                         <button type="button"
