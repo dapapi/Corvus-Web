@@ -100,9 +100,23 @@
                                     <router-link :to="{name:'tasks/detail', params: {id: task.id}}">{{ task.title }}
                                     </router-link>
                                 </td>
-                                <td>{{task.resource ? task.resource.data.resource.data.title : ''}}</td>
+                                <td>{{task.resource ? task.resource.data.resource.data.title : ''}}
+                                    <template v-if="task.resource && task.resource.data.resourceable && task.resource.data.resourceable.data.name">
+                                        -  {{ task.resource.data.resourceable.data.name }}
+                                    </template>
+                                    <template v-if="task.resource && task.resource.data.resourceable && task.resource.data.resourceable.data.nickname">
+                                        -  {{ task.resource.data.resourceable.data.nickname }}
+                                    </template>
+                                    <template v-if="task.resource && task.resource.data.resourceable && task.resource.data.resourceable.data.title">
+                                        - {{ task.resource.data.resourceable.data.title }}
+                                    </template>
+                                    <template v-if="task.resource && task.resource.data.resourceable && task.resource.data.resourceable.data.company">
+                                        - {{ task.resource.data.resourceable.data.company }}
+                                    </template>
+                                </td>
                                 <!-- <td>暂无</td> -->
-                                <td>{{ task.type ? task.type.data ? task.type.data.title : '' : '' }}</td>
+                                <td>{{ task.type ? task.type.data ? task.type.data.title : '' : '' }}
+                                </td>
                                 <td>
                                     <template v-if="task.status === 1"><span style="color:#FF9800">进行中</span></template>
                                     <template v-if="task.status === 2"><span style="color:#4CAF50">已完成</span></template>

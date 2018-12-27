@@ -10,12 +10,15 @@ export default {
     props:['title','n','data'],
     data(){
         return {
-            textContent:''
+            textContent:'',
         }
     },
     methods:{
         emitText(){
-            this.$emit('change',this.textContent)
+            let {id} = this.data[0]
+            // let data = {}
+            // data[id]= this.textContent
+            this.$emit('change',{key:id,value:this.textContent,type:null})
         }
     },
     watch:{

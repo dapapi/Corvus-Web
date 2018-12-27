@@ -15,7 +15,8 @@ export default {
     },
     methods:{
         emitText(){
-            this.$emit('change',this.textContent)
+            let {id} = this.data[0]
+            this.$emit('change',{key:id,value:this.textContent,type:null})
         }
     },
     watch:{
