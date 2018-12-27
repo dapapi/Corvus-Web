@@ -439,7 +439,7 @@
                         <div class="example">
                             <div class="col-md-2 text-right float-left">描述</div>
                             <div class="col-md-10 float-left pl-0">
-                                <textarea name="" rows="5" class="form-control" @change="describe" v-model="emptydescribe"></textarea>
+                                <textarea name="" rows="5" class="form-control"  v-model="emptydescribe"></textarea>
                             </div>
                         </div>
                     </div>
@@ -531,7 +531,7 @@
                         <div class="example">
                             <div class="col-md-2 text-right float-left">描述</div>
                             <div class="col-md-10 float-left pl-0">
-                                <textarea name="" rows="5" class="form-control" @change="updateDescribe" v-model="emptyrole_describe" :placeholder="emptydescribe"></textarea>
+                                <textarea name="" rows="5" class="form-control" @change="updateDescribe" v-model="emptyrole_describe" ></textarea>
                             </div>
                         </div>
                     </div>
@@ -729,7 +729,6 @@
                 let _this = this;
                 fetch('get', '/console/role').then(function (response) {
                     _this.roleDate = response.data;
-                    console.log(_this.roleDate)
                 });
             },
             //获取分组数据
@@ -757,7 +756,7 @@
             //切换内容
             changeCont(value) {
                 this.jobCont = value
-            
+                this.selectedIds = []
                 this.defaultId = 0
                 let _this = this;
                 fetch('get', '/console/feature/' + this.jobCont).then(function (response) {
@@ -823,6 +822,7 @@
 
             },
             powerkeep() {
+                console.log( this.selectedIds)
                 fetch('post', '/console/feature/' + this.jobCont, {resouce: this.selectedIds}).then(function (response) {
                     toastr.success('保存成功');
                 })
@@ -925,19 +925,15 @@
 
             //获取新增角色的类别
             changeRolejob(value) {
-                this.roleType = value
+                this.groupingId=value
             },
-            //获取新增角色的描述
-            describe(value) {
-                console.log(value)
-                this.roledescribe = value
-            },
+          
             //新增角色
             addrole() {
                 let _this = this;
                 let data = {
                     name: this.roleName,
-                    group_id: this.roleType,
+                    group_id: this.groupingId,
                     description:this.emptydescribe
 
                 }
@@ -945,7 +941,7 @@
                     toastr.success('创建成功');
                     $('#addRole').modal('hide');
                     _this.roleName=""
-                    // _this.emptydescribe=""
+                    _this.emptydescribe=""
                     _this.$refs.resourceType.setValue("")
                     _this.getroleDate()
 
@@ -969,12 +965,22 @@
             },
             //修改类型
             updateRolejob(value) {
+                console.log(value)
                 this.updateType = value
             },
             //修改描述
             updateDescribe(value) {
-    
+                console.log(value)
                
+            },
+            Modifyingroles(value,id){
+                this.updateType=id
+                this.roleGroupId=value;
+                this.modifyName=this.roleDate.find(item=>item.id==this.roleGroupId).name
+                this.rolegroupName = this.groupingDate.find(item=>item.id==id).name
+                this.updateName = this.modifyName
+                this.$refs.roleGroup.setValue(id,this.rolegroupName)
+                // this.emptyrole_describe=this.emptydescribe
             },
             //修改角色
             updaterole() {
@@ -1064,21 +1070,14 @@
                 this.roleId = value
             },
             grouping(value) {
+                console.log(value)
                 this.groupingId = value
                 this.panelName=this.groupingDate.find(item=>item.id==this.groupingId).name
                 this.$refs.resourceType.setValue(value,this.panelName)
                 this.roleName=""
            
             },
-             Modifyingroles(value,id){
-                 console.log(id)
-                this.roleGroupId=value;
-                this.modifyName=this.roleDate.find(item=>item.id==this.roleGroupId).name
-                this.rolegroupName = this.groupingDate.find(item=>item.id==id).name
-                this.updateName = this.modifyName
-                this.$refs.roleGroup.setValue(id,this.rolegroupName)
-                // this.emptyrole_describe=this.emptydescribe
-            },
+           
             clickdefault() {
                 this.conceal = !this.conceal;
             },

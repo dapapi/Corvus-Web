@@ -75,12 +75,12 @@
                         </div>
                     </div>
                     <div class="col-md-6 float-left pl-0 mb-20" >
-                        <div class="col-md-6" v-if="artistInfo.sign_contract_status == 2">                    
-                            <div class="col-md-6"><i class="iconfont icon-ego-box"></i>项目</div>
+                        <div class="col-md-12" v-if="artistInfo.sign_contract_status == 2">                    
+                            <div class="col-md-12"><i class="iconfont icon-ego-box"></i>项目</div>
                             <div class="clearfix example projectshow" v-for="(item,index) in ProjectsInfo" :key="index" @click="projectDetails(item.id)">
                                 <div class="col-md-3 float-left">{{item.title}}</div>
-                                <div class="col-md-3 float-left">{{item.principal.data.name}}</div>
-                                <div class="col-md-3 float-left">{{item.end_at}}</div>
+                                <div class="col-md-2 float-left">{{item.principal.data.name}}</div>
+                                <div class="col-md-4 float-left">{{item.end_at}}</div>
                                 <div class="col-md-3 float-left">
                                     <template v-if="item.status === 1"><span style="color:#FF9800">进行中</span></template>
                                     <template v-if="item.status === 2"><span style="color:#4CAF50">已完成</span></template>
@@ -206,7 +206,7 @@
                         <div class="tab-pane animation-fade pb-20 fixed-button-father" id="forum-artist-schedule"
                              role="tabpanel" :class="artistInfo.sign_contract_status == 2?'active':''">
                             <div class="col-md-12">
-                                <calendar></calendar>
+                                <calendar :goto-date="selectedDate" :calendars="selectedCalendar" ref="calendar" @scheduleClick="showScheduleModal"></calendar>
                             </div>
                         </div>
                         <div class="tab-pane animation-fade pb-20 fixed-button-father" id="forum-artist-projects"
@@ -218,24 +218,17 @@
                                 <tr class="animation-fade"
                                     style="animation-fill-mode: backwards; animation-duration: 250ms; animation-delay: 0ms;">
                                     <th class="cell-300" scope="col">项目名称</th>
-                                    <th class="cell-300" scope="col">项目状态</th>
                                     <th class="cell-300" scope="col">负责人</th>
                                     <th class="cell-300" scope="col">关联公司</th>
                                     <th class="cell-300" scope="col">录入日期</th>
+                                    <th class="cell-300" scope="col">博主分成</th>
                                 </tr>
                                 <tr v-for="(item,index) in ProjectsInfo" :key="index" @click="projectdetil(item.id)" class="Jump">
-                                    <td>{{item}}</td>
-                                    <td>
-                                        <template v-if="item.status === 1"><span style="color:#FF9800">进行中</span>
-                                        </template>
-                                        <template v-if="item.status === 2"><span style="color:#4CAF50">已完成</span>
-                                        </template>
-                                        <template v-if="item.status === 3"><span style="color:#9E9E9E">撤单</span>
-                                        </template>
-                                    </td>
+                                    <td>{{item.title}}</td>
                                     <td>{{item.principal.data.name}}</td>
                                     <td>{{item.company}}</td>
                                     <td>{{item.created_at}}</td>
+                                    <td>{{item.relate_project_bills_resource}}</td>
                                 </tr>
                             </table>
                             <div class="col-md-1" style="margin: 6rem auto" v-if="ProjectsInfo.length === 0">
@@ -640,8 +633,6 @@
                             <div class="col-md-2 text-right float-left">负责人</div>
                             <div class="col-md-5 float-left pl-0">
                                     <InputSelectors
-                                        :placeholder="principalName"
-                                        v-model="principalName"
                                         @change="principalChange">
                                     </InputSelectors>
                             </div>
@@ -844,7 +835,9 @@
                 Incubationperiod:'',
                 principalName:'',
                 filterFee:1,
-                platformArr:config.platformArr
+                platformArr:config.platformArr,
+                selectedCalendar:[],
+                selectedDate:''
             }
         },
         computed: {
@@ -859,6 +852,11 @@
             this.getTaskDate();  
             this.charts();
             let _this = this;
+            this.user = JSON.parse(Cookies.get('user'))
+            this.$store.commit('changeNewPrincipal', {
+                name: this.user.nickname,
+                id: this.user.id
+            })
             //  清空任务
             $('#addTask').on('hidden.bs.modal', function () {
                 _this.$refs.mold.setValue('');//类型
@@ -872,7 +870,8 @@
                 _this.taskName = '';
                 _this.startMinutes = '00:00';
                 _this.endMinutes = '00:00';
-
+                
+         
             })
             //  清空视频
             $('#addWork').on('hidden.bs.modal', function () {
@@ -957,12 +956,22 @@
                 // 使用刚指定的配置项和数据显示图表。
                 myChart.setOption(option);
             },
-
+            showScheduleModal: function (data) {
+                this.scheduleData = data;
+                // console.log(this.scheduleData)
+                if(data.participants.data){
+                    this.scheduleParticipants = JSON.parse(JSON.stringify(data.participants.data));
+                }
+            },
+            selectDate: function (value) {
+                this.selectedDate = value;
+                this.$refs.meetingRoom.setDate(value)
+            },
             getArtist: function () {
                 this.artistId = this.$route.params.id;
                 let _this = this;
                 let data = {
-                    include: 'creator,tasks,affixes,producer,type,publicity,trails.project,trails.client',
+                    include: 'creator,tasks,affixes,producer,type,publicity,trails.project,trails.client,trails.project.principal,trails.project.relate_project_bills_resource,',
                 };
                 fetch('get', '/bloggers/' + this.artistId, data).then(function (response) {
                     let doneTaskNum = 0
@@ -978,15 +987,14 @@
                         }
                     }
                      //项目
-                    //  if(response.data.trails){
-                    //     for (let i = 0; i < response.data.trails.data.length; i++) {                        
-                    //         if (response.data.trails.data[i].project&&response.data.trails.data[i].client) {                        
-                    //             response.data.trails.data[i].project.data.company = response.data.trails.data[i].client.data.company                        
-                    //             _this.ProjectsInfo.push(response.data.trails.data[i].project.data)
-                    //             console.log(_this.ProjectsInfo)
-                    //         }
-                    //     }
-                    //  }
+                     if(response.data.trails){
+                        for (let i = 0; i < response.data.trails.data.length; i++) {                                       
+                            if (response.data.trails.data[i].project.data) {                       
+                                response.data.trails.data[i].project.data.company = response.data.trails.data[i].client.data.company                        
+                                _this.ProjectsInfo.push(response.data.trails.data[i].project.data)
+                            }
+                        }
+                     }
                     
                     //孵化期时间 
                     if(_this.artistInfo.hatch_star_at&&_this.artistInfo.hatch_end_at){
@@ -1019,10 +1027,10 @@
                 fetch('get', '/bloggers/gettype').then(function (response) {
                     _this.artistTypeArr = response.data
                 })
-                fetch('get','/users/my?include=department').then(function(response){
-                    _this.principalId = response.data.id 
-                    _this.principalName = response.data.name
-                })
+                // fetch('get','/users/my?include=department').then(function(response){
+                //     _this.principalId = response.data.id 
+                //     _this.principalName = response.data.name
+                // })
                  fetch('get','/bloggers/select?include=users').then(function(response){ 
                     response.data.forEach(item=>{
                          _this.principalIds.push(item.users.data.id)
@@ -1030,6 +1038,7 @@
                     })
 
                 })
+               
             },
            
           
@@ -1200,10 +1209,11 @@
                     _this.getArtist()
 
                 })
-               
+                this.user = JSON.parse(Cookies.get('user'))
+                this.principalName = this.user.nickname;
                 let obj={
                     title:'制作人视频评分-视频评分',
-                    principal_id:this.principalId,
+                    principal_id:this.user.id,
                     start_at:this.start_Time,
                     end_at:this.end_Time,
                     participant_ids:this.principalIds,
