@@ -4,25 +4,28 @@
         <select class="good-picker selectpicker col-md-10" data-plugin="" :value="value" :data-live-search="isSelectable"
             :data-show-subtext="isSelectable" 
             :multiple="multiple" :title="placeholder || data[0].control_placeholder" v-model="valueListener">
-        <selectorsOptions v-for="option in options || data[0].control_enums" :id="option.enum_sort" :val="option.enum_sort"
-                          :key="option.enum_sort">
-            {{option.enum_value}}
-            <!-- 增强组件扩展性和数据通用性 -->
-        </selectorsOptions>
-    </select>
+            <selectorsOptions v-for="option in options" :id="option.enum_sort" :val="option.enum_value || {name:option.id,id:option.id}"
+                            :key="option.enum_sort">
+                {{option.nickname || option.enum_value}}
+                <!-- 增强组件扩展性和数据通用性 -->
+            </selectorsOptions>
+        </select>
 
     </div>
 </template>
 
 <script>
+import config from '@/assets/js/config.js'
+import fetch from '@/assets/utils/fetch.js'
 export default {
      // 凡是多选，都有搜索框；不是多选传入selectable为true也可以有搜索框
         // changeKey为父组件的data，且可以被改变
-        props: ['options', 'n', 'multiple', 'placeholder', 'changeKey', 'value', 'resetinfo', 'selectable','title','data','index'],
+        props: ['n', 'multiple', 'placeholder', 'changeKey', 'value', 'resetinfo', 'selectable','title','data','index'],
         data() {
             return {
                 isDisable: this.disable,
                 valueListener: [],
+                options:[],
             }
         },
         computed: {
@@ -35,9 +38,11 @@ export default {
                 }
                 return false
             },
+            
         },
 
         mounted() {
+            this.sourceChecker()
             // if(!this.multiple){
             //     let self = this;
             //     $(this.$el).selectpicker().on('hidden.bs.select', function () {
@@ -53,12 +58,16 @@ export default {
             // }
            
         },
+        update(){
+            this.refresh()
+        },
         watch: {
             n:function(value){
 
             },
             valueListener: function (newValue) {
-                this.$emit('change', newValue,this.index)
+                let {id} = this.data[0]
+                this.$emit('change',{key:id,value:this.valueListener,type:null})
             },
             disable: function (newValue) {
                 this.isDisable = newValue;
@@ -77,7 +86,24 @@ export default {
             }
         },
         methods: {
-
+            sourceChecker(){
+                let _this = this
+                if(this.data[0].control_source){
+                    fetch('get',this.data[0].control_source.url).then((params) => {
+                        console.log(params.data);
+                        _this.options = params.data
+                        
+                        _this.$nextTick(() => {
+                            _this.refresh()
+                        })
+                    })
+                }else{
+                    _this.options = this.data[0].control_enums
+                }
+                this.$nextTick(() => {
+                    
+                })
+            },
             destroy() {
                 $(this.$el).selectpicker('destroy');
             },
@@ -94,7 +120,7 @@ export default {
             },
 
             refresh() {
-                $(this.$el).selectpicker('refresh');
+                $('.selectpicker').selectpicker('refresh');
             },
         }
     }
