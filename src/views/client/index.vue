@@ -17,14 +17,14 @@
             <div class="panel col-md-12 py-5">
                 <div class="clearfix">
                     <div class="col-md-3 example float-left">
-                        <selectors :options="companiesArr" @change="changeCompany"></selectors>
+                        <selectors :options="companiesArr" @change="changeCompany" placeholder="请选择公司"></selectors>
                     </div>
                     <div class="col-md-3 example float-left">
                         <input-selectors :key="'inputSelect'" :placeholder="'请选择负责人'"
                                          @change="changePrincipalSelect"></input-selectors>
                     </div>
                     <div class="col-md-3 example float-left">
-                        <selectors :options="clientLevelArr" @change="changeClientLevelSelect"></selectors>
+                        <selectors :options="clientLevelArr" @change="changeClientLevelSelect" placeholder="请选择公司级别"></selectors>
                     </div>
                     <div class="col-md-3 example float-left">
                         <button type="button" class="btn btn-default waves-effect waves-classic float-right"

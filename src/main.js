@@ -40,6 +40,7 @@ import TaskFollowUp from './components/TaskFollowUp.vue';
 import LeftMenu from './components/LeftMenu.vue';
 import ListSelection from './components/ListSelection.vue';
 import ListSelectMember from './components/ListSelectMember.vue';
+import Loading from './components/Loading.vue';
 import MeetingRoomCalendar from './components/MeetingRoomCalendar.vue';
 import Modal from './components/Modal.vue';
 import CheckboxGroup from './components/CheckboxGroup.vue';
@@ -61,11 +62,13 @@ import ToolTips from '@/components/ToolTips.vue'
 import ApprovalGoModal from '@/components/ForApproval/ApprovalGoModal.vue'
 import AppDetail from  '@/views/approval/appdetail.vue'
 import Avatar from '@/components/Avatar.vue'
+import ApprovalProgress from '@/components/ForApproval/ApprovalProgress'
 
 import DepartmentPicker from '@/components/DepartmentPicker'
 Vue.config.productionTip = false;
 Vue.component('ApprovalGoModal', ApprovalGoModal);
 Vue.component('AppDetail', AppDetail);
+Vue.component('ApprovalProgress', ApprovalProgress);
 
 Vue.component('AddMember', AddMember);
 Vue.component('BuildProject', BuildProject);
@@ -107,6 +110,7 @@ Vue.component('TaskFollowUp', TaskFollowUp);
 Vue.component('LeftMenu', LeftMenu);
 Vue.component('ListSelection', ListSelection);
 Vue.component('ListSelectMember', ListSelectMember);
+Vue.component('Loading', Loading);
 Vue.component('MeetingRoomCalendar', MeetingRoomCalendar);
 Vue.component('Modal', Modal);
 Vue.component('CheckboxGroup', CheckboxGroup);

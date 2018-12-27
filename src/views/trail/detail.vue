@@ -1,17 +1,6 @@
 <template>
     <div class="page">
-        <div class="loader-overlay" v-if="isLoading">
-            <div class="loader-content">
-                <div class="loader-index">
-                    <div></div>
-                    <div></div>
-                    <div></div>
-                    <div></div>
-                    <div></div>
-                    <div></div>
-                </div>
-            </div>
-        </div>
+        <Loading :is-loading="isLoading"></Loading>
         <div class="page-header page-header-bordered">
             <h1 class="page-title d-inline">销售线索</h1>
 
@@ -1131,11 +1120,6 @@
     .follow-task {
         height: 500px;
         overflow: scroll;
-    }
-
-    .loader-overlay {
-        margin-left: 100px;
-        background-color: rgba(7, 17, 27, 0.2)
     }
 
     .expfee {

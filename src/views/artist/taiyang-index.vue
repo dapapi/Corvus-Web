@@ -25,10 +25,10 @@
                                style="width: 220px" @blur="getArtists"> 
                     </div>
                     <div class="col-md-3 example float-left">
-                        <selectors :options="artistStatusArr"  @change="getStatus"></selectors>
+                        <selectors :options="artistStatusArr" placeholder="请选择艺人沟通状态" @change="getStatus"></selectors>
                     </div>
                     <div class="col-md-3 example float-left">
-                        <selectors :options="artistSourceArr"  @change="getSource"></selectors>
+                        <selectors :options="artistSourceArr" placeholder="请选择艺人来源" @change="getSource"></selectors>
                     </div>
                     <div class="col-md-3 example float-left">
                         <button type="button" class="btn btn-default waves-effect waves-classic float-right"

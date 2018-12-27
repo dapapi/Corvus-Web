@@ -12,7 +12,7 @@
 </template>
 
 <script>
-    import { mapActions } from 'vuex'
+    import {mapActions} from 'vuex'
     import Cookies from 'js-cookie'
     import LeftMenu from '@/components/LeftMenu.vue'
     import getMessage from '@/components/getMessage.vue'
@@ -41,17 +41,17 @@
                     || this.$route.path === '/appmanagement'
                     || this.$route.path === '/organization'
                     || this.$route.path.indexOf('staff') > 0
-                    || this.$route.path === '/organization/management'){
-                     this.isLeftMenuShow = false
-                     this.isLeftManageShow = true
-                } else{
+                    || this.$route.path === '/organization/management') {
+                    this.isLeftMenuShow = false
+                    this.isLeftManageShow = true
+                } else {
                     this.isLeftMenuShow = true
-                    this.isLeftManageShow = false 
+                    this.isLeftManageShow = false
                 }
             },
 
         },
-        beforeMount () {
+        beforeMount() {
             if (Cookies.get('user')) {
                 this.getUserList()
                 this.getDepartment()
@@ -157,21 +157,6 @@
         min-height: 100vh;
     }
 
-    /* .require {
-        position: relative;
-    }
-
-    .require:before {
-        content: '';
-        position: absolute;
-        width: 8px;
-        height: 8px;
-        border-radius: 50%;
-        background: #F44336;
-        right: -4px;
-        top: 50%;
-        transform: translateY(-50%);
-    } */
     .require::before {
         content: '*';
         position: relative;
@@ -179,7 +164,6 @@
         vertical-align: middle;
         color: #F44336;
         font-size: 16px;
-        /* line-height: 1; */
     }
 
     .point {
@@ -201,9 +185,6 @@
         border-bottom: 1px solid #eee;
     }
 
-    .edit-height {
-        /*height: 57px;*/
-    }
     .label-name {
         display: flex;
         align-items: center;
