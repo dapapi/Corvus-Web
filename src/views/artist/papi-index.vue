@@ -388,7 +388,6 @@
                     _this.$refs.isSign.setValue('')//其他公司意向 
                     _this.artistDesc='';//备注
                     _this.platformType=[];
-                    _this.selectedArtistsArr=[]
              })
         },
         methods: {
