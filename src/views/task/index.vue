@@ -95,7 +95,7 @@
                                 <th class="cell-300" scope="col">截止时间</th>
                             </tr>
                             <tbody>
-                            <tr v-for="task in tasksInfo">
+                            <tr v-for="(task, index) in tasksInfo" :key="index">
                                 <td class="pointer-content">
                                     <router-link :to="{name:'tasks/detail', params: {id: task.id}}">{{ task.title }}
                                     </router-link>
@@ -321,7 +321,6 @@
                     params.keyword = this.taskNameSearch;
                 }
                 if (this.taskStatusSearch) {
-                    console.log(this.taskStatusSearch)
                     params.status = this.taskStatusSearch;
                 }
                 if (this.taskTypeSearch) {

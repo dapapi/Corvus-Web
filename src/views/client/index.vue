@@ -20,8 +20,7 @@
                         <selectors :options="companiesArr" @change="changeCompany"></selectors>
                     </div>
                     <div class="col-md-3 example float-left">
-                        <input-selectors :key="'inputSelect'" :placeholder="'请选择负责人'"
-                                         @change="changePrincipalSelect"></input-selectors>
+                        <selectors :options="userList" @change="changePrincipalSelect" :multiple="true" />
                     </div>
                     <div class="col-md-3 example float-left">
                         <selectors :options="clientLevelArr" @change="changeClientLevelSelect"></selectors>
@@ -171,6 +170,7 @@
 </template>
 
 <script>
+    import { mapState } from 'vuex'
     import fetch from '../../assets/utils/fetch.js'
     import config from '../../assets/js/config'
     import ImportAndExport from '../../components/ImportAndExport.vue'
@@ -201,10 +201,9 @@
                 clientContactPhone: '',
                 clientContactPosition: '',
                 clientContactType: '', // 是否是关键人
-                // clientDecision: '',
                 clientRemark: '',
-                clientPrincipalSearch: '', // 条件筛选的负责人
-                clientPrincipalIdSearch: '', // 负责人id
+                // clientPrincipalSearch: '', // 条件筛选的负责人
+                clientPrincipalIdSearch: [], // 负责人id
                 clientLevelSearch: '', // 条件筛选的公司级别
                 companyName: '', // 公司名称
                 user: {}, // 个人信息
@@ -225,6 +224,12 @@
             })
         },
 
+        computed: {
+            ...mapState([
+                'userList'
+            ])
+        },
+
         methods: {
             getClients: function (pageNum = 1) {
                 const params = {
@@ -240,11 +245,11 @@
                 if (this.clientLevelSearch) {
                     params.grade = this.clientLevelSearch
                 }
-                if (this.clientPrincipalIdSearch) {
+                if (this.clientPrincipalIdSearch.length > 0) {
                     params.principal_id = this.clientPrincipalIdSearch
                 }
 
-                if (this.companyName || this.clientLevelSearch || this.clientPrincipalIdSearch) {
+                if (this.companyName || this.clientLevelSearch || this.clientPrincipalIdSearch.length > 0) {
                     url = '/clients/filter'
                 }
 
@@ -359,8 +364,7 @@
             },
 
             changePrincipalSelect(value) {
-                this.clientPrincipalSearch = value
-                this.clientPrincipalIdSearch = this.$store.state.newPrincipalInfo.id
+                this.clientPrincipalIdSearch = value
                 this.getClients()
             },
 
