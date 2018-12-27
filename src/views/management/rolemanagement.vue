@@ -279,7 +279,7 @@
                             <li class="nav-item" role="presentation">
                                 <a class="nav-link" data-toggle="tab" :href="'#forum-scope'+ item.id"
                                    aria-controls="forum-present"
-                                   aria-expanded="false" role="tab">功能范围</a>
+                                   aria-expanded="false" role="tab">数据范围</a>
                             </li>
                         </ul>
                     </div>
@@ -531,7 +531,7 @@
                         <div class="example">
                             <div class="col-md-2 text-right float-left">描述</div>
                             <div class="col-md-10 float-left pl-0">
-                                <textarea name="" rows="5" class="form-control" @change="updateDescribe" v-model="emptyrole_describe"></textarea>
+                                <textarea name="" rows="5" class="form-control" @change="updateDescribe" v-model="emptyrole_describe" :placeholder="emptydescribe"></textarea>
                             </div>
                         </div>
                     </div>
@@ -929,6 +929,7 @@
             },
             //获取新增角色的描述
             describe(value) {
+                console.log(value)
                 this.roledescribe = value
             },
             //新增角色
@@ -936,11 +937,16 @@
                 let _this = this;
                 let data = {
                     name: this.roleName,
-                    group_id: this.roleType
+                    group_id: this.roleType,
+                    description:this.emptydescribe
+
                 }
                 fetch('post', '/console/role', data).then(function (response) {
                     toastr.success('创建成功');
                     $('#addRole').modal('hide');
+                    _this.roleName=""
+                    // _this.emptydescribe=""
+                    _this.$refs.resourceType.setValue("")
                     _this.getroleDate()
 
                 });
@@ -966,15 +972,17 @@
                 this.updateType = value
             },
             //修改描述
-            updateDescribe() {
-
+            updateDescribe(value) {
+    
+               
             },
             //修改角色
             updaterole() {
                 let _this = this;
                 let data = {
                     name: this.updateName,
-                    group_id: this.updateType
+                    group_id: this.updateType,
+                    description: this.emptyrole_describe
                 }
                 fetch('put', '/console/role/' + this.roleId, data).then(function (response) {
                     toastr.success('修改成功');
@@ -1069,7 +1077,7 @@
                 this.rolegroupName = this.groupingDate.find(item=>item.id==id).name
                 this.updateName = this.modifyName
                 this.$refs.roleGroup.setValue(id,this.rolegroupName)
-                this.emptyrole_describe=this.emptydescribe
+                // this.emptyrole_describe=this.emptydescribe
             },
             clickdefault() {
                 this.conceal = !this.conceal;
