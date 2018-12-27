@@ -33,7 +33,7 @@
                             <div class="example">
                                 <div class="col-md-3 text-right float-left require">性别</div>
                                 <div class="col-md-8 float-left pl-0">
-                                    <selectors :options="genderArr" change-key="gender" @select="changeState" placeholder="请选择" :defaultValue="0"></selectors>
+                                    <selectors :options="genderArr" change-key="gender" @select="changeState" :defaultValue="0"></selectors>
                                 </div>
                             </div>
                             <div class="example">
@@ -78,7 +78,7 @@
                             <div class="example">
                                 <div class="col-md-3 text-right float-left require">婚姻状况</div>
                                 <div class="col-md-8 float-left pl-0">
-                                    <selectors :options="maritalStatusArr" change-key="maritalStatus" @select="changeState" placeholder="请选择" :defaultValue="0"></selectors>
+                                    <selectors :options="maritalStatusArr" change-key="maritalStatus" @select="changeState" :defaultValue="0"></selectors>
                                 </div>
                             </div>
                             <div class="example">
@@ -104,13 +104,13 @@
                             <div class="example">
                                 <div class="col-md-3 text-right float-left require">民族</div>
                                 <div class="col-md-8 float-left pl-0">
-                                    <selectors :options="nationalityArr" change-key="nationality" @select="changeState" placeholder="请选择" :defaultValue="0"></selectors>
+                                    <selectors :options="nationalityArr" change-key="nationality" @select="changeState" :defaultValue="0"></selectors>
                                 </div>
                             </div>
                             <div class="example">
                                 <div class="col-md-3 text-right float-left require">血型</div>
                                 <div class="col-md-8 float-left pl-0">
-                                    <selectors :options="bloodTypeArr" change-key="bloodType" @select="changeState" placeholder="请选择" :defaultValue="0"></selectors>
+                                    <selectors :options="bloodTypeArr" change-key="bloodType" @select="changeState" :defaultValue="0"></selectors>
                                 </div>
                             </div>
                             <div class="example">

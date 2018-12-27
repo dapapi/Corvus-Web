@@ -25,10 +25,10 @@
                                style="width: 220px" @blur="getArtists"> 
                     </div>
                     <div class="col-md-3 example float-left">
-                        <selectors :options="artistStatusArr" :placeholder="'请选择沟通状态'" @change="getStatus"></selectors>
+                        <selectors :options="artistStatusArr"  @change="getStatus"></selectors>
                     </div>
                     <div class="col-md-3 example float-left">
-                        <selectors :options="artistSourceArr" :placeholder="'请选择艺人来源'" @change="getSource"></selectors>
+                        <selectors :options="artistSourceArr"  @change="getSource"></selectors>
                     </div>
                     <div class="col-md-3 example float-left">
                         <button type="button" class="btn btn-default waves-effect waves-classic float-right"
@@ -160,7 +160,7 @@
                         <div class="example">
                             <div class="col-md-2 text-right float-left">性别</div>
                             <div class="col-md-4 float-left row">
-                                <selectors :options="genderArr" placeholder="请选择性别" @change="changeGender" ref="gender"></selectors>
+                                <selectors :options="genderArr"  @change="changeGender" ref="gender"></selectors>
                             </div>
                             <div class="col-md-2 text-right float-left pr-0">出生日期</div>
                             <div class="col-md-4 float-left pr-0">
@@ -170,8 +170,7 @@
                         <div class="example">
                             <div class="col-md-2 text-right float-left">艺人来源</div>
                             <div class="col-md-4 float-left row">
-                                <selectors :options="artistSourceArr" placeholder="请选择艺人来源"
-                                           @change="changeSource" ref="source"></selectors>
+                                <selectors :options="artistSourceArr" @change="changeSource" ref="source"></selectors>
                             </div>
                             <div class="col-md-2 text-right float-left pr-0">邮箱</div>
                             <div class="col-md-4 float-left pr-0">
@@ -258,14 +257,13 @@
                             <div class="col-md-2 text-right float-left">沟通状态</div>
                             <div class="col-md-3 float-left pl-0">
                                 <selectors :options="taiyangCommunicationStatusArr"
-                                           @change="changeCommunicationType" :placeholder="'请选择沟通状态'" ref="communicationType"></selectors>
+                                           @change="changeCommunicationType" ref="communicationType"></selectors>
                             </div>
                         </div>
                         <div class="example">
                             <div class="col-md-2 text-right float-left">与我司签约意向</div>
                             <div class="col-md-5 float-left pl-0">
-                                <selectors :options="yesOrNoArr" :placeholder="'请选择签约意向'"
-                                           @change="changeSignIntention" ref="signIntention"></selectors>
+                                <selectors :options="yesOrNoArr" @change="changeSignIntention" ref="signIntention"></selectors>
                             </div>
                             <div class="col-md-5 float-left pl-0" v-show="signIntention == 2">
                                 <textarea name="" class="form-control" rows="1" placeholder="请填写不签约理由"
@@ -275,8 +273,7 @@
                         <div class="example">
                             <div class="col-md-2 text-right float-left">是否签约其他公司</div>
                             <div class="col-md-5 float-left pl-0">
-                                <selectors :options="yesOrNoArr" :placeholder="'请选择是否签约其他公司'"
-                                           @change="isSignCompany" ref="signCompany"></selectors>
+                                <selectors :options="yesOrNoArr" @change="isSignCompany" ref="signCompany"></selectors>
                             </div>
                             <div class="col-md-5 float-left pl-0" v-if="signCompany == 1">
                                 <input type="text" class="form-control" v-model="sign_contract_other_name" placeholder="请输入已签约公司名称">
@@ -285,8 +282,7 @@
                         <div class="example">
                             <div class="col-md-2 text-right float-left">附件类型</div>
                             <div class="col-md-5 float-left pl-0">
-                                <selectors :options="attachmentTypeArr" :placeholder="'请选择附件类型'"
-                                           @change="changeAttachmentType" ref="attachmentType"></selectors>
+                                <selectors :options="attachmentTypeArr" @change="changeAttachmentType" ref="attachmentType"></selectors>
                             </div>
                         </div>
                         <div class="example" v-show="affixesType>0">

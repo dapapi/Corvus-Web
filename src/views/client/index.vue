@@ -17,16 +17,13 @@
             <div class="panel col-md-12 py-5">
                 <div class="clearfix">
                     <div class="col-md-3 example float-left">
-                        <selectors :options="companiesArr" :placeholder="'请选择公司'"
-                                   @change="changeCompany"></selectors>
+                        <selectors :options="companiesArr" @change="changeCompany"></selectors>
                     </div>
                     <div class="col-md-3 example float-left">
-                        <input-selectors :key="'inputSelect'" :placeholder="'请选择负责人'"
-                                         @change="changePrincipalSelect"></input-selectors>
+                        <selectors :options="userList" @change="changePrincipalSelect" :multiple="true" />
                     </div>
                     <div class="col-md-3 example float-left">
-                        <selectors :options="clientLevelArr" :placeholder="'请选择公司级别'"
-                                   @change="changeClientLevelSelect"></selectors>
+                        <selectors :options="clientLevelArr" @change="changeClientLevelSelect"></selectors>
                     </div>
                     <div class="col-md-3 example float-left">
                         <button type="button" class="btn btn-default waves-effect waves-classic float-right"
@@ -100,8 +97,7 @@
                                 <input type="text" class="form-control" title="" v-model="clientName">
                             </div>
                             <div class="col-md-5 float-left pl-0">
-                                <selectors ref="clientLevel" :options="clientLevelArr" :placeholder="'请选择公司级别'"
-                                           @change="changeClientLevel"></selectors>
+                                <selectors ref="clientLevel" :options="clientLevelArr" @change="changeClientLevel"></selectors>
                             </div>
                         </div>
                         <!-- 暂时隐藏 -->
@@ -133,8 +129,7 @@
                         <div class="example">
                             <div class="col-md-2 text-right float-left">关键决策人</div>
                             <div class="col-md-10 float-left pl-0">
-                                <selectors ref="clientContactType" :options="keyMasterArr" :placeholder="'请选择是否是关键决策人'"
-                                           @change="changeContactClientType"></selectors>
+                                <selectors ref="clientContactType" :options="keyMasterArr" @change="changeContactClientType"></selectors>
                             </div>
                         </div>
                         <div class="example">
@@ -152,8 +147,7 @@
                         <div class="example">
                             <div class="col-md-2 text-right float-left">规模</div>
                             <div class="col-md-10 float-left pl-0">
-                                <selectors ref="clientScale" :options="clientScaleArr" :placeholder="'请选择规模'"
-                                           @change="changeClientScale"></selectors>
+                                <selectors ref="clientScale" :options="clientScaleArr" @change="changeClientScale"></selectors>
                             </div>
                         </div>
                         <div class="example">
@@ -176,6 +170,7 @@
 </template>
 
 <script>
+    import { mapState } from 'vuex'
     import fetch from '../../assets/utils/fetch.js'
     import config from '../../assets/js/config'
     import ImportAndExport from '../../components/ImportAndExport.vue'
@@ -206,10 +201,9 @@
                 clientContactPhone: '',
                 clientContactPosition: '',
                 clientContactType: '', // 是否是关键人
-                // clientDecision: '',
                 clientRemark: '',
-                clientPrincipalSearch: '', // 条件筛选的负责人
-                clientPrincipalIdSearch: '', // 负责人id
+                // clientPrincipalSearch: '', // 条件筛选的负责人
+                clientPrincipalIdSearch: [], // 负责人id
                 clientLevelSearch: '', // 条件筛选的公司级别
                 companyName: '', // 公司名称
                 user: {}, // 个人信息
@@ -230,6 +224,12 @@
             })
         },
 
+        computed: {
+            ...mapState([
+                'userList'
+            ])
+        },
+
         methods: {
             getClients: function (pageNum = 1) {
                 const params = {
@@ -245,11 +245,11 @@
                 if (this.clientLevelSearch) {
                     params.grade = this.clientLevelSearch
                 }
-                if (this.clientPrincipalIdSearch) {
+                if (this.clientPrincipalIdSearch.length > 0) {
                     params.principal_id = this.clientPrincipalIdSearch
                 }
 
-                if (this.companyName || this.clientLevelSearch || this.clientPrincipalIdSearch) {
+                if (this.companyName || this.clientLevelSearch || this.clientPrincipalIdSearch.length > 0) {
                     url = '/clients/filter'
                 }
 
@@ -364,8 +364,7 @@
             },
 
             changePrincipalSelect(value) {
-                this.clientPrincipalSearch = value
-                this.clientPrincipalIdSearch = this.$store.state.newPrincipalInfo.id
+                this.clientPrincipalIdSearch = value
                 this.getClients()
             },
 

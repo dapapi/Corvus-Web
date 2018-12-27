@@ -245,11 +245,6 @@
                                     </div>
                                 </div>
                                 <div class="card-text py-5 clearfix">
-                                    <div class="col-md-1 float-left text-right pl-0">决策关键人/部门</div>
-                                    <div class="col-md-5 float-left font-weight-bold">
-                                        <EditInput :content="clientInfo.keyman"
-                                                   :is-edit="isEdit" @change="changeClientDecision"></EditInput>
-                                    </div>
                                     <div class="col-md-1 float-left text-right pl-0">负责人</div>
                                     <div class="col-md-5 float-left font-weight-bold">
 
@@ -426,7 +421,7 @@
                         <div class="example">
                             <div class="col-md-2 text-right float-left">关键决策人</div>
                             <div class="col-md-10 float-left">
-                                <selectors ref="contact" :options="keyMasterArr" :value="editConfig.type" :placeholder="'请选择是否是关键决策人'"
+                                <selectors ref="contact" :options="keyMasterArr" :value="editConfig.type"
                                     @change="changeContactClientType"></selectors>
                             </div>
                         </div>
@@ -632,12 +627,6 @@
                 }
                 this.changeInfo.grade = newValue
             },
-            'clientInfo.keyman': function (newValue, oldValue) {
-                if (oldValue === undefined) {
-                    return
-                }
-                this.changeInfo.keyman = newValue
-            },
             'clientInfo.size': function (newValue, oldValue) {
                 if (oldValue === undefined) {
                     return
@@ -796,10 +785,6 @@
 
             changeClientLevel: function (value) {
                 this.clientInfo.grade = value
-            },
-
-            changeClientDecision: function (value) {
-                this.clientInfo.keyman = value
             },
 
             changeClientScale: function (value) {

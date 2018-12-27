@@ -8,7 +8,7 @@
                <div class="panel col-md-12 clearfix p-10 mt-0">
                 <!-- <div class="clearfix"> -->
                 <div class="col-md-3 example float-left " >
-                        <Selectors :placeholder="'太阳系'" :options="data"></Selectors>
+                        <Selectors :options="data"></Selectors>
                 </div>
                  <div class="col-md-3 example float-left" >
                          <datepicker :placeholder="'开始时间'"></datepicker>

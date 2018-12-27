@@ -15,13 +15,11 @@
                     </div>
                     <div class="col-md-3 example float-left">
                         <selectors @change="(value) => getFilterProjects(1, 'status', value)"
-                                   :options="projectStatusArr"
-                                   :placeholder="'请选择项目状态'"></selectors>
+                                   :options="projectStatusArr"></selectors>
                     </div>
                     <div class="col-md-3 example float-left" v-if="allUsers.length > 0">
                         <selectors @change="(value) => getFilterProjects(1, 'principal', value)"
-                                   :options="allUsers" multiple="true"
-                                   :placeholder="'请选择项目负责人'"></selectors>
+                                   :options="allUsers" multiple="true"></selectors>
                     </div>
                     <div class="col-md-3 example float-left">
                         <button type="button" class="btn btn-default waves-effect waves-classic float-right"

@@ -64,7 +64,7 @@
                 this.setValue(this.default.values.data.value)
             }
             if(this.getValue()){
-                this.$emit('change',this.getValue())                
+                this.$emit('change', this.getValue())                
             }
         },
         watch: {

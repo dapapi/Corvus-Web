@@ -16,15 +16,11 @@
                                placeholder="请输入任务名称">
                     </div>
                     <div class="col-md-3 example float-left">
-                        <Selectors :options="taskTypeArr"
-                                   @change="changeTaskTypeSearch"
-                                   :placeholder="'请选择任务类型'"></Selectors>
+                        <Selectors :options="taskTypeArr" @change="changeTaskTypeSearch"></Selectors>
                     </div>
                     <!-- todo 任务类型暂无 -->
                     <div class="col-md-3 example float-left">
-                        <Selectors :options="taskStatusArr"
-                                   @change="changeTaskStatusSearch"
-                                   :placeholder="'请选择任务状态'"></Selectors>
+                        <Selectors :options="taskStatusArr" @change="changeTaskStatusSearch"></Selectors>
                     </div>
                     <div class="col-md-3 example float-left">
                         <button type="button"
@@ -99,14 +95,28 @@
                                 <th class="cell-300" scope="col">截止时间</th>
                             </tr>
                             <tbody>
-                            <tr v-for="task in tasksInfo">
+                            <tr v-for="(task, index) in tasksInfo" :key="index">
                                 <td class="pointer-content">
                                     <router-link :to="{name:'tasks/detail', params: {id: task.id}}">{{ task.title }}
                                     </router-link>
                                 </td>
-                                <td>{{task.resource ? task.resource.data.resource.data.title : ''}}</td>
+                                <td>{{task.resource ? task.resource.data.resource.data.title : ''}}
+                                    <template v-if="task.resource && task.resource.data.resourceable && task.resource.data.resourceable.data.name">
+                                        -  {{ task.resource.data.resourceable.data.name }}
+                                    </template>
+                                    <template v-if="task.resource && task.resource.data.resourceable && task.resource.data.resourceable.data.nickname">
+                                        -  {{ task.resource.data.resourceable.data.nickname }}
+                                    </template>
+                                    <template v-if="task.resource && task.resource.data.resourceable && task.resource.data.resourceable.data.title">
+                                        - {{ task.resource.data.resourceable.data.title }}
+                                    </template>
+                                    <template v-if="task.resource && task.resource.data.resourceable && task.resource.data.resourceable.data.company">
+                                        - {{ task.resource.data.resourceable.data.company }}
+                                    </template>
+                                </td>
                                 <!-- <td>暂无</td> -->
-                                <td>{{ task.type ? task.type.data ? task.type.data.title : '' : '' }}</td>
+                                <td>{{ task.type ? task.type.data ? task.type.data.title : '' : '' }}
+                                </td>
                                 <td>
                                     <template v-if="task.status === 1"><span style="color:#FF9800">进行中</span></template>
                                     <template v-if="task.status === 2"><span style="color:#4CAF50">已完成</span></template>
@@ -179,7 +189,7 @@
                         <div class="example">
                             <div class="col-md-2 text-right float-left">任务类型</div>
                             <div class="col-md-10 float-left pl-0">
-                                <Selectors :options="taskTypeArr" :placeholder="'请选择任务类型'" ref="taskType"
+                                <Selectors :options="taskTypeArr" ref="taskType"
                                            @change="changeTaskType"></Selectors>
                             </div>
                         </div>
@@ -206,7 +216,6 @@
                             <div class="col-md-10 float-left pl-0">
                                 <Selectors
                                         :options="taskLevelArr"
-                                        :placeholder="'请选择任务优先级'"
                                         @change="changeTaskLevel"
                                         ref="taskLevel"
                                 ></Selectors>
@@ -268,7 +277,6 @@
                 total: 0,
                 current_page: 1,
                 total_pages: 1,
-                memberPlaceholder: "请选择负责人",
                 participants: [],
                 multiple: false,
                 taskIntroduce: "",
@@ -327,7 +335,6 @@
                     params.keyword = this.taskNameSearch;
                 }
                 if (this.taskStatusSearch) {
-                    console.log(this.taskStatusSearch)
                     params.status = this.taskStatusSearch;
                 }
                 if (this.taskTypeSearch) {

@@ -146,7 +146,7 @@
                         <div class="example">
                             <div class="col-md-2 text-right float-left">日历</div>
                             <div class="col-md-10 float-left pl-0">
-                                <selectors :placeholder="'请选择日历'"></selectors>
+                                <selectors></selectors>
                             </div>
                         </div>
                         <div class="example">
@@ -196,19 +196,19 @@
                             <div class="pt-10 mb-20 clearfix">
                                 <div class="col-md-2 text-right float-left">会议室</div>
                                 <div class="col-md-10 float-left pl-0">
-                                    <selectors :options="meetingRomeArr" :placeholder="'请选择会议室'"></selectors>
+                                    <selectors :options="meetingRomeArr"></selectors>
                                 </div>
                             </div>
                             <div class="example">
                                 <div class="col-md-2 text-right float-left">提醒</div>
                                 <div class="col-md-10 float-left pl-0">
-                                    <selectors :options="remindArr" :placeholder="''"></selectors>
+                                    <selectors :options="remindArr" ></selectors>
                                 </div>
                             </div>
                             <div class="example">
                                 <div class="col-md-2 text-right float-left">重复</div>
                                 <div class="col-md-10 float-left pl-0">
-                                    <selectors :options="repeatArr" :placeholder="''"></selectors>
+                                    <selectors :options="repeatArr" ></selectors>
                                 </div>
                             </div>
                             <div class="example">
