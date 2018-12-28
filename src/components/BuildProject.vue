@@ -198,7 +198,6 @@
                 projectFields: [],
                 approver: [],
                 newArray: [],
-                isShow: false,
             }
         },
         watch: {
@@ -216,6 +215,7 @@
 
         },
         created() {
+            this.getTrail()
             this.getStars();
             this.getBloggers()
         },
@@ -238,6 +238,7 @@
                     })
                 })
             }
+        
         },
         methods: {
             getBloggers() {
@@ -272,6 +273,10 @@
                 this.projectBaseInfo = {trail: {}, notice: []};
                 this.$store.dispatch('changePrincipal', {data: {}});
                 this.$store.dispatch('changePrincipal', {type: 'selector', data: {}});
+                // this.$store.dispatch('changeParticipantsInfo', );
+
+                // this.$store.dispatch('newParticipantsInfo', {type: 'selector', data: {}});
+                // this.$store.dispatch('newParticipantsInfo', []);
                 this.projectFields = [];
             },
             setDefaultValue() {
