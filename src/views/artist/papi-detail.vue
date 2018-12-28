@@ -9,11 +9,11 @@
                 <div class="dropdown-menu dropdown-menu-right task-dropdown-item" aria-labelledby="taskDropdown"
                      role="menu" x-placement="bottom-end">
                     <a class="dropdown-item" role="menuitem" >分配制作人</a>
-                    <a class="dropdown-item" role="menuitem" data-toggle="modal" data-target="#addPrivacy">隐私设置</a>
-                    <a class="dropdown-item" role="menuitem" data-toggle="modal" data-target="#addPrivacy">
-                        <template v-if="artistInfo.sign_contract_status == 1">签约</template>
-                        <template v-if="artistInfo.sign_contract_status == 2">解约</template>
-                    </a>
+                    <!--<a class="dropdown-item" role="menuitem" data-toggle="modal" data-target="#addPrivacy">隐私设置</a>-->
+                    <!--<a class="dropdown-item" role="menuitem" data-toggle="modal" data-target="#addPrivacy">-->
+                        <!--<template v-if="artistInfo.sign_contract_status == 1">签约</template>-->
+                        <!--<template v-if="artistInfo.sign_contract_status == 2">解约</template>-->
+                    <!--</a>-->
                 </div>
             </div>
         </div>
@@ -58,10 +58,10 @@
                         </div>
                         </div>
                     </div>
-                </div>  
+                </div>
                 <div class="clearfix">
                     <div class="col-md-6 float-left pl-1 mb-20 pr-1" style="border-right: 1px solid #eee" >
-                        <div class="col-md-6"><i class="iconfont icon-iconset0399"></i> 任务</div>
+                        <div class="col-md-6"><i class="iconfont icon-iconset0399 pr-2"></i> 任务</div>
                         <div class="clearfix example taskshow" v-for="(task,index) in tasksInfo" :key="index" @click="JumpDetails(task.id)">
                             <div class="col-md-3 float-left">{{task.title}}</div>
                             <div class="col-md-2 float-left">{{task.principal.data.name}}</div>
@@ -75,8 +75,8 @@
                         </div>
                     </div>
                     <div class="col-md-6 float-left pl-0 mb-20" >
-                        <div class="col-md-12" v-if="artistInfo.sign_contract_status == 2">                    
-                            <div class="col-md-12"><i class="iconfont icon-ego-box"></i>项目</div>
+                        <div class="col-md-12" v-if="artistInfo.sign_contract_status == 2">
+                            <div class="col-md-12"><i class="iconfont icon-ego-box pr-2"></i>项目</div>
                             <div class="clearfix example projectshow" v-for="(item,index) in ProjectsInfo" :key="index" @click="projectDetails(item.id)">
                                 <div class="col-md-3 float-left">{{item.title}}</div>
                                 <div class="col-md-2 float-left">{{item.principal.data.name}}</div>
@@ -88,19 +88,19 @@
                                 </div>
                             </div>
                         </div>
-                       <div class="col-md-6" v-show="artistInfo.sign_contract_status == 1">                    
+                       <div class="col-md-6" v-show="artistInfo.sign_contract_status == 1">
                             <div class="clearfix">
                                 <div class="col-md-6 float-left"><span>沟通状态</span></div>
                                 <div class="col-md-6 float-left font-weight-bold "  v-if="artistInfo.communication_status">
                                     <template >
                                             {{ papiCommunicationStatusArr.find(item => item.value ==
                                             artistInfo.communication_status).name}}
-                                    </template>  
+                                    </template>
                                 </div>
                             </div>
                             <div class="clearfix example ">
                                 <div class="col-md-6 float-left"><span>平台</span></div>
-                                <div class="col-md-6 float-left font-weight-bold " v-if="artistInfo.platform">   
+                                <div class="col-md-6 float-left font-weight-bold " v-if="artistInfo.platform">
                                             <template v-if="artistInfo.platform==1">
                                                     微博
                                             </template>
@@ -109,12 +109,12 @@
                                             </template>
                                             <template v-else-if="artistInfo.platform==3">
                                                     小红书
-                                            </template> 
+                                            </template>
                                             <template v-else>
                                                 微博,抖音,小红书
-                                            </template>                
+                                            </template>
                                 </div>
-                            </div> 
+                            </div>
                             <div class="clearfix example " >
                                 <div class="col-md-6 float-left" >
                                     <template v-if="artistInfo.platform==1">
@@ -125,10 +125,10 @@
                                     </template>
                                     <template v-else-if="artistInfo.platform==3">
                                             小红书地址
-                                    </template> 
+                                    </template>
                                     <template v-else>
                                             微博,抖音,小红书地址
-                                    </template> 
+                                    </template>
                                 </div>
                                 <div class="col-md-6 float-left font-weight-bold ">
                                     <template v-if="artistInfo.platform==1">
@@ -139,12 +139,12 @@
                                     </template>
                                     <template v-else-if="artistInfo.platform==3">
                                             {{artistInfo.xiaohongshu_url}}
-                                    </template> 
+                                    </template>
                                     <template v-else>
                                             {{artistInfo.weibo_url}}
                                             {{artistInfo.douyin_id}}
                                             {{artistInfo.xiaohongshu_url}}
-                                    </template> 
+                                    </template>
                                 </div>
                             </div>
                         </div>
@@ -186,11 +186,11 @@
                                aria-controls="forum-present"
                                aria-expanded="false" role="tab" >作品库</a>
                         </li>
-                        <li class="nav-item" role="presentation" v-show="artistInfo.sign_contract_status == 2">
-                            <a class="nav-link" data-toggle="tab" href="#forum-artist-fans"
-                               aria-controls="forum-present"
-                               aria-expanded="false" role="tab" >粉丝数据</a>
-                        </li>
+                        <!--<li class="nav-item" role="presentation" v-show="artistInfo.sign_contract_status == 2">-->
+                            <!--<a class="nav-link" data-toggle="tab" href="#forum-artist-fans"-->
+                               <!--aria-controls="forum-present"-->
+                               <!--aria-expanded="false" role="tab" >粉丝数据</a>-->
+                        <!--</li>-->
                         <li class="nav-item" role="presentation" v-show="artistInfo.sign_contract_status == 2">
                             <a class="nav-link" data-toggle="tab" href="#forum-artist-bill"
                                aria-controls="forum-present"
@@ -228,7 +228,7 @@
                                     <td>{{item.principal.data.name}}</td>
                                     <td>{{item.company}}</td>
                                     <td>{{item.created_at}}</td>
-                                    <td>{{item.relate_project_bills_resource}}</td>
+                                    <td v-for="(v,index) in item.relate_project_bills_resource.data" :key="index">{{v.bigger_divide}}</td>
                                 </tr>
                             </table>
                             <div class="col-md-1" style="margin: 6rem auto" v-if="ProjectsInfo.length === 0">
@@ -351,7 +351,7 @@
                                         <template v-if="filterFee === 1">全部</template>
                                         <template v-if="filterFee === 2">成本</template>
                                         <template v-if="filterFee === 3">收入</template>
-                                        <i class="iconfont icon-gengduo1 pl-2" aria-hidden="true"
+                                        <i class="iconfont icon-plus-select-down pl-2" aria-hidden="true"
                                            id="projectDropdown" data-toggle="dropdown" aria-expanded="false"></i>
                                         <div class="dropdown-menu" aria-labelledby="projectDropdown" role="menu">
                                             <a class="dropdown-item" role="menuitem" v-show="filterFee !== 1"
@@ -447,7 +447,7 @@
                                                             @change="changReason" ></EditInput>
                                                 </div>
                                             </div>
-                                           
+
                                         </div>
 
                                         <div class="card-text py-10 px-0 clearfix col-md-6 float-left edit-height">
@@ -466,8 +466,8 @@
                                                             @change="changSigningCompany" ></EditInput>
                                                 </div>
                                             </div>
-                                            
-                                        </div> 
+
+                                        </div>
                                         <div class="card-text py-10 px-0 clearfix col-md-6 float-left edit-height">
                                             <div class="col-md-2 float-left text-right pl-0">社交平台</div>
                                             <div class="col-md-10 float-left font-weight-bold">
@@ -556,7 +556,7 @@
                                     <div class="card-text py-5 clearfix">
                                         <div class="col-md-1 float-left text-right pl-0">录入人</div>
                                         <div class="col-md-5 float-left font-weight-bold">
-                                            {{artistInfo.name}}
+                                            {{principalName}}
                                         </div>
                                         <div class="col-md-1 float-left text-right pl-0">录入时间</div>
                                         <div class="col-md-5 float-left font-weight-bold">
@@ -566,7 +566,7 @@
                                     <div class="card-text py-5 clearfix">
                                         <div class="col-md-1 float-left text-right pl-0">最近更新人</div>
                                         <div class="col-md-5 float-left font-weight-bold">
-                                            {{artistInfo.name}}
+                                            {{principalName}}
                                         </div>
                                         <div class="col-md-1 float-left text-right pl-0">最近更新时间</div>
                                         <div class="col-md-5 float-left font-weight-bold">
@@ -613,7 +613,7 @@
                         <div class="example">
                             <div class="col-md-2 text-right float-left">关联资源</div>
                             <div class="col-md-10 float-left">
-                                博主 - {{ artistInfo.name }}
+                                博主 - {{ artistInfo.nickname}}
                             </div>
                         </div>
                         <div class="example">
@@ -812,6 +812,7 @@
                 artistTypeArr:'',
                 trueOrFalse: config.trueOrFalse,
                 artistSocialPlatform: config.artistSocialPlatform,
+                petName:'',//昵称
                 updateStar_weibo_infos:{},//修改微博
                 updateStar_douyin_infos:{},//修改抖音
                 updateStar_xiaohongshu_infos:{},//修改小红书
@@ -834,7 +835,8 @@
                 filterFee:1,
                 platformArr:config.platformArr,
                 selectedCalendar:[],
-                selectedDate:''
+                selectedDate:'',
+                Namevalue:''
             }
         },
         computed: {
@@ -846,7 +848,7 @@
             this.getArtist()
         },
         mounted() {
-            this.getTaskDate();  
+            this.getTaskDate();
             this.charts();
             let _this = this;
             this.user = JSON.parse(Cookies.get('user'))
@@ -854,6 +856,7 @@
                 name: this.user.nickname,
                 id: this.user.id
             })
+            this.principalName = this.user.nickname;
             //  清空任务
             $('#addTask').on('hidden.bs.modal', function () {
                 _this.$refs.mold.setValue('');//类型
@@ -867,8 +870,8 @@
                 _this.taskName = '';
                 _this.startMinutes = '00:00';
                 _this.endMinutes = '00:00';
-                
-         
+
+
             })
             //  清空视频
             $('#addWork').on('hidden.bs.modal', function () {
@@ -985,19 +988,19 @@
                     }
                      //项目
                      if(response.data.trails){
-                        for (let i = 0; i < response.data.trails.data.length; i++) {                                       
-                            if (response.data.trails.data[i].project.data) {                       
-                                response.data.trails.data[i].project.data.company = response.data.trails.data[i].client.data.company                        
+                        for (let i = 0; i < response.data.trails.data.length; i++) {
+                            if (response.data.trails.data[i].project.data) {
+                                response.data.trails.data[i].project.data.company = response.data.trails.data[i].client.data.company
                                 _this.ProjectsInfo.push(response.data.trails.data[i].project.data)
                             }
                         }
                      }
-                    
+
                     //孵化期时间 
                     if(_this.artistInfo.hatch_star_at&&_this.artistInfo.hatch_end_at){
-                        
+
                         _this.Incubationperiod = _this.artistInfo.hatch_star_at+'|'+_this.artistInfo.hatch_end_at
-                    }   
+                    }
                     //状态转换
                     if(_this.artistInfo.intention==false){
                         _this.updateType=2
@@ -1028,17 +1031,17 @@
                 //     _this.principalId = response.data.id 
                 //     _this.principalName = response.data.name
                 // })
-                 fetch('get','/bloggers/select?include=users').then(function(response){ 
+                 fetch('get','/bloggers/select?include=users').then(function(response){
                     response.data.forEach(item=>{
                          _this.principalIds.push(item.users.data.id)
-                        
+
                     })
 
                 })
-               
+
             },
-           
-          
+
+
             //作品
             getTaskDate:function(){
                 let _this = this;
@@ -1048,10 +1051,10 @@
                         let time=new Date(item.release_time)
                         let Y = time.getFullYear() + '-';
                         let M = (time.getMonth()+1 < 10 ? '0'+(time.getMonth()+1) : time.getMonth()+1) + '-';
-                        let D = time.getDate() + ' '; 
+                        let D = time.getDate() + ' ';
                         item.release_time=Y+M+D
                     })
-                    
+
                 });
             },
             getArtistTasks: function () {
@@ -1061,7 +1064,7 @@
                 })
             },
 
-         
+
             addPrivacy: function () {
                 $('#addPrivacy').modal('hide')
                 this.$store.state.collectInfo = []
@@ -1079,8 +1082,10 @@
             },
 
             cancelEdit: function () {
+                this.getArtist()
                 this.isEdit = false;
                 this.isStatrtEdit = true
+                
             },
             //类型
             changArtistType: function (value) {
@@ -1134,7 +1139,7 @@
                     }else{
                         this.updateSign_contract_other=false
                     }
-                let data = { 
+                let data = {
                     nickname:this.artistInfo.name,
                     type_id:this.artistInfo.type.data.id,
                     communication_status:this.artistInfo.communication_status,
@@ -1145,10 +1150,10 @@
                     star_weibo_infos: this.updateStar_weibo_infos,
                     star_xiaohongshu_infos: this.updateStar_xiaohongshu_infos,
                     platform: this.updatePlatform,
-                    level: this.artistInfo.level,
-                    cooperation_demand: this.updatedemand,
-                    hatch_star_at: _this.artistInfo.hatch_star_at,
-                    hatch_end_at: _this.artistInfo.hatch_end_at,
+                    // level: this.artistInfo.level,
+                    // cooperation_demand: this.updatedemand,
+                    // hatch_star_at: _this.artistInfo.hatch_star_at,
+                    // hatch_end_at: _this.artistInfo.hatch_end_at,
                     intention_desc:_this.artistInfo.intention_desc,
                     sign_contract_other_name:_this.artistInfo.sign_contract_other_name
                 }
@@ -1206,8 +1211,7 @@
                     _this.getArtist()
 
                 })
-                this.user = JSON.parse(Cookies.get('user'))
-                this.principalName = this.user.nickname;
+               
                 let obj={
                     title:'制作人视频评分-视频评分',
                     principal_id:this.user.id,
@@ -1252,7 +1256,7 @@
                         start_minute=start_minute;
                     }
                     let start_second=time.getSeconds();
-                    
+
                     end_second=(60-start_second)*1000
                     if(start_minute<10){
                         start_minute="0"+start_minute;
@@ -1261,11 +1265,11 @@
                      if(time.getDay()<=5){
                         end_date = (5-time.getDay())*60*60*1000*24
                         end_timeStamp = time.getTime()+end_date+end_hour+end_minute+end_second
-                        
+
                     }else if(time.getDay()>5){
                         end_date = (7-time.getDay()+5)*60*60*1000*24
                         end_timeStamp = time.getTime()+end_date+end_hour+end_minute+end_second
-                       
+
                     }
                     let end = new Date(end_timeStamp)
                     let Y = end.getFullYear() + '-';
@@ -1385,7 +1389,7 @@
             ,
             //昵称
             changArtistName: function (value) {
-                this.artistInfo.name = value
+                this.Namevalue = value
             }
             ,
 
@@ -1447,6 +1451,7 @@
             ,
             //合作需求
             changeArtistDemand: function (value) {
+             
                 this.updatedemand = value
             }
             ,
@@ -1461,9 +1466,9 @@
               let price = value;
               let str=/[a-zA-Z0-9][-a-zA-Z0-9]{0,62}(\.[a-zA-Z0-9][-a-zA-Z0-9]{0,62})+\.?///网址是否合法检测
               let regex = /(https?:\/\/)?(\w+\.?)+(\/[a-zA-Z0-9\?%=_\-\+\/]+)?/gi//http,https有无检测
-              var re=new RegExp(str); 
-                
-                if (!re.test(value)) { 
+              var re=new RegExp(str);
+
+                if (!re.test(value)) {
                      alert('您的网址不正确')
                 }else{
                    value = value.replace(regex, function (match, capture) {
@@ -1475,9 +1480,9 @@
                          window.open('http://' + match)
                     }
                    })
-                  
-                } 
-                
+
+                }
+
             },
             JumpDetails(id){
                 this.$router.push({path: '/tasks/' + id})

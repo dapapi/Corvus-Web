@@ -62,8 +62,8 @@
                         </div>
                     </div>
                 </div>
-                <div class="clearfix ml-10" style="border-top:1px solid #eee">
-                    <div class="col-md-6 float-left pl-0 mb-20 pt-30" style="border-right: 1px solid #eee">
+                <div class="clearfix ml-10">
+                    <div v-if="artistTasksInfo.length>0" class="col-md-6 float-left pl-0 mb-20">
                         <div class="col-md-6"><i class="iconfont icon-iconset0399"></i> 任务</div>
                         <div class="clearfix example" v-for="(item,index) in artistTasksInfo" :key="index"
                              @click="toTask(item.id)" style="cursor: pointer;">
@@ -79,7 +79,7 @@
                             </div>
                         </div>
                     </div>
-                    <div class="col-md-6 float-left pl-20 mb-20 pt-30">
+                    <div v-if="threeProjectList.length>0" class="col-md-6 float-left pl-20 mb-20">
                         <div class="col-md-6"><i class="iconfont icon-ego-box"></i>项目</div>
                         <div class="clearfix example" v-for="(item,index) in artistProjectsInfo" :key="index"
                              style="cursor: pointer">
@@ -89,9 +89,13 @@
                             <div class="col-md-3 float-left">{{item.principal.data.name}}</div>
                             <div class="col-md-3 float-left">{{item.end_at}}</div>
                             <div class="col-md-3 float-left">
-                                <template v-if="item.status === 1">进行中</template>
+                                <!-- <template v-if="item.status === 1">进行中</template>
                                 <template v-if="item.status === 2">已完成</template>
-                                <template v-if="item.status === 3">已停止</template>
+                                <template v-if="item.status === 3">已停止</template> -->
+                                <template v-if="item.relate_project_bills_resource">
+                                    {{item.relate_project_bills_resource}}
+                                </template>
+                                <template>0</template>
                             </div>
                         </div>
                     </div>
@@ -132,11 +136,11 @@
                                aria-controls="forum-present"
                                aria-expanded="false" role="tab">作品库</a>
                         </li>
-                        <li class="nav-item" role="presentation" v-show="artistInfo.sign_contract_status == 2">
-                            <a class="nav-link" data-toggle="tab" href="#forum-artist-fans"
-                               aria-controls="forum-present"
-                               aria-expanded="false" role="tab">粉丝数据</a>
-                        </li>
+                        <!--<li class="nav-item" role="presentation" v-show="artistInfo.sign_contract_status == 2">-->
+                            <!--<a class="nav-link" data-toggle="tab" href="#forum-artist-fans"-->
+                               <!--aria-controls="forum-present"-->
+                               <!--aria-expanded="false" role="tab">粉丝数据</a>-->
+                        <!--</li>-->
                         <li class="nav-item" role="presentation" @click="getArtistsBill"
                             v-show="artistInfo.sign_contract_status == 2">
                             <a class="nav-link" data-toggle="tab" href="#forum-artist-bill"
@@ -168,26 +172,31 @@
                                 <tr class="animation-fade"
                                     style="animation-fill-mode: backwards; animation-duration: 250ms; animation-delay: 0ms;">
                                     <th class="cell-300" scope="col">项目名称</th>
-                                    <th class="cell-300" scope="col">艺人分成</th>
                                     <th class="cell-300" scope="col">负责人</th>
                                     <th class="cell-300" scope="col">关联公司</th>
                                     <th class="cell-300" scope="col">录入日期</th>
+                                    <th class="cell-300" scope="col">艺人分成</th>
                                 </tr>
                                 <tr v-for="(item,index) in artistProjectsInfo" :key="index" @click="toProject(item.id)" style="cursor: pointer;">
                                     <td>
                                         {{item.title}}
                                     </td>
+                                    
+                                    <td>{{item.principal.data.name}}</td>
+                                    <td>{{item.company}}</td>
+                                    <td>{{item.created_at}}</td>
                                     <td>
-                                        <template v-if="item.status === 1"><span style="color:#FF9800">进行中</span>
+                                        <template v-if="item.relate_project_bills_resource">
+                                            {{item.relate_project_bills_resource}}
+                                        </template>
+                                        <template>0</template>
+                                        <!-- <template v-if="item.status === 1"><span style="color:#FF9800">进行中</span>
                                         </template>
                                         <template v-if="item.status === 2"><span style="color:#4CAF50">已完成</span>
                                         </template>
                                         <template v-if="item.status === 3"><span style="color:#9E9E9E">撤单</span>
-                                        </template>
+                                        </template> -->
                                     </td>
-                                    <td>{{item.principal.data.name}}</td>
-                                    <td>{{item.company}}</td>
-                                    <td>{{item.created_at}}</td>
                                 </tr>
                             </table>
                             <div class="col-md-1" style="margin: 6rem auto" v-if="artistProjectsInfo.length === 0">
@@ -294,8 +303,8 @@
                              role="tabpanel">
                             <div class="clearfix my-10">
                                 <div class="float-left my-10 ml-10">
-                                    <div class="float-left pr-40">收款金额 <span class="money-color">10000元</span></div>
-                                    <div class="float-left pr-40">付款金额 <span class="money-color">1000元0</span></div>
+                                    <div class="float-left pr-40">收款金额 <span class="money-color">{{incomesum}}元</span></div>
+                                    <div class="float-left pr-40">付款金额 <span class="money-color">{{expendituresum}}元</span></div>
                                 </div>
                             </div>
                             <table class="table table-hover" data-child="tr">
@@ -305,15 +314,15 @@
                                         <template v-if="filterFee === 1">全部</template>
                                         <template v-if="filterFee === 2">成本</template>
                                         <template v-if="filterFee === 3">收入</template>
-                                        <i class="iconfont icon-gengduo1 pl-2" aria-hidden="true"
+                                        <i class="iconfont icon-plus-select-down pl-2" aria-hidden="true"
                                            id="projectDropdown" data-toggle="dropdown" aria-expanded="false"></i>
                                         <div class="dropdown-menu" aria-labelledby="projectDropdown" role="menu">
                                             <a class="dropdown-item" role="menuitem" v-show="filterFee !== 1"
-                                               @click="filterProjectFee(1)">全部</a>
+                                               @click="getArtistsBill(1,0)">全部</a>
                                             <a class="dropdown-item" role="menuitem" v-show="filterFee !== 2"
-                                               @click="filterProjectFee(2)">成本</a>
+                                               @click="getArtistsBill(1,2)">成本</a>
                                             <a class="dropdown-item" role="menuitem" v-show="filterFee !== 3"
-                                               @click="filterProjectFee(3)">收入</a>
+                                               @click="getArtistsBill(1,1)">收入</a>
                                         </div>
                                     </th>
                                     <th class="cell-300" scope="col">项目名称</th>
@@ -360,8 +369,7 @@
                                         <div class="card-text py-10 px-0 clearfix col-md-6 float-left edit-height">
                                             <div class="col-md-2 float-left text-right pl-0">姓名</div>
                                             <div class="col-md-10 float-left font-weight-bold">
-                                                <span v-show="!isEdit">{{artistInfo.name}}</span>
-                                                <EditInput v-show="isEdit" :content="artistInfo.name" :is-edit="isEdit"
+                                                <EditInput :content="artistInfo.name" :is-edit="isEdit"
                                                            @change="(value) => changeArtistBaseInfo(value, 'name')"></EditInput>
                                             </div>
                                         </div>
@@ -421,40 +429,35 @@
                                         <div class="card-text py-10 px-0 clearfix col-md-6 float-left edit-height">
                                             <div class="col-md-2 float-left text-right pl-0">星探</div>
                                             <div class="col-md-10 float-left font-weight-bold">
-                                                <span v-show="!isEdit">{{artistInfo.artist_scout_name}}</span>
-                                                <EditInput v-show="isEdit" :content="artistInfo.artist_scout_name" :is-edit="isEdit"
+                                                <EditInput :content="artistInfo.artist_scout_name" :is-edit="isEdit"
                                                            @change="(value) => changeArtistBaseInfo(value, 'artist_scout_name')"></EditInput>
                                             </div>
                                         </div>
                                         <div class="card-text py-10 px-0 clearfix col-md-6 float-left edit-height">
                                             <div class="col-md-2 float-left text-right pl-0">地区</div>
                                             <div class="col-md-10 float-left font-weight-bold">
-                                                <span v-show="!isEdit">{{artistInfo.star_location}}</span>
-                                                <EditInput v-show="isEdit" :content="artistInfo.star_location" :is-edit="isEdit"
+                                                <EditInput  :content="artistInfo.star_location" :is-edit="isEdit"
                                                            @change="(value) => changeArtistBaseInfo(value, 'star_location')"></EditInput>
                                             </div>
                                         </div>
                                         <div class="card-text py-10 px-0 clearfix col-md-6 float-left edit-height">
                                             <div class="col-md-2 float-left text-right pl-0">手机号</div>
                                             <div class="col-md-10 float-left font-weight-bold">
-                                                <span v-show="!isEdit">{{artistInfo.phone}}</span>
-                                                <EditInput v-show="isEdit" :content="artistInfo.phone" :is-edit="isEdit"
+                                                <EditInput :content="artistInfo.phone" :is-edit="isEdit"
                                                            @change="(value) => changeArtistBaseInfo(value, 'phone')"></EditInput>
                                             </div>
                                         </div>
                                         <div class="card-text py-10 px-0 clearfix col-md-6 float-left edit-height">
                                             <div class="col-md-2 float-left text-right pl-0">微信</div>
                                             <div class="col-md-10 float-left font-weight-bold">
-                                                <span v-show="!isEdit">{{artistInfo.wechat}}</span>
-                                                <EditInput v-show="isEdit" :content="artistInfo.wechat" :is-edit="isEdit"
+                                                <EditInput  :content="artistInfo.wechat" :is-edit="isEdit"
                                                            @change="(value) => changeArtistBaseInfo(value, 'wechat')"></EditInput>
                                             </div>
                                         </div>
                                         <div class="card-text py-10 px-0 clearfix col-md-6 float-left edit-height">
                                             <div class="col-md-2 float-left text-right pl-0">邮箱</div>
                                             <div class="col-md-10 float-left font-weight-bold">
-                                                <span v-show="!isEdit">{{artistInfo.email}}</span>
-                                                <EditInput v-show="isEdit" :content="artistInfo.email" :is-edit="isEdit"
+                                                <EditInput :content="artistInfo.email" :is-edit="isEdit"
                                                            @change="(value) => changeArtistBaseInfo(value, 'email')"></EditInput>
                                             </div>
                                         </div>
@@ -470,32 +473,28 @@
                                         <div class="card-text py-10 px-0 clearfix col-md-6 float-left edit-height">
                                             <div class="col-md-2 float-left text-right pl-0">微博主页地址</div>
                                             <div class="col-md-10 float-left font-weight-bold">
-                                                <span v-show="!isEdit">{{artistInfo.weibo_url}}</span>
-                                                <EditInput v-show="isEdit" :content="artistInfo.weibo_url" :is-edit="isEdit"
+                                                <EditInput :content="artistInfo.weibo_url" :is-edit="isEdit"
                                                            @change="(value) => changeArtistBaseInfo(value, 'weibo_url')"></EditInput>
                                             </div>
                                         </div>
                                         <div class="card-text py-10 px-0 clearfix col-md-6 float-left edit-height">
                                             <div class="col-md-2 float-left text-right pl-0">微博粉丝数</div>
                                             <div class="col-md-10 float-left font-weight-bold">
-                                                <span v-show="!isEdit">{{artistInfo.weibo_fans_num}}</span>
-                                                <EditInput v-show="isEdit" :content="artistInfo.weibo_fans_num" :is-edit="isEdit"
+                                                <EditInput :content="artistInfo.weibo_fans_num" :is-edit="isEdit"
                                                            @change="(value) => changeArtistBaseInfo(value, 'weibo_fans_num')"></EditInput>
                                             </div>
                                         </div>
                                         <div class="card-text py-10 px-0 clearfix col-md-6 float-left edit-height">
                                             <div class="col-md-2 float-left text-right pl-0">抖音Id</div>
                                             <div class="col-md-10 float-left font-weight-bold">
-                                                <span v-show="!isEdit">{{artistInfo.douyin_id}}</span>
-                                                <EditInput v-show="isEdit" :content="artistInfo.douyin_id" :is-edit="isEdit"
+                                                <EditInput :content="artistInfo.douyin_id" :is-edit="isEdit"
                                                            @change="(value) => changeArtistBaseInfo(value, 'douyin_id')"></EditInput>
                                             </div>
                                         </div>
                                         <div class="card-text py-10 px-0 clearfix col-md-6 float-left edit-height">
                                             <div class="col-md-2 float-left text-right pl-0">抖音粉丝数</div>
                                             <div class="col-md-10 float-left font-weight-bold">
-                                                <span v-show="!isEdit">{{artistInfo.douyin_fans_num}}</span>
-                                                <EditInput v-show="isEdit" :content="artistInfo.douyin_fans_num" :is-edit="isEdit"
+                                                <EditInput :content="artistInfo.douyin_fans_num" :is-edit="isEdit"
                                                            @change="(value) => changeArtistBaseInfo(value, 'douyin_fans_num')"></EditInput>
                                             </div>
                                         </div>
@@ -503,8 +502,7 @@
                                         <div class="card-text py-10 px-0 clearfix col-md-6 float-left edit-height">
                                             <div class="col-md-2 float-left text-right pl-0">备注</div>
                                             <div class="col-md-10 float-left font-weight-bold">
-                                                <span v-show="!isEdit">{{artistInfo.desc}}</span>
-                                                <editTextarea v-show="isEdit" :content="artistInfo.desc" :is-edit="isEdit"
+                                                <editTextarea :content="artistInfo.desc" :is-edit="isEdit"
                                                               @change="(value) => changeArtistBaseInfo(value, 'desc')"></editTextarea>
                                             </div>
                                         </div>
@@ -1007,7 +1005,12 @@
                 total: 0,
                 current_page: 1,
                 total_pages: 1,
-                allTaskList:[] //获取任务列表
+                allTaskList:[], //获取任务列表
+                threeProjectList:[],//获取三个项目
+                expense_type:0,
+                incomesum:0,//账单 -- 收入总和
+                expendituresum:0,//账单 -- 支出总和
+
             }
         },
 
@@ -1021,6 +1024,7 @@
             this.draw();
             this.getArtistsBill()
             this.getTaskList()
+            this.getProjectList()
             this.user = JSON.parse(Cookies.get('user'))
             this.$store.commit('changeNewPrincipal', {
                 name: this.user.nickname,
@@ -1048,7 +1052,7 @@
                 this.artistId = this.$route.params.id;
 
                 let data = {
-                    include: 'publicity,broker,creator,tasks,affixes,trails.project.principal,works,trails.client',
+                    include: 'publicity,broker,creator,tasks,affixes,trails.project.principal,works,trails.client,relate_project_bills_resource',
                 };
                 let _this = this;
                 fetch('get', '/stars/' + this.artistId, data).then(function (response) {
@@ -1057,15 +1061,7 @@
                     _this.avatar = _this.artistInfo.avatar
                     _this.artistProjectsInfo = []
                     _this.artistTasksInfo = response.data.tasks.data
-                    if (_this.artistTasksInfo.length > 0) {
-                        for (let i = 0; i < _this.artistTasksInfo.length; i++) {
-                            if (_this.artistTasksInfo[i].status == 2) {
-                                _this.doneTaskNum = _this.doneTaskNum + 1
-                            }
-
-                        }
-                    }
-                    _this.taskNum = `${_this.doneTaskNum}/${_this.artistTasksInfo.length}`
+                    
                     _this.artistWorksInfo = response.data.works.data
                     _this.affixes = response.data.affixes.data
                     for (let i = 0; i < response.data.trails.data.length; i++) {
@@ -1095,17 +1091,24 @@
                 }
                 $('#checkSchedule').modal('show')
             },
-            getArtistsBill: function (page = 1) {
+            //获取账单
+            getArtistsBill: function (page = 1,expense_type) {
                 // if (this.artistBillsInfo.length > 0) {
                 //     return;
                 // }
                 let _this = this
-
-                fetch('get', `/stars/${this.$route.params.id}/bill`, {page: page}).then(response => {
+                _this.expense_type = expense_type
+                fetch('get', `/stars/${this.$route.params.id}/bill`, {page: page,expense_type:this.expense_type}).then(response => {
                     _this.artistBillsInfo = response.data
                     _this.current_page = response.meta.pagination.current_page;
                     _this.total = response.meta.pagination.total;
                     _this.total_pages = response.meta.pagination.total_pages;
+                    if(response.meta.incomesum){
+                        _this.incomesum = response.meta.incomesum //收入总和
+                    }
+                    if(response.meta.expendituresum){
+                        _this.expendituresum = response.meta.expendituresum //支出总和
+                    }
                 })
             },
 
@@ -1125,11 +1128,28 @@
                 let _this = this
                 fetch('get', `/stars/${this.$route.params.id}/tasks`).then(response => {
                     _this.allTaskList = response.data
+                    if (_this.allTaskList.length > 0) {
+                        for (let i = 0; i < _this.allTaskList.length; i++) {
+                            if (_this.allTaskList[i].status == 2) {
+                                _this.doneTaskNum = _this.doneTaskNum + 1
+                            }
+
+                        }
+                    }
+                    _this.taskNum = `${_this.doneTaskNum}/${_this.allTaskList.length}`
                 })
             },
             selectDate: function (value) {
                 this.selectedDate = value;
                 this.$refs.meetingRoom.setDate(value)
+            },
+            //获取三个项目
+            getProjectList:function(){
+                let _this = this
+                fetch('get', `/projects/star/${this.$route.params.id}`).then(response => {
+                    console.log(response)
+                    // _this.threeProjectList = response.data
+                })
             },
             //粉丝数据
             draw: function () {

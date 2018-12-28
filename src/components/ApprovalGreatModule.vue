@@ -41,6 +41,7 @@ import pageData from '@/views/approval/approval_form'
 // import papiProjectContract from '@/components/ForApproval/papiProjectContract.json'
 import config from '@/assets/js/config.js'
 import fetch from '@/assets/utils/fetch.js'
+import ApprovalDiv from '@/components/ForApproval/ApprovalDiv'
 import ApprovalSummerNote from '@/components/ForApproval/ApprovalSummerNote'
 import ApprovalUploader from '@/components/ForApproval/ApprovalUploader'
 import ApprovalImageUploader from '@/components/ForApproval/ApprovalImageUploader'
@@ -74,7 +75,7 @@ export default {
         }
     },
     created(){
-        this.dataInit()
+        // this.dataInit()
     },
     mounted(){
         let _this = this
@@ -97,15 +98,16 @@ export default {
         ApprovalTextArea,
         ApprovalNumber,
         ApprovalProgress,
-        ApprovalDouble
+        ApprovalDouble,
+        ApprovalDiv
     },
     watch:{
         formData:function(value){
             if(value){
-                this.getFormContractor()
-                this.dataInit()
-                this.trendApproverChecker()
-                // console.log(this.formData.condition);
+                // this.getFormContractor()
+
+                // this.trendApproverChecker()
+
             }
             
         }
@@ -121,8 +123,13 @@ export default {
         },
         trendApproverChecker(params){
             if(this.formData.condition.includes(params.key)){
-                this.trendApprover.condition[this.formData.condition.indexOf(params.key)] = params.value
-                // this.trendApprover.condition.push(params.value)
+                let tempData = this.formData.condition.indexOf(params.key)
+                // this.trendApprover.condition.splice(tempData,1) 
+                // console.log(this.formData.condition.indexOf(params.key));
+                this.trendApprover.condition[tempData]=params.value
+            }
+            else{
+                this.trendApprover.condition.push(params.value)
             }
             if(this.formData.condition.length === this.trendApprover.condition.length){
                 this.trendApprover.ready = true
@@ -138,14 +145,16 @@ export default {
             }   
         },
         changeHandler(params){
-            this.trendApproverChecker(params)
-            switch (params.type){
-                case 'upload':
-                    if(!this.sendData.uploadfile){
-                        this.sendData.uploadfile=[]
-                    }
-                    this.sendData.uploadfile.push({url:params.fileUrl,name:params.fileName})
+            if(this.formData.condition){
+                this.trendApproverChecker(params)
             }
+            // switch (params.type){
+            //     case 'upload':
+            //         if(!this.sendData.uploadfile){
+            //             this.sendData.uploadfile=[]
+            //         }
+            //         this.sendData.uploadfile.push({url:params.fileUrl,name:params.fileName})
+            // }
             if(!this.sendData.values.find(item=>item.key === params.key)){
                 this.sendData.values.push(params)
             }else{
@@ -159,7 +168,12 @@ export default {
         dataInit(){
             let {name,description,approval_form_controls,form_id} = this.importData
             this.form_id = form_id
-            let controlArr= Array.from(approval_form_controls.data)
+            try {
+                var controlArr= Array.from(approval_form_controls.data)
+                
+            } catch (error) {
+
+            }
             this.pageInfo.title = name
             let descriptionArr = []
             let tempArr = []
@@ -199,6 +213,8 @@ export default {
                     return this.$options.components.ApprovalTextArea
                 case 88 :
                     return this.$options.components.ApprovalText
+                case 89 :
+                    return this.$options.components.ApprovalDiv
                 case 91 : 
                     return this.$options.components.ApprovalImageUploader
                 case 92 : 

@@ -210,6 +210,8 @@
                                     <selectors :options="repeatArr" ref="scheduleRepeat"
                                                @change="changeScheduleRepeat"></selectors>
                                 </div>
+                                <div class="col-md-2 float-left"></div>
+                                <div class="col-md-10 float-left pl-0 font-12 mt-5" style="color: #c3c3c3">重复周期为1年</div>
                             </div>
                             <div class="example">
                                 <div class="col-md-2 text-right float-left">位置</div>
@@ -392,7 +394,7 @@
                         <div class="example">
                             <div class="col-md-2 text-right float-left">参与人</div>
                             <div class="col-md-10 float-left pl-0">
-                                <add-member @change="addParticipant"></add-member>
+                                <add-member @change=""></add-member>
                             </div>
                         </div>
                         <div class="modal-footer">
@@ -459,7 +461,7 @@
                     </div>
                     <div class="modal-footer">
                         <button class="btn btn-sm btn-white btn-pure" data-dismiss="modal">取消</button>
-                        <button class="btn btn-primary" @click="">确定</button>
+                        <button class="btn btn-primary" @click="addProjectMultipleMember">确定</button>
                     </div>
                 </div>
             </div>
@@ -634,9 +636,13 @@
             });
 
             $('#checkSchedule').on('hide.bs.modal', function () {
-                if (this.scheduleType !== 'edit') {
+                if (_this.scheduleType !== 'edit') {
                     _this.$store.dispatch('changeParticipantsInfo', {data: []});
                 }
+            });
+
+            $('#addMembers').on('hidden.bs.modal', function () {
+                _this.$store.dispatch('changeParticipantsInfo', {type: 'change', data: []});
             });
             this.globalClick(this.removeSelector);
             this.initCalendar();
@@ -824,6 +830,22 @@
                 }
             },
 
+            addProjectMultipleMember: function () {
+                let memberIds = [];
+                let selectedMember = this.$store.state.participantsInfo;
+                for (let i = 0; i < selectedMember.length; i++) {
+                    memberIds.push(selectedMember[i].id)
+                }
+                let data = {
+                    calendars_ids: this.selectedCalendar,
+                    person_ids: memberIds,
+                };
+                fetch('post', '/calendars/participants', data).then(() => {
+                    toastr.success('添加成功');
+                    $('#addMembers').modal('hide')
+                })
+            },
+
             delAffix: function (affixId) {
                 fetch('delete', '/schedules/' + this.scheduleData.id + '/affixes/' + affixId).then(() => {
                     toastr.success('删除成功');
@@ -853,12 +875,12 @@
                     data.participant_ids = [];
                     data.participant_del_ids = [];
                     for (let i = 0; i < participantsInfo.length; i++) {
-                        if (this.scheduleParticipants.indexOf(participantsInfo[i].id) === -1) {
+                        if (this.scheduleParticipants.map(item => item.id).indexOf(participantsInfo[i].id) === -1) {
                             data.participant_ids.push(participantsInfo[i].id)
                         }
                     }
                     for (let i = 0; i < this.scheduleParticipants.length; i++) {
-                        if (participantsInfo.indexOf(this.scheduleParticipants[i].id) === -1) {
+                        if (participantsInfo.map(item => item.id).indexOf(this.scheduleParticipants[i].id) === -1) {
                             data.participant_del_ids.push(this.scheduleParticipants[i].id)
                         }
                     }
@@ -1083,7 +1105,7 @@
                 this.endTime = '';
                 this.endMinutes = '00:00';
                 this.eventPlace = '';
-                this.scheduleRepeat = 1;
+                this.scheduleRepeat = 0;
                 this.eventDesc = '';
                 this.isAllday = false;
                 this.schedulePrivacy = false;

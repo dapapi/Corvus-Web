@@ -130,7 +130,7 @@
                     <div class="col-md-12">
                         <ul class="nav nav-tabs nav-tabs-line" role="tablist">
                             <li class="nav-item" role="presentation">
-                                <a class="nav-link active" data-toggle="tab" href="#forum-role"
+                                <a class="nav-link"  data-toggle="tab" href="#forum-role"
                                    aria-controls="forum-base"
                                    aria-expanded="true" role="tab">角色成员</a>
                             </li>
@@ -279,9 +279,9 @@
 
                     </div>
                     <div class="col-md-12">
-                        <ul class="nav nav-tabs nav-tabs-line" role="tablist">
+                        <ul class="nav nav-tabs nav-tabs-line" role="tablist" ref="tableft">
                             <li class="nav-item" role="presentation">
-                                <a class="nav-link active" data-toggle="tab" :href="'#forum-member'+ item.id"
+                                <a class="nav-link " :class="isAactive?'active':''" data-toggle="tab" :href="'#forum-member'+ item.id"
                                    aria-controls="forum-base"
                                    aria-expanded="true" role="tab">角色成员</a>
                             </li>
@@ -298,7 +298,7 @@
                         </ul>
                     </div>
                     <div class="page-content tab-content nav-tabs-animate bg-white pt-20">
-                        <div class="tab-pane animation-fade active" :id="'forum-member'+item.id" role="tabpanel">
+                        <div class="tab-pane animation-fade " :class="isAactive?'active':''" :id="'forum-member'+item.id" role="tabpanel">
                             <table class="table table-hover" data-plugin="selectable" data-selectable="selectable">
                                 <tr>
                                     <th class="w-50">
@@ -464,7 +464,7 @@
                         </div>
                     </div>
                     <div class="modal-footer">
-                        <button class="btn btn-sm btn-white btn-pure" data-dismiss="modal">取消</button>
+                        <button class="btn btn-sm btn-white btn-pure" data-dismiss="modal" @click="cancelrole">取消</button>
                         <button class="btn btn-primary" type="submit" @click="addrole">确定</button>
                     </div>
                 </div>
@@ -551,8 +551,8 @@
                         <div class="example">
                             <div class="col-md-2 text-right float-left">描述</div>
                             <div class="col-md-10 float-left pl-0">
-                                <textarea name="" rows="5" class="form-control" @change="updateDescribe"
-                                          v-model="emptyrole_describe" :placeholder="emptydescribe"></textarea>
+                                <textarea name="" rows="5" class="form-control" 
+                                          v-model="emptyrole_describe" ></textarea>
                             </div>
                         </div>
                     </div>
@@ -730,7 +730,8 @@
                 modifyName: '',
                 roleGroupId: '',
                 rolegroupName: '',
-                emptyrole_describe: ''
+                emptyrole_describe: '',
+                isAactive:true
             }
         },
         mounted() {
@@ -750,6 +751,7 @@
                 let _this = this;
                 fetch('get', '/console/role').then(function (response) {
                     _this.roleDate = response.data;
+                    
                 });
             },
             //获取分组数据
@@ -757,7 +759,6 @@
                 let _this = this;
                 fetch('get', '/console/group?Accept=application/vnd.Corvus.v1+json').then(function (response) {
                     _this.groupingDate = response.data;
-                    console.log(_this.groupingDate)
                 });
             },
             //获取成员数据
@@ -776,6 +777,8 @@
             },
             //切换内容
             changeCont(value) {
+                
+                
                 this.jobCont = value
                 this.selectedIds = []
                 this.defaultId = 0
@@ -962,23 +965,28 @@
             changeRolejob(value) {
                 this.groupingId = value
             },
-
+            roletype(){
+                this.roleName = ""
+                this.emptydescribe = ""
+                this.$refs.resourceType.setValue("")
+            },
+            cancelrole(){
+               this.roletype()
+            },
             //新增角色
             addrole() {
                 let _this = this;
                 let data = {
                     name: this.roleName,
-                    group_id: this.roleType,
+                    group_id: this.groupingId,
                     description: this.emptydescribe
                 }
                 fetch('post', '/console/role', data).then(function (response) {
                     toastr.success('创建成功');
                     $('#addRole').modal('hide');
-                    _this.roleName = ""
-                    _this.emptydescribe = ""
-                    _this.$refs.resourceType.setValue("")
+                    _this.roletype()
                     _this.getroleDate()
-
+                   
                 });
             },
             //添加成员
@@ -1007,13 +1015,20 @@
                 console.log(value)
             },
             Modifyingroles(value, id) {
-                this.updateType = id
-                this.roleGroupId = value;
+                this.updateType = id//角色组id获取
+                this.roleGroupId = value;//角色id获取
                 this.modifyName = this.roleDate.find(item => item.id == this.roleGroupId).name
-                this.rolegroupName = this.groupingDate.find(item => item.id == id).name
-                this.updateName = this.modifyName
-                this.$refs.roleGroup.setValue(id, this.rolegroupName)
-                // this.emptyrole_describe=this.emptydescribe
+                this.rolegroupName = this.groupingDate.find(item => item.id == id).name//把角色组id转为name
+                this.updateName = this.modifyName//角色名默认带出值设置
+                this.$refs.roleGroup.setValue(id,this.roleGroupId)//角色组默认带出值设置
+                for(let i = 0;i<this.roleDate.length;i++){
+                    if(this.roleDate[i].id==value){
+                      this.emptyrole_describe=this.roleDate[i].description
+                    }
+                    
+                }
+              
+                
             },
             //修改角色
             updaterole() {
@@ -1103,21 +1118,11 @@
                 this.roleId = value
             },
             grouping(value) {
-                console.log(value)
                 this.groupingId = value
                 this.panelName = this.groupingDate.find(item => item.id == this.groupingId).name
                 this.$refs.resourceType.setValue(value, this.panelName)
                 this.roleName = ""
 
-            },
-            Modifyingroles(value, id) {
-                console.log(id)
-                this.roleGroupId = value;
-                this.modifyName = this.roleDate.find(item => item.id == this.roleGroupId).name
-                this.rolegroupName = this.groupingDate.find(item => item.id == id).name
-                this.updateName = this.modifyName
-                this.$refs.roleGroup.setValue(id, this.rolegroupName)
-                // this.emptyrole_describe=this.emptydescribe
             },
             clickdefault() {
                 this.conceal = !this.conceal;
