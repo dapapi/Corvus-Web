@@ -29,15 +29,6 @@
                     <div class="col-md-3 example float-left">
                         <selectors :options="papiCommunicationStatusArr" @change="CommunicationStatus" placeholder="请选择沟通状态"></selectors>
                     </div>
-<<<<<<< HEAD
-                    <!-- <div class="col-md-3 example float-left">
-                        <button type="button" class="btn btn-default waves-effect waves-classic float-right"
-                                data-toggle="modal" data-target="#customizeContent"
-                                data-placement="right" title="">
-                            自定义筛选
-                        </button>
-                    </div> -->
-=======
                     <!--<div class="col-md-3 example float-left">-->
                         <!--<button type="button" class="btn btn-default waves-effect waves-classic float-right"-->
                                 <!--data-toggle="modal" data-target="#customizeContent"-->
@@ -45,7 +36,6 @@
                             <!--自定义筛选-->
                         <!--</button>-->
                     <!--</div>-->
->>>>>>> 27487e100afe282f6fd3ef0519fbe850d0edd33b
                 </div>
 
                 <div class="col-md-12">

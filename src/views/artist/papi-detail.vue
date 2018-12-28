@@ -1027,15 +1027,11 @@
                 fetch('get', '/bloggers/gettype').then(function (response) {
                     _this.artistTypeArr = response.data
                 })
-<<<<<<< HEAD
-                 fetch('get','/bloggers/select?include=users').then(function(response){ 
-=======
                 // fetch('get','/users/my?include=department').then(function(response){
                 //     _this.principalId = response.data.id 
                 //     _this.principalName = response.data.name
                 // })
                  fetch('get','/bloggers/select?include=users').then(function(response){
->>>>>>> 27487e100afe282f6fd3ef0519fbe850d0edd33b
                     response.data.forEach(item=>{
                          _this.principalIds.push(item.users.data.id)
 
@@ -1132,57 +1128,6 @@
                 this.isEdit = false;
                 this.isStatrtEdit = true;
                 let _this = this;
-<<<<<<< HEAD
-                // this.artistInfo.nickname= this.petName
-                // this.artistId = this.$route.params.id;
-
-                // if(this.artistInfo.intention==1){
-                //         this.updateType=true
-                //     }else{
-                //         this.updateType=false
-                //     }
-                // if(this.artistInfo.sign_contract_other==1){
-                //         this.updateSign_contract_other=true
-                //     }else{
-                //         this.updateSign_contract_other=false
-                //     }
-                // let data = { 
-                //     nickname:this.artistInfo.nickname,
-                //     type_id:this.artistInfo.type.data.id,
-                //     communication_status:this.artistInfo.communication_status,
-                //     intention:this.artistInfo.intention,
-                //     sign_contract_other: this.artistInfo.sign_contract_other,
-                //     desc: this.artistInfo.desc,
-                //     star_douyin_infos: this.updateStar_douyin_infos,
-                //     star_weibo_infos: this.updateStar_weibo_infos,
-                //     star_xiaohongshu_infos: this.updateStar_xiaohongshu_infos,
-                //     platform: this.updatePlatform,
-                //     level: this.artistInfo.level,
-                //     cooperation_demand: this.updatedemand,
-                //     hatch_star_at: _this.artistInfo.hatch_star_at,
-                //     hatch_end_at: _this.artistInfo.hatch_end_at,
-                //     intention_desc:_this.artistInfo.intention_desc,
-                //     sign_contract_other_name:_this.artistInfo.sign_contract_other_name
-                // }
-                // fetch('put', '/bloggers/' + this.artistId, data).then(function (response) {
-                //     toastr.success('修改成功');
-                //     _this.artistTasksInfo = response.data;
-
-                //     if (_this.artistInfo.intention == false) {
-                //         _this.updateType = 2
-                //     } else {
-                //         _this.updateType = 1
-                //     }
-                //     if (_this.artistInfo.sign_contract_other == false) {
-                //         _this.updateSign_contract_other = 2
-                //     } else {
-                //         _this.updateSign_contract_other = 1
-                //     }
-
-                //     _this.getArtist()
-                //     $('.selectpicker').selectpicker('refresh')
-                // })
-=======
                 this.artistId = this.$route.params.id;
                 if(this.artistInfo.intention==1){
                         this.updateType=true
@@ -1205,10 +1150,10 @@
                     star_weibo_infos: this.updateStar_weibo_infos,
                     star_xiaohongshu_infos: this.updateStar_xiaohongshu_infos,
                     platform: this.updatePlatform,
-                    level: this.artistInfo.level,
-                    cooperation_demand: this.updatedemand,
-                    hatch_star_at: _this.artistInfo.hatch_star_at,
-                    hatch_end_at: _this.artistInfo.hatch_end_at,
+                    // level: this.artistInfo.level,
+                    // cooperation_demand: this.updatedemand,
+                    // hatch_star_at: _this.artistInfo.hatch_star_at,
+                    // hatch_end_at: _this.artistInfo.hatch_end_at,
                     intention_desc:_this.artistInfo.intention_desc,
                     sign_contract_other_name:_this.artistInfo.sign_contract_other_name
                 }
@@ -1230,7 +1175,6 @@
                     _this.getArtist()
                     $('.selectpicker').selectpicker('refresh')
                 })
->>>>>>> 27487e100afe282f6fd3ef0519fbe850d0edd33b
 
             },
 
