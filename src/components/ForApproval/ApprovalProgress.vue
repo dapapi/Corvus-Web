@@ -1,15 +1,15 @@
 <template>
-    <div class="page-content container-fluid">
+    <div class="page-content container-fluid pt-0">
         <hr v-if="mode !== 'detail'">
         <div class="approver-row">
             <span>审批人</span>
             <div class="approver-container" v-for="(item, index) in approver" :key="index">
                 <div class="approver-container">
-                    <!-- {{item}} -->
                     <div class="splicer" v-if="index !== 0"></div>
                     <div>
                         <div class="approver" :style="{backgroundImage:'url('+randomColor(item.icon_url).color+')',backgroundColor:randomColor(item.icon_url).color}">{{randomColor(item.icon_url).name}}</div>
                         <div v-if="!mode">{{item.name}}</div>
+                        <i class="iconfont iconfont-logo" :class="item.change_state_obj.changed_icon.split('|')[0]" :style='{color:item.change_state_obj.changed_icon.split("|")[1]}'></i>
                     </div>
                 </div>
                 <div class="approver_texts" v-if="item.change_state_obj">
@@ -70,10 +70,20 @@ export default {
             let _this = this
             if(value == true){
                 console.log(this.trend.condition);
-                fetch('get','/approvals/chains?form_id='+this.formid+'&change_type=222&value='+this.trend.condition.join(',')).then((params) => {
+                fetch('get','/approvals/chains?form_id='+this.formid+'&change_type=224&value='+this.trend.condition.join(',')).then((params) => {
                     _this.approver = params.data
                 })
             }
+        },
+        'trend':{
+            handler:function(newValue,oldValue){
+                if(this.trend.ready==true)
+                var _this = this
+                fetch('get','/approvals/chains?form_id='+this.formid+'&change_type=224&value='+this.trend.condition.join(',')).then((params) => {
+                    _this.approver = params.data
+                })
+            },
+            deep:true,
         }
     },
     mounted(){
@@ -86,6 +96,8 @@ export default {
     methods:{
         getApprover(value){
             if(!value){
+                return
+            }else if(this.trend){
                 return
             }
             let _this = this
@@ -121,6 +133,13 @@ export default {
 </script>
 
 <style scoped>
+.iconfont-logo{
+    position: relative;
+    z-index: 1288;
+    bottom: 15px;
+    left: 25px;
+}
+
 .approval-detail-title,.approval-detail-container{
     height: 40px;
     display: flex;
@@ -143,6 +162,10 @@ export default {
     display: flex;
     margin-top: 30px; 
     /* margin-left: 10%;   */
+}
+.approver-row::-webkit-scrollbar {
+    /* width: 1px !important; */
+    height: 2px !important;
 }
 .approver-row span{
     margin-right: 20px;
