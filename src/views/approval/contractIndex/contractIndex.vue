@@ -112,6 +112,6 @@ export default {
     cursor: pointer;
   }
   .card-block:hover{
-    box-shadow:4px 4px 12px 1px rgba(7,17,27,0.2);
+    /* box-shadow:4px 4px 12px 1px rgba(7,17,27,0.2); */
   }
 </style>
