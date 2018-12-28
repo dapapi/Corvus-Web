@@ -20,7 +20,7 @@
                 <div class="clearfix">
                     <div class="col-md-3 example float-left">
                         <input type="text" v-model="listData.name" class="form-control" id="inputPlaceholder" placeholder="请输入姓名"
-                               style="width: 220px" @blur="getArtists"> 
+                               @blur="getArtists">
                     </div>
                     <div class="col-md-3 example float-left">
                         <selectors :options="artistStatusArr" placeholder="请选择艺人沟通状态" @change="getStatus"></selectors>
@@ -28,13 +28,13 @@
                     <div class="col-md-3 example float-left">
                         <selectors :options="artistSourceArr" placeholder="请选择艺人来源" @change="getSource"></selectors>
                     </div>
-                    <!-- <div class="col-md-3 example float-left">
-                        <button type="button" class="btn btn-default waves-effect waves-classic float-right"
-                                data-toggle="modal" data-target="#customizeContent"
-                                data-placement="right" title="">
-                            自定义筛选
-                        </button>
-                    </div> -->
+                    <!--<div class="col-md-3 example float-left">-->
+                        <!--<button type="button" class="btn btn-default waves-effect waves-classic float-right"-->
+                                <!--data-toggle="modal" data-target="#customizeContent"-->
+                                <!--data-placement="right" title="">-->
+                            <!--自定义筛选-->
+                        <!--</button>-->
+                    <!--</div>-->
                 </div>
 
                 <div class="col-md-12">
@@ -297,9 +297,7 @@
                                 <Upload @change='getUploadUrl' class="upload-image">
                                     <div class="puls" :style="{ backgroundImage: 'url(' + uploadUrl + ')' }" v-if="uploadUrl">
                                     </div>
-                                    <div class="puls" v-if="!uploadUrl">
-                                    <span>+</span>
-                                    </div>
+                                    <div v-if="!uploadUrl" class="addMember-trigger-button addMember-trigger-left"><i class="iconfont icon-tianjia"></i></div>
                                 </Upload>
                             </div>
                         </div>
@@ -569,8 +567,16 @@
                     toastr.error('请选择签约意向');
                     return false
                 }
+                if(this.signIntention == 2&&!this.notSignReason){
+                    toastr.error('请填写不签约理由');
+                    return false
+                }
                 if(!this.signCompany){
                     toastr.error('请选择是否与其他公司签约');
+                    return false
+                }
+                if(this.signCompany == 2&&!this.sign_contract_other_name){
+                    toastr.error('请输入已签约公司名称');
                     return false
                 }
                 if(!this.affixes){

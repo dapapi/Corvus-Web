@@ -26,13 +26,13 @@
                         <span v-if="fetchData.principal_ids" class="clear-principal-filter"
                               @click="clearPrincipalFilter">&nbsp;&nbsp;x</span>
                     </div>
-                    <div class="col-md-3 example float-left">
-                        <button type="button" class="btn btn-default waves-effect waves-classic float-right"
-                                data-toggle="modal" data-target="#customizeContent"
-                                data-placement="right" title="">
-                            自定义筛选
-                        </button>
-                    </div>
+                    <!--<div class="col-md-3 example float-left">-->
+                        <!--<button type="button" class="btn btn-default waves-effect waves-classic float-right"-->
+                                <!--data-toggle="modal" data-target="#customizeContent"-->
+                                <!--data-placement="right" title="">-->
+                            <!--自定义筛选-->
+                        <!--</button>-->
+                    <!--</div>-->
                 </div>
 
                 <div class="col-md-12">
