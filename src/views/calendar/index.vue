@@ -210,6 +210,8 @@
                                     <selectors :options="repeatArr" ref="scheduleRepeat"
                                                @change="changeScheduleRepeat"></selectors>
                                 </div>
+                                <div class="col-md-2 float-left"></div>
+                                <div class="col-md-10 float-left pl-0 font-12 mt-5" style="color: #c3c3c3">重复周期为1年</div>
                             </div>
                             <div class="example">
                                 <div class="col-md-2 text-right float-left">位置</div>
@@ -634,9 +636,13 @@
             });
 
             $('#checkSchedule').on('hide.bs.modal', function () {
-                if (this.scheduleType !== 'edit') {
+                if (_this.scheduleType !== 'edit') {
                     _this.$store.dispatch('changeParticipantsInfo', {data: []});
                 }
+            });
+
+            $('#addMembers').on('hidden.bs.modal', function () {
+                _this.$store.dispatch('changeParticipantsInfo', {type: 'change', data: []});
             });
             this.globalClick(this.removeSelector);
             this.initCalendar();
