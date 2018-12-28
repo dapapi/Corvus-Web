@@ -246,7 +246,7 @@
                     params.grade = this.clientLevelSearch
                 }
                 if (this.clientPrincipalIdSearch.length > 0) {
-                    params.principal_id = this.clientPrincipalIdSearch
+                    params.principal_ids = this.clientPrincipalIdSearch
                 }
 
                 if (this.companyName || this.clientLevelSearch || this.clientPrincipalIdSearch.length > 0) {
