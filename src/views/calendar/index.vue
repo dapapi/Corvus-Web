@@ -1099,7 +1099,7 @@
                 this.endTime = '';
                 this.endMinutes = '00:00';
                 this.eventPlace = '';
-                this.scheduleRepeat = 1;
+                this.scheduleRepeat = 0;
                 this.eventDesc = '';
                 this.isAllday = false;
                 this.schedulePrivacy = false;
