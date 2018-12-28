@@ -108,41 +108,41 @@
                             </div>
                         </div>
                         <div class="example">
-                            <div class="col-md-2 text-right float-left">品牌名称</div>
+                            <div class="col-md-2 text-right float-left require">品牌名称</div>
                             <div class="col-md-10 float-left pl-0">
                                 <input type="text" class="form-control" title="" placeholder="请输入品牌名称"
                                        v-model="brandName">
                             </div>
                         </div>
                         <div class="example">
-                            <div class="col-md-2 text-right float-left">公司名称</div>
+                            <div class="col-md-2 text-right float-left require">公司名称</div>
                             <div class="col-md-10 float-left pl-0">
                                 <edit-company @change="changeCompanyName"></edit-company>
                             </div>
                         </div>
                         <div class="example">
-                            <div class="col-md-2 text-right float-left">线索名称</div>
+                            <div class="col-md-2 text-right float-left require">线索名称</div>
                             <div class="col-md-10 float-left pl-0">
                                 <input type="text" class="form-control" title="" placeholder="请输入线索名称"
                                        v-model="trailName">
                             </div>
                         </div>
-                        <div class="example">
-                            <TrailOrigin :trailType='trailType'
+                        <div class="example trial-origin">
+                            <TrailOrigin class="require" :trailType='trailType'
                                          typeName='线索' alwaysShow='true'
                                          @changeTrailOrigin='changeTrailOrigin'
                                          @changeEmail='changeEmail'
                                          @changeTrailOriginPerson='changeTrailOriginPerson'/>
                         </div>
                         <div class="example">
-                            <div class="col-md-2 text-right float-left">行业</div>
+                            <div class="col-md-2 text-right float-left require">行业</div>
                             <div class="col-md-10 float-left pl-0" v-if="industriesArr.length > 0">
                                 <selectors ref='industries' :options="industriesArr"
                                            @change="changeIndustry"></selectors>
                             </div>
                         </div>
                         <div class="example">
-                            <div class="col-md-2 text-right float-left">负责人</div>
+                            <div class="col-md-2 text-right float-left require">负责人</div>
                             <div class="col-md-10 float-left pl-0">
                                 <input-selectors :placeholder="'请选择负责人'" otherslot='otherslot'
                                                  @change="changePrincipal"
@@ -150,7 +150,7 @@
                             </div>
                         </div>
                         <div class="example">
-                            <div class="col-md-2 text-right float-left">目标艺人</div>
+                            <div class="col-md-2 text-right float-left require">目标艺人</div>
                             <div class="col-md-10 float-left pl-0" v-if="starsArr.length > 0">
                                 <selectors :options="starsArr" @valuelistener="changeTargetStars"
                                            :multiple="true"></selectors>
@@ -164,20 +164,20 @@
                             </div>
                         </div>
                         <div class="example">
-                            <div class="col-md-2 text-right float-left">优先级</div>
+                            <div class="col-md-2 text-right float-left require">优先级</div>
                             <div class="col-md-10 float-left pl-0">
                                 <selectors :options="priorityArr" @change="changePriority"></selectors>
                             </div>
                         </div>
                         <div class="example">
-                            <div class="col-md-2 text-right float-left">联系人</div>
+                            <div class="col-md-2 text-right float-left require">联系人</div>
                             <div class="col-md-10 float-left pl-0">
                                 <input type="text" class="form-control" title="" placeholder="请输入联系人"
                                        v-model="trailContact">
                             </div>
                         </div>
                         <div class="example">
-                            <div class="col-md-2 text-right float-left">联系人电话</div>
+                            <div class="col-md-2 text-right float-left require">联系人电话</div>
                             <div class="col-md-10 float-left pl-0">
                                 <input type="text" class="form-control" title="" placeholder="请输入联系电话"
                                        v-model="trailContactPhone" @blur='phoneValidate'>
@@ -197,7 +197,7 @@
                             </div>
                         </div>
                         <div class="example">
-                            <div class="col-md-2 text-right float-left">预计订单收入</div>
+                            <div class="col-md-2 text-right float-left require">预计订单收入</div>
                             <div class="col-md-5 float-left pl-0 pr-0">
                                 <number-spinner @change="changeTrailFee"></number-spinner>
                             </div>
@@ -674,6 +674,9 @@
 
     .clear-principal-filter {
         cursor: pointer;
+    }
+    .trial-origin .require::before {
+        margin-left: 9px;
     }
 </style>
 

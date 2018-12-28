@@ -412,28 +412,28 @@
                             </div>
                         </div>
                         <div class="example">
-                            <div class="col-md-2 text-right float-left">联系人</div>
+                            <div class="col-md-2 text-right float-left require">联系人</div>
                             <div class="col-md-10 float-left">
                                 <input type="text" title="" class="form-control"
                                        placeholder="请输入联系人" v-model="editConfig.name">
                             </div>
                         </div>
                         <div class="example">
-                            <div class="col-md-2 text-right float-left">关键决策人</div>
+                            <div class="col-md-2 text-right float-left require">关键决策人</div>
                             <div class="col-md-10 float-left">
                                 <selectors ref="contact" :options="keyMasterArr" :value="editConfig.type"
                                     @change="changeContactClientType"></selectors>
                             </div>
                         </div>
                         <div class="example">
-                            <div class="col-md-2 text-right float-left">联系人电话</div>
+                            <div class="col-md-2 text-right float-left require">联系人电话</div>
                             <div class="col-md-10 float-left">
                                 <input type="text" title="" class="form-control"
                                        placeholder="请输入联系人电话" v-model="editConfig.phone"/>
                             </div>
                         </div>
                         <div class="example">
-                            <div class="col-md-2 text-right float-left">职位</div>
+                            <div class="col-md-2 text-right float-left require">职位</div>
                             <div class="col-md-10 float-left">
                                 <input type="text" title="" class="form-control"
                                        placeholder="请输入联系人职位" v-model="editConfig.position">
@@ -467,19 +467,19 @@
                             </div>
                         </div>
                         <div class="example">
-                            <div class="col-md-2 text-right float-left">任务类型</div>
+                            <div class="col-md-2 text-right float-left require">任务类型</div>
                             <div class="col-md-10 float-left pl-0">
                                 <selectors ref="taskType" :options="taskTypeArr" @change="changeTaskType"></selectors>
                             </div>
                         </div>
                         <div class="example">
-                            <div class="col-md-2 text-right float-left">任务名称</div>
+                            <div class="col-md-2 text-right float-left require">任务名称</div>
                             <div class="col-md-10 float-left pl-0">
                                 <input type="text" class="form-control" placeholder="请输入任务名称" v-model="taskName">
                             </div>
                         </div>
                         <div class="example">
-                            <div class="col-md-2 text-right float-left">负责人</div>
+                            <div class="col-md-2 text-right float-left require">负责人</div>
                             <div class="col-md-5 float-left pl-0">
                                 <input-selectors :placeholder="'请选择负责人'"
                                                  @change="taskPrincipalChange"></input-selectors>
@@ -492,17 +492,17 @@
                             </div>
                         </div>
                         <div class="example">
-                            <div class="col-md-2 text-right float-left pl-0">任务优先级</div>
+                            <div class="col-md-2 text-right float-left pl-0 require">任务优先级</div>
                             <div class="col-md-10 float-left pl-0">
                                 <selectors ref="taskLevel" :options="taskLevelArr" @change="changeTaskLevel"></selectors>
                             </div>
                         </div>
                         <div class="example">
-                            <div class="col-md-2 text-right float-left">开始时间</div>
+                            <div class="col-md-2 text-right float-left require">开始时间</div>
                             <div class="col-md-4 float-left pl-0">
                                 <datepicker ref="startTime" @change="changeStartTime"></datepicker>
                             </div>
-                            <div class="col-md-2 text-right float-left">截止时间</div>
+                            <div class="col-md-2 text-right float-left require">截止时间</div>
                             <div class="col-md-4 float-left pl-0">
                                 <datepicker ref="endTime" @change="changeEndTime"></datepicker>
                             </div>
@@ -720,7 +720,10 @@
 
             addContact: function () {
                 let data = {}
-
+                if (!this.editConfig.name) {
+                    toastr.error('请输入联系人！')
+                    return
+                }
                 if (this.editConfig.phone.length !== 11) {
                     toastr.error('手机号码格式不对！')
                     return
@@ -728,6 +731,10 @@
 
                 if (!this.editConfig.type) {
                     toastr.error('请选择关键决策人！')
+                    return
+                }
+                if (!this.editConfig.position) {
+                    toastr.error('请输入职位！')
                     return
                 }
                 data = {
@@ -812,6 +819,10 @@
                     desc: this.taskIntroduce,
                     participant_ids: this.participantIds
                 };
+                if (!data.type) {
+                    toastr.error('请选择任务类型')
+                    return
+                }
                 if (!data.title) {
                     toastr.error('请填写任务名称')
                     return
@@ -834,6 +845,12 @@
 
                 if (!data.principal_id) {
                     toastr.error('请选择负责人')
+                    return
+                }
+
+                if (!this.priority) {
+                    toastr.error('请选择任务优先级')
+                    return
                 }
 
                 fetch('post', '/tasks', data).then(function (response) {

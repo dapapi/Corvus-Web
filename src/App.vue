@@ -156,11 +156,19 @@
         margin-left: 100px !important;
         min-height: 100vh;
     }
+    /* .require::before {
+        content: '*';
+        position: absolute;
+        left: 0px;
+        vertical-align: middle;
+        color: #F44336;
+        font-size: 16px;
+    } */
 
     .require::before {
         content: '*';
-        position: relative;
-        left: -4px;
+        position: absolute;
+        margin-left: -14px;
         vertical-align: middle;
         color: #F44336;
         font-size: 16px;
@@ -185,7 +193,7 @@
         border-bottom: 1px solid #eee;
     }
 
-    .label-name {
+    .label-center {
         display: flex;
         align-items: center;
     }

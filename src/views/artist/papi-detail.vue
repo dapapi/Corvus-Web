@@ -617,19 +617,19 @@
                             </div>
                         </div>
                         <div class="example">
-                            <div class="col-md-2 text-right float-left">任务类型</div>
+                            <div class="col-md-2 text-right float-left require">任务类型</div>
                             <div class="col-md-10 float-left pl-0">
                                 <selectors :options="tasksType" @change="changeTaskType" ref="mold"></selectors>
                             </div>
                         </div>
                         <div class="example">
-                            <div class="col-md-2 text-right float-left">任务名称</div>
+                            <div class="col-md-2 text-right float-left require">任务名称</div>
                             <div class="col-md-10 float-left pl-0">
                                 <input type="text" class="form-control" placeholder="请输入任务名称" v-model="taskName">
                             </div>
                         </div>
                         <div class="example">
-                            <div class="col-md-2 text-right float-left">负责人</div>
+                            <div class="col-md-2 text-right float-left require">负责人</div>
                             <div class="col-md-5 float-left pl-0">
                                     <InputSelectors
                                         @change="principalChange">
@@ -644,13 +644,13 @@
                             </div>
                         </div>
                         <div class="example">
-                            <div class="col-md-2 text-right float-left pl-0">任务优先级</div>
+                            <div class="col-md-2 text-right float-left pl-0 require">任务优先级</div>
                             <div class="col-md-10 float-left pl-0">
                                 <selectors :options="taskLevelArr" @change="changeTaskLevel" ref="taskpriority"></selectors>
                             </div>
                         </div>
                         <div class="example">
-                            <div class="col-md-2 text-right float-left">开始时间</div>
+                            <div class="col-md-2 text-right float-left require">开始时间</div>
                             <div class="col-md-5 float-left pl-0">
                                 <datepicker @change="changeStartTime" ref="startTime"></datepicker>
                             </div>
@@ -659,7 +659,7 @@
                             </div>
                         </div>
                         <div class="example">
-                            <div class="col-md-2 text-right float-left">截止时间</div>
+                            <div class="col-md-2 text-right float-left require">截止时间</div>
                             <div class="col-md-5 float-left pl-0">
                                 <datepicker @change="changeEndTime" ref="deadline"></datepicker>
                             </div>
@@ -1278,6 +1278,32 @@
             },
             //添加任务
             addTask: function () {
+
+                if (!this.taskName) {
+                    toastr.error('请填写任务名称！')
+                    return
+                }
+                if (!this.taskType) {
+                    toastr.error('请选择任务类型！')
+                    return
+                }
+                if (!this.Person_id) {
+                    toastr.error('请选择负责人！')
+                    return
+                }
+                if (!this.taskLevel) {
+                    toastr.error('请选择任务优先级！')
+                    return
+                }
+                if (!this.startTime || !this.endTime) {
+                    toastr.error('请选择时间!')
+                    return
+                }
+                // if ((this.startTime + " " + this.startMinutes) > (this.endTime + " " + this.endMinutes)) {
+                //     toastr.error('开始时间不能晚于截止时间');
+                //     return
+                // }
+
                 let start,end,startMin,endMin
                 startMin = this.startMinutes.split(':')
                 endMin = this.endMinutes.split(':')
@@ -1295,9 +1321,11 @@
                    end_at: this.endTime + ' ' + this.endMinutes,
                    resource_type:1,
                    resourceable_id:this.artistInfo.id,
+                   priority: this.taskLevel,
                    desc:this.taskIntroduce,
                    type:this.taskType
                 }
+
                 fetch('post', '/tasks', data).then(function (response) {
 
                     toastr.success('创建成功');

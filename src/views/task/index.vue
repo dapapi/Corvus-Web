@@ -187,20 +187,20 @@
                             </div>
                         </div>
                         <div class="example">
-                            <div class="col-md-2 text-right float-left">任务类型</div>
+                            <div class="col-md-2 text-right float-left require">任务类型</div>
                             <div class="col-md-10 float-left pl-0">
                                 <Selectors :options="taskTypeArr" ref="taskType"
                                            @change="changeTaskType"></Selectors>
                             </div>
                         </div>
                         <div class="example">
-                            <div class="col-md-2 text-right float-left">任务名称</div>
+                            <div class="col-md-2 text-right float-left require">任务名称</div>
                             <div class="col-md-10 float-left pl-0">
                                 <input type="text" class="form-control" placeholder="请输入任务名称" v-model="taskName">
                             </div>
                         </div>
                         <div class="example">
-                            <div class="col-md-2 text-right float-left">负责人</div>
+                            <div class="col-md-2 text-right float-left require">负责人</div>
                             <div class="col-md-5 float-left pl-0">
                                 <InputSelectors :placeholder="'请选择负责人'" @change="principalChange"></InputSelectors>
                             </div>
@@ -212,7 +212,7 @@
                             </div>
                         </div>
                         <div class="example">
-                            <div class="col-md-2 text-right float-left pl-0">任务优先级</div>
+                            <div class="col-md-2 text-right float-left pl-0 require">任务优先级</div>
                             <div class="col-md-10 float-left pl-0">
                                 <Selectors
                                         :options="taskLevelArr"
@@ -222,7 +222,7 @@
                             </div>
                         </div>
                         <div class="example">
-                            <div class="col-md-2 text-right float-left">开始时间</div>
+                            <div class="col-md-2 text-right float-left require">开始时间</div>
                             <div class="col-md-5 float-left pl-0">
                                 <Datepicker ref="startTime" @change="changeStartTime"></Datepicker>
                             </div>
@@ -232,7 +232,7 @@
                             </div>
                         </div>
                         <div class="example">
-                            <div class="col-md-2 text-right float-left">截止时间</div>
+                            <div class="col-md-2 text-right float-left require">截止时间</div>
                             <div class="col-md-5 float-left pl-0">
                                 <Datepicker ref="endTime" @change="changeEndTime"></Datepicker>
                             </div>
@@ -386,6 +386,10 @@
                     toastr.error('请填写任务名称！')
                     return
                 }
+                if (!this.$store.state.newPrincipalInfo.id) {
+                    toastr.error('请选择负责人！')
+                    return
+                }
                 if (!this.taskType) {
                     toastr.error('请选择任务类型！')
                     return
@@ -409,8 +413,8 @@
                 }
 
                 let data = {
-                    resource_type: this.resourceType ,
-                    resourceable_id: this.resourceableId,
+                    // resource_type: this.resourceType ,
+                    // resourceable_id: this.resourceableId,
                     type: this.taskType,
                     title: this.taskName,
                     principal_id: this.$store.state.newPrincipalInfo.id,
@@ -420,6 +424,13 @@
                     end_at: this.endTime + " " + this.endMinutes,
                     desc: this.taskIntroduce
                 };
+
+                if (this.resourceType) {
+                    data.resource_type = this.resourceType
+                }
+                if (this.resourceableId) {
+                    data.resourceable_id = this.resourceableId
+                }
 
                 fetch('post', '/tasks', data).then(res => {
                     toastr.success("创建成功");

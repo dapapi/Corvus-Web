@@ -92,7 +92,7 @@
                     <div class="modal-body">
 
                         <div class="example">
-                            <div class="col-md-2 text-right float-left">公司名称</div>
+                            <div class="col-md-2 text-right float-left require">公司名称</div>
                             <div class="col-md-5 float-left pl-0">
                                 <input type="text" class="form-control" title="" v-model="clientName">
                             </div>
@@ -115,31 +115,31 @@
                             </div>
                         </div>
                         <div class="example">
-                            <div class="col-md-2 text-right float-left">负责人</div>
+                            <div class="col-md-2 text-right float-left require">负责人</div>
                             <div class="col-md-10 float-left pl-0">
                                 <input-selectors :placeholder="'请选择负责人'" @change="changePrincipal"></input-selectors>
                             </div>
                         </div>
                         <div class="example">
-                            <div class="col-md-2 text-right float-left">联系人</div>
+                            <div class="col-md-2 text-right float-left require">联系人</div>
                             <div class="col-md-10 float-left pl-0">
                                 <input type="text" class="form-control" title="" v-model="clientContact">
                             </div>
                         </div>
                         <div class="example">
-                            <div class="col-md-2 text-right float-left">关键决策人</div>
+                            <div class="col-md-2 text-right float-left require">关键决策人</div>
                             <div class="col-md-10 float-left pl-0">
                                 <selectors ref="clientContactType" :options="keyMasterArr" @change="changeContactClientType"></selectors>
                             </div>
                         </div>
                         <div class="example">
-                            <div class="col-md-2 text-right float-left">联系人电话</div>
+                            <div class="col-md-2 text-right float-left require">联系人电话</div>
                             <div class="col-md-10 float-left pl-0">
                                 <input type="text" class="form-control" title="" v-model="clientContactPhone">
                             </div>
                         </div>
                         <div class="example">
-                            <div class="col-md-2 text-right float-left">职位</div>
+                            <div class="col-md-2 text-right float-left require">职位</div>
                             <div class="col-md-10 float-left pl-0">
                                 <input type="text" class="form-control" title="" v-model="clientContactPosition">
                             </div>
