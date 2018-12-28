@@ -191,7 +191,7 @@
                                aria-controls="forum-present"
                                aria-expanded="false" role="tab" >粉丝数据</a>
                         </li>
-                        <li class="nav-item" role="presentation" v-show="artistInfo.sign_contract_status == 2">
+                        <li class="nav-item" role="presentation" v-show="artistInfo.sign_contract_status == 2" @click="getArtistsBill">
                             <a class="nav-link" data-toggle="tab" href="#forum-artist-bill"
                                aria-controls="forum-present"
                                aria-expanded="false" role="tab" >账单</a>
@@ -332,19 +332,24 @@
                             <div id="myChart"
                                  style="width:80vw ;height:400px; margin-top:30px;padding-bottom: 20px"></div>
                         </div>
+                       <!-- 账单 -->
                         <div class="tab-pane animation-fade pb-20 fixed-button-father" id="forum-artist-bill"
                              role="tabpanel">
                             <div class="clearfix my-10">
                                 <div style="padding: .715rem .6rem">
-                                    <div class="float-left pr-40">收款金额</div>
-                                    <div class="float-left pr-40 money-color">10000000元</div>
-                                    <div class="float-left pr-40">付款金额</div>
-                                    <div class="float-left pr-40 money-color">10000000元</div>
+                                    <div class="income" v-show="calculatedAmount.incomesum">
+                                        <div class="float-left pr-40">收款金额</div>
+                                        <div class="float-left pr-40 money-color">{{calculatedAmount.incomesum}}元</div>
+                                    </div>
+                                    <div class="expendituresum" v-show="calculatedAmount.expendituresum">
+                                        <div class="float-left pr-40">付款金额</div>
+                                        <div class="float-left pr-40 money-color">{{calculatedAmount.expendituresum}}元</div>
+                                    </div>       
                                 </div>
                             </div>
 
                            <table class="table table-hover"
-                                   data-child="tr">
+                                   data-child="tr" >
                                 <tr>
                                     <th class="cell-300" scope="col">费用类型</th>
                                     <th class="cell-300 position-relative" scope="col">
@@ -368,28 +373,22 @@
                                     <th class="cell-300" scope="col">操作人</th>
                                 </tr>
                                 <tbody>
-                                <tr>
-                                    <td>宣传费</td>
-                                    <td>成本</td>
-                                    <td>我们不一样</td>
-                                    <td>10000元</td>
-                                    <td>2018-07-23 10:00</td>
-                                    <td>测试</td>
-                                </tr>
-                                 <tr>
-                                    <td>项目收入</td>
-                                    <td>收入</td>
-                                    <td>喜欢你</td>
-                                    <td>10000元</td>
-                                    <td>2018-07-23 10:00</td>
-                                    <td>测试</td>
+                                <tr v-for="(item,index) in artistBillsInfo" :key="index">
+                                    <td>{{item.expense_name}}</td>
+                                    <td>{{item.expense_type}}</td>
+                                    <td>{{item.project_kd_name}}</td>
+                                    <td>{{item.money}}元</td>
+                                    <td>{{item.pay_rec_time}}</td>
+                                    <td>{{item.action_user}}</td>
                                 </tr>
                                 </tbody>
                             </table>
-                            <!-- <div class="col-md-1" style="margin: 6rem auto" v-if="artistBillsInfo.length === 0">
+                            <div class="col-md-1" style="margin: 6rem auto" v-if="artistBillsInfo.length === 0">
                                 <img src="https://res.papitube.com/corvus/images/content-none.png" alt=""
                                      style="width: 100%">
-                            </div> -->
+                            </div>
+                             <pagination :current_page="current_page" :method="getArtistsBill" :total_pages="total_pages"
+                                        :total="total"></pagination>
                         </div>
                         <div class="tab-pane animation-fade fixed-button-father" id="forum-artist-base"
                              role="tabpanel">
@@ -781,6 +780,7 @@
             return {
                 artistId: '',
                 artistInfo: {},
+                calculatedAmount:'',//计算金额
                 artistBillsInfo: [],//账单
                 artistWorkProportion: '',
                 yesOrNoArr: config.yesOrNoArr,
@@ -836,7 +836,10 @@
                 platformArr:config.platformArr,
                 selectedCalendar:[],
                 selectedDate:'',
-                Namevalue:''
+                Namevalue:'',
+                total: 0,
+                current_page: 1,
+                total_pages: 1,
             }
         },
         computed: {
@@ -885,7 +888,7 @@
 
             })
             this.getTimes()
-
+            this.getArtistsBill()
         },
 
         methods: {
@@ -1020,6 +1023,7 @@
 
 
                 });
+                
                 //任务状态跑组。试戏
                 fetch('get', '/task_types').then(function (response) {
                     _this.tasksType = response.data;
@@ -1036,8 +1040,20 @@
                 })
                
             },
-           
-          
+            //账单
+            getArtistsBill(page = 1){  
+                let _this=this;
+                fetch('get','/bloggers/'+this.artistId +'/bill',{page: page}).then(function(response){
+                    _this.artistBillsInfo = response.data
+                    _this.calculatedAmount=response.meta;
+                    _this.current_page = response.meta.pagination.current_page;
+                    _this.total = response.meta.pagination.total;
+                    _this.total_pages = response.meta.pagination.total_pages;
+                })
+            },
+            filterProjectFee: function (value) {
+                this.filterFee = value;
+            },
             //作品
             getTaskDate:function(){
                 let _this = this;
@@ -1124,55 +1140,54 @@
                 this.isEdit = false;
                 this.isStatrtEdit = true;
                 let _this = this;
-                // this.artistInfo.nickname= this.petName
-                // this.artistId = this.$route.params.id;
+                this.artistId = this.$route.params.id;
 
-                // if(this.artistInfo.intention==1){
-                //         this.updateType=true
-                //     }else{
-                //         this.updateType=false
-                //     }
-                // if(this.artistInfo.sign_contract_other==1){
-                //         this.updateSign_contract_other=true
-                //     }else{
-                //         this.updateSign_contract_other=false
-                //     }
-                // let data = { 
-                //     nickname:this.artistInfo.nickname,
-                //     type_id:this.artistInfo.type.data.id,
-                //     communication_status:this.artistInfo.communication_status,
-                //     intention:this.artistInfo.intention,
-                //     sign_contract_other: this.artistInfo.sign_contract_other,
-                //     desc: this.artistInfo.desc,
-                //     star_douyin_infos: this.updateStar_douyin_infos,
-                //     star_weibo_infos: this.updateStar_weibo_infos,
-                //     star_xiaohongshu_infos: this.updateStar_xiaohongshu_infos,
-                //     platform: this.updatePlatform,
-                //     level: this.artistInfo.level,
-                //     cooperation_demand: this.updatedemand,
-                //     hatch_star_at: _this.artistInfo.hatch_star_at,
-                //     hatch_end_at: _this.artistInfo.hatch_end_at,
-                //     intention_desc:_this.artistInfo.intention_desc,
-                //     sign_contract_other_name:_this.artistInfo.sign_contract_other_name
-                // }
-                // fetch('put', '/bloggers/' + this.artistId, data).then(function (response) {
-                //     toastr.success('修改成功');
-                //     _this.artistTasksInfo = response.data;
+                if(this.artistInfo.intention==1){
+                        this.updateType=true
+                    }else{
+                        this.updateType=false
+                    }
+                if(this.artistInfo.sign_contract_other==1){
+                        this.updateSign_contract_other=true
+                    }else{
+                        this.updateSign_contract_other=false
+                    }
+                let data = { 
+                    nickname:this.artistInfo.nickname,
+                    type_id:this.artistInfo.type.data.id,
+                    communication_status:this.artistInfo.communication_status,
+                    intention:this.artistInfo.intention,
+                    sign_contract_other: this.artistInfo.sign_contract_other,
+                    desc: this.artistInfo.desc,
+                    star_douyin_infos: this.updateStar_douyin_infos,
+                    star_weibo_infos: this.updateStar_weibo_infos,
+                    star_xiaohongshu_infos: this.updateStar_xiaohongshu_infos,
+                    platform: this.updatePlatform,
+                    // level: this.artistInfo.level,
+                    // cooperation_demand: this.updatedemand,
+                    // hatch_star_at: _this.artistInfo.hatch_star_at,
+                    // hatch_end_at: _this.artistInfo.hatch_end_at,
+                    intention_desc:_this.artistInfo.intention_desc,
+                    sign_contract_other_name:_this.artistInfo.sign_contract_other_name
+                }
+                fetch('put', '/bloggers/' + this.artistId, data).then(function (response) {
+                    toastr.success('修改成功');
+                    _this.artistTasksInfo = response.data;
 
-                //     if (_this.artistInfo.intention == false) {
-                //         _this.updateType = 2
-                //     } else {
-                //         _this.updateType = 1
-                //     }
-                //     if (_this.artistInfo.sign_contract_other == false) {
-                //         _this.updateSign_contract_other = 2
-                //     } else {
-                //         _this.updateSign_contract_other = 1
-                //     }
+                    if (_this.artistInfo.intention == false) {
+                        _this.updateType = 2
+                    } else {
+                        _this.updateType = 1
+                    }
+                    if (_this.artistInfo.sign_contract_other == false) {
+                        _this.updateSign_contract_other = 2
+                    } else {
+                        _this.updateSign_contract_other = 1
+                    }
 
-                //     _this.getArtist()
-                //     $('.selectpicker').selectpicker('refresh')
-                // })
+                    _this.getArtist()
+                    $('.selectpicker').selectpicker('refresh')
+                })
 
             },
 
@@ -1421,7 +1436,6 @@
             ,
             //合作需求
             changeArtistDemand: function (value) {
-             
                 this.updatedemand = value
             }
             ,
