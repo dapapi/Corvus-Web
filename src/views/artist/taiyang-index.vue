@@ -3,7 +3,6 @@
 
         <div class="page-header page-header-bordered">
             <h1 class="page-title">艺人管理</h1>
-
             <div class="page-header-actions dropdown show task-dropdown float-right">
                 <i class="iconfont icon-gengduo1 font-size-24" aria-hidden="true" id="taskDropdown"
                    data-toggle="dropdown" aria-expanded="false"></i>
@@ -11,18 +10,17 @@
                      role="menu" x-placement="bottom-end">
                     <!-- <a class="dropdown-item" role="menuitem" @click="">导入</a>
                     <a class="dropdown-item" role="menuitem" @click="">导出</a> -->
-                    <a class="dropdown-item" role="menuitem" data-toggle="modal" data-target="#giveBroker" @click="changeMember(1)">分配经纪人</a>
+                    <a class="dropdown-item" role="menuitem" data-toggle="modal" data-target="#giveBroker" @click="changeMember(1)">分配经理人</a>
                     <a class="dropdown-item" role="menuitem" data-toggle="modal" data-target="#giveBroker" @click="changeMember(2)">分配宣传人</a>
                 </div>
             </div>
-
         </div>
         <div class="page-content container-fluid">
             <div class="panel col-md-12 clearfix py-5">
                 <div class="clearfix">
                     <div class="col-md-3 example float-left">
                         <input type="text" v-model="listData.name" class="form-control" id="inputPlaceholder" placeholder="请输入姓名"
-                               style="width: 220px" @blur="getArtists"> 
+                               @blur="getArtists">
                     </div>
                     <div class="col-md-3 example float-left">
                         <selectors :options="artistStatusArr" placeholder="请选择艺人沟通状态" @change="getStatus"></selectors>
@@ -30,13 +28,13 @@
                     <div class="col-md-3 example float-left">
                         <selectors :options="artistSourceArr" placeholder="请选择艺人来源" @change="getSource"></selectors>
                     </div>
-                    <div class="col-md-3 example float-left">
-                        <button type="button" class="btn btn-default waves-effect waves-classic float-right"
-                                data-toggle="modal" data-target="#customizeContent"
-                                data-placement="right" title="">
-                            自定义筛选
-                        </button>
-                    </div>
+                    <!--<div class="col-md-3 example float-left">-->
+                        <!--<button type="button" class="btn btn-default waves-effect waves-classic float-right"-->
+                                <!--data-toggle="modal" data-target="#customizeContent"-->
+                                <!--data-placement="right" title="">-->
+                            <!--自定义筛选-->
+                        <!--</button>-->
+                    <!--</div>-->
                 </div>
 
                 <div class="col-md-12">
@@ -255,7 +253,7 @@
                         </div>
                         <div class="example">
                             <div class="col-md-2 text-right float-left">沟通状态</div>
-                            <div class="col-md-3 float-left pl-0">
+                            <div class="col-md-5 float-left pl-0">
                                 <selectors :options="taiyangCommunicationStatusArr"
                                            @change="changeCommunicationType" ref="communicationType"></selectors>
                             </div>
@@ -299,9 +297,7 @@
                                 <Upload @change='getUploadUrl' class="upload-image">
                                     <div class="puls" :style="{ backgroundImage: 'url(' + uploadUrl + ')' }" v-if="uploadUrl">
                                     </div>
-                                    <div class="puls" v-if="!uploadUrl">
-                                    <span>+</span>
-                                    </div>
+                                    <div v-if="!uploadUrl" class="addMember-trigger-button addMember-trigger-left"><i class="iconfont icon-tianjia"></i></div>
                                 </Upload>
                             </div>
                         </div>
@@ -320,7 +316,7 @@
                 </div>
             </div>
         </div>
-        <!--分配经纪人-->
+        <!--分配经理人-->
         <div class="modal fade" id="giveBroker" aria-hidden="true" aria-labelledby="addLabelForm"
              role="dialog" tabindex="-1">
             <div class="modal-dialog modal-simple">
@@ -330,7 +326,7 @@
                             <i class="iconfont icon-guanbi" aria-hidden="true"></i>
                         </button>
                         <h4 class="modal-title">
-                            <template v-if="giveType == 1">分配经纪人</template>
+                            <template v-if="giveType == 1">分配分配经理人</template>
                              <template v-else>分配宣传人</template>
                         </h4>
                     </div>
@@ -425,7 +421,7 @@
                     communication_status:'', //沟通状态
                     source:'', // 艺人来源
                 },
-                giveType:1,//1 分配经纪人  2 分配宣传人
+                giveType:1,//1 分配经理人 2 分配宣传人
                 affixes:[],
                 affixesType:''//附件类型
             }
@@ -571,8 +567,16 @@
                     toastr.error('请选择签约意向');
                     return false
                 }
+                if(this.signIntention == 2&&!this.notSignReason){
+                    toastr.error('请填写不签约理由');
+                    return false
+                }
                 if(!this.signCompany){
                     toastr.error('请选择是否与其他公司签约');
+                    return false
+                }
+                if(this.signCompany == 2&&!this.sign_contract_other_name){
+                    toastr.error('请输入已签约公司名称');
                     return false
                 }
                 if(!this.affixes){
@@ -692,7 +696,7 @@
             changeMember:function(type){
                 this.giveType =type
             },
-            //分配经纪人和宣传人
+            //分配经理人 和宣传人
             giveBroker:function(){
                 let url,toast,data
                 let _this = this
@@ -702,13 +706,13 @@
                 }
                 if(this.giveType == 1){
                    url = 'distribution/person' 
-                   toast = '分配经纪人成功'
+                   toast = '分配经理人成功'
                    data = {
-                        person_ids:[],//经纪人数组
+                        person_ids:[],//经理人数组
                         del_person_ids:[],//删除
                         moduleable_ids:this.selectedArtistsArr,//艺人
                         moduleable_type:'star',
-                        type:3,//经纪人
+                        type:3,//经理人
                    }
                 }else{
                     url = 'distribution/person'

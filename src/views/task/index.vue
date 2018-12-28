@@ -22,15 +22,15 @@
                     <div class="col-md-3 example float-left">
                         <Selectors :options="taskStatusArr" @change="changeTaskStatusSearch" placeholder="请选择任务状态"></Selectors>
                     </div>
-                    <div class="col-md-3 example float-left">
-                        <button type="button"
-                                class="btn btn-default waves-effect waves-classic float-right"
-                                data-toggle="modal"
-                                data-target="#customizeContent"
-                                data-placement="right"
-                                title>自定义筛选
-                        </button>
-                    </div>
+                    <!--<div class="col-md-3 example float-left">-->
+                        <!--<button type="button"-->
+                                <!--class="btn btn-default waves-effect waves-classic float-right"-->
+                                <!--data-toggle="modal"-->
+                                <!--data-target="#customizeContent"-->
+                                <!--data-placement="right"-->
+                                <!--title>自定义筛选-->
+                        <!--</button>-->
+                    <!--</div>-->
                 </div>
 
                 <div class="col-md-12">
@@ -409,8 +409,8 @@
                 }
 
                 let data = {
-                    resource_type: this.resourceType ? this.resourceType : this.linkData[0].id,
-                    resourceable_id: this.resourceableId ? this.resourceableId : this.linkData[0].child[0].id,
+                    resource_type: this.resourceType ,
+                    resourceable_id: this.resourceableId,
                     type: this.taskType,
                     title: this.taskName,
                     principal_id: this.$store.state.newPrincipalInfo.id,
@@ -493,11 +493,11 @@
             // 获取关联父资源数据
             getLinkData() {
                 fetch('get', '/resources').then(res => {
-                    let code = 0
+                    // let code = 0
                     this.linkData = res.data.map((n, i) => {
-                        if (i === 0) {
-                            code = n.code
-                        }
+                        // if (i === 0) {
+                        //     code = n.code
+                        // }
                         return {
                             name: n.title,
                             id: n.type,
@@ -506,28 +506,49 @@
                             child: []
                         }
                     })
+                    this.linkData.unshift({
+                            name: '暂不关联任何资源',
+                            id: '',
+                            value: '',
+                            // type: n.type,
+                            child: []
+                        })
                     if (this.linkData[0].child.length === 0) {
-                        this.getChildLinkData(code, 0)
+                        this.getChildLinkData('', 0)
                     }
                 })
             },
             // 获取关联子资源数据
             getChildLinkData(url, index) {
-                fetch('get', `/${url}`).then(res => {
-                    const temp = this.linkData[index]
-                    temp.child = res.data.map(n => {
-                        return {
-                            name: n.name || n.nickname || n.title || n.company,
-                            id: n.id,
-                            value: n.id,
-                        }
+                if (url) {
+                    fetch('get', `/${url}`).then(res => {
+                        const temp = this.linkData[index]
+                        temp.child = res.data.map(n => {
+                            return {
+                                name: n.name || n.nickname || n.title || n.company,
+                                id: n.id,
+                                value: n.id,
+                            }
+                        })
+                        this.resourceableId = temp.child[0].id
+                        this.$set(this.linkData, index, temp)
+                        setTimeout(() => {
+                            this.$refs.linkage.refresh()
+                        }, 100)
                     })
+                } else {
+                    const temp = this.linkData[index]
+                    temp.child = [{
+                        name: '暂不关联任何资源',
+                        id: '',
+                        value: '',
+                    }]
                     this.resourceableId = temp.child[0].id
                     this.$set(this.linkData, index, temp)
                     setTimeout(() => {
                         this.$refs.linkage.refresh()
                     }, 100)
-                })
+                }
             },
             // 获取任务类型列表
             getTaskType() {

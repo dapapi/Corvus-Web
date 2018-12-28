@@ -25,13 +25,13 @@
                     <div class="col-md-3 example float-left">
                         <selectors :options="clientLevelArr" @change="changeClientLevelSelect" placeholder="请选择公司级别"></selectors>
                     </div>
-                    <div class="col-md-3 example float-left">
-                        <button type="button" class="btn btn-default waves-effect waves-classic float-right"
-                                data-toggle="modal" data-target="#customizeContent"
-                                data-placement="right" title="">
-                            自定义筛选
-                        </button>
-                    </div>
+                    <!--<div class="col-md-3 example float-left">-->
+                        <!--<button type="button" class="btn btn-default waves-effect waves-classic float-right"-->
+                                <!--data-toggle="modal" data-target="#customizeContent"-->
+                                <!--data-placement="right" title="">-->
+                            <!--自定义筛选-->
+                        <!--</button>-->
+                    <!--</div>-->
                 </div>
                 <div class="col-md-12">
                     <table class="table table-hover is-indent mb-20" data-plugin="animateList" data-animate="fade"
@@ -246,7 +246,7 @@
                     params.grade = this.clientLevelSearch
                 }
                 if (this.clientPrincipalIdSearch.length > 0) {
-                    params.principal_id = this.clientPrincipalIdSearch
+                    params.principal_ids = this.clientPrincipalIdSearch
                 }
 
                 if (this.companyName || this.clientLevelSearch || this.clientPrincipalIdSearch.length > 0) {

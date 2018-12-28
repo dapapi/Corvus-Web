@@ -84,7 +84,7 @@
                     let data = {
                         start_date: self.startDate,
                         end_date: self.endDate,
-                        include: 'calendar,participants,creator,material,affixes'
+                        include: 'calendar,creator,material'
                     };
                     if (self.meetingRomeList) {
                         let materialsIds = [];
@@ -117,8 +117,8 @@
                     self.$emit('dayClick', formatDate);
                 },
                 eventClick: function (event, jsEvent, view) {
-                    let data = self.allScheduleInfo.find(item => item.id === event.id);
-                    self.$emit('scheduleClick', data)
+                    // let data = self.allScheduleInfo.find(item => item.id === event.id);
+                    self.$emit('scheduleClick', event.id)
                 },
                 eventMouseover: function (event, jsEvent, view) {
                     // console.log(jsEvent)

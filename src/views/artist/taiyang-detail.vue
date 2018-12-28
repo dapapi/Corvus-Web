@@ -27,22 +27,14 @@
 
             <div class="panel col-md-12">
                 <div class="card-block clearfix">
-                    <!-- <img  v-if="avatar" width="80px" height="80px" style="border-radius:50%" class="mr-5 float-left"
-                                                :src="avatar" alt="">
-                    <img v-else width="80px" height="80px" style="border-radius:50%" class="mr-5 float-left"> -->
-                    <Upload @change='getUploadUrl' class="upload-image float-left mr-5"
-                            style="width:80px;height:80px;border-radius:50%;position:relative">
-                        <div class="puls" :style="{ backgroundImage: 'url(' + avatar + ')' }" v-if="avatar">
+                    <Upload @change='getUploadUrl' class="upload-image float-left mr-5" style="width:80px;height:80px;border-radius:50%;position:relative">
+                        <div  class="puls" :style="{ backgroundImage: 'url(' + avatar + ')' }" v-if="avatar">
                         </div>
-                        <!-- <div class="puls plus_hover">
-                            <span>+</span>
-                        </div> -->
                         <div class="puls" v-if="!avatar">
                             <img src="https://res-crm.papitube.com/image/artist-no-avatar.png" alt="">
                         </div>
 
                     </Upload>
-                    <!-- src="https://res.papitube.com/corvus/images/taiyang-icon.png" alt=""> -->
                     <div class="float-left ml-10" style="width:calc(100% - 100px)">
                         <h4 class="card-title">{{artistInfo.name}}</h4>
                         <div class=" clearfix example">
@@ -71,7 +63,7 @@
                     </div>
                 </div>
                 <div class="clearfix ml-10">
-                    <div class="col-md-6 float-left pl-0 mb-20" style="border-right: 1px solid #eee">
+                    <div v-if="artistTasksInfo.length>0" class="col-md-6 float-left pl-0 mb-20">
                         <div class="col-md-6"><i class="iconfont icon-iconset0399"></i> 任务</div>
                         <div class="clearfix example" v-for="(item,index) in artistTasksInfo" :key="index"
                              @click="toTask(item.id)" style="cursor: pointer;">
@@ -87,7 +79,7 @@
                             </div>
                         </div>
                     </div>
-                    <div class="col-md-6 float-left pl-0 mb-20">
+                    <div v-if="threeProjectList.length>0" class="col-md-6 float-left pl-20 mb-20">
                         <div class="col-md-6"><i class="iconfont icon-ego-box"></i>项目</div>
                         <div class="clearfix example" v-for="(item,index) in artistProjectsInfo" :key="index"
                              style="cursor: pointer">
@@ -96,7 +88,15 @@
                             </div>
                             <div class="col-md-3 float-left">{{item.principal.data.name}}</div>
                             <div class="col-md-3 float-left">{{item.end_at}}</div>
-                            <div class="col-md-3 float-left">{{item.status}}</div>
+                            <div class="col-md-3 float-left">
+                                <!-- <template v-if="item.status === 1">进行中</template>
+                                <template v-if="item.status === 2">已完成</template>
+                                <template v-if="item.status === 3">已停止</template> -->
+                                <template v-if="item.relate_project_bills_resource">
+                                    {{item.relate_project_bills_resource}}
+                                </template>
+                                <template>0</template>
+                            </div>
                         </div>
                     </div>
 
@@ -119,7 +119,7 @@
                                aria-expanded="false" role="tab">项目</a>
                         </li>
                         <li class="nav-item" role="presentation">
-                            <a class="nav-link" :class="artistInfo.sign_contract_status == 2?'':'active'"
+                            <a class="nav-link" 
                                data-toggle="tab" href="#forum-artist-tasks"
                                aria-controls="forum-present"
                                aria-expanded="true" role="tab">
@@ -136,11 +136,11 @@
                                aria-controls="forum-present"
                                aria-expanded="false" role="tab">作品库</a>
                         </li>
-                        <li class="nav-item" role="presentation" v-show="artistInfo.sign_contract_status == 2">
-                            <a class="nav-link" data-toggle="tab" href="#forum-artist-fans"
-                               aria-controls="forum-present"
-                               aria-expanded="false" role="tab">粉丝数据</a>
-                        </li>
+                        <!--<li class="nav-item" role="presentation" v-show="artistInfo.sign_contract_status == 2">-->
+                            <!--<a class="nav-link" data-toggle="tab" href="#forum-artist-fans"-->
+                               <!--aria-controls="forum-present"-->
+                               <!--aria-expanded="false" role="tab">粉丝数据</a>-->
+                        <!--</li>-->
                         <li class="nav-item" role="presentation" @click="getArtistsBill"
                             v-show="artistInfo.sign_contract_status == 2">
                             <a class="nav-link" data-toggle="tab" href="#forum-artist-bill"
@@ -150,7 +150,7 @@
                         <li class="nav-item" role="presentation">
                             <a class="nav-link" data-toggle="tab" href="#forum-artist-base"
                                aria-controls="forum-present"
-                               aria-expanded="false" role="tab">概况</a>
+                               aria-expanded="false" role="tab" :class="artistInfo.sign_contract_status == 2?'':'active'">概况</a>
                         </li>
                     </ul>
                     <div class="tab-content nav-tabs-animate bg-white col-md-12">
@@ -172,26 +172,31 @@
                                 <tr class="animation-fade"
                                     style="animation-fill-mode: backwards; animation-duration: 250ms; animation-delay: 0ms;">
                                     <th class="cell-300" scope="col">项目名称</th>
-                                    <th class="cell-300" scope="col">项目状态</th>
                                     <th class="cell-300" scope="col">负责人</th>
                                     <th class="cell-300" scope="col">关联公司</th>
                                     <th class="cell-300" scope="col">录入日期</th>
+                                    <th class="cell-300" scope="col">艺人分成</th>
                                 </tr>
-                                <tr v-for="(item,index) in artistProjectsInfo" :key="index" @click="toProject(item.id)">
+                                <tr v-for="(item,index) in artistProjectsInfo" :key="index" @click="toProject(item.id)" style="cursor: pointer;">
                                     <td>
                                         {{item.title}}
                                     </td>
+                                    
+                                    <td>{{item.principal.data.name}}</td>
+                                    <td>{{item.company}}</td>
+                                    <td>{{item.created_at}}</td>
                                     <td>
-                                        <template v-if="item.status === 1"><span style="color:#FF9800">进行中</span>
+                                        <template v-if="item.relate_project_bills_resource">
+                                            {{item.relate_project_bills_resource}}
+                                        </template>
+                                        <template>0</template>
+                                        <!-- <template v-if="item.status === 1"><span style="color:#FF9800">进行中</span>
                                         </template>
                                         <template v-if="item.status === 2"><span style="color:#4CAF50">已完成</span>
                                         </template>
                                         <template v-if="item.status === 3"><span style="color:#9E9E9E">撤单</span>
-                                        </template>
+                                        </template> -->
                                     </td>
-                                    <td>{{item.principal.data.name}}</td>
-                                    <td>{{item.company}}</td>
-                                    <td>{{item.created_at}}</td>
                                 </tr>
                             </table>
                             <div class="col-md-1" style="margin: 6rem auto" v-if="artistProjectsInfo.length === 0">
@@ -201,7 +206,7 @@
                         </div>
                         <!--任务-->
                         <div class="tab-pane animation-fade pb-20 fixed-button-father"
-                             :class="artistInfo.sign_contract_status == 2?'':'active'" id="forum-artist-tasks"
+                              id="forum-artist-tasks"
                              role="tabpanel">
                             <table class="table table-hover is-indent example" data-plugin="animateList"
                                    data-animate="fade" data-child="tr">
@@ -213,7 +218,7 @@
                                     <th class="cell-300" scope="col">负责人</th>
                                     <th class="cell-300" scope="col">截止时间</th>
                                 </tr>
-                                <tr v-for="(task,index) in artistTasksInfo" :key="index" @click="toTask(task.id)">
+                                <tr v-for="(task,index) in allTaskList" :key="index" @click="toTask(task.id)" style="cursor: pointer;">
                                     <td>
                                         {{task.title}}
                                     </td>
@@ -298,8 +303,8 @@
                              role="tabpanel">
                             <div class="clearfix my-10">
                                 <div class="float-left my-10 ml-10">
-                                    <div class="float-left pr-40">收款金额 <span class="money-color">10000元</span></div>
-                                    <div class="float-left pr-40">付款金额 <span class="money-color">1000元0</span></div>
+                                    <div class="float-left pr-40">收款金额 <span class="money-color">{{incomesum}}元</span></div>
+                                    <div class="float-left pr-40">付款金额 <span class="money-color">{{expendituresum}}元</span></div>
                                 </div>
                             </div>
                             <table class="table table-hover" data-child="tr">
@@ -309,15 +314,15 @@
                                         <template v-if="filterFee === 1">全部</template>
                                         <template v-if="filterFee === 2">成本</template>
                                         <template v-if="filterFee === 3">收入</template>
-                                        <i class="iconfont icon-gengduo1 pl-2" aria-hidden="true"
+                                        <i class="iconfont icon-plus-select-down pl-2" aria-hidden="true"
                                            id="projectDropdown" data-toggle="dropdown" aria-expanded="false"></i>
                                         <div class="dropdown-menu" aria-labelledby="projectDropdown" role="menu">
                                             <a class="dropdown-item" role="menuitem" v-show="filterFee !== 1"
-                                               @click="filterProjectFee(1)">全部</a>
+                                               @click="getArtistsBill(1,0)">全部</a>
                                             <a class="dropdown-item" role="menuitem" v-show="filterFee !== 2"
-                                               @click="filterProjectFee(2)">成本</a>
+                                               @click="getArtistsBill(1,2)">成本</a>
                                             <a class="dropdown-item" role="menuitem" v-show="filterFee !== 3"
-                                               @click="filterProjectFee(3)">收入</a>
+                                               @click="getArtistsBill(1,1)">收入</a>
                                         </div>
                                     </th>
                                     <th class="cell-300" scope="col">项目名称</th>
@@ -346,7 +351,7 @@
                         </div>
                         <!--概况-->
                         <div class="tab-pane animation-fade  pb-20 fixed-button-father" id="forum-artist-base"
-                             role="tabpanel">
+                             role="tabpanel" :class="artistInfo.sign_contract_status == 2?'':'active'">
                             <div class="card">
                                 <div class="card-header card-header-transparent card-header-bordered">
                                     <div class="float-left font-weight-bold third-title">艺人信息</div>
@@ -431,7 +436,7 @@
                                         <div class="card-text py-10 px-0 clearfix col-md-6 float-left edit-height">
                                             <div class="col-md-2 float-left text-right pl-0">地区</div>
                                             <div class="col-md-10 float-left font-weight-bold">
-                                                <EditInput :content="artistInfo.star_location" :is-edit="isEdit"
+                                                <EditInput  :content="artistInfo.star_location" :is-edit="isEdit"
                                                            @change="(value) => changeArtistBaseInfo(value, 'star_location')"></EditInput>
                                             </div>
                                         </div>
@@ -445,7 +450,7 @@
                                         <div class="card-text py-10 px-0 clearfix col-md-6 float-left edit-height">
                                             <div class="col-md-2 float-left text-right pl-0">微信</div>
                                             <div class="col-md-10 float-left font-weight-bold">
-                                                <EditInput :content="artistInfo.wechat" :is-edit="isEdit"
+                                                <EditInput  :content="artistInfo.wechat" :is-edit="isEdit"
                                                            @change="(value) => changeArtistBaseInfo(value, 'wechat')"></EditInput>
                                             </div>
                                         </div>
@@ -1000,6 +1005,12 @@
                 total: 0,
                 current_page: 1,
                 total_pages: 1,
+                allTaskList:[], //获取任务列表
+                threeProjectList:[],//获取三个项目
+                expense_type:0,
+                incomesum:0,//账单 -- 收入总和
+                expendituresum:0,//账单 -- 支出总和
+
             }
         },
 
@@ -1008,10 +1019,12 @@
 
         },
         mounted() {
-
+            
             this.getTaskType();
             this.draw();
             this.getArtistsBill()
+            this.getTaskList()
+            this.getProjectList()
             this.user = JSON.parse(Cookies.get('user'))
             this.$store.commit('changeNewPrincipal', {
                 name: this.user.nickname,
@@ -1039,7 +1052,7 @@
                 this.artistId = this.$route.params.id;
 
                 let data = {
-                    include: 'publicity,broker,creator,tasks,affixes,trails.project.principal,works,trails.client',
+                    include: 'publicity,broker,creator,tasks,affixes,trails.project.principal,works,trails.client,relate_project_bills_resource',
                 };
                 let _this = this;
                 fetch('get', '/stars/' + this.artistId, data).then(function (response) {
@@ -1048,15 +1061,7 @@
                     _this.avatar = _this.artistInfo.avatar
                     _this.artistProjectsInfo = []
                     _this.artistTasksInfo = response.data.tasks.data
-                    if (_this.artistTasksInfo.length > 0) {
-                        for (let i = 0; i < _this.artistTasksInfo.length; i++) {
-                            if (_this.artistTasksInfo[i].status == 2) {
-                                _this.doneTaskNum = _this.doneTaskNum + 1
-                            }
-
-                        }
-                    }
-                    _this.taskNum = `${_this.doneTaskNum}/${_this.artistTasksInfo.length}`
+                    
                     _this.artistWorksInfo = response.data.works.data
                     _this.affixes = response.data.affixes.data
                     for (let i = 0; i < response.data.trails.data.length; i++) {
@@ -1086,17 +1091,24 @@
                 }
                 $('#checkSchedule').modal('show')
             },
-            getArtistsBill: function (page = 1) {
+            //获取账单
+            getArtistsBill: function (page = 1,expense_type) {
                 // if (this.artistBillsInfo.length > 0) {
                 //     return;
                 // }
                 let _this = this
-
-                fetch('get', `/stars/${this.$route.params.id}/bill`, {page: page}).then(response => {
+                _this.expense_type = expense_type
+                fetch('get', `/stars/${this.$route.params.id}/bill`, {page: page,expense_type:this.expense_type}).then(response => {
                     _this.artistBillsInfo = response.data
                     _this.current_page = response.meta.pagination.current_page;
                     _this.total = response.meta.pagination.total;
                     _this.total_pages = response.meta.pagination.total_pages;
+                    if(response.meta.incomesum){
+                        _this.incomesum = response.meta.incomesum //收入总和
+                    }
+                    if(response.meta.expendituresum){
+                        _this.expendituresum = response.meta.expendituresum //支出总和
+                    }
                 })
             },
 
@@ -1111,9 +1123,33 @@
                     }
                 })
             },
+            //获取任务列表
+            getTaskList:function(){
+                let _this = this
+                fetch('get', `/stars/${this.$route.params.id}/tasks`).then(response => {
+                    _this.allTaskList = response.data
+                    if (_this.allTaskList.length > 0) {
+                        for (let i = 0; i < _this.allTaskList.length; i++) {
+                            if (_this.allTaskList[i].status == 2) {
+                                _this.doneTaskNum = _this.doneTaskNum + 1
+                            }
+
+                        }
+                    }
+                    _this.taskNum = `${_this.doneTaskNum}/${_this.allTaskList.length}`
+                })
+            },
             selectDate: function (value) {
                 this.selectedDate = value;
                 this.$refs.meetingRoom.setDate(value)
+            },
+            //获取三个项目
+            getProjectList:function(){
+                let _this = this
+                fetch('get', `/projects/star/${this.$route.params.id}`).then(response => {
+                    console.log(response)
+                    // _this.threeProjectList = response.data
+                })
             },
             //粉丝数据
             draw: function () {
@@ -1467,6 +1503,7 @@
             },
 
             addDistributionPerson: function () {
+                let toast
                 let data = {
                     person_ids: [],
                     del_person_ids: [],
@@ -1496,11 +1533,14 @@
 
                 if (this.distributionType === 'broker') {
                     data.type = 3
+                    toast = '分配经理人成功'
                 } else {
                     data.type = 2
+                    toast = '分配宣传人成功'
                 }
                 let _this = this;
                 fetch('post', '/distribution/person', data).then(function (response) {
+                    toastr.success(toast)
                     $('#distributionBroker').modal('hide');
                     _this.getArtist();
                     _this.$store.state.participantsInfo = []

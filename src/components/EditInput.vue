@@ -16,24 +16,35 @@
         data() {
             return {
                 isEditInput: false,
-                context: ''
+                // context: ''
             }
         },
 
         mounted() {
-            this.context = this.content // 此时获取不到值 ，所以改为监听
+            // this.context = this.content // 此时获取不到值 ，所以改为监听
         },
-        computed: {},
+        computed: {
+            context: {
+                get() {
+                    return this.content
+                },
+                set(newValue) {
+                    
+                    this.$emit('change', newValue)
+                    return newValue
+                }
+            }
+        },
 
         watch: {
             isEdit(newValue) {
                 this.isEditInput = newValue;
             },
 
-            context(newValue) {
-                this.$emit('change', newValue)
-            },
-            content () {
+            // context(newValue) {
+            //     this.$emit('change', newValue)
+            // },
+            content() {
                 this.$nextTick(() => {
                     this.context = this.content
                 })
