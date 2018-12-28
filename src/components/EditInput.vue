@@ -16,14 +16,23 @@
         data() {
             return {
                 isEditInput: false,
-                context: ''
+                // context: ''
             }
         },
 
         mounted() {
-            this.context = this.content // 此时获取不到值 ，所以改为监听
+            // this.context = this.content // 此时获取不到值 ，所以改为监听
         },
-        computed: {},
+        computed: {
+            context: {
+                get() {
+                    return this.content
+                },
+                set() {
+                    return this.content
+                }
+            }
+        },
 
         watch: {
             isEdit(newValue) {
@@ -33,7 +42,7 @@
             context(newValue) {
                 this.$emit('change', newValue)
             },
-            content () {
+            content() {
                 this.$nextTick(() => {
                     this.context = this.content
                 })
