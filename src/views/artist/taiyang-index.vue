@@ -3,7 +3,6 @@
 
         <div class="page-header page-header-bordered">
             <h1 class="page-title">艺人管理</h1>
-
             <div class="page-header-actions dropdown show task-dropdown float-right">
                 <i class="iconfont icon-gengduo1 font-size-24" aria-hidden="true" id="taskDropdown"
                    data-toggle="dropdown" aria-expanded="false"></i>
@@ -11,11 +10,10 @@
                      role="menu" x-placement="bottom-end">
                     <!-- <a class="dropdown-item" role="menuitem" @click="">导入</a>
                     <a class="dropdown-item" role="menuitem" @click="">导出</a> -->
-                    <a class="dropdown-item" role="menuitem" data-toggle="modal" data-target="#giveBroker" @click="changeMember(1)">分配经纪人</a>
+                    <a class="dropdown-item" role="menuitem" data-toggle="modal" data-target="#giveBroker" @click="changeMember(1)">分配经理人</a>
                     <a class="dropdown-item" role="menuitem" data-toggle="modal" data-target="#giveBroker" @click="changeMember(2)">分配宣传人</a>
                 </div>
             </div>
-
         </div>
         <div class="page-content container-fluid">
             <div class="panel col-md-12 clearfix py-5">
@@ -30,13 +28,13 @@
                     <div class="col-md-3 example float-left">
                         <selectors :options="artistSourceArr" :placeholder="'请选择艺人来源'" @change="getSource"></selectors>
                     </div>
-                    <div class="col-md-3 example float-left">
+                    <!-- <div class="col-md-3 example float-left">
                         <button type="button" class="btn btn-default waves-effect waves-classic float-right"
                                 data-toggle="modal" data-target="#customizeContent"
                                 data-placement="right" title="">
                             自定义筛选
                         </button>
-                    </div>
+                    </div> -->
                 </div>
 
                 <div class="col-md-12">
@@ -256,7 +254,7 @@
                         </div>
                         <div class="example">
                             <div class="col-md-2 text-right float-left">沟通状态</div>
-                            <div class="col-md-3 float-left pl-0">
+                            <div class="col-md-5 float-left pl-0">
                                 <selectors :options="taiyangCommunicationStatusArr"
                                            @change="changeCommunicationType" :placeholder="'请选择沟通状态'" ref="communicationType"></selectors>
                             </div>
@@ -324,7 +322,7 @@
                 </div>
             </div>
         </div>
-        <!--分配经纪人-->
+        <!--分配经理人-->
         <div class="modal fade" id="giveBroker" aria-hidden="true" aria-labelledby="addLabelForm"
              role="dialog" tabindex="-1">
             <div class="modal-dialog modal-simple">
@@ -334,7 +332,7 @@
                             <i class="iconfont icon-guanbi" aria-hidden="true"></i>
                         </button>
                         <h4 class="modal-title">
-                            <template v-if="giveType == 1">分配经纪人</template>
+                            <template v-if="giveType == 1">分配分配经理人</template>
                              <template v-else>分配宣传人</template>
                         </h4>
                     </div>
@@ -429,7 +427,7 @@
                     communication_status:'', //沟通状态
                     source:'', // 艺人来源
                 },
-                giveType:1,//1 分配经纪人  2 分配宣传人
+                giveType:1,//1 分配经理人 2 分配宣传人
                 affixes:[],
                 affixesType:''//附件类型
             }
@@ -696,7 +694,7 @@
             changeMember:function(type){
                 this.giveType =type
             },
-            //分配经纪人和宣传人
+            //分配经理人 和宣传人
             giveBroker:function(){
                 let url,toast,data
                 let _this = this
@@ -706,13 +704,13 @@
                 }
                 if(this.giveType == 1){
                    url = 'distribution/person' 
-                   toast = '分配经纪人成功'
+                   toast = '分配经理人成功'
                    data = {
-                        person_ids:[],//经纪人数组
+                        person_ids:[],//经理人数组
                         del_person_ids:[],//删除
                         moduleable_ids:this.selectedArtistsArr,//艺人
                         moduleable_type:'star',
-                        type:3,//经纪人
+                        type:3,//经理人
                    }
                 }else{
                     url = 'distribution/person'
