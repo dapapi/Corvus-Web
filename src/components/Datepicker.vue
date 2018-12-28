@@ -8,7 +8,7 @@
 </template>
 <script>
     export default {
-        props: ['placeholder', 'changeKey', 'startDate','default'],
+        props: ['placeholder', 'changeKey', 'startDate','default','clear'],
         data() {
             return {}
         },
@@ -36,7 +36,12 @@
              * */
             startDate(newValue) {
                 $(this.$el).datepicker('setStartDate', newValue);
-            }
+            },
+            clear:function(value){
+                if(value===true){
+                    this.setValue('')
+                }
+        }
         },
         methods: {
             /**

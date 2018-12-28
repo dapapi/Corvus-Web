@@ -13,9 +13,6 @@
                         <p @click="toggleSubSort(item.key)" class="approval-sort-title"> 
                             <span class="icon md-caret-right font-size-20 mr-10 leftImg" :class="!showSort.includes(item.key)?'anmite':''"></span>
                             {{item.value}}</p>
-                             <div v-if="item.value === '合同'" class="ribbon ribbon-badge ribbon-warning ribbon-reverse">
-                                <span class="ribbon-inner">施工中</span>
-                            </div>
                         <transition name="sub">
                             <div v-if="!showSort.includes(item.key)" class="sub-box">
                                 <div>

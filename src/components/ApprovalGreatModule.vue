@@ -13,7 +13,7 @@
                         <div v-for="(item, index) in moduleInfo" :key="index" class="great-option example">
                             <div :is='sortChecker(item)' 
                             :data='item' :predata='sendData'
-                            :singlemode='singlemode' 
+                            :singlemode='singlemode' :clear='clearFlag'
                             @change="changeHandler"
                             :formid='form_id'></div>
                             <!-- ⬆️核心模块 -->
@@ -71,15 +71,17 @@ export default {
             trendApprover:{
                 condition:[],
                 ready:false,
-            }
+            },
+            clearFlag:false,
         }
     },
     created(){
-        // this.dataInit()
+
     },
     mounted(){
         let _this = this
         $('#approval-great-module').on('show.bs.modal',function(){
+                _this.clearSignal()
                 _this.$nextTick(() => {
                     _this.getFormContractor() 
                 })
@@ -116,20 +118,42 @@ export default {
 
     },
     methods:{
+        clearSignal(){
+            this.sendData = {
+                values:[]
+            }
+            this.clearFlag = true
+            setTimeout(() => {
+                this.clearFlag = false
+            }, 1);
+        },
+        getRequiredArr(){
+            for (const key in this.moduleInfo) {
+                if (this.moduleInfo[key][0].required==1 && !this.sendData.values.find(item=>item.key === this.moduleInfo[key][0].id)) {
+                    toastr.error(this.moduleInfo[key][0].control_title+'为必填')
+                    return false
+                }
+            }
+            return true
+        },
         approvalSubmit(){
-            fetch('post','/approvals/'+this.formData.form_id,this.sendData).then((params) => {
-                console.log(params)
-            })
+            let _this = this
+            if(this.getRequiredArr()){
+                fetch('post','/approvals/'+this.formData.form_id,this.sendData).then((params) => {
+                    toastr.success('提交成功')
+                    $('#approval-great-module').modal('hide')
+                    _this.clearSignal()
+                })
+            }
         },
         trendApproverChecker(params){
+            console.log(params);
+            console.log(this.formData.condition);
             if(this.formData.condition.includes(params.key)){
                 let tempData = this.formData.condition.indexOf(params.key)
-                // this.trendApprover.condition.splice(tempData,1) 
+                this.trendApprover.condition.splice(tempData,1) 
                 // console.log(this.formData.condition.indexOf(params.key));
                 this.trendApprover.condition[tempData]=params.value
-            }
-            else{
-                this.trendApprover.condition.push(params.value)
             }
             if(this.formData.condition.length === this.trendApprover.condition.length){
                 this.trendApprover.ready = true
@@ -145,6 +169,7 @@ export default {
             }   
         },
         changeHandler(params){
+            console.log(params);
             if(this.formData.condition){
                 this.trendApproverChecker(params)
             }
