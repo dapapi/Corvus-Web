@@ -192,7 +192,7 @@
                         </div>
                         <div v-show="showMore">
                             <div class="pt-10 mb-20 clearfix">
-                                <div class="col-md-2 text-right float-left">会议室</div>
+                                <div class="col-md-2 text-right float-left">资源</div>
                                 <div class="col-md-10 float-left pl-0">
                                     <selectors :options="allMeetingRomeList" ref="scheduleResource"
                                                @change="changeScheduleMaterial"></selectors>
