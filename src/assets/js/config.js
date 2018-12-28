@@ -829,19 +829,19 @@ let config = {
         repeatArr: [
             {
                 name: '从不重复',
-                value: 1
+                value: 0
             },
             {
                 name: '每天',
-                value: 2
+                value: 1
             },
             {
                 name: '每周',
-                value: 3
+                value: 2
             },
             {
                 name: '每月',
-                value: 4
+                value: 3
             },
         ],
         colorArr: ['#FF40D0', '#F06293', '#FDD420', '#FB8C00', '#FFB300', '#E53935', '#EC407A', '#8E25AA', '#6520FF', '#28CC2D', '#27D3A8', '#448AFF', '#536DFE', '#01B0FF', '#304FFE'],
