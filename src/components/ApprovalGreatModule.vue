@@ -13,12 +13,12 @@
                         <div v-for="(item, index) in moduleInfo" :key="index" class="great-option example">
                             <div :is='sortChecker(item)' 
                             :data='item' :predata='sendData'
-                            :singlemode='singlemode'
+                            :singlemode='singlemode' 
                             @change="changeHandler"
                             :formid='form_id'></div>
                             <!-- ⬆️核心模块 -->
                         </div>
-                        <ApprovalProgress :formid='form_id'/>
+                        <ApprovalProgress :formid='form_id' :trend='trendApprover' />
 
                     </div>
                     <div class="modal-footer">
@@ -29,8 +29,8 @@
             </div>
         </div>        
     </div>    
-</template>
-
+</template>    
+                                                            
 <script>
 import pageData from '@/views/approval/approval_form'
 // import papiContractConfig from '@/components/ForApproval/papiContractConfig.json'
@@ -66,21 +66,25 @@ export default {
             sendData:{
                 values:[]
             },
-            form_id:''
+            form_id:'',
+            trendApprover:{
+                condition:[],
+                ready:false,
+            }
         }
     },
     created(){
-
+        this.dataInit()
     },
     mounted(){
         let _this = this
         $('#approval-great-module').on('show.bs.modal',function(){
-                _this.$nextTick((params) => {
+                _this.$nextTick(() => {
                     _this.getFormContractor() 
                 })
         })
-        this.dataInit()
         this.refresh()
+        // console.log(this.formData.condition);
     },
     components:{
         ApprovalMultiple,
@@ -98,17 +102,31 @@ export default {
     watch:{
         formData:function(value){
             if(value){
+                this.getFormContractor()
                 this.dataInit()
-            this.getFormContractor()
+                this.trendApproverChecker()
+                // console.log(this.formData.condition);
             }
             
         }
+    },
+    update(){
+
     },
     methods:{
         approvalSubmit(){
             fetch('post','/approvals/'+this.formData.form_id,this.sendData).then((params) => {
                 console.log(params)
             })
+        },
+        trendApproverChecker(params){
+            if(this.formData.condition.includes(params.key)){
+                this.trendApprover.condition[this.formData.condition.indexOf(params.key)] = params.value
+                // this.trendApprover.condition.push(params.value)
+            }
+            if(this.formData.condition.length === this.trendApprover.condition.length){
+                this.trendApprover.ready = true
+            }
         },
         getFormContractor(){
             let _this = this
@@ -119,8 +137,8 @@ export default {
                 })
             }   
         },
-    
         changeHandler(params){
+            this.trendApproverChecker(params)
             switch (params.type){
                 case 'upload':
                     if(!this.sendData.uploadfile){

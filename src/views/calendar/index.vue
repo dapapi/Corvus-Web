@@ -28,7 +28,7 @@
                                         <i class="iconfont icon-xiangshangjiantou" style="font-size:12px"></i>
                                     </template>
                                 </span>
-                                <span class="float-right pointer-content" data-toggle="modal" data-target="#addMembers">
+                                <span class="float-right pointer-content" @click="addMultipleMember">
                                     <i class="iconfont icon-tianjiarenyuan"></i>
                                 </span>
                             </div>
@@ -192,7 +192,7 @@
                         </div>
                         <div v-show="showMore">
                             <div class="pt-10 mb-20 clearfix">
-                                <div class="col-md-2 text-right float-left">会议室</div>
+                                <div class="col-md-2 text-right float-left">资源</div>
                                 <div class="col-md-10 float-left pl-0">
                                     <selectors :options="allMeetingRomeList" ref="scheduleResource"
                                                @change="changeScheduleMaterial"></selectors>
@@ -793,6 +793,14 @@
                 })
             },
 
+            addMultipleMember: function () {
+                if (this.selectedCalendar.length > 0) {
+                    $('#addMembers').modal('show')
+                } else {
+                    toastr.error('请选择至少一个需要添加成员的日历')
+                }
+            },
+
             openFile: function (url) {
                 window.open(url)
             },
@@ -817,8 +825,8 @@
             },
 
             delAffix: function (affixId) {
-                fetch('delete', '/schedules/' + this.scheduleData.id + '/affixes/' + affixId).then(response => {
-                    toastr.success('删除成功')
+                fetch('delete', '/schedules/' + this.scheduleData.id + '/affixes/' + affixId).then(() => {
+                    toastr.success('删除成功');
                     this.scheduleData.affixes.data.splice(this.scheduleData.affixes.data.map(item => item.id).indexOf(affixId), 1)
                 })
             },
@@ -855,17 +863,24 @@
                         }
                     }
                 }
-                fetch('put', '/schedules/' + this.scheduleData.id, data).then(response => {
+                fetch('put', '/schedules/' + this.scheduleData.id, data).then(() => {
                     this.$refs.calendar.refresh();
                     this.scheduleParticipants = JSON.parse(JSON.stringify(this.$store.state.newParticipantsInfo));
                 })
             },
 
-            showScheduleModal: function (data) {
-                this.scheduleData = data;
-                this.scheduleParticipants = JSON.parse(JSON.stringify(data.participants.data));
-                this.$store.dispatch('changeParticipantsInfo', {data: data.participants.data});
-                $('#checkSchedule').modal('show')
+            showScheduleModal: function (scheduleId) {
+
+                let data = {
+                    include: 'calendar,participants,creator,material,affixes',
+                };
+                fetch('get', '/schedules/' + scheduleId, data).then(response => {
+                    console.log(response)
+                    this.scheduleData = response.data;
+                    this.scheduleParticipants = JSON.parse(JSON.stringify(response.data.participants.data));
+                    this.$store.dispatch('changeParticipantsInfo', {data: response.data.participants.data});
+                    $('#checkSchedule').modal('show')
+                })
             },
 
             showAddScheduleModal: function (date) {
@@ -919,7 +934,7 @@
             },
 
             deleteSchedule: function () {
-                fetch('delete', '/schedules/' + this.scheduleData.id).then(response => {
+                fetch('delete', '/schedules/' + this.scheduleData.id).then(() => {
                     $('#delModel').modal('hide');
                     toastr.success('删除成功');
                     this.$refs.calendar.refresh()
@@ -965,7 +980,7 @@
                     }
                 }
 
-                fetch('put', '/schedules/' + this.scheduleData.id, data).then(response => {
+                fetch('put', '/schedules/' + this.scheduleData.id, data).then(() => {
                     this.$refs.calendar.refresh();
                     $('#changeSchedule').modal('hide');
                     toastr.success('修改成功')
@@ -1049,7 +1064,7 @@
                 if (this.linkageSelectedIds.tasks.length > 0) {
                     data.task_ids = this.linkageSelectedIds.tasks;
                 }
-                fetch('post', '/schedules', data).then(response => {
+                fetch('post', '/schedules', data).then(() => {
                     this.$refs.calendar.refresh();
                     $('#changeSchedule').modal('hide');
                     toastr.success('添加成功')
@@ -1158,16 +1173,12 @@
                         data.participant_ids.push(participants[i].id)
                     }
                 }
-                fetch('put', '/calendars/' + this.calendarId, data).then(response => {
+                fetch('put', '/calendars/' + this.calendarId, data).then(() => {
                     this.getCalendarList();
                     this.$refs.calendar.refresh();
                     $('#addCalendar').modal('hide');
                     toastr.success('修改成功')
                 })
-            },
-
-            addParticipant: function () {
-
             },
 
             changeCalendarColor: function (value) {
@@ -1188,10 +1199,6 @@
                 }
             },
 
-            editCalendar: function () {
-
-            },
-
             selectAllCalendar: function (e) {
                 this.selectedCalendar = [];
                 if (e.target.checked) {
@@ -1202,7 +1209,7 @@
             },
 
             deleteCalendar: function () {
-                fetch('delete', '/calendars/' + this.delCalendarInfo.id).then(response => {
+                fetch('delete', '/calendars/' + this.delCalendarInfo.id).then(() => {
                     toastr.success('删除成功');
                     $('#delModel').modal('hide');
                     this.getCalendarList();
@@ -1237,11 +1244,6 @@
             allResourceShow: function () {
                 this.showAllResource = !this.showAllResource
             },
-
-            addCalendarMember: function () {
-                this.selectMemberShow = true
-            }
-
 
         }
     }
@@ -1297,20 +1299,6 @@
         font-size: 48px;
         color: #3F51B5;
         font-weight: bold;
-    }
-
-    .follow-avatar {
-        border-radius: 100%;
-        overflow: hidden;
-        width: 40px;
-        height: 40px;
-    }
-
-    .creator-avatar {
-        width: 30px;
-        height: 30px;
-        overflow: hidden;
-        border-radius: 100%;
     }
 
     .del-affix {

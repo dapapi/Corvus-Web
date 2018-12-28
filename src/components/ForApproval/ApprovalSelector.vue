@@ -90,7 +90,6 @@ export default {
                 let _this = this
                 if(this.data[0].control_source){
                     fetch('get',this.data[0].control_source.url).then((params) => {
-                        console.log(params.data);
                         _this.options = params.data
                         
                         _this.$nextTick(() => {
