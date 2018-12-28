@@ -31,15 +31,13 @@
                         </div>
                     </div>
                     <div class="clearfix">
-                        <div class="col-md-6 float-left pl-0 mb-20" style="border-right: 1px solid #eee" v-if="clientTasksInfo.length > 0">
-                            <div class="col-md-6">任务 
-                                <!-- {{newArray(clientTasksInfo).length}}/{{clientTasksInfo.length}} -->
-                            </div>
+                        <div class="col-md-6 float-left pl-0 mb-20" v-if="clientTasksInfo.length > 0">
+                            <div class="col-md-6 pl-0"><i class="iconfont icon-iconset0399 pr-2" aria-hidden="true"></i>任务</div>
                             <div class="clearfix example" v-for="(task, index) in newArray(clientTasksInfo)" :key="index">
-                                <div class="col-md-3 float-left"><router-link :to="`/tasks/${task.id}`">{{ task.title }}</router-link></div>
-                                <div class="col-md-3 float-left">{{ task.principal?task.principal.data.name:'' }}</div>
-                                <div class="col-md-4 float-left">{{ task.end_at }}</div>
-                                <div class="col-md-2 float-left">
+                                <div class="col-md-3 float-left px-0"><router-link :to="`/tasks/${task.id}`">{{ task.title }}</router-link></div>
+                                <div class="col-md-3 float-left px-0">{{ task.principal?task.principal.data.name:'' }}</div>
+                                <div class="col-md-4 float-left px-0">{{ task.end_at }}</div>
+                                <div class="col-md-2 float-left px-0">
                                     <template v-if="task.status === 1">进行中</template>
                                     <template v-if="task.status === 2">已完成</template>
                                     <template v-if="task.status === 3">已停止</template>
@@ -49,10 +47,10 @@
                         <div class="col-md-6 float-left pl-0 mb-20" v-if="clientProjectsInfo.length > 0">
                             <div class="col-md-6 p-0"><i class="iconfont icon-ego-box pr-2 " aria-hidden="true"></i>项目</div>
                             <div class="clearfix example" v-for="(project, index) in newArray(clientProjectsInfo)" :key="index">
-                                <div class="col-md-3 float-left"><router-link :to="`/projects/${project.id}`">{{project.title}}</router-link></div>
-                                <div class="col-md-3 float-left">{{ clientTypeArr.find(item => item.value == project.type).name }}</div>
-                                <div class="col-md-4 float-left">{{ project.created_at }}</div>
-                                <div class="col-md-2 float-left">
+                                <div class="col-md-3 float-left px-0"><router-link :to="`/projects/${project.id}`">{{project.title}}</router-link></div>
+                                <div class="col-md-3 float-left px-0">{{ clientTypeArr.find(item => item.value == project.type).name }}</div>
+                                <div class="col-md-4 float-left px-0">{{ project.created_at }}</div>
+                                <div class="col-md-2 float-left px-0">
                                     <template v-if="project.status === 1">进行中</template>
                                     <template v-if="project.status === 2">完成</template>
                                     <template v-if="project.status === 3">终止</template>

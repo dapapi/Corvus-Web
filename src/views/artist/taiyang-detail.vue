@@ -136,11 +136,11 @@
                                aria-controls="forum-present"
                                aria-expanded="false" role="tab">作品库</a>
                         </li>
-                        <li class="nav-item" role="presentation" v-show="artistInfo.sign_contract_status == 2">
-                            <a class="nav-link" data-toggle="tab" href="#forum-artist-fans"
-                               aria-controls="forum-present"
-                               aria-expanded="false" role="tab">粉丝数据</a>
-                        </li>
+                        <!--<li class="nav-item" role="presentation" v-show="artistInfo.sign_contract_status == 2">-->
+                            <!--<a class="nav-link" data-toggle="tab" href="#forum-artist-fans"-->
+                               <!--aria-controls="forum-present"-->
+                               <!--aria-expanded="false" role="tab">粉丝数据</a>-->
+                        <!--</li>-->
                         <li class="nav-item" role="presentation" @click="getArtistsBill"
                             v-show="artistInfo.sign_contract_status == 2">
                             <a class="nav-link" data-toggle="tab" href="#forum-artist-bill"
@@ -314,7 +314,7 @@
                                         <template v-if="filterFee === 1">全部</template>
                                         <template v-if="filterFee === 2">成本</template>
                                         <template v-if="filterFee === 3">收入</template>
-                                        <i class="iconfont icon-gengduo1 pl-2" aria-hidden="true"
+                                        <i class="iconfont icon-plus-select-down pl-2" aria-hidden="true"
                                            id="projectDropdown" data-toggle="dropdown" aria-expanded="false"></i>
                                         <div class="dropdown-menu" aria-labelledby="projectDropdown" role="menu">
                                             <a class="dropdown-item" role="menuitem" v-show="filterFee !== 1"
