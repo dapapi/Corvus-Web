@@ -1443,6 +1443,7 @@
                 user: '',
                 projectTaskingInfo: [],
                 metaInfo: '',
+                oldInfo: '',
             }
         },
 
@@ -1519,6 +1520,7 @@
                     include: 'principal,participants,creator,fields,trail.expectations,trail.client,relate_tasks,relate_projects,type',
                 };
                 fetch('get', '/projects/' + this.projectId, data).then(response => {
+                    this.oldInfo = JSON.parse(JSON.stringify(response));
                     let fieldsArr = response.meta.fields.data;
                     this.metaInfo = response.meta;
                     for (let i = 0; i < fieldsArr.length; i++) {
@@ -1984,6 +1986,45 @@
             },
 
             cancelEdit: function () {
+                this.projectInfo = this.oldInfo.data;
+                let fieldsArr = this.oldInfo.meta.fields.data;
+                this.metaInfo = this.oldInfo.meta;
+                for (let i = 0; i < fieldsArr.length; i++) {
+                    if (fieldsArr[i].field_type === 2 || fieldsArr[i].field_type === 6) {
+                        fieldsArr[i].contentArr = [];
+                        for (let j = 0; j < fieldsArr[i].content.length; j++) {
+                            fieldsArr[i].contentArr.push({
+                                name: fieldsArr[i].content[j],
+                                value: fieldsArr[i].content[j],
+                            })
+                        }
+                    }
+                }
+                this.oldInfo.data.fields = fieldsArr;
+                let params = {
+                    type: 'change',
+                };
+                params.data = this.oldInfo.data.principal.data;
+                this.$store.dispatch('changePrincipal', params);
+                if (this.oldInfo.data.participants) {
+                    for (let i = 0; i < this.oldInfo.data.participants.data.length; i++) {
+                        this.flagParticipantsIdArr.push(this.oldInfo.data.participants.data[i].id)
+                    }
+                    params.data = JSON.parse(JSON.stringify(this.oldInfo.data.participants.data));
+                    this.$store.dispatch('changeParticipantsInfo', params);
+                }
+
+                for (let i = 0; i < this.oldInfo.data.relate_tasks.data.length; i++) {
+                    this.linkageSelectedIds.tasks.push(this.oldInfoa.relate_tasks.data[i].id)
+                }
+                for (let i = 0; i < this.oldInfo.data.relate_projects.data.length; i++) {
+                    this.linkageSelectedIds.projects.push(this.oldInfo.data.relate_projects.data[i].id)
+                }
+                if (this.oldInfo.data.trail) {
+                    for (let i = 0; i < this.oldInfo.data.trail.data.expectations.data.length; i++) {
+                        this.selectedExpectationsArr.push(this.oldInfo.data.trail.data.expectations.data[i].id)
+                    }
+                }
                 this.isEdit = false;
                 this.changeInfo = {};
                 this.addInfoArr = {};
