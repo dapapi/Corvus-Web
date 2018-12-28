@@ -72,7 +72,7 @@
                 </div>
                 <div class="clearfix ml-10">
                     <div class="col-md-6 float-left pl-0 mb-20" style="border-right: 1px solid #eee">
-                        <div class="col-md-6"><i class="iconfont icon-iconset0399"></i> 任务</div>
+                        <div class="col-md-6"><i class="iconfont icon-iconset0399 pr-2"></i> 任务</div>
                         <div class="clearfix example" v-for="(item,index) in artistTasksInfo" :key="index"
                              @click="toTask(item.id)" style="cursor: pointer;">
                             <div class="col-md-3 float-left">
@@ -88,7 +88,7 @@
                         </div>
                     </div>
                     <div class="col-md-6 float-left pl-0 mb-20">
-                        <div class="col-md-6"><i class="iconfont icon-ego-box"></i>项目</div>
+                        <div class="col-md-6"><i class="iconfont icon-ego-box pr-2"></i>项目</div>
                         <div class="clearfix example" v-for="(item,index) in artistProjectsInfo" :key="index"
                              style="cursor: pointer">
                             <div class="col-md-3 float-left">
@@ -136,11 +136,11 @@
                                aria-controls="forum-present"
                                aria-expanded="false" role="tab">作品库</a>
                         </li>
-                        <li class="nav-item" role="presentation" v-show="artistInfo.sign_contract_status == 2">
-                            <a class="nav-link" data-toggle="tab" href="#forum-artist-fans"
-                               aria-controls="forum-present"
-                               aria-expanded="false" role="tab">粉丝数据</a>
-                        </li>
+                        <!--<li class="nav-item" role="presentation" v-show="artistInfo.sign_contract_status == 2">-->
+                            <!--<a class="nav-link" data-toggle="tab" href="#forum-artist-fans"-->
+                               <!--aria-controls="forum-present"-->
+                               <!--aria-expanded="false" role="tab">粉丝数据</a>-->
+                        <!--</li>-->
                         <li class="nav-item" role="presentation" @click="getArtistsBill"
                             v-show="artistInfo.sign_contract_status == 2">
                             <a class="nav-link" data-toggle="tab" href="#forum-artist-bill"

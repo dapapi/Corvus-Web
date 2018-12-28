@@ -74,7 +74,7 @@
                     </div>
                     <div class="clearfix">
                         <div v-if="projectTaskingInfo.length > 0" class="col-md-6 float-left pl-0 mb-20">
-                            <div class="col-md-6 pl-0"><i class="iconfont icon-iconset0399"></i> 任务</div>
+                            <div class="col-md-6 pl-0"><i class="iconfont icon-iconset0399  pr-2"></i> 任务</div>
                             <div class="clearfix example" v-for="task in projectTaskingInfo">
                                 <div class="col-md-3 float-left pl-0">{{ task.title }}</div>
                                 <div class="col-md-3 float-left pl-0">{{ task.principal.data.name }}</div>
@@ -142,24 +142,24 @@
                                 </template>
                             </a>
                         </li>
-                        <li class="nav-item" role="presentation"
-                            v-if="projectInfo.type != 5 && projectInfo.approval_status == 232">
-                            <a class="nav-link" data-toggle="tab" href="#forum-project-contract"
-                               aria-controls="forum-present"
-                               aria-expanded="false" role="tab">合同</a>
-                        </li>
-                        <li class="nav-item" role="presentation" @click="getProjectBill"
-                            v-if="projectInfo.type != 5 && projectInfo.approval_status == 232">
-                            <a class="nav-link" data-toggle="tab" href="#forum-project-bill"
-                               aria-controls="forum-present"
-                               aria-expanded="false" role="tab">账单</a>
-                        </li>
-                        <li class="nav-item" role="presentation" @click="getProjectReturned"
-                            v-if="projectInfo.type != 5 && projectInfo.approval_status == 232">
-                            <a class="nav-link" data-toggle="tab" href="#forum-project-payback"
-                               aria-controls="forum-present"
-                               aria-expanded="false" role="tab">回款</a>
-                        </li>
+                        <!--<li class="nav-item" role="presentation"-->
+                            <!--v-if="projectInfo.type != 5 && projectInfo.approval_status == 232">-->
+                            <!--<a class="nav-link" data-toggle="tab" href="#forum-project-contract"-->
+                               <!--aria-controls="forum-present"-->
+                               <!--aria-expanded="false" role="tab">合同</a>-->
+                        <!--</li>-->
+                        <!--<li class="nav-item" role="presentation" @click="getProjectBill"-->
+                            <!--v-if="projectInfo.type != 5 && projectInfo.approval_status == 232">-->
+                            <!--<a class="nav-link" data-toggle="tab" href="#forum-project-bill"-->
+                               <!--aria-controls="forum-present"-->
+                               <!--aria-expanded="false" role="tab">账单</a>-->
+                        <!--</li>-->
+                        <!--<li class="nav-item" role="presentation" @click="getProjectReturned"-->
+                            <!--v-if="projectInfo.type != 5 && projectInfo.approval_status == 232">-->
+                            <!--<a class="nav-link" data-toggle="tab" href="#forum-project-payback"-->
+                               <!--aria-controls="forum-present"-->
+                               <!--aria-expanded="false" role="tab">回款</a>-->
+                        <!--</li>-->
                         <li class="nav-item" role="presentation">
                             <a class="nav-link"
                                :class="(projectInfo.type == 5 || projectInfo.approval_status != 232) ? 'active' : ''"

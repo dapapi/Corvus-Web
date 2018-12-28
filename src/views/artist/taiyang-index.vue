@@ -22,7 +22,7 @@
                 <div class="clearfix">
                     <div class="col-md-3 example float-left">
                         <input type="text" v-model="listData.name" class="form-control" id="inputPlaceholder" placeholder="请输入姓名"
-                               style="width: 220px" @blur="getArtists"> 
+                               @blur="getArtists">
                     </div>
                     <div class="col-md-3 example float-left">
                         <selectors :options="artistStatusArr" placeholder="请选择艺人沟通状态" @change="getStatus"></selectors>
@@ -30,13 +30,13 @@
                     <div class="col-md-3 example float-left">
                         <selectors :options="artistSourceArr" placeholder="请选择艺人来源" @change="getSource"></selectors>
                     </div>
-                    <div class="col-md-3 example float-left">
-                        <button type="button" class="btn btn-default waves-effect waves-classic float-right"
-                                data-toggle="modal" data-target="#customizeContent"
-                                data-placement="right" title="">
-                            自定义筛选
-                        </button>
-                    </div>
+                    <!--<div class="col-md-3 example float-left">-->
+                        <!--<button type="button" class="btn btn-default waves-effect waves-classic float-right"-->
+                                <!--data-toggle="modal" data-target="#customizeContent"-->
+                                <!--data-placement="right" title="">-->
+                            <!--自定义筛选-->
+                        <!--</button>-->
+                    <!--</div>-->
                 </div>
 
                 <div class="col-md-12">
