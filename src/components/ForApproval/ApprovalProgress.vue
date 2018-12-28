@@ -47,7 +47,7 @@ import config from '@/assets/js/config.js'
 import fetch from '@/assets/utils/fetch.js'
 export default {
         //这是啥    提交页/详情页   231/232...   知会人
-    props:['formid','mode','formstatus','notice'],
+    props:['formid','mode','formstatus','notice','trend'],
     data(){
         return{
             colorArr:['#F23E7C','#FF68E2','#FB8C00','#B53FAF','#27D3A8','#2CCCDA','#38BA5D','#3F51B5'],
@@ -66,6 +66,15 @@ export default {
         formstatus:function(value){
             this.getApprover(this.formid)
         },
+        'trend.ready':function(value){
+            let _this = this
+            if(value == true){
+                console.log(this.trend.condition);
+                fetch('get','/approvals/chains?form_id='+this.formid+'&change_type=222&value='+this.trend.condition.join(',')).then((params) => {
+                    _this.approver = params.data
+                })
+            }
+        }
     },
     mounted(){
         this.getApprover(this.formid)
@@ -81,7 +90,7 @@ export default {
             }
             let _this = this
             if(!this.mode){
-                fetch('get','/approvals/chains?form_id='+value+'&change_type=222&value').then((params) => {
+                fetch('get','/approvals/chains?form_id='+value+'&change_type=222').then((params) => {
                     _this.approver = params.data
                 })
             }else{

@@ -147,7 +147,7 @@ export default new Router({
         {
             path: '/approval',
             name: 'approval',
-            redirect: '/approval/contract/initiate',
+            redirect: '/approval/project/initiate',
             component: () => import('./views/approval/index.vue'),
             children: [
                 {
