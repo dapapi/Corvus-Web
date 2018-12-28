@@ -228,7 +228,7 @@
                                     <td>{{item.principal.data.name}}</td>
                                     <td>{{item.company}}</td>
                                     <td>{{item.created_at}}</td>
-                                    <td>{{item.relate_project_bills_resource}}</td>
+                                    <td v-for="(v,index) in item.relate_project_bills_resource.data" :key="index">{{v.bigger_divide}}</td>
                                 </tr>
                             </table>
                             <div class="col-md-1" style="margin: 6rem auto" v-if="ProjectsInfo.length === 0">
@@ -556,7 +556,7 @@
                                     <div class="card-text py-5 clearfix">
                                         <div class="col-md-1 float-left text-right pl-0">录入人</div>
                                         <div class="col-md-5 float-left font-weight-bold">
-                                            {{artistInfo.name}}
+                                            {{principalName}}
                                         </div>
                                         <div class="col-md-1 float-left text-right pl-0">录入时间</div>
                                         <div class="col-md-5 float-left font-weight-bold">
@@ -566,7 +566,7 @@
                                     <div class="card-text py-5 clearfix">
                                         <div class="col-md-1 float-left text-right pl-0">最近更新人</div>
                                         <div class="col-md-5 float-left font-weight-bold">
-                                            {{artistInfo.name}}
+                                            {{principalName}}
                                         </div>
                                         <div class="col-md-1 float-left text-right pl-0">最近更新时间</div>
                                         <div class="col-md-5 float-left font-weight-bold">
@@ -613,7 +613,7 @@
                         <div class="example">
                             <div class="col-md-2 text-right float-left">关联资源</div>
                             <div class="col-md-10 float-left">
-                                博主 - {{ artistInfo.name }}
+                                博主 - {{ artistInfo.nickname}}
                             </div>
                         </div>
                         <div class="example">
@@ -812,6 +812,7 @@
                 artistTypeArr:'',
                 trueOrFalse: config.trueOrFalse,
                 artistSocialPlatform: config.artistSocialPlatform,
+                petName:'',//昵称
                 updateStar_weibo_infos:{},//修改微博
                 updateStar_douyin_infos:{},//修改抖音
                 updateStar_xiaohongshu_infos:{},//修改小红书
@@ -834,7 +835,8 @@
                 filterFee:1,
                 platformArr:config.platformArr,
                 selectedCalendar:[],
-                selectedDate:''
+                selectedDate:'',
+                Namevalue:''
             }
         },
         computed: {
@@ -854,6 +856,7 @@
                 name: this.user.nickname,
                 id: this.user.id
             })
+            this.principalName = this.user.nickname;
             //  清空任务
             $('#addTask').on('hidden.bs.modal', function () {
                 _this.$refs.mold.setValue('');//类型
@@ -1024,10 +1027,6 @@
                 fetch('get', '/bloggers/gettype').then(function (response) {
                     _this.artistTypeArr = response.data
                 })
-                // fetch('get','/users/my?include=department').then(function(response){
-                //     _this.principalId = response.data.id 
-                //     _this.principalName = response.data.name
-                // })
                  fetch('get','/bloggers/select?include=users').then(function(response){ 
                     response.data.forEach(item=>{
                          _this.principalIds.push(item.users.data.id)
@@ -1079,8 +1078,10 @@
             },
 
             cancelEdit: function () {
+                this.getArtist()
                 this.isEdit = false;
                 this.isStatrtEdit = true
+                
             },
             //类型
             changArtistType: function (value) {
@@ -1123,53 +1124,55 @@
                 this.isEdit = false;
                 this.isStatrtEdit = true;
                 let _this = this;
-                this.artistId = this.$route.params.id;
-                if(this.artistInfo.intention==1){
-                        this.updateType=true
-                    }else{
-                        this.updateType=false
-                    }
-                if(this.artistInfo.sign_contract_other==1){
-                        this.updateSign_contract_other=true
-                    }else{
-                        this.updateSign_contract_other=false
-                    }
-                let data = { 
-                    nickname:this.artistInfo.name,
-                    type_id:this.artistInfo.type.data.id,
-                    communication_status:this.artistInfo.communication_status,
-                    intention:this.artistInfo.intention,
-                    sign_contract_other: this.artistInfo.sign_contract_other,
-                    desc: this.artistInfo.desc,
-                    star_douyin_infos: this.updateStar_douyin_infos,
-                    star_weibo_infos: this.updateStar_weibo_infos,
-                    star_xiaohongshu_infos: this.updateStar_xiaohongshu_infos,
-                    platform: this.updatePlatform,
-                    level: this.artistInfo.level,
-                    cooperation_demand: this.updatedemand,
-                    hatch_star_at: _this.artistInfo.hatch_star_at,
-                    hatch_end_at: _this.artistInfo.hatch_end_at,
-                    intention_desc:_this.artistInfo.intention_desc,
-                    sign_contract_other_name:_this.artistInfo.sign_contract_other_name
-                }
-                fetch('put', '/bloggers/' + this.artistId, data).then(function (response) {
-                    toastr.success('修改成功');
-                    _this.artistTasksInfo = response.data;
+                // this.artistInfo.nickname= this.petName
+                // this.artistId = this.$route.params.id;
 
-                    if (_this.artistInfo.intention == false) {
-                        _this.updateType = 2
-                    } else {
-                        _this.updateType = 1
-                    }
-                    if (_this.artistInfo.sign_contract_other == false) {
-                        _this.updateSign_contract_other = 2
-                    } else {
-                        _this.updateSign_contract_other = 1
-                    }
+                // if(this.artistInfo.intention==1){
+                //         this.updateType=true
+                //     }else{
+                //         this.updateType=false
+                //     }
+                // if(this.artistInfo.sign_contract_other==1){
+                //         this.updateSign_contract_other=true
+                //     }else{
+                //         this.updateSign_contract_other=false
+                //     }
+                // let data = { 
+                //     nickname:this.artistInfo.nickname,
+                //     type_id:this.artistInfo.type.data.id,
+                //     communication_status:this.artistInfo.communication_status,
+                //     intention:this.artistInfo.intention,
+                //     sign_contract_other: this.artistInfo.sign_contract_other,
+                //     desc: this.artistInfo.desc,
+                //     star_douyin_infos: this.updateStar_douyin_infos,
+                //     star_weibo_infos: this.updateStar_weibo_infos,
+                //     star_xiaohongshu_infos: this.updateStar_xiaohongshu_infos,
+                //     platform: this.updatePlatform,
+                //     level: this.artistInfo.level,
+                //     cooperation_demand: this.updatedemand,
+                //     hatch_star_at: _this.artistInfo.hatch_star_at,
+                //     hatch_end_at: _this.artistInfo.hatch_end_at,
+                //     intention_desc:_this.artistInfo.intention_desc,
+                //     sign_contract_other_name:_this.artistInfo.sign_contract_other_name
+                // }
+                // fetch('put', '/bloggers/' + this.artistId, data).then(function (response) {
+                //     toastr.success('修改成功');
+                //     _this.artistTasksInfo = response.data;
 
-                    _this.getArtist()
-                    $('.selectpicker').selectpicker('refresh')
-                })
+                //     if (_this.artistInfo.intention == false) {
+                //         _this.updateType = 2
+                //     } else {
+                //         _this.updateType = 1
+                //     }
+                //     if (_this.artistInfo.sign_contract_other == false) {
+                //         _this.updateSign_contract_other = 2
+                //     } else {
+                //         _this.updateSign_contract_other = 1
+                //     }
+
+                //     _this.getArtist()
+                //     $('.selectpicker').selectpicker('refresh')
+                // })
 
             },
 
@@ -1206,8 +1209,7 @@
                     _this.getArtist()
 
                 })
-                this.user = JSON.parse(Cookies.get('user'))
-                this.principalName = this.user.nickname;
+               
                 let obj={
                     title:'制作人视频评分-视频评分',
                     principal_id:this.user.id,
@@ -1357,7 +1359,7 @@
             ,
             //昵称
             changArtistName: function (value) {
-                this.artistInfo.name = value
+                this.Namevalue = value
             }
             ,
 
@@ -1419,6 +1421,7 @@
             ,
             //合作需求
             changeArtistDemand: function (value) {
+             
                 this.updatedemand = value
             }
             ,
