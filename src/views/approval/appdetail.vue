@@ -119,7 +119,7 @@
         </div>
         <BuildProject :project-type="projectType" :project-fields-arr="projectFieldsArr" 
         :default-data='{fields:info.fields.data,list:list,trailInfo:trailInfo}'></BuildProject>
-        <ApprovalGoModal :mode='approvalMode' :id='list.project_number' @approvaldone='approvalDone' />
+        <ApprovalGoModal :mode='approvalMode' :id='this.$route.params.id' @approvaldone='approvalDone' />
     </div>
 
 </template>
@@ -188,7 +188,8 @@ export default {
             let _this = this
             fetch('get','/users/my?include=department,roleUser').then((params) => {
                 _this.currentId = params.data.id
-                _this.roleUser = params.data.roleUser.data.role_id
+                console.log(params.data);
+                _this.roleUser = params.data.roleUser.data[0].role_id
                 if(_this.currentId === _this.pending.id || _this.roleUser === _this.pending.id){
                     _this.isCurrentApprover = true
                 }else{
