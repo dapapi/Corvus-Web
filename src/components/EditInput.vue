@@ -28,8 +28,10 @@
                 get() {
                     return this.content
                 },
-                set() {
-                    return this.content
+                set(newValue) {
+                    
+                    this.$emit('change', newValue)
+                    return newValue
                 }
             }
         },
@@ -39,9 +41,9 @@
                 this.isEditInput = newValue;
             },
 
-            context(newValue) {
-                this.$emit('change', newValue)
-            },
+            // context(newValue) {
+            //     this.$emit('change', newValue)
+            // },
             content() {
                 this.$nextTick(() => {
                     this.context = this.content
