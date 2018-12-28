@@ -139,40 +139,46 @@
                         hoverImage: 'https://res.papitube.com/corvus/images/select-baobiao.png',
                     },
                     {
-                        name: '应用',
-                        image: 'https://res.papitube.com/corvus/images/yingyong.png',
-                        hoverImage: 'https://res.papitube.com/corvus/images/select-yingyong.png',
-                        data: [
-                            {
-                                name: '考勤',
-                                code: 'attendance'
-                            },
-                            {
-                                name: '公告',
-                                code: 'broadcast'
-                            },
-                            {
-                                name: '简报',
-                                code: 'brief'
-                            },
-                            // {
-                            //     name: '在线编辑',
-                            //     code: 'collaboration'
-                            // },
-                            // {
-                            //     name: '网盘',
-                            //     code: 'pan'
-                            // },
-                            {
-                                name: '通讯录',
-                                code: 'address'
-                            },
-                            {
-                                name: '知识库',
-                                code: 'knowledgebase'
-                            },
-                        ]
+                        name: '通讯录',
+                        code: 'address',
+                        image: 'https://res.papitube.com/corvus/images/tongxunlu.png',
+                        hoverImage: 'https://res.papitube.com/corvus/images/select-tongxunlu.png',
                     },
+                    // {
+                    //     name: '应用',
+                    //     image: 'https://res.papitube.com/corvus/images/yingyong.png',
+                    //     hoverImage: 'https://res.papitube.com/corvus/images/select-yingyong.png',
+                    //     data: [
+                    //         {
+                    //             name: '考勤',
+                    //             code: 'attendance'
+                    //         },
+                    //         {
+                    //             name: '公告',
+                    //             code: 'broadcast'
+                    //         },
+                    //         {
+                    //             name: '简报',
+                    //             code: 'brief'
+                    //         },
+                    //         // {
+                    //         //     name: '在线编辑',
+                    //         //     code: 'collaboration'
+                    //         // },
+                    //         // {
+                    //         //     name: '网盘',
+                    //         //     code: 'pan'
+                    //         // },
+                    //         {
+                    //             name: '通讯录',
+                    //             code: 'address'
+                    //         },
+                    //         {
+                    //             name: '知识库',
+                    //             code: 'knowledgebase'
+                    //         },
+                    //     ]
+                    // },
                 ],
                 pageRoute: '',
                 visible: false,
