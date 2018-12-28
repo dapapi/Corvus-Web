@@ -9,14 +9,14 @@
 
             <div class="panel col-md-12">
                 <div class="card-block">
-                    <h4 class="card-title">{{ clientInfo.company }}</h4>
+                    <h4 class="card-title">{{ clientInfoCopy.company }}</h4>
                     <div class="card-text clearfix example">
                         <div class="col-md-6 float-left clearfix pl-0">
                             <div class="float-left pl-0 pr-2 col-md-2">
                                 <i class="iconfont icon-kehu pr-2" aria-hidden="true"></i>负责人
                             </div>
-                            <div class="font-weight-bold float-left" v-if="clientInfo.principal">
-                                {{ clientInfo.principal?clientInfo.principal.data.name:'' }}
+                            <div class="font-weight-bold float-left" v-if="clientInfoCopy.principal">
+                                {{ clientInfoCopy.principal?clientInfoCopy.principal.data.name:'' }}
                             </div>
                         </div>
                     </div>
@@ -25,8 +25,8 @@
                             <div class="float-left pl-0 pr-2 col-md-2">
                                 <i class="iconfont icon-labelbiaoqian pr-2" aria-hidden="true"></i>类型
                             </div>
-                            <div class="font-weight-bold float-left" v-if="clientInfo.type">
-                                {{ clientTypeArr.find(item => item.value == clientInfo.type).name }}
+                            <div class="font-weight-bold float-left" v-if="clientInfoCopy.type">
+                                {{ clientTypeArr.find(item => item.value == clientInfoCopy.type).name }}
                             </div>
                         </div>
                     </div>
@@ -222,10 +222,10 @@
                         <div class="card" v-if="clientInfo.company">
                             <div class="card-header card-header-transparent card-header-bordered">
                                 <div class="float-left font-weight-bold third-title">客户详情</div>
-                                <div class="float-right pointer-content">
+                                <div class="float-right pointer-content" v-show="!isEdit">
                                     <i class="iconfont icon-bianji2" aria-hidden="true" @click="editBaseInfo"></i>
                                 </div>
-                                <div class="float-right mr-40" v-show="isEdit">
+                                <div class="float-right" v-show="isEdit">
                                     <button class="btn btn-sm btn-white btn-pure" @click="cancelEdit">取消</button>
                                     <button class="btn btn-primary" @click="changeClientBaseInfo">确定</button>
                                 </div>
@@ -559,6 +559,7 @@
                 taskLevel: 1,
                 isEdit: false,
                 clientInfo: {},
+                clientInfoCopy: {},
                 clientTasksInfo: [],
                 clientTrailsInfo: [],
                 clientContactsInfo: [],
@@ -653,6 +654,7 @@
                 let _this = this;
                 fetch('get', '/clients/' + this.clientId, {include: 'principal,creator'}).then(function (response) {
                     _this.clientInfo = response.data;
+                    _this.clientInfoCopy = JSON.parse(JSON.stringify(response.data))
 
                     let params = {
                         type: 'change',

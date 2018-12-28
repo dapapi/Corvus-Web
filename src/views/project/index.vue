@@ -303,3 +303,12 @@
         }
     }
 </script>
+
+<style lang="scss" scoped>
+/deep/ .addMember {
+    .addMember-trigger-dropdown {
+        top: -400px!important;
+    }
+}
+</style>
+

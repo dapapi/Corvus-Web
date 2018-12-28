@@ -94,8 +94,12 @@
 <style scoped>
     .follow-task {
         height: 240px;
-        overflow-y: auto;
+        overflow-y: hidden;
         overflow-x: hidden;
+    }
+
+    .follow-task:hover {
+        overflow-y: auto;
     }
 
     .no-nav-tab-border {

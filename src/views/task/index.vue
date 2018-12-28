@@ -329,7 +329,7 @@
                     include:
                         "principal,pTask,tasks,resource.resourceable,resource.resource,participants"
                 };
-                let url = "/tasks/my_all";
+                let url = "/tasks";
 
                 if (this.taskNameSearch) {
                     params.keyword = this.taskNameSearch;
