@@ -217,7 +217,6 @@
             },
             goManagement() {
                 this.visible = false
-                console.log(this.canPassBack)
                 if (this.canPassBack) {
                     window.open('/management')
                 } else {
