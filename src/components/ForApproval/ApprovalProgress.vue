@@ -77,11 +77,14 @@ export default {
         },
         'trend':{
             handler:function(newValue,oldValue){
-                if(this.trend.ready==true)
-                var _this = this
-                fetch('get','/approvals/chains?form_id='+this.formid+'&change_type=224&value='+this.trend.condition.join(',')).then((params) => {
-                    _this.approver = params.data
-                })
+                if(this.trend.ready==true && this.trend.condition[0].length !== 0){
+                    var _this = this
+                    console.log(this.trend.condition[0]);
+                    fetch('get','/approvals/chains?form_id='+this.formid+'&change_type=224&value='+this.trend.condition.join(',')).then((params) => {
+                        _this.approver = params.data
+                    })
+                }
+                
             },
             deep:true,
         }

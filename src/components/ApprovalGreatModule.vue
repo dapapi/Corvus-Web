@@ -22,7 +22,7 @@
 
                     </div>
                     <div class="modal-footer">
-                        <button type="button" class="btn btn-default btn-pure waves-effect waves-light waves-round" data-dismiss="modal">取消</button>
+                        <button type="button" class="btn btn-default btn-pure waves-effect waves-light waves-round" data-dismiss="modal" @click='clearSignal'>取消</button>
                         <button type="button" class="btn btn-primary waves-effect waves-light waves-round" @click='approvalSubmit'>提交</button>
                     </div>
                 </div>
@@ -81,7 +81,7 @@ export default {
     mounted(){
         let _this = this
         $('#approval-great-module').on('show.bs.modal',function(){
-                _this.clearSignal()
+                // _this.clearSignal()
                 _this.$nextTick(() => {
                     _this.getFormContractor() 
                 })
