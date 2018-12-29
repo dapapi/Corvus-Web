@@ -1027,6 +1027,7 @@
                     } else {
                         _this.artistInfo.artistWorkProportion = false
                     }
+                    _this.isLoading = false;
 
                 });
                 
@@ -1045,7 +1046,7 @@
                 //     })
 
                 // })
-                _this.isLoading = false;
+                
             },
             //账单
             getArtistsBill(page = 1,expense_type){  

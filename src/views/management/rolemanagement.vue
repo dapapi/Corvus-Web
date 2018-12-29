@@ -82,7 +82,7 @@
                                             <li  v-show="item.id==n.group_id && switchId.includes(n.group_id)"
                                                 class="py-5"
                                                 style="position:relative;" @click="changeCont(n.id,index)"
-                                                :class="n.id==jobCont?'back':''" >
+                                                :class="n.id==jobCont?'back':''">
                                                 <template >
                                                     <i class="iconfont icon-chengyuannew pr-10"
                                                        style="vertical-align: middle;"></i>
@@ -710,7 +710,7 @@
                 defaultId: '0',
                 defaultpitchon: '1',
                 funDate: data,
-                switchId: [],
+                switchId: ['1994731356'],
                 rolepower: [],
                 powerDate: [],
                 powerInfo: [],
@@ -735,7 +735,7 @@
                 rolegroupName: '',
                 emptyrole_describe: '',
                 isAactive:true,
-                
+                idArray:[]
             }
         },
         mounted() {
@@ -763,7 +763,10 @@
                 let _this = this;
                 fetch('get', '/console/group?Accept=application/vnd.Corvus.v1+json').then(function (response) {
                     _this.groupingDate = response.data;
-                    console.log(_this.groupingDate)
+                    response.data.forEach(item=>{
+                       _this.idArray.push(item.id) 
+                    })
+                  
                 });
             },
             //获取成员数据
@@ -1116,7 +1119,8 @@
                 } else {
                     this.switchId.splice(this.switchId.indexOf(id), 1)
                 }
-
+                
+                
             },
             //删除的名字id获取
             role(value) {
