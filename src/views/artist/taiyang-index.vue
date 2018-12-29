@@ -583,19 +583,19 @@
                     toastr.error('请选择是否与其他公司签约');
                     return false
                 }
-                if (!this.affixesType) {
-                    toastr.error('请选择附件类型')
-                    return false
-                }
-                if(this.signCompany == 2&&!this.sign_contract_other_name){
+                if(this.signCompany == 1&&!this.sign_contract_other_name){
                     toastr.error('请输入已签约公司名称');
                     return false
                 }
-
-                if(this.affixes.length === 0){
+                // console.log(this.affixesType)
+                if(this.affixesType>1&&this.affixes.length==0){
                     toastr.error('请上传附件');
                     return false
                 }
+                // if(this.affixes){
+                //     toastr.error('请上传附件');
+                //     return false
+                // }
                 // if(!this.uploadUrl){
                 //     toastr.error('请上传头像')
                 //     return false
@@ -631,7 +631,7 @@
                     desc:this.artistDesc,//  备注
                     avatar:this.uploadUrl
 
-                };
+                }
                 let _this = this;
                 fetch('post', '/stars', data).then(function (response) {
                     toastr.success('创建成功');
