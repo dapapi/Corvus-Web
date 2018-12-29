@@ -117,8 +117,8 @@
                     self.$emit('dayClick', formatDate);
                 },
                 eventClick: function (event, jsEvent, view) {
-                    // let data = self.allScheduleInfo.find(item => item.id === event.id);
-                    self.$emit('scheduleClick', event.id)
+                    let data = self.allScheduleInfo.find(item => item.id === event.id);
+                    self.$emit('scheduleClick', data)
                 },
                 eventMouseover: function (event, jsEvent, view) {
                     // console.log(jsEvent)
