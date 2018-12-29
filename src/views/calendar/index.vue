@@ -1106,6 +1106,7 @@
                 this.endMinutes = '00:00';
                 this.eventPlace = '';
                 this.scheduleRepeat = 0;
+                this.scheduleMaterialId = '';
                 this.eventDesc = '';
                 this.isAllday = false;
                 this.schedulePrivacy = false;
