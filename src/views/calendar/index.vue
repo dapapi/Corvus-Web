@@ -592,7 +592,7 @@
                 calendarActionType: '',
                 scheduleCalendar: '',
                 isScheduleAllday: 0,
-                scheduleRepeat: 1,
+                scheduleRepeat: 0,
                 scheduleData: '',
                 scheduleParticipants: '',
                 isAllday: false,
