@@ -22,7 +22,7 @@
                         <section class="page-aside-section">
                             <div class="site-menubar-body" style="width:260px;">
                                 <!--默认分组-->
-                                <ul class="menu pl-0 m-0 pb-10" style="width:260px;">
+                                <!-- <ul class="menu pl-0 m-0 pb-10" style="width:260px;">
                                     <li class="site-menu-item has-sub" v-for="(item,index) in job" :key="index"
                                         style="width:260px;">
                                         <a href="javascript:void(0) " class="p-5" @click="clickdefault">
@@ -46,7 +46,7 @@
                                         </li>
 
                                     </ul>
-                                </ul>
+                                </ul> -->
                                 <!--渲染分组 -->
                                 <ul class="menu pl-0">
                                     <li class="site-menu-item has-sub  pb-10" v-for="(item,index) in groupingDate"
@@ -61,7 +61,7 @@
                                             <span class="site-menu-title">{{item.name}}</span>
                                         </a>
                                         <div class="drop-parent" style="position: absolute; right:23px;top:0;"
-                                             v-if="item.id" @click="grouping(item.id)">
+                                             v-if="item.id" @click="grouping(item.id)" v-show="index!==0">
                                             <i class="iconfont icon-gengduo1 font-size-20 parent" aria-hidden="true"
                                                data-toggle="dropdown" aria-expanded="false"
                                                style="cursor: pointer; float: right;line-height: 40px;">
@@ -77,8 +77,8 @@
                                             </div>
                                         </div>
 
-                                        <ul class="administration-subordinate-item m-0" v-for="n in roleDate"
-                                            :key="n.id">
+                                        <ul class="administration-subordinate-item m-0" v-for="(n,index) in roleDate"
+                                            :key="index">
                                             <li v-show="item.id==n.group_id && switchId.includes(n.group_id)"
                                                 class="py-5"
                                                 style="position:relative;" @click="changeCont(n.id)"
@@ -89,7 +89,7 @@
                                                     <span class="site-menu-title">{{n.name}}</span>
                                                 </template>
                                                 <div class="drop-son" style="position: absolute; right:23px;top:0px;"
-                                                     @click="role(n.id)">
+                                                     @click="role(n.id)" v-if="n.group_id!==1994731356">
                                                     <i class="iconfont icon-gengduo1 font-size-20 son"
                                                        aria-hidden="true"
                                                        data-toggle="dropdown" aria-expanded="false"
@@ -121,7 +121,7 @@
                     </div>
 
                 </div>
-                <div class="col-md-9 float-left" style="border-left:1px solid #e3e3e3;" v-if="defaultId==1">
+                <!-- <div class="col-md-9 float-left" style="border-left:1px solid #e3e3e3;" v-if="defaultId==1">
                     <div class="page-header py-10">
                         <h5>所有者<span class=" pl-10" style="font-weight:300;color:#999999;font-size:12px;">系统默认角色，默认具有企业功能权限和全部数据可见范围</span>
                         </h5>
@@ -270,12 +270,13 @@
                             </table>
                         </div>
                     </div>
-                </div>
+                </div> -->
                 <div class="col-md-9 float-left" v-for="item in roleDate" :key="item.id" v-show="item.id==jobCont"
                      style="border-left:1px solid #e3e3e3;">
                     <div class="page-header py-10">
                         <h5>{{item.name}}<span class=" pl-10"
-                                               style="font-weight: 300">全部人员，共{{item.users.data.length}}人</span></h5>
+                                               style="font-weight: 300" v-if="item.group_id!==1994731356">全部人员，共{{item.users.data.length}}人</span><span class=" pl-10" style="font-weight:300;color:#999999;font-size:12px;">系统默认角色，此处仅显示企业组织架构中已设置的“部门主管”</span>
+                        </h5>
 
                     </div>
                     <div class="col-md-12">
@@ -288,18 +289,20 @@
                             <li class="nav-item" role="presentation">
                                 <a class="nav-link" data-toggle="tab" :href="'#forum-authority'+ item.id"
                                    aria-controls="forum-present"
-                                   aria-expanded="false" role="tab">功能权限</a>
+                                   aria-expanded="false" role="tab" v-if="item.group_id!==1994731356">功能权限</a>
                             </li>
                             <li class="nav-item" role="presentation">
                                 <a class="nav-link" data-toggle="tab" :href="'#forum-scope'+ item.id"
                                    aria-controls="forum-present"
-                                   aria-expanded="false" role="tab">数据范围</a>
+                                   aria-expanded="false" role="tab" v-if="item.group_id!==1994731356">数据范围</a>
                             </li>
                         </ul>
                     </div>
                     <div class="page-content tab-content nav-tabs-animate bg-white pt-20">
                         <div class="tab-pane animation-fade " :class="isAactive?'active':''" :id="'forum-member'+item.id" role="tabpanel">
+                            <span style="font-weight:300;color:#999999;font-size:12px;">如需添加“部门主管”，请到【成员管理】页面，在【编辑部门】中设置“部门主管”，设置完成后自动同步。</span>
                             <table class="table table-hover" data-plugin="selectable" data-selectable="selectable">
+                               
                                 <tr>
                                     <th class="w-50">
                                        <span class="checkbox-custom checkbox-primary">
@@ -751,7 +754,7 @@
                 let _this = this;
                 fetch('get', '/console/role').then(function (response) {
                     _this.roleDate = response.data;
-                    
+                    console.log(_this.roleDate )
                 });
             },
             //获取分组数据
@@ -759,6 +762,7 @@
                 let _this = this;
                 fetch('get', '/console/group?Accept=application/vnd.Corvus.v1+json').then(function (response) {
                     _this.groupingDate = response.data;
+                    console.log(_this.groupingDate)
                 });
             },
             //获取成员数据
