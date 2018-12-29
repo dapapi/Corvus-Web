@@ -75,19 +75,19 @@
                 <div class="panel col-md-12 col-lg-12 pb-10">
                     <div class="caption">
                         <h6 class="page-title">{{list.title}}</h6>
-                        <span>编号：{{list.project_number}}</span>
+                        <span>编号：{{list.form_instance_number}}</span>
                     </div>
                     <div class="example">
                         <div class="col-md-3 float-left">申请人</div>
-                        <div class="col-md-3 float-left">{{list.name}}</div>
-                        <div class="col-md-3 float-left">部门</div>
-                        <div class="col-md-3 float-left">{{list.department_name }}</div>
+                        <div class="col-md-3 float-left">{{list.name || info.approval.name}}</div>
+                        <div class="col-md-3 float-left">职位</div>
+                        <div class="col-md-3 float-left">{{list.position || info.approval.position}}</div>
                     </div>
                     <div class="example">
                         <div class="col-md-3 float-left">部门</div>
-                        <div class="col-md-3 float-left">{{list.department_name}}</div>
+                        <div class="col-md-3 float-left">{{list.department_name || info.approval.department_name}}</div>
                         <div class="col-md-3 float-left">申请时间</div>
-                        <div class="col-md-3 float-left">{{list.created_at}}</div>
+                        <div class="col-md-3 float-left">{{list.created_at || info.approval.created_at}}</div>
                     </div>
                     <div class="example pt-20" style="border-top:1px solid #ccc">
 
@@ -105,7 +105,7 @@
                                 <h6 class="page-title pb-20" style="border-bottom:1px solid #ccc">审批流程</h6>
                                 <div class="">
                                     <ApprovalProgress mode='detail' 
-                                            :formid='list.project_number' 
+                                            :formid='list.form_instance_number' 
                                             :formstatus='currentStatus' 
                                             @waitingfor='waitingFor'
                                             :notice="info.participant"
