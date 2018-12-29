@@ -187,7 +187,8 @@
         },
         computed: {
             ...mapState([
-                'unReadMsg'
+                'unReadMsg',
+                'canPassBack' // 能否进入后台
             ])
         },
         mounted() {
@@ -216,7 +217,12 @@
             },
             goManagement() {
                 this.visible = false
-                window.open('/management')
+                console.log(this.canPassBack)
+                if (this.canPassBack) {
+                    window.open('/management')
+                } else {
+                    toastr.error('您没有进入后台的权限！')
+                }
             },
             hideBackModel () {
                 this.visible = false
