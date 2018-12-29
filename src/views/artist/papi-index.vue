@@ -1,6 +1,6 @@
 <template>
     <div class="page">
-
+        <Loading :is-loading="isLoading"></Loading>
         <div class="page-header page-header-bordered">
             <h1 class="page-title">博主管理</h1>
 
@@ -147,13 +147,13 @@
                     </div>
                     <div class="modal-body">
                         <div class="example">
-                            <div class="col-md-2 text-right float-left">昵称</div>
+                            <div class="col-md-2 text-right float-left require">昵称</div>
                             <div class="col-md-10 float-left pl-0">
                                 <input type="text" class="form-control" placeholder="请输入昵称" v-model="artistName">
                             </div>
                         </div>
                         <div class="example">
-                            <div class="col-md-2 text-right float-left">平台</div>
+                            <div class="col-md-2 text-right float-left require">平台</div>
                             <div class="col-md-10 float-left pl-0">
                                  <CheckboxGroup :optionData="platformList" @change="changeCheckbox" :isLine="true">
                                     <template slot-scope="scope">
@@ -194,20 +194,20 @@
                             </div>
                         </div>
                         <div class="example">
-                            <div class="col-md-2 text-right float-left">类型</div>
+                            <div class="col-md-2 text-right float-left require">类型</div>
                             <div class="col-md-10 float-left pl-0">
                                 <selectors :options="artistTypeArr" @change="changeArtistType" ref="papitype"></selectors>
                             </div>
                         </div>
                         <div class="example">
-                            <div class="col-md-2 text-right float-left">沟通状态</div>
+                            <div class="col-md-2 text-right float-left require">沟通状态</div>
                             <div class="col-md-3 float-left pl-0">
                                 <selectors :options="papiCommunicationStatusArr"
                                            @change="changeCommunicationType" ref="communicationType"></selectors>
                             </div>
                         </div>
                         <div class="example">
-                            <div class="col-md-2 text-right float-left">与我司签约意向</div>
+                            <div class="col-md-2 text-right float-left require">与我司签约意向</div>
                             <div class="col-md-5 float-left pl-0">
                                 <selectors :options="yesOrNoArr" @change="changeSignIntention" ref="signIntention"></selectors>
                             </div>
@@ -217,7 +217,7 @@
                             </div>
                         </div>
                         <div class="example">
-                            <div class="col-md-2 text-right float-left">是否签约其他公司</div>
+                            <div class="col-md-2 text-right float-left require">是否签约其他公司</div>
                             <div class="col-md-5 float-left pl-0">
                                 <selectors :options="yesOrNoArr" @change="isSignCompany" ref="isSign"></selectors>
                             </div>
@@ -361,6 +361,7 @@
                 blogName:'',//博主名称
                 blogStatus:1,//博主状态
                 selectedArtistsArr: [],
+                isLoading:true
             }
         },
         watch:{
@@ -422,7 +423,9 @@
                     _this.current_page = response.meta.pagination.current_page;
                     _this.total = response.meta.pagination.total;
                     _this.total_pages = response.meta.pagination.total_pages;
+                    _this.isLoading = false;
                 });
+                
             },
 
             //获取博主类型

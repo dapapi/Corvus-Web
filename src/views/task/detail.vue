@@ -454,19 +454,19 @@
                             </div>
                         </div>
                         <div class="example">
-                            <div class="col-md-2 text-right float-left">任务类型</div>
+                            <div class="col-md-2 text-right float-left require">任务类型</div>
                             <div class="col-md-10 float-left pl-0">
                                 <selectors ref="taskType" :options="taskTypeArr" @change="addTaskType"></selectors>
                             </div>
                         </div>
                         <div class="example">
-                            <div class="col-md-2 text-right float-left">任务名称</div>
+                            <div class="col-md-2 text-right float-left require">任务名称</div>
                             <div class="col-md-10 float-left pl-0">
                                 <input type="text" class="form-control" placeholder="请输入任务名称" v-model="taskName">
                             </div>
                         </div>
                         <div class="example">
-                            <div class="col-md-2 text-right float-left">负责人</div>
+                            <div class="col-md-2 text-right float-left require">负责人</div>
                             <div class="col-md-5 float-left pl-0">
                                 <input-selectors :placeholder="'请选择负责人'"
                                                  @change="addPrincipal"></input-selectors>
@@ -479,13 +479,13 @@
                             </div>
                         </div>
                         <div class="example">
-                            <div class="col-md-2 text-right float-left pl-0">任务优先级</div>
+                            <div class="col-md-2 text-right float-left pl-0 require">任务优先级</div>
                             <div class="col-md-10 float-left pl-0">
                                 <selectors :options="taskLevelArr" ref="taskLevel" @change="addTaskLevel"></selectors>
                             </div>
                         </div>
                         <div class="example">
-                            <div class="col-md-2 text-right float-left">开始时间</div>
+                            <div class="col-md-2 text-right float-left require">开始时间</div>
                             <div class="col-md-5 float-left pl-0">
                                 <datepicker ref='startTime' @change="addStartTime"></datepicker>
                             </div>
@@ -495,7 +495,7 @@
                             </div>
                         </div>
                         <div class="example">
-                            <div class="col-md-2 text-right float-left">截止时间</div>
+                            <div class="col-md-2 text-right float-left require">截止时间</div>
                             <div class="col-md-5 float-left pl-0">
                                 <datepicker ref="endTime" @change="addEndTime"></datepicker>
                             </div>
@@ -616,7 +616,8 @@
             $('#push-reason').on('hidden.bs.modal', () => {
                 this.pushReason = ''
             })
-            this.getQuestionId()
+            // 请求问卷
+            // this.getQuestionId()
         },
 
         watch: {
@@ -863,6 +864,10 @@
                     toastr.error('请选择任务类型！')
                     return
                 }
+                if (!this.$store.state.newPrincipalInfo.id) {
+                    toastr.error('请选择负责人！')
+                    return
+                }
                 if (!this.taskLevel) {
                     toastr.error('请选择任务优先级！')
                     return
@@ -882,8 +887,6 @@
                 let data = {
                     title: this.taskName,
                     type: this.taskType,
-                    resource_type: this.resourceType,
-                    resourceable_id: this.resourceableId,
                     principal_id: this.$store.state.newPrincipalInfo.id,
                     participant_ids: participant_ids,
                     priority: this.taskLevel,
@@ -891,6 +894,12 @@
                     end_at: this.endTime + ' ' + this.endMinutes,
                     desc: this.taskIntroduce,
                 };
+                if (this.resourceType) {
+                    data.resource_type = this.resourceType
+                }
+                if (this.resourceableId) {
+                    data.resourceable_id = this.resourceableId
+                }
                 let self = this
                 fetch('post', '/tasks/' + this.taskId + '/subtask', data).then(function (response) {
                     toastr.success('添加成功');

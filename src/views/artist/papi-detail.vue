@@ -1,5 +1,6 @@
 <template>
     <div class="page">
+        <Loading :is-loading="isLoading"></Loading>
         <div class="page-header page-header-bordered">
             <h1 class="page-title d-inline">博主详情</h1>
 
@@ -25,24 +26,24 @@
                     <h4 class="card-title">{{artistInfo.nickname}}</h4>
                      <div class="card-text clearfix">
                         <div class="card-text clearfix example">
-                        <div class="col-md-6 float-left pl-0"  v-show="artistInfo.sign_contract_status == 2&&artistInfo.publicity.data.length>0">
+                        <div class="col-md-6 float-left pl-0"  v-if ="artistInfo.publicity" v-show="artistInfo.sign_contract_status == 2&&artistInfo.publicity.data.length>0">
                             <div class="float-left pl-0 col-md-2">
                                 <i class="iconfont icon-yonghu pr-2"></i>
                                 <span>制作人</span>
                             </div>
-                            <!-- <div class="font-weight-bold float-left" >
-                                <template v-if="artistInfo.publicity.data.length>0" v-for="item in artistInfo.publicity.data">
+                            <div class="font-weight-bold float-left" v-for="(item,index) in artistInfo.publicity.data" :key="index">
+                                <template  >
                                     {{item.name}}
                                 </template>
-                            </div> -->
+                            </div>
                         </div>
                          <div class="col-md-6 float-left pl-0" v-show="artistInfo.sign_contract_status == 1">
-                            <div class="float-left pl-0 pr-2 col-md-2">
+                            <div class="float-left pl-0 pr-2 col-md-4">
                                 <i class="iconfont icon-yonghu pr-2" aria-hidden="true"></i>录入人
                             </div>
-                            <div class="font-weight-bold float-left" v-if="principalName">
-                                <template>
-                                    {{ principalName}}
+                            <div class="font-weight-bold float-left"  v-if="artistInfo.creator" v-for="(entry,index) in artistInfo.creator" :key="index">
+                                <template >
+                                    {{ entry.name}}
                                 </template>
                             </div>
                         </div>
@@ -60,7 +61,7 @@
                     </div>
                 </div>
                 <div class="clearfix">
-                    <div class="col-md-6 float-left pl-1 mb-20 pr-1" style="border-right: 1px solid #eee" >
+                    <div class="col-md-6 float-left pl-1 mb-20 pr-1"  v-if="tasksInfo.length>0">
                         <div class="col-md-6"><i class="iconfont icon-iconset0399 pr-2"></i> 任务</div>
                         <div class="clearfix example taskshow" v-for="(task,index) in tasksInfo" :key="index" @click="JumpDetails(task.id)">
                             <div class="col-md-3 float-left">{{task.title}}</div>
@@ -75,7 +76,7 @@
                         </div>
                     </div>
                     <div class="col-md-6 float-left pl-0 mb-20" >
-                        <div class="col-md-12" v-if="artistInfo.sign_contract_status == 2">
+                        <div class="col-md-12" v-if="artistInfo.sign_contract_status == 2&&ProjectsInfo.length>0" >
                             <div class="col-md-12"><i class="iconfont icon-ego-box pr-2"></i>项目</div>
                             <div class="clearfix example projectshow" v-for="(item,index) in ProjectsInfo" :key="index" @click="projectDetails(item.id)">
                                 <div class="col-md-3 float-left">{{item.title}}</div>
@@ -88,10 +89,10 @@
                                 </div>
                             </div>
                         </div>
-                       <div class="col-md-6" v-show="artistInfo.sign_contract_status == 1">
+                       <div class="col-md-6 pl-3" v-show="artistInfo.sign_contract_status == 1">
                             <div class="clearfix">
-                                <div class="col-md-6 float-left"><span>沟通状态</span></div>
-                                <div class="col-md-6 float-left font-weight-bold "  v-if="artistInfo.communication_status">
+                                <div class="col-md-8 float-left"><span>沟通状态</span></div>
+                                <div class="col-md-4 float-left font-weight-bold "  v-if="artistInfo.communication_status">
                                     <template >
                                             {{ papiCommunicationStatusArr.find(item => item.value ==
                                             artistInfo.communication_status).name}}
@@ -99,8 +100,8 @@
                                 </div>
                             </div>
                             <div class="clearfix example ">
-                                <div class="col-md-6 float-left"><span>平台</span></div>
-                                <div class="col-md-6 float-left font-weight-bold " v-if="artistInfo.platform">
+                                <div class="col-md-8 float-left"><span>平台</span></div>
+                                <div class="col-md-4 float-left font-weight-bold " v-if="artistInfo.platform">
                                             <template v-if="artistInfo.platform==1">
                                                     微博
                                             </template>
@@ -116,7 +117,7 @@
                                 </div>
                             </div>
                             <div class="clearfix example " >
-                                <div class="col-md-6 float-left" >
+                                <div class="col-md-8 float-left" >
                                     <template v-if="artistInfo.platform==1">
                                             微博地址
                                     </template>
@@ -130,7 +131,7 @@
                                             微博,抖音,小红书地址
                                     </template>
                                 </div>
-                                <div class="col-md-6 float-left font-weight-bold ">
+                                <div class="col-md-4 float-left font-weight-bold ">
                                     <template v-if="artistInfo.platform==1">
                                             {{artistInfo.weibo_url}}
                                     </template>
@@ -155,10 +156,10 @@
             <div class="col-md-12 panel">
                 <div class="col-md-12">
                     <ul class="nav nav-tabs nav-tabs-line" role="tablist">
-                        <li class="nav-item" role="presentation" v-show="artistInfo.sign_contract_status == 2">
+                        <li class="nav-item" role="presentation" v-show="artistInfo.sign_contract_status == 2" >
                             <a class="nav-link" data-toggle="tab" href="#forum-artist-schedule"
                                aria-controls="forum-base"
-                               aria-expanded="true" role="tab"  >日程</a>
+                               aria-expanded="true" role="tab"  :class="artistInfo.sign_contract_status == 2?'active':''">日程</a>
                         </li>
                         <li class="nav-item" role="presentation" v-show="artistInfo.sign_contract_status == 2">
                             <a class="nav-link" data-toggle="tab" href="#forum-artist-projects"
@@ -169,16 +170,20 @@
                             <a class="nav-link" data-toggle="tab" href="#forum-artist-tasks"
                                aria-controls="forum-present"
                                aria-expanded="false" role="tab" :class="artistInfo.sign_contract_status == 2?'':'active'">
-                                <template v-if="tasksInfo.length > 0">
+                                <!-- <template v-if="tasksInfo.length > 0">
                                     <ToolTips :title="`已完成数量${completeNum}`">
                                         任务 ({{completeNum}}/{{tasksInfo.length}})
                                     </ToolTips>
-                                </template>
-                                <template v-if="tasksInfo.length == 0">
+                                </template> -->
+                                <!-- <template v-if="tasksInfo.length == 0">
                                     <ToolTips :title="`已完成数量${0}`">
                                         任务 ({{0}}/{{tasksInfo.length}})
                                     </ToolTips>
-                                </template>
+                                </template> -->
+                                <ToolTips v-if="tasksInfo.length > 0" :title="`已完成数量${completeNum}`">
+                                    任务 ({{completeNum}}/{{tasksInfo.length}})
+                                </ToolTips>
+                                <span v-else>任务</span>
                             </a>
                         </li>
                         <li class="nav-item" role="presentation" v-show="artistInfo.sign_contract_status == 2">
@@ -360,11 +365,11 @@
                                            id="projectDropdown" data-toggle="dropdown" aria-expanded="false"></i>
                                         <div class="dropdown-menu" aria-labelledby="projectDropdown" role="menu">
                                             <a class="dropdown-item" role="menuitem" v-show="filterFee !== 1"
-                                               @click="filterProjectFee(1)">全部</a>
+                                               @click="getArtistsBill(1,0)">全部</a>
                                             <a class="dropdown-item" role="menuitem" v-show="filterFee !== 2"
-                                               @click="filterProjectFee(2)">成本</a>
+                                               @click="getArtistsBill(1,2)">成本</a>
                                             <a class="dropdown-item" role="menuitem" v-show="filterFee !== 3"
-                                               @click="filterProjectFee(3)">收入</a>
+                                               @click="getArtistsBill(1,1)">收入</a>
                                         </div>
                                     </th>
                                     <th class="cell-300" scope="col">项目名称</th>
@@ -554,8 +559,8 @@
                                     <div class="segmentation-line example"></div>
                                     <div class="card-text py-5 clearfix">
                                         <div class="col-md-1 float-left text-right pl-0">录入人</div>
-                                        <div class="col-md-5 float-left font-weight-bold">
-                                            {{principalName}}
+                                        <div class="col-md-5 float-left font-weight-bold" v-if="artistInfo.creator" v-for="(entry,index) in artistInfo.creator" :key="index">
+                                            {{entry.name}}
                                         </div>
                                         <div class="col-md-1 float-left text-right pl-0">录入时间</div>
                                         <div class="col-md-5 float-left font-weight-bold">
@@ -564,8 +569,8 @@
                                     </div>
                                     <div class="card-text py-5 clearfix">
                                         <div class="col-md-1 float-left text-right pl-0">最近更新人</div>
-                                        <div class="col-md-5 float-left font-weight-bold">
-                                            {{principalName}}
+                                        <div class="col-md-5 float-left font-weight-bold" v-if="artistInfo.creator" v-for="(entry,index) in artistInfo.creator" :key="index">
+                                            {{entry.name}}
                                         </div>
                                         <div class="col-md-1 float-left text-right pl-0">最近更新时间</div>
                                         <div class="col-md-5 float-left font-weight-bold">
@@ -616,19 +621,19 @@
                             </div>
                         </div>
                         <div class="example">
-                            <div class="col-md-2 text-right float-left">任务类型</div>
+                            <div class="col-md-2 text-right float-left require">任务类型</div>
                             <div class="col-md-10 float-left pl-0">
                                 <selectors :options="tasksType" @change="changeTaskType" ref="mold"></selectors>
                             </div>
                         </div>
                         <div class="example">
-                            <div class="col-md-2 text-right float-left">任务名称</div>
+                            <div class="col-md-2 text-right float-left require">任务名称</div>
                             <div class="col-md-10 float-left pl-0">
                                 <input type="text" class="form-control" placeholder="请输入任务名称" v-model="taskName">
                             </div>
                         </div>
                         <div class="example">
-                            <div class="col-md-2 text-right float-left">负责人</div>
+                            <div class="col-md-2 text-right float-left require">负责人</div>
                             <div class="col-md-5 float-left pl-0">
                                     <InputSelectors
                                         @change="principalChange">
@@ -643,13 +648,13 @@
                             </div>
                         </div>
                         <div class="example">
-                            <div class="col-md-2 text-right float-left pl-0">任务优先级</div>
+                            <div class="col-md-2 text-right float-left pl-0 require">任务优先级</div>
                             <div class="col-md-10 float-left pl-0">
                                 <selectors :options="taskLevelArr" @change="changeTaskLevel" ref="taskpriority"></selectors>
                             </div>
                         </div>
                         <div class="example">
-                            <div class="col-md-2 text-right float-left">开始时间</div>
+                            <div class="col-md-2 text-right float-left require">开始时间</div>
                             <div class="col-md-5 float-left pl-0">
                                 <datepicker @change="changeStartTime" ref="startTime"></datepicker>
                             </div>
@@ -658,7 +663,7 @@
                             </div>
                         </div>
                         <div class="example">
-                            <div class="col-md-2 text-right float-left">截止时间</div>
+                            <div class="col-md-2 text-right float-left require">截止时间</div>
                             <div class="col-md-5 float-left pl-0">
                                 <datepicker @change="changeEndTime" ref="deadline"></datepicker>
                             </div>
@@ -840,7 +845,9 @@
                 total: 0,
                 current_page: 1,
                 total_pages: 1,
-                artistype:''
+                artistype:'',
+                bloggerlevel:'',
+                isLoading: true,
             }
         },
         computed: {
@@ -962,7 +969,6 @@
             },
             showScheduleModal: function (data) {
                 this.scheduleData = data;
-                // console.log(this.scheduleData)
                 if(data.participants.data){
                     this.scheduleParticipants = JSON.parse(JSON.stringify(data.participants.data));
                 }
@@ -980,7 +986,9 @@
                 fetch('get', '/bloggers/' + this.artistId, data).then(function (response) {
                     let doneTaskNum = 0
                     _this.artistInfo = response.data;
+                   
                     _this.tasksInfo = response.data.tasks.data
+                     console.log( _this.tasksInfo)
                     if (_this.tasksInfo.length > 0) {
                         for (let i = 0; i < _this.tasksInfo.length; i++) {
                             if (_this.tasksInfo[i].status == 2) {
@@ -1020,7 +1028,7 @@
                     } else {
                         _this.artistInfo.artistWorkProportion = false
                     }
-
+                    _this.isLoading = false;
 
                 });
                 
@@ -1030,33 +1038,28 @@
                 })
                 fetch('get', '/bloggers/gettype').then(function (response) {
                     _this.artistTypeArr = response.data
+                   
                 })
-                // fetch('get','/users/my?include=department').then(function(response){
-                //     _this.principalId = response.data.id 
-                //     _this.principalName = response.data.name
+                //  fetch('get','/bloggers/select?include=users').then(function(response){
+                //     response.data.forEach(item=>{
+                //          _this.principalIds.push(item.users.data.id)
+
+                //     })
+
                 // })
-                 fetch('get','/bloggers/select?include=users').then(function(response){
-                    response.data.forEach(item=>{
-                         _this.principalIds.push(item.users.data.id)
-
-                    })
-
-                })
-
+                
             },
             //账单
-            getArtistsBill(page = 1){  
+            getArtistsBill(page = 1,expense_type){  
                 let _this=this;
-                fetch('get','/bloggers/'+this.artistId +'/bill',{page: page}).then(function(response){
+                _this.expense_type = expense_type
+                fetch('get','/bloggers/'+this.artistId +'/bill',{page: page,expense_type:this.expense_type}).then(function(response){
                     _this.artistBillsInfo = response.data
                     _this.calculatedAmount=response.meta;
                     _this.current_page = response.meta.pagination.current_page;
                     _this.total = response.meta.pagination.total;
                     _this.total_pages = response.meta.pagination.total_pages;
                 })
-            },
-            filterProjectFee: function (value) {
-                this.filterFee = value;
             },
             //作品
             getTaskDate:function(){
@@ -1105,8 +1108,8 @@
             },
             //类型
             changArtistType: function (value) {
-                console.log(value)
-                this.artistype = value
+           
+                this.artistInfo.type.data.id= value
 
             },
             //沟通状态
@@ -1144,7 +1147,6 @@
                 this.isEdit = false;
                 this.isStatrtEdit = true;
                 let _this = this;
-
                 this.artistId = this.$route.params.id;
 
                 if(this.artistInfo.intention==1){
@@ -1160,7 +1162,7 @@
 
                 let data = {
                     nickname:this.Namevalue,
-                    type_id:this.artistype,
+                    type_id:this.artistInfo.type.data.id,
                     communication_status:this.artistInfo.communication_status,
                     intention:this.artistInfo.intention,
                     sign_contract_other: this.artistInfo.sign_contract_other,
@@ -1169,10 +1171,10 @@
                     star_weibo_infos: this.updateStar_weibo_infos,
                     star_xiaohongshu_infos: this.updateStar_xiaohongshu_infos,
                     platform: this.updatePlatform,
-                    // level: this.artistInfo.level,
-                    // cooperation_demand: this.updatedemand,
-                    // hatch_star_at: _this.artistInfo.hatch_star_at,
-                    // hatch_end_at: _this.artistInfo.hatch_end_at,
+                    level:this.artistInfo.level,
+                    cooperation_demand: this.updatedemand,
+                    hatch_star_at: _this.artistInfo.hatch_star_at,
+                    hatch_end_at: _this.artistInfo.hatch_end_at,
                     intention_desc:_this.artistInfo.intention_desc,
                     sign_contract_other_name:_this.artistInfo.sign_contract_other_name
                 }
@@ -1223,26 +1225,26 @@
                     toastr.success('创建成功');
 
                     $('#addWork').modal('hide');
-
-                    _this.getArtist()
+                    _this.getTaskDate()
+                    
 
                 })
                
-                let obj={
-                    title:'制作人视频评分-视频评分',
-                    principal_id:this.user.id,
-                    start_at:this.start_Time,
-                    end_at:this.end_Time,
-                    participant_ids:this.principalIds,
-                    resource_type:1,
-                    resourceable_id:this.artistId,
-                    desc:'这是一个评分问卷任务',//默认
-                    type:1609922710//评分问卷
-                }
-                fetch('post', '/tasks', obj
-                ).then(function (response) {
-                    _this.getArtist()
-                })
+                // let obj={
+                //     title:'制作人视频评分-视频评分',
+                //     principal_id:this.user.id,
+                //     start_at:this.start_Time,
+                //     end_at:this.end_Time,
+                //     participant_ids:this.principalIds,
+                //     resource_type:1,
+                //     resourceable_id:this.artistId,
+                //     desc:'这是一个评分问卷任务',//默认
+                //     type:1609922710//评分问卷
+                // }
+                // fetch('post', '/tasks', obj
+                // ).then(function (response) {
+                //     _this.getArtist()
+                // })
             },
             //孵化期截止时间计算
             getTimes:function(){
@@ -1298,6 +1300,32 @@
             },
             //添加任务
             addTask: function () {
+
+                if (!this.taskName) {
+                    toastr.error('请填写任务名称！')
+                    return
+                }
+                if (!this.taskType) {
+                    toastr.error('请选择任务类型！')
+                    return
+                }
+                if (!this.Person_id) {
+                    toastr.error('请选择负责人！')
+                    return
+                }
+                if (!this.taskLevel) {
+                    toastr.error('请选择任务优先级！')
+                    return
+                }
+                if (!this.startTime || !this.endTime) {
+                    toastr.error('请选择时间!')
+                    return
+                }
+                // if ((this.startTime + " " + this.startMinutes) > (this.endTime + " " + this.endMinutes)) {
+                //     toastr.error('开始时间不能晚于截止时间');
+                //     return
+                // }
+
                 let start,end,startMin,endMin
                 startMin = this.startMinutes.split(':')
                 endMin = this.endMinutes.split(':')
@@ -1315,9 +1343,11 @@
                    end_at: this.endTime + ' ' + this.endMinutes,
                    resource_type:1,
                    resourceable_id:this.artistInfo.id,
+                   priority: this.taskLevel,
                    desc:this.taskIntroduce,
                    type:this.taskType
                 }
+
                 fetch('post', '/tasks', data).then(function (response) {
 
                     toastr.success('创建成功');
@@ -1377,6 +1407,7 @@
             ,
             //昵称
             changArtistName: function (value) {
+                console.log(value)
                 this.Namevalue = value
             }
             ,
@@ -1421,20 +1452,18 @@
             ,
             //博主级别
             changeArtistLevel: function (value) {
-                console.log(value)
-
-                this.artistInfo.level = value
+               
+               this.artistInfo.level= value
             }
             ,
             //孵化期
             changeArtistHatch: function (start, end) {
 
-                console.log(start, end)
+                
                 this.artistInfo.hatch_star_at = start
                 this.artistInfo.hatch_end_at = end
 
 
-                console.log(this.updatehatch_start, this.updatehatch_end)
             }
             ,
             //合作需求
@@ -1443,7 +1472,7 @@
             }
             ,
             taskdetail(id) {
-                console.log(id)
+             
                 this.$router.push({path: '/tasks/' + id})
             },
             projectdetil(id) {
@@ -1460,7 +1489,6 @@
                 }else{
                    value = value.replace(regex, function (match, capture) {
                     if (capture) {
-                        console.log(price)
                          window.open(price)
                     }
                     else {
