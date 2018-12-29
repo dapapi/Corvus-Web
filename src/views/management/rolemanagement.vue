@@ -275,7 +275,7 @@
                      style="border-left:1px solid #e3e3e3;">
                     <div class="page-header py-10">
                         <h5>{{item.name}}<span class=" pl-10"
-                                               style="font-weight: 300" v-if="item.group_id!==1994731356">全部人员，共{{item.users.data.length}}人</span><span class=" pl-10" style="font-weight:300;color:#999999;font-size:12px;">系统默认角色，此处仅显示企业组织架构中已设置的“部门主管”</span>
+                                               style="font-weight: 300" v-if="item.group_id!==1994731356">全部人员，共{{item.users.data.length}}人</span><span class=" pl-10" style="font-weight:300;color:#999999;font-size:12px;" v-if="item.group_id==1994731356">系统默认角色，此处仅显示企业组织架构中已设置的“部门主管”</span>
                         </h5>
 
                     </div>
@@ -300,7 +300,7 @@
                     </div>
                     <div class="page-content tab-content nav-tabs-animate bg-white pt-20">
                         <div class="tab-pane animation-fade " :class="isAactive?'active':''" :id="'forum-member'+item.id" role="tabpanel">
-                            <span style="font-weight:300;color:#999999;font-size:12px;">如需添加“部门主管”，请到【成员管理】页面，在【编辑部门】中设置“部门主管”，设置完成后自动同步。</span>
+                            <span style="font-weight:300;color:#999999;font-size:12px;" v-if="item.group_id==1994731356">如需添加“部门主管”，请到【成员管理】页面，在【编辑部门】中设置“部门主管”，设置完成后自动同步。</span>
                             <table class="table table-hover" data-plugin="selectable" data-selectable="selectable">
                                
                                 <tr>
