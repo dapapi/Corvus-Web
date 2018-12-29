@@ -70,11 +70,12 @@
             },
 
             removeSelect: function (event) {
-                
+                // alert(9999)
                 let tag = document.getElementById("selectStaff" + this._uid);
                 if (tag) {
                     // alert(222)
                     if (!tag.contains(event.target)) {
+                        // alert(333)
                         this.isMemberShow = false;
                     }
                 }
