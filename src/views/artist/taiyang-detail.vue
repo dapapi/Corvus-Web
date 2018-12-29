@@ -1099,8 +1099,10 @@
             getArtistsBill: function (page = 1,expense_type) {
                 
                 let _this = this
-                _this.expense_type = expense_type
-                fetch('get', `/stars/${this.$route.params.id}/bill`, {page: page,expense_type:this.expense_type}).then(response => {
+                if(expense_type){
+                    _this.expense_type = expense_type
+                }
+                fetch('get', `/stars/${this.$route.params.id}/bill`, {page: page,expense_type:_this.expense_type}).then(response => {
                     _this.artistBillsInfo = response.data
                     _this.current_page = response.meta.pagination.current_page;
                     _this.total = response.meta.pagination.total;
@@ -1340,16 +1342,16 @@
                 }
 
                 let data = {
-                    title: this.taskName,
-                    principal_id: this.$store.state.newPrincipalInfo.id,
+                    title:this.taskName,
+                    principal_id:this.$store.state.newPrincipalInfo.id,
                     participant_ids: participant_ids,
-                    priority: this.taskLevel,
                     start_at: this.startTime + ' ' + this.startMinutes,
                     end_at: this.endTime + ' ' + this.endMinutes,
-                    desc: this.taskIntroduce,
-                    resource_type: 2,
-                    resourceable_id: this.artistId,
-                    type: this.taskType,
+                    resource_type:2,
+                    resourceable_id:this.artistId,
+                    priority: this.taskLevel,
+                    desc:this.taskIntroduce,
+                    type:this.taskType
                 };
                 let _this = this;
                 fetch('post', '/tasks', data).then(function (response) {
@@ -1358,7 +1360,7 @@
                     _this.artistTasksInfo.push(response.data)
                     _this.setDefaultPrincipal()
                     // _this.$store.state.newPrincipalInfo = []
-                    // _this.$store.state.newParticipantsInfo = []
+                    _this.$store.state.newParticipantsInfo = []
                     _this.taskType = ''
                     _this.taskName = ''
                     _this.taskLevel = ''
@@ -1489,12 +1491,15 @@
             },
 
             changeArtist: function () {
+                
                 if(this.changeArtistInfo.intention||this.changeArtistInfo.hasOwnProperty("intention_desc")){
                     if(this.$refs.condition.getSelectorValue() ==2){
                         if(!this.changeArtistInfo.intention_desc){
                             toastr.error('请填写不签约理由')
                             return false
                         }
+                    }else{
+                        this.changeArtistInfo.intention_desc = ''
                     }
                 }
                 if(this.changeArtistInfo.sign_contract_other||this.changeArtistInfo.hasOwnProperty("sign_contract_other_name")){
@@ -1503,6 +1508,8 @@
                             toastr.error('请输入已签约公司名称')
                              return false
                         }
+                    }else{
+                        this.changeArtistInfo.sign_contract_other_name
                     }
                 }
                 if (JSON.stringify(this.changeArtistInfo) === "{}") {
@@ -1843,3 +1850,4 @@
         
     } */
 </style>
+

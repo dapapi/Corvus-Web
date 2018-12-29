@@ -1,6 +1,6 @@
 <template>
     <div class="page">
-
+        <Loading :is-loading="isLoading"></Loading>
         <div class="page-header page-header-bordered">
             <h1 class="page-title">艺人管理</h1>
             <div class="page-header-actions dropdown show task-dropdown float-right">
@@ -423,7 +423,8 @@
                 },
                 giveType:1,//1 分配经理人 2 分配宣传人
                 affixes:[],
-                affixesType:''//附件类型
+                affixesType:'',//附件类型
+                isLoading: true,
             }
         },
         watch:{
@@ -463,6 +464,7 @@
                     _this.total_pages = response.meta.pagination.total_pages;
                     $('table').asSelectable('_trigger');
                 })
+                _this.isLoading = false
             },
             customize: function (value) {
 
@@ -575,6 +577,9 @@
                     toastr.error('请选择签约意向');
                     return false
                 }
+                if(this.signIntention == 1){
+                    this.notSignReason = ''
+                }
                 if(this.signIntention == 2&&!this.notSignReason){
                     toastr.error('请填写不签约理由');
                     return false
@@ -586,6 +591,9 @@
                 if(this.signCompany == 1&&!this.sign_contract_other_name){
                     toastr.error('请输入已签约公司名称');
                     return false
+                }
+                if(this.signCompany == 2){
+                    this.sign_contract_other_name = ''
                 }
                 // console.log(this.affixesType)
                 if(this.affixesType>1&&this.affixes.length==0){

@@ -39,6 +39,7 @@
 
         watch: {
             context(newValue) {
+                // console.log(newValue)
                 this.$emit('change', {key: 'value', value: newValue})
             },
             isEdit(newValue) {
@@ -57,10 +58,11 @@
                 if (!value) {
                     value = 0
                 }
+                this.context = '';
                 this.$emit('change', {key: 'condition', value: value});
             },
             getSelectorValue(){
-                console.log(this.$refs.conditionSelector.getValue())
+                // console.log(this.$refs.conditionSelector.getValue())
                 return this.$refs.conditionSelector.getValue()
             }
         }
