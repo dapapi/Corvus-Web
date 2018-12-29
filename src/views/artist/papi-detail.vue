@@ -822,7 +822,6 @@
                 updateStar_douyin_infos:{},//修改抖音
                 updateStar_xiaohongshu_infos:{},//修改小红书
                 updatePlatform:'',//修改平台
-                isLoading:true,
                 participant:'',
                 tasksInfo:'',
                 ProjectsInfo:[],
