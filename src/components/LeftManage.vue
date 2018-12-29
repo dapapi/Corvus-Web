@@ -1,5 +1,5 @@
 <template>
-    <div class="site-menubar col-md-1.5 p-0" style="height: 100%!important;top: 0;width: 200px">
+    <div class="site-menubar col-md-1.5 p-0" style="height: 100%!important;top: 0;width: 200px" @click.stop>
         <div class="site-menubar-body">
             <div class="pt-10 menu-icon"
                  style="position: relative;background-color: #3f51b5;z-index: 2">
@@ -26,7 +26,7 @@
                         </router-link>
                     </template>
                     <template v-else>
-                        <a class="animsition-link">
+                        <a class="animsition-link" >
                             <div>
                                 <span class="base-icon">
                                     <img :src="menu.image" alt="">
@@ -81,8 +81,8 @@
                     {
                         name: '员工档案',
                         code: 'staff',
-                        image: 'https://res.papitube.com/corvus/images/talent.png',
-                        hoverImage: 'https://res.papitube.com/corvus/images/select-talent.png',
+                        image: 'https://res.papitube.com/corvus/images/baobiao.png',
+                        hoverImage: 'https://res.papitube.com/corvus/images/select-baobiao.png',
                     }
                 ],
                 pageRoute: '',
@@ -92,7 +92,12 @@
             back(){
                 window.location.href='/my/message'
             }
-        }
+        },
+        watch: {
+            '$router'(to, from) {
+                this.pageRoute = to.path.split('/')[1];
+            },
+        },
     }
 </script>
 

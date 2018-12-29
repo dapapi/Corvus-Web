@@ -4,7 +4,7 @@
             <LeftMenu/>
             <get-message/>
         </template>
-        <template v-else-if="isLeftManageShow">
+        <template v-if="isLeftManageShow">
             <LeftManage/>
         </template>
         <router-view/>
@@ -35,6 +35,7 @@
             '$route': function (to, from) {
                 if (this.$route.path === '/login' || this.$route.path === '/informationForm') {
                     this.isLeftMenuShow = false
+                    this.isLeftManageShow = false
                 }
                 else if (this.$route.path === '/management'
                     || this.$route.path === '/rolemanagement'

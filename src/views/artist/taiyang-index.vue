@@ -465,6 +465,7 @@
                     $('table').asSelectable('_trigger');
                     _this.isLoading = false;
                 })
+                _this.isLoading = false
             },
             customize: function (value) {
 
@@ -577,6 +578,9 @@
                     toastr.error('请选择签约意向');
                     return false
                 }
+                if(this.signIntention == 1){
+                    this.notSignReason = ''
+                }
                 if(this.signIntention == 2&&!this.notSignReason){
                     toastr.error('请填写不签约理由');
                     return false
@@ -588,6 +592,9 @@
                 if(this.signCompany == 1&&!this.sign_contract_other_name){
                     toastr.error('请输入已签约公司名称');
                     return false
+                }
+                if(this.signCompany == 2){
+                    this.sign_contract_other_name = ''
                 }
                 // console.log(this.affixesType)
                 if(this.affixesType>1&&this.affixes.length==0){
