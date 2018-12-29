@@ -9,7 +9,8 @@
                    data-toggle="dropdown" aria-expanded="false"></i>
                 <div class="dropdown-menu dropdown-menu-right task-dropdown-item" aria-labelledby="taskDropdown"
                      role="menu" x-placement="bottom-end">
-                    <a class="dropdown-item" role="menuitem" >分配制作人</a>
+                    <a class="dropdown-item" role="menuitem" data-toggle="modal"
+                       data-target="#distributionproducer" @click="distributionPerson('publicity')">分配制作人</a>
                     <!--<a class="dropdown-item" role="menuitem" data-toggle="modal" data-target="#addPrivacy">隐私设置</a>-->
                     <!--<a class="dropdown-item" role="menuitem" data-toggle="modal" data-target="#addPrivacy">-->
                         <!--<template v-if="artistInfo.sign_contract_status == 1">签约</template>-->
@@ -31,7 +32,7 @@
                                 <i class="iconfont icon-yonghu pr-2"></i>
                                 <span>制作人</span>
                             </div>
-                            <div class="font-weight-bold float-left" v-for="(item,index) in artistInfo.publicity.data" :key="index">
+                            <div class="font-weight-bold float-left pr-10" v-for="(item,index) in artistInfo.publicity.data" :key="index">
                                 <template  >
                                     {{item.name}}
                                 </template>
@@ -772,6 +773,32 @@
                 </div>
             </div>
         </div>
+<!-- 分配制作人-->      
+        <div class="modal fade" id="distributionproducer" aria-hidden="true" aria-labelledby="addLabelForm"
+             role="dialog" tabindex="-1">
+            <div class="modal-dialog modal-simple" style="max-width: 50rem;">
+
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <button type="button" class="close" aria-hidden="true" data-dismiss="modal">
+                            <i class="iconfont icon-guanbi" aria-hidden="true"></i>
+                        </button>
+                        <template>
+                            <h4 class="modal-title">分配制作人</h4>
+                        </template>
+                    </div>
+                    <div class="modal-body">
+                        <div class="py-20">
+                            <ListSelectMember type="change"></ListSelectMember>
+                        </div>
+                    </div>
+                    <div class="modal-footer">
+                        <button class="btn btn-sm btn-white btn-pure" data-dismiss="modal">取消</button>
+                        <button class="btn btn-primary" type="submit" @click="addDistributionPerson">确定</button>
+                    </div>
+                </div>
+            </div>
+        </div> 
 
     </div>
 </template>
@@ -847,6 +874,7 @@
                 artistype:'',
                 bloggerlevel:'',
                 isLoading: true,
+               distributionType:''
             }
         },
         computed: {
@@ -971,6 +999,7 @@
                 if(data.participants.data){
                     this.scheduleParticipants = JSON.parse(JSON.stringify(data.participants.data));
                 }
+                $('#checkSchedule').modal('show')
             },
             selectDate: function (value) {
                 this.selectedDate = value;
@@ -987,7 +1016,6 @@
                     _this.artistInfo = response.data;
                    
                     _this.tasksInfo = response.data.tasks.data
-                     console.log( _this.tasksInfo)
                     if (_this.tasksInfo.length > 0) {
                         for (let i = 0; i < _this.tasksInfo.length; i++) {
                             if (_this.tasksInfo[i].status == 2) {
@@ -1105,6 +1133,55 @@
                 this.isStatrtEdit = true
                 
             },
+            distributionPerson: function (value) {
+                
+                this.distributionType = value;
+                if (this.artistInfo[value].data.length > 0) {
+                    this.$store.state.participantsInfo = Object.assign([], this.artistInfo[value].data)
+                }
+            },
+            //分配制作人
+             addDistributionPerson: function () {
+                let toast
+                let data = {
+                    person_ids: [],
+                    del_person_ids: [],
+                    moduleable_type: 'blogger',
+                    moduleable_ids: [this.artistId],
+                    type:4
+                };
+                let personInfo = this.$store.state.participantsInfo;
+                let oldPersonInfo = this.artistInfo[this.distributionType].data
+                //todo 删除和新增的数据有问题
+                if (this.artistInfo[this.distributionType].data.length > 0) {
+
+                    for (let i = 0; i < this.artistInfo[this.distributionType].data.length; i++) {
+
+                        if (personInfo.map(item => item.id).indexOf(this.artistInfo[this.distributionType].data[i].id) === -1) {
+
+                            data.del_person_ids.push(this.artistInfo[this.distributionType].data[i].id)
+                        }
+                    }
+                }
+                for (let i = 0; i < this.$store.state.participantsInfo.length; i++) {
+                    data.person_ids.push(this.$store.state.participantsInfo[i].id)
+
+                }
+                
+
+                if (this.distributionType === 'publicity') {
+                    data.type = 4
+                    toast = '分配制作人成功'
+                } 
+                let _this = this;
+                console.log(this.$store.state.participantsInfo)
+                fetch('post', '/distribution/person', data).then(function (response) {
+                    toastr.success(toast)
+                    $('#distributionproducer').modal('hide');
+                    _this.getArtist();
+                    _this.$store.state.participantsInfo = []
+                })
+            },
             //类型
             changArtistType: function (value) {
            
@@ -1179,8 +1256,15 @@
                 }
                 fetch('put', '/bloggers/' + this.artistId, data).then(function (response) {
                     toastr.success('修改成功');
+                    // if(artistInfo.intention==true){
+                    //     _this.artistInfo.intention_desc=""
+                        
+                    // }
+                    // if(artistInfo.sign_contract_other==true){
+                    //     _artistInfo.sign_contract_other_name=""
+                    // }
                     _this.artistTasksInfo = response.data;
-
+                    
                     if (_this.artistInfo.intention == false) {
                         _this.updateType = 2
                     } else {
@@ -1406,7 +1490,6 @@
             ,
             //昵称
             changArtistName: function (value) {
-                console.log(value)
                 this.Namevalue = value
             }
             ,
@@ -1536,5 +1619,8 @@
     }
     .Jump,.taskshow,.projectshow{
         cursor:pointer;
+    }
+    textarea{
+        overflow: 'hidden';
     }
 </style>
