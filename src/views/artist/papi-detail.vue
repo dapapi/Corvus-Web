@@ -38,7 +38,7 @@
                             </div>
                         </div>
                          <div class="col-md-6 float-left pl-0" v-show="artistInfo.sign_contract_status == 1">
-                            <div class="float-left pl-0 pr-2 col-md-2">
+                            <div class="float-left pl-0 pr-2 col-md-4">
                                 <i class="iconfont icon-yonghu pr-2" aria-hidden="true"></i>录入人
                             </div>
                             <div class="font-weight-bold float-left"  v-if="artistInfo.creator" v-for="(entry,index) in artistInfo.creator" :key="index">
