@@ -82,7 +82,7 @@
                                             <li  v-show="item.id==n.group_id && switchId.includes(n.group_id)"
                                                 class="py-5"
                                                 style="position:relative;" @click="changeCont(n.id,index)"
-                                                :class="n.id==jobCont?'back':''" >
+                                                :class="n.id==jobCont?'back':''">
                                                 <template >
                                                     <i class="iconfont icon-chengyuannew pr-10"
                                                        style="vertical-align: middle;"></i>
@@ -275,7 +275,7 @@
                      style="border-left:1px solid #e3e3e3;">
                     <div class="page-header py-10">
                         <h5>{{item.name}}<span class=" pl-10"
-                                               style="font-weight: 300" v-if="item.group_id!==1994731356">全部人员，共{{item.users.data.length}}人</span><span class=" pl-10" style="font-weight:300;color:#999999;font-size:12px;">系统默认角色，此处仅显示企业组织架构中已设置的“部门主管”</span>
+                                               style="font-weight: 300" v-if="item.group_id!==1994731356">全部人员，共{{item.users.data.length}}人</span><span class=" pl-10" style="font-weight:300;color:#999999;font-size:12px;" v-if="item.group_id==1994731356">系统默认角色，此处仅显示企业组织架构中已设置的“部门主管”</span>
                         </h5>
 
                     </div>
@@ -300,7 +300,7 @@
                     </div>
                     <div class="page-content tab-content nav-tabs-animate bg-white pt-20">
                         <div class="tab-pane animation-fade " :class="isAactive?'active':''" :id="'forum-member'+item.id" role="tabpanel">
-                            <span style="font-weight:300;color:#999999;font-size:12px;">如需添加“部门主管”，请到【成员管理】页面，在【编辑部门】中设置“部门主管”，设置完成后自动同步。</span>
+                            <span style="font-weight:300;color:#999999;font-size:12px;" v-if="item.group_id==1994731356">如需添加“部门主管”，请到【成员管理】页面，在【编辑部门】中设置“部门主管”，设置完成后自动同步。</span>
                             <table class="table table-hover" data-plugin="selectable" data-selectable="selectable">
                                
                                 <tr>
@@ -710,7 +710,7 @@
                 defaultId: '0',
                 defaultpitchon: '1',
                 funDate: data,
-                switchId: [],
+                switchId: ['1994731356'],
                 rolepower: [],
                 powerDate: [],
                 powerInfo: [],
@@ -735,7 +735,7 @@
                 rolegroupName: '',
                 emptyrole_describe: '',
                 isAactive:true,
-                
+                idArray:[]
             }
         },
         mounted() {
@@ -763,7 +763,10 @@
                 let _this = this;
                 fetch('get', '/console/group?Accept=application/vnd.Corvus.v1+json').then(function (response) {
                     _this.groupingDate = response.data;
-                    console.log(_this.groupingDate)
+                    response.data.forEach(item=>{
+                       _this.idArray.push(item.id) 
+                    })
+                  
                 });
             },
             //获取成员数据
@@ -1116,7 +1119,8 @@
                 } else {
                     this.switchId.splice(this.switchId.indexOf(id), 1)
                 }
-
+                
+                
             },
             //删除的名字id获取
             role(value) {

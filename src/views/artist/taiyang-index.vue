@@ -91,7 +91,7 @@
                                     <td @click="redirectArtistDetail(artist.id)">{{artist.birthday|jsGetAge}}</td>
                                     <td @click="redirectArtistDetail(artist.id)">
                                         <template v-if="artist.source">
-                                            <span style="color:artistSourceArr.find(item => item.value == artist.source).color">
+                                            <span :style="'color:' + artistSourceArr.find(item => item.value == artist.source).color">
                                                 {{ artistSourceArr.find(item => item.value == artist.source).name}}
                                             </span>
                                         </template>
@@ -103,7 +103,7 @@
                                                  {{ taiyangCommunicationStatusArr.find(item => item.value ==
                                                     artist.communication_status).name}}
                                             </span>
-                                           
+
                                         </template>
                                     </td>
                                     <!-- <td>
@@ -116,12 +116,12 @@
                                     <td @click="redirectArtistDetail(artist.id)">{{artist.updated_at}}</td>
                                 </tr>
                             </tbody>
-                            
+
                         </table>
                         <div v-if="artistsInfo.length === 0" class="col-md-1" style="margin: 6rem auto">
                             <img src="https://res.papitube.com/corvus/images/content-none.png" alt="" style="width: 100%">
                         </div>
-                             
+
                         <pagination :current_page="current_page" :method="getArtists" :total_pages="total_pages"
                                     :total="total"></pagination>
                     </div>
@@ -241,7 +241,7 @@
                                 <input type="text" class="form-control" v-model="douyinFansNum">
                             </div>
                         </div>
-                        <div class="example" v-show='platformType.find(item => item ==4)'> 
+                        <div class="example" v-show='platformType.find(item => item ==4)'>
                             <div class="col-md-2 text-right float-left">其他地址</div>
                             <div class="col-md-4 float-left pl-0">
                                 <input type="text" class="form-control" v-model="qitaUrl">
@@ -431,15 +431,15 @@
             platformType:function(){
                 return  this.platformType
             }
-            
+
         },
         mounted() {
             this.getArtists();
             $('table').asSelectable();
         },
-        
+
         methods: {
-            
+
             //获取沟通状态
             getStatus:function(value){
                 this.listData.communication_status = value
@@ -463,6 +463,7 @@
                     _this.total = response.meta.pagination.total;
                     _this.total_pages = response.meta.pagination.total_pages;
                     $('table').asSelectable('_trigger');
+                    _this.isLoading = false;
                 })
                 _this.isLoading = false
             },
@@ -487,26 +488,26 @@
                 for (let i = 0; i < value.length; i++) {
                     this.platformType.push(value[i].value)
                 }
-                
+
             },
 
             changeCommunicationType: function (value) {
-                
+
                 this.communicationStatus = value
             },
 
             changeSignIntention: function (value) {
-                
+
                     this.signIntention = value
-                
-                
+
+
             },
 
             isSignCompany: function (value) {
-               
+
                 this.signCompany = value
-                
-                
+
+
             },
 
             changeGender: function (value) {
@@ -526,14 +527,14 @@
 
                         this.affixes.splice(i,1)
                     }
-                    
+
                 }
                 this.affixes.push ({
                     title:name,
                     size:size,
                     url:url,
                     type:this.affixesType
-                }) 
+                })
             },
             addArtist: function () {
                 if(!this.artistName){
@@ -545,7 +546,7 @@
                     return false
                 }
                 if(!this.artistBirthday){
-                    
+
                     toastr.error('请选择艺人出生日期');
                     return false
                 }
@@ -726,7 +727,7 @@
                     return false
                 }
                 if(this.giveType == 1){
-                   url = 'distribution/person' 
+                   url = 'distribution/person'
                    toast = '分配经理人成功'
                    data = {
                         person_ids:[],//经理人数组
@@ -746,10 +747,10 @@
                         type:2, //宣传人
                     }
                 }
-                
+
                 for (let  i= 0;  i< this.$store.state.participantsInfo.length; i++) {
                     data.person_ids.push(this.$store.state.participantsInfo[i].id)
-                    
+
                 }
                 fetch('post', url, data).then(function (response) {
                     toastr.success(toast)
@@ -847,7 +848,7 @@
     .uploadContent{
         position: relative;
     }
-    
+
     .puls {
         display: inline-block;
         background-size: 100px;

@@ -9,10 +9,10 @@ export default new Router({
     mode: 'history',
     base: process.env.BASE_URL,
     routes: [
-        {
-            path: "*",
-            redirect: "/"
-        },
+        // {
+        //     path: "*",
+        //     redirect: "/"
+        // },
         {
             path: '/',
             // name: 'home',
@@ -29,9 +29,6 @@ export default new Router({
                 } else {
                     next()
                 }
-                // console.log('to', to)
-                // console.log('from', to)
-                // console.log('next', to)
             }
         },
         {
@@ -109,36 +106,6 @@ export default new Router({
             name: 'informationForm',
             component: () => import('./views/staff/informationForm.vue')
         },
-        // {
-        //     path: '/staff',
-        //     name: 'staff',
-        //     component: () => import('./views/staff/index.vue')
-        // },
-        // {
-        //     path: '/staff/add',
-        //     name: 'staffAdd',
-        //     component: () => import('./views/staff/add.vue')
-        // },
-        // {
-        //     path: '/staff/edit/:id',
-        //     name: 'staffEdit',
-        //     component: () => import('./views/staff/add.vue')
-        // },
-        // {
-        //     path: '/staff/detail/:id',
-        //     name: 'staffDetail',
-        //     component: () => import('./views/staff/detail.vue'),
-        // },
-        // {
-        //     path: '/staff/history',
-        //     name: 'staffHistory',
-        //     component: () => import('./views/staff/history.vue'),
-        // },
-        // {
-        //     path: '/staff/apply',
-        //     name: 'staffApply',
-        //     component: () => import('./views/staff/apply.vue'),
-        // },
         {
             path: '/address',
             name: 'address',
@@ -443,52 +410,53 @@ export default new Router({
             path: '/management',
             name: 'management/index',
             component: () => import('./views/management/index.vue'),
-            children: [
-                {
-                    path: '/rolemanagement',
-                    component: () => import('./views/management/rolemanagement.vue')
-                }, {
-                    path: '/organization',
-                    name: 'organization',
-                    component: () => import('./views/organization/index.vue')
-                },
-                {
-                    path: '/organization/management',
-                    name: 'organization/management',
-                    component: () => import('./views/organization/management.vue')
-                },
-                {
-                    path: '/staff',
-                    name: 'staff',
-                    component: () => import('./views/staff/index.vue')
-                },
-                {
-                    path: '/staff/add',
-                    name: 'staffAdd',
-                    component: () => import('./views/staff/add.vue')
-                },
-                {
-                    path: '/staff/edit/:id',
-                    name: 'staffEdit',
-                    component: () => import('./views/staff/add.vue')
-                },
-                {
-                    path: '/staff/detail/:id',
-                    name: 'staffDetail',
-                    component: () => import('./views/staff/detail.vue'),
-                },
-                {
-                    path: '/staff/history',
-                    name: 'staffHistory',
-                    component: () => import('./views/staff/history.vue'),
-                },
-                {
-                    path: '/staff/apply',
-                    name: 'staffApply',
-                    component: () => import('./views/staff/apply.vue'),
-                },
-            ]
         },
+        //     children: [
+        //         {
+        //             path: '/rolemanagement',
+        //             component: () => import('./views/management/rolemanagement.vue')
+        //         }, {
+        //             path: '/organization',
+        //             name: 'organization',
+        //             component: () => import('./views/organization/index.vue')
+        //         },
+        //         {
+        //             path: '/organization/management',
+        //             name: 'organization/management',
+        //             component: () => import('./views/organization/management.vue')
+        //         },
+        //         {
+        //             path: '/staff',
+        //             name: 'staff',
+        //             component: () => import('./views/staff/index.vue')
+        //         },
+        //         {
+        //             path: '/staff/add',
+        //             name: 'staffAdd',
+        //             component: () => import('./views/staff/add.vue')
+        //         },
+        //         {
+        //             path: '/staff/edit/:id',
+        //             name: 'staffEdit',
+        //             component: () => import('./views/staff/add.vue')
+        //         },
+        //         {
+        //             path: '/staff/detail/:id',
+        //             name: 'staffDetail',
+        //             component: () => import('./views/staff/detail.vue'),
+        //         },
+        //         {
+        //             path: '/staff/history',
+        //             name: 'staffHistory',
+        //             component: () => import('./views/staff/history.vue'),
+        //         },
+        //         {
+        //             path: '/staff/apply',
+        //             name: 'staffApply',
+        //             component: () => import('./views/staff/apply.vue'),
+        //         },
+        //     ]
+        // },
         {
             path: '/knowledgebase',
             name: 'knowledgebase/index',
@@ -508,6 +476,10 @@ export default new Router({
             path: '/contracts',
             name: 'contracts',
             component: () => import('./views/contracts/index.vue')
-        }
+        },
+        // {
+        //     path: "*",
+        //     redirect: "/"
+        // },
     ],
 });

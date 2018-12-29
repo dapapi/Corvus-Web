@@ -1,4 +1,7 @@
 // import menusModule from "./menusModule"; 
+import router from '../router'
+import backRouter from '../backRouter'
+
 export default {
     changeParticipantsInfo(state, data) {
         state.participantsInfo = data
@@ -66,4 +69,16 @@ export default {
     setUserList (state, data) {
         state.userList = data
     },
+    // 进入后台权限
+    setPassBack (state, data) {
+        state.canPassBack = data
+        if (data) {
+            router.addRoutes(backRouter)
+        } else {
+            router.addRoutes([{
+                path: "*",
+                redirect: "/"
+            }])
+        }
+    }
 }

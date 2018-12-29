@@ -11,7 +11,7 @@ import LeftMenu from '@/components/LeftMenu.vue'
 export default {
   name: 'home',
   components: {
-      LeftMenu
+      // LeftMenu
       
   }
 }

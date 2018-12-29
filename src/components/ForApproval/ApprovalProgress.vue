@@ -106,10 +106,12 @@ export default {
             let _this = this
             if(!this.mode){
                 fetch('get','/approvals/chains?form_id='+value+'&change_type=222').then((params) => {
+                    console.log(params);
                     _this.approver = params.data
                 })
             }else{
                 fetch('get','/approval_instances/'+value+'/chains').then((params) => {
+                    console.log(params);
                     _this.approver = params.data
                     _this.waitingFor = params.data.find(item=>item.approval_stage === "doing")
                     if(_this.waitingFor){

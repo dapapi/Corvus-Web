@@ -119,6 +119,11 @@ export default {
     },
     methods:{
         clearSignal(){
+            this.$store.dispatch('changeParticipantsInfo',{data:[]});
+            this.trendApprover={
+                condition:[],
+                ready:false,
+            },
             this.sendData = {
                 values:[]
             }
@@ -147,8 +152,6 @@ export default {
             }
         },
         trendApproverChecker(params){
-            console.log(params);
-            console.log(this.formData.condition);
             if(this.formData.condition.includes(params.key)){
                 let tempData = this.formData.condition.indexOf(params.key)
                 this.trendApprover.condition.splice(tempData,1) 
@@ -169,17 +172,9 @@ export default {
             }   
         },
         changeHandler(params){
-            console.log(params);
             if(this.formData.condition){
                 this.trendApproverChecker(params)
             }
-            // switch (params.type){
-            //     case 'upload':
-            //         if(!this.sendData.uploadfile){
-            //             this.sendData.uploadfile=[]
-            //         }
-            //         this.sendData.uploadfile.push({url:params.fileUrl,name:params.fileName})
-            // }
             if(!this.sendData.values.find(item=>item.key === params.key)){
                 this.sendData.values.push(params)
             }else{

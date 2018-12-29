@@ -36,7 +36,7 @@
                 <th class="cell-200" scope="col">申请人</th>  
                   <th class="cell-200" scope="col">
                     <div class="nav-item dropdown">
-                      <a class="nav-link dropdown-toggle" data-toggle="dropdown" href="#"><font style="vertical-align: inherit;"><font style="vertical-align: inherit;">类型</font></font></a>
+                      <!-- <a class="nav-link dropdown-toggle" data-toggle="dropdown" href="#"><font style="vertical-align: inherit;"><font style="vertical-align: inherit;">类型</font></font></a> -->
                       <div class="dropdown-menu" role="menu">
                         <a class="dropdown-item" tabindex="-1" href="javascript:void(0)"> 不限 </a>
                         <div class="dropdown-divider"></div>

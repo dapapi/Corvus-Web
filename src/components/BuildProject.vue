@@ -157,7 +157,7 @@
                 </template>
 
                 <div class="modal-footer">
-                    <button class="btn btn-sm btn-white btn-pure" data-dismiss="modal">取消</button>
+                    <button class="btn btn-sm btn-white btn-pure" data-dismiss="modal" @click='refreshAddProjectModal'>取消</button>
                     <button class="btn btn-primary" type="submit" @click="addProject">确定</button>
                 </div>
             </div>

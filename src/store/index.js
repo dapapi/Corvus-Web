@@ -27,6 +27,7 @@ const state = {
     isExpanded:[],
     department: [], // 部门数据
     userList: [], // 用户列表
+    canPassBack: false, // 能否进入后台
 };
 
 export default new Vuex.Store({
