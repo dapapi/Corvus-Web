@@ -170,14 +170,14 @@
                             <div class="col-md-4 float-left row">
                                 <selectors :options="artistSourceArr" @change="changeSource" ref="source"></selectors>
                             </div>
-                            <div class="col-md-2 text-right float-left pr-0">邮箱</div>
+                            <div class="col-md-2 text-right float-left pr-0 require">邮箱</div>
                             <div class="col-md-4 float-left pr-0">
                                 <input type="text" class="form-control" title="" v-model="artistEmail"
                                        placeholder="请输入邮箱">
                             </div>
                         </div>
                         <div class="example">
-                            <div class="col-md-2 text-right float-left">手机号</div>
+                            <div class="col-md-2 text-right float-left require">手机号</div>
                             <div class="col-md-4 float-left row">
                                 <input type="text" class="form-control" title="" v-model="artistPhone"
                                        placeholder="请输入手机号">

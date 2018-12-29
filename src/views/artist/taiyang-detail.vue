@@ -477,7 +477,7 @@
                                             <div class="col-md-2 float-left text-right pl-0">社交平台</div>
                                             <div class="col-md-10 float-left font-weight-bold">
                                                 <EditSelector :is-edit="isEdit" :multiple="true"
-                                                              :content="artistInfo.platform ? artistInfo.platform.split(',') : ''"
+                                                              :content="artistInfo.platform ? artistInfo.platform.split(',') : []"
                                                               :options="artistSocialPlatform"
                                                               @change="(value) => changeArtistBaseInfo(value, 'platform')"></EditSelector>
                                             </div>
@@ -1033,7 +1033,7 @@
 
         },
         mounted() {
-            
+
             this.getTaskType();
             this.draw();
             this.getArtistsBill()

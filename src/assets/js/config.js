@@ -6,7 +6,7 @@ let config = {
         // apiUrl: '/api/',
         apiUrl: 'https://sandbox-api-crm.papitube.com',
         imgUrl: 'https://res-crm.papitube.com/',
-        socketUrl:'ws://sandbox-corvus.papitube.com:8081',
+        socketUrl:'wss://sandbox-corvus.papitube.com:8081',
 
         getHeaders: function () {
             let headers = {
