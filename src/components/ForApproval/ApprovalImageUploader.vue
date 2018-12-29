@@ -18,7 +18,7 @@ import config from '@/assets/js/config'
 import * as qiniu from 'qiniu-js'
 
 export default {
-    props:['data'],
+    props:['data','clear'],
     name: 'ApprovalImageUploader',
     data(){
         return{
@@ -72,7 +72,7 @@ export default {
                     let fileUrl = config.imgUrl + res.key;
                     let fileName = file.name;
                     // _this.$emit('change', fileUrl, fileName, fileSize,_this.fileExt,_this.id);
-                     let {id} = _this.data[0]
+                    let {id} = _this.data[0]
                     _this.$emit('change',{key:id,value:fileUrl,type:null})
                     _this.fileInfo.push({fileUrl, fileName, fileSize})
                 })
@@ -108,6 +108,11 @@ export default {
         fileInfo:function(val,oldval){
             if(val !== oldval){
                 this.getFileExt()
+            }
+        },
+         clear:function(value){
+            if(value===true){
+                this.fileInfo = []
             }
         }
     }

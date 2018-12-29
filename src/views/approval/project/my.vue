@@ -88,7 +88,7 @@
             }
         },
        mounted(){
-            this.getList()
+            this.getList(1)
         },
         computed:{
             getProgressName(){
@@ -100,16 +100,12 @@
         methods: {
             getList(params) {
                 let _this = this
-                if(params !== 2){
-                    fetch('get','/approvals_project/approval').then((params) => {
-                        _this.projectsInfo = params.data
-                    })
-                }else{
-                    fetch('get','/approvals_project/thenapproval').then((params) => {
+                console.log(params);
+                    fetch('get','/approvals_project/approval?status='+params).then((params) => {
                         _this.projectsInfo = params.data
                     })
                 }
-            }
+
         }
     }
 </script>

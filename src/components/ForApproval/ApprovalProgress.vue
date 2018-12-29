@@ -1,5 +1,5 @@
 <template>
-    <div class="page-content container-fluid pt-0">
+    <div class="page-content container-fluid progress-container pt-0">
         <hr v-if="mode !== 'detail'">
         <div class="approver-row">
             <span>审批人</span>
@@ -9,7 +9,7 @@
                     <div>
                         <div class="approver" :style="{backgroundImage:'url('+randomColor(item.icon_url).color+')',backgroundColor:randomColor(item.icon_url).color}">{{randomColor(item.icon_url).name}}</div>
                         <div v-if="!mode">{{item.name}}</div>
-                        <i class="iconfont iconfont-logo" :class="item.change_state_obj.changed_icon.split('|')[0]" :style='{color:item.change_state_obj.changed_icon.split("|")[1]}'></i>
+                        <i v-if="item.change_state_obj" class="iconfont iconfont-logo" :class="item.change_state_obj.changed_icon.split('|')[0]" :style='{color:item.change_state_obj.changed_icon.split("|")[1]}'></i>
                     </div>
                 </div>
                 <div class="approver_texts" v-if="item.change_state_obj">
@@ -34,9 +34,9 @@
                 <div class="col-md-3">{{item.change_at}}</div>
             </div>  
         </div>
-        <div class="approver-row" style="overflow: unset;">
-            <span>知会人</span>
-            <div class="approver ml-10" :style="randomColor(item.icon_url).color" v-if="mode" v-for="(item, index) in notice" :key="index">{{randomColor(item.icon_url).name}}</div>
+        <div class="approver-row" style="overflow: unset;" >
+            <span v-if="notice || !mode">知会人</span>
+            <div class="approver ml-10" :style="{backgroundImage:'url('+randomColor(item.icon_url).color+')',backgroundColor:randomColor(item.icon_url).color}" v-if="mode" v-for="(item, index) in notice" :key="index">{{randomColor(item.icon_url).name}}</div>
             <AddMember v-if="!mode"/>
         </div>
     </div>
@@ -77,11 +77,14 @@ export default {
         },
         'trend':{
             handler:function(newValue,oldValue){
-                if(this.trend.ready==true)
-                var _this = this
-                fetch('get','/approvals/chains?form_id='+this.formid+'&change_type=224&value='+this.trend.condition.join(',')).then((params) => {
-                    _this.approver = params.data
-                })
+                if(this.trend.ready==true && this.trend.condition[0].length !== 0){
+                    var _this = this
+                    console.log(this.trend.condition[0]);
+                    fetch('get','/approvals/chains?form_id='+this.formid+'&change_type=224&value='+this.trend.condition.join(',')).then((params) => {
+                        _this.approver = params.data
+                    })
+                }
+                
             },
             deep:true,
         }
@@ -133,6 +136,9 @@ export default {
 </script>
 
 <style scoped>
+.progress-container{
+    padding: 0 45px;
+}
 .iconfont-logo{
     position: relative;
     z-index: 1288;
@@ -163,10 +169,21 @@ export default {
     margin-top: 30px; 
     /* margin-left: 10%;   */
 }
-.approver-row::-webkit-scrollbar {
-    /* width: 1px !important; */
-    height: 2px !important;
-}
+*::-webkit-scrollbar {
+        width: 3px !important;
+        height: 3px !important;
+        -webkit-appearance: none;
+    }
+
+    *::-webkit-scrollbar-thumb {
+        background: #ddd !important;
+        border-radius: 10px !important;
+    }
+
+    *::-webkit-scrollbar-track-piece {
+        background: #eee !important;
+        border-radius: 3px !important;
+    }
 .approver-row span{
     margin-right: 20px;
     line-height: 40px;
