@@ -1,5 +1,5 @@
 <template>
-    <div class="site-menubar col-md-1.5 p-0" style="height: 100%!important;top: 0;width: 200px">
+    <div class="site-menubar col-md-1.5 p-0" style="height: 100%!important;top: 0;width: 200px" @click.stop>
         <div class="site-menubar-body">
             <div class="pt-10 menu-icon"
                  style="position: relative;background-color: #3f51b5;z-index: 2">
@@ -92,7 +92,12 @@
             back(){
                 window.location.href='/my/message'
             }
-        }
+        },
+        watch: {
+            '$router'(to, from) {
+                this.pageRoute = to.path.split('/')[1];
+            },
+        },
     }
 </script>
 
