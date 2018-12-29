@@ -65,8 +65,8 @@
                         <button class="btn btn-primary" @click='approvalHandler("transfer")'>转交</button>
 
                     </i>
-                    <i v-if="info.approval[0].form_status==232">
-                        <button class="btn btn-info" @click='approvalHandler("discard")' >作废</button>
+                    <i v-if="info.approval[0].form_status==232 && list.creator.data.id === currentId">
+                        <button class="btn btn-primary" @click='approvalHandler("discard")' >作废</button>
                     </i>
                 </div>
                 </h6>

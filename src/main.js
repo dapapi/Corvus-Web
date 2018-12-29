@@ -132,6 +132,7 @@ Vue.component('Avatar', Avatar)
 
 Vue.prototype.globalClick = function (callback) {
     document.getElementById('app').addEventListener('click', () => {
+        // alert('jahahahhhf')
         callback(event);
     });
 };

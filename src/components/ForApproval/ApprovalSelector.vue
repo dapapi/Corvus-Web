@@ -87,6 +87,7 @@ export default {
             clear:function(value){
                 if(value===true){
                     this.setValue('')
+                    this.valueListener = []
                 }
         }
         },

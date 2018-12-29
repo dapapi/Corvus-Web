@@ -58,6 +58,10 @@
                     value = 0
                 }
                 this.$emit('change', {key: 'condition', value: value});
+            },
+            getSelectorValue(){
+                console.log(this.$refs.conditionSelector.getValue())
+                return this.$refs.conditionSelector.getValue()
             }
         }
     }

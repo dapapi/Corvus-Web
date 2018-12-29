@@ -1,5 +1,5 @@
 <template>
-    <div class="page-content container-fluid pt-0">
+    <div class="page-content container-fluid progress-container pt-0">
         <hr v-if="mode !== 'detail'">
         <div class="approver-row">
             <span>审批人</span>
@@ -36,7 +36,7 @@
         </div>
         <div class="approver-row" style="overflow: unset;" >
             <span v-if="notice || !mode">知会人</span>
-            <div class="approver ml-10" :style="randomColor(item.icon_url).color" v-if="mode" v-for="(item, index) in notice" :key="index">{{randomColor(item.icon_url).name}}</div>
+            <div class="approver ml-10" :style="{backgroundImage:'url('+randomColor(item.icon_url).color+')',backgroundColor:randomColor(item.icon_url).color}" v-if="mode" v-for="(item, index) in notice" :key="index">{{randomColor(item.icon_url).name}}</div>
             <AddMember v-if="!mode"/>
         </div>
     </div>
@@ -77,11 +77,14 @@ export default {
         },
         'trend':{
             handler:function(newValue,oldValue){
-                if(this.trend.ready==true)
-                var _this = this
-                fetch('get','/approvals/chains?form_id='+this.formid+'&change_type=224&value='+this.trend.condition.join(',')).then((params) => {
-                    _this.approver = params.data
-                })
+                if(this.trend.ready==true && this.trend.condition[0].length !== 0){
+                    var _this = this
+                    console.log(this.trend.condition[0]);
+                    fetch('get','/approvals/chains?form_id='+this.formid+'&change_type=224&value='+this.trend.condition.join(',')).then((params) => {
+                        _this.approver = params.data
+                    })
+                }
+                
             },
             deep:true,
         }
@@ -133,6 +136,9 @@ export default {
 </script>
 
 <style scoped>
+.progress-container{
+    padding: 0 45px;
+}
 .iconfont-logo{
     position: relative;
     z-index: 1288;
