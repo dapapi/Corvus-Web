@@ -1,5 +1,6 @@
 <template>
     <div class="page">
+        <Loading :is-loading="isLoading"></Loading>
         <div class="page-header page-header-bordered">
             <h1 class="page-title d-inline">任务</h1>
 
@@ -587,6 +588,7 @@
                 principalId: '', // 负责人id
                 questionId: '', // 问卷id
                 visible: false, // 是否展示问卷
+                isLoading: true,
             }
         },
         created() {
@@ -695,6 +697,7 @@
                     _this.$store.dispatch('changeParticipantsInfo', params);
                     params.data = response.data.principal.data;
                     _this.$store.dispatch('changePrincipal', params)
+                    _this.isLoading = false;
                 })
             },
 

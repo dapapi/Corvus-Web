@@ -1,6 +1,6 @@
 <template>
     <div class="page">
-
+        <Loading :is-loading="isLoading"></Loading>
         <div class="page-header page-header-bordered">
             <h1 class="page-title">博主管理</h1>
 
@@ -361,6 +361,7 @@
                 blogName:'',//博主名称
                 blogStatus:1,//博主状态
                 selectedArtistsArr: [],
+                isLoading:true
             }
         },
         watch:{
@@ -422,7 +423,9 @@
                     _this.current_page = response.meta.pagination.current_page;
                     _this.total = response.meta.pagination.total;
                     _this.total_pages = response.meta.pagination.total_pages;
+                    _this.isLoading = false;
                 });
+                
             },
 
             //获取博主类型

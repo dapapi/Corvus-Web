@@ -1,6 +1,6 @@
 <template>
     <div class="page">
-
+        <Loading :is-loading="isLoading"></Loading>
         <div class="page-header page-header-bordered">
             <h1 class="page-title">艺人管理</h1>
             <div class="page-header-actions dropdown show task-dropdown float-right">
@@ -91,7 +91,7 @@
                                     <td @click="redirectArtistDetail(artist.id)">{{artist.birthday|jsGetAge}}</td>
                                     <td @click="redirectArtistDetail(artist.id)">
                                         <template v-if="artist.source">
-                                            <span style="color:artistSourceArr.find(item => item.value == artist.source).color">
+                                            <span :style="'color:' + artistSourceArr.find(item => item.value == artist.source).color">
                                                 {{ artistSourceArr.find(item => item.value == artist.source).name}}
                                             </span>
                                         </template>
@@ -103,7 +103,7 @@
                                                  {{ taiyangCommunicationStatusArr.find(item => item.value ==
                                                     artist.communication_status).name}}
                                             </span>
-                                           
+
                                         </template>
                                     </td>
                                     <!-- <td>
@@ -116,12 +116,12 @@
                                     <td @click="redirectArtistDetail(artist.id)">{{artist.updated_at}}</td>
                                 </tr>
                             </tbody>
-                            
+
                         </table>
                         <div v-if="artistsInfo.length === 0" class="col-md-1" style="margin: 6rem auto">
                             <img src="https://res.papitube.com/corvus/images/content-none.png" alt="" style="width: 100%">
                         </div>
-                             
+
                         <pagination :current_page="current_page" :method="getArtists" :total_pages="total_pages"
                                     :total="total"></pagination>
                     </div>
@@ -241,7 +241,7 @@
                                 <input type="text" class="form-control" v-model="douyinFansNum">
                             </div>
                         </div>
-                        <div class="example" v-show='platformType.find(item => item ==4)'> 
+                        <div class="example" v-show='platformType.find(item => item ==4)'>
                             <div class="col-md-2 text-right float-left">其他地址</div>
                             <div class="col-md-4 float-left pl-0">
                                 <input type="text" class="form-control" v-model="qitaUrl">
@@ -423,22 +423,23 @@
                 },
                 giveType:1,//1 分配经理人 2 分配宣传人
                 affixes:[],
-                affixesType:''//附件类型
+                affixesType:'',//附件类型
+                isLoading: true,
             }
         },
         watch:{
             platformType:function(){
                 return  this.platformType
             }
-            
+
         },
         mounted() {
             this.getArtists();
             $('table').asSelectable();
         },
-        
+
         methods: {
-            
+
             //获取沟通状态
             getStatus:function(value){
                 this.listData.communication_status = value
@@ -462,6 +463,7 @@
                     _this.total = response.meta.pagination.total;
                     _this.total_pages = response.meta.pagination.total_pages;
                     $('table').asSelectable('_trigger');
+                    _this.isLoading = false;
                 })
             },
             customize: function (value) {
@@ -485,26 +487,26 @@
                 for (let i = 0; i < value.length; i++) {
                     this.platformType.push(value[i].value)
                 }
-                
+
             },
 
             changeCommunicationType: function (value) {
-                
+
                 this.communicationStatus = value
             },
 
             changeSignIntention: function (value) {
-                
+
                     this.signIntention = value
-                
-                
+
+
             },
 
             isSignCompany: function (value) {
-               
+
                 this.signCompany = value
-                
-                
+
+
             },
 
             changeGender: function (value) {
@@ -524,14 +526,14 @@
 
                         this.affixes.splice(i,1)
                     }
-                    
+
                 }
                 this.affixes.push ({
                     title:name,
                     size:size,
                     url:url,
                     type:this.affixesType
-                }) 
+                })
             },
             addArtist: function () {
                 if(!this.artistName){
@@ -543,7 +545,7 @@
                     return false
                 }
                 if(!this.artistBirthday){
-                    
+
                     toastr.error('请选择艺人出生日期');
                     return false
                 }
@@ -583,19 +585,19 @@
                     toastr.error('请选择是否与其他公司签约');
                     return false
                 }
-                if (!this.affixesType) {
-                    toastr.error('请选择附件类型')
-                    return false
-                }
-                if(this.signCompany == 2&&!this.sign_contract_other_name){
+                if(this.signCompany == 1&&!this.sign_contract_other_name){
                     toastr.error('请输入已签约公司名称');
                     return false
                 }
-
-                if(this.affixes.length === 0){
+                // console.log(this.affixesType)
+                if(this.affixesType>1&&this.affixes.length==0){
                     toastr.error('请上传附件');
                     return false
                 }
+                // if(this.affixes){
+                //     toastr.error('请上传附件');
+                //     return false
+                // }
                 // if(!this.uploadUrl){
                 //     toastr.error('请上传头像')
                 //     return false
@@ -631,7 +633,7 @@
                     desc:this.artistDesc,//  备注
                     avatar:this.uploadUrl
 
-                };
+                }
                 let _this = this;
                 fetch('post', '/stars', data).then(function (response) {
                     toastr.success('创建成功');
@@ -718,7 +720,7 @@
                     return false
                 }
                 if(this.giveType == 1){
-                   url = 'distribution/person' 
+                   url = 'distribution/person'
                    toast = '分配经理人成功'
                    data = {
                         person_ids:[],//经理人数组
@@ -738,10 +740,10 @@
                         type:2, //宣传人
                     }
                 }
-                
+
                 for (let  i= 0;  i< this.$store.state.participantsInfo.length; i++) {
                     data.person_ids.push(this.$store.state.participantsInfo[i].id)
-                    
+
                 }
                 fetch('post', url, data).then(function (response) {
                     toastr.success(toast)
@@ -839,7 +841,7 @@
     .uploadContent{
         position: relative;
     }
-    
+
     .puls {
         display: inline-block;
         background-size: 100px;

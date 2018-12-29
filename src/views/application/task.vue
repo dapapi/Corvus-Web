@@ -134,7 +134,7 @@ export default {
                     this.taskStatus = signStatus
                 }
                 data.page = page
-                fetch('get', '/tasks/my_all', data).then(function (response) {             
+                fetch('get', '/tasks/filter', data).then(function (response) {             
                     _this.taskInfo = response.data;
                     _this.current_page = response.meta.pagination.current_page;
                     _this.total = response.meta.pagination.total;

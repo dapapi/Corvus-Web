@@ -736,23 +736,23 @@ let config = {
         attachmentTypeArr: [
             {
                 name: '艺人简报',
-                value: 1
-            },
-            {
-                name: '独白视频',
                 value: 2
             },
             {
-                name: '艺人规划',
+                name: '独白视频',
                 value: 3
             },
             {
-                name: '自我介绍视频',
+                name: '艺人规划',
                 value: 4
             },
             {
-                name: '其他',
+                name: '自我介绍视频',
                 value: 5
+            },
+            {
+                name: '其他',
+                value: 6
             }
 
         ],

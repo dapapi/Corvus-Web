@@ -55,12 +55,14 @@
             if (Cookies.get('user')) {
                 this.getUserList()
                 this.getDepartment()
+                this.getModuleRole()
             }
         },
         methods: {
             ...mapActions([
                 'getUserList',
-                'getDepartment'
+                'getDepartment',
+                'getModuleRole'
             ])
         }
     };

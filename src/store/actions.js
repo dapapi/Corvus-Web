@@ -70,5 +70,20 @@ export default {
         fetch('get', '/users').then(res => {
             commit('setUserList', res.data)
         })
+    },
+    // 获取模块权限
+    getModuleRole ({commit}) {
+        fetch('get','console/getpowermodel').then(res => {
+            let canPassBack = false
+            if (res.length > 0) {
+                for (const n of res) {
+                    if (n.code === 'back') {
+                        canPassBack = true
+                        break
+                    }
+                }
+            }
+            commit('setPassBack', canPassBack)
+        })
     }
 }

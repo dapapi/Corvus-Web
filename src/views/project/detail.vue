@@ -86,7 +86,7 @@
                                 </div>
                             </div>
                         </div>
-                        <div class="col-md-6 float-left pl-0 mb-20 px-0">
+                        <div class="col-md-6 float-left pl-0 mb-20 px-0" v-if="projectInfo.type != 5">
                             <div class="mb-20 float-left clearfix col-md-6 pl-0">
                                 <div class="float-left col-md-5 px-0">预计订单收入</div>
                                 <div class="float-left col-md-7">
@@ -128,7 +128,7 @@
                                aria-expanded="true" role="tab">项目进度</a>
                         </li>
                         <li class="nav-item" role="presentation" @click="getProjectTasks"
-                            v-if="projectInfo.approval_status == 232">
+                            v-if="projectInfo.type == 5 || projectInfo.approval_status == 232">
                             <a class="nav-link" data-toggle="tab" href="#forum-project-tasks"
                                aria-controls="forum-present"
                                aria-expanded="false" role="tab">
@@ -143,22 +143,22 @@
                             </a>
                         </li>
                         <!--<li class="nav-item" role="presentation"-->
-                            <!--v-if="projectInfo.type != 5 && projectInfo.approval_status == 232">-->
-                            <!--<a class="nav-link" data-toggle="tab" href="#forum-project-contract"-->
-                               <!--aria-controls="forum-present"-->
-                               <!--aria-expanded="false" role="tab">合同</a>-->
+                        <!--v-if="projectInfo.type != 5 && projectInfo.approval_status == 232">-->
+                        <!--<a class="nav-link" data-toggle="tab" href="#forum-project-contract"-->
+                        <!--aria-controls="forum-present"-->
+                        <!--aria-expanded="false" role="tab">合同</a>-->
                         <!--</li>-->
                         <!--<li class="nav-item" role="presentation" @click="getProjectBill"-->
-                            <!--v-if="projectInfo.type != 5 && projectInfo.approval_status == 232">-->
-                            <!--<a class="nav-link" data-toggle="tab" href="#forum-project-bill"-->
-                               <!--aria-controls="forum-present"-->
-                               <!--aria-expanded="false" role="tab">账单</a>-->
+                        <!--v-if="projectInfo.type != 5 && projectInfo.approval_status == 232">-->
+                        <!--<a class="nav-link" data-toggle="tab" href="#forum-project-bill"-->
+                        <!--aria-controls="forum-present"-->
+                        <!--aria-expanded="false" role="tab">账单</a>-->
                         <!--</li>-->
                         <!--<li class="nav-item" role="presentation" @click="getProjectReturned"-->
-                            <!--v-if="projectInfo.type != 5 && projectInfo.approval_status == 232">-->
-                            <!--<a class="nav-link" data-toggle="tab" href="#forum-project-payback"-->
-                               <!--aria-controls="forum-present"-->
-                               <!--aria-expanded="false" role="tab">回款</a>-->
+                        <!--v-if="projectInfo.type != 5 && projectInfo.approval_status == 232">-->
+                        <!--<a class="nav-link" data-toggle="tab" href="#forum-project-payback"-->
+                        <!--aria-controls="forum-present"-->
+                        <!--aria-expanded="false" role="tab">回款</a>-->
                         <!--</li>-->
                         <li class="nav-item" role="presentation">
                             <a class="nav-link"
@@ -500,7 +500,7 @@
                             </div>
                         </div>
                         <!-- 概况 -->
-                        <div class="tab-pane animation-fade"
+                        <div class="tab-pane animation-fade" v-if="projectInfo"
                              :class="(projectInfo.type == 5 || projectInfo.approval_status != 232) ? 'active' : ''"
                              id="forum-project-base"
                              role="tabpanel">
@@ -610,7 +610,7 @@
                                                                 @change="(value) => changeProjectBaseInfo(value, 'end_at')"></EditDatepicker>
                                             </div>
                                         </div>
-                                        <div v-if="projectInfo.fields">
+                                        <div v-if="projectInfo.type != 5 && projectInfo.fields">
                                             <div class="card-text py-10 px-0 clearfix col-md-6 float-left edit-height"
                                                  v-for="field in projectInfo.fields">
                                                 <div class="col-md-2 float-left text-right pl-0">{{ field.key }}
@@ -687,7 +687,7 @@
 
                                     <div class="segmentation-line example"></div>
 
-                                    <div class="card-text py-5 clearfix edit-height">
+                                    <div class="card-text py-5 clearfix edit-height" v-if="projectInfo.creator">
                                         <div class="col-md-1 float-left text-right pl-0">录入人</div>
                                         <div class="col-md-5 float-left font-weight-bold">
                                             {{ projectInfo.creator.data.name }}
@@ -708,23 +708,27 @@
                                         </div>
                                     </div>
                                     <div class="card-text py-5 clearfix edit-height">
-                                        <div class="col-md-1 float-left text-right pl-0">关联项目</div>
-                                        <div class="col-md-5 float-left font-weight-bold">
-                                            <template v-for="project in projectInfo.relate_projects.data">
-                                                <span @click="redirectProject(project.id)">{{project.title }}</span>
-                                            </template>
+                                        <div class="float-left px-0 col-md-6" v-if="projectInfo.relate_projects">
+                                            <div class="col-md-2 float-left text-right pl-0">关联项目</div>
+                                            <div class="col-md-10 float-left font-weight-bold">
+                                                <template v-for="project in projectInfo.relate_projects.data">
+                                                    <span @click="redirectProject(project.id)">{{project.title }}</span>
+                                                </template>
+                                            </div>
                                         </div>
-                                        <div class="col-md-1 float-left text-right pl-0">关联任务</div>
-                                        <div class="col-md-5 float-left font-weight-bold">
-                                            <template v-for="task in projectInfo.relate_tasks.data">
-                                                <span @click="redirectTask(task.id)">{{ task.title }}</span>
-                                            </template>
+                                        <div class="float-left px-0 col-md-6" v-if="projectInfo.relate_tasks">
+                                            <div class="col-md-2 float-left text-right pl-0">关联任务</div>
+                                            <div class="col-md-10 float-left font-weight-bold">
+                                                <template v-for="task in projectInfo.relate_tasks.data">
+                                                    <span @click="redirectTask(task.id)">{{ task.title }}</span>
+                                                </template>
+                                            </div>
                                         </div>
                                     </div>
 
                                     <div class="segmentation-line example"></div>
 
-                                    <div>
+                                    <div v-if="projectInfo.type != 5">
                                         <ApprovalProgress :formid="projectInfo.project_number"
                                                           :formstatus="projectInfo.approval_status.id"
                                                           mode="detail"></ApprovalProgress>
@@ -900,7 +904,7 @@
         </div>
         <!-- 撤单原因 -->
         <div class="modal fade" id="withdrawal" aria-hidden="true" aria-labelledby="addLabelForm"
-             role="dialog" tabindex="-1">
+             role="dialog" tabindex="-1" v-if="projectInfo.type != 5">
             <div class="modal-dialog modal-simple">
                 <div class="modal-content">
                     <div class="modal-header">
@@ -927,7 +931,7 @@
         </div>
         <!-- 新建/修改回款期次 -->
         <div class="modal fade" id="addPaybackTime" aria-hidden="true" aria-labelledby="addLabelForm"
-             role="dialog" tabindex="-1">
+             role="dialog" tabindex="-1" v-if="projectInfo.type != 5">
             <div class="modal-dialog modal-simple" v-if="projectInfo.title">
                 <div class="modal-content">
                     <div class="modal-header">
@@ -1001,7 +1005,7 @@
         </div>
         <!-- 新建/修改回款记录 -->
         <div class="modal fade" id="addPayback" aria-hidden="true" aria-labelledby="addLabelForm"
-             role="dialog" tabindex="-1">
+             role="dialog" tabindex="-1" v-if="projectInfo.type != 5">
             <div class="modal-dialog modal-simple" v-if="projectInfo.title">
                 <div class="modal-content">
                     <div class="modal-header">
@@ -1084,7 +1088,7 @@
         </div>
         <!-- 新建/修改开票记录 -->
         <div class="modal fade" id="addInvoice" aria-hidden="true" aria-labelledby="addLabelForm"
-             role="dialog" tabindex="-1">
+             role="dialog" tabindex="-1" v-if="projectInfo.type != 5">
             <div class="modal-dialog modal-simple" v-if="projectInfo.title">
                 <div class="modal-content">
                     <div class="modal-header">
@@ -1247,7 +1251,7 @@
         </div>
         <!-- 新增结算单 -->
         <div class="modal fade" id="addBill" aria-hidden="true" aria-labelledby="addLabelForm"
-             role="dialog" tabindex="-1">
+             role="dialog" tabindex="-1" v-if="projectInfo.type != 5">
             <div class="modal-dialog modal-simple">
                 <div class="modal-content">
                     <div class="modal-header">
@@ -1549,11 +1553,15 @@
                         this.$store.dispatch('changeParticipantsInfo', params);
                     }
 
-                    for (let i = 0; i < response.data.relate_tasks.data.length; i++) {
-                        this.linkageSelectedIds.tasks.push(response.data.relate_tasks.data[i].id)
+                    if (response.data.relate_tasks) {
+                        for (let i = 0; i < response.data.relate_tasks.data.length; i++) {
+                            this.linkageSelectedIds.tasks.push(response.data.relate_tasks.data[i].id)
+                        }
                     }
-                    for (let i = 0; i < response.data.relate_projects.data.length; i++) {
-                        this.linkageSelectedIds.projects.push(response.data.relate_projects.data[i].id)
+                    if (response.data.relate_projects) {
+                        for (let i = 0; i < response.data.relate_projects.data.length; i++) {
+                            this.linkageSelectedIds.projects.push(response.data.relate_projects.data[i].id)
+                        }
                     }
                     if (response.data.trail) {
                         for (let i = 0; i < response.data.trail.data.expectations.data.length; i++) {

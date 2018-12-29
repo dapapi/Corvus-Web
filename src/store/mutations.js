@@ -66,4 +66,8 @@ export default {
     setUserList (state, data) {
         state.userList = data
     },
+    // 进入后台权限
+    setPassBack (state, data) {
+        state.canPassBack = data
+    }
 }
