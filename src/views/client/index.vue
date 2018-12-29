@@ -1,6 +1,6 @@
 <template>
     <div class="page">
-
+        <Loading :is-loading="isLoading"></Loading>
         <div class="page-header page-header-bordered">
             <h1 class="page-title">客户管理</h1>
             <!-- <div class="page-header-actions">
@@ -20,17 +20,18 @@
                         <selectors :options="companiesArr" @change="changeCompany" placeholder="请选择公司"></selectors>
                     </div>
                     <div class="col-md-3 example float-left">
-                        <selectors :options="userList" @change="changePrincipalSelect" :multiple="true" />
+                        <selectors :options="userList" @change="changePrincipalSelect" :multiple="true"/>
                     </div>
                     <div class="col-md-3 example float-left">
-                        <selectors :options="clientLevelArr" @change="changeClientLevelSelect" placeholder="请选择公司级别"></selectors>
+                        <selectors :options="clientLevelArr" @change="changeClientLevelSelect"
+                                   placeholder="请选择公司级别"></selectors>
                     </div>
                     <!--<div class="col-md-3 example float-left">-->
-                        <!--<button type="button" class="btn btn-default waves-effect waves-classic float-right"-->
-                                <!--data-toggle="modal" data-target="#customizeContent"-->
-                                <!--data-placement="right" title="">-->
-                            <!--自定义筛选-->
-                        <!--</button>-->
+                    <!--<button type="button" class="btn btn-default waves-effect waves-classic float-right"-->
+                    <!--data-toggle="modal" data-target="#customizeContent"-->
+                    <!--data-placement="right" title="">-->
+                    <!--自定义筛选-->
+                    <!--</button>-->
                     <!--</div>-->
                 </div>
                 <div class="col-md-12">
@@ -77,7 +78,7 @@
 
         <customize-filter :data="customizeInfo" @change="customize"></customize-filter>
 
-        <AddClientType @change="showAddModal" />
+        <AddClientType @change="showAddModal"/>
 
         <div class="modal fade" id="addClient" aria-hidden="true" aria-labelledby="addLabelForm"
              role="dialog" tabindex="-1">
@@ -97,14 +98,15 @@
                                 <input type="text" class="form-control" title="" v-model="clientName">
                             </div>
                             <div class="col-md-5 float-left pl-0">
-                                <selectors ref="clientLevel" :options="clientLevelArr" @change="changeClientLevel"></selectors>
+                                <selectors ref="clientLevel" :options="clientLevelArr"
+                                           @change="changeClientLevel"></selectors>
                             </div>
                         </div>
                         <!-- 暂时隐藏 -->
                         <div class="example">
                             <div class="col-md-2 text-right float-left">地区</div>
                             <div class="col-md-10 float-left pl-0 region">
-                                <RegionSelector ref="region" @setAreaData="changeAreaData" />
+                                <RegionSelector ref="region" @setAreaData="changeAreaData"/>
                             </div>
                         </div>
                         <div class="example">
@@ -129,7 +131,8 @@
                         <div class="example">
                             <div class="col-md-2 text-right float-left require">关键决策人</div>
                             <div class="col-md-10 float-left pl-0">
-                                <selectors ref="clientContactType" :options="keyMasterArr" @change="changeContactClientType"></selectors>
+                                <selectors ref="clientContactType" :options="keyMasterArr"
+                                           @change="changeContactClientType"></selectors>
                             </div>
                         </div>
                         <div class="example">
@@ -147,7 +150,8 @@
                         <div class="example">
                             <div class="col-md-2 text-right float-left">规模</div>
                             <div class="col-md-10 float-left pl-0">
-                                <selectors ref="clientScale" :options="clientScaleArr" @change="changeClientScale"></selectors>
+                                <selectors ref="clientScale" :options="clientScaleArr"
+                                           @change="changeClientScale"></selectors>
                             </div>
                         </div>
                         <div class="example">
@@ -170,14 +174,14 @@
 </template>
 
 <script>
-    import { mapState } from 'vuex'
+    import {mapState} from 'vuex'
     import fetch from '../../assets/utils/fetch.js'
     import config from '../../assets/js/config'
     import ImportAndExport from '../../components/ImportAndExport.vue'
 
     const clientLevelArr = [{name: '全部', value: ''}, ...config.clientLevelArr]
     export default {
-        components:{
+        components: {
             ImportAndExport
         },
         data: function () {
@@ -208,7 +212,8 @@
                 companyName: '', // 公司名称
                 user: {}, // 个人信息
                 ragion: {}, // 区域
-                clientScale: ''
+                clientScale: '',
+                isLoading: true,
             }
         },
 
@@ -258,6 +263,7 @@
                     this.current_page = response.meta.pagination.current_page;
                     this.total = response.meta.pagination.total;
                     this.total_pages = response.meta.pagination.total_pages;
+                    this.isLoading = false;
                 })
             },
 
@@ -276,8 +282,8 @@
             },
 
             addClient: function () {
-               
-                
+
+
                 if (!this.clientName) {
                     toastr.error('请输入公司名称！');
                     return
@@ -377,7 +383,7 @@
                 this.clientScale = value
             },
             // 选择地区
-            changeAreaData (val) {
+            changeAreaData(val) {
                 if (val.area.name) {
                     this.ragion.province = val.province.name
                     this.ragion.city = val.city.name !== '市辖区' ? val.city.name : val.province.name
@@ -385,28 +391,28 @@
                 }
             },
             // show add
-            showAddModal (val) {
+            showAddModal(val) {
                 this.setDefaultPrincipal()
                 $('#addClient').modal()
                 this.clientType = val
             },
             // 关键决策人
-            changeContactClientType (val) {
+            changeContactClientType(val) {
                 this.clientContactType = val
             },
             // 设置默认负责人
-            setDefaultPrincipal () {
+            setDefaultPrincipal() {
                 this.$store.commit('changeNewPrincipal', {
                     name: this.user.nickname,
                     id: this.user.id
                 })
             },
             // 清空默认负责人
-            clearDefaultPrincipal () {
+            clearDefaultPrincipal() {
                 this.$store.commit('changeNewPrincipal', {name: '', id: ''})
             },
             // 关闭弹窗
-            cancelClient () {
+            cancelClient() {
                 this.clientType = ''
                 this.clientName = ''
                 this.clientLevel = ''
@@ -415,7 +421,7 @@
                 this.$refs.clientContactType.setValue('')
                 this.$refs.region.reset()
                 this.ragion.province = {}
-                    // principal_id: this.$store.state.newPrincipalInfo.id,
+                // principal_id: this.$store.state.newPrincipalInfo.id,
                 this.clientContact = ''
                 this.clientContactPhone = ''
                 this.clientContactPosition = ''
@@ -443,6 +449,7 @@
             display: inline-block;
         }
     }
+
     .region {
         /deep/ .page-content {
             padding: 0;

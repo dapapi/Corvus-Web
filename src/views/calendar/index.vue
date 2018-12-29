@@ -263,11 +263,13 @@
                 <div class="modal-content" v-if="scheduleData">
                     <div class="modal-header">
                         <div style="order: 2">
-                            <i class="iconfont icon-bianji2 pr-4 font-size-16 pointer-content"
-                               @click="changeScheduleType('edit')" aria-hidden="true"></i>
-                            <FileUploader is-icon="true" class="float-left" @change="fileUpload"></FileUploader>
-                            <i class="iconfont icon-shanchu1 pr-4 font-size-16 pointer-content" data-toggle="modal"
-                               data-target="#delModel" aria-hidden="true" @click="deleteToastr('schedule')"></i>
+                            <span v-show="!noPermission">
+                                <i class="iconfont icon-bianji2 pr-4 font-size-16 pointer-content"
+                                   @click="changeScheduleType('edit')" aria-hidden="true"></i>
+                                <FileUploader is-icon="true" class="float-left" @change="fileUpload"></FileUploader>
+                                <i class="iconfont icon-shanchu1 pr-4 font-size-16 pointer-content" data-toggle="modal"
+                                   data-target="#delModel" aria-hidden="true" @click="deleteToastr('schedule')"></i>
+                            </span>
                             <i class="iconfont icon-guanbi pointer-content" aria-hidden="true" data-dismiss="modal"></i>
                         </div>
                         <h5 class="modal-title">{{ scheduleData.calendar.data.title }}</h5>
@@ -316,13 +318,13 @@
                                 {{ scheduleData.creator.data.name }}
                             </div>
                         </div>
-                        <div class="example" v-if="scheduleData.participants">
+                        <div class="example" v-if="scheduleData.participants && !noPermission">
                             <div class="col-md-1 px-0 float-left">参与人</div>
                             <div class="col-md-10 float-left">
                                 <AddMember type="add" @change="changeScheduleParticipants"></AddMember>
                             </div>
                         </div>
-                        <div class="example" v-if="scheduleData.desc">
+                        <div class="example" v-if="scheduleData.desc && !noPermission">
                             <div class="col-md-1 px-0 float-left">备注</div>
                             <div class="col-md-10 float-left">{{ scheduleData.desc }}</div>
                         </div>
@@ -592,7 +594,7 @@
                 calendarActionType: '',
                 scheduleCalendar: '',
                 isScheduleAllday: 0,
-                scheduleRepeat: 1,
+                scheduleRepeat: 0,
                 scheduleData: '',
                 scheduleParticipants: '',
                 isAllday: false,
@@ -613,6 +615,7 @@
                 isMeeting: false,
                 materialsIds: [],
                 meetingRomeType: '',
+                noPermission: false,
             }
         },
 
@@ -898,12 +901,14 @@
                 fetch('get', '/schedules/' + schedule.id, data).then(response => {
                     if (!response) {
                         this.scheduleData = schedule;
+                        this.noPermission = true;
                         return
                     }
+                    this.noPermission = false;
                     this.scheduleData = response.data;
                     this.scheduleParticipants = JSON.parse(JSON.stringify(response.data.participants.data));
                     this.$store.dispatch('changeParticipantsInfo', {data: response.data.participants.data});
-                })
+                });
                 $('#checkSchedule').modal('show')
             },
 

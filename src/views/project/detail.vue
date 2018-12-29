@@ -729,7 +729,7 @@
                                     <div class="segmentation-line example"></div>
 
                                     <div v-if="projectInfo.type != 5">
-                                        <ApprovalProgress :formid="projectInfo.project_number"
+                                        <ApprovalProgress :formid="projectInfo.form_instance_number"
                                                           :formstatus="projectInfo.approval_status.id"
                                                           mode="detail"></ApprovalProgress>
                                     </div>
