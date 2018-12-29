@@ -822,7 +822,6 @@
                 updateStar_douyin_infos:{},//修改抖音
                 updateStar_xiaohongshu_infos:{},//修改小红书
                 updatePlatform:'',//修改平台
-                isLoading:true,
                 participant:'',
                 tasksInfo:'',
                 ProjectsInfo:[],
@@ -1028,6 +1027,7 @@
                     } else {
                         _this.artistInfo.artistWorkProportion = false
                     }
+                    _this.isLoading = false;
 
                 });
                 
@@ -1046,7 +1046,7 @@
                 //     })
 
                 // })
-                _this.isLoading = false;
+                
             },
             //账单
             getArtistsBill(page = 1,expense_type){  
