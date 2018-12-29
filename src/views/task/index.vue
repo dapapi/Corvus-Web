@@ -1,5 +1,6 @@
 <template>
     <div class="page">
+        <Loading :is-loading="isLoading"></Loading>
         <div class="page-header page-header-bordered">
             <h1 class="page-title">任务管理</h1>
         </div>
@@ -301,7 +302,8 @@
                 taskStatusSearch: "", // 搜索的任务状态
                 resourceType: "", // 资源type
                 resourceableId: "", // 资源id
-                user: {} // 个人信息
+                user: {}, // 个人信息
+                isLoading: true,
             };
         },
         created() {
@@ -350,6 +352,7 @@
                     this.current_page = response.meta.pagination.current_page;
                     this.total = response.meta.pagination.total;
                     this.total_pages = response.meta.pagination.total_pages;
+                    this.isLoading = false;
                 });
             },
 

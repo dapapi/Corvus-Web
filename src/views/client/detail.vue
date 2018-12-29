@@ -1,6 +1,6 @@
 <template>
     <div class="page">
-
+        <Loading :is-loading="isLoading"></Loading>
         <div class="page-header page-header-bordered">
             <h1 class="page-title d-inline">客户</h1>
         </div>
@@ -576,6 +576,7 @@
                 }, // 修改的联系人信息
                 contactId: '', // 联系人id
                 user: {},
+                isLoading: true,
             }
         },
         beforeMount() {
@@ -659,6 +660,7 @@
                         data: response.data.principal.data
                     };
                     _this.$store.dispatch('changePrincipal', params);
+                    _this.isLoading = false
                 })
             },
 
