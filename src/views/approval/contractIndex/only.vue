@@ -62,11 +62,12 @@
                                 </tr>
                                 </tbody>
                             </table>
-<!-- 
-                            <div v-if="projectsInfo.length === 0" class="col-md-1" style="margin: 6rem auto">
+                            <div class="col-md-1" style="margin: 6rem auto">
                                 <img src="https://res.papitube.com/corvus/images/content-none.png" alt=""
                                      style="width: 100%">
-                            </div> -->
+                            </div>
+                             <pagination :current_page="current_page" :method="getProjects" :total_pages="total_pages"
+                                    :total="total"></pagination>
                         </div>
                     </div>
                 </div>
@@ -77,19 +78,53 @@
 </template>
 
 <script>
+import {CONTRACT_INDEX_CONFIG} from '@/views/approval/contractIndex/contractIndexData.js'
+
+    import fetch from '@/assets/utils/fetch.js'
+    import config from '@/assets/js/config'
     export default {
         name: "only",
         data() {
-            return {
+            return { 
+                total: 1,
+                current_page: 1,
+                total_pages: 1,
                 keywords: '',
                 projectsInfo: [],
                 contractList:CONTRACT_INDEX_CONFIG.contractIndex,
-
             }
         },
+        mounted(){
+            this.getList(1)
+        },
         methods: {
-            getList(value) {
-
+            getProjects: function (pageNum = 1, type = null) {
+                let data = {
+                    page: pageNum,
+                    include: 'principal,trail.expectations'
+                };
+                let url = '/approvals_contract/my?status=1';
+                if (type) {
+                    url = '/approvals_contract/my';
+                    data.type = type;
+                }
+                this.paginationType = 'getProjects';
+                fetch('get', url, data).then(response => {
+                    this.projectsInfo = response.data
+                    this.total = response.meta.pagination;
+                    this.current_page = response.meta.current_page;
+                    this.total_pages = response.meta.total_pages;
+                })
+            },
+            getList(params) {
+                    let _this = this
+                    fetch('get','/approvals_contract/approval?status=',params).then((params) => {
+                        console.log(params.meta);
+                        _this.projectsInfo = params.data
+                        _this.total = params.meta.pagination
+                        _this.current_page = params.meta.current_page;
+                        _this.total_pages = params.meta.total_pages;
+                    })
             }
         }
     }

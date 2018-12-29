@@ -65,6 +65,8 @@
                                 <img src="https://res.papitube.com/corvus/images/content-none.png" alt=""
                                      style="width: 100%">
                             </div>
+                            <pagination :current_page="current_page" :method="getProjects" :total_pages="total_pages"
+                                    :total="total"></pagination>
                         </div>
                     </div>
                 </div>
@@ -82,6 +84,9 @@
         name: "application",
         data() {
             return {
+                total: 1,
+                current_page: 1,
+                total_pages: 1,
                 keywords: '',
                 projectsInfo: [],
                 projectProgress:PROJECT_CONFIG.approvalProgress
@@ -98,11 +103,31 @@
             }
         },
         methods: {
+            getProjects: function (pageNum = 1, type = null) {
+                let data = {
+                    page: pageNum,
+                    include: 'principal,trail.expectations'
+                };
+                let url = '/approvals_project/notify';
+                if (type) {
+                    url = 'approvals_project/notify';
+                    data.type = type;
+                }
+                this.paginationType = 'getProjects';
+                fetch('get', url, data).then(response => {
+                    this.projectsInfo = response.data
+                    this.total = response.total;
+                    this.current_page = response.current_page;
+                    this.total_pages = response.last_page;
+                })
+            },
             getList() {
                 let _this = this
                 fetch('get','/approvals_project/notify').then((params) => {
-                    console.log(params.data)
                     _this.projectsInfo = params.data
+                    _this.total = params.total;
+                    _this.current_page = params.current_page;
+                    _this.total_pages = params.last_page;
                 })
             }
         }

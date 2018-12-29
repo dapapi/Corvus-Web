@@ -81,7 +81,7 @@
                         <div class="col-md-3 float-left">申请人</div>
                         <div class="col-md-3 float-left">{{list.name || info.approval.name}}</div>
                         <div class="col-md-3 float-left">职位</div>
-                        <div class="col-md-3 float-left">{{list.position || info.approval.position}}</div>
+                        <div class="col-md-3 float-left">{{list.position}}</div>
                     </div>
                     <div class="example">
                         <div class="col-md-3 float-left">部门</div>
@@ -119,7 +119,8 @@
         </div>
         <BuildProject :project-type="projectType" :project-fields-arr="projectFieldsArr" 
         :default-data='{fields:info.fields.data,list:list,trailInfo:trailInfo}'></BuildProject>
-        <ApprovalGoModal :mode='approvalMode' :id='list.project_number' @approvaldone='approvalDone' />
+        <ApprovalGreatModule :form-data='formData' singlemode='true'  />
+        <ApprovalGoModal :mode='approvalMode' :id='list.form_instance_number' @approvaldone='approvalDone' />
     </div>
 
 </template>
@@ -127,11 +128,13 @@
 import fetch from '@/assets/utils/fetch.js'
 import config from '@/assets/js/config'
 import {PROJECT_CONFIG} from '@/views/approval/project/projectConfig.js'
+import ApprovalGreatModule from '@/components/ApprovalGreatModule'
+
 import ApprovalProgress from '@/components/ForApproval/ApprovalProgress'
 export default {
     name:'approvalDetail',
     components:{
-        ApprovalProgress
+        ApprovalProgress,ApprovalGreatModule
     },
     data(){
         return{
@@ -147,11 +150,17 @@ export default {
            pending:{},
            currentId:'',
            isCurrentApprover:false,
-           roleUser:''
+           roleUser:'',
+           indexData:{},
+           formData:{},
         }
     },
 
     mounted(){
+        // if(this.list.title.includes('合同')){
+        //             console.log(111111);
+        //         }
+        this.getFormList()
         this.getData()
     },
     computed:{
@@ -179,6 +188,16 @@ export default {
         
     },
     methods:{
+         getFormList(){
+            let _this = this
+            fetch('get','/approvals?type=0').then((params) => {
+                _this.indexData = params.data
+            })
+        },
+        pullUp(params){
+            this.formData = params
+            $('#approval-great-module').modal('show')
+        },
         approvalDone(){
             this.getData()
             this.$refs.approvalProgress.getApprover(this.list.project_number)
@@ -220,11 +239,14 @@ export default {
            
         },
         addProject(value) {
-                console.log(value);
                 this.projectType = value;
-                this.selectProjectType(function () {
-                    $('#addProject').modal('show')
-                });
+                if(this.list.title.includes('合同')){
+                    this.pullUp(this.indexData[0])
+                }else{
+                    this.selectProjectType(function () {
+                        $('#addProject').modal('show')
+                    });
+                }
             },
 
         selectProjectType(callback) {
@@ -261,6 +283,8 @@ export default {
                 let {fields:{data}} = meta
                 _this.detailData = data
                 _this.trailInfo = params.data.trail
+        
+
             })
         },
         participantChange: function (value) {
