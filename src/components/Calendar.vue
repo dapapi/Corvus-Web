@@ -77,7 +77,11 @@
                 events: function (start, end, timezone, callback) {
                     self.startDate = self.timeReformat(start._d);
                     self.endDate = self.timeReformat(end._d);
-                    if (self.calendars.length === 0 && self.meetingRomeList.length === 0) {
+                    let meetingRomeList = self.meetingRomeList;
+                    if (!meetingRomeList) {
+                        meetingRomeList = [];
+                    }
+                    if (self.calendars.length === 0 && meetingRomeList.length === 0) {
                         callback([]);
                         return
                     }
@@ -86,10 +90,10 @@
                         end_date: self.endDate,
                         include: 'calendar,creator,material'
                     };
-                    if (self.meetingRomeList) {
+                    if (meetingRomeList.length > 0) {
                         let materialsIds = [];
-                        for (let i = 0; i < self.meetingRomeList.length; i++) {
-                            materialsIds.push(self.meetingRomeList[i].id)
+                        for (let i = 0; i < meetingRomeList.length; i++) {
+                            materialsIds.push(meetingRomeList[i].id)
                         }
                         data.material_ids = materialsIds
                     } else {
