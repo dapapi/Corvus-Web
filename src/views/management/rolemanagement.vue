@@ -51,7 +51,7 @@
                                 <ul class="menu pl-0">
                                     <li class="site-menu-item has-sub  pb-10" v-for="(item,index) in groupingDate"
                                         :key="index" style="width:260px;">
-                                        <a href="javascript:void(0) " class="p-5" @click="switchMenu(item.id)">
+                                        <a href="javascript:void(0) " class="p-5" @click="switchMenu(item.id)" >
                                             <i v-show="visible"
                                                class="iconfont icon-plus-select-down showList font-size:25px pr-10"></i>
                                             <i v-show="!visible"
@@ -77,13 +77,13 @@
                                             </div>
                                         </div>
 
-                                        <ul class="administration-subordinate-item m-0" v-for="(n,index) in roleDate"
-                                            :key="index">
-                                            <li v-show="item.id==n.group_id && switchId.includes(n.group_id)"
+                                        <ul class="administration-subordinate-item m-0" v-for="n in roleDate"
+                                            :key="n.id" >
+                                            <li  v-show="item.id==n.group_id && switchId.includes(n.group_id)"
                                                 class="py-5"
-                                                style="position:relative;" @click="changeCont(n.id)"
-                                                :class="n.id==jobCont?'back':''">
-                                                <template>
+                                                style="position:relative;" @click="changeCont(n.id,index)"
+                                                :class="n.id==jobCont?'back':''" >
+                                                <template >
                                                     <i class="iconfont icon-chengyuannew pr-10"
                                                        style="vertical-align: middle;"></i>
                                                     <span class="site-menu-title">{{n.name}}</span>
@@ -687,7 +687,7 @@
                 visible: false,//渲染部分隐藏显示管理
                 conceal: true,//默认部分隐藏显示管理
                 roleId: '',
-                jobCont: '',
+                jobCont: '358554270',
                 isShow: true,
                 selectedArtistsArr: [],
                 isSelectAll: false,
@@ -707,7 +707,7 @@
                 radio: [],
                 radiotow: '7',
                 check: '',
-                defaultId: '1',
+                defaultId: '0',
                 defaultpitchon: '1',
                 funDate: data,
                 switchId: [],
@@ -734,7 +734,8 @@
                 roleGroupId: '',
                 rolegroupName: '',
                 emptyrole_describe: '',
-                isAactive:true
+                isAactive:true,
+                
             }
         },
         mounted() {
@@ -780,12 +781,12 @@
                 })
             },
             //切换内容
-            changeCont(value) {
-                
+            changeCont(value,index) {
+                console.log(index)
                 
                 this.jobCont = value
                 this.selectedIds = []
-                this.defaultId = 0
+                this.defaultId = index
                 fetch('get', '/console/feature/' + this.jobCont).then(response => {
                     this.powerlist = [];
                     for (this.powerlist in response) {

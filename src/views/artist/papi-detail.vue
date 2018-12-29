@@ -1,5 +1,6 @@
 <template>
     <div class="page">
+        <Loading :is-loading="isLoading"></Loading>
         <div class="page-header page-header-bordered">
             <h1 class="page-title d-inline">博主详情</h1>
 
@@ -25,24 +26,24 @@
                     <h4 class="card-title">{{artistInfo.nickname}}</h4>
                      <div class="card-text clearfix">
                         <div class="card-text clearfix example">
-                        <div class="col-md-6 float-left pl-0"  v-show="artistInfo.sign_contract_status == 2&&artistInfo.publicity.data.length>0">
+                        <div class="col-md-6 float-left pl-0"  v-if ="artistInfo.publicity" v-show="artistInfo.sign_contract_status == 2&&artistInfo.publicity.data.length>0">
                             <div class="float-left pl-0 col-md-2">
                                 <i class="iconfont icon-yonghu pr-2"></i>
                                 <span>制作人</span>
                             </div>
-                            <!-- <div class="font-weight-bold float-left" >
-                                <template v-if="artistInfo.publicity.data.length>0" v-for="item in artistInfo.publicity.data">
+                            <div class="font-weight-bold float-left" v-for="(item,index) in artistInfo.publicity.data" :key="index">
+                                <template  >
                                     {{item.name}}
                                 </template>
-                            </div> -->
+                            </div>
                         </div>
                          <div class="col-md-6 float-left pl-0" v-show="artistInfo.sign_contract_status == 1">
                             <div class="float-left pl-0 pr-2 col-md-2">
                                 <i class="iconfont icon-yonghu pr-2" aria-hidden="true"></i>录入人
                             </div>
-                            <div class="font-weight-bold float-left" v-if="principalName">
-                                <template>
-                                    {{ principalName}}
+                            <div class="font-weight-bold float-left"  v-if="artistInfo.creator" v-for="(entry,index) in artistInfo.creator" :key="index">
+                                <template >
+                                    {{ entry.name}}
                                 </template>
                             </div>
                         </div>
@@ -60,7 +61,7 @@
                     </div>
                 </div>
                 <div class="clearfix">
-                    <div class="col-md-6 float-left pl-1 mb-20 pr-1" style="border-right: 1px solid #eee" >
+                    <div class="col-md-6 float-left pl-1 mb-20 pr-1"  v-if="tasksInfo.length>0">
                         <div class="col-md-6"><i class="iconfont icon-iconset0399 pr-2"></i> 任务</div>
                         <div class="clearfix example taskshow" v-for="(task,index) in tasksInfo" :key="index" @click="JumpDetails(task.id)">
                             <div class="col-md-3 float-left">{{task.title}}</div>
@@ -75,7 +76,7 @@
                         </div>
                     </div>
                     <div class="col-md-6 float-left pl-0 mb-20" >
-                        <div class="col-md-12" v-if="artistInfo.sign_contract_status == 2">
+                        <div class="col-md-12" v-if="artistInfo.sign_contract_status == 2&&ProjectsInfo.length>0" >
                             <div class="col-md-12"><i class="iconfont icon-ego-box pr-2"></i>项目</div>
                             <div class="clearfix example projectshow" v-for="(item,index) in ProjectsInfo" :key="index" @click="projectDetails(item.id)">
                                 <div class="col-md-3 float-left">{{item.title}}</div>
@@ -88,7 +89,7 @@
                                 </div>
                             </div>
                         </div>
-                       <div class="col-md-6" v-show="artistInfo.sign_contract_status == 1">
+                       <div class="col-md-6 pl-3" v-show="artistInfo.sign_contract_status == 1">
                             <div class="clearfix">
                                 <div class="col-md-8 float-left"><span>沟通状态</span></div>
                                 <div class="col-md-4 float-left font-weight-bold "  v-if="artistInfo.communication_status">
@@ -169,16 +170,20 @@
                             <a class="nav-link" data-toggle="tab" href="#forum-artist-tasks"
                                aria-controls="forum-present"
                                aria-expanded="false" role="tab" :class="artistInfo.sign_contract_status == 2?'':'active'">
-                                <template v-if="tasksInfo.length > 0">
+                                <!-- <template v-if="tasksInfo.length > 0">
                                     <ToolTips :title="`已完成数量${completeNum}`">
                                         任务 ({{completeNum}}/{{tasksInfo.length}})
                                     </ToolTips>
-                                </template>
-                                <template v-if="tasksInfo.length == 0">
+                                </template> -->
+                                <!-- <template v-if="tasksInfo.length == 0">
                                     <ToolTips :title="`已完成数量${0}`">
                                         任务 ({{0}}/{{tasksInfo.length}})
                                     </ToolTips>
-                                </template>
+                                </template> -->
+                                <ToolTips v-if="tasksInfo.length > 0" :title="`已完成数量${completeNum}`">
+                                    任务 ({{completeNum}}/{{tasksInfo.length}})
+                                </ToolTips>
+                                <span v-else>任务</span>
                             </a>
                         </li>
                         <li class="nav-item" role="presentation" v-show="artistInfo.sign_contract_status == 2">
@@ -841,7 +846,8 @@
                 current_page: 1,
                 total_pages: 1,
                 artistype:'',
-                bloggerlevel:''
+                bloggerlevel:'',
+                isLoading: true,
             }
         },
         computed: {
@@ -980,8 +986,9 @@
                 fetch('get', '/bloggers/' + this.artistId, data).then(function (response) {
                     let doneTaskNum = 0
                     _this.artistInfo = response.data;
-                    console.log( _this.artistInfo)
+                   
                     _this.tasksInfo = response.data.tasks.data
+                     console.log( _this.tasksInfo)
                     if (_this.tasksInfo.length > 0) {
                         for (let i = 0; i < _this.tasksInfo.length; i++) {
                             if (_this.tasksInfo[i].status == 2) {
@@ -1022,7 +1029,6 @@
                         _this.artistInfo.artistWorkProportion = false
                     }
 
-
                 });
                 
                 //任务状态跑组。试戏
@@ -1040,7 +1046,7 @@
                 //     })
 
                 // })
-
+                _this.isLoading = false;
             },
             //账单
             getArtistsBill(page = 1,expense_type){  
