@@ -67,7 +67,9 @@ export default {
             },
             valueListener: function (newValue) {
                 let {id} = this.data[0]
-                this.$emit('change',{key:id,value:this.valueListener,type:null})
+                if(this.valueListener.length>0){
+                    this.$emit('change',{key:id,value:this.valueListener,type:null})
+                }
             },
             disable: function (newValue) {
                 this.isDisable = newValue;
