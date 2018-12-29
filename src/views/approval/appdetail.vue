@@ -15,7 +15,7 @@
         <div class="" style="background-color:#f3f4f5">
             <div class="page-header  page-header-bordered mb-0" >
                 <h6 class="page-title nav-head" v-if="info">
-                    <i class="iconfont icon-zuojiantou"></i>{{list.title}}
+                    {{list.title}}
                     <template v-if="info.approval[0].form_status==232">
                         <button class="btn btn-success py-5">已审批</button>
                     </template>
@@ -35,14 +35,14 @@
             </div>
             <div class="page-header  page-header-bordered m-20 pl-10" >
                 <h6 class="page-title title-status">当前状态
-                    <div class="approver" :style="{backgroundColor:String(pending.icon_url).split('|')[0]}">{{String(pending.icon_url).split('|')[1]}}</div>
-                    <span v-if="info.approval[0].form_status=== 231">{{currentStatus.slice(0,1)}}{{pending.name}}{{currentStatus.slice(1)}}</span>
+                    <div class="approver" :style="{backgroundImage:'url('+pending.icon_url+')',backgroundColor:String(pending.icon_url).split('|')[0]}">{{String(pending.icon_url).split('|')[1]}}</div>
+                    <span v-if="info.approval[0].form_status=== 231">&nbsp;{{currentStatus.slice(0,1)}}{{pending.name}}{{currentStatus.slice(1)}}</span>
                     <span v-if="info.approval[0].form_status !== 231">{{pending.name}}{{currentStatus}}</span>
                 <div v-if="!isApproverMode">
                     <i v-if="info.approval[0].form_status==232">
                         <button class="btn btn-primary" @click='approvalHandler("discard")'>作废</button>
                     </i>
-                    <i v-if="info.approval[0].form_status==231">
+                    <i v-if="info.approval[0].form_status==231 && list.approval_begin === 0">
                         <button class="btn btn-primary" @click='approvalHandler("cancel")'>撤销</button>
                         <button class="btn btn-danger" type="submit"
                                 data-toggle="modal">提醒
@@ -65,8 +65,8 @@
                         <button class="btn btn-primary" @click='approvalHandler("transfer")'>转交</button>
 
                     </i>
-                    <i v-if="info.approval[0].form_status==232">
-                        <button class="btn btn-info" @click='approvalHandler("discard")' >作废</button>
+                    <i v-if="info.approval[0].form_status==232 && list.creator.data.id === currentId">
+                        <button class="btn btn-primary" @click='approvalHandler("discard")' >作废</button>
                     </i>
                 </div>
                 </h6>
@@ -93,10 +93,12 @@
 
                     </div>
                     <div class="example">
-                        <div >审批详情</div>
-                        <div class="col-md-12 detail-container px-0" v-for="(item, index) in detailData" :key="index" v-if="item.values">
-                            <div class="col-md-3 float-left detail-key mx-0">{{item.key}}</div>
-                            <div class="col-md-9 float-left detail-value" v-if="item.values">{{item.values.data.value || ''}}</div>
+                        <div>审批详情</div>
+                        <div class="row px-20">
+                            <div class="col-md-6 detail-container px-0" v-for="(item, index) in detailData" :key="index" v-if="item.values">
+                                <div class="col-md-3 float-left detail-key mx-0">{{item.key}}</div>
+                                <div class="col-md-6 float-left detail-value" v-if="item.values">{{item.values.data.value || ''}}</div>
+                            </div>
                         </div>
                         <div class="panel col-md-12 col-lg-12">
                             <div class="caption" style="border:0;">
@@ -145,6 +147,7 @@ export default {
            pending:{},
            currentId:'',
            isCurrentApprover:false,
+           roleUser:''
         }
     },
 
@@ -183,9 +186,11 @@ export default {
         },
         getCurrentApprover(){
             let _this = this
-            fetch('get','/users/my?include=department').then((params) => {
+            fetch('get','/users/my?include=department,roleUser').then((params) => {
                 _this.currentId = params.data.id
-                if(_this.currentId === _this.pending.id){
+                console.log(params);
+                _this.roleUser = params.data.roleUser.data[0].role_id
+                if(_this.currentId === _this.pending.id || _this.roleUser === _this.pending.id){
                     _this.isCurrentApprover = true
                 }else{
                     _this.isCurrentApprover = false
@@ -195,6 +200,7 @@ export default {
         waitingFor(params){
             if(params){
                 this.pending = params
+                console.log(params);
                 this.getCurrentApprover()
             }
             
@@ -206,7 +212,7 @@ export default {
                     this.addProject(params)
                     this.firstFlag = false
                     this.isLoading = false
-            }, 3000);
+                }, 3000);
             }else{
                 this.addProject(params)
                 this.isLoading = false
@@ -247,7 +253,7 @@ export default {
         },
         getData(){
             let _this = this
-            fetch('get','/approvals_project/detail/'+this.$route.params.id+'?include=principal,creator,fields,trail').then((params) => {
+            fetch('get','/approval_instances/'+this.$route.params.id+'?include=principal,creator,fields,trail').then((params) => {
                 let {meta}=params
                 _this.list = params.data
                 _this.projectType = params.data.type
@@ -273,6 +279,7 @@ export default {
     font-style: normal;
     font-weight: normal;
 }
+
 .approver{
     display: inline-block;
     font-size: 12px;
@@ -281,7 +288,8 @@ export default {
     width: 30px;
     height: 30px;
     border-radius: 100%;
-    background-color: rgba(7, 17, 27, 0.2);
+    /* background-color: rgba(7, 17, 27, 0.2); */
+    background-size: 30px;
     text-align: center;
     line-height: 30px;
 }

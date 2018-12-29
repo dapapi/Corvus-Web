@@ -81,7 +81,6 @@
 
         watch: {
             meetingRomeList(newValue) {
-                console.log(newValue)
                 if (newValue) {
                     this.getSchedules();
                 }

@@ -1,6 +1,6 @@
 <template>
     <div class="upload col-md-12">
-        <div class="col-md-2">{{data[0].control_title}}</div>
+        <div class="col-md-2 text-right">{{data[0].control_title}}</div>
         <figure v-for="(item, index) in fileInfo" :key="index" >
             <div class="image-show" v-if="fileInfo.length > 0" :style="'backgroundImage:url('+item.fileUrl+')'"></div>
             <p>{{item.fileName}}</p>
@@ -18,7 +18,7 @@ import config from '@/assets/js/config'
 import * as qiniu from 'qiniu-js'
 
 export default {
-    props:['data'],
+    props:['data','clear'],
     name: 'ApprovalImageUploader',
     data(){
         return{
@@ -71,7 +71,9 @@ export default {
                 }, function (res) {
                     let fileUrl = config.imgUrl + res.key;
                     let fileName = file.name;
-                    _this.$emit('change', fileUrl, fileName, fileSize,_this.fileExt,_this.id);
+                    // _this.$emit('change', fileUrl, fileName, fileSize,_this.fileExt,_this.id);
+                    let {id} = _this.data[0]
+                    _this.$emit('change',{key:id,value:fileUrl,type:null})
                     _this.fileInfo.push({fileUrl, fileName, fileSize})
                 })
             });
@@ -106,6 +108,11 @@ export default {
         fileInfo:function(val,oldval){
             if(val !== oldval){
                 this.getFileExt()
+            }
+        },
+         clear:function(value){
+            if(value===true){
+                this.fileInfo = []
             }
         }
     }

@@ -7,7 +7,7 @@
 
 <script>
 export default {
-    props:['duration','title','data'],
+    props:['duration','title','data','refresh'],
     data(){
         return{
 
@@ -19,6 +19,9 @@ export default {
             console.log(params);
             this.$emit('change',{key:id,value:params,type:null})
         }
+    },
+    watch:{
+       
     }
 }
 </script>

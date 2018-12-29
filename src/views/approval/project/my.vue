@@ -52,7 +52,7 @@
                                 <tbody>
                                 <tr v-for="project in projectsInfo" :key='project.form_instance_number'>
                                     
-                                    <router-link :to="{path:'/approval/'+project.id,query:{mode:'approver'}}"><td>{{project.form_instance_number}}</td></router-link>
+                                    <router-link :to="{path:'/approval/'+project.form_instance_number,query:{mode:'approver'}}"><td>{{project.form_instance_number}}</td></router-link>
                                     <td>{{project.title}}</td>
                                     <td>{{project.name}}</td>
                                     <td></td>
@@ -88,7 +88,7 @@
             }
         },
        mounted(){
-            this.getList()
+            this.getList(1)
         },
         computed:{
             getProgressName(){
@@ -100,16 +100,12 @@
         methods: {
             getList(params) {
                 let _this = this
-                if(params !== 2){
-                    fetch('get','/approvals_project/approval').then((params) => {
-                        _this.projectsInfo = params.data
-                    })
-                }else{
-                    fetch('get','/approvals_project/thenapproval').then((params) => {
+                console.log(params);
+                    fetch('get','/approvals_project/approval?status='+params).then((params) => {
                         _this.projectsInfo = params.data
                     })
                 }
-            }
+
         }
     }
 </script>

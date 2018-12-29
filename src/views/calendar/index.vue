@@ -210,6 +210,8 @@
                                     <selectors :options="repeatArr" ref="scheduleRepeat"
                                                @change="changeScheduleRepeat"></selectors>
                                 </div>
+                                <div class="col-md-2 float-left"></div>
+                                <div class="col-md-10 float-left pl-0 font-12 mt-5" style="color: #c3c3c3">重复周期为1年</div>
                             </div>
                             <div class="example">
                                 <div class="col-md-2 text-right float-left">位置</div>
@@ -314,7 +316,7 @@
                                 {{ scheduleData.creator.data.name }}
                             </div>
                         </div>
-                        <div class="example">
+                        <div class="example" v-if="scheduleData.participants">
                             <div class="col-md-1 px-0 float-left">参与人</div>
                             <div class="col-md-10 float-left">
                                 <AddMember type="add" @change="changeScheduleParticipants"></AddMember>
@@ -324,7 +326,7 @@
                             <div class="col-md-1 px-0 float-left">备注</div>
                             <div class="col-md-10 float-left">{{ scheduleData.desc }}</div>
                         </div>
-                        <div class="example" v-if="scheduleData.affixes.data.length > 0">
+                        <div class="example" v-if="scheduleData.affixes && scheduleData.affixes.data.length > 0">
                             <div>附件</div>
                             <div>
                                 <div class="col-md-3 float-left text-center position-relative file-item"
@@ -634,9 +636,13 @@
             });
 
             $('#checkSchedule').on('hide.bs.modal', function () {
-                if (this.scheduleType !== 'edit') {
+                if (_this.scheduleType !== 'edit') {
                     _this.$store.dispatch('changeParticipantsInfo', {data: []});
                 }
+            });
+
+            $('#addMembers').on('hidden.bs.modal', function () {
+                _this.$store.dispatch('changeParticipantsInfo', {type: 'change', data: []});
             });
             this.globalClick(this.removeSelector);
             this.initCalendar();
@@ -885,18 +891,20 @@
                 })
             },
 
-            showScheduleModal: function (scheduleId) {
-
+            showScheduleModal: function (schedule) {
                 let data = {
                     include: 'calendar,participants,creator,material,affixes',
                 };
-                fetch('get', '/schedules/' + scheduleId, data).then(response => {
-                    console.log(response)
+                fetch('get', '/schedules/' + schedule.id, data).then(response => {
+                    if (!response) {
+                        this.scheduleData = schedule;
+                        return
+                    }
                     this.scheduleData = response.data;
                     this.scheduleParticipants = JSON.parse(JSON.stringify(response.data.participants.data));
                     this.$store.dispatch('changeParticipantsInfo', {data: response.data.participants.data});
-                    $('#checkSchedule').modal('show')
                 })
+                $('#checkSchedule').modal('show')
             },
 
             showAddScheduleModal: function (date) {
@@ -1099,7 +1107,8 @@
                 this.endTime = '';
                 this.endMinutes = '00:00';
                 this.eventPlace = '';
-                this.scheduleRepeat = 1;
+                this.scheduleRepeat = 0;
+                this.scheduleMaterialId = '';
                 this.eventDesc = '';
                 this.isAllday = false;
                 this.schedulePrivacy = false;
@@ -1114,7 +1123,7 @@
                 this.$refs.scheduleStartMinute.setValue('00:00');
                 this.$refs.scheduleEndMinute.setValue('00:00');
                 this.$refs.scheduleResource.setValue('');
-                this.$refs.scheduleRepeat.setValue(1);
+                this.$refs.scheduleRepeat.setValue('0');
                 this.$refs.scheduleNotice.setValue('0');
             },
 

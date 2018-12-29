@@ -7,7 +7,7 @@
 
 <script>
 export default {
-    props:['title','n','data'],
+    props:['title','n','data','clear'],
     data(){
         return {
             textContent:'',
@@ -24,6 +24,11 @@ export default {
     watch:{
         textContent:function(){
             this.emitText()
+        },
+        clear:function(value){
+            if(value===true){
+                this.textContent = ''
+            }
         }
     }
 

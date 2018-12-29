@@ -150,23 +150,23 @@
                     </div>
                     <div class="modal-body">
                         <div class="example">
-                            <div class="col-md-2 text-right float-left">姓名</div>
+                            <div class="col-md-2 text-right float-left require">姓名</div>
                             <div class="col-md-10 float-left pl-0">
                                 <input type="text" class="form-control" placeholder="请输入姓名" v-model="artistName" >
                             </div>
                         </div>
                         <div class="example">
-                            <div class="col-md-2 text-right float-left">性别</div>
+                            <div class="col-md-2 text-right float-left require">性别</div>
                             <div class="col-md-4 float-left row">
                                 <selectors :options="genderArr"  @change="changeGender" ref="gender"></selectors>
                             </div>
-                            <div class="col-md-2 text-right float-left pr-0">出生日期</div>
+                            <div class="col-md-2 text-right float-left pr-0 require">出生日期</div>
                             <div class="col-md-4 float-left pr-0">
                                 <datepicker @change="changeBirthday" :placeholder="'请选择日期'" ref="birthday"></datepicker>
                             </div>
                         </div>
                         <div class="example">
-                            <div class="col-md-2 text-right float-left">艺人来源</div>
+                            <div class="col-md-2 text-right float-left require">艺人来源</div>
                             <div class="col-md-4 float-left row">
                                 <selectors :options="artistSourceArr" @change="changeSource" ref="source"></selectors>
                             </div>
@@ -201,7 +201,7 @@
                             </div>
                         </div>
                         <div class="example">
-                            <div class="col-md-2 text-right float-left">平台</div>
+                            <div class="col-md-2 text-right float-left require">平台</div>
                             <div class="col-md-10 float-left pl-0 ">
                                 <!-- todo 全选 -->
                                 <CheckboxGroup :optionData="platformList" @change="changeCheckbox" :isLine="true">
@@ -252,14 +252,14 @@
                             </div>
                         </div>
                         <div class="example">
-                            <div class="col-md-2 text-right float-left">沟通状态</div>
+                            <div class="col-md-2 text-right float-left require">沟通状态</div>
                             <div class="col-md-5 float-left pl-0">
                                 <selectors :options="taiyangCommunicationStatusArr"
                                            @change="changeCommunicationType" ref="communicationType"></selectors>
                             </div>
                         </div>
                         <div class="example">
-                            <div class="col-md-2 text-right float-left">与我司签约意向</div>
+                            <div class="col-md-2 text-right float-left require">与我司签约意向</div>
                             <div class="col-md-5 float-left pl-0">
                                 <selectors :options="yesOrNoArr" @change="changeSignIntention" ref="signIntention"></selectors>
                             </div>
@@ -269,7 +269,7 @@
                             </div>
                         </div>
                         <div class="example">
-                            <div class="col-md-2 text-right float-left">是否签约其他公司</div>
+                            <div class="col-md-2 text-right float-left require">是否签约其他公司</div>
                             <div class="col-md-5 float-left pl-0">
                                 <selectors :options="yesOrNoArr" @change="isSignCompany" ref="signCompany"></selectors>
                             </div>
@@ -278,13 +278,13 @@
                             </div>
                         </div>
                         <div class="example">
-                            <div class="col-md-2 text-right float-left">附件类型</div>
+                            <div class="col-md-2 text-right float-left require">附件类型</div>
                             <div class="col-md-5 float-left pl-0">
                                 <selectors :options="attachmentTypeArr" @change="changeAttachmentType" ref="attachmentType"></selectors>
                             </div>
                         </div>
                         <div class="example" v-show="affixesType>0">
-                            <div class="col-md-2 text-right float-left">上传附件</div>
+                            <div class="col-md-2 text-right float-left require">上传附件</div>
                             <div class="col-md-5 float-left pl-0">
                                 <span style="color:#01BCD4;cursor:pointer">上传附件</span>
                                 <FileUploader class="fileupload"  @change="uploadAttachment"></FileUploader>
@@ -555,7 +555,15 @@
                     toastr.error('请选择艺人来源');
                     return false
                 }
-                if(!this.platformType){
+                if (!this.artistEmail) {
+                    toastr.error('请选择输入邮箱')
+                    return false
+                }
+                if (!this.artistPhone) {
+                    toastr.error('请选择输入手机号')
+                    return false
+                }
+                if(this.platformType.length === 0){
                     toastr.error('请选择沟通平台');
                     return false
                 }
@@ -575,11 +583,16 @@
                     toastr.error('请选择是否与其他公司签约');
                     return false
                 }
+                if (!this.affixesType) {
+                    toastr.error('请选择附件类型')
+                    return false
+                }
                 if(this.signCompany == 2&&!this.sign_contract_other_name){
                     toastr.error('请输入已签约公司名称');
                     return false
                 }
-                if(!this.affixes){
+
+                if(this.affixes.length === 0){
                     toastr.error('请上传附件');
                     return false
                 }
@@ -847,5 +860,9 @@
         left:0px;
         opacity: 0;
 
+    }
+    .modal-body .example {
+        display: flex;
+        align-items: center;
     }
 </style>
