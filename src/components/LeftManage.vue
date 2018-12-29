@@ -26,7 +26,7 @@
                         </router-link>
                     </template>
                     <template v-else>
-                        <a class="animsition-link">
+                        <a class="animsition-link" >
                             <div>
                                 <span class="base-icon">
                                     <img :src="menu.image" alt="">
@@ -81,8 +81,8 @@
                     {
                         name: '员工档案',
                         code: 'staff',
-                        image: 'https://res.papitube.com/corvus/images/talent.png',
-                        hoverImage: 'https://res.papitube.com/corvus/images/select-talent.png',
+                        image: 'https://res.papitube.com/corvus/images/baobiao.png',
+                        hoverImage: 'https://res.papitube.com/corvus/images/select-baobiao.png',
                     }
                 ],
                 pageRoute: '',
