@@ -273,10 +273,7 @@
                 this.projectBaseInfo = {trail: {}, notice: []};
                 this.$store.dispatch('changePrincipal', {data: {}});
                 this.$store.dispatch('changePrincipal', {type: 'selector', data: {}});
-                // this.$store.dispatch('changeParticipantsInfo', );
-
-                // this.$store.dispatch('newParticipantsInfo', {type: 'selector', data: {}});
-                // this.$store.dispatch('newParticipantsInfo', []);
+                this.$store.dispatch('changeParticipantsInfo',{data:[]});
                 this.projectFields = [];
             },
             setDefaultValue() {
