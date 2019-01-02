@@ -157,7 +157,9 @@
                 </template>
 
                 <div class="modal-footer">
-                    <button class="btn btn-sm btn-white btn-pure" data-dismiss="modal" @click='refreshAddProjectModal'>取消</button>
+                    <button class="btn btn-sm btn-white btn-pure" data-dismiss="modal" @click='refreshAddProjectModal'>
+                        取消
+                    </button>
                     <button class="btn btn-primary" type="submit" @click="addProject">确定</button>
                 </div>
             </div>
@@ -170,6 +172,7 @@
     import config from '../assets/js/config.js'
     import fetch from '../assets/utils/fetch.js'
     import ApprovalProgress from '@/components/ForApproval/ApprovalProgress'
+    import Cookies from 'js-cookie'
 
     export default {
         components: {
@@ -198,6 +201,7 @@
                 projectFields: [],
                 approver: [],
                 newArray: [],
+                user: '',
             }
         },
         watch: {
@@ -225,9 +229,9 @@
             this.defaultDataFilter()
             $('#addProject').on('hidden.bs.modal', function () {
                 _this.refreshAddProjectModal()
-            })
-            if (this.defaultData) {
-                $('#addProject').on('show.bs.modal', function () {
+            });
+            $('#addProject').on('show.bs.modal', function () {
+                if (_this.defaultData) {
                     _this.setDefaultValue()
                     _this.$nextTick(() => {
                         _this.$refs.trails.setValue(_this.defaultData.trailInfo.data.id)
@@ -236,9 +240,11 @@
                             _this.$forceUpdate()
                         })
                     })
-                })
-            }
-        
+                } else {
+                    _this.$store.dispatch('changePrincipal', {data: {id: _this.user.id, name: _this.user.nickname}})
+                }
+            });
+            this.user = JSON.parse(Cookies.get('user'));
         },
         methods: {
             getBloggers() {
@@ -273,7 +279,7 @@
                 this.projectBaseInfo = {trail: {}, notice: []};
                 this.$store.dispatch('changePrincipal', {data: {}});
                 this.$store.dispatch('changePrincipal', {type: 'selector', data: {}});
-                this.$store.dispatch('changeParticipantsInfo',{data:[]});
+                this.$store.dispatch('changeParticipantsInfo', {data: []});
                 this.projectFields = [];
             },
             setDefaultValue() {

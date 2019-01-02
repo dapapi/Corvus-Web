@@ -305,28 +305,46 @@
                             </div>
                         </div>
                         <div class="example" v-if="scheduleData.position">
-                            <div class="col-md-1 px-0 float-left">地点</div>
-                            <div class="col-md-10 float-left">{{ scheduleData.position }}</div>
+                            <div class="col-md-2 px-0 float-left">地点</div>
+                            <div class="col-md-10 pl-0 float-left">{{ scheduleData.position }}</div>
                         </div>
                         <div class="example" v-if="scheduleData.material">
-                            <div class="col-md-1 px-0 float-left">资源</div>
-                            <div class="col-md-10 float-left">{{ scheduleData.material.data.name }}</div>
+                            <div class="col-md-2 px-0 float-left">资源</div>
+                            <div class="col-md-10 pl-0 float-left">{{ scheduleData.material.data.name }}</div>
                         </div>
                         <div class="example">
-                            <div class="col-md-1 px-0 float-left">组织人</div>
-                            <div class="col-md-10 float-left">
+                            <div class="col-md-2 px-0 float-left">组织人</div>
+                            <div class="col-md-10 pl-0 float-left">
                                 {{ scheduleData.creator.data.name }}
                             </div>
                         </div>
+                        <div class="example" v-if="(scheduleData.project || scheduleData.task) && !noPermission">
+                            <div class="col-md-2 px-0 float-left">关联资源</div>
+                            <div class="col-md-10 pl-0 float-left">
+                                <div class="pb-5" v-if="scheduleData.project"
+                                     v-for="project in scheduleData.project.data">
+                                    <span>项目 - {{ project.id }}</span>
+                                    <span class="float-right" @click="delScheduleLinkage('project', project.id)">
+                                        <i class="iconfont icon-shanchu1 pointer-content"></i>
+                                    </span>
+                                </div>
+                                <div class="pb-5" v-if="scheduleData.task" v-for="task in scheduleData.task.data">
+                                    <span>任务 - {{ task.id }}</span>
+                                    <span class="float-right" @click="delScheduleLinkage('task', task.id)">
+                                        <i class="iconfont icon-shanchu1 pointer-content"></i>
+                                    </span>
+                                </div>
+                            </div>
+                        </div>
                         <div class="example" v-if="scheduleData.participants && !noPermission">
-                            <div class="col-md-1 px-0 float-left">参与人</div>
-                            <div class="col-md-10 float-left">
+                            <div class="col-md-2 px-0 float-left">参与人</div>
+                            <div class="col-md-10 pl-0 float-left">
                                 <AddMember type="add" @change="changeScheduleParticipants"></AddMember>
                             </div>
                         </div>
                         <div class="example" v-if="scheduleData.desc && !noPermission">
-                            <div class="col-md-1 px-0 float-left">备注</div>
-                            <div class="col-md-10 float-left">{{ scheduleData.desc }}</div>
+                            <div class="col-md-2 px-0 float-left">备注</div>
+                            <div class="col-md-10 pl-0 float-left">{{ scheduleData.desc }}</div>
                         </div>
                         <div class="example" v-if="scheduleData.affixes && scheduleData.affixes.data.length > 0">
                             <div>附件</div>
@@ -856,6 +874,19 @@
                 })
             },
 
+            delScheduleLinkage: function (type, value) {
+                let url = '';
+                if (type === 'project') {
+                    url = '/schedules/' + this.scheduleData.id + '/projects/' + value
+                } else if (type === 'task') {
+                    url = '/schedules/' + this.scheduleData.id + '/tasks/' + value
+                }
+                fetch('delete', url).then(() => {
+                    toastr.success('删除成功');
+                    this.scheduleData[type].data.splice(this.scheduleData[type].data.map(item => item.id).indexOf(value), 1)
+                })
+            },
+
             delNewScheduleLinkage: function (type, value) {
                 let index = this.linkageSelectedIds[type].indexOf(value);
                 this.linkageSelectedIds[type].splice(index, 1)
@@ -896,7 +927,7 @@
 
             showScheduleModal: function (schedule) {
                 let data = {
-                    include: 'calendar,participants,creator,material,affixes',
+                    include: 'calendar,participants,creator,material,affixes,project,task',
                 };
                 fetch('get', '/schedules/' + schedule.id, data).then(response => {
                     if (!response) {
