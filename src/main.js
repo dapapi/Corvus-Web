@@ -131,8 +131,7 @@ Vue.component('ToolTips', ToolTips)
 Vue.component('Avatar', Avatar)
 
 Vue.prototype.globalClick = function (callback) {
-    document.getElementById('app').addEventListener('click', () => {
-        // alert('jahahahhhf')
+    document.getElementById('app').addEventListener('click', (event) => {
         callback(event);
     });
 };

@@ -33,7 +33,7 @@
         },
         watch: {
             '$route': function (to, from) {
-                if (this.$route.path === '/login' || this.$route.path === '/informationForm') {
+                if (this.$route.path === '/login' || this.$route.path === '/informationForm' || this.$route.path === '/404') {
                     this.isLeftMenuShow = false
                     this.isLeftManageShow = false
                 }

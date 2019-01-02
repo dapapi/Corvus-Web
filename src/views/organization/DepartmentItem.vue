@@ -5,7 +5,7 @@
                 <i v-show="visible" class="md-caret-down showList"></i>
                 <i v-show="!visible" class="md-caret-right showList"></i>
                 <img src="../../assets/img/department@2x.png" />
-                {{ data.name }} <span>({{count}})</span> <span class="principal">{{principal ? principal.name:'无负责人'}}</span>
+                {{ data.name }} <span>({{count}})</span> <span class="principal">{{ data.is_department_username ? data.is_department_username : '' }}</span>
             </span>
             <i v-if="!isEdit" class="iconfont icon-tianjia edit" style="float: right;line-height: 50px;" @click.stop="check(data)"></i>
             <div class="drop" v-else>
@@ -59,9 +59,9 @@ export default {
             return this.left || this.left === 0 ? this.left * 1 + 20 : 0
         },
         // 负责人
-        principal () {
-            return this.data.users.data.find(item => item.is_department_principal === 1)
-        }
+        // principal () {
+        //     return this.data.users.data.find(item => item.is_department_principal === 1)
+        // }
     },
     methods: {
         // 列表展示
