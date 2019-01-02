@@ -58,10 +58,11 @@ export default {
         paddingLeft () {
             return this.left || this.left === 0 ? this.left * 1 + 20 : 0
         },
-        // 负责人
-        // principal () {
-        //     return this.data.users.data.find(item => item.is_department_principal === 1)
-        // }
+    },
+    watch: {
+        data() {
+            this.count = this.countNum(this.data)
+        }
     },
     methods: {
         // 列表展示
