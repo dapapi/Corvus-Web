@@ -1058,9 +1058,9 @@
         //     }
         // },
         methods: {
-            changeCalender: function () {
-                this.selectedCalendar[0] = this.$route.params.id
-            },
+            // changeCalender: function () {
+            //     this.selectedCalendar[0] = this.$route.params.id
+            // },
             //获取艺人信息
             getArtist: function () {
                 this.artistId = this.$route.params.id;

@@ -515,6 +515,7 @@
             },
 
             changeBirthday: function (value) {
+                console.log(value)
                 this.artistBirthday = value
             },
 
@@ -756,7 +757,6 @@
                     toastr.success(toast)
                     $('#giveBroker').modal('hide')
                     _this.$store.state.participantsInfo = []
-
                 })
             },
             cancelGiveBroker:function(){
