@@ -50,7 +50,7 @@ const backRouter = [{
     ]},
     {
         path: "*",
-        redirect: "/"
+        redirect: "/404"
     },
 ]
 

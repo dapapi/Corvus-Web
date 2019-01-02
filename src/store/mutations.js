@@ -77,7 +77,7 @@ export default {
         } else {
             router.addRoutes([{
                 path: "*",
-                redirect: "/"
+                redirect: "/404"
             }])
         }
     }

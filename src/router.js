@@ -477,6 +477,11 @@ export default new Router({
             name: 'contracts',
             component: () => import('./views/contracts/index.vue')
         },
+        {
+            path: '/404',
+            name: '404',
+            component: () => import('./views/special/404.vue')
+        }
         // {
         //     path: "*",
         //     redirect: "/"
