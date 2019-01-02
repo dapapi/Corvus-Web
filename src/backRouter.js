@@ -28,8 +28,8 @@ const backRouter = [{
             component: () => import('./views/staff/add.vue')
         },
         {
-            path: '/staff/edit/:id',
-            name: 'staffEdit',
+            path: '/staff/entryDetail/:id',
+            name: 'entryDetail',
             component: () => import('./views/staff/add.vue')
         },
         {

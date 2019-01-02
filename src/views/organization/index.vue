@@ -68,6 +68,7 @@ import { mapState, mapActions } from 'vuex'
         },
 
         mounted () {
+            this.count = this.countNum(this._department)
         },
 
         watch: {
