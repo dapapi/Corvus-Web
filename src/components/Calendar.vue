@@ -122,6 +122,7 @@
                 },
                 eventClick: function (event, jsEvent, view) {
                     let data = self.allScheduleInfo.find(item => item.id === event.id);
+                    // console.log(data)
                     self.$emit('scheduleClick', data)
                 },
                 eventMouseover: function (event, jsEvent, view) {

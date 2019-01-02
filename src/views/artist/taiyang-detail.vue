@@ -1088,12 +1088,31 @@
                 })
 
             },
-            showScheduleModal: function (data) {
-                this.scheduleData = data;
-                if (data.participants.data) {
-                    this.scheduleParticipants = JSON.parse(JSON.stringify(data.participants.data));
-                }
+
+            //获取日历详情
+            showScheduleModal: function (schedule) {
+                let data = {
+                    include: 'calendar,participants,creator,material,affixes',
+                };
+                fetch('get', '/schedules/' + schedule.id, data).then(response => {
+                    // console.log(response)
+                    if (!response) {
+                        this.scheduleData = schedule;
+                        // this.noPermission = true;
+                        return
+                    }
+                    // this.noPermission = false;
+                    this.scheduleData = response.data;
+                    this.scheduleParticipants = JSON.parse(JSON.stringify(response.data.participants.data));
+                    this.$store.dispatch('changeParticipantsInfo', {data: response.data.participants.data});
+                });
                 $('#checkSchedule').modal('show')
+                // console.log(data)
+                // this.scheduleData = data;
+                // if (data.participants.data) {
+                //     this.scheduleParticipants = JSON.parse(JSON.stringify(data.participants.data));
+                // }
+                // $('#checkSchedule').modal('show')
             },
             //获取账单
             getArtistsBill: function (page = 1,expense_type) {

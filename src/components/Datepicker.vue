@@ -55,6 +55,7 @@
             destroy() {
                 $(this.$el).datepicker('destroy');
             },
+            //输入日期时获取值
             getInputValue(){
                 // console.log($('#dateInput').val())
                 this.$emit('change', $('#dateInput').val());
