@@ -34,7 +34,7 @@
                             </div>
                             <div v-show="showAllCalendar">
                                 <ul>
-                                    <li v-for="calendar in calendarList" class="clearfix">
+                                    <li v-for="(calendar,index) in calendarList" :key="index" class="clearfix">
                                         <div class="calendar-checkbox float-left pointer-content"
                                              :style="'background-color:' + calendar.color"
                                              @click="checkCalendar(calendar.id)">
@@ -174,14 +174,14 @@
                              v-show="linkageSelectedIds.projects.length > 0 || linkageSelectedIds.tasks.length > 0">
                             <div class="col-md-2 text-right float-left">关联资源</div>
                             <div class="col-md-10 float-left pl-0">
-                                <div class="clearfix" v-for="id in linkageSelectedIds.projects">
+                                <div class="clearfix" v-for="(id,index) in linkageSelectedIds.projects" :key="index">
                                     <span class="float-left">
                                         项目 - {{ allProjectsInfo.find(item => item.id == id).title }}
                                     </span>
                                     <span class="float-right icon iconfont icon-shanchu1"
                                           @click="delNewScheduleLinkage('projects', id)"></span>
                                 </div>
-                                <div class="clearfix" v-for="id in linkageSelectedIds.tasks">
+                                <div class="clearfix" v-for="(id,index) in linkageSelectedIds.tasks" :key="index">
                                     <span class="float-left">
                                         任务 - {{ allTasksInfo.find(item => item.id == id).title }}
                                     </span>
@@ -350,7 +350,7 @@
                             <div>附件</div>
                             <div>
                                 <div class="col-md-3 float-left text-center position-relative file-item"
-                                     v-for="affix in scheduleData.affixes.data">
+                                     v-for="(affix,index) in scheduleData.affixes.data" :key="index">
                                     <div class="del-affix iconfont icon-zuofei position-absolute pointer-content"
                                          @click="delAffix(affix.id)"></div>
                                     <div><i class="iconfont icon-wenjian" style="font-size: 36px"></i></div>
@@ -391,8 +391,8 @@
                             <div class="col-md-2 text-right float-left"></div>
                             <div class="col-md-10 float-left pl-0">
                                 <ul class="color-selector calendar-color-list">
-                                    <li v-for="color in colorArr" :style="'background-color: ' + color"
-                                        @click="changeCalendarColor(color)">
+                                    <li v-for="(color,index) in colorArr" :style="'background-color: ' + color"
+                                      :key="index"  @click="changeCalendarColor(color)">
                                         <i class="md-check" v-if="color === checkColor"></i>
                                     </li>
                                 </ul>
@@ -414,7 +414,7 @@
                         <div class="example">
                             <div class="col-md-2 text-right float-left">参与人</div>
                             <div class="col-md-10 float-left pl-0">
-                                <add-member @change=""></add-member>
+                                <add-member></add-member>
                             </div>
                         </div>
                         <div class="modal-footer">
@@ -524,7 +524,7 @@
                                         </div>
                                         <ul class="nav">
                                             <li class="nav-link pointer-content" style="width: 95%"
-                                                v-for="project in allProjectsInfo"
+                                                v-for="(project,index) in allProjectsInfo" :key="index"
                                                 v-show="project.title.indexOf(searchKeyWord) > -1"
                                                 @click="selectResource('projects', project.id)">{{ project.title }}
                                                 <span class="float-right"
@@ -544,7 +544,7 @@
                                         </div>
                                         <ul class="nav">
                                             <li class="nav-link pointer-content" style="width: 95%"
-                                                v-for="task in allTasksInfo"
+                                                v-for="(task,index) in allTasksInfo" :key="index"
                                                 v-show="task.title.indexOf(searchKeyWord) > -1"
                                                 @click="selectResource('tasks', task.id)">{{ task.title }}
                                                 <span class="float-right"

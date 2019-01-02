@@ -1,6 +1,6 @@
 <template>
     <div class="input-group date">
-        <input type="text" class="form-control" title="" :placeholder="this.placeholder">
+        <input type="text" id="dateInput" class="form-control" title="" :placeholder="this.placeholder" @change="getInputValue">
         <span class="input-group-addon">
             <i class="icon md-apps" aria-hidden="true"></i>
         </span>
@@ -20,6 +20,7 @@
                 format: "yyyy-mm-dd",
                 language: "zh-CN",
             }).on("changeDate", function () {
+                
                 self.$emit('change', $(this)[0].children[0].value);
                 if (self.changeKey) {
                     self.$emit('select', self.changeKey, $(this)[0].children[0].value)
@@ -53,6 +54,11 @@
 
             destroy() {
                 $(this.$el).datepicker('destroy');
+            },
+            //输入日期时获取值
+            getInputValue(){
+                // console.log($('#dateInput').val())
+                this.$emit('change', $('#dateInput').val());
             }
         }
     }

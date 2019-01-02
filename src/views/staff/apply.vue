@@ -62,7 +62,7 @@
                                 </div>
                             </div>
                             <div class="edit">
-                                <span>查看</span>
+                                <span><router-link :to="`/staff/entryDetail/${item.id}`">查看</router-link></span>
                                 <span v-if="status === 1" @click="agreeApply(item.id, 2)">删除</span> 
                                 <span v-if="status === 1" @click="agreeApply(item.id, 3)">同意</span>
                             </div>
