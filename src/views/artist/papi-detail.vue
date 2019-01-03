@@ -211,9 +211,9 @@
                     <div class="tab-content nav-tabs-animate bg-white col-md-12">
                         <div class="tab-pane animation-fade pb-20 fixed-button-father" id="forum-artist-schedule"
                              role="tabpanel" :class="artistInfo.sign_contract_status == 2?'active':''">
-                            <div class="col-md-12">
+                            <!-- <div class="col-md-12">
                                 <calendar :goto-date="selectedDate" :calendars="selectedCalendar" ref="calendar" @scheduleClick="showScheduleModal"></calendar>
-                            </div>
+                            </div> -->
                         </div>
                         <div class="tab-pane animation-fade pb-20 fixed-button-father" id="forum-artist-projects"
                              role="tabpanel">
@@ -445,8 +445,7 @@
                                                               @change="changeArtistIntention"></EditSelector>
                                             </div>
                                             <div class="col-md-6 float-left" v-show="artistInfo.intention==false">
-                                                <div class="col-md-5 float-left text-right pl-10">不签约原因</div>
-                                                <div class="col-md-7 float-left font-weight-bold" >
+                                                <div class="col-md-12 float-left font-weight-bold" >
                                                     <EditInput :content="artistInfo.intention_desc"
                                                             :is-edit="isEdit"
                                                             @change="changReason" ></EditInput>
@@ -464,8 +463,7 @@
                                                               @change="changeArtistSignStatus"></EditSelector>
                                             </div>
                                             <div class="col-md-6 float-left" v-show="artistInfo.sign_contract_other==true">
-                                                <div class="col-md-5 float-left text-right pl-10">签约公司</div>
-                                                <div class="col-md-7 float-left font-weight-bold">
+                                                <div class="col-md-12 float-left font-weight-bold">
                                                     <EditInput :content="artistInfo.sign_contract_other_name"
                                                             :is-edit="isEdit"
                                                             @change="changSigningCompany" ></EditInput>
@@ -897,7 +895,7 @@
             this.principalName = this.user.nickname;
             //  清空任务
             $('#addTask').on('hidden.bs.modal', function () {
-                _this.$refs.mold.setValue('');//类型
+                // _this.$refs.mold.setValue('');//类型
                 _this.taskType = ''
                 _this.Person_id = '';//负责人
                 _this.$refs.taskpriority.setValue('');
@@ -1256,15 +1254,8 @@
                 }
                 fetch('put', '/bloggers/' + this.artistId, data).then(function (response) {
                     toastr.success('修改成功');
-                    // if(artistInfo.intention==true){
-                    //     _this.artistInfo.intention_desc=""
-                        
-                    // }
-                    // if(artistInfo.sign_contract_other==true){
-                    //     _artistInfo.sign_contract_other_name=""
-                    // }
                     _this.artistTasksInfo = response.data;
-                    
+
                     if (_this.artistInfo.intention == false) {
                         _this.updateType = 2
                     } else {
