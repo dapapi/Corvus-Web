@@ -122,8 +122,9 @@
                 })
             },
              getList(params) {
+                 console.log(params);
                 let _this = this
-                    fetch('get','/approvals_contract/approval?status=',params).then((params) => {
+                    fetch('get','/approvals_contract/approval?status='+params).then((params) => {
                         _this.projectsInfo = params.data
                         _this.total = params.meta.pagination
                         _this.current_page = params.meta.current_page;
