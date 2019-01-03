@@ -49,13 +49,13 @@
                         </button>
                     </i>
                     <i v-if="list.form_status==234">
-                        <button class="btn btn-primary" @click="addProjectTimeout(list.type)">重新提交</button>
+                        <button class="btn btn-primary" @click="addProjectTimeout(list.form_id)">重新提交</button>
                     </i>
                     <i v-if="list.form_status==235">
-                        <button class="btn btn-primary" @click="addProjectTimeout(list.type)" >重新提交</button>
+                        <button class="btn btn-primary" @click="addProjectTimeout(list.form_id)" >重新提交</button>
                     </i>
                     <i v-if="list.form_status==233">
-                        <button class="btn btn-primary" @click="addProjectTimeout(list.type)" >重新提交</button>
+                        <button class="btn btn-primary" @click="addProjectTimeout(list.form_id)" >重新提交</button>
                     </i>
                 </div>
                 <div v-if="isCurrentApprover">
@@ -121,7 +121,7 @@
         </div>
         <BuildProject :project-type="projectType" :project-fields-arr="projectFieldsArr" 
         :default-data='{fields:info.fields.data,list:list,trailInfo:trailInfo}'></BuildProject>
-        <ApprovalGreatModule :form-data='formData' singlemode='true'  />
+        <ApprovalGreatModule :form-data='formData' singlemode='true' :default-data='detailData' />
         <ApprovalGoModal :mode='approvalMode' :id='list.form_instance_number' @approvaldone='approvalDone' />
     </div>
 
@@ -131,7 +131,6 @@ import fetch from '@/assets/utils/fetch.js'
 import config from '@/assets/js/config'
 import {PROJECT_CONFIG} from '@/views/approval/project/projectConfig.js'
 import ApprovalGreatModule from '@/components/ApprovalGreatModule'
-
 import ApprovalProgress from '@/components/ForApproval/ApprovalProgress'
 export default {
     name:'approvalDetail',
@@ -203,6 +202,7 @@ export default {
         },
         approvalDone(){
             this.$refs.approvalProgress.getApprover(this.list.project_number)
+            this.$refs.approvalProgress.getApprover(this.list.form_instance_number)
             this.getData()
             toastr.success('审批成功')
         },
@@ -243,7 +243,7 @@ export default {
         addProject(value) {
                 this.projectType = value;
                 if(this.list.title.includes('合同')){
-                    this.pullUp(this.indexData[0])
+                    this.pullUp(this.indexData.find(item=>item.form_id === this.projectType))
                 }else{
                     this.selectProjectType(function () {
                         $('#addProject').modal('show')

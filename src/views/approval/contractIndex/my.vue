@@ -54,7 +54,7 @@
                                     <td>{{project.name}}</td>
                                     <!-- <td></td> -->
                                     <td>{{project.created_at}}</td>
-                                    <td>{{getProgressName(project.form_status)}}{{project.form_status}}</td>
+                                    <td>{{getProgressName(project.form_status)}}</td>
                                     <!-- <td></td> -->
                                 </tr>
                                 </tbody>

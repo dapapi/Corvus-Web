@@ -61,7 +61,8 @@ export default {
     },
     watch:{
         formid:function(value){
-            this.getApprover(value)
+            console.log(value);
+            this.getApprover(this.formid)
         },
         formstatus:function(value){
             this.getApprover(this.formid)
@@ -96,9 +97,13 @@ export default {
     },
     methods:{
         getApprover(value){
-            if(!value){
-                return
-            }else if(this.trend.condition[0]){
+            // if(!value){
+            //     console.log(1123123);
+            //     return
+            // }else if(this.trend.condition[0]){
+            //     return
+            // }
+            if(!value || this.trend){
                 return
             }
             let _this = this
