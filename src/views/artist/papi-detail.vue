@@ -211,9 +211,9 @@
                     <div class="tab-content nav-tabs-animate bg-white col-md-12">
                         <div class="tab-pane animation-fade pb-20 fixed-button-father" id="forum-artist-schedule"
                              role="tabpanel" :class="artistInfo.sign_contract_status == 2?'active':''">
-                            <div class="col-md-12">
+                            <!-- <div class="col-md-12">
                                 <calendar :goto-date="selectedDate" :calendars="selectedCalendar" ref="calendar" @scheduleClick="showScheduleModal"></calendar>
-                            </div>
+                            </div> -->
                         </div>
                         <div class="tab-pane animation-fade pb-20 fixed-button-father" id="forum-artist-projects"
                              role="tabpanel">
@@ -1254,15 +1254,8 @@
                 }
                 fetch('put', '/bloggers/' + this.artistId, data).then(function (response) {
                     toastr.success('修改成功');
-                    // if(artistInfo.intention==true){
-                    //     _this.artistInfo.intention_desc=""
-                        
-                    // }
-                    // if(artistInfo.sign_contract_other==true){
-                    //     _artistInfo.sign_contract_other_name=""
-                    // }
                     _this.artistTasksInfo = response.data;
-                    
+
                     if (_this.artistInfo.intention == false) {
                         _this.updateType = 2
                     } else {
