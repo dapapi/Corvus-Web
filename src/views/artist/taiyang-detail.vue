@@ -170,7 +170,7 @@
                         <div class="tab-pane animation-fade pb-20 fixed-button-father" id="forum-artist-schedule"
                              role="tabpanel" :class="artistInfo.sign_contract_status == 2?'active':''">
                             <div class="col-md-12">
-                                <calendar :goto-date="selectedDate" :calendars="selectedCalendar" ref="calendar"
+                                <calendar :goto-date="selectedDate" :calendars="calendarId" ref="calendar"
                                           @scheduleClick="showScheduleModal"></calendar>
                             </div>
                         </div>
@@ -1009,7 +1009,6 @@
                 avatar: '',
                 selectedDate: '',
                 scheduleData: '',
-                selectedCalendar: [],
                 scheduleParticipants: [],
                 previewUrl: '',
                 previewName: '',
@@ -1023,7 +1022,8 @@
                 incomesum:0,//账单 -- 收入总和
                 expendituresum:0,//账单 -- 支出总和
                 isLoading: true,
-                uploadUrl:''
+                uploadUrl:'',
+                calendarId:[]//艺人关联日历id
 
             }
         },
@@ -1044,29 +1044,20 @@
                 name: this.user.nickname,
                 id: this.user.id
             })
-            this.selectedCalendar.push(this.$route.params.id)
             let _this = this;
             $('#distributionBroker').on('hidden.bs.modal', function () {
                 _this.$store.commit('changeParticipantsInfo', [])
             })
         },
-        // computed:{
-        //     selectedCalendar:function(){
-        //         let arr = new Array()
-        //         arr[0] = this.$route.params.id
-        //         return arr
-        //     }
-        // },
+        
         methods: {
-            // changeCalender: function () {
-            //     this.selectedCalendar[0] = this.$route.params.id
-            // },
+            
             //获取艺人信息
             getArtist: function () {
                 this.artistId = this.$route.params.id;
 
                 let data = {
-                    include: 'publicity,broker,creator,tasks,affixes,trails.project.principal,works,trails.client,relate_project_bills_resource',
+                    include: 'publicity,broker,creator,tasks,affixes,trails.project.principal,works,trails.client,relate_project_bills_resource,calendar',
                 };
                 let _this = this;
                 fetch('get', '/stars/' + this.artistId, data).then(function (response) {
@@ -1075,7 +1066,9 @@
                     _this.uploadUrl = _this.artistInfo.avatar
                     _this.artistProjectsInfo = []
                     _this.artistTasksInfo = response.data.tasks.data
-                    
+                    if(response.data.calendar.data){
+                        _this.calendarId.push(response.data.calendar.data[0].id)
+                    }
                     _this.artistWorksInfo = response.data.works.data
                     _this.affixes = response.data.affixes.data
                     for (let i = 0; i < response.data.trails.data.length; i++) {
@@ -1841,7 +1834,7 @@
         text-align: center;
         line-height: 76px;
         border-radius: 50%;
-        border: 1px dashed #eee;
+        border: 1px solid #eee;
 
     }
 
