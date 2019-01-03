@@ -1,7 +1,7 @@
 <template>
 <!-- 文件预览组件 by王骁
     需要url和文件名  
-    模态框组件，需要父组件设置data-target='docPreview'触发
+    模态框组件，需要父组件设置data-target='#docPreview'触发
     内置下载按钮
 -->
     <div>
@@ -49,7 +49,12 @@ export default {
     computed:{
         //获取扩展名
         fileNameHandler(){
-            return String(this.givenFileName).split('.').pop()
+            if(this.givenFileName){
+                return String(this.givenFileName).split('.').pop()
+            }else{
+                return String(this.url).split('.').pop()
+            }
+
         }
     }
 }
