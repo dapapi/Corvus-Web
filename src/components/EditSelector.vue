@@ -31,9 +31,6 @@
 
         mounted() {
             this.isEditSelect = this.isEdit
-            if (this.content) {
-                this.$refs.selector.setValue(this.content)
-            }
         },
 
         watch: {
@@ -45,11 +42,7 @@
                         _this.$refs.selector.setValue(_this.content)
                     }, 0)
                 } else {
-                    setTimeout(() => {
-                        if (this.$refs.selector) {
-                            this.$refs.selector.destroy()
-                        }
-                    }, 0)
+                    this.$refs.selector.destroy()
                 }
             }
         },
