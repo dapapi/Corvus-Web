@@ -99,6 +99,7 @@
         computed:{
             getProgressName(){
                 return function(params){
+                    console.log(params);
                    return  this.projectProgress.find(item=>item.id == params).value
                 }
             }
@@ -125,7 +126,6 @@
             getList(params) {
                 let _this = this
                 fetch('get','/approvals_project/my?status='+params).then((params) => {
-                    console.log(params);
                     _this.projectsInfo = params.data
                     _this.total = params.total;
                     _this.current_page = params.current_page;

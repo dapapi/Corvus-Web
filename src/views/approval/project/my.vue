@@ -123,7 +123,6 @@
             },
             getList(params) {
                 let _this = this
-                console.log(params);
                     fetch('get','/approvals_project/approval?status='+params).then((params) => {
                         _this.projectsInfo = params.data
                         _this.total = params.total;
