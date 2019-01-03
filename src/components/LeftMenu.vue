@@ -134,10 +134,10 @@
                         image: 'https://res.papitube.com/corvus/images/yingyong.png',
                         hoverImage: 'https://res.papitube.com/corvus/images/select-yingyong.png',
                         data: [
-                            {
-                                name: '考勤',
-                                code: 'attendance'
-                            },
+                            // {
+                            //     name: '考勤',
+                            //     code: 'attendance'
+                            // },
                             {
                                 name: '公告',
                                 code: 'broadcast'
@@ -150,14 +150,10 @@
                                 name: '通讯录',
                                 code: 'address'
                             },
-                            {
-                                name: '知识库',
-                                code: 'knowledgebase'
-                            },
-                            {
-                                name: '通讯录',
-                                code: 'address',
-                            },
+                            // {
+                            //     name: '知识库',
+                            //     code: 'knowledgebase'
+                            // },
                         ]
                     },
                 ],
