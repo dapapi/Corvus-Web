@@ -47,7 +47,8 @@
                                         <i class="iconfont icon-buoumaotubiao32" aria-hidden="true"
                                            style="font-size:12px;"></i>
                                     </span>
-                                    <input type="password" class="form-control" placeholder="密码" v-model="password" @keyup.enter="checkLogin">
+                                    <input type="password" class="form-control" placeholder="密码" v-model="password"
+                                           @keyup.enter="checkLogin">
                                 </div>
                             </div>
                             <div class="form-group clearfix">
@@ -357,7 +358,17 @@
                     client_secret: config.clientSecret,
                     scope: '*'
                 };
-                fetch('post', '/oauth/token', data).then(function (response) {
+                $.ajax({
+                    type: 'post',
+                    url: config.apiUrl + '/oauth/token',
+                    headers: config.getHeaders(),
+                    data: data,
+                    statusCode: {
+                        401: function () {
+                            toastr.error('用户名或密码错误')
+                        },
+                    }
+                }).done(function (response) {
                     let token = response.access_token;
                     config.setAccessToken(token);
                     setTimeout(function () {
