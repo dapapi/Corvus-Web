@@ -445,7 +445,8 @@
                                                               @change="changeArtistIntention"></EditSelector>
                                             </div>
                                             <div class="col-md-6 float-left" v-show="artistInfo.intention==false">
-                                                <div class="col-md-12 float-left font-weight-bold" >
+                                                <div class="col-md-5 float-left text-right pl-10">不签约原因</div>
+                                                <div class="col-md-7 float-left font-weight-bold" >
                                                     <EditInput :content="artistInfo.intention_desc"
                                                             :is-edit="isEdit"
                                                             @change="changReason" ></EditInput>
@@ -463,7 +464,8 @@
                                                               @change="changeArtistSignStatus"></EditSelector>
                                             </div>
                                             <div class="col-md-6 float-left" v-show="artistInfo.sign_contract_other==true">
-                                                <div class="col-md-12 float-left font-weight-bold">
+                                                <div class="col-md-5 float-left text-right pl-10">签约公司</div>
+                                                <div class="col-md-7 float-left font-weight-bold">
                                                     <EditInput :content="artistInfo.sign_contract_other_name"
                                                             :is-edit="isEdit"
                                                             @change="changSigningCompany" ></EditInput>
@@ -895,7 +897,7 @@
             this.principalName = this.user.nickname;
             //  清空任务
             $('#addTask').on('hidden.bs.modal', function () {
-                // _this.$refs.mold.setValue('');//类型
+                _this.$refs.mold.setValue('');//类型
                 _this.taskType = ''
                 _this.Person_id = '';//负责人
                 _this.$refs.taskpriority.setValue('');
