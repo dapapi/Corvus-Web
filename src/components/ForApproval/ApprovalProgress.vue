@@ -113,8 +113,12 @@ export default {
     methods:{
         getApprover(value){
             if(!this.mode){
-                if(!value || this.trend.condition[0]){
+                if(!value ){
                     return
+                }else if(this.trend){
+                    if(this.trend.condition.length === 0){
+                        return
+                    }
                 }
             }
             let _this = this
