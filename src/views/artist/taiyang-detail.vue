@@ -1067,7 +1067,7 @@
                     _this.artistProjectsInfo = []
                     _this.artistTasksInfo = response.data.tasks.data
                     if(response.data.calendar.data){
-                        _this.calendarId.push(response.data.calendar.data[0].id)
+                        _this.calendarId.push(response.data.calendar.data.id)
                     }
                     _this.artistWorksInfo = response.data.works.data
                     _this.affixes = response.data.affixes.data
