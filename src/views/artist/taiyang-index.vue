@@ -381,7 +381,6 @@
                 douyinFansNum: '',
                 xhsUrl: '',
                 xhsFansNum: '',
-                // platform:[],
                 platformType: [],
                 signIntention: '',
                 signCompany: '',
@@ -515,7 +514,6 @@
             },
 
             changeBirthday: function (value) {
-                console.log(value)
                 this.artistBirthday = value
             },
 
@@ -597,20 +595,10 @@
                 if(this.signCompany == 2){
                     this.sign_contract_other_name = ''
                 }
-                // console.log(this.affixesType)
                 if(this.affixesType>1&&this.affixes.length==0){
                     toastr.error('请上传附件');
                     return false
                 }
-                // if(this.affixes){
-                //     toastr.error('请上传附件');
-                //     return false
-                // }
-                // if(!this.uploadUrl){
-                //     toastr.error('请上传头像')
-                //     return false
-                // }
-
                 let platform = this.platformType.join(',');
                 let data = {
                     name: this.artistName,//名字
@@ -688,11 +676,7 @@
             //选择附件类型
             changeAttachmentType: function (value) {
                   this.affixesType = value
-                //   alert(value)
-                //   alert(this.affixesType)
-
             },
-
             //上传头像
             getUploadUrl(res){
                 this.uploadUrl = res
@@ -700,7 +684,6 @@
             redirectArtistDetail: function (artistId) {
                 this.$router.push({path: 'artists/' + artistId});
             },
-
             selectArtists: function (value) {
                 if (value === 'all') {
                     this.selectedArtistsArr = [];

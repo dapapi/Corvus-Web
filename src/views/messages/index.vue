@@ -81,16 +81,12 @@
 </template>
 
 <script>
-import Main from './detail.vue';
 import messagesData from './messages.json'
 import fetch from '@/assets/utils/fetch'
 import config from '@/assets/js/config'
 import {mapState, mapGetters} from 'vuex'
 export default {
   name: 'messagesIndex',
-  components: {
-    Main,
-  },
   computed:{
     
   },
@@ -148,12 +144,13 @@ export default {
   },
   watch:{
        unReadMsg:function(){
-        //    alert(222)
-        //    console.log(this.unReadMsg)
+       
            this.getModule()
        }
   },
   methods: {
+
+    //查询消息列表
     renderMsg:function(type,state){
        
         if(type){
@@ -174,6 +171,8 @@ export default {
 
         })
     },
+
+    //获取模块列表
     getModule:function(){
         fetch('get',`${config.apiUrl}/getmodules`).then((res) => {
             this.moduleList = res
@@ -188,16 +187,16 @@ export default {
                 this.renderMsg(this.moduleList[0].id,1)
             }
         })
-        // console.log(this.moduleList)
-        // console.log(this.moduleType)
+       
     },
+    //设置消息状态 
     msgStatus:function(id,type){
         let data = {}
         if(type){
             data={
                 module:this.moduleType,
                 all:'yes'
-            }
+            }  //全部设置为已读
         }else{
             data ={
                message_id:id

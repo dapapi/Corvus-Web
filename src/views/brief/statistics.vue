@@ -85,12 +85,12 @@
                 </div>
                 </div>
         </div>
-        <div class="site-action" data-plugin="actionBtn" @click="redirectBriefAdd()">
+        <!-- <div class="site-action" data-plugin="actionBtn" @click="redirectBriefAdd()">
             <button type="button"  class="site-action-toggle btn-raised btn btn-success btn-floating waves-effect waves-classic">
                 <i class="front-icon iconfont icon-tianjia1 animation-scale-up" aria-hidden="true" style="font-size:30px"></i>
                 <i class="back-icon iconfont icon-tianjia1 animation-scale-up" aria-hidden="true" style="font-size:30px"></i>
             </button>
-        </div>
+        </div> -->
     </div>
 </template>
 <script>
@@ -142,12 +142,11 @@ export default {
     },
     methods:{
         selectDate:function(start,end,month,year){
-            this.start_time = start
-            this.end_time = end
+            this.start_time = `${start} 00"00:00`
+            this.end_time = `${end} 23:59:59`
+            
             this.nowMonth = month
             this.nowYear = year
-            // console.log(this.nowYear)
-            // console.log(this.nowMonth)
             this.getlist()
             
         },
@@ -157,8 +156,6 @@ export default {
         getlist:function(page =1){
             this.template_name = this.$route.query.name
             let _this = this
-            // alert(this.nowMonth)
-            // alert(this.nowYear)
             this.getAllWeek(this.nowMonth)
             let data={
                 template_id:this.$route.query.id,
@@ -185,14 +182,12 @@ export default {
                                         _this.monthWeek[_this.nowYear-1][g].number = _this.monthWeek[_this.nowYear-1][g].number+1
                                     }    
                                 }
-                          }
+                            }
                         }
 
                     }
                 }
-                // console.log(_this.monthWeek[_this.nowMonth-1])
-                // console.log(_this.list)
-                
+               
                 _this.current_page=res.meta.pagination.current_page,
                 _this.total_pages=res.meta.pagination.total_pages,
                 _this.total=res.meta.pagination.total
@@ -200,7 +195,6 @@ export default {
         },
         //获取全部周
         getAllWeek:function(year){
-            // alert(year)
             let index=1;
             let allWeek = []
             for(let i of this.createWeeks(year)){
@@ -214,8 +208,7 @@ export default {
                     endDay:`${this.formatDate(end).split(',')[2]}`
                 })
             }
-            // console.log(allWeek)
-            // console.log(allWeek)
+            
             for (let i = 0; i < 12; i++) {
                 this.monthWeek[i]=[]
                 for (let t = 0; t < allWeek.length; t++) {
@@ -227,7 +220,6 @@ export default {
                     }
                 }
             }
-            // console.log(this.monthWeek)
         },
         formatDig:function(num){
             return num>9?''+num:'0'+num;
