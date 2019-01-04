@@ -142,7 +142,7 @@
                         <div class="example">
                             <div class="col-md-2 text-right float-left require">负责人</div>
                             <div class="col-md-10 float-left pl-0">
-                                <input-selectors :placeholder="'请选择负责人'" otherslot='otherslot'
+                                <input-selectors :placeholder="'请选择负责人'"
                                                  @change="changePrincipal"
                                                  :propSelectMemberName='$store.state.otherSlot.data?$store.state.otherSlot.data.name:currentUser.name'></input-selectors>
                             </div>
@@ -231,6 +231,7 @@
     import fetch from '../../assets/utils/fetch.js'
     import config from '../../assets/js/config'
     import {mapState} from 'vuex'
+    import Cookies from 'js-cookie'
 
     export default {
         data: function () {
@@ -640,6 +641,13 @@
             },
 
             changeTrailType: function (value) {
+                if (value === 3) {
+                    if (Cookies.get('companyType') === '泰洋川禾') {
+                        value = 3;
+                    } else {
+                        value = 4;
+                    }
+                }
                 this.trailType = value;
                 $('#addTrail').modal('show')
                 setTimeout(() => {

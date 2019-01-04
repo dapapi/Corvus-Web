@@ -38,9 +38,8 @@
                     <div class="approver" :style="{backgroundImage:'url('+pending.icon_url+')',backgroundColor:String(pending.icon_url).split('|')[0]}">{{String(pending.icon_url).split('|')[1]}}</div>
                     <span v-if="list.form_status=== 231">&nbsp;{{currentStatus.slice(0,1)}}{{pending.name}}{{currentStatus.slice(1)}}</span>
                     <span v-if="list.form_status !== 231">{{pending.name}}{{currentStatus}}</span>
-                <div >
-                    <i v-if="list.form_status==232">
-                        <button class="btn btn-primary" @click='approvalHandler("discard")'>作废</button>
+                    <i v-if="list.form_status==232 && (info.approval.user_id === currentId || (list.creator && list.creator.data.id === currentId)) ">
+                        <button class="btn btn-primary" @click='approvalHandler("discard")' >作废</button>
                     </i>
                     <i v-if="list.form_status==231 && list.approval_begin === 0">
                         <button class="btn btn-primary" @click='approvalHandler("cancel")'>撤销</button>
@@ -48,27 +47,23 @@
                                 data-toggle="modal">提醒
                         </button>
                     </i>
-                    <i v-if="list.form_status==234">
+                    <i v-if="[233,234,235].includes(list.form_status)">
                         <button class="btn btn-primary" @click="addProjectTimeout(list.form_id)">重新提交</button>
                     </i>
-                    <i v-if="list.form_status==235">
+                    <!-- <i v-if="list.form_status==235">
                         <button class="btn btn-primary" @click="addProjectTimeout(list.form_id)" >重新提交</button>
                     </i>
                     <i v-if="list.form_status==233">
                         <button class="btn btn-primary" @click="addProjectTimeout(list.form_id)" >重新提交</button>
-                    </i>
-                </div>
-                <div v-if="isCurrentApprover">
-                    <i v-if="list.form_status==231">
+                    </i> -->
+                    <i v-if="list.form_status==231 && isCurrentApprover && $route.query.mode === 'approver'">
                         <button class="btn btn-success" @click='approvalHandler("agree")'>同意</button>
                         <button class="btn btn-danger" @click='approvalHandler("refuse")'>拒绝</button>
                         <button class="btn btn-primary" @click='approvalHandler("transfer")'>转交</button>
-
                     </i>
-                    <i v-if="list.form_status==232 && list.creator.data.id === currentId">
+                    <!-- <i v-if="list.form_status==232 && list.creator.data.id === currentId">
                         <button class="btn btn-primary" @click='approvalHandler("discard")' >作废</button>
-                    </i>
-                </div>
+                    </i> -->
                 </h6>
             </div>
             <div class="page-content container-fluid mt-20" v-if="info">
@@ -97,8 +92,8 @@
                         <div class="row px-20">
                             <div class="col-md-6 detail-container px-0" v-for="(item, index) in detailData" :key="index" v-if="item.values">
                                 <div class="col-md-3 float-left detail-key mx-0">{{item.key}}</div>
-                                <div class="col-md-6 float-left detail-value" v-if="item.values && !item.values.data.value.includes('http')">{{item.values.data.value || ''}}</div>
-                                <div class="col-md-6 float-left detail-value" v-if="item.values && item.values.data.value.includes('http')" data-target='#docPreview' data-toggle='modal' @click='previewUrl=item.values.data.value'>点击查看</div>
+                                <div class="col-md-9 float-left detail-value" v-if="item.values && !item.values.data.value.includes('http')">{{item.values.data.value || ''}}</div>
+                                <div class="col-md-9 float-left detail-value" v-if="item.values && item.values.data.value.includes('http')" data-target='#docPreview' data-toggle='modal' @click='previewUrl=item.values.data.value'>点击查看</div>
                             </div>
                         </div>
                         <div class="panel col-md-12 col-lg-12">
@@ -159,9 +154,6 @@ export default {
     },
 
     mounted(){
-        // if(this.list.title.includes('合同')){
-        //             console.log(111111);
-        //         }
         this.getFormList()
         this.getData()
     },
@@ -201,8 +193,11 @@ export default {
             $('#approval-great-module').modal('show')
         },
         approvalDone(){
-            this.$refs.approvalProgress.getApprover(this.list.project_number)
-            this.$refs.approvalProgress.getApprover(this.list.form_instance_number)
+            if(this.list.project_number){
+                this.$refs.approvalProgress.getApprover(this.list.project_number)
+            }else{
+                this.$refs.approvalProgress.getApprover(this.list.form_instance_number)
+            }
             this.getData()
             toastr.success('审批成功')
         },

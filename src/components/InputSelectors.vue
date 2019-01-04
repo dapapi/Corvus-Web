@@ -1,13 +1,12 @@
 <!-- 选择员工，单人 -->
 <template>
     <div class="selector" :id="'inputSelectMember' + _uid">
-        <div class="float-left input-selectors-div" :class='otherslot?"input-selectors-add":""'>
+        <div class="float-left input-selectors-div" :class='otherslot?"":"input-selectors-add"'>
             <input type="text" class="form-control" title="" @focus="showMember" :placeholder="placeholder"
                    v-model="selectedMemberName">
         </div>
         <div class="float-left" v-show="selectMemberShow">
             <select-staff class="selector" @change="changeSelectMember" :member-type="'principal'"
-                          :otherslot='otherslot'
                           :type="type"></select-staff>
         </div>
     </div>
@@ -28,12 +27,6 @@
 
         computed: {
             selectedMemberName: function () {
-                // if (this.type === 'change') {
-                //     this.$emit('change', this.$store.state.principalInfo.name)
-                //     return this.$store.state.principalInfo.name
-                // } else if (this.type === 'selector') {
-                //     this.$emit('change', this.$store.state.selectPrincipalInfo)
-                //     return this.$store.state.selectPrincipalInfo.name
                 if (this.propSelectMemberName) {
                     return this.propSelectMemberName
                 } else {
@@ -79,7 +72,7 @@
     }
 
     .input-selectors-add {
-        width: 220px;
+        width: 100%;
     }
 
     .input-selectors-span {

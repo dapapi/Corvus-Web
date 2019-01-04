@@ -21,7 +21,7 @@
                 <div class="clearfix">
                     <div class="col-md-3 example float-left">
                         <input type="text" class="form-control" id="inputPlaceholder" placeholder="请输入博主昵称"
-                               style="width: 220px" v-model="blogName" @blur='getArtists()'>
+                                v-model="blogName" @blur='getArtists()'>
                     </div>
                     <div class="col-md-3 example float-left">
                         <selectors :options="artistTypeArr" @change="typeFilter" placeholder="请选择博主分类"></selectors>
@@ -201,7 +201,7 @@
                         </div>
                         <div class="example">
                             <div class="col-md-2 text-right float-left require">沟通状态</div>
-                            <div class="col-md-3 float-left pl-0">
+                            <div class="col-md-10 float-left pl-0">
                                 <selectors :options="papiCommunicationStatusArr"
                                            @change="changeCommunicationType" ref="communicationType"></selectors>
                             </div>
