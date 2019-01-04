@@ -77,7 +77,6 @@ export default {
     },
     watch:{
         formid:function(value){
-            console.log(value);
             this.getApprover(this.formid)
         },
         formstatus:function(value){
@@ -91,18 +90,18 @@ export default {
                 })
             }
         },
-        'trend':{
-            handler:function(newValue,oldValue){
-                if(this.trend.ready==true && this.trend.condition[0].length !== 0){
-                    var _this = this
-                    fetch('get','/approvals/chains?form_id='+this.formid+'&change_type=224&value='+this.trend.condition.join(',')).then((params) => {
-                        _this.approver = params.data
-                    })
-                }
+        // 'trend':{
+        //     handler:function(newValue,oldValue){
+        //         if(this.trend.ready==true && this.trend.condition[0].length !== 0){
+        //             var _this = this
+        //             fetch('get','/approvals/chains?form_id='+this.formid+'&change_type=224&value='+this.trend.condition.join(',')).then((params) => {
+        //                 _this.approver = params.data
+        //             })
+        //         }
                 
-            },
-            deep:true,
-        }
+        //     },
+        //     deep:true,
+        // }
     },
     mounted(){
         this.getApprover(this.formid)
