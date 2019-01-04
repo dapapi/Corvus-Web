@@ -25,7 +25,6 @@
         </div>
 
         <div class="page-content container-fluid">
-
             <div class="panel col-md-12">
                 <div class="card-block clearfix">
                     <Upload @change='getUploadUrl' class="upload-image float-left mr-5" style="width:80px;height:80px;border-radius:50%;position:relative">
@@ -63,9 +62,7 @@
                                         <span>{{ publicity.name }}</span>
                                         
                                     </span>
-                                    <!-- <template v-for="publicity in artistInfo.publicity.data">
-                                        {{ publicity.name }}
-                                    </template> -->
+
                                 </div>
                             </div>
 
@@ -99,9 +96,7 @@
                             <div class="col-md-3 float-left">{{item.principal.data.name}}</div>
                             <div class="col-md-3 float-left">{{item.end_at}}</div>
                             <div class="col-md-3 float-left">
-                                <!-- <template v-if="item.status === 1">进行中</template>
-                                <template v-if="item.status === 2">已完成</template>
-                                <template v-if="item.status === 3">已停止</template> -->
+                                
                                 <template v-if="item.relate_project_bills_resource">
                                     {{item.relate_project_bills_resource}}
                                 </template>
@@ -202,12 +197,6 @@
                                             {{item.relate_project_bills_resource}}
                                         </template>
                                         <template>0</template>
-                                        <!-- <template v-if="item.status === 1"><span style="color:#FF9800">进行中</span>
-                                        </template>
-                                        <template v-if="item.status === 2"><span style="color:#4CAF50">已完成</span>
-                                        </template>
-                                        <template v-if="item.status === 3"><span style="color:#9E9E9E">撤单</span>
-                                        </template> -->
                                     </td>
                                 </tr>
                             </table>
@@ -601,8 +590,6 @@
             </div>
 
         </div>
-
-
         <modal :id="'affix'" :title="'删除附件'" @onOK="deleteAffix">
             <div class="text-center m-20">您确认删除该附件吗？</div>
         </modal>
@@ -693,7 +680,6 @@
                 </div>
             </div>
         </div>
-
         <!--作品库-->
         <div class="modal fade" id="addWork" aria-hidden="true" aria-labelledby="addLabelForm"
              role="dialog" tabindex="-1">
@@ -856,11 +842,6 @@
                 <div class="modal-content" v-if="scheduleData">
                     <div class="modal-header">
                         <div style="order: 2">
-                            <!-- <i class="iconfont icon-bianji2 pr-4 font-size-16 pointer-content"
-                               @click="changeScheduleType('edit')" aria-hidden="true"></i>
-                            <FileUploader is-icon="true" class="float-left" @change="fileUpload"></FileUploader>
-                            <i class="iconfont icon-shanchu1 pr-4 font-size-16 pointer-content" data-toggle="modal"
-                               data-target="#delModel" aria-hidden="true" @click="deleteToastr('schedule')"></i> -->
                             <i class="iconfont icon-guanbi pointer-content" aria-hidden="true" data-dismiss="modal"></i>
                         </div>
                         <h5 class="modal-title">{{ scheduleData.calendar.data.title }}</h5>
@@ -896,39 +877,55 @@
                             </div>
                         </div>
                         <div class="example" v-if="scheduleData.position">
-                            <div class="col-md-1 px-0 float-left">地点</div>
-                            <div class="col-md-10 float-left">{{ scheduleData.position }}</div>
+                            <div class="col-md-2 px-0 float-left">地点</div>
+                            <div class="col-md-10 pl-0 float-left">{{ scheduleData.position }}</div>
                         </div>
                         <div class="example" v-if="scheduleData.material">
-                            <div class="col-md-1 px-0 float-left">资源</div>
-                            <div class="col-md-10 float-left">{{ scheduleData.material.data.name }}</div>
+                            <div class="col-md-2 px-0 float-left">资源</div>
+                            <div class="col-md-10 pl-0 float-left">{{ scheduleData.material.data.name }}</div>
                         </div>
                         <div class="example">
-                            <div class="col-md-1 px-0 float-left">组织人</div>
-                            <div class="col-md-10 float-left">
-                                <div class="creator-avatar float-left">
-                                    <img src="https://res.papitube.com/no-icon.png" alt="">
+                            <div class="col-md-2 px-0 float-left">组织人</div>
+                            <div class="col-md-10 pl-0 float-left">
+                                {{ scheduleData.creator.data.name }}
+                            </div>
+                        </div>
+                        <div class="example" v-if="(scheduleData.project || scheduleData.task) && !noPermission">
+                            <div class="col-md-2 px-0 float-left">关联资源</div>
+                            <div class="col-md-10 pl-0 float-left">
+                                <div class="pb-5" v-show="scheduleData.project"
+                                     v-for="(project,index) in scheduleData.project.data" :key="index">
+                                    <span>项目 - {{ project.id }}</span>
+                                    <span class="float-right" @click="delScheduleLinkage('project', project.id)">
+                                        <i class="iconfont icon-shanchu1 pointer-content"></i>
+                                    </span>
                                 </div>
-                                <div class="float-left pl-2">{{ scheduleData.creator.data.name }}</div>
+                                <div class="pb-5" v-show="scheduleData.task" v-for="(task,index) in scheduleData.task.data" :key="index">
+                                    <span>任务 - {{ task.id }}</span>
+                                    <span class="float-right" @click="delScheduleLinkage('task', task.id)">
+                                        <i class="iconfont icon-shanchu1 pointer-content"></i>
+                                    </span>
+                                </div>
                             </div>
                         </div>
                         <div class="example">
                             <div class="col-md-1 px-0 float-left">参与人</div>
                             <div class="col-md-10 float-left">
                                 <span class="mr-5" v-for="(item,index) in scheduleParticipants" :key="index">{{item.name}}</span>
-                                <!-- <AddMember type="add" @change="changeScheduleParticipants"></AddMember> -->
+                                
                             </div>
                         </div>
-                        <div class="example" v-if="scheduleData.desc">
-                            <div class="col-md-1 px-0 float-left">备注</div>
-                            <div class="col-md-10 float-left">{{ scheduleData.desc }}</div>
+                        <div class="example" v-if="scheduleData.desc && !noPermission">
+                            <div class="col-md-2 px-0 float-left">备注</div>
+                            <div class="col-md-10 pl-0 float-left">{{ scheduleData.desc }}</div>
                         </div>
-                        <div class="example" v-if="scheduleData.affixes.data.length > 0">
+                        <div class="example" v-if="scheduleData.affixes && scheduleData.affixes.data.length > 0">
                             <div>附件</div>
                             <div>
                                 <div class="col-md-3 float-left text-center position-relative file-item"
                                      v-for="(affix,index) in scheduleData.affixes.data" :key="index">
-
+                                    <div class="del-affix iconfont icon-zuofei position-absolute pointer-content"
+                                         @click="delAffix(affix.id)"></div>
                                     <div><i class="iconfont icon-wenjian" style="font-size: 36px"></i></div>
                                     <div @click="openFile(affix.url)" class="pointer-content">{{ affix.title }}</div>
                                 </div>
@@ -1088,24 +1085,16 @@
                     include: 'calendar,participants,creator,material,affixes',
                 };
                 fetch('get', '/schedules/' + schedule.id, data).then(response => {
-                    // console.log(response)
                     if (!response) {
                         this.scheduleData = schedule;
-                        // this.noPermission = true;
                         return
                     }
-                    // this.noPermission = false;
                     this.scheduleData = response.data;
                     this.scheduleParticipants = JSON.parse(JSON.stringify(response.data.participants.data));
                     this.$store.dispatch('changeParticipantsInfo', {data: response.data.participants.data});
                 });
                 $('#checkSchedule').modal('show')
-                // console.log(data)
-                // this.scheduleData = data;
-                // if (data.participants.data) {
-                //     this.scheduleParticipants = JSON.parse(JSON.stringify(data.participants.data));
-                // }
-                // $('#checkSchedule').modal('show')
+                
             },
             //获取账单
             getArtistsBill: function (page = 1,expense_type) {
@@ -1163,10 +1152,9 @@
             getProjectList:function(){
                 let _this = this
                 fetch('get', `/projects/star/${this.$route.params.id}`).then(response => {
-                    // console.log(response)
-                    // if(){
+                   
                         _this.threeProjectList = response
-                    // }
+                    
                 })
             },
             //粉丝数据
@@ -1235,13 +1223,7 @@
                             type: 'line',
                             stack: '总量',
                             data: [320, 332, 301, 334, 390, 330, 320]
-                        },
-                        // {
-                        //     name:'搜索引擎',
-                        //     type:'line',
-                        //     stack: '总量',
-                        //     data:[820, 932, 901, 934, 1290, 1330, 1320]
-                        // }
+                        }
                     ]
                 };
 
@@ -1291,13 +1273,7 @@
             changeEndMinutes: function (value) {
                 this.endMinutes = value
             },
-            //设置默认负责人
-            // setDefault:function(){
-            //     // let defaultParams = 
-
-            //     this.$store.state.newPrincipalInfo = {id:this.$route.params.id}
-            // },
-
+            
             //添加任务
             addTask: function () {
                 let participant_ids = [];
@@ -1371,7 +1347,6 @@
                     $('#addTask').modal('hide');
                     _this.artistTasksInfo.push(response.data)
                     _this.setDefaultPrincipal()
-                    // _this.$store.state.newPrincipalInfo = []
                     _this.$store.state.newParticipantsInfo = []
                     _this.taskType = ''
                     _this.taskName = ''
@@ -1441,7 +1416,7 @@
                     _this.$refs.workTime.setValue('');
                 })
             },
-
+            //隐私设置  清除数据
             addPrivacy: function () {
                 $('#addPrivacy').modal('hide')
                 this.$store.state.collectInfo = []
@@ -1470,8 +1445,7 @@
             },
             //修改基本信息
             changeArtistBaseInfo: function (value, name) {
-                // alert('是否一开始就调用')
-                // console.log(value,name)
+               
                 if (name === 'platform') {
                     value = value.join(',')
                 }
@@ -1501,7 +1475,7 @@
                 }
                 this.changeArtistInfo[name] = value
             },
-
+            //修改基本信息
             changeArtist: function () {
                 
                 if(this.changeArtistInfo.intention||this.changeArtistInfo.hasOwnProperty("intention_desc")){
@@ -1537,32 +1511,14 @@
                     _this.getArtist();
                 })
             },
-
+            //分配经理人和分配制作人
             distributionPerson: function (value) {
                 
                 this.distributionType = value;
                 if (this.artistInfo[value].data.length > 0) {
                     this.$store.state.participantsInfo = Object.assign([], this.artistInfo[value].data)
                 }
-                // if (value === 'broker') {
-                //     if (this.artistInfo.broker) {
-                //         let params = {
-                //             type: 'change',
-                //             data: JSON.parse(JSON.stringify(this.artistInfo.broker.data))
-                //         };
-                //         this.$store.dispatch('changeParticipantsInfo', params);
-                //     }
-                // } else {
-                //     if (this.artistInfo.publicity) {
-                //         let params = {
-                //             type: 'change',
-                //             data: JSON.parse(JSON.stringify(this.artistInfo.publicity.data))
-                //         };
-                //         this.$store.dispatch('changeParticipantsInfo', params);
-                //     }
-                // }
             },
-
             addDistributionPerson: function () {
                 let toast
                 let data = {
@@ -1571,11 +1527,8 @@
                     moduleable_type: 'star',
                     moduleable_ids: [this.artistId]
                 };
-
-
                 let personInfo = this.$store.state.participantsInfo;
                 let oldPersonInfo = this.artistInfo[this.distributionType].data
-                //todo 删除和新增的数据有问题
                 if (this.artistInfo[this.distributionType].data.length > 0) {
 
                     for (let i = 0; i < this.artistInfo[this.distributionType].data.length; i++) {
@@ -1600,7 +1553,6 @@
                     toast = '分配宣传人成功'
                 }
                 let _this = this;
-                console.log(this.$store.state.participantsInfo)
                 fetch('post', '/distribution/person', data).then(function (response) {
                     toastr.success(toast)
                     $('#distributionBroker').modal('hide');
@@ -1849,17 +1801,8 @@
         opacity: 0;
 
     }
-
-    /* .plus_hover{
-        display:none;
-       position: absolute;
-        left: 0px;
-        top:0px;
-        z-index:99
-    } */
-    /* .plus_hover:hover{
-        display: block;
-        
-    } */
+    .console{
+        font-size: 12px
+    }
 </style>
 

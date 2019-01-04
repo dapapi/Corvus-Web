@@ -59,22 +59,23 @@
                         <h4 class="modal-title" v-else>编辑模版</h4>
                     </div>
                     <div class="modal-body clearfix">
-                        <div class="example">
-                            <div class="col-md-2 text-right float-left">模版名称</div>
+                        <div class="example row">
+                            <div class="col-md-2 text-right float-left require">模版名称</div>
                             <div class="col-md-10 float-left pl-0">
                                 <input v-model="addModelData.template_name" type="text" class="form-control" placeholder="字数不超过10个汉字或20个字母">
                             </div>
                         </div>
-                        <div class="example">
-                            <div class="col-md-2 text-right float-left">模版对象</div>
-                            <add-member @change="participantChange"></add-member>
+                        <div class="example row">
+                            <div class="col-md-2 text-right float-left require">模版对象</div>
+                            <div class="col-md-10">
+                                <add-member @change="participantChange"></add-member>
+                            </div>
                         </div>
-                        <div class="example">
-                            <div class="col-md-2 text-right float-left">模版频率</div>
+                        <div class="example row">
+                            <div class="col-md-2 text-right float-left require">模版频率</div>
                             <div class="col-md-10 float-left pl-0">
-                                <EditSelector :content="addModelData.frequency" :is-edit="isEdit"
-                                                      :options="times" @change="changeFrequency"></EditSelector>
-                                <!-- <selectors :options="times" placeholder="请选择频率" @change="changeFrequency"></selectors> -->
+                                <EditSelector ref="frequency" :content="addModelData.frequency" :is-edit="isEdit"
+                                                      :options="times" @change="changeFrequency" :placeholder="'请选择频次'"></EditSelector>
                             </div>
                         </div>
                     </div>
@@ -151,21 +152,21 @@
                                <EditAddMember :is-edit="isEdit" @change="participantChange"></EditAddMember>  
                             </div>
                         </div>
-                        <div class="example">
-                            <div class="col-md-2 text-right float-left">问题描述</div>
+                        <div class="example row">
+                            <div class="col-md-2 text-right float-left require">问题描述</div>
                             <div class="col-md-10 float-left pl-0">
                                 <textarea class="form-control" v-model="addQuesData.issues" placeholder="" style="height: 80px;"></textarea>
                             </div>
                         </div>
-                        <div class="example">
-                            <div class="col-md-2 text-right float-left">类型</div>
+                        <div class="example row">
+                            <div class="col-md-2 text-right float-left require">类型</div>
                             <div class="col-md-10 float-left pl-0">
-                                <EditSelector :content="addModelData.type" :is-edit="isEdit"
-                                                      :options="type" @change="changeType"></EditSelector>
+                                <EditSelector ref="quesType" :content="addModelData.type" :is-edit="isEdit"
+                                                      :options="type" @change="changeType" :placeholder="'请选择类型'"></EditSelector>
                                 <!-- <selectors style="width: 100%;"  :options="type" placeholder=""></selectors> -->
                             </div>
                         </div>
-                        <div class="example">
+                        <div class="example row">
                             <div class="col-md-2 text-right float-left"></div>
                             <div class="col-md-10 float-left pl-0">
                                 <div class="checkbox-primary">
@@ -243,6 +244,9 @@ export default {
             total_pages:1,
             total:0,
             per_page:20,
+            ques_current_page:1,
+            ques_total_pages:1,
+            ques_total:0,
             times:config.briefTime,
             type:config.briefType,
             modelType:'add',
@@ -250,7 +254,7 @@ export default {
             addModelData:{
                 template_name:'',
                 colour:'白',
-                frequency:1,
+                frequency:'',
                 member:'',
             },
             delId:0,
@@ -260,7 +264,7 @@ export default {
             addQuesData:{
                issues:'',
                task_id:'',
-               type:1,
+               type:'',
                required:false,
                member_id:'',
                accessory:''//添加问题--模版id
@@ -307,36 +311,41 @@ export default {
 
 
         //模版
-
-
         changeModelType:function(type,member,template_name,frequency,id){
             this.isEdit = true
             if(type == 'edit'){
                 //获取编辑内容
                 this.modelType = 'edit'
+                //获取内容
                 this.$store.state.newParticipantsInfo = member.split(',')
                 this.addModelData.template_name =template_name
                 this.addModelData.frequency = frequency
+                this.$refs.frequency.setDefaultValue(frequency)
                 this.editId = id
             }else{
                 //清空上次显示弹框填写的内容
                 this.modelType ='add'
                 this.$store.state.newParticipantsInfo = []
                 this.addModelData.template_name =''
-                this.addModelData.frequency = 1
+                this.$refs.frequency.setDefaultValue('')
+                this.addModelData.frequency = ''
             }
             
         },
         //编辑和添加模版
         changeModel:function(){
-            let url,type
+            let url,type,tips
             let aUser = []
-            if(this.$store.state.newParticipantsInfo.length<=0){
-                toastr.error('请选择评审人');
-                return false
-            }
             if(!this.addModelData.template_name){
                 toastr.error('请输入模版名称');
+                return false
+            }
+            if(this.$store.state.newParticipantsInfo.length<=0){
+                toastr.error('请选择模版对象');
+                return false
+            }
+            if(!this.addModelData.frequency){
+                toastr.error('请选择模版频次');
                 return false
             }
             for (let i = 0; i < this.$store.state.newParticipantsInfo.length; i++) {
@@ -351,8 +360,9 @@ export default {
             this.addModelData.member = aUser.join(',')
             this.modelType == 'add'?url = '/report':url = `/report/${this.editId}`
             this.modelType == 'add'?type = 'post':type='put'
-            
+            this.modelType == 'add'?tips = '创建模版成功':tips="编辑模版成功"
             fetch(type,`${config.apiUrl}${url}`,this.addModelData).then((res) =>{
+                toastr.success(tips);
                 $('#addModelDetails').modal('hide')
                 this.getlist()
             })
@@ -391,10 +401,10 @@ export default {
             fetch('get',`${config.apiUrl}/report/issues`,{id:id}).then((res) => {
                 
                 this.quesList = res.data
-                this.current_page = res.meta.pagination.current_page
-                this.total_pages = res.meta.pagination.total_pages
-                this.total = res.meta.pagination.total
-                this.per_page = res.meta.pagination.per_page
+                // this.current_page = res.meta.pagination.current_page
+                // this.total_pages = res.meta.pagination.total_pages
+                // this.total = res.meta.pagination.total
+                // this.per_page = res.meta.pagination.per_page
             })
         },
         changeQuesType:function(type,issues,quesType,accessory,required,id){
@@ -403,21 +413,28 @@ export default {
                 this.modelType = 'edit'
                 this.addQuesData.issues = issues
                 this.addQuesData.type = quesType
+                this.$refs.quesType.setDefaultValue(quesType)
                 this.addQuesData.required = required
                 this.editQuesId = id
             }else{
                 this.$store.state.participantsInfo = []
                 this.addQuesData.issues =''
                 this.modelType = 'add'
+                this.addQuesData.type = ''
+                this.$refs.quesType.setDefaultValue('')
             }
         },
         //添加和修改问题  
         changeQues:function(){
-            let url,type
+            let url,type,tips
             let aUser = []
             
             if(!this.addQuesData.issues){
                 toastr.error('请输入问题描述');
+                return false
+            }
+            if(!this.addQuesData.type){
+                toastr.error('请选择问题类型')
                 return false
             }
             for (let i = 0; i < this.$store.state.participantsInfo.length; i++) {
@@ -432,8 +449,10 @@ export default {
             this.addQuesData.member_id = aUser.join(',')
             this.modelType == 'add'?url = '/report/issues':url = `/report/issues/${this.editQuesId}`
             this.modelType == 'add'?type = 'post':type='put'
+            this.modelType == 'add'?tips= '添加问题成功':tips = '编辑问题成功'
             fetch(type,`${config.apiUrl}${url}`,this.addQuesData).then((res) =>{
                 $('#addQuesDetails').modal('hide')
+                toastr.success(tips)
                 this.getQuesList(this.addQuesData.accessory)
             })
         },

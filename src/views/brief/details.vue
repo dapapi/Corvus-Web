@@ -31,11 +31,11 @@
                         <li class="list-group-item p-0 mb-10 pb-10" v-for="(item,index) in quesList" :key="item.id">
                             
                             <!--问题-->
-                            <p v-if="item.type == 1">{{index+1}}.{{item.issues}}</p>
-                            <p v-else-if="item.type == 2">{{index+1}}.{{item.issues}}</p>
-                            <p v-else-if="item.type == 3">{{index+1}}.{{item.issues}}</p>
-                             <p v-else-if="item.type == 4" class="list-group-item-heading mt-0 mb-5">{{index+1}}.{{item.issues}}<span style="color:#01BCD4;cursor:pointer" data-toggle="modal" data-target="#selectTask" class="px-5" @click="getTaskQuesId(item.id)">选任务</span></p>
-                            <p v-else>{{index+1}}.{{item.issues}}</p>
+                            <p class="ques" v-if="item.type == 1" :class="item.required==1?'require':''">{{index+1}}.{{item.issues}}</p>
+                            <p class="ques" v-else-if="item.type == 2" :class="item.required==1?'require':''">{{index+1}}.{{item.issues}}</p>
+                            <p class="ques" v-else-if="item.type == 3" :class="item.required==1?'require':''">{{index+1}}.{{item.issues}}</p>
+                            <p v-else-if="item.type == 4" class="list-group-item-heading mt-0 mb-5 ques" :class="item.required==1?'require':''">{{index+1}}.{{item.issues}}<span style="color:#01BCD4;cursor:pointer" data-toggle="modal" data-target="#selectTask" class="px-5" @click="getTaskQuesId(item.id)">选任务</span></p>
+                            <p v-else class="ques" :class="item.required==1?'require':''">{{index+1}}.{{item.issues}}</p>
                             
                             <!--填写答案-->
                             <div  v-show="item.type == 1" class="pt-10">
@@ -90,7 +90,7 @@
                     </ul>
                 </div>
                 <div class="modal-footer pl-5">
-                    <button class="btn btn-sm btn-white btn-pure" data-dismiss="modal" @click="cancelTask()">取消</button>
+                    <button class="btn btn-sm btn-white btn-pure" data-dismiss="modal">取消</button>
                     <button class="btn btn-primary" type="submit" data-dismiss="modal">确定</button>
                 </div>
             </div>
@@ -137,13 +137,13 @@ export default {
     mounted(){
 
         this.getAll()
-        this.getTaskList()
-        // console.log(typeof this.type)
-        // this.getDetails()
+        this.draftDetails()
+        //任务列表报错 暂时注释
+        // this.getTaskList()
+       
     },
     methods:{
         getTime:function(start,end){
-            // console.log(start,end)
             this.startTime = start 
             this.endTime = end
         },
@@ -261,7 +261,17 @@ export default {
                toastr.success('保存草稿成功');
                 
             })
-        }
+        },
+        //草稿内容
+        draftDetails:function(){
+            this.submitAnswerData.reviewer_id = this.$store.state.newPrincipalInfo.id
+            this.submitAnswerData.accessory = this.$route.query.id
+            fetch('get',`${config.apiUrl}/launch/draft`).then((res) => {
+                console.log(res)
+            //    toastr.success('保存草稿成功');
+                
+            })
+        },
     }
 }
 </script>
@@ -273,5 +283,8 @@ export default {
     }
     .list-group-item{
         border-bottom:1px solid #f4f4f4;
+    }
+    .ques{
+        margin-left:14px
     }
 </style>

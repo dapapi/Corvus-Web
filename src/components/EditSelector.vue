@@ -50,6 +50,12 @@
             },
             changeSelect: function (value) {
                 this.$emit('change', value);
+            },
+            setDefaultValue:function(val){
+                let _this = this;
+                    setTimeout(function () {
+                        _this.$refs.selector.setValue(val)
+                    }, 0)
             }
         }
     }

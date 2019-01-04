@@ -48,12 +48,12 @@
 
                 <submit-report :templateId="temId" :templateStatus="status" :tempName="tempName"></submit-report>
         </div>
-        <div class="site-action" data-plugin="actionBtn" @click="redirectBriefAdd()">
+        <!-- <div class="site-action" data-plugin="actionBtn" @click="redirectBriefAdd()">
             <button type="button"  class="site-action-toggle btn-raised btn btn-success btn-floating waves-effect waves-classic">
                 <i class="front-icon iconfont icon-tianjia1 animation-scale-up" aria-hidden="true" style="font-size:30px"></i>
                 <i class="back-icon iconfont icon-tianjia1 animation-scale-up" aria-hidden="true" style="font-size:30px"></i>
             </button>
-        </div>
+        </div> -->
     </div>
 </template>
 <script>
@@ -97,8 +97,8 @@ export default {
     },
     methods:{
         selectDate:function(start,end){
-            this.start_time = start
-            this.end_time = end
+            this.start_time = `${start} 00:00:00` 
+            this.end_time = `${end} 23:59:59`
             this.getlist()
         },
         getProps:function(id,status,name,temName){
