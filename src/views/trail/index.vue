@@ -233,6 +233,7 @@
     import fetch from '../../assets/utils/fetch.js'
     import config from '../../assets/js/config'
     import {mapState} from 'vuex'
+    import Cookies from 'js-cookie'
 
     export default {
         data: function () {
@@ -642,6 +643,13 @@
             },
 
             changeTrailType: function (value) {
+                if (value === 3) {
+                    if (Cookies.get('companyType') === '泰洋川禾') {
+                        value = 3;
+                    } else {
+                        value = 4;
+                    }
+                }
                 this.trailType = value;
                 $('#addTrail').modal('show')
                 setTimeout(() => {

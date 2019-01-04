@@ -178,6 +178,7 @@
     import fetch from '../../assets/utils/fetch.js'
     import config from '../../assets/js/config'
     import ImportAndExport from '../../components/ImportAndExport.vue'
+    import Cookies from 'js-cookie'
 
     const clientLevelArr = [{name: '全部', value: ''}, ...config.clientLevelArr]
     export default {
@@ -392,6 +393,13 @@
             },
             // show add
             showAddModal(val) {
+                if (val === 3) {
+                    if (Cookies.get('companyType') === '泰洋川禾') {
+                        val = 3;
+                    } else {
+                        val = 4;
+                    }
+                }
                 this.setDefaultPrincipal()
                 $('#addClient').modal()
                 this.clientType = val
