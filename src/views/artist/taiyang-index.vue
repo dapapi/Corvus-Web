@@ -156,48 +156,64 @@
                             </div>
                         </div>
                         <div class="example">
-                            <div class="col-md-2 text-right float-left require">性别</div>
-                            <div class="col-md-4 float-left row">
-                                <selectors :options="genderArr"  @change="changeGender" ref="gender"></selectors>
+                            <div class="col-md-6 px-0 float-left">
+                                <div class="col-md-4 text-right float-left require">性别</div>
+                                <div class="col-md-8 float-left row">
+                                    <selectors :options="genderArr"  @change="changeGender" ref="gender"></selectors>
+                                </div>
                             </div>
-                            <div class="col-md-2 text-right float-left pr-0 require">出生日期</div>
-                            <div class="col-md-4 float-left pr-0">
-                                <datepicker @change="changeBirthday" :placeholder="'请选择日期'" ref="birthday"></datepicker>
-                            </div>
-                        </div>
-                        <div class="example">
-                            <div class="col-md-2 text-right float-left require">艺人来源</div>
-                            <div class="col-md-4 float-left row">
-                                <selectors :options="artistSourceArr" @change="changeSource" ref="source"></selectors>
-                            </div>
-                            <div class="col-md-2 text-right float-left pr-0 require">邮箱</div>
-                            <div class="col-md-4 float-left pr-0">
-                                <input type="text" class="form-control" title="" v-model="artistEmail"
-                                       placeholder="请输入邮箱">
+                            <div class="col-md-6 px-0 float-left">
+                                <div class="col-md-4 text-right float-left pl-0 require">出生日期</div>
+                                <div class="col-md-8 float-left pl-0">
+                                    <datepicker @change="changeBirthday" :placeholder="'请选择日期'" ref="birthday"></datepicker>
+                                </div>
                             </div>
                         </div>
                         <div class="example">
-                            <div class="col-md-2 text-right float-left require">手机号</div>
-                            <div class="col-md-4 float-left row">
-                                <input type="text" class="form-control" title="" v-model="artistPhone"
-                                       placeholder="请输入手机号">
+                            <div class="col-md-6 px-0 float-left">
+                                <div class="col-md-4 text-right float-left require">艺人来源</div>
+                                <div class="col-md-8 float-left row">
+                                    <selectors :options="artistSourceArr" @change="changeSource" ref="source"></selectors>
+                                </div>
                             </div>
-                            <div class="col-md-2 text-right float-left pr-0">微信</div>
-                            <div class="col-md-4 float-left pr-0">
-                                <input type="text" class="form-control" title="" v-model="artistWeiXin"
-                                       placeholder="请输入微信号码">
+                            <div class="col-md-6 px-0 float-left">
+                                <div class="col-md-4 text-right float-left pl-0 require">邮箱</div>
+                                <div class="col-md-8 float-left pl-0">
+                                    <input type="text" class="form-control" title="" v-model="artistEmail"
+                                           placeholder="请输入邮箱">
+                                </div>
                             </div>
                         </div>
                         <div class="example">
-                            <div class="col-md-2 text-right float-left">星探</div>
-                            <div class="col-md-4 float-left row">
-                                <input type="text" class="form-control" title="" v-model="artistScoutName"
-                                       placeholder="请输入星探姓名">
+                            <div class="col-md-6 px-0 float-left">
+                                <div class="col-md-4 text-right float-left require">手机号</div>
+                                <div class="col-md-8 float-left row">
+                                    <input type="text" class="form-control" title="" v-model="artistPhone"
+                                           placeholder="请输入手机号">
+                                </div>
                             </div>
-                            <div class="col-md-2 text-right float-left pr-0">地区</div>
-                            <div class="col-md-4 float-left pr-0">
-                                <input type="text" class="form-control" title="" v-model="artistLocation"
-                                       placeholder="请输入地区">
+                            <div class="col-md-6 px-0 float-left">
+                                <div class="col-md-4 text-right float-left pl-0">微信</div>
+                                <div class="col-md-8 float-left pl-0">
+                                    <input type="text" class="form-control" title="" v-model="artistWeiXin"
+                                           placeholder="请输入微信号码">
+                                </div>
+                            </div>
+                        </div>
+                        <div class="example">
+                            <div class="col-md-6 px-0 float-left">
+                                <div class="col-md-4 text-right float-left">星探</div>
+                                <div class="col-md-8 float-left row">
+                                    <input type="text" class="form-control" title="" v-model="artistScoutName"
+                                           placeholder="请输入星探姓名">
+                                </div>
+                            </div>
+                            <div class="col-md-6 px-0 float-left">
+                                <div class="col-md-4 text-right float-left pl-0">地区</div>
+                                <div class="col-md-8 float-left pl-0">
+                                    <input type="text" class="form-control" title="" v-model="artistLocation"
+                                           placeholder="请输入地区">
+                                </div>
                             </div>
                         </div>
                         <div class="example">
@@ -253,14 +269,14 @@
                         </div>
                         <div class="example">
                             <div class="col-md-2 text-right float-left require">沟通状态</div>
-                            <div class="col-md-5 float-left pl-0">
+                            <div class="col-md-10 float-left pl-0">
                                 <selectors :options="taiyangCommunicationStatusArr"
                                            @change="changeCommunicationType" ref="communicationType"></selectors>
                             </div>
                         </div>
                         <div class="example">
                             <div class="col-md-2 text-right float-left require">与我司签约意向</div>
-                            <div class="col-md-5 float-left pl-0">
+                            <div class="col-md-10 float-left pl-0">
                                 <selectors :options="yesOrNoArr" @change="changeSignIntention" ref="signIntention"></selectors>
                             </div>
                             <div class="col-md-5 float-left pl-0" v-show="signIntention == 2">
@@ -279,7 +295,7 @@
                         </div>
                         <div class="example">
                             <div class="col-md-2 text-right float-left require">附件类型</div>
-                            <div class="col-md-5 float-left pl-0">
+                            <div class="col-md-10 float-left pl-0">
                                 <selectors :options="attachmentTypeArr" @change="changeAttachmentType" ref="attachmentType"></selectors>
                             </div>
                         </div>
@@ -293,7 +309,7 @@
                         </div>
                         <div class="example">
                             <div class="col-md-2 text-right float-left">头像</div>
-                            <div class="col-md-5 float-left pl-0" style="height:50px">
+                            <div class="col-md-5 float-left pl-0">
                                 <Upload @change='getUploadUrl' class="upload-image">
                                     <div class="puls" :style="{ backgroundImage: 'url(' + uploadUrl + ')' }" v-if="uploadUrl">
                                     </div>

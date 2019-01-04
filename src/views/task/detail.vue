@@ -416,20 +416,20 @@
                 </div>
             </div>
 
-            <div class="panel">
-                <div class="col-md-12">
-                    <div class="card col-md-12">
-                        <div class="card-header card-header-transparent card-header-bordered">
-                            <h5>任务跟进</h5>
-                        </div>
-                        <div class="card-block">
-                            <div class="col-md-7 pl-0">
-                                <TaskFollowUp :follow-type="'任务'" :trailId='taskId' trailType='tasks'></TaskFollowUp>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-            </div>
+            <!--<div class="panel">-->
+                <!--<div class="col-md-12">-->
+                    <!--<div class="card col-md-12">-->
+                        <!--<div class="card-header card-header-transparent card-header-bordered">-->
+                            <!--<h5>任务跟进</h5>-->
+                        <!--</div>-->
+                        <!--<div class="card-block">-->
+                            <!--<div class="col-md-7 pl-0">-->
+                                <!--<TaskFollowUp :follow-type="'任务'" :trailId='taskId' trailType='tasks'></TaskFollowUp>-->
+                            <!--</div>-->
+                        <!--</div>-->
+                    <!--</div>-->
+                <!--</div>-->
+            <!--</div>-->
 
 
         </div>
