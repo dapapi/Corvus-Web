@@ -28,22 +28,12 @@
                 isEditSelect: false,
             }
         },
-
-        mounted() {
-            this.isEditSelect = this.isEdit
-            if (this.content) {
-                this.$refs.selector.setValue(this.content)
-            }
-        },
-
         watch: {
             isEdit(newValue) {
                 this.isEditSelect = newValue;
                 if (newValue) {
                     let _this = this;
-                    setTimeout(function () {
-                        _this.$refs.selector.setValue(_this.content)
-                    }, 0)
+                    _this.$refs.selector.setValue(_this.content)
                 } else {
                     setTimeout(() => {
                         if (this.$refs.selector) {

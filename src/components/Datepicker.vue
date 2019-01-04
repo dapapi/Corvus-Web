@@ -19,6 +19,7 @@
             $(this.$el).datepicker({
                 format: "yyyy-mm-dd",
                 language: "zh-CN",
+                minDate: new Date()
             }).on("changeDate", function () {
                 
                 self.$emit('change', $(this)[0].children[0].value);

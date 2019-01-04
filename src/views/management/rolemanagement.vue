@@ -21,37 +21,11 @@
                     <div class="clearfix py-50">
                         <section class="page-aside-section">
                             <div class="site-menubar-body" style="width:260px;">
-                                <!--默认分组-->
-                                <!-- <ul class="menu pl-0 m-0 pb-10" style="width:260px;">
-                                    <li class="site-menu-item has-sub" v-for="(item,index) in job" :key="index"
-                                        style="width:260px;">
-                                        <a href="javascript:void(0) " class="p-5" @click="clickdefault">
-                                            <i v-show="conceal"
-                                               class="iconfont icon-plus-select-down showList font-size:25px pr-10"></i>
-                                            <i v-show="!conceal"
-                                               class="iconfont icon-yousanjiao showList font-size:25px pr-10"></i>
-                                            <i class="iconfont icon-chengyuannew pr-10"
-                                               style="vertical-align: middle;"></i>
-                                            <span class="site-menu-title">{{item.name}}</span>
-                                        </a>
-                                    </li>
-                                    <ul class="administration-subordinate-item m-0" v-for="n in jobData" :key="n.id"
-                                        v-show="conceal" @click="defaultcontent(n.id)">
-                                        <li class="py-5" :class="defaultpitchon==n.id?'pitchon':''">
-                                            <template>
-                                                <i class="iconfont icon-chengyuannew pr-10"
-                                                   style="vertical-align: middle;"></i>
-                                                <span class="site-menu-title">{{n.name}}</span>
-                                            </template>
-                                        </li>
-
-                                    </ul>
-                                </ul> -->
                                 <!--渲染分组 -->
                                 <ul class="menu pl-0">
                                     <li class="site-menu-item has-sub  pb-10" v-for="(item,index) in groupingDate"
                                         :key="index" style="width:260px;">
-                                        <a href="javascript:void(0) " class="p-5" @click="switchMenu(item.id)" >
+                                        <a href="javascript:void(0) " class="p-10" @click="switchMenu(item.id)" >
                                             <i v-show="visible"
                                                class="iconfont icon-plus-select-down showList font-size:25px pr-10"></i>
                                             <i v-show="!visible"
@@ -80,7 +54,7 @@
                                         <ul class="administration-subordinate-item m-0" v-for="n in roleDate"
                                             :key="n.id" >
                                             <li  v-show="item.id==n.group_id && switchId.includes(n.group_id)"
-                                                class="py-5"
+                                                class="px-20 py-10"
                                                 style="position:relative;" @click="changeCont(n.id,index)"
                                                 :class="n.id==jobCont?'back':''">
                                                 <template >
@@ -121,156 +95,6 @@
                     </div>
 
                 </div>
-                <!-- <div class="col-md-9 float-left" style="border-left:1px solid #e3e3e3;" v-if="defaultId==1">
-                    <div class="page-header py-10">
-                        <h5>所有者<span class=" pl-10" style="font-weight:300;color:#999999;font-size:12px;">系统默认角色，默认具有企业功能权限和全部数据可见范围</span>
-                        </h5>
-
-                    </div>
-                    <div class="col-md-12">
-                        <ul class="nav nav-tabs nav-tabs-line" role="tablist">
-                            <li class="nav-item" role="presentation">
-                                <a class="nav-link"  data-toggle="tab" href="#forum-role"
-                                   aria-controls="forum-base"
-                                   aria-expanded="true" role="tab">角色成员</a>
-                            </li>
-                            <li class="nav-item" role="presentation">
-                                <a class="nav-link" data-toggle="tab" href="#forum-power"
-                                   aria-controls="forum-present"
-                                   aria-expanded="false" role="tab">功能权限</a>
-                            </li>
-                            <li class="nav-item" role="presentation">
-                                <a class="nav-link" data-toggle="tab" href="#forum-fun"
-                                   aria-controls="forum-present"
-                                   aria-expanded="false" role="tab">数据范围</a>
-                            </li>
-                        </ul>
-                    </div>
-                    <div class="page-content tab-content nav-tabs-animate bg-white pt-0 ml-2">
-                        <div class="tab-pane animation-fade active" id="forum-role" role="tabpanel">
-                            <div class="title py-20" style="color:#999999;font-size:12px;font-weight:300;">
-                                如需更换企业所有着,请到【企业设置】页面,点击【转让企业】来更换所有着,设置完成后信息自动同步。
-                            </div>
-                            <table class="table table-hover" data-plugin="selectable" data-selectable="selectable">
-                                <tr>
-                                    <th class="cell-300 pl-0" scope="col">姓名</th>
-                                    <th class="cell-300" scope="col">工号</th>
-                                    <th class="cell-300" scope="col">手机号</th>
-                                    <th class="cell-300" scope="col">邮箱</th>
-                                </tr>
-                                <tbody style="border-top:1px solid #e3e3e3">
-                                <tr class="pointer-content">
-                                    <td class="pl-0"><em class="ml-0"></em>泰洋系</td>
-                                    <td></td>
-                                    <td></td>
-                                    <td>example@xxxx.com</td>
-                                </tr>
-                                </tbody>
-                            </table>
-                        </div>
-                        <div class="tab-pane animation-fade" id="forum-power" role="tabpanel">
-                            <div class="title py-20"
-                                 style="color:#999999;font-size:12px;font-weight:300;position: relative;">
-                                设置角色对应到功能操作、应用管理、后台管理权限<span style="font-weight:600;position:absolute;right:10px"><input
-                                    type="checkbox" class="mr-10" value="0" v-model="check"
-                                    disabled="disabled">全选</span></div>
-                            <table class="table table-hover" data-plugin="selectable" data-selectable="selectable">
-                                <tbody>
-                                <tr class="pointer-cont" style="border:1px solid #e3e3e3;position: relative;"
-                                    v-for="item in funDate" :key="item.id">
-                                    <td style="font-weight:400;border:1px solid #e3e3e3" class="p-30 text-center py-60">
-                                        <input type="checkbox" class="mr-10" :value="item.id" v-model="check"
-                                               disabled="disabled">{{item.title}}
-                                    </td>
-                                    <td>
-                                        <div v-for="one in item.contentone" :key="one.id" class="py-10 pl-20">
-                                            <input type="checkbox" :value="item.id" v-model="check" disabled="disabled"
-                                                   class="mr-10">{{one.name}}
-                                        </div>
-                                    </td>
-                                    <td>
-                                        <div v-for="tow in item.contentTow" :key="tow.id" class="py-10">
-                                            <input type="checkbox" :value="item.id" v-model="check" disabled="disabled"
-                                                   class="mr-10">{{tow.name}}
-                                        </div>
-                                    </td>
-                                    <td>
-                                        <div v-for="tree in item.contentTree" :key="tree.id" class="py-10">
-                                            <input type="checkbox" :value="item.id" v-model="check" disabled="disabled"
-                                                   class="mr-10">{{tree.name}}
-                                        </div>
-                                    </td>
-                                </tr>
-                                </tbody>
-                            </table>
-                        </div>
-                        <div class="tab-pane animation-fade " id="forum-fun" role="tabpanel">
-                            <div class="title py-20" style="color:#999999;font-size:12px;font-weight:300;">
-                                针对审批、考勤、简报、销售等应用、设置该查看、管理数据范围
-                            </div>
-                            <table class="table table-hover" data-plugin="selectable" data-selectable="selectable">
-                                <tr>
-                                    <th class="cell-300 pl-0" scope="col">应用名</th>
-                                    <th class="cell-300" scope="col">查看数据范围</th>
-                                    <th class="cell-300" scope="col">管理数据范围</th>
-                                </tr>
-                                <tbody>
-                                <tr class="pointer-content" style="border-top:1px solid #e3e3e3;position: relative;">
-                                    <td style="position: absolute;top:230px;left:50px;font-weight:400">简报</td>
-                                    <td style="color:#D4D4D4">
-                                        <div><input type="radio" value="0" v-model="radio" disabled="disabled"
-                                                    class="mr-10">本人相关
-                                        </div>
-                                        <div><input type="radio" value="1" v-model="radio" disabled="disabled"
-                                                    class="mr-10">本部门
-                                        </div>
-                                        <div><input type="radio" value="2" v-model="radio" disabled="disabled"
-                                                    class="mr-10">本部门以及下属部门
-                                        </div>
-                                        <div><input type="radio" value="3" v-model="radio" disabled="disabled"
-                                                    class="mr-10">本部门以及下属部门
-                                        </div>
-                                    </td>
-                                    <td>
-
-                                    </td>
-                                </tr>
-                                <tr class="pointer-content" style="border-top:1px solid #e3e3e3;position: relative;">
-                                    <td style="position: absolute;top:350px;left:50px;font-weight:400">简报</td>
-                                    <td style="color:#D4D4D4">
-                                        <div><input type="radio" value="4" v-model="radiotow" disabled="disabled"
-                                                    class="mr-10">本人相关
-                                        </div>
-                                        <div><input type="radio" value="5" v-model="radiotow" disabled="disabled"
-                                                    class="mr-10">本部门
-                                        </div>
-                                        <div><input type="radio" value="6" v-model="radiotow" disabled="disabled"
-                                                    class="mr-10">本部门以及下属部门
-                                        </div>
-                                        <div><input type="radio" value="7" v-model="radiotow" disabled="disabled"
-                                                    class="mr-10">本部门以及下属部门
-                                        </div>
-                                    </td>
-                                    <td style="color:#999999">
-                                        <div><input type="checkbox" v-model="check" disabled="disabled" class="mr-10"
-                                                    value="0">我负责的
-                                        </div>
-                                        <div><input type="checkbox" v-model="check" disabled="disabled" class="mr-10"
-                                                    value="1">我创建的
-                                        </div>
-                                        <div><input type="checkbox" v-model="check" disabled="disabled" class="mr-10"
-                                                    value="2">我参与的
-                                        </div>
-                                        <div><input type="checkbox" v-model="check" disabled="disabled" class="mr-10"
-                                                    value="3">我可见的
-                                        </div>
-                                    </td>
-                                </tr>
-                                </tbody>
-                            </table>
-                        </div>
-                    </div>
-                </div> -->
                 <div class="col-md-9 float-left" v-for="item in roleDate" :key="item.id" v-show="item.id==jobCont"
                      style="border-left:1px solid #e3e3e3;">
                     <div class="page-header py-10">
@@ -301,22 +125,32 @@
                     <div class="page-content tab-content nav-tabs-animate bg-white pt-20">
                         <div class="tab-pane animation-fade " :class="isAactive?'active':''" :id="'forum-member'+item.id" role="tabpanel">
                             <span style="font-weight:300;color:#999999;font-size:12px;" v-if="item.group_id==1994731356">如需添加“部门主管”，请到【成员管理】页面，在【编辑部门】中设置“部门主管”，设置完成后自动同步。</span>
-                            <table class="table table-hover" data-plugin="selectable" data-selectable="selectable">
-                               
+                            <table class="table table-hover" data-plugin="selectable" data-selectable="selectable">    
                                 <tr>
-                                    <th class="w-50">
-                                       <span class="checkbox-custom checkbox-primary">
+                                    <th class="w-50" v-if="item.group_id!==1994731356">
+                                        <span class="checkbox-custom checkbox-primary">
                                             <input class="selectable-all" type="checkbox"
-                                                   @change="selectArtists('all',item.id)">
+                                                   @change="selectArtists('all')">
                                             <label></label>
                                         </span>
-
                                     </th>
                                     <th class="cell-300" scope="col">姓名</th>
                                     <th class="cell-300" scope="col">手机号</th>
                                     <th class="cell-300" scope="col">邮箱</th>
                                 </tr>
-                                <tbody style="border-top:1px solid #e3e3e3">
+                                <tbody style="border-top:1px solid #e3e3e3" v-if="item.group_id==1994731356">
+                                <tr v-for="v in departmentDate" :key="v.id" class="pointer-content">
+                                  
+                                    <td>
+                                        <Avatar :imgUrl="v.icon_url"
+                                                style="margin-right: 10px; width: 28px;height: 28px;"/>
+                                        {{v.name}}
+                                    </td>
+                                    <td>{{v.phone}}</td>
+                                    <td>{{v.email}}</td>
+                                </tr>
+                                </tbody>
+                                <tbody style="border-top:1px solid #e3e3e3" v-if="item.group_id!==1994731356">
                                 <tr v-for="v in item.users.data" :key="v.id" class="pointer-content">
                                     <td>
                                         <span class="checkbox-custom checkbox-primary">
@@ -335,6 +169,10 @@
                                 </tr>
                                 </tbody>
                             </table>
+                            <template v-if="item.group_id==1994731356">
+                                 <Pagination :current_page="current_page" :method="getDefault" :total_pages="total_pages"
+                                        :total="total"></Pagination>
+                            </template>
                         </div>
                         <div class="tab-pane animation-fade selectable-wrap" :id="'forum-authority'+item.id"
                              role="tabpanel"
@@ -446,20 +284,20 @@
                         <h4 class="modal-title">新增角色</h4>
                     </div>
                     <div class="modal-body">
-                        <div class="example">
+                        <div class="example label-center">
                             <div class="col-md-2 text-right float-left">角色名</div>
                             <div class="col-md-10 float-left pl-0">
                                 <input type="text" class="form-control" placeholder="请输入角色称" v-model="roleName">
                             </div>
                         </div>
-                        <div class="example">
+                        <div class="example  label-center">
                             <div class="col-md-2 text-right float-left">资源类型</div>
                             <div class="col-md-10 float-left pl-0">
                                 <Selectors @change="changeRolejob"
                                            :options="groupingDate" ref="resourceType"></Selectors>
                             </div>
                         </div>
-                        <div class="example">
+                        <div class="example  label-center">
                             <div class="col-md-2 text-right float-left">描述</div>
                             <div class="col-md-10 float-left pl-0">
                                 <textarea name="" rows="5" class="form-control" v-model="emptydescribe"></textarea>
@@ -485,7 +323,7 @@
                         <h4 class="modal-title">新增分组</h4>
                     </div>
                     <div class="modal-body">
-                        <div class="example">
+                        <div class="example  label-center">
                             <div class="col-md-2 text-right float-left">分组名称</div>
                             <div class="col-md-10 float-left pl-0">
                                 <input type="text" class="form-control" placeholder="请输入分组名称" v-model="groupingName">
@@ -511,7 +349,7 @@
                         <h4 class="modal-title">移动到分组</h4>
                     </div>
                     <div class="modal-body">
-                        <div class="example">
+                        <div class="example  label-center">
                             <div class="col-md-2 text-right float-left">角色组</div>
                             <div class="col-md-10 float-left pl-0">
                                 <selectors class="form-control" @change="moveGrouping"
@@ -538,20 +376,20 @@
                         <h4 class="modal-title">修改角色</h4>
                     </div>
                     <div class="modal-body">
-                        <div class="example">
+                        <div class="example  label-center">
                             <div class="col-md-2 text-right float-left">角色名</div>
                             <div class="col-md-10 float-left pl-0">
                                 <input type="text" class="form-control" v-model="updateName" :placeholder="'请输入角色名'">
                             </div>
                         </div>
-                        <div class="example">
+                        <div class="example  label-center">
                             <div class="col-md-2 text-right float-left">角色组</div>
                             <div class="col-md-10 float-left pl-0">
                                 <Selectors @change="updateRolejob"
                                            :options="groupingDate" ref="roleGroup"></Selectors>
                             </div>
                         </div>
-                        <div class="example">
+                        <div class="example  label-center">
                             <div class="col-md-2 text-right float-left">描述</div>
                             <div class="col-md-10 float-left pl-0">
                                 <textarea name="" rows="5" class="form-control" 
@@ -578,7 +416,7 @@
                         <h4 class="modal-title">重命名</h4>
                     </div>
                     <div class="modal-body">
-                        <div class="example">
+                        <div class="example  label-center">
                             <div class="col-md-2 text-right float-left">角色组</div>
                             <div class="col-md-10 float-left pl-0">
                                 <input type="text" class="form-control" placeholder="请输入分组名称" v-model="updategrouping">
@@ -604,7 +442,7 @@
                         <h4 class="modal-title">删除</h4>
                     </div>
                     <div class="modal-body">
-                        <div class="example" v-for="item in groupingDate" :key="item.id" v-if="item.id==groupingId">
+                        <div class="example  label-center" v-for="item in groupingDate" :key="item.id" v-if="item.id==groupingId">
                             <div class="col-md-12  pl-0">
                                 <p class="modal-title text-center">确认删除{{item.name}}</p>
                             </div>
@@ -629,7 +467,7 @@
                         <h4 class="modal-title">删除</h4>
                     </div>
                     <div class="modal-body">
-                        <div class="example">
+                        <div class="example  label-center">
                             <div class="col-md-12  pl-0">
                                 <p class="modal-title text-center">确认删除</p>
                             </div>
@@ -735,12 +573,17 @@
                 rolegroupName: '',
                 emptyrole_describe: '',
                 isAactive:true,
-                idArray:[]
+                idArray:[],
+                departmentDate:'',//默认数据
+                current_page:1,//几页
+                total_pages:1,//一页一共几人
+                total:0//人数
             }
         },
         mounted() {
             this.getroleDate();
             this.getgroupingDate();
+            this.getDefault()
             $('#addRole').on('hidden.bs.modal', function () {
                 this.roleName = "请输入角色称"
             })
@@ -755,7 +598,6 @@
                 let _this = this;
                 fetch('get', '/console/role').then(function (response) {
                     _this.roleDate = response.data;
-                    console.log(_this.roleDate )
                 });
             },
             //获取分组数据
@@ -768,6 +610,15 @@
                     })
                   
                 });
+            },
+            //获取默认数据
+            getDefault(){
+                let _this = this;
+                 fetch('get','/console/director').then(response=>{
+                    _this.departmentDate = response.data;
+                    _this.current_page = response.current_page
+                    _this.total = response.total
+                })
             },
             //获取成员数据
             getmemberDate(id) {
@@ -785,8 +636,6 @@
             },
             //切换内容
             changeCont(value,index) {
-                console.log(index)
-                
                 this.jobCont = value
                 this.selectedIds = []
                 this.defaultId = index
@@ -864,7 +713,7 @@
                     }
 
                 })
-
+               
 
             },
             powerkeep() {
@@ -1216,7 +1065,7 @@
         background: #F5F5F5;
     }
 
-    .administration-subordinate-item li:hover {
+   .administration-subordinate-item :hover {
         background: #F5F5F5;
         cursor: pointer;
     }

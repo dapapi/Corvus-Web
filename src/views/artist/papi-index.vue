@@ -146,13 +146,13 @@
                         <h4 class="modal-title">新增博主</h4>
                     </div>
                     <div class="modal-body">
-                        <div class="example">
+                        <div class="example label-center">
                             <div class="col-md-2 text-right float-left require">昵称</div>
                             <div class="col-md-10 float-left pl-0">
                                 <input type="text" class="form-control" placeholder="请输入昵称" v-model="artistName">
                             </div>
                         </div>
-                        <div class="example">
+                        <div class="example label-center">
                             <div class="col-md-2 text-right float-left require">平台</div>
                             <div class="col-md-10 float-left pl-0">
                                  <CheckboxGroup :optionData="platformList" @change="changeCheckbox" :isLine="true">
@@ -163,7 +163,7 @@
                             </div>
                         </div>
                         
-                        <div class="example" v-show="platformType.find(item => item ==1)">
+                        <div class="example label-center" v-show="platformType.find(item => item ==1)">
                             <div class="col-md-2 text-right float-left">微博主页地址</div>
                             <div class="col-md-4 float-left pl-0">
                                 <input type="text" class="form-control" v-model="star_weibo_infos.url">
@@ -173,7 +173,7 @@
                                 <number-spinner @change="changeWeiboFansNum" style="width:130px" ref="weibo"></number-spinner>
                             </div>
                         </div>
-                        <div class="example" v-show="platformType.find(item => item ==2)">
+                        <div class="example label-center" v-show="platformType.find(item => item ==2)">
                             <div class="col-md-2 text-right float-left">抖音ID</div>
                             <div class="col-md-4 float-left pl-0">
                                 <input type="text" class="form-control" v-model="star_douyin_infos.url">
@@ -183,7 +183,7 @@
                                 <number-spinner @change="changeDouyinFansNum" style="width:130px" ref="douyin"></number-spinner>
                             </div>
                         </div>
-                        <div class="example" v-show="platformType.find(item => item ==3)">
+                        <div class="example label-center" v-show="platformType.find(item => item ==3)">
                             <div class="col-md-2 text-right float-left">小红书链接</div>
                             <div class="col-md-4 float-left pl-0">
                                 <input type="text" class="form-control" v-model="star_xiaohongshu_infos.url">
@@ -193,20 +193,20 @@
                                 <number-spinner @change="changeXHSFansNum" style="width:130px" ref="xiaohongshu"></number-spinner>
                             </div>
                         </div>
-                        <div class="example">
+                        <div class="example label-center">
                             <div class="col-md-2 text-right float-left require">类型</div>
                             <div class="col-md-10 float-left pl-0">
                                 <selectors :options="artistTypeArr" @change="changeArtistType" ref="papitype"></selectors>
                             </div>
                         </div>
-                        <div class="example">
+                        <div class="example label-center">
                             <div class="col-md-2 text-right float-left require">沟通状态</div>
-                            <div class="col-md-3 float-left pl-0">
+                            <div class="col-md-5 float-left pl-0">
                                 <selectors :options="papiCommunicationStatusArr"
                                            @change="changeCommunicationType" ref="communicationType"></selectors>
                             </div>
                         </div>
-                        <div class="example">
+                        <div class="example label-center">
                             <div class="col-md-2 text-right float-left require">与我司签约意向</div>
                             <div class="col-md-5 float-left pl-0">
                                 <selectors :options="yesOrNoArr" @change="changeSignIntention" ref="signIntention"></selectors>
@@ -216,7 +216,7 @@
                                           v-model="intention_desc"></textarea>
                             </div>
                         </div>
-                        <div class="example">
+                        <div class="example label-center">
                             <div class="col-md-2 text-right float-left require">是否签约其他公司</div>
                             <div class="col-md-5 float-left pl-0">
                                 <selectors :options="yesOrNoArr" @change="isSignCompany" ref="isSign"></selectors>
@@ -226,7 +226,7 @@
                                        v-model="signCompanyName">
                             </div>
                         </div>
-                        <div class="example">
+                        <div class="example label-center">
                             <div class="col-md-2 text-right float-left">备注</div>
                             <div class="col-md-10 float-left pl-0">
                                 <input type="text" class="form-control" placeholder="请输入备注" v-model="artistDesc">
@@ -293,11 +293,8 @@
                 artistsInfo: '',
                 artistStatus: '',
                 artistName: '',
-                weiboUrl: '',
                 weiboFansNum: '',
-                douyinId: '',
                 douyinFansNum: '',
-                xhsUrl: '',
                 xhsFansNum: '',
                 platformType: [],//平台类型
                 signIntention: '',
@@ -307,17 +304,8 @@
                 artistTypeId:'',
                 signCompanyName: '',
                 companyCityArr: config.companyCityArr,
-                trailFilter: '',
-                userData: '',
-                communicationArr: '',
                 communication: '',
                 intention_desc: '',
-                typeF: '',
-                statusF: '',
-                checkboxedone: '',
-                checkboxtow: '',
-                checkboxedthree: '',
-                checkoutfix: '',
                 filetData: {
                     include: 'type,creator,tasks,affixes,producer',
                 },

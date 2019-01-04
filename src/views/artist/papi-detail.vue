@@ -19,9 +19,7 @@
                 </div>
             </div>
         </div>
-
         <div class="page-content container-fluid">
-
             <div class="panel col-md-12">
                 <div class="card-block">
                     <h4 class="card-title">{{artistInfo.nickname}}</h4>
@@ -615,25 +613,25 @@
                     </div>
                     <div class="modal-body">
 
-                        <div class="example">
+                        <div class="example label-center">
                             <div class="col-md-2 text-right float-left">关联资源</div>
                             <div class="col-md-10 float-left">
                                 博主 - {{ artistInfo.nickname}}
                             </div>
                         </div>
-                        <div class="example">
+                        <div class="example label-center">
                             <div class="col-md-2 text-right float-left require">任务类型</div>
                             <div class="col-md-10 float-left pl-0">
                                 <selectors :options="tasksType" @change="changeTaskType" ref="mold"></selectors>
                             </div>
                         </div>
-                        <div class="example">
+                        <div class="example label-center">
                             <div class="col-md-2 text-right float-left require">任务名称</div>
                             <div class="col-md-10 float-left pl-0">
                                 <input type="text" class="form-control" placeholder="请输入任务名称" v-model="taskName">
                             </div>
                         </div>
-                        <div class="example">
+                        <div class="example label-center">
                             <div class="col-md-2 text-right float-left require">负责人</div>
                             <div class="col-md-5 float-left pl-0">
                                     <InputSelectors
@@ -642,19 +640,19 @@
                             </div>
 
                         </div>
-                        <div class="example">
+                        <div class="example label-center">
                             <div class="col-md-2 text-right float-left">参与人</div>
                             <div class="col-md-10 float-left pl-0">
                                 <add-member @change="participantChange"></add-member>
                             </div>
                         </div>
-                        <div class="example">
+                        <div class="example label-center">
                             <div class="col-md-2 text-right float-left pl-0 require">任务优先级</div>
                             <div class="col-md-10 float-left pl-0">
                                 <selectors :options="taskLevelArr" @change="changeTaskLevel" ref="taskpriority"></selectors>
                             </div>
                         </div>
-                        <div class="example">
+                        <div class="example label-center">
                             <div class="col-md-2 text-right float-left require">开始时间</div>
                             <div class="col-md-5 float-left pl-0">
                                 <datepicker @change="changeStartTime" ref="startTime"></datepicker>
@@ -663,7 +661,7 @@
                                 <timepicker :default="startMinutes" @change="changeStartMinutes"></timepicker>
                             </div>
                         </div>
-                        <div class="example">
+                        <div class="example label-center">
                             <div class="col-md-2 text-right float-left require">截止时间</div>
                             <div class="col-md-5 float-left pl-0">
                                 <datepicker @change="changeEndTime" ref="deadline"></datepicker>
@@ -672,7 +670,7 @@
                                 <timepicker :default="endMinutes" @change="changeEndMinutes"></timepicker>
                             </div>
                         </div>
-                        <div class="example">
+                        <div class="example label-center">
                             <div class="col-md-2 text-right float-left">任务说明</div>
                             <div class="col-md-10 float-left pl-0">
                                 <textarea class="form-control" name="taskDescription" id="" cols="30"
@@ -701,39 +699,39 @@
                     </div>
                     <div class="modal-body">
 
-                        <div class="example">
+                        <div class="example label-center">
                             <div class="col-md-2 text-right float-left">昵称</div>
                             <div class="col-md-10 float-left">{{ artistInfo.nickname}}</div>
                         </div>
-                        <div class="example">
-                            <div class="col-md-2 text-right float-left">视频名称</div>
+                        <div class="example label-center">
+                            <div class="col-md-2 text-right float-left require">视频名称</div>
                             <div class="col-md-10 float-left">
                                 <input type="text" title="" class="form-control" v-model="artistWorkName"
                                        placeholder="请输入作品名称">
                             </div>
                         </div>
-                        <div class="example">
-                            <div class="col-md-2 text-right float-left">视频发布时间</div>
+                        <div class="example label-center">
+                            <div class="col-md-2 text-right float-left require">视频发布时间</div>
                             <div class="col-md-10 float-left">
-                                <datepicker @change="changeWorkReleaseTime" ref="workReleaseTime"></datepicker>
+                                <datepicker @change="changeWorkReleaseTime" ref="workReleaseTime" :startDate="new Date()"></datepicker>
                             </div>
                         </div>
-                        <div class="example">
+                        <div class="example label-center">
                             <div class="col-md-2 text-right float-left">阅转比</div>
                             <div class="col-md-10 float-left">
                                 <input type="text" title="" class="form-control" v-model="artistWorkProportion"
                                        placeholder="请输入阅转比">
                             </div>
                         </div>
-                        <div class="example">
-                            <div class="col-md-2 text-right float-left">视频链接</div>
+                        <div class="example label-center">
+                            <div class="col-md-2 text-right float-left require">视频链接</div>
                             <div class="col-md-10 float-left">
                                 <input type="text" title="" class="form-control" v-model="videoUrl"
                                        placeholder="请输入视频链接">
                             </div>
                         </div>
-                        <div class="example">
-                            <div class="col-md-2 text-right float-left">是否广告</div>
+                        <div class="example label-center">
+                            <div class="col-md-2 text-right float-left require">是否广告</div>
                             <div class="col-md-10 float-left">
                                 <selectors :options="yesOrNoArr" @change="changeWorkAd" ref="advertisingType"></selectors>
                             </div>
@@ -810,32 +808,28 @@
     export default {
         data: function () {
             return {
-                artistId: '',
-                artistInfo: {},
+                artistId: '',//博主id
+                artistInfo: {},//博主详情数据
                 calculatedAmount:'',//计算金额
                 artistBillsInfo: [],//账单
-                artistWorkProportion: '',
-                yesOrNoArr: config.yesOrNoArr,
-                videoUrl: '',
-                artistWorksInfo: [],
-                taskTypeArr: config.taskTypeArr,
-                taskName: '',
-                taskLevelArr: config.taskLevelArr,
-                taskType: '',
-                taskLevel: '',
-                startTime: '',
-                startMinutes: '00:00',
-                endTime: '',
-                endMinutes: '00:00',
-                taskIntroduce: '',
-                artistWorkName: '',
+                artistWorkProportion: '',//阅换比
+                yesOrNoArr: config.yesOrNoArr,//是否
+                videoUrl: '',//视频链接
+                taskName: '',//任务名称
+                taskLevelArr: config.taskLevelArr,//任务优先级
+                taskType: '',//任务类型
+                taskLevel: '',//优先级选项
+                startTime: '',//开始时间
+                startMinutes: '00:00',//开始时间的分秒
+                endTime: '',//结束时间
+                endMinutes: '00:00',//结束时间的分秒
+                taskIntroduce: '',//任务说明
+                artistWorkName: '',//视频名称
                 isEdit: false,
                 isStatrtEdit: true,
                 papiCommunicationStatusArr: config.papiCommunicationStatusArr,
-                updateNickname:'',
                 updateType:'',
                 updateSign_contract_other:'',
-                totalData:'',
                 worksData:'',
                 advertisingType:'',
                 Person_id:'',
@@ -844,7 +838,6 @@
                 artistTypeArr:'',
                 trueOrFalse: config.trueOrFalse,
                 artistSocialPlatform: config.artistSocialPlatform,
-                petName:'',//昵称
                 updateStar_weibo_infos:{},//修改微博
                 updateStar_douyin_infos:{},//修改抖音
                 updateStar_xiaohongshu_infos:{},//修改小红书
@@ -856,25 +849,18 @@
                 end_Time:'',
                 principalId:'',
                 principalIds:[],
-                taskLevelArr:config.taskLevelArr,
-                updatelevel:'',//博主级别
                 updatedemand:'',//合作需求
-                updatehatch_start:'',//孵化期开始
-                updatehatch_end:'',//孵化期截止
                 Incubationperiod:'',
                 principalName:'',
                 filterFee:1,
-                platformArr:config.platformArr,
                 selectedCalendar:[],
                 selectedDate:'',
                 Namevalue:'',
                 total: 0,
                 current_page: 1,
                 total_pages: 1,
-                artistype:'',
-                bloggerlevel:'',
                 isLoading: true,
-               distributionType:''
+                distributionType:''
             }
         },
         computed: {
@@ -913,7 +899,6 @@
             })
             //  清空视频
             $('#addWork').on('hidden.bs.modal', function () {
-                _this.artistInfo.nickname = '';
                 _this.artistWorkName = '';
                 _this.artistWorkProportion = '';
                 _this.videoUrl = '';
@@ -1016,6 +1001,7 @@
                     _this.artistInfo = response.data;
                    
                     _this.tasksInfo = response.data.tasks.data
+                    
                     if (_this.tasksInfo.length > 0) {
                         for (let i = 0; i < _this.tasksInfo.length; i++) {
                             if (_this.tasksInfo[i].status == 2) {
@@ -1067,6 +1053,7 @@
                     _this.artistTypeArr = response.data
                    
                 })
+                // 任务问卷调查
                 //  fetch('get','/bloggers/select?include=users').then(function(response){
                 //     response.data.forEach(item=>{
                 //          _this.principalIds.push(item.users.data.id)
@@ -1224,7 +1211,6 @@
                 this.isStatrtEdit = true;
                 let _this = this;
                 this.artistId = this.$route.params.id;
-
                 if(this.artistInfo.intention==1){
                         this.updateType=true
                     }else{
@@ -1274,18 +1260,28 @@
                 })
             },
             changeWorkAd: function (value) {
-
-                if (value) {
-                    this.advertisingType = value.id;
-                } else {
-                    this.advertisingType = 0;
-                }
-
+                    this.advertisingType = value;
             },
             //添加作品
             addWork: function () {
                 if (this.advertisingType == 2) {
                     this.advertisingType = 0
+                }
+                if(!this.artistWorkName){
+                    toastr.error('请填写视频名称')
+                    return 
+                }
+                if(!this.workReleaseTime){
+                    toastr.error('请输入发布时间')
+                    return 
+                }
+                if(!this.videoUrl){
+                    toastr.error('请填写视频链接')
+                    return 
+                }
+                if(!this.advertisingType){
+                    toastr.error('请选择是否广告')
+                    return 
                 }
                 let _this = this;
                 let data = {
@@ -1302,10 +1298,8 @@
 
                     $('#addWork').modal('hide');
                     _this.getTaskDate()
-                    
-
                 })
-               
+                //任务问卷调查
                 // let obj={
                 //     title:'制作人视频评分-视频评分',
                 //     principal_id:this.user.id,
@@ -1376,13 +1370,12 @@
             },
             //添加任务
             addTask: function () {
-
-                if (!this.taskName) {
-                    toastr.error('请填写任务名称！')
-                    return
-                }
                 if (!this.taskType) {
                     toastr.error('请选择任务类型！')
+                    return
+                }
+                if (!this.taskName) {
+                    toastr.error('请填写任务名称！')
                     return
                 }
                 if (!this.Person_id) {
@@ -1397,11 +1390,6 @@
                     toastr.error('请选择时间!')
                     return
                 }
-                // if ((this.startTime + " " + this.startMinutes) > (this.endTime + " " + this.endMinutes)) {
-                //     toastr.error('开始时间不能晚于截止时间');
-                //     return
-                // }
-
                 let start,end,startMin,endMin
                 startMin = this.startMinutes.split(':')
                 endMin = this.endMinutes.split(':')
@@ -1423,7 +1411,6 @@
                    desc:this.taskIntroduce,
                    type:this.taskType
                 }
-
                 fetch('post', '/tasks', data).then(function (response) {
 
                     toastr.success('创建成功');
@@ -1432,133 +1419,95 @@
                     _this.getArtist()
                     $('.selectpicker').selectpicker('refresh')
                 })
-
-            }
-            ,
-
+            },
             changeTaskType: function (value) {
                 this.taskType = value
 
-            }
-            ,
-
+            },
             principalChange: function (value) {
                 this.Person_id = value = this.$store.state.newPrincipalInfo.id
-            }
-            ,
-
+            },
             participantChange: function (value) {
                 this.participant = value
-            }
-            ,
-
+            },
             changeTaskLevel: function (value) {
                 this.taskLevel = value
-            }
-            ,
-
+            },
             changeStartTime: function (value) {
                 this.startTime = value
-            }
-            ,
-
+            },
             changeStartMinutes: function (value) {
                 this.startMinutes = value
-            }
-            ,
-
+            },
             changeEndTime: function (value) {
                 this.endTime = value
-            }
-            ,
-
+            },
             changeEndMinutes: function (value) {
                 this.endMinutes = value
-            }
-            ,
+            },
             //视频时间
             changeWorkReleaseTime: function (value) {
                 this.workReleaseTime = value
-            }
-            ,
+            },
             //昵称
             changArtistName: function (value) {
                 this.Namevalue = value
-            }
-            ,
-
-
+            },
             //微博地址
             changeArtistWeibo_url(value) {
                 this.updateStar_weibo_infos.url = value
 
-            }
-            ,
+            },
             //微博粉丝
             changeArtistWeibo_fans_num(value) {
 
                 this.updateStar_weibo_infos.avatar = value
-            }
-            ,
+            },
             //抖音id
             changeArtistDouyin_id(value) {
                 this.updateStar_douyin_infos.url = value
-            }
-            ,
+            },
             //抖音粉丝数
             changeArtistDouyin_fans_num(value) {
                 this.updateStar_douyin_infos.avatar = value
-            }
-            ,
+            },
             //小红书地址
             changeArtistXiaohongshu_url(value) {
                 this.updateStar_xiaohongshu_infos.url = value
-            }
-            ,
+            },
             //小红书粉丝数
             changeArtistXiaohongshu_fans_num(value) {
                 this.updateStar_xiaohongshu_infos.avatar = value
-            }
-            ,
+            },
             //备注
             changeArtistDesc: function (value) {
                 this.artistInfo.desc = value
-            }
-            ,
+            },
             //博主级别
             changeArtistLevel: function (value) {
                
                this.artistInfo.level= value
-            }
-            ,
+            },
             //孵化期
-            changeArtistHatch: function (start, end) {
-
-                
+            changeArtistHatch: function (start, end) {                
                 this.artistInfo.hatch_star_at = start
                 this.artistInfo.hatch_end_at = end
-
-
-            }
-            ,
+            },
             //合作需求
             changeArtistDemand: function (value) {
                 this.updatedemand = value
-            }
-            ,
+            },
             taskdetail(id) {
-             
                 this.$router.push({path: '/tasks/' + id})
             },
             projectdetil(id) {
                 this.$router.push({path: '/projects/' + id})
             },
             Jump(value){
-              let price = value;
-              let str=/[a-zA-Z0-9][-a-zA-Z0-9]{0,62}(\.[a-zA-Z0-9][-a-zA-Z0-9]{0,62})+\.?///网址是否合法检测
-              let regex = /(https?:\/\/)?(\w+\.?)+(\/[a-zA-Z0-9\?%=_\-\+\/]+)?/gi//http,https有无检测
-              var re=new RegExp(str);
-
+            let price = value;
+            let str=/[a-zA-Z0-9][-a-zA-Z0-9]{0,62}(\.[a-zA-Z0-9][-a-zA-Z0-9]{0,62})+\.?///网址是否合法检测
+            let regex = /(https?:\/\/)?(\w+\.?)+(\/[a-zA-Z0-9\?%=_\-\+\/]+)?/gi//http,https有无检测
+            var re=new RegExp(str);
                 if (!re.test(value)) {
                      alert('您的网址不正确')
                 }else{
