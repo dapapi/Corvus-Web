@@ -38,7 +38,7 @@
                     <div class="approver" :style="{backgroundImage:'url('+pending.icon_url+')',backgroundColor:String(pending.icon_url).split('|')[0]}">{{String(pending.icon_url).split('|')[1]}}</div>
                     <span v-if="list.form_status=== 231">&nbsp;{{currentStatus.slice(0,1)}}{{pending.name}}{{currentStatus.slice(1)}}</span>
                     <span v-if="list.form_status !== 231">{{pending.name}}{{currentStatus}}</span>
-                    <i v-if="list.form_status==232 && (info.approval.name === currentId || list.creator.data.id === currentId) ">
+                    <i v-if="list.form_status==232 && (info.approval.user_id === currentId || (list.creator && list.creator.data.id === currentId)) ">
                         <button class="btn btn-primary" @click='approvalHandler("discard")' >作废</button>
                     </i>
                     <i v-if="list.form_status==231 && list.approval_begin === 0">
@@ -154,9 +154,6 @@ export default {
     },
 
     mounted(){
-        // if(this.list.title.includes('合同')){
-        //             console.log(111111);
-        //         }
         this.getFormList()
         this.getData()
     },
@@ -196,8 +193,11 @@ export default {
             $('#approval-great-module').modal('show')
         },
         approvalDone(){
-            this.$refs.approvalProgress.getApprover(this.list.project_number)
-            this.$refs.approvalProgress.getApprover(this.list.form_instance_number)
+            if(this.list.project_number){
+                this.$refs.approvalProgress.getApprover(this.list.project_number)
+            }else{
+                this.$refs.approvalProgress.getApprover(this.list.form_instance_number)
+            }
             this.getData()
             toastr.success('审批成功')
         },

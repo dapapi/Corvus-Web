@@ -6,7 +6,7 @@
             :multiple="multiple" :title="placeholder || data[0].control_placeholder" v-model="valueListener">
             <selectorsOptions v-for="option in options" :id="option.enum_sort" :val="option.enum_value || {name:option.id,id:option.id}"
                             :key="option.enum_sort">
-                {{option.name || option.nickname || option.enum_value}}
+                {{option.name || option.nickname || option.enum_value || option.title}}
                 <!-- 增强组件扩展性和数据通用性 -->
             </selectorsOptions>
         </select>
