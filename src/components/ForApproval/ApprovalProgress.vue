@@ -61,7 +61,8 @@ export default {
     },
     watch:{
         formid:function(value){
-            this.getApprover(value)
+            console.log(value);
+            this.getApprover(this.formid)
         },
         formstatus:function(value){
             this.getApprover(this.formid)
@@ -69,7 +70,6 @@ export default {
         'trend.ready':function(value){
             let _this = this
             if(value == true){
-                console.log(this.trend.condition);
                 fetch('get','/approvals/chains?form_id='+this.formid+'&change_type=224&value='+this.trend.condition.join(',')).then((params) => {
                     _this.approver = params.data
                 })
@@ -79,7 +79,6 @@ export default {
             handler:function(newValue,oldValue){
                 if(this.trend.ready==true && this.trend.condition[0].length !== 0){
                     var _this = this
-                    console.log(this.trend.condition[0]);
                     fetch('get','/approvals/chains?form_id='+this.formid+'&change_type=224&value='+this.trend.condition.join(',')).then((params) => {
                         _this.approver = params.data
                     })
@@ -98,26 +97,31 @@ export default {
     },
     methods:{
         getApprover(value){
-            if(!value){
-                return
-            }else if(this.trend){
+            // if(!value){
+            //     console.log(1123123);
+            //     return
+            // }else if(this.trend.condition[0]){
+            //     return
+            // }
+            if(!value || this.trend){
                 return
             }
             let _this = this
             if(!this.mode){
                 fetch('get','/approvals/chains?form_id='+value+'&change_type=222').then((params) => {
-                    console.log(params);
                     _this.approver = params.data
                 })
             }else{
                 fetch('get','/approval_instances/'+value+'/chains').then((params) => {
-                    console.log(params);
                     _this.approver = params.data
                     _this.waitingFor = params.data.find(item=>item.approval_stage === "doing")
                     if(_this.waitingFor){
                         _this.$emit("waitingfor", _this.waitingFor)
                     }else{
-                        _this.$emit("waitingfor", params.data[params.data.length-1])
+                        params.data.reverse()
+                        _this.waitingFor = params.data.find(item=>item.approval_stage === "done")
+                        _this.$emit("waitingfor", _this.waitingFor)
+                        params.data.reverse()
                     }
                 })
             }

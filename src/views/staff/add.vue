@@ -69,7 +69,7 @@
                                         <EditSelector 
                                             :options="genderArr" 
                                             :isEdit="!isLook" 
-                                            :content="gender" 
+                                            :content="gender"
                                             @change="item => changeState('gender', item)"
                                         />
                                     </div>
@@ -132,7 +132,7 @@
                                         <EditSelector 
                                             :options="maritalStatusArr" 
                                             :isEdit="!isLook" 
-                                            :content="maritalStatus" 
+                                            :content="maritalStatus"
                                             @change="item => changeState('maritalStatus', item)"
                                         />
                                     </div>
@@ -172,7 +172,7 @@
                                         <EditSelector 
                                             :options="nationalityArr" 
                                             :isEdit="!isLook" 
-                                            :content="nationality" 
+                                            :content="nationality"
                                             @change="item => changeState('nationality', item)"
                                         />
                                     </div>
@@ -415,7 +415,7 @@ export default {
     name: 'StaffDetail',
     data () {
         return {
-            isLook: false,
+            isLook: this.$route.name === 'entryDetail',
             userId: '',
             genderArr: genderArr,
             maritalStatusArr: maritalStatusArr,
@@ -623,7 +623,6 @@ export default {
         const route = this.$route
         if (route.name === 'entryDetail') {
             this.userId = route.params.id
-            this.isLook = true
             this.getData()
         }
 

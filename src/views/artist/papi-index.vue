@@ -472,14 +472,12 @@
             },
 
             changeSignIntention: function (value) {
-                
                 this.signIntention = value  
                 
               
             },
 
             isSignCompany: function (value) {
-            
                 this.signCompany = value  
                
             },
@@ -502,6 +500,40 @@
                 let _this=this;
                 if(!this.artistName){
                     toastr.error('请输入博主名称');
+                    return false
+                }
+                if(this.platformType.length === 0){
+                    toastr.error('请选择沟通平台');
+                    return false
+                }
+                if(!this.artistTypeId){
+                    toastr.error('请选择博主类型');
+                    return false
+                }
+                if(!this.communication){
+                    toastr.error('请选择沟通状态');
+                    return false
+                }
+                if(!this.signIntention){
+                    toastr.error('请选择签约意向');
+                    return false
+                }
+                 if(this.signIntention==1){
+                   this.intention_desc=''
+                }
+                if(this.signIntention==0&&!this.intention_desc){
+                    toastr.error('请填写不签约原因');
+                    return false
+                }
+                 if(!this.signCompany){
+                    toastr.error('请选择是否与其他公司签约');
+                    return false
+                }
+                 if(this.signCompany==0){
+                   this.signCompanyName=''
+                }
+                 if(this.signCompany==1&&!this.signCompanyName){
+                    toastr.error('请填写签约公司');
                     return false
                 }
                 let platform = this.platformType.join(',');

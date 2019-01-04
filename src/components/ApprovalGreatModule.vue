@@ -54,7 +54,7 @@ import ApprovalNumber from '@/components/ForApproval/ApprovalNumber'
 import ApprovalProgress from '@/components/ForApproval/ApprovalProgress'
 import ApprovalDouble from '@/components/ForApproval/ApprovalDouble'
 export default {
-    props:['formData','singlemode'],
+    props:['formData','singlemode','defaultData'],
     data(){
         return{
             importData:'',
