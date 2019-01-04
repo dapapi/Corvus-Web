@@ -32,10 +32,15 @@
                     </div>
                     <div class="clearfix">
                         <div class="col-md-6 float-left pl-0 mb-20" v-if="clientTasksInfo.length > 0">
-                            <div class="col-md-6 pl-0"><i class="iconfont icon-iconset0399 pr-2" aria-hidden="true"></i>任务</div>
-                            <div class="clearfix example" v-for="(task, index) in newArray(clientTasksInfo)" :key="index">
-                                <div class="col-md-3 float-left px-0"><router-link :to="`/tasks/${task.id}`">{{ task.title }}</router-link></div>
-                                <div class="col-md-3 float-left px-0">{{ task.principal?task.principal.data.name:'' }}</div>
+                            <div class="col-md-6 pl-0"><i class="iconfont icon-iconset0399 pr-2" aria-hidden="true"></i>任务
+                            </div>
+                            <div class="clearfix example" v-for="(task, index) in newArray(clientTasksInfo)"
+                                 :key="index">
+                                <div class="col-md-3 float-left px-0">
+                                    <router-link :to="`/tasks/${task.id}`">{{ task.title }}</router-link>
+                                </div>
+                                <div class="col-md-3 float-left px-0">{{ task.principal?task.principal.data.name:'' }}
+                                </div>
                                 <div class="col-md-4 float-left px-0">{{ task.end_at }}</div>
                                 <div class="col-md-2 float-left px-0">
                                     <template v-if="task.status === 1">进行中</template>
@@ -45,10 +50,16 @@
                             </div>
                         </div>
                         <div class="col-md-6 float-left pl-0 mb-20" v-if="clientProjectsInfo.length > 0">
-                            <div class="col-md-6 p-0"><i class="iconfont icon-ego-box pr-2 " aria-hidden="true"></i>项目</div>
-                            <div class="clearfix example" v-for="(project, index) in newArray(clientProjectsInfo)" :key="index">
-                                <div class="col-md-3 float-left px-0"><router-link :to="`/projects/${project.id}`">{{project.title}}</router-link></div>
-                                <div class="col-md-3 float-left px-0">{{ clientTypeArr.find(item => item.value == project.type).name }}</div>
+                            <div class="col-md-6 p-0"><i class="iconfont icon-ego-box pr-2 " aria-hidden="true"></i>项目
+                            </div>
+                            <div class="clearfix example" v-for="(project, index) in newArray(clientProjectsInfo)"
+                                 :key="index">
+                                <div class="col-md-3 float-left px-0">
+                                    <router-link :to="`/projects/${project.id}`">{{project.title}}</router-link>
+                                </div>
+                                <div class="col-md-3 float-left px-0">{{ clientTypeArr.find(item => item.value ==
+                                    project.type).name }}
+                                </div>
                                 <div class="col-md-4 float-left px-0">{{ project.created_at }}</div>
                                 <div class="col-md-2 float-left px-0">
                                     <template v-if="project.status === 1">进行中</template>
@@ -79,8 +90,8 @@
                         </li>
                         <li class="nav-item" role="presentation" @click="getClientTask">
                             <a class="nav-link" data-toggle="tab" href="#forum-task"
-                                aria-controls="forum-present"
-                                aria-expanded="false" role="tab">
+                               aria-controls="forum-present"
+                               aria-expanded="false" role="tab">
                                 <template v-if="clientTasksInfo.length > 0">
                                     <ToolTips :title="`已完成数量${completeNum}`">
                                         任务 ({{completeNum}}/{{clientTasksInfo.length}})
@@ -159,9 +170,12 @@
                                     </router-link>
                                 </td>
                                 <td>
-                                    <template v-if="project.status === 1"><span style="color:#FF9800">进行中</span></template>
-                                    <template v-if="project.status === 2"><span style="color:#4CAF50">已完成</span></template>
-                                    <template v-if="project.status === 3"><span style="color:#9E9E9E">撤单</span></template>
+                                    <template v-if="project.status === 1"><span style="color:#FF9800">进行中</span>
+                                    </template>
+                                    <template v-if="project.status === 2"><span style="color:#4CAF50">已完成</span>
+                                    </template>
+                                    <template v-if="project.status === 3"><span style="color:#9E9E9E">撤单</span>
+                                    </template>
                                 </td>
                                 <td>{{ project.principal?project.principal.data.name:'' }}</td>
                                 <td>{{ project.trail.data.client.data.company}}</td>
@@ -211,13 +225,15 @@
                              data-target="#addTask">
                             <button type="button"
                                     class="site-action-toggle btn-raised btn btn-success btn-floating waves-effect waves-classic">
-                                <i class="front-icon iconfont icon-tianjia1 animation-scale-up" aria-hidden="true" style="font-size:30px"></i>
-                                <i class="back-icon iconfont icon-tianjia1 animation-scale-up" aria-hidden="true" style="font-size:30px"></i>
+                                <i class="front-icon iconfont icon-tianjia1 animation-scale-up" aria-hidden="true"
+                                   style="font-size:30px"></i>
+                                <i class="back-icon iconfont icon-tianjia1 animation-scale-up" aria-hidden="true"
+                                   style="font-size:30px"></i>
                             </button>
                         </div>
                     </div>
-                    <div class="tab-pane animation-fade pb-20" id="forum-base" role="tabpanel">
-                        <div class="card" v-if="clientInfo.company">
+                    <div class="tab-pane animation-fade" id="forum-base" role="tabpanel">
+                        <div class="card mb-0" v-if="clientInfo.company">
                             <div class="card-header card-header-transparent card-header-bordered">
                                 <div class="float-left font-weight-bold third-title">客户详情</div>
                                 <div class="float-right pointer-content" v-show="!isEdit">
@@ -229,57 +245,65 @@
                                 </div>
                             </div>
                             <div class="card-block">
-                                <div class="card-text py-5 clearfix">
-                                    <div class="col-md-1 float-left text-right pl-0">公司名称</div>
-                                    <div class="col-md-5 float-left font-weight-bold">
-                                        <EditInput :content="clientInfo.company" :is-edit="isEdit"
-                                                   @change="changeClientName"></EditInput>
+                                <div class="clearfix">
+                                    <div class="card-text py-10 px-0 clearfix col-md-6 float-left">
+                                        <div class="col-md-2 float-left text-right pl-0">公司名称</div>
+                                        <div class="col-md-10 float-left font-weight-bold expfee">
+                                            <EditInput :content="clientInfo.company" :is-edit="isEdit"
+                                                       @change="changeClientName"></EditInput>
+                                        </div>
                                     </div>
-                                    <div class="col-md-1 float-left text-right pl-0">级别</div>
-                                    <div class="col-md-5 float-left font-weight-bold">
-                                        <EditSelector :options="clientLevelArr" :is-edit="isEdit"
-                                                      :content="clientInfo.grade"
-                                                      @change="changeClientLevel"></EditSelector>
+                                    <div class="card-text py-10 px-0 clearfix col-md-6 float-left">
+                                        <div class="col-md-2 float-left text-right pl-0">级别</div>
+                                        <div class="col-md-10 float-left font-weight-bold expfee">
+                                            <EditSelector :options="clientLevelArr" :is-edit="isEdit"
+                                                          :content="clientInfo.grade"
+                                                          @change="changeClientLevel"></EditSelector>
+                                        </div>
                                     </div>
-                                </div>
-                                <div class="card-text py-5 clearfix">
-                                    <div class="col-md-1 float-left text-right pl-0">负责人</div>
-                                    <div class="col-md-5 float-left font-weight-bold">
-
-                                        <EditInput-selector :is-edit="isEdit" :placeholder="'请选择负责人'"
-                                                            @change="selectPrincipal"
-                                                            :select-type="'principal'"></EditInput-selector>
+                                    <div class="card-text py-10 px-0 clearfix col-md-6 float-left">
+                                        <div class="col-md-2 float-left text-right pl-0">负责人</div>
+                                        <div class="col-md-10 float-left font-weight-bold expfee">
+                                            <EditInput-selector :is-edit="isEdit" :placeholder="'请选择负责人'"
+                                                                @change="selectPrincipal"
+                                                                :select-type="'principal'"></EditInput-selector>
+                                        </div>
                                     </div>
-                                </div>
-                                <div class="card-text py-5 clearfix">
-                                    <div class="col-md-1 float-left text-right pl-0">地区</div>
-                                    <div class="col-md-5 float-left font-weight-bold region">
-                                        <template v-if="!isEdit">
-                                            {{clientInfo.province}}{{clientInfo.city}}{{clientInfo.district}}
-                                        </template>
-                                        <template v-else>
-                                            <RegionSelector :provinceVal="clientInfo.province" :cityVal="clientInfo.city" :areaVal="clientInfo.district" @setAreaData="changeAreaData" />
-                                        </template>
-
+                                    <div class="card-text py-10 px-0 clearfix col-md-6 float-left">
+                                        <div class="col-md-2 float-left text-right pl-0">地区</div>
+                                        <div class="col-md-10 float-left font-weight-bold expfee">
+                                            <template v-if="!isEdit">
+                                                {{clientInfo.province}}{{clientInfo.city}}{{clientInfo.district}}
+                                            </template>
+                                            <template v-else>
+                                                <RegionSelector :provinceVal="clientInfo.province"
+                                                                :cityVal="clientInfo.city"
+                                                                :areaVal="clientInfo.district"
+                                                                @setAreaData="changeAreaData"/>
+                                            </template>
+                                        </div>
                                     </div>
-                                    <div class="col-md-1 float-left text-right pl-0">详细地址</div>
-                                    <div class="col-md-5 float-left font-weight-bold">
-                                        <EditInput :content="clientInfo.address" :is-edit="isEdit"
-                                                   @change="changeClientAddress"></EditInput>
+                                    <div class="card-text py-10 px-0 clearfix col-md-6 float-left">
+                                        <div class="col-md-2 float-left text-right pl-0">详细地址</div>
+                                        <div class="col-md-10 float-left font-weight-bold expfee">
+                                            <EditInput :content="clientInfo.address" :is-edit="isEdit"
+                                                       @change="changeClientAddress"></EditInput>
+                                        </div>
                                     </div>
-                                </div>
-
-                                <div class="card-text py-5 clearfix">
-                                    <div class="col-md-1 float-left text-right pl-0">规模</div>
-                                    <div class="col-md-5 float-left font-weight-bold">
-                                        <EditSelector :options="clientScaleArr" :is-edit="isEdit"
-                                                      :content="clientInfo.size"
-                                                      @change="changeClientScale"></EditSelector>
+                                    <div class="card-text py-10 px-0 clearfix col-md-6 float-left">
+                                        <div class="col-md-2 float-left text-right pl-0">规模</div>
+                                        <div class="col-md-10 float-left font-weight-bold expfee">
+                                            <EditSelector :options="clientScaleArr" :is-edit="isEdit"
+                                                          :content="clientInfo.size"
+                                                          @change="changeClientScale"></EditSelector>
+                                        </div>
                                     </div>
-                                    <div class="col-md-1 float-left text-right pl-0">备注</div>
-                                    <div class="col-md-5 float-left font-weight-bold">
-                                        <editTextarea :content="clientInfo.desc"
-                                                      :is-edit="isEdit" @change="changeClientDesc"></editTextarea>
+                                    <div class="card-text py-10 px-0 clearfix col-md-6 float-left">
+                                        <div class="col-md-2 float-left text-right pl-0">备注</div>
+                                        <div class="col-md-10 float-left font-weight-bold expfee">
+                                            <editTextarea :content="clientInfo.desc"
+                                                          :is-edit="isEdit" @change="changeClientDesc"></editTextarea>
+                                        </div>
                                     </div>
                                 </div>
 
@@ -298,7 +322,7 @@
                                 <div class="card-text py-5 clearfix">
                                     <div class="col-md-1 float-left text-right pl-0">最近更新人</div>
                                     <div class="col-md-5 float-left font-weight-bold">
-                                    {{clientInfo.last_updated_user?clientInfo.last_updated_user:''}}
+                                        {{clientInfo.last_updated_user?clientInfo.last_updated_user:''}}
                                     </div>
                                     <div class="col-md-1 float-left text-right pl-0">最近更新时间</div>
                                     <div class="col-md-5 float-left font-weight-bold">
@@ -363,8 +387,10 @@
                              @click="changeEditStatus(true)">
                             <button type="button"
                                     class="site-action-toggle btn-raised btn btn-success btn-floating waves-effect waves-classic">
-                                <i class="front-icon iconfont icon-tianjia1 animation-scale-up" aria-hidden="true" style="font-size:30px"></i>
-                                <i class="back-icon iconfont icon-tianjia1 animation-scale-up" aria-hidden="true" style="font-size:30px"></i>
+                                <i class="front-icon iconfont icon-tianjia1 animation-scale-up" aria-hidden="true"
+                                   style="font-size:30px"></i>
+                                <i class="back-icon iconfont icon-tianjia1 animation-scale-up" aria-hidden="true"
+                                   style="font-size:30px"></i>
                             </button>
                         </div>
 
@@ -420,7 +446,7 @@
                             <div class="col-md-2 text-right float-left require">关键决策人</div>
                             <div class="col-md-10 float-left">
                                 <selectors ref="contact" :options="keyMasterArr" :value="editConfig.type"
-                                    @change="changeContactClientType"></selectors>
+                                           @change="changeContactClientType"></selectors>
                             </div>
                         </div>
                         <div class="example">
@@ -492,7 +518,8 @@
                         <div class="example">
                             <div class="col-md-2 text-right float-left pl-0 require">任务优先级</div>
                             <div class="col-md-10 float-left pl-0">
-                                <selectors ref="taskLevel" :options="taskLevelArr" @change="changeTaskLevel"></selectors>
+                                <selectors ref="taskLevel" :options="taskLevelArr"
+                                           @change="changeTaskLevel"></selectors>
                             </div>
                         </div>
                         <div class="example">
@@ -603,8 +630,8 @@
             })
         },
         computed: {
-            completeNum () {
-                return this.clientTasksInfo.filter( n => n.status === 2).length
+            completeNum() {
+                return this.clientTasksInfo.filter(n => n.status === 2).length
             }
         },
 
@@ -916,7 +943,7 @@
                 this.contactId = id
             },
             // 选择地区
-            changeAreaData (val) {
+            changeAreaData(val) {
                 if (val.area.name) {
                     this.changeInfo.province = val.province.name
                     this.changeInfo.city = val.city.name !== '市辖区' ? val.city.name : val.province.name
@@ -924,18 +951,18 @@
                 }
             },
             // 关键决策人
-            changeContactClientType (val) {
+            changeContactClientType(val) {
                 this.editConfig.type = val
             },
             // 返回前5组数据
-            newArray (arr) {
+            newArray(arr) {
                 if (arr.length > 5) {
                     arr.length = 5
                 }
                 return arr
             },
             // 关闭添加任务弹出层
-            cancleTask () {
+            cancleTask() {
                 this.taskName = ''
                 this.taskType = ''
                 this.$refs.taskType.setValue('')
@@ -951,7 +978,7 @@
                 // participant_ids: this.participantIds
             },
             // 关闭新增联系人
-            cancleContact () {
+            cancleContact() {
                 this.editConfig = {
                     position: '',
                     name: '',
@@ -961,7 +988,7 @@
                 this.$refs.contact.setValue('')
             },
             // 设置默认负责人
-            setDefaultPrincipal () {
+            setDefaultPrincipal() {
                 this.$store.commit('changeNewPrincipal', {
                     name: this.user.nickname,
                     id: this.user.id
@@ -973,7 +1000,7 @@
 </script>
 
 <style lang="scss" scoped>
- .region {
+    .region {
         /deep/ .page-content {
             padding: 0;
             .modal-body {

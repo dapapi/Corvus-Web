@@ -170,7 +170,7 @@
                                         </div>
                                         <div class="card-text py-10 px-0 clearfix col-md-6 float-left"
                                              :class="isEdit ? 'edit-height':'' ">
-                                            <div class="col-md-2 float-left text-right pl-0">预计订单收入</div>
+                                            <div class="col-md-2 float-left text-right pl-0">预计订单收入/元</div>
                                             <div class="col-md-10 float-left font-weight-bold expfee">
                                                 <edit-number-spinner :content="trailInfo.fee" :is-edit="isEdit"
                                                                      @change="changeTrailFee"></edit-number-spinner>

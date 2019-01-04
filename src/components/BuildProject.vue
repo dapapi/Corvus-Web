@@ -85,14 +85,14 @@
                         </div>
                     </div>
                     <div class="col-md-12 example clearfix" v-show="projectType != 5">
-                        <div class="col-md-2 text-right float-left px-0">预计支出</div>
+                        <div class="col-md-2 text-right float-left px-0">预计支出/元</div>
                         <div class="col-md-10 float-left">
                             <NumberSpinner ref="projectExpenditureFee"
                                            @change="(value) => addProjectBaseInfo(value, 'projected_expenditure')"></NumberSpinner>
                         </div>
                     </div>
                     <div class="col-md-12 example clearfix" v-show="projectType != 5">
-                        <div class="col-md-2 text-right float-left px-0">预计订单收入</div>
+                        <div class="col-md-2 text-right float-left px-0">预计订单收入/元</div>
                         <div class="col-md-10 float-left">
                             <NumberSpinner ref="projectFee"
                                            @change="(value) => addProjectBaseInfo(value, 'fee')"></NumberSpinner>
