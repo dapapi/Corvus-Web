@@ -226,8 +226,8 @@
                                 <th class="cell-300" scope="col">截止日期</th>
                             </tr>
                             <tbody>
-                            <tr v-for="task in taskInfo.tasks?taskInfo.tasks.data:[]">
-                                <td @click="redirectTaskDetail(task.id)" class="pointer-content">{{ task.title }}</td>
+                            <tr v-for="task in taskInfo.tasks?taskInfo.tasks.data:[]" :key="task.id" @click="redirectTaskDetail(task.id)">
+                                <td>{{ task.title }}</td>
                                 <td>{{ task.type.data.title }}</td>
                                 <td>
                                     <template v-if="task.status === 1">进行中</template>
@@ -1145,7 +1145,7 @@
                         this.getQuestionData(res.data.id)
                     }
                 })
-            }
+            },
         }
     }
 </script>
@@ -1282,5 +1282,8 @@
 
     .radio-custom label {
         top: 2px;
+    }
+    table tbody tr {
+       cursor: pointer;
     }
 </style>

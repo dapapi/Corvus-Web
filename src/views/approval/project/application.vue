@@ -50,8 +50,8 @@
                                     <th class="cell-300" scope="col">审批状态</th>
                                 </tr>
                                 <tbody>
-                                <tr v-for="project in projectsInfo" :key='project.project_number'>
-                                    <router-link :to="'/approval/'+project.form_instance_number"><td>{{project.form_instance_number}}</td></router-link>                                    
+                                <tr v-for="project in projectsInfo" :key='project.project_number' @click="goDetail(project.form_instance_number)">
+                                    <td>{{project.form_instance_number}}</td>                               
                                     <td>{{project.title}}</td>
                                     <td>{{project.name}}</td>
                                     <!-- <td></td> -->
@@ -131,6 +131,9 @@
                     _this.current_page = params.current_page;
                     _this.total_pages = params.last_page;
                 })
+            },
+            goDetail (id) {
+                this.$router.push('/approval/' + id)
             }
         }
     }
@@ -142,5 +145,8 @@
     } */
     .project-search::-webkit-input-placeholder{
         font-weight: 200;
+    }
+    table tbody tr {
+       cursor: pointer;
     }
 </style>
