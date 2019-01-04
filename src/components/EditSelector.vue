@@ -38,9 +38,7 @@
                 this.isEditSelect = newValue;
                 if (newValue) {
                     let _this = this;
-                    setTimeout(function () {
-                        _this.$refs.selector.setValue(_this.content)
-                    }, 0)
+                    _this.$refs.selector.setValue(_this.content)
                 } else {
                     this.$refs.selector.destroy()
                 }
