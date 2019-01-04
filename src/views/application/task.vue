@@ -53,7 +53,7 @@
                                 <th class="cell-300" scope="col">截止时间</th>
                             </tr>
                             <tbody>
-                            <tr v-for="task in tasksInfo" :key="task.id">
+                            <tr v-for="task in tasksInfo" :key="task.id" @click="taskDetail(task.id)">
                                 <td class="pointer-content">
                                     <router-link :to="{name:'tasks/detail', params: {id: task.id}}">{{ task.title }}
                                     </router-link>
@@ -437,6 +437,10 @@
                 })
                 this.$store.commit('changeNewParticipantsInfo', [])
             },
+            // 跳转
+            taskDetail(taskId){
+                this.$router.push({path: '/tasks/' + taskId})
+            },
         }
     };
 </script>
@@ -448,6 +452,9 @@
     padding: 10px 0 10px 20px;
 }
 .page-item{
+    cursor: pointer;
+}
+table tbody tr {
     cursor: pointer;
 }
 </style>

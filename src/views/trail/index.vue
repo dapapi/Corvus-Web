@@ -49,12 +49,10 @@
                             <th class="cell-300" scope="col">负责人</th>
                         </tr>
                         <tbody>
-                        <tr v-for="trail in trailsInfo" :key='trail.id'>
+                        <tr v-for="trail in trailsInfo" :key='trail.id' @click="goDetail(trail.id)">
                             <!-- trailFilter?filterData:trailsInfo -->
                             <td class="pointer-content">
-                                <router-link :to="{name:'trails/detail', params: {id: trail.id}}">
-                                    {{ trail.title }}
-                                </router-link>
+                                {{ trail.title }}
                             </td>
 
                             <td>{{ trail.client.data.company }}</td>
@@ -660,8 +658,10 @@
                 this.fetchData.principal_ids = ''
                 this.fetchHandler('get', '/trails/filter')
                 this.$refs.principal_id.setValue('')
+            },
+            goDetail(id) {
+                this.$router.push({path: '/trails/' + id})
             }
-
         }
     }
 </script>
@@ -677,6 +677,9 @@
     }
     .trial-origin .require::before {
         margin-left: 9px;
+    }
+    table tbody tr {
+        cursor: pointer;
     }
 </style>
 

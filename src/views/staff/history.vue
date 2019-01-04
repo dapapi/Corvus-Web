@@ -15,9 +15,9 @@
                         <th class="cell-300" scope="col">归档日期</th>
                     </tr>
                     <tbody>
-                    <tr v-for="(item, index) in data" :key="index">
+                    <tr v-for="(item, index) in data" :key="index" @click="goDetail(item.id)">
                         <!-- <th scope="row">1</th> -->
-                        <td><router-link :to="{name: 'staffDetail', params: { id: item.id }}">{{ item.name }}</router-link></td>
+                        <td>{{ item.name }}</td>
                         <td>{{ item.phone }}</td>
                         <td>{{ item.archive_time }}</td>
                     </tr>
@@ -51,6 +51,9 @@ export default {
             fetch ('get', '/archive').then((res) => {
                 this.data = res.data
             })
+        },
+        goDetail (id) {
+            this.$router.push({name: 'staffDetail', params: { id: id }})
         }
     }
 }
@@ -59,6 +62,9 @@ export default {
 <style scoped>
 .page {
     margin-left: 0px!important;
+}
+table tbody tr {
+    cursor: pointer;
 }
 </style>
 

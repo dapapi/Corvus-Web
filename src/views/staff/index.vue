@@ -59,29 +59,35 @@
                         <th class="cell-300" scope="col">操作</th>
                     </tr>
                     <tbody>
-                    <tr v-for="(item, index) in staffList" :key="index">
-                        <td><router-link :to="{name: 'staffDetail', params: { id: item.id }}">{{item.name}}</router-link></td>
-                        <td>{{ item.phone }}</td>
-                        <td>{{ staffStatus.find(n => n.value == item.status)?staffStatus.find(n => n.value == item.status).name:'' }}</td>
-                        <td>{{ hireShapeArr.find(n => n.value == item.hire_shape)?hireShapeArr.find(n => n.value == item.hire_shape).name:'' }}</td>
-                        <td>{{ item.company?item.company:'' }}</td>
-                        <td>{{ item.entry_time }}</td>
-                        <td>
-                            <div class="dropdown show task-dropdown">
-                                <i class="iconfont icon-gengduo1 font-size-24" aria-hidden="true" id="taskDropdown"
-                                   data-toggle="dropdown" aria-expanded="false" style="cursor: pointer"></i>
-                                <div class="dropdown-menu dropdown-menu-left task-dropdown-item" aria-labelledby="taskDropdown"
-                                     role="menu" x-placement="bottom-end" style="min-width: 0;">
-                                    <a class="dropdown-item" role="menuitem" @click="changeStaffStatus(item, 2)">转正</a>
-                                    <a class="dropdown-item" role="menuitem" @click="showEditPos(item.id)">调岗</a>
-                                    <a class="dropdown-item" role="menuitem" @click="changeStaffStatus(item, 3)">离职</a>
-                                    <a v-if="(item.hire_shape == 2 || item.hire_shape == 4) && item.status == 3" 
-                                        class="dropdown-item" role="menuitem" @click="changeStaffStatus(item, 5)">归档</a>
-                                    <!-- 劳务外包 -->
+                        <tr v-for="(item, index) in staffList" :key="index">
+                            <router-link tag="td" :to="{name: 'staffDetail', params: { id: item.id }}">{{item.name}}</router-link>
+                            <router-link tag="td" :to="{name: 'staffDetail', params: { id: item.id }}">{{ item.phone }}</router-link>
+                            <router-link tag="td" :to="{name: 'staffDetail', params: { id: item.id }}">
+                                {{ staffStatus.find(n => n.value == item.status)?staffStatus.find(n => n.value == item.status).name:'' }}
+                            </router-link>
+                            <router-link tag="td" :to="{name: 'staffDetail', params: { id: item.id }}">
+                                {{ hireShapeArr.find(n => n.value == item.hire_shape)?hireShapeArr.find(n => n.value == item.hire_shape).name:'' }}
+                            </router-link>
+                            <router-link tag="td" :to="{name: 'staffDetail', params: { id: item.id }}">{{ item.company?item.company:'' }}
+                            </router-link>
+                            <router-link tag="td" :to="{name: 'staffDetail', params: { id: item.id }}">{{ item.entry_time }}
+                            </router-link>
+                            <td>
+                                <div class="dropdown show task-dropdown">
+                                    <i class="iconfont icon-gengduo1 font-size-24" aria-hidden="true" id="taskDropdown"
+                                    data-toggle="dropdown" aria-expanded="false" style="cursor: pointer"></i>
+                                    <div class="dropdown-menu dropdown-menu-left task-dropdown-item" aria-labelledby="taskDropdown"
+                                        role="menu" x-placement="bottom-end" style="min-width: 0;">
+                                        <a class="dropdown-item" role="menuitem" @click="changeStaffStatus(item, 2)">转正</a>
+                                        <a class="dropdown-item" role="menuitem" @click="showEditPos(item.id)">调岗</a>
+                                        <a class="dropdown-item" role="menuitem" @click="changeStaffStatus(item, 3)">离职</a>
+                                        <a v-if="(item.hire_shape == 2 || item.hire_shape == 4) && item.status == 3" 
+                                            class="dropdown-item" role="menuitem" @click="changeStaffStatus(item, 5)">归档</a>
+                                        <!-- 劳务外包 -->
+                                    </div>
                                 </div>
-                            </div>
-                        </td>
-                    </tr>
+                            </td>
+                        </tr>
                     </tbody>
                 </table>
 
@@ -280,6 +286,9 @@ export default {
 }
 .page {
     margin-left: 0px!important;
+}
+table tbody tr {
+    cursor: pointer;
 }
 </style>
 
