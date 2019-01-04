@@ -11,6 +11,8 @@
                     </div>
                     <div class="modal-body modal-greater">
                         <div v-for="(item, index) in moduleInfo" :key="index" class="great-option example">
+                            <span v-if="item[0].required===1">*</span>
+                            <span v-else>&nbsp;</span>
                             <div :is='sortChecker(item)' 
                             :data='item' :predata='sendData'
                             :singlemode='singlemode' :clear='clearFlag'

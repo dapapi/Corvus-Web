@@ -6,9 +6,9 @@
             <div class="approver-container float-left" v-for="(item, index) in approver" :key="index">
                 <div class=" " style="display:flex">
                     <div class="splicer" v-if="index !== 0"></div>
-                    <div class="approver-logo">
-                        <div class="approver" :style="{backgroundImage:'url('+randomColor(item.icon_url).color+')',backgroundColor:randomColor(item.icon_url).color}">{{randomColor(item.icon_url).name}}</div>
-                        <div v-if="!mode" :class="mode?'approver-name':''" style='font-size:12px;'>{{item.name}}</div>
+                    <div class="approver-logo" style='font-size:12px; min-width:50px'>
+                        <div class="approver" :style="{backgroundImage:'url('+randomColor(item.icon_url).color+')',backgroundColor:randomColor(item.icon_url).color,margin:'0 auto'}">{{randomColor(item.icon_url).name}}</div>
+                        <div v-if="!mode" :class="mode?'approver-name':''" style='text-align:center;'>{{item.name}}</div>
                         <i v-if="item.change_state_obj" class="iconfont iconfont-logo" :class="item.change_state_obj.changed_icon.split('|')[0]" :style='{color:item.change_state_obj.changed_icon.split("|")[1]}'></i>
                     </div>
                 </div>
@@ -113,8 +113,12 @@ export default {
     methods:{
         getApprover(value){
             if(!this.mode){
-                if(!value || this.trend.condition[0]){
+                if(!value ){
                     return
+                }else if(this.trend){
+                    if(this.trend.condition.length === 0){
+                        return
+                    }
                 }
             }
             let _this = this
@@ -160,9 +164,11 @@ export default {
     position: relative;
     z-index: 1288;
     bottom: 15px;
-    left: 18px;
+    left: 30px;
 }
-
+.approver-logo{
+    padding: 0 auto;
+}
 .approval-detail-title,.approval-detail-container{
     height: 40px;
     display: flex;
