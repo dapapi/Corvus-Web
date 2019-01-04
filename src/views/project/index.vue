@@ -63,8 +63,8 @@
                                 <th class="cell-300" scope="col">跟进时间</th>
                             </tr>
                             <tbody>
-                            <tr v-for="project in projectsInfo ">
-                                <td class="pointer-content" @click="redirectDetail(project.id)">
+                            <tr v-for="project in projectsInfo" @click="redirectDetail(project.id)">
+                                <td class="pointer-content">
                                     {{ project.title }}
                                 </td>
                                 <td>
@@ -317,6 +317,9 @@
         .addMember-trigger-dropdown {
             top: -400px !important;
         }
+    }
+    table tbody tr {
+        cursor: pointer;
     }
 </style>
 

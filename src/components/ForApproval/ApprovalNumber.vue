@@ -1,5 +1,5 @@
 <template>
-<div class="col-md-12 approval-text-container">
+<div class="col-md-12 approval-text-container pl-0">
     <span class="col-md-2 text-right">预计费用</span>
     <input ref='number' type="text" class="form-control addtrail" data-plugin="asSpinner" value="0"
            :class="[shortInput ? 'short-spinner-input' : '']">

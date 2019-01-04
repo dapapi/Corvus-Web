@@ -47,11 +47,9 @@
                             <th class="cell-300" scope="col">跟进时间</th>
                         </tr>
                         <tbody>
-                        <tr v-for="client in clientsInfo ">
+                        <tr v-for="client in clientsInfo " :key="client.id" @click="goDetail(client.id)">
                             <td class="pointer-content">
-                                <router-link :to="{name:'clients/detail', params: {id: client.id}}">
-                                    {{ client.company }}
-                                </router-link>
+                                {{ client.company }}
                             </td>
                             <td>
                                 <template v-if="client.grade === 1">直客</template>
@@ -439,6 +437,9 @@
                 this.clientRemark = ''
                 this.clientAddressDetail = ''
                 this.clearDefaultPrincipal()
+            },
+            goDetail (id) {
+                this.$router.push('/clients/' + id)
             }
         }
     }
@@ -468,5 +469,8 @@
                 }
             }
         }
+    }
+    table tbody tr {
+       cursor: pointer;
     }
 </style>

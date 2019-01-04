@@ -1,5 +1,5 @@
 <template>
-    <div class="approval-text-container col-md-12">
+    <div class="approval-text-container col-md-12 pl-0">
         <span class="col-md-2 text-right">{{title || data[0].control_title}}</span>
         <select class="good-picker selectpicker col-md-10" data-plugin="" :value="value" :data-live-search="isSelectable"
             :data-show-subtext="isSelectable" 
@@ -20,7 +20,8 @@ import fetch from '@/assets/utils/fetch.js'
 export default {
      // 凡是多选，都有搜索框；不是多选传入selectable为true也可以有搜索框
         // changeKey为父组件的data，且可以被改变
-        props: ['n', 'multiple', 'placeholder', 'changeKey', 'value', 'resetinfo', 'selectable','title','data','index','clear'],
+        name:'selector',
+        props: ['n', 'multiple', 'placeholder','formid', 'value', 'resetinfo', 'selectable','title','data','index','clear'],
         data() {
             return {
                 isDisable: this.disable,
@@ -43,20 +44,6 @@ export default {
 
         mounted() {
             this.sourceChecker()
-            // if(!this.multiple){
-            //     let self = this;
-            //     $(this.$el).selectpicker().on('hidden.bs.select', function () {
-            //         console.log($(this).val());
-            //         self.$emit('change', $(this).val(), $(this)[0].selectedOptions[0].label, $(this)[0].selectedOptions[0].id);
-            //         // 可以通过调用select方法，去改变父组件传过来的changeKey
-            //         if (self.changeKey) {
-            //             self.$emit('select', self.changeKey, $(this).val(), $(this)[0].selectedOptions[0].label)
-            //         }
-            //     });
-            // }else{
-            //     $(this.$el).selectpicker()
-            // }
-           
         },
         update(){
             this.refresh()
@@ -95,7 +82,10 @@ export default {
                     this.setValue('')
                     this.valueListener = []
                 }
-        }
+            },
+            formid:function(){
+                this.sourceChecker()
+            }
         },
         methods: {
             sourceChecker(){
@@ -103,7 +93,6 @@ export default {
                 if(this.data[0].control_source){
                     fetch('get',this.data[0].control_source.url).then((params) => {
                         _this.options = params.data
-                        
                         _this.$nextTick(() => {
                             _this.refresh()
                         })

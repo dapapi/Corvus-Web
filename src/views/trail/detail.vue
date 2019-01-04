@@ -372,10 +372,8 @@
                                     <th class="cell-300" scope="col">截止日期</th>
                                 </tr>
                                 <tbody>
-                                <tr v-for="task in trailTasksInfo" v-if="trailTasksInfo" :key="task.id">
-                                    <router-link :to="'/tasks/'+task.id">
-                                        <td>{{ task.title }}</td>
-                                    </router-link>
+                                <tr v-for="task in trailTasksInfo" v-if="trailTasksInfo" :key="task.id" @click="goTask(task.id)">
+                                    <td>{{ task.title }}</td>
                                     <td v-if="task.type">{{ task.type.data.title }}</td>
                                     <td v-if="!task.type">{{ '' }}</td>
                                     <td>
@@ -1112,6 +1110,9 @@
                     this.trailInfo.progress_status = 0
                 }
             },
+            goTask(id) {
+                this.$router.push({path: '/tasks/' + id})
+            }
         }
     }
 </script>
@@ -1132,5 +1133,8 @@
         -ms-user-select: none;
         user-select: none;
         z-index: 2;
+    }
+    table tbody tr {
+       cursor: pointer;
     }
 </style>

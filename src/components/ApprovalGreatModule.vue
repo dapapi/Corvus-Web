@@ -83,10 +83,21 @@ export default {
     mounted(){
         let _this = this
         $('#approval-great-module').on('show.bs.modal',function(){
-                // _this.clearSignal()
-                _this.$nextTick(() => {
-                    _this.getFormContractor() 
-                })
+            _this.trendApprover={
+                condition:[],
+                ready:false, 
+            }
+            _this.$nextTick(() => {
+                _this.getFormContractor() 
+            })
+        })
+         $('#approval-great-module').on('hidden.bs.modal',function(){
+             _this.clearSignal()
+            _this.trendApprover={
+                condition:[],
+                ready:false, 
+            }
+             
         })
         this.refresh()
         // console.log(this.formData.condition);
@@ -160,7 +171,7 @@ export default {
                 // console.log(this.formData.condition.indexOf(params.key));
                 this.trendApprover.condition[tempData]=params.value
             }
-            if(this.formData.condition.length === this.trendApprover.condition.length){
+            if(this.formData.condition.length === this.trendApprover.condition.length && this.trendApprover.condition[0] !== undefined){
                 this.trendApprover.ready = true
             }
         },

@@ -32,15 +32,11 @@
                     </div>
                     <div class="clearfix">
                         <div class="col-md-6 float-left pl-0 mb-20" v-if="clientTasksInfo.length > 0">
-                            <div class="col-md-6 pl-0"><i class="iconfont icon-iconset0399 pr-2" aria-hidden="true"></i>任务
-                            </div>
-                            <div class="clearfix example" v-for="(task, index) in newArray(clientTasksInfo)"
-                                 :key="index">
-                                <div class="col-md-3 float-left px-0">
-                                    <router-link :to="`/tasks/${task.id}`">{{ task.title }}</router-link>
-                                </div>
-                                <div class="col-md-3 float-left px-0">{{ task.principal?task.principal.data.name:'' }}
-                                </div>
+                            <div class="col-md-6 pl-0"><i class="iconfont icon-iconset0399 pr-2" aria-hidden="true"></i>任务</div>
+                            <div class="clearfix example " v-for="(task, index) in newArray(clientTasksInfo)" 
+                                style="cursor: pointer" :key="index" @click="linkTo('/tasks/' + task.id)">
+                                <div class="col-md-3 float-left px-0">{{ task.title }}</div>
+                                <div class="col-md-3 float-left px-0">{{ task.principal?task.principal.data.name:'' }}</div>
                                 <div class="col-md-4 float-left px-0">{{ task.end_at }}</div>
                                 <div class="col-md-2 float-left px-0">
                                     <template v-if="task.status === 1">进行中</template>
@@ -50,16 +46,11 @@
                             </div>
                         </div>
                         <div class="col-md-6 float-left pl-0 mb-20" v-if="clientProjectsInfo.length > 0">
-                            <div class="col-md-6 p-0"><i class="iconfont icon-ego-box pr-2 " aria-hidden="true"></i>项目
-                            </div>
-                            <div class="clearfix example" v-for="(project, index) in newArray(clientProjectsInfo)"
-                                 :key="index">
-                                <div class="col-md-3 float-left px-0">
-                                    <router-link :to="`/projects/${project.id}`">{{project.title}}</router-link>
-                                </div>
-                                <div class="col-md-3 float-left px-0">{{ clientTypeArr.find(item => item.value ==
-                                    project.type).name }}
-                                </div>
+                            <div class="col-md-6 p-0"><i class="iconfont icon-ego-box pr-2 " aria-hidden="true"></i>项目</div>
+                            <div class="clearfix example" v-for="(project, index) in newArray(clientProjectsInfo)" :key="index" 
+                                @click="linkTo('/projects/' + project.id)" style="cursor: pointer">
+                                <div class="col-md-3 float-left px-0">{{project.title}}</div>
+                                <div class="col-md-3 float-left px-0">{{ clientTypeArr.find(item => item.value == project.type).name }}</div>
                                 <div class="col-md-4 float-left px-0">{{ project.created_at }}</div>
                                 <div class="col-md-2 float-left px-0">
                                     <template v-if="project.status === 1">进行中</template>
@@ -122,18 +113,16 @@
                                data-selectable="selectable">
                             <tr class="animation-fade"
                                 style="animation-fill-mode: backwards; animation-duration: 250ms; animation-delay: 0ms;">
-                                <th class="cell-300" scope="col">线索务名称</th>
+                                <th class="cell-300" scope="col">线索名称</th>
                                 <th class="cell-300" scope="col">销售进展</th>
                                 <th class="cell-300" scope="col">负责人</th>
                                 <th class="cell-300" scope="col">关联公司</th>
                                 <th class="cell-300" scope="col">录入日期</th>
                             </tr>
                             <tbody>
-                            <tr v-for="trail in clientTrailsInfo">
+                            <tr v-for="trail in clientTrailsInfo" :key="trail.id" @click="linkTo('/trails/' + trail.id)">
                                 <td>
-                                    <router-link :to="{name: 'trails/detail', params: {id: trail.id}}">{{ trail.title
-                                        }}
-                                    </router-link>
+                                    {{ trail.title }}
                                 </td>
                                 <td>
                                     <template v-if="trail.progress_status === 1">未确定合作</template>
@@ -163,24 +152,21 @@
                                 <th class="cell-300" scope="col">关联公司</th>
                                 <th class="cell-300" scope="col">录入日期</th>
                             </tr>
-                            <tr v-for="project in clientProjectsInfo">
-                                <td>
-                                    <router-link :to="{name: 'projects/detail', params: {id: project.id}}">{{
-                                        project.title }}
-                                    </router-link>
-                                </td>
-                                <td>
-                                    <template v-if="project.status === 1"><span style="color:#FF9800">进行中</span>
-                                    </template>
-                                    <template v-if="project.status === 2"><span style="color:#4CAF50">已完成</span>
-                                    </template>
-                                    <template v-if="project.status === 3"><span style="color:#9E9E9E">撤单</span>
-                                    </template>
-                                </td>
-                                <td>{{ project.principal?project.principal.data.name:'' }}</td>
-                                <td>{{ project.trail.data.client.data.company}}</td>
-                                <td>{{ project.created_at }}</td>
-                            </tr>
+                            <tbody>
+                                <tr v-for="project in clientProjectsInfo" :key="project.id" @click="linkTo('/projects/' + project.id)">
+                                    <td>
+                                        {{ project.title }}
+                                    </td>
+                                    <td>
+                                        <template v-if="project.status === 1"><span style="color:#FF9800">进行中</span></template>
+                                        <template v-if="project.status === 2"><span style="color:#4CAF50">已完成</span></template>
+                                        <template v-if="project.status === 3"><span style="color:#9E9E9E">撤单</span></template>
+                                    </td>
+                                    <td>{{ project.principal?project.principal.data.name:'' }}</td>
+                                    <td>{{ project.trail.data.client.data.company}}</td>
+                                    <td>{{ project.created_at }}</td>
+                                </tr>
+                            </tbody>
                         </table>
                         <div class="col-md-1" v-if="clientProjectsInfo.length === 0" style="margin: 6rem auto">
                             <img src="https://res.papitube.com/corvus/images/content-none.png" alt=""
@@ -200,20 +186,19 @@
                                 <th class="cell-300" scope="col">截止时间</th>
                             </tr>
                             <tbody>
-                            <tr v-for="task in clientTasksInfo">
-                                <td>
-                                    <router-link :to="{name: 'tasks/detail', params: {id: task.id}}">{{ task.title }}
-                                    </router-link>
-                                </td>
-                                <td>{{ task.type?task.type.data.title:'' }}</td>
-                                <td>
-                                    <template v-if="task.status === 1">进行中</template>
-                                    <template v-if="task.status === 2">已完成</template>
-                                    <template v-if="task.status === 3">已停止</template>
-                                </td>
-                                <td>{{ task.principal?task.principal.data.name:'' }}</td>
-                                <td>{{ task.end_at }}</td>
-                            </tr>
+                                <tr v-for="task in clientTasksInfo" :key="task.id" @click="linkTo('/tasks/' + task.id)">
+                                    <td>
+                                        {{ task.title }}
+                                    </td>
+                                    <td>{{ task.type?task.type.data.title:'' }}</td>
+                                    <td>
+                                        <template v-if="task.status === 1">进行中</template>
+                                        <template v-if="task.status === 2">已完成</template>
+                                        <template v-if="task.status === 3">已停止</template>
+                                    </td>
+                                    <td>{{ task.principal?task.principal.data.name:'' }}</td>
+                                    <td>{{ task.end_at }}</td>
+                                </tr>
                             </tbody>
 
                         </table>
@@ -348,34 +333,34 @@
                                 <th class="cell-300" scope="col">操作</th>
                             </tr>
                             <tbody>
-                            <tr v-for="contact in clientContactsInfo">
-                                <td>{{ contact.name }}</td>
-                                <!-- <td>{{ clientInfo.company }}</td> -->
-                                <td>
-                                    {{ contact.type === 1 ? '否' : '' }}
-                                    {{ contact.type === 2 ? '是' : '' }}
-                                </td>
-                                <td>{{ contact.phone }}</td>
-                                <td>{{ contact.position }}</td>
-                                <td>{{ clientInfo.principal?clientInfo.principal.data.name:'' }}</td>
-                                <td>
-                                    <span class="pr-20 d-block float-left pointer-content"
-                                          style="color: #b9b9b9;"
-                                          data-plugin="actionBtn" data-toggle="modal"
-                                          data-target="#addContact"
-                                          @click="changeEditStatus(false,contact)"
-                                    >
-                                        <i class="iconfont icon-bianji2" aria-hidden="true"></i>
-                                    </span>
-                                    <span class="d-block float-left"
-                                          style="width: 1px; height: 14px;border-right: 1px solid #b9b9b9;margin: 3px;"></span>
-                                    <span class="pl-20 d-block float-left pointer-content" style="color: #b9b9b9"
-                                          data-plugin="actionBtn" @click="setDelInfo(contact.id)" data-toggle="modal"
-                                          data-target="#confirmFlag" typeText="删除">
-                                        <i class="iconfont icon-shanchu1" aria-hidden="true"></i>
-                                    </span>
-                                </td>
-                            </tr>
+                                <tr v-for="(contact, index) in clientContactsInfo" :key="index">
+                                    <td>{{ contact.name }}</td>
+                                    <!-- <td>{{ clientInfo.company }}</td> -->
+                                    <td>
+                                        {{ contact.type === 1 ? '否' : '' }}
+                                        {{ contact.type === 2 ? '是' : '' }}
+                                    </td>
+                                    <td>{{ contact.phone }}</td>
+                                    <td>{{ contact.position }}</td>
+                                    <td>{{ clientInfo.principal?clientInfo.principal.data.name:'' }}</td>
+                                    <td>
+                                        <span class="pr-20 d-block float-left pointer-content"
+                                            style="color: #b9b9b9;"
+                                            data-plugin="actionBtn" data-toggle="modal"
+                                            data-target="#addContact"
+                                            @click="changeEditStatus(false,contact)"
+                                        >
+                                            <i class="iconfont icon-bianji2" aria-hidden="true"></i>
+                                        </span>
+                                        <span class="d-block float-left"
+                                            style="width: 1px; height: 14px;border-right: 1px solid #b9b9b9;margin: 3px;"></span>
+                                        <span class="pl-20 d-block float-left pointer-content" style="color: #b9b9b9"
+                                            data-plugin="actionBtn" @click="setDelInfo(contact.id)" data-toggle="modal"
+                                            data-target="#confirmFlag" typeText="删除">
+                                            <i class="iconfont icon-shanchu1" aria-hidden="true"></i>
+                                        </span>
+                                    </td>
+                                </tr>
                             </tbody>
                         </table>
                         <div class="col-md-1" style="margin: 6rem auto" v-if="clientContactsInfo.length === 0">
@@ -995,6 +980,9 @@
                 })
                 this.$store.commit('changeNewParticipantsInfo', [])
             },
+            linkTo (url) {
+                this.$router.push(url)
+            }
         }
     }
 </script>
@@ -1010,5 +998,8 @@
                 }
             }
         }
+    }
+    table tbody tr {
+       cursor: pointer;
     }
 </style>

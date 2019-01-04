@@ -104,17 +104,8 @@ export default {
 
             return s4() + s4() + '-' + s4() + '-' + s4() + '-' + s4() + '-' + s4() + s4() + s4();
         },
-
-        getFileExt(){
-            this.fileExt = this.fileInfo.name.split('.').pop()
-        }
     },
     watch:{
-        fileInfo:function(val,oldval){
-            if(val !== oldval){
-                this.getFileExt()
-            }
-        },
          clear:function(value){
             if(value===true){
                 this.fileInfo = []
