@@ -34,7 +34,7 @@
                                    data-selectable="selectable">
                                 <tr>
                                     <th class="cell-300" scope="col">审批编号</th>
-                                    <th class="cell-300" scope="col">项目名称</th>
+                                    <th class="cell-300" scope="col">合同名称</th>
                                     <th class="cell-300" scope="col">申请人</th>
                                     <!-- <th class="cell-300 position-relative" scope="col">类型
                                         <i class="iconfont icon-gengduo1" aria-hidden="true"
@@ -75,9 +75,7 @@
 </template>
 
 <script>
-import {CONTRACT_INDEX_CONFIG} from '@/views/approval/contractIndex/contractIndexData.js'
     import {PROJECT_CONFIG} from '@/views/approval/project/projectConfig.js'
-
     import fetch from '@/assets/utils/fetch.js'
     import config from '@/assets/js/config'
     export default {
@@ -89,20 +87,22 @@ import {CONTRACT_INDEX_CONFIG} from '@/views/approval/contractIndex/contractInde
                 total_pages: 1,
                 keywords: '',
                 projectsInfo: [],
-                projectProgress:PROJECT_CONFIG.approvalProgress
+                projectProgress:PROJECT_CONFIG.approvalProgress,
 
             }
         },
         mounted(){
             this.getList(1)
         },
-        methods: {
+        computed:{
             getProgressName(){
                 return function(params){
-                    console.log(this.projectProgress);
                    return  this.projectProgress.find(item=>item.id == params).value
                 }
             },
+        },
+        methods: {
+            
             getProjects: function (pageNum = 1, type = null) {
                 let data = {
                     page: pageNum,
@@ -122,9 +122,9 @@ import {CONTRACT_INDEX_CONFIG} from '@/views/approval/contractIndex/contractInde
                 })
             },
              getList(params) {
+                 console.log(params);
                 let _this = this
-                    fetch('get','/approvals_contract/approval?status=',params).then((params) => {
-                        console.log(params.meta);
+                    fetch('get','/approvals_contract/approval?status='+params).then((params) => {
                         _this.projectsInfo = params.data
                         _this.total = params.meta.pagination
                         _this.current_page = params.meta.current_page;

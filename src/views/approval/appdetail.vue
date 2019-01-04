@@ -38,7 +38,7 @@
                     <div class="approver" :style="{backgroundImage:'url('+pending.icon_url+')',backgroundColor:String(pending.icon_url).split('|')[0]}">{{String(pending.icon_url).split('|')[1]}}</div>
                     <span v-if="list.form_status=== 231">&nbsp;{{currentStatus.slice(0,1)}}{{pending.name}}{{currentStatus.slice(1)}}</span>
                     <span v-if="list.form_status !== 231">{{pending.name}}{{currentStatus}}</span>
-                <div v-if="!isApproverMode">
+                <div >
                     <i v-if="list.form_status==232">
                         <button class="btn btn-primary" @click='approvalHandler("discard")'>作废</button>
                     </i>
@@ -49,13 +49,13 @@
                         </button>
                     </i>
                     <i v-if="list.form_status==234">
-                        <button class="btn btn-primary" @click="addProjectTimeout(list.type)">重新提交</button>
+                        <button class="btn btn-primary" @click="addProjectTimeout(list.form_id)">重新提交</button>
                     </i>
                     <i v-if="list.form_status==235">
-                        <button class="btn btn-primary" @click="addProjectTimeout(list.type)" >重新提交</button>
+                        <button class="btn btn-primary" @click="addProjectTimeout(list.form_id)" >重新提交</button>
                     </i>
                     <i v-if="list.form_status==233">
-                        <button class="btn btn-primary" @click="addProjectTimeout(list.type)" >重新提交</button>
+                        <button class="btn btn-primary" @click="addProjectTimeout(list.form_id)" >重新提交</button>
                     </i>
                 </div>
                 <div v-if="isCurrentApprover">
@@ -81,7 +81,7 @@
                         <div class="col-md-3 float-left">申请人</div>
                         <div class="col-md-3 float-left">{{list.name || info.approval.name}}</div>
                         <div class="col-md-3 float-left">职位</div>
-                        <div class="col-md-3 float-left">{{list.position}}</div>
+                        <div class="col-md-3 float-left">{{list.position || info.approval.position}}</div>
                     </div>
                     <div class="example">
                         <div class="col-md-3 float-left">部门</div>
@@ -97,7 +97,8 @@
                         <div class="row px-20">
                             <div class="col-md-6 detail-container px-0" v-for="(item, index) in detailData" :key="index" v-if="item.values">
                                 <div class="col-md-3 float-left detail-key mx-0">{{item.key}}</div>
-                                <div class="col-md-6 float-left detail-value" v-if="item.values">{{item.values.data.value || ''}}</div>
+                                <div class="col-md-9 float-left detail-value" v-if="item.values && !item.values.data.value.includes('http')">{{item.values.data.value || ''}}</div>
+                                <div class="col-md-9 float-left detail-value" v-if="item.values && item.values.data.value.includes('http')" data-target='#docPreview' data-toggle='modal' @click='previewUrl=item.values.data.value'>点击查看</div>
                             </div>
                         </div>
                         <div class="panel col-md-12 col-lg-12">
@@ -116,10 +117,11 @@
                     </div>
                 </div>
             </div>
+            <DocPreview :url='previewUrl'/>
         </div>
         <BuildProject :project-type="projectType" :project-fields-arr="projectFieldsArr" 
         :default-data='{fields:info.fields.data,list:list,trailInfo:trailInfo}'></BuildProject>
-        <ApprovalGreatModule :form-data='formData' singlemode='true'  />
+        <ApprovalGreatModule :form-data='formData' singlemode='true' :default-data='detailData' />
         <ApprovalGoModal :mode='approvalMode' :id='list.form_instance_number' @approvaldone='approvalDone' />
     </div>
 
@@ -129,7 +131,6 @@ import fetch from '@/assets/utils/fetch.js'
 import config from '@/assets/js/config'
 import {PROJECT_CONFIG} from '@/views/approval/project/projectConfig.js'
 import ApprovalGreatModule from '@/components/ApprovalGreatModule'
-
 import ApprovalProgress from '@/components/ForApproval/ApprovalProgress'
 export default {
     name:'approvalDetail',
@@ -153,6 +154,7 @@ export default {
            roleUser:'',
            indexData:{},
            formData:{},
+           previewUrl:'',
         }
     },
 
@@ -199,15 +201,15 @@ export default {
             $('#approval-great-module').modal('show')
         },
         approvalDone(){
-            this.getData()
             this.$refs.approvalProgress.getApprover(this.list.project_number)
+            this.$refs.approvalProgress.getApprover(this.list.form_instance_number)
+            this.getData()
             toastr.success('审批成功')
         },
         getCurrentApprover(){
             let _this = this
             fetch('get','/users/my?include=department,roleUser').then((params) => {
                 _this.currentId = params.data.id
-                console.log(params);
                 _this.roleUser = params.data.roleUser.data[0].role_id
                 if(_this.currentId === _this.pending.id || _this.roleUser === _this.pending.id){
                     _this.isCurrentApprover = true
@@ -217,9 +219,9 @@ export default {
             })
         },
         waitingFor(params){
+            console.log(params);
             if(params){
                 this.pending = params
-                console.log(params);
                 this.getCurrentApprover()
             }
             
@@ -241,7 +243,7 @@ export default {
         addProject(value) {
                 this.projectType = value;
                 if(this.list.title.includes('合同')){
-                    this.pullUp(this.indexData[0])
+                    this.pullUp(this.indexData.find(item=>item.form_id === this.projectType))
                 }else{
                     this.selectProjectType(function () {
                         $('#addProject').modal('show')
@@ -283,8 +285,6 @@ export default {
                 let {fields:{data}} = meta
                 _this.detailData = data
                 _this.trailInfo = params.data.trail
-        
-
             })
         },
         participantChange: function (value) {

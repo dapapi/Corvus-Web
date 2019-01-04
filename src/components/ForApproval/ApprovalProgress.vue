@@ -2,13 +2,13 @@
     <div class="page-content container-fluid progress-container pt-0">
         <hr v-if="mode !== 'detail'">
         <div class="approver-row">
-            <span>审批人</span>
-            <div class="approver-container" v-for="(item, index) in approver" :key="index">
-                <div class="approver-container">
+            <span style='min-width:50px;'>审批人</span>
+            <div class="approver-container float-left" v-for="(item, index) in approver" :key="index">
+                <div class=" " style="display:flex">
                     <div class="splicer" v-if="index !== 0"></div>
-                    <div>
+                    <div class="approver-logo">
                         <div class="approver" :style="{backgroundImage:'url('+randomColor(item.icon_url).color+')',backgroundColor:randomColor(item.icon_url).color}">{{randomColor(item.icon_url).name}}</div>
-                        <div v-if="!mode">{{item.name}}</div>
+                        <div v-if="!mode" :class="mode?'approver-name':''" style='font-size:12px;'>{{item.name}}</div>
                         <i v-if="item.change_state_obj" class="iconfont iconfont-logo" :class="item.change_state_obj.changed_icon.split('|')[0]" :style='{color:item.change_state_obj.changed_icon.split("|")[1]}'></i>
                     </div>
                 </div>
@@ -19,6 +19,7 @@
             </div>
             <div class="approver-container" v-if="formstatus">
                 <div class="splicer"></div>
+                <i class="iconfont issueicon" :class="iconSelector.split('|')[0]" :style='{color:iconSelector.split("|")[1]}'></i>
                 <div class="status">{{formstatus}}</div>
             </div>
         </div>
@@ -35,7 +36,7 @@
             </div>  
         </div>
         <div class="approver-row" style="overflow: unset;" >
-            <span v-if="notice || !mode">知会人</span>
+            <span v-if="notice || !mode" style='min-width:50px;'>知会人</span>
             <div class="approver ml-10" :style="{backgroundImage:'url('+randomColor(item.icon_url).color+')',backgroundColor:randomColor(item.icon_url).color}" v-if="mode" v-for="(item, index) in notice" :key="index">{{randomColor(item.icon_url).name}}</div>
             <AddMember v-if="!mode"/>
         </div>
@@ -57,11 +58,27 @@ export default {
         }
     },
     computed:{
-       
+       iconSelector(){
+           switch (this.formstatus) {
+                case '已审批':
+                    return 'icon-tongguo|#4daf50'
+                    break;
+                case '待审批':
+                    return 'icon-tongguo|#e0e0e0'
+                    break;
+                case '已拒绝':
+                    return 'icon-jujue|#fa5a5a'
+                    break;
+                case '已撤销':
+                    return 'icon-chehui|#cacaca'
+                    break
+           }
+       }
     },
     watch:{
         formid:function(value){
-            this.getApprover(value)
+            console.log(value);
+            this.getApprover(this.formid)
         },
         formstatus:function(value){
             this.getApprover(this.formid)
@@ -69,7 +86,6 @@ export default {
         'trend.ready':function(value){
             let _this = this
             if(value == true){
-                console.log(this.trend.condition);
                 fetch('get','/approvals/chains?form_id='+this.formid+'&change_type=224&value='+this.trend.condition.join(',')).then((params) => {
                     _this.approver = params.data
                 })
@@ -79,7 +95,6 @@ export default {
             handler:function(newValue,oldValue){
                 if(this.trend.ready==true && this.trend.condition[0].length !== 0){
                     var _this = this
-                    console.log(this.trend.condition[0]);
                     fetch('get','/approvals/chains?form_id='+this.formid+'&change_type=224&value='+this.trend.condition.join(',')).then((params) => {
                         _this.approver = params.data
                     })
@@ -94,30 +109,30 @@ export default {
         if(this.notice){
             this.$store.state.newParticipantsInfo = Array.from(this.notice)
         }
-
     },
     methods:{
         getApprover(value){
-            if(!value){
-                return
-            }else if(this.trend){
-                return
+            if(!this.mode){
+                if(!value || this.trend.condition[0]){
+                    return
+                }
             }
             let _this = this
             if(!this.mode){
                 fetch('get','/approvals/chains?form_id='+value+'&change_type=222').then((params) => {
-                    console.log(params);
                     _this.approver = params.data
                 })
             }else{
                 fetch('get','/approval_instances/'+value+'/chains').then((params) => {
-                    console.log(params);
                     _this.approver = params.data
                     _this.waitingFor = params.data.find(item=>item.approval_stage === "doing")
                     if(_this.waitingFor){
                         _this.$emit("waitingfor", _this.waitingFor)
                     }else{
-                        _this.$emit("waitingfor", params.data[params.data.length-1])
+                        params.data.reverse()
+                        _this.waitingFor = params.data.find(item=>item.approval_stage === "done")
+                        _this.$emit("waitingfor", _this.waitingFor)
+                        params.data.reverse()
                     }
                 })
             }
@@ -145,7 +160,7 @@ export default {
     position: relative;
     z-index: 1288;
     bottom: 15px;
-    left: 25px;
+    left: 18px;
 }
 
 .approval-detail-title,.approval-detail-container{
@@ -157,13 +172,12 @@ export default {
 .approval-detail-title{
     background: #f5f5f5;
 }
-.approver_texts{
-    margin-top: 5px;
-}
+
 .approver_text{
     margin-left: 5px;
     margin-bottom: 0;
     font-size: 5px;
+    min-width: 50px;
 }
 .approver-row{
     overflow: auto;
@@ -193,6 +207,7 @@ export default {
 
 .approver-container{
     display: flex;
+    
 }
 .splicer{
     width: 60px;
@@ -201,24 +216,33 @@ export default {
     background-color: #E0E0E0;
 }
 .approver{
-    background-size: 40px;
-    font-size: 18px;
+    background-size: 30px;
+    font-size: 12px;
     font-weight: 800;
     color: white;
-    width: 40px;
-    height: 40px;
+    width: 30px;
+    height: 30px;
     border-radius: 100%;
     /* background-color: rgba(7, 17, 27, 0.2); */
     text-align: center;
-    line-height: 40px;
+    line-height: 30px;
+}
+.approver-name{
+    font-size: 8px;
+    min-width: 200px;
 }
 .status{
     font-size: 16px;
     font-weight: 800;
-    width: 80px;
+    width: 60px;
     height: 40px;
+    /* margin-left: -5px; */
     /* background-color: rgba(7, 17, 27, 0.2); */
     text-align: center;
     line-height: 40px;
+}
+.issueicon{
+    font-size: 20px;
+    line-height: 45px;
 }
 </style>
