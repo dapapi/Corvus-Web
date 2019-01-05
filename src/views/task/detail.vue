@@ -50,7 +50,7 @@
                             <template v-if="oldInfo.status === 4"><span style="color:#F44336">延期</span></template>
                         </div>
                     </div>
-                    <div class="card-text clearfix example">
+                    <div class="clearfix example">
                         <div class="pl-0">
                             <div class="float-left pl-0 pr-2 col-md-1">
                                 <i class="iconfont icon-jieshushijian pr-2" aria-hidden="true"></i>结束时间
@@ -144,7 +144,7 @@
                                 </div>
                                 <div class="card-text py-5 clearfix">
                                     <div class="col-md-1 float-left text-right pl-0">优先级</div>
-                                    <div class="col-md-11 float-left font-weight-bold">
+                                    <div class="ml-15 float-left font-weight-bold" style="width: 220px;">
                                         <EditSelector :content="taskInfo.priority?taskInfo.priority: ''"
                                                       :is-edit="isEdit"
                                                       :options="priorityArr" @change="changeTaskLevel"></EditSelector>
@@ -152,7 +152,7 @@
                                 </div>
                                 <div class="card-text py-5 clearfix">
                                     <div class="col-md-1 float-left text-right pl-0">任务说明</div>
-                                    <div class="col-md-11 float-left font-weight-bold">
+                                    <div class="ml-15 float-left font-weight-bold" style="width: 220px;">
                                         <div class="">
                                             <editTextarea :content="taskInfo.desc"
                                                           :is-edit="isEdit"
@@ -1285,5 +1285,15 @@
     }
     table tbody tr {
        cursor: pointer;
+    }
+
+    .modal-body .example {
+        display: flex;
+        align-items: center;
+    }
+
+    .card-block .card-text {
+        display: flex;
+        align-items: center;
     }
 </style>

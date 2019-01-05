@@ -645,6 +645,11 @@
         position: relative;
         border:0px
     }
+
+    .modal-body .example {
+        display: flex;
+        align-items: center;
+    }
 </style>
 
 

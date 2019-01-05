@@ -125,7 +125,7 @@
                                        v-model="trailName">
                             </div>
                         </div>
-                        <div class="example trial-origin">
+                        <div class="my-20 trial-origin clearfix">
                             <TrailOrigin class="require" :trailType='trailType'
                                          typeName='线索' alwaysShow='true'
                                          @changeTrailOrigin='changeTrailOrigin'
@@ -685,9 +685,15 @@
     }
     .trial-origin .require::before {
         margin-left: 9px;
+        line-height: 34px;
     }
     table tbody tr {
         cursor: pointer;
+    }
+
+    .modal-body .example {
+        display: flex;
+        align-items: center;
     }
 </style>
 

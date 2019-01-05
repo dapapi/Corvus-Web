@@ -378,14 +378,14 @@
                                 </div>
                                 <div class="card-block" v-if="artistInfo.name">
                                     <div class="clearfix">
-                                        <div class="card-text py-10 px-0 clearfix col-md-6 float-left edit-height">
+                                        <div class="card-text py-10 px-0 clearfix col-md-6 float-left ">
                                             <div class="col-md-2 float-left text-right pl-0">姓名</div>
                                             <div class="col-md-10 float-left font-weight-bold">
                                                 <EditInput :content="artistInfo.name" :is-edit="isEdit"
                                                            @change="(value) => changeArtistBaseInfo(value, 'name')"></EditInput>
                                             </div>
                                         </div>
-                                        <div class="card-text py-10 px-0 clearfix col-md-6 float-left edit-height">
+                                        <div class="card-text py-10 px-0 clearfix col-md-6 float-left ">
                                             <div class="col-md-2 float-left text-right pl-0">性别</div>
                                             <div class="col-md-10 float-left font-weight-bold">
                                                 <EditSelector :options="genderArr" :content="artistInfo.gender"
@@ -393,7 +393,7 @@
                                                               @change="(value) => changeArtistBaseInfo(value, 'gender')"></EditSelector>
                                             </div>
                                         </div>
-                                        <div class="card-text py-10 px-0 clearfix col-md-6 float-left edit-height">
+                                        <div class="card-text py-10 px-0 clearfix col-md-6 float-left ">
                                             <div class="col-md-2 float-left text-right pl-0">出生日期</div>
                                             <div class="col-md-10 float-left font-weight-bold">
                                                 <EditDatepicker :content="artistInfo.birthday"
@@ -401,7 +401,7 @@
                                                                 @change="(value) => changeArtistBaseInfo(value, 'birthday')"></EditDatepicker>
                                             </div>
                                         </div>
-                                        <div class="card-text py-10 px-0 clearfix col-md-6 float-left edit-height">
+                                        <div class="card-text py-10 px-0 clearfix col-md-6 float-left ">
                                             <div class="col-md-2 float-left text-right pl-0">艺人来源</div>
                                             <div class="col-md-10 float-left font-weight-bold">
                                                 <EditSelector :content="artistInfo.source"
@@ -410,7 +410,7 @@
                                                               @change="(value) => changeArtistBaseInfo(value, 'source')"></EditSelector>
                                             </div>
                                         </div>
-                                        <div class="card-text py-10 px-0 clearfix col-md-6 float-left edit-height">
+                                        <div class="card-text py-10 px-0 clearfix col-md-6 float-left ">
                                             <div class="col-md-2 float-left text-right pl-0">沟通状态</div>
                                             <div class="col-md-10 float-left font-weight-bold">
                                                 <EditSelector :content="artistInfo.communication_status"
@@ -419,7 +419,14 @@
                                                               @change="(value) => changeArtistBaseInfo(value, 'communication_status')"></EditSelector>
                                             </div>
                                         </div>
-                                        <div class="card-text py-10 px-0 clearfix col-md-6 float-left edit-height">
+                                        <div class="card-text py-10 px-0 clearfix col-md-6 float-left ">
+                                            <div class="col-md-2 float-left text-right pl-0">星探</div>
+                                            <div class="col-md-10 float-left font-weight-bold">
+                                                <EditInput :content="artistInfo.artist_scout_name" :is-edit="isEdit"
+                                                           @change="(value) => changeArtistBaseInfo(value, 'artist_scout_name')"></EditInput>
+                                            </div>
+                                        </div>
+                                        <div class="card-text py-10 px-0 clearfix col-md-6 float-left ">
                                             <div class="col-md-2 float-left text-right pl-0">与我司签约意向</div>
                                             <div class="col-md-10 float-left font-weight-bold">
                                                 <ConditionalInput ref="condition" :is-edit="isEdit" :content="artistInfo.intention"
@@ -428,7 +435,7 @@
                                                                   @change="(value) => changeArtistBaseInfo(value, 'intention')"></ConditionalInput>
                                             </div>
                                         </div>
-                                        <div class="card-text py-10 px-0 clearfix col-md-6 float-left edit-height">
+                                        <div class="card-text py-10 px-0 clearfix col-md-6 float-left ">
                                             <div class="col-md-2 float-left text-right pl-0">是否签约其他公司</div>
                                             <div class="col-md-10 float-left font-weight-bold">
                                                 <ConditionalInput ref="condition1" :is-edit="isEdit"
@@ -438,42 +445,35 @@
                                                                   @change="(value) => changeArtistBaseInfo(value, 'sign_contract_other')"></ConditionalInput>
                                             </div>
                                         </div>
-                                        <div class="card-text py-10 px-0 clearfix col-md-6 float-left edit-height">
-                                            <div class="col-md-2 float-left text-right pl-0">星探</div>
-                                            <div class="col-md-10 float-left font-weight-bold">
-                                                <EditInput :content="artistInfo.artist_scout_name" :is-edit="isEdit"
-                                                           @change="(value) => changeArtistBaseInfo(value, 'artist_scout_name')"></EditInput>
-                                            </div>
-                                        </div>
-                                        <div class="card-text py-10 px-0 clearfix col-md-6 float-left edit-height">
+                                        <div class="card-text py-10 px-0 clearfix col-md-6 float-left ">
                                             <div class="col-md-2 float-left text-right pl-0">地区</div>
                                             <div class="col-md-10 float-left font-weight-bold">
                                                 <EditInput  :content="artistInfo.star_location" :is-edit="isEdit"
                                                            @change="(value) => changeArtistBaseInfo(value, 'star_location')"></EditInput>
                                             </div>
                                         </div>
-                                        <div class="card-text py-10 px-0 clearfix col-md-6 float-left edit-height">
+                                        <div class="card-text py-10 px-0 clearfix col-md-6 float-left ">
                                             <div class="col-md-2 float-left text-right pl-0">手机号</div>
                                             <div class="col-md-10 float-left font-weight-bold">
                                                 <EditInput :content="artistInfo.phone" :is-edit="isEdit"
                                                            @change="(value) => changeArtistBaseInfo(value, 'phone')"></EditInput>
                                             </div>
                                         </div>
-                                        <div class="card-text py-10 px-0 clearfix col-md-6 float-left edit-height">
+                                        <div class="card-text py-10 px-0 clearfix col-md-6 float-left ">
                                             <div class="col-md-2 float-left text-right pl-0">微信</div>
                                             <div class="col-md-10 float-left font-weight-bold">
                                                 <EditInput  :content="artistInfo.wechat" :is-edit="isEdit"
                                                            @change="(value) => changeArtistBaseInfo(value, 'wechat')"></EditInput>
                                             </div>
                                         </div>
-                                        <div class="card-text py-10 px-0 clearfix col-md-6 float-left edit-height">
+                                        <div class="card-text py-10 px-0 clearfix col-md-6 float-left ">
                                             <div class="col-md-2 float-left text-right pl-0">邮箱</div>
                                             <div class="col-md-10 float-left font-weight-bold">
                                                 <EditInput :content="artistInfo.email" :is-edit="isEdit"
                                                            @change="(value) => changeArtistBaseInfo(value, 'email')"></EditInput>
                                             </div>
                                         </div>
-                                        <div class="card-text py-10 px-0 clearfix col-md-6 float-left edit-height">
+                                        <div class="card-text py-10 px-0 clearfix col-md-6 float-left ">
                                             <div class="col-md-2 float-left text-right pl-0">社交平台</div>
                                             <div class="col-md-10 float-left font-weight-bold">
                                                 <EditSelector :is-edit="isEdit" :multiple="true"
@@ -482,28 +482,28 @@
                                                               @change="(value) => changeArtistBaseInfo(value, 'platform')"></EditSelector>
                                             </div>
                                         </div>
-                                        <div class="card-text py-10 px-0 clearfix col-md-6 float-left edit-height">
+                                        <div class="card-text py-10 px-0 clearfix col-md-6 float-left ">
                                             <div class="col-md-2 float-left text-right pl-0">微博主页地址</div>
                                             <div class="col-md-10 float-left font-weight-bold">
                                                 <EditInput :content="artistInfo.weibo_url" :is-edit="isEdit"
                                                            @change="(value) => changeArtistBaseInfo(value, 'weibo_url')"></EditInput>
                                             </div>
                                         </div>
-                                        <div class="card-text py-10 px-0 clearfix col-md-6 float-left edit-height">
+                                        <div class="card-text py-10 px-0 clearfix col-md-6 float-left ">
                                             <div class="col-md-2 float-left text-right pl-0">微博粉丝数</div>
                                             <div class="col-md-10 float-left font-weight-bold">
                                                 <EditInput :content="artistInfo.weibo_fans_num" :is-edit="isEdit"
                                                            @change="(value) => changeArtistBaseInfo(value, 'weibo_fans_num')"></EditInput>
                                             </div>
                                         </div>
-                                        <div class="card-text py-10 px-0 clearfix col-md-6 float-left edit-height">
+                                        <div class="card-text py-10 px-0 clearfix col-md-6 float-left ">
                                             <div class="col-md-2 float-left text-right pl-0">抖音Id</div>
                                             <div class="col-md-10 float-left font-weight-bold">
                                                 <EditInput :content="artistInfo.douyin_id" :is-edit="isEdit"
                                                            @change="(value) => changeArtistBaseInfo(value, 'douyin_id')"></EditInput>
                                             </div>
                                         </div>
-                                        <div class="card-text py-10 px-0 clearfix col-md-6 float-left edit-height">
+                                        <div class="card-text py-10 px-0 clearfix col-md-6 float-left ">
                                             <div class="col-md-2 float-left text-right pl-0">抖音粉丝数</div>
                                             <div class="col-md-10 float-left font-weight-bold">
                                                 <EditInput :content="artistInfo.douyin_fans_num" :is-edit="isEdit"
@@ -511,7 +511,7 @@
                                             </div>
                                         </div>
 
-                                        <div class="card-text py-10 px-0 clearfix col-md-6 float-left edit-height">
+                                        <div class="card-text py-10 px-0 clearfix col-md-6 float-left ">
                                             <div class="col-md-2 float-left text-right pl-0">备注</div>
                                             <div class="col-md-10 float-left font-weight-bold">
                                                 <editTextarea :content="artistInfo.desc" :is-edit="isEdit"
@@ -519,7 +519,7 @@
                                             </div>
                                         </div>
                                         <div v-show="isEdit"
-                                             class="card-text py-10 px-0 clearfix col-md-6 float-left edit-height">
+                                             class="card-text py-10 px-0 clearfix col-md-6 float-left ">
                                             <div class="col-md-2 float-left text-right pl-0">附件类型</div>
                                             <div class="col-md-10 float-left font-weight-bold">
                                                 <selectors v-show="isEdit" :options="attachmentTypeArr"
@@ -527,7 +527,7 @@
 
                                             </div>
                                         </div>
-                                        <div class="card-text py-10 px-0 clearfix col-md-6 float-left mt-10"
+                                        <div class=" py-10 px-0 clearfix col-md-6 float-left mt-10"
                                              style="min-height:57px">
                                             <div class="col-md-2 float-left text-right pl-0">附件</div>
                                             <div class="col-md-10 float-left font-weight-bold">
@@ -1719,7 +1719,7 @@
         will-change: transform;
     }
 
-    .edit-height {
+    . {
         height: 57px;
     }
 
@@ -1850,16 +1850,9 @@
 
     }
 
-    /* .plus_hover{
-        display:none;
-       position: absolute;
-        left: 0px;
-        top:0px;
-        z-index:99
-    } */
-    /* .plus_hover:hover{
-        display: block;
-        
-    } */
+    .card-block .card-text {
+        display: flex;
+        align-items: center;
+    }
 </style>
 

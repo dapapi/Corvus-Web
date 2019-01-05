@@ -255,8 +255,16 @@
                                         </div>
                                     </div>
                                     <div class="card-text py-10 px-0 clearfix col-md-6 float-left">
-                                        <div class="col-md-2 float-left text-right pl-0">地区</div>
+                                        <div class="col-md-2 float-left text-right pl-0">规模</div>
                                         <div class="col-md-10 float-left font-weight-bold expfee">
+                                            <EditSelector :options="clientScaleArr" :is-edit="isEdit"
+                                                          :content="clientInfo.size"
+                                                          @change="changeClientScale"></EditSelector>
+                                        </div>
+                                    </div>
+                                    <div class="card-text py-10 px-0 clearfix col-md-6 float-left">
+                                        <div class="col-md-2 float-left text-right pl-0">地区</div>
+                                        <div class="col-md-10 float-left font-weight-bold expfee region">
                                             <template v-if="!isEdit">
                                                 {{clientInfo.province}}{{clientInfo.city}}{{clientInfo.district}}
                                             </template>
@@ -273,14 +281,6 @@
                                         <div class="col-md-10 float-left font-weight-bold expfee">
                                             <EditInput :content="clientInfo.address" :is-edit="isEdit"
                                                        @change="changeClientAddress"></EditInput>
-                                        </div>
-                                    </div>
-                                    <div class="card-text py-10 px-0 clearfix col-md-6 float-left">
-                                        <div class="col-md-2 float-left text-right pl-0">规模</div>
-                                        <div class="col-md-10 float-left font-weight-bold expfee">
-                                            <EditSelector :options="clientScaleArr" :is-edit="isEdit"
-                                                          :content="clientInfo.size"
-                                                          @change="changeClientScale"></EditSelector>
                                         </div>
                                     </div>
                                     <div class="card-text py-10 px-0 clearfix col-md-6 float-left">
@@ -1001,5 +1001,15 @@
     }
     table tbody tr {
        cursor: pointer;
+    }
+
+    .modal-body .example {
+        display: flex;
+        align-items: center;
+    }
+
+    .card-block .card-text {
+        display: flex;
+        align-items: center;
     }
 </style>

@@ -101,7 +101,7 @@
         </div>
 
         <!-- 新建/修改 日程 -->
-        <div class="modal fade" id="changeSchedule" aria-hidden="true" aria-labelledby="addLabelForm"
+        <div class="modal fade line-center" id="changeSchedule" aria-hidden="true" aria-labelledby="addLabelForm"
              role="dialog" tabindex="-1">
             <div class="modal-dialog modal-simple">
                 <div class="modal-content">
@@ -146,7 +146,7 @@
                             </div>
                         </div>
                         <div class="clearfix">
-                            <div class="col-md-2 text-right float-left">结束时间</div>
+                            <div class="col-md-2 text-right float-left line-fixed-height">结束时间</div>
                             <div class="col-md-5 float-left pl-0">
                                 <datepicker @change="changeEndTime" ref="scheduleEndDate"></datepicker>
                             </div>
@@ -165,7 +165,7 @@
                             </div>
                         </div>
                         <div class="clearfix py-10">
-                            <div class="col-md-2 text-right float-left">参与人</div>
+                            <div class="col-md-2 text-right float-left line-fixed-height">参与人</div>
                             <div class="col-md-10 float-left pl-0">
                                 <AddMember type="add"></AddMember>
                             </div>
@@ -192,7 +192,7 @@
                         </div>
                         <div v-show="showMore">
                             <div class="pt-10 mb-20 clearfix">
-                                <div class="col-md-2 text-right float-left">资源</div>
+                                <div class="col-md-2 text-right float-left line-fixed-height">资源</div>
                                 <div class="col-md-10 float-left pl-0">
                                     <selectors :options="allMeetingRomeList" ref="scheduleResource"
                                                @change="changeScheduleMaterial"></selectors>
@@ -204,8 +204,8 @@
                                     <selectors :options="remindArr" ref="scheduleNotice"></selectors>
                                 </div>
                             </div>
-                            <div class="example">
-                                <div class="col-md-2 text-right float-left">重复</div>
+                            <div class="clearfix my-20">
+                                <div class="col-md-2 text-right float-left line-fixed-height">重复</div>
                                 <div class="col-md-10 float-left pl-0">
                                     <selectors :options="repeatArr" ref="scheduleRepeat"
                                                @change="changeScheduleRepeat"></selectors>
@@ -219,7 +219,7 @@
                                     <input type="text" class="form-control" title="" v-model="eventPlace">
                                 </div>
                             </div>
-                            <div class="mt-20">
+                            <div class="example">
                                 <div class="col-md-2 text-right float-left">备注</div>
                                 <div class="col-md-10 float-left pl-0">
                                     <textarea class="form-control" title="" v-model="eventDesc"></textarea>
@@ -323,14 +323,15 @@
                             <div class="col-md-10 pl-0 float-left">
                                 <div class="pb-5" v-if="scheduleData.project"
                                      v-for="project in scheduleData.project.data">
-                                    <span>项目 - {{ project.id }}</span>
-                                    <span class="float-right" @click="delScheduleLinkage('project', project.id)">
+                                    <span>项目 - {{ project.title }}</span>
+                                    <span class="float-right"
+                                          @click="delScheduleLinkage('project', project.moduleable_id)">
                                         <i class="iconfont icon-shanchu1 pointer-content"></i>
                                     </span>
                                 </div>
                                 <div class="pb-5" v-if="scheduleData.task" v-for="task in scheduleData.task.data">
-                                    <span>任务 - {{ task.id }}</span>
-                                    <span class="float-right" @click="delScheduleLinkage('task', task.id)">
+                                    <span>任务 - {{ task.title }}</span>
+                                    <span class="float-right" @click="delScheduleLinkage('task', task.moduleable_id)">
                                         <i class="iconfont icon-shanchu1 pointer-content"></i>
                                     </span>
                                 </div>
@@ -364,7 +365,7 @@
         </div>
 
         <!-- 添加/修改 日历 -->
-        <div class="modal fade" id="addCalendar" aria-hidden="true" aria-labelledby="addLabelForm"
+        <div class="modal fade line-center" id="addCalendar" aria-hidden="true" aria-labelledby="addLabelForm"
              role="dialog" tabindex="-1">
             <div class="modal-dialog modal-simple">
                 <div class="modal-content">
@@ -392,7 +393,7 @@
                             <div class="col-md-10 float-left pl-0">
                                 <ul class="color-selector calendar-color-list">
                                     <li v-for="(color,index) in colorArr" :style="'background-color: ' + color"
-                                      :key="index"  @click="changeCalendarColor(color)">
+                                        :key="index" @click="changeCalendarColor(color)">
                                         <i class="md-check" v-if="color === checkColor"></i>
                                     </li>
                                 </ul>
@@ -1370,6 +1371,15 @@
 
     .file-item:hover .del-affix {
         display: block;
+    }
+
+    .line-center .example {
+        display: flex;
+        align-items: center;
+    }
+
+    .line-center .line-fixed-height {
+        line-height: 34px;
     }
 
 </style>
