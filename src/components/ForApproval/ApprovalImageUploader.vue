@@ -1,6 +1,6 @@
 <template>
-    <div class="upload col-md-12 pl-0">
-        <div class="col-md-2 text-right">{{data[0].control_title}}</div>
+    <div class="upload col-md-12 pl-0 ">
+        <div class="col-md-2 text-right pl-0" :class="data[0].required===1?'require':''">{{data[0].control_title}}</div>
         <figure v-for="(item, index) in fileInfo" :key="index" >
             <div class="image-show" v-if="fileInfo.length > 0" :style="'backgroundImage:url('+item.fileUrl+')'"></div>
             <p>{{item.fileName}}</p>
