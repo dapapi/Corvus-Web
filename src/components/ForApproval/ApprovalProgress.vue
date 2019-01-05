@@ -78,6 +78,7 @@ export default {
     },
     watch:{
         formid:function(value){
+            console.log(value);
             this.getApprover(this.formid)
         },
         formstatus:function(value){

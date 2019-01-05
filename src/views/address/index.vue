@@ -129,67 +129,27 @@
                         </div>
                     </div>
                 </div>
-                <div class="panel task-panel">
-                    <div class="px-30 py-10 title-wrap">
-                        <h5>任务</h5>
-                    </div>
-                    <div class="col-md-12">
-                        <ul class="nav nav-tabs nav-tabs-line" role="tablist">
-                            <li class="nav-item" role="presentation">
-                                <a class="nav-link active" data-toggle="tab"
-                                   href="#forum-tasking"
-                                   aria-controls="forum-base"
-                                   aria-expanded="true" role="tab">正在进行</a>
-                            </li>
-                            <li class="nav-item" role="presentation">
-                                <a class="nav-link" data-toggle="tab"
-                                   href="#forum-task"
-                                   aria-controls="forum-present"
-                                   aria-expanded="false" role="tab">待完成</a>
-                            </li>
-                            <li class="nav-item" role="presentation">
-                                <a class="nav-link" data-toggle="tab"
-                                   href="#forum-task-finish"
-                                   aria-controls="forum-present"
-                                   aria-expanded="false" role="tab">已完成</a>
-                            </li>
-                        </ul>
-                    </div>
-                    <div class="page-content tab-content nav-tabs-animate">
-                        <div class="tab-pane animation-fade active" id="forum-tasking" role="tabpanel">
-                            <div class="clearfix pb-10">
-                                <div class="col-md-6 float-left pl-0">任务1</div>
-                                <div class="col-md-6 float-left">任务1所在项目</div>
-                            </div>
-                            <div class="clearfix pb-10">
-                                <div class="col-md-6 float-left pl-0">任务2</div>
-                                <div class="col-md-6 float-left">任务2所在项目</div>
-                            </div>
-                            <div class="clearfix pb-10">
-                                <div class="col-md-6 float-left pl-0">任务3</div>
-                                <div class="col-md-6 float-left">任务3所在项目</div>
+                <div class="clearfix">
+                    <div class="panel task-panel">
+                        <div class="px-30 py-10 title-wrap">
+                            <h5>任务</h5>
+                        </div>
+                        <div class="page-content tab-content nav-tabs-animate">
+                            <div class="clearfix pb-10 my-10" v-for="(item, index) in tasks" :key="index">
+                                <div class="col-md-7 float-left"><Avatar class="small-avatar" :imgUrl="item.principal.data.icon_url" />{{ item.title }}</div>
+                                <div class="col-md-5 float-left" style="text-align: right">{{ item.end_at }}</div>
                             </div>
                         </div>
-                        <div class="tab-pane animation-fade" id="forum-task" role="tabpanel">
-                            待完成
-                        </div>
-                        <div class="tab-pane animation-fade" id="forum-task-finish" role="tabpanel">
-                            已完成
-                        </div>
                     </div>
-                </div>
-                <div class="panel schedule-panel">
-                    <div class="px-30 py-10 title-wrap">
-                        <h5>最近日程</h5>
-                    </div>
-                    <div class="page-content tab-content nav-tabs-animate">
-                        <div class="clearfix pb-10">
-                            <div class="col-md-6 float-left pl-0">日程1</div>
-                            <div class="col-md-6 float-left">2018-09-23 11：22</div>
+                    <div class="panel schedule-panel">
+                        <div class="px-30 py-10 title-wrap">
+                            <h5>最近日程</h5>
                         </div>
-                        <div class="clearfix pb-10">
-                            <div class="col-md-6 float-left pl-0">日程2</div>
-                            <div class="col-md-6 float-left">2018-09-23 11：22</div>
+                        <div class="page-content tab-content nav-tabs-animate">
+                            <div class="clearfix pb-10 my-10" v-for="(item, index) in schedules" :key="index">
+                                <div class="col-md-7 float-left"><Avatar class="small-avatar" :imgUrl="item.creator.data.icon_url" />{{ item.title }}</div>
+                                <div class="col-md-5 float-left" style="text-align: right">{{ item.end_at }}</div>
+                            </div>
                         </div>
                     </div>
                 </div>
@@ -213,13 +173,17 @@
                 normalUsers: '',
                 personalInfo: {},
                 checkedIndex: '',
+                tasks: [], // 任务
+                schedules: [], // 日程
             }
         },
         mounted() {
+            const id = JSON.parse(Cookies.get('user')).id
             fetch('get', '/departments/crew').then(res => {
                 this.normalUsers = res;
-                this.setDefaultInfo(JSON.parse(Cookies.get('user')).id)
+                this.setDefaultInfo(id)
             })
+            this.getSchedules(id)
         },
         computed: {
             ...mapState([
@@ -233,6 +197,7 @@
             handelMemberClick (index, data) {
                 this.checkedIndex = index
                 this.personalInfo = data
+                this.getSchedules(data.user_id)
             },
             // 设置默认信息
             setDefaultInfo(id) {
@@ -250,10 +215,12 @@
                 }
             },
             // 日程
-            getSchedules () {
-                // todo
+            getSchedules (id) {
+                fetch('get', `/users/${id}?include=tasks,schedules.creator`).then(res => {
+                    this.tasks = res.data.tasks.data
+                    this.schedules = res.data.schedules.data
+                })
             }
-            // 任务  todo
         },
     }
 </script>
@@ -314,6 +281,12 @@
     }
     #forum-department {
         padding-bottom: 30px;
+    }
+    .small-avatar {
+        float: left;
+        position: relative;
+        top: -4px;
+        left: -15px;
     }
 </style>
 

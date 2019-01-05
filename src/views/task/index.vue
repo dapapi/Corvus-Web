@@ -624,4 +624,9 @@
     table tbody tr {
        cursor: pointer;
     }
+
+    .modal-body .example {
+        display: flex;
+        align-items: center;
+    }
 </style>
