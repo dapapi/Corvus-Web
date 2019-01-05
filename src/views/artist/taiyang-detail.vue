@@ -114,68 +114,6 @@
 
             </div>
 
-<<<<<<< HEAD
-            <div style="display: flex; align-items: stretch; justify-content: space-between;">
-                <div class="panel" style="width: calc(66% - 15px);">
-                    <div class="col-md-12">
-                        <ul class="nav nav-tabs nav-tabs-line" role="tablist">
-                            <li class="nav-item" role="presentation" v-show="artistInfo.sign_contract_status == 2">
-                                <a class="nav-link" :class="artistInfo.sign_contract_status == 2?'active':''"
-                                data-toggle="tab" href="#forum-artist-schedule"
-                                aria-controls="forum-base"
-                                aria-expanded="false" role="tab">日程</a>
-                            </li>
-                            <li class="nav-item" role="presentation" v-show="artistInfo.sign_contract_status == 2">
-                                <a class="nav-link" data-toggle="tab" href="#forum-artist-projects"
-                                aria-controls="forum-present"
-                                aria-expanded="false" role="tab">项目</a>
-                            </li>
-                            <li class="nav-item" role="presentation">
-                                <a class="nav-link" 
-                                data-toggle="tab" href="#forum-artist-tasks"
-                                aria-controls="forum-present"
-                                aria-expanded="true" role="tab">
-                                    <template v-if="allTaskList.length > 0">
-                                        <ToolTips :title="`已完成数量${doneTaskNum}`">
-                                            任务 ({{taskNum}})
-                                        </ToolTips>
-                                    </template>
-                                    <template v-else>
-                                        任务
-                                    </template>
-                                </a>
-                            </li>
-                            <li class="nav-item" role="presentation" v-show="artistInfo.sign_contract_status == 2">
-                                <a class="nav-link" data-toggle="tab" href="#forum-artist-work"
-                                aria-controls="forum-present"
-                                aria-expanded="false" role="tab">作品库</a>
-                            </li>
-                            <!--<li class="nav-item" role="presentation" v-show="artistInfo.sign_contract_status == 2">-->
-                                <!--<a class="nav-link" data-toggle="tab" href="#forum-artist-fans"-->
-                                <!--aria-controls="forum-present"-->
-                                <!--aria-expanded="false" role="tab">粉丝数据</a>-->
-                            <!--</li>-->
-                            <li class="nav-item" role="presentation" @click="getArtistsBill"
-                                v-show="artistInfo.sign_contract_status == 2">
-                                <a class="nav-link" data-toggle="tab" href="#forum-artist-bill"
-                                aria-controls="forum-present"
-                                aria-expanded="false" role="tab">账单</a>
-                            </li>
-                            <li class="nav-item" role="presentation">
-                                <a class="nav-link" data-toggle="tab" href="#forum-artist-base"
-                                aria-controls="forum-present"
-                                aria-expanded="false" role="tab" :class="artistInfo.sign_contract_status == 2?'':'active'">概况</a>
-                            </li>
-                        </ul>
-                        <div class="tab-content nav-tabs-animate bg-white col-md-12">
-                            <!--日历日程-->
-                            <div class="tab-pane animation-fade pb-20 fixed-button-father" id="forum-artist-schedule"
-                                role="tabpanel" :class="artistInfo.sign_contract_status == 2?'active':''">
-                                <div class="col-md-12">
-                                    <calendar :goto-date="selectedDate" :calendars="calendarId" ref="calendar"
-                                            @scheduleClick="showScheduleModal"></calendar>
-                                </div>
-=======
             <div class="col-md-12 panel">
                 <div class="col-md-12">
                     <ul class="nav nav-tabs nav-tabs-line" role="tablist">
@@ -216,7 +154,7 @@
                                <!--aria-expanded="false" role="tab">粉丝数据</a>-->
                         <!--</li>-->
                         <li class="nav-item" role="presentation" @click="getArtistsBill"
-                            v-show="artistInfo.sign_contract_status == 2">
+                            v-if="artistInfo.sign_contract_status == 2">
                             <a class="nav-link" data-toggle="tab" href="#forum-artist-bill"
                                aria-controls="forum-present"
                                aria-expanded="false" role="tab">账单</a>
@@ -317,7 +255,6 @@
                                     <i class="back-icon iconfont icon-tianjia1 animation-scale-up" aria-hidden="true"
                                        style="font-size:30px"></i>
                                 </button>
->>>>>>> qsf
                             </div>
                             <!--项目-->
                             <div class="tab-pane animation-fade pb-20 fixed-button-father" id="forum-artist-projects"
