@@ -481,7 +481,6 @@
                     $('table').asSelectable('_trigger');
                     _this.isLoading = false;
                 })
-                _this.isLoading = false
             },
             customize: function (value) {
 

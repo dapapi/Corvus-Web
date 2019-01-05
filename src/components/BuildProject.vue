@@ -421,6 +421,8 @@
                         this.trailOrigin = value;
                         this.projectBaseInfo.trail.resource_type = value;
                         return
+                    case 'expectations':
+                        this.projectBaseInfo.trail.expectations = value;
                 }
                 this.projectBaseInfo[name] = value
             },
