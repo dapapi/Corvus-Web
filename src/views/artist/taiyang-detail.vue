@@ -114,7 +114,7 @@
 
             </div>
 
-            <div style="display: flex; align-items: stretch; justify-content: space-between;">
+            <div style="display: flex; justify-content: space-between; align-items: flex-start">
                 <div class="panel" style="width: calc(66% - 15px);">
                     <div class="col-md-12">
                         <ul class="nav nav-tabs nav-tabs-line" role="tablist">
