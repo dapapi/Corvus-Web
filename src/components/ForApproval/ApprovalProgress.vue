@@ -2,37 +2,42 @@
     <div class="page-content container-fluid progress-container pt-0">
         <hr v-if="mode !== 'detail'">
         <div class="approver-row col-md-12 clearfix">
-            <span style='min-width:50px;' class="float-left mt-20">审批人</span>
-            <div class="approver-container float-left mt-20 ml-0" v-for="(item, index) in approver" :key="index">
-                <div class=" noselect" style="display:flex ">
-                    <div class="splicer" v-if="index !== 0"></div>
-                    <div class="approver-logo" style='font-size:12px; min-width:50px'>
-                        <div class="approver" :style="{backgroundImage:'url('+randomColor(item.icon_url).color+')',backgroundColor:randomColor(item.icon_url).color,margin:'0 auto'}">{{randomColor(item.icon_url).name}}</div>
-                        <div v-if="!mode" :class="mode?'approver-name':''" style='text-align:center;'>{{item.name}}</div>
-                        <i v-if="item.change_state_obj" class="iconfont iconfont-logo" :class="item.change_state_obj.changed_icon.split('|')[0]" :style='{color:item.change_state_obj.changed_icon.split("|")[1]}'></i>
+            <div style='min-width:50px;' class="float-left mt-20 ">审批人</div>
+            <div class="float-left col-md-10">
+                <div class="approver-container float-left mt-20 ml-0" v-for="(item, index) in approver" :key="index">
+                    <div class=" noselect" style="display:flex ">
+                        <div class="approver-logo" style='font-size:12px; min-width:50px'>
+                            <div class="approver" :style="{backgroundImage:'url('+randomColor(item.icon_url).color+')',backgroundColor:randomColor(item.icon_url).color,margin:'0 auto'}">{{randomColor(item.icon_url).name}}</div>
+                            <div v-if="!mode" :class="mode?'approver-name':''" style='text-align:center;'>{{item.name}}</div>
+                            <i v-if="item.change_state_obj" class="iconfont iconfont-logo" :class="item.change_state_obj.changed_icon.split('|')[0]" :style='{color:item.change_state_obj.changed_icon.split("|")[1]}'></i>
+                        </div>
+                        <div class="splicer" v-if="index < (approver.length-1)">{{item.length}}</div>
+
+                    </div>
+                    <div class="approver_texts" v-if="item.change_state_obj">
+                        <p class="approver_text">{{item.name}}</p>
+                        <p class="approver_text">{{item.change_state_obj.changed_state}}</p>
                     </div>
                 </div>
-                <div class="approver_texts" v-if="item.change_state_obj">
-                    <p class="approver_text">{{item.name}}</p>
-                    <p class="approver_text">{{item.change_state_obj.changed_state}}</p>
+                <div class="approver-container float-left mt-20" v-if="formstatus">
+                    <div class="splicer"></div>
+                    <i class="iconfont issueicon" :class="iconSelector.split('|')[0]" :style='{color:iconSelector.split("|")[1]}'></i>
+                    <div class="status">{{formstatus}}</div>
                 </div>
-            </div>
-            <div class="approver-container float-left mt-20" v-if="formstatus">
-                <div class="splicer"></div>
-                <i class="iconfont issueicon" :class="iconSelector.split('|')[0]" :style='{color:iconSelector.split("|")[1]}'></i>
-                <div class="status">{{formstatus}}</div>
             </div>
         </div>
         <div class="approval-detail-main example" v-if="formstatus">
             <div class="approval-detail-title col-md-12">
-                <div class="col-md-3 ">审批</div>
-                <div class="col-md-6">操作</div>
+                <div class="col-md-2 ">审批</div>
+                <div class="col-md-3">操作</div>
                 <div class="col-md-3">审批时间</div>
+                <div class="col-md-4">审批意见</div>
             </div>
             <div class="col-md-12 approval-detail-container" v-for="(item, index) in approver" :key="index" v-if="item.approval_stage === 'done'">
-                <div class="col-md-3">{{item.name}}</div>
-                <div class="col-md-6">{{item.change_state_obj.changed_state}}</div>
+                <div class="col-md-2">{{item.name}}</div>
+                <div class="col-md-3">{{item.change_state_obj.changed_state}}</div>
                 <div class="col-md-3">{{item.change_at}}</div>
+                <div class="col-md-4">{{item.comment}}</div>
             </div>  
         </div>
         <div class="col-md-12 mt-20 mb-50" >
