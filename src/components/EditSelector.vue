@@ -55,9 +55,9 @@
             },
             setDefaultValue:function(val){
                 let _this = this;
-                    setTimeout(function () {
-                        _this.$refs.selector.setValue(val)
-                    }, 0)
+                this.$nextTick(()=>{
+                    _this.$refs.selector.setValue(val)
+                })
             }
         }
     }
