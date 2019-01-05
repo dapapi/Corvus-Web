@@ -112,13 +112,13 @@
             <div class="col-md-12 panel">
                 <div class="col-md-12">
                     <ul class="nav nav-tabs nav-tabs-line" role="tablist">
-                        <li class="nav-item" role="presentation" v-show="artistInfo.sign_contract_status == 2">
+                        <li class="nav-item" role="presentation" v-if="artistInfo.sign_contract_status == 2">
                             <a class="nav-link" :class="artistInfo.sign_contract_status == 2?'active':''"
                                data-toggle="tab" href="#forum-artist-schedule"
                                aria-controls="forum-base"
                                aria-expanded="false" role="tab">日程</a>
                         </li>
-                        <li class="nav-item" role="presentation" v-show="artistInfo.sign_contract_status == 2">
+                        <li class="nav-item" role="presentation" v-if="artistInfo.sign_contract_status == 2">
                             <a class="nav-link" data-toggle="tab" href="#forum-artist-projects"
                                aria-controls="forum-present"
                                aria-expanded="false" role="tab">项目</a>
@@ -138,7 +138,7 @@
                                 </template>
                             </a>
                         </li>
-                        <li class="nav-item" role="presentation" v-show="artistInfo.sign_contract_status == 2">
+                        <li class="nav-item" role="presentation" v-if="artistInfo.sign_contract_status == 2">
                             <a class="nav-link" data-toggle="tab" href="#forum-artist-work"
                                aria-controls="forum-present"
                                aria-expanded="false" role="tab">作品库</a>
@@ -165,8 +165,8 @@
                         <div class="tab-pane animation-fade pb-20 fixed-button-father" id="forum-artist-schedule"
                              role="tabpanel" :class="artistInfo.sign_contract_status == 2?'active':''">
                             <div class="col-md-12">
-                                <calendar :goto-date="selectedDate" :calendars="calendarId" ref="calendar"
-                                          @scheduleClick="showScheduleModal"></calendar>
+                                <calendar v-if="artistInfo.sign_contract_status == 2" :goto-date="selectedDate" :calendars="calendarId" ref="calendar"
+                                          @scheduleClick="showScheduleModal" :isModel="true"></calendar>
                             </div>
                         </div>
                         <!--项目-->
@@ -1082,6 +1082,7 @@
             //获取日历详情
             showScheduleModal: function (schedule) {
                 let data = {
+
                     include: 'calendar,participants,creator,material,affixes',
                 };
                 fetch('get', '/schedules/' + schedule.id, data).then(response => {

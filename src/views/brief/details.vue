@@ -56,9 +56,7 @@
                             <div class="pt-10 uploadContent" v-show="item.type == 5" >
                                 {{submitAnswerData[`answer[${item.id}]`]}}
                                 <div v-for="(item,index) in submitAnswerData[`answer[${item.id}]`]" :key="index">{{item.name}}</div>
-                                <!-- <span style="color:#01BCD4;cursor:pointer">上传附件</span> -->
                                 <Upload v-bind:id="item.id" @change="uploadAttachment">上传附件</Upload>
-                                <!-- <FileUploader class="upload" v-bind:id="item.id"  @change="uploadAttachment"></FileUploader> -->
                             </div>
                             
                         </li>
@@ -67,12 +65,6 @@
              </div>
         </div>
     </div>
-    <!-- <div class="site-action" data-plugin="actionBtn" @click="redirectBriefAdd()">
-        <button type="button" class="site-action-toggle btn-raised btn btn-success btn-floating waves-effect waves-classic">
-            <i class="front-icon iconfont icon-tianjia animation-scale-up" aria-hidden="true"></i>
-            <i class="back-icon iconfont icon-tianjia animation-scale-up" aria-hidden="true"></i>
-        </button>
-    </div> -->
     <div class="modal fade" id="selectTask" aria-hidden="true" aria-labelledby="addLabelForm" role="dialog" tabindex="-1">
         <div class="modal-dialog modal-simple">
             <div class="modal-content">
@@ -137,6 +129,7 @@ export default {
     mounted(){
 
         this.getAll()
+        //获取草稿详情
         this.draftDetails()
         //任务列表报错 暂时注释
         // this.getTaskList()

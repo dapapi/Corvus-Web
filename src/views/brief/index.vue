@@ -11,7 +11,7 @@
                         <div v-if="item.status === null" class="card" @click="redirectBriefDetails(item.id,item.frequency,item.template_name)">
                             <div class="card-block clearfix">
                                 <img :src="item.type === 2?'https://res-crm.papitube.com/contract-blue.png':'https://res-crm.papitube.com/contract-dark-blue.png'" alt=""
-                                         style="width: 40px;height: 40px;" class="float-left mr-10">
+                                         style="width: 40px;height: 40px;" class="float-left mr-10 mt-10">
                                 
                                 <div class="float-left my-10">
                                     <div >{{item.template_name}}</div>
@@ -23,7 +23,7 @@
                             <div class="card-block clearfix">
                                 
                                  <img :src="item.type === 2?'https://res-crm.papitube.com/contract-blue.png':'https://res-crm.papitube.com/contract-dark-blue.png'" alt=""
-                                         style="width: 40px;height: 40px;" class="float-left mr-10">
+                                         style="width: 40px;height: 40px;" class="float-left mr-10 mt-10">
                                 
                                 <div class="float-left my-10">
                                      <div>{{item.template_name}}</div>

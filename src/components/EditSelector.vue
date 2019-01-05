@@ -38,7 +38,10 @@
                 this.isEditSelect = newValue;
                 if (newValue) {
                     let _this = this;
-                    _this.$refs.selector.setValue(_this.content)
+                    this.$nextTick(()=>{
+                       _this.$refs.selector.setValue(_this.content)
+                    })
+                    
                 } else {
                     this.$refs.selector.destroy()
                 }

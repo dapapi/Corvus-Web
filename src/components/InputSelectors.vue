@@ -5,13 +5,15 @@
             <input type="text" class="form-control" title="" @focus="showMember" :placeholder="placeholder"
                    v-model="selectedMemberName">
         </div>
+        <!-- <div class="addMember-trigger-button float input-selectors-div" :class="selectedMemberName?'addMember-trigger-left' : ''"
+                 @click="showMember"><i class="iconfont icon-tianjia"></i></div> -->
         <div class="float-left" v-show="selectMemberShow">
             <select-staff class="selector" @change="changeSelectMember" :member-type="'principal'"
                           :type="type"></select-staff>
         </div>
     </div>
 </template>
-
+jj
 <script>
     export default {
         props: ['placeholder', 'type', 'propSelectMemberName', 'otherslot'],
@@ -73,6 +75,7 @@
 
     .input-selectors-add {
         width: 100%;
+        width:140px;
     }
 
     .input-selectors-span {
