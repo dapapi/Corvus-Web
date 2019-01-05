@@ -306,7 +306,7 @@ export default {
      -ms-user-select: none;
      user-select:none;
 }
-.approver{
+ .approver{
     display: inline-block;
     font-size: 12px;
     font-weight: 800;
