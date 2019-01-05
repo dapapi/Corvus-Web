@@ -432,6 +432,11 @@
     }
 </script>
 
-<style scoped>
+<style lang="css" scoped>
+
+    .modal-body .example {
+        display: flex;
+        align-items: center;
+    }
 
 </style>

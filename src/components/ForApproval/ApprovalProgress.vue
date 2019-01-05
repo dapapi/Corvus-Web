@@ -1,9 +1,9 @@
 <template>
     <div class="page-content container-fluid progress-container pt-0">
         <hr v-if="mode !== 'detail'">
-        <div class="approver-row">
-            <span style='min-width:50px;'>审批人</span>
-            <div class="approver-container float-left" v-for="(item, index) in approver" :key="index">
+        <div class="approver-row col-md-12 clearfix">
+            <span style='min-width:50px;' class="float-left mt-20">审批人</span>
+            <div class="approver-container float-left mt-20 ml-0" v-for="(item, index) in approver" :key="index">
                 <div class=" " style="display:flex">
                     <div class="splicer" v-if="index !== 0"></div>
                     <div class="approver-logo" style='font-size:12px; min-width:50px'>
@@ -17,7 +17,7 @@
                     <p class="approver_text">{{item.change_state_obj.changed_state}}</p>
                 </div>
             </div>
-            <div class="approver-container" v-if="formstatus">
+            <div class="approver-container float-left mt-20" v-if="formstatus">
                 <div class="splicer"></div>
                 <i class="iconfont issueicon" :class="iconSelector.split('|')[0]" :style='{color:iconSelector.split("|")[1]}'></i>
                 <div class="status">{{formstatus}}</div>
@@ -35,8 +35,8 @@
                 <div class="col-md-3">{{item.change_at}}</div>
             </div>  
         </div>
-        <div class="approver-row" style="overflow: unset;" >
-            <span v-if="notice || !mode" style='min-width:50px;'>知会人</span>
+        <div class="col-md-12 mt-20 " >
+            <span v-if="notice || !mode" style='min-width:50px;' class="float-left">知会人</span>
             <div class="approver ml-10" :style="{backgroundImage:'url('+randomColor(item.icon_url).color+')',backgroundColor:randomColor(item.icon_url).color}" v-if="mode" v-for="(item, index) in notice" :key="index">{{randomColor(item.icon_url).name}}</div>
             <AddMember v-if="!mode"/>
         </div>
@@ -54,7 +54,8 @@ export default {
             colorArr:['#F23E7C','#FF68E2','#FB8C00','#B53FAF','#27D3A8','#2CCCDA','#38BA5D','#3F51B5'],
             approver:[],
             cover:[],
-            waitingFor:''
+            waitingFor:'',
+            informer:{},
         }
     },
     computed:{
@@ -88,6 +89,10 @@ export default {
             if(value == true){
                 fetch('get','/approvals/chains?form_id='+this.formid+'&change_type=224&value='+this.trend.condition.join(',')).then((params) => {
                     _this.approver = params.data
+                    let {meta:{notice:{data}}} = params
+                     _this.informer = data
+                    _this.$store.dispatch('changeParticipantsInfo',{data:Array.from(_this.informer)});
+                    // _this.$store.state.newParticipantsInfo = Array.from(_this.informer)
                 })
             }
         },
@@ -96,7 +101,11 @@ export default {
                 if(this.trend.ready==true && this.trend.condition[0].length !== 0){
                     var _this = this
                     fetch('get','/approvals/chains?form_id='+this.formid+'&change_type=224&value='+this.trend.condition.join(',')).then((params) => {
-                        _this.approver = params.data
+                    _this.approver = params.data
+                    let {meta:{notice:{data}}} = params
+                    _this.informer = data
+                    _this.$store.dispatch('changeParticipantsInfo',{data:Array.from(_this.informer)});
+                    // _this.$store.state.newParticipantsInfo = Array.from(_this.informer)
                     })
                 }
                 
@@ -107,7 +116,8 @@ export default {
     mounted(){
         this.getApprover(this.formid)
         if(this.notice){
-            this.$store.state.newParticipantsInfo = Array.from(this.notice)
+            // this.$store.state.newParticipantsInfo = Array.from(this.notice)
+            this.$store.dispatch('changeParticipantsInfo',{data:Array.from(this.notice)});
         }
     },
     methods:{
@@ -120,11 +130,17 @@ export default {
                         return
                     }
                 }
+
             }
             let _this = this
             if(!this.mode){
                 fetch('get','/approvals/chains?form_id='+value+'&change_type=222').then((params) => {
                     _this.approver = params.data
+                    let {meta:{notice:{data}}} = params
+                    _this.informer = data
+                    console.log(data);
+                    _this.$store.dispatch('changeParticipantsInfo',{data:Array.from(_this.informer)});
+                    // _this.$store.state.newParticipantsInfo = Array.from(_this.informer)
                 })
             }else{
                 fetch('get','/approval_instances/'+value+'/chains').then((params) => {
@@ -186,9 +202,10 @@ export default {
     min-width: 50px;
 }
 .approver-row{
-    overflow: auto;
-    display: flex;
+    /* overflow: auto; */
+    /* display: flex; */
     margin-top: 30px; 
+    /* width: 200px; */
     /* margin-left: 10%;   */
 }
 *::-webkit-scrollbar {

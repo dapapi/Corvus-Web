@@ -9,12 +9,10 @@
                         </button>
                         <h4 class="modal-title" id="exampleModalTitle">{{pageInfo.title}}</h4>
                     </div>
-                    <div class="modal-body modal-greater">
-                        <div v-for="(item, index) in moduleInfo" :key="index" class="great-option example">
-                            <span v-if="item[0].required===1">*</span>
-                            <span v-else>&nbsp;</span>
+                    <div class="modal-body modal-greater ">
+                        <div v-for="(item, index) in moduleInfo" :key="index" class="great-option example " >
                             <div :is='sortChecker(item)' 
-                            :data='item' :predata='sendData'
+                            :data='item' :predata='sendData' class="container"
                             :singlemode='singlemode' :clear='clearFlag'
                             @change="changeHandler"
                             :formid='form_id'></div>
@@ -146,6 +144,7 @@ export default {
         approvalSubmit(){
             let _this = this
             if(this.getRequiredArr()){
+                Object.assign(this.sendData,{notice:this.$store.state.newParticipantsInfo})
                 fetch('post','/approvals/'+this.formData.form_id,this.sendData).then((params) => {
                     toastr.success('提交成功')
                     $('#approval-great-module').modal('hide')
@@ -157,7 +156,6 @@ export default {
             if(this.formData.condition.includes(params.key)){
                 let tempData = this.formData.condition.indexOf(params.key)
                 this.trendApprover.condition.splice(tempData,1) 
-                // console.log(this.formData.condition.indexOf(params.key));
                 this.trendApprover.condition[tempData]=params.value
             }
             if(this.formData.condition.length === this.trendApprover.condition.length){
@@ -253,6 +251,17 @@ export default {
 </script>
 
 <style scoped>
+.container{
+    display: flex;
+    align-items: center;
+}
+.require{
+    padding-right: 0;
+    /* position: relative ; */
+    /* left: 15px !important; */
+    
+    /* line-height: 30px; */
+}
 .modal-greater{
     margin-top: 20px !important;
     height: 100%;

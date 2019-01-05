@@ -10,7 +10,7 @@
         </div>
     </div> -->
     <div class="upload col-md-12">
-        <div class="col-md-2 text-right">{{data[0].control_title}}</div>
+        <div class="col-md-2 text-right" :class="data[0].required===1?'require':''">{{data[0].control_title}}</div>
         <div class="image-show">
             <div v-for="(item, index) in fileInfo" :key="index">{{item.fileName}}</div>
             <input type="file" @change="uploadFile" />请上传附件
