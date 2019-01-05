@@ -257,10 +257,6 @@ export default {
 }
 .require{
     padding-right: 0;
-    /* position: relative ; */
-    /* left: 15px !important; */
-    
-    /* line-height: 30px; */
 }
 .modal-greater{
     margin-top: 20px !important;
@@ -269,6 +265,7 @@ export default {
 }
 .great-option{
     display: flex;
+    font-size: 12px;
     /* height: 50px; */
     
     margin: 20px 5px ;

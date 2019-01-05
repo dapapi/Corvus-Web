@@ -4,7 +4,7 @@
         <div class="approver-row col-md-12 clearfix">
             <span style='min-width:50px;' class="float-left mt-20">审批人</span>
             <div class="approver-container float-left mt-20 ml-0" v-for="(item, index) in approver" :key="index">
-                <div class=" " style="display:flex">
+                <div class=" noselect" style="display:flex ">
                     <div class="splicer" v-if="index !== 0"></div>
                     <div class="approver-logo" style='font-size:12px; min-width:50px'>
                         <div class="approver" :style="{backgroundImage:'url('+randomColor(item.icon_url).color+')',backgroundColor:randomColor(item.icon_url).color,margin:'0 auto'}">{{randomColor(item.icon_url).name}}</div>
@@ -35,9 +35,9 @@
                 <div class="col-md-3">{{item.change_at}}</div>
             </div>  
         </div>
-        <div class="col-md-12 mt-20 " >
-            <span v-if="notice || !mode" style='min-width:50px;' class="float-left">知会人</span>
-            <div class="approver ml-10" :style="{backgroundImage:'url('+randomColor(item.icon_url).color+')',backgroundColor:randomColor(item.icon_url).color}" v-if="mode" v-for="(item, index) in notice" :key="index">{{randomColor(item.icon_url).name}}</div>
+        <div class="col-md-12 mt-20 mb-50" >
+            <span v-if="notice || !mode" style='min-width:50px;' class="float-left ">知会人</span>
+            <div class="approver ml-10 float-left noselect" :style="{backgroundImage:'url('+randomColor(item.icon_url).color+')',backgroundColor:randomColor(item.icon_url).color}" v-if="mode" v-for="(item, index) in notice" :key="index">{{randomColor(item.icon_url).name}}</div>
             <AddMember v-if="!mode"/>
         </div>
     </div>
@@ -160,7 +160,6 @@ export default {
         randomColor(params){
             if(params){
                 let tempArr = params.split('|')
-                    
                     return {color:tempArr[0],name:tempArr[1]}
 
             }else{
@@ -175,6 +174,15 @@ export default {
 <style scoped>
 .progress-container{
     padding: 0 45px;
+
+}
+.noselect{
+     -webkit-touch-callout: none;
+     -webkit-user-select: none;
+     -khtml-user-select: none;
+     -moz-user-select: none;
+     -ms-user-select: none;
+     user-select: none;
 }
 .iconfont-logo{
     position: relative;
@@ -200,13 +208,6 @@ export default {
     margin-bottom: 0;
     font-size: 5px;
     min-width: 50px;
-}
-.approver-row{
-    /* overflow: auto; */
-    /* display: flex; */
-    margin-top: 30px; 
-    /* width: 200px; */
-    /* margin-left: 10%;   */
 }
 *::-webkit-scrollbar {
         width: 3px !important;
