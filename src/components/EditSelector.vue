@@ -39,9 +39,8 @@
                 if (newValue) {
                     let _this = this;
                     this.$nextTick(()=>{
-                       _this.$refs.selector.setValue(_this.content)
+                        _this.$refs.selector.setValue(_this.content)
                     })
-                    
                 } else {
                     this.$refs.selector.destroy()
                 }
@@ -53,6 +52,12 @@
             },
             changeSelect: function (value) {
                 this.$emit('change', value);
+            },
+            setDefaultValue:function(val){
+                let _this = this;
+                this.$nextTick(()=>{
+                    _this.$refs.selector.setValue(val)
+                })
             }
         }
     }
