@@ -436,7 +436,7 @@
                                                               @change="changeArtistCommunication"></EditSelector>
                                             </div>
                                         </div>
-                                        <div class="card-text py-10 px-0 clearfix col-md-6 float-left ">
+                                        <!-- <div class="card-text py-10 px-0 clearfix col-md-6 float-left ">
                                             <div class="col-md-2 float-left text-right pl-0">与我司签约意向</div>
                                             <div class="col-md-4 float-left font-weight-bold">
                                                 <EditSelector :content="updateType"
@@ -472,6 +472,25 @@
                                                 </div>
                                             </div>
 
+                                        </div> -->
+                                        <div class="card-text py-10 px-0 clearfix col-md-6 float-left edit-height">
+                                                <div class="col-md-2 float-left text-right pl-0">与我司签约意向</div>
+                                                <div class="col-md-10 float-left font-weight-bold">
+                                                    <ConditionalInput ref="condition" :is-edit="isEdit" :content="artistInfo.intention"
+                                                                    :input-content="artistInfo.intention_desc"
+                                                                    :condition="2"
+                                                                    @change="(value) => changeArtistSigning(value, 'intention')"></ConditionalInput>
+                                                </div>
+                                        </div>
+                                        <div class="card-text py-10 px-0 clearfix col-md-6 float-left edit-height">
+                                            <div class="col-md-2 float-left text-right pl-0">是否签约其他公司</div>
+                                            <div class="col-md-10 float-left font-weight-bold">
+                                                <ConditionalInput ref="condition1" :is-edit="isEdit"
+                                                                :content="artistInfo.sign_contract_other"
+                                                                :input-content="artistInfo.sign_contract_other_name"
+                                                                :condition="1"
+                                                                @change="(value) => changeArtistSigning(value, 'sign_contract_other')"></ConditionalInput>
+                                            </div>
                                         </div>
                                         <div class="card-text py-10 px-0 clearfix col-md-6 float-left ">
                                             <div class="col-md-2 float-left text-right pl-0">社交平台</div>
@@ -875,7 +894,8 @@
                 bloggerlevel:'',
                 isLoading: true,
                 distributionType:'',
-                alltaskshow:[]
+                alltaskshow:[],
+                changeArtistInfo:{}
             }
         },
         computed: {
@@ -1015,7 +1035,16 @@
                   
                     let doneTaskNum = 0
                     _this.artistInfo = response.data;
-
+                    if(_this.artistInfo.intention){
+                        _this.artistInfo.intention = 1
+                    }else{
+                        _this.artistInfo.intention = 2
+                    }
+                    if(_this.artistInfo.sign_contract_other){
+                        _this.artistInfo.sign_contract_other=1
+                    }else{
+                        _this.artistInfo.sign_contract_other=2
+                    }
                     _this.tasksInfo = response.data.tasks.data
                     if (_this.tasksInfo.length > 0) {
                         for (let i = 0; i < _this.tasksInfo.length; i++) {
@@ -1040,22 +1069,22 @@
 
                         _this.Incubationperiod = _this.artistInfo.hatch_star_at+'|'+_this.artistInfo.hatch_end_at
                     }
-                    //状态转换
-                    if(_this.artistInfo.intention==false){
-                        _this.updateType=2
-                    }else{
-                        _this.updateType=1
-                    }
-                    if (_this.artistInfo.sign_contract_other == false) {
-                        _this.updateSign_contract_other = 2
-                    } else {
-                        _this.updateSign_contract_other = 1
-                    }
-                    if (_this.artistInfo.artistWorkProportion == 1) {
-                        _this.artistInfo.artistWorkProportion = true
-                    } else {
-                        _this.artistInfo.artistWorkProportion = false
-                    }
+                    // //状态转换
+                    // if(_this.artistInfo.intention==false){
+                    //     _this.updateType=2
+                    // }else{
+                    //     _this.updateType=1
+                    // }
+                    // if (_this.artistInfo.sign_contract_other == false) {
+                    //     _this.updateSign_contract_other = 2
+                    // } else {
+                    //     _this.updateSign_contract_other = 1
+                    // }
+                    // if (_this.artistInfo.artistWorkProportion == 1) {
+                    //     _this.artistInfo.artistWorkProportion = true
+                    // } else {
+                    //     _this.artistInfo.artistWorkProportion = false
+                    // }
                     _this.isLoading = false;
 
                 });
@@ -1177,7 +1206,6 @@
                     toast = '分配制作人成功'
                 }
                 let _this = this;
-                console.log(this.$store.state.participantsInfo)
                 fetch('post', '/distribution/person', data).then(function (response) {
                     toastr.success(toast)
                     $('#distributionproducer').modal('hide');
@@ -1221,25 +1249,48 @@
 
                 this.updatePlatform = value.join(',')
             },
+            changeArtistSigning(value,name){
+                if(name === 'intention'){
+                    if (value.key === 'value') {
+                        name = 'intention_desc'
+                        this.artistInfo.intention_desc = value.value
+                    }
+                    if(value.key === 'condition'){
+                        name = 'intention'
+                        this.artistInfo.intention = value.value
+                    }
+                  
+                }else if(name === 'sign_contract_other'){
+                    if (value.key === 'value') {
+                        name = 'sign_contract_other_name'
+                        this.artistInfo.sign_contract_other_name = value.value
+                    }
+                    if(value.key === 'condition'){
+                        name = 'sign_contract_other'
+                        this.artistInfo.sign_contract_other= value.value
+                    }
+                   
+                }
+            },
             //修改
             changeArtistBaseInfo: function () {
+                
                 this.isEdit = false;
                 this.isStatrtEdit = true;
                 let _this = this;
                 this.artistId = this.$route.params.id;
 
                 if(this.artistInfo.intention==1){
-                        this.updateType=true
-                    }else{
-                        this.updateType=false
-                    }
+                        this.artistInfo.intention = true
+                }else{
+                        this.artistInfo.intention = false
+                }
                 if(this.artistInfo.sign_contract_other==1){
-                        this.updateSign_contract_other=true
-                    }else{
-                        this.updateSign_contract_other=false
-                    }
-
-                let data = {
+                        this.artistInfo.sign_contract_other=true
+                }else{
+                    this.artistInfo.sign_contract_other=false
+                }
+                this.changeArtistInfo = {
                     nickname:this.Namevalue,
                     type_id:this.artistInfo.type.data.id,
                     communication_status:this.artistInfo.communication_status,
@@ -1252,29 +1303,28 @@
                     platform: this.updatePlatform,
                     level:this.artistInfo.level,
                     cooperation_demand: this.updatedemand,
-                    hatch_star_at: _this.artistInfo.hatch_star_at,
-                    hatch_end_at: _this.artistInfo.hatch_end_at,
-                    intention_desc:_this.artistInfo.intention_desc,
-                    sign_contract_other_name:_this.artistInfo.sign_contract_other_name
+                    hatch_star_at: this.artistInfo.hatch_star_at,
+                    hatch_end_at: this.artistInfo.hatch_end_at,
+                    intention_desc:this.artistInfo.intention_desc,
+                    sign_contract_other_name:this.artistInfo.sign_contract_other_name
                 }
-                fetch('put', '/bloggers/' + this.artistId, data).then(function (response) {
+                console.log( this.changeArtistInfo)
+                fetch('put', '/bloggers/' + this.artistId, this.changeArtistInfo).then(function (response) {
                     toastr.success('修改成功');
-                    _this.artistTasksInfo = response.data;
-
-                    if (_this.artistInfo.intention == false) {
-                        _this.updateType = 2
-                    } else {
-                        _this.updateType = 1
-                    }
-                    if (_this.artistInfo.sign_contract_other == false) {
-                        _this.updateSign_contract_other = 2
-                    } else {
-                        _this.updateSign_contract_other = 1
-                    }
-
                     _this.getArtist()
                     $('.selectpicker').selectpicker('refresh')
                 })
+                if(this.artistInfo.intention==true){
+                    this.artistInfo.intention=1
+                }else{
+                    this.artistInfo.intention=2
+                }
+                
+                if(this.artistInfo.sign_contract_other==true){
+                        this.artistInfo.sign_contract_other=1
+                }else{
+                    this.artistInfo.sign_contract_other=2
+                }
             },
             changeWorkAd: function (value) {
 
@@ -1526,7 +1576,7 @@
             ,
             //博主级别
             changeArtistLevel: function (value) {
-
+                
                this.artistInfo.level= value
             }
             ,
@@ -1579,12 +1629,12 @@
             projectDetails(id){
                 this.$router.push({path: '/projects/' + id})
             },
-            changReason(value){
-                this.artistInfo.intention_desc = value
-            },
-            changSigningCompany(value){
-                this.artistInfo.sign_contract_other_name = value
-            }
+            // changReason(value){
+            //     this.artistInfo.intention_desc = value
+            // },
+            // changSigningCompany(value){
+            //     this.artistInfo.sign_contract_other_name = value
+            // }
         }
     }
 </script>
