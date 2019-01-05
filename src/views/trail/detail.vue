@@ -144,7 +144,7 @@
                                 </div>
                                 <div class="card-block">
                                     <div class="clearfix">
-                                        <div class="card-text py-10 px-0 clearfix col-md-6 float-left edit-height">
+                                        <div class="card-text py-10 px-0 clearfix col-md-6 float-left ">
                                             <div class="col-md-2 float-left text-right pl-0">线索名称</div>
                                             <div class="col-md-10 float-left font-weight-bold">
                                                 <span v-show="!isEdit">{{trailInfo.title}}</span>
@@ -152,7 +152,7 @@
                                                            @change="changeTrailName"></EditInput>
                                             </div>
                                         </div>
-                                        <div class="card-text py-10 px-0 clearfix col-md-6 float-left edit-height">
+                                        <div class="py-10 px-0 clearfix col-md-6 float-left ">
                                             <TrailOrigin :trailType='trailType'
                                                          typeName='线索' :isEdit='isEdit' :content='trailInfo.resource'
                                                          @changeTrailOrigin='changeTrailOrigin'
@@ -160,24 +160,21 @@
                                                          @changeEmail='changeEmail' detailPage='true'
                                                          @changeTrailOriginPerson='changeTrailOriginPerson'/>
                                         </div>
-                                        <div class="card-text py-10 px-0 clearfix col-md-6 float-left"
-                                             :class="isEdit ? 'edit-height':'' ">
+                                        <div class="card-text py-10 px-0 clearfix col-md-6 float-left">
                                             <div class="col-md-2 float-left text-right pl-0">负责人</div>
                                             <div class="col-md-10 float-left font-weight-bold">
                                                 <EditInput-selector :is-edit="isEdit" 
                                                                     @change="changeTrailPrincipal"></EditInput-selector>
                                             </div>
                                         </div>
-                                        <div class="card-text py-10 px-0 clearfix col-md-6 float-left"
-                                             :class="isEdit ? 'edit-height':'' ">
-                                            <div class="col-md-2 float-left text-right pl-0">预计订单收入</div>
+                                        <div class="card-text py-10 px-0 clearfix col-md-6 float-left">
+                                            <div class="col-md-2 float-left text-right pl-0">预计订单收入/元</div>
                                             <div class="col-md-10 float-left font-weight-bold expfee">
                                                 <edit-number-spinner :content="trailInfo.fee" :is-edit="isEdit"
                                                                      @change="changeTrailFee"></edit-number-spinner>
                                             </div>
                                         </div>
-                                        <div class="card-text py-10 px-0 clearfix col-md-6 float-left"
-                                             :class="isEdit ? 'edit-height':'' ">
+                                        <div class="card-text py-10 px-0 clearfix col-md-6 float-left">
                                             <div class="col-md-2 float-left text-right pl-0">目标艺人</div>
                                             <div class="col-md-10 float-left font-weight-bold"
                                                  v-if="trailInfo.expectations">
@@ -192,8 +189,7 @@
                                             </div>
 
                                         </div>
-                                        <div class="card-text py-10 px-0 clearfix col-md-6 float-left"
-                                             :class="isEdit ? 'edit-height':'' ">
+                                        <div class="card-text py-10 px-0 clearfix col-md-6 float-left">
                                             <div class="col-md-2 float-left text-right pl-0">推荐艺人</div>
                                             <div class="col-md-10 float-left font-weight-bold"
                                                  v-if="trailInfo.recommendations">
@@ -207,8 +203,7 @@
                                                               @valuelistener="changeRecommendations"></EditSelector>
                                             </div>
                                         </div>
-                                        <div class="card-text py-10 px-0 clearfix col-md-6 float-left"
-                                             :class="isEdit ? 'edit-height':'' ">
+                                        <div class="card-text py-10 px-0 clearfix col-md-6 float-left">
                                             <div class="col-md-2 float-left text-right pl-0">行业</div>
                                             <div class="col-md-10 float-left font-weight-bold">
                                                 <EditSelector :is-edit="isEdit" :options="industriesArr"
@@ -216,8 +211,7 @@
                                                               @change="changeIndustry"></EditSelector>
                                             </div>
                                         </div>
-                                        <div class="card-text py-10 px-0 clearfix col-md-6 float-left"
-                                             :class="isEdit ? 'edit-height':'' ">
+                                        <div class="card-text py-10 px-0 clearfix col-md-6 float-left">
                                             <div class="col-md-2 float-left text-right pl-0">优先级</div>
                                             <div class="col-md-10 float-left font-weight-bold">
                                                 <EditSelector :is-edit="isEdit"
@@ -227,7 +221,7 @@
                                             </div>
                                         </div>
                                         <div class="card-text py-10 px-0 clearfix col-md-6 float-left"
-                                             v-if="trailInfo.type === 4" :class="isEdit ? 'edit-height':'' ">
+                                             v-if="trailInfo.type === 4">
                                             <div class="col-md-2 float-left text-right pl-0">是否锁价</div>
                                             <div class="col-md-10 float-left font-weight-bold">
                                                 <EditSelector :is-edit="isEdit" :options="lockArr"
@@ -236,7 +230,7 @@
                                             </div>
                                         </div>
                                         <div class="card-text py-10 px-0 clearfix col-md-6 float-left"
-                                             v-if="trailInfo.type !== 4" :class="isEdit ? 'edit-height':'' ">
+                                             v-if="trailInfo.type !== 4">
                                             <div class="col-md-2 float-left text-right pl-0">线索状态</div>
                                             <div class="col-md-10 float-left font-weight-bold" >
                                                 <EditSelector :is-edit="isEdit"
@@ -246,8 +240,7 @@
                                             </div>
                                         </div>
                                         <div v-if="trailInfo.type !== 4"
-                                             class="card-text py-10 px-0 clearfix col-md-6 float-left"
-                                             :class="isEdit ? 'edit-height':''">
+                                             class="card-text py-10 px-0 clearfix col-md-6 float-left">
                                             <div class="col-md-2 float-left text-right pl-0">合作类型</div>
                                             <div class="col-md-10 float-left font-weight-bold">
 
@@ -257,8 +250,7 @@
                                                               :content='trailInfo.cooperation_type'></EditSelector>
                                             </div>
                                         </div>
-                                        <div class="card-text py-10 px-0 clearfix col-md-6 float-left"
-                                             :class="isEdit ? 'edit-height':'' ">
+                                        <div class="card-text py-10 px-0 clearfix col-md-6 float-left">
                                             <div class="col-md-2 float-left text-right pl-0">品牌名称</div>
                                             <div class="col-md-10 float-left font-weight-bold">
                                                 <EditInput :content="trailInfo.brand" :is-edit="isEdit"
@@ -266,8 +258,7 @@
                                             </div>
 
                                         </div>
-                                        <div class="card-text py-10 px-0 clearfix col-md-6 float-left"
-                                             :class="isEdit ? 'edit-height':'' ">
+                                        <div class="card-text py-10 px-0 clearfix col-md-6 float-left">
                                             <div class="col-md-2 float-left text-right pl-0">公司名称</div>
                                             <div class="col-md-10 float-left font-weight-bold" v-if="trailInfo.client">
                                                 <EditInput :content="trailInfo.client.data.company" :is-edit="isEdit"
@@ -275,8 +266,7 @@
                                             </div>
 
                                         </div>
-                                        <div class="card-text py-10 px-0 clearfix col-md-6 float-left"
-                                             :class="isEdit ? 'edit-height':'' ">
+                                        <div class="card-text py-10 px-0 clearfix col-md-6 float-left">
                                             <div class="col-md-2 float-left text-right pl-0">级别</div>
                                             <div class="col-md-10 float-left font-weight-bold" v-if="trailInfo.client">
                                                 <EditSelector :content="trailInfo.client.data.grade" :is-edit="isEdit"
@@ -284,24 +274,21 @@
                                                               :options="clientLevelArr"></EditSelector>
                                             </div>
                                         </div>
-                                        <div class="card-text py-10 px-0 clearfix col-md-6 float-left"
-                                             :class="isEdit ? 'edit-height':'' ">
+                                        <div class="card-text py-10 px-0 clearfix col-md-6 float-left">
                                             <div class="col-md-2 float-left text-right pl-0">联系人</div>
                                             <div class="col-md-10 float-left font-weight-bold" v-if="trailInfo.contact">
                                                 <EditInput :content="trailInfo.contact.data.name" :is-edit="isEdit"
                                                            @change="changeTrailContact"></EditInput>
                                             </div>
                                         </div>
-                                        <div class="card-text py-10 px-0 clearfix col-md-6 float-left"
-                                             :class="isEdit ? 'edit-height':'' ">
+                                        <div class="card-text py-10 px-0 clearfix col-md-6 float-left">
                                             <div class="col-md-2 float-left text-right pl-0">联系方式</div>
                                             <div class="col-md-10 float-left font-weight-bold" v-if="trailInfo.contact">
                                                 <EditInput :content="trailInfo.contact.data.phone" :is-edit="isEdit"
                                                            @change="changeTrailContactPhone"></EditInput>
                                             </div>
                                         </div>
-                                        <div class="card-text py-10 px-0 clearfix col-md-6 float-left"
-                                             :class="isEdit ? 'edit-height':'' ">
+                                        <div class="card-text py-10 px-0 clearfix col-md-6 float-left">
                                             <div class="col-md-2 float-left text-right pl-0">备注</div>
                                             <div class="col-md-10 float-left font-weight-bold" v-if="trailInfo.contact">
                                                 <editTextarea :content="trailInfo.desc" :is-edit="isEdit"

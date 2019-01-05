@@ -1721,7 +1721,7 @@
         will-change: transform;
     }
 
-    .edit-height {
+    . {
         height: 57px;
     }
 
@@ -1852,16 +1852,9 @@
 
     }
 
-    /* .plus_hover{
-        display:none;
-       position: absolute;
-        left: 0px;
-        top:0px;
-        z-index:99
-    } */
-    /* .plus_hover:hover{
-        display: block;
-        
-    } */
+    .card-block .card-text {
+        display: flex;
+        align-items: center;
+    }
 </style>
 

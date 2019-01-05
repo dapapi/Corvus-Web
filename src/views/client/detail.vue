@@ -228,7 +228,7 @@
                                 </div>
                             </div>
                             <div class="card-block">
-                                <div class="card-text py-5 clearfix">
+                                <div class="card-text py-10 clearfix">
                                     <div class="col-md-1 float-left text-right pl-0">公司名称</div>
                                     <div class="col-md-5 float-left font-weight-bold">
                                         <EditInput :content="clientInfo.company" :is-edit="isEdit"
@@ -241,7 +241,7 @@
                                                       @change="changeClientLevel"></EditSelector>
                                     </div>
                                 </div>
-                                <div class="card-text py-5 clearfix">
+                                <div class="card-text py-10 clearfix">
                                     <div class="col-md-1 float-left text-right pl-0">负责人</div>
                                     <div class="col-md-5 float-left font-weight-bold">
 
@@ -249,8 +249,14 @@
                                                             @change="selectPrincipal"
                                                             :select-type="'principal'"></EditInput-selector>
                                     </div>
+                                    <div class="col-md-1 float-left text-right pl-0">规模</div>
+                                    <div class="col-md-5 float-left font-weight-bold">
+                                        <EditSelector :options="clientScaleArr" :is-edit="isEdit"
+                                                      :content="clientInfo.size"
+                                                      @change="changeClientScale"></EditSelector>
+                                    </div>
                                 </div>
-                                <div class="card-text py-5 clearfix">
+                                <div class="card-text py-10 clearfix">
                                     <div class="col-md-1 float-left text-right pl-0">地区</div>
                                     <div class="col-md-5 float-left font-weight-bold region">
                                         <template v-if="!isEdit">
@@ -268,13 +274,7 @@
                                     </div>
                                 </div>
 
-                                <div class="card-text py-5 clearfix">
-                                    <div class="col-md-1 float-left text-right pl-0">规模</div>
-                                    <div class="col-md-5 float-left font-weight-bold">
-                                        <EditSelector :options="clientScaleArr" :is-edit="isEdit"
-                                                      :content="clientInfo.size"
-                                                      @change="changeClientScale"></EditSelector>
-                                    </div>
+                                <div class="card-text py-10 clearfix">
                                     <div class="col-md-1 float-left text-right pl-0">备注</div>
                                     <div class="col-md-5 float-left font-weight-bold">
                                         <editTextarea :content="clientInfo.desc"
@@ -988,5 +988,15 @@
     }
     table tbody tr {
        cursor: pointer;
+    }
+
+    .modal-body .example {
+        display: flex;
+        align-items: center;
+    }
+
+    .card-block .card-text {
+        display: flex;
+        align-items: center;
     }
 </style>

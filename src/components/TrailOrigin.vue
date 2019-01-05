@@ -1,6 +1,6 @@
 <template>
     <div class="">
-        <div class="col-md-2 text-right float-left">{{typeName}}来源</div>
+        <div class="col-md-2 text-right float-left" :class="isEdit ? 'line-fiexd-height': ''">{{typeName}}来源</div>
         <div v-if="isEditSituation || alwaysShow">
             <!-- ⬆️判断是否永久显示 -->
             <div :class="detailPage?'col-md-10 float-left font-weight-bold expfee':'col-md-10 float-left pl-0'">
@@ -159,6 +159,8 @@
 </script>
 
 <style>
-
+    .line-fiexd-height {
+        line-height: 34px;
+    }
 </style>
 

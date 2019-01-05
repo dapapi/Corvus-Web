@@ -156,13 +156,13 @@
                             </div>
                         </div>
                         <div class="example">
-                            <div class="col-md-6 px-0 float-left">
+                            <div class="col-md-6 px-0 float-left label-center">
                                 <div class="col-md-4 text-right float-left require">性别</div>
                                 <div class="col-md-8 float-left row">
                                     <selectors :options="genderArr"  @change="changeGender" ref="gender"></selectors>
                                 </div>
                             </div>
-                            <div class="col-md-6 px-0 float-left">
+                            <div class="col-md-6 px-0 float-left label-center">
                                 <div class="col-md-4 text-right float-left pl-0 require">出生日期</div>
                                 <div class="col-md-8 float-left pl-0">
                                     <datepicker @change="changeBirthday" :placeholder="'请选择日期'" ref="birthday"></datepicker>
@@ -170,13 +170,13 @@
                             </div>
                         </div>
                         <div class="example">
-                            <div class="col-md-6 px-0 float-left">
+                            <div class="col-md-6 px-0 float-left label-center">
                                 <div class="col-md-4 text-right float-left require">艺人来源</div>
                                 <div class="col-md-8 float-left row">
                                     <selectors :options="artistSourceArr" @change="changeSource" ref="source"></selectors>
                                 </div>
                             </div>
-                            <div class="col-md-6 px-0 float-left">
+                            <div class="col-md-6 px-0 float-left label-center">
                                 <div class="col-md-4 text-right float-left pl-0 require">邮箱</div>
                                 <div class="col-md-8 float-left pl-0">
                                     <input type="text" class="form-control" title="" v-model="artistEmail"
@@ -185,14 +185,14 @@
                             </div>
                         </div>
                         <div class="example">
-                            <div class="col-md-6 px-0 float-left">
+                            <div class="col-md-6 px-0 float-left label-center">
                                 <div class="col-md-4 text-right float-left require">手机号</div>
                                 <div class="col-md-8 float-left row">
                                     <input type="text" class="form-control" title="" v-model="artistPhone"
                                            placeholder="请输入手机号">
                                 </div>
                             </div>
-                            <div class="col-md-6 px-0 float-left">
+                            <div class="col-md-6 px-0 float-left label-center">
                                 <div class="col-md-4 text-right float-left pl-0">微信</div>
                                 <div class="col-md-8 float-left pl-0">
                                     <input type="text" class="form-control" title="" v-model="artistWeiXin"
@@ -201,14 +201,14 @@
                             </div>
                         </div>
                         <div class="example">
-                            <div class="col-md-6 px-0 float-left">
+                            <div class="col-md-6 px-0 float-left label-center">
                                 <div class="col-md-4 text-right float-left">星探</div>
                                 <div class="col-md-8 float-left row">
                                     <input type="text" class="form-control" title="" v-model="artistScoutName"
                                            placeholder="请输入星探姓名">
                                 </div>
                             </div>
-                            <div class="col-md-6 px-0 float-left">
+                            <div class="col-md-6 px-0 float-left label-center">
                                 <div class="col-md-4 text-right float-left pl-0">地区</div>
                                 <div class="col-md-8 float-left pl-0">
                                     <input type="text" class="form-control" title="" v-model="artistLocation"
@@ -885,9 +885,5 @@
         left:0px;
         opacity: 0;
 
-    }
-    .modal-body .example {
-        display: flex;
-        align-items: center;
     }
 </style>
