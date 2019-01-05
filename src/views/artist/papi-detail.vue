@@ -179,8 +179,8 @@
                                         任务 ({{0}}/{{tasksInfo.length}})
                                     </ToolTips>
                                 </template> -->
-                                <ToolTips v-if="tasksInfo.length > 0" :title="`已完成数量${completeNum}`">
-                                    任务 ({{completeNum}}/{{tasksInfo.length}})
+                                <ToolTips v-if="alltaskshow.length > 0" :title="`已完成数量${completeNum}`">
+                                    任务 ({{completeNum}}/{{alltaskshow.length}})
                                 </ToolTips>
                                 <span v-else>任务</span>
                             </a>
@@ -254,7 +254,7 @@
                                     <th class="cell-300" scope="col">负责人</th>
                                     <th class="cell-300" scope="col">截止日期</th>
                                 </tr>
-                                <tr v-for="(task,index) in tasksInfo" :key="index" v-if="task" @click="taskdetail(task.id)" class="Jump">
+                                <tr v-for="(task,index) in alltaskshow" :key="index" v-if="task" @click="taskdetail(task.id)" class="Jump">
                                     <td>{{task.title}}</td>
                                     <td v-if="task.type">{{task.type.data.title}}</td>
                                     <td v-if="!task.type">未选择</td>
@@ -860,7 +860,8 @@
                 current_page: 1,
                 total_pages: 1,
                 isLoading: true,
-                distributionType:''
+                distributionType:'',
+                alltaskshow:[]
             }
         },
         computed: {
@@ -874,6 +875,7 @@
         mounted() {
             this.getTaskDate();
             this.charts();
+            this.getArtistTasks();
             let _this = this;
             this.user = JSON.parse(Cookies.get('user'))
             this.$store.commit('changeNewPrincipal', {
@@ -995,6 +997,7 @@
                     include: 'creator,tasks,affixes,producer,type,publicity,trails.project,trails.client,trails.project.principal,trails.project.relate_project_bills_resource,',
                 };
                 fetch('get', '/bloggers/' + this.artistId, data).then(function (response) {
+                  
                     let doneTaskNum = 0
                     _this.artistInfo = response.data;
                    
@@ -1090,8 +1093,10 @@
             },
             getArtistTasks: function () {
                 let _this = this;
-                fetch('get', '/stars/' + this.artistId).then(function (response) {
-                    _this.artistTasksInfo = response.data;
+                fetch('get', '/bloggers/' + this.artistId+'/tasks').then(function (response) {
+                    console.log(response.data)
+                    _this.alltaskshow = response.data
+                    // _this.artistTasksInfo = response.data;
                 })
             },
 

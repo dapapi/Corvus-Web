@@ -285,13 +285,13 @@
                     </div>
                     <div class="modal-body">
                         <div class="example label-center">
-                            <div class="col-md-2 text-right float-left">角色名</div>
+                            <div class="col-md-2 text-right float-left ">角色名</div>
                             <div class="col-md-10 float-left pl-0">
                                 <input type="text" class="form-control" placeholder="请输入角色称" v-model="roleName">
                             </div>
                         </div>
                         <div class="example  label-center">
-                            <div class="col-md-2 text-right float-left">资源类型</div>
+                            <div class="col-md-2 text-right float-left ">资源类型</div>
                             <div class="col-md-10 float-left pl-0">
                                 <Selectors @change="changeRolejob"
                                            :options="groupingDate" ref="resourceType"></Selectors>
