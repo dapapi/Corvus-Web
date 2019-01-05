@@ -43,7 +43,6 @@
                                                 @click="handelMemberClick(index + '' + _index, user)"
                                                 :key='user.name+Math.random()'>
                                                 <a class="avatar" href="javascript:void(0)">
-                                                    <!-- <img src="https://res.papitube.com/no-icon.png" alt="..."> -->
                                                     <Avatar :imgUrl="user.icon_url" style="margin-right: 10px; "/>
                                                 </a>
                                                 <span class="pl-1 user-name">{{ user.name }}</span>
@@ -71,84 +70,91 @@
             </div>
         </div>
         <div class="page-main" style="background-color:#f3f4f5">
-            <div class="page-content container-fluid">
-                <div class="panel">
-                    <div class="col-md-12">
-                        <div class="py-25 clearfix position-relative">
-                            <div class="col-md-2 float-left head-img">
-                                <Avatar :imgUrl="personalInfo.icon_url" style="width: 90px; height: 90px; font-size: 24px;" />
+            <div class="panel" style="margin-bottom: 0;">
+                <div class="col-md-12 p-0 top-bg">
+                    <img src="https://res-crm.papitube.com/image/address_bg.jpg" alt="" />
+                </div>
+                <div class="col-md-12" style="margin-top: -70px;">
+                    <div class="py-25 px-25 clearfix position-relative">
+                        <div class="col-md-2 float-left head-img">
+                            <Avatar :imgUrl="personalInfo.icon_url" style="width: 140px; height: 140px; font-size: 50px; font-weight: 400;" />
+                        </div>
+                        <div class="col-md-10 float-left position-absolute" style="bottom: 25px;right: 0;">
+                            <div class="clearfix mb-20">
+                                <div class="col-md-4 float-left">
+                                    <div class="float-left col-md-6">
+                                        <i class="iconfont icon-yonghu pr-2"></i>
+                                        <span class="font-weight-bold">姓名</span>
+                                    </div>
+                                    <div class="float-left col-md-6 pl-0">{{ personalInfo.name ? personalInfo.name : ''}}</div>
+                                </div>
+                                <div class="col-md-4 float-left">
+                                    <div class="float-left col-md-6">
+                                        <i class="iconfont icon-gongwenbao1 pr-2"></i>
+                                        <span class="font-weight-bold">职位</span>
+                                    </div>
+                                    <div class="float-left col-md-6 pl-0">{{ personalInfo.position ? personalInfo.position : ''}}</div>
+                                </div>
+                                <div class="col-md-4 float-left">
+                                    <div class="float-left col-md-6">
+                                        <i class="iconfont icon-hierarchy pr-2"></i>
+                                        <span class="font-weight-bold">部门</span>
+                                    </div>
+                                    <div class="float-left col-md-6 pl-0">{{ personalInfo.position ? personalInfo.position : ''}}</div>
+                                </div>
                             </div>
-                            <div class="col-md-10 float-left position-absolute" style="bottom: 25px;right: 0;">
-                                <div class="clearfix mb-20">
-                                    <div class="col-md-4 float-left">
-                                        <div class="float-left col-md-6">
-                                            <i class="iconfont icon-yonghu pr-2"></i>
-                                            <span class="font-weight-bold">姓名</span>
-                                        </div>
-                                        <div class="float-left col-md-6 pl-0">{{ personalInfo.name ? personalInfo.name : ''}}</div>
+                            <div class="clearfix">
+                                <div class="col-md-4 float-left">
+                                    <div class="float-left col-md-6">
+                                        <i class="iconfont icon-weidu pr-2"></i>
+                                        <span class="font-weight-bold">邮箱</span>
                                     </div>
-                                    <div class="col-md-4 float-left">
-                                        <div class="float-left col-md-6">
-                                            <i class="iconfont icon-gongwenbao1 pr-2"></i>
-                                            <span class="font-weight-bold">职位</span>
-                                        </div>
-                                        <div class="float-left col-md-6 pl-0">{{ personalInfo.position ? personalInfo.position : ''}}</div>
-                                    </div>
-                                    <div class="col-md-4 float-left">
-                                        <div class="float-left col-md-6">
-                                            <i class="iconfont icon-hierarchy pr-2"></i>
-                                            <span class="font-weight-bold">部门</span>
-                                        </div>
-                                        <div class="float-left col-md-6 pl-0">{{ personalInfo.position ? personalInfo.position : ''}}</div>
-                                    </div>
+                                    <div class="float-left col-md-6 pl-0">{{ personalInfo.work_email ? personalInfo.work_email : ''}}</div>
                                 </div>
-                                <div class="clearfix">
-                                    <div class="col-md-4 float-left">
-                                        <div class="float-left col-md-6">
-                                            <i class="iconfont icon-weidu pr-2"></i>
-                                            <span class="font-weight-bold">邮箱</span>
-                                        </div>
-                                        <div class="float-left col-md-6 pl-0">{{ personalInfo.work_email ? personalInfo.work_email : ''}}</div>
+                                <div class="col-md-4 float-left">
+                                    <div class="float-left col-md-6">
+                                        <i class="iconfont icon-dianhua pr-2"></i>
+                                        <span class="font-weight-bold">电话</span>
                                     </div>
-                                    <div class="col-md-4 float-left">
-                                        <div class="float-left col-md-6">
-                                            <i class="iconfont icon-dianhua pr-2"></i>
-                                            <span class="font-weight-bold">电话</span>
-                                        </div>
-                                        <div class="float-left col-md-6 pl-0">{{ personalInfo.phone ? personalInfo.phone : ''}}</div>
-                                    </div>
-                                    <!-- <div class="col-md-4 float-left">
-                                        <div class="float-left col-md-6">
-                                            <i class="iconfont icon-Wechat pr-2"></i>
-                                            <span class="font-weight-bold">WeChat</span>
-                                        </div>
-                                        <div class="float-left col-md-6 pl-0">XXX</div>
-                                    </div> -->
+                                    <div class="float-left col-md-6 pl-0">{{ personalInfo.phone ? personalInfo.phone : ''}}</div>
                                 </div>
+                                <!-- <div class="col-md-4 float-left">
+                                    <div class="float-left col-md-6">
+                                        <i class="iconfont icon-Wechat pr-2"></i>
+                                        <span class="font-weight-bold">WeChat</span>
+                                    </div>
+                                    <div class="float-left col-md-6 pl-0">XXX</div>
+                                </div> -->
                             </div>
                         </div>
                     </div>
                 </div>
+            </div>
+            <div class="page-content container-fluid">
                 <div class="clearfix">
-                    <div class="panel task-panel">
-                        <div class="px-30 py-10 title-wrap">
+                    <div class="panel mb-0 task-panel">
+                        <div class="mx-30 py-10 title-wrap">
                             <h5>任务</h5>
                         </div>
-                        <div class="page-content tab-content nav-tabs-animate">
-                            <div class="clearfix pb-10 my-10" v-for="(item, index) in tasks" :key="index">
-                                <div class="col-md-7 float-left"><Avatar class="small-avatar" :imgUrl="item.principal.data.icon_url" />{{ item.title }}</div>
-                                <div class="col-md-5 float-left" style="text-align: right">{{ item.end_at }}</div>
+                        <div class="page-content tab-content nav-tabs-animate overflowY py-0">
+                            <div class="list-wrap" v-for="(item, index) in tasks" :key="index">
+                                <div class="flex">
+                                    <Avatar class="small-avatar" :imgUrl="item.principal.data.icon_url" />{{ item.title }}
+                                </div>
+                                <div class="">{{ item.start_at }}</div>
                             </div>
                         </div>
                     </div>
-                    <div class="panel schedule-panel">
-                        <div class="px-30 py-10 title-wrap">
+                    <div class="panel mb-0 schedule-panel">
+                        <div class="mx-30 py-10 title-wrap">
                             <h5>最近日程</h5>
                         </div>
-                        <div class="page-content tab-content nav-tabs-animate">
-                            <div class="clearfix pb-10 my-10" v-for="(item, index) in schedules" :key="index">
-                                <div class="col-md-7 float-left"><Avatar class="small-avatar" :imgUrl="item.creator.data.icon_url" />{{ item.title }}</div>
-                                <div class="col-md-5 float-left" style="text-align: right">{{ item.end_at }}</div>
+                        <div class="page-content tab-content nav-tabs-animate overflowY py-0">
+                            <div class="list-wrap" v-for="(item, index) in schedules" :key="index">
+                                <div class="flex">
+                                    <Avatar class="small-avatar" :imgUrl="item.creator.data.icon_url" />{{ item.title }}
+                                </div>
+                                <div class="">{{ item.end_at }}</div>
                             </div>
                         </div>
                     </div>
@@ -283,10 +289,27 @@
         padding-bottom: 30px;
     }
     .small-avatar {
-        float: left;
-        position: relative;
-        top: -4px;
-        left: -15px;
+        margin-right: 10px;
+    }
+    .top-bg {
+        width: 100%;
+    }
+    .top-bg img {
+        width: 100%;
+    }
+    .overflowY {
+        height: calc(100vh - 400px);
+        overflow-y: scroll;
+    }
+    .list-wrap {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        margin: 20px 0;
+    }
+    .flex {
+        display: flex;
+        align-items: center;
     }
 </style>
 

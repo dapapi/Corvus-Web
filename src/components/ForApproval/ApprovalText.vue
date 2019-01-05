@@ -1,6 +1,6 @@
 <template>
-    <div class="approval-text-container col-md-12">
-        <span class="col-md-2 text-right">{{title || data[0].control_title || '测试文本输入框'}}</span>
+    <div class="approval-text-container col-md-12 pl-0">
+        <span class="col-md-2 text-right ml-0 pl-0" :class="data[0].required===1?'require':''">{{title || data[0].control_title || '测试文本输入框'}}</span>
         <input type="text" v-model="textContent" class="form-control col-md-10" placeholder="请输入">
     </div>    
 </template>

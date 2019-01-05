@@ -114,66 +114,147 @@
 
             </div>
 
-            <div style="display: flex; align-items: stretch; justify-content: space-between;">
-                <div class="panel" style="width: calc(66% - 15px);">
-                    <div class="col-md-12">
-                        <ul class="nav nav-tabs nav-tabs-line" role="tablist">
-                            <li class="nav-item" role="presentation" v-show="artistInfo.sign_contract_status == 2">
-                                <a class="nav-link" :class="artistInfo.sign_contract_status == 2?'active':''"
-                                data-toggle="tab" href="#forum-artist-schedule"
-                                aria-controls="forum-base"
-                                aria-expanded="false" role="tab">日程</a>
-                            </li>
-                            <li class="nav-item" role="presentation" v-show="artistInfo.sign_contract_status == 2">
-                                <a class="nav-link" data-toggle="tab" href="#forum-artist-projects"
-                                aria-controls="forum-present"
-                                aria-expanded="false" role="tab">项目</a>
-                            </li>
-                            <li class="nav-item" role="presentation">
-                                <a class="nav-link" 
-                                data-toggle="tab" href="#forum-artist-tasks"
-                                aria-controls="forum-present"
-                                aria-expanded="true" role="tab">
-                                    <template v-if="allTaskList.length > 0">
-                                        <ToolTips :title="`已完成数量${doneTaskNum}`">
-                                            任务 ({{taskNum}})
-                                        </ToolTips>
-                                    </template>
-                                    <template v-else>
-                                        任务
-                                    </template>
-                                </a>
-                            </li>
-                            <li class="nav-item" role="presentation" v-show="artistInfo.sign_contract_status == 2">
-                                <a class="nav-link" data-toggle="tab" href="#forum-artist-work"
-                                aria-controls="forum-present"
-                                aria-expanded="false" role="tab">作品库</a>
-                            </li>
-                            <!--<li class="nav-item" role="presentation" v-show="artistInfo.sign_contract_status == 2">-->
-                                <!--<a class="nav-link" data-toggle="tab" href="#forum-artist-fans"-->
-                                <!--aria-controls="forum-present"-->
-                                <!--aria-expanded="false" role="tab">粉丝数据</a>-->
-                            <!--</li>-->
-                            <li class="nav-item" role="presentation" @click="getArtistsBill"
-                                v-show="artistInfo.sign_contract_status == 2">
-                                <a class="nav-link" data-toggle="tab" href="#forum-artist-bill"
-                                aria-controls="forum-present"
-                                aria-expanded="false" role="tab">账单</a>
-                            </li>
-                            <li class="nav-item" role="presentation">
-                                <a class="nav-link" data-toggle="tab" href="#forum-artist-base"
-                                aria-controls="forum-present"
-                                aria-expanded="false" role="tab" :class="artistInfo.sign_contract_status == 2?'':'active'">概况</a>
-                            </li>
-                        </ul>
-                        <div class="tab-content nav-tabs-animate bg-white col-md-12">
-                            <!--日历日程-->
-                            <div class="tab-pane animation-fade pb-20 fixed-button-father" id="forum-artist-schedule"
-                                role="tabpanel" :class="artistInfo.sign_contract_status == 2?'active':''">
-                                <div class="col-md-12">
-                                    <calendar :goto-date="selectedDate" :calendars="calendarId" ref="calendar"
-                                            @scheduleClick="showScheduleModal"></calendar>
-                                </div>
+            <div class="col-md-12 panel">
+                <div class="col-md-12">
+                    <ul class="nav nav-tabs nav-tabs-line" role="tablist">
+                        <li class="nav-item" role="presentation" v-if="artistInfo.sign_contract_status == 2">
+                            <a class="nav-link" :class="artistInfo.sign_contract_status == 2?'active':''"
+                               data-toggle="tab" href="#forum-artist-schedule"
+                               aria-controls="forum-base"
+                               aria-expanded="false" role="tab">日程</a>
+                        </li>
+                        <li class="nav-item" role="presentation" v-if="artistInfo.sign_contract_status == 2">
+                            <a class="nav-link" data-toggle="tab" href="#forum-artist-projects"
+                               aria-controls="forum-present"
+                               aria-expanded="false" role="tab">项目</a>
+                        </li>
+                        <li class="nav-item" role="presentation">
+                            <a class="nav-link" 
+                               data-toggle="tab" href="#forum-artist-tasks"
+                               aria-controls="forum-present"
+                               aria-expanded="true" role="tab">
+                                <template v-if="allTaskList.length > 0">
+                                    <ToolTips :title="`已完成数量${doneTaskNum}`">
+                                        任务 ({{taskNum}})
+                                    </ToolTips>
+                                </template>
+                                <template v-else>
+                                    任务
+                                </template>
+                            </a>
+                        </li>
+                        <li class="nav-item" role="presentation" v-if="artistInfo.sign_contract_status == 2">
+                            <a class="nav-link" data-toggle="tab" href="#forum-artist-work"
+                               aria-controls="forum-present"
+                               aria-expanded="false" role="tab">作品库</a>
+                        </li>
+                        <!--<li class="nav-item" role="presentation" v-show="artistInfo.sign_contract_status == 2">-->
+                            <!--<a class="nav-link" data-toggle="tab" href="#forum-artist-fans"-->
+                               <!--aria-controls="forum-present"-->
+                               <!--aria-expanded="false" role="tab">粉丝数据</a>-->
+                        <!--</li>-->
+                        <li class="nav-item" role="presentation" @click="getArtistsBill"
+                            v-if="artistInfo.sign_contract_status == 2">
+                            <a class="nav-link" data-toggle="tab" href="#forum-artist-bill"
+                               aria-controls="forum-present"
+                               aria-expanded="false" role="tab">账单</a>
+                        </li>
+                        <li class="nav-item" role="presentation">
+                            <a class="nav-link" data-toggle="tab" href="#forum-artist-base"
+                               aria-controls="forum-present"
+                               aria-expanded="false" role="tab" :class="artistInfo.sign_contract_status == 2?'':'active'">概况</a>
+                        </li>
+                    </ul>
+                    <div class="tab-content nav-tabs-animate bg-white col-md-12">
+                        <!--日历日程-->
+                        <div class="tab-pane animation-fade pb-20 fixed-button-father" id="forum-artist-schedule"
+                             role="tabpanel" :class="artistInfo.sign_contract_status == 2?'active':''">
+                            <div class="col-md-12">
+                                <calendar v-if="artistInfo.sign_contract_status == 2" :goto-date="selectedDate" :calendars="calendarId" ref="calendar"
+                                          @scheduleClick="showScheduleModal" :isModel="true"></calendar>
+                            </div>
+                        </div>
+                        <!--项目-->
+                        <div class="tab-pane animation-fade pb-20 fixed-button-father" id="forum-artist-projects"
+                             role="tabpanel">
+                            <table class="table table-hover is-indent example" data-plugin="animateList"
+                                   data-animate="fade"
+                                   data-child="tr"
+                                   data-selectable="selectable">
+                                <tr class="animation-fade"
+                                    style="animation-fill-mode: backwards; animation-duration: 250ms; animation-delay: 0ms;">
+                                    <th class="cell-300" scope="col">项目名称</th>
+                                    <th class="cell-300" scope="col">负责人</th>
+                                    <th class="cell-300" scope="col">关联公司</th>
+                                    <th class="cell-300" scope="col">录入日期</th>
+                                    <th class="cell-300" scope="col">艺人分成</th>
+                                </tr>
+                                <tr v-for="(item,index) in artistProjectsInfo" :key="index" @click="toProject(item.id)" style="cursor: pointer;">
+                                    <td>
+                                        {{item.title}}
+                                    </td>
+                                    
+                                    <td>{{item.principal.data.name}}</td>
+                                    <td>{{item.company}}</td>
+                                    <td>{{item.created_at}}</td>
+                                    <td>
+                                        <template v-if="item.relate_project_bills_resource">
+                                            {{item.relate_project_bills_resource}}
+                                        </template>
+                                        <template>0</template>
+                                    </td>
+                                </tr>
+                            </table>
+                            <div class="col-md-1" style="margin: 6rem auto" v-if="artistProjectsInfo.length === 0">
+                                <img src="https://res.papitube.com/corvus/images/content-none.png" alt=""
+                                     style="width: 100%">
+                            </div>
+                        </div>
+                        <!--任务-->
+                        <div class="tab-pane animation-fade pb-20 fixed-button-father"
+                              id="forum-artist-tasks"
+                             role="tabpanel">
+                            <table class="table table-hover is-indent example" data-plugin="animateList"
+                                   data-animate="fade" data-child="tr">
+                                <tr class="animation-fade"
+                                    style="animation-fill-mode: backwards; animation-duration: 250ms; animation-delay: 0ms;">
+                                    <th class="cell-300" scope="col">任务名称</th>
+                                    <th class="cell-300" scope="col">任务类型</th>
+                                    <th class="cell-300" scope="col">状态</th>
+                                    <th class="cell-300" scope="col">负责人</th>
+                                    <th class="cell-300" scope="col">截止时间</th>
+                                </tr>
+                                <tr v-for="(task,index) in allTaskList" :key="index" @click="toTask(task.id)" style="cursor: pointer;">
+                                    <td>
+                                        {{task.title}}
+                                    </td>
+                                    <td>
+                                        <template v-if="task.type">{{task.type.data.title}}</template>
+                                        <template v-else></template>
+                                    </td>
+                                    <td>
+                                        <template v-if="task.status === 1">进行中</template>
+                                        <template v-if="task.status === 2">已完成</template>
+                                        <template v-if="task.status === 3">已停止</template>
+                                    </td>
+                                    <td>{{ task.principal.data.name }}</td>
+                                    <td>{{ task.end_at }}</td>
+                                </tr>
+
+                            </table>
+                            <div class="col-md-1" style="margin: 6rem auto" v-if="artistTasksInfo.length === 0">
+                                <img src="https://res.papitube.com/corvus/images/content-none.png" alt=""
+                                     style="width: 100%">
+                            </div>
+                            <div class="site-action fixed-button" data-plugin="actionBtn" data-toggle="modal"
+                                 data-target="#addTask">
+                                <button type="button"
+                                        class="site-action-toggle btn-raised btn btn-success btn-floating waves-effect waves-classic">
+                                    <i class="front-icon iconfont icon-tianjia1 animation-scale-up" aria-hidden="true"
+                                       style="font-size:30px"></i>
+                                    <i class="back-icon iconfont icon-tianjia1 animation-scale-up" aria-hidden="true"
+                                       style="font-size:30px"></i>
+                                </button>
                             </div>
                             <!--项目-->
                             <div class="tab-pane animation-fade pb-20 fixed-button-father" id="forum-artist-projects"
@@ -1087,6 +1168,7 @@
             //获取日历详情
             showScheduleModal: function (schedule) {
                 let data = {
+
                     include: 'calendar,participants,creator,material,affixes',
                 };
                 fetch('get', '/schedules/' + schedule.id, data).then(response => {

@@ -1,6 +1,6 @@
 <template>
-    <div class="col-md-12 approval-text-container">
-        <span class="col-md-2 text-right" >{{title || data[0].control_title || "时间选择器测试"}}</span>
+    <div class="col-md-12 approval-text-container pl-0">
+        <span class="col-md-2 text-right pl-0" :class="data[0].required===1?'require':''">{{title || data[0].control_title || "时间选择器测试"}}</span>
         <datepicker class="col-md-10 time-picker" v-if="!duration" :placeholder="data[0].control_placeholder" @change='change' :clear='clear' />
     </div>
 </template>

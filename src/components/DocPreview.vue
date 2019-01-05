@@ -60,7 +60,10 @@ export default {
 }
 </script>
 
-<style>
-
+<style scoped>
+img{
+    width: 500px !important;
+    height: 500px !important;
+}
 </style>
 
