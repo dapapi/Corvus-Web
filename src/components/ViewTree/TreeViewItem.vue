@@ -1,7 +1,7 @@
 <template>
     <div class="tree-view-item">
        <div class="level" :class="`level-${menu.level}`" v-for="menu in menus" :key="menu.id">
-           <div v-if="menu.type ==='link'" :class="isSelected == menu.id?'selected':''">
+           <div class="list-group-item" v-if="menu.type ==='link'" :class="isSelected == menu.id?'selected':''">
                <router-link class="link" v-bind:to="menu.url" @click.native="toggle(menu)">
                    <span v-if="menu.level>1" class="icon md-file-text font-size-18 mr-10 ml-15"></span>
                    {{menu.name}}
@@ -9,7 +9,7 @@
                 </router-link>
            </div>
            <div v-if="menu.type === 'button'">
-                <div class="button heading" :class="{selected:isSelected == menu.id,expand:isExpanded.includes(menu.id)}" @click="toggle(menu)">
+                <div class="list-group-item button heading" :class="{selected:isSelected == menu.id,expand:isExpanded.includes(menu.id)}" @click="toggle(menu)">
                     <i class="icon md-caret-right mr-10 font-size-20"></i>
                     <span>{{menu.name}}
                     </span>
@@ -134,7 +134,7 @@ export default {
     }
     .link,.button{
         display: block;
-        padding:10px 15px;
+        /* padding:10px 15px; */
         transition: background-color 0.2s ease-in-out 0s, color 0.3s ease-in-out 0.1s;
         -moz-user-select: none;
         -webkit-user-select: none;

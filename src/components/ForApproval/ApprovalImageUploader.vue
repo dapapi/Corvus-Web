@@ -1,15 +1,22 @@
 <template>
-    <div class="upload col-md-12">
-        <div class="col-md-2 text-right">{{data[0].control_title}}</div>
-        <figure v-for="(item, index) in fileInfo" :key="index" >
+    <div class="upload col-md-12 pl-0 ">
+        <div class="col-md-2 text-right pl-0" :class="data[0].required===1?'require':''">{{data[0].control_title}}</div>
+        <figure v-for="(item, index) in fileInfo" :key="index" style="margin-right:20px;">
             <div class="image-show" v-if="fileInfo.length > 0" :style="'backgroundImage:url('+item.fileUrl+')'"></div>
-            <p>{{item.fileName}}</p>
+            <hr>
+            <div class="icon-control">
+                <a :href="item.fileUrl" target="_blank">
+                    <i class="iconfont icon-liulan"></i>
+                </a>
+                <i class="iconfont icon-shanchu1" @click="imgDelete(item)"></i>
+            </div>
+            <!-- <p>{{item.fileName.split('.')[0]}}</p> -->
         </figure>
         <div class="image-show">
             <span class="plus-icon">+</span>
             <input type="file" @change="uploadFile" accept="image/png,image/gif,image/jpeg,image/tiff,application/pdf" />
          </div>
-         <DocPreview />
+         <DocPreview :url="fileUrl" :givenFileName="givenFileName" />
     </div>
 </template>
 
@@ -24,7 +31,9 @@ export default {
         return{
             fileInfo:[],
             fileExt:'',
-            imgExt:['png','jpg','bmp','tif','gif']
+            imgExt:['png','jpg','bmp','tif','gif'],
+            fileUrl:'',
+            givenFileName:'',
         }
     },
     mounted () {
@@ -46,6 +55,9 @@ export default {
         // }
     },
     methods: {
+        imgDelete(params){
+            this.$delete(this.fileInfo,this.fileInfo.indexOf(this.fileInfo.find(item=>item.fileName === params.fileName)))
+        },
         uploadFile(e) {
             let file = e.target.files[0];
             let putExtra = null;
@@ -73,8 +85,9 @@ export default {
                     let fileName = file.name;
                     // _this.$emit('change', fileUrl, fileName, fileSize,_this.fileExt,_this.id);
                     let {id} = _this.data[0]
-                    _this.$emit('change',{key:id,value:fileUrl,type:null})
+                    
                     _this.fileInfo.push({fileUrl, fileName, fileSize})
+                    _this.$emit('change',{key:id,value:_this.fileInfo,type:null})
                 })
             });
         },
@@ -126,15 +139,29 @@ p{
 figure{
 
 }
+// .icon-shanchu1{
+//     position: relative;
+//     right: 0;
+// }
+.icon-control{
+    display: flex;
+    justify-content: space-between;
+    padding: 0 5px 0 5px;
+}
 .image-show{
     cursor: pointer;
     background-size: 80px;
     background-repeat: no-repeat;
     width: 80px;
     height: 80px;
-    border: 1px solid rgba(7,17,27,0.2);
+    background-position-y: 60%;
+    // border: 1px solid rgba(7,17,27,0.2);
     display:flex;
+    align-items: center;
     justify-content: center;
+}
+hr{
+    margin: 2px;    
 }
 .plus-icon{
     font-size: 50px;

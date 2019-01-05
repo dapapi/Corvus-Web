@@ -8,7 +8,7 @@
     import fetch from '../assets/utils/fetch.js'
 
     export default {
-        props: ['calendars', 'gotoDate', 'meetingRomeList', 'isMeeting'],
+        props: ['calendars', 'gotoDate', 'meetingRomeList', 'isMeeting','isModel'],
         data() {
             return {
                 startDate: '', //获取开始时间
@@ -78,6 +78,8 @@
                     self.startDate = self.timeReformat(start._d);
                     self.endDate = self.timeReformat(end._d);
                     let meetingRomeList = self.meetingRomeList;
+                    let url
+                    self.isModel==true?url = '/schedules/all':url = '/schedules'
                     if (!meetingRomeList) {
                         meetingRomeList = [];
                     }
@@ -99,7 +101,8 @@
                     } else {
                         data.calendar_ids = self.calendars
                     }
-                    fetch('get', '/schedules', data).then(response => {
+                    
+                    fetch('get', url, data).then(response => {
                         self.allScheduleInfo = response.data;
                         let events = [];
                         for (let i = 0; i < response.data.length; i++) {

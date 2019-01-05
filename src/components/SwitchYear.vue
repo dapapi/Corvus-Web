@@ -20,24 +20,24 @@
             <i class="icon md-chevron-right font-size-20 goRight" @click="changeYear('right')"></i>
        </div>
        <!--切换月-->
-       <ul v-show="showDetails&&type == 5" class="row m-0 p-0 mt-20 pl-10">
+       <!-- <ul v-show="showDetails&&type == 5" class="row m-0 p-0 mt-20 pl-10">
            <li @click="changeYear('li',item.startDate,item.endDate)" v-for="(item,index) in month" :key="index" class="col-md-3 py-5"><span>{{item.name}}</span></li>
-       </ul>
+       </ul> -->
 
        <!--切换季-->
-       <ul v-show="showDetails&&type == 4" class="mt-20">
+       <!-- <ul v-show="showDetails&&type == 4" class="mt-20">
            <li v-for="(item,index) in season" :key="index" class="py-5">
                <div class="mb-5">{{item.name}}</div>
                <div class="font-size-12" style="color:#ccc">{{item.start}} - {{item.end}}</div>
            </li>
-       </ul>
+       </ul> -->
        <!--切换周-->
-       <ul v-show="showDetails&&type == 2" class="mt-20">
+       <!-- <ul v-show="showDetails&&type == 2" class="mt-20">
            <li v-for="(item,index) in monthWeek[nowMonth-1]" :key="index" class="py-5">
                <div class="mb-5">{{item.name}}</div>
                <div class="font-size-12" style="color:#ccc">{{item.start}} - {{item.end}}</div>
            </li>
-       </ul>
+       </ul> -->
        
        <!--切换年-->
        <!-- <ul v-show="showDetails&&type == 5" class="mt-20">
@@ -46,6 +46,9 @@
                <div class="font-size-12" style="color:#ccc">{{item.start}} - {{item.end}}</div>
            </li>
        </ul> -->
+       <div>
+            
+       </div>
     </div>
 </template>
 <script>
@@ -165,8 +168,6 @@ export default {
                 }else{}
                 this.$emit('click',`${this.year}-${this.season.find(item=> item.value == this.nowSeason).startTime}`,`${this.year}-${this.season.find(item=> item.value == this.nowSeason).endTime}`,this.year)
             }
-            
-            
         },
         getMonth:function(){
             
@@ -189,7 +190,6 @@ export default {
                 this.month[i]= data
                
             }
-            //  console.log(this.month)
         },
         changeMonth:function(){
            
@@ -199,7 +199,6 @@ export default {
         },
          //获取全部周
         getAllWeek:function(year){
-            // alert(year)
             let index=1;
             let allWeek = []
             for(let i of this.createWeeks(year)){
