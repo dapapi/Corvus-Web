@@ -37,8 +37,6 @@ export default {
     },
     methods:{
         changeMonth:function(way){
-            
-           
            if(way == 'left'){
                
                if(this.month <= 1){
