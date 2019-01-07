@@ -20,9 +20,16 @@
                     <i class="iconfont icon-shanchu1" @click="imgDelete(item)"></i>
                 </div>
             </div>
-            <input type="file" @change="uploadFile" class="float-left"/>请上传附件
+            <div>
+                <input type="file" @change="uploadFile" id="fileUploader" v-show="false"/>
+                <label for="fileUploader" class="pt-10 noselect" style="color:#00bcd4">
+                <template v-if="!isIcon">
+                    上传附件
+                </template>
+        </label>
+            </div>
          </div>
-         <DocPreview :url='previewUrl' :given-file-name='givenFileName' />
+        <DocPreview :url='previewUrl' :given-file-name='givenFileName' />
     </div>
 </template>
 
@@ -145,6 +152,10 @@ export default {
     display: flex;
     justify-content: space-between;
     padding: 0 5px 0 5px;
+}
+.upload-text{
+    display: flex;
+    justify-self: center;
 }
 .plus-icon{
     font-size: 50px;
