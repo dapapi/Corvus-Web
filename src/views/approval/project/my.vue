@@ -123,10 +123,11 @@
             getList(params) {
                 let _this = this
                 fetch('get','/approvals_project/approval?status='+params).then((params) => {
+                    console.log(params);
                     _this.projectsInfo = params.data
-                    _this.total = params.total;
-                    _this.current_page = params.current_page;
-                    _this.total_pages = params.last_page;
+                    _this.total = params.meta.pagination;
+                    _this.current_page = params.meta.current_page;
+                    _this.total_pages = params.meta.total_pages;
                 })
             },
             goDetail (num) {
