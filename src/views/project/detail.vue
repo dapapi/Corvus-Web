@@ -62,11 +62,16 @@
                                 <i class="iconfont icon-tubiao- pr-2" aria-hidden="true"></i>项目状态
                             </div>
                             <div class="font-weight-bold float-left">
-                                <template v-if="projectInfo.status === 1"><span style="color:#FF9800">进行中</span>
+                                <template v-if="projectInfo.approval_status != 232">
+                                    <span style="color:#FF9800">审批中</span>
                                 </template>
-                                <template v-if="projectInfo.status === 2"><span style="color:#4CAF50">已完成</span>
-                                </template>
-                                <template v-if="projectInfo.status === 3"><span style="color:#9E9E9E">撤单</span>
+                                <template v-else>
+                                    <template v-if="projectInfo.status === 1"><span style="color:#FF9800">进行中</span>
+                                    </template>
+                                    <template v-if="projectInfo.status === 2"><span style="color:#4CAF50">已完成</span>
+                                    </template>
+                                    <template v-if="projectInfo.status === 3"><span style="color:#9E9E9E">撤单</span>
+                                    </template>
                                 </template>
 
                             </div>
