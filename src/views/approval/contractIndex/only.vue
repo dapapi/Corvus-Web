@@ -118,7 +118,7 @@ import {CONTRACT_INDEX_CONFIG} from '@/views/approval/contractIndex/contractInde
             },
             getList(params) {
                     let _this = this
-                    fetch('get','/approvals_contract/approval?status=',params).then((params) => {
+                    fetch('get','/approvals_contract/notify?status=',params).then((params) => {
                         console.log(params.meta);
                         _this.projectsInfo = params.data
                         _this.total = params.meta.pagination

@@ -50,7 +50,7 @@
                                     <th class="cell-300" scope="col">审批状态</th>
                                 </tr>
                                 <tbody>
-                                <tr v-for="project in projectsInfo" :key='project.project_number' @click="goDetail(project.project_number)">
+                                <tr v-for="project in projectsInfo" :key='project.project_number' @click="goDetail(project.form_instance_number)">
                                     <td>{{project.form_instance_number}}</td>
                                     <td>{{project.title}}</td>
                                     <td>{{project.name}}</td>
@@ -98,7 +98,6 @@
         computed:{
             getProgressName(){
                 return function(params){
-                    console.log(params);
                    return  this.projectProgress.find(item=>item.id = params).value
                 }
             }
@@ -122,9 +121,9 @@
                     this.total_pages = response.last_page;
                 })
             },
-            getList() {
+            getList(params) {
                 let _this = this
-                fetch('get','/approvals_project/notify').then((params) => {
+                fetch('get','/approvals_project/notify?status='+params).then((params) => {
                     _this.projectsInfo = params.data
                     _this.total = params.total;
                     _this.current_page = params.current_page;

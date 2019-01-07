@@ -180,14 +180,7 @@ export default {
     padding: 0 45px;
 
 }
-.noselect{
-     -webkit-touch-callout: none;
-     -webkit-user-select: none;
-     -khtml-user-select: none;
-     -moz-user-select: none;
-     -ms-user-select: none;
-     user-select: none;
-}
+
 .iconfont-logo{
     position: relative;
     z-index: 1288;

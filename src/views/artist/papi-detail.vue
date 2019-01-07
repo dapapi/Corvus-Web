@@ -412,14 +412,36 @@
                                     <div class="card-block" v-if="artistInfo">
                                         <div class="clearfix">
                                             <div class="card-text py-10 px-0 clearfix col-md-6 float-left ">
-                                                <div class="col-md-3 float-left text-right pl-0">昵称</div>
+                                                <div class="col-md-4 float-left text-right pl-0">昵称</div>
                                                 <div class="col-md-9 float-left font-weight-bold">
                                                     <EditInput :content="artistInfo.nickname" :is-edit="isEdit"
                                                             @change="changArtistName"></EditInput>
                                                 </div>
                                             </div>
                                             <div class="card-text py-10 px-0 clearfix col-md-6 float-left ">
+<<<<<<< HEAD
                                                 <div class="col-md-3 float-left text-right pl-0">博主级别</div>
+=======
+                                                <div class="col-md-4 float-left text-right pl-0">类型</div>
+                                                <div class="col-md-9 float-left font-weight-bold" v-if="artistInfo.type">
+                                                    <EditSelector :content="artistInfo.type.data.id"
+                                                                :options="artistTypeArr"
+                                                                :is-edit="isEdit"
+                                                                @change="changArtistType"></EditSelector>
+                                                </div>
+                                            </div>
+                                            <div class="card-text py-10 px-0 clearfix col-md-6 float-left ">
+                                                <div class="col-md-4 float-left text-right pl-0">沟通状态</div>
+                                                <div class="col-md-9 float-left font-weight-bold">
+                                                    <EditSelector :content="artistInfo.communication_status"
+                                                                :options="papiCommunicationStatusArr"
+                                                                :is-edit="isEdit"
+                                                                @change="changeArtistCommunication"></EditSelector>
+                                                </div>
+                                            </div>
+                                            <div class="card-text py-10 px-0 clearfix col-md-6 float-left ">
+                                                <div class="col-md-4 float-left text-right pl-0">社交平台</div>
+>>>>>>> ee69e80f4171342d655996480ce254a8eab5e475
                                                 <div class="col-md-9 float-left font-weight-bold">
                                                     <EditSelector :content="artistInfo.level"
                                                                   :options="taskLevelArr"
@@ -428,7 +450,7 @@
                                                 </div>
                                             </div>
                                             <div class="card-text py-10 px-0 clearfix col-md-6 float-left edit-height">
-                                                <div class="col-md-3 float-left text-right pl-0">与我司签约意向</div>
+                                                <div class="col-md-4 float-left text-right pl-0">与我司签约意向</div>
                                                 <div class="col-md-9 float-left font-weight-bold">
                                                     <ConditionalInput ref="condition" :is-edit="isEdit" :content="artistInfo.intention"
                                                                     :input-content="artistInfo.intention_desc"
@@ -437,7 +459,7 @@
                                                 </div>
                                             </div>
                                             <div class="card-text py-10 px-0 clearfix col-md-6 float-left edit-height">
-                                                <div class="col-md-3 float-left text-right pl-0">是否签约其他公司</div>
+                                                <div class="col-md-4 float-left text-right pl-0">签约其他公司</div>
                                                 <div class="col-md-9 float-left font-weight-bold">
                                                     <ConditionalInput ref="condition1" :is-edit="isEdit"
                                                                     :content="artistInfo.sign_contract_other"
@@ -446,59 +468,58 @@
                                                                     @change="(value) => changeArtistSigning(value, 'sign_contract_other')"></ConditionalInput>
                                                 </div>
                                             </div>
+                                           
                                             <div class="card-text py-10 px-0 clearfix col-md-6 float-left ">
-                                                <div class="col-md-3 float-left text-right pl-0">社交平台</div>
+                                                <div class="col-md-4 float-left text-right pl-0">微博链接</div>
                                                 <div class="col-md-9 float-left font-weight-bold">
-                                                    <EditSelector :is-edit="isEdit" :multiple="true"
-                                                                :content="artistInfo.platform ? artistInfo.platform.split(',') : ''"
-                                                                :options="artistSocialPlatform"
-                                                                @valuelistener="changeArtistPlatform_id"></EditSelector>
+                                                    <EditInput :content="artistInfo.weibo_url" :is-edit="isEdit"
+                                                            @change="changeArtistWeibo_url"></EditInput>
                                                 </div>
                                             </div>
                                             <div class="card-text py-10 px-0 clearfix col-md-6 float-left ">
-                                                <div class="col-md-3 float-left text-right pl-0">微博粉丝数</div>
+                                                <div class="col-md-4 float-left text-right pl-0">微博粉丝数</div>
                                                 <div class="col-md-9 float-left font-weight-bold">
                                                     <EditInput :content="artistInfo.weibo_fans_num" :is-edit="isEdit"
                                                             @change="changeArtistWeibo_fans_num"></EditInput>
                                                 </div>
                                             </div>
                                             <div class="card-text py-10 px-0 clearfix col-md-6 float-left ">
-                                                <div class="col-md-3 float-left text-right pl-0">抖音Id</div>
+                                                <div class="col-md-4 float-left text-right pl-0">抖音Id</div>
                                                 <div class="col-md-9 float-left font-weight-bold">
                                                     <EditInput :content="artistInfo.douyin_id" :is-edit="isEdit"
                                                             @change="changeArtistDouyin_id"></EditInput>
                                                 </div>
                                             </div>
                                             <div class="card-text py-10 px-0 clearfix col-md-6 float-left ">
-                                                <div class="col-md-3 float-left text-right pl-0">抖音粉丝数</div>
+                                                <div class="col-md-4 float-left text-right pl-0">抖音粉丝数</div>
                                                 <div class="col-md-9 float-left font-weight-bold">
                                                     <EditInput :content="artistInfo.douyin_fans_num" :is-edit="isEdit"
                                                             @change="changeArtistDouyin_fans_num"></EditInput>
                                                 </div>
                                             </div>
                                             <div class="card-text py-10 px-0 clearfix col-md-6 float-left ">
-                                                <div class="col-md-3 float-left text-right pl-0">小红书链接</div>
+                                                <div class="col-md-4 float-left text-right pl-0">小红书链接</div>
                                                 <div class="col-md-9 float-left font-weight-bold">
                                                     <EditInput :content="artistInfo.xiaohongshu_url" :is-edit="isEdit"
                                                             @change="changeArtistXiaohongshu_url"></EditInput>
                                                 </div>
                                             </div>
                                             <div class="card-text py-10 px-0 clearfix col-md-6 float-left ">
-                                                <div class="col-md-3 float-left text-right pl-0">小红书粉丝数</div>
+                                                <div class="col-md-4 float-left text-right pl-0">小红书粉丝数</div>
                                                 <div class="col-md-9 float-left font-weight-bold">
                                                     <EditInput :content="artistInfo.xiaohongshu_fans_num" :is-edit="isEdit"
                                                             @change="changeArtistXiaohongshu_fans_num"></EditInput>
                                                 </div>
                                             </div>
                                             <div class="card-text py-10 px-0 clearfix col-md-6 float-left ">
-                                                <div class="col-md-3 float-left text-right pl-0">孵化期</div>
+                                                <div class="col-md-4 float-left text-right pl-0">孵化期</div>
                                                 <div class="col-md-9 float-left font-weight-bold" >
                                                     <EditGroupDatePicker :content="Incubationperiod" :is-edit="isEdit"
                                                                         @change="changeArtistHatch"></EditGroupDatePicker>
                                                 </div>
                                             </div>
                                             <div class="card-text py-10 px-0 clearfix col-md-6 float-left ">
-                                                <div class="col-md-3 float-left text-right pl-0">商务合作要求</div>
+                                                <div class="col-md-4 float-left text-right pl-0">商务合作要求</div>
                                                 <div class="col-md-9 float-left font-weight-bold">
                                                     <EditInput :content="artistInfo.cooperation_demand" :is-edit="isEdit"
                                                             @change="changeArtistDemand"></EditInput>
@@ -515,25 +536,25 @@
                                             <div class="segmentation-line example float-left"></div>
 
                                             <div class="card-text py-10 px-0 clearfix col-md-6 float-left ">
-                                                <div class="col-md-3 float-left text-right pl-0">录入人</div>
+                                                <div class="col-md-4 float-left text-right pl-0">录入人</div>
                                                 <div class="col-md-9 float-left font-weight-bold" v-if="artistInfo.creator" v-for="(entry,index) in artistInfo.creator" :key="index">
                                                     {{entry.name}}
                                                 </div>
                                             </div>
                                             <div class="card-text py-10 px-0 clearfix col-md-6 float-left ">
-                                                <div class="col-md-3 float-left text-right pl-0">录入时间</div>
+                                                <div class="col-md-4 float-left text-right pl-0">录入时间</div>
                                                 <div class="col-md-9 float-left font-weight-bold">
                                                     {{artistInfo.created_at}}
                                                 </div>
                                             </div>
                                             <div class="card-text py-10 px-0 clearfix col-md-6 float-left ">
-                                                <div class="col-md-3 float-left text-right pl-0">最近更新人</div>
+                                                <div class="col-md-4 float-left text-right pl-0">最近更新人</div>
                                                 <div class="col-md-9 float-left font-weight-bold" v-if="artistInfo.creator" v-for="(entry,index) in artistInfo.creator" :key="index">
                                                     {{entry.name}}
                                                 </div>
                                             </div>
                                             <div class="card-text py-10 px-0 clearfix col-md-6 float-left ">
-                                                <div class="col-md-3 float-left text-right pl-0">最近更新时间</div>
+                                                <div class="col-md-4 float-left text-right pl-0">最近更新时间</div>
                                                 <div class="col-md-9 float-left font-weight-bold">
                                                     {{artistInfo.updated_at}}
                                                 </div>
@@ -768,7 +789,6 @@
 <script>
     import fetch from '../../assets/utils/fetch.js'
     import config from '../../assets/js/config'
-
     export default {
         data: function () {
             return {
@@ -883,16 +903,13 @@
                 _this.artistInfo.id = '';
                 _this.$refs.advertisingType.setValue('');
                 _this.$refs.workReleaseTime.setValue('');
-
             })
             this.getTimes()
             this.getArtistsBill()
         },
-
         methods: {
             charts: function () {
                 let myChart = echarts.init(document.getElementById('myChart'));
-
                 // 指定图表的配置项和数据
                 let option = {
                     title: {
@@ -950,10 +967,8 @@
                             stack: '总量',
                             data: [320, 332, 301, 334, 390, 330, 320]
                         },
-
                     ]
                 };
-
                 // 使用刚指定的配置项和数据显示图表。
                 myChart.setOption(option);
             },
@@ -994,7 +1009,6 @@
                             if (_this.tasksInfo[i].status == 2) {
                                 doneTaskNum = doneTaskNum + 1
                             }
-
                         }
                     }
                      //项目
@@ -1006,10 +1020,8 @@
                             }
                         }
                      }
-
                     //孵化期时间 
                     if(_this.artistInfo.hatch_star_at&&_this.artistInfo.hatch_end_at){
-
                         _this.Incubationperiod = _this.artistInfo.hatch_star_at+'|'+_this.artistInfo.hatch_end_at
                     }
                     // //状态转换
@@ -1029,25 +1041,19 @@
                     //     _this.artistInfo.artistWorkProportion = false
                     // }
                     _this.isLoading = false;
-
                 });
-
                 //任务状态跑组。试戏
                 fetch('get', '/task_types').then(function (response) {
                     _this.tasksType = response.data;
                 })
                 fetch('get', '/bloggers/gettype').then(function (response) {
                     _this.artistTypeArr = response.data
-
                 })
                 //  fetch('get','/bloggers/select?include=users').then(function(response){
                 //     response.data.forEach(item=>{
                 //          _this.principalIds.push(item.users.data.id)
-
                 //     })
-
                 // })
-
             },
             //账单
             getArtistsBill(page = 1,expense_type){
@@ -1073,7 +1079,6 @@
                         let D = time.getDate() + ' ';
                         item.release_time=Y+M+D
                     })
-
                 });
             },
             getArtistTasks: function () {
@@ -1083,8 +1088,6 @@
                     // _this.artistTasksInfo = response.data;
                 })
             },
-
-
             addPrivacy: function () {
                 $('#addPrivacy').modal('hide')
                 this.$store.state.collectInfo = []
@@ -1094,21 +1097,17 @@
                 this.$store.state.incubationInfo = []
                 this.$store.state.billInfo = []
             },
-
             editBaseInfo: function () {
                 this.isEdit = true;
                 this.isStatrtEdit = false
                 this.changeInfo = [];
             },
-
             cancelEdit: function () {
                 this.getArtist()
                 this.isEdit = false;
                 this.isStatrtEdit = true
-
             },
             distributionPerson: function (value) {
-
                 this.distributionType = value;
                 if (this.artistInfo[value].data.length > 0) {
                     this.$store.state.participantsInfo = Object.assign([], this.artistInfo[value].data)
@@ -1128,21 +1127,15 @@
                 let oldPersonInfo = this.artistInfo[this.distributionType].data
                 //todo 删除和新增的数据有问题
                 if (this.artistInfo[this.distributionType].data.length > 0) {
-
                     for (let i = 0; i < this.artistInfo[this.distributionType].data.length; i++) {
-
                         if (personInfo.map(item => item.id).indexOf(this.artistInfo[this.distributionType].data[i].id) === -1) {
-
                             data.del_person_ids.push(this.artistInfo[this.distributionType].data[i].id)
                         }
                     }
                 }
                 for (let i = 0; i < this.$store.state.participantsInfo.length; i++) {
                     data.person_ids.push(this.$store.state.participantsInfo[i].id)
-
                 }
-
-
                 if (this.distributionType === 'publicity') {
                     data.type = 4
                     toast = '分配制作人成功'
@@ -1157,15 +1150,11 @@
             },
             //类型
             changArtistType: function (value) {
-
                 this.artistInfo.type.data.id= value
-
             },
             //沟通状态
             changeArtistCommunication: function (value) {
-
                 this.artistInfo.communication_status = value
-
             },
             //我公司签约
             changeArtistIntention: function (value) {
@@ -1174,12 +1163,9 @@
                 } else {
                     this.artistInfo.intention = false
                 }
-
-
             },
             //签约其他公司
             changeArtistSignStatus: function (value) {
-
                 if (value == 1) {
                     this.artistInfo.sign_contract_other = true
                 } else {
@@ -1188,7 +1174,6 @@
             },
             //平台id
             changeArtistPlatform_id(value) {
-
                 this.updatePlatform = value.join(',')
             },
             changeArtistSigning(value,name){
@@ -1221,7 +1206,6 @@
                 this.isStatrtEdit = true;
                 let _this = this;
                 this.artistId = this.$route.params.id;
-
                 if(this.artistInfo.intention==1){
                         this.artistInfo.intention = true
                 }else{
@@ -1243,12 +1227,19 @@
                     star_weibo_infos: this.updateStar_weibo_infos,
                     star_xiaohongshu_infos: this.updateStar_xiaohongshu_infos,
                     platform: this.updatePlatform,
-                    level:this.artistInfo.level,
+                    level:this.updatelevel,
                     cooperation_demand: this.updatedemand,
                     hatch_star_at: this.artistInfo.hatch_star_at,
                     hatch_end_at: this.artistInfo.hatch_end_at,
                     intention_desc:this.artistInfo.intention_desc,
                     sign_contract_other_name:this.artistInfo.sign_contract_other_name
+                }
+                if(!this.updatelevel){
+                    delete(this.changeArtistInfo.level)
+                }
+                if(!this.artistInfo.hatch_star_at||!this.artistInfo.hatch_end_at){
+                    delete(this.changeArtistInfo.hatch_star_at)
+                    delete(this.changeArtistInfo.hatch_end_at)
                 }
                 if (JSON.stringify(this.changeArtistInfo) !== "{}"){
                     return
@@ -1271,13 +1262,11 @@
                 }
             },
             changeWorkAd: function (value) {
-
                 if (value) {
                     this.advertisingType = value.id;
                 } else {
                     this.advertisingType = 0;
                 }
-
             },
             //添加作品
             addWork: function () {
@@ -1296,13 +1285,9 @@
                 }
                 fetch('post', '/bloggers/new/production', data).then(function (response) {
                     toastr.success('创建成功');
-
                     $('#addWork').modal('hide');
                     _this.getTaskDate()
-
-
                 })
-
                 // let obj={
                 //     title:'制作人视频评分-视频评分',
                 //     principal_id:this.user.id,
@@ -1347,7 +1332,6 @@
                         start_minute=start_minute;
                     }
                     let start_second=time.getSeconds();
-
                     end_second=(60-start_second)*1000
                     if(start_minute<10){
                         start_minute="0"+start_minute;
@@ -1356,11 +1340,9 @@
                      if(time.getDay()<=5){
                         end_date = (5-time.getDay())*60*60*1000*24
                         end_timeStamp = time.getTime()+end_date+end_hour+end_minute+end_second
-
                     }else if(time.getDay()>5){
                         end_date = (7-time.getDay()+5)*60*60*1000*24
                         end_timeStamp = time.getTime()+end_date+end_hour+end_minute+end_second
-
                     }
                     let end = new Date(end_timeStamp)
                     let Y = end.getFullYear() + '-';
@@ -1373,7 +1355,6 @@
             },
             //添加任务
             addTask: function () {
-
                 if (!this.taskName) {
                     toastr.error('请填写任务名称！')
                     return
@@ -1394,7 +1375,6 @@
                 //     toastr.error('开始时间不能晚于截止时间');
                 //     return
                 // }
-
                 let start,end,startMin,endMin
                 startMin = this.startMinutes.split(':')
                 endMin = this.endMinutes.split(':')
@@ -1416,55 +1396,43 @@
                    desc:this.taskIntroduce,
                    type:this.taskType
                 }
-
                 fetch('post', '/tasks', data).then(function (response) {
-
                     toastr.success('创建成功');
                     $('#addTask').modal('hide');
                     _this.tasksData = response.data;
                     _this.getArtist()
                     $('.selectpicker').selectpicker('refresh')
                 })
-
             }
             ,
-
             changeTaskType: function (value) {
                 this.taskType = value
-
             }
             ,
-
             principalChange: function (value) {
                 this.Person_id = value = this.$store.state.newPrincipalInfo.id
             }
             ,
-
             participantChange: function (value) {
                 this.participant = value
             }
             ,
-
             changeTaskLevel: function (value) {
                 this.taskLevel = value
             }
             ,
-
             changeStartTime: function (value) {
                 this.startTime = value
             }
             ,
-
             changeStartMinutes: function (value) {
                 this.startMinutes = value
             }
             ,
-
             changeEndTime: function (value) {
                 this.endTime = value
             }
             ,
-
             changeEndMinutes: function (value) {
                 this.endMinutes = value
             }
@@ -1479,17 +1447,13 @@
                 this.Namevalue = value
             }
             ,
-
-
             //微博地址
             changeArtistWeibo_url(value) {
                 this.updateStar_weibo_infos.url = value
-
             }
             ,
             //微博粉丝
             changeArtistWeibo_fans_num(value) {
-
                 this.updateStar_weibo_infos.avatar = value
             }
             ,
@@ -1520,18 +1484,13 @@
             ,
             //博主级别
             changeArtistLevel: function (value) {
-
-               this.artistInfo.level= value
+               this.updatelevel= value
             }
             ,
             //孵化期
             changeArtistHatch: function (start, end) {
-
-
                 this.artistInfo.hatch_star_at = start
                 this.artistInfo.hatch_end_at = end
-
-
             }
             ,
             //合作需求
@@ -1540,7 +1499,6 @@
             }
             ,
             taskdetail(id) {
-
                 this.$router.push({path: '/tasks/' + id})
             },
             projectdetil(id) {
@@ -1551,7 +1509,6 @@
               let str=/[a-zA-Z0-9][-a-zA-Z0-9]{0,62}(\.[a-zA-Z0-9][-a-zA-Z0-9]{0,62})+\.?///网址是否合法检测
               let regex = /(https?:\/\/)?(\w+\.?)+(\/[a-zA-Z0-9\?%=_\-\+\/]+)?/gi//http,https有无检测
               var re=new RegExp(str);
-
                 if (!re.test(value)) {
                      alert('您的网址不正确')
                 }else{
@@ -1563,9 +1520,7 @@
                          window.open('http://' + match)
                     }
                    })
-
                 }
-
             },
             JumpDetails(id){
                 this.$router.push({path: '/tasks/' + id})
@@ -1591,7 +1546,6 @@
         user-select: none;
         z-index: 2;
     }
-
     .task-dropdown-item {
         position: absolute;
         transform: translate3d(299px, 36px, 0px);
@@ -1605,7 +1559,6 @@
     textarea{
         overflow: hidden;
     }
-
     .card-block .card-text {
         display: flex;
         align-items: center;

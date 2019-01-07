@@ -172,7 +172,7 @@
                                 role="tabpanel" :class="artistInfo.sign_contract_status == 2?'active':''">
                                 <div class="col-md-12">
                                     <calendar :goto-date="selectedDate" :calendars="calendarId" ref="calendar"
-                                            @scheduleClick="showScheduleModal"></calendar>
+                                            @scheduleClick="showScheduleModal" :isModel="true"></calendar>
                                 </div>
                             </div>
                             <!--项目-->
@@ -625,37 +625,37 @@
                             </div>
                         </div>
                         <div class="example">
-                            <div class="col-md-2 text-right float-left">任务类型</div>
+                            <div class="col-md-2 text-right float-left require">任务类型</div>
                             <div class="col-md-10 float-left pl-0">
                                 <selectors :options="taskTypeArr" @change="changeTaskType" ref="taskType"></selectors>
                             </div>
                         </div>
                         <div class="example">
-                            <div class="col-md-2 text-right float-left">任务名称</div>
+                            <div class="col-md-2 text-right float-left require">任务名称</div>
                             <div class="col-md-10 float-left pl-0">
                                 <input type="text" class="form-control" placeholder="请输入任务名称" v-model="taskName">
                             </div>
                         </div>
                         <div class="example">
-                            <div class="col-md-2 text-right float-left">负责人</div>
+                            <div class="col-md-2 text-right float-left require">负责人</div>
                             <div class="col-md-5 float-left pl-0">
                                 <input-selectors :placeholder="'请选择负责人'"></input-selectors>
                             </div>
                         </div>
                         <div class="example">
-                            <div class="col-md-2 text-right float-left">参与人</div>
+                            <div class="col-md-2 text-right float-left require">参与人</div>
                             <div class="col-md-10 float-left pl-0">
                                 <add-member></add-member>
                             </div>
                         </div>
                         <div class="example">
-                            <div class="col-md-2 text-right float-left pl-0">任务优先级</div>
+                            <div class="col-md-2 text-right float-left pl-0 require">任务优先级</div>
                             <div class="col-md-10 float-left pl-0">
                                 <selectors :options="taskLevelArr" @change="changeTaskLevel" ref="taskLevel"></selectors>
                             </div>
                         </div>
                         <div class="example">
-                            <div class="col-md-2 text-right float-left">开始时间</div>
+                            <div class="col-md-2 text-right float-left require">开始时间</div>
                             <div class="col-md-5 float-left pl-0">
                                 <datepicker @change="changeStartTime" :placeholder="'请输入开始时间'"
                                             ref="taskStartDate"></datepicker>
@@ -666,7 +666,7 @@
                             </div>
                         </div>
                         <div class="example">
-                            <div class="col-md-2 text-right float-left">截止时间</div>
+                            <div class="col-md-2 text-right float-left require">截止时间</div>
                             <div class="col-md-5 float-left pl-0">
                                 <datepicker @change="changeEndTime" :placeholder="'请输入结束时间'"
                                             ref="taskEndDate"></datepicker>
@@ -711,7 +711,7 @@
                             <div class="col-md-10 float-left">{{ artistInfo.name }}</div>
                         </div>
                         <div class="example">
-                            <div class="col-md-2 text-right float-left">作品名称</div>
+                            <div class="col-md-2 text-right float-left require">作品名称</div>
                             <div class="col-md-10 float-left">
                                 <input type="text" title="" class="form-control" v-model="artistWorkName"
                                        placeholder="请输入作品名称">
@@ -719,21 +719,21 @@
                         </div>
 
                         <div class="example">
-                            <div class="col-md-2 text-right float-left">导演</div>
+                            <div class="col-md-2 text-right float-left require">导演</div>
                             <div class="col-md-10 float-left">
                                 <input type="text" title="" class="form-control" v-model="artistWorkDirector"
                                        placeholder="请输入导演姓名">
                             </div>
                         </div>
                         <div class="example">
-                            <div class="col-md-2 text-right float-left">作品发布时间</div>
+                            <div class="col-md-2 text-right float-left require">作品发布时间</div>
                             <div class="col-md-10 float-left">
                                 <datepicker @change="changeWorkReleaseTime" ref="workTime"
                                             placeholder="请选择时间"></datepicker>
                             </div>
                         </div>
                         <div class="example">
-                            <div class="col-md-2 text-right float-left">作品类型</div>
+                            <div class="col-md-2 text-right float-left require">作品类型</div>
                             <div class="col-md-10 float-left">
                                 <selectors :options="workTypeArr" @change="changeWorkType" ref="workType"></selectors>
                             </div>
@@ -1368,10 +1368,10 @@
                 let _this = this;
                 fetch('post', '/tasks', data).then(function (response) {
                     toastr.success('创建成功');
+                    _this.allTaskList.push(response.data)
                     $('#addTask').modal('hide');
-                    _this.artistTasksInfo.push(response.data)
+                    _this.getTaskList()
                     _this.setDefaultPrincipal()
-                    // _this.$store.state.newPrincipalInfo = []
                     _this.$store.state.newParticipantsInfo = []
                     _this.taskType = ''
                     _this.taskName = ''

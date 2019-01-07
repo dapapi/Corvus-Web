@@ -47,6 +47,7 @@
                     let _this = this;
                     setTimeout(function () {
                         _this.$refs.conditionSelector.setValue(_this.content)
+                        _this.isInputShow = _this.content == _this.condition ? true : false
                     }, 100)
                 }
             }
