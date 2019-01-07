@@ -13,8 +13,8 @@
                         <div v-for="(item, index) in moduleInfo" :key="index" class="great-option example " >
                             <div :is='sortChecker(item)' 
                             :data='item' :predata='sendData' class="container"
-                            :singlemode='singlemode' :clear='clearFlag'
-                            @change="changeHandler"
+                            :singlemode='singlemode' :clear='clearFlag' :directional-sender='directionalData'
+                            @change="changeHandler" @directional='directionalWatcher'
                             :formid='form_id'></div>
                             <!-- ⬆️核心模块 -->
                         </div>
@@ -53,6 +53,8 @@ import ApprovalSelector from '@/components/ForApproval/ApprovalSelector'
 import ApprovalNumber from '@/components/ForApproval/ApprovalNumber'
 import ApprovalProgress from '@/components/ForApproval/ApprovalProgress'
 import ApprovalDouble from '@/components/ForApproval/ApprovalDouble'
+import ApprovalMultipleSelector from '@/components/ForApproval/ApprovalMultipleSelector'
+import ApprovalChainReaction from '@/components/ForApproval/ApprovalChainReaction'
 export default {
     props:['formData','singlemode','defaultData'],
     data(){
@@ -73,6 +75,7 @@ export default {
                 ready:false,
             },
             clearFlag:false,
+            directionalData:{},
         }
     },
     created(){
@@ -101,7 +104,9 @@ export default {
         ApprovalNumber,
         ApprovalProgress,
         ApprovalDouble,
-        ApprovalDiv
+        ApprovalDiv,
+        ApprovalMultipleSelector,
+        ApprovalChainReaction
     },
     watch:{
         formData:function(value){
@@ -118,6 +123,10 @@ export default {
 
     },
     methods:{
+        directionalWatcher(params){
+          console.log(params); 
+          this.directionalData = params
+        },
         clearSignal(){
             this.$store.dispatch('changeParticipantsInfo',{data:[]});
             this.trendApprover={
@@ -241,6 +250,10 @@ export default {
                     return this.$options.components.ApprovalUploader
                 case 200 :
                     return this.$options.components.ApprovalDouble
+                case 310 :
+                    return this.$options.components.ApprovalMultipleSelector
+                case 391 :
+                    return this.$options.components.ApprovalChainReaction
                 default : 
                     return this.$options.components.Approvaltext
                 }
