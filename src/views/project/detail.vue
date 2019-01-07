@@ -196,9 +196,9 @@
                                                         </template>
                                                     </div>
                                                 </div>
-                                                <div class="col-md-8 float-left pr-0 pl-10"
+                                                <div class="col-md-8 float-left pr-0 pl-5"
                                                     :class="item.isFinish == 1 ? 'finish-font-color' : ''"
-                                                    style=" line-height: 40px;">
+                                                    style=" line-height: 30px;font-size: 12px;">
                                                     {{ item.name }}
                                                 </div>
                                             </div>
@@ -216,9 +216,9 @@
                                                         </template>
                                                     </div>
                                                 </div>
-                                                <div class="col-md-8 float-left pr-0 pl-10"
+                                                <div class="col-md-8 float-left pr-0 pl-5"
                                                     :class="item.isFinish == 1 ? 'finish-font-color' : ''"
-                                                    style=" line-height: 40px;">
+                                                    style=" line-height: 30px;font-size: 12px;">
                                                     {{ item.name }}
                                                 </div>
                                             </div>
@@ -228,7 +228,7 @@
                                             <div class="line"
                                                 :class="item.isFinish == 1 ? 'finish-color' : 'unfinish-color'"></div>
                                         </div>
-                                        <div class="pt-10" v-if="item.isFinish">
+                                        <div class="pt-10 font-size-14" v-if="item.isFinish">
                                             <div>{{ item.finisher }}</div>
                                             <div>{{ item.finish_at }}</div>
                                         </div>
@@ -524,7 +524,7 @@
                                             <button class="btn btn-primary" @click="changeProjectInfo">确定</button>
                                         </div>
                                     </div>
-                                    <div class="card-block" v-if="projectInfo.title">
+                                    <div class="py-20" v-if="projectInfo.title">
                                         <div class="clearfix">
                                             <div class="card-text py-10 px-0 clearfix col-md-6 float-left ">
                                                 <div class="col-md-3 float-left text-right pl-0">项目名称</div>
@@ -594,8 +594,8 @@
                                             </div>
                                             <div class="card-text py-10 px-0 clearfix col-md-6 float-left "
                                                 v-if="projectInfo.type != 5">
-                                                <div class="col-md-2 float-left text-right pl-0">预计支出/元</div>
-                                                <div class="col-md-10 float-left font-weight-bold">
+                                                <div class="col-md-3 float-left text-right pl-0">预计支出/元</div>
+                                                <div class="col-md-9 float-left font-weight-bold">
                                                     <EditNumberSpinner :is-edit="isEdit"
                                                                     :content="projectInfo.projected_expenditure"
                                                                     @change="(value) => changeProjectBaseInfo(value, 'projected_expenditure')"></EditNumberSpinner>
@@ -874,32 +874,46 @@
                     </div>
                     <div class="modal-body">
                         <div class="example">
-                            <div class="col-md-2 text-right float-left">合同金额</div>
+                            <div class="col-md-2 text-right float-left">预计订单收入</div>
+                            <div class="col-md-10 float-left">
+                                <add-member></add-member>
+
+                            </div>
+                        </div>
+                        <div class="example">
+                            <div class="col-md-2 text-right float-left">预计支出</div>
+                            <div class="col-md-10 float-left">
+                                <add-member :type="'change'"></add-member>
+
+                            </div>
+                        </div>
+                        <div class="example">
+                            <div class="col-md-2 text-right float-left">实际收入</div>
                             <div class="col-md-10 float-left">
                                 <add-member :type="'contract'"></add-member>
 
                             </div>
                         </div>
                         <div class="example">
-                            <div class="col-md-2 text-right float-left">收款金额</div>
+                            <div class="col-md-2 text-right float-left">实际支出</div>
                             <div class="col-md-10 float-left">
                                 <add-member :type="'collect'"></add-member>
                             </div>
                         </div>
-                        <div class="example">
-                            <div class="col-md-2 text-right float-left">付款金额</div>
+                        <!-- <div class="example">
+                            <div class="col-md-2 text-right float-left">合约费用(含税)</div>
                             <div class="col-md-10 float-left">
                                 <add-member :type="'pay'"></add-member>
 
                             </div>
-                        </div>
-                        <div class="example">
+                        </div> -->
+                        <!-- <div class="example">
                             <div class="col-md-2 text-right float-left">税</div>
                             <div class="col-md-10 float-left">
                                 <add-member :type="'incubation'"></add-member>
                             </div>
-                        </div>
-                        <div class="example">
+                        </div> -->
+                        <!-- <div class="example">
                             <div class="col-md-2 text-right float-left">账单</div>
                             <div class="col-md-10 float-left">
                                 <add-member :type="'bill'"></add-member>
@@ -910,11 +924,11 @@
                             <div class="col-md-10 float-left">
                                 <add-member :type="'division'"></add-member>
                             </div>
-                        </div>
+                        </div> -->
                     </div>
                     <div class="modal-footer">
                         <button class="btn btn-sm btn-white btn-pure" data-dismiss="modal">取消</button>
-                        <button class="btn btn-primary" type="submit" @click="addPrivacy">确定</button>
+                        <button class="btn btn-primary" type="submit" @click="setPrivacy">确定</button>
                     </div>
                 </div>
             </div>
@@ -1589,7 +1603,39 @@
                     this.isLoading = false
                 })
             },
-
+            //隐私设置
+            setPrivacy:function(){
+                // alert(222)
+                let _this = this
+                let data = {
+                    fee:this.$store.state.newParticipantsInfo, //预计订单收入
+                    projected_expenditure:this.$store.state.participantsInfo,//预计支出
+                    expendituresum:this.$store.state.contractInfo,//实际收入
+                    contractmoney:this.$store.state.collectInfo,//实际支出
+                    // project_bill:[]
+                }
+                let sendData={
+                    fee:[],
+                    projected_expenditure:[],
+                    expendituresum:[],
+                    contractmoney:[],
+                    // project_bill:[]
+                }
+                for (const key in data) {
+                    for (let i = 0; i < data[key].length; i++) {
+                        sendData[key].push(data[key][i].id)
+                    }
+                }
+                // console.log(sendData)
+                fetch('post', `/projects/${this.$route.params.id}/privacyUser`,sendData).then(function (response) {
+                    toastr.success('隐私设置成功')
+                    $('#addPrivacy').modal('hide')
+                    _this.$store.state.newParticipantsInfo = []
+                    _this.$store.state.participantsInfo = []
+                    _this.$store.state.contractInfo = []
+                    _this.$store.state.collectInfo = []
+                })
+            },
             getStars: function () {
                 let _this = this;
                 fetch('get', '/stars/all').then(function (response) {
@@ -1691,7 +1737,6 @@
 
             addProjectProgress: function (status) {
                 fetch('put', '/projects/' + this.projectId + '/course', {status: status}).then(response => {
-                    console.log(response)
                     let flagInfo = this.projectProgressInfo.find(item => item.status == status);
                     flagInfo['finisher'] = response.data.user;
                     flagInfo['finish_at'] = response.data.updated_at;
@@ -1883,18 +1928,6 @@
                     this.allTasksInfo = response.data
                 })
             },
-
-            addPrivacy: function () {
-
-                $('#addPrivacy').modal('hide')
-                this.$store.state.collectInfo = []
-                this.$store.state.payInfo = []
-                this.$store.state.contractInfo = []
-                this.$store.state.divisionInfo = []
-                this.$store.state.incubationInfo = []
-                this.$store.state.billInfo = []
-            },
-
             editBaseInfo: function () {
                 this.isEdit = true;
                 this.changeInfo = {};
@@ -1921,7 +1954,6 @@
                         if (value == this.projectInfo.trail.data.fee) {
                             return
                         }
-                        console.log('fee')
                         if (this.changeInfo.trail) {
                             this.changeInfo.trail.fee = value
                         } else {
@@ -1956,7 +1988,6 @@
                         if (value == this.projectInfo.trail.data.resource_type) {
                             return
                         }
-                        console.log('resource_type')
                         if (this.changeInfo.trail) {
                             this.changeInfo.trail.resource_type = value
                         } else {
@@ -1970,7 +2001,6 @@
                         if (value == this.projectInfo.trail.data.resource) {
                             return
                         }
-                        console.log('resource')
                         if (this.changeInfo.trail) {
                             this.changeInfo.trail.resource = value
                         } else {
@@ -2233,8 +2263,8 @@
     }
 
     .image-wraper {
-        width: 40px;
-        height: 40px;
+        width: 30px;
+        height: 30px;
     }
 
     .image-wraper img {

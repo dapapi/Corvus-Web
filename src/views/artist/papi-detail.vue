@@ -42,8 +42,8 @@
                             <div class="float-left pl-0 pr-2 col-md-4">
                                 <i class="iconfont icon-yonghu pr-2" aria-hidden="true"></i>录入人
                             </div>
-                            <div class="font-weight-bold float-left"  v-if="artistInfo.creator" v-for="(entry,index) in artistInfo.creator" :key="index">
-                                <template >
+                            <div class="font-weight-bold float-left"   v-for="(entry,index) in artistInfo.creator" :key="index">
+                                <template v-if="artistInfo.creator">
                                     {{ entry.name}}
                                 </template>
                             </div>
@@ -211,9 +211,9 @@
                         <div class="tab-content nav-tabs-animate bg-white col-md-12">
                             <div class="tab-pane animation-fade pb-20 fixed-button-father" id="forum-artist-schedule"
                                 role="tabpanel" :class="artistInfo.sign_contract_status == 2?'active':''">
-                                <!-- <div class="col-md-12">
-                                    <calendar :goto-date="selectedDate" :calendars="selectedCalendar" ref="calendar" @scheduleClick="showScheduleModal"></calendar>
-                                </div> -->
+                                <div class="col-md-12">
+                                    <calendar  :calendars="calendarId" ref="calendar" :isModel="true" @scheduleClick="showScheduleModal"></calendar>
+                                </div>
                             </div>
                             <div class="tab-pane animation-fade pb-20 fixed-button-father" id="forum-artist-projects"
                                 role="tabpanel">
@@ -256,7 +256,8 @@
                                         <th class="cell-300" scope="col">负责人</th>
                                         <th class="cell-300" scope="col">截止日期</th>
                                     </tr>
-                                    <tr v-for="(task,index) in alltaskshow" :key="index" v-if="task" @click="taskdetail(task.id)" class="Jump">
+                                    <template v-if="alltaskshow">
+                                    <tr v-for="(task,index) in alltaskshow" :key="index"  @click="taskdetail(task.id)" class="Jump">
                                         <td>{{task.title}}</td>
                                         <td v-if="task.type">{{task.type.data.title}}</td>
                                         <td v-if="!task.type">未选择</td>
@@ -273,6 +274,7 @@
                                         <td>{{task.principal.data.name}}</td>
                                         <td>{{task.end_at}}</td>
                                     </tr>
+                                    </template>
                                 </table>
                                 <div class="col-md-1" style="margin: 6rem auto" v-if="tasksInfo.length==0">
                                     <img src="https://res.papitube.com/corvus/images/content-none.png" alt=""
@@ -413,14 +415,14 @@
                                         <div class="clearfix">
                                             <div class="card-text py-10 px-0 clearfix col-md-6 float-left ">
                                                 <div class="col-md-4 float-left text-right pl-0">昵称</div>
-                                                <div class="col-md-9 float-left font-weight-bold">
+                                                <div class="col-md-8 float-left font-weight-bold">
                                                     <EditInput :content="artistInfo.nickname" :is-edit="isEdit"
                                                             @change="changArtistName"></EditInput>
                                                 </div>
                                             </div>
                                             <div class="card-text py-10 px-0 clearfix col-md-6 float-left ">
                                                 <div class="col-md-4 float-left text-right pl-0">类型</div>
-                                                <div class="col-md-9 float-left font-weight-bold" v-if="artistInfo.type">
+                                                <div class="col-md-8 float-left font-weight-bold" v-if="artistInfo.type">
                                                     <EditSelector :content="artistInfo.type.data.id"
                                                                 :options="artistTypeArr"
                                                                 :is-edit="isEdit"
@@ -429,7 +431,7 @@
                                             </div>
                                             <div class="card-text py-10 px-0 clearfix col-md-6 float-left ">
                                                 <div class="col-md-4 float-left text-right pl-0">沟通状态</div>
-                                                <div class="col-md-9 float-left font-weight-bold">
+                                                <div class="col-md-8 float-left font-weight-bold">
                                                     <EditSelector :content="artistInfo.communication_status"
                                                                 :options="papiCommunicationStatusArr"
                                                                 :is-edit="isEdit"
@@ -438,7 +440,7 @@
                                             </div>
                                             <div class="card-text py-10 px-0 clearfix col-md-6 float-left ">
                                                 <div class="col-md-4 float-left text-right pl-0">社交平台</div>
-                                                <div class="col-md-9 float-left font-weight-bold">
+                                                <div class="col-md-8 float-left font-weight-bold">
                                                     <EditSelector :is-edit="isEdit" :multiple="true"
                                                                 :content="artistInfo.platform ? artistInfo.platform.split(',') : ''"
                                                                 :options="artistSocialPlatform"
@@ -447,7 +449,7 @@
                                             </div>
                                             <div class="card-text py-10 px-0 clearfix col-md-6 float-left edit-height">
                                                 <div class="col-md-4 float-left text-right pl-0">与我司签约意向</div>
-                                                <div class="col-md-9 float-left font-weight-bold">
+                                                <div class="col-md-8 float-left font-weight-bold">
                                                     <ConditionalInput ref="condition" :is-edit="isEdit" :content="artistInfo.intention"
                                                                     :input-content="artistInfo.intention_desc"
                                                                     :condition="2"
@@ -456,7 +458,7 @@
                                             </div>
                                             <div class="card-text py-10 px-0 clearfix col-md-6 float-left edit-height">
                                                 <div class="col-md-4 float-left text-right pl-0">签约其他公司</div>
-                                                <div class="col-md-9 float-left font-weight-bold">
+                                                <div class="col-md-8 float-left font-weight-bold">
                                                     <ConditionalInput ref="condition1" :is-edit="isEdit"
                                                                     :content="artistInfo.sign_contract_other"
                                                                     :input-content="artistInfo.sign_contract_other_name"
@@ -467,42 +469,42 @@
                                            
                                             <div class="card-text py-10 px-0 clearfix col-md-6 float-left ">
                                                 <div class="col-md-4 float-left text-right pl-0">微博链接</div>
-                                                <div class="col-md-9 float-left font-weight-bold">
+                                                <div class="col-md-8 float-left font-weight-bold">
                                                     <EditInput :content="artistInfo.weibo_url" :is-edit="isEdit"
                                                             @change="changeArtistWeibo_url"></EditInput>
                                                 </div>
                                             </div>
                                             <div class="card-text py-10 px-0 clearfix col-md-6 float-left ">
                                                 <div class="col-md-4 float-left text-right pl-0">微博粉丝数</div>
-                                                <div class="col-md-9 float-left font-weight-bold">
+                                                <div class="col-md-8 float-left font-weight-bold">
                                                     <EditInput :content="artistInfo.weibo_fans_num" :is-edit="isEdit"
                                                             @change="changeArtistWeibo_fans_num"></EditInput>
                                                 </div>
                                             </div>
                                             <div class="card-text py-10 px-0 clearfix col-md-6 float-left ">
                                                 <div class="col-md-4 float-left text-right pl-0">抖音Id</div>
-                                                <div class="col-md-9 float-left font-weight-bold">
+                                                <div class="col-md-8 float-left font-weight-bold">
                                                     <EditInput :content="artistInfo.douyin_id" :is-edit="isEdit"
                                                             @change="changeArtistDouyin_id"></EditInput>
                                                 </div>
                                             </div>
                                             <div class="card-text py-10 px-0 clearfix col-md-6 float-left ">
                                                 <div class="col-md-4 float-left text-right pl-0">抖音粉丝数</div>
-                                                <div class="col-md-9 float-left font-weight-bold">
+                                                <div class="col-md-8 float-left font-weight-bold">
                                                     <EditInput :content="artistInfo.douyin_fans_num" :is-edit="isEdit"
                                                             @change="changeArtistDouyin_fans_num"></EditInput>
                                                 </div>
                                             </div>
                                             <div class="card-text py-10 px-0 clearfix col-md-6 float-left ">
                                                 <div class="col-md-4 float-left text-right pl-0">小红书链接</div>
-                                                <div class="col-md-9 float-left font-weight-bold">
+                                                <div class="col-md-8 float-left font-weight-bold">
                                                     <EditInput :content="artistInfo.xiaohongshu_url" :is-edit="isEdit"
                                                             @change="changeArtistXiaohongshu_url"></EditInput>
                                                 </div>
                                             </div>
                                             <div class="card-text py-10 px-0 clearfix col-md-6 float-left ">
                                                 <div class="col-md-4 float-left text-right pl-0">小红书粉丝数</div>
-                                                <div class="col-md-9 float-left font-weight-bold">
+                                                <div class="col-md-8 float-left font-weight-bold">
                                                     <EditInput :content="artistInfo.xiaohongshu_fans_num" :is-edit="isEdit"
                                                             @change="changeArtistXiaohongshu_fans_num"></EditInput>
                                                 </div>
@@ -510,14 +512,14 @@
 
                                             <div class="card-text py-10 px-0 clearfix col-md-6 float-left ">
                                                 <div class="col-md-4 float-left text-right pl-0">备注</div>
-                                                <div class="col-md-9 float-left font-weight-bold">
+                                                <div class="col-md-8 float-left font-weight-bold">
                                                     <EditInput :content="artistInfo.desc" :is-edit="isEdit"
                                                             @change="changeArtistDesc"></EditInput>
                                                 </div>
                                             </div>
                                             <div class="card-text py-10 px-0 clearfix col-md-6 float-left ">
                                                 <div class="col-md-4 float-left text-right pl-0">博主级别</div>
-                                                <div class="col-md-9 float-left font-weight-bold">
+                                                <div class="col-md-8 float-left font-weight-bold">
                                                     <EditSelector :content="artistInfo.level"
                                                                 :options="taskLevelArr"
                                                                 :is-edit="isEdit"
@@ -526,42 +528,47 @@
                                             </div>
                                             <div class="card-text py-10 px-0 clearfix col-md-6 float-left ">
                                                 <div class="col-md-4 float-left text-right pl-0">孵化期</div>
-                                                <div class="col-md-9 float-left font-weight-bold" >
+                                                <div class="col-md-8 float-left font-weight-bold" >
                                                     <EditGroupDatePicker :content="Incubationperiod" :is-edit="isEdit"
                                                                         @change="changeArtistHatch"></EditGroupDatePicker>
                                                 </div>
                                             </div>
                                             <div class="card-text py-10 px-0 clearfix col-md-6 float-left ">
                                                 <div class="col-md-4 float-left text-right pl-0">商务合作要求</div>
-                                                <div class="col-md-9 float-left font-weight-bold">
+                                                <div class="col-md-8 float-left font-weight-bold">
                                                     <EditInput :content="artistInfo.cooperation_demand" :is-edit="isEdit"
                                                             @change="changeArtistDemand"></EditInput>
                                                 </div>
                                             </div>
-                                            <!-- </div> -->
+                                           
 
                                             <div class="segmentation-line example float-left"></div>
+
                                             <div class="card-text py-10 px-0 clearfix col-md-6 float-left ">
                                                 <div class="col-md-4 float-left text-right pl-0">录入人</div>
-                                                <div class="col-md-9 float-left font-weight-bold" v-if="artistInfo.creator" v-for="(entry,index) in artistInfo.creator" :key="index">
+                                                <div class="col-md-8 float-left font-weight-bold"  v-for="(entry,index) in artistInfo.creator" :key="index">
+                                                    <template v-if="artistInfo.creator">
                                                     {{entry.name}}
+                                                    </template>
                                                 </div>
                                             </div>
                                             <div class="card-text py-10 px-0 clearfix col-md-6 float-left ">
                                                 <div class="col-md-4 float-left text-right pl-0">录入时间</div>
-                                                <div class="col-md-9 float-left font-weight-bold">
+                                                <div class="col-md-8 float-left font-weight-bold">
                                                     {{artistInfo.created_at}}
                                                 </div>
                                             </div>
                                             <div class="card-text py-10 px-0 clearfix col-md-6 float-left ">
                                                 <div class="col-md-4 float-left text-right pl-0">最近更新人</div>
-                                                <div class="col-md-9 float-left font-weight-bold" v-if="artistInfo.creator" v-for="(entry,index) in artistInfo.creator" :key="index">
+                                                <div class="col-md-8 float-left font-weight-bold" v-for="(entry,index) in artistInfo.creator" :key="index">
+                                                    <template v-if="artistInfo.creator">
                                                     {{entry.name}}
+                                                    </template>
                                                 </div>
                                             </div>
                                             <div class="card-text py-10 px-0 clearfix col-md-6 float-left ">
                                                 <div class="col-md-4 float-left text-right pl-0">最近更新时间</div>
-                                                <div class="col-md-9 float-left font-weight-bold">
+                                                <div class="col-md-8 float-left font-weight-bold">
                                                     {{artistInfo.updated_at}}
                                                 </div>
                                             </div>
@@ -788,7 +795,93 @@
                 </div>
             </div>
         </div>
+        <div class="modal fade" id="checkSchedule" aria-hidden="true" aria-labelledby="addLabelForm"
+             role="dialog" tabindex="-1">
+            <div class="modal-dialog modal-simple">
+                <div class="modal-content" v-if="scheduleData">
+                    <div class="modal-header">
+                        <div style="order: 2">
+                            <!-- <i class="iconfont icon-bianji2 pr-4 font-size-16 pointer-content"
+                               @click="changeScheduleType('edit')" aria-hidden="true"></i>
+                            <FileUploader is-icon="true" class="float-left" @change="fileUpload"></FileUploader>
+                            <i class="iconfont icon-shanchu1 pr-4 font-size-16 pointer-content" data-toggle="modal"
+                               data-target="#delModel" aria-hidden="true" @click="deleteToastr('schedule')"></i> -->
+                            <i class="iconfont icon-guanbi pointer-content" aria-hidden="true" data-dismiss="modal"></i>
+                        </div>
+                        <h5 class="modal-title">{{ scheduleData.calendar.data.title }}</h5>
+                    </div>
+                    <div class="modal-body px-40">
+                        <div class="">
+                            <h4 class="my-20">{{ scheduleData.title }}</h4>
+                        </div>
+                        <div class="example">
+                            <div class="">
+                                <div class="col-md-3 float-left px-0">
+                                    <div class="">{{ (scheduleData.start_at.split(' ')[0]).split('-')[1] }}月
+                                        {{ (scheduleData.start_at.split(' ')[0]).split('-')[2] }}日
+                                        {{ scheduleData.start_at|getWeek(scheduleData.start_at) }}
+                                    </div>
+                                    <div class="big-time">{{ (scheduleData.start_at.split(' ')[1]).slice(0,5) }}</div>
+                                </div>
+                                <div class="col-md-2 float-left pl-0">
+                                    <div class="" style="color: white"> -</div>
+                                    <div class="big-time text-center"> -</div>
+                                </div>
+                                <div class="col-md-3 float-left px-0">
+                                    <div class="">{{ (scheduleData.end_at.split(' ')[0]).split('-')[1] }}月
+                                        {{ (scheduleData.end_at.split(' ')[0]).split('-')[2] }}日
+                                        {{ scheduleData.end_at|getWeek(scheduleData.end_at) }}
+                                    </div>
+                                    <div class="big-time">{{ (scheduleData.end_at.split(' ')[1]).slice(0,5) }}</div>
+                                </div>
+                                <div class="col-md-2 float-left" v-show="scheduleData.is_allday">
+                                    <div class="" style="color: white"> -</div>
+                                    <div class="big-time font-size-18" style="line-height: 75px">全天</div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="example" v-if="scheduleData.position">
+                            <div class="col-md-1 px-0 float-left">地点</div>
+                            <div class="col-md-10 float-left">{{ scheduleData.position }}</div>
+                        </div>
+                        <div class="example" v-if="scheduleData.material">
+                            <div class="col-md-1 px-0 float-left">资源</div>
+                            <div class="col-md-10 float-left">{{ scheduleData.material.data.name }}</div>
+                        </div>
+                        <div class="example">
+                            <div class="col-md-1 px-0 float-left">组织人</div>
+                            <div class="col-md-10 float-left">
+                                <div class="creator-avatar float-left">
+                                    <img src="https://res.papitube.com/no-icon.png" alt="">
+                                </div>
+                                <div class="float-left pl-2">{{ scheduleData.creator.data.name }}</div>
+                            </div>
+                        </div>
+                        <div class="example">
+                            <div class="col-md-1 px-0 float-left">参与人</div>
+                            <div class="col-md-10 float-left">
+                                <span class="mr-5" v-for="(item,index) in scheduleParticipants" :key="index">{{item.name}}</span>
+                            </div>
+                        </div>
+                        <div class="example" v-if="scheduleData.desc">
+                            <div class="col-md-1 px-0 float-left">备注</div>
+                            <div class="col-md-10 float-left">{{ scheduleData.desc }}</div>
+                        </div>
+                        <div class="example" v-if="scheduleData.affixes.data.length > 0">
+                            <div>附件</div>
+                            <div>
+                                <div class="col-md-3 float-left text-center position-relative file-item"
+                                     v-for="(affix,index) in scheduleData.affixes.data" :key="index">
 
+                                    <div><i class="iconfont icon-wenjian" style="font-size: 36px"></i></div>
+                                    <div @click="openFile(affix.url)" class="pointer-content">{{ affix.title }}</div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
     </div>
 </template>
 
@@ -864,7 +957,9 @@
                 isLoading: true,
                 distributionType:'',
                 alltaskshow:[],
-                changeArtistInfo:{}
+                changeArtistInfo:{},
+                calendarId:[],
+                scheduleData:''
             }
         },
         computed: {
@@ -978,11 +1073,15 @@
                 // 使用刚指定的配置项和数据显示图表。
                 myChart.setOption(option);
             },
-            showScheduleModal: function (data) {
-                this.scheduleData = data;
-                if(data.participants.data){
-                    this.scheduleParticipants = JSON.parse(JSON.stringify(data.participants.data));
-                }
+            showScheduleModal: function (schedule) {
+                let data = {
+                    include: 'calendar,participants,creator,material,affixes',
+                };
+                fetch('get', '/schedules/' + this.calendarId, data).then(response => {
+                    this.scheduleData = response.data;
+                    this.scheduleParticipants = JSON.parse(JSON.stringify(response.data.participants.data));
+                    this.$store.dispatch('changeParticipantsInfo', {data: response.data.participants.data});
+                });
                 $('#checkSchedule').modal('show')
             },
             selectDate: function (value) {
@@ -993,7 +1092,7 @@
                 this.artistId = this.$route.params.id;
                 let _this = this;
                 let data = {
-                    include: 'creator,tasks,affixes,producer,type,publicity,trails.project,trails.client,trails.project.principal,trails.project.relate_project_bills_resource,',
+                    include: 'creator,tasks,affixes,producer,type,publicity,trails.project,trails.client,trails.project.principal,trails.project.relate_project_bills_resource,calendar',
                 };
                 fetch('get', '/bloggers/' + this.artistId, data).then(function (response) {
                   
@@ -1017,6 +1116,9 @@
                             }
                         }
                     }
+                    if(response.data.calendar.data.id){
+                        _this.calendarId.push(response.data.calendar.data.id)
+                    }
                      //项目
                      if(response.data.trails){
                         for (let i = 0; i < response.data.trails.data.length; i++) {
@@ -1030,22 +1132,6 @@
                     if(_this.artistInfo.hatch_star_at&&_this.artistInfo.hatch_end_at){
                         _this.Incubationperiod = _this.artistInfo.hatch_star_at+'|'+_this.artistInfo.hatch_end_at
                     }
-                    // //状态转换
-                    // if(_this.artistInfo.intention==false){
-                    //     _this.updateType=2
-                    // }else{
-                    //     _this.updateType=1
-                    // }
-                    // if (_this.artistInfo.sign_contract_other == false) {
-                    //     _this.updateSign_contract_other = 2
-                    // } else {
-                    //     _this.updateSign_contract_other = 1
-                    // }
-                    // if (_this.artistInfo.artistWorkProportion == 1) {
-                    //     _this.artistInfo.artistWorkProportion = true
-                    // } else {
-                    //     _this.artistInfo.artistWorkProportion = false
-                    // }
                     _this.isLoading = false;
                 });
                 //任务状态跑组。试戏
@@ -1090,9 +1176,7 @@
             getArtistTasks: function () {
                 let _this = this;
                 fetch('get', '/bloggers/' + this.artistId+'/tasks').then(function (response) {
-                    console.log(response.data)
                     _this.alltaskshow = response.data
-                    // _this.artistTasksInfo = response.data;
                 })
             },
             addPrivacy: function () {
@@ -1248,7 +1332,9 @@
                     delete(this.changeArtistInfo.hatch_star_at)
                     delete(this.changeArtistInfo.hatch_end_at)
                 }
-                console.log( this.changeArtistInfo)
+                if (JSON.stringify(this.changeArtistInfo) !== "{}"){
+                    return
+                }
                 fetch('put', '/bloggers/' + this.artistId, this.changeArtistInfo).then(function (response) {
                     toastr.success('修改成功');
                     _this.getArtist()
@@ -1259,7 +1345,7 @@
                 }else{
                     this.artistInfo.intention=2
                 }
-                
+
                 if(this.artistInfo.sign_contract_other==true){
                         this.artistInfo.sign_contract_other=1
                 }else{
@@ -1489,7 +1575,6 @@
             ,
             //博主级别
             changeArtistLevel: function (value) {
-                
                this.updatelevel= value
             }
             ,
@@ -1534,13 +1619,37 @@
             projectDetails(id){
                 this.$router.push({path: '/projects/' + id})
             },
-            // changReason(value){
-            //     this.artistInfo.intention_desc = value
-            // },
-            // changSigningCompany(value){
-            //     this.artistInfo.sign_contract_other_name = value
-            // }
-        }
+        },
+        filters: {
+            getWeek: function (date) {
+                let week = new Date(date).getDay();
+                let value = '';
+                switch (week) {
+                    case 0:
+                        value = '周日';
+                        break;
+                    case 1:
+                        value = '周一';
+                        break;
+                    case 2:
+                        value = '周二';
+                        break;
+                    case 3:
+                        value = '周三';
+                        break;
+                    case 4:
+                        value = '周四';
+                        break;
+                    case 5:
+                        value = '周五';
+                        break;
+                    case 6:
+                        value = '周六';
+                        break;
+                }
+                return value;
+            }
+        },
     }
 </script>
 
@@ -1568,5 +1677,78 @@
     .card-block .card-text {
         display: flex;
         align-items: center;
+    }
+
+    .creator-avatar {
+        width: 30px;
+        height: 30px;
+        overflow: hidden;
+        border-radius: 100%;
+    }
+
+    li {
+        list-style: none;
+    }
+
+    .calendar-color-list li {
+        width: 20px;
+        height: 20px;
+        border-radius: 100%;
+        margin-right: 10px;
+    }
+
+    .calendar-color-list li i {
+        line-height: 20px;
+        color: white;
+        text-align: center;
+        position: absolute;
+        left: 5px;
+    }
+
+    .calendar-checkbox {
+        width: 20px;
+        height: 20px;
+        border-radius: 2px;
+    }
+
+    .calendar-title {
+        padding: 20px 20px 10px;
+    }
+
+    .calendar-list ul li {
+        padding: 7px 0;
+        border-bottom: 1px solid #E0E0E0;
+    }
+
+    .calendar-list ul {
+        padding: 0 20px;
+        margin-top: 10px;
+
+    }
+
+    .calendar-list ul li .calendar-checkbox i {
+        color: white;
+        text-align: center;
+        left: 5px;
+    }
+
+    .big-time {
+        font-size: 48px;
+        color: #3F51B5;
+        font-weight: bold;
+    }
+
+    .follow-avatar {
+        border-radius: 100%;
+        overflow: hidden;
+        width: 40px;
+        height: 40px;
+    }
+
+    .creator-avatar {
+        width: 30px;
+        height: 30px;
+        overflow: hidden;
+        border-radius: 100%;
     }
 </style>

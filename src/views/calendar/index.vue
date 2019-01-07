@@ -732,7 +732,7 @@
 
             getStars: function () {
                 if (Cookies.get('companyType') === '泰洋川禾') {
-                    fetch('get', '/stars/all', {status: 2}).then(response => {
+                    fetch('get', '/stars/all', {sign_contract_status: 2}).then(response => {
                         for (let i = 0; i < response.data.length; i++) {
                             this.starsArr.push({
                                 value: response.data[i].id,
@@ -741,7 +741,7 @@
                         }
                     })
                 } else {
-                    fetch('get', '/bloggers/all', {status: 2}).then(response => {
+                    fetch('get', '/bloggers/all', {sign_contract_status: 2}).then(response => {
                         for (let i = 0; i < response.data.length; i++) {
                             this.starsArr.push({
                                 value: response.data[i].id,
@@ -1044,6 +1044,13 @@
                     if (this.scheduleParticipants.map(item => item.id).indexOf(flagInfo[i].id) === -1) {
                         data.participant_ids.push(flagInfo[i].id)
                     }
+                }
+
+                if (this.linkageSelectedIds.projects.length > 0) {
+                    data.project_ids = this.linkageSelectedIds.projects;
+                }
+                if (this.linkageSelectedIds.tasks.length > 0) {
+                    data.task_ids = this.linkageSelectedIds.tasks;
                 }
 
                 fetch('put', '/schedules/' + this.scheduleData.id, data).then(() => {
