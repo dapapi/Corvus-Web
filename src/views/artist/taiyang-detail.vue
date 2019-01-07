@@ -171,7 +171,7 @@
                             <div class="tab-pane animation-fade pb-20 fixed-button-father" id="forum-artist-schedule"
                                 role="tabpanel" :class="artistInfo.sign_contract_status == 2?'active':''">
                                 <div class="col-md-12">
-                                    <calendar :goto-date="selectedDate" :calendars="calendarId" ref="calendar"
+                                    <calendar v-if="artistInfo.sign_contract_status == 2" :goto-date="selectedDate" :calendars="calendarId" ref="calendar"
                                             @scheduleClick="showScheduleModal" :isModel="true"></calendar>
                                 </div>
                             </div>

@@ -928,7 +928,7 @@
                     </div>
                     <div class="modal-footer">
                         <button class="btn btn-sm btn-white btn-pure" data-dismiss="modal">取消</button>
-                        <button class="btn btn-primary" type="submit" @click="addPrivacy">确定</button>
+                        <button class="btn btn-primary" type="submit" @click="setPrivacy">确定</button>
                     </div>
                 </div>
             </div>
@@ -1605,19 +1605,35 @@
             },
             //隐私设置
             setPrivacy:function(){
+                // alert(222)
                 let _this = this
                 let data = {
-                    
+                    fee:this.$store.state.newParticipantsInfo, //预计订单收入
+                    projected_expenditure:this.$store.state.participantsInfo,//预计支出
+                    expendituresum:this.$store.state.contractInfo,//实际收入
+                    contractmoney:this.$store.state.collectInfo,//实际支出
+                    // project_bill:[]
                 }
-                fetch('post', `/projects/${this.$router.params.id}/privacyUser`).then(function (response) {
-                    // for (let i = 0; i < response.data.length; i++) {
-                    //     _this.starsArr.push({
-                    //         name: response.data[i].name,
-                    //         id: response.data[i].id,
-                    //         value: response.data[i].id
-                    //     })
-                    // }
-
+                let sendData={
+                    fee:[],
+                    projected_expenditure:[],
+                    expendituresum:[],
+                    contractmoney:[],
+                    // project_bill:[]
+                }
+                for (const key in data) {
+                    for (let i = 0; i < data[key].length; i++) {
+                        sendData[key].push(data[key][i].id)
+                    }
+                }
+                // console.log(sendData)
+                fetch('post', `/projects/${this.$route.params.id}/privacyUser`,sendData).then(function (response) {
+                    toastr.success('隐私设置成功')
+                    $('#addPrivacy').modal('hide')
+                    _this.$store.state.newParticipantsInfo = []
+                    _this.$store.state.participantsInfo = []
+                    _this.$store.state.contractInfo = []
+                    _this.$store.state.collectInfo = []
                 })
             },
             getStars: function () {
@@ -1912,18 +1928,6 @@
                     this.allTasksInfo = response.data
                 })
             },
-
-            addPrivacy: function () {
-
-                $('#addPrivacy').modal('hide')
-                this.$store.state.collectInfo = []
-                this.$store.state.payInfo = []
-                this.$store.state.contractInfo = []
-                this.$store.state.divisionInfo = []
-                this.$store.state.incubationInfo = []
-                this.$store.state.billInfo = []
-            },
-
             editBaseInfo: function () {
                 this.isEdit = true;
                 this.changeInfo = {};
