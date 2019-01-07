@@ -127,7 +127,7 @@
                             <table class="table table-hover" data-plugin="selectable" data-selectable="selectable">
                                
                                 <tr>
-                                    <th class="w-50">
+                                    <th class="w-50" v-if="item.group_id!==1994731356">
                                        <span class="checkbox-custom checkbox-primary">
                                             <input class="selectable-all" type="checkbox"
                                                    @change="selectArtists('all',item.id)">
@@ -139,9 +139,20 @@
                                     <th class="cell-300" scope="col">手机号</th>
                                     <th class="cell-300" scope="col">邮箱</th>
                                 </tr>
-                                <tbody style="border-top:1px solid #e3e3e3">
-                                <tr v-for="v in item.users.data" :key="v.id" class="pointer-content">
+                                <tbody style="border-top:1px solid #e3e3e3" v-if="item.group_id==1994731356">
+                                <tr v-for="v in defaultDate" :key="v.id" class="pointer-content">
                                     <td>
+                                        <Avatar :imgUrl="v.icon_url"
+                                                style="margin-right: 10px; width: 28px;height: 28px;"/>
+                                        {{v.name}}
+                                    </td>
+                                    <td>{{v.phone}}</td>
+                                    <td>{{v.email}}</td>
+                                </tr>
+                                </tbody>
+                                <tbody style="border-top:1px solid #e3e3e3" v-if="item.group_id!==1994731356">
+                                <tr v-for="v in item.users.data" :key="v.id" class="pointer-content">
+                                     <td>
                                         <span class="checkbox-custom checkbox-primary">
                                             <input class="selectable-item" type="checkbox" :id="'row-' + v.id"
                                                    :value="v.id" @change="selectArtists(v.id)">
@@ -558,18 +569,21 @@
                 rolegroupName: '',
                 emptyrole_describe: '',
                 isAactive:true,
-                idArray:[]
+                idArray:[],
+                defaultDate:''
             }
         },
         mounted() {
             this.getroleDate();
             this.getgroupingDate();
+            this.getDefaultDate();
             $('#addRole').on('hidden.bs.modal', function () {
                 this.roleName = "请输入角色称"
             })
         },
         updated() {
             $('.selectable-wrap').asSelectable();
+            $('.table').asSelectable();
         },
 
         methods: {
@@ -578,8 +592,16 @@
                 let _this = this;
                 fetch('get', '/console/role').then(function (response) {
                     _this.roleDate = response.data;
-                    console.log(_this.roleDate )
+                   
                 });
+            },
+            //获取默认数据
+            getDefaultDate(){
+                let _this = this;
+                fetch('get','/console/director').then(function(resouce){
+                    _this.defaultDate = resouce.data
+                     console.log(_this.defaultDate )
+                })
             },
             //获取分组数据
             getgroupingDate() {

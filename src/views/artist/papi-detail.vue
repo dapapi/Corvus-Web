@@ -170,7 +170,7 @@
                             <li class="nav-item" role="presentation" >
                                 <a class="nav-link" data-toggle="tab" href="#forum-artist-tasks"
                                 aria-controls="forum-present"
-                                aria-expanded="false" role="tab" :class="artistInfo.sign_contract_status == 2?'':'active'">
+                                aria-expanded="false" role="tab" >
                                     <!-- <template v-if="tasksInfo.length > 0">
                                         <ToolTips :title="`已完成数量${completeNum}`">
                                             任务 ({{completeNum}}/{{tasksInfo.length}})
@@ -205,7 +205,7 @@
                             <li class="nav-item" role="presentation" >
                                 <a class="nav-link" data-toggle="tab" href="#forum-artist-base"
                                 aria-controls="forum-present"
-                                aria-expanded="false" role="tab">概况</a>
+                                aria-expanded="false" role="tab" :class="artistInfo.sign_contract_status == 2?'':'active'">概况</a>
                             </li>
                         </ul>
                         <div class="tab-content nav-tabs-animate bg-white col-md-12">
@@ -243,7 +243,7 @@
                                 </div>
                             </div>
                             <div class="tab-pane animation-fade pb-20 fixed-button-father" id="forum-artist-tasks"
-                                role="tabpanel" :class="artistInfo.sign_contract_status == 2?'':'active'">
+                                role="tabpanel" >
                                 <table class="table table-hover is-indent example" data-plugin="animateList"
                                     data-animate="fade"
                                     data-child="tr"
@@ -399,7 +399,7 @@
                                             :total="total"></pagination>
                             </div>
                             <div class="tab-pane animation-fade fixed-button-father" id="forum-artist-base"
-                                role="tabpanel">
+                                role="tabpanel" :class="artistInfo.sign_contract_status == 2?'':'active'">
                                 <div class="card">
                                     <div class="card-header card-header-transparent card-header-bordered">
                                         <div class="float-left font-weight-bold third-title">博主信息</div>
@@ -1332,9 +1332,9 @@
                     delete(this.changeArtistInfo.hatch_star_at)
                     delete(this.changeArtistInfo.hatch_end_at)
                 }
-                if (JSON.stringify(this.changeArtistInfo) !== "{}"){
-                    return
-                }
+                // if (JSON.stringify(this.changeArtistInfo) !== "{}"){
+                //     return
+                // }
                 fetch('put', '/bloggers/' + this.artistId, this.changeArtistInfo).then(function (response) {
                     toastr.success('修改成功');
                     _this.getArtist()
