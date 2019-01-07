@@ -38,9 +38,9 @@
                 this.isEditSelect = newValue;
                 if (newValue) {
                     let _this = this;
-                    setTimeout(function () {
+                    this.$nextTick(()=>{
                         _this.$refs.selector.setValue(_this.content)
-                    }, 0)
+                    })
                 } else {
                     this.$refs.selector.destroy()
                 }
@@ -52,6 +52,12 @@
             },
             changeSelect: function (value) {
                 this.$emit('change', value);
+            },
+            setDefaultValue:function(val){
+                let _this = this;
+                this.$nextTick(()=>{
+                    _this.$refs.selector.setValue(val)
+                })
             }
         }
     }

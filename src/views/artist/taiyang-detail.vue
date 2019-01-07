@@ -114,17 +114,17 @@
 
             </div>
 
-            <div style="display: flex; align-items: stretch; justify-content: space-between;">
+            <div style="display: flex; justify-content: space-between; align-items: flex-start">
                 <div class="panel" style="width: calc(66% - 15px);">
                     <div class="col-md-12">
                         <ul class="nav nav-tabs nav-tabs-line" role="tablist">
-                            <li class="nav-item" role="presentation" v-show="artistInfo.sign_contract_status == 2">
+                            <li class="nav-item" role="presentation" v-if="artistInfo.sign_contract_status == 2">
                                 <a class="nav-link" :class="artistInfo.sign_contract_status == 2?'active':''"
                                 data-toggle="tab" href="#forum-artist-schedule"
                                 aria-controls="forum-base"
                                 aria-expanded="false" role="tab">日程</a>
                             </li>
-                            <li class="nav-item" role="presentation" v-show="artistInfo.sign_contract_status == 2">
+                            <li class="nav-item" role="presentation" v-if="artistInfo.sign_contract_status == 2">
                                 <a class="nav-link" data-toggle="tab" href="#forum-artist-projects"
                                 aria-controls="forum-present"
                                 aria-expanded="false" role="tab">项目</a>
@@ -144,7 +144,7 @@
                                     </template>
                                 </a>
                             </li>
-                            <li class="nav-item" role="presentation" v-show="artistInfo.sign_contract_status == 2">
+                            <li class="nav-item" role="presentation" v-if="artistInfo.sign_contract_status == 2">
                                 <a class="nav-link" data-toggle="tab" href="#forum-artist-work"
                                 aria-controls="forum-present"
                                 aria-expanded="false" role="tab">作品库</a>
@@ -155,7 +155,7 @@
                                 <!--aria-expanded="false" role="tab">粉丝数据</a>-->
                             <!--</li>-->
                             <li class="nav-item" role="presentation" @click="getArtistsBill"
-                                v-show="artistInfo.sign_contract_status == 2">
+                                v-if="artistInfo.sign_contract_status == 2">
                                 <a class="nav-link" data-toggle="tab" href="#forum-artist-bill"
                                 aria-controls="forum-present"
                                 aria-expanded="false" role="tab">账单</a>
@@ -203,12 +203,6 @@
                                                 {{item.relate_project_bills_resource}}
                                             </template>
                                             <template>0</template>
-                                            <!-- <template v-if="item.status === 1"><span style="color:#FF9800">进行中</span>
-                                            </template>
-                                            <template v-if="item.status === 2"><span style="color:#4CAF50">已完成</span>
-                                            </template>
-                                            <template v-if="item.status === 3"><span style="color:#9E9E9E">撤单</span>
-                                            </template> -->
                                         </td>
                                     </tr>
                                 </table>
@@ -550,27 +544,30 @@
                                         </div>
 
                                         <div class="segmentation-line example"></div>
-                                        <div class="card-text py-5 clearfix">
-                                            <div class="col-md-2 float-left text-right pl-0">录入人</div>
-                                            <div class="col-md-4 float-left font-weight-bold">
+                                        <div class="card-text py-10 px-0 clearfix col-md-6 float-left">
+                                            <div class="col-md-3 float-left text-right pl-0">录入人</div>
+                                            <div class="col-md-9 float-left font-weight-bold">
                                                 {{ artistInfo.creator.data.name }}
                                             </div>
-                                            <div class="col-md-2 float-left text-right pl-0">录入时间</div>
-                                            <div class="col-md-4 float-left font-weight-bold">
+                                        </div>
+                                        <div class="card-text py-10 px-0 clearfix col-md-6 float-left">
+                                            <div class="col-md-3 float-left text-right pl-0">录入时间</div>
+                                            <div class="col-md-9 float-left font-weight-bold">
                                                 {{ artistInfo.created_at }}
                                             </div>
                                         </div>
-                                        <div class="card-text py-5 clearfix">
-                                            <div class="col-md-2 float-left text-right pl-0">最近更新人</div>
-                                            <div class="col-md-4 float-left font-weight-bold">
+                                        <div class="card-text py-10 px-0 clearfix col-md-6 float-left">
+                                            <div class="col-md-3 float-left text-right pl-0">最近更新人</div>
+                                            <div class="col-md-9 float-left font-weight-bold">
                                                 <template v-if="artistInfo.last_updated_user">
                                                     {{artistInfo.last_updated_user}}
                                                 </template>
                                                 <template v-else>{{ artistInfo.created_at }}</template>
-
                                             </div>
-                                            <div class="col-md-2 float-left text-right pl-0">最近更新时间</div>
-                                            <div class="col-md-4 float-left font-weight-bold">
+                                        </div>
+                                        <div class="card-text py-10 px-0 clearfix col-md-6 float-left">
+                                            <div class="col-md-3 float-left text-right pl-0">最近更新时间</div>
+                                            <div class="col-md-9 float-left font-weight-bold">
                                                 <template v-if="artistInfo.last_follow_up_at">
                                                     {{artistInfo.last_follow_up_at}}
                                                 </template>
@@ -582,9 +579,9 @@
 
                             </div>
                         </div>
+                        
                     </div>
                 </div>
-
                 <div class="panel" style="width: calc(34% - 15px);">
                     <div class="col-md-12">
                         <div class="card col-md-12">
@@ -1087,6 +1084,7 @@
             //获取日历详情
             showScheduleModal: function (schedule) {
                 let data = {
+
                     include: 'calendar,participants,creator,material,affixes',
                 };
                 fetch('get', '/schedules/' + schedule.id, data).then(response => {

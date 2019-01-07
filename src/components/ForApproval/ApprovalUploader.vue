@@ -10,19 +10,25 @@
         </div>
     </div> -->
     <div class="upload col-md-12">
-        <div class="col-md-2 text-right">{{data[0].control_title}}</div>
+        <div class="col-md-2 text-right" :class="data[0].required===1?'require':''">{{data[0].control_title}}</div>
         <div class="image-show">
-            <div v-for="(item, index) in fileInfo" :key="index">{{item.fileName}}</div>
-            <input type="file" @change="uploadFile" />请上传附件
+            <div v-for="(item, index) in fileInfo" :key="index" class="float-left pr-10">
+                <div>{{item.fileName}}</div>
+                <hr>
+                <div class="icon-control">
+                    <!-- <i class="iconfont icon-liulan" @click='previewHandler(item)' data-target='#docPreview' data-toggle='modal'></i> -->
+                    <i class="iconfont icon-shanchu1" @click="imgDelete(item)"></i>
+                </div>
+            </div>
+            <input type="file" @change="uploadFile" class="float-left"/>请上传附件
          </div>
-         <DocPreview />
+         <DocPreview :url='previewUrl' :given-file-name='givenFileName' />
     </div>
 </template>
 
 <script>
 import config from '@/assets/js/config'
 import * as qiniu from 'qiniu-js'
-
 export default {
     props:['data','clear'],
     name: 'ApprovalUploader',
@@ -30,6 +36,8 @@ export default {
         return{
             fileInfo:[],
             fileExt:'',
+            previewUrl:'',
+            givenFileName:'',
         }
     },
     mounted () {
@@ -51,6 +59,14 @@ export default {
         // }
     },
     methods: {
+        previewHandler(params){
+            console.log(params);
+            this.previewUrl = params.fileUrl
+            this.givenFileName = params.fileName
+        },
+        imgDelete(params){
+            this.$delete(this.fileInfo,this.fileInfo.indexOf(this.fileInfo.find(item=>item.fileName === params.fileName)))
+        },
         uploadFile(e) {
             let file = e.target.files[0];
             let putExtra = null;
@@ -125,6 +141,11 @@ export default {
 </script>
 
 <style lang="scss" scoped>
+.icon-control{
+    display: flex;
+    justify-content: space-between;
+    padding: 0 5px 0 5px;
+}
 .plus-icon{
     font-size: 50px;
 }

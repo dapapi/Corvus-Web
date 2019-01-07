@@ -91,7 +91,7 @@
                         <div>审批详情</div>
                         <div class="row px-20">
                             <div class="col-md-6 detail-container px-0" v-for="(item, index) in detailData" :key="index" v-if="item.values">
-                                <div class="col-md-3 float-left detail-key mx-0">{{item.key}}</div>
+                                <div class="col-md-3 float-left detail-key mx-0 noselect">{{item.key}}</div>
                                 <div class="col-md-9 float-left detail-value" v-if="item.values && !item.values.data.value.includes('http')">{{item.values.data.value || ''}}</div>
                                 <div class="col-md-9 float-left detail-value" v-if="item.values && item.values.data.value.includes('http')" data-target='#docPreview' data-toggle='modal' @click='previewUrl=item.values.data.value'>点击查看</div>
                             </div>
@@ -104,7 +104,7 @@
                                             :formid='list.form_instance_number' 
                                             :formstatus='currentStatus' 
                                             @waitingfor='waitingFor'
-                                            :notice="info.participant"
+                                            :notice="info.participant || info.notice.data"
                                             ref='approvalProgress' />
                                 </div>
                             </div>
@@ -298,8 +298,15 @@ export default {
     font-style: normal;
     font-weight: normal;
 }
-
-.approver{
+.noselect{
+     -webkit-touch-callout: none;
+     -webkit-user-select: none;
+     -khtml-user-select: none;
+     -moz-user-select: none;
+     -ms-user-select: none;
+     user-select:none;
+}
+ .approver{
     display: inline-block;
     font-size: 12px;
     font-weight: 800;

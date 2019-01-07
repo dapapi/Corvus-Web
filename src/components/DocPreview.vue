@@ -12,7 +12,7 @@
                     <button type="button" class="close" data-dismiss="modal" aria-label="Close">
                     <span aria-hidden="true">×</span>
                     </button>
-                    <h4 class="modal-title">文件预览</h4>
+                    <h4 class="modal-title">文件预览{{fileNameHandler}}</h4>{{fileNameHandler}}
                 </div>
                 <div class="modal-body">
                     <iframe v-if="['doc','docx','xls','xlsx','ppt','pptx'].includes(fileNameHandler)" class="mt-20 ml-30" :src='"https://view.officeapps.live.com/op/view.aspx?src="+url' width='800px' height='500px' frameborder='1'>
@@ -50,8 +50,10 @@ export default {
         //获取扩展名
         fileNameHandler(){
             if(this.givenFileName){
+                console.log(String(this.givenFileName).split('.').pop());
                 return String(this.givenFileName).split('.').pop()
             }else{
+                console.log(String(this.url).split('.').pop());
                 return String(this.url).split('.').pop()
             }
 
@@ -60,7 +62,10 @@ export default {
 }
 </script>
 
-<style>
-
+<style scoped>
+img{
+    width: 500px !important;
+    height: 500px !important;
+}
 </style>
 

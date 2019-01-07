@@ -73,340 +73,357 @@
                     </div>
                 </div>
             </div>
+            
+             <div style="display: flex; justify-content: space-between; align-items: flex-start">
+                <div class="panel" style="width: calc(66% - 15px);">
 
-            <div class="panel col-md-12 col-lg-12">
-
-                <div class="col-md-12">
-                    <ul class="nav nav-tabs nav-tabs-line" role="tablist" id="taskTab">
-                        <li class="nav-item" role="presentation">
-                            <a class="nav-link active" data-toggle="tab" href="#forum-task-base"
-                               aria-controls="forum-base"
-                               aria-expanded="true" role="tab">概况</a>
-                        </li>
-                        <li class="nav-item" role="presentation">
-                            <a class="nav-link" data-toggle="tab" href="#forum-task-annex"
-                               aria-controls="forum-present"
-                               aria-expanded="false" role="tab">附件</a>
-                        </li>
-                        <li class="nav-item" role="presentation" v-if="taskInfo.task_p">
-                            <a class="nav-link" data-toggle="tab" href="#forum-task-subtasks"
-                               aria-controls="forum-present"
-                               aria-expanded="false" role="tab">子任务</a>
-                        </li>
-                    </ul>
-                </div>
-                <div class="tab-content nav-tabs-animate bg-white col-md-12" v-if="taskInfo">
-                    <div class="tab-pane animation-fade active" id="forum-task-base" role="tabpanel">
-                        <div class="card">
-                            <div class="card-header card-header-transparent card-header-bordered">
-                                <div class="float-left font-weight-bold third-title">任务详情</div>
-                                <div class="float-right pointer-content">
-                                    <i class="iconfont icon-bianji2" aria-hidden="true" @click="editBaseInfo" v-show="!isEdit"></i>
-                                </div>
-                                <div class="float-right mr-40" v-show="isEdit">
-                                    <button class="btn btn-sm btn-white btn-pure" @click="cancelEdit">取消</button>
-                                    <button class="btn btn-primary" @click="changeTaskBaseInfo">确定</button>
-                                </div>
-                            </div>
-                            <div class="card-block">
-                                <div class="card-text py-10 clearfix">
-                                    <div class="col-md-1 float-left text-right pl-0">负责人</div>
-                                    <div class="col-md-11 float-left font-weight-bold">
-                                        <div class="edit-wrap">
-                                            <EditInputSelector :is-edit="isEdit" :select-type="'principal'"
-                                                               @change="changeTaskPrincipal"></EditInputSelector>
-                                        </div>
-                                    </div>
-                                </div>
-                                <div class="card-text py-10 clearfix">
-                                    <div class="col-md-1 float-left text-right pl-0">参与人</div>
-                                    <div class="col-md-11 float-left font-weight-bold">
-                                        <EditAddMember :is-edit="isEdit"></EditAddMember>
-                                    </div>
-                                </div>
-                                <div class="card-text py-10 clearfix">
-                                    <div class="col-md-1 float-left text-right pl-0">开始时间</div>
-                                    <div class="col-md-11 float-left font-weight-bold">
-                                        <div class="edit-wrap">
-                                            <EditDatepicker :content="taskInfo.start_at" :is-edit="isEdit"
-                                                            @change="changeTaskStartTime"></EditDatepicker>
-                                        </div>
-                                    </div>
-                                </div>
-                                <div class="card-text py-10 clearfix">
-                                    <div class="col-md-1 float-left text-right pl-0">结束时间</div>
-                                    <div class="col-md-11 float-left font-weight-bold">
-                                        <div class="edit-wrap">
-                                            <EditDatepicker :content="taskInfo.end_at" :is-edit="isEdit"
-                                                            @change="changeEndTime"></EditDatepicker>
-                                        </div>
-                                    </div>
-                                </div>
-                                <div class="card-text py-10 clearfix">
-                                    <div class="col-md-1 float-left text-right pl-0">优先级</div>
-                                    <div class="ml-15 float-left font-weight-bold" style="width: 220px;">
-                                        <EditSelector :content="taskInfo.priority?taskInfo.priority: ''"
-                                                      :is-edit="isEdit"
-                                                      :options="priorityArr" @change="changeTaskLevel"></EditSelector>
-                                    </div>
-                                </div>
-                                <div class="card-text py-10 clearfix">
-                                    <div class="col-md-1 float-left text-right pl-0">任务说明</div>
-                                    <div class="ml-15 float-left font-weight-bold" style="width: 220px;">
-                                        <div class="">
-                                            <editTextarea :content="taskInfo.desc"
-                                                          :is-edit="isEdit"
-                                                          @change="changeTaskIntroduce"></editTextarea>
-                                        </div>
-                                    </div>
-                                </div>
-
-                                <div class="card-text py-10 clearfix" v-if="taskInfo.complete_at">
-                                    <div class="col-md-1 float-left text-right pl-0">完成时间</div>
-                                    <div class="col-md-11 float-left font-weight-bold">
-                                        {{ taskInfo.complete_at }}
-                                    </div>
-                                </div>
-                                <div class="card-text py-10 clearfix" v-if="taskInfo.stop_at">
-                                    <div class="col-md-1 float-left text-right pl-0">停止时间</div>
-                                    <div class="col-md-11 float-left font-weight-bold">
-                                        {{ taskInfo.stop_at }}
-                                    </div>
-                                </div>
-                                <div class="card-text py-10 clearfix">
-                                    <div class="col-md-1 float-left text-right pl-0">创建人</div>
-                                    <div class="col-md-11 float-left font-weight-bold">
-                                        {{ taskInfo.creator?taskInfo.creator.data.name:'' }}
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
+                    <div class="col-md-12">
+                        <ul class="nav nav-tabs nav-tabs-line" role="tablist" id="taskTab">
+                            <li class="nav-item" role="presentation">
+                                <a class="nav-link active" data-toggle="tab" href="#forum-task-base"
+                                aria-controls="forum-base"
+                                aria-expanded="true" role="tab">概况</a>
+                            </li>
+                            <li class="nav-item" role="presentation">
+                                <a class="nav-link" data-toggle="tab" href="#forum-task-annex"
+                                aria-controls="forum-present"
+                                aria-expanded="false" role="tab">附件</a>
+                            </li>
+                            <li class="nav-item" role="presentation" v-if="taskInfo.task_p">
+                                <a class="nav-link" data-toggle="tab" href="#forum-task-subtasks"
+                                aria-controls="forum-present"
+                                aria-expanded="false" role="tab">子任务</a>
+                            </li>
+                        </ul>
                     </div>
-                    <div class="tab-pane animation-fade" id="forum-task-annex" role="tabpanel">
-                        <div class="card">
-                            <div class="card-header card-header-transparent card-header-bordered attachment-upload">
-                                <div class="float-left font-weight-bold third-title">上传附件</div>
-                                <div class="d-inline float-right">
-                                    <FileUploader is-icon="true" @change="uploadAttachment"></FileUploader>
-                                </div>
-                            </div>
-                            <div class="card-block">
-                                <ul class="file-list">
-                                    <li v-for="attachment in taskInfo.affixes?taskInfo.affixes.data:[]">
-                                        <i class="iconfont icon-wenjian pr-5" style="color: #3298dc;"></i>{{ attachment.title }}
-                                        <span class="float-right pl-10 pointer-content"
-                                              data-plugin="actionBtn" @click="setDelInfo(attachment.id)"
-                                              data-toggle="modal"
-                                              data-target="#confirmFlag"><i class="iconfont icon-iconfonttubiao"></i> 删除</span>
-                                        <span class="float-right px-10">|</span>
-                                        <span class="float-right px-10 pointer-content"
-                                              @click="downloadAttachment(attachment.id, attachment.url)"><i class="iconfont icon-download"></i> 下载</span>
-                                        <span class="float-right px-10">{{ attachment.size }}</span>
-                                    </li>
-                                </ul>
-                                <div class="col-md-1" style="margin: 6rem auto"
-                                     v-if="taskInfo.affixes&&taskInfo.affixes.data.length === 0">
-                                    <img src="https://res.papitube.com/corvus/images/content-none.png" alt=""
-                                         style="width: 100%">
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                    <div class="tab-pane animation-fade pb-20 fixed-button-father" id="forum-task-subtasks"
-                         role="tabpanel">
-                        <table class="table table-hover is-indent example" data-plugin="animateList" data-animate="fade"
-                               data-child="tr"
-                               data-selectable="selectable">
-                            <tr class="animation-fade"
-                                style="animation-fill-mode: backwards; animation-duration: 250ms; animation-delay: 0ms;">
-                                <th class="cell-300" scope="col">任务名称</th>
-                                <th class="cell-300" scope="col">任务类型</th>
-                                <th class="cell-300" scope="col">状态</th>
-                                <th class="cell-300" scope="col">负责人</th>
-                                <th class="cell-300" scope="col">截止日期</th>
-                            </tr>
-                            <tbody>
-                            <tr v-for="task in taskInfo.tasks?taskInfo.tasks.data:[]" :key="task.id" @click="redirectTaskDetail(task.id)">
-                                <td>{{ task.title }}</td>
-                                <td>{{ task.type.data.title }}</td>
-                                <td>
-                                    <template v-if="task.status === 1">进行中</template>
-                                    <template v-if="task.status === 2">已完成</template>
-                                    <template v-if="task.status === 3">已停止</template>
-                                </td>
-                                <td>{{ task.principal?task.principal.data.name:'' }}</td>
-                                <td>{{ task.end_at }}</td>
-                            </tr>
-                            </tbody>
-                        </table>
-
-                        <div class="col-md-1" style="margin: 6rem auto"
-                             v-if="taskInfo.tasks&&taskInfo.tasks.data.length === 0">
-                            <img src="https://res.papitube.com/corvus/images/content-none.png" alt=""
-                                 style="width: 100%">
-                        </div>
-
-                        <div class="site-action fixed-button" data-plugin="actionBtn" data-toggle="modal"
-                             data-target="#addChildTask">
-                            <button type="button"
-                                    class="site-action-toggle btn-raised btn btn-success btn-floating waves-effect waves-classic">
-                                <i class="front-icon iconfont icon-tianjia1 animation-scale-up" aria-hidden="true"
-                                   style="font-size:30px"></i>
-                                <i class="back-icon iconfont icon-tianjia1 animation-scale-up" aria-hidden="true"
-                                   style="font-size:30px"></i>
-                            </button>
-                        </div>
-
-                    </div>
-                </div>
-
-            </div>
-
-            <div class="panel col-md-12 col-lg-12" v-if="questionId && visible">
-                <div class="tab-content nav-tabs-animate bg-white">
-                    <div class="card">
-                        <div class="card-header card-header-transparent card-header-bordered"
-                             style="display: flex; justify-content: space-between; align-items: center;">
-                            <div class="font-weight-bold third-title">问卷详情</div>
-                            <div class="">
-                                <button type="button"
-                                        class="btn btn-primary"
-                                        v-if="!~hasAnsweredArr.indexOf(user.id)"
-                                        @click="submit">提交
-                                </button>
-                                <button type="button" class="btn btn-primary" data-plugin="actionBtn"
-                                        data-toggle="modal"
-                                        v-if="questionInfo.reviewanswer
-                                        && principalId === user.id 
-                                        && hasAnsweredArr.length > 0 
-                                        && hasAnsweredArr.length === questionInfo.reviewanswer.data.length"
-                                        && !questionInfo.excellent
-                                        data-target="#push-reason">推优
-                                </button>
-                            </div>
-                        </div>
-                        <div class="card-block">
-                            <h4 style="color: #3F51B5">平均分
-                                {{ questionInfo.sum ? (questionInfo.sum.data[0]
-                                ?questionInfo.sum.data[0].truncate : 0) : 0}}
-                            </h4>
-                            <div class="row">
-                                <div class="col-md-8 clearfix" style="padding-right: 0;">
-                                    <div class="progress" data-labeltype="percentage" data-goal="-40"
-                                         data-plugin="progress" style="width: calc(100% - 100px); float:left;">
-                                        <div class="progress-bar progress-bar-warning" aria-valuemin="-100"
-                                             aria-valuemax="0" aria-valuenow="-40" role="progressbar"
-                                             :style="{width: `${questionInfo.reviewanswer.length === 0 ? 0 : hasAnsweredArr.length / questionInfo.reviewanswer.data.length * 100}%`}">
-                                            <!-- <span class="progress-label">{{questionInfo.reviewanswer.length === 0 ? 0 : ~~((hasAnsweredArr.length / questionInfo.reviewanswer.data.length * 100))}}%</span> -->
-                                        </div>
+                    <div class="tab-content nav-tabs-animate bg-white col-md-12" v-if="taskInfo">
+                        <div class="tab-pane animation-fade active" id="forum-task-base" role="tabpanel">
+                            <div class="card">
+                                <div class="card-header card-header-transparent card-header-bordered">
+                                    <div class="float-left font-weight-bold third-title">任务详情</div>
+                                    <div class="float-right pointer-content">
+                                        <i class="iconfont icon-bianji2" aria-hidden="true" @click="editBaseInfo" v-show="!isEdit"></i>
                                     </div>
-                                    <div style="width: 50px; padding-left: 10px; float: left;">
-                                        {{questionInfo.reviewanswer.length === 0 ? 0 : ~~((hasAnsweredArr.length /
-                                        questionInfo.reviewanswer.data.length * 100))}}%
+                                    <div class="float-right mr-40" v-show="isEdit">
+                                        <button class="btn btn-sm btn-white btn-pure" @click="cancelEdit">取消</button>
+                                        <button class="btn btn-primary" @click="changeTaskBaseInfo">确定</button>
                                     </div>
                                 </div>
-                            </div>
-                            <div class="all-menber clearfix">
-                                <template v-for="(item, index) in questionInfo.reviewanswer.data">
-                                    <Avatar :imgUrl="item.users.data.icon_url" :key="index" style="margin: 5px;" />
-                                </template>
-                            </div>
-                            <div class="card-text py-5 clearfix">
-                                <div class="col-md-1 float-left text-right pl-0">作者</div>
-                                <div class="col-md-11 float-left font-weight-bold">
-                                    <div class="edit-wrap">
-                                        {{ questionInfo.creator ? questionInfo.creator.data.name : '' }}
-                                    </div>
-                                </div>
-                            </div>
-                            <div class="card-text py-5 clearfix">
-                                <div class="col-md-1 float-left text-right pl-0">视频名称</div>
-                                <div class="col-md-11 float-left font-weight-bold">
-                                    <div class="edit-wrap">
-                                        {{ questionInfo.production ? questionInfo.production.data[0].nickname : '' }}
-                                    </div>
-                                </div>
-                            </div>
-                            <div class="card-text py-5 clearfix">
-                                <div class="col-md-1 float-left text-right pl-0">阅转比</div>
-                                <div class="col-md-11 float-left font-weight-bold">
-                                    <div class="edit-wrap">
-                                        {{ questionInfo.production ? questionInfo.production.data[0].read_proportion :
-                                        '' }}
-                                    </div>
-                                </div>
-                            </div>
-                            <div class="card-text py-5 clearfix" v-if="questionInfo.excellent">
-                                <div class="col-md-1 float-left text-right pl-0">推优分</div>
-                                <div class="col-md-11 float-left font-weight-bold">
-                                    <div class="edit-wrap">
-                                        {{ questionInfo.excellent_sum }}
-                                    </div>
-                                </div>
-                            </div>
-                            <div class="card-text py-5 clearfix" v-if="questionInfo.excellent">
-                                <div class="col-md-1 float-left text-right pl-0">推优原因</div>
-                                <div class="col-md-11 float-left font-weight-bold">
-                                    <div class="edit-wrap">
-                                        {{ questionInfo.excellent }}
-                                    </div>
-                                </div>
-                            </div>
-                            <div class="card-text py-5 clearfix">
-                                <div class="col-md-1 float-left text-right pl-0">视频链接</div>
-                                <div class="col-md-11 float-left font-weight-bold">
-                                    <router-link
-                                            :to="questionInfo.production ? questionInfo.production.data[0].link : ''">
-                                        <div class="edit-wrap" style="color: #3298DC; cursor: pointer; width: 100%;">
-                                            {{ questionInfo.production ? questionInfo.production.data[0].link : '' }}
-                                        </div>
-                                    </router-link>
-                                </div>
-                            </div>
-
-                            <div class="question" v-for="(items, index) in questionData" :key="index">
-                                <div class="name">{{index + 1}}. {{ items.title }}</div>
-                                <div class="options clearfix" v-for="(item, _index) in items.items.data" :key="_index">
-                                    <div class="title">
-                                        <label>
-                                            <div class="radio-custom radio-primary" style="display: inline-block;">
-                                                <input type="radio" @click="answerList[index] = item"
-                                                       :disabled="hasAnsweredArr.includes(user.id)"
-                                                       :checked="answerList[index] === item.value
-                                                        || items.selectrows.data.find(n => n.review_question_item_id === item.id && n.creator.data.id === user.id)"
-                                                       :name="items.id"/>
-                                                <label></label>
+                                <div class="card-block">
+                                    <div class="card-text py-10 clearfix">
+                                        <div class="col-md-1 float-left text-right pl-0">负责人</div>
+                                        <div class="col-md-11 float-left font-weight-bold">
+                                            <div class="edit-wrap">
+                                                <EditInputSelector :is-edit="isEdit" :select-type="'principal'"
+                                                                @change="changeTaskPrincipal"></EditInputSelector>
                                             </div>
-                                            {{ item.value }}: {{ item.title }}
-                                        </label>
+                                        </div>
                                     </div>
-                                    <div class="row">
-                                        <div class="col-md-8" style="padding-right: 0;">
-                                            <div class="progress" data-labeltype="percentage" data-goal="-40"
-                                                 data-plugin="progress" style="width: calc(100% - 100px); float: left;">
-                                                <div class="progress-bar progress-bar-warning" aria-valuemin="-100"
-                                                     aria-valuemax="0" aria-valuenow="-40" role="progressbar"
-                                                     :style="{width: `${items.selectrows.data.filter(n => n.review_question_item_id === item.id).length / hasAnsweredArr.length * 100}%`}">
+                                    <div class="card-text py-10 clearfix">
+                                        <div class="col-md-1 float-left text-right pl-0">参与人</div>
+                                        <div class="col-md-11 float-left font-weight-bold">
+                                            <EditAddMember :is-edit="isEdit"></EditAddMember>
+                                        </div>
+                                    </div>
+                                    <div class="card-text py-10 clearfix">
+                                        <div class="col-md-1 float-left text-right pl-0">开始时间</div>
+                                        <div class="col-md-11 float-left font-weight-bold">
+                                            <div class="edit-wrap">
+                                                <EditDatepicker :content="taskInfo.start_at" :is-edit="isEdit"
+                                                                @change="changeTaskStartTime"></EditDatepicker>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="card-text py-10 clearfix">
+                                        <div class="col-md-1 float-left text-right pl-0">结束时间</div>
+                                        <div class="col-md-11 float-left font-weight-bold">
+                                            <div class="edit-wrap">
+                                                <EditDatepicker :content="taskInfo.end_at" :is-edit="isEdit"
+                                                                @change="changeEndTime"></EditDatepicker>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="card-text py-10 clearfix">
+                                        <div class="col-md-1 float-left text-right pl-0">优先级</div>
+                                        <div class="ml-15 float-left font-weight-bold" style="width: 220px;">
+                                            <EditSelector :content="taskInfo.priority?taskInfo.priority: ''"
+                                                        :is-edit="isEdit"
+                                                        :options="priorityArr" @change="changeTaskLevel"></EditSelector>
+                                        </div>
+                                    </div>
+                                    <div class="card-text py-10 clearfix">
+                                        <div class="col-md-1 float-left text-right pl-0">任务说明</div>
+                                        <div class="ml-15 float-left font-weight-bold" style="width: 220px;">
+                                            <div class="">
+                                                <editTextarea :content="taskInfo.desc"
+                                                            :is-edit="isEdit"
+                                                            @change="changeTaskIntroduce"></editTextarea>
+                                            </div>
+                                        </div>
+                                    </div>
+
+                                    <div class="card-text py-10 clearfix" v-if="taskInfo.complete_at">
+                                        <div class="col-md-1 float-left text-right pl-0">完成时间</div>
+                                        <div class="col-md-11 float-left font-weight-bold">
+                                            {{ taskInfo.complete_at }}
+                                        </div>
+                                    </div>
+                                    <div class="card-text py-10 clearfix" v-if="taskInfo.stop_at">
+                                        <div class="col-md-1 float-left text-right pl-0">停止时间</div>
+                                        <div class="col-md-11 float-left font-weight-bold">
+                                            {{ taskInfo.stop_at }}
+                                        </div>
+                                    </div>
+                                    <div class="card-text py-10 clearfix">
+                                        <div class="col-md-1 float-left text-right pl-0">创建人</div>
+                                        <div class="col-md-11 float-left font-weight-bold">
+                                            {{ taskInfo.creator?taskInfo.creator.data.name:'' }}
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="tab-pane animation-fade" id="forum-task-annex" role="tabpanel">
+                            <div class="card">
+                                <div class="card-header card-header-transparent card-header-bordered attachment-upload">
+                                    <div class="float-left font-weight-bold third-title">上传附件</div>
+                                    <div class="d-inline float-right">
+                                        <FileUploader is-icon="true" @change="uploadAttachment"></FileUploader>
+                                    </div>
+                                </div>
+                                <div class="card-block">
+                                    <ul class="file-list">
+                                        <li v-for="attachment in taskInfo.affixes?taskInfo.affixes.data:[]">
+                                            <i class="iconfont icon-wenjian pr-5" style="color: #3298dc;"></i>{{ attachment.title }}
+                                            <span class="float-right pl-10 pointer-content"
+                                                data-plugin="actionBtn" @click="setDelInfo(attachment.id)"
+                                                data-toggle="modal"
+                                                data-target="#confirmFlag"><i class="iconfont icon-iconfonttubiao"></i> 删除</span>
+                                            <span class="float-right px-10">|</span>
+                                            <span class="float-right px-10 pointer-content"
+                                                @click="downloadAttachment(attachment.id, attachment.url)"><i class="iconfont icon-download"></i> 下载</span>
+                                            <span class="float-right px-10">{{ attachment.size }}</span>
+                                        </li>
+                                    </ul>
+                                    <div class="col-md-1" style="margin: 6rem auto"
+                                        v-if="taskInfo.affixes&&taskInfo.affixes.data.length === 0">
+                                        <img src="https://res.papitube.com/corvus/images/content-none.png" alt=""
+                                            style="width: 100%">
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="tab-pane animation-fade pb-20 fixed-button-father" id="forum-task-subtasks"
+                            role="tabpanel">
+                            <table class="table table-hover is-indent example" data-plugin="animateList" data-animate="fade"
+                                data-child="tr"
+                                data-selectable="selectable">
+                                <tr class="animation-fade"
+                                    style="animation-fill-mode: backwards; animation-duration: 250ms; animation-delay: 0ms;">
+                                    <th class="cell-300" scope="col">任务名称</th>
+                                    <th class="cell-300" scope="col">任务类型</th>
+                                    <th class="cell-300" scope="col">状态</th>
+                                    <th class="cell-300" scope="col">负责人</th>
+                                    <th class="cell-300" scope="col">截止日期</th>
+                                </tr>
+                                <tbody>
+                                <tr v-for="task in taskInfo.tasks?taskInfo.tasks.data:[]" :key="task.id" @click="redirectTaskDetail(task.id)">
+                                    <td>{{ task.title }}</td>
+                                    <td>{{ task.type.data.title }}</td>
+                                    <td>
+                                        <template v-if="task.status === 1">进行中</template>
+                                        <template v-if="task.status === 2">已完成</template>
+                                        <template v-if="task.status === 3">已停止</template>
+                                    </td>
+                                    <td>{{ task.principal?task.principal.data.name:'' }}</td>
+                                    <td>{{ task.end_at }}</td>
+                                </tr>
+                                </tbody>
+                            </table>
+
+                            <div class="col-md-1" style="margin: 6rem auto"
+                                v-if="taskInfo.tasks&&taskInfo.tasks.data.length === 0">
+                                <img src="https://res.papitube.com/corvus/images/content-none.png" alt=""
+                                    style="width: 100%">
+                            </div>
+
+                            <div class="site-action fixed-button" data-plugin="actionBtn" data-toggle="modal"
+                                data-target="#addChildTask">
+                                <button type="button"
+                                        class="site-action-toggle btn-raised btn btn-success btn-floating waves-effect waves-classic">
+                                    <i class="front-icon iconfont icon-tianjia1 animation-scale-up" aria-hidden="true"
+                                    style="font-size:30px"></i>
+                                    <i class="back-icon iconfont icon-tianjia1 animation-scale-up" aria-hidden="true"
+                                    style="font-size:30px"></i>
+                                </button>
+                            </div>
+
+                        </div>
+                    </div>
+
+                </div>
+
+                <div class="panel" style="width: calc(34% - 15px);">
+                    <div class="col-md-12">
+                        <div class="card col-md-12">
+                            <div class="card-header card-header-transparent card-header-bordered">
+                                <h5>任务跟进</h5>
+                            </div>
+                            <div class="card-block">
+                                <div class="col-md-12 pl-0">
+                                    <TaskFollowUp :follow-type="'任务'" :trailId='taskId' trailType='tasks'></TaskFollowUp>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+             </div>
+             <div class="panel col-md-12 col-lg-12" v-if="questionId && visible">
+                    <div class="tab-content nav-tabs-animate bg-white">
+                        <div class="card">
+                            <div class="card-header card-header-transparent card-header-bordered"
+                                style="display: flex; justify-content: space-between; align-items: center;">
+                                <div class="font-weight-bold third-title">问卷详情</div>
+                                <div class="">
+                                    <button type="button"
+                                            class="btn btn-primary"
+                                            v-if="!~hasAnsweredArr.indexOf(user.id)"
+                                            @click="submit">提交
+                                    </button>
+                                    <button type="button" class="btn btn-primary" data-plugin="actionBtn"
+                                            data-toggle="modal"
+                                            v-if="questionInfo.reviewanswer
+                                            && principalId === user.id 
+                                            && hasAnsweredArr.length > 0 
+                                            && hasAnsweredArr.length === questionInfo.reviewanswer.data.length"
+                                            && !questionInfo.excellent
+                                            data-target="#push-reason">推优
+                                    </button>
+                                </div>
+                            </div>
+                            <div class="card-block">
+                                <h4 style="color: #3F51B5">平均分
+                                    {{ questionInfo.sum ? (questionInfo.sum.data[0]
+                                    ?questionInfo.sum.data[0].truncate : 0) : 0}}
+                                </h4>
+                                <div class="row">
+                                    <div class="col-md-8 clearfix" style="padding-right: 0;">
+                                        <div class="progress" data-labeltype="percentage" data-goal="-40"
+                                            data-plugin="progress" style="width: calc(100% - 100px); float:left;">
+                                            <div class="progress-bar progress-bar-warning" aria-valuemin="-100"
+                                                aria-valuemax="0" aria-valuenow="-40" role="progressbar"
+                                                :style="{width: `${questionInfo.reviewanswer.length === 0 ? 0 : hasAnsweredArr.length / questionInfo.reviewanswer.data.length * 100}%`}">
+                                                <!-- <span class="progress-label">{{questionInfo.reviewanswer.length === 0 ? 0 : ~~((hasAnsweredArr.length / questionInfo.reviewanswer.data.length * 100))}}%</span> -->
+                                            </div>
+                                        </div>
+                                        <div style="width: 50px; padding-left: 10px; float: left;">
+                                            {{questionInfo.reviewanswer.length === 0 ? 0 : ~~((hasAnsweredArr.length /
+                                            questionInfo.reviewanswer.data.length * 100))}}%
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="all-menber clearfix">
+                                    <template v-for="(item, index) in questionInfo.reviewanswer.data">
+                                        <Avatar :imgUrl="item.users.data.icon_url" :key="index" style="margin: 5px;" />
+                                    </template>
+                                </div>
+                                <div class="card-text py-5 clearfix">
+                                    <div class="col-md-1 float-left text-right pl-0">作者</div>
+                                    <div class="col-md-11 float-left font-weight-bold">
+                                        <div class="edit-wrap">
+                                            {{ questionInfo.creator ? questionInfo.creator.data.name : '' }}
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="card-text py-5 clearfix">
+                                    <div class="col-md-1 float-left text-right pl-0">视频名称</div>
+                                    <div class="col-md-11 float-left font-weight-bold">
+                                        <div class="edit-wrap">
+                                            {{ questionInfo.production ? questionInfo.production.data[0].nickname : '' }}
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="card-text py-5 clearfix">
+                                    <div class="col-md-1 float-left text-right pl-0">阅转比</div>
+                                    <div class="col-md-11 float-left font-weight-bold">
+                                        <div class="edit-wrap">
+                                            {{ questionInfo.production ? questionInfo.production.data[0].read_proportion :
+                                            '' }}
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="card-text py-5 clearfix" v-if="questionInfo.excellent">
+                                    <div class="col-md-1 float-left text-right pl-0">推优分</div>
+                                    <div class="col-md-11 float-left font-weight-bold">
+                                        <div class="edit-wrap">
+                                            {{ questionInfo.excellent_sum }}
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="card-text py-5 clearfix" v-if="questionInfo.excellent">
+                                    <div class="col-md-1 float-left text-right pl-0">推优原因</div>
+                                    <div class="col-md-11 float-left font-weight-bold">
+                                        <div class="edit-wrap">
+                                            {{ questionInfo.excellent }}
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="card-text py-5 clearfix">
+                                    <div class="col-md-1 float-left text-right pl-0">视频链接</div>
+                                    <div class="col-md-11 float-left font-weight-bold">
+                                        <router-link
+                                                :to="questionInfo.production ? questionInfo.production.data[0].link : ''">
+                                            <div class="edit-wrap" style="color: #3298DC; cursor: pointer; width: 100%;">
+                                                {{ questionInfo.production ? questionInfo.production.data[0].link : '' }}
+                                            </div>
+                                        </router-link>
+                                    </div>
+                                </div>
+
+                                <div class="question" v-for="(items, index) in questionData" :key="index">
+                                    <div class="name">{{index + 1}}. {{ items.title }}</div>
+                                    <div class="options clearfix" v-for="(item, _index) in items.items.data" :key="_index">
+                                        <div class="title">
+                                            <label>
+                                                <div class="radio-custom radio-primary" style="display: inline-block;">
+                                                    <input type="radio" @click="answerList[index] = item"
+                                                        :disabled="hasAnsweredArr.includes(user.id)"
+                                                        :checked="answerList[index] === item.value
+                                                            || items.selectrows.data.find(n => n.review_question_item_id === item.id && n.creator.data.id === user.id)"
+                                                        :name="items.id"/>
+                                                    <label></label>
+                                                </div>
+                                                {{ item.value }}: {{ item.title }}
+                                            </label>
+                                        </div>
+                                        <div class="row">
+                                            <div class="col-md-8" style="padding-right: 0;">
+                                                <div class="progress" data-labeltype="percentage" data-goal="-40"
+                                                    data-plugin="progress" style="width: calc(100% - 100px); float: left;">
+                                                    <div class="progress-bar progress-bar-warning" aria-valuemin="-100"
+                                                        aria-valuemax="0" aria-valuenow="-40" role="progressbar"
+                                                        :style="{width: `${items.selectrows.data.filter(n => n.review_question_item_id === item.id).length / hasAnsweredArr.length * 100}%`}">
+                                                    </div>
+                                                </div>
+                                                <div style="width: 50px; padding-left: 10px; float: left;">
+                                                    {{ hasAnsweredArr.length > 0 ? items.selectrows.data.filter(n =>
+                                                    n.review_question_item_id ===
+                                                    item.id).length / hasAnsweredArr.length * 100: '0' }}%
+                                                </div>
+                                                <div style="width: 50px; padding-left: 10px; float: right;">
+                                                    {{items.selectrows.data.filter(n => n.review_question_item_id ===
+                                                    item.id)?
+                                                    items.selectrows.data.filter(n => n.review_question_item_id ===
+                                                    item.id).length
+                                                    :0}}票
                                                 </div>
                                             </div>
-                                            <div style="width: 50px; padding-left: 10px; float: left;">
-                                                {{ hasAnsweredArr.length > 0 ? items.selectrows.data.filter(n =>
-                                                n.review_question_item_id ===
-                                                item.id).length / hasAnsweredArr.length * 100: '0' }}%
+                                            <div class="col-md-4 clearfix" style="padding-left: 0; margin-top: -9px;">
+                                                <template v-for="(_item, nameIndex) in items.selectrows.data">
+                                                    <Avatar v-if="_item.review_question_item_id === item.id"
+                                                        :imgUrl="_item.creator.data.icon_url" :key="nameIndex" style="margin: 5px;" />
+                                                </template>
                                             </div>
-                                            <div style="width: 50px; padding-left: 10px; float: right;">
-                                                {{items.selectrows.data.filter(n => n.review_question_item_id ===
-                                                item.id)?
-                                                items.selectrows.data.filter(n => n.review_question_item_id ===
-                                                item.id).length
-                                                :0}}票
-                                            </div>
-                                        </div>
-                                        <div class="col-md-4 clearfix" style="padding-left: 0; margin-top: -9px;">
-                                            <template v-for="(_item, nameIndex) in items.selectrows.data">
-                                                <Avatar v-if="_item.review_question_item_id === item.id"
-                                                    :imgUrl="_item.creator.data.icon_url" :key="nameIndex" style="margin: 5px;" />
-                                            </template>
                                         </div>
                                     </div>
                                 </div>
@@ -414,23 +431,6 @@
                         </div>
                     </div>
                 </div>
-            </div>
-
-            <div class="panel">
-                <div class="col-md-12">
-                    <div class="card col-md-12">
-                        <div class="card-header card-header-transparent card-header-bordered">
-                            <h5>任务跟进</h5>
-                        </div>
-                        <div class="card-block">
-                            <div class="col-md-7 pl-0">
-                                <TaskFollowUp :follow-type="'任务'" :trailId='taskId' trailType='tasks'></TaskFollowUp>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-            </div>
-
 
         </div>
 

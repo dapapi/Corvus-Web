@@ -171,6 +171,16 @@
                             <a class="nav-link" data-toggle="tab" href="#forum-artist-tasks"
                                aria-controls="forum-present"
                                aria-expanded="false" role="tab" :class="artistInfo.sign_contract_status == 2?'':'active'">
+                                <!-- <template v-if="tasksInfo.length > 0">
+                                    <ToolTips :title="`已完成数量${completeNum}`">
+                                        任务 ({{completeNum}}/{{tasksInfo.length}})
+                                    </ToolTips>
+                                </template> -->
+                                <!-- <template v-if="tasksInfo.length == 0">
+                                    <ToolTips :title="`已完成数量${0}`">
+                                        任务 ({{0}}/{{tasksInfo.length}})
+                                    </ToolTips>
+                                </template> -->
                                 <ToolTips v-if="alltaskshow.length > 0" :title="`已完成数量${completeNum}`">
                                     任务 ({{completeNum}}/{{alltaskshow.length}})
                                 </ToolTips>
@@ -972,7 +982,7 @@
                 if(data.participants.data){
                     this.scheduleParticipants = JSON.parse(JSON.stringify(data.participants.data));
                 }
-                // $('#checkSchedule').modal('show')
+                $('#checkSchedule').modal('show')
             },
             selectDate: function (value) {
                 this.selectedDate = value;
