@@ -153,411 +153,418 @@
                     </div>
                 </div>
             </div>
-
-            <div class="col-md-12 panel">
-                <div class="col-md-12">
-                    <ul class="nav nav-tabs nav-tabs-line" role="tablist">
-                        <li class="nav-item" role="presentation" v-show="artistInfo.sign_contract_status == 2" >
-                            <a class="nav-link" data-toggle="tab" href="#forum-artist-schedule"
-                               aria-controls="forum-base"
-                               aria-expanded="true" role="tab"  :class="artistInfo.sign_contract_status == 2?'active':''">日程</a>
-                        </li>
-                        <li class="nav-item" role="presentation" v-show="artistInfo.sign_contract_status == 2">
-                            <a class="nav-link" data-toggle="tab" href="#forum-artist-projects"
-                               aria-controls="forum-present"
-                               aria-expanded="false" role="tab" >项目</a>
-                        </li>
-                        <li class="nav-item" role="presentation" >
-                            <a class="nav-link" data-toggle="tab" href="#forum-artist-tasks"
-                               aria-controls="forum-present"
-                               aria-expanded="false" role="tab" :class="artistInfo.sign_contract_status == 2?'':'active'">
-                                <!-- <template v-if="tasksInfo.length > 0">
-                                    <ToolTips :title="`已完成数量${completeNum}`">
-                                        任务 ({{completeNum}}/{{tasksInfo.length}})
+            <div style="display: flex; justify-content: space-between; align-items: flex-start">
+                <div class="panel" style="width: calc(66% - 15px);">
+                    <div class="col-md-12">
+                        <ul class="nav nav-tabs nav-tabs-line" role="tablist">
+                            <li class="nav-item" role="presentation" v-show="artistInfo.sign_contract_status == 2" >
+                                <a class="nav-link" data-toggle="tab" href="#forum-artist-schedule"
+                                aria-controls="forum-base"
+                                aria-expanded="true" role="tab"  :class="artistInfo.sign_contract_status == 2?'active':''">日程</a>
+                            </li>
+                            <li class="nav-item" role="presentation" v-show="artistInfo.sign_contract_status == 2">
+                                <a class="nav-link" data-toggle="tab" href="#forum-artist-projects"
+                                aria-controls="forum-present"
+                                aria-expanded="false" role="tab" >项目</a>
+                            </li>
+                            <li class="nav-item" role="presentation" >
+                                <a class="nav-link" data-toggle="tab" href="#forum-artist-tasks"
+                                aria-controls="forum-present"
+                                aria-expanded="false" role="tab" :class="artistInfo.sign_contract_status == 2?'':'active'">
+                                    <!-- <template v-if="tasksInfo.length > 0">
+                                        <ToolTips :title="`已完成数量${completeNum}`">
+                                            任务 ({{completeNum}}/{{tasksInfo.length}})
+                                        </ToolTips>
+                                    </template> -->
+                                    <!-- <template v-if="tasksInfo.length == 0">
+                                        <ToolTips :title="`已完成数量${0}`">
+                                            任务 ({{0}}/{{tasksInfo.length}})
+                                        </ToolTips>
+                                    </template> -->
+                                    <ToolTips v-if="alltaskshow.length > 0" :title="`已完成数量${completeNum}`">
+                                        任务 ({{completeNum}}/{{alltaskshow.length}})
                                     </ToolTips>
-                                </template> -->
-                                <!-- <template v-if="tasksInfo.length == 0">
-                                    <ToolTips :title="`已完成数量${0}`">
-                                        任务 ({{0}}/{{tasksInfo.length}})
-                                    </ToolTips>
-                                </template> -->
-                                <ToolTips v-if="alltaskshow.length > 0" :title="`已完成数量${completeNum}`">
-                                    任务 ({{completeNum}}/{{alltaskshow.length}})
-                                </ToolTips>
-                                <span v-else>任务</span>
-                            </a>
-                        </li>
-                        <li class="nav-item" role="presentation" v-show="artistInfo.sign_contract_status == 2">
-                            <a class="nav-link" data-toggle="tab" href="#forum-artist-work"
-                               aria-controls="forum-present"
-                               aria-expanded="false" role="tab" >作品库</a>
-                        </li>
-                        <li class="nav-item" role="presentation" v-show="artistInfo.sign_contract_status == 2">
-                            <a class="nav-link" data-toggle="tab" href="#forum-artist-fans"
-                               aria-controls="forum-present"
-                               aria-expanded="false" role="tab" >粉丝数据</a>
-                        </li>
-                        <li class="nav-item" role="presentation" v-show="artistInfo.sign_contract_status == 2" @click="getArtistsBill">
-                            <a class="nav-link" data-toggle="tab" href="#forum-artist-bill"
-                               aria-controls="forum-present"
-                               aria-expanded="false" role="tab" >账单</a>
-                        </li>
-                        <li class="nav-item" role="presentation" >
-                            <a class="nav-link" data-toggle="tab" href="#forum-artist-base"
-                               aria-controls="forum-present"
-                               aria-expanded="false" role="tab">概况</a>
-                        </li>
-                    </ul>
-                    <div class="tab-content nav-tabs-animate bg-white col-md-12">
-                        <div class="tab-pane animation-fade pb-20 fixed-button-father" id="forum-artist-schedule"
-                             role="tabpanel" :class="artistInfo.sign_contract_status == 2?'active':''">
-                            <!-- <div class="col-md-12">
-                                <calendar :goto-date="selectedDate" :calendars="selectedCalendar" ref="calendar" @scheduleClick="showScheduleModal"></calendar>
-                            </div> -->
-                        </div>
-                        <div class="tab-pane animation-fade pb-20 fixed-button-father" id="forum-artist-projects"
-                             role="tabpanel">
-                            <table class="table table-hover is-indent example" data-plugin="animateList"
-                                   data-animate="fade"
-                                   data-child="tr"
-                                   data-selectable="selectable">
-                                <tr class="animation-fade"
-                                    style="animation-fill-mode: backwards; animation-duration: 250ms; animation-delay: 0ms;">
-                                    <th class="cell-300" scope="col">项目名称</th>
-                                    <th class="cell-300" scope="col">负责人</th>
-                                    <th class="cell-300" scope="col">关联公司</th>
-                                    <th class="cell-300" scope="col">录入日期</th>
-                                    <th class="cell-300" scope="col">博主分成</th>
-                                </tr>
-                                <tr v-for="(item,index) in ProjectsInfo" :key="index" @click="projectdetil(item.id)" class="Jump">
-                                    <td>{{item.title}}</td>
-                                    <td>{{item.principal.data.name}}</td>
-                                    <td>{{item.company}}</td>
-                                    <td>{{item.created_at}}</td>
-                                    <td v-for="(v,index) in item.relate_project_bills_resource.data" :key="index">{{v.bigger_divide}}</td>
-                                </tr>
-                            </table>
-                            <div class="col-md-1" style="margin: 6rem auto" v-if="ProjectsInfo.length === 0">
-                                <img src="https://res.papitube.com/corvus/images/content-none.png" alt=""
-                                     style="width: 100%">
+                                    <span v-else>任务</span>
+                                </a>
+                            </li>
+                            <li class="nav-item" role="presentation" v-show="artistInfo.sign_contract_status == 2">
+                                <a class="nav-link" data-toggle="tab" href="#forum-artist-work"
+                                aria-controls="forum-present"
+                                aria-expanded="false" role="tab" >作品库</a>
+                            </li>
+                            <li class="nav-item" role="presentation" v-show="artistInfo.sign_contract_status == 2">
+                                <a class="nav-link" data-toggle="tab" href="#forum-artist-fans"
+                                aria-controls="forum-present"
+                                aria-expanded="false" role="tab" >粉丝数据</a>
+                            </li>
+                            <li class="nav-item" role="presentation" v-show="artistInfo.sign_contract_status == 2" @click="getArtistsBill">
+                                <a class="nav-link" data-toggle="tab" href="#forum-artist-bill"
+                                aria-controls="forum-present"
+                                aria-expanded="false" role="tab" >账单</a>
+                            </li>
+                            <li class="nav-item" role="presentation" >
+                                <a class="nav-link" data-toggle="tab" href="#forum-artist-base"
+                                aria-controls="forum-present"
+                                aria-expanded="false" role="tab">概况</a>
+                            </li>
+                        </ul>
+                        <div class="tab-content nav-tabs-animate bg-white col-md-12">
+                            <div class="tab-pane animation-fade pb-20 fixed-button-father" id="forum-artist-schedule"
+                                role="tabpanel" :class="artistInfo.sign_contract_status == 2?'active':''">
+                                <!-- <div class="col-md-12">
+                                    <calendar :goto-date="selectedDate" :calendars="selectedCalendar" ref="calendar" @scheduleClick="showScheduleModal"></calendar>
+                                </div> -->
                             </div>
-                        </div>
-                        <div class="tab-pane animation-fade pb-20 fixed-button-father" id="forum-artist-tasks"
-                             role="tabpanel" :class="artistInfo.sign_contract_status == 2?'':'active'">
-                            <table class="table table-hover is-indent example" data-plugin="animateList"
-                                   data-animate="fade"
-                                   data-child="tr"
-                                   data-selectable="selectable">
-                                <tr class="animation-fade"
-                                    style="animation-fill-mode: backwards; animation-duration: 250ms; animation-delay: 0ms;">
-                                    <th class="cell-300" scope="col">任务名称</th>
-                                    <th class="cell-300" scope="col">任务类型</th>
-                                    <th class="cell-300" scope="col">状态</th>
-                                    <th class="cell-300" scope="col">负责人</th>
-                                    <th class="cell-300" scope="col">截止日期</th>
-                                </tr>
-                                <tr v-for="(task,index) in alltaskshow" :key="index" v-if="task" @click="taskdetail(task.id)" class="Jump">
-                                    <td>{{task.title}}</td>
-                                    <td v-if="task.type">{{task.type.data.title}}</td>
-                                    <td v-if="!task.type">未选择</td>
-                                    <td>
-                                        <template v-if="task.status === 1"><span style="color:#FF9800">进行中</span>
-                                        </template>
-                                        <template v-if="task.status === 2"><span style="color:#4CAF50">已完成</span>
-                                        </template>
-                                        <template v-if="task.status === 3"><span style="color:#9E9E9E">已停止</span>
-                                        </template>
-                                        <template v-if="task.status === 4"><span style="color:#F44336">延期</span>
-                                        </template>
-                                    </td>
-                                    <td>{{task.principal.data.name}}</td>
-                                    <td>{{task.end_at}}</td>
-                                </tr>
-                            </table>
-                            <div class="col-md-1" style="margin: 6rem auto" v-if="tasksInfo.length==0">
-                                <img src="https://res.papitube.com/corvus/images/content-none.png" alt=""
-                                     style="width: 100%">
-                            </div>
-                            <div class="site-action fixed-button" data-plugin="actionBtn" data-toggle="modal"
-                                 data-target="#addTask">
-                                <button type="button"
-                                        class="site-action-toggle btn-raised btn btn-success btn-floating waves-effect waves-classic">
-                                    <i class="front-icon iconfont icon-tianjia1 animation-scale-up" aria-hidden="true" style="font-size:30px"></i>
-                                    <i class="back-icon iconfont icon-tianjia1 animation-scale-up" aria-hidden="true" style="font-size:30px"></i>
-                                </button>
-                            </div>
-                        </div>
-                        <div class="tab-pane animation-fade pb-20 fixed-button-father" id="forum-artist-work"
-                             role="tabpanel">
-                            <table class="table table-hover is-indent example" data-plugin="animateList"
-                                   data-animate="fade" data-child="tr">
-                                <tr class="animation-fade"
-                                    style="animation-fill-mode: backwards; animation-duration: 250ms; animation-delay: 0ms;">
-                                    <th class="cell-300" scope="col">昵称</th>
-                                    <th class="cell-300" scope="col">视频名称</th>
-                                    <th class="cell-300" scope="col">视频发布时间</th>
-                                    <th class="cell-300" scope="col">阅转比</th>
-                                    <th class="cell-300" scope="col">视频链接</th>
-                                    <th class="cell-300" scope="col">是否广告</th>
-                                </tr>
-                                <tbody>
-                                <tr v-for="work in worksData" :key="work.id">
-                                    <td>{{work.nickname}}</td>
-                                    <td>{{work.videoname}}</td>
-                                    <td>{{work.release_time}}</td>
-                                    <td>{{work.read_proportion}}</td>
-                                    <td @click="Jump(work.link)">
-                                        <template v-show="work.link">
-                                            {{work.link}}
-                                        </template>
-                                    </td>
-                                    <td v-if="work.advertising==1">
-                                        是
-                                    </td>
-                                    <td v-else-if="work.advertising==0">
-                                        否
-                                    </td>
-                                </tr>
-                                </tbody>
-                            </table>
-                            <div class="col-md-1" style="margin: 6rem auto" v-if="worksData.length==0">
-                                <img src="https://res.papitube.com/corvus/images/content-none.png" alt=""
-                                     style="width: 100%">
-                            </div>
-                            <div class="site-action fixed-button" data-plugin="actionBtn" data-toggle="modal"
-                                 data-target="#addWork">
-                                <button type="button"
-                                        class="site-action-toggle btn-raised btn btn-success btn-floating waves-effect waves-classic">
-                                    <i class="front-icon iconfont icon-tianjia1 animation-scale-up" aria-hidden="true" style="font-size:30px"></i>
-                                    <i class="back-icon iconfont icon-tianjia1 animation-scale-up" aria-hidden="true" style="font-size:30px"></i>
-                                </button>
-                            </div>
-                        </div>
-                        <div class="tab-pane animation-fade pb-20 fixed-button-father" id="forum-artist-fans"
-                             role="tabpanel">
-                            <div id="myChart"
-                                 style="width:80vw ;height:400px; margin-top:30px;padding-bottom: 20px"></div>
-                        </div>
-                       <!-- 账单 -->
-                        <div class="tab-pane animation-fade pb-20 fixed-button-father" id="forum-artist-bill"
-                             role="tabpanel">
-                            <div class="clearfix my-10">
-                                <div style="padding: .715rem .6rem">
-                                    <div class="income" v-show="calculatedAmount.incomesum">
-                                        <div class="float-left pr-40">收款金额</div>
-                                        <div class="float-left pr-40 money-color">{{calculatedAmount.incomesum}}元</div>
-                                    </div>
-                                    <div class="expendituresum" v-show="calculatedAmount.expendituresum">
-                                        <div class="float-left pr-40">付款金额</div>
-                                        <div class="float-left pr-40 money-color">{{calculatedAmount.expendituresum}}元</div>
-                                    </div>
+                            <div class="tab-pane animation-fade pb-20 fixed-button-father" id="forum-artist-projects"
+                                role="tabpanel">
+                                <table class="table table-hover is-indent example" data-plugin="animateList"
+                                    data-animate="fade"
+                                    data-child="tr"
+                                    data-selectable="selectable">
+                                    <tr class="animation-fade"
+                                        style="animation-fill-mode: backwards; animation-duration: 250ms; animation-delay: 0ms;">
+                                        <th class="cell-300" scope="col">项目名称</th>
+                                        <th class="cell-300" scope="col">负责人</th>
+                                        <th class="cell-300" scope="col">关联公司</th>
+                                        <th class="cell-300" scope="col">录入日期</th>
+                                        <th class="cell-300" scope="col">博主分成</th>
+                                    </tr>
+                                    <tr v-for="(item,index) in ProjectsInfo" :key="index" @click="projectdetil(item.id)" class="Jump">
+                                        <td>{{item.title}}</td>
+                                        <td>{{item.principal.data.name}}</td>
+                                        <td>{{item.company}}</td>
+                                        <td>{{item.created_at}}</td>
+                                        <td v-for="(v,index) in item.relate_project_bills_resource.data" :key="index">{{v.bigger_divide}}</td>
+                                    </tr>
+                                </table>
+                                <div class="col-md-1" style="margin: 6rem auto" v-if="ProjectsInfo.length === 0">
+                                    <img src="https://res.papitube.com/corvus/images/content-none.png" alt=""
+                                        style="width: 100%">
                                 </div>
                             </div>
-
-                           <table class="table table-hover"
-                                   data-child="tr" >
-                                <tr>
-                                    <th class="cell-300" scope="col">费用类型</th>
-                                    <th class="cell-300 position-relative" scope="col">
-                                        <template v-if="filterFee === 1">全部</template>
-                                        <template v-if="filterFee === 2">成本</template>
-                                        <template v-if="filterFee === 3">收入</template>
-                                        <i class="iconfont icon-plus-select-down pl-2" aria-hidden="true"
-                                           id="projectDropdown" data-toggle="dropdown" aria-expanded="false"></i>
-                                        <div class="dropdown-menu" aria-labelledby="projectDropdown" role="menu">
-                                            <a class="dropdown-item" role="menuitem" v-show="filterFee !== 1"
-                                               @click="getArtistsBill(1,0)">全部</a>
-                                            <a class="dropdown-item" role="menuitem" v-show="filterFee !== 2"
-                                               @click="getArtistsBill(1,2)">成本</a>
-                                            <a class="dropdown-item" role="menuitem" v-show="filterFee !== 3"
-                                               @click="getArtistsBill(1,1)">收入</a>
-                                        </div>
-                                    </th>
-                                    <th class="cell-300" scope="col">项目名称</th>
-                                    <th class="cell-300" scope="col">金额</th>
-                                    <th class="cell-300" scope="col">收款/审批时间</th>
-                                    <th class="cell-300" scope="col">操作人</th>
-                                </tr>
-                                <tbody>
-                                <tr v-for="(item,index) in artistBillsInfo" :key="index">
-                                    <td>{{item.expense_name}}</td>
-                                    <td>{{item.expense_type}}</td>
-                                    <td>{{item.project_kd_name}}</td>
-                                    <td>{{item.money}}元</td>
-                                    <td>{{item.pay_rec_time}}</td>
-                                    <td>{{item.action_user}}</td>
-                                </tr>
-                                </tbody>
-                            </table>
-                            <div class="col-md-1" style="margin: 6rem auto" v-if="artistBillsInfo.length === 0">
-                                <img src="https://res.papitube.com/corvus/images/content-none.png" alt=""
-                                     style="width: 100%">
+                            <div class="tab-pane animation-fade pb-20 fixed-button-father" id="forum-artist-tasks"
+                                role="tabpanel" :class="artistInfo.sign_contract_status == 2?'':'active'">
+                                <table class="table table-hover is-indent example" data-plugin="animateList"
+                                    data-animate="fade"
+                                    data-child="tr"
+                                    data-selectable="selectable">
+                                    <tr class="animation-fade"
+                                        style="animation-fill-mode: backwards; animation-duration: 250ms; animation-delay: 0ms;">
+                                        <th class="cell-300" scope="col">任务名称</th>
+                                        <th class="cell-300" scope="col">任务类型</th>
+                                        <th class="cell-300" scope="col">状态</th>
+                                        <th class="cell-300" scope="col">负责人</th>
+                                        <th class="cell-300" scope="col">截止日期</th>
+                                    </tr>
+                                    <tr v-for="(task,index) in alltaskshow" :key="index" v-if="task" @click="taskdetail(task.id)" class="Jump">
+                                        <td>{{task.title}}</td>
+                                        <td v-if="task.type">{{task.type.data.title}}</td>
+                                        <td v-if="!task.type">未选择</td>
+                                        <td>
+                                            <template v-if="task.status === 1"><span style="color:#FF9800">进行中</span>
+                                            </template>
+                                            <template v-if="task.status === 2"><span style="color:#4CAF50">已完成</span>
+                                            </template>
+                                            <template v-if="task.status === 3"><span style="color:#9E9E9E">已停止</span>
+                                            </template>
+                                            <template v-if="task.status === 4"><span style="color:#F44336">延期</span>
+                                            </template>
+                                        </td>
+                                        <td>{{task.principal.data.name}}</td>
+                                        <td>{{task.end_at}}</td>
+                                    </tr>
+                                </table>
+                                <div class="col-md-1" style="margin: 6rem auto" v-if="tasksInfo.length==0">
+                                    <img src="https://res.papitube.com/corvus/images/content-none.png" alt=""
+                                        style="width: 100%">
+                                </div>
+                                <div class="site-action fixed-button" data-plugin="actionBtn" data-toggle="modal"
+                                    data-target="#addTask">
+                                    <button type="button"
+                                            class="site-action-toggle btn-raised btn btn-success btn-floating waves-effect waves-classic">
+                                        <i class="front-icon iconfont icon-tianjia1 animation-scale-up" aria-hidden="true" style="font-size:30px"></i>
+                                        <i class="back-icon iconfont icon-tianjia1 animation-scale-up" aria-hidden="true" style="font-size:30px"></i>
+                                    </button>
+                                </div>
                             </div>
-                             <pagination :current_page="current_page" :method="getArtistsBill" :total_pages="total_pages"
-                                        :total="total"></pagination>
-                        </div>
-                        <div class="tab-pane animation-fade fixed-button-father" id="forum-artist-base"
-                             role="tabpanel">
-                            <div class="card">
-                                <div class="card-header card-header-transparent card-header-bordered">
-                                    <div class="float-left font-weight-bold third-title">博主信息</div>
-                                    <div class="float-right pointer-content" v-show="isStatrtEdit">
-                                        <i class="iconfont icon-bianji2" aria-hidden="true" @click="editBaseInfo"></i>
-                                    </div>
-                                    <div class="float-right mr-40" v-show="isEdit">
-                                        <button class="btn btn-sm btn-white btn-pure" @click="cancelEdit">取消</button>
-                                        <button class="btn btn-primary" @click="changeArtistBaseInfo">确定</button>
+                            <div class="tab-pane animation-fade pb-20 fixed-button-father" id="forum-artist-work"
+                                role="tabpanel">
+                                <table class="table table-hover is-indent example" data-plugin="animateList"
+                                    data-animate="fade" data-child="tr">
+                                    <tr class="animation-fade"
+                                        style="animation-fill-mode: backwards; animation-duration: 250ms; animation-delay: 0ms;">
+                                        <th class="cell-300" scope="col">昵称</th>
+                                        <th class="cell-300" scope="col">视频名称</th>
+                                        <th class="cell-300" scope="col">视频发布时间</th>
+                                        <th class="cell-300" scope="col">阅转比</th>
+                                        <th class="cell-300" scope="col">视频链接</th>
+                                        <th class="cell-300" scope="col">是否广告</th>
+                                    </tr>
+                                    <tbody>
+                                    <tr v-for="work in worksData" :key="work.id">
+                                        <td>{{work.nickname}}</td>
+                                        <td>{{work.videoname}}</td>
+                                        <td>{{work.release_time}}</td>
+                                        <td>{{work.read_proportion}}</td>
+                                        <td @click="Jump(work.link)">
+                                            <template v-show="work.link">
+                                                {{work.link}}
+                                            </template>
+                                        </td>
+                                        <td v-if="work.advertising==1">
+                                            是
+                                        </td>
+                                        <td v-else-if="work.advertising==0">
+                                            否
+                                        </td>
+                                    </tr>
+                                    </tbody>
+                                </table>
+                                <div class="col-md-1" style="margin: 6rem auto" v-if="worksData.length==0">
+                                    <img src="https://res.papitube.com/corvus/images/content-none.png" alt=""
+                                        style="width: 100%">
+                                </div>
+                                <div class="site-action fixed-button" data-plugin="actionBtn" data-toggle="modal"
+                                    data-target="#addWork">
+                                    <button type="button"
+                                            class="site-action-toggle btn-raised btn btn-success btn-floating waves-effect waves-classic">
+                                        <i class="front-icon iconfont icon-tianjia1 animation-scale-up" aria-hidden="true" style="font-size:30px"></i>
+                                        <i class="back-icon iconfont icon-tianjia1 animation-scale-up" aria-hidden="true" style="font-size:30px"></i>
+                                    </button>
+                                </div>
+                            </div>
+                            <div class="tab-pane animation-fade pb-20 fixed-button-father" id="forum-artist-fans"
+                                role="tabpanel">
+                                <div id="myChart"
+                                    style="width:80vw ;height:400px; margin-top:30px;padding-bottom: 20px"></div>
+                            </div>
+                        <!-- 账单 -->
+                            <div class="tab-pane animation-fade pb-20 fixed-button-father" id="forum-artist-bill"
+                                role="tabpanel">
+                                <div class="clearfix my-10">
+                                    <div style="padding: .715rem .6rem">
+                                        <div class="income" v-show="calculatedAmount.incomesum">
+                                            <div class="float-left pr-40">收款金额</div>
+                                            <div class="float-left pr-40 money-color">{{calculatedAmount.incomesum}}元</div>
+                                        </div>
+                                        <div class="expendituresum" v-show="calculatedAmount.expendituresum">
+                                            <div class="float-left pr-40">付款金额</div>
+                                            <div class="float-left pr-40 money-color">{{calculatedAmount.expendituresum}}元</div>
+                                        </div>
                                     </div>
                                 </div>
-                                <div class="card-block" v-if="artistInfo">
-                                    <div class="clearfix">
-                                        <div class="card-text py-10 px-0 clearfix col-md-6 float-left ">
-                                            <div class="col-md-2 float-left text-right pl-0">昵称</div>
-                                            <div class="col-md-10 float-left font-weight-bold">
-                                                <EditInput :content="artistInfo.nickname" :is-edit="isEdit"
-                                                           @change="changArtistName"></EditInput>
+
+                            <table class="table table-hover"
+                                    data-child="tr" >
+                                    <tr>
+                                        <th class="cell-300" scope="col">费用类型</th>
+                                        <th class="cell-300 position-relative" scope="col">
+                                            <template v-if="filterFee === 1">全部</template>
+                                            <template v-if="filterFee === 2">成本</template>
+                                            <template v-if="filterFee === 3">收入</template>
+                                            <i class="iconfont icon-plus-select-down pl-2" aria-hidden="true"
+                                            id="projectDropdown" data-toggle="dropdown" aria-expanded="false"></i>
+                                            <div class="dropdown-menu" aria-labelledby="projectDropdown" role="menu">
+                                                <a class="dropdown-item" role="menuitem" v-show="filterFee !== 1"
+                                                @click="getArtistsBill(1,0)">全部</a>
+                                                <a class="dropdown-item" role="menuitem" v-show="filterFee !== 2"
+                                                @click="getArtistsBill(1,2)">成本</a>
+                                                <a class="dropdown-item" role="menuitem" v-show="filterFee !== 3"
+                                                @click="getArtistsBill(1,1)">收入</a>
                                             </div>
+                                        </th>
+                                        <th class="cell-300" scope="col">项目名称</th>
+                                        <th class="cell-300" scope="col">金额</th>
+                                        <th class="cell-300" scope="col">收款/审批时间</th>
+                                        <th class="cell-300" scope="col">操作人</th>
+                                    </tr>
+                                    <tbody>
+                                    <tr v-for="(item,index) in artistBillsInfo" :key="index">
+                                        <td>{{item.expense_name}}</td>
+                                        <td>{{item.expense_type}}</td>
+                                        <td>{{item.project_kd_name}}</td>
+                                        <td>{{item.money}}元</td>
+                                        <td>{{item.pay_rec_time}}</td>
+                                        <td>{{item.action_user}}</td>
+                                    </tr>
+                                    </tbody>
+                                </table>
+                                <div class="col-md-1" style="margin: 6rem auto" v-if="artistBillsInfo.length === 0">
+                                    <img src="https://res.papitube.com/corvus/images/content-none.png" alt=""
+                                        style="width: 100%">
+                                </div>
+                                <pagination :current_page="current_page" :method="getArtistsBill" :total_pages="total_pages"
+                                            :total="total"></pagination>
+                            </div>
+                            <div class="tab-pane animation-fade fixed-button-father" id="forum-artist-base"
+                                role="tabpanel">
+                                <div class="card">
+                                    <div class="card-header card-header-transparent card-header-bordered">
+                                        <div class="float-left font-weight-bold third-title">博主信息</div>
+                                        <div class="float-right pointer-content" v-show="isStatrtEdit">
+                                            <i class="iconfont icon-bianji2" aria-hidden="true" @click="editBaseInfo"></i>
                                         </div>
-                                        <div class="card-text py-10 px-0 clearfix col-md-6 float-left ">
-                                            <div class="col-md-2 float-left text-right pl-0">类型</div>
-                                            <div class="col-md-10 float-left font-weight-bold" v-if="artistInfo.type">
-                                                <EditSelector :content="artistInfo.type.data.id"
-                                                              :options="artistTypeArr"
-                                                              :is-edit="isEdit"
-                                                              @change="changArtistType"></EditSelector>
+                                        <div class="float-right mr-40" v-show="isEdit">
+                                            <button class="btn btn-sm btn-white btn-pure" @click="cancelEdit">取消</button>
+                                            <button class="btn btn-primary" @click="changeArtistBaseInfo">确定</button>
+                                        </div>
+                                    </div>
+                                    <div class="card-block" v-if="artistInfo">
+                                        <div class="clearfix">
+                                            <div class="card-text py-10 px-0 clearfix col-md-6 float-left ">
+                                                <div class="col-md-4 float-left text-right pl-0">昵称</div>
+                                                <div class="col-md-9 float-left font-weight-bold">
+                                                    <EditInput :content="artistInfo.nickname" :is-edit="isEdit"
+                                                            @change="changArtistName"></EditInput>
+                                                </div>
                                             </div>
-                                        </div>
-                                        <div class="card-text py-10 px-0 clearfix col-md-6 float-left ">
-                                            <div class="col-md-2 float-left text-right pl-0">沟通状态</div>
-                                            <div class="col-md-10 float-left font-weight-bold">
-                                                <EditSelector :content="artistInfo.communication_status"
-                                                              :options="papiCommunicationStatusArr"
-                                                              :is-edit="isEdit"
-                                                              @change="changeArtistCommunication"></EditSelector>
+                                            <div class="card-text py-10 px-0 clearfix col-md-6 float-left ">
+                                                <div class="col-md-4 float-left text-right pl-0">类型</div>
+                                                <div class="col-md-9 float-left font-weight-bold" v-if="artistInfo.type">
+                                                    <EditSelector :content="artistInfo.type.data.id"
+                                                                :options="artistTypeArr"
+                                                                :is-edit="isEdit"
+                                                                @change="changArtistType"></EditSelector>
+                                                </div>
                                             </div>
-                                        </div>
-                                        <div class="card-text py-10 px-0 clearfix col-md-6 float-left edit-height">
-                                                <div class="col-md-2 float-left text-right pl-0">与我司签约意向</div>
-                                                <div class="col-md-10 float-left font-weight-bold">
+                                            <div class="card-text py-10 px-0 clearfix col-md-6 float-left ">
+                                                <div class="col-md-4 float-left text-right pl-0">沟通状态</div>
+                                                <div class="col-md-9 float-left font-weight-bold">
+                                                    <EditSelector :content="artistInfo.communication_status"
+                                                                :options="papiCommunicationStatusArr"
+                                                                :is-edit="isEdit"
+                                                                @change="changeArtistCommunication"></EditSelector>
+                                                </div>
+                                            </div>
+                                            <div class="card-text py-10 px-0 clearfix col-md-6 float-left ">
+                                                <div class="col-md-4 float-left text-right pl-0">社交平台</div>
+                                                <div class="col-md-9 float-left font-weight-bold">
+                                                    <EditSelector :is-edit="isEdit" :multiple="true"
+                                                                :content="artistInfo.platform ? artistInfo.platform.split(',') : ''"
+                                                                :options="artistSocialPlatform"
+                                                                @valuelistener="changeArtistPlatform_id"></EditSelector>
+                                                </div>
+                                            </div>
+                                            <div class="card-text py-10 px-0 clearfix col-md-6 float-left edit-height">
+                                                <div class="col-md-4 float-left text-right pl-0">与我司签约意向</div>
+                                                <div class="col-md-9 float-left font-weight-bold">
                                                     <ConditionalInput ref="condition" :is-edit="isEdit" :content="artistInfo.intention"
                                                                     :input-content="artistInfo.intention_desc"
                                                                     :condition="2"
                                                                     @change="(value) => changeArtistSigning(value, 'intention')"></ConditionalInput>
                                                 </div>
-                                        </div>
-                                        <div class="card-text py-10 px-0 clearfix col-md-6 float-left edit-height">
-                                            <div class="col-md-2 float-left text-right pl-0">是否签约其他公司</div>
-                                            <div class="col-md-10 float-left font-weight-bold">
-                                                <ConditionalInput ref="condition1" :is-edit="isEdit"
-                                                                :content="artistInfo.sign_contract_other"
-                                                                :input-content="artistInfo.sign_contract_other_name"
-                                                                :condition="1"
-                                                                @change="(value) => changeArtistSigning(value, 'sign_contract_other')"></ConditionalInput>
                                             </div>
-                                        </div>
-                                        <div class="card-text py-10 px-0 clearfix col-md-6 float-left ">
-                                            <div class="col-md-2 float-left text-right pl-0">社交平台</div>
-                                            <div class="col-md-10 float-left font-weight-bold">
-                                                <EditSelector :is-edit="isEdit" :multiple="true"
-                                                              :content="artistInfo.platform ? artistInfo.platform.split(',') : ''"
-                                                              :options="artistSocialPlatform"
-                                                              @valuelistener="changeArtistPlatform_id"></EditSelector>
+                                            <div class="card-text py-10 px-0 clearfix col-md-6 float-left edit-height">
+                                                <div class="col-md-4 float-left text-right pl-0">签约其他公司</div>
+                                                <div class="col-md-9 float-left font-weight-bold">
+                                                    <ConditionalInput ref="condition1" :is-edit="isEdit"
+                                                                    :content="artistInfo.sign_contract_other"
+                                                                    :input-content="artistInfo.sign_contract_other_name"
+                                                                    :condition="1"
+                                                                    @change="(value) => changeArtistSigning(value, 'sign_contract_other')"></ConditionalInput>
+                                                </div>
                                             </div>
-                                        </div>
-                                        <div class="card-text py-10 px-0 clearfix col-md-6 float-left ">
-                                            <div class="col-md-2 float-left text-right pl-0">微博主页地址</div>
-                                            <div class="col-md-10 float-left font-weight-bold">
-                                                <EditInput :content="artistInfo.weibo_url" :is-edit="isEdit"
-                                                           @change="changeArtistWeibo_url"></EditInput>
+                                           
+                                            <div class="card-text py-10 px-0 clearfix col-md-6 float-left ">
+                                                <div class="col-md-4 float-left text-right pl-0">微博链接</div>
+                                                <div class="col-md-9 float-left font-weight-bold">
+                                                    <EditInput :content="artistInfo.weibo_url" :is-edit="isEdit"
+                                                            @change="changeArtistWeibo_url"></EditInput>
+                                                </div>
                                             </div>
-                                        </div>
-                                        <div class="card-text py-10 px-0 clearfix col-md-6 float-left ">
-                                            <div class="col-md-2 float-left text-right pl-0">微博粉丝数</div>
-                                            <div class="col-md-10 float-left font-weight-bold">
-                                                <EditInput :content="artistInfo.weibo_fans_num" :is-edit="isEdit"
-                                                           @change="changeArtistWeibo_fans_num"></EditInput>
+                                            <div class="card-text py-10 px-0 clearfix col-md-6 float-left ">
+                                                <div class="col-md-4 float-left text-right pl-0">微博粉丝数</div>
+                                                <div class="col-md-9 float-left font-weight-bold">
+                                                    <EditInput :content="artistInfo.weibo_fans_num" :is-edit="isEdit"
+                                                            @change="changeArtistWeibo_fans_num"></EditInput>
+                                                </div>
                                             </div>
-                                        </div>
-                                        <div class="card-text py-10 px-0 clearfix col-md-6 float-left ">
-                                            <div class="col-md-2 float-left text-right pl-0">抖音Id</div>
-                                            <div class="col-md-10 float-left font-weight-bold">
-                                                <EditInput :content="artistInfo.douyin_id" :is-edit="isEdit"
-                                                           @change="changeArtistDouyin_id"></EditInput>
+                                            <div class="card-text py-10 px-0 clearfix col-md-6 float-left ">
+                                                <div class="col-md-4 float-left text-right pl-0">抖音Id</div>
+                                                <div class="col-md-9 float-left font-weight-bold">
+                                                    <EditInput :content="artistInfo.douyin_id" :is-edit="isEdit"
+                                                            @change="changeArtistDouyin_id"></EditInput>
+                                                </div>
                                             </div>
-                                        </div>
-                                        <div class="card-text py-10 px-0 clearfix col-md-6 float-left ">
-                                            <div class="col-md-2 float-left text-right pl-0">抖音粉丝数</div>
-                                            <div class="col-md-10 float-left font-weight-bold">
-                                                <EditInput :content="artistInfo.douyin_fans_num" :is-edit="isEdit"
-                                                           @change="changeArtistDouyin_fans_num"></EditInput>
+                                            <div class="card-text py-10 px-0 clearfix col-md-6 float-left ">
+                                                <div class="col-md-4 float-left text-right pl-0">抖音粉丝数</div>
+                                                <div class="col-md-9 float-left font-weight-bold">
+                                                    <EditInput :content="artistInfo.douyin_fans_num" :is-edit="isEdit"
+                                                            @change="changeArtistDouyin_fans_num"></EditInput>
+                                                </div>
                                             </div>
-                                        </div>
-                                        <div class="card-text py-10 px-0 clearfix col-md-6 float-left ">
-                                            <div class="col-md-2 float-left text-right pl-0">小红书链接</div>
-                                            <div class="col-md-10 float-left font-weight-bold">
-                                                <EditInput :content="artistInfo.xiaohongshu_url" :is-edit="isEdit"
-                                                           @change="changeArtistXiaohongshu_url"></EditInput>
+                                            <div class="card-text py-10 px-0 clearfix col-md-6 float-left ">
+                                                <div class="col-md-4 float-left text-right pl-0">小红书链接</div>
+                                                <div class="col-md-9 float-left font-weight-bold">
+                                                    <EditInput :content="artistInfo.xiaohongshu_url" :is-edit="isEdit"
+                                                            @change="changeArtistXiaohongshu_url"></EditInput>
+                                                </div>
                                             </div>
-                                        </div>
-                                        <div class="card-text py-10 px-0 clearfix col-md-6 float-left ">
-                                            <div class="col-md-2 float-left text-right pl-0">小红书粉丝数</div>
-                                            <div class="col-md-10 float-left font-weight-bold">
-                                                <EditInput :content="artistInfo.xiaohongshu_fans_num" :is-edit="isEdit"
-                                                           @change="changeArtistXiaohongshu_fans_num"></EditInput>
+                                            <div class="card-text py-10 px-0 clearfix col-md-6 float-left ">
+                                                <div class="col-md-4 float-left text-right pl-0">小红书粉丝数</div>
+                                                <div class="col-md-9 float-left font-weight-bold">
+                                                    <EditInput :content="artistInfo.xiaohongshu_fans_num" :is-edit="isEdit"
+                                                            @change="changeArtistXiaohongshu_fans_num"></EditInput>
+                                                </div>
                                             </div>
-                                        </div>
 
-                                        <div class="card-text py-10 px-0 clearfix col-md-6 float-left ">
-                                            <div class="col-md-2 float-left text-right pl-0">备注</div>
-                                            <div class="col-md-10 float-left font-weight-bold">
-                                                <EditInput :content="artistInfo.desc" :is-edit="isEdit"
-                                                           @change="changeArtistDesc"></EditInput>
+                                            <div class="card-text py-10 px-0 clearfix col-md-6 float-left ">
+                                                <div class="col-md-4 float-left text-right pl-0">备注</div>
+                                                <div class="col-md-9 float-left font-weight-bold">
+                                                    <EditInput :content="artistInfo.desc" :is-edit="isEdit"
+                                                            @change="changeArtistDesc"></EditInput>
+                                                </div>
                                             </div>
-                                        </div>
-                                        <div class="card-text py-10 px-0 clearfix col-md-6 float-left ">
-                                            <div class="col-md-2 float-left text-right pl-0">博主级别</div>
-                                            <div class="col-md-10 float-left font-weight-bold">
-                                                <EditSelector :content="artistInfo.level"
-                                                              :options="taskLevelArr"
-                                                              :is-edit="isEdit"
-                                                              @change="changeArtistLevel"></EditSelector>
+                                            <div class="card-text py-10 px-0 clearfix col-md-6 float-left ">
+                                                <div class="col-md-4 float-left text-right pl-0">博主级别</div>
+                                                <div class="col-md-9 float-left font-weight-bold">
+                                                    <EditSelector :content="artistInfo.level"
+                                                                :options="taskLevelArr"
+                                                                :is-edit="isEdit"
+                                                                @change="changeArtistLevel"></EditSelector>
+                                                </div>
                                             </div>
-                                        </div>
-                                        <div class="card-text py-10 px-0 clearfix col-md-6 float-left ">
-                                            <div class="col-md-2 float-left text-right pl-0">孵化期</div>
-                                            <div class="col-md-10 float-left font-weight-bold" >
-                                                <EditGroupDatePicker :content="Incubationperiod" :is-edit="isEdit"
-                                                                     @change="changeArtistHatch"></EditGroupDatePicker>
+                                            <div class="card-text py-10 px-0 clearfix col-md-6 float-left ">
+                                                <div class="col-md-4 float-left text-right pl-0">孵化期</div>
+                                                <div class="col-md-9 float-left font-weight-bold" >
+                                                    <EditGroupDatePicker :content="Incubationperiod" :is-edit="isEdit"
+                                                                        @change="changeArtistHatch"></EditGroupDatePicker>
+                                                </div>
                                             </div>
-                                        </div>
-                                        <div class="card-text py-10 px-0 clearfix col-md-6 float-left ">
-                                            <div class="col-md-2 float-left text-right pl-0">商务合作要求</div>
-                                            <div class="col-md-10 float-left font-weight-bold">
-                                                <EditInput :content="artistInfo.cooperation_demand" :is-edit="isEdit"
-                                                           @change="changeArtistDemand"></EditInput>
+                                            <div class="card-text py-10 px-0 clearfix col-md-6 float-left ">
+                                                <div class="col-md-4 float-left text-right pl-0">商务合作要求</div>
+                                                <div class="col-md-9 float-left font-weight-bold">
+                                                    <EditInput :content="artistInfo.cooperation_demand" :is-edit="isEdit"
+                                                            @change="changeArtistDemand"></EditInput>
+                                                </div>
                                             </div>
-                                        </div>
-                                    </div>
+                                            <!-- </div> -->
 
-                                    <div class="segmentation-line example"></div>
-                                    <div class="card-text py-5 clearfix">
-                                        <div class="col-md-1 float-left text-right pl-0">录入人</div>
-                                        <div class="col-md-5 float-left font-weight-bold" v-if="artistInfo.creator" v-for="(entry,index) in artistInfo.creator" :key="index">
-                                            {{entry.name}}
-                                        </div>
-                                        <div class="col-md-1 float-left text-right pl-0">录入时间</div>
-                                        <div class="col-md-5 float-left font-weight-bold">
-                                            {{artistInfo.created_at}}
-                                        </div>
-                                    </div>
-                                    <div class="card-text py-5 clearfix">
-                                        <div class="col-md-1 float-left text-right pl-0">最近更新人</div>
-                                        <div class="col-md-5 float-left font-weight-bold" v-if="artistInfo.creator" v-for="(entry,index) in artistInfo.creator" :key="index">
-                                            {{entry.name}}
-                                        </div>
-                                        <div class="col-md-1 float-left text-right pl-0">最近更新时间</div>
-                                        <div class="col-md-5 float-left font-weight-bold">
-                                            {{artistInfo.updated_at}}
+                                            <div class="segmentation-line example float-left"></div>
+                                            <div class="card-text py-10 px-0 clearfix col-md-6 float-left ">
+                                                <div class="col-md-4 float-left text-right pl-0">录入人</div>
+                                                <div class="col-md-9 float-left font-weight-bold" v-if="artistInfo.creator" v-for="(entry,index) in artistInfo.creator" :key="index">
+                                                    {{entry.name}}
+                                                </div>
+                                            </div>
+                                            <div class="card-text py-10 px-0 clearfix col-md-6 float-left ">
+                                                <div class="col-md-4 float-left text-right pl-0">录入时间</div>
+                                                <div class="col-md-9 float-left font-weight-bold">
+                                                    {{artistInfo.created_at}}
+                                                </div>
+                                            </div>
+                                            <div class="card-text py-10 px-0 clearfix col-md-6 float-left ">
+                                                <div class="col-md-4 float-left text-right pl-0">最近更新人</div>
+                                                <div class="col-md-9 float-left font-weight-bold" v-if="artistInfo.creator" v-for="(entry,index) in artistInfo.creator" :key="index">
+                                                    {{entry.name}}
+                                                </div>
+                                            </div>
+                                            <div class="card-text py-10 px-0 clearfix col-md-6 float-left ">
+                                                <div class="col-md-4 float-left text-right pl-0">最近更新时间</div>
+                                                <div class="col-md-9 float-left font-weight-bold">
+                                                    {{artistInfo.updated_at}}
+                                                </div>
+                                            </div>
                                         </div>
                                     </div>
                                 </div>
@@ -565,18 +572,18 @@
                         </div>
                     </div>
                 </div>
-            </div>
 
-            <div class="panel">
-                <div class="col-md-12">
-                    <div class="card col-md-12">
-                        <div class="card-header card-header-transparent card-header-bordered">
-                            <h5>博主跟进</h5>
-                        </div>
-                        <div class="card-block">
-                            <div class="col-md-7 pl-0">
-                                <TaskFollowUp :follow-type="'博主'" trailType='blogger'
-                                              :trailId="$route.params.id"></TaskFollowUp>
+                <div class="panel" style="width: calc(34% - 15px);">
+                    <div class="col-md-12">
+                        <div class="card col-md-12">
+                            <div class="card-header card-header-transparent card-header-bordered">
+                                <h5>博主跟进</h5>
+                            </div>
+                            <div class="card-block">
+                                <div class="col-md-12 pl-0">
+                                    <TaskFollowUp :follow-type="'博主'" trailType='blogger'
+                                                :trailId="$route.params.id"></TaskFollowUp>
+                                </div>
                             </div>
                         </div>
                     </div>
@@ -788,7 +795,6 @@
 <script>
     import fetch from '../../assets/utils/fetch.js'
     import config from '../../assets/js/config'
-
     export default {
         data: function () {
             return {
@@ -858,7 +864,7 @@
                 isLoading: true,
                 distributionType:'',
                 alltaskshow:[],
-                changeArtistInfo:{},
+                changeArtistInfo:{}
             }
         },
         computed: {
@@ -903,16 +909,13 @@
                 _this.artistInfo.id = '';
                 _this.$refs.advertisingType.setValue('');
                 _this.$refs.workReleaseTime.setValue('');
-
             })
             this.getTimes()
             this.getArtistsBill()
         },
-
         methods: {
             charts: function () {
                 let myChart = echarts.init(document.getElementById('myChart'));
-
                 // 指定图表的配置项和数据
                 let option = {
                     title: {
@@ -970,10 +973,8 @@
                             stack: '总量',
                             data: [320, 332, 301, 334, 390, 330, 320]
                         },
-
                     ]
                 };
-
                 // 使用刚指定的配置项和数据显示图表。
                 myChart.setOption(option);
             },
@@ -1014,7 +1015,6 @@
                             if (_this.tasksInfo[i].status == 2) {
                                 doneTaskNum = doneTaskNum + 1
                             }
-
                         }
                     }
                      //项目
@@ -1026,32 +1026,40 @@
                             }
                         }
                      }
-
                     //孵化期时间 
                     if(_this.artistInfo.hatch_star_at&&_this.artistInfo.hatch_end_at){
-
                         _this.Incubationperiod = _this.artistInfo.hatch_star_at+'|'+_this.artistInfo.hatch_end_at
                     }
+                    // //状态转换
+                    // if(_this.artistInfo.intention==false){
+                    //     _this.updateType=2
+                    // }else{
+                    //     _this.updateType=1
+                    // }
+                    // if (_this.artistInfo.sign_contract_other == false) {
+                    //     _this.updateSign_contract_other = 2
+                    // } else {
+                    //     _this.updateSign_contract_other = 1
+                    // }
+                    // if (_this.artistInfo.artistWorkProportion == 1) {
+                    //     _this.artistInfo.artistWorkProportion = true
+                    // } else {
+                    //     _this.artistInfo.artistWorkProportion = false
+                    // }
                     _this.isLoading = false;
-
                 });
-
                 //任务状态跑组。试戏
                 fetch('get', '/task_types').then(function (response) {
                     _this.tasksType = response.data;
                 })
                 fetch('get', '/bloggers/gettype').then(function (response) {
                     _this.artistTypeArr = response.data
-
                 })
                 //  fetch('get','/bloggers/select?include=users').then(function(response){
                 //     response.data.forEach(item=>{
                 //          _this.principalIds.push(item.users.data.id)
-
                 //     })
-
                 // })
-
             },
             //账单
             getArtistsBill(page = 1,expense_type){
@@ -1077,17 +1085,16 @@
                         let D = time.getDate() + ' ';
                         item.release_time=Y+M+D
                     })
-
                 });
             },
             getArtistTasks: function () {
                 let _this = this;
                 fetch('get', '/bloggers/' + this.artistId+'/tasks').then(function (response) {
+                    console.log(response.data)
                     _this.alltaskshow = response.data
+                    // _this.artistTasksInfo = response.data;
                 })
             },
-
-
             addPrivacy: function () {
                 $('#addPrivacy').modal('hide')
                 this.$store.state.collectInfo = []
@@ -1097,21 +1104,17 @@
                 this.$store.state.incubationInfo = []
                 this.$store.state.billInfo = []
             },
-
             editBaseInfo: function () {
                 this.isEdit = true;
                 this.isStatrtEdit = false
                 this.changeInfo = [];
             },
-
             cancelEdit: function () {
                 this.getArtist()
                 this.isEdit = false;
                 this.isStatrtEdit = true
-
             },
             distributionPerson: function (value) {
-
                 this.distributionType = value;
                 if (this.artistInfo[value].data.length > 0) {
                     this.$store.state.participantsInfo = Object.assign([], this.artistInfo[value].data)
@@ -1131,21 +1134,15 @@
                 let oldPersonInfo = this.artistInfo[this.distributionType].data
                 //todo 删除和新增的数据有问题
                 if (this.artistInfo[this.distributionType].data.length > 0) {
-
                     for (let i = 0; i < this.artistInfo[this.distributionType].data.length; i++) {
-
                         if (personInfo.map(item => item.id).indexOf(this.artistInfo[this.distributionType].data[i].id) === -1) {
-
                             data.del_person_ids.push(this.artistInfo[this.distributionType].data[i].id)
                         }
                     }
                 }
                 for (let i = 0; i < this.$store.state.participantsInfo.length; i++) {
                     data.person_ids.push(this.$store.state.participantsInfo[i].id)
-
                 }
-
-
                 if (this.distributionType === 'publicity') {
                     data.type = 4
                     toast = '分配制作人成功'
@@ -1160,15 +1157,11 @@
             },
             //类型
             changArtistType: function (value) {
-
                 this.artistInfo.type.data.id= value
-
             },
             //沟通状态
             changeArtistCommunication: function (value) {
-
                 this.artistInfo.communication_status = value
-
             },
             //我公司签约
             changeArtistIntention: function (value) {
@@ -1177,12 +1170,9 @@
                 } else {
                     this.artistInfo.intention = false
                 }
-
-
             },
             //签约其他公司
             changeArtistSignStatus: function (value) {
-
                 if (value == 1) {
                     this.artistInfo.sign_contract_other = true
                 } else {
@@ -1191,7 +1181,6 @@
             },
             //平台id
             changeArtistPlatform_id(value) {
-
                 this.updatePlatform = value.join(',')
             },
             changeArtistSigning(value,name){
@@ -1224,7 +1213,6 @@
                 this.isStatrtEdit = true;
                 let _this = this;
                 this.artistId = this.$route.params.id;
-
                 if(this.artistInfo.intention==1){
                         this.artistInfo.intention = true
                 }else{
@@ -1235,7 +1223,6 @@
                 }else{
                     this.artistInfo.sign_contract_other=false
                 }
-               
                 this.changeArtistInfo = {
                     nickname:this.Namevalue,
                     type_id:this.artistInfo.type.data.id,
@@ -1280,13 +1267,11 @@
                 }
             },
             changeWorkAd: function (value) {
-
                 if (value) {
                     this.advertisingType = value.id;
                 } else {
                     this.advertisingType = 0;
                 }
-
             },
             //添加作品
             addWork: function () {
@@ -1305,13 +1290,9 @@
                 }
                 fetch('post', '/bloggers/new/production', data).then(function (response) {
                     toastr.success('创建成功');
-
                     $('#addWork').modal('hide');
                     _this.getTaskDate()
-
-
                 })
-
                 // let obj={
                 //     title:'制作人视频评分-视频评分',
                 //     principal_id:this.user.id,
@@ -1356,7 +1337,6 @@
                         start_minute=start_minute;
                     }
                     let start_second=time.getSeconds();
-
                     end_second=(60-start_second)*1000
                     if(start_minute<10){
                         start_minute="0"+start_minute;
@@ -1365,11 +1345,9 @@
                      if(time.getDay()<=5){
                         end_date = (5-time.getDay())*60*60*1000*24
                         end_timeStamp = time.getTime()+end_date+end_hour+end_minute+end_second
-
                     }else if(time.getDay()>5){
                         end_date = (7-time.getDay()+5)*60*60*1000*24
                         end_timeStamp = time.getTime()+end_date+end_hour+end_minute+end_second
-
                     }
                     let end = new Date(end_timeStamp)
                     let Y = end.getFullYear() + '-';
@@ -1382,7 +1360,6 @@
             },
             //添加任务
             addTask: function () {
-
                 if (!this.taskName) {
                     toastr.error('请填写任务名称！')
                     return
@@ -1403,7 +1380,6 @@
                 //     toastr.error('开始时间不能晚于截止时间');
                 //     return
                 // }
-
                 let start,end,startMin,endMin
                 startMin = this.startMinutes.split(':')
                 endMin = this.endMinutes.split(':')
@@ -1425,55 +1401,43 @@
                    desc:this.taskIntroduce,
                    type:this.taskType
                 }
-
                 fetch('post', '/tasks', data).then(function (response) {
-
                     toastr.success('创建成功');
                     $('#addTask').modal('hide');
                     _this.tasksData = response.data;
                     _this.getArtist()
                     $('.selectpicker').selectpicker('refresh')
                 })
-
             }
             ,
-
             changeTaskType: function (value) {
                 this.taskType = value
-
             }
             ,
-
             principalChange: function (value) {
                 this.Person_id = value = this.$store.state.newPrincipalInfo.id
             }
             ,
-
             participantChange: function (value) {
                 this.participant = value
             }
             ,
-
             changeTaskLevel: function (value) {
                 this.taskLevel = value
             }
             ,
-
             changeStartTime: function (value) {
                 this.startTime = value
             }
             ,
-
             changeStartMinutes: function (value) {
                 this.startMinutes = value
             }
             ,
-
             changeEndTime: function (value) {
                 this.endTime = value
             }
             ,
-
             changeEndMinutes: function (value) {
                 this.endMinutes = value
             }
@@ -1488,17 +1452,13 @@
                 this.Namevalue = value
             }
             ,
-
-
             //微博地址
             changeArtistWeibo_url(value) {
                 this.updateStar_weibo_infos.url = value
-
             }
             ,
             //微博粉丝
             changeArtistWeibo_fans_num(value) {
-
                 this.updateStar_weibo_infos.avatar = value
             }
             ,
@@ -1535,12 +1495,8 @@
             ,
             //孵化期
             changeArtistHatch: function (start, end) {
-
-
                 this.artistInfo.hatch_star_at = start
                 this.artistInfo.hatch_end_at = end
-
-
             }
             ,
             //合作需求
@@ -1549,7 +1505,6 @@
             }
             ,
             taskdetail(id) {
-
                 this.$router.push({path: '/tasks/' + id})
             },
             projectdetil(id) {
@@ -1560,7 +1515,6 @@
               let str=/[a-zA-Z0-9][-a-zA-Z0-9]{0,62}(\.[a-zA-Z0-9][-a-zA-Z0-9]{0,62})+\.?///网址是否合法检测
               let regex = /(https?:\/\/)?(\w+\.?)+(\/[a-zA-Z0-9\?%=_\-\+\/]+)?/gi//http,https有无检测
               var re=new RegExp(str);
-
                 if (!re.test(value)) {
                      alert('您的网址不正确')
                 }else{
@@ -1572,9 +1526,7 @@
                          window.open('http://' + match)
                     }
                    })
-
                 }
-
             },
             JumpDetails(id){
                 this.$router.push({path: '/tasks/' + id})
@@ -1600,7 +1552,6 @@
         user-select: none;
         z-index: 2;
     }
-
     .task-dropdown-item {
         position: absolute;
         transform: translate3d(299px, 36px, 0px);
@@ -1614,7 +1565,6 @@
     textarea{
         overflow: hidden;
     }
-
     .card-block .card-text {
         display: flex;
         align-items: center;
