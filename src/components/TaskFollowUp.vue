@@ -93,7 +93,7 @@
 
 <style scoped>
     .follow-task {
-        height: 240px;
+        height: 370px;
         overflow-y: hidden;
         overflow-x: hidden;
     }
