@@ -171,16 +171,6 @@
                             <a class="nav-link" data-toggle="tab" href="#forum-artist-tasks"
                                aria-controls="forum-present"
                                aria-expanded="false" role="tab" :class="artistInfo.sign_contract_status == 2?'':'active'">
-                                <!-- <template v-if="tasksInfo.length > 0">
-                                    <ToolTips :title="`已完成数量${completeNum}`">
-                                        任务 ({{completeNum}}/{{tasksInfo.length}})
-                                    </ToolTips>
-                                </template> -->
-                                <!-- <template v-if="tasksInfo.length == 0">
-                                    <ToolTips :title="`已完成数量${0}`">
-                                        任务 ({{0}}/{{tasksInfo.length}})
-                                    </ToolTips>
-                                </template> -->
                                 <ToolTips v-if="alltaskshow.length > 0" :title="`已完成数量${completeNum}`">
                                     任务 ({{completeNum}}/{{alltaskshow.length}})
                                 </ToolTips>
@@ -436,43 +426,6 @@
                                                               @change="changeArtistCommunication"></EditSelector>
                                             </div>
                                         </div>
-                                        <!-- <div class="card-text py-10 px-0 clearfix col-md-6 float-left ">
-                                            <div class="col-md-2 float-left text-right pl-0">与我司签约意向</div>
-                                            <div class="col-md-4 float-left font-weight-bold">
-                                                <EditSelector :content="updateType"
-                                                              :options="yesOrNoArr"
-                                                              :is-edit="isEdit"
-                                                              @change="changeArtistIntention"></EditSelector>
-                                            </div>
-                                            <div class="col-md-6 float-left" v-show="artistInfo.intention==false">
-                                                <div class="col-md-5 float-left text-right pl-10">不签约原因</div>
-                                                <div class="col-md-7 float-left font-weight-bold" >
-                                                    <EditInput :content="artistInfo.intention_desc"
-                                                            :is-edit="isEdit"
-                                                            @change="changReason" ></EditInput>
-                                                </div>
-                                            </div>
-
-                                        </div>
-
-                                        <div class="card-text py-10 px-0 clearfix col-md-6 float-left ">
-                                            <div class="col-md-2 float-left text-right pl-0">是否签约其他公司</div>
-                                            <div class="col-md-4 float-left font-weight-bold">
-                                                <EditSelector :content="updateSign_contract_other"
-                                                              :options="yesOrNoArr"
-                                                              :is-edit="isEdit"
-                                                              @change="changeArtistSignStatus"></EditSelector>
-                                            </div>
-                                            <div class="col-md-6 float-left" v-show="artistInfo.sign_contract_other==true">
-                                                <div class="col-md-5 float-left text-right pl-10">签约公司</div>
-                                                <div class="col-md-7 float-left font-weight-bold">
-                                                    <EditInput :content="artistInfo.sign_contract_other_name"
-                                                            :is-edit="isEdit"
-                                                            @change="changSigningCompany" ></EditInput>
-                                                </div>
-                                            </div>
-
-                                        </div> -->
                                         <div class="card-text py-10 px-0 clearfix col-md-6 float-left edit-height">
                                                 <div class="col-md-2 float-left text-right pl-0">与我司签约意向</div>
                                                 <div class="col-md-10 float-left font-weight-bold">
@@ -895,7 +848,7 @@
                 isLoading: true,
                 distributionType:'',
                 alltaskshow:[],
-                changeArtistInfo:{}
+                changeArtistInfo:{},
             }
         },
         computed: {
@@ -1019,7 +972,7 @@
                 if(data.participants.data){
                     this.scheduleParticipants = JSON.parse(JSON.stringify(data.participants.data));
                 }
-                $('#checkSchedule').modal('show')
+                // $('#checkSchedule').modal('show')
             },
             selectDate: function (value) {
                 this.selectedDate = value;
@@ -1069,22 +1022,6 @@
 
                         _this.Incubationperiod = _this.artistInfo.hatch_star_at+'|'+_this.artistInfo.hatch_end_at
                     }
-                    // //状态转换
-                    // if(_this.artistInfo.intention==false){
-                    //     _this.updateType=2
-                    // }else{
-                    //     _this.updateType=1
-                    // }
-                    // if (_this.artistInfo.sign_contract_other == false) {
-                    //     _this.updateSign_contract_other = 2
-                    // } else {
-                    //     _this.updateSign_contract_other = 1
-                    // }
-                    // if (_this.artistInfo.artistWorkProportion == 1) {
-                    //     _this.artistInfo.artistWorkProportion = true
-                    // } else {
-                    //     _this.artistInfo.artistWorkProportion = false
-                    // }
                     _this.isLoading = false;
 
                 });
@@ -1136,9 +1073,7 @@
             getArtistTasks: function () {
                 let _this = this;
                 fetch('get', '/bloggers/' + this.artistId+'/tasks').then(function (response) {
-                    console.log(response.data)
                     _this.alltaskshow = response.data
-                    // _this.artistTasksInfo = response.data;
                 })
             },
 
@@ -1290,6 +1225,7 @@
                 }else{
                     this.artistInfo.sign_contract_other=false
                 }
+               
                 this.changeArtistInfo = {
                     nickname:this.Namevalue,
                     type_id:this.artistInfo.type.data.id,
@@ -1301,12 +1237,19 @@
                     star_weibo_infos: this.updateStar_weibo_infos,
                     star_xiaohongshu_infos: this.updateStar_xiaohongshu_infos,
                     platform: this.updatePlatform,
-                    level:this.artistInfo.level,
+                    level:this.updatelevel,
                     cooperation_demand: this.updatedemand,
                     hatch_star_at: this.artistInfo.hatch_star_at,
                     hatch_end_at: this.artistInfo.hatch_end_at,
                     intention_desc:this.artistInfo.intention_desc,
                     sign_contract_other_name:this.artistInfo.sign_contract_other_name
+                }
+                if(!this.updatelevel){
+                    delete(this.changeArtistInfo.level)
+                }
+                if(!this.artistInfo.hatch_star_at||!this.artistInfo.hatch_end_at){
+                    delete(this.changeArtistInfo.hatch_star_at)
+                    delete(this.changeArtistInfo.hatch_end_at)
                 }
                 console.log( this.changeArtistInfo)
                 fetch('put', '/bloggers/' + this.artistId, this.changeArtistInfo).then(function (response) {
@@ -1577,7 +1520,7 @@
             //博主级别
             changeArtistLevel: function (value) {
                 
-               this.artistInfo.level= value
+               this.updatelevel= value
             }
             ,
             //孵化期
