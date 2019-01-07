@@ -415,6 +415,13 @@
                                                 </div>
                                             </div>
                                             <div class="card-text py-10 px-0 clearfix col-md-6 float-left edit-height">
+                                                <div class="col-md-3 float-left text-right pl-0">星探</div>
+                                                <div class="col-md-9 float-left font-weight-bold">
+                                                    <EditInput :content="artistInfo.artist_scout_name" :is-edit="isEdit"
+                                                               @change="(value) => changeArtistBaseInfo(value, 'artist_scout_name')"></EditInput>
+                                                </div>
+                                            </div>
+                                            <div class="card-text py-10 px-0 clearfix col-md-6 float-left edit-height">
                                                 <div class="col-md-3 float-left text-right pl-0">与我司签约意向</div>
                                                 <div class="col-md-9 float-left font-weight-bold">
                                                     <ConditionalInput ref="condition" :is-edit="isEdit" :content="artistInfo.intention"
@@ -431,13 +438,6 @@
                                                                     :input-content="artistInfo.sign_contract_other_name"
                                                                     :condition="1"
                                                                     @change="(value) => changeArtistBaseInfo(value, 'sign_contract_other')"></ConditionalInput>
-                                                </div>
-                                            </div>
-                                            <div class="card-text py-10 px-0 clearfix col-md-6 float-left edit-height">
-                                                <div class="col-md-3 float-left text-right pl-0">星探</div>
-                                                <div class="col-md-9 float-left font-weight-bold">
-                                                    <EditInput :content="artistInfo.artist_scout_name" :is-edit="isEdit"
-                                                            @change="(value) => changeArtistBaseInfo(value, 'artist_scout_name')"></EditInput>
                                                 </div>
                                             </div>
                                             <div class="card-text py-10 px-0 clearfix col-md-6 float-left edit-height">

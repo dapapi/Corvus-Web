@@ -1,9 +1,9 @@
 <template>
     <div class="">
-        <div class="col-md-2 text-right float-left" :class="isEdit ? 'line-fiexd-height': ''">{{typeName}}来源</div>
+        <div class="text-right float-left" :class="[detailPage? 'col-md-3': 'col-md-2',isEdit ? 'line-fiexd-height': '']">{{typeName}}来源</div>
         <div v-if="isEditSituation || alwaysShow">
             <!-- ⬆️判断是否永久显示 -->
-            <div :class="detailPage?'col-md-10 float-left font-weight-bold expfee':'col-md-10 float-left pl-0'">
+            <div :class="detailPage?'col-md-9 float-left font-weight-bold expfee':'col-md-10 float-left pl-0'">
                 <!-- ⬆️启用详情页样式 -->
                 <div class="float-left col-md-6 px-0" v-if="trailOriginArr.length > 0">
                     <selectors :options="trailOriginArr" @change="changeTrailOriginType" ref='contentType'
@@ -15,7 +15,7 @@
                     </div>
                 </template>
                 <template v-else-if="(trailOrigin === '4' || trailOrigin === '5')">
-                    <div class="col-md-6 float-left pr-0 pl-45">
+                    <div class="col-md-6 float-left pr-0">
                         <input-selectors @change="changeTrailOrigin" :placeholder='memberFinder' type="selector"
                                          :propSelectMemberName='trailOriginPerson.name'></input-selectors>
                     </div>
@@ -23,12 +23,12 @@
             </div>
         </div>
         <div v-if="!isEditSituation  && !(trailOrigin === '4' || trailOrigin === '5')"
-             class="col-md-10 float-left font-weight-bold expfee">
+             class="float-left font-weight-bold expfee" :class="detailPage? 'col-md-9' : 'col-md-10'">
             <span>{{typeFinder}}</span>
             <span v-if="content"> - {{content.value || content}}</span>
         </div>
         <div v-if="!isEditSituation && (trailOrigin === '4' || trailOrigin === '5')"
-             class="col-md-10 float-left font-weight-bold expfee">
+             class="float-left font-weight-bold expfee" :class="detailPage? 'col-md-9' : 'col-md-10'">
             <span>{{typeFinder}}  {{memberFinder}}</span>
         </div>
     </div>
@@ -36,7 +36,6 @@
 
 <script>
     import config from '@/assets/js/config'
-    import fetch from '@/assets/utils/fetch.js'
     import verify from '@/assets/utils/verify.js'
     import {mapState} from 'vuex'
 

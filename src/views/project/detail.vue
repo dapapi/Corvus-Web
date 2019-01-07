@@ -196,9 +196,9 @@
                                                         </template>
                                                     </div>
                                                 </div>
-                                                <div class="col-md-8 float-left pr-0 pl-10"
+                                                <div class="col-md-8 float-left pr-0 pl-5"
                                                     :class="item.isFinish == 1 ? 'finish-font-color' : ''"
-                                                    style=" line-height: 40px;">
+                                                    style=" line-height: 30px;font-size: 12px;">
                                                     {{ item.name }}
                                                 </div>
                                             </div>
@@ -216,9 +216,9 @@
                                                         </template>
                                                     </div>
                                                 </div>
-                                                <div class="col-md-8 float-left pr-0 pl-10"
+                                                <div class="col-md-8 float-left pr-0 pl-5"
                                                     :class="item.isFinish == 1 ? 'finish-font-color' : ''"
-                                                    style=" line-height: 40px;">
+                                                    style=" line-height: 30px;font-size: 12px;">
                                                     {{ item.name }}
                                                 </div>
                                             </div>
@@ -228,7 +228,7 @@
                                             <div class="line"
                                                 :class="item.isFinish == 1 ? 'finish-color' : 'unfinish-color'"></div>
                                         </div>
-                                        <div class="pt-10" v-if="item.isFinish">
+                                        <div class="pt-10 font-size-14" v-if="item.isFinish">
                                             <div>{{ item.finisher }}</div>
                                             <div>{{ item.finish_at }}</div>
                                         </div>
@@ -524,7 +524,7 @@
                                             <button class="btn btn-primary" @click="changeProjectInfo">确定</button>
                                         </div>
                                     </div>
-                                    <div class="card-block" v-if="projectInfo.title">
+                                    <div class="py-20" v-if="projectInfo.title">
                                         <div class="clearfix">
                                             <div class="card-text py-10 px-0 clearfix col-md-6 float-left ">
                                                 <div class="col-md-3 float-left text-right pl-0">项目名称</div>
@@ -594,8 +594,8 @@
                                             </div>
                                             <div class="card-text py-10 px-0 clearfix col-md-6 float-left "
                                                 v-if="projectInfo.type != 5">
-                                                <div class="col-md-2 float-left text-right pl-0">预计支出/元</div>
-                                                <div class="col-md-10 float-left font-weight-bold">
+                                                <div class="col-md-3 float-left text-right pl-0">预计支出/元</div>
+                                                <div class="col-md-9 float-left font-weight-bold">
                                                     <EditNumberSpinner :is-edit="isEdit"
                                                                     :content="projectInfo.projected_expenditure"
                                                                     @change="(value) => changeProjectBaseInfo(value, 'projected_expenditure')"></EditNumberSpinner>
@@ -1691,7 +1691,6 @@
 
             addProjectProgress: function (status) {
                 fetch('put', '/projects/' + this.projectId + '/course', {status: status}).then(response => {
-                    console.log(response)
                     let flagInfo = this.projectProgressInfo.find(item => item.status == status);
                     flagInfo['finisher'] = response.data.user;
                     flagInfo['finish_at'] = response.data.updated_at;
@@ -1921,7 +1920,6 @@
                         if (value == this.projectInfo.trail.data.fee) {
                             return
                         }
-                        console.log('fee')
                         if (this.changeInfo.trail) {
                             this.changeInfo.trail.fee = value
                         } else {
@@ -1956,7 +1954,6 @@
                         if (value == this.projectInfo.trail.data.resource_type) {
                             return
                         }
-                        console.log('resource_type')
                         if (this.changeInfo.trail) {
                             this.changeInfo.trail.resource_type = value
                         } else {
@@ -1970,7 +1967,6 @@
                         if (value == this.projectInfo.trail.data.resource) {
                             return
                         }
-                        console.log('resource')
                         if (this.changeInfo.trail) {
                             this.changeInfo.trail.resource = value
                         } else {
@@ -2233,8 +2229,8 @@
     }
 
     .image-wraper {
-        width: 40px;
-        height: 40px;
+        width: 30px;
+        height: 30px;
     }
 
     .image-wraper img {

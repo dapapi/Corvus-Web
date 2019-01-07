@@ -278,7 +278,6 @@
     .users .avatar {
         width: 30px;
         height: 30px;
-        /* overflow: hidden; */
     }
 
     .selector-page-content {
@@ -300,7 +299,8 @@
         user-select: none;
         border: 1px solid #f2f2f2;
         overflow: hidden;
-        z-index: 10;
+        z-index: 1000;
+        top: 36px;
     }
 
     .page-nav-tabs {
