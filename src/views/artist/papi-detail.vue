@@ -1310,12 +1310,19 @@
                     star_weibo_infos: this.updateStar_weibo_infos,
                     star_xiaohongshu_infos: this.updateStar_xiaohongshu_infos,
                     platform: this.updatePlatform,
-                    level:this.artistInfo.level,
+                    level:this.updatelevel,
                     cooperation_demand: this.updatedemand,
                     hatch_star_at: this.artistInfo.hatch_star_at,
                     hatch_end_at: this.artistInfo.hatch_end_at,
                     intention_desc:this.artistInfo.intention_desc,
                     sign_contract_other_name:this.artistInfo.sign_contract_other_name
+                }
+                if(!this.updatelevel){
+                    delete(this.changeArtistInfo.level)
+                }
+                if(!this.artistInfo.hatch_star_at||!this.artistInfo.hatch_end_at){
+                    delete(this.changeArtistInfo.hatch_star_at)
+                    delete(this.changeArtistInfo.hatch_end_at)
                 }
                 console.log( this.changeArtistInfo)
                 fetch('put', '/bloggers/' + this.artistId, this.changeArtistInfo).then(function (response) {
@@ -1586,7 +1593,7 @@
             //博主级别
             changeArtistLevel: function (value) {
                 
-               this.artistInfo.level= value
+               this.updatelevel= value
             }
             ,
             //孵化期
