@@ -122,647 +122,651 @@
                 </div>
             </div>
 
-            <div class="col-md-12 panel" v-if="projectInfo.title">
-                <div class="col-md-12">
-                    <ul class="nav nav-tabs nav-tabs-line" role="tablist">
-                        <li class="nav-item" role="presentation"
-                            v-if="projectInfo.type != 5 && projectInfo.approval_status == 232">
-                            <a class="nav-link" :class="projectInfo.type != 5 ? 'active' : ''" data-toggle="tab"
-                               href="#forum-project-follow"
-                               aria-controls="forum-base"
-                               aria-expanded="true" role="tab">项目进度</a>
-                        </li>
-                        <li class="nav-item" role="presentation" @click="getProjectTasks"
-                            v-if="projectInfo.type == 5 || projectInfo.approval_status == 232">
-                            <a class="nav-link" data-toggle="tab" href="#forum-project-tasks"
-                               aria-controls="forum-present"
-                               aria-expanded="false" role="tab">
-                                <template v-if="projectTasksInfo.length > 0">
-                                    <ToolTips :title="`已完成数量${completeNum}`">
-                                        任务 ({{completeNum}}/{{projectTasksInfo.length}})
-                                    </ToolTips>
-                                </template>
-                                <template v-else>
-                                    任务
-                                </template>
-                            </a>
-                        </li>
-                        <!--<li class="nav-item" role="presentation"-->
-                        <!--v-if="projectInfo.type != 5 && projectInfo.approval_status == 232">-->
-                        <!--<a class="nav-link" data-toggle="tab" href="#forum-project-contract"-->
-                        <!--aria-controls="forum-present"-->
-                        <!--aria-expanded="false" role="tab">合同</a>-->
-                        <!--</li>-->
-                        <!--<li class="nav-item" role="presentation" @click="getProjectBill"-->
-                        <!--v-if="projectInfo.type != 5 && projectInfo.approval_status == 232">-->
-                        <!--<a class="nav-link" data-toggle="tab" href="#forum-project-bill"-->
-                        <!--aria-controls="forum-present"-->
-                        <!--aria-expanded="false" role="tab">账单</a>-->
-                        <!--</li>-->
-                        <!--<li class="nav-item" role="presentation" @click="getProjectReturned"-->
-                        <!--v-if="projectInfo.type != 5 && projectInfo.approval_status == 232">-->
-                        <!--<a class="nav-link" data-toggle="tab" href="#forum-project-payback"-->
-                        <!--aria-controls="forum-present"-->
-                        <!--aria-expanded="false" role="tab">回款</a>-->
-                        <!--</li>-->
-                        <li class="nav-item" role="presentation">
-                            <a class="nav-link"
-                               :class="(projectInfo.type == 5 || projectInfo.approval_status != 232) ? 'active' : ''"
-                               data-toggle="tab"
-                               href="#forum-project-base"
-                               aria-controls="forum-base"
-                               aria-expanded="true" role="tab">概况</a>
-                        </li>
-                    </ul>
-                    <div class="tab-content nav-tabs-animate bg-white">
-                        <!-- 项目进度 -->
-                        <div class="tab-pane animation-fade pb-10" @click="getProjectProgress"
-                             v-if="projectInfo.type != 5 && projectInfo.approval_status == 232"
-                             :class="projectInfo.type != 5 ? 'active' : ''"
-                             id="forum-project-follow" role="tabpanel">
-                            <div class="clearfix mt-20">
-                                <div class="project-progress" v-for="item in projectProgressInfo">
-                                    <template v-if="!item.isFinish">
-                                        <div class="clearfix pointer-content" @click="addProjectProgress(item.status)">
-                                            <div class="col-md-4 p-0 float-left">
-                                                <div class="image-wraper">
-                                                    <template v-if="item.isFinish == 1">
-                                                        <img src="https://res-crm.papitube.com/progress-selected.png"
-                                                             alt="">
-                                                    </template>
-                                                    <template v-else>
-                                                        <img src="https://res-crm.papitube.com/progress.png" alt="">
-                                                    </template>
-                                                </div>
-                                            </div>
-                                            <div class="col-md-8 float-left pr-0 pl-10"
-                                                 :class="item.isFinish == 1 ? 'finish-font-color' : ''"
-                                                 style=" line-height: 40px;">
-                                                {{ item.name }}
-                                            </div>
-                                        </div>
+            <div style="display: flex; justify-content: space-between; align-items: flex-start">
+                <div class="panel" style="width: calc(66% - 15px);" v-if="projectInfo.title">
+                    <div class="col-md-12">
+                        <ul class="nav nav-tabs nav-tabs-line" role="tablist">
+                            <li class="nav-item" role="presentation"
+                                v-if="projectInfo.type != 5 && projectInfo.approval_status == 232">
+                                <a class="nav-link" :class="projectInfo.type != 5 ? 'active' : ''" data-toggle="tab"
+                                href="#forum-project-follow"
+                                aria-controls="forum-base"
+                                aria-expanded="true" role="tab">项目进度</a>
+                            </li>
+                            <li class="nav-item" role="presentation" @click="getProjectTasks"
+                                v-if="projectInfo.type == 5 || projectInfo.approval_status == 232">
+                                <a class="nav-link" data-toggle="tab" href="#forum-project-tasks"
+                                aria-controls="forum-present"
+                                aria-expanded="false" role="tab">
+                                    <template v-if="projectTasksInfo.length > 0">
+                                        <ToolTips :title="`已完成数量${completeNum}`">
+                                            任务 ({{completeNum}}/{{projectTasksInfo.length}})
+                                        </ToolTips>
                                     </template>
                                     <template v-else>
-                                        <div class="clearfix">
-                                            <div class="col-md-4 p-0 float-left">
-                                                <div class="image-wraper">
-                                                    <template v-if="item.isFinish == 1">
-                                                        <img src="https://res-crm.papitube.com/progress-selected.png"
-                                                             alt="">
-                                                    </template>
-                                                    <template v-else>
-                                                        <img src="https://res-crm.papitube.com/progress.png" alt="">
-                                                    </template>
-                                                </div>
-                                            </div>
-                                            <div class="col-md-8 float-left pr-0 pl-10"
-                                                 :class="item.isFinish == 1 ? 'finish-font-color' : ''"
-                                                 style=" line-height: 40px;">
-                                                {{ item.name }}
-                                            </div>
-                                        </div>
+                                        任务
                                     </template>
-                                    <div class="pt-20">
-                                        <div class="points" :class="item.isFinish == 1 ? 'finish-color' : ''"></div>
-                                        <div class="line"
-                                             :class="item.isFinish == 1 ? 'finish-color' : 'unfinish-color'"></div>
-                                    </div>
-                                    <div class="pt-10" v-if="item.isFinish">
-                                        <div>{{ item.finisher }}</div>
-                                        <div>{{ item.finish_at }}</div>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-                        <!-- 任务 -->
-                        <div class="tab-pane animation-fade pb-20 fixed-button-father" id="forum-project-tasks"
-                             role="tabpanel" v-if="projectInfo.approval_status == 232">
-                            <table class="table table-hover is-indent example" data-plugin="animateList"
-                                   data-animate="fade"
-                                   data-child="tr"
-                                   data-selectable="selectable">
-                                <tr class="animation-fade"
-                                    style="animation-fill-mode: backwards; animation-duration: 250ms; animation-delay: 0ms;">
-                                    <th class="cell-300" scope="col">任务名称</th>
-                                    <th class="cell-300" scope="col">任务类型</th>
-                                    <th class="cell-300" scope="col">状态</th>
-                                    <th class="cell-300" scope="col">负责人</th>
-                                    <th class="cell-300" scope="col">截止日期</th>
-                                </tr>
-                                <tbody>
-                                <tr v-for="task in projectTasksInfo">
-                                    <td class="pointer-content" @click="redirectTask(task.id)">{{ task.title }}</td>
-                                    <td>{{ task.type.data.title }}</td>
-                                    <td>
-                                        <template v-if="task.status === 1">进行中</template>
-                                        <template v-if="task.status === 2">已完成</template>
-                                        <template v-if="task.status === 3">已停止</template>
-                                    </td>
-                                    <td>{{ task.principal.data.name }}</td>
-                                    <td>{{ task.end_at }}</td>
-                                </tr>
-                                </tbody>
-                            </table>
-                            <div class="col-md-1" style="margin: 6rem auto" v-if="projectTasksInfo.length === 0">
-                                <img src="https://res.papitube.com/corvus/images/content-none.png" alt=""
-                                     style="width: 100%">
-                            </div>
-
-                            <div class="site-action fixed-button" data-plugin="actionBtn" data-toggle="modal"
-                                 data-target="#addTask">
-                                <button type="button" @click="setTaskPrincipal"
-                                        class="site-action-toggle btn-raised btn btn-success btn-floating waves-effect waves-classic">
-                                    <i class="front-icon iconfont icon-tianjia1 animation-scale-up" aria-hidden="true"
-                                       style="font-size:30px"></i>
-                                    <i class="back-icon iconfont icon-tianjia1 animation-scale-up" aria-hidden="true"
-                                       style="font-size:30px"></i>
-                                </button>
-                            </div>
-
-                        </div>
-                        <!-- 合同 -->
-                        <!--<div class="tab-pane animation-fade py-10"-->
-                        <!--v-if="projectInfo.type != 5 && projectInfo.approval_status == 232"-->
-                        <!--id="forum-project-contract"-->
-                        <!--role="tabpanel">-->
-                        <!--<table class="table table-hover example"-->
-                        <!--data-child="tr">-->
-                        <!--<tr>-->
-                        <!--<th class="cell-300" scope="col">合同编号</th>-->
-                        <!--<th class="cell-300" scope="col">项目名称</th>-->
-                        <!--<th class="cell-300" scope="col">艺人</th>-->
-                        <!--<th class="cell-300" scope="col">合同类型</th>-->
-                        <!--<th class="cell-300" scope="col">创建人</th>-->
-                        <!--<th class="cell-300" scope="col">创建时间</th>-->
-                        <!--<th class="cell-300" scope="col">审批状态</th>-->
-                        <!--</tr>-->
-                        <!--<tbody>-->
-                        <!--<tr>-->
-                        <!--<td>#12312sdf231</td>-->
-                        <!--<td>测试合同</td>-->
-                        <!--<td>papi、bigger</td>-->
-                        <!--<td>收入</td>-->
-                        <!--<td>陈晓禹</td>-->
-                        <!--<td>2018-12-27</td>-->
-                        <!--<td>审批中</td>-->
-                        <!--</tr>-->
-                        <!--</tbody>-->
-                        <!--</table>-->
-
-                        <!--</div>-->
-                        <!--&lt;!&ndash; 账单 &ndash;&gt;-->
-                        <!--<div class="tab-pane animation-fade py-10"-->
-                        <!--v-if="projectInfo.type != 5 && projectInfo.approval_status == 232" id="forum-project-bill"-->
-                        <!--role="tabpanel">-->
-                        <!--<div class="clearfix">-->
-                        <!--<div class="float-left" style="padding: .715rem 1.429rem">-->
-                        <!--<div class="float-left pr-40">合同金额 <span class="money-color">10000元</span></div>-->
-                        <!--<div class="float-left pr-40">支出金额 <span class="money-color">1000元</span></div>-->
-                        <!--<div class="float-left pr-40">税费 <span class="money-color">10000元</span></div>-->
-                        <!--<div class="float-left pr-40">papi分成 <span class="money-color">10000元</span></div>-->
-                        <!--<div class="float-left pr-40">bigger分成 <span class="money-color">10000元</span></div>-->
-                        <!--<div class="float-left pr-40">我司分成 <span class="money-color">10000元</span></div>-->
-                        <!--</div>-->
-                        <!--<div class="float-right" style="padding: .715rem 0">-->
-                        <!--<span class="pointer-content hover-content" data-toggle="modal"-->
-                        <!--data-target="#addBill">-->
-                        <!--<i class="iconfont icon-tianjia pr-5"></i>新增结算单</span>-->
-                        <!--</div>-->
-                        <!--</div>-->
-                        <!--<table class="table table-hover" data-child="tr">-->
-                        <!--<tr>-->
-                        <!--<th class="cell-300" scope="col">费用类型</th>-->
-                        <!--<th class="cell-300 position-relative" scope="col">-->
-                        <!--<template v-if="filterFee === 1">全部</template>-->
-                        <!--<template v-if="filterFee === 2">成本</template>-->
-                        <!--<template v-if="filterFee === 3">收入</template>-->
-                        <!--<i class="iconfont icon-plus-select-down pl-2" aria-hidden="true"-->
-                        <!--id="projectDropdown" data-toggle="dropdown" aria-expanded="false"></i>-->
-                        <!--<div class="dropdown-menu" aria-labelledby="projectDropdown" role="menu">-->
-                        <!--<a class="dropdown-item" role="menuitem" v-show="filterFee !== 1"-->
-                        <!--@click="filterProjectFee(1)">全部</a>-->
-                        <!--<a class="dropdown-item" role="menuitem" v-show="filterFee !== 2"-->
-                        <!--@click="filterProjectFee(2)">成本</a>-->
-                        <!--<a class="dropdown-item" role="menuitem" v-show="filterFee !== 3"-->
-                        <!--@click="filterProjectFee(3)">收入</a>-->
-                        <!--</div>-->
-                        <!--</th>-->
-                        <!--<th class="cell-300" scope="col">艺人</th>-->
-                        <!--<th class="cell-300" scope="col">金额</th>-->
-                        <!--<th class="cell-300" scope="col">收款/审批时间</th>-->
-                        <!--<th class="cell-300" scope="col">操作人</th>-->
-                        <!--</tr>-->
-                        <!--<tbody>-->
-                        <!--<tr v-for="bill in projectBillsInfo">-->
-                        <!--<td>{{ bill.expence_name }}</td>-->
-                        <!--<td>{{ bill.expense_type }}</td>-->
-                        <!--<td>{{ bill.artist_name }}</td>-->
-                        <!--<td>{{ bill.money }}</td>-->
-                        <!--<td>{{ bill.pay_rec_time }}</td>-->
-                        <!--<td>{{ bill.action_user }}</td>-->
-                        <!--</tr>-->
-                        <!--</tbody>-->
-                        <!--</table>-->
-                        <!--<div class="col-md-1" style="margin: 6rem auto" v-if="projectBillsInfo.length === 0">-->
-                        <!--<img src="https://res.papitube.com/corvus/images/content-none.png" alt=""-->
-                        <!--style="width: 100%">-->
-                        <!--</div>-->
-                        <!--</div>-->
-                        <!--&lt;!&ndash; 回款 &ndash;&gt;-->
-                        <!--<div class="tab-pane animation-fade pt-10 pb-20"-->
-                        <!--v-if="projectInfo.type != 5 && projectInfo.approval_status == 232"-->
-                        <!--id="forum-project-payback" role="tabpanel">-->
-                        <!--<div class="clearfix">-->
-                        <!--<ul class="nav nav-tabs nav-tabs-line float-left" role="tablist"-->
-                        <!--style="border-bottom: 0">-->
-                        <!--<li class="nav-item" role="presentation">-->
-                        <!--<a class="nav-link active" data-toggle="tab" href="#forum-item-bill"-->
-                        <!--aria-controls="forum-base"-->
-                        <!--aria-expanded="true" role="tab">bigger研究所/papi酱</a>-->
-                        <!--</li>-->
-                        <!--<li class="nav-item" role="presentation">-->
-                        <!--<a class="nav-link" data-toggle="tab" href="#forum-item-bill"-->
-                        <!--aria-controls="forum-base"-->
-                        <!--aria-expanded="true" role="tab">周冬雨</a>-->
-                        <!--</li>-->
-                        <!--</ul>-->
-                        <!--<div class="float-right" style="padding: .715rem 1.429rem">-->
-                        <!--<span class="pointer-content hover-content" data-toggle="modal"-->
-                        <!--data-target="#addPaybackTime" @click="editProjectPaybackTime(false)">-->
-                        <!--<i class="iconfont icon-tianjia pr-5"></i>新建回款期次</span>-->
-                        <!--</div>-->
-                        <!--</div>-->
-                        <!--<div class="tab-pane animation-fade" id="forum-item-payback">-->
-                        <!--<div class="example" v-if="projectReturnInfo.meta">-->
-                        <!--<div class="col-md-3 float-left pl-0">-->
-                        <!--<div>合同金额<span class="money-color pl-5">-->
-                        <!--{{ projectReturnInfo.meta.contractReturnedMoney ? projectReturnInfo.meta.contractReturnedMoney : 0}}</span>/元-->
-                        <!--</div>-->
-                        <!--</div>-->
-                        <!--<div class="col-md-3 float-left pl-0">-->
-                        <!--<div>已回款<span class="money-color pl-5">-->
-                        <!--{{ projectReturnInfo.meta.alreadyReturnedMoney ? projectReturnInfo.meta.alreadyReturnedMoney : 0}}</span>/元-->
-                        <!--</div>-->
-                        <!--</div>-->
-                        <!--<div class="col-md-3 float-left pl-0">-->
-                        <!--<div>未回款<span class="money-color pl-5">-->
-                        <!--{{ projectReturnInfo.meta.notReturnedMoney ? projectReturnInfo.meta.notReturnedMoney : 0}}</span>/元-->
-                        <!--</div>-->
-                        <!--</div>-->
-                        <!--<div class="col-md-3 float-left pl-0">-->
-                        <!--<div>已开票<span class="money-color pl-5">-->
-                        <!--{{ projectReturnInfo.meta.alreadyinvoice ? projectReturnInfo.meta.alreadyinvoice : 0}}</span>/元-->
-                        <!--</div>-->
-                        <!--</div>-->
-                        <!--</div>-->
-                        <!--<div class="dividing-line"></div>-->
-                        <!--<div v-for="returnMoney in projectReturnInfo.data">-->
-                        <!--<div class="clearfix py-20">-->
-                        <!--<div class="float-left font-weight-bold">{{ returnMoney.issue_name }}</div>-->
-                        <!--<div class="float-right">-->
-                        <!--<span class="mr-40 pointer-content hover-content" data-toggle="modal"-->
-                        <!--data-target="#addPayback" @click="selectedPaybackTime(returnMoney)">-->
-                        <!--<i class="iconfont icon-tianjia pr-5"></i>回款记录</span>-->
-                        <!--<span class="pointer-content hover-content" data-toggle="modal"-->
-                        <!--data-target="#addInvoice" @click="selectedPaybackTime(returnMoney)">-->
-                        <!--<i class="iconfont icon-tianjia pr-5"></i>开票记录</span>-->
-                        <!--</div>-->
-                        <!--</div>-->
-                        <!--<div class="clearfix">-->
-                        <!--<div class="col-md-2 float-left pl-0">回款日期<span class="pl-5">{{ returnMoney.plan_returned_time }}</span>-->
-                        <!--</div>-->
-                        <!--<div class="col-md-2 float-left pl-0">计划回款-->
-                        <!--<span class="money-color pl-5">-->
-                        <!--{{ returnMoney.plan_returned_money }}元-->
-                        <!--</span>-->
-                        <!--</div>-->
-                        <!--<div class="col-md-2 float-left pl-0">实际回款<span class="money-color pl-5">22312031203元</span>-->
-                        <!--</div>-->
-                        <!--<div class="col-md-2 float-left pl-0">开票金额<span-->
-                        <!--class="money-color pl-5">12312222元</span>-->
-                        <!--</div>-->
-                        <!--<div class="col-md-2 float-right pr-0 text-right" style="color: #cccccc;">-->
-                        <!--<i class="iconfont icon-bianji2 pr-40 pointer-content" data-toggle="modal"-->
-                        <!--data-target="#addPaybackTime"-->
-                        <!--@click="editProjectPaybackTime(true, returnMoney)"></i>-->
-                        <!--<i class="iconfont icon-shanchu1 pointer-content"-->
-                        <!--data-toggle="modal" data-target="#paybackDel"-->
-                        <!--@click="delProjectPayback(returnMoney.id)"></i>-->
-                        <!--</div>-->
-                        <!--</div>-->
-
-                        <!--<div v-for="item in returnMoney.money.data">-->
-                        <!--<div class="segmentation-line example"></div>-->
-                        <!--<div v-if="item.type.data.type === 1">-->
-                        <!--<div class="font-weight-bold">回款记录</div>-->
-                        <!--<div class="clearfix">-->
-                        <!--<div class="col-md-2 float-left pl-0">回款日期<span-->
-                        <!--class="pl-5">{{ item.plan_returned_time }}</span>-->
-                        <!--</div>-->
-                        <!--<div class="col-md-2 float-left pl-0">回款金额<span-->
-                        <!--class="money-color pl-5">{{ item.plan_returned_money }}元</span>-->
-                        <!--</div>-->
-                        <!--<div class="col-md-2 float-left pl-0">付款方式<span-->
-                        <!--class="pl-5">{{ item.type.data.plan_returned_money }}</span>-->
-                        <!--</div>-->
-                        <!--<div class="col-md-2 float-right pr-0 text-right"-->
-                        <!--style="color: #cccccc;">-->
-                        <!--<i class="iconfont icon-bianji2 pr-40 pointer-content"-->
-                        <!--data-toggle="modal" data-target="#addPayback"-->
-                        <!--@click="editProjectPaybackRecording(item, returnMoney, 'payback')"></i>-->
-                        <!--<i class="iconfont icon-shanchu1 pointer-content"-->
-                        <!--data-toggle="modal" data-target="#paybackDel"-->
-                        <!--@click="delProjectPayback(item.id)"></i>-->
-                        <!--</div>-->
-                        <!--</div>-->
-                        <!--</div>-->
-                        <!--<div v-if="item.type.data.type === 2">-->
-                        <!--<div class="font-weight-bold">开票记录</div>-->
-                        <!--<div class="clearfix">-->
-                        <!--<div class="col-md-2 float-left pl-0">开票日期<span-->
-                        <!--class="pl-5">{{ item.plan_returned_time }}</span>-->
-                        <!--</div>-->
-                        <!--<div class="col-md-2 float-left pl-0">开票金额<span-->
-                        <!--class="money-color pl-5">{{ item.plan_returned_money }}元</span>-->
-                        <!--</div>-->
-                        <!--<div class="col-md-2 float-left pl-0">票据类型<span class="pl-5">{{ item.type.data.plan_returned_money }}</span>-->
-                        <!--</div>-->
-                        <!--<div class="col-md-2 float-right pr-0 text-right"-->
-                        <!--style="color: #cccccc;">-->
-                        <!--<i class="iconfont icon-bianji2 pr-40 pointer-content"-->
-                        <!--data-toggle="modal" data-target="#addInvoice"-->
-                        <!--@click="editProjectPaybackRecording(item, returnMoney)"></i>-->
-                        <!--<i class="iconfont icon-shanchu1 pointer-content"-->
-                        <!--data-toggle="modal" data-target="#paybackDel"-->
-                        <!--@click="delProjectPayback(item.id)"></i>-->
-                        <!--</div>-->
-                        <!--</div>-->
-                        <!--</div>-->
-                        <!--</div>-->
-
-                        <!--<div class="dividing-line example"></div>-->
-                        <!--</div>-->
-                        <!--</div>-->
-                        <!--</div>-->
-                        <!-- 概况 -->
-                        <div class="tab-pane animation-fade" v-if="projectInfo"
-                             :class="(projectInfo.type == 5 || projectInfo.approval_status != 232) ? 'active' : ''"
-                             id="forum-project-base"
-                             role="tabpanel">
-                            <div class="card">
-                                <div class="card-header card-header-transparent card-header-bordered">
-                                    <div class="float-left font-weight-bold third-title">项目信息</div>
-                                    <div class="float-right"
-                                         v-show="!isEdit && projectInfo.approval_status == 232">
-                                        <i class="iconfont icon-bianji2 pointer-content" aria-hidden="true"
-                                           @click="editBaseInfo"></i>
-                                    </div>
-                                    <div class="float-right mr-40" v-show="isEdit">
-                                        <button class="btn btn-sm btn-white btn-pure" @click="cancelEdit">取消
-                                        </button>
-                                        <button class="btn btn-primary" @click="changeProjectInfo">确定</button>
+                                </a>
+                            </li>
+                            <!--<li class="nav-item" role="presentation"-->
+                            <!--v-if="projectInfo.type != 5 && projectInfo.approval_status == 232">-->
+                            <!--<a class="nav-link" data-toggle="tab" href="#forum-project-contract"-->
+                            <!--aria-controls="forum-present"-->
+                            <!--aria-expanded="false" role="tab">合同</a>-->
+                            <!--</li>-->
+                            <!--<li class="nav-item" role="presentation" @click="getProjectBill"-->
+                            <!--v-if="projectInfo.type != 5 && projectInfo.approval_status == 232">-->
+                            <!--<a class="nav-link" data-toggle="tab" href="#forum-project-bill"-->
+                            <!--aria-controls="forum-present"-->
+                            <!--aria-expanded="false" role="tab">账单</a>-->
+                            <!--</li>-->
+                            <!--<li class="nav-item" role="presentation" @click="getProjectReturned"-->
+                            <!--v-if="projectInfo.type != 5 && projectInfo.approval_status == 232">-->
+                            <!--<a class="nav-link" data-toggle="tab" href="#forum-project-payback"-->
+                            <!--aria-controls="forum-present"-->
+                            <!--aria-expanded="false" role="tab">回款</a>-->
+                            <!--</li>-->
+                            <li class="nav-item" role="presentation">
+                                <a class="nav-link"
+                                :class="(projectInfo.type == 5 || projectInfo.approval_status != 232) ? 'active' : ''"
+                                data-toggle="tab"
+                                href="#forum-project-base"
+                                aria-controls="forum-base"
+                                aria-expanded="true" role="tab">概况</a>
+                            </li>
+                        </ul>
+                        <div class="tab-content nav-tabs-animate bg-white">
+                            <!-- 项目进度 -->
+                            <div class="tab-pane animation-fade pb-10" @click="getProjectProgress"
+                                v-if="projectInfo.type != 5 && projectInfo.approval_status == 232"
+                                :class="projectInfo.type != 5 ? 'active' : ''"
+                                id="forum-project-follow" role="tabpanel">
+                                <div class="clearfix mt-20">
+                                    <div class="project-progress" v-for="item in projectProgressInfo">
+                                        <template v-if="!item.isFinish">
+                                            <div class="clearfix pointer-content" @click="addProjectProgress(item.status)">
+                                                <div class="col-md-4 p-0 float-left">
+                                                    <div class="image-wraper">
+                                                        <template v-if="item.isFinish == 1">
+                                                            <img src="https://res-crm.papitube.com/progress-selected.png"
+                                                                alt="">
+                                                        </template>
+                                                        <template v-else>
+                                                            <img src="https://res-crm.papitube.com/progress.png" alt="">
+                                                        </template>
+                                                    </div>
+                                                </div>
+                                                <div class="col-md-8 float-left pr-0 pl-10"
+                                                    :class="item.isFinish == 1 ? 'finish-font-color' : ''"
+                                                    style=" line-height: 40px;">
+                                                    {{ item.name }}
+                                                </div>
+                                            </div>
+                                        </template>
+                                        <template v-else>
+                                            <div class="clearfix">
+                                                <div class="col-md-4 p-0 float-left">
+                                                    <div class="image-wraper">
+                                                        <template v-if="item.isFinish == 1">
+                                                            <img src="https://res-crm.papitube.com/progress-selected.png"
+                                                                alt="">
+                                                        </template>
+                                                        <template v-else>
+                                                            <img src="https://res-crm.papitube.com/progress.png" alt="">
+                                                        </template>
+                                                    </div>
+                                                </div>
+                                                <div class="col-md-8 float-left pr-0 pl-10"
+                                                    :class="item.isFinish == 1 ? 'finish-font-color' : ''"
+                                                    style=" line-height: 40px;">
+                                                    {{ item.name }}
+                                                </div>
+                                            </div>
+                                        </template>
+                                        <div class="pt-20">
+                                            <div class="points" :class="item.isFinish == 1 ? 'finish-color' : ''"></div>
+                                            <div class="line"
+                                                :class="item.isFinish == 1 ? 'finish-color' : 'unfinish-color'"></div>
+                                        </div>
+                                        <div class="pt-10" v-if="item.isFinish">
+                                            <div>{{ item.finisher }}</div>
+                                            <div>{{ item.finish_at }}</div>
+                                        </div>
                                     </div>
                                 </div>
-                                <div class="card-block" v-if="projectInfo.title">
-                                    <div class="clearfix">
-                                        <div class="card-text py-10 px-0 clearfix col-md-6 float-left ">
-                                            <div class="col-md-2 float-left text-right pl-0">项目名称</div>
-                                            <div class="col-md-10 float-left font-weight-bold">
-                                                <EditInput :content="projectInfo.title" :is-edit="isEdit"
-                                                           @change="(value) => changeProjectBaseInfo(value, 'title')"></EditInput>
+                            </div>
+                            <!-- 任务 -->
+                            <div class="tab-pane animation-fade pb-20 fixed-button-father" id="forum-project-tasks"
+                                role="tabpanel" v-if="projectInfo.approval_status == 232">
+                                <table class="table table-hover is-indent example" data-plugin="animateList"
+                                    data-animate="fade"
+                                    data-child="tr"
+                                    data-selectable="selectable">
+                                    <tr class="animation-fade"
+                                        style="animation-fill-mode: backwards; animation-duration: 250ms; animation-delay: 0ms;">
+                                        <th class="cell-300" scope="col">任务名称</th>
+                                        <th class="cell-300" scope="col">任务类型</th>
+                                        <th class="cell-300" scope="col">状态</th>
+                                        <th class="cell-300" scope="col">负责人</th>
+                                        <th class="cell-300" scope="col">截止日期</th>
+                                    </tr>
+                                    <tbody>
+                                    <tr v-for="task in projectTasksInfo">
+                                        <td class="pointer-content" @click="redirectTask(task.id)">{{ task.title }}</td>
+                                        <td>{{ task.type.data.title }}</td>
+                                        <td>
+                                            <template v-if="task.status === 1">进行中</template>
+                                            <template v-if="task.status === 2">已完成</template>
+                                            <template v-if="task.status === 3">已停止</template>
+                                        </td>
+                                        <td>{{ task.principal.data.name }}</td>
+                                        <td>{{ task.end_at }}</td>
+                                    </tr>
+                                    </tbody>
+                                </table>
+                                <div class="col-md-1" style="margin: 6rem auto" v-if="projectTasksInfo.length === 0">
+                                    <img src="https://res.papitube.com/corvus/images/content-none.png" alt=""
+                                        style="width: 100%">
+                                </div>
+
+                                <div class="site-action fixed-button" data-plugin="actionBtn" data-toggle="modal"
+                                    data-target="#addTask">
+                                    <button type="button" @click="setTaskPrincipal"
+                                            class="site-action-toggle btn-raised btn btn-success btn-floating waves-effect waves-classic">
+                                        <i class="front-icon iconfont icon-tianjia1 animation-scale-up" aria-hidden="true"
+                                        style="font-size:30px"></i>
+                                        <i class="back-icon iconfont icon-tianjia1 animation-scale-up" aria-hidden="true"
+                                        style="font-size:30px"></i>
+                                    </button>
+                                </div>
+
+                            </div>
+                            <!-- 合同 -->
+                            <!--<div class="tab-pane animation-fade py-10"-->
+                            <!--v-if="projectInfo.type != 5 && projectInfo.approval_status == 232"-->
+                            <!--id="forum-project-contract"-->
+                            <!--role="tabpanel">-->
+                            <!--<table class="table table-hover example"-->
+                            <!--data-child="tr">-->
+                            <!--<tr>-->
+                            <!--<th class="cell-300" scope="col">合同编号</th>-->
+                            <!--<th class="cell-300" scope="col">项目名称</th>-->
+                            <!--<th class="cell-300" scope="col">艺人</th>-->
+                            <!--<th class="cell-300" scope="col">合同类型</th>-->
+                            <!--<th class="cell-300" scope="col">创建人</th>-->
+                            <!--<th class="cell-300" scope="col">创建时间</th>-->
+                            <!--<th class="cell-300" scope="col">审批状态</th>-->
+                            <!--</tr>-->
+                            <!--<tbody>-->
+                            <!--<tr>-->
+                            <!--<td>#12312sdf231</td>-->
+                            <!--<td>测试合同</td>-->
+                            <!--<td>papi、bigger</td>-->
+                            <!--<td>收入</td>-->
+                            <!--<td>陈晓禹</td>-->
+                            <!--<td>2018-12-27</td>-->
+                            <!--<td>审批中</td>-->
+                            <!--</tr>-->
+                            <!--</tbody>-->
+                            <!--</table>-->
+
+                            <!--</div>-->
+                            <!--&lt;!&ndash; 账单 &ndash;&gt;-->
+                            <!--<div class="tab-pane animation-fade py-10"-->
+                            <!--v-if="projectInfo.type != 5 && projectInfo.approval_status == 232" id="forum-project-bill"-->
+                            <!--role="tabpanel">-->
+                            <!--<div class="clearfix">-->
+                            <!--<div class="float-left" style="padding: .715rem 1.429rem">-->
+                            <!--<div class="float-left pr-40">合同金额 <span class="money-color">10000元</span></div>-->
+                            <!--<div class="float-left pr-40">支出金额 <span class="money-color">1000元</span></div>-->
+                            <!--<div class="float-left pr-40">税费 <span class="money-color">10000元</span></div>-->
+                            <!--<div class="float-left pr-40">papi分成 <span class="money-color">10000元</span></div>-->
+                            <!--<div class="float-left pr-40">bigger分成 <span class="money-color">10000元</span></div>-->
+                            <!--<div class="float-left pr-40">我司分成 <span class="money-color">10000元</span></div>-->
+                            <!--</div>-->
+                            <!--<div class="float-right" style="padding: .715rem 0">-->
+                            <!--<span class="pointer-content hover-content" data-toggle="modal"-->
+                            <!--data-target="#addBill">-->
+                            <!--<i class="iconfont icon-tianjia pr-5"></i>新增结算单</span>-->
+                            <!--</div>-->
+                            <!--</div>-->
+                            <!--<table class="table table-hover" data-child="tr">-->
+                            <!--<tr>-->
+                            <!--<th class="cell-300" scope="col">费用类型</th>-->
+                            <!--<th class="cell-300 position-relative" scope="col">-->
+                            <!--<template v-if="filterFee === 1">全部</template>-->
+                            <!--<template v-if="filterFee === 2">成本</template>-->
+                            <!--<template v-if="filterFee === 3">收入</template>-->
+                            <!--<i class="iconfont icon-plus-select-down pl-2" aria-hidden="true"-->
+                            <!--id="projectDropdown" data-toggle="dropdown" aria-expanded="false"></i>-->
+                            <!--<div class="dropdown-menu" aria-labelledby="projectDropdown" role="menu">-->
+                            <!--<a class="dropdown-item" role="menuitem" v-show="filterFee !== 1"-->
+                            <!--@click="filterProjectFee(1)">全部</a>-->
+                            <!--<a class="dropdown-item" role="menuitem" v-show="filterFee !== 2"-->
+                            <!--@click="filterProjectFee(2)">成本</a>-->
+                            <!--<a class="dropdown-item" role="menuitem" v-show="filterFee !== 3"-->
+                            <!--@click="filterProjectFee(3)">收入</a>-->
+                            <!--</div>-->
+                            <!--</th>-->
+                            <!--<th class="cell-300" scope="col">艺人</th>-->
+                            <!--<th class="cell-300" scope="col">金额</th>-->
+                            <!--<th class="cell-300" scope="col">收款/审批时间</th>-->
+                            <!--<th class="cell-300" scope="col">操作人</th>-->
+                            <!--</tr>-->
+                            <!--<tbody>-->
+                            <!--<tr v-for="bill in projectBillsInfo">-->
+                            <!--<td>{{ bill.expence_name }}</td>-->
+                            <!--<td>{{ bill.expense_type }}</td>-->
+                            <!--<td>{{ bill.artist_name }}</td>-->
+                            <!--<td>{{ bill.money }}</td>-->
+                            <!--<td>{{ bill.pay_rec_time }}</td>-->
+                            <!--<td>{{ bill.action_user }}</td>-->
+                            <!--</tr>-->
+                            <!--</tbody>-->
+                            <!--</table>-->
+                            <!--<div class="col-md-1" style="margin: 6rem auto" v-if="projectBillsInfo.length === 0">-->
+                            <!--<img src="https://res.papitube.com/corvus/images/content-none.png" alt=""-->
+                            <!--style="width: 100%">-->
+                            <!--</div>-->
+                            <!--</div>-->
+                            <!--&lt;!&ndash; 回款 &ndash;&gt;-->
+                            <!--<div class="tab-pane animation-fade pt-10 pb-20"-->
+                            <!--v-if="projectInfo.type != 5 && projectInfo.approval_status == 232"-->
+                            <!--id="forum-project-payback" role="tabpanel">-->
+                            <!--<div class="clearfix">-->
+                            <!--<ul class="nav nav-tabs nav-tabs-line float-left" role="tablist"-->
+                            <!--style="border-bottom: 0">-->
+                            <!--<li class="nav-item" role="presentation">-->
+                            <!--<a class="nav-link active" data-toggle="tab" href="#forum-item-bill"-->
+                            <!--aria-controls="forum-base"-->
+                            <!--aria-expanded="true" role="tab">bigger研究所/papi酱</a>-->
+                            <!--</li>-->
+                            <!--<li class="nav-item" role="presentation">-->
+                            <!--<a class="nav-link" data-toggle="tab" href="#forum-item-bill"-->
+                            <!--aria-controls="forum-base"-->
+                            <!--aria-expanded="true" role="tab">周冬雨</a>-->
+                            <!--</li>-->
+                            <!--</ul>-->
+                            <!--<div class="float-right" style="padding: .715rem 1.429rem">-->
+                            <!--<span class="pointer-content hover-content" data-toggle="modal"-->
+                            <!--data-target="#addPaybackTime" @click="editProjectPaybackTime(false)">-->
+                            <!--<i class="iconfont icon-tianjia pr-5"></i>新建回款期次</span>-->
+                            <!--</div>-->
+                            <!--</div>-->
+                            <!--<div class="tab-pane animation-fade" id="forum-item-payback">-->
+                            <!--<div class="example" v-if="projectReturnInfo.meta">-->
+                            <!--<div class="col-md-3 float-left pl-0">-->
+                            <!--<div>合同金额<span class="money-color pl-5">-->
+                            <!--{{ projectReturnInfo.meta.contractReturnedMoney ? projectReturnInfo.meta.contractReturnedMoney : 0}}</span>/元-->
+                            <!--</div>-->
+                            <!--</div>-->
+                            <!--<div class="col-md-3 float-left pl-0">-->
+                            <!--<div>已回款<span class="money-color pl-5">-->
+                            <!--{{ projectReturnInfo.meta.alreadyReturnedMoney ? projectReturnInfo.meta.alreadyReturnedMoney : 0}}</span>/元-->
+                            <!--</div>-->
+                            <!--</div>-->
+                            <!--<div class="col-md-3 float-left pl-0">-->
+                            <!--<div>未回款<span class="money-color pl-5">-->
+                            <!--{{ projectReturnInfo.meta.notReturnedMoney ? projectReturnInfo.meta.notReturnedMoney : 0}}</span>/元-->
+                            <!--</div>-->
+                            <!--</div>-->
+                            <!--<div class="col-md-3 float-left pl-0">-->
+                            <!--<div>已开票<span class="money-color pl-5">-->
+                            <!--{{ projectReturnInfo.meta.alreadyinvoice ? projectReturnInfo.meta.alreadyinvoice : 0}}</span>/元-->
+                            <!--</div>-->
+                            <!--</div>-->
+                            <!--</div>-->
+                            <!--<div class="dividing-line"></div>-->
+                            <!--<div v-for="returnMoney in projectReturnInfo.data">-->
+                            <!--<div class="clearfix py-20">-->
+                            <!--<div class="float-left font-weight-bold">{{ returnMoney.issue_name }}</div>-->
+                            <!--<div class="float-right">-->
+                            <!--<span class="mr-40 pointer-content hover-content" data-toggle="modal"-->
+                            <!--data-target="#addPayback" @click="selectedPaybackTime(returnMoney)">-->
+                            <!--<i class="iconfont icon-tianjia pr-5"></i>回款记录</span>-->
+                            <!--<span class="pointer-content hover-content" data-toggle="modal"-->
+                            <!--data-target="#addInvoice" @click="selectedPaybackTime(returnMoney)">-->
+                            <!--<i class="iconfont icon-tianjia pr-5"></i>开票记录</span>-->
+                            <!--</div>-->
+                            <!--</div>-->
+                            <!--<div class="clearfix">-->
+                            <!--<div class="col-md-2 float-left pl-0">回款日期<span class="pl-5">{{ returnMoney.plan_returned_time }}</span>-->
+                            <!--</div>-->
+                            <!--<div class="col-md-2 float-left pl-0">计划回款-->
+                            <!--<span class="money-color pl-5">-->
+                            <!--{{ returnMoney.plan_returned_money }}元-->
+                            <!--</span>-->
+                            <!--</div>-->
+                            <!--<div class="col-md-2 float-left pl-0">实际回款<span class="money-color pl-5">22312031203元</span>-->
+                            <!--</div>-->
+                            <!--<div class="col-md-2 float-left pl-0">开票金额<span-->
+                            <!--class="money-color pl-5">12312222元</span>-->
+                            <!--</div>-->
+                            <!--<div class="col-md-2 float-right pr-0 text-right" style="color: #cccccc;">-->
+                            <!--<i class="iconfont icon-bianji2 pr-40 pointer-content" data-toggle="modal"-->
+                            <!--data-target="#addPaybackTime"-->
+                            <!--@click="editProjectPaybackTime(true, returnMoney)"></i>-->
+                            <!--<i class="iconfont icon-shanchu1 pointer-content"-->
+                            <!--data-toggle="modal" data-target="#paybackDel"-->
+                            <!--@click="delProjectPayback(returnMoney.id)"></i>-->
+                            <!--</div>-->
+                            <!--</div>-->
+
+                            <!--<div v-for="item in returnMoney.money.data">-->
+                            <!--<div class="segmentation-line example"></div>-->
+                            <!--<div v-if="item.type.data.type === 1">-->
+                            <!--<div class="font-weight-bold">回款记录</div>-->
+                            <!--<div class="clearfix">-->
+                            <!--<div class="col-md-2 float-left pl-0">回款日期<span-->
+                            <!--class="pl-5">{{ item.plan_returned_time }}</span>-->
+                            <!--</div>-->
+                            <!--<div class="col-md-2 float-left pl-0">回款金额<span-->
+                            <!--class="money-color pl-5">{{ item.plan_returned_money }}元</span>-->
+                            <!--</div>-->
+                            <!--<div class="col-md-2 float-left pl-0">付款方式<span-->
+                            <!--class="pl-5">{{ item.type.data.plan_returned_money }}</span>-->
+                            <!--</div>-->
+                            <!--<div class="col-md-2 float-right pr-0 text-right"-->
+                            <!--style="color: #cccccc;">-->
+                            <!--<i class="iconfont icon-bianji2 pr-40 pointer-content"-->
+                            <!--data-toggle="modal" data-target="#addPayback"-->
+                            <!--@click="editProjectPaybackRecording(item, returnMoney, 'payback')"></i>-->
+                            <!--<i class="iconfont icon-shanchu1 pointer-content"-->
+                            <!--data-toggle="modal" data-target="#paybackDel"-->
+                            <!--@click="delProjectPayback(item.id)"></i>-->
+                            <!--</div>-->
+                            <!--</div>-->
+                            <!--</div>-->
+                            <!--<div v-if="item.type.data.type === 2">-->
+                            <!--<div class="font-weight-bold">开票记录</div>-->
+                            <!--<div class="clearfix">-->
+                            <!--<div class="col-md-2 float-left pl-0">开票日期<span-->
+                            <!--class="pl-5">{{ item.plan_returned_time }}</span>-->
+                            <!--</div>-->
+                            <!--<div class="col-md-2 float-left pl-0">开票金额<span-->
+                            <!--class="money-color pl-5">{{ item.plan_returned_money }}元</span>-->
+                            <!--</div>-->
+                            <!--<div class="col-md-2 float-left pl-0">票据类型<span class="pl-5">{{ item.type.data.plan_returned_money }}</span>-->
+                            <!--</div>-->
+                            <!--<div class="col-md-2 float-right pr-0 text-right"-->
+                            <!--style="color: #cccccc;">-->
+                            <!--<i class="iconfont icon-bianji2 pr-40 pointer-content"-->
+                            <!--data-toggle="modal" data-target="#addInvoice"-->
+                            <!--@click="editProjectPaybackRecording(item, returnMoney)"></i>-->
+                            <!--<i class="iconfont icon-shanchu1 pointer-content"-->
+                            <!--data-toggle="modal" data-target="#paybackDel"-->
+                            <!--@click="delProjectPayback(item.id)"></i>-->
+                            <!--</div>-->
+                            <!--</div>-->
+                            <!--</div>-->
+                            <!--</div>-->
+
+                            <!--<div class="dividing-line example"></div>-->
+                            <!--</div>-->
+                            <!--</div>-->
+                            <!--</div>-->
+                            <!-- 概况 -->
+                            <div class="tab-pane animation-fade" v-if="projectInfo"
+                                :class="(projectInfo.type == 5 || projectInfo.approval_status != 232) ? 'active' : ''"
+                                id="forum-project-base"
+                                role="tabpanel">
+                                <div class="card">
+                                    <div class="card-header card-header-transparent card-header-bordered">
+                                        <div class="float-left font-weight-bold third-title">项目信息</div>
+                                        <div class="float-right"
+                                            v-show="!isEdit && projectInfo.approval_status == 232">
+                                            <i class="iconfont icon-bianji2 pointer-content" aria-hidden="true"
+                                            @click="editBaseInfo"></i>
+                                        </div>
+                                        <div class="float-right mr-40" v-show="isEdit">
+                                            <button class="btn btn-sm btn-white btn-pure" @click="cancelEdit">取消
+                                            </button>
+                                            <button class="btn btn-primary" @click="changeProjectInfo">确定</button>
+                                        </div>
+                                    </div>
+                                    <div class="card-block" v-if="projectInfo.title">
+                                        <div class="clearfix">
+                                            <div class="card-text py-10 px-0 clearfix col-md-6 float-left ">
+                                                <div class="col-md-3 float-left text-right pl-0">项目名称</div>
+                                                <div class="col-md-9 float-left font-weight-bold">
+                                                    <EditInput :content="projectInfo.title" :is-edit="isEdit"
+                                                            @change="(value) => changeProjectBaseInfo(value, 'title')"></EditInput>
+                                                </div>
                                             </div>
-                                        </div>
-                                        <div class="card-text py-10 px-0 clearfix col-md-6 float-left ">
-                                            <div class="col-md-2 float-left text-right pl-0">负责人</div>
-                                            <div class="col-md-10 float-left font-weight-bold">
-                                                <EditInputSelector :is-edit="isEdit"
-                                                                   @change="(value) => changeProjectBaseInfo(value, 'principal_id')"></EditInputSelector>
+                                            <div class="card-text py-10 px-0 clearfix col-md-6 float-left ">
+                                                <div class="col-md-3 float-left text-right pl-0">负责人</div>
+                                                <div class="col-md-9 float-left font-weight-bold">
+                                                    <EditInputSelector :is-edit="isEdit"
+                                                                    @change="(value) => changeProjectBaseInfo(value, 'principal_id')"></EditInputSelector>
+                                                </div>
                                             </div>
-                                        </div>
-                                        <div class="card-text py-10 px-0 clearfix col-md-6 float-left ">
-                                            <div class="col-md-2 float-left text-right pl-0">参与人</div>
-                                            <div class="col-md-10 float-left font-weight-bold">
-                                                <EditAddMember :is-edit="isEdit"
-                                                               @change="(value) => changeProjectBaseInfo(value, 'participant_ids')"></EditAddMember>
+                                            <div class="card-text py-10 px-0 clearfix col-md-6 float-left ">
+                                                <div class="col-md-3 float-left text-right pl-0">参与人</div>
+                                                <div class="col-md-9 float-left font-weight-bold">
+                                                    <EditAddMember :is-edit="isEdit"
+                                                                @change="(value) => changeProjectBaseInfo(value, 'participant_ids')"></EditAddMember>
+                                                </div>
                                             </div>
-                                        </div>
-                                        <div class="py-10 px-0 clearfix col-md-6 float-left "
-                                             v-if="projectInfo.type != 5">
-                                            <TrailOrigin :trailType='projectInfo.trail.data.type'
-                                                         typeName='项目' :isEdit='isEdit'
-                                                         :content='projectInfo.trail.data.resource'
-                                                         @changeTrailOrigin="(value) => changeProjectBaseInfo(value, 'resource_type')"
-                                                         :contentType='projectInfo.trail.data.resource_type'
-                                                         @changeEmail="(value) => changeProjectBaseInfo(value, 'resource')"
-                                                         detailPage='true'
-                                                         @changeTrailOriginPerson="(value) => changeProjectBaseInfo(value.id, 'resource')"/>
-                                        </div>
-                                        <div class="card-text py-10 px-0 clearfix col-md-6 float-left "
-                                             v-if="projectInfo.type != 5">
-                                            <div class="col-md-2 float-left text-right pl-0">目标艺人</div>
-                                            <div class="col-md-10 float-left font-weight-bold"
-                                                 v-if="projectInfo.trail.data.expectations">
-                                                <span v-for="expectation in projectInfo.trail.data.expectations.data"
-                                                      :key="expectation.name" v-if="!isEdit">
-                                                    {{ expectation.name || expectation.nickname}}
-                                                </span>
-                                                <EditSelector :options="starsArr" :is-edit="isEdit"
-                                                              :multiple="true"
-                                                              :content="selectedExpectationsArr"
-                                                              :contentHide='true'
-                                                              @change="(value) => changeProjectBaseInfo(value, 'expectations')"></EditSelector>
+                                            <div class="py-10 px-0 clearfix col-md-6 float-left "
+                                                v-if="projectInfo.type != 5">
+                                                <TrailOrigin :trailType='projectInfo.trail.data.type'
+                                                            typeName='项目' :isEdit='isEdit'
+                                                            :content='projectInfo.trail.data.resource'
+                                                            @changeTrailOrigin="(value) => changeProjectBaseInfo(value, 'resource_type')"
+                                                            :contentType='projectInfo.trail.data.resource_type'
+                                                            @changeEmail="(value) => changeProjectBaseInfo(value, 'resource')"
+                                                            detailPage='true'
+                                                            @changeTrailOriginPerson="(value) => changeProjectBaseInfo(value.id, 'resource')"/>
                                             </div>
-                                        </div>
-                                        <div class="card-text py-10 px-0 clearfix col-md-6 float-left "
-                                             v-if="projectInfo.type == 5">
-                                            <div class="col-md-2 float-left text-right pl-0">可见范围</div>
-                                            <div class="col-md-10 float-left font-weight-bold">
-                                                <EditSelector :is-edit="isEdit" :content="projectInfo.privacy"
-                                                              :options="visibleRangeArr"
-                                                              @change="(value) => changeProjectBaseInfo(value, 'privacy')"></EditSelector>
-                                            </div>
-                                        </div>
-                                        <div class="card-text py-10 px-0 clearfix col-md-6 float-left "
-                                             v-if="projectInfo.type != 5">
-                                            <div class="col-md-2 float-left text-right pl-0">预计订单收入/元</div>
-                                            <div class="col-md-10 float-left font-weight-bold">
-                                                <EditNumberSpinner :is-edit="isEdit"
-                                                                   :content="projectInfo.trail.data.fee"
-                                                                   @change="(value) => changeProjectBaseInfo(value, 'fee')"></EditNumberSpinner>
-                                            </div>
-                                        </div>
-                                        <div class="card-text py-10 px-0 clearfix col-md-6 float-left "
-                                             v-if="projectInfo.type != 5">
-                                            <div class="col-md-2 float-left text-right pl-0">预计支出/元</div>
-                                            <div class="col-md-10 float-left font-weight-bold">
-                                                <EditNumberSpinner :is-edit="isEdit"
-                                                                   :content="projectInfo.projected_expenditure"
-                                                                   @change="(value) => changeProjectBaseInfo(value, 'projected_expenditure')"></EditNumberSpinner>
-                                            </div>
-                                        </div>
-                                        <div class="card-text py-10 px-0 clearfix col-md-6 float-left ">
-                                            <div class="col-md-2 float-left text-right pl-0">优先级</div>
-                                            <div class="col-md-10 float-left font-weight-bold">
-                                                <EditSelector :is-edit="isEdit" :options="levelArr"
-                                                              :content="projectInfo.priority"
-                                                              @change="(value) => changeProjectBaseInfo(value, 'priority')"></EditSelector>
-                                            </div>
-                                        </div>
-                                        <div class="card-text py-10 px-0 clearfix col-md-6 float-left ">
-                                            <div class="col-md-2 float-left text-right pl-0">开始时间</div>
-                                            <div class="col-md-10 float-left font-weight-bold">
-                                                <EditDatepicker :is-edit="isEdit"
-                                                                :content="projectInfo.start_at"
-                                                                @change="(value) => changeProjectBaseInfo(value, 'start_at')"></EditDatepicker>
-                                            </div>
-                                        </div>
-                                        <div class="card-text py-10 px-0 clearfix col-md-6 float-left ">
-                                            <div class="col-md-2 float-left text-right pl-0">截止时间</div>
-                                            <div class="col-md-10 float-left font-weight-bold">
-                                                <EditDatepicker :is-edit="isEdit"
-                                                                :content="projectInfo.end_at"
-                                                                @change="(value) => changeProjectBaseInfo(value, 'end_at')"></EditDatepicker>
-                                            </div>
-                                        </div>
-                                        <div v-if="projectInfo.type != 5 && projectInfo.fields">
                                             <div class="card-text py-10 px-0 clearfix col-md-6 float-left "
-                                                 v-for="field in projectInfo.fields">
-                                                <div class="col-md-2 float-left text-right pl-0">{{ field.key }}
-                                                </div>
-                                                <div class="col-md-10 float-left font-weight-bold">
-                                                    <template v-if="field.field_type === 1">
-                                                        <EditInput
-                                                                :content="field.values ? field.values.data.value : ''"
-                                                                :is-edit="isEdit"
-                                                                @change="(value) => addInfo(value, field.id )"></EditInput>
-                                                    </template>
-                                                    <template v-else-if="field.field_type === 2">
-                                                        <EditSelector :placeholder="'请选择' + field.key"
-                                                                      :content="field.values ? field.values.data.value : ''"
-                                                                      :is-edit="isEdit"
-                                                                      :options="field.contentArr"
-                                                                      @change="(value) => addInfo(value, field.id )"></EditSelector>
-                                                    </template>
-                                                    <template v-else-if="field.field_type === 3">
-                                                        <EditableSearchBox :options="starsArr" :multiple="true"
-                                                                           :is-edit="isEdit"
-                                                                           @change="(value) => addInfo(value, field.id )"></EditableSearchBox>
-                                                    </template>
-                                                    <template v-else-if="field.field_type === 4">
-                                                        <EditDatepicker
-                                                                :content="field.values ? field.values.data.value : ''"
-                                                                :is-edit="isEdit"
-                                                                @change="(value) => addInfo(value, field.id )"></EditDatepicker>
-                                                    </template>
-                                                    <template v-else-if="field.field_type === 5">
-                                                        <EditTextarea
-                                                                :content="field.values ? field.values.data.value : ''"
-                                                                :is-edit="isEdit"
-                                                                @change="(value) => addInfo(value, field.id )"></EditTextarea>
-                                                    </template>
-                                                    <template v-else-if="field.field_type === 6">
-                                                        <EditSelector
-                                                                :content="field.values ? field.values.data.value.split('|') : ''"
+                                                v-if="projectInfo.type != 5">
+                                                <div class="col-md-3 float-left text-right pl-0">目标艺人</div>
+                                                <div class="col-md-9 float-left font-weight-bold"
+                                                    v-if="projectInfo.trail.data.expectations">
+                                                    <span v-for="expectation in projectInfo.trail.data.expectations.data"
+                                                        :key="expectation.name" v-if="!isEdit">
+                                                        {{ expectation.name || expectation.nickname}}
+                                                    </span>
+                                                    <EditSelector :options="starsArr" :is-edit="isEdit"
                                                                 :multiple="true"
-                                                                :is-edit="isEdit"
-                                                                :options="field.contentArr"
-                                                                @change="(value) => addInfo(value.join('|'), field.id )"></EditSelector>
-                                                    </template>
-                                                    <template v-else-if="field.field_type === 8">
-                                                        <EditGroupDatePicker
-                                                                :content="field.values ? field.values.data.value : ''"
-                                                                :is-edit="isEdit"
-                                                                @change="(start, end) => addInfo(start + '|' + end, field.id )">
-                                                        </EditGroupDatePicker>
-                                                    </template>
-                                                    <template v-else-if="field.field_type === 10">
-                                                        <EditInputSelector :is-edit="isEdit"
-                                                                           @change="(value) => addInfo(value, field.id )"></EditInputSelector>
-                                                    </template>
-                                                    <template v-else-if="field.field_type === 11">
-                                                        <EditNumberSpinner
-                                                                :content="field.values ? field.values.data.value : ''"
-                                                                :is-edit="isEdit"
-                                                                @change="(value) => addInfo(value, field.id )"></EditNumberSpinner>
-                                                    </template>
+                                                                :content="selectedExpectationsArr"
+                                                                :contentHide='true'
+                                                                @change="(value) => changeProjectBaseInfo(value, 'expectations')"></EditSelector>
                                                 </div>
                                             </div>
+                                            <div class="card-text py-10 px-0 clearfix col-md-6 float-left "
+                                                v-if="projectInfo.type == 5">
+                                                <div class="col-md-3 float-left text-right pl-0">可见范围</div>
+                                                <div class="col-md-9 float-left font-weight-bold">
+                                                    <EditSelector :is-edit="isEdit" :content="projectInfo.privacy"
+                                                                :options="visibleRangeArr"
+                                                                @change="(value) => changeProjectBaseInfo(value, 'privacy')"></EditSelector>
+                                                </div>
+                                            </div>
+                                            <div class="card-text py-10 px-0 clearfix col-md-6 float-left "
+                                                v-if="projectInfo.type != 5">
+                                                <div class="col-md-3 float-left text-right pl-0">预计订单收入/元</div>
+                                                <div class="col-md-9 float-left font-weight-bold">
+                                                    <EditNumberSpinner :is-edit="isEdit"
+                                                                    :content="projectInfo.trail.data.fee"
+                                                                    @change="(value) => changeProjectBaseInfo(value, 'fee')"></EditNumberSpinner>
+                                                </div>
+                                            </div>
+                                            <div class="card-text py-10 px-0 clearfix col-md-6 float-left "
+                                                v-if="projectInfo.type != 5">
+                                                <div class="col-md-2 float-left text-right pl-0">预计支出/元</div>
+                                                <div class="col-md-10 float-left font-weight-bold">
+                                                    <EditNumberSpinner :is-edit="isEdit"
+                                                                    :content="projectInfo.projected_expenditure"
+                                                                    @change="(value) => changeProjectBaseInfo(value, 'projected_expenditure')"></EditNumberSpinner>
+                                                </div>
+                                            </div>
+                                            <div class="card-text py-10 px-0 clearfix col-md-6 float-left ">
+                                                <div class="col-md-3 float-left text-right pl-0">优先级</div>
+                                                <div class="col-md-9 float-left font-weight-bold">
+                                                    <EditSelector :is-edit="isEdit" :options="levelArr"
+                                                                :content="projectInfo.priority"
+                                                                @change="(value) => changeProjectBaseInfo(value, 'priority')"></EditSelector>
+                                                </div>
+                                            </div>
+                                            <div class="card-text py-10 px-0 clearfix col-md-6 float-left ">
+                                                <div class="col-md-3 float-left text-right pl-0">开始时间</div>
+                                                <div class="col-md-9 float-left font-weight-bold">
+                                                    <EditDatepicker :is-edit="isEdit"
+                                                                    :content="projectInfo.start_at"
+                                                                    @change="(value) => changeProjectBaseInfo(value, 'start_at')"></EditDatepicker>
+                                                </div>
+                                            </div>
+                                            <div class="card-text py-10 px-0 clearfix col-md-6 float-left ">
+                                                <div class="col-md-3 float-left text-right pl-0">截止时间</div>
+                                                <div class="col-md-9 float-left font-weight-bold">
+                                                    <EditDatepicker :is-edit="isEdit"
+                                                                    :content="projectInfo.end_at"
+                                                                    @change="(value) => changeProjectBaseInfo(value, 'end_at')"></EditDatepicker>
+                                                </div>
+                                            </div>
+                                            <div v-if="projectInfo.type != 5 && projectInfo.fields">
+                                                <div class="card-text py-10 px-0 clearfix col-md-6 float-left "
+                                                    v-for="field in projectInfo.fields">
+                                                    <div class="col-md-3 float-left text-right pl-0">{{ field.key }}
+                                                    </div>
+                                                    <div class="col-md-9 float-left font-weight-bold">
+                                                        <template v-if="field.field_type === 1">
+                                                            <EditInput
+                                                                    :content="field.values ? field.values.data.value : ''"
+                                                                    :is-edit="isEdit"
+                                                                    @change="(value) => addInfo(value, field.id )"></EditInput>
+                                                        </template>
+                                                        <template v-else-if="field.field_type === 2">
+                                                            <EditSelector :placeholder="'请选择' + field.key"
+                                                                        :content="field.values ? field.values.data.value : ''"
+                                                                        :is-edit="isEdit"
+                                                                        :options="field.contentArr"
+                                                                        @change="(value) => addInfo(value, field.id )"></EditSelector>
+                                                        </template>
+                                                        <template v-else-if="field.field_type === 3">
+                                                            <EditableSearchBox :options="starsArr" :multiple="true"
+                                                                            :is-edit="isEdit"
+                                                                            @change="(value) => addInfo(value, field.id )"></EditableSearchBox>
+                                                        </template>
+                                                        <template v-else-if="field.field_type === 4">
+                                                            <EditDatepicker
+                                                                    :content="field.values ? field.values.data.value : ''"
+                                                                    :is-edit="isEdit"
+                                                                    @change="(value) => addInfo(value, field.id )"></EditDatepicker>
+                                                        </template>
+                                                        <template v-else-if="field.field_type === 5">
+                                                            <EditTextarea
+                                                                    :content="field.values ? field.values.data.value : ''"
+                                                                    :is-edit="isEdit"
+                                                                    @change="(value) => addInfo(value, field.id )"></EditTextarea>
+                                                        </template>
+                                                        <template v-else-if="field.field_type === 6">
+                                                            <EditSelector
+                                                                    :content="field.values ? field.values.data.value.split('|') : ''"
+                                                                    :multiple="true"
+                                                                    :is-edit="isEdit"
+                                                                    :options="field.contentArr"
+                                                                    @change="(value) => addInfo(value.join('|'), field.id )"></EditSelector>
+                                                        </template>
+                                                        <template v-else-if="field.field_type === 8">
+                                                            <EditGroupDatePicker
+                                                                    :content="field.values ? field.values.data.value : ''"
+                                                                    :is-edit="isEdit"
+                                                                    @change="(start, end) => addInfo(start + '|' + end, field.id )">
+                                                            </EditGroupDatePicker>
+                                                        </template>
+                                                        <template v-else-if="field.field_type === 10">
+                                                            <EditInputSelector :is-edit="isEdit"
+                                                                            @change="(value) => addInfo(value, field.id )"></EditInputSelector>
+                                                        </template>
+                                                        <template v-else-if="field.field_type === 11">
+                                                            <EditNumberSpinner
+                                                                    :content="field.values ? field.values.data.value : ''"
+                                                                    :is-edit="isEdit"
+                                                                    @change="(value) => addInfo(value, field.id )"></EditNumberSpinner>
+                                                        </template>
+                                                    </div>
+                                                </div>
 
+                                            </div>
+                                            <div class="card-text py-10 px-0 clearfix col-md-6 float-left">
+                                                <div class="col-md-3 float-left text-right pl-0">备注</div>
+                                                <div class="col-md-9 float-left font-weight-bold">
+                                                    <EditTextarea :is-edit="isEdit" :content="projectInfo.desc"
+                                                                @change="(value) => changeProjectBaseInfo(value, 'desc')"></EditTextarea>
+                                                </div>
+                                            </div>
+                                        </div>
+
+                                        <div class="segmentation-line example"></div>
+
+                                        <div class="card-text py-10 px-0 clearfix col-md-6 float-left" v-if="projectInfo.creator">
+                                            <div class="col-md-3 float-left text-right pl-0">录入人</div>
+                                            <div class="col-md-9 float-left font-weight-bold">
+                                                {{ projectInfo.creator.data.name }}
+                                            </div>
                                         </div>
                                         <div class="card-text py-10 px-0 clearfix col-md-6 float-left">
-                                            <div class="col-md-2 float-left text-right pl-0">备注</div>
-                                            <div class="col-md-10 float-left font-weight-bold">
-                                                <EditTextarea :is-edit="isEdit" :content="projectInfo.desc"
-                                                              @change="(value) => changeProjectBaseInfo(value, 'desc')"></EditTextarea>
+                                            <div class="col-md-3 float-left text-right pl-0">录入时间</div>
+                                            <div class="col-md-9 float-left font-weight-bold">
+                                                {{ projectInfo.created_at }}
                                             </div>
                                         </div>
-                                    </div>
-
-                                    <div class="segmentation-line example"></div>
-
-                                    <div class="card-text py-5 clearfix " v-if="projectInfo.creator">
-                                        <div class="col-md-1 float-left text-right pl-0">录入人</div>
-                                        <div class="col-md-5 float-left font-weight-bold">
-                                            {{ projectInfo.creator.data.name }}
+                                        <div class="card-text py-10 px-0 clearfix col-md-6 float-left">
+                                            <div class="col-md-3 float-left text-right pl-0">最近更新人</div>
+                                            <div class="col-md-9 float-left font-weight-bold">
+                                                {{ projectInfo.last_follow_up_user }}
+                                            </div>
                                         </div>
-                                        <div class="col-md-1 float-left text-right pl-0">录入时间</div>
-                                        <div class="col-md-5 float-left font-weight-bold">
-                                            {{ projectInfo.created_at }}
+                                        <div class="card-text py-10 px-0 clearfix col-md-6 float-left">
+                                            <div class="col-md-3 float-left text-right pl-0">最近更新时间</div>
+                                            <div class="col-md-9 float-left font-weight-bold">
+                                                {{ projectInfo.last_updated_at }}
+                                            </div>
                                         </div>
-                                    </div>
-                                    <div class="card-text py-5 clearfix ">
-                                        <div class="col-md-1 float-left text-right pl-0">最近更新人</div>
-                                        <div class="col-md-5 float-left font-weight-bold">
-                                            {{ projectInfo.last_follow_up_user }}
-                                        </div>
-                                        <div class="col-md-1 float-left text-right pl-0">最近更新时间</div>
-                                        <div class="col-md-5 float-left font-weight-bold">
-                                            {{ projectInfo.last_updated_at }}
-                                        </div>
-                                    </div>
-                                    <div class="card-text py-5 clearfix ">
-                                        <div class="float-left px-0 col-md-6" v-if="projectInfo.relate_projects">
-                                            <div class="col-md-2 float-left text-right pl-0">关联项目</div>
-                                            <div class="col-md-10 float-left font-weight-bold">
+                                        <div class="card-text py-10 px-0 clearfix col-md-6 float-left" v-if="projectInfo.relate_projects">
+                                            <div class="col-md-3 float-left text-right pl-0">关联项目</div>
+                                            <div class="col-md-9 float-left font-weight-bold">
                                                 <template v-for="project in projectInfo.relate_projects.data">
                                                     <span @click="redirectProject(project.id)">{{project.title }}</span>
                                                 </template>
                                             </div>
                                         </div>
-                                        <div class="float-left px-0 col-md-6" v-if="projectInfo.relate_tasks">
-                                            <div class="col-md-2 float-left text-right pl-0">关联任务</div>
-                                            <div class="col-md-10 float-left font-weight-bold">
+                                        <div class="card-text py-10 px-0 clearfix col-md-6 float-left" v-if="projectInfo.relate_tasks">
+                                            <div class="col-md-3 float-left text-right pl-0">关联任务</div>
+                                            <div class="col-md-9 float-left font-weight-bold">
                                                 <template v-for="task in projectInfo.relate_tasks.data">
                                                     <span @click="redirectTask(task.id)">{{ task.title }}</span>
                                                 </template>
                                             </div>
                                         </div>
-                                    </div>
 
-                                    <div class="segmentation-line example"></div>
+                                        <div class="segmentation-line example float-left"></div>
 
-                                    <div v-if="projectInfo.type != 5">
-                                        <!--<ApprovalProgress :formid="projectInfo.form_instance_number"-->
-                                                          <!--:formstatus="projectInfo.approval_status"-->
-                                                          <!--mode="detail"></ApprovalProgress>-->
+                                        <div v-if="projectInfo.type != 5">
+                                            <!--<ApprovalProgress :formid="projectInfo.form_instance_number"-->
+                                                            <!--:formstatus="projectInfo.approval_status"-->
+                                                            <!--mode="detail"></ApprovalProgress>-->
+                                        </div>
                                     </div>
                                 </div>
                             </div>
-                        </div>
 
+                        </div>
                     </div>
                 </div>
-            </div>
-            <div class="panel" v-if="projectId">
-                <div class="col-md-12">
-                    <div class="card col-md-12">
-                        <div class="card-header card-header-transparent card-header-bordered">
-                            <h5>项目跟进</h5>
-                        </div>
-                        <div class="card-block">
-                            <div class="col-md-7 pl-0">
-                                <TaskFollowUp :follow-type="'项目'" :trailId="projectId"
-                                              trailType="projects"></TaskFollowUp>
+                <div class="panel" style="width: calc(34% - 15px);" v-if="projectId">
+                    <div class="col-md-12">
+                        <div class="card col-md-12">
+                            <div class="card-header card-header-transparent card-header-bordered">
+                                <h5>项目跟进</h5>
+                            </div>
+                            <div class="card-block">
+                                <div class="col-md-12 pl-0">
+                                    <TaskFollowUp :follow-type="'项目'" :trailId="projectId"
+                                                trailType="projects"></TaskFollowUp>
+                                </div>
                             </div>
                         </div>
                     </div>

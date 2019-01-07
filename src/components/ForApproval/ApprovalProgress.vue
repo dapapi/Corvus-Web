@@ -11,13 +11,12 @@
                             <div v-if="!mode" :class="mode?'approver-name':''" style='text-align:center;'>{{item.name}}</div>
                             <i v-if="item.change_state_obj" class="iconfont iconfont-logo" :class="item.change_state_obj.changed_icon.split('|')[0]" :style='{color:item.change_state_obj.changed_icon.split("|")[1]}'></i>
                         </div>
-                        <div class="splicer" v-if="index < (approver.length-1)">{{item.length}}</div>
-
                     </div>
                     <div class="approver_texts" v-if="item.change_state_obj">
                         <p class="approver_text">{{item.name}}</p>
                         <p class="approver_text">{{item.change_state_obj.changed_state}}</p>
                     </div>
+                    <div class="splicer" v-if="index < (approver.length-1)">{{item.length}}</div>
                 </div>
                 <div class="approver-container float-left mt-20" v-if="formstatus">
                     <div class="splicer"></div>
