@@ -97,6 +97,13 @@ import {CONTRACT_INDEX_CONFIG} from '@/views/approval/contractIndex/contractInde
         mounted(){
             this.getList(1)
         },
+        computed:{
+            getProgressName(){
+                return function(params){
+                   return  this.projectProgress.find(item=>item.id == params).value
+                }
+            }
+        },
         methods: {
             getProjects: function (pageNum = 1, type = null) {
                 let data = {
@@ -118,8 +125,8 @@ import {CONTRACT_INDEX_CONFIG} from '@/views/approval/contractIndex/contractInde
             },
             getList(params) {
                     let _this = this
-                    fetch('get','/approvals_contract/notify?status=',params).then((params) => {
-                        console.log(params.meta);
+                    fetch('get','/approvals_contract/notify?status='+params).then((params) => {
+                        console.log(params);
                         _this.projectsInfo = params.data
                         _this.total = params.meta.pagination
                         _this.current_page = params.meta.current_page;

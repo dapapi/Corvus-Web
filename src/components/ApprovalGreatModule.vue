@@ -18,7 +18,7 @@
                             :formid='form_id'></div>
                             <!-- ⬆️核心模块 -->
                         </div>
-                        <ApprovalProgress :formid='form_id' :trend='trendApprover' />
+                        <ApprovalProgress :formid='form_id' :trend='trendApprover.condition[0]?trendApprover:""' />
 
                     </div>
                     <div class="modal-footer">
@@ -265,7 +265,7 @@ export default {
 }
 .great-option{
     display: flex;
-    font-size: 12px;
+    /* font-size: 12px; */
     /* height: 50px; */
     
     margin: 20px 5px ;

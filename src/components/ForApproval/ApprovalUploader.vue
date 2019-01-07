@@ -23,7 +23,7 @@
             <div>
                 <input type="file" @change="uploadFile" id="fileUploader" v-show="false"/>
                 <label for="fileUploader" class="pt-10 noselect" style="color:#00bcd4">
-                <template v-if="!isIcon">
+                <template>
                     上传附件
                 </template>
         </label>

@@ -127,7 +127,7 @@ export default {
     methods:{
         getApprover(value){
             if(!this.mode){
-                if(!value ){
+                if(!value){
                     return
                 }else if(this.trend){
                     if(this.trend.condition.length === 0){
@@ -139,6 +139,7 @@ export default {
             let _this = this
             if(!this.mode){
                 fetch('get','/approvals/chains?form_id='+value+'&change_type=222').then((params) => {
+                    console.log(params);
                     _this.approver = params.data
                     let {meta:{notice:{data}}} = params
                     _this.informer = data
