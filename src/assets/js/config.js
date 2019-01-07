@@ -798,7 +798,7 @@ let config = {
                 value: 2
             },
             {
-                name: '10分钟给前',
+                name: '10分钟前',
                 value: 3
             },
             {

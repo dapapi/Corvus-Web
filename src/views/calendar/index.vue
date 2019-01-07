@@ -108,7 +108,7 @@
                     <div class="modal-header">
                         <div style="order: 2">
                             <span class="pointer-content hover-content mr-4" data-toggle="modal"
-                                  data-target="#addLinkage" @click="selectProjectLinkage">关联</span>
+                                  data-target="#addLinkage">关联</span>
                             <i class="iconfont icon-guanbi pointer-content" aria-hidden="true" data-dismiss="modal"></i>
                         </div>
                         <h5 class="modal-title">
@@ -324,16 +324,9 @@
                                 <div class="pb-5" v-if="scheduleData.project"
                                      v-for="project in scheduleData.project.data">
                                     <span>项目 - {{ project.title }}</span>
-                                    <span class="float-right"
-                                          @click="delScheduleLinkage('project', project.moduleable_id)">
-                                        <i class="iconfont icon-shanchu1 pointer-content"></i>
-                                    </span>
                                 </div>
                                 <div class="pb-5" v-if="scheduleData.task" v-for="task in scheduleData.task.data">
                                     <span>任务 - {{ task.title }}</span>
-                                    <span class="float-right" @click="delScheduleLinkage('task', task.moduleable_id)">
-                                        <i class="iconfont icon-shanchu1 pointer-content"></i>
-                                    </span>
                                 </div>
                             </div>
                         </div>
@@ -642,6 +635,7 @@
             this.getStars();
             this.getCalendarList();
             this.getResources();
+            this.selectProjectLinkage();
             let _this = this;
             $('#addCalendar').on('hidden.bs.modal', function () {
                 _this.$store.dispatch('changeParticipantsInfo', {data: []});
@@ -738,7 +732,7 @@
 
             getStars: function () {
                 if (Cookies.get('companyType') === '泰洋川禾') {
-                    fetch('get', '/stars/all').then(response => {
+                    fetch('get', '/stars/all', {status: 2}).then(response => {
                         for (let i = 0; i < response.data.length; i++) {
                             this.starsArr.push({
                                 value: response.data[i].id,
@@ -747,7 +741,7 @@
                         }
                     })
                 } else {
-                    fetch('get', '/bloggers/all').then(response => {
+                    fetch('get', '/bloggers/all', {status: 2}).then(response => {
                         for (let i = 0; i < response.data.length; i++) {
                             this.starsArr.push({
                                 value: response.data[i].id,
@@ -985,11 +979,22 @@
                     this.isAllday = this.scheduleData.is_allday;
                     this.eventDesc = this.scheduleData.desc;
                     this.eventPlace = this.scheduleData.position;
-                    console.log(this.scheduleData.participants.data);
                     this.$store.dispatch('changeParticipantsInfo', {data: this.scheduleData.participants.data});
                     if (this.scheduleData.material) {
                         this.$refs.scheduleResource.setValue(this.scheduleData.material.data.id);
                         this.scheduleMaterialId = this.scheduleData.material.data.id;
+                    }
+                    if (this.scheduleData.project.data.length > 0){
+                        this.linkageSelectedIds.projects = [];
+                        for (let i = 0; i < this.scheduleData.project.data.length; i++) {
+                            this.linkageSelectedIds.projects.push(this.scheduleData.project.data[i].moduleable_id)
+                        }
+                    }
+                    if (this.scheduleData.task.data.length > 0) {
+                        this.linkageSelectedIds.tasks = [];
+                        for (let i = 0; i < this.scheduleData.task.data.length; i++) {
+                            this.linkageSelectedIds.tasks.push(this.scheduleData.task.data[i].moduleable_id)
+                        }
                     }
                 }
             },
