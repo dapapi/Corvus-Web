@@ -865,32 +865,46 @@
                     </div>
                     <div class="modal-body">
                         <div class="example">
-                            <div class="col-md-2 text-right float-left">合同金额</div>
+                            <div class="col-md-2 text-right float-left">预计订单收入</div>
+                            <div class="col-md-10 float-left">
+                                <add-member></add-member>
+
+                            </div>
+                        </div>
+                        <div class="example">
+                            <div class="col-md-2 text-right float-left">预计支出</div>
+                            <div class="col-md-10 float-left">
+                                <add-member :type="'change'"></add-member>
+
+                            </div>
+                        </div>
+                        <div class="example">
+                            <div class="col-md-2 text-right float-left">实际收入</div>
                             <div class="col-md-10 float-left">
                                 <add-member :type="'contract'"></add-member>
 
                             </div>
                         </div>
                         <div class="example">
-                            <div class="col-md-2 text-right float-left">收款金额</div>
+                            <div class="col-md-2 text-right float-left">实际支出</div>
                             <div class="col-md-10 float-left">
                                 <add-member :type="'collect'"></add-member>
                             </div>
                         </div>
-                        <div class="example">
-                            <div class="col-md-2 text-right float-left">付款金额</div>
+                        <!-- <div class="example">
+                            <div class="col-md-2 text-right float-left">合约费用(含税)</div>
                             <div class="col-md-10 float-left">
                                 <add-member :type="'pay'"></add-member>
 
                             </div>
-                        </div>
-                        <div class="example">
+                        </div> -->
+                        <!-- <div class="example">
                             <div class="col-md-2 text-right float-left">税</div>
                             <div class="col-md-10 float-left">
                                 <add-member :type="'incubation'"></add-member>
                             </div>
-                        </div>
-                        <div class="example">
+                        </div> -->
+                        <!-- <div class="example">
                             <div class="col-md-2 text-right float-left">账单</div>
                             <div class="col-md-10 float-left">
                                 <add-member :type="'bill'"></add-member>
@@ -901,7 +915,7 @@
                             <div class="col-md-10 float-left">
                                 <add-member :type="'division'"></add-member>
                             </div>
-                        </div>
+                        </div> -->
                     </div>
                     <div class="modal-footer">
                         <button class="btn btn-sm btn-white btn-pure" data-dismiss="modal">取消</button>
@@ -1580,7 +1594,23 @@
                     this.isLoading = false
                 })
             },
+            //隐私设置
+            setPrivacy:function(){
+                let _this = this
+                let data = {
+                    
+                }
+                fetch('post', `/projects/${this.$router.params.id}/privacyUser`).then(function (response) {
+                    // for (let i = 0; i < response.data.length; i++) {
+                    //     _this.starsArr.push({
+                    //         name: response.data[i].name,
+                    //         id: response.data[i].id,
+                    //         value: response.data[i].id
+                    //     })
+                    // }
 
+                })
+            },
             getStars: function () {
                 let _this = this;
                 fetch('get', '/stars/all').then(function (response) {
