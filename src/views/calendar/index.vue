@@ -1046,6 +1046,13 @@
                     }
                 }
 
+                if (this.linkageSelectedIds.projects.length > 0) {
+                    data.project_ids = this.linkageSelectedIds.projects;
+                }
+                if (this.linkageSelectedIds.tasks.length > 0) {
+                    data.task_ids = this.linkageSelectedIds.tasks;
+                }
+
                 fetch('put', '/schedules/' + this.scheduleData.id, data).then(() => {
                     this.$refs.calendar.refresh();
                     $('#changeSchedule').modal('hide');

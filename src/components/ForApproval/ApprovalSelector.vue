@@ -1,10 +1,10 @@
 <template>
     <div class="approval-text-container col-md-12 pl-0">
         <span class="col-md-2 text-right pl-0" :class="data[0].required===1?'require':''">{{title || data[0].control_title}}</span>
-        <select class="good-picker selectpicker col-md-10" data-plugin="" :value="value" :data-live-search="isSelectable"
+        <select class="good-picker selectpicker col-md-10" :disabled="data[0].disabled?true:false" data-plugin="" :value="value" :data-live-search="isSelectable"
             :data-show-subtext="isSelectable" 
             :multiple="multiple" :title="placeholder || data[0].control_placeholder" v-model="valueListener">
-            <selectorsOptions v-for="option in options" :id="option.enum_sort" :val="option.enum_value || {name:option.id,id:option.id}"
+            <selectorsOptions v-for="option in options" :id="option.enum_sort" :val="option.enum_value || {name:option.name || option.id,id:option.id}"
                             :key="option.enum_sort">
                 {{option.name || option.nickname || option.enum_value || option.title}}
                 <!-- 增强组件扩展性和数据通用性 -->

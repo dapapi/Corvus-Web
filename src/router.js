@@ -117,10 +117,10 @@ export default new Router({
             redirect: '/approval/project/initiate',
             component: () => import('./views/approval/index.vue'),
             children: [
-                {
-                    path: '/approval/contract/detail',
-                    component: () => import('./views/approval/contractIndex/appdetail.vue')
-                },
+                // {
+                //     path: '/approval/contract/detail',
+                //     component: () => import('./views/approval/contractIndex/appdetail.vue')
+                // },
                 {
                     path: '/approval/contract/initiate',
                     component: () => import('./views/approval/contractIndex/contractIndex.vue')

@@ -93,7 +93,7 @@
                             <div class="col-md-6 detail-container px-0" v-for="(item, index) in detailData" :key="index" v-if="item.values">
                                 <div class="col-md-3 float-left detail-key mx-0 noselect">{{item.key}}</div>
                                 <div class="col-md-9 float-left detail-value" v-if="item.values && !item.values.data.value.includes('http')">{{item.values.data.value || ''}}</div>
-                                <div class="col-md-9 float-left detail-value" v-if="item.values && item.values.data.value.includes('http')" data-target='#docPreview' data-toggle='modal' @click='previewUrl=item.values.data.value'>点击查看</div>
+                                <div class="col-md-9 float-left detail-value" v-if="item.values && item.values.data.value.includes('http')" data-target='#docPreview' data-toggle='modal' @click='previewHandler(item.values.data.value)'>点击查看</div>
                             </div>
                         </div>
                         <div class="panel col-md-12 col-lg-12">
@@ -182,7 +182,10 @@ export default {
         
     },
     methods:{
-         getFormList(){
+        previewHandler(params){
+            // String(params).split('.')
+        },
+        getFormList(){
             let _this = this
             fetch('get','/approvals?type=0').then((params) => {
                 _this.indexData = params.data
