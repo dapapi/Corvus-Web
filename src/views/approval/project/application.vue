@@ -99,7 +99,6 @@
         computed:{
             getProgressName(){
                 return function(params){
-                    console.log(params);
                    return  this.projectProgress.find(item=>item.id == params).value
                 }
             }
