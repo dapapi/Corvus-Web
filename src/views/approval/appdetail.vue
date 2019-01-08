@@ -47,7 +47,7 @@
                                 data-toggle="modal">提醒
                         </button>
                     </i>
-                    <i v-if="[233,234,235].includes(list.form_status)">
+                    <i v-if="[233,234,235].includes(list.form_status) && currentId === info.approval.user_id">
                         <button class="btn btn-primary" @click="addProjectTimeout(list.form_id)">重新提交</button>
                     </i>
                     <i v-if="list.form_status==231 && isCurrentApprover && $route.query.mode === 'approver'">
