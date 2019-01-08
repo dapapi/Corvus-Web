@@ -66,7 +66,6 @@
 <script>
     import fetch from '@/assets/utils/fetch'
     import config from '@/assets/js/config'
-    import treeView from '@/components/ViewTree/TreeView.vue'
     import {mapState, mapGetters} from 'vuex'
 
     export default {
@@ -81,9 +80,6 @@
             ...mapState([
                 'unReadMsg'
             ])
-        },
-        components:{
-            treeView
         },
         data() {
             return {
