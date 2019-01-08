@@ -2,14 +2,14 @@
     <div class="tree-view-item">
        <div class="level" :class="`level-${menu.level}`" v-for="menu in menus" :key="menu.id">
            <div class="list-group-item" v-if="menu.type ==='link'" :class="isSelected == menu.id?'selected':''">
-               <router-link class="link" v-bind:to="menu.url" @click.native="toggle(menu)">
-                   <span v-if="menu.level>1" class="icon md-file-text font-size-18 mr-10 ml-15"></span>
+               <router-link class="link" v-bind:to="menu.url" @click.native="toggle(menu)" :class="menu.level>1?'pl-15':''">
+                   <span v-if="isShow" class="icon md-file-text font-size-18 mr-10 ml-15" ></span>
                    {{menu.name}}
-                   <span v-if="menu.name == '我的消息'&&unReadMsg>0" class="unRead">{{unReadMsg}}</span>
+                   <span v-if="menu.num>0" class="unRead">{{menu.num}}</span>
                 </router-link>
            </div>
            <div v-if="menu.type === 'button'">
-                <div class="list-group-item button heading" :class="{selected:isSelected == menu.id,expand:isExpanded.includes(menu.id)}" @click="toggle(menu)">
+                <div class="list-group-item button heading" :class="{selected:isSelected == menu.id,expand:isExpanded.includes(menu.id)}" @click="toggle(menu)" style="vertical-align: middle;">
                     <i class="icon md-caret-right mr-10 font-size-20"></i>
                     <span>{{menu.name}}
                     </span>
@@ -35,6 +35,7 @@ export default {
         return {
             canRun:true,
             urlRoute:'',
+            isShow:false
         }
     },
     computed:{
@@ -147,8 +148,8 @@ export default {
         position: relative;
     }
     .link:hover,.button:hover {
-        /* color: #1976d2; */
-        background-color: #eee;
+        
+        /* background-color: #eee; */
         cursor: pointer;
     }
     .icon {
@@ -200,7 +201,7 @@ export default {
         position: relative;
         bottom:1px;
         position: absolute;
-        top: 14px;
+        top: 3px;
         right: 10px;
     }
 </style>
