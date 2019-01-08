@@ -84,6 +84,9 @@
                 if (newValue) {
                     this.getSchedules();
                 }
+            },
+            date(newValue) {
+                this.getSchedules()
             }
         },
 
