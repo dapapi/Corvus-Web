@@ -98,7 +98,7 @@
         computed:{
             getProgressName(){
                 return function(params){
-                   return  this.projectProgress.find(item=>item.id = params).value
+                   return  this.projectProgress.find(item=>item.id == params).value
                 }
             }
         },

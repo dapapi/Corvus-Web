@@ -22,7 +22,7 @@
                         <div class="table-responsive">
                             <table class="table table-hover" data-role="content" data-plugin="selectable" data-row-selectable="true">
                                 <tr>
-                                    <th class="cell-300" scope="col"><i class="iconfont icon-T"></i> 标题</th>
+                                    <th class="cell-300" scope="col">标题</th>
                                     <th class="cell-300" scope="col">分类</th>
                                     <th class="cell-300" scope="col">发布时间</th>
                                     <th class="cell-300" scope="col">发布人</th>

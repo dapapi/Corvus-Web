@@ -29,7 +29,7 @@
                             </div>
                         </li>
                     </ul>
-                    <div v-if="taskData.length === 0" class="col-md-3 text-center">
+                    <div v-if="taskData.length === 0" class="col-md-6 text-center">
                         暂无数据
                     </div>
                 </div>

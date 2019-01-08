@@ -555,8 +555,8 @@
                 fetch('post', '/bloggers', data).then(function (response) {
                     toastr.success('创建成功');
                     $('#addArtist').modal('hide');
+                    _this.$router.push({path: 'blogger/' + response.data.id});
                     _this.getArtists()
-
                 })
 
             },

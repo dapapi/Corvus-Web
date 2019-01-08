@@ -830,7 +830,11 @@
                 }
                 if (this.trailTypeValidate()) {
                     let _this = this;
+
                     let data = _this.changeInfo;
+                    if(!data.resource_type){
+                        Object.assign(data,{resource_type:_this.trailInfo.resource_type})
+                    }
                     fetch('put', '/trails/' + this.trailId, data).then(function () {
                         toastr.success('修改成功');
                         _this.isEdit = false
