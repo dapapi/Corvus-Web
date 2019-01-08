@@ -1,6 +1,6 @@
 <template>
 <div class="col-md-12 approval-text-container pl-0">
-    <span class="col-md-2 text-right pl-0" :class="data[0].required===1?'require':''">预计费用</span>
+    <span class="col-md-2 text-right pl-0" :class="consdata[0].required===1?'require':''">预计费用</span>
     <input ref='number' type="text" class="form-control addtrail" data-plugin="asSpinner" value="0"
            :class="[shortInput ? 'short-spinner-input' : '']">
 </div>
@@ -8,7 +8,7 @@
 
 <script>
     export default {
-        props: ['shortInput','data'],
+        props: ['shortInput','consdata'],
         data(){
             return {
 
@@ -26,8 +26,10 @@
                     max: 100000000,
                 }
             ).on('asSpinner::change', function (e) {
-                let {id} = _this.data[0]
-                _this.$emit('change', {key:id,value:e.currentTarget.value,type:null})
+                let {id} = _this.consdata[0]
+                let {related_field} = _this.consdata[0]
+
+                _this.$emit('change', {key:id,value:e.currentTarget.value,type:related_field})
             });
             $('.asSpinner').parent().css('width', '50%')
         },

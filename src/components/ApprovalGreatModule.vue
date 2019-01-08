@@ -11,8 +11,8 @@
                     </div>
                     <div class="modal-body modal-greater ">
                         <div v-for="(item, index) in moduleInfo" :key="index" class="great-option example " >
-                            <div :is='sortChecker(item)' 
-                            :data='item' :predata='sendData' class="container"
+                            <div :is='sortChecker(item)' :ref='item[0].control.data_dictionary_id'
+                            :consdata='item' :predata='sendData' class="container"
                             :singlemode='singlemode' :clear='clearFlag' :directional-sender='directionalData'
                             @change="changeHandler" @directional='directionalWatcher'
                             :formid='form_id'></div>
@@ -84,9 +84,10 @@ export default {
     mounted(){
         let _this = this
         $('#approval-great-module').on('show.bs.modal',function(){
-                // _this.clearSignal()
+                _this.clearSignal()
                 _this.$nextTick(() => {
                     _this.getFormContractor() 
+                        // _this.$refs.modalDiv.sourceChecker()
                 })
         })
         this.refresh()
@@ -129,6 +130,7 @@ export default {
         },
         clearSignal(){
             this.$store.dispatch('changeParticipantsInfo',{data:[]});
+            
             this.trendApprover={
                 condition:[],
                 ready:false,

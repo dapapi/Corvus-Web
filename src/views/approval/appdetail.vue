@@ -41,7 +41,7 @@
                     <i v-if="list.form_status==232 && (info.approval.user_id === currentId || (list.creator && list.creator.data.id === currentId)) ">
                         <button class="btn btn-primary" @click='approvalHandler("discard")' >作废</button>
                     </i>
-                    <i v-if="list.form_status==231 && list.approval_begin === 0 && currentId === info.approval.user_id">
+                    <i v-if="list.form_status==231 && list.approval_begin === 0 && (info.approval.user_id === currentId || (list.creator && list.creator.data.id === currentId)) ">
                         <button class="btn btn-primary" @click='approvalHandler("cancel")'>撤销</button>
                         <button class="btn btn-danger" type="submit"
                                 data-toggle="modal">提醒

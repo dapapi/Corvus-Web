@@ -1,6 +1,6 @@
 <template>
     <!-- <div class="upload col-md-12">
-        <div class="col-md-2 text-right">{{data[0].control_title}}</div>
+        <div class="col-md-2 text-right">{{consdata[0].control_title}}</div>
         <div v-if="data" v-for="(item, index) in predata.uploadfile" :key="index">
             {{item.name}}
         </div>
@@ -10,7 +10,7 @@
         </div>
     </div> -->
     <div class="upload col-md-12">
-        <div class="col-md-2 text-right" :class="data[0].required===1?'require':''">{{data[0].control_title}}</div>
+        <div class="col-md-2 text-right" :class="consdata[0].required===1?'require':''">{{consdata[0].control_title}}</div>
         <div class="image-show">
             <div v-for="(item, index) in fileInfo" :key="index" class="float-left pr-10">
                 <div>{{item.fileName}}</div>
@@ -37,7 +37,7 @@
 import config from '@/assets/js/config'
 import * as qiniu from 'qiniu-js'
 export default {
-    props:['data','clear'],
+    props:['consdata','clear'],
     name: 'ApprovalUploader',
     data(){
         return{
@@ -100,7 +100,7 @@ export default {
                     let fileUrl = config.imgUrl + res.key;
                     let fileName = file.name;
                     // _this.$emit('change', fileUrl, fileName, fileSize,_this.fileExt,_this.id);
-                    let {id} = _this.data[0]
+                    let {id} = _this.consdata[0]
                     _this.$emit('change',{key:id,value:fileUrl,type:null})
                     _this.fileInfo.push({fileUrl, fileName, fileSize})
                 })

@@ -1,9 +1,9 @@
 <template>
     <div class="px-0 mx-0 approval-chain-container">
         <!-- <span class="col-md-2 text-right pl-0" :class="data[0].required===1?'require':''">{{title || data[0].control_title}}</span> -->
-        <ApprovalSelector  ref='main' :data='options' :title='data[0].control_title' @change='mainSelectorHandler'/>
+        <ApprovalSelector  ref='main' :consdata='options' :title='consdata[0].control_title' @change='mainSelectorHandler'/>
         <!-- <div v-for="(item, index) in count" :key="index"> -->
-        <ApprovalSelector class="pt-20 sub-selector" ref='sub' :data='subOptions' @change='subSelectorHandler'/>
+        <ApprovalSelector class="pt-20 sub-selector" ref='sub' :consdata='subOptions' @change='subSelectorHandler'/>
         <!-- </div> -->
     </div>
 </template>
@@ -15,20 +15,20 @@ export default {
         ApprovalSelector,
     },
     name:'ApprovalChainReaction',
-    props: ['n', 'placeholder', 'value', 'resetinfo', 'selectable','title','data','index','clear','directionalSender'],
+    props: ['n', 'placeholder', 'value', 'resetinfo', 'selectable','title','consdata','index','clear','directionalSender'],
     data(){
         return{
             count:0,
             options:[{
                     control_enums:[],
                     control_placeholder:'请选择',
-                    required:this.data[0].required,
+                    required:this.consdata[0].required,
                     
             }],
             subOptions:[{
                     control_enums:[],
                     control_placeholder:'请选择',
-                    required:this.data[0].required,
+                    required:this.consdata[0].required,
                     control_title:'',
             }],
             hasList:[],
@@ -43,7 +43,7 @@ export default {
     },
     methods:{
         dataInit(){
-            this.data[0].control_enums.forEach(element => {
+            this.consdata[0].control_enums.forEach(element => {
                 if(element.enum_value.hasOwnProperty('list')){
                     this.hasList.push({name:element.enum_value.column,list:element.enum_value.list})
                     let tempObj = {enum_value:element.enum_value.column}
@@ -57,7 +57,7 @@ export default {
             let preList = this.hasList.find(item=>item.name === params.value)
             this.emitData.mainValue = params.value
             this.emitData.subValue = ''
-            let {id} = this.data[0]
+            let {id} = this.consdata[0]
             this.$emit('change',{key:id,value:[this.emitData.mainValue,this.emitData.subValue],type:null})
             if(preList){
                 let preArr = []
@@ -72,7 +72,7 @@ export default {
             this.$refs.sub.sourceChecker()
         },
         subSelectorHandler(params){
-            let {id} = this.data[0]
+            let {id} = this.consdata[0]
             this.emitData.subValue = params.value
             this.$emit('change',{key:id,value:[this.emitData.mainValue,this.emitData.subValue],type:null})
         }
