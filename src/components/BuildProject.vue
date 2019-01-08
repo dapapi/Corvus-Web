@@ -241,7 +241,9 @@
                         })
                     })
                 } else {
-                    _this.$store.dispatch('changePrincipal', {data: {id: _this.user.id, name: _this.user.nickname}})
+                    if (!_this.$store.state.newPrincipalInfo.id) {
+                        _this.$store.dispatch('changePrincipal', {data: {id: _this.user.id, name: _this.user.nickname}})
+                    }
                 }
             });
             this.user = JSON.parse(Cookies.get('user'));
