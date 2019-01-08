@@ -140,12 +140,17 @@
                             creator: response.data[i].creator.data.name
                         };
                         let material = JSON.parse(JSON.stringify(this.meetingRomeList.find(item => item.id == response.data[i].material.data.id)));
-                        if (material.events) {
-                            material.events.push(event)
+                        if ( this.meetingRomeListInfo.find(item => item.id == material.id)) {
+                            let info = this.meetingRomeListInfo.find(item => item.id == material.id);
+                            if (info.events) {
+                                info.events.push(event)
+                            } else {
+                                info.events = [event];
+                            }
                         } else {
                             material.events = [event];
+                            this.meetingRomeListInfo.push(material)
                         }
-                        this.meetingRomeListInfo.push(material);
                     }
                     this.isNothing = response.data.length;
                 })
@@ -194,9 +199,3 @@
         }
     }
 </script>
-
-<style>
-    .calendar-material {
-        height: calc(100vh - 72px - 60px);
-    }
-</style>
