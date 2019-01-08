@@ -338,7 +338,7 @@
                             <div class="tab-pane animation-fade pb-20 fixed-button-father" id="forum-artist-fans"
                                 role="tabpanel">
                                 <div id="myChart"
-                                    style="width:80vw ;height:400px; margin-top:30px;padding-bottom: 20px"></div>
+                                    style="width:50vw ;height:400px; margin-top:30px;padding-bottom: 20px"></div>
                             </div>
                         <!-- 账单 -->
                             <div class="tab-pane animation-fade pb-20 fixed-button-father" id="forum-artist-bill"
@@ -1073,21 +1073,11 @@
                 // 使用刚指定的配置项和数据显示图表。
                 myChart.setOption(option);
             },
-            showScheduleModal: function (schedule) {
-                let data = {
-                    include: 'calendar,participants,creator,material,affixes',
-                };
-                fetch('get', '/schedules/' + this.calendarId, data).then(response => {
-                    this.scheduleData = response.data;
-                    this.scheduleParticipants = JSON.parse(JSON.stringify(response.data.participants.data));
-                    this.$store.dispatch('changeParticipantsInfo', {data: response.data.participants.data});
-                });
-                $('#checkSchedule').modal('show')
-            },
-            selectDate: function (value) {
-                this.selectedDate = value;
-                this.$refs.meetingRoom.setDate(value)
-            },
+          
+            // selectDate: function (value) {
+            //     this.selectedDate = value;
+            //     this.$refs.meetingRoom.setDate(value)
+            // },
             getArtist: function () {
                 this.artistId = this.$route.params.id;
                 let _this = this;
@@ -1146,6 +1136,17 @@
                 //          _this.principalIds.push(item.users.data.id)
                 //     })
                 // })
+            },
+             showScheduleModal: function (schedule) {
+                let data = {
+                    include: 'calendar,participants,creator,material,affixes',
+                };
+                fetch('get', '/schedules/' + this.calendarId, data).then(response => {
+                    this.scheduleData = response.data;
+                    this.scheduleParticipants = JSON.parse(JSON.stringify(response.data.participants.data));
+                    this.$store.dispatch('changeParticipantsInfo', {data: response.data.participants.data});
+                });
+                $('#checkSchedule').modal('show')
             },
             //账单
             getArtistsBill(page = 1,expense_type){

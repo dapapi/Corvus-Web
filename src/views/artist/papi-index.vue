@@ -421,7 +421,6 @@
                     _this.total = response.meta.pagination.total;
                     _this.total_pages = response.meta.pagination.total_pages;
                     _this.isLoading = false;
-
                     _this.selectAllBlogger = false;
                     _this.selectedArtistsArr = [];
 
