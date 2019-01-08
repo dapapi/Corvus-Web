@@ -1,10 +1,11 @@
 <template>
-    <div class="approval-text-container col-md-12 pl-0">
-        <span class="col-md-2 text-right pl-0" :class="data[0].required===1?'require':''">{{title || data[0].control_title}}</span>
+    <div class="approval-text-container col-md-12 pl-0" v-show="options.length > 0">
+        <span class="col-md-2 text-right pl-0" :class="data[0].required===1?'require':''" v-if="title || data[0].control_title">{{title || data[0].control_title}}</span>
         <select class="good-picker selectpicker col-md-10" :disabled="data[0].disabled?true:false" data-plugin="" :value="value" :data-live-search="isSelectable"
             :data-show-subtext="isSelectable" 
             :multiple="multiple" :title="placeholder || data[0].control_placeholder" v-model="valueListener">
-            <selectorsOptions v-for="option in options" :id="option.enum_sort" :val="option.enum_value || {name:option.name || option.nickname|| option.id,id:option.id}"
+            <option v-if="data[0].disabled?true:false" :value="valueListener.name" selected></option>
+            <selectorsOptions v-for="option in options" :id="option.enum_sort" :val="option.enum_value || {name:option.name||option.title || option.nickname|| option.id,id:option.id || option.client_id}"
                             :key="option.enum_sort">
                 {{option.name || option.nickname || option.enum_value || option.title}}
                 <!-- 增强组件扩展性和数据通用性 -->
@@ -21,7 +22,7 @@ export default {
      // 凡是多选，都有搜索框；不是多选传入selectable为true也可以有搜索框
         // changeKey为父组件的data，且可以被改变
         name:'ApprovalSelector',
-        props: ['n', 'multiple', 'placeholder', 'changeKey', 'value', 'resetinfo', 'selectable','title','data','index','clear','directionalSender'],
+        props: ['n', 'multiple', 'placeholder', 'changeKey' , 'value', 'resetinfo', 'selectable','title','data','index','clear','directionalSender'],
         data() {
             return {
                 isDisable: this.disable,
@@ -72,11 +73,12 @@ export default {
                     if(this.data[0].control_source){
                         fetch('get',this.data[0].control_source.url+'?'+this.data[0].control_source.parameters+'='+value.data).then((params) => {
                             _this.options = params.data
-                            
                             _this.$nextTick(() => {
+                                _this.valueListener={name:_this.options[0].title,id:_this.options[0].client_id}                            
                                 _this.refresh()
-                                console.log(_this.options[0].client_id);
-                                _this.valueListener.push(_this.options[0])
+                                _this.$nextTick(() => {
+                                    _this.refresh()
+                                })
                             })
                         })
                     }

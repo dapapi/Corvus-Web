@@ -41,29 +41,20 @@
                     <i v-if="list.form_status==232 && (info.approval.user_id === currentId || (list.creator && list.creator.data.id === currentId)) ">
                         <button class="btn btn-primary" @click='approvalHandler("discard")' >作废</button>
                     </i>
-                    <i v-if="list.form_status==231 && list.approval_begin === 0">
+                    <i v-if="list.form_status==231 && list.approval_begin === 0 && currentId === info.approval.user_id">
                         <button class="btn btn-primary" @click='approvalHandler("cancel")'>撤销</button>
                         <button class="btn btn-danger" type="submit"
                                 data-toggle="modal">提醒
                         </button>
                     </i>
-                    <i v-if="[233,234,235].includes(list.form_status)">
+                    <i v-if="[233,234,235].includes(list.form_status) && currentId === info.approval.user_id">
                         <button class="btn btn-primary" @click="addProjectTimeout(list.form_id)">重新提交</button>
                     </i>
-                    <!-- <i v-if="list.form_status==235">
-                        <button class="btn btn-primary" @click="addProjectTimeout(list.form_id)" >重新提交</button>
-                    </i>
-                    <i v-if="list.form_status==233">
-                        <button class="btn btn-primary" @click="addProjectTimeout(list.form_id)" >重新提交</button>
-                    </i> -->
                     <i v-if="list.form_status==231 && isCurrentApprover && $route.query.mode === 'approver'">
                         <button class="btn btn-success" @click='approvalHandler("agree")'>同意</button>
                         <button class="btn btn-danger" @click='approvalHandler("refuse")'>拒绝</button>
                         <button class="btn btn-primary" @click='approvalHandler("transfer")'>转交</button>
                     </i>
-                    <!-- <i v-if="list.form_status==232 && list.creator.data.id === currentId">
-                        <button class="btn btn-primary" @click='approvalHandler("discard")' >作废</button>
-                    </i> -->
                 </h6>
             </div>
             <div class="page-content container-fluid mt-20" v-if="info">

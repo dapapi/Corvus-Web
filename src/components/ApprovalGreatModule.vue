@@ -152,6 +152,8 @@ export default {
         },
         approvalSubmit(){
             let _this = this
+                console.log(this.sendData);
+
             if(this.getRequiredArr()){
                 Object.assign(this.sendData,{notice:this.$store.state.newParticipantsInfo})
                 fetch('post','/approvals/'+this.formData.form_id,this.sendData).then((params) => {
