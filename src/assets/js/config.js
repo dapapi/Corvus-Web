@@ -920,17 +920,6 @@ let config = {
                 value: 4
             }
         ],
-        // 汇报对象
-        eportArr: [
-            {
-                name: '总裁办',
-                value: 1
-            },
-            {
-                name: 'CEO',
-                value: 2
-            }
-        ],
         // 转正状态
         positiveStateArr: [
             {
@@ -991,6 +980,10 @@ let config = {
             {
                 name: '劳务报酬所得',
                 value: 2,
+            },
+            {
+                name: '其他',
+                value: 3
             }
         ],
         personnelCategoryArr: [
