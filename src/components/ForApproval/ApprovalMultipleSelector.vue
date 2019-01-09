@@ -1,9 +1,9 @@
 <template>
     <div class="approval-text-container col-md-12 pl-0">
-        <span class="col-md-2 text-right pl-0" :class="data[0].required===1?'require':''">{{title || data[0].control_title}}</span>
+        <span class="col-md-2 text-right pl-0" :class="consdata[0].required===1?'require':''">{{title || consdata[0].control_title}}</span>
         <select class="good-picker selectpicker col-md-10"  data-plugin="" :value="value" :data-live-search="isSelectable"
             :data-show-subtext="isSelectable" 
-            multiple="true" :title="placeholder || data[0].control_placeholder" v-model="valueListener">
+            multiple="true" :title="placeholder || consdata[0].control_placeholder" v-model="valueListener">
             <selectorsOptions v-for="option in options" :id="option.enum_sort" :val="option.enum_value || {name:option.name || option.id,id:option.id}"
                             :key="option.enum_sort">
                 {{option.name || option.nickname || option.enum_value || option.title}}
@@ -21,7 +21,7 @@ export default {
      // 凡是多选，都有搜索框；不是多选传入selectable为true也可以有搜索框
         // changeKey为父组件的data，且可以被改变
         name:'ApprovalMultipleSelector',
-        props: ['n', 'placeholder', 'changeKey', 'value', 'resetinfo', 'selectable','title','data','index','clear','directionalSender'],
+        props: ['n', 'placeholder', 'changeKey', 'value', 'resetinfo', 'selectable','title','consdata','index','clear','directionalSender'],
         data() {
             return {
                 isDisable: this.disable,
@@ -67,10 +67,10 @@ export default {
 
             },
             directionalSender:function(value){
-                if(value && value.to === this.data[0].sort_number){
+                if(value && value.to === this.consdata[0].sort_number){
                     console.log(value);let _this = this
-                    if(this.data[0].control_source){
-                        fetch('get',this.data[0].control_source.url+'?'+this.data[0].control_source.parameters+'='+value.data).then((params) => {
+                    if(this.consdata[0].control_source){
+                        fetch('get',this.consdata[0].control_source.url+'?'+this.consdata[0].control_source.parameters+'='+value.data).then((params) => {
                             _this.options = params.data
                             
                             _this.$nextTick(() => {
@@ -81,8 +81,8 @@ export default {
                 }
             },
             valueListener: function (newValue) {
-                let {id} = this.data[0]
-                let {control_source} = this.data[0]
+                let {id} = this.consdata[0]
+                let {control_source} = this.consdata[0]
                 if(Array.isArray(this.valueListener)){
                     if(this.valueListener.length>0){
                         this.$emit('change',{key:id,value:this.valueListener,type:null})
@@ -124,8 +124,8 @@ export default {
             // },
             sourceChecker(){
                 let _this = this
-                if(this.data[0].control_source){
-                    fetch('get',this.data[0].control_source.url).then((params) => {
+                if(this.consdata[0].control_source){
+                    fetch('get',this.consdata[0].control_source.url).then((params) => {
                         _this.options = params.data
                         console.log(params);
                         _this.$nextTick(() => {
@@ -133,7 +133,7 @@ export default {
                         })
                     })
                 }else{
-                    _this.options = this.data[0].control_enums
+                    _this.options = this.consdata[0].control_enums
                 }
                 this.$nextTick(() => {
                     

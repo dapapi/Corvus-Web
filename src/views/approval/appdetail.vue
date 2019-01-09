@@ -41,29 +41,20 @@
                     <i v-if="list.form_status==232 && (info.approval.user_id === currentId || (list.creator && list.creator.data.id === currentId)) ">
                         <button class="btn btn-primary" @click='approvalHandler("discard")' >作废</button>
                     </i>
-                    <i v-if="list.form_status==231 && list.approval_begin === 0">
+                    <i v-if="list.form_status==231 && list.approval_begin === 0 && (info.approval.user_id === currentId || (list.creator && list.creator.data.id === currentId)) ">
                         <button class="btn btn-primary" @click='approvalHandler("cancel")'>撤销</button>
                         <button class="btn btn-danger" type="submit"
                                 data-toggle="modal">提醒
                         </button>
                     </i>
-                    <i v-if="[233,234,235].includes(list.form_status)">
+                    <i v-if="[233,234,235].includes(list.form_status) && (info.approval.user_id === currentId || (list.creator && list.creator.data.id === currentId)) ">
                         <button class="btn btn-primary" @click="addProjectTimeout(list.form_id)">重新提交</button>
                     </i>
-                    <!-- <i v-if="list.form_status==235">
-                        <button class="btn btn-primary" @click="addProjectTimeout(list.form_id)" >重新提交</button>
-                    </i>
-                    <i v-if="list.form_status==233">
-                        <button class="btn btn-primary" @click="addProjectTimeout(list.form_id)" >重新提交</button>
-                    </i> -->
                     <i v-if="list.form_status==231 && isCurrentApprover && $route.query.mode === 'approver'">
                         <button class="btn btn-success" @click='approvalHandler("agree")'>同意</button>
                         <button class="btn btn-danger" @click='approvalHandler("refuse")'>拒绝</button>
                         <button class="btn btn-primary" @click='approvalHandler("transfer")'>转交</button>
                     </i>
-                    <!-- <i v-if="list.form_status==232 && list.creator.data.id === currentId">
-                        <button class="btn btn-primary" @click='approvalHandler("discard")' >作废</button>
-                    </i> -->
                 </h6>
             </div>
             <div class="page-content container-fluid mt-20" v-if="info">
@@ -76,7 +67,7 @@
                         <div class="col-md-3 float-left">申请人</div>
                         <div class="col-md-3 float-left">{{list.name || info.approval.name}}</div>
                         <div class="col-md-3 float-left">职位</div>
-                        <div class="col-md-3 float-left">{{list.position || info.approval.position}}</div>
+                        <div class="col-md-3 float-left">{{list.position || (info.approval.position && info.approval.position.name)}}</div>
                     </div>
                     <div class="example">
                         <div class="col-md-3 float-left">部门</div>
@@ -93,7 +84,7 @@
                             <div class="col-md-6 detail-container px-0" v-for="(item, index) in detailData" :key="index" v-if="item.values">
                                 <div class="col-md-3 float-left detail-key mx-0 noselect">{{item.key}}</div>
                                 <div class="col-md-9 float-left detail-value" v-if="item.values && !item.values.data.value.includes('http')">{{item.values.data.value || ''}}</div>
-                                <div class="col-md-9 float-left detail-value" v-if="item.values && item.values.data.value.includes('http')" data-target='#docPreview' data-toggle='modal' @click='previewHandler(item.values.data.value)'>点击查看</div>
+                                <div class="col-md-9 float-left detail-value" v-if="item.values && item.values.data.value.includes('http')" @click='previewHandler(item.values.data.value)'>点击查看</div>
                             </div>
                         </div>
                         <div class="panel col-md-12 col-lg-12">
@@ -118,6 +109,30 @@
         :default-data='{fields:info.fields.data,list:list,trailInfo:trailInfo}'></BuildProject>
         <ApprovalGreatModule :form-data='formData' singlemode='true' :default-data='detailData' />
         <ApprovalGoModal :mode='approvalMode' :id='list.form_instance_number' @approvaldone='approvalDone' />
+        <div class="modal fade  bootbox" id="docPreviewSelector" aria-labelledby="docPreviewPositionCenter" role="dialog" tabindex="-1">
+            <div class="modal-dialog modal-simple modal-center modal-lg">
+                <div class="modal-content">
+                   
+                <div class="modal-header">
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">×</span>
+                    </button>
+                    <h4 class="modal-title">请选择要预览的文件</h4>
+                </div>
+                <div class="modal-body">
+                    <div v-for="(item, index) in previewUrlArr" :key="index" @click='previewHandler(item)'>
+                        {{item}}
+                        <!-- <figure>
+                            <img class="ml-20 mt-20 float-left" :src="item" style='max-width:400px;border:1px solid rgba(7,17,27,0.5)' :alt="item" >
+                        </figure> -->
+                    </div>
+                </div>
+                <!-- <div class="modal-footer">
+                    <button type="button" class="btn btn-default btn-pure waves-effect waves-light waves-round" data-dismiss="modal">关闭</button>
+                </div> -->
+                </div>
+            </div>
+        </div>
     </div>
 
 </template>
@@ -150,6 +165,7 @@ export default {
            indexData:{},
            formData:{},
            previewUrl:'',
+           previewUrlArr:[],
         }
     },
 
@@ -183,7 +199,14 @@ export default {
     },
     methods:{
         previewHandler(params){
-            // String(params).split('.')
+            $('#docPreviewSelector').modal('hide')
+            this.previewUrlArr = String(params).split(',')
+            if(this.previewUrlArr.length === 1){
+                $('#docPreview').modal('show')
+                this.previewUrl = this.previewUrlArr[0]
+            }else{
+                $('#docPreviewSelector').modal('show')
+            }
         },
         getFormList(){
             let _this = this
@@ -217,7 +240,6 @@ export default {
             })
         },
         waitingFor(params){
-            console.log(params);
             if(params){
                 this.pending = params
                 this.getCurrentApprover()

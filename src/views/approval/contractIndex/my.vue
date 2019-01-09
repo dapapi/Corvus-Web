@@ -87,7 +87,7 @@
                 keywords: '',
                 projectsInfo: [],
                 projectProgress:PROJECT_CONFIG.approvalProgress,
-
+                pageType:1,
             }
         },
         mounted(){
@@ -102,26 +102,25 @@
         },
         methods: {
             
-            getProjects: function (pageNum = 1, type = null) {
+            getProjects: function (pageNum = 1, signStatus) {
+                let _this = this
                 let data = {
                     page: pageNum,
-                    include: 'principal,trail.expectations'
+                    include: 'principal,trail.expectations',
+                    status:this.pageType
                 };
-                let url = '/approvals_contract/approval?status=1';
-                if (type) {
-                    url = '/approvals_contract/approval';
-                    data.type = type;
+                if (signStatus) {
+                    data.sign_contract_status = signStatus
                 }
-                this.paginationType = 'getProjects';
-                fetch('get', url, data).then(response => {
-                    this.projectsInfo = response.data
-                    this.total = response.meta.pagination;
-                    this.current_page = response.meta.current_page;
-                    this.total_pages = response.meta.total_pages;
+                fetch('get', '/approvals_contract/approval', data).then(response => {
+                    _this.projectsInfo = response.data
+                    _this.total = response.meta.pagination;
+                    _this.current_page = response.meta.current_page;
+                    _this.total_pages = response.meta.total_pages;
                 })
             },
              getList(params) {
-                 console.log(params);
+                this.pageType = params
                 let _this = this
                     fetch('get','/approvals_contract/approval?status='+params).then((params) => {
                         _this.projectsInfo = params.data

@@ -22,6 +22,7 @@
                     <div v-else>不支持此文件格式预览</div>
                 </div>
                 <div class="modal-footer">
+                    <span>图片文件请使用右键另存为</span>
                     <a :href="url" download="">
                         <button type="button" class="btn btn-success waves-effect waves-light waves-round">
                             <i class="icon md-download" aria-hidden="true"></i>下载附件
@@ -64,8 +65,8 @@ export default {
 
 <style scoped>
 img{
-    width: 500px !important;
-    height: 500px !important;
+    max-width: 860px !important;
+    /* height: 500px !important; */
 }
 </style>
 

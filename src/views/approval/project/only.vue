@@ -34,7 +34,7 @@
                                    data-selectable="selectable">
                                 <tr>
                                     <th class="cell-300" scope="col">审批编号</th>
-                                    <th class="cell-300" scope="col">项目名称</th>
+                                    <th class="cell-300" scope="col">合同名称</th>
                                     <th class="cell-300" scope="col">申请人</th>
                                     <!-- <th class="cell-300 position-relative" scope="col">类型
                                         <i class="iconfont icon-gengduo1" aria-hidden="true"
@@ -89,7 +89,8 @@
                 total_pages: 1,
                 keywords: '',
                 projectsInfo: [],
-                projectProgress:PROJECT_CONFIG.approvalProgress
+                projectProgress:PROJECT_CONFIG.approvalProgress,
+                pageType:1,
             }
         },
         mounted(){
@@ -103,26 +104,27 @@
             }
         },
         methods: {
-            getProjects: function (pageNum = 1, type = null) {
+            getProjects: function (pageNum = 1, signStatus) {
+                let _this = this
                 let data = {
                     page: pageNum,
-                    include: 'principal,trail.expectations'
+                    include: 'principal,trail.expectations',
+                    status:this.pageType
                 };
-                let url = '/approvals_project/notify';
-                if (type) {
-                    url = 'approvals_project/notify';
-                    data.type = type;
+                 if (signStatus) {
+                    data.sign_contract_status = signStatus
                 }
-                this.paginationType = 'getProjects';
-                fetch('get', url, data).then(response => {
-                    this.projectsInfo = response.data
-                    this.total = response.total;
-                    this.current_page = response.current_page;
-                    this.total_pages = response.last_page;
+                fetch('get', '/approvals_project/notify', data).then(response => {
+                    _this.projectsInfo = response.data
+                    _this.total = response.total;
+                    _this.current_page = response.current_page;
+                    _this.total_pages = response.last_page;
                 })
             },
             getList(params) {
                 let _this = this
+                this.pageType = params
+
                 fetch('get','/approvals_project/notify?status='+params).then((params) => {
                     _this.projectsInfo = params.data
                     _this.total = params.total;

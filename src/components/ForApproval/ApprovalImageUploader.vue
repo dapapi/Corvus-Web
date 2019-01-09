@@ -1,6 +1,6 @@
 <template>
     <div class="upload col-md-12 pl-0 ">
-        <div class="col-md-2 text-right pl-0" :class="data[0].required===1?'require':''">{{data[0].control_title}}</div>
+        <div class="col-md-2 text-right pl-0" :class="consdata[0].required===1?'require':''">{{consdata[0].control_title}}</div>
         <figure v-for="(item, index) in fileInfo" :key="index" style="margin-right:20px;">
             <div class="image-show" v-if="fileInfo.length > 0" :style="'backgroundImage:url('+item.fileUrl+')'"></div>
             <hr>
@@ -25,7 +25,7 @@ import config from '@/assets/js/config'
 import * as qiniu from 'qiniu-js'
 
 export default {
-    props:['data','clear'],
+    props:['consdata','clear'],
     name: 'ApprovalImageUploader',
     data(){
         return{
@@ -56,7 +56,9 @@ export default {
     },
     methods: {
         imgDelete(params){
+            let {id} = this.consdata[0]
             this.$delete(this.fileInfo,this.fileInfo.indexOf(this.fileInfo.find(item=>item.fileName === params.fileName)))
+            this.$emit('change',{key:id,value:this.fileInfo,type:null})
         },
         uploadFile(e) {
             let file = e.target.files[0];
@@ -84,7 +86,7 @@ export default {
                     let fileUrl = config.imgUrl + res.key;
                     let fileName = file.name;
                     // _this.$emit('change', fileUrl, fileName, fileSize,_this.fileExt,_this.id);
-                    let {id} = _this.data[0]
+                    let {id} = _this.consdata[0]
                     
                     _this.fileInfo.push({fileUrl, fileName, fileSize})
                     _this.$emit('change',{key:id,value:_this.fileInfo,type:null})

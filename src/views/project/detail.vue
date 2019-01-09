@@ -5,7 +5,7 @@
             <h1 class="page-title d-inline">项目详情</h1>
 
             <div class="page-header-actions dropdown show task-dropdown float-right"
-                 v-if="projectInfo.approval_status == 232">
+                 v-if="projectInfo.approval_status == 231">
                 <i class="iconfont icon-gengduo1 font-size-24" aria-hidden="true" id="taskDropdown"
                    data-toggle="dropdown" aria-expanded="false"></i>
                 <div class="dropdown-menu dropdown-menu-right task-dropdown-item" aria-labelledby="taskDropdown"
@@ -95,7 +95,8 @@
                             <div class="mb-20 float-left clearfix col-md-6 pl-0">
                                 <div class="float-left col-md-5 px-0">预计订单收入</div>
                                 <div class="float-left col-md-7">
-                                    {{ projectInfo.trail ? projectInfo.trail.data.fee : 0 }}元
+                                    {{ (projectInfo.trail && projectInfo.trail.data.fee) ? projectInfo.trail.data.fee :
+                                    0 }}元
                                 </div>
                             </div>
                             <div class="mb-20 float-left clearfix col-md-6 pl-0">
@@ -129,15 +130,15 @@
                             <li class="nav-item" role="presentation"
                                 v-if="projectInfo.type != 5 && projectInfo.approval_status == 232">
                                 <a class="nav-link" :class="projectInfo.type != 5 ? 'active' : ''" data-toggle="tab"
-                                href="#forum-project-follow"
-                                aria-controls="forum-base"
-                                aria-expanded="true" role="tab">项目进度</a>
+                                   href="#forum-project-follow"
+                                   aria-controls="forum-base"
+                                   aria-expanded="true" role="tab">项目进度</a>
                             </li>
                             <li class="nav-item" role="presentation" @click="getProjectTasks"
                                 v-if="projectInfo.type == 5 || projectInfo.approval_status == 232">
                                 <a class="nav-link" data-toggle="tab" href="#forum-project-tasks"
-                                aria-controls="forum-present"
-                                aria-expanded="false" role="tab">
+                                   aria-controls="forum-present"
+                                   aria-expanded="false" role="tab">
                                     <template v-if="projectTasksInfo.length > 0">
                                         <ToolTips :title="`已完成数量${completeNum}`">
                                             任务 ({{completeNum}}/{{projectTasksInfo.length}})
@@ -168,37 +169,39 @@
                             <!--</li>-->
                             <li class="nav-item" role="presentation">
                                 <a class="nav-link"
-                                :class="(projectInfo.type == 5 || projectInfo.approval_status != 232) ? 'active' : ''"
-                                data-toggle="tab"
-                                href="#forum-project-base"
-                                aria-controls="forum-base"
-                                aria-expanded="true" role="tab">概况</a>
+                                   :class="(projectInfo.type == 5 || projectInfo.approval_status != 232) ? 'active' : ''"
+                                   data-toggle="tab"
+                                   href="#forum-project-base"
+                                   aria-controls="forum-base"
+                                   aria-expanded="true" role="tab">概况</a>
                             </li>
                         </ul>
                         <div class="tab-content nav-tabs-animate bg-white">
                             <!-- 项目进度 -->
                             <div class="tab-pane animation-fade pb-10" @click="getProjectProgress"
-                                v-if="projectInfo.type != 5 && projectInfo.approval_status == 232"
-                                :class="projectInfo.type != 5 ? 'active' : ''"
-                                id="forum-project-follow" role="tabpanel">
+                                 v-if="projectInfo.type != 5 && projectInfo.approval_status == 232"
+                                 :class="projectInfo.type != 5 ? 'active' : ''"
+                                 id="forum-project-follow" role="tabpanel">
                                 <div class="clearfix mt-20">
                                     <div class="project-progress" v-for="item in projectProgressInfo">
                                         <template v-if="!item.isFinish">
-                                            <div class="clearfix pointer-content" @click="addProjectProgress(item.status)">
+                                            <div class="clearfix pointer-content"
+                                                 @click="addProjectProgress(item.status)">
                                                 <div class="col-md-4 p-0 float-left">
                                                     <div class="image-wraper">
                                                         <template v-if="item.isFinish == 1">
                                                             <img src="https://res-crm.papitube.com/progress-selected.png"
-                                                                alt="">
+                                                                 alt="">
                                                         </template>
                                                         <template v-else>
-                                                            <img src="https://res-crm.papitube.com/progress.png" alt="">
+                                                            <img src="https://res-crm.papitube.com/progress.png"
+                                                                 alt="">
                                                         </template>
                                                     </div>
                                                 </div>
                                                 <div class="col-md-8 float-left pr-0 pl-5"
-                                                    :class="item.isFinish == 1 ? 'finish-font-color' : ''"
-                                                    style=" line-height: 30px;font-size: 12px;">
+                                                     :class="item.isFinish == 1 ? 'finish-font-color' : ''"
+                                                     style=" line-height: 30px;font-size: 12px;">
                                                     {{ item.name }}
                                                 </div>
                                             </div>
@@ -209,39 +212,48 @@
                                                     <div class="image-wraper">
                                                         <template v-if="item.isFinish == 1">
                                                             <img src="https://res-crm.papitube.com/progress-selected.png"
-                                                                alt="">
+                                                                 alt="">
                                                         </template>
                                                         <template v-else>
-                                                            <img src="https://res-crm.papitube.com/progress.png" alt="">
+                                                            <img src="https://res-crm.papitube.com/progress.png"
+                                                                 alt="">
                                                         </template>
                                                     </div>
                                                 </div>
                                                 <div class="col-md-8 float-left pr-0 pl-5"
-                                                    :class="item.isFinish == 1 ? 'finish-font-color' : ''"
-                                                    style=" line-height: 30px;font-size: 12px;">
+                                                     :class="item.isFinish == 1 ? 'finish-font-color' : ''"
+                                                     style=" line-height: 30px;font-size: 12px;">
                                                     {{ item.name }}
                                                 </div>
                                             </div>
                                         </template>
                                         <div class="pt-20">
-                                            <div class="points" :class="item.isFinish == 1 ? 'finish-color' : ''"></div>
+                                            <div class="points"
+                                                 :class="item.isFinish == 1 ? 'finish-color' : ''"></div>
                                             <div class="line"
-                                                :class="item.isFinish == 1 ? 'finish-color' : 'unfinish-color'"></div>
+                                                 :class="item.isFinish == 1 ? 'finish-color' : 'unfinish-color'"></div>
                                         </div>
                                         <div class="pt-10 font-size-14" v-if="item.isFinish">
                                             <div>{{ item.finisher }}</div>
                                             <div>{{ item.finish_at }}</div>
                                         </div>
                                     </div>
+                                    <div class="bar-wrap float-left">
+                                        <ul>
+                                            <li v-for="(item, index) in new Array(36)" :key="index"
+                                                :style="{transform: `rotate(${index * 10}deg)`, opacity:`${index <= coursesLength/8 * 36 ? 1: 0.3}`}"></li>
+                                        </ul>
+                                        <div class="percent">{{ coursesLength / 8 * 100 }}%</div>
+                                    </div>
                                 </div>
                             </div>
                             <!-- 任务 -->
                             <div class="tab-pane animation-fade pb-20 fixed-button-father" id="forum-project-tasks"
-                                role="tabpanel" v-if="projectInfo.approval_status == 232">
+                                 role="tabpanel" v-if="projectInfo.approval_status == 232">
                                 <table class="table table-hover is-indent example" data-plugin="animateList"
-                                    data-animate="fade"
-                                    data-child="tr"
-                                    data-selectable="selectable">
+                                       data-animate="fade"
+                                       data-child="tr"
+                                       data-selectable="selectable">
                                     <tr class="animation-fade"
                                         style="animation-fill-mode: backwards; animation-duration: 250ms; animation-delay: 0ms;">
                                         <th class="cell-300" scope="col">任务名称</th>
@@ -252,7 +264,9 @@
                                     </tr>
                                     <tbody>
                                     <tr v-for="task in projectTasksInfo">
-                                        <td class="pointer-content" @click="redirectTask(task.id)">{{ task.title }}</td>
+                                        <td class="pointer-content" @click="redirectTask(task.id)">{{ task.title
+                                            }}
+                                        </td>
                                         <td>{{ task.type.data.title }}</td>
                                         <td>
                                             <template v-if="task.status === 1">进行中</template>
@@ -264,19 +278,22 @@
                                     </tr>
                                     </tbody>
                                 </table>
-                                <div class="col-md-1" style="margin: 6rem auto" v-if="projectTasksInfo.length === 0">
+                                <div class="col-md-1" style="margin: 6rem auto"
+                                     v-if="projectTasksInfo.length === 0">
                                     <img src="https://res.papitube.com/corvus/images/content-none.png" alt=""
-                                        style="width: 100%">
+                                         style="width: 100%">
                                 </div>
 
                                 <div class="site-action fixed-button" data-plugin="actionBtn" data-toggle="modal"
-                                    data-target="#addTask">
+                                     data-target="#addTask">
                                     <button type="button" @click="setTaskPrincipal"
                                             class="site-action-toggle btn-raised btn btn-success btn-floating waves-effect waves-classic">
-                                        <i class="front-icon iconfont icon-tianjia1 animation-scale-up" aria-hidden="true"
-                                        style="font-size:30px"></i>
-                                        <i class="back-icon iconfont icon-tianjia1 animation-scale-up" aria-hidden="true"
-                                        style="font-size:30px"></i>
+                                        <i class="front-icon iconfont icon-tianjia1 animation-scale-up"
+                                           aria-hidden="true"
+                                           style="font-size:30px"></i>
+                                        <i class="back-icon iconfont icon-tianjia1 animation-scale-up"
+                                           aria-hidden="true"
+                                           style="font-size:30px"></i>
                                     </button>
                                 </div>
 
@@ -507,16 +524,16 @@
                             <!--</div>-->
                             <!-- 概况 -->
                             <div class="tab-pane animation-fade" v-if="projectInfo"
-                                :class="(projectInfo.type == 5 || projectInfo.approval_status != 232) ? 'active' : ''"
-                                id="forum-project-base"
-                                role="tabpanel">
+                                 :class="(projectInfo.type == 5 || projectInfo.approval_status != 232) ? 'active' : ''"
+                                 id="forum-project-base"
+                                 role="tabpanel">
                                 <div class="card">
                                     <div class="card-header card-header-transparent card-header-bordered">
                                         <div class="float-left font-weight-bold third-title">项目信息</div>
                                         <div class="float-right"
-                                            v-show="!isEdit && projectInfo.approval_status == 232">
+                                             v-show="!isEdit && projectInfo.approval_status == 232">
                                             <i class="iconfont icon-bianji2 pointer-content" aria-hidden="true"
-                                            @click="editBaseInfo"></i>
+                                               @click="editBaseInfo"></i>
                                         </div>
                                         <div class="float-right mr-40" v-show="isEdit">
                                             <button class="btn btn-sm btn-white btn-pure" @click="cancelEdit">取消
@@ -530,83 +547,83 @@
                                                 <div class="col-md-3 float-left text-right pl-0">项目名称</div>
                                                 <div class="col-md-9 float-left font-weight-bold">
                                                     <EditInput :content="projectInfo.title" :is-edit="isEdit"
-                                                            @change="(value) => changeProjectBaseInfo(value, 'title')"></EditInput>
+                                                               @change="(value) => changeProjectBaseInfo(value, 'title')"></EditInput>
                                                 </div>
                                             </div>
                                             <div class="card-text py-10 px-0 clearfix col-md-6 float-left ">
                                                 <div class="col-md-3 float-left text-right pl-0">负责人</div>
                                                 <div class="col-md-9 float-left font-weight-bold">
                                                     <EditInputSelector :is-edit="isEdit"
-                                                                    @change="(value) => changeProjectBaseInfo(value, 'principal_id')"></EditInputSelector>
+                                                                       @change="(value) => changeProjectBaseInfo(value, 'principal_id')"></EditInputSelector>
                                                 </div>
                                             </div>
                                             <div class="card-text py-10 px-0 clearfix col-md-6 float-left ">
                                                 <div class="col-md-3 float-left text-right pl-0">参与人</div>
                                                 <div class="col-md-9 float-left font-weight-bold">
                                                     <EditAddMember :is-edit="isEdit"
-                                                                @change="(value) => changeProjectBaseInfo(value, 'participant_ids')"></EditAddMember>
+                                                                   @change="(value) => changeProjectBaseInfo(value, 'participant_ids')"></EditAddMember>
                                                 </div>
                                             </div>
                                             <div class="py-10 px-0 clearfix col-md-6 float-left "
-                                                v-if="projectInfo.type != 5">
+                                                 v-if="projectInfo.type != 5">
                                                 <TrailOrigin :trailType='projectInfo.trail.data.type'
-                                                            typeName='项目' :isEdit='isEdit'
-                                                            :content='projectInfo.trail.data.resource'
-                                                            @changeTrailOrigin="(value) => changeProjectBaseInfo(value, 'resource_type')"
-                                                            :contentType='projectInfo.trail.data.resource_type'
-                                                            @changeEmail="(value) => changeProjectBaseInfo(value, 'resource')"
-                                                            detailPage='true'
-                                                            @changeTrailOriginPerson="(value) => changeProjectBaseInfo(value.id, 'resource')"/>
+                                                             typeName='项目' :isEdit='isEdit'
+                                                             :content='projectInfo.trail.data.resource'
+                                                             @changeTrailOrigin="(value) => changeProjectBaseInfo(value, 'resource_type')"
+                                                             :contentType='projectInfo.trail.data.resource_type'
+                                                             @changeEmail="(value) => changeProjectBaseInfo(value, 'resource')"
+                                                             detailPage='true'
+                                                             @changeTrailOriginPerson="(value) => changeProjectBaseInfo(value.id, 'resource')"/>
                                             </div>
                                             <div class="card-text py-10 px-0 clearfix col-md-6 float-left "
-                                                v-if="projectInfo.type != 5">
+                                                 v-if="projectInfo.type != 5">
                                                 <div class="col-md-3 float-left text-right pl-0">目标艺人</div>
                                                 <div class="col-md-9 float-left font-weight-bold"
-                                                    v-if="projectInfo.trail.data.expectations">
+                                                     v-if="projectInfo.trail.data.expectations">
                                                     <span v-for="expectation in projectInfo.trail.data.expectations.data"
-                                                        :key="expectation.name" v-if="!isEdit">
+                                                          :key="expectation.name" v-if="!isEdit">
                                                         {{ expectation.name || expectation.nickname}}
                                                     </span>
                                                     <EditSelector :options="starsArr" :is-edit="isEdit"
-                                                                :multiple="true"
-                                                                :content="selectedExpectationsArr"
-                                                                :contentHide='true'
-                                                                @change="(value) => changeProjectBaseInfo(value, 'expectations')"></EditSelector>
+                                                                  :multiple="true"
+                                                                  :content="selectedExpectationsArr"
+                                                                  :contentHide='true'
+                                                                  @change="(value) => changeProjectBaseInfo(value, 'expectations')"></EditSelector>
                                                 </div>
                                             </div>
                                             <div class="card-text py-10 px-0 clearfix col-md-6 float-left "
-                                                v-if="projectInfo.type == 5">
+                                                 v-if="projectInfo.type == 5">
                                                 <div class="col-md-3 float-left text-right pl-0">可见范围</div>
                                                 <div class="col-md-9 float-left font-weight-bold">
                                                     <EditSelector :is-edit="isEdit" :content="projectInfo.privacy"
-                                                                :options="visibleRangeArr"
-                                                                @change="(value) => changeProjectBaseInfo(value, 'privacy')"></EditSelector>
+                                                                  :options="visibleRangeArr"
+                                                                  @change="(value) => changeProjectBaseInfo(value, 'privacy')"></EditSelector>
                                                 </div>
                                             </div>
                                             <div class="card-text py-10 px-0 clearfix col-md-6 float-left "
-                                                v-if="projectInfo.type != 5">
+                                                 v-if="projectInfo.type != 5">
                                                 <div class="col-md-3 float-left text-right pl-0">预计订单收入/元</div>
                                                 <div class="col-md-9 float-left font-weight-bold">
                                                     <EditNumberSpinner :is-edit="isEdit"
-                                                                    :content="projectInfo.trail.data.fee"
-                                                                    @change="(value) => changeProjectBaseInfo(value, 'fee')"></EditNumberSpinner>
+                                                                       :content="projectInfo.trail.data.fee"
+                                                                       @change="(value) => changeProjectBaseInfo(value, 'fee')"></EditNumberSpinner>
                                                 </div>
                                             </div>
                                             <div class="card-text py-10 px-0 clearfix col-md-6 float-left "
-                                                v-if="projectInfo.type != 5">
+                                                 v-if="projectInfo.type != 5">
                                                 <div class="col-md-3 float-left text-right pl-0">预计支出/元</div>
                                                 <div class="col-md-9 float-left font-weight-bold">
                                                     <EditNumberSpinner :is-edit="isEdit"
-                                                                    :content="projectInfo.projected_expenditure"
-                                                                    @change="(value) => changeProjectBaseInfo(value, 'projected_expenditure')"></EditNumberSpinner>
+                                                                       :content="projectInfo.projected_expenditure"
+                                                                       @change="(value) => changeProjectBaseInfo(value, 'projected_expenditure')"></EditNumberSpinner>
                                                 </div>
                                             </div>
                                             <div class="card-text py-10 px-0 clearfix col-md-6 float-left ">
                                                 <div class="col-md-3 float-left text-right pl-0">优先级</div>
                                                 <div class="col-md-9 float-left font-weight-bold">
                                                     <EditSelector :is-edit="isEdit" :options="levelArr"
-                                                                :content="projectInfo.priority"
-                                                                @change="(value) => changeProjectBaseInfo(value, 'priority')"></EditSelector>
+                                                                  :content="projectInfo.priority"
+                                                                  @change="(value) => changeProjectBaseInfo(value, 'priority')"></EditSelector>
                                                 </div>
                                             </div>
                                             <div class="card-text py-10 px-0 clearfix col-md-6 float-left ">
@@ -627,7 +644,7 @@
                                             </div>
                                             <div v-if="projectInfo.type != 5 && projectInfo.fields">
                                                 <div class="card-text py-10 px-0 clearfix col-md-6 float-left "
-                                                    v-for="field in projectInfo.fields">
+                                                     v-for="field in projectInfo.fields">
                                                     <div class="col-md-3 float-left text-right pl-0">{{ field.key }}
                                                     </div>
                                                     <div class="col-md-9 float-left font-weight-bold">
@@ -639,15 +656,15 @@
                                                         </template>
                                                         <template v-else-if="field.field_type === 2">
                                                             <EditSelector :placeholder="'请选择' + field.key"
-                                                                        :content="field.values ? field.values.data.value : ''"
-                                                                        :is-edit="isEdit"
-                                                                        :options="field.contentArr"
-                                                                        @change="(value) => addInfo(value, field.id )"></EditSelector>
+                                                                          :content="field.values ? field.values.data.value : ''"
+                                                                          :is-edit="isEdit"
+                                                                          :options="field.contentArr"
+                                                                          @change="(value) => addInfo(value, field.id )"></EditSelector>
                                                         </template>
                                                         <template v-else-if="field.field_type === 3">
                                                             <EditableSearchBox :options="starsArr" :multiple="true"
-                                                                            :is-edit="isEdit"
-                                                                            @change="(value) => addInfo(value, field.id )"></EditableSearchBox>
+                                                                               :is-edit="isEdit"
+                                                                               @change="(value) => addInfo(value, field.id )"></EditableSearchBox>
                                                         </template>
                                                         <template v-else-if="field.field_type === 4">
                                                             <EditDatepicker
@@ -678,7 +695,7 @@
                                                         </template>
                                                         <template v-else-if="field.field_type === 10">
                                                             <EditInputSelector :is-edit="isEdit"
-                                                                            @change="(value) => addInfo(value, field.id )"></EditInputSelector>
+                                                                               @change="(value) => addInfo(value, field.id )"></EditInputSelector>
                                                         </template>
                                                         <template v-else-if="field.field_type === 11">
                                                             <EditNumberSpinner
@@ -694,14 +711,15 @@
                                                 <div class="col-md-3 float-left text-right pl-0">备注</div>
                                                 <div class="col-md-9 float-left font-weight-bold">
                                                     <EditTextarea :is-edit="isEdit" :content="projectInfo.desc"
-                                                                @change="(value) => changeProjectBaseInfo(value, 'desc')"></EditTextarea>
+                                                                  @change="(value) => changeProjectBaseInfo(value, 'desc')"></EditTextarea>
                                                 </div>
                                             </div>
                                         </div>
 
                                         <div class="segmentation-line example"></div>
 
-                                        <div class="card-text py-10 px-0 clearfix col-md-6 float-left" v-if="projectInfo.creator">
+                                        <div class="card-text py-10 px-0 clearfix col-md-6 float-left"
+                                             v-if="projectInfo.creator">
                                             <div class="col-md-3 float-left text-right pl-0">录入人</div>
                                             <div class="col-md-9 float-left font-weight-bold">
                                                 {{ projectInfo.creator.data.name }}
@@ -725,7 +743,8 @@
                                                 {{ projectInfo.last_updated_at }}
                                             </div>
                                         </div>
-                                        <div class="card-text py-10 px-0 clearfix col-md-6 float-left" v-if="projectInfo.relate_projects">
+                                        <div class="card-text py-10 px-0 clearfix col-md-6 float-left"
+                                             v-if="projectInfo.relate_projects">
                                             <div class="col-md-3 float-left text-right pl-0">关联项目</div>
                                             <div class="col-md-9 float-left font-weight-bold">
                                                 <template v-for="project in projectInfo.relate_projects.data">
@@ -733,7 +752,8 @@
                                                 </template>
                                             </div>
                                         </div>
-                                        <div class="card-text py-10 px-0 clearfix col-md-6 float-left" v-if="projectInfo.relate_tasks">
+                                        <div class="card-text py-10 px-0 clearfix col-md-6 float-left"
+                                             v-if="projectInfo.relate_tasks">
                                             <div class="col-md-3 float-left text-right pl-0">关联任务</div>
                                             <div class="col-md-9 float-left font-weight-bold">
                                                 <template v-for="task in projectInfo.relate_tasks.data">
@@ -745,9 +765,9 @@
                                         <div class="segmentation-line example float-left"></div>
 
                                         <div v-if="projectInfo.type != 5">
-                                            <!--<ApprovalProgress :formid="projectInfo.form_instance_number"-->
-                                                            <!--:formstatus="projectInfo.approval_status"-->
-                                                            <!--mode="detail"></ApprovalProgress>-->
+                                            <ApprovalProgress :formid="projectInfo.form_instance_number"
+                                                              :formstatus="projectInfo.approval_text"
+                                                              mode="detail"></ApprovalProgress>
                                         </div>
                                     </div>
                                 </div>
@@ -765,7 +785,7 @@
                             <div class="card-block">
                                 <div class="col-md-12 pl-0">
                                     <TaskFollowUp :follow-type="'项目'" :trailId="projectId"
-                                                trailType="projects"></TaskFollowUp>
+                                                  trailType="projects"></TaskFollowUp>
                                 </div>
                             </div>
                         </div>
@@ -795,7 +815,8 @@
                         <div class="example" v-if="taskTypeArr.length > 0">
                             <div class="col-md-2 text-right float-left">任务类型</div>
                             <div class="col-md-10 float-left pl-0">
-                                <selectors :options="taskTypeArr" ref="taskType" @change="changeTaskType"></selectors>
+                                <selectors :options="taskTypeArr" ref="taskType"
+                                           @change="changeTaskType"></selectors>
                             </div>
                         </div>
                         <div class="example">
@@ -1360,7 +1381,7 @@
     import fetch from '../../assets/utils/fetch.js'
     import config from '../../assets/js/config'
     import Cookies from 'js-cookie'
-
+    
     export default {
         data: function () {
             return {
@@ -1479,11 +1500,13 @@
                 projectTaskingInfo: [],
                 metaInfo: '',
                 oldInfo: '',
+                coursesLength: 0,
             }
         },
 
         mounted() {
             this.projectId = this.$route.params.id;
+            this.getPrivacy() //获取隐私设置列表
             this.getProject();
             this.getClients();
             this.getTaskType();
@@ -1600,40 +1623,75 @@
                         }
                     }
 
+                    if (response.data.approval_status === 231) {
+                        this.projectInfo.approval_text = '待审批'
+                    } else if (response.data.approval_status === 232) {
+                        this.projectInfo.approval_text = '已审批'
+                    }
+
                     this.isLoading = false
                 })
             },
             //隐私设置
-            setPrivacy:function(){
-                // alert(222)
+            setPrivacy: function () {
+                
                 let _this = this
                 let data = {
-                    fee:this.$store.state.newParticipantsInfo, //预计订单收入
-                    projected_expenditure:this.$store.state.participantsInfo,//预计支出
-                    expendituresum:this.$store.state.contractInfo,//实际收入
-                    contractmoney:this.$store.state.collectInfo,//实际支出
-                    // project_bill:[]
+                    fee: this.$store.state.newParticipantsInfo, //预计订单收入
+                    projected_expenditure: this.$store.state.participantsInfo,//预计支出
+                    expendituresum: this.$store.state.contractInfo,//实际收入
+                    contractmoney: this.$store.state.collectInfo,//实际支出
                 }
-                let sendData={
-                    fee:[],
-                    projected_expenditure:[],
-                    expendituresum:[],
-                    contractmoney:[],
-                    // project_bill:[]
+                let sendData = {
+                    fee: [],
+                    projected_expenditure: [],
+                    expendituresum: [],
+                    contractmoney: [],
                 }
                 for (const key in data) {
                     for (let i = 0; i < data[key].length; i++) {
                         sendData[key].push(data[key][i].id)
                     }
                 }
-                // console.log(sendData)
-                fetch('post', `/projects/${this.$route.params.id}/privacyUser`,sendData).then(function (response) {
+                fetch('post', `/projects/${this.$route.params.id}/privacyUser`, sendData).then(function (response) {
                     toastr.success('隐私设置成功')
                     $('#addPrivacy').modal('hide')
                     _this.$store.state.newParticipantsInfo = []
                     _this.$store.state.participantsInfo = []
                     _this.$store.state.contractInfo = []
                     _this.$store.state.collectInfo = []
+                })
+            },
+            getPrivacy:function(){
+                let data ={
+                    project_id:this.$route.params.id
+                }
+                let _this = this
+                fetch('get', `/privacyUsers`, data).then(function (response) {
+                    // console.log(response)
+                    let allPrivacyUsers = response.privacy_users
+                    _this.$store.state.newParticipantsInfo = []
+                    _this.$store.state.participantsInfo = []
+                    _this.$store.state.contractInfo = []
+                    _this.$store.state.collectInfo = []
+                    if(allPrivacyUsers){
+                        for (let i = 0; i < allPrivacyUsers.length; i++) {
+                            if(allPrivacyUsers[i].moduleable_field == 'fee'){
+                                _this.$store.state.newParticipantsInfo = allPrivacyUsers[i].user_ids.split(',')
+                            }else if (allPrivacyUsers[i].moduleable_field == 'projected_expenditure'){
+                               _this.$store.state.participantsInfo = allPrivacyUsers[i].user_ids.split(',')
+                            }else if (allPrivacyUsers[i].moduleable_field == 'expendituresum'){
+                               _this.$store.state.contractInfo = allPrivacyUsers[i].user_ids.split(',')
+                            }else if (allPrivacyUsers[i].moduleable_field == 'contractmoney'){
+                                // console.log(allPrivacyUsers[i])
+                               _this.$store.state.collectInfo = allPrivacyUsers[i].user_ids.split(',')
+                            }else{
+                                console.log(allPrivacyUsers[i].user_ids.split(','))
+                            }
+                        }
+                    }
+                    console.log(_this.$store.state.newParticipantsInfo)
+                    
                 })
             },
             getStars: function () {
@@ -1741,6 +1799,7 @@
                     flagInfo['finisher'] = response.data.user;
                     flagInfo['finish_at'] = response.data.updated_at;
                     flagInfo['isFinish'] = 1;
+                    this.coursesLength += 1;
                     toastr.success('修改成功');
                     this.getProjectProgress();
                 })
@@ -1750,6 +1809,7 @@
                 fetch('get', '/projects/' + this.projectId + '/course').then(response => {
                     if (response.data.length > 0) {
                         let courses = response.data;
+                        this.coursesLength = response.data.length
                         let flagArr = [];
                         for (let i = 0; i < courses.length; i++) {
                             let projectProgress = this.projectProgressInfo.find(item => item.status == courses[i].content);
@@ -2211,7 +2271,7 @@
     }
 </script>
 
-<style>
+<style lang="scss" scoped>
     .task-dropdown {
         -moz-user-select: none;
         -webkit-user-select: none;
@@ -2301,4 +2361,26 @@
         align-items: center;
     }
 
+    .bar-wrap {
+        height: 50px;
+        width: 80px;
+        position: relative;
+        ul {
+            list-style: none;
+            li {
+                list-style: none;
+                width: 1px;
+                height: 3px;
+                background-color: red;
+                transform-origin: center 25px;
+                position: absolute;
+                border-radius: 2px;
+            }
+        }
+        .percent {
+            font-size: 10px;
+            line-height: 25px;
+            text-align: center;
+        }
+    }
 </style>

@@ -25,7 +25,7 @@
                                 <ul class="menu pl-0">
                                     <li class="site-menu-item has-sub  pb-10" v-for="(item,index) in groupingDate"
                                         :key="index" style="width:260px;">
-                                        <a href="javascript:void(0) " class="p-5" @click="switchMenu(item.id)" >
+                                        <a href="javascript:void(0) " class="p-10" @click="switchMenu(item.id)" >
                                             <i v-show="visible"
                                                class="iconfont icon-plus-select-down showList font-size:25px pr-10"></i>
                                                <span class="icon md-caret-right font-size-20 mr-10 leftImg " :class="switchId.includes(item.id)?'anmite':''"></span>
@@ -53,7 +53,7 @@
                                         <ul class="administration-subordinate-item m-0" v-for="n in roleDate"
                                             :key="n.id" >
                                             <li  v-show="item.id==n.group_id && switchId.includes(n.group_id)"
-                                                class="py-5"
+                                                class="p-10"
                                                 style="position:relative;" @click="changeCont(n.id,index)"
                                                 :class="n.id==jobCont?'back':''">
                                                 <template >

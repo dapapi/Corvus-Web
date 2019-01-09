@@ -10,7 +10,7 @@
                 <div data-role="content" class="scrollable-content" style="width: 259px;">
                     <section class="page-aside-section">
                         <h5 class="page-title pl-30 mb-30">{{title}}</h5>
-                        <treeView :menus="leftData"></treeView>
+                        <treeView :menus="leftData" :isMessage="true"></treeView>
                     </section>
                 </div>
             </div>
@@ -66,7 +66,6 @@
 <script>
     import fetch from '@/assets/utils/fetch'
     import config from '@/assets/js/config'
-    import treeView from '@/components/ViewTree/TreeView.vue'
     import {mapState, mapGetters} from 'vuex'
 
     export default {
@@ -81,9 +80,6 @@
             ...mapState([
                 'unReadMsg'
             ])
-        },
-        components:{
-            treeView
         },
         data() {
             return {

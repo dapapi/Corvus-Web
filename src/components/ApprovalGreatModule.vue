@@ -11,8 +11,8 @@
                     </div>
                     <div class="modal-body modal-greater ">
                         <div v-for="(item, index) in moduleInfo" :key="index" class="great-option example " >
-                            <div :is='sortChecker(item)' 
-                            :data='item' :predata='sendData' class="container"
+                            <div :is='sortChecker(item)' :ref='item[0].control.data_dictionary_id'
+                            :consdata='item' :predata='sendData' class="container"
                             :singlemode='singlemode' :clear='clearFlag' :directional-sender='directionalData'
                             @change="changeHandler" @directional='directionalWatcher'
                             :formid='form_id'></div>
@@ -84,13 +84,14 @@ export default {
     mounted(){
         let _this = this
         $('#approval-great-module').on('show.bs.modal',function(){
-                // _this.clearSignal()
                 _this.$nextTick(() => {
                     _this.getFormContractor() 
                 })
         })
+         $('#approval-great-module').on('hidden.bs.modal',function(){
+                // _this.clearSignal()
+        })
         this.refresh()
-        // console.log(this.formData.condition);
     },
     components:{
         ApprovalMultiple,
@@ -109,26 +110,18 @@ export default {
         ApprovalChainReaction
     },
     watch:{
-        formData:function(value){
-            if(value){
-                // this.getFormContractor()
 
-                // this.trendApproverChecker()
-
-            }
-            
-        }
     },
     update(){
 
     },
     methods:{
         directionalWatcher(params){
-          console.log(params); 
           this.directionalData = params
         },
         clearSignal(){
             this.$store.dispatch('changeParticipantsInfo',{data:[]});
+            
             this.trendApprover={
                 condition:[],
                 ready:false,
@@ -158,6 +151,9 @@ export default {
                     toastr.success('提交成功')
                     $('#approval-great-module').modal('hide')
                     _this.clearSignal()
+                    setTimeout(() => {
+                        location.reload();
+                    }, 1000);
                 })
             }
         },
@@ -274,13 +270,9 @@ export default {
 .modal-greater{
     margin-top: 20px !important;
     height: 100%;
-    /* overflow-y:scroll; */
 }
 .great-option{
     display: flex;
-    /* font-size: 12px; */
-    /* height: 50px; */
-    
     margin: 20px 5px ;
 }
 </style>

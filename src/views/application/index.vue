@@ -1,6 +1,6 @@
 <template>
     <div class="page  page-aside-left">
-        <second-left :leftData="leftData" :title="'工作台'"></second-left>
+        <second-left :leftData="leftData"  :title="'工作台'"></second-left>
         <router-view/>
     </div>
 </template>
@@ -16,7 +16,8 @@
         },
         data() {
             return {
-                leftData: []
+                leftData: [],
+                total:''
             }
         },
         mounted() {
@@ -29,8 +30,9 @@
                         id: 1,
                         name: '我的消息',
                         url: '/my/message',
-                        type: 'link',
-                        level: 1
+                        type: 'button',
+                        level: 1,
+                        subMenu:[],
                     },
                     {
                         id: 2,
@@ -68,7 +70,34 @@
                     //     level: 1
                     // }
                 ]
-            }
+                this.getList()
+            },
+            getList:function(){
+                fetch('get',`${config.apiUrl}/getmodules`).then((res) => {
+                    this.moduleList = res
+                    let data={}
+                    for (let i = 0; i < this.leftData.length; i++) {
+                    if(this.leftData[i].id == 1){
+                        for (let t = 0; t < res.length; t++) {
+                            data={
+                                id:`${res[t].id}`,
+                                name:`${res[t].name}`,
+                                url:`/my/message?moduleType=${res[t].id}`,
+                                type:'link',
+                                level:2,
+                                isExpanded:false,
+                                isSelected:false,
+                                num:res[t].un_read,
+                            }
+                            this.leftData[i].subMenu.push(data)
+                            
+                        }
+                    }
+                    
+                }
+                })
+            
+            },
         }
     }
 </script>

@@ -11,14 +11,14 @@
                 </div>
                 <div class="modal-body">
                     <div class="col-md-12 example clearfix" v-show="projectType != 5 && trailsArr.length > 0">
-                        <div class="col-md-2 text-right float-left px-0">销售线索</div>
+                        <div class="col-md-2 text-right float-left px-0 require">销售线索</div>
                         <div class="col-md-10 float-left">
                             <Selectors :options="trailsArr" @change="addProjectTrail" ref="trails"
                                        selectable="true"></Selectors>
                         </div>
                     </div>
                     <div class="col-md-12 example clearfix" v-show="projectType != 5">
-                        <div class="col-md-2 text-right float-left px-0">项目来源</div>
+                        <div class="col-md-2 text-right float-left px-0 require">项目来源</div>
                         <div class="col-md-10 float-left">
                             <div class="col-md-6 float-left pl-0" v-if="trailOriginArr.length > 0">
                                 <Selectors :options="trailOriginArr"
@@ -36,70 +36,70 @@
                         </div>
                     </div>
                     <div class="col-md-12 example clearfix">
-                        <div class="col-md-2 text-right float-left px-0">项目名称</div>
+                        <div class="col-md-2 text-right float-left require px-0">项目名称</div>
                         <div class="col-md-10 float-left">
                             <EmitInput @change="(value) => addProjectBaseInfo(value, 'title')"
                                        ref="projectNameRef"></EmitInput>
                         </div>
                     </div>
                     <div class="col-md-12 example clearfix">
-                        <div class="col-md-2 text-right float-left px-0">项目负责人</div>
+                        <div class="col-md-2 text-right float-left px-0 require">项目负责人</div>
                         <div class="col-md-10 float-left">
                             <InputSelectors
                                     @change="(value) => addProjectBaseInfo(value, 'principal_id')"></InputSelectors>
                         </div>
                     </div>
                     <div class="col-md-12 example clearfix" v-show="projectType != 5 && starsArr.length > 0">
-                        <div class="col-md-2 text-right float-left px-0">目标艺人</div>
+                        <div class="col-md-2 text-right float-left px-0 require">目标艺人</div>
                         <div class="col-md-10 float-left">
                             <Selectors multiple="true" :options="allStarsArr" ref="intentionArtist"
                                        @change="(value) => addProjectBaseInfo(value, 'expectations')"></Selectors>
                         </div>
                     </div>
                     <div class="col-md-12 example clearfix">
-                        <div class="col-md-2 text-right float-left px-0">优先级</div>
+                        <div class="col-md-2 text-right float-left px-0 require">优先级</div>
                         <div class="col-md-10 float-left">
                             <Selectors :options="levelArr" ref="priorityLevel"
                                        @change="(value) => addProjectBaseInfo(value, 'priority')"></Selectors>
                         </div>
                     </div>
                     <div class="col-md-12 example clearfix" v-show="projectType == 5">
-                        <div class="col-md-2 text-right float-left px-0">可见范围</div>
+                        <div class="col-md-2 text-right float-left px-0 require">可见范围</div>
                         <div class="col-md-10 float-left">
                             <Selectors :options="visibleRangeArr" ref="visibleRange"
                                        @change="(value) => addProjectBaseInfo(value, 'privacy')"></Selectors>
                         </div>
                     </div>
                     <div class="col-md-12 example clearfix">
-                        <div class="col-md-2 text-right float-left px-0">开始时间</div>
+                        <div class="col-md-2 text-right float-left px-0 require">开始时间</div>
                         <div class="col-md-10 float-left">
                             <Datepicker @change="(value) => addProjectBaseInfo(value, 'start_at')"
                                         ref="startTime"></Datepicker>
                         </div>
                     </div>
                     <div class="col-md-12 example clearfix">
-                        <div class="col-md-2 text-right float-left px-0">截止时间</div>
+                        <div class="col-md-2 text-right float-left px-0 require">截止时间</div>
                         <div class="col-md-10 float-left">
                             <Datepicker @change="(value) => addProjectBaseInfo(value, 'end_at')"
                                         ref="endTime" :startDate="startTime"></Datepicker>
                         </div>
                     </div>
                     <div class="col-md-12 example clearfix" v-show="projectType != 5">
-                        <div class="col-md-2 text-right float-left px-0">预计支出</div>
+                        <div class="col-md-2 text-right float-left px-0 require">预计支出</div>
                         <div class="col-md-10 float-left">
                             <NumberSpinner ref="projectExpenditureFee"
                                            @change="(value) => addProjectBaseInfo(value, 'projected_expenditure')"></NumberSpinner>
                         </div>
                     </div>
                     <div class="col-md-12 example clearfix" v-show="projectType != 5">
-                        <div class="col-md-2 text-right float-left px-0">预计订单收入</div>
+                        <div class="col-md-2 text-right float-left px-0 require">预计订单收入</div>
                         <div class="col-md-10 float-left">
                             <NumberSpinner ref="projectFee"
                                            @change="(value) => addProjectBaseInfo(value, 'fee')"></NumberSpinner>
                         </div>
                     </div>
                     <div class="col-md-12 example clearfix" v-for="field in projectFields">
-                        <div class="col-md-2 text-right float-left px-0">{{ field.key }}</div>
+                        <div class="col-md-2 text-right float-left px-0 ">{{ field.key }}</div>
                         <div class="col-md-10 float-left">
                             <template v-if="field.field_type === 1">
                                 <EmitInput :default='newArray.find(item=>item.id === field.id)'
@@ -241,7 +241,9 @@
                         })
                     })
                 } else {
-                    _this.$store.dispatch('changePrincipal', {data: {id: _this.user.id, name: _this.user.nickname}})
+                    if (!_this.$store.state.newPrincipalInfo.id) {
+                        _this.$store.dispatch('changePrincipal', {data: {id: _this.user.id, name: _this.user.nickname}})
+                    }
                 }
             });
             this.user = JSON.parse(Cookies.get('user'));

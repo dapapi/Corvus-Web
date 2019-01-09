@@ -1,7 +1,7 @@
 <template>
     <div class="col-md-12 pl-0 pr-0">
         <div v-for="i in n" :key="i" class="approval-multiple">
-            <span v-if="!singlemode">{{data[0].control_title}}({{i}})</span>
+            <span v-if="!singlemode">{{consdata[0].control_title}}({{i}})</span>
             <hr v-if="!singlemode">
             <div :is='sortChecker(item)' class="approval-multiple-option"
                 v-for="(item, index) in data" ref='selectpicker'
@@ -31,7 +31,7 @@ import ApprovalNumber from '@/components/ForApproval/ApprovalNumber'
 import ApprovalSelector from '@/components/ForApproval/ApprovalSelector'
 export default {
     name:'ApprovalMultiple',
-    props:['data','singlemode'],
+    props:['consdata','singlemode'],
     components:{
         ApprovalMultiple,
         ApprovalText,

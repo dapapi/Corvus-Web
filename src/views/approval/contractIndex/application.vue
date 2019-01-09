@@ -93,7 +93,7 @@
                 keywords: '',
                 projectsInfo: [],
                 projectProgress:PROJECT_CONFIG.approvalProgress,
-
+                pageType:1,
             }
         },
         mounted(){
@@ -107,26 +107,23 @@
             }
         },
         methods: {
-            getProjects: function (pageNum = 1, type = null) {
+            getProjects: function (pageNum = 1, signStatus) {
+                let _this = this
                 let data = {
                     page: pageNum,
-                    include: 'principal,trail.expectations'
+                    include: 'principal,trail.expectations',
+                    status:this.pageType
                 };
-                let url = '/approvals_contract/my?status=1';
-                if (type) {
-                    url = '/approvals_contract/my';
-                    data.type = type;
-                }
-                this.paginationType = 'getProjects';
-                fetch('get', url, data).then(response => {
-                    this.projectsInfo = response.data
-                    this.total = response.total;
-                    this.current_page = response.current_page;
-                    this.total_pages = response.last_page;
+                fetch('get', '/approvals_contract/my', data).then(response => {
+                    _this.projectsInfo = response.data
+                    _this.total = response.total;
+                    _this.current_page = response.current_page;
+                    _this.total_pages = response.last_page;
                 })
             },
             getList(params) {
                 let _this = this
+                this.pageType = params
                 fetch('get','/approvals_contract/my?status='+params).then((params) => {
                     _this.projectsInfo = params.data
                     _this.total = params.total;

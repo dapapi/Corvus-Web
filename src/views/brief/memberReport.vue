@@ -1,9 +1,10 @@
 <template>
     <!-- Page -->
-    <div class="page-main" style="background-color:##f3f4f5">
+    <div class="page-main" style="background-color:#f3f4f5">
         <div class="page-header page-header-bordered clearfix">
             <h1 class="page-title float-left">成员{{templateName}}</h1>
-            <switch-year class="float-right" :type="type" @click="selectDate"></switch-year>
+            <switch-time-details class="float-right" :type="type" @click="selectDate"></switch-time-details>
+            <!-- <switch-year class="float-right" :type="type" @click="selectDate"></switch-year> -->
         </div>
         <div class="page-content container-fluid">
             <div class="panel mb-0">
@@ -62,7 +63,7 @@
 <script>
 import fetch from '@/assets/utils/fetch'
 import config from '@/assets/js/config'
-
+import switchTimeDetails from '@/components/switchTimeDetails.vue'
 export default {
     data(){
         return {
@@ -74,7 +75,7 @@ export default {
             templateName:'',
             start_time:'',
             end_time:'',
-            type:(this.$route.query.type-0),
+            // type:(this.$route.query.type-0),
             temId:'',
             status:'',
             tempName:''
@@ -85,6 +86,15 @@ export default {
         //检测路由参数变化  调用函数
        "$route":"getlist",
 
+    },
+    components:{
+        switchTimeDetails
+    },
+    computed:{
+        type:function(){
+            // console.log(this.$route.query.type)
+            return (this.$route.query.type-0)
+        },
     },
     // mounted(){
     //     this.getlist()

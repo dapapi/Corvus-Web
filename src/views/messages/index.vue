@@ -14,23 +14,23 @@
         </div>
         <div class="page-content container-fluid" >
             <div class="row mx-0" style="background-color:#fff">
-                <div class="col-md-2">
+                <!-- <div class="col-md-2">
                  <div class="list-group mt-20" style="border-right:1px solid #E0E0E0">
                     <a :class="item.id == moduleType?'checked list-group-item mr-10 px-10':'list-group-item mr-10 px-10'" v-for="(item,index) in moduleList" :key="index" href="javascript:void(0)" role="menuitem" @click="renderMsg(item.id,state)">{{item.name}}<span v-show="item.un_read>0" class="unRead ml-5">{{item.un_read}}</span></a>
                 </div>
-            </div>
-            <div class="col-md-10 py-5">
+            </div> -->
+            <div class="col-md-12 py-5">
                 <div class="col-md-12">
                     <ul class="nav nav-tabs nav-tabs-line" role="tablist">
                         <li class="nav-item" role="presentation" >
                             <a class="nav-link active" data-toggle="tab" href="#forum-task"
                                 aria-controls="forum-base"
-                                aria-expanded="true" role="tab" @click='renderMsg(moduleType,1)'>未读</a>
+                                aria-expanded="true" role="tab" @click='getModuleData(1)'>未读</a>
                         </li>
                         <li class="nav-item" role="presentation">
                             <a class="nav-link" data-toggle="tab" href="#forum-task"
                                 aria-controls="forum-present"
-                                aria-expanded="false" role="tab" @click='renderMsg(moduleType,2)'>已读</a>
+                                aria-expanded="false" role="tab" @click='getModuleData(2)'>已读</a>
                         </li>
                     </ul>
                 </div>
@@ -132,14 +132,15 @@ export default {
       },
       week:config.week,
       state:1,// 1未读 2已读
-      websocket:null
+      websocket:null,
+    //   moduleId :this.$route.query.moduleType
     };
   },
   mounted() {
       //数据初始化
       this.getModule()
       
-      
+    //   console.log(this.$route.query.moduleType)
   },
   computed:{
       ...mapState([
@@ -150,23 +151,24 @@ export default {
        unReadMsg:function(){
         //    alert(222)
         //    console.log(this.unReadMsg)
-           this.getModule()
-       }
+           this.getModule();
+           
+       },
+       "$route":"renderMsg"
   },
   methods: {
-    renderMsg:function(type,state){
-       
-        if(type){
-            this.moduleType = type
-        }
-        if(state ==1){
-            this.state = state
+    
+    getModuleData:function(state){
+        this.state = state
+        if(this.state == 1){
             this.readFilter = true
         }else{
-            this.state = state
             this.readFilter = false
         }
-        
+        this.renderMsg()
+    },
+    renderMsg:function(){
+        this.moduleType = this.$route.query.moduleType
         fetch('get',`${config.apiUrl}/getmsg?include=recive.data&module=${this.moduleType}&state=${this.state}`).then((res) => {
         
             this.messageList = res.data
@@ -177,6 +179,7 @@ export default {
     getModule:function(){
         fetch('get',`${config.apiUrl}/getmodules`).then((res) => {
             this.moduleList = res
+            // console.log(res)
             let num = 0
             for (let i = 0; i < res.length; i++) {
                 num = num + res[i].un_read
