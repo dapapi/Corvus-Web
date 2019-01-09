@@ -6,14 +6,15 @@
                    <span v-if="isShow" class="icon md-file-text font-size-18 mr-10 ml-15" ></span>
                    {{menu.name}}
                    <span v-if="menu.num>0" class="unRead">{{menu.num}}</span>
+                   
                 </router-link>
            </div>
            <div v-if="menu.type === 'button'">
-                <div class="list-group-item button heading" :class="{selected:isSelected == menu.id,expand:isExpanded.includes(menu.id)}" @click="toggle(menu)" style="vertical-align: middle;">
-                    <i class="icon md-caret-right mr-10 font-size-20"></i>
+                <div class="list-group-item button heading" :class="{selected:isSelected == menu.id,expand:isExpanded.includes(menu.id)}" @click="toggle(menu)" >
+                    <i class="icon md-caret-right mr-10 font-size-20" style="vertical-align: middle;"></i>
                     <span>{{menu.name}}
                     </span>
-
+                    <span v-if="menu.name=='我的消息'" class="unRead first">{{unReadMsg}}</span>
                 </div>
                 <transition name="fade">
                     <div class="heading-children" v-if="menu.subMenu && isExpanded.includes(menu.id)">
@@ -203,6 +204,11 @@ export default {
         position: absolute;
         top: 3px;
         right: 10px;
+    }
+    .first{
+        position:absolute;
+        top:15px;
+        right:45px;
     }
 </style>
 

@@ -195,7 +195,7 @@
             goManagement() {
                 this.visible = false
                 if (this.canPassBack) {
-                    window.open('/management')
+                    window.open('/apps')
                 } else {
                     toastr.error('您没有进入后台的权限！')
                 }
