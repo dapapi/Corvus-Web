@@ -897,14 +897,14 @@
                         <div class="example">
                             <div class="col-md-2 text-right float-left">预计订单收入</div>
                             <div class="col-md-10 float-left">
-                                <add-member></add-member>
+                                <add-member :type="'pay'"></add-member>
 
                             </div>
                         </div>
                         <div class="example">
                             <div class="col-md-2 text-right float-left">预计支出</div>
                             <div class="col-md-10 float-left">
-                                <add-member :type="'change'"></add-member>
+                                <add-member :type="'division'"></add-member>
 
                             </div>
                         </div>
@@ -921,34 +921,9 @@
                                 <add-member :type="'collect'"></add-member>
                             </div>
                         </div>
-                        <!-- <div class="example">
-                            <div class="col-md-2 text-right float-left">合约费用(含税)</div>
-                            <div class="col-md-10 float-left">
-                                <add-member :type="'pay'"></add-member>
-
-                            </div>
-                        </div> -->
-                        <!-- <div class="example">
-                            <div class="col-md-2 text-right float-left">税</div>
-                            <div class="col-md-10 float-left">
-                                <add-member :type="'incubation'"></add-member>
-                            </div>
-                        </div> -->
-                        <!-- <div class="example">
-                            <div class="col-md-2 text-right float-left">账单</div>
-                            <div class="col-md-10 float-left">
-                                <add-member :type="'bill'"></add-member>
-                            </div>
-                        </div>
-                        <div class="example">
-                            <div class="col-md-2 text-right float-left">回款</div>
-                            <div class="col-md-10 float-left">
-                                <add-member :type="'division'"></add-member>
-                            </div>
-                        </div> -->
                     </div>
                     <div class="modal-footer">
-                        <button class="btn btn-sm btn-white btn-pure" data-dismiss="modal">取消</button>
+                        <button class="btn btn-sm btn-white btn-pure" data-dismiss="modal" @click="cancelPrivacy">取消</button>
                         <button class="btn btn-primary" type="submit" @click="setPrivacy">确定</button>
                     </div>
                 </div>
@@ -1637,8 +1612,8 @@
                 
                 let _this = this
                 let data = {
-                    fee: this.$store.state.newParticipantsInfo, //预计订单收入
-                    projected_expenditure: this.$store.state.participantsInfo,//预计支出
+                    fee: this.$store.state.payInfo, //预计订单收入
+                    projected_expenditure: this.$store.state.divisionInfo,//预计支出
                     expendituresum: this.$store.state.contractInfo,//实际收入
                     contractmoney: this.$store.state.collectInfo,//实际支出
                 }
@@ -1653,13 +1628,9 @@
                         sendData[key].push(data[key][i].id)
                     }
                 }
-                fetch('post', `/projects/${this.$route.params.id}/privacyUser`, sendData).then(function (response) {
+                fetch('put', `/projects/${this.$route.params.id}/privacyUser`, sendData).then(function (response) {
                     toastr.success('隐私设置成功')
                     $('#addPrivacy').modal('hide')
-                    _this.$store.state.newParticipantsInfo = []
-                    _this.$store.state.participantsInfo = []
-                    _this.$store.state.contractInfo = []
-                    _this.$store.state.collectInfo = []
                 })
             },
             getPrivacy:function(){
@@ -1667,32 +1638,35 @@
                     project_id:this.$route.params.id
                 }
                 let _this = this
-                fetch('get', `/privacyUsers`, data).then(function (response) {
+                fetch('get', `/privacyUsers?include=user`, data).then(function (response) {
                     // console.log(response)
-                    let allPrivacyUsers = response.privacy_users
-                    _this.$store.state.newParticipantsInfo = []
-                    _this.$store.state.participantsInfo = []
+                    let allPrivacyUsers = response.data
+                    _this.$store.state.divisionInfo = []
+                    _this.$store.state.payInfo = []
                     _this.$store.state.contractInfo = []
                     _this.$store.state.collectInfo = []
                     if(allPrivacyUsers){
                         for (let i = 0; i < allPrivacyUsers.length; i++) {
-                            if(allPrivacyUsers[i].moduleable_field == 'fee'){
-                                _this.$store.state.newParticipantsInfo = allPrivacyUsers[i].user_ids.split(',')
-                            }else if (allPrivacyUsers[i].moduleable_field == 'projected_expenditure'){
-                               _this.$store.state.participantsInfo = allPrivacyUsers[i].user_ids.split(',')
-                            }else if (allPrivacyUsers[i].moduleable_field == 'expendituresum'){
-                               _this.$store.state.contractInfo = allPrivacyUsers[i].user_ids.split(',')
-                            }else if (allPrivacyUsers[i].moduleable_field == 'contractmoney'){
-                                // console.log(allPrivacyUsers[i])
-                               _this.$store.state.collectInfo = allPrivacyUsers[i].user_ids.split(',')
-                            }else{
-                                console.log(allPrivacyUsers[i].user_ids.split(','))
-                            }
+                            if(allPrivacyUsers[i].field == 'fee'){
+                                _this.$store.state.payInfo.push(allPrivacyUsers[i].user.data)
+                            }else if (allPrivacyUsers[i].field == 'projected_expenditure'){
+                               _this.$store.state.divisionInfo.push(allPrivacyUsers[i].user.data)
+                            }else if (allPrivacyUsers[i].field == 'expendituresum'){
+                               _this.$store.state.contractInfo.push(allPrivacyUsers[i].user.data)
+                            }else if (allPrivacyUsers[i].field == 'contractmoney'){
+                               _this.$store.state.collectInfo.push(allPrivacyUsers[i].user.data)
+                            }else{}
+                            
                         }
                     }
-                    console.log(_this.$store.state.newParticipantsInfo)
                     
                 })
+            },
+            cancelPrivacy:function(){
+                this.$store.state.divisionInfo = []
+                this.$store.state.payInfo = []
+                this.$store.state.contractInfo = []
+                this.$store.state.collectInfo = []
             },
             getStars: function () {
                 let _this = this;
