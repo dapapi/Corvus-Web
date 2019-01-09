@@ -30,8 +30,7 @@ export default {
                     level:1,
                     name:'提交简报',
                     url:'/brief/index',
-                    type:'link',
-                    
+                    type:'link', //第一层
                     isSelected:false,
                 },
                 {
@@ -47,7 +46,7 @@ export default {
                     id:3,
                     level:1,
                     name:'我的简报',
-                    type:'button',
+                    type:'button', //有第二级
                     isExpanded:false,
                     isSelected:false,
                     subMenu:[]

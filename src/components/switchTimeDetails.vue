@@ -1,55 +1,23 @@
 <template>
     <div>
        <div class="year">
-            <i v-if="type !=1" class="icon md-chevron-left font-size-20 goLeft" @click="changeYear('left')"></i>
+            <i class="icon md-chevron-left font-size-20 goLeft" @click="changeYear('left')" :class="type == 1?'goLeftTop':''"></i>
             <div class="text-center">
-
-                
-                <div v-if="type == 1">
-                    <Datepicker :isInput="true"></Datepicker>
+                <div v-if="isShowTitle == true">
+                    <div v-if="type == 1">{{day}}</div>
+                    <div v-if="type == 2">{{week}}</div>
+                    <div v-if="type == 3">{{content}}</div>
+                    <div v-if="type == 4">{{this.year}}{{season.find(item => item.value == nowSeason).name}}</div>
+                    <div v-if="type == 5">{{year}}年</div>
                 </div>
-                
-                <!-- <div v-if="type == 2"></div> -->
-                <div v-if="type == 3 ||type == 2">{{content}}</div>
-                <div v-if="type == 4">{{this.year}}{{season.find(item => item.value == nowSeason).name}}</div>
-                <div v-if="type == 5"></div>
-                
-                <!-- <div v-if="type == 2"></div> -->
-                <div v-if="type == 3 || type == 2" class="font-size-12" style="color:#ccc">{{month.find(item => item.value == nowMonth).details}}</div>
-                <div v-if="type == 4" class="font-size-12" style="color:#ccc">{{season.find(item=> item.value == nowSeason).start}}-{{season.find(item=> item.value == nowSeason).end}}</div>
-                 <div v-if="type == 5" class="font-size-12" style="color:#ccc">1月1日-12月31日</div>
-                
+                <div v-if="isShowDetails == true">
+                     <div v-if="type == 2&&allWeek.length>0" class="font-size-12" style="color:#ccc">{{allWeek.find(item => item.name == week).start.split('年')[1]}} - {{allWeek.find(item => item.name == week).end.split('年')[1]}}</div>
+                    <div v-if="type == 3" class="font-size-12" style="color:#ccc">{{month.find(item => item.value == nowMonth).details}}</div>
+                    <div v-if="type == 4" class="font-size-12" style="color:#ccc">{{season.find(item=> item.value == nowSeason).start}}-{{season.find(item=> item.value == nowSeason).end}}</div>
+                    <div v-if="type == 5" class="font-size-12" style="color:#ccc">1月1日-12月31日</div>
+                </div>   
             </div>
-            <i v-if="type !=1" class="icon md-chevron-right font-size-20 goRight" @click="changeYear('right')"></i>
-       </div>
-       <!--切换月-->
-       <ul v-if="showDetails&&type == 3" class="row m-0 p-0 mt-20 pl-10">
-           <li @click="changeYear('li',item.startDate,item.endDate)" v-for="(item,index) in month" :key="index" class="col-md-3 py-5"><span>{{item.name}}</span></li>
-       </ul>
-
-       <!--切换季-->
-       <ul v-show="showDetails&&type == 4" class="mt-20">
-           <li v-for="(item,index) in season" :key="index" class="py-5">
-               <div class="mb-5">{{item.name}}</div>
-               <div class="font-size-12" style="color:#ccc">{{item.start}} - {{item.end}}</div>
-           </li>
-       </ul>
-       <!--切换周-->
-       <ul v-show="showDetails&&type == 2" class="mt-20">
-           <li v-for="(item,index) in monthWeek[nowMonth-1]" :key="index" class="py-5">
-               <div class="mb-5">{{item.name}}</div>
-               <div class="font-size-12" style="color:#ccc">{{item.start}} - {{item.end}}</div>
-           </li>
-       </ul>
-       
-       <!--切换年-->
-       <ul v-show="showDetails&&type == 5" class="mt-20 row mx-0 pl-10">
-           <li v-for="(item,index) in allYear" :key="index" class="py-5 col-md-3 font-size-12 text-center px-0">
-               {{item. value}}
-           </li>
-       </ul>
-       <div>
-            
+            <i class="icon md-chevron-right font-size-20 goRight" @click="changeYear('right')" :class="type ==1?'goRightTop':''"></i>
        </div>
     </div>
 </template>
@@ -58,13 +26,21 @@ import config from '@/assets/js/config'
 
 export default {
     props:{
-        type:{
+        type:{  //1 日 2 周 3 月 4 季 5年
             type:Number,
             default:3
         },
-        showDetails:{
+        isShowTitle:{
             type:Boolean,
-            default:false,
+            default:true
+        },
+        isShowDetails:{
+            type:Boolean,
+            default:true
+        },
+        isMember:{
+            type:Boolean,
+            default:true
         }
     },
     data(){
@@ -76,25 +52,31 @@ export default {
            nowDay:new Date().getDate(),
            month:[],
            season:config.season,
-           day:new Date().getDate(),
+           day:`${new Date().getFullYear()}年${new Date().getMonth()+1}月${new Date().getDate()}日`,
            monthDay:[31,28,31,30,31,30,31,31,30,31,30,31],
            content:`${new Date().getMonth()+1}月`,
            monthWeek:{},
-           allYear:[]
+           week:'',
+           allWeek:[],
+           weekNum:1,
         }
     },
     created(){
+        let _this = this
         this.getMonth()
-        this.changeYear()
-        this.getAllWeek(this.nowMonth)
-        this.getYear()
         document.onselectstart = function(){return false}
     },
     mounted(){
-
+        this.getAllWeek(this.year)
+        let nowDate =new Date().getTime()
+        this.week = this.allWeek.find(item => item.startTime<nowDate).name
+        this.weekNum = this.allWeek.find(item => item.startTime<nowDate).value
+        this.changeYear()
     },
+    
     methods:{
         changeYear:function(move,start,end){
+            //年
             if(this.type == 5){
                 if(move == 'left'){
                     this.year = this.year-1
@@ -104,7 +86,8 @@ export default {
 
                 }
                 this.$emit('click',`${this.year}`,`${this.year}`,this.year)
-            }else if(this.type == 3||this.type == 2){
+            }else if(this.type == 3){
+                //月
                 if(move == 'left'){
                
                     if(this.nowMonth <= 1){
@@ -123,11 +106,35 @@ export default {
                         this.nowMonth = this.nowMonth+1
                     }
                 }else{
-
+               
                 }
                 this.content = `${this.year}年${this.nowMonth}月`
                 this.$emit('click',`${this.month.find(item => item.value == this.nowMonth).startDate}`,`${this.month.find(item => item.value == this.nowMonth).endDate}`,this.year,this.nowMonth)
+            }else if(this.type == 2){
+                //周
+                if(move == 'left'){
+                    if(this.weekNum<=1){
+                        this.year = this.year -1
+                        this.getAllWeek(this.year)
+                        this.weekNum = this.allWeek.length
+                    }else{
+                        this.weekNum = this.weekNum-1
+                        
+                    }
+                }else if(move == 'right'){
+                    if(this.weekNum>=this.allWeek.length){
+                        this.year = Number(this.year)+1
+                        this.getAllWeek(this.year)
+                        this.weekNum = 1
+                    }else{
+                        this.weekNum = this.weekNum+1
+                    }
+                    
+                }else{}
+                this.week = this.allWeek.find(item => item.value == this.weekNum).name
+                this.$emit('click',`${this.allWeek.find(item => item.value == this.weekNum).startDay}`,`${this.allWeek.find(item => item.value == this.weekNum).endDay}`)
             }else if(this.type ==1){
+                //日
                 if(move == 'left'){
                     if(this.nowDay <=1){
                         this.nowMonth = this.nowMonth-1
@@ -138,7 +145,7 @@ export default {
                             this.nowDay  = this.monthDay[this.nowMonth-1]
                         }
                     }else{
-                        this.nowDay = this.f-1
+                        this.nowDay = this.nowDay-1
                     }
                     
                 }else if(move == 'right'){
@@ -155,9 +162,10 @@ export default {
                        this.nowDay = this.nowDay+1
                    } 
                 }else{}
-                this.day = `${this.year}-${this.nowMonth}-${this.nowDay}`
-                this.$emit('click',`${this.day}`,`${this.day}`,this.nowMonth)
+                this.day = `${this.year}年${this.nowMonth}月${this.nowDay}日`
+                this.$emit('click',`${this.year}-${this.nowMonth}-${this.nowDay}`,`${this.year}-${this.nowMonth}-${this.nowDay}`)
             }else if(this.type == 4){
+                //季度
                 if(move == 'left'){
                     if(this.nowSeason<=1){
                         this.nowSeason = 4
@@ -173,12 +181,8 @@ export default {
                         this.nowSeason = this.nowSeason+1
                     }
                 }else{}
-                this.$emit('click',`${this.year}-${this.season.find(item=> item.value == this.nowSeason).startTime}`,`${this.year}-${this.season.find(item=> item.value == this.nowSeason).endTime}`,this.year)
-            }else if(this.type == 5){
-                if(move == 'left'){
-                
-                }
-            }else{}
+                this.$emit('click',`${this.year}-${this.season.find(item=> item.value == this.nowSeason).startTime}`,`${this.year}-${this.season.find(item=> item.value == this.nowSeason).endTime}`)
+            }
         },
         getMonth:function(){
             
@@ -202,55 +206,27 @@ export default {
                
             }
         },
-        getYear:function(){
-            this.allYear = []
-            // console.log(this.year%20)
-            let nowYear = this.year - (this.year%20-1)
-            for (let i = 0; i <20; i++) {
-                let data = {
-                    value:`${Number(nowYear)+i}`,
-                    startTime:`${nowYear}-01-01`,
-                    endTime:`${nowYear}-12-31`
-                }
-                this.allYear.push(data)
-                
-            }
-            console.log(this.allYear)
-        },
-        changeMonth:function(){
-           
-        },
-        changeSeason:function(){
-
-        },
-        
          //获取全部周
         getAllWeek:function(year){
             let index=1;
-            let allWeek = []
+            this.allWeek = []
             for(let i of this.createWeeks(year)){
                 let start=i[0],
-                    end=i[1];
-                allWeek.push({
-                    value:`${index++}`,
-                    start:`${this.formatDate(start)}`,
-                    end:`${this.formatDate(end)}`,
-                    startDay:`${this.formatDate(start).split(',')[2]}`,
-                    endDay:`${this.formatDate(end).split(',')[2]}`
+                    end=i[1],
+                    iValue = index++
+                this.allWeek.push({
+                    value:iValue,
+                    start:`${this.formatDate(start)[0]}`,
+                    end:`${this.formatDate(end)[0]}`,
+                    name:`${year}第${iValue}周`,
+                    startDay:`${this.formatDate(start)[1]}`,
+                    endDay:`${this.formatDate(end)[1]}`,
+                    startTime:`${this.formatDate(start)[2]}`,
+                    endTime:`${this.formatDate(start)[2]}`
                 })
             }
-            for (let i = 0; i < 12; i++) {
-                this.monthWeek[i]=[]
-                for (let t = 0; t < allWeek.length; t++) {
-                    if(allWeek[t].end.split(',')[1] == i){
-                        allWeek[t].start = allWeek[t].start.split(',')[0]
-                        allWeek[t].end = allWeek[t].end.split(',')[0]
-                        allWeek[t].name = `${year}年第${allWeek[t].value}周`
-                        this.monthWeek[i].push(allWeek[t])
-                    }
-                }
-            }
         },
+    
         formatDig:function(num){
             return num>9?''+num:'0'+num;
         },
@@ -260,11 +236,10 @@ export default {
                 y.getFullYear(),
                 this.formatDig(y.getMonth()+1),
                 this.formatDig(y.getDate()),
-                y.getMonth(),
-                y.getDate()
             ];
-            let format=['年','月','日,',','];
-            return String.raw({raw:raws},...format);
+            let format=['年','月',' 日'];
+            let format2 = ['-','-']
+            return [String.raw({raw:raws},...format),String.raw({raw:raws},...format2),mill];
         },
         //这段es6	--代码不是很懂
         *createWeeks(year){
@@ -305,20 +280,27 @@ export default {
    }
    .year{
        position: relative;
-       min-width: 200px;
+       min-width: 150px;
    }
    .goLeft{
        position: absolute;
-       left: 25px;
-       top:0px;
+       left: 0px;
+       top:10px;
        cursor: pointer;
+   }
+   .goLeftTop{
+       top:2px;
    }
    .goRight{
        position: absolute;
-       right: 25px;
-       top:0px;
+       right: 0px;
+       top:10px;
        cursor: pointer;
    }
+   .goRightTop{
+       top:2px;
+   }
 </style>
+
 
 
