@@ -5,7 +5,7 @@
             <h1 class="page-title d-inline">项目详情</h1>
 
             <div class="page-header-actions dropdown show task-dropdown float-right"
-                 v-if="projectInfo.approval_status == 232">
+                 v-if="projectInfo.approval_status == 231">
                 <i class="iconfont icon-gengduo1 font-size-24" aria-hidden="true" id="taskDropdown"
                    data-toggle="dropdown" aria-expanded="false"></i>
                 <div class="dropdown-menu dropdown-menu-right task-dropdown-item" aria-labelledby="taskDropdown"
