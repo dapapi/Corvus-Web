@@ -108,7 +108,7 @@
                                         <input v-else type="text" v-model="phoneNum" placeholder="" class="form-control">
                                     </div>
                                 </div>
-                                <div class="example">
+                                <!-- <div class="example">
                                     <div class="col-md-3 text-right float-left require">入职时间</div>
                                     <div class="col-md-8 float-left pl-0">
                                         <template v-if="isLook">
@@ -116,9 +116,9 @@
                                         </template>
                                         <datepicker v-else change-key="entryTime" @select="changeState"></datepicker>
                                     </div>
-                                </div>
+                                </div> -->
                                 <div class="example">
-                                    <div class="col-md-3 text-right float-left require">政治面目</div>
+                                    <div class="col-md-3 text-right float-left">政治面目</div>
                                     <div class="col-md-8 float-left pl-0">
                                         <template v-if="isLook">
                                             {{ politicalFace }}
@@ -146,6 +146,17 @@
                                         <input v-else type="text" v-model="email" placeholder="" class="form-control">
                                     </div>
                                 </div>
+                                <div class="example">
+                                    <div class="col-md-3 text-right float-left">民族</div>
+                                    <div class="col-md-8 float-left pl-0">
+                                        <EditSelector 
+                                            :options="nationalityArr" 
+                                            :isEdit="!isLook" 
+                                            :content="nationality"
+                                            @change="item => changeState('nationality', item)"
+                                        />
+                                    </div>
+                                </div>
                             </div>
                             <div class="col-md-6" style="margin-top: -20px;">
                                 <div class="example">
@@ -158,7 +169,7 @@
                                     </div>
                                 </div>
                                 <div class="example">
-                                    <div class="col-md-3 text-right float-left require">户籍所在地详细地址</div>
+                                    <div class="col-md-3 text-right float-left">户籍所在地详细地址</div>
                                     <div class="col-md-8 float-left pl-0">
                                         <template v-if="isLook">
                                             {{ householdAddress }}
@@ -167,18 +178,7 @@
                                     </div>
                                 </div>
                                 <div class="example">
-                                    <div class="col-md-3 text-right float-left require">民族</div>
-                                    <div class="col-md-8 float-left pl-0">
-                                        <EditSelector 
-                                            :options="nationalityArr" 
-                                            :isEdit="!isLook" 
-                                            :content="nationality"
-                                            @change="item => changeState('nationality', item)"
-                                        />
-                                    </div>
-                                </div>
-                                <div class="example">
-                                    <div class="col-md-3 text-right float-left require">血型</div>
+                                    <div class="col-md-3 text-right float-left">血型</div>
                                     <div class="col-md-8 float-left pl-0">
                                         <EditSelector 
                                             :options="bloodTypeArr" 
@@ -189,7 +189,7 @@
                                     </div>
                                 </div>
                                 <div class="example">
-                                    <div class="col-md-3 text-right float-left require">现居住地址</div>
+                                    <div class="col-md-3 text-right float-left">现居住地址</div>
                                     <div class="col-md-8 float-left pl-0">
                                         <template v-if="isLook">
                                             {{ homeAddress }}
@@ -427,7 +427,7 @@ export default {
             gender: '',
             IDNum: '',
             phoneNum: '',
-            entryTime: '', // 入职时间
+            // entryTime: '', // 入职时间
             politicalFace: '', // 政治面目
             maritalStatus: '', // 婚姻
             email: '',
@@ -582,12 +582,6 @@ export default {
                 name: 'phoneNum',
                 msg: '请填写手机号'
             }, {
-                name: 'entryTime',
-                msg: '请填写入职时间'
-            }, {
-                name: 'politicalFace',
-                msg: '请填写政治面目'
-            }, {
                 name: 'maritalStatus',
                 msg: '请选择婚姻状况'
             }, {
@@ -596,18 +590,6 @@ export default {
             }, {
                 name: 'birthDay',
                 msg: '请选择出生日期'
-            }, {
-                name: 'householdAddress',
-                msg: '请填写户籍所在地址'
-            }, {
-                name: 'nationality',
-                msg: '请选择民族'
-            }, {
-                name: 'bloodType',
-                msg: '请选择血型'
-            }, {
-                name: 'homeAddress',
-                msg: '请填写现居住地址'
             }]
         };
     },
@@ -671,7 +653,7 @@ export default {
 				national: this.nationality,
 				current_address: this.householdAddress,
 				birth_time: this.birthDay,
-				entry_time: this.entryTime,
+				// entry_time: this.entryTime,
 				blood_type: this.bloodType,
 				email: this.email,
 				language_level: this.foreignLanguageLevel,
@@ -703,7 +685,7 @@ export default {
                 this.gender = data.gender
                 this.IDNum = data.id_number
                 this.phoneNum = data.phone
-                this.entryTime = data.entry_time
+                // this.entryTime = data.entry_time
                 this.politicalFace = data.political
                 this.maritalStatus = data.marriage
                 this.email = data.email

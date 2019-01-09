@@ -56,7 +56,7 @@
                 </div>
                 </div>
                 <div class="example">
-                <div class="col-md-2 text-right float-left require">负责人</div>
+                <div class="col-md-2 text-right float-left">负责人</div>
                 <div class="col-md-10 float-left">
                     <InputSelectors :placeholder="'请选择负责人'" @change="principalChange"></InputSelectors>
                 </div>
@@ -90,7 +90,7 @@
                 </div>
                 </div>
                 <div class="example">
-                <div class="col-md-2 text-right float-left require">负责人</div>
+                <div class="col-md-2 text-right float-left">负责人</div>
                 <div class="col-md-10 float-left">
                     <InputSelectors :placeholder="'请选择负责人'" @change="principalChange"></InputSelectors>
                 </div>
@@ -178,10 +178,10 @@ export default {
                 toastr.error("请填写部门名称");
                 return;
             }
-            if (!this.principalId) {
-                toastr.error("请选择部门负责人");
-                return;
-            }
+            // if (!this.principalId) {
+            //     toastr.error("请选择部门负责人");
+            //     return;
+            // }
             const params = {
                 department_pid: this.departmentPId,
                 name: this.departmentName,
