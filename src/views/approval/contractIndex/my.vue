@@ -87,6 +87,7 @@
                 keywords: '',
                 projectsInfo: [],
                 projectProgress:PROJECT_CONFIG.approvalProgress,
+                pageType:1,
 
             }
         },
@@ -103,13 +104,14 @@
         methods: {
             
             getProjects: function (pageNum = 1, type = null) {
+                console.log(pageNum,type);
                 let data = {
                     page: pageNum,
                     include: 'principal,trail.expectations'
                 };
-                let url = '/approvals_contract/approval?status=1';
+                let url = '/approvals_contract/approval?status='+this.pageType
                 if (type) {
-                    url = '/approvals_contract/approval';
+                    url = '/approvals_contract/approval?status='+this.pageType
                     data.type = type;
                 }
                 this.paginationType = 'getProjects';
@@ -121,7 +123,7 @@
                 })
             },
              getList(params) {
-                 console.log(params);
+                this.pageType = params
                 let _this = this
                     fetch('get','/approvals_contract/approval?status='+params).then((params) => {
                         _this.projectsInfo = params.data
