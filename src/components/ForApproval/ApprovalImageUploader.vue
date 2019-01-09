@@ -56,7 +56,9 @@ export default {
     },
     methods: {
         imgDelete(params){
+            let {id} = this.consdata[0]
             this.$delete(this.fileInfo,this.fileInfo.indexOf(this.fileInfo.find(item=>item.fileName === params.fileName)))
+            this.$emit('change',{key:id,value:this.fileInfo,type:null})
         },
         uploadFile(e) {
             let file = e.target.files[0];

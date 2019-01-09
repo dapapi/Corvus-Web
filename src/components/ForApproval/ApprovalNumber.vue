@@ -1,6 +1,6 @@
 <template>
 <div class="col-md-12 approval-text-container pl-0">
-    <span class="col-md-2 text-right pl-0" :class="consdata[0].required===1?'require':''">预计费用</span>
+    <span class="col-md-2 text-right pl-0" :class="consdata[0].required===1?'require':''">{{consdata[0].control_title}}</span>
     <input ref='number' type="text" class="form-control addtrail" data-plugin="asSpinner" value="0"
            :class="[shortInput ? 'short-spinner-input' : '']">
 </div>
