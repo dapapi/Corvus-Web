@@ -34,7 +34,7 @@
                                    data-selectable="selectable">
                                 <tr>
                                     <th class="cell-300" scope="col">审批编号</th>
-                                    <th class="cell-300" scope="col">项目名称</th>
+                                    <th class="cell-300" scope="col">合同名称</th>
                                     <th class="cell-300" scope="col">申请人</th>
                                     <!-- <th class="cell-300 position-relative" scope="col">类型
                                         <i class="iconfont icon-gengduo1" aria-hidden="true"
