@@ -88,7 +88,8 @@ export default {
                     let fileName = file.name;
                     // _this.$emit('change', fileUrl, fileName, fileSize,_this.fileExt,_this.id);
                     let {id} = _this.consdata[0]
-                    let {related_field} = this.consdata[0]
+                    let {related_field} = _this.consdata[0]
+                    
                     _this.fileInfo.push({fileUrl, fileName, fileSize})
                     _this.$emit('change',{key:id,value:_this.fileInfo,type:related_field})
                 })
