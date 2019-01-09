@@ -3,22 +3,12 @@
        <div class="year">
             <i v-if="type !=1" class="icon md-chevron-left font-size-20 goLeft" @click="changeYear('left')"></i>
             <div class="text-center">
-
-                
                 <div v-if="type == 1">
-                    <Datepicker :isInput="true"></Datepicker>
+                    <date-picker-brief ></date-picker-brief>
                 </div>
-                
-                <!-- <div v-if="type == 2"></div> -->
-                <div v-if="type == 3 ||type == 2">{{content}}</div>
-                <div v-if="type == 4">{{this.year}}{{season.find(item => item.value == nowSeason).name}}</div>
-                <div v-if="type == 5"></div>
-                
-                <!-- <div v-if="type == 2"></div> -->
-                <div v-if="type == 3 || type == 2" class="font-size-12" style="color:#ccc">{{month.find(item => item.value == nowMonth).details}}</div>
-                <div v-if="type == 4" class="font-size-12" style="color:#ccc">{{season.find(item=> item.value == nowSeason).start}}-{{season.find(item=> item.value == nowSeason).end}}</div>
-                 <div v-if="type == 5" class="font-size-12" style="color:#ccc">1月1日-12月31日</div>
-                
+                <div v-if="type == 2">{{content}}</div>
+                <div v-if="type == 3||type ==4">{{year}}</div>
+                <div v-if="type == 5" style="color:#ccc" class="font-size-12">{{allYear[0].value}}-{{allYear[19].value}}</div>
             </div>
             <i v-if="type !=1" class="icon md-chevron-right font-size-20 goRight" @click="changeYear('right')"></i>
        </div>
@@ -55,7 +45,7 @@
 </template>
 <script>
 import config from '@/assets/js/config'
-
+import DatePickerBrief from '@/components/DatePickerBrief.vue'
 export default {
     props:{
         type:{
@@ -66,6 +56,9 @@ export default {
             type:Boolean,
             default:false,
         }
+    },
+    components:{
+        DatePickerBrief
     },
     data(){
         return {
@@ -80,7 +73,8 @@ export default {
            monthDay:[31,28,31,30,31,30,31,31,30,31,30,31],
            content:`${new Date().getMonth()+1}月`,
            monthWeek:{},
-           allYear:[]
+           allYear:[],
+           switchYear:''
         }
     },
     created(){
@@ -95,7 +89,7 @@ export default {
     },
     methods:{
         changeYear:function(move,start,end){
-            if(this.type == 5){
+            if(this.type == 3||this.type ==4){
                 if(move == 'left'){
                     this.year = this.year-1
                 }else if(move == 'right'){
@@ -104,7 +98,7 @@ export default {
 
                 }
                 this.$emit('click',`${this.year}`,`${this.year}`,this.year)
-            }else if(this.type == 3||this.type == 2){
+            }else if(this.type == 2){
                 if(move == 'left'){
                
                     if(this.nowMonth <= 1){
@@ -157,27 +151,35 @@ export default {
                 }else{}
                 this.day = `${this.year}-${this.nowMonth}-${this.nowDay}`
                 this.$emit('click',`${this.day}`,`${this.day}`,this.nowMonth)
-            }else if(this.type == 4){
+            }
+            
+            // else if(this.type == 4){
+            //     if(move == 'left'){
+            //         if(this.nowSeason<=1){
+            //             this.nowSeason = 4
+            //             this.year = this.year -1
+            //         }else{
+            //             this.nowSeason = this.nowSeason-1
+            //         }
+            //     }else if(move == 'right'){
+            //         if(this.nowSeason>=4){
+            //             this.nowSeason = 1
+            //             this.year = this.year+1
+            //         }else{
+            //             this.nowSeason = this.nowSeason+1
+            //         }
+            //     }else{}
+            //     this.$emit('click',`${this.year}-${this.season.find(item=> item.value == this.nowSeason).startTime}`,`${this.year}-${this.season.find(item=> item.value == this.nowSeason).endTime}`,this.year)
+            // }
+            else if(this.type == 5){
                 if(move == 'left'){
-                    if(this.nowSeason<=1){
-                        this.nowSeason = 4
-                        this.year = this.year -1
-                    }else{
-                        this.nowSeason = this.nowSeason-1
-                    }
+                    let leftYear = Number(this.allYear[0].value)-2
+                    this.getYear(leftYear)
+
                 }else if(move == 'right'){
-                    if(this.nowSeason>=4){
-                        this.nowSeason = 1
-                        this.year = this.year+1
-                    }else{
-                        this.nowSeason = this.nowSeason+1
-                    }
+                    let rightYear =Number(this.allYear[19].value)+19
+                    this.getYear(rightYear)
                 }else{}
-                this.$emit('click',`${this.year}-${this.season.find(item=> item.value == this.nowSeason).startTime}`,`${this.year}-${this.season.find(item=> item.value == this.nowSeason).endTime}`,this.year)
-            }else if(this.type == 5){
-                if(move == 'left'){
-                
-                }
             }else{}
         },
         getMonth:function(){
@@ -202,20 +204,23 @@ export default {
                
             }
         },
-        getYear:function(){
+        getYear:function(year){
             this.allYear = []
-            // console.log(this.year%20)
-            let nowYear = this.year - (this.year%20-1)
+            let nowYear
+            if(year){
+                nowYear = year - (this.year%20-1)
+            }else{
+                nowYear = this.year - (this.year%20-1)
+            }
             for (let i = 0; i <20; i++) {
                 let data = {
                     value:`${Number(nowYear)+i}`,
                     startTime:`${nowYear}-01-01`,
-                    endTime:`${nowYear}-12-31`
+                    endTime:`${nowYear}-12-31`,
                 }
                 this.allYear.push(data)
                 
             }
-            console.log(this.allYear)
         },
         changeMonth:function(){
            

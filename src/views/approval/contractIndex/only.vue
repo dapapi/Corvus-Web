@@ -95,7 +95,7 @@ import {CONTRACT_INDEX_CONFIG} from '@/views/approval/contractIndex/contractInde
                 projectsInfo: [],
                 contractList:CONTRACT_INDEX_CONFIG.contractIndex,
                 projectProgress:PROJECT_CONFIG.approvalProgress,
-                pageType = 1
+                pageType : 1
             }
         },
         mounted(){

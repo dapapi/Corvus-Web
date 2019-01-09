@@ -1381,7 +1381,7 @@
     import fetch from '../../assets/utils/fetch.js'
     import config from '../../assets/js/config'
     import Cookies from 'js-cookie'
-
+    
     export default {
         data: function () {
             return {
@@ -1506,6 +1506,7 @@
 
         mounted() {
             this.projectId = this.$route.params.id;
+            this.getPrivacy() //获取隐私设置列表
             this.getProject();
             this.getClients();
             this.getTaskType();
@@ -1633,28 +1634,25 @@
             },
             //隐私设置
             setPrivacy: function () {
-                // alert(222)
+                
                 let _this = this
                 let data = {
                     fee: this.$store.state.newParticipantsInfo, //预计订单收入
                     projected_expenditure: this.$store.state.participantsInfo,//预计支出
                     expendituresum: this.$store.state.contractInfo,//实际收入
                     contractmoney: this.$store.state.collectInfo,//实际支出
-                    // project_bill:[]
                 }
                 let sendData = {
                     fee: [],
                     projected_expenditure: [],
                     expendituresum: [],
                     contractmoney: [],
-                    // project_bill:[]
                 }
                 for (const key in data) {
                     for (let i = 0; i < data[key].length; i++) {
                         sendData[key].push(data[key][i].id)
                     }
                 }
-                // console.log(sendData)
                 fetch('post', `/projects/${this.$route.params.id}/privacyUser`, sendData).then(function (response) {
                     toastr.success('隐私设置成功')
                     $('#addPrivacy').modal('hide')
@@ -1662,6 +1660,38 @@
                     _this.$store.state.participantsInfo = []
                     _this.$store.state.contractInfo = []
                     _this.$store.state.collectInfo = []
+                })
+            },
+            getPrivacy:function(){
+                let data ={
+                    project_id:this.$route.params.id
+                }
+                let _this = this
+                fetch('get', `/privacyUsers`, data).then(function (response) {
+                    // console.log(response)
+                    let allPrivacyUsers = response.privacy_users
+                    _this.$store.state.newParticipantsInfo = []
+                    _this.$store.state.participantsInfo = []
+                    _this.$store.state.contractInfo = []
+                    _this.$store.state.collectInfo = []
+                    if(allPrivacyUsers){
+                        for (let i = 0; i < allPrivacyUsers.length; i++) {
+                            if(allPrivacyUsers[i].moduleable_field == 'fee'){
+                                _this.$store.state.newParticipantsInfo = allPrivacyUsers[i].user_ids.split(',')
+                            }else if (allPrivacyUsers[i].moduleable_field == 'projected_expenditure'){
+                               _this.$store.state.participantsInfo = allPrivacyUsers[i].user_ids.split(',')
+                            }else if (allPrivacyUsers[i].moduleable_field == 'expendituresum'){
+                               _this.$store.state.contractInfo = allPrivacyUsers[i].user_ids.split(',')
+                            }else if (allPrivacyUsers[i].moduleable_field == 'contractmoney'){
+                                // console.log(allPrivacyUsers[i])
+                               _this.$store.state.collectInfo = allPrivacyUsers[i].user_ids.split(',')
+                            }else{
+                                console.log(allPrivacyUsers[i].user_ids.split(','))
+                            }
+                        }
+                    }
+                    console.log(_this.$store.state.newParticipantsInfo)
+                    
                 })
             },
             getStars: function () {
