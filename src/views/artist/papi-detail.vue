@@ -11,7 +11,7 @@
                      role="menu" x-placement="bottom-end">
                     <a class="dropdown-item" role="menuitem" data-toggle="modal"
                        data-target="#distributionproducer" @click="distributionPerson('publicity')">分配制作人</a>
-                    <!--<a class="dropdown-item" role="menuitem" data-toggle="modal" data-target="#addPrivacy">隐私设置</a>-->
+                    <a class="dropdown-item" role="menuitem" data-toggle="modal" data-target="#addPrivacy">隐私设置</a>
                     <!--<a class="dropdown-item" role="menuitem" data-toggle="modal" data-target="#addPrivacy">-->
                         <!--<template v-if="artistInfo.sign_contract_status == 1">签约</template>-->
                         <!--<template v-if="artistInfo.sign_contract_status == 2">解约</template>-->
@@ -743,7 +743,7 @@
                 </div>
             </div>
         </div>
-
+        <!--隐私设置-->
         <div class="modal fade" id="addPrivacy" aria-hidden="true" aria-labelledby="addLabelForm"
              role="dialog" tabindex="-1">
             <div class="modal-dialog modal-simple">
@@ -764,7 +764,7 @@
                     </div>
                     <div class="modal-footer">
                         <button class="btn btn-sm btn-white btn-pure" data-dismiss="modal">取消</button>
-                        <button class="btn btn-primary" type="submit" @click="addPrivacy">确定</button>
+                        <button class="btn btn-primary" type="submit" @click="setPrivacy">确定</button>
                     </div>
                 </div>
             </div>
@@ -1007,6 +1007,7 @@
             })
             this.getTimes()
             this.getArtistsBill()
+            this.getPrivacy() //获取隐私设置
         },
         methods: {
             charts: function () {
@@ -1180,15 +1181,6 @@
                     _this.alltaskshow = response.data
                 })
             },
-            addPrivacy: function () {
-                $('#addPrivacy').modal('hide')
-                this.$store.state.collectInfo = []
-                this.$store.state.payInfo = []
-                this.$store.state.contractInfo = []
-                this.$store.state.divisionInfo = []
-                this.$store.state.incubationInfo = []
-                this.$store.state.billInfo = []
-            },
             editBaseInfo: function () {
                 this.isEdit = true;
                 this.isStatrtEdit = false
@@ -1238,6 +1230,49 @@
                     $('#distributionproducer').modal('hide');
                     _this.getArtist();
                     _this.$store.state.participantsInfo = []
+                })
+            },
+
+            //隐私设置
+            setPrivacy: function () {
+                
+                let _this = this
+                let data = {
+                    hatch_at: this.$store.state.incubationInfo, //孵化期
+                    
+                }
+                let sendData = {
+                    hatch_at: [],
+                    
+                }
+                for (const key in data) {
+                    for (let i = 0; i < data[key].length; i++) {
+                        sendData[key].push(data[key][i].id)
+                    }
+                }
+                fetch('post', `/bloggers/${this.$route.params.id}/privacyUser`, sendData).then(function (response) {
+                    toastr.success('隐私设置成功')
+                    $('#addPrivacy').modal('hide')
+                })
+            },
+            getPrivacy:function(){
+                let data ={
+                    blogger_id:this.$route.params.id
+                }
+                let _this = this
+                fetch('get', `/privacyUsers?include=user`, data).then(function (response) {
+                    // console.log(response)
+                    let allPrivacyUsers = response.data
+                    _this.$store.state.incubationInfo = []
+                   
+                    if(allPrivacyUsers){
+                        for (let i = 0; i < allPrivacyUsers.length; i++) {
+                            _this.$store.state.incubationInfo.push(allPrivacyUsers[i].user.data)
+                            
+                        }
+                    }
+                    console.log(_this.$store.state.incubationInfo)
+                    
                 })
             },
             //类型

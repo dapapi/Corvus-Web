@@ -42,6 +42,7 @@
             //billInfo:[],//账单
             selectMemberArr: function () {
                 if (this.type === 'change') {
+
                     return this.$store.state.participantsInfo
                 }else if(this.type ==='collect'){
                     return this.$store.state.collectInfo
@@ -56,8 +57,8 @@
                 }else if(this.type === 'bill'){
                     return this.$store.state.billInfo
                 }
-                
                 else {
+                    
                     return this.$store.state.newParticipantsInfo
                 }
             }
@@ -89,8 +90,9 @@
                 //incubationInfo:[],//孵化期
                 //billInfo:[],//账单
                 let participantInfo = '';
-                if (this.type === 'add') {
-                    participantInfo = this.$store.state.newParticipantsInfo;
+                if (this.type === 'change') {
+                    participantInfo = this.$store.state.participantsInfo;
+                    
                 }else if(this.type === 'collect'){
                     participantInfo = this.$store.state.collectInfo;
                 }else if(this.type === 'pay'){
@@ -106,7 +108,7 @@
                 }
                     
                 else {
-                    participantInfo = this.$store.state.participantsInfo;
+                    participantInfo = this.$store.state.newParticipantsInfo;
                 }
                 participantInfo.splice(participantInfo.map(item => item.id).indexOf(userId), 1);
                 let params = {
