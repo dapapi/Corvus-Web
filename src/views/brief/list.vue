@@ -41,7 +41,7 @@
                             </div>
                         </div>
                     </div>
-                <briefright :type="showType" @getDate="selectDate"></briefright>
+                <briefright :type="type" @getDate="selectDate"></briefright>
                 </div>
                 <!-- <pagination :current_page="current_page" :method="getProjects" :total_pages="total_pages"
                             :total="total"></pagination> -->
@@ -80,13 +80,6 @@ export default {
     computed:{
         type:function(){
             return (this.$route.query.type-0)
-        },
-        showType:function(){
-            if(this.$route.query.type == 3){
-                return 5
-            }else{
-                return (this.$route.query.type-0)
-            }
         }
     },
     methods:{

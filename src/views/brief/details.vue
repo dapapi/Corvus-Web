@@ -12,7 +12,9 @@
     <div class="page-content container-fluid">
         <div class="col-md-12 panel example clearfix p-20">
             <span class="float-left pr-10">评审人</span>
-            <input-selectors :placeholder="'请选择评审人'" @change="changePrincipal"></input-selectors>
+            <div class="float-left" style="width:140px">
+                <input-selectors :placeholder="'请选择评审人'" @change="changePrincipal"></input-selectors>
+            </div>
             <!-- <add-member class="float-left pr-20" @change="participantChange"></add-member>
             <span class="float-left pr-10 ml-20">谁可以看</span>
             <add-member @change="participantChange"></add-member> -->
@@ -21,7 +23,7 @@
         <div class="panel col-md-12 p-20">
              <div class="panel-header clearfix">
                  <div class="float-left">
-                    <switchYear :type ="type" @click="getTime"></switchYear>
+                    <switch-time-details :type ="type" @click="getTime"></switch-time-details>
                  </div>
                  <button type="button" class="btn btn-warning float-right" style="color:#fff">未提交</button>
              </div>
@@ -96,6 +98,7 @@ import fetch from '@/assets/utils/fetch'
 import config from '@/assets/js/config'
 import numberinput from '@/components/numberInput'
 import checkbox from '@/components/checkbox'
+import switchTimeDetails from '@/components/switchTimeDetails.vue'
 export default {
     data(){
         return {
@@ -124,22 +127,24 @@ export default {
         }
     },
     components:{
-        numberinput
+        numberinput,
+        switchTimeDetails
     },
     mounted(){
 
         this.getAll()
         //获取草稿详情
-        this.draftDetails()
+        // this.draftDetails()
         //任务列表报错 暂时注释
-        // this.getTaskList()
+        this.getTaskList()
        
     },
     methods:{
         getTime:function(start,end){
-            // console.log(start,end)
-            this.startTime = start 
-            this.endTime = end
+            console.log(start,end)
+            this.startTime = `${start} 00:00:00` 
+            this.endTime = `${end} 23:59:59`
+            this.getAll()
         },
         //获取所有的问题
         getAll:function(){
@@ -215,7 +220,7 @@ export default {
         },
         //获取任务列表
         getTaskList:function(){
-            fetch('get',`${config.apiUrl}/tasks/my_all`).then((res) => {
+            fetch('get',`${config.apiUrl}/tasks/my?status=0`).then((res) => {
                 this.taskList = res.data
             })
         },

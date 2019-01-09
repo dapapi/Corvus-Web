@@ -3,7 +3,8 @@
     <div class="page-main" style="background-color:##f3f4f5">
         <div class="page-header page-header-bordered clearfix">
             <h1 class="page-title float-left">统计{{template_name}}</h1>
-            <switch-year class="float-right" :type="type" @click="selectDate"></switch-year>
+            <!-- <switch-year class="float-right" :type="type" @click="selectDate"></switch-year> -->
+            <switch-time-details class="float-right" :type="type" @click="selectDate"></switch-time-details>
         </div>
         <div class="page-content container-fluid">
             <div class="panel mb-0">
@@ -96,7 +97,7 @@
 <script>
 import fetch from '@/assets/utils/fetch'
 import config from '@/assets/js/config'
-
+import switchTimeDetails from '@/components/switchTimeDetails.vue'
 export default {
     data(){
         return {
@@ -121,16 +122,13 @@ export default {
         //检测路由参数变化  调用函数
        "$route":"getlist",
     },
+    components:{
+        switchTimeDetails
+    },
     computed:{
        type:function(){
-            let type =  this.$route.query.type-0
-            
-            if(type == 3||type == 4 ||type == 5){
-               return 5
-            }else{
-               return 3
-            }
-       },
+            return (this.$route.query.type-0)
+        },
        //showType  1 日 2 周 3 月 4 季 5 年
        showType:function(){
            return this.$route.query.type-0
@@ -142,12 +140,10 @@ export default {
     },
     methods:{
         selectDate:function(start,end,month,year){
-            this.start_time = start
-            this.end_time = end
+            this.start_time = `${start} 00:00:00`
+            this.end_time = `${end} 23:59:59`
             this.nowMonth = month
             this.nowYear = year
-            // console.log(this.nowYear)
-            // console.log(this.nowMonth)
             this.getlist()
             
         },
@@ -157,8 +153,6 @@ export default {
         getlist:function(page =1){
             this.template_name = this.$route.query.name
             let _this = this
-            // alert(this.nowMonth)
-            // alert(this.nowYear)
             this.getAllWeek(this.nowMonth)
             let data={
                 template_id:this.$route.query.id,

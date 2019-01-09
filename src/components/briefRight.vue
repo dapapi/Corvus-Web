@@ -1,8 +1,6 @@
 <template>
     <div class="col-md-4 pl-10">
         <div class="panel pt-15" style="width:100%">
-            <!-- <switchWeek></switchWeek> -->
-           <!-- <datepicker v-if="type == 1"></datepicker> -->
             <switch-year :showDetails="true" :type="type" @click="selectDate"></switch-year>
             <div class="footer mx-20 py-10 mt-20">
                  <span class="inline-block btn-success mr-10"></span>
@@ -25,7 +23,7 @@
 </style>
 <script>
 
-import switchWeek from '@/components/SwitchWeek.vue'
+// import switchWeek from '@/components/SwitchWeek.vue'
 export default {
     props:{
         type:{
@@ -39,9 +37,9 @@ export default {
            end:''
         }
     },
-    components:{
-       switchWeek
-    },
+    // components:{
+    //    switchWeek
+    // },
     mounted(){
        this.$emit('getDate',this.start,this.end)
     },
