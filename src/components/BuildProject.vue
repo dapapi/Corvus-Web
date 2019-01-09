@@ -99,7 +99,7 @@
                         </div>
                     </div>
                     <div class="col-md-12 example clearfix" v-for="field in projectFields">
-                        <div class="col-md-2 text-right float-left px-0 require">{{ field.key }}</div>
+                        <div class="col-md-2 text-right float-left px-0 ">{{ field.key }}</div>
                         <div class="col-md-10 float-left">
                             <template v-if="field.field_type === 1">
                                 <EmitInput :default='newArray.find(item=>item.id === field.id)'

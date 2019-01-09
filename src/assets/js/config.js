@@ -331,10 +331,10 @@ let config = {
                 name: '商务客户',
                 value: 3
             },
-            // {
-            //     name: 'papi客户',
-            //     value: 4
-            // },
+            {
+                name: 'papi客户',
+                value: 4
+            },
         ],
         // 员工状态
         staffStatus: [

@@ -941,6 +941,7 @@
                     end_at: this.endTime + ' ' + this.endMinutes,
                     desc: this.taskIntroduce,
                     participants: this.$store.state.newParticipantsInfo,
+                    lock_status : Number(this.trailInfo.lock_status)
                 };
                 
                 if (!this.taskName) {
