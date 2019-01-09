@@ -57,8 +57,9 @@ export default {
     methods: {
         imgDelete(params){
             let {id} = this.consdata[0]
+            let {related_field} = this.consdata[0]
             this.$delete(this.fileInfo,this.fileInfo.indexOf(this.fileInfo.find(item=>item.fileName === params.fileName)))
-            this.$emit('change',{key:id,value:this.fileInfo,type:null})
+            this.$emit('change',{key:id,value:this.fileInfo,type:related_field})
         },
         uploadFile(e) {
             let file = e.target.files[0];
@@ -87,9 +88,9 @@ export default {
                     let fileName = file.name;
                     // _this.$emit('change', fileUrl, fileName, fileSize,_this.fileExt,_this.id);
                     let {id} = _this.consdata[0]
-                    
+                    let {related_field} = this.consdata[0]
                     _this.fileInfo.push({fileUrl, fileName, fileSize})
-                    _this.$emit('change',{key:id,value:_this.fileInfo,type:null})
+                    _this.$emit('change',{key:id,value:_this.fileInfo,type:related_field})
                 })
             });
         },

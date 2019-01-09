@@ -55,7 +55,8 @@ export default {
             this.emitData.mainValue = params.value
             this.emitData.subValue = ''
             let {id} = this.consdata[0]
-            this.$emit('change',{key:id,value:[this.emitData.mainValue,this.emitData.subValue],type:null})
+            let {related_field} = this.consdata[0]
+            this.$emit('change',{key:id,value:[this.emitData.mainValue,this.emitData.subValue],type:related_field})
             if(preList){
                 let preArr = []
                 preList.list.forEach(element => {
@@ -70,8 +71,10 @@ export default {
         },
         subSelectorHandler(params){
             let {id} = this.consdata[0]
+            let {related_field} = this.consdata[0]
+
             this.emitData.subValue = params.value
-            this.$emit('change',{key:id,value:[this.emitData.mainValue,this.emitData.subValue],type:null})
+            this.$emit('change',{key:id,value:[this.emitData.mainValue,this.emitData.subValue],type:related_field})
         }
     }
 }

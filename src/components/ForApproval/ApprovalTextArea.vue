@@ -16,7 +16,8 @@ export default {
     methods:{
         emitText(){
             let {id} = this.consdata[0]
-            this.$emit('change',{key:id,value:this.textContent,type:null})
+            let {related_field} = this.consdata[0]
+            this.$emit('change',{key:id,value:this.textContent,type:related_field})
         }
     },
     watch:{
