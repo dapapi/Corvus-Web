@@ -15,7 +15,6 @@
             }
         },
         mounted() {
-            console.log(this.$el);
             let _this = this;
             $(this.$refs.number).asSpinner(
                 {
