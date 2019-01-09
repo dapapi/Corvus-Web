@@ -110,10 +110,12 @@ export default {
         ApprovalChainReaction
     },
     watch:{
-
+        formData:function(){
+            this.clearSignal()
+        }
     },
     update(){
-
+        
     },
     methods:{
         directionalWatcher(params){
