@@ -487,6 +487,7 @@
                 this.listData.page = page
                 fetch('get', '/stars', this.listData).then(function (response) {
                     _this.artistsInfo = response.data;
+                    
                     _this.current_page = response.meta.pagination.current_page;
                     _this.total = response.meta.pagination.total;
                     _this.total_pages = response.meta.pagination.total_pages;

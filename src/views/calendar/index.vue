@@ -664,6 +664,9 @@
             this.initCalendar();
             let pageContent = $('.container-fluid');
             $('.vertical-line').css('height', (pageContent[0].offsetHeight - 60) + 'px');
+            $('#addLinkage').on('hidden.bs.modal', function () {
+                $('#changeSchedule').modal('handleUpdate')
+            })
         },
 
         watch: {
