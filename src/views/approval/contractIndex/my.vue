@@ -63,8 +63,8 @@
                                 <img src="https://res.papitube.com/corvus/images/content-none.png" alt=""
                                      style="width: 100%">
                             </div>
-                            <pagination :current_page="current_page" :method="getProjects" :total_pages="total_pages"
-                                    :total="total"></pagination>
+                            <!-- <pagination :current_page="current_page" :method="getProjects" :total_pages="total_pages"
+                                    :total="total"></pagination> -->
                         </div>
                     </div>
                 </div>
@@ -103,23 +103,26 @@
         },
         methods: {
             
-            getProjects: function (pageNum = 1, type = null) {
-                console.log(pageNum,type);
+            getProjects: function (pageNum = 1, signStatus) {
+                let _this = this
                 let data = {
                     page: pageNum,
                     include: 'principal,trail.expectations'
                 };
-                let url = '/approvals_contract/approval?status='+this.pageType
-                if (type) {
-                    url = '/approvals_contract/approval?status='+this.pageType
-                    data.type = type;
+                // let url = '/approvals_contract/approval?status='+this.pageType
+                // if (type) {
+                //     url = '/approvals_contract/approval?status='+this.pageType
+                //     data.type = type;
+                // }
+                // this.paginationType = 'getProjects';
+                if (signStatus) {
+                    data.sign_contract_status = signStatus
                 }
-                this.paginationType = 'getProjects';
-                fetch('get', url, data).then(response => {
-                    this.projectsInfo = response.data
-                    this.total = response.meta.pagination;
-                    this.current_page = response.meta.current_page;
-                    this.total_pages = response.meta.total_pages;
+                fetch('get', '/approvals_contract/approval?status='+this.pageType, data).then(response => {
+                    _this.projectsInfo = response.data
+                    _this.total = response.meta.pagination;
+                    _this.current_page = response.meta.current_page;
+                    _this.total_pages = response.meta.total_pages;
                 })
             },
              getList(params) {
