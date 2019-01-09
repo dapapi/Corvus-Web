@@ -94,8 +94,8 @@ import {CONTRACT_INDEX_CONFIG} from '@/views/approval/contractIndex/contractInde
                 keywords: '',
                 projectsInfo: [],
                 contractList:CONTRACT_INDEX_CONFIG.contractIndex,
-                projectProgress:PROJECT_CONFIG.approvalProgress
-
+                projectProgress:PROJECT_CONFIG.approvalProgress,
+                pageType = 1
             }
         },
         mounted(){
@@ -109,26 +109,25 @@ import {CONTRACT_INDEX_CONFIG} from '@/views/approval/contractIndex/contractInde
             }
         },
         methods: {
-            getProjects: function (pageNum = 1, type = null) {
+            getProjects: function (pageNum = 1, signStatus) {
+                let _this = this
                 let data = {
                     page: pageNum,
-                    include: 'principal,trail.expectations'
+                    include: 'principal,trail.expectations',
+                    status:this.pageType
                 };
-                let url = '/approvals_contract/notify?status='+String(this.current_page)
-                if (type) {
-                    url = '/approvals_contract/notify?status='+String(this.current_page)
-                    data.type = type;
+                 if (signStatus) {
+                    data.sign_contract_status = signStatus
                 }
-                this.paginationType = 'getProjects';
-                fetch('get', url).then(response => {
-                    this.projectsInfo = response.data
-                    this.total = response.meta.pagination;
-                    this.current_page = response.meta.current_page;
-                    this.total_pages = response.meta.total_pages;
+                fetch('get', '/approvals_contract/notify', data).then(response => {
+                    _this.projectsInfo = response.data
+                    _this.total = response.meta.pagination;
+                    _this.current_page = response.meta.current_page;
+                    _this.total_pages = response.meta.total_pages;
                 })
             },
             getList(params) {
-                this.current_page = params
+                this.pageType = params
                     let _this = this
                     fetch('get','/approvals_contract/notify?status='+params).then((params) => {
                         console.log(params);

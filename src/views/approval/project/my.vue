@@ -88,7 +88,8 @@
                 total_pages: 1,
                 keywords: '',
                 projectsInfo: [],
-                projectProgress:PROJECT_CONFIG.approvalProgress
+                projectProgress:PROJECT_CONFIG.approvalProgress,
+                pageType:1
             }
         },
        mounted(){
@@ -102,25 +103,25 @@
             }
         },
         methods: {
-            getProjects: function (pageNum = 1, type = null) {
+            getProjects: function (pageNum = 1,signStatus) {
+                let _this = this
                 let data = {
                     page: pageNum,
-                    include: 'principal,trail.expectations'
+                    include: 'principal,trail.expectations',
+                    status:this.pageType
                 };
-                let url = '/approvals_project/approval?status=1';
-                if (type) {
-                    url = '/approvals_project/approval?status=1';
-                    data.type = type;
+                 if (signStatus) {
+                    data.sign_contract_status = signStatus
                 }
-                this.paginationType = 'getProjects';
-                fetch('get', url, data).then(response => {
-                    this.projectsInfo = response.data
-                    this.total = response.total;
-                    this.current_page = response.current_page;
-                    this.total_pages = response.last_page;
+                fetch('get', '/approvals_project/approval', data).then(response => {
+                    _this.projectsInfo = response.data
+                    _this.total = response.total;
+                    _this.current_page = response.current_page;
+                    _this.total_pages = response.last_page;
                 })
             },
             getList(params) {
+                this.pageType = params
                 let _this = this
                 fetch('get','/approvals_project/approval?status='+params).then((params) => {
                     console.log(params);

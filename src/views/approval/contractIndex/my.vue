@@ -63,8 +63,8 @@
                                 <img src="https://res.papitube.com/corvus/images/content-none.png" alt=""
                                      style="width: 100%">
                             </div>
-                            <!-- <pagination :current_page="current_page" :method="getProjects" :total_pages="total_pages"
-                                    :total="total"></pagination> -->
+                            <pagination :current_page="current_page" :method="getProjects" :total_pages="total_pages"
+                                    :total="total"></pagination>
                         </div>
                     </div>
                 </div>
@@ -88,7 +88,6 @@
                 projectsInfo: [],
                 projectProgress:PROJECT_CONFIG.approvalProgress,
                 pageType:1,
-
             }
         },
         mounted(){
@@ -107,18 +106,13 @@
                 let _this = this
                 let data = {
                     page: pageNum,
-                    include: 'principal,trail.expectations'
+                    include: 'principal,trail.expectations',
+                    status:this.pageType
                 };
-                // let url = '/approvals_contract/approval?status='+this.pageType
-                // if (type) {
-                //     url = '/approvals_contract/approval?status='+this.pageType
-                //     data.type = type;
-                // }
-                // this.paginationType = 'getProjects';
                 if (signStatus) {
                     data.sign_contract_status = signStatus
                 }
-                fetch('get', '/approvals_contract/approval?status='+this.pageType, data).then(response => {
+                fetch('get', '/approvals_contract/approval', data).then(response => {
                     _this.projectsInfo = response.data
                     _this.total = response.meta.pagination;
                     _this.current_page = response.meta.current_page;
