@@ -67,7 +67,7 @@
                         <div class="col-md-3 float-left">申请人</div>
                         <div class="col-md-3 float-left">{{list.name || info.approval.name}}</div>
                         <div class="col-md-3 float-left">职位</div>
-                        <div class="col-md-3 float-left">{{list.position || info.approval.position}}</div>
+                        <div class="col-md-3 float-left">{{list.position || (info.approval.position && info.approval.position[0].name)}}</div>
                     </div>
                     <div class="example">
                         <div class="col-md-3 float-left">部门</div>
@@ -208,7 +208,6 @@ export default {
             })
         },
         waitingFor(params){
-            console.log(params);
             if(params){
                 this.pending = params
                 this.getCurrentApprover()

@@ -1,10 +1,7 @@
 <template>
     <div class="px-0 mx-0 approval-chain-container">
-        <!-- <span class="col-md-2 text-right pl-0" :class="data[0].required===1?'require':''">{{title || data[0].control_title}}</span> -->
         <ApprovalSelector  ref='main' :consdata='options' :title='consdata[0].control_title' @change='mainSelectorHandler'/>
-        <!-- <div v-for="(item, index) in count" :key="index"> -->
         <ApprovalSelector class="pt-20 sub-selector" ref='sub' :consdata='subOptions' @change='subSelectorHandler'/>
-        <!-- </div> -->
     </div>
 </template>
 

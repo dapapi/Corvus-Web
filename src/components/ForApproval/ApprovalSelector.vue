@@ -1,5 +1,5 @@
 <template>
-    <div class="approval-text-container col-md-12 pl-0" v-show="options.length > 0">
+    <div class="approval-text-container col-md-12 pl-0" v-show="options.length > 0 || consdata[0].disabled">
         <span class="col-md-2 text-right pl-0" :class="consdata[0].required===1?'require':''" v-if="title || consdata[0].control_title">{{title || consdata[0].control_title}}</span>
         <select class="good-picker selectpicker col-md-10" :disabled="consdata[0].disabled?true:false" data-plugin="" :value="value" :data-live-search="isSelectable"
             :data-show-subtext="isSelectable" 
@@ -72,8 +72,8 @@ export default {
             },
             directionalSender:function(value){
                 if(value && value.to === this.consdata[0].sort_number){
-                    console.log(value);let _this = this
-                    if(this.consdata[0].control_source){
+                    let _this = this
+                    if(this.consdata[0].control_source && value.data){
                         fetch('get',this.consdata[0].control_source.url+'?'+this.consdata[0].control_source.parameters+'='+value.data).then((params) => {
                             _this.options = params.data
                             _this.$nextTick(() => {
@@ -127,19 +127,17 @@ export default {
         }
         },
         methods: {
-            // directionalWatcher(){
-                
-            // },
             sourceChecker(){
                 let _this = this
                 if(this.consdata[0].control_source){
-                    fetch('get',this.consdata[0].control_source.url).then((params) => {
+                    if(!this.consdata[0].disabled){
+                        fetch('get',this.consdata[0].control_source.url).then((params) => {
                         _this.options = params.data
-                        
                         _this.$nextTick(() => {
                             _this.refresh()
                         })
                     })
+                    }
                 }else{
                     _this.options = this.consdata[0].control_enums
                 }
