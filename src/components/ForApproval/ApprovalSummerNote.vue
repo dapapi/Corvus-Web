@@ -1,13 +1,13 @@
 <template>
     <div class="approval-text-container col-md-12">
-        <span class="col-md-2 text-right">{{data[0].control_title}}</span>
+        <span class="col-md-2 text-right">{{consdata[0].control_title}}</span>
         <div class="summernote col-md-10" id="summernote"></div>
     </div>
 </template>
 
 <script>
 export default {
-    props:['data'],
+    props:['consdata'],
     data(){
         return{
             text:''

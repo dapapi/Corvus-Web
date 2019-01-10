@@ -1,9 +1,10 @@
 <template>
     <!-- Page -->
-    <div class="page-main" style="background-color:##f3f4f5">
+    <div class="page-main" style="background-color:#f3f4f5">
         <div class="page-header page-header-bordered clearfix">
             <h1 class="page-title float-left">成员{{templateName}}</h1>
-            <switch-year class="float-right" :type="type" @click="selectDate"></switch-year>
+            <switch-time-details class="float-right" :type="type" @click="selectDate"></switch-time-details>
+            <!-- <switch-year class="float-right" :type="type" @click="selectDate"></switch-year> -->
         </div>
         <div class="page-content container-fluid">
             <div class="panel mb-0">
@@ -56,19 +57,13 @@
                 </div>
                 </div>
         </div>
-        <div class="site-action" data-plugin="actionBtn" @click="redirectBriefAdd()">
-            <button type="button"  class="site-action-toggle btn-raised btn btn-success btn-floating waves-effect waves-classic">
-                <i class="front-icon iconfont icon-tianjia1 animation-scale-up" aria-hidden="true" style="font-size:30px"></i>
-                <i class="back-icon iconfont icon-tianjia1 animation-scale-up" aria-hidden="true" style="font-size:30px"></i>
-            </button>
-        </div>
         <submit-report :templateId="temId" :templateStatus="status" :tempName="tempName"></submit-report>
     </div>
 </template>
 <script>
 import fetch from '@/assets/utils/fetch'
 import config from '@/assets/js/config'
-
+import switchTimeDetails from '@/components/switchTimeDetails.vue'
 export default {
     data(){
         return {
@@ -80,7 +75,7 @@ export default {
             templateName:'',
             start_time:'',
             end_time:'',
-            type:(this.$route.query.type-0),
+            // type:(this.$route.query.type-0),
             temId:'',
             status:'',
             tempName:''
@@ -91,6 +86,15 @@ export default {
         //检测路由参数变化  调用函数
        "$route":"getlist",
 
+    },
+    components:{
+        switchTimeDetails
+    },
+    computed:{
+        type:function(){
+            // console.log(this.$route.query.type)
+            return (this.$route.query.type-0)
+        },
     },
     // mounted(){
     //     this.getlist()

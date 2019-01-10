@@ -41,18 +41,12 @@
                             </div>
                         </div>
                     </div>
-                <briefright :type="showType" @getDate="selectDate"></briefright>
+                <briefright :type="type" @getDate="selectDate"></briefright>
                 </div>
                 <!-- <pagination :current_page="current_page" :method="getProjects" :total_pages="total_pages"
                             :total="total"></pagination> -->
 
                 <submit-report :templateId="temId" :templateStatus="status" :tempName="tempName"></submit-report>
-        </div>
-        <div class="site-action" data-plugin="actionBtn" @click="redirectBriefAdd()">
-            <button type="button"  class="site-action-toggle btn-raised btn btn-success btn-floating waves-effect waves-classic">
-                <i class="front-icon iconfont icon-tianjia1 animation-scale-up" aria-hidden="true" style="font-size:30px"></i>
-                <i class="back-icon iconfont icon-tianjia1 animation-scale-up" aria-hidden="true" style="font-size:30px"></i>
-            </button>
         </div>
     </div>
 </template>
@@ -86,13 +80,6 @@ export default {
     computed:{
         type:function(){
             return (this.$route.query.type-0)
-        },
-        showType:function(){
-            if(this.$route.query.type == 3){
-                return 5
-            }else{
-                return (this.$route.query.type-0)
-            }
         }
     },
     methods:{

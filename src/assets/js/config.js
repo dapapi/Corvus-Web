@@ -331,10 +331,10 @@ let config = {
                 name: '商务客户',
                 value: 3
             },
-            {
-                name: 'papi客户',
-                value: 4
-            },
+            // {
+            //     name: 'papi客户',
+            //     value: 4
+            // },
         ],
         // 员工状态
         staffStatus: [
@@ -798,7 +798,7 @@ let config = {
                 value: 2
             },
             {
-                name: '10分钟给前',
+                name: '10分钟前',
                 value: 3
             },
             {
@@ -920,17 +920,6 @@ let config = {
                 value: 4
             }
         ],
-        // 汇报对象
-        eportArr: [
-            {
-                name: '总裁办',
-                value: 1
-            },
-            {
-                name: 'CEO',
-                value: 2
-            }
-        ],
         // 转正状态
         positiveStateArr: [
             {
@@ -991,6 +980,10 @@ let config = {
             {
                 name: '劳务报酬所得',
                 value: 2,
+            },
+            {
+                name: '其他',
+                value: 3
             }
         ],
         personnelCategoryArr: [

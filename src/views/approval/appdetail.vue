@@ -1,19 +1,8 @@
 <template>
-    <div class="">
-        <div class="loader-overlay" v-if="isLoading">
-            <div class="loader-content">
-                <div class="loader-index">
-                    <div></div>
-                    <div></div>
-                    <div></div>
-                    <div></div>
-                    <div></div>
-                    <div></div>
-                </div>
-            </div>
-        </div>
-        <div class="" style="background-color:#f3f4f5">
-            <div class="page-header  page-header-bordered mb-0" >
+    <div class="page-main" style="background-color:#f3f4f5">
+        <Loading :is-loading="isLoading"></Loading>
+        <div>
+            <div class="page-header page-header-bordered mb-0">
                 <h6 class="page-title nav-head" v-if="info">
                     {{list.title}}
                     <template v-if="list.form_status==232">
@@ -33,407 +22,479 @@
                     </template>
                 </h6>
             </div>
-            <div class="page-header  page-header-bordered m-20 pl-10" >
+            <div class="page-header  page-header-bordered m-20 pl-10">
                 <h6 class="page-title title-status">当前状态
-                    <div class="approver" :style="{backgroundImage:'url('+pending.icon_url+')',backgroundColor:String(pending.icon_url).split('|')[0]}">{{String(pending.icon_url).split('|')[1]}}</div>
+                    <div class="approver"
+                         :style="{backgroundImage:'url('+pending.icon_url+')',backgroundColor:String(pending.icon_url).split('|')[0]}">
+                        {{String(pending.icon_url).split('|')[1]}}
+                    </div>
                     <span v-if="list.form_status=== 231">&nbsp;{{currentStatus.slice(0,1)}}{{pending.name}}{{currentStatus.slice(1)}}</span>
                     <span v-if="list.form_status !== 231">{{pending.name}}{{currentStatus}}</span>
-                <div v-if="!isApproverMode">
-                    <i v-if="list.form_status==232">
+                    <i v-if="list.form_status==232 && (info.approval.user_id === currentId || (list.creator && list.creator.data.id === currentId)) ">
                         <button class="btn btn-primary" @click='approvalHandler("discard")'>作废</button>
                     </i>
-                    <i v-if="list.form_status==231 && list.approval_begin === 0">
+                    <i v-if="list.form_status==231 && list.approval_begin === 0 && (info.approval.user_id === currentId || (list.creator && list.creator.data.id === currentId)) ">
                         <button class="btn btn-primary" @click='approvalHandler("cancel")'>撤销</button>
                         <button class="btn btn-danger" type="submit"
                                 data-toggle="modal">提醒
                         </button>
                     </i>
-                    <i v-if="list.form_status==234">
-                        <button class="btn btn-primary" @click="addProjectTimeout(list.type)">重新提交</button>
+                    <i v-if="[233,234,235].includes(list.form_status) && (info.approval.user_id === currentId || (list.creator && list.creator.data.id === currentId)) ">
+                        <button class="btn btn-primary" @click="addProjectTimeout(list.form_id)">重新提交</button>
                     </i>
-                    <i v-if="list.form_status==235">
-                        <button class="btn btn-primary" @click="addProjectTimeout(list.type)" >重新提交</button>
-                    </i>
-                    <i v-if="list.form_status==233">
-                        <button class="btn btn-primary" @click="addProjectTimeout(list.type)" >重新提交</button>
-                    </i>
-                </div>
-                <div v-if="isCurrentApprover">
-                    <i v-if="list.form_status==231">
+                    <i v-if="list.form_status==231 && isCurrentApprover && $route.query.mode === 'approver'">
                         <button class="btn btn-success" @click='approvalHandler("agree")'>同意</button>
                         <button class="btn btn-danger" @click='approvalHandler("refuse")'>拒绝</button>
                         <button class="btn btn-primary" @click='approvalHandler("transfer")'>转交</button>
-
                     </i>
-                    <i v-if="list.form_status==232 && list.creator.data.id === currentId">
-                        <button class="btn btn-primary" @click='approvalHandler("discard")' >作废</button>
-                    </i>
-                </div>
                 </h6>
             </div>
-            <div class="page-content container-fluid mt-20" v-if="info">
+            <div class="page-content container-fluid" v-if="info" style="height: 100%;">
                 <div class="panel col-md-12 col-lg-12 pb-10">
                     <div class="caption">
-                        <h6 class="page-title">{{list.title}}</h6>
-                        <span>编号：{{list.form_instance_number}}</span>
+                        <h6 class="page-title mx-15">{{list.title}}</h6>
+                        <span class="mx-15">编号：{{list.form_instance_number}}</span>
                     </div>
-                    <div class="example">
-                        <div class="col-md-3 float-left">申请人</div>
-                        <div class="col-md-3 float-left">{{list.name || info.approval.name}}</div>
-                        <div class="col-md-3 float-left">职位</div>
-                        <div class="col-md-3 float-left">{{list.position}}</div>
-                    </div>
-                    <div class="example">
-                        <div class="col-md-3 float-left">部门</div>
-                        <div class="col-md-3 float-left">{{list.department_name || info.approval.department_name}}</div>
-                        <div class="col-md-3 float-left">申请时间</div>
-                        <div class="col-md-3 float-left">{{list.created_at || info.approval.created_at}}</div>
-                    </div>
-                    <div class="example pt-20" style="border-top:1px solid #ccc">
-
-                    </div>
-                    <div class="example">
-                        <div>审批详情</div>
-                        <div class="row px-20">
-                            <div class="col-md-6 detail-container px-0" v-for="(item, index) in detailData" :key="index" v-if="item.values">
-                                <div class="col-md-3 float-left detail-key mx-0">{{item.key}}</div>
-                                <div class="col-md-6 float-left detail-value" v-if="item.values">{{item.values.data.value || ''}}</div>
+                    <div class="col-md-10">
+                        <div class="example">
+                            <div class="col-md-2 float-left text-right">申请人</div>
+                            <div class="col-md-4 float-left">{{(list && list.name) || (info.approval &&
+                                info.approval.name)}}
+                            </div>
+                            <div class="col-md-2 float-left text-right">职位</div>
+                            <div class="col-md-4 float-left">{{(list && list.position) || (info.approval &&
+                                info.approval.position && info.approval.position.name)}}
                             </div>
                         </div>
-                        <div class="panel col-md-12 col-lg-12">
+                        <div class="example">
+                            <div class="col-md-2 float-left text-right">部门</div>
+                            <div class="col-md-4 float-left">{{list.department_name || (info.approval &&
+                                info.approval.department_name)}}
+                            </div>
+                            <div class="col-md-2 float-left text-right">申请时间</div>
+                            <div class="col-md-4 float-left">{{list.created_at || (info.approval &&
+                                info.approval.created_at)}}
+                            </div>
+                        </div>
+                    </div>
+                    <div class="example pt-20" style="border-top:1px solid #e3e3e3">
+
+                    </div>
+                    <div class="">
+                        <h6 class="page-title pb-20 mx-15">审批详情</h6>
+                        <div class="row px-20">
+                            <div class="col-md-10">
+                                <div class="col-md-6 detail-container px-0 float-left"
+                                     v-for="(item, index) in detailData" :key="index">
+                                    <div class="col-md-4 float-left text-right detail-key mx-0 noselect">{{item.key}}
+                                    </div>
+                                    <div class="col-md-8 float-left detail-value"
+                                         v-if="item.values && !item.values.data.value.includes('http')">{{(item.values
+                                        && item.values.data.value) || ''}}
+                                    </div>
+                                    <div class="col-md-8 float-left detail-value"
+                                         v-if="item.values && item.values.data.value.includes('http')"
+                                         @click='previewHandler(item.values.data.value)'>点击查看
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class=" col-md-12 col-lg-12">
                             <div class="caption" style="border:0;">
-                                <h6 class="page-title pb-20" style="border-bottom:1px solid #ccc">审批流程</h6>
+                                <h6 class="page-title pb-20" style="border-bottom:1px solid #e3e3e3">审批流程</h6>
                                 <div class="">
-                                    <ApprovalProgress mode='detail' 
-                                            :formid='list.form_instance_number' 
-                                            :formstatus='currentStatus' 
-                                            @waitingfor='waitingFor'
-                                            :notice="info.participant"
-                                            ref='approvalProgress' />
+                                    <ApprovalProgress mode='detail'
+                                                      :formid='list.form_instance_number'
+                                                      :formstatus='currentStatus'
+                                                      @waitingfor='waitingFor'
+                                                      :notice="info.participant || (info.notice && info.notice.data)"
+                                                      ref='approvalProgress'/>
                                 </div>
                             </div>
                         </div>
                     </div>
                 </div>
             </div>
+            <DocPreview :url='previewUrl'/>
         </div>
-        <BuildProject :project-type="projectType" :project-fields-arr="projectFieldsArr" 
-        :default-data='{fields:info.fields.data,list:list,trailInfo:trailInfo}'></BuildProject>
-        <ApprovalGreatModule :form-data='formData' singlemode='true'  />
-        <ApprovalGoModal :mode='approvalMode' :id='list.form_instance_number' @approvaldone='approvalDone' />
+        <BuildProject :project-type="projectType" :project-fields-arr="projectFieldsArr"
+                      :default-data='{fields:(info.fields && info.fields.data),list:list,trailInfo:trailInfo}'></BuildProject>
+        <ApprovalGreatModule :form-data='formData' singlemode='true' :default-data='detailData'/>
+        <ApprovalGoModal :mode='approvalMode' :id='list.form_instance_number' @approvaldone='approvalDone'/>
+        <div class="modal fade  bootbox" id="docPreviewSelector" aria-labelledby="docPreviewPositionCenter"
+             role="dialog" tabindex="-1">
+            <div class="modal-dialog modal-simple modal-center modal-lg">
+                <div class="modal-content">
+
+                    <div class="modal-header">
+                        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                            <span aria-hidden="true">×</span>
+                        </button>
+                        <h4 class="modal-title">请选择要预览的文件</h4>
+                    </div>
+                    <div class="modal-body">
+                        <div v-for="(item, index) in previewUrlArr" :key="index" @click='previewHandler(item)'>
+                            {{item}}
+                            <!-- <figure>
+                                <img class="ml-20 mt-20 float-left" :src="item" style='max-width:400px;border:1px solid rgba(7,17,27,0.5)' :alt="item" >
+                            </figure> -->
+                        </div>
+                    </div>
+                    <!-- <div class="modal-footer">
+                        <button type="button" class="btn btn-default btn-pure waves-effect waves-light waves-round" data-dismiss="modal">关闭</button>
+                    </div> -->
+                </div>
+            </div>
+        </div>
     </div>
 
 </template>
 <script>
-import fetch from '@/assets/utils/fetch.js'
-import config from '@/assets/js/config'
-import {PROJECT_CONFIG} from '@/views/approval/project/projectConfig.js'
-import ApprovalGreatModule from '@/components/ApprovalGreatModule'
+    import fetch from '@/assets/utils/fetch.js'
+    import config from '@/assets/js/config'
+    import {PROJECT_CONFIG} from '@/views/approval/project/projectConfig.js'
+    import ApprovalGreatModule from '@/components/ApprovalGreatModule'
+    import ApprovalProgress from '@/components/ForApproval/ApprovalProgress'
 
-import ApprovalProgress from '@/components/ForApproval/ApprovalProgress'
-export default {
-    name:'approvalDetail',
-    components:{
-        ApprovalProgress,ApprovalGreatModule
-    },
-    data(){
-        return{
-           list:{},
-           info:{},
-           detailData:{},
-           projectType:'',
-           projectFieldsArr:[],
-           trailInfo:{},
-           firstFlag:true,
-           isLoading:false,
-           approvalMode:'',
-           pending:{},
-           currentId:'',
-           isCurrentApprover:false,
-           roleUser:'',
-           indexData:{},
-           formData:{},
-        }
-    },
-
-    mounted(){
-        // if(this.list.title.includes('合同')){
-        //             console.log(111111);
-        //         }
-        this.getFormList()
-        this.getData()
-    },
-    computed:{
-         isApproverMode(){
-            if(this.$route.query.mode === 'approver'){
-                return true
-            }else{
-                return false
+    export default {
+        name: 'approvalDetail',
+        components: {
+            ApprovalProgress, ApprovalGreatModule
+        },
+        data() {
+            return {
+                list: {},
+                info: {},
+                detailData: {},
+                projectType: '',
+                projectFieldsArr: [],
+                trailInfo: {},
+                firstFlag: true,
+                isLoading: true,
+                approvalMode: '',
+                pending: {},
+                currentId: '',
+                isCurrentApprover: false,
+                roleUser: '',
+                indexData: {},
+                formData: {},
+                previewUrl: '',
+                previewUrlArr: [],
             }
         },
-         currentStatus(){
-            switch(this.list.form_status){
-                case 232:
-                    return '已审批'
-                case 231:
-                    return '待审批'
-                case 233:
-                    return '已拒绝'
-                case 234:
-                    return '已撤销'
-                case 235:
-                    return '已作废'
-            }
-        },
-        
-    },
-    methods:{
-         getFormList(){
-            let _this = this
-            fetch('get','/approvals?type=0').then((params) => {
-                _this.indexData = params.data
-            })
-        },
-        pullUp(params){
-            this.formData = params
-            $('#approval-great-module').modal('show')
-        },
-        approvalDone(){
+
+        mounted() {
+            this.getFormList()
             this.getData()
-            this.$refs.approvalProgress.getApprover(this.list.project_number)
-            toastr.success('审批成功')
         },
-        getCurrentApprover(){
-            let _this = this
-            fetch('get','/users/my?include=department,roleUser').then((params) => {
-                _this.currentId = params.data.id
-                console.log(params);
-                _this.roleUser = params.data.roleUser.data[0].role_id
-                if(_this.currentId === _this.pending.id || _this.roleUser === _this.pending.id){
-                    _this.isCurrentApprover = true
-                }else{
-                    _this.isCurrentApprover = false
+        computed: {
+            isApproverMode() {
+                if (this.$route.query.mode === 'approver') {
+                    return true
+                } else {
+                    return false
                 }
-            })
+            },
+            currentStatus() {
+                switch (this.list.form_status) {
+                    case 232:
+                        return '已审批'
+                    case 231:
+                        return '待审批'
+                    case 233:
+                        return '已拒绝'
+                    case 234:
+                        return '已撤销'
+                    case 235:
+                        return '已作废'
+                }
+            },
+
         },
-        waitingFor(params){
-            if(params){
-                this.pending = params
-                console.log(params);
-                this.getCurrentApprover()
-            }
-            
-        },
-        addProjectTimeout(params){
-            this.isLoading = true
-            if(this.firstFlag === true){
-                setTimeout(() => {
+        methods: {
+            previewHandler(params) {
+                $('#docPreviewSelector').modal('hide')
+                this.previewUrlArr = String(params).split(',')
+                if (this.previewUrlArr.length === 1) {
+                    $('#docPreview').modal('show')
+                    this.previewUrl = this.previewUrlArr[0]
+                } else {
+                    $('#docPreviewSelector').modal('show')
+                }
+            },
+            getFormList() {
+                let _this = this
+                fetch('get', '/approvals/contracts').then((params) => {
+                    _this.indexData = params.data
+                    _this.isLoading = false
+                })
+            },
+            pullUp(params) {
+                this.formData = params
+                $('#approval-great-module').modal('show')
+            },
+            approvalDone() {
+                if (this.list.project_number) {
+                    this.$refs.approvalProgress.getApprover(this.list.project_number)
+                } else {
+                    this.$refs.approvalProgress.getApprover(this.list.form_instance_number)
+                }
+                this.getData()
+                toastr.success('审批成功')
+            },
+            getCurrentApprover() {
+                let _this = this
+                fetch('get', '/users/my?include=department,roleUser').then((params) => {
+                    _this.currentId = params.data.id
+                    _this.roleUser = params.data.roleUser.data[0].role_id
+                    if (_this.currentId === _this.pending.id || _this.roleUser === _this.pending.id) {
+                        _this.isCurrentApprover = true
+                    } else {
+                        _this.isCurrentApprover = false
+                    }
+                })
+            },
+            waitingFor(params) {
+                if (params) {
+                    this.pending = params
+                    this.getCurrentApprover()
+                }
+
+            },
+            addProjectTimeout(params) {
+                this.isLoading = true
+                if (this.firstFlag === true) {
+                    setTimeout(() => {
+                        this.addProject(params)
+                        this.firstFlag = false
+                        this.isLoading = false
+                    }, 3000);
+                } else {
                     this.addProject(params)
-                    this.firstFlag = false
                     this.isLoading = false
-                }, 3000);
-            }else{
-                this.addProject(params)
-                this.isLoading = false
-            }
-           
-        },
-        addProject(value) {
+                }
+
+            },
+            addProject(value) {
                 this.projectType = value;
-                if(this.list.title.includes('合同')){
-                    this.pullUp(this.indexData[0])
-                }else{
+                if (this.list.title.includes('合同')) {
+                    this.pullUp(this.indexData.find(item => item.form_id === this.projectType))
+                } else {
                     this.selectProjectType(function () {
                         $('#addProject').modal('show')
                     });
                 }
             },
 
-        selectProjectType(callback) {
-            fetch('get', '/project_fields', {
-                type: this.projectType,
-                status: 1,
-            }).then(response => {
-                for (let i = 0; i < response.data.length; i++) {
-                    if (response.data[i].field_type === 2 || response.data[i].field_type === 6) {
-                        response.data[i].contentArr = [];
-                        for (let j = 0; j < response.data[i].content.length; j++) {
-                            response.data[i].contentArr.push({
-                                value: response.data[i].content[j],
-                                name: response.data[i].content[j]
-                            })
+            selectProjectType(callback) {
+                fetch('get', '/project_fields', {
+                    type: this.projectType,
+                    status: 1,
+                }).then(response => {
+                    for (let i = 0; i < response.data.length; i++) {
+                        if (response.data[i].field_type === 2 || response.data[i].field_type === 6) {
+                            response.data[i].contentArr = [];
+                            for (let j = 0; j < response.data[i].content.length; j++) {
+                                response.data[i].contentArr.push({
+                                    value: response.data[i].content[j],
+                                    name: response.data[i].content[j]
+                                })
+                            }
                         }
                     }
+                    this.projectFieldsArr = response.data;
+                    callback();
+                });
+            },
+            approvalHandler(params) {
+                this.approvalMode = params
+                $('#approvalGo').modal('show')
+            },
+            getData() {
+                let _this = this
+                fetch('get', '/approval_instances/' + this.$route.params.id + '?include=principal,creator,fields,trail').then((params) => {
+                    let {meta} = params
+                    _this.list = params.data
+                    _this.projectType = params.data.type
+                    _this.info = meta
+                    let {fields: {data}} = meta
+                    _this.detailData = data
+                    _this.trailInfo = params.data.trail
+                })
+            },
+            participantChange: function (value) {
+                let flagArr = [];
+                for (let i = 0; i < value.length; i++) {
+                    flagArr.push(value[i].id)
                 }
-                this.projectFieldsArr = response.data;
-                callback();
-            });
-        },
-        approvalHandler(params){
-            this.approvalMode = params
-            $('#approvalGo').modal('show')
-        },
-        getData(){
-            let _this = this
-            fetch('get','/approval_instances/'+this.$route.params.id+'?include=principal,creator,fields,trail').then((params) => {
-                let {meta}=params
-                _this.list = params.data
-                _this.projectType = params.data.type
-                _this.info = meta
-                let {fields:{data}} = meta
-                _this.detailData = data
-                _this.trailInfo = params.data.trail
-        
-
-            })
-        },
-        participantChange: function (value) {
-        let flagArr = [];
-        for (let i = 0; i < value.length; i++) {
-          flagArr.push(value[i].id)
+                this.participants = flagArr
+            },
         }
-        this.participants = flagArr
-      },
     }
-}
 </script>
 <style scoped>
-*{
-    list-style: none;
-    font-style: normal;
-    font-weight: normal;
-}
+    * {
+        list-style: none;
+        font-style: normal;
+        font-weight: normal;
+    }
 
-.approver{
-    display: inline-block;
-    font-size: 12px;
-    font-weight: 800;
-    color: white;
-    width: 30px;
-    height: 30px;
-    border-radius: 100%;
-    /* background-color: rgba(7, 17, 27, 0.2); */
-    background-size: 30px;
-    text-align: center;
-    line-height: 30px;
-}
- .loader-overlay {
+    .nav-head button {
+        color: white;
+        transform: scale(0.7)
+    }
+
+    .noselect {
+        -webkit-touch-callout: none;
+        -webkit-user-select: none;
+        -khtml-user-select: none;
+        -moz-user-select: none;
+        -ms-user-select: none;
+        user-select: none;
+    }
+
+    .approver {
+        display: inline-block;
+        font-size: 12px;
+        font-weight: 800;
+        color: white;
+        width: 30px;
+        height: 30px;
+        border-radius: 100%;
+        background-size: 30px;
+        text-align: center;
+        line-height: 30px;
+    }
+
+    .loader-overlay {
         margin-left: 320px;
         background-color: rgba(7, 17, 27, 0.2)
     }
-.detail {
-    width: 82%;
-    position: absolute;
-    left: 140px;
-    top: 0;
-}
-.btn{
-    padding: 0 10px;
-    margin: 0 10px;
-}
-.title-status{
-    position: relative;
 
-}
-.page-title{
-    font-size: 1rem;
-}
-.title-status em,.content em,.setp em{
-    width: 25px;
-    height:25px;
-    display: inline-block;
-    background-image: url('../../assets/head.jpg');
-    background-size:25px;
-    border-radius: 50%;
-    margin: 0 10px;
-    vertical-align: middle;
-}
-.title-status i{
-    position: absolute;
-    right:10px;
-    top:0;
-}
-.caption{
-  padding: 20px 0;
-  position: relative;
-  border-bottom: 1px solid #ccc;
-}
+    .btn {
+        padding: 0 10px;
+        margin: 0 10px;
+    }
 
-.caption span{
-  position: absolute;
-  right:10px;
-  top: 20px;
-}
-.page-content{
-    padding: 0 20px;
-}
-.notify{
-    display: flex;
-}
-.left,.middle{
-    display: flex;
-    vertical-align: middle;
-    position: relative;
-}
-.left::before,.middle::before{
-    content: '';
-    width:40px;
-    height:1px;
-    background: #e0e0e0;
-    display: inline-block;
-    position: absolute;
-    top: 15px;
-    left: 130px;
-}
-.example{
-    position: relative;
-}
-.example em{
-    position: absolute;
-    left: 50px;
-    top:-2px;
-}
-.left-cont,.middle-cont{
-    display: flex;
-    flex-direction: column;
-    font-size: 12px;
-    font-weight: bold;
-}
-.setp{
-    display: flex;
-}
-.setp em{
-   width: 35px;
-   height:35px;
-}
-.right{
-    display: flex;
-    align-items: center;
-}
-.middle em,.left em {
-    position: relative;
-}
-.middle em i,.left em i{
-    position: absolute;
-    bottom: -3px;
-    right:-6px;
-}
-.panel{
-   margin-bottom: 20px;
-}
-.nav-head{
-    font-size: 26px;
-}
-.detail-container{
-    border: 1px solid #eeeeee;
-    height: 40px;
-    line-height: 40px;
-}
-.detail-key{
-    height: 40px;
-    background: #f5f5f5;
+    .title-status {
+        position: relative;
 
-}
+    }
+
+    .page-title {
+        font-size: 1.2rem;
+    }
+
+    .title-status em, .content em, .setp em {
+        width: 25px;
+        height: 25px;
+        display: inline-block;
+        background-image: url('../../assets/head.jpg');
+        background-size: 25px;
+        border-radius: 50%;
+        margin: 0 10px;
+        vertical-align: middle;
+    }
+
+    .title-status i {
+        position: absolute;
+        right: 10px;
+        top: 0;
+    }
+
+    .caption {
+        padding: 20px 0;
+        position: relative;
+        border-bottom: 1px solid #e3e3e3;
+    }
+
+    .caption span {
+        position: absolute;
+        right: 10px;
+        top: 20px;
+    }
+
+    .page-content {
+        padding: 0 20px;
+    }
+
+    .left, .middle {
+        display: flex;
+        vertical-align: middle;
+        position: relative;
+    }
+
+    .left::before, .middle::before {
+        content: '';
+        width: 40px;
+        height: 1px;
+        background: #e0e0e0;
+        display: inline-block;
+        position: absolute;
+        top: 15px;
+        left: 130px;
+    }
+
+    .example {
+        position: relative;
+    }
+
+    .example em {
+        position: absolute;
+        left: 50px;
+        top: -2px;
+    }
+
+    .left-cont, .middle-cont {
+        display: flex;
+        flex-direction: column;
+        font-size: 12px;
+        font-weight: bold;
+    }
+
+    .setp {
+        display: flex;
+    }
+
+    .setp em {
+        width: 35px;
+        height: 35px;
+    }
+
+    .right {
+        display: flex;
+        align-items: center;
+    }
+
+    .middle em, .left em {
+        position: relative;
+    }
+
+    .middle em i, .left em i {
+        position: absolute;
+        bottom: -3px;
+        right: -6px;
+    }
+
+    .panel {
+        margin-bottom: 20px;
+    }
+
+    .nav-head {
+        font-size: 26px;
+    }
+
+    .detail-container {
+        /* border: 1px solid #eeeeee; */
+        height: 40px;
+        line-height: 40px;
+    }
+
+    .detail-key {
+        height: 40px;
+        /* background: #f5f5f5; */
+
+    }
 </style>
 
 

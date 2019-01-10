@@ -1,6 +1,6 @@
 <template>
   <div class="">
-    <div class="" style="background-color:#f3f4f5">
+    <div class="page-main" style="background-color:#f3f4f5">
       <div class="page-header  page-header-bordered mb-0">
         <h1 class="page-title">我的申请</h1>
       </div>
@@ -49,7 +49,7 @@
                 <th class="cell-200" scope="col">申请时间</th>
                 <th class="cell-200" scope="col">申请状态</th>
               </tr>
-              <tr v-for="task in tasksInfo">
+              <tr v-for="task in tasksInfo" :key='task'>
                 <td class="pointer-content cell-200">
                   <router-link :to="{name:'approval/detail', params: {id: task.id}}">{{ task.title }}
                   </router-link>

@@ -40,8 +40,8 @@
                                 <th class="cell-300" scope="col">跟进时间</th>
                             </tr>
                             <tbody>
-                            <tr v-for="item in projectInfo" :key="item.id">
-                                <td class="pointer-content" @click="projectDetail(item.id)">
+                            <tr v-for="item in projectInfo" :key="item.id" @click="projectDetail(item.id)" style="cursor: pointer">
+                                <td class="pointer-content">
                                     {{item.title}}
                                 </td>
                                 <td >{{item.principal.data.name}}</td>

@@ -69,7 +69,7 @@
                                         <EditSelector 
                                             :options="genderArr" 
                                             :isEdit="!isLook" 
-                                            :content="gender" 
+                                            :content="gender"
                                             @change="item => changeState('gender', item)"
                                         />
                                     </div>
@@ -108,7 +108,7 @@
                                         <input v-else type="text" v-model="phoneNum" placeholder="" class="form-control">
                                     </div>
                                 </div>
-                                <div class="example">
+                                <!-- <div class="example">
                                     <div class="col-md-3 text-right float-left require">入职时间</div>
                                     <div class="col-md-8 float-left pl-0">
                                         <template v-if="isLook">
@@ -116,9 +116,9 @@
                                         </template>
                                         <datepicker v-else change-key="entryTime" @select="changeState"></datepicker>
                                     </div>
-                                </div>
+                                </div> -->
                                 <div class="example">
-                                    <div class="col-md-3 text-right float-left require">政治面目</div>
+                                    <div class="col-md-3 text-right float-left">政治面目</div>
                                     <div class="col-md-8 float-left pl-0">
                                         <template v-if="isLook">
                                             {{ politicalFace }}
@@ -132,7 +132,7 @@
                                         <EditSelector 
                                             :options="maritalStatusArr" 
                                             :isEdit="!isLook" 
-                                            :content="maritalStatus" 
+                                            :content="maritalStatus"
                                             @change="item => changeState('maritalStatus', item)"
                                         />
                                     </div>
@@ -144,6 +144,17 @@
                                             {{ email }}
                                         </template>
                                         <input v-else type="text" v-model="email" placeholder="" class="form-control">
+                                    </div>
+                                </div>
+                                <div class="example">
+                                    <div class="col-md-3 text-right float-left">民族</div>
+                                    <div class="col-md-8 float-left pl-0">
+                                        <EditSelector 
+                                            :options="nationalityArr" 
+                                            :isEdit="!isLook" 
+                                            :content="nationality"
+                                            @change="item => changeState('nationality', item)"
+                                        />
                                     </div>
                                 </div>
                             </div>
@@ -158,7 +169,7 @@
                                     </div>
                                 </div>
                                 <div class="example">
-                                    <div class="col-md-3 text-right float-left require">户籍所在地详细地址</div>
+                                    <div class="col-md-3 text-right float-left">户籍所在地详细地址</div>
                                     <div class="col-md-8 float-left pl-0">
                                         <template v-if="isLook">
                                             {{ householdAddress }}
@@ -167,18 +178,7 @@
                                     </div>
                                 </div>
                                 <div class="example">
-                                    <div class="col-md-3 text-right float-left require">民族</div>
-                                    <div class="col-md-8 float-left pl-0">
-                                        <EditSelector 
-                                            :options="nationalityArr" 
-                                            :isEdit="!isLook" 
-                                            :content="nationality" 
-                                            @change="item => changeState('nationality', item)"
-                                        />
-                                    </div>
-                                </div>
-                                <div class="example">
-                                    <div class="col-md-3 text-right float-left require">血型</div>
+                                    <div class="col-md-3 text-right float-left">血型</div>
                                     <div class="col-md-8 float-left pl-0">
                                         <EditSelector 
                                             :options="bloodTypeArr" 
@@ -189,7 +189,7 @@
                                     </div>
                                 </div>
                                 <div class="example">
-                                    <div class="col-md-3 text-right float-left require">现居住地址</div>
+                                    <div class="col-md-3 text-right float-left">现居住地址</div>
                                     <div class="col-md-8 float-left pl-0">
                                         <template v-if="isLook">
                                             {{ homeAddress }}
@@ -279,7 +279,7 @@
                                             <template v-if="isLook">
                                                 {{ train.tBody[index][key] }}
                                             </template>
-                                            <input type="text" v-model="train.tBody[index][key]" />
+                                            <input v-else type="text" v-model="train.tBody[index][key]" />
                                         </td>
                                     </tr>
                                 </tbody>
@@ -340,27 +340,27 @@
                             <div class="col-md-7" style="margin-top: 4px;">1、现在或以前是否患有任何的身体缺陷或疾病，包括心脏病、肝炎、神经衰弱等</div>
                             <div class="col-md-5">
                                 <div class="checkbox-custom checkbox-primary staff-radio">
-                                    <input type="radio" id="inputRadiosCheckedOne" value="1" name="inputRadioOne" v-model="isIll">
+                                    <input type="radio" :disabled="isLook" id="inputRadiosCheckedOne" value="1" name="inputRadioOne" v-model="isIll">
                                     <label for="inputRadiosCheckedOne">是</label>&nbsp;&nbsp;
-                                    <input type="radio" id="inputRadiosUncheckedOne" value="2" name="inputRadioOne" v-model="isIll">
+                                    <input type="radio" :disabled="isLook" id="inputRadiosUncheckedOne" value="2" name="inputRadioOne" v-model="isIll">
                                     <label for="inputRadiosUncheckedOne">否</label>
                                 </div>
                             </div>
                             <div class="col-md-7" style="margin-top: 4px;">2、如属女性，请说明是否怀孕？</div>
                             <div class="col-md-5">
                                 <div class="checkbox-custom checkbox-primary staff-radio">
-                                    <input type="radio" id="inputRadiosCheckedTwo" value="1" name="inputRadioTwo" v-model="isPregnancy">
+                                    <input type="radio" :disabled="isLook" id="inputRadiosCheckedTwo" value="1" name="inputRadioTwo" v-model="isPregnancy">
                                     <label for="inputRadiosCheckedTwo">是</label>&nbsp;&nbsp;
-                                    <input type="radio" id="inputRadiosUncheckedTwo" value="2" name="inputRadioTwo" v-model="isPregnancy">
+                                    <input type="radio" :disabled="isLook" id="inputRadiosUncheckedTwo" value="2" name="inputRadioTwo" v-model="isPregnancy">
                                     <label for="inputRadiosUncheckedTwo">否</label>
                                 </div>
                             </div>
                             <div class="col-md-7" style="margin-top: 4px;">3、是否同意工作迁移到集团其他城市</div>
                             <div class="col-md-5">
                                 <div class="checkbox-custom checkbox-primary staff-radio">
-                                    <input type="radio" id="inputRadiosCheckedThree" value="1" name="inputRadioThree" v-model="agreeMove">
+                                    <input type="radio" :disabled="isLook" id="inputRadiosCheckedThree" value="1" name="inputRadioThree" v-model="agreeMove">
                                     <label for="inputRadiosCheckedThree">是</label>&nbsp;&nbsp;
-                                    <input type="radio" id="inputRadiosUncheckedThree" value="2" name="inputRadioThree" v-model="agreeMove">
+                                    <input type="radio" :disabled="isLook" id="inputRadiosUncheckedThree" value="2" name="inputRadioThree" v-model="agreeMove">
                                     <label for="inputRadiosUncheckedThree">否</label>
                                 </div>
                             </div>
@@ -415,7 +415,7 @@ export default {
     name: 'StaffDetail',
     data () {
         return {
-            isLook: false,
+            isLook: this.$route.name === 'entryDetail',
             userId: '',
             genderArr: genderArr,
             maritalStatusArr: maritalStatusArr,
@@ -427,7 +427,7 @@ export default {
             gender: '',
             IDNum: '',
             phoneNum: '',
-            entryTime: '', // 入职时间
+            // entryTime: '', // 入职时间
             politicalFace: '', // 政治面目
             maritalStatus: '', // 婚姻
             email: '',
@@ -582,12 +582,6 @@ export default {
                 name: 'phoneNum',
                 msg: '请填写手机号'
             }, {
-                name: 'entryTime',
-                msg: '请填写入职时间'
-            }, {
-                name: 'politicalFace',
-                msg: '请填写政治面目'
-            }, {
                 name: 'maritalStatus',
                 msg: '请选择婚姻状况'
             }, {
@@ -596,18 +590,6 @@ export default {
             }, {
                 name: 'birthDay',
                 msg: '请选择出生日期'
-            }, {
-                name: 'householdAddress',
-                msg: '请填写户籍所在地址'
-            }, {
-                name: 'nationality',
-                msg: '请选择民族'
-            }, {
-                name: 'bloodType',
-                msg: '请选择血型'
-            }, {
-                name: 'homeAddress',
-                msg: '请填写现居住地址'
             }]
         };
     },
@@ -623,7 +605,6 @@ export default {
         const route = this.$route
         if (route.name === 'entryDetail') {
             this.userId = route.params.id
-            this.isLook = true
             this.getData()
         }
 
@@ -672,7 +653,7 @@ export default {
 				national: this.nationality,
 				current_address: this.householdAddress,
 				birth_time: this.birthDay,
-				entry_time: this.entryTime,
+				// entry_time: this.entryTime,
 				blood_type: this.bloodType,
 				email: this.email,
 				language_level: this.foreignLanguageLevel,
@@ -693,6 +674,7 @@ export default {
 
 			fetch('post', '/personnel' ,params).then(result => {
                 toastr.success('添加成功')
+                this.$router.push({ path: '/staff' });
 			})
         },
         // 获取员工数据
@@ -704,7 +686,7 @@ export default {
                 this.gender = data.gender
                 this.IDNum = data.id_number
                 this.phoneNum = data.phone
-                this.entryTime = data.entry_time
+                // this.entryTime = data.entry_time
                 this.politicalFace = data.political
                 this.maritalStatus = data.marriage
                 this.email = data.email
@@ -718,10 +700,10 @@ export default {
                 this.computerSkill = data.skills.data[0].computer_level
                 this.certificate = data.skills.data[0].certificate
                 this.specialty = data.skills.data[0].specialty
-                this.remarks = data.remark
-				this.isIll = data.disease
-                this.isPregnancy = data.pregnancy
-                this.agreeMove = data.migration
+                this.remarks = data.skills.data[0].remark
+				this.isIll = data.skills.data[0].disease
+                this.isPregnancy = data.skills.data[0].pregnancy
+                this.agreeMove = data.skills.data[0].migration
                 this.education.tBody = data.education.data.map(n => {
                     return this.education.tHead.map(m => {
                         return n[m.key]

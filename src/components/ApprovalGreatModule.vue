@@ -9,16 +9,16 @@
                         </button>
                         <h4 class="modal-title" id="exampleModalTitle">{{pageInfo.title}}</h4>
                     </div>
-                    <div class="modal-body modal-greater">
-                        <div v-for="(item, index) in moduleInfo" :key="index" class="great-option example">
-                            <div :is='sortChecker(item)' 
-                            :data='item' :predata='sendData'
-                            :singlemode='singlemode' :clear='clearFlag'
-                            @change="changeHandler"
+                    <div class="modal-body modal-greater ">
+                        <div v-for="(item, index) in moduleInfo" :key="index" class="great-option example " >
+                            <div :is='sortChecker(item)' :ref='item[0].control.data_dictionary_id'
+                            :consdata='item' :predata='sendData' class="container"
+                            :singlemode='singlemode' :clear='clearFlag' :directional-sender='directionalData'
+                            @change="changeHandler" @directional='directionalWatcher'
                             :formid='form_id'></div>
                             <!-- ⬆️核心模块 -->
                         </div>
-                        <ApprovalProgress :formid='form_id' :trend='trendApprover' />
+                        <ApprovalProgress :formid='form_id' :trend='trendApprover.condition[0]?trendApprover:""' />
 
                     </div>
                     <div class="modal-footer">
@@ -53,8 +53,10 @@ import ApprovalSelector from '@/components/ForApproval/ApprovalSelector'
 import ApprovalNumber from '@/components/ForApproval/ApprovalNumber'
 import ApprovalProgress from '@/components/ForApproval/ApprovalProgress'
 import ApprovalDouble from '@/components/ForApproval/ApprovalDouble'
+import ApprovalMultipleSelector from '@/components/ForApproval/ApprovalMultipleSelector'
+import ApprovalChainReaction from '@/components/ForApproval/ApprovalChainReaction'
 export default {
-    props:['formData','singlemode'],
+    props:['formData','singlemode','defaultData'],
     data(){
         return{
             importData:'',
@@ -73,6 +75,7 @@ export default {
                 ready:false,
             },
             clearFlag:false,
+            directionalData:{},
         }
     },
     created(){
@@ -81,13 +84,14 @@ export default {
     mounted(){
         let _this = this
         $('#approval-great-module').on('show.bs.modal',function(){
-                // _this.clearSignal()
                 _this.$nextTick(() => {
                     _this.getFormContractor() 
                 })
         })
+         $('#approval-great-module').on('hidden.bs.modal',function(){
+                // _this.clearSignal()
+        })
         this.refresh()
-        // console.log(this.formData.condition);
     },
     components:{
         ApprovalMultiple,
@@ -101,25 +105,25 @@ export default {
         ApprovalNumber,
         ApprovalProgress,
         ApprovalDouble,
-        ApprovalDiv
+        ApprovalDiv,
+        ApprovalMultipleSelector,
+        ApprovalChainReaction
     },
     watch:{
-        formData:function(value){
-            if(value){
-                // this.getFormContractor()
-
-                // this.trendApproverChecker()
-
-            }
-            
+        formData:function(){
+            this.clearSignal()
         }
     },
     update(){
-
+        
     },
     methods:{
+        directionalWatcher(params){
+          this.directionalData = params
+        },
         clearSignal(){
             this.$store.dispatch('changeParticipantsInfo',{data:[]});
+            
             this.trendApprover={
                 condition:[],
                 ready:false,
@@ -144,10 +148,14 @@ export default {
         approvalSubmit(){
             let _this = this
             if(this.getRequiredArr()){
+                Object.assign(this.sendData,{notice:this.$store.state.newParticipantsInfo})
                 fetch('post','/approvals/'+this.formData.form_id,this.sendData).then((params) => {
                     toastr.success('提交成功')
                     $('#approval-great-module').modal('hide')
                     _this.clearSignal()
+                    setTimeout(() => {
+                        location.reload();
+                    }, 1000);
                 })
             }
         },
@@ -155,7 +163,6 @@ export default {
             if(this.formData.condition.includes(params.key)){
                 let tempData = this.formData.condition.indexOf(params.key)
                 this.trendApprover.condition.splice(tempData,1) 
-                // console.log(this.formData.condition.indexOf(params.key));
                 this.trendApprover.condition[tempData]=params.value
             }
             if(this.formData.condition.length === this.trendApprover.condition.length){
@@ -241,6 +248,10 @@ export default {
                     return this.$options.components.ApprovalUploader
                 case 200 :
                     return this.$options.components.ApprovalDouble
+                case 310 :
+                    return this.$options.components.ApprovalMultipleSelector
+                case 391 :
+                    return this.$options.components.ApprovalChainReaction
                 default : 
                     return this.$options.components.Approvaltext
                 }
@@ -251,15 +262,19 @@ export default {
 </script>
 
 <style scoped>
+.container{
+    display: flex;
+    align-items: center;
+}
+.require{
+    padding-right: 0;
+}
 .modal-greater{
     margin-top: 20px !important;
     height: 100%;
-    /* overflow-y:scroll; */
 }
 .great-option{
     display: flex;
-    /* height: 50px; */
-    
     margin: 20px 5px ;
 }
 </style>

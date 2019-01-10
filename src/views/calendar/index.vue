@@ -101,14 +101,14 @@
         </div>
 
         <!-- 新建/修改 日程 -->
-        <div class="modal fade" id="changeSchedule" aria-hidden="true" aria-labelledby="addLabelForm"
+        <div class="modal fade line-center" id="changeSchedule" aria-hidden="true" aria-labelledby="addLabelForm"
              role="dialog" tabindex="-1">
             <div class="modal-dialog modal-simple">
                 <div class="modal-content">
                     <div class="modal-header">
                         <div style="order: 2">
                             <span class="pointer-content hover-content mr-4" data-toggle="modal"
-                                  data-target="#addLinkage" @click="selectProjectLinkage">关联</span>
+                                  data-target="#addLinkage">关联</span>
                             <i class="iconfont icon-guanbi pointer-content" aria-hidden="true" data-dismiss="modal"></i>
                         </div>
                         <h5 class="modal-title">
@@ -146,7 +146,7 @@
                             </div>
                         </div>
                         <div class="clearfix">
-                            <div class="col-md-2 text-right float-left">结束时间</div>
+                            <div class="col-md-2 text-right float-left line-fixed-height">结束时间</div>
                             <div class="col-md-5 float-left pl-0">
                                 <datepicker @change="changeEndTime" ref="scheduleEndDate"></datepicker>
                             </div>
@@ -165,7 +165,7 @@
                             </div>
                         </div>
                         <div class="clearfix py-10">
-                            <div class="col-md-2 text-right float-left">参与人</div>
+                            <div class="col-md-2 text-right float-left line-fixed-height">参与人</div>
                             <div class="col-md-10 float-left pl-0">
                                 <AddMember type="add"></AddMember>
                             </div>
@@ -192,7 +192,7 @@
                         </div>
                         <div v-show="showMore">
                             <div class="pt-10 mb-20 clearfix">
-                                <div class="col-md-2 text-right float-left">资源</div>
+                                <div class="col-md-2 text-right float-left line-fixed-height">资源</div>
                                 <div class="col-md-10 float-left pl-0">
                                     <selectors :options="allMeetingRomeList" ref="scheduleResource"
                                                @change="changeScheduleMaterial"></selectors>
@@ -204,8 +204,8 @@
                                     <selectors :options="remindArr" ref="scheduleNotice"></selectors>
                                 </div>
                             </div>
-                            <div class="example">
-                                <div class="col-md-2 text-right float-left">重复</div>
+                            <div class="clearfix my-20">
+                                <div class="col-md-2 text-right float-left line-fixed-height">重复</div>
                                 <div class="col-md-10 float-left pl-0">
                                     <selectors :options="repeatArr" ref="scheduleRepeat"
                                                @change="changeScheduleRepeat"></selectors>
@@ -219,7 +219,7 @@
                                     <input type="text" class="form-control" title="" v-model="eventPlace">
                                 </div>
                             </div>
-                            <div class="mt-20">
+                            <div class="example">
                                 <div class="col-md-2 text-right float-left">备注</div>
                                 <div class="col-md-10 float-left pl-0">
                                     <textarea class="form-control" title="" v-model="eventDesc"></textarea>
@@ -305,28 +305,41 @@
                             </div>
                         </div>
                         <div class="example" v-if="scheduleData.position">
-                            <div class="col-md-1 px-0 float-left">地点</div>
-                            <div class="col-md-10 float-left">{{ scheduleData.position }}</div>
+                            <div class="col-md-2 px-0 float-left">地点</div>
+                            <div class="col-md-10 pl-0 float-left">{{ scheduleData.position }}</div>
                         </div>
                         <div class="example" v-if="scheduleData.material">
-                            <div class="col-md-1 px-0 float-left">资源</div>
-                            <div class="col-md-10 float-left">{{ scheduleData.material.data.name }}</div>
+                            <div class="col-md-2 px-0 float-left">资源</div>
+                            <div class="col-md-10 pl-0 float-left">{{ scheduleData.material.data.name }}</div>
                         </div>
                         <div class="example">
-                            <div class="col-md-1 px-0 float-left">组织人</div>
-                            <div class="col-md-10 float-left">
+                            <div class="col-md-2 px-0 float-left">组织人</div>
+                            <div class="col-md-10 pl-0 float-left">
                                 {{ scheduleData.creator.data.name }}
                             </div>
                         </div>
+                        <div class="example"
+                             v-if="((scheduleData.project && scheduleData.project.data.length > 0) || (scheduleData.task && scheduleData.task.data.length > 0)) && !noPermission">
+                            <div class="col-md-2 px-0 float-left">关联资源</div>
+                            <div class="col-md-10 pl-0 float-left">
+                                <div class="pb-5" v-if="scheduleData.project"
+                                     v-for="project in scheduleData.project.data">
+                                    <span>项目 - {{ project.title }}</span>
+                                </div>
+                                <div class="pb-5" v-if="scheduleData.task" v-for="task in scheduleData.task.data">
+                                    <span>任务 - {{ task.title }}</span>
+                                </div>
+                            </div>
+                        </div>
                         <div class="example" v-if="scheduleData.participants && !noPermission">
-                            <div class="col-md-1 px-0 float-left">参与人</div>
-                            <div class="col-md-10 float-left">
+                            <div class="col-md-2 px-0 float-left">参与人</div>
+                            <div class="col-md-10 pl-0 float-left">
                                 <AddMember type="add" @change="changeScheduleParticipants"></AddMember>
                             </div>
                         </div>
                         <div class="example" v-if="scheduleData.desc && !noPermission">
-                            <div class="col-md-1 px-0 float-left">备注</div>
-                            <div class="col-md-10 float-left">{{ scheduleData.desc }}</div>
+                            <div class="col-md-2 px-0 float-left">备注</div>
+                            <div class="col-md-10 pl-0 float-left">{{ scheduleData.desc }}</div>
                         </div>
                         <div class="example" v-if="scheduleData.affixes && scheduleData.affixes.data.length > 0">
                             <div>附件</div>
@@ -346,7 +359,7 @@
         </div>
 
         <!-- 添加/修改 日历 -->
-        <div class="modal fade" id="addCalendar" aria-hidden="true" aria-labelledby="addLabelForm"
+        <div class="modal fade line-center" id="addCalendar" aria-hidden="true" aria-labelledby="addLabelForm"
              role="dialog" tabindex="-1">
             <div class="modal-dialog modal-simple">
                 <div class="modal-content">
@@ -374,7 +387,7 @@
                             <div class="col-md-10 float-left pl-0">
                                 <ul class="color-selector calendar-color-list">
                                     <li v-for="(color,index) in colorArr" :style="'background-color: ' + color"
-                                      :key="index"  @click="changeCalendarColor(color)">
+                                        :key="index" @click="changeCalendarColor(color)">
                                         <i class="md-check" v-if="color === checkColor"></i>
                                     </li>
                                 </ul>
@@ -623,6 +636,7 @@
             this.getStars();
             this.getCalendarList();
             this.getResources();
+            this.selectProjectLinkage();
             let _this = this;
             $('#addCalendar').on('hidden.bs.modal', function () {
                 _this.$store.dispatch('changeParticipantsInfo', {data: []});
@@ -651,6 +665,9 @@
             this.initCalendar();
             let pageContent = $('.container-fluid');
             $('.vertical-line').css('height', (pageContent[0].offsetHeight - 60) + 'px');
+            $('#addLinkage').on('hidden.bs.modal', function () {
+                $('#changeSchedule').modal('handleUpdate')
+            })
         },
 
         watch: {
@@ -710,16 +727,17 @@
                     };
                 }
                 fetch('get', '/materials/all', data).then(response => {
-                    this.allMeetingRomeList = response.data;
                     if (type) {
                         this.meetingRomeList = response.data;
+                    } else {
+                        this.allMeetingRomeList = response.data;
                     }
                 })
             },
 
             getStars: function () {
                 if (Cookies.get('companyType') === '泰洋川禾') {
-                    fetch('get', '/stars/all').then(response => {
+                    fetch('get', '/stars/all', {sign_contract_status: 2}).then(response => {
                         for (let i = 0; i < response.data.length; i++) {
                             this.starsArr.push({
                                 value: response.data[i].id,
@@ -728,7 +746,7 @@
                         }
                     })
                 } else {
-                    fetch('get', '/bloggers/all').then(response => {
+                    fetch('get', '/bloggers/all', {sign_contract_status: 2}).then(response => {
                         for (let i = 0; i < response.data.length; i++) {
                             this.starsArr.push({
                                 value: response.data[i].id,
@@ -856,6 +874,19 @@
                 })
             },
 
+            delScheduleLinkage: function (type, value) {
+                let url = '';
+                if (type === 'project') {
+                    url = '/schedules/' + this.scheduleData.id + '/projects/' + value
+                } else if (type === 'task') {
+                    url = '/schedules/' + this.scheduleData.id + '/tasks/' + value
+                }
+                fetch('delete', url).then(() => {
+                    toastr.success('删除成功');
+                    this.scheduleData[type].data.splice(this.scheduleData[type].data.map(item => item.id).indexOf(value), 1)
+                })
+            },
+
             delNewScheduleLinkage: function (type, value) {
                 let index = this.linkageSelectedIds[type].indexOf(value);
                 this.linkageSelectedIds[type].splice(index, 1)
@@ -896,7 +927,7 @@
 
             showScheduleModal: function (schedule) {
                 let data = {
-                    include: 'calendar,participants,creator,material,affixes',
+                    include: 'calendar,participants,creator,material,affixes,project,task',
                 };
                 fetch('get', '/schedules/' + schedule.id, data).then(response => {
                     if (!response) {
@@ -953,11 +984,22 @@
                     this.isAllday = this.scheduleData.is_allday;
                     this.eventDesc = this.scheduleData.desc;
                     this.eventPlace = this.scheduleData.position;
-                    console.log(this.scheduleData.participants.data);
                     this.$store.dispatch('changeParticipantsInfo', {data: this.scheduleData.participants.data});
                     if (this.scheduleData.material) {
                         this.$refs.scheduleResource.setValue(this.scheduleData.material.data.id);
                         this.scheduleMaterialId = this.scheduleData.material.data.id;
+                    }
+                    if (this.scheduleData.project.data.length > 0) {
+                        this.linkageSelectedIds.projects = [];
+                        for (let i = 0; i < this.scheduleData.project.data.length; i++) {
+                            this.linkageSelectedIds.projects.push(this.scheduleData.project.data[i].moduleable_id)
+                        }
+                    }
+                    if (this.scheduleData.task.data.length > 0) {
+                        this.linkageSelectedIds.tasks = [];
+                        for (let i = 0; i < this.scheduleData.task.data.length; i++) {
+                            this.linkageSelectedIds.tasks.push(this.scheduleData.task.data[i].moduleable_id)
+                        }
                     }
                 }
             },
@@ -1007,6 +1049,13 @@
                     if (this.scheduleParticipants.map(item => item.id).indexOf(flagInfo[i].id) === -1) {
                         data.participant_ids.push(flagInfo[i].id)
                     }
+                }
+
+                if (this.linkageSelectedIds.projects.length > 0) {
+                    data.project_ids = this.linkageSelectedIds.projects;
+                }
+                if (this.linkageSelectedIds.tasks.length > 0) {
+                    data.task_ids = this.linkageSelectedIds.tasks;
                 }
 
                 fetch('put', '/schedules/' + this.scheduleData.id, data).then(() => {
@@ -1339,6 +1388,15 @@
 
     .file-item:hover .del-affix {
         display: block;
+    }
+
+    .line-center .example {
+        display: flex;
+        align-items: center;
+    }
+
+    .line-center .line-fixed-height {
+        line-height: 34px;
     }
 
 </style>

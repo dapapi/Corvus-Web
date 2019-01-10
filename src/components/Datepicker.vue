@@ -1,14 +1,15 @@
 <template>
     <div class="input-group date">
-        <input type="text" id="dateInput" class="form-control" title="" :placeholder="this.placeholder" @change="getInputValue">
+        <input type="text" id="dateInput" class="form-control" title="" :placeholder="this.placeholder"
+            @change="getInputValue">
         <span class="input-group-addon">
             <i class="icon md-apps" aria-hidden="true"></i>
         </span>
-    </div>
+    </div> 
 </template>
 <script>
     export default {
-        props: ['placeholder', 'changeKey', 'startDate','default','clear'],
+        props: ['placeholder', 'changeKey', 'startDate', 'default', 'clear'],
         data() {
             return {}
         },
@@ -19,14 +20,15 @@
             $(this.$el).datepicker({
                 format: "yyyy-mm-dd",
                 language: "zh-CN",
+                autoclose: true
             }).on("changeDate", function () {
-                
+
                 self.$emit('change', $(this)[0].children[0].value);
                 if (self.changeKey) {
                     self.$emit('select', self.changeKey, $(this)[0].children[0].value)
                 }
             });
-            if(this.default){
+            if (this.default) {
                 this.setValue(this.default.values.data.value)
             }
 
@@ -38,11 +40,11 @@
             startDate(newValue) {
                 $(this.$el).datepicker('setStartDate', newValue);
             },
-            clear:function(value){
-                if(value===true){
+            clear: function (value) {
+                if (value === true) {
                     this.setValue('')
                 }
-        }
+            }
         },
         methods: {
             /**
@@ -56,7 +58,7 @@
                 $(this.$el).datepicker('destroy');
             },
             //输入日期时获取值
-            getInputValue(){
+            getInputValue() {
                 // console.log($('#dateInput').val())
                 this.$emit('change', $('#dateInput').val());
             }

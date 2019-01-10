@@ -7,24 +7,26 @@
                 <img src="../../assets/img/department@2x.png" />
                 {{ data.name }} <span>({{count}})</span> <span class="principal">{{ data.is_department_username ? data.is_department_username : '' }}</span>
             </span>
-            <i v-if="!isEdit" class="iconfont icon-tianjia edit" style="float: right;line-height: 50px;" @click.stop="check(data)"></i>
-            <div class="drop" v-else>
-                 <i class="iconfont icon-gengduo1 font-size-24" aria-hidden="true" id="org-dropdown"
-                    data-toggle="dropdown" aria-expanded="false" style="cursor: pointer; float: right;line-height: 50px;">
-                </i>
-                <div class="dropdown-menu dropdown-menu-left" aria-labelledby="org-dropdown" role="menu" x-placement="bottom-start" style="min-width: 0">
-                    <a class="dropdown-item" role="menuitem" @click="edit(data)">编辑部门</a>
-                    <a class="dropdown-item" role="menuitem" @click="check(data)">选择成员</a>
-                    <a class="dropdown-item" role="menuitem" @click="move(data)">移动部门到</a>
-                    <a class="dropdown-item" role="menuitem" @click="addChild(data)">添加子部门</a>
-                    <a class="dropdown-item" role="menuitem" @click="del(data)">删除部门</a>
+            <template v-if="data.id != '1994731356'">
+                <i v-if="!isEdit " class="iconfont icon-tianjia edit" style="float: right;line-height: 50px;" @click.stop="check(data)"></i>
+                <div class="drop" v-else>
+                    <i class="iconfont icon-gengduo1 font-size-24" aria-hidden="true" id="org-dropdown"
+                        data-toggle="dropdown" aria-expanded="false" style="cursor: pointer; float: right;line-height: 50px;">
+                    </i>
+                    <div class="dropdown-menu dropdown-menu-left" aria-labelledby="org-dropdown" role="menu" x-placement="bottom-start" style="min-width: 0">
+                        <a class="dropdown-item" role="menuitem" @click="edit(data)">编辑部门</a>
+                        <a class="dropdown-item" role="menuitem" @click="check(data)">选择成员</a>
+                        <a class="dropdown-item" role="menuitem" @click="move(data)">移动部门到</a>
+                        <a class="dropdown-item" role="menuitem" @click="addChild(data)">添加子部门</a>
+                        <a class="dropdown-item" role="menuitem" @click="del(data)">删除部门</a>
+                    </div>
                 </div>
-            </div>
+            </template>
         </div>
         <ul v-show="visible" v-if="!isEdit">
             <li v-for="(_item, _index) in data.users.data" :key="_index" :style="{paddingLeft: paddingLeft + 40 + 'px'}">
                 <Avatar :imgUrl="_item.icon_url" style="margin-right: 10px; vertical-align: unset" />{{ _item.name }}
-                <router-link :to="`/staff/detail/${_item.id}`"><i class="icon md-eye" style="float: right;line-height: 50px;" @click.stop></i></router-link>
+                <!-- <router-link :to="`/staff/detail/${_item.id}`"><i class="icon md-eye" style="float: right;line-height: 50px;" @click.stop></i></router-link> -->
             </li>
         </ul>
          <template v-for="(item, index) in data.departments.data">
@@ -58,10 +60,11 @@ export default {
         paddingLeft () {
             return this.left || this.left === 0 ? this.left * 1 + 20 : 0
         },
-        // 负责人
-        // principal () {
-        //     return this.data.users.data.find(item => item.is_department_principal === 1)
-        // }
+    },
+    watch: {
+        data() {
+            this.count = this.countNum(this.data)
+        }
     },
     methods: {
         // 列表展示
@@ -84,11 +87,18 @@ export default {
         // 编辑部门
         edit (data) {
             this.editDepartment(data)
-            const item = data.users.data.find(item => item.is_department_principal === 1)
-            this.$store.commit('changeNewPrincipal', {
-                name: item.name,
-                id: item.id
-            })
+             if (data.is_department_principal === 1) {
+                this.$store.commit('changeNewPrincipal', {
+                    name: data.is_department_username,
+                    id: data.is_department_user_id
+                })
+            } else {
+                this.$store.commit('changeNewPrincipal', {
+                    name: '',
+                    id: ''
+                })
+            }
+            
         },
         // 删除
         del (data) {
@@ -168,6 +178,7 @@ ul {
 }
 .drop {
     float: right;
+    position: relative;
 }
 .principal {
     position: absolute;

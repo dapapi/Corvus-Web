@@ -22,11 +22,11 @@
                                    :options="allUsers" multiple="true"></selectors>
                     </div>
                     <!--<div class="col-md-3 example float-left">-->
-                        <!--<button type="button" class="btn btn-default waves-effect waves-classic float-right"-->
-                                <!--data-toggle="modal" data-target="#customizeContent"-->
-                                <!--data-placement="right" title="">-->
-                            <!--自定义筛选-->
-                        <!--</button>-->
+                    <!--<button type="button" class="btn btn-default waves-effect waves-classic float-right"-->
+                    <!--data-toggle="modal" data-target="#customizeContent"-->
+                    <!--data-placement="right" title="">-->
+                    <!--自定义筛选-->
+                    <!--</button>-->
                     <!--</div>-->
                 </div>
 
@@ -63,8 +63,8 @@
                                 <th class="cell-300" scope="col">跟进时间</th>
                             </tr>
                             <tbody>
-                            <tr v-for="project in projectsInfo ">
-                                <td class="pointer-content" @click="redirectDetail(project.id)">
+                            <tr v-for="project in projectsInfo" @click="redirectDetail(project.id)" :key='project.id'>
+                                <td class="pointer-content">
                                     {{ project.title }}
                                 </td>
                                 <td>
@@ -120,6 +120,7 @@
     import fetch from '../../assets/utils/fetch.js'
     import config from '../../assets/js/config'
     import {mapState} from 'vuex'
+    import Cookies from 'js-cookie'
 
     const projectStatusArr = [{name: '全部', value: ''}, ...config.projectStatusArr];
 
@@ -265,6 +266,13 @@
             },
 
             changeProjectType: function (value) {
+                if (value === 3) {
+                    if (Cookies.get('companyType') === '泰洋川禾') {
+                        value = 3;
+                    } else {
+                        value = 4;
+                    }
+                }
                 this.projectType = value;
                 this.selectProjectType();
                 $('#addProject').modal('show');
@@ -305,10 +313,13 @@
 </script>
 
 <style lang="scss" scoped>
-/deep/ .addMember {
-    .addMember-trigger-dropdown {
-        top: -400px!important;
+    /deep/ .addMember {
+        .addMember-trigger-dropdown {
+            top: -400px !important;
+        }
     }
-}
+    table tbody tr {
+        cursor: pointer;
+    }
 </style>
 

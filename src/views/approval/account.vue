@@ -1,6 +1,6 @@
 <template>
     <!-- Page -->
-    <div class="" style="background-color:#f3f4f5">
+    <div class="page-main" style="background-color:#f3f4f5">
         <div class="page-header page-header-bordered">
             <h1 class="page-title">知会我的</h1>
         </div>
@@ -18,7 +18,7 @@
                 </div>
                 </div>
         </div>
-        <div class="page-content container-fluid px-20">       
+        <div class="page-content container-fluid px-20">
             <div class="col-md-12 panel">
                     <div class="example pb-5 mt-0">
                         <table class="table table-hover is-indent mb-20" data-plugin="animateList" data-animate="fade"
@@ -31,8 +31,8 @@
                                 <th class="cell-300 pl-15" scope="col">审批编号</th>
                                 <th class="cell-300 pl-15" scope="col">申请时间</th>
                                 <th class="cell-300 pl-15" scope="col">审批时间</th>
-                                <th class="cell-300 pl-15" scope="col">审批人</th>   
-                            </tr>   
+                                <th class="cell-300 pl-15" scope="col">审批人</th>
+                            </tr>
                             <tr >
                                 <td>
                                     <div data-toggle="modal" data-target="#submitReport">
@@ -66,7 +66,7 @@
                                 </td>
                                 <td>
                                     <div data-toggle="modal" data-target="#submitReport">明明</div>
-                                </td>     
+                                </td>
                             </tr>
                                 <tr >
                                     <td>
@@ -101,7 +101,7 @@
                                     </td>
                                     <td>
                                         <div data-toggle="modal" data-target="#submitReport">明明</div>
-                                    </td>     
+                                    </td>
                                 </tr>
                                  <tr >
                                 <td>
@@ -136,9 +136,9 @@
                                 </td>
                                 <td>
                                     <div data-toggle="modal" data-target="#submitReport">白白</div>
-                                </td>     
+                                </td>
                             </tr>
-                            
+
                         </table>
                         <!-- <pagination :current_page="current_page" :method="getProjects" :total_pages="total_pages"
                                     :total="total"></pagination> -->

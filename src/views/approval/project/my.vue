@@ -50,9 +50,8 @@
                                     <th class="cell-300" scope="col">审批状态</th>
                                 </tr>
                                 <tbody>
-                                <tr v-for="project in projectsInfo" :key='project.form_instance_number'>
-                                    
-                                    <router-link :to="{path:'/approval/'+project.form_instance_number,query:{mode:'approver'}}"><td>{{project.form_instance_number}}</td></router-link>
+                                <tr v-for="project in projectsInfo" :key='project.form_instance_number' @click="goDetail(project.form_instance_number)">
+                                    <td>{{project.form_instance_number}}</td>
                                     <td>{{project.title}}</td>
                                     <td>{{project.name}}</td>
                                     <!-- <td></td> -->
@@ -89,7 +88,8 @@
                 total_pages: 1,
                 keywords: '',
                 projectsInfo: [],
-                projectProgress:PROJECT_CONFIG.approvalProgress
+                projectProgress:PROJECT_CONFIG.approvalProgress,
+                pageType:1
             }
         },
        mounted(){
@@ -103,35 +103,40 @@
             }
         },
         methods: {
-            getProjects: function (pageNum = 1, type = null) {
+            getProjects: function (pageNum = 1,signStatus) {
+                let _this = this
                 let data = {
                     page: pageNum,
-                    include: 'principal,trail.expectations'
+                    include: 'principal,trail.expectations',
+                    status:this.pageType
                 };
-                let url = '/approvals_project/approval?status=1';
-                if (type) {
-                    url = '/approvals_project/approval?status=1';
-                    data.type = type;
+                 if (signStatus) {
+                    data.sign_contract_status = signStatus
                 }
-                this.paginationType = 'getProjects';
-                fetch('get', url, data).then(response => {
-                    this.projectsInfo = response.data
-                    this.total = response.total;
-                    this.current_page = response.current_page;
-                    this.total_pages = response.last_page;
+                fetch('get', '/approvals_project/approval', data).then(response => {
+                    _this.projectsInfo = response.data
+                    _this.total = response.total;
+                    _this.current_page = response.current_page;
+                    _this.total_pages = response.last_page;
                 })
             },
             getList(params) {
+                this.pageType = params
                 let _this = this
-                console.log(params);
-                    fetch('get','/approvals_project/approval?status='+params).then((params) => {
-                        _this.projectsInfo = params.data
-                        _this.total = params.total;
-                        _this.current_page = params.current_page;
-                        _this.total_pages = params.last_page;
-                    })
-                }
-
+                fetch('get','/approvals_project/approval?status='+params).then((params) => {
+                    console.log(params);
+                    _this.projectsInfo = params.data
+                    _this.total = params.meta.pagination;
+                    _this.current_page = params.meta.current_page;
+                    _this.total_pages = params.meta.total_pages;
+                })
+            },
+            goDetail (num) {
+                this.$router.push({
+                    path: '/approval/' + num,
+                    query:{mode:'approver'}
+                })
+            }
         }
     }
 </script>

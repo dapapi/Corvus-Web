@@ -1,13 +1,13 @@
 <template>
-    <div class="approval-text-container col-md-12">
-        <span class="col-md-2 text-right">{{title || data[0].control_title || '测试文本输入框'}}</span>
+    <div class="approval-text-container col-md-12 pl-0">
+        <span class="col-md-2 text-right ml-0 pl-0" :class="consdata[0].required===1?'require':''">{{title || consdata[0].control_title || '测试文本输入框'}}</span>
         <input type="text" v-model="textContent" class="form-control col-md-10" placeholder="请输入">
     </div>    
 </template>
 
 <script>
 export default {
-    props:['title','n','data','clear'],
+    props:['title','n','consdata','clear'],
     data(){
         return {
             textContent:'',
@@ -15,10 +15,12 @@ export default {
     },
     methods:{
         emitText(){
-            let {id} = this.data[0]
+            let {id} = this.consdata[0]
             // let data = {}
             // data[id]= this.textContent
-            this.$emit('change',{key:id,value:this.textContent,type:null})
+            let {related_field} = this.consdata[0]
+
+            this.$emit('change',{key:id,value:this.textContent,type:related_field})
         }
     },
     watch:{

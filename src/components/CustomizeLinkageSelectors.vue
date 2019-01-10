@@ -22,7 +22,7 @@
             <datepicker v-if="valueType === 3" @change="datePickerChange"></datepicker>
             <number-spinner v-if="valueType === 2" ref="numberSpinner" :shortInput="true"
                             @change="numberSpinnerChange"></number-spinner>
-            <!-- <input-selectors v-if="valueType === 6"></input-selectors> -->
+            <!-- <input-selectors v-if="valueType === 6" :otherslot="true"></input-selectors> -->
             <div v-if="valueType === 6" class="">
                 <selectors class="pr-40" ref='selectors' :options="users" @valuelistener="changeUsers" :multiple="true"
                                         :placeholder="'请选择'"></selectors>
