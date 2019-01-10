@@ -1,6 +1,6 @@
 <template>
     <div class="upload">
-        <input type="file" @change="uploadFile"/>
+        <input type="file" @change="uploadFile" :accept="accept ? accept : ''" />
         <slot></slot>
     </div>
 </template>
@@ -10,7 +10,7 @@ import config from '../assets/js/config'
 import * as qiniu from 'qiniu-js'
 
 export default {
-    props:['id'],
+    props:['id', 'accept'],
     name: 'file-upload',
     data(){
         return{
