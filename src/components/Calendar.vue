@@ -102,21 +102,23 @@
                         data.calendar_ids = self.calendars
                     }
                     
-                    fetch('get', url, data).then(response => {
-                        self.allScheduleInfo = response.data;
-                        let events = [];
-                        for (let i = 0; i < response.data.length; i++) {
-                            events.push({
-                                title: response.data[i].title,
-                                start: response.data[i].start_at,
-                                end: response.data[i].end_at,
-                                color: response.data[i].calendar.data.color,
-                                allDay: !!response.data[i].is_allday,
-                                id: response.data[i].id,
-                            })
-                        }
-                        callback(events)
-                    })
+                    if(meetingRomeList.length>0 ||self.calendars.length>0){
+                        fetch('get', url, data).then(response => {
+                            self.allScheduleInfo = response.data;
+                            let events = [];
+                            for (let i = 0; i < response.data.length; i++) {
+                                events.push({
+                                    title: response.data[i].title,
+                                    start: response.data[i].start_at,
+                                    end: response.data[i].end_at,
+                                    color: response.data[i].calendar.data.color,
+                                    allDay: !!response.data[i].is_allday,
+                                    id: response.data[i].id,
+                                })
+                            }
+                            callback(events)
+                        })
+                    }
 
                 },
                 dayClick: function (date, allDay, jsEvent) {
