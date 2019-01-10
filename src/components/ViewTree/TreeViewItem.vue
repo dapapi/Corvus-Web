@@ -14,7 +14,7 @@
                     <i class="icon md-caret-right mr-10 font-size-20" style="vertical-align: middle;"></i>
                     <span>{{menu.name}}
                     </span>
-                    <span v-if="menu.name=='我的消息'" class="unRead first">{{unReadMsg}}</span>
+                    <span v-if="menu.name=='我的消息'&&unReadMsg>0" class="unRead first">{{unReadMsg}}</span>
                 </div>
                 <transition name="fade">
                     <div class="heading-children" v-if="menu.subMenu && isExpanded.includes(menu.id)">
