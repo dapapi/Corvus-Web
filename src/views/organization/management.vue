@@ -50,7 +50,7 @@
                         type="text"
                         title
                         class="form-control"
-                        placeholder="请输部门名称"
+                        placeholder="请输入部门名称"
                         v-model="departmentName"
                     >
                 </div>
@@ -137,6 +137,8 @@ export default {
             isEdit: false,
             moveDepartmentId: 0,
             dIndex: -1,
+            principalName: '', // 负责人名字
+            principalId: '', // 负责人id
             cityArr: config.departmentCityArr // 部门城市
         };
     },
@@ -145,6 +147,10 @@ export default {
         $('#add-department').on('hidden.bs.modal', () => {
             // 清空state
             this.cancelAdd()
+        })
+        $('#check-member').on('hidden.bs.modal', () => {
+            // 清空state
+            this.$store.commit("changeNewParticipantsInfo", []);
         })
         if (this.department.length > 0) {
             this.departmentPId = this.department[0].department_pid;
@@ -215,6 +221,13 @@ export default {
             this.departmentName = val.name;
             this.departmentId = val.id;
             this.departmentPId = val.department_pid;
+            if (val.is_department_principal === 1) {
+                this.principalName = val.is_department_username
+                this.principalId = val.is_department_user_id
+            } else {
+                this.principalName = ''
+                this.principalId = ''
+            }
             //   departmentCity todo
             //   this.city = val.
             $("#add-department").modal();
@@ -238,7 +251,7 @@ export default {
         // 选择
         checkMember(data) {
             this.departmentId = data.id;
-            this.$store.commit("changeNewParticipantsInfo", data.users.data);
+            this.$store.commit("changeNewParticipantsInfo", JSON.parse(JSON.stringify(data.users.data)));
             $("#check-member").modal();
         },
         // 选择成员
@@ -301,6 +314,11 @@ export default {
         cancelAdd () {
             this.$refs.departmentCity.setValue('')
             this.city = ''
+            this.principalName = ''
+            this.principalId = ''
+            this.departmentName = "" // 部门名称
+            this.departmentId = 0 // 部门id
+            this.departmentPId = 0 // 父级部门id
         }
     }
 };
