@@ -21,9 +21,54 @@
         </div>
 
         <div class="page-content container-fluid">
-
             <div class="panel col-md-12">
-                <div class="card-block">
+                    <!-- <div class="card-block clearfix">
+                        <Upload @change='getUploadUrl' class="upload-image float-left mr-5" style="width:80px;height:80px;border-radius:50%;position:relative">
+                            <div  class="puls" :style="{ backgroundImage: 'url(' + uploadUrl + ')' }" v-if="uploadUrl">
+                            </div>
+                            <div class="puls" v-if="!uploadUrl">
+                                <img src="https://res-crm.papitube.com/image/artist-no-avatar.png" alt="">
+                            </div>
+                        </Upload>
+                        <div class="float-left ml-10 mt-10" style="width:calc(100% - 100px)">
+                            <h4 class="card-title">{{artistInfo.nickname}}</h4>
+                            <div class=" clearfix example">
+                                <div class="col-md-6 float-left pl-0" v-if ="artistInfo.publicity" v-show="artistInfo.sign_contract_status == 2&&artistInfo.publicity.data.length>0">
+                                    <div class="float-left pl-0 pr-2 col-md-2">
+                                        <i class="iconfont icon-yonghu pr-2" aria-hidden="true"></i>制作人
+                                    </div>
+                                    <div class="font-weight-bold float-left pr-10" v-for="(item,index) in artistInfo.publicity.data" :key="index">
+                                        <template  >
+                                            {{item.name}}
+                                        </template>
+                                    </div>
+                                    
+                                </div>
+                            <div class="col-md-6 float-left pl-0" v-show="artistInfo.sign_contract_status == 1">
+                                    <div class="float-left pl-0 pr-2 col-md-4">
+                                        <i class="iconfont icon-yonghu pr-2" aria-hidden="true"></i>录入人
+                                    </div>
+                                    <div class="font-weight-bold float-left"   v-for="(entry,index) in artistInfo.creator" :key="index">
+                                            <span>{{entry.company}}</span>
+                                            <span v-if="entry.company">-</span>
+                                            <span>{{ entry.name }}</span>    
+                                    </div>
+                                </div>
+                                <div class="col-md-6 float-left pl-18" v-show="artistInfo.sign_contract_status == 1">
+                                    <div class="float-left pl-0 pr-2 col-md-3">
+                                        <i class="iconfont icon-yonghu pr-2" aria-hidden="true"></i>录入时间
+                                    </div>
+                                    <div class="font-weight-bold float-left" v-if="principalName">
+                                        <template>
+                                            {{artistInfo.created_at}}
+                                        </template>
+                                    </div>
+                                </div>
+                            </div>
+
+                        </div>
+                    </div> -->
+                    <div class="card-block">
                     <h4 class="card-title">{{artistInfo.nickname}}</h4>
                      <div class="clearfix">
                         <div class=" clearfix example">
@@ -60,9 +105,9 @@
                         </div>
                         </div>
                     </div>
-                </div>
+                     </div>
                 <div class="clearfix">
-                    <div class="col-md-6 float-left pl-1 mb-20 pr-1"  v-if="tasksInfo.length>0">
+                    <div class="col-md-6 float-left pl-1 mb-20 pr-1"  v-if="artistInfo.sign_contract_status == 2&&tasksInfo.length>0">
                         <div class="col-md-6"><i class="iconfont icon-iconset0399 pr-2"></i> 任务</div>
                         <div class="clearfix example taskshow" v-for="(task,index) in tasksInfo" :key="index" @click="JumpDetails(task.id)">
                             <div class="col-md-3 float-left">{{task.title}}</div>
@@ -90,7 +135,7 @@
                                 </div>
                             </div>
                         </div>
-                       <div class="col-md-6 pl-3" v-show="artistInfo.sign_contract_status == 1">
+                       <div class="col-md-12 pl-10" v-show="artistInfo.sign_contract_status == 1">
                             <div class="clearfix">
                                 <div class="col-md-8 float-left"><span>沟通状态</span></div>
                                 <div class="col-md-4 float-left font-weight-bold "  v-if="artistInfo.communication_status">
@@ -566,12 +611,12 @@
                                                     {{artistInfo.created_at}}
                                                 </div>
                                             </div>
-                                            <div class="card-text py-10 px-0 clearfix col-md-6 float-left ">
+                                            <div class="card-text py-10 px-0 clearfix col-md-6 float-left " >
                                                 <div class="col-md-4 float-left text-right pl-0">最近更新人</div>
-                                                <div class="col-md-8 float-left font-weight-bold" v-for="(entry,index) in artistInfo.creator" :key="index">
-                                                    <template v-if="artistInfo.creator">
-                                                    {{entry.name}}
-                                                    </template>
+                                                <div class="col-md-8 float-left font-weight-bold"  v-if="artistInfo.operatelogs" >
+                                                    <span v-for="(entry,index) in artistInfo.operatelogs.data" :key="index">
+                                                    {{entry.username}}
+                                                    </span>
                                                 </div>
                                             </div>
                                             <div class="card-text py-10 px-0 clearfix col-md-6 float-left ">
@@ -929,7 +974,6 @@
                 advertisingType:'',
                 Person_id:'',
                 tasksType:'',
-                tasksData:'',
                 artistTypeArr:'',
                 trueOrFalse: config.trueOrFalse,
                 artistSocialPlatform: config.artistSocialPlatform,
@@ -967,7 +1011,9 @@
                 alltaskshow:[],
                 changeArtistInfo:{},
                 calendarId:[],
-                scheduleData:''
+                scheduleData:'',
+                uploadUrl:'',
+                participant_ids:[]
             }
         },
         computed: {
@@ -997,7 +1043,7 @@
                 _this.$refs.taskpriority.setValue('');
                 _this.$refs.startTime.setValue('');
                 _this.$refs.deadline.setValue('');
-                _this.participant = '';//参与人
+                _this.$store.state.newParticipantsInfo=[];//参与人
                 _this.taskIntroduce = '';
                 _this.taskName = '';
                 _this.startMinutes = '00:00';
@@ -1083,20 +1129,18 @@
                 myChart.setOption(option);
             },
           
-            // selectDate: function (value) {
-            //     this.selectedDate = value;
-            //     this.$refs.meetingRoom.setDate(value)
-            // },
             getArtist: function () {
                 this.artistId = this.$route.params.id;
                 let _this = this;
                 let data = {
-                    include: 'creator,tasks,affixes,producer,type,publicity,trails.project,trails.client,trails.project.principal,trails.project.relate_project_bills_resource,calendar',
+                    include: 'creator,tasks,affixes,producer,type,publicity,trails.project,trails.client,trails.project.principal,trails.project.relate_project_bills_resource,calendar,operatelogs',
                 };
                 fetch('get', '/bloggers/' + this.artistId, data).then(function (response) {
                   
                     let doneTaskNum = 0
                     _this.artistInfo = response.data;
+                    console.log(_this.artistInfo)
+                    _this.uploadUrl = _this.artistInfo.avatar;
                     if(_this.artistInfo.intention){
                         _this.artistInfo.intention = 1
                     }else{
@@ -1145,6 +1189,17 @@
                 //          _this.principalIds.push(item.users.data.id)
                 //     })
                 // })
+            },
+            //上传头像 ---修改头像
+            getUploadUrl(res) {
+                let _this = this
+                if(!this.isEdit) {
+                    this.changeArtistInfo = {}
+                }
+                _this.uploadUrl = res
+                _this.run(res,function(){
+                    _this.changeArtistBaseInfo()
+                })                         
             },
              showScheduleModal: function (schedule) {
                 let data = {
@@ -1381,9 +1436,6 @@
                     delete(this.changeArtistInfo.hatch_star_at)
                     delete(this.changeArtistInfo.hatch_end_at)
                 }
-                // if (JSON.stringify(this.changeArtistInfo) !== "{}"){
-                //     return
-                // }
                 fetch('put', '/bloggers/' + this.artistId, this.changeArtistInfo).then(function (response) {
                     toastr.success('修改成功');
                     _this.getArtist()
@@ -1495,6 +1547,10 @@
             },
             //添加任务
             addTask: function () {
+                
+                for (let i = 0; i < this.$store.state.newParticipantsInfo.length; i++) {
+                    this.participant_ids.push(this.$store.state.newParticipantsInfo[i].id)
+                }
                 if (!this.taskName) {
                     toastr.error('请填写任务名称！')
                     return
@@ -1527,7 +1583,8 @@
                 let _this=this;
                 let data={
                    title:this.taskName,
-                   principal_id:this.Person_id,
+                   principal_id:this.Person_id,//负责人
+                   participant_ids:this.participant_ids,
                    start_at: this.startTime + ' ' + this.startMinutes,
                    end_at: this.endTime + ' ' + this.endMinutes,
                    resource_type:1,
@@ -1539,8 +1596,8 @@
                 fetch('post', '/tasks', data).then(function (response) {
                     toastr.success('创建成功');
                     $('#addTask').modal('hide');
-                    _this.tasksData = response.data;
                     _this.getArtist()
+                    _this.getArtistTasks()
                     $('.selectpicker').selectpicker('refresh')
                 })
             }
@@ -1799,5 +1856,20 @@
         height: 30px;
         overflow: hidden;
         border-radius: 100%;
+    }
+     .puls {
+        display: inline-block;
+        background-size: 100px;
+        width: 80px;
+        height: 80px;
+        text-align: center;
+        line-height: 76px;
+        border-radius: 50%;
+        border: 1px solid #eee;
+
+    }
+
+    .puls span {
+        font-size: 30px;
     }
 </style>
