@@ -1269,7 +1269,9 @@
                 showMore: false,
                 searchKeyWord: '',
                 allProjectsInfo: '',
-                allTasksInfo:''
+                allTasksInfo:'',
+                colorArr: config.colorArr,
+                checkColor:''
 
             }
         },
@@ -1285,6 +1287,7 @@
             this.getArtistsBill()
             this.getTaskList()
             this.getProjectList()
+            this.selectProjectLinkage();
             this.user = JSON.parse(Cookies.get('user'))
             this.$store.commit('changeNewPrincipal', {
                 name: this.user.nickname,
@@ -1494,6 +1497,21 @@
             },
             addLinkageResource: function () {
                 $('#addLinkage').modal('hide');
+            },
+            selectResource: function (type, value) {
+                let index = this.linkageSelectedIds[type].indexOf(value);
+                if (index > -1) {
+                    this.linkageSelectedIds[type].splice(index, 1)
+                } else {
+                    this.linkageSelectedIds[type].push(value)
+                }
+            },
+            delNewScheduleLinkage: function (type, value) {
+                let index = this.linkageSelectedIds[type].indexOf(value);
+                this.linkageSelectedIds[type].splice(index, 1)
+            },
+            changeCalendarColor: function (value) {
+                this.checkColor = value;
             },
             //获取账单
             getArtistsBill: function (page = 1,expense_type) {

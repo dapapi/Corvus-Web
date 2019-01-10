@@ -1250,7 +1250,7 @@
                         sendData[key].push(data[key][i].id)
                     }
                 }
-                fetch('post', `/bloggers/${this.$route.params.id}/privacyUser`, sendData).then(function (response) {
+                fetch('put', `/bloggers/${this.$route.params.id}/privacyUser`, sendData).then(function (response) {
                     toastr.success('隐私设置成功')
                     $('#addPrivacy').modal('hide')
                 })
@@ -1260,14 +1260,14 @@
                     blogger_id:this.$route.params.id
                 }
                 let _this = this
-                fetch('get', `/privacyUsers?include=user`, data).then(function (response) {
+                fetch('get', `/privacyUsers?include=creator`, data).then(function (response) {
                     // console.log(response)
                     let allPrivacyUsers = response.data
                     _this.$store.state.incubationInfo = []
                    
                     if(allPrivacyUsers){
                         for (let i = 0; i < allPrivacyUsers.length; i++) {
-                            _this.$store.state.incubationInfo.push(allPrivacyUsers[i].user.data)
+                            _this.$store.state.incubationInfo.push(allPrivacyUsers[i].creator.data)
                             
                         }
                     }
