@@ -643,7 +643,7 @@
                             </div>
                         </div>
                         <div class="example">
-                            <div class="col-md-2 text-right float-left require">参与人</div>
+                            <div class="col-md-2 text-right float-left">参与人</div>
                             <div class="col-md-10 float-left pl-0">
                                 <add-member></add-member>
                             </div>
@@ -1065,8 +1065,8 @@
                     _this.uploadUrl = _this.artistInfo.avatar
                     _this.artistProjectsInfo = []
                     _this.artistTasksInfo = response.data.tasks.data
-                    if(response.data.calendar.data){
-                        _this.calendarId.push(response.data.calendar.data.id)
+                    if(response.data.calendar){
+                         _this.calendarId.push(response.data.calendar.data.id)
                     }
                     _this.artistWorksInfo = response.data.works.data
                     _this.affixes = response.data.affixes.data
@@ -1318,10 +1318,10 @@
                     toastr.error('请选择负责人')
                     return false
                 }
-                if (participant_ids.length <= 0) {
-                    toastr.error('请选择参与人')
-                    return false
-                }
+                // if (participant_ids.length <= 0) {
+                //     toastr.error('请选择参与人')
+                //     return false
+                // }
                 if (!this.taskLevel) {
                     toastr.error('请选择任务优先级')
                     return false
