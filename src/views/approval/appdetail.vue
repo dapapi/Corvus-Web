@@ -214,7 +214,7 @@ export default {
         },
         getFormList(){
             let _this = this
-            fetch('get','/approvals?type=0').then((params) => {
+            fetch('get','/approvals/contracts').then((params) => {
                 _this.indexData = params.data
             })
         },
