@@ -49,7 +49,7 @@
                 <th class="cell-200" scope="col">申请时间</th>
                 <th class="cell-200" scope="col">申请状态</th>
               </tr>
-              <tr v-for="task in tasksInfo">
+              <tr v-for="task in tasksInfo" :key='task'>
                 <td class="pointer-content cell-200">
                   <router-link :to="{name:'approval/detail', params: {id: task.id}}">{{ task.title }}
                   </router-link>

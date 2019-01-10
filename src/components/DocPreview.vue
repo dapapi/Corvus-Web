@@ -51,10 +51,8 @@ export default {
         //获取扩展名
         fileNameHandler(){
             if(this.givenFileName){
-                console.log(String(this.givenFileName).split('.').pop());
                 return String(this.givenFileName).split('.').pop()
             }else{
-                console.log(String(this.url).split('.').pop());
                 return String(this.url).split('.').pop()
             }
 

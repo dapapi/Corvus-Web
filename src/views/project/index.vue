@@ -63,7 +63,7 @@
                                 <th class="cell-300" scope="col">跟进时间</th>
                             </tr>
                             <tbody>
-                            <tr v-for="project in projectsInfo" @click="redirectDetail(project.id)">
+                            <tr v-for="project in projectsInfo" @click="redirectDetail(project.id)" :key='project.id'>
                                 <td class="pointer-content">
                                     {{ project.title }}
                                 </td>

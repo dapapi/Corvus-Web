@@ -13,7 +13,7 @@
             </div>
         </div>
         <div class="" style="background-color:#f3f4f5">
-            <div class="page-header  page-header-bordered mb-0" >
+            <div class="page-header page-header-bordered mb-0" >
                 <h6 class="page-title nav-head" v-if="info">
                     {{list.title}}
                     <template v-if="list.form_status==232">
@@ -60,31 +60,35 @@
             <div class="page-content container-fluid mt-20" v-if="info">
                 <div class="panel col-md-12 col-lg-12 pb-10">
                     <div class="caption">
-                        <h6 class="page-title">{{list.title}}</h6>
-                        <span>编号：{{list.form_instance_number}}</span>
+                        <h6 class="page-title mx-15">{{list.title}}</h6>
+                        <span class="mx-15">编号：{{list.form_instance_number}}</span>
                     </div>
-                    <div class="example">
-                        <div class="col-md-3 float-left">申请人</div>
-                        <div class="col-md-3 float-left">{{list.name || info.approval.name}}</div>
-                        <div class="col-md-3 float-left">职位</div>
-                        <div class="col-md-3 float-left">{{list.position || (info.approval.position && info.approval.position.name)}}</div>
-                    </div>
-                    <div class="example">
-                        <div class="col-md-3 float-left">部门</div>
-                        <div class="col-md-3 float-left">{{list.department_name || info.approval.department_name}}</div>
-                        <div class="col-md-3 float-left">申请时间</div>
-                        <div class="col-md-3 float-left">{{list.created_at || info.approval.created_at}}</div>
+                    <div class="col-md-10">
+                        <div class="example">
+                            <div class="col-md-2 float-left text-right">申请人</div>
+                            <div class="col-md-4 float-left">{{(list && list.name) || (info.approval && info.approval.name)}}</div>
+                            <div class="col-md-2 float-left text-right">职位</div>
+                            <div class="col-md-4 float-left">{{(list && list.position) || (info.approval && info.approval.position && info.approval.position.name)}}</div>
+                        </div>
+                        <div class="example">
+                            <div class="col-md-2 float-left text-right">部门</div>
+                            <div class="col-md-4 float-left">{{list.department_name || (info.approval && info.approval.department_name)}}</div>
+                            <div class="col-md-2 float-left text-right">申请时间</div>
+                            <div class="col-md-4 float-left">{{list.created_at || (info.approval && info.approval.created_at)}}</div>
+                        </div>
                     </div>
                     <div class="example pt-20" style="border-top:1px solid #ccc">
 
                     </div>
-                    <div class="example">
-                        <div>审批详情</div>
+                    <div class="">
+                        <h6 class="page-title pb-20 mx-15">审批详情</h6>
                         <div class="row px-20">
-                            <div class="col-md-6 detail-container px-0" v-for="(item, index) in detailData" :key="index" v-if="item.values">
-                                <div class="col-md-3 float-left detail-key mx-0 noselect">{{item.key}}</div>
-                                <div class="col-md-9 float-left detail-value" v-if="item.values && !item.values.data.value.includes('http')">{{item.values.data.value || ''}}</div>
-                                <div class="col-md-9 float-left detail-value" v-if="item.values && item.values.data.value.includes('http')" @click='previewHandler(item.values.data.value)'>点击查看</div>
+                            <div class="col-md-10">
+                            <div class="col-md-6 detail-container px-0 float-left" v-for="(item, index) in detailData" :key="index" >
+                                <div class="col-md-4 float-left text-right detail-key mx-0 noselect">{{item.key}}</div>
+                                <div class="col-md-8 float-left detail-value" v-if="item.values && !item.values.data.value.includes('http')">{{(item.values && item.values.data.value) || ''}}</div>
+                                <div class="col-md-8 float-left detail-value" v-if="item.values && item.values.data.value.includes('http')" @click='previewHandler(item.values.data.value)'>点击查看</div>
+                            </div>
                             </div>
                         </div>
                         <div class="panel col-md-12 col-lg-12">
@@ -95,7 +99,7 @@
                                             :formid='list.form_instance_number' 
                                             :formstatus='currentStatus' 
                                             @waitingfor='waitingFor'
-                                            :notice="info.participant || info.notice.data"
+                                            :notice="info.participant || (info.notice && info.notice.data)"
                                             ref='approvalProgress' />
                                 </div>
                             </div>
@@ -106,7 +110,7 @@
             <DocPreview :url='previewUrl'/>
         </div>
         <BuildProject :project-type="projectType" :project-fields-arr="projectFieldsArr" 
-        :default-data='{fields:info.fields.data,list:list,trailInfo:trailInfo}'></BuildProject>
+        :default-data='{fields:(info.fields && info.fields.data),list:list,trailInfo:trailInfo}'></BuildProject>
         <ApprovalGreatModule :form-data='formData' singlemode='true' :default-data='detailData' />
         <ApprovalGoModal :mode='approvalMode' :id='list.form_instance_number' @approvaldone='approvalDone' />
         <div class="modal fade  bootbox" id="docPreviewSelector" aria-labelledby="docPreviewPositionCenter" role="dialog" tabindex="-1">
@@ -323,6 +327,10 @@ export default {
     font-style: normal;
     font-weight: normal;
 }
+.nav-head button{
+    color: white;
+    transform:scale(0.7)
+}
 .noselect{
      -webkit-touch-callout: none;
      -webkit-user-select: none;
@@ -363,7 +371,7 @@ export default {
 
 }
 .page-title{
-    font-size: 1rem;
+    font-size: 1.2rem;
 }
 .title-status em,.content em,.setp em{
     width: 25px;
@@ -452,13 +460,13 @@ export default {
     font-size: 26px;
 }
 .detail-container{
-    border: 1px solid #eeeeee;
+    /* border: 1px solid #eeeeee; */
     height: 40px;
     line-height: 40px;
 }
 .detail-key{
     height: 40px;
-    background: #f5f5f5;
+    /* background: #f5f5f5; */
 
 }
 </style>
