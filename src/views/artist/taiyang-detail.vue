@@ -172,7 +172,7 @@
                                 role="tabpanel" :class="artistInfo.sign_contract_status == 2?'active':''">
                                 <div class="col-md-12">
                                     <calendar v-if="artistInfo.sign_contract_status == 2" :goto-date="selectedDate" :calendars="calendarId" ref="calendar"
-                                            @scheduleClick="showScheduleModal" :isModel="true"></calendar>
+                                            @scheduleClick="showScheduleModal" :isModel="true" @dayClick="showAddScheduleModal"></calendar>
                                 </div>
                             </div>
                             <!--项目-->
@@ -643,7 +643,7 @@
                             </div>
                         </div>
                         <div class="example">
-                            <div class="col-md-2 text-right float-left require">参与人</div>
+                            <div class="col-md-2 text-right float-left">参与人</div>
                             <div class="col-md-10 float-left pl-0">
                                 <add-member></add-member>
                             </div>
@@ -848,6 +848,239 @@
                 </div>
             </div>
         </div>
+        <!-- 新建/修改 日程 -->
+        <div class="modal fade line-center" id="changeSchedule" aria-hidden="true" aria-labelledby="addLabelForm"
+             role="dialog" tabindex="-1">
+            <div class="modal-dialog modal-simple">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <div style="order: 2">
+                            <span class="pointer-content hover-content mr-4" data-toggle="modal"
+                                  data-target="#addLinkage">关联</span>
+                            <i class="iconfont icon-guanbi pointer-content" aria-hidden="true" data-dismiss="modal"></i>
+                        </div>
+                        <h5 class="modal-title">
+                            <template v-if="scheduleType === 'add'">
+                                <h4 class="modal-title">新建日程</h4>
+                            </template>
+                            <template v-else>
+                                <h4 class="modal-title">修改日程</h4>
+                            </template>
+                        </h5>
+                    </div>
+                    <div class="modal-body">
+                        <div class="example">
+                            <div class="col-md-2 text-right float-left">标题</div>
+                            <div class="col-md-10 float-left pl-0">
+                                <input type="text" class="form-control" title="" placeholder="请输入标题"
+                                       v-model="scheduleName">
+                            </div>
+                        </div>
+                        <div class="example">
+                            <div class="col-md-2 text-right float-left">日历</div>
+                            <div class="col-md-10 float-left pl-0">
+                                <selectors :options="calendarList" ref="calendarSelector"
+                                           @change="selectScheduleCalendar"></selectors>
+                            </div>
+                        </div>
+                        <div class="example">
+                            <div class="col-md-2 text-right float-left">开始时间</div>
+                            <div class="col-md-5 float-left pl-0">
+                                <datepicker @change="changeStartTime" ref="scheduleStartDate"></datepicker>
+                            </div>
+                            <div class="col-md-5 float-left pl-0" v-show="!isAllday">
+                                <timepicker :default="startMinutes" @change="changeStartMinutes"
+                                            ref="scheduleStartMinute"></timepicker>
+                            </div>
+                        </div>
+                        <div class="clearfix">
+                            <div class="col-md-2 text-right float-left line-fixed-height">结束时间</div>
+                            <div class="col-md-5 float-left pl-0">
+                                <datepicker @change="changeEndTime" ref="scheduleEndDate"></datepicker>
+                            </div>
+                            <div class="col-md-5 float-left pl-0" v-show="!isAllday">
+                                <timepicker :default="endMinutes" @change="changeEndMinutes"
+                                            ref="scheduleEndMinute"></timepicker>
+                            </div>
+                        </div>
+                        <div class="clearfix">
+                            <div class="col-md-2 text-right float-left"></div>
+                            <div class="col-md-10 float-left pl-0">
+                                <div class="checkbox-custom checkbox-primary">
+                                    <input type="checkbox" id="isAllDay" @change="changeIsAllDay" v-model="isAllday">
+                                    <label for="isAllDay">全天</label>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="clearfix py-10">
+                            <div class="col-md-2 text-right float-left line-fixed-height">参与人</div>
+                            <div class="col-md-10 float-left pl-0">
+                                <AddMember type="add"></AddMember>
+                            </div>
+                        </div>
+                        <div class="my-10 clearfix"
+                             v-show="linkageSelectedIds.projects.length > 0 || linkageSelectedIds.tasks.length > 0">
+                            <div class="col-md-2 text-right float-left">关联资源</div>
+                            <div class="col-md-10 float-left pl-0">
+                                <div class="clearfix" v-for="(id,index) in linkageSelectedIds.projects" :key="index">
+                                    <span class="float-left">
+                                        项目 - {{ allProjectsInfo.find(item => item.id == id).title }}
+                                    </span>
+                                    <span class="float-right icon iconfont icon-shanchu1"
+                                          @click="delNewScheduleLinkage('projects', id)"></span>
+                                </div>
+                                <div class="clearfix" v-for="(id,index) in linkageSelectedIds.tasks" :key="index">
+                                    <span class="float-left">
+                                        任务 - {{ allTasksInfo.find(item => item.id == id).title }}
+                                    </span>
+                                    <span class="float-right icon iconfont icon-shanchu1"
+                                          @click="delNewScheduleLinkage('tasks', id)"></span>
+                                </div>
+                            </div>
+                        </div>
+                        <!-- <div v-show="showMore">
+                            <div class="pt-10 mb-20 clearfix">
+                                <div class="col-md-2 text-right float-left line-fixed-height">资源</div>
+                                <div class="col-md-10 float-left pl-0">
+                                    <selectors :options="allMeetingRomeList" ref="scheduleResource"
+                                               @change="changeScheduleMaterial"></selectors>
+                                </div>
+                            </div>
+                            <div class="example">
+                                <div class="col-md-2 text-right float-left">提醒</div>
+                                <div class="col-md-10 float-left pl-0">
+                                    <selectors :options="remindArr" ref="scheduleNotice"></selectors>
+                                </div>
+                            </div>
+                            <div class="clearfix my-20">
+                                <div class="col-md-2 text-right float-left line-fixed-height">重复</div>
+                                <div class="col-md-10 float-left pl-0">
+                                    <selectors :options="repeatArr" ref="scheduleRepeat"
+                                               @change="changeScheduleRepeat"></selectors>
+                                </div>
+                                <div class="col-md-2 float-left"></div>
+                                <div class="col-md-10 float-left pl-0 font-12 mt-5" style="color: #c3c3c3">重复周期为1年</div>
+                            </div>
+                            <div class="example">
+                                <div class="col-md-2 text-right float-left">位置</div>
+                                <div class="col-md-10 float-left pl-0">
+                                    <input type="text" class="form-control" title="" v-model="eventPlace">
+                                </div>
+                            </div>
+                            <div class="example">
+                                <div class="col-md-2 text-right float-left">备注</div>
+                                <div class="col-md-10 float-left pl-0">
+                                    <textarea class="form-control" title="" v-model="eventDesc"></textarea>
+                                </div>
+                            </div>
+                            <div class="clearfix">
+                                <div class="col-md-2 text-right float-left"></div>
+                                <div class="col-md-10 float-left pl-0">
+                                    <div class="checkbox-custom checkbox-primary">
+                                        <input type="checkbox" id="onlyParticipantVisible" v-model="schedulePrivacy">
+                                        <label for="onlyParticipantVisible">仅参与人可见</label>
+                                    </div>
+                                </div>
+                            </div>
+                        </div> -->
+                        <!-- <div class="pointer-content hover-content mt-20" @click="isShowMore">
+                            <div class="col-md-2 float-left"></div>
+                            <div class="col-md-10 float-left pl-0">
+                                <template v-if="showMore">隐藏更多选项</template>
+                                <template v-else>添加更多选项</template>
+                            </div>
+                        </div> -->
+                    </div>
+                    <div class="modal-footer">
+                        <button class="btn btn-sm btn-white btn-pure" data-dismiss="modal">取消</button>
+                        <template v-if="scheduleType === 'add'">
+                            <button class="btn btn-primary" type="submit" @click="addSchedule">确定</button>
+                        </template>
+                        <template v-if="scheduleType === 'edit'">
+                            <button class="btn btn-primary" type="submit" @click="changeSchedule">确定</button>
+                        </template>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <!-- 关联资源 -->
+        <div class="modal fade" id="addLinkage" aria-hidden="true" aria-labelledby="addLabelForm"
+             role="dialog" tabindex="-1">
+            <div class="modal-dialog modal-simple">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <button type="button" class="close" aria-hidden="true" data-dismiss="modal">
+                            <i class="iconfont icon-guanbi" aria-hidden="true"></i>
+                        </button>
+                        <h4 class="modal-title">关联资源</h4>
+                    </div>
+                    <div class="modal-body">
+                        <div class="tab-pane p-20" role="tabpanel">
+                            <div class="nav-tabs-vertical" data-plugin="tabs" style="margin: 0 -20px -30px  -20px ">
+                                <ul class="nav nav-tabs nav-tabs-line mr-25" role="tablist">
+                                    <li class="nav-item" role="presentation" @click="selectProjectLinkage('project')">
+                                        <a class="nav-link active" data-toggle="tab" href="#projectsPane"
+                                           aria-controls="exampleTabsLineLeftOne" role="tab" aria-selected="false">
+                                            项目</a>
+                                    </li>
+                                    <li class="nav-item" role="presentation" @click="selectProjectLinkage('task')">
+                                        <a class="nav-link" data-toggle="tab" href="#tasksPane"
+                                           aria-controls="exampleTabsLineLeftOne" role="tab" aria-selected="false">
+                                            任务</a>
+                                    </li>
+                                </ul>
+                                <div class="tab-content" style="max-height: 70vh;overflow-y: auto">
+                                    <div class="tab-pane active" id="projectsPane" role="tabpanel">
+                                        <div class="input-search mb-20" style="width: 70%">
+                                            <button type="submit" class="input-search-btn">
+                                                <i class="iconfont icon-buoumaotubiao13" aria-hidden="true"></i>
+                                            </button>
+                                            <input type="text" class="form-control" name="" placeholder="搜索关键字..."
+                                                   v-model="searchKeyWord">
+                                        </div>
+                                        <ul class="nav">
+                                            <li class="nav-link pointer-content" style="width: 95%"
+                                                v-for="(project,index) in allProjectsInfo" :key="index"
+                                                v-show="project.title.indexOf(searchKeyWord) > -1"
+                                                @click="selectResource('projects', project.id)">{{ project.title }}
+                                                <span class="float-right"
+                                                      v-show="linkageSelectedIds.projects.indexOf(project.id) > -1">
+                                                    <i class="md-check"></i>
+                                                </span>
+                                            </li>
+                                        </ul>
+                                    </div>
+                                    <div class="tab-pane" id="tasksPane" role="tabpanel">
+                                        <div class="input-search mb-20" style="width: 70%">
+                                            <button type="submit" class="input-search-btn">
+                                                <i class="iconfont icon-buoumaotubiao13" aria-hidden="true"></i>
+                                            </button>
+                                            <input type="text" class="form-control" name="" placeholder="搜索关键字..."
+                                                   v-model="searchKeyWord">
+                                        </div>
+                                        <ul class="nav">
+                                            <li class="nav-link pointer-content" style="width: 95%"
+                                                v-for="(task,index) in allTasksInfo" :key="index"
+                                                v-show="task.title.indexOf(searchKeyWord) > -1"
+                                                @click="selectResource('tasks', task.id)">{{ task.title }}
+                                                <span class="float-right"
+                                                      v-show="linkageSelectedIds.tasks.indexOf(task.id) > -1">
+                                                    <i class="md-check"></i>
+                                                </span>
+                                            </li>
+                                        </ul>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="modal-footer">
+                        <button class="btn btn-sm btn-white btn-pure" data-dismiss="modal">取消</button>
+                        <button class="btn btn-primary" type="submit" @click="addLinkageResource">确定</button>
+                    </div>
+                </div>
+            </div>
+        </div>
         <!-- 查看日程 -->
         <div class="modal fade" id="checkSchedule" aria-hidden="true" aria-labelledby="addLabelForm"
              role="dialog" tabindex="-1">
@@ -1022,7 +1255,21 @@
                 expendituresum:0,//账单 -- 支出总和
                 isLoading: true,
                 uploadUrl:'',
-                calendarId:[]//艺人关联日历id
+                calendarId:[],//艺人关联日历id
+                scheduleType: 'add',
+                scheduleName: '',
+                calendarList: [],
+                scheduleCalendar: '',
+                isAllday: false,
+                isScheduleAllday: 0,
+                linkageSelectedIds: {
+                    projects: [],
+                    tasks: []
+                },
+                showMore: false,
+                searchKeyWord: '',
+                allProjectsInfo: '',
+                allTasksInfo:''
 
             }
         },
@@ -1047,6 +1294,7 @@
             $('#distributionBroker').on('hidden.bs.modal', function () {
                 _this.$store.commit('changeParticipantsInfo', [])
             })
+
         },
         
         methods: {
@@ -1065,9 +1313,10 @@
                     _this.uploadUrl = _this.artistInfo.avatar
                     _this.artistProjectsInfo = []
                     _this.artistTasksInfo = response.data.tasks.data
-                    if(response.data.calendar.data){
-                        _this.calendarId.push(response.data.calendar.data.id)
-                    }
+                    // if(response.data.calendar.data.id){
+                        // _this.calendarId.push(response.data.calendar.data.id)
+                        // console.log(response.data.calendar.data.id)
+                    // }
                     _this.artistWorksInfo = response.data.works.data
                     _this.affixes = response.data.affixes.data
                     for (let i = 0; i < response.data.trails.data.length; i++) {
@@ -1088,24 +1337,164 @@
                     include: 'calendar,participants,creator,material,affixes',
                 };
                 fetch('get', '/schedules/' + schedule.id, data).then(response => {
-                    // console.log(response)
                     if (!response) {
                         this.scheduleData = schedule;
-                        // this.noPermission = true;
                         return
                     }
-                    // this.noPermission = false;
                     this.scheduleData = response.data;
                     this.scheduleParticipants = JSON.parse(JSON.stringify(response.data.participants.data));
                     this.$store.dispatch('changeParticipantsInfo', {data: response.data.participants.data});
                 });
                 $('#checkSchedule').modal('show')
-                // console.log(data)
-                // this.scheduleData = data;
-                // if (data.participants.data) {
-                //     this.scheduleParticipants = JSON.parse(JSON.stringify(data.participants.data));
-                // }
-                // $('#checkSchedule').modal('show')
+            },
+            addSchedule: function () {
+                let startTime = '';
+                let endTime = '';
+                if (this.isScheduleAllday) {
+                    startTime = this.startTime;
+                    endTime = this.endTime;
+                } else {
+                    startTime = this.startTime + ' ' + this.startMinutes;
+                    endTime = this.endTime + ' ' + this.endMinutes;
+
+                    if (startTime > endTime) {
+                        toastr.error('开始时间不能晚于截止时间');
+                        return
+                    }
+
+                    if (this.startTime === this.endTime) {
+                        let startMinutesArr = this.startMinutes.split(':');
+                        let endMinutesArr = this.endMinutes.split(':');
+                        if (startMinutesArr[0] === endMinutesArr[0]) {
+                            if ((Number(endMinutesArr[1]) - Number(startMinutesArr[1])) < 30) {
+                                toastr.error('日程时间不能小于30分钟');
+                                return
+                            }
+
+                        }
+                    }
+                }
+                let data = {
+                    title: this.scheduleName,
+                    calendar_id: this.scheduleCalendar,
+                    is_allday: this.isScheduleAllday,
+                    privacy: Number(this.schedulePrivacy),
+                    start_at: startTime,
+                    end_at: endTime,
+                    repeat: this.scheduleRepeat,
+                    desc: this.eventDesc
+                };
+                if (this.eventPlace) {
+                    data.position = this.eventPlace;
+                }
+                if (this.scheduleMaterialId) {
+                    data.material_id = this.scheduleMaterialId;
+                }
+                if (this.$store.state.newParticipantsInfo) {
+                    data.participant_ids = [];
+                    let newParticipantsInfo = this.$store.state.newParticipantsInfo;
+                    for (let i = 0; i < newParticipantsInfo.length; i++) {
+                        data.participant_ids.push(newParticipantsInfo[i].id)
+                    }
+                }
+                if (this.linkageSelectedIds.projects.length > 0) {
+                    data.project_ids = this.linkageSelectedIds.projects;
+                }
+                if (this.linkageSelectedIds.tasks.length > 0) {
+                    data.task_ids = this.linkageSelectedIds.tasks;
+                }
+                fetch('post', '/schedules', data).then(() => {
+                    this.$refs.calendar.refresh();
+                    $('#changeSchedule').modal('hide');
+                    toastr.success('添加成功')
+                })
+            },
+            changeSchedule: function () {
+                let startTime = '';
+                let endTime = '';
+                if (this.isScheduleAllday) {
+                    startTime = this.startTime;
+                    endTime = this.endTime;
+                } else {
+                    startTime = this.startTime + ' ' + this.startMinutes;
+                    endTime = this.endTime + ' ' + this.endMinutes;
+                }
+                let data = {
+                    title: this.scheduleName,
+                    calendar_id: this.scheduleCalendar,
+                    is_allday: this.isScheduleAllday,
+                    privacy: Number(this.schedulePrivacy),
+                    start_at: startTime,
+                    end_at: endTime,
+                    repeat: this.scheduleRepeat,
+                    desc: this.eventDesc,
+                    material_id: this.scheduleMaterialId
+                };
+                if (this.eventPlace) {
+                    data.position = this.eventPlace;
+                }
+
+                data.participant_del_ids = [];
+                data.participant_ids = [];
+                let flagInfo = this.$store.state.newParticipantsInfo;
+                for (let i = 0; i < this.scheduleParticipants.length; i++) {
+                    if (flagInfo.map(item => item.id).indexOf(this.scheduleParticipants[i].id) === -1) {
+                        data.participant_del_ids.push(this.scheduleParticipants[i].id)
+                    }
+                }
+                for (let i = 0; i < flagInfo.length; i++) {
+                    if (this.scheduleParticipants.map(item => item.id).indexOf(flagInfo[i].id) === -1) {
+                        data.participant_ids.push(flagInfo[i].id)
+                    }
+                }
+
+                if (this.linkageSelectedIds.projects.length > 0) {
+                    data.project_ids = this.linkageSelectedIds.projects;
+                }
+                if (this.linkageSelectedIds.tasks.length > 0) {
+                    data.task_ids = this.linkageSelectedIds.tasks;
+                }
+
+                fetch('put', '/schedules/' + this.scheduleData.id, data).then(() => {
+                    this.$refs.calendar.refresh();
+                    $('#changeSchedule').modal('hide');
+                    toastr.success('修改成功')
+                })
+            },
+            selectScheduleCalendar: function (value) {
+                this.scheduleCalendar = value
+            },
+            changeIsAllDay: function (e) {
+                this.isScheduleAllday = Number(e.target.checked);
+            },
+            showAddScheduleModal: function (date) {
+                this.$refs.scheduleStartDate.setValue(date);
+                this.$refs.scheduleEndDate.setValue(date);
+                this.startTime = date;
+                this.endTime = date;
+                $('#changeSchedule').modal('show')
+            },
+            selectProjectLinkage: function (value) {
+                this.linkageResource = value;
+                if (!this.allProjectsInfo) {
+                    this.getAllProjects()
+                }
+                if (!this.allTasksInfo) {
+                    this.getAllTasks()
+                }
+            },
+            getAllProjects: function () {
+                fetch('get', '/projects/all').then(response => {
+                    this.allProjectsInfo = response.data
+                })
+            },
+            getAllTasks: function () {
+                fetch('get', '/tasksAll').then(response => {
+                    this.allTasksInfo = response.data
+                })
+            },
+            addLinkageResource: function () {
+                $('#addLinkage').modal('hide');
             },
             //获取账单
             getArtistsBill: function (page = 1,expense_type) {
@@ -1318,10 +1707,10 @@
                     toastr.error('请选择负责人')
                     return false
                 }
-                if (participant_ids.length <= 0) {
-                    toastr.error('请选择参与人')
-                    return false
-                }
+                // if (participant_ids.length <= 0) {
+                //     toastr.error('请选择参与人')
+                //     return false
+                // }
                 if (!this.taskLevel) {
                     toastr.error('请选择任务优先级')
                     return false
