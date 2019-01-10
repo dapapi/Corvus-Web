@@ -1313,10 +1313,9 @@
                     _this.uploadUrl = _this.artistInfo.avatar
                     _this.artistProjectsInfo = []
                     _this.artistTasksInfo = response.data.tasks.data
-                    // if(response.data.calendar.data.id){
-                        // _this.calendarId.push(response.data.calendar.data.id)
-                        // console.log(response.data.calendar.data.id)
-                    // }
+                    if(response.data.calendar){
+                         _this.calendarId.push(response.data.calendar.data.id)
+                    }
                     _this.artistWorksInfo = response.data.works.data
                     _this.affixes = response.data.affixes.data
                     for (let i = 0; i < response.data.trails.data.length; i++) {
@@ -1502,6 +1501,8 @@
                 let _this = this
                 if(expense_type){
                     _this.expense_type = expense_type
+                }else{
+                    _this.expense_type = 0
                 }
                 fetch('get', `/stars/${this.$route.params.id}/bill`, {page: page,expense_type:_this.expense_type}).then(response => {
                     _this.artistBillsInfo = response.data

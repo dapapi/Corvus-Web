@@ -101,7 +101,8 @@
                     } else {
                         data.calendar_ids = self.calendars
                     }
-                    if(meetingRoomList.length>0||self.calendars.length>0){
+                    
+                    if(meetingRomeList.length>0 ||self.calendars.length>0){
                         fetch('get', url, data).then(response => {
                             self.allScheduleInfo = response.data;
                             let events = [];
