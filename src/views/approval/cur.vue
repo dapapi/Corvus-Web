@@ -1,6 +1,6 @@
 <template>
     <!-- Page -->
-    <div class="" style="background-color:#f3f4f5">
+    <div class="page-main" style="background-color:#f3f4f5">
         <div class="page-header page-header-bordered">
             <h1 class="page-title">我的申请</h1>
         </div>
