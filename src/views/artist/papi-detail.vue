@@ -192,7 +192,7 @@
                                 aria-controls="forum-present"
                                 aria-expanded="false" role="tab" >作品库</a>
                             </li>
-                            <li class="nav-item" role="presentation" v-show="artistInfo.sign_contract_status == 2">
+                            <li class="nav-item" role="presentation" v-show="artistInfo.sign_contract_status == 3">
                                 <a class="nav-link" data-toggle="tab" href="#forum-artist-fans"
                                 aria-controls="forum-present"
                                 aria-expanded="false" role="tab" >粉丝数据</a>
@@ -336,7 +336,7 @@
                                 </div>
                             </div>
                             <div class="tab-pane animation-fade pb-20 fixed-button-father" id="forum-artist-fans"
-                                role="tabpanel">
+                                role="tabpanel" v-show="artistInfo.sign_contract_status == 3">
                                 <div id="myChart"
                                     style="width:50vw ;height:400px; margin-top:30px;padding-bottom: 20px"></div>
                             </div>
@@ -345,33 +345,41 @@
                                 role="tabpanel">
                                 <div class="clearfix my-10">
                                     <div style="padding: .715rem .6rem">
-                                        <div class="income" v-show="calculatedAmount.incomesum">
+                                        <div class="income" v-if="calculatedAmount.incomesum">
                                             <div class="float-left pr-40">收款金额</div>
                                             <div class="float-left pr-40 money-color">{{calculatedAmount.incomesum}}元</div>
                                         </div>
-                                        <div class="expendituresum" v-show="calculatedAmount.expendituresum">
+                                        <div class="income" v-if="!calculatedAmount.incomesum">
+                                            <div class="float-left pr-40">收款金额</div>
+                                            <div class="float-left pr-40 money-color">0元</div>
+                                        </div>
+                                        <div class="expendituresum" v-if="calculatedAmount.expendituresum">
                                             <div class="float-left pr-40">付款金额</div>
                                             <div class="float-left pr-40 money-color">{{calculatedAmount.expendituresum}}元</div>
+                                        </div>
+                                        <div class="expendituresum" v-if="!calculatedAmount.expendituresum">
+                                            <div class="float-left pr-40">付款金额</div>
+                                            <div class="float-left pr-40 money-color">0元</div>
                                         </div>
                                     </div>
                                 </div>
 
                             <table class="table table-hover"
-                                    data-child="tr" >
+                                    data-child="tr">
                                     <tr>
                                         <th class="cell-300" scope="col">费用类型</th>
                                         <th class="cell-300 position-relative" scope="col">
-                                            <template v-if="filterFee === 1">全部</template>
-                                            <template v-if="filterFee === 2">成本</template>
-                                            <template v-if="filterFee === 3">收入</template>
+                                            <template v-if="expense_type == 0">全部</template>
+                                            <template v-if="expense_type == 2">成本</template>
+                                            <template v-if="expense_type == 1">收入</template>
                                             <i class="iconfont icon-plus-select-down pl-2" aria-hidden="true"
                                             id="projectDropdown" data-toggle="dropdown" aria-expanded="false"></i>
                                             <div class="dropdown-menu" aria-labelledby="projectDropdown" role="menu">
-                                                <a class="dropdown-item" role="menuitem" v-show="filterFee !== 1"
+                                                <a class="dropdown-item" role="menuitem" v-show="expense_type !== 0"
                                                 @click="getArtistsBill(1,0)">全部</a>
-                                                <a class="dropdown-item" role="menuitem" v-show="filterFee !== 2"
+                                                <a class="dropdown-item" role="menuitem" v-show="expense_type !== 2"
                                                 @click="getArtistsBill(1,2)">成本</a>
-                                                <a class="dropdown-item" role="menuitem" v-show="filterFee !== 3"
+                                                <a class="dropdown-item" role="menuitem" v-show="expense_type !== 1"
                                                 @click="getArtistsBill(1,1)">收入</a>
                                             </div>
                                         </th>
@@ -944,7 +952,7 @@
                 updatehatch_end:'',//孵化期截止
                 Incubationperiod:'',
                 principalName:'',
-                filterFee:1,
+                expense_type:0,
                 platformArr:config.platformArr,
                 selectedCalendar:[],
                 selectedDate:'',
@@ -1151,8 +1159,13 @@
             //账单
             getArtistsBill(page = 1,expense_type){
                 let _this=this;
-                _this.expense_type = expense_type
-                fetch('get','/bloggers/'+this.artistId +'/bill',{page: page,expense_type:this.expense_type}).then(function(response){
+                if(!expense_type){
+                    _this.expense_type =0 
+                }else{
+                    _this.expense_type = expense_type
+                }
+               
+                fetch('get','/bloggers/'+this.artistId +'/bill',{page: page,expense_type:expense_type}).then(function(response){
                     _this.artistBillsInfo = response.data
                     _this.calculatedAmount=response.meta;
                     _this.current_page = response.meta.pagination.current_page;
