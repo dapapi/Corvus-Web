@@ -29,7 +29,7 @@
                             </div>
                         </li>
                     </ul>
-                    <div v-if="taskData.length === 0" class="col-md-3 text-center">
+                    <div v-if="taskData.length === 0" class="col-md-6 text-center">
                         暂无数据
                     </div>
                 </div>
@@ -93,7 +93,7 @@
 
 <style scoped>
     .follow-task {
-        height: 240px;
+        height: 370px;
         overflow-y: hidden;
         overflow-x: hidden;
     }

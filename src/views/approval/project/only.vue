@@ -34,7 +34,7 @@
                                    data-selectable="selectable">
                                 <tr>
                                     <th class="cell-300" scope="col">审批编号</th>
-                                    <th class="cell-300" scope="col">项目名称</th>
+                                    <th class="cell-300" scope="col">合同名称</th>
                                     <th class="cell-300" scope="col">申请人</th>
                                     <!-- <th class="cell-300 position-relative" scope="col">类型
                                         <i class="iconfont icon-gengduo1" aria-hidden="true"
@@ -50,8 +50,8 @@
                                     <th class="cell-300" scope="col">审批状态</th>
                                 </tr>
                                 <tbody>
-                                <tr v-for="project in projectsInfo" :key='project.project_number'>
-                                    <router-link :to="'/approval/'+project.id"><td>{{project.form_instance_number}}</td></router-link>
+                                <tr v-for="project in projectsInfo" :key='project.project_number' @click="goDetail(project.form_instance_number)">
+                                    <td>{{project.form_instance_number}}</td>
                                     <td>{{project.title}}</td>
                                     <td>{{project.name}}</td>
                                     <!-- <td></td> -->
@@ -89,46 +89,51 @@
                 total_pages: 1,
                 keywords: '',
                 projectsInfo: [],
-                projectProgress:PROJECT_CONFIG.approvalProgress
+                projectProgress:PROJECT_CONFIG.approvalProgress,
+                pageType:1,
             }
         },
         mounted(){
-            this.getList()
+            this.getList(1)
         },
         computed:{
             getProgressName(){
                 return function(params){
-                   return  this.projectProgress.find(item=>item.id = params).value
+                   return  this.projectProgress.find(item=>item.id == params).value
                 }
             }
         },
         methods: {
-            getProjects: function (pageNum = 1, type = null) {
+            getProjects: function (pageNum = 1, signStatus) {
+                let _this = this
                 let data = {
                     page: pageNum,
-                    include: 'principal,trail.expectations'
+                    include: 'principal,trail.expectations',
+                    status:this.pageType
                 };
-                let url = '/approvals_project/notify';
-                if (type) {
-                    url = 'approvals_project/notify';
-                    data.type = type;
+                 if (signStatus) {
+                    data.sign_contract_status = signStatus
                 }
-                this.paginationType = 'getProjects';
-                fetch('get', url, data).then(response => {
-                    this.projectsInfo = response.data
-                    this.total = response.total;
-                    this.current_page = response.current_page;
-                    this.total_pages = response.last_page;
+                fetch('get', '/approvals_project/notify', data).then(response => {
+                    _this.projectsInfo = response.data
+                    _this.total = response.total;
+                    _this.current_page = response.current_page;
+                    _this.total_pages = response.last_page;
                 })
             },
-            getList() {
+            getList(params) {
                 let _this = this
-                fetch('get','/approvals_project/notify').then((params) => {
+                this.pageType = params
+
+                fetch('get','/approvals_project/notify?status='+params).then((params) => {
                     _this.projectsInfo = params.data
                     _this.total = params.total;
                     _this.current_page = params.current_page;
                     _this.total_pages = params.last_page;
                 })
+            },
+            goDetail (id) {
+                this.$router.push('/approval/' + id)
             }
         }
     }

@@ -51,6 +51,7 @@
                                 </tr>
                                 <tbody>
                                 <tr v-for="project in projectsInfo" :key='project.id'>
+                                    
                                     <router-link :to="'/approval/'+project.form_instance_number"><td>{{project.form_instance_number}}</td></router-link>                                    
                                   
                                     <td>{{project.title}}</td>
@@ -62,11 +63,11 @@
                                 </tr>
                                 </tbody>
                             </table>
-                            <div class="col-md-1" style="margin: 6rem auto">
+                            <div v-if="projectsInfo.length === 0" class="col-md-1" style="margin: 6rem auto">
                                 <img src="https://res.papitube.com/corvus/images/content-none.png" alt=""
                                      style="width: 100%">
                             </div>
-                             <pagination :current_page="current_page" :method="getProjects" :total_pages="total_pages"
+                            <pagination :current_page="current_page" :method="getProjects" :total_pages="total_pages"
                                     :total="total"></pagination>
                         </div>
                     </div>
@@ -79,6 +80,7 @@
 
 <script>
 import {CONTRACT_INDEX_CONFIG} from '@/views/approval/contractIndex/contractIndexData.js'
+    import {PROJECT_CONFIG} from '@/views/approval/project/projectConfig.js'
 
     import fetch from '@/assets/utils/fetch.js'
     import config from '@/assets/js/config'
@@ -92,34 +94,43 @@ import {CONTRACT_INDEX_CONFIG} from '@/views/approval/contractIndex/contractInde
                 keywords: '',
                 projectsInfo: [],
                 contractList:CONTRACT_INDEX_CONFIG.contractIndex,
+                projectProgress:PROJECT_CONFIG.approvalProgress,
+                pageType : 1
             }
         },
         mounted(){
             this.getList(1)
         },
+        computed:{
+            getProgressName(){
+                return function(params){
+                   return  this.projectProgress.find(item=>item.id == params).value
+                }
+            }
+        },
         methods: {
-            getProjects: function (pageNum = 1, type = null) {
+            getProjects: function (pageNum = 1, signStatus) {
+                let _this = this
                 let data = {
                     page: pageNum,
-                    include: 'principal,trail.expectations'
+                    include: 'principal,trail.expectations',
+                    status:this.pageType
                 };
-                let url = '/approvals_contract/my?status=1';
-                if (type) {
-                    url = '/approvals_contract/my';
-                    data.type = type;
+                 if (signStatus) {
+                    data.sign_contract_status = signStatus
                 }
-                this.paginationType = 'getProjects';
-                fetch('get', url, data).then(response => {
-                    this.projectsInfo = response.data
-                    this.total = response.meta.pagination;
-                    this.current_page = response.meta.current_page;
-                    this.total_pages = response.meta.total_pages;
+                fetch('get', '/approvals_contract/notify', data).then(response => {
+                    _this.projectsInfo = response.data
+                    _this.total = response.meta.pagination;
+                    _this.current_page = response.meta.current_page;
+                    _this.total_pages = response.meta.total_pages;
                 })
             },
             getList(params) {
+                this.pageType = params
                     let _this = this
-                    fetch('get','/approvals_contract/approval?status=',params).then((params) => {
-                        console.log(params.meta);
+                    fetch('get','/approvals_contract/notify?status='+params).then((params) => {
+                        console.log(params);
                         _this.projectsInfo = params.data
                         _this.total = params.meta.pagination
                         _this.current_page = params.meta.current_page;

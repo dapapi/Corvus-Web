@@ -33,8 +33,9 @@
                     <div class="clearfix">
                         <div class="col-md-6 float-left pl-0 mb-20" v-if="clientTasksInfo.length > 0">
                             <div class="col-md-6 pl-0"><i class="iconfont icon-iconset0399 pr-2" aria-hidden="true"></i>任务</div>
-                            <div class="clearfix example" v-for="(task, index) in newArray(clientTasksInfo)" :key="index">
-                                <div class="col-md-3 float-left px-0"><router-link :to="`/tasks/${task.id}`">{{ task.title }}</router-link></div>
+                            <div class="clearfix example " v-for="(task, index) in newArray(clientTasksInfo)" 
+                                style="cursor: pointer" :key="index" @click="linkTo('/tasks/' + task.id)">
+                                <div class="col-md-3 float-left px-0">{{ task.title }}</div>
                                 <div class="col-md-3 float-left px-0">{{ task.principal?task.principal.data.name:'' }}</div>
                                 <div class="col-md-4 float-left px-0">{{ task.end_at }}</div>
                                 <div class="col-md-2 float-left px-0">
@@ -46,8 +47,9 @@
                         </div>
                         <div class="col-md-6 float-left pl-0 mb-20" v-if="clientProjectsInfo.length > 0">
                             <div class="col-md-6 p-0"><i class="iconfont icon-ego-box pr-2 " aria-hidden="true"></i>项目</div>
-                            <div class="clearfix example" v-for="(project, index) in newArray(clientProjectsInfo)" :key="index">
-                                <div class="col-md-3 float-left px-0"><router-link :to="`/projects/${project.id}`">{{project.title}}</router-link></div>
+                            <div class="clearfix example" v-for="(project, index) in newArray(clientProjectsInfo)" :key="index" 
+                                @click="linkTo('/projects/' + project.id)" style="cursor: pointer">
+                                <div class="col-md-3 float-left px-0">{{project.title}}</div>
                                 <div class="col-md-3 float-left px-0">{{ clientTypeArr.find(item => item.value == project.type).name }}</div>
                                 <div class="col-md-4 float-left px-0">{{ project.created_at }}</div>
                                 <div class="col-md-2 float-left px-0">
@@ -63,326 +65,325 @@
 
             </div>
 
-            <div class="panel col-md-12 col-lg-12">
+            <div style="display: flex; justify-content: space-between; align-items: flex-start">
+                <div class="panel" style="width: calc(66% - 15px);">
 
-                <div class="col-md-12">
-                    <ul class="nav nav-tabs nav-tabs-line" role="tablist">
-                        <li class="nav-item" role="presentation">
-                            <a class="nav-link active" data-toggle="tab" href="#forum-trail"
-                               aria-controls="forum-present"
-                               aria-expanded="false" role="tab">销售线索</a>
-                        </li>
-                        <li class="nav-item" role="presentation" @click="getClientProject">
-                            <a class="nav-link" data-toggle="tab" href="#forum-project"
-                               aria-controls="forum-present"
-                               aria-expanded="false" role="tab">项目</a>
-                        </li>
-                        <li class="nav-item" role="presentation" @click="getClientTask">
-                            <a class="nav-link" data-toggle="tab" href="#forum-task"
+                    <div class="col-md-12">
+                        <ul class="nav nav-tabs nav-tabs-line" role="tablist">
+                            <li class="nav-item" role="presentation">
+                                <a class="nav-link active" data-toggle="tab" href="#forum-trail"
                                 aria-controls="forum-present"
-                                aria-expanded="false" role="tab">
-                                <template v-if="clientTasksInfo.length > 0">
-                                    <ToolTips :title="`已完成数量${completeNum}`">
-                                        任务 ({{completeNum}}/{{clientTasksInfo.length}})
-                                    </ToolTips>
-                                </template>
-                                <template v-else>
-                                    任务
-                                </template>
-                            </a>
-                        </li>
-                        <li class="nav-item" role="presentation">
-                            <a class="nav-link" data-toggle="tab" href="#forum-base"
-                               aria-controls="forum-present"
-                               aria-expanded="false" role="tab">概况</a>
-                        </li>
-                        <li class="nav-item" role="presentation" @click="getClientContact">
-                            <a class="nav-link" data-toggle="tab" href="#forum-contact"
-                               aria-controls="forum-present"
-                               aria-expanded="false" role="tab">联系人</a>
-                        </li>
-                    </ul>
+                                aria-expanded="false" role="tab">销售线索</a>
+                            </li>
+                            <li class="nav-item" role="presentation" @click="getClientProject">
+                                <a class="nav-link" data-toggle="tab" href="#forum-project"
+                                aria-controls="forum-present"
+                                aria-expanded="false" role="tab">项目</a>
+                            </li>
+                            <li class="nav-item" role="presentation" @click="getClientTask">
+                                <a class="nav-link" data-toggle="tab" href="#forum-task"
+                                    aria-controls="forum-present"
+                                    aria-expanded="false" role="tab">
+                                    <template v-if="clientTasksInfo.length > 0">
+                                        <ToolTips :title="`已完成数量${completeNum}`">
+                                            任务 ({{completeNum}}/{{clientTasksInfo.length}})
+                                        </ToolTips>
+                                    </template>
+                                    <template v-else>
+                                        任务
+                                    </template>
+                                </a>
+                            </li>
+                            <li class="nav-item" role="presentation">
+                                <a class="nav-link" data-toggle="tab" href="#forum-base"
+                                aria-controls="forum-present"
+                                aria-expanded="false" role="tab">概况</a>
+                            </li>
+                            <li class="nav-item" role="presentation" @click="getClientContact">
+                                <a class="nav-link" data-toggle="tab" href="#forum-contact"
+                                aria-controls="forum-present"
+                                aria-expanded="false" role="tab">联系人</a>
+                            </li>
+                        </ul>
+                    </div>
+                    <div class="tab-content nav-tabs-animate bg-white col-md-12" v-if="clientInfo">
+                        <div class="tab-pane animation-fade pb-20 active" id="forum-trail" role="tabpanel">
+
+                            <table class="table table-hover is-indent example" data-plugin="animateList" data-animate="fade"
+                                data-child="tr"
+                                data-selectable="selectable">
+                                <tr class="animation-fade"
+                                    style="animation-fill-mode: backwards; animation-duration: 250ms; animation-delay: 0ms;">
+                                    <th class="cell-300" scope="col">线索名称</th>
+                                    <th class="cell-300" scope="col">销售进展</th>
+                                    <th class="cell-300" scope="col">负责人</th>
+                                    <th class="cell-300" scope="col">关联公司</th>
+                                    <th class="cell-300" scope="col">录入日期</th>
+                                </tr>
+                                <tbody>
+                                <tr v-for="trail in clientTrailsInfo" :key="trail.id" @click="linkTo('/trails/' + trail.id)">
+                                    <td>
+                                        {{ trail.title }}
+                                    </td>
+                                    <td>
+                                        <template v-if="trail.progress_status === 1">未确定合作</template>
+                                        <template v-if="trail.progress_status === 2">已确定合作</template>
+                                        <template v-if="trail.progress_status === 0">已拒绝</template>
+                                    </td>
+                                    <td>{{ trail.principal?trail.principal.data.name: '' }}</td>
+                                    <td>{{ trail.client?trail.client.data.company:'' }}</td>
+                                    <td>{{ trail.created_at }}</td>
+                                </tr>
+                                </tbody>
+                            </table>
+                            <div class="col-md-1" style="margin: 6rem auto" v-if="clientTrailsInfo.length === 0">
+                                <img src="https://res.papitube.com/corvus/images/content-none.png" alt=""
+                                    style="width: 100%">
+                            </div>
+                        </div>
+                        <div class="tab-pane animation-fade pb-20" id="forum-project" role="tabpanel">
+                            <table class="table table-hover is-indent example" data-plugin="animateList" data-animate="fade"
+                                data-child="tr"
+                                data-selectable="selectable">
+                                <tr class="animation-fade"
+                                    style="animation-fill-mode: backwards; animation-duration: 250ms; animation-delay: 0ms;">
+                                    <th class="cell-300" scope="col">项目名称</th>
+                                    <th class="cell-300" scope="col">项目状态</th>
+                                    <th class="cell-300" scope="col">负责人</th>
+                                    <th class="cell-300" scope="col">关联公司</th>
+                                    <th class="cell-300" scope="col">录入日期</th>
+                                </tr>
+                                <tbody>
+                                    <tr v-for="project in clientProjectsInfo" :key="project.id" @click="linkTo('/projects/' + project.id)">
+                                        <td>
+                                            {{ project.title }}
+                                        </td>
+                                        <td>
+                                            <template v-if="project.status === 1"><span style="color:#FF9800">进行中</span></template>
+                                            <template v-if="project.status === 2"><span style="color:#4CAF50">已完成</span></template>
+                                            <template v-if="project.status === 3"><span style="color:#9E9E9E">撤单</span></template>
+                                        </td>
+                                        <td>{{ project.principal?project.principal.data.name:'' }}</td>
+                                        <td>{{ project.trail.data.client.data.company}}</td>
+                                        <td>{{ project.created_at }}</td>
+                                    </tr>
+                                </tbody>
+                            </table>
+                            <div class="col-md-1" v-if="clientProjectsInfo.length === 0" style="margin: 6rem auto">
+                                <img src="https://res.papitube.com/corvus/images/content-none.png" alt=""
+                                    style="width: 100%">
+                            </div>
+                        </div>
+                        <div class="tab-pane animation-fade pb-20 fixed-button-father" id="forum-task" role="tabpanel">
+                            <table class="table table-hover is-indent example" data-plugin="animateList" data-animate="fade"
+                                data-child="tr"
+                                data-selectable="selectable">
+                                <tr class="animation-fade"
+                                    style="animation-fill-mode: backwards; animation-duration: 250ms; animation-delay: 0ms;">
+                                    <th class="cell-300" scope="col">任务名称</th>
+                                    <th class="cell-300" scope="col">任务类型</th>
+                                    <th class="cell-300" scope="col">状态</th>
+                                    <th class="cell-300" scope="col">负责人</th>
+                                    <th class="cell-300" scope="col">截止时间</th>
+                                </tr>
+                                <tbody>
+                                    <tr v-for="task in clientTasksInfo" :key="task.id" @click="linkTo('/tasks/' + task.id)">
+                                        <td>
+                                            {{ task.title }}
+                                        </td>
+                                        <td>{{ task.type?task.type.data.title:'' }}</td>
+                                        <td>
+                                            <template v-if="task.status === 1">进行中</template>
+                                            <template v-if="task.status === 2">已完成</template>
+                                            <template v-if="task.status === 3">已停止</template>
+                                        </td>
+                                        <td>{{ task.principal?task.principal.data.name:'' }}</td>
+                                        <td>{{ task.end_at }}</td>
+                                    </tr>
+                                </tbody>
+
+                            </table>
+                            <div class="col-md-1" style="margin: 6rem auto" v-if="clientTasksInfo.length === 0">
+                                <img src="https://res.papitube.com/corvus/images/content-none.png" alt=""
+                                    style="width: 100%">
+                            </div>
+                            <div class="site-action fixed-button" data-plugin="actionBtn" data-toggle="modal"
+                                data-target="#addTask">
+                                <button type="button"
+                                        class="site-action-toggle btn-raised btn btn-success btn-floating waves-effect waves-classic">
+                                    <i class="front-icon iconfont icon-tianjia1 animation-scale-up" aria-hidden="true" style="font-size:30px"></i>
+                                    <i class="back-icon iconfont icon-tianjia1 animation-scale-up" aria-hidden="true" style="font-size:30px"></i>
+                                </button>
+                            </div>
+                        </div>
+                        <div class="tab-pane animation-fade pb-20" id="forum-base" role="tabpanel">
+                            <div class="card" v-if="clientInfo.company">
+                                <div class="card-header card-header-transparent card-header-bordered">
+                                    <div class="float-left font-weight-bold third-title">客户详情</div>
+                                    <div class="float-right pointer-content" v-show="!isEdit">
+                                        <i class="iconfont icon-bianji2" aria-hidden="true" @click="editBaseInfo"></i>
+                                    </div>
+                                    <div class="float-right" v-show="isEdit">
+                                        <button class="btn btn-sm btn-white btn-pure" @click="cancelEdit">取消</button>
+                                        <button class="btn btn-primary" @click="changeClientBaseInfo">确定</button>
+                                    </div>
+                                </div>
+                                <div class="card-block">
+                                    <div class="card-text py-10 clearfix">
+                                        <div class="col-md-2 float-left text-right pl-0">公司名称</div>
+                                        <div class="col-md-4 float-left font-weight-bold">
+                                            <EditInput :content="clientInfo.company" :is-edit="isEdit"
+                                                    @change="changeClientName"></EditInput>
+                                        </div>
+                                        <div class="col-md-2 float-left text-right pl-0">级别</div>
+                                        <div class="col-md-4 float-left font-weight-bold">
+                                            <EditSelector :options="clientLevelArr" :is-edit="isEdit"
+                                                        :content="clientInfo.grade"
+                                                        @change="changeClientLevel"></EditSelector>
+                                        </div>
+                                    </div>
+                                    <div class="card-text py-10 clearfix">
+                                        <div class="col-md-2 float-left text-right pl-0">负责人</div>
+                                        <div class="col-md-4 float-left font-weight-bold">
+
+                                            <EditInput-selector :is-edit="isEdit" :placeholder="'请选择负责人'"
+                                                                @change="selectPrincipal"
+                                                                :select-type="'principal'"></EditInput-selector>
+                                        </div>
+                                        <div class="col-md-2 float-left text-right pl-0">规模</div>
+                                        <div class="col-md-4 float-left font-weight-bold">
+                                            <EditSelector :options="clientScaleArr" :is-edit="isEdit"
+                                                        :content="clientInfo.size"
+                                                        @change="changeClientScale"></EditSelector>
+                                        </div>
+                                    </div>
+                                    <div class="card-text py-10 clearfix">
+                                        <div class="col-md-2 float-left text-right pl-0">地区</div>
+                                        <div class="col-md-4 float-left font-weight-bold region">
+                                            <template v-if="!isEdit">
+                                                {{clientInfo.province}}{{clientInfo.city}}{{clientInfo.district}}
+                                            </template>
+                                            <template v-else>
+                                                <RegionSelector :provinceVal="clientInfo.province" :cityVal="clientInfo.city" :areaVal="clientInfo.district" @setAreaData="changeAreaData" />
+                                            </template>
+
+                                        </div>
+                                        <div class="col-md-2 float-left text-right pl-0">详细地址</div>
+                                        <div class="col-md-4 float-left font-weight-bold">
+                                            <EditInput :content="clientInfo.address" :is-edit="isEdit"
+                                                    @change="changeClientAddress"></EditInput>
+                                        </div>
+                                    </div>
+
+                                    <div class="card-text py-10 clearfix">
+                                        <div class="col-md-2 float-left text-right pl-0">备注</div>
+                                        <div class="col-md-4 float-left font-weight-bold">
+                                            <editTextarea :content="clientInfo.desc"
+                                                        :is-edit="isEdit" @change="changeClientDesc"></editTextarea>
+                                        </div>
+                                    </div>
+
+                                    <div class="segmentation-line example"></div>
+
+                                    <div class="card-text py-5 clearfix">
+                                        <div class="col-md-2 float-left text-right pl-0">录入人</div>
+                                        <div class="col-md-4 float-left font-weight-bold">
+                                            {{clientInfo.creator?clientInfo.creator.data.name:''}}
+                                        </div>
+                                        <div class="col-md-2 float-left text-right pl-0">录入时间</div>
+                                        <div class="col-md-4 float-left font-weight-bold">
+                                            {{clientInfo.created_at?clientInfo.created_at:''}}
+                                        </div>
+                                    </div>
+                                    <div class="card-text py-5 clearfix">
+                                        <div class="col-md-2 float-left text-right pl-0">最近更新人</div>
+                                        <div class="col-md-4 float-left font-weight-bold">
+                                        {{clientInfo.last_updated_user?clientInfo.last_updated_user:''}}
+                                        </div>
+                                        <div class="col-md-2 float-left text-right pl-0">最近更新时间</div>
+                                        <div class="col-md-4 float-left font-weight-bold">
+                                            {{clientInfo.updated_at?clientInfo.updated_at:''}}
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="tab-pane animation-fade pb-20 fixed-button-father" id="forum-contact"
+                            role="tabpanel">
+                            <table class="table table-hover is-indent example" data-plugin="animateList" data-animate="fade"
+                                data-child="tr"
+                                data-selectable="selectable">
+                                <tr class="animation-fade"
+                                    style="animation-fill-mode: backwards; animation-duration: 250ms; animation-delay: 0ms;">
+                                    <th class="cell-300" scope="col">联系人</th>
+                                    <!-- <th class="cell-300" scope="col">关联公司</th> -->
+                                    <th class="cell-300" scope="col">关键决策人</th>
+                                    <th class="cell-300" scope="col">联系人电话</th>
+                                    <th class="cell-300" scope="col">职位</th>
+                                    <th class="cell-300" scope="col">负责人</th>
+                                    <th class="cell-300" scope="col">操作</th>
+                                </tr>
+                                <tbody>
+                                    <tr v-for="(contact, index) in clientContactsInfo" :key="index">
+                                        <td>{{ contact.name }}</td>
+                                        <!-- <td>{{ clientInfo.company }}</td> -->
+                                        <td>
+                                            {{ contact.type === 1 ? '否' : '' }}
+                                            {{ contact.type === 2 ? '是' : '' }}
+                                        </td>
+                                        <td>{{ contact.phone }}</td>
+                                        <td>{{ contact.position }}</td>
+                                        <td>{{ clientInfo.principal?clientInfo.principal.data.name:'' }}</td>
+                                        <td>
+                                            <span class="pr-20 d-block float-left pointer-content"
+                                                style="color: #b9b9b9;"
+                                                data-plugin="actionBtn" data-toggle="modal"
+                                                data-target="#addContact"
+                                                @click="changeEditStatus(false,contact)"
+                                            >
+                                                <i class="iconfont icon-bianji2" aria-hidden="true"></i>
+                                            </span>
+                                            <span class="d-block float-left"
+                                                style="width: 1px; height: 14px;border-right: 1px solid #b9b9b9;margin: 3px;"></span>
+                                            <span class="pl-20 d-block float-left pointer-content" style="color: #b9b9b9"
+                                                data-plugin="actionBtn" @click="setDelInfo(contact.id)" data-toggle="modal"
+                                                data-target="#confirmFlag" typeText="删除">
+                                                <i class="iconfont icon-shanchu1" aria-hidden="true"></i>
+                                            </span>
+                                        </td>
+                                    </tr>
+                                </tbody>
+                            </table>
+                            <div class="col-md-1" style="margin: 6rem auto" v-if="clientContactsInfo.length === 0">
+                                <img src="https://res.papitube.com/corvus/images/content-none.png" alt=""
+                                    style="width: 100%">
+                            </div>
+                            <div class="site-action fixed-button" data-plugin="actionBtn" data-toggle="modal"
+                                data-target="#addContact"
+                                @click="changeEditStatus(true)">
+                                <button type="button"
+                                        class="site-action-toggle btn-raised btn btn-success btn-floating waves-effect waves-classic">
+                                    <i class="front-icon iconfont icon-tianjia1 animation-scale-up" aria-hidden="true" style="font-size:30px"></i>
+                                    <i class="back-icon iconfont icon-tianjia1 animation-scale-up" aria-hidden="true" style="font-size:30px"></i>
+                                </button>
+                            </div>
+
+                        </div>
+
+                    </div>
                 </div>
-                <div class="tab-content nav-tabs-animate bg-white col-md-12" v-if="clientInfo">
-                    <div class="tab-pane animation-fade pb-20 active" id="forum-trail" role="tabpanel">
 
-                        <table class="table table-hover is-indent example" data-plugin="animateList" data-animate="fade"
-                               data-child="tr"
-                               data-selectable="selectable">
-                            <tr class="animation-fade"
-                                style="animation-fill-mode: backwards; animation-duration: 250ms; animation-delay: 0ms;">
-                                <th class="cell-300" scope="col">线索务名称</th>
-                                <th class="cell-300" scope="col">销售进展</th>
-                                <th class="cell-300" scope="col">负责人</th>
-                                <th class="cell-300" scope="col">关联公司</th>
-                                <th class="cell-300" scope="col">录入日期</th>
-                            </tr>
-                            <tbody>
-                            <tr v-for="trail in clientTrailsInfo">
-                                <td>
-                                    <router-link :to="{name: 'trails/detail', params: {id: trail.id}}">{{ trail.title
-                                        }}
-                                    </router-link>
-                                </td>
-                                <td>
-                                    <template v-if="trail.progress_status === 1">未确定合作</template>
-                                    <template v-if="trail.progress_status === 2">已确定合作</template>
-                                    <template v-if="trail.progress_status === 0">已拒绝</template>
-                                </td>
-                                <td>{{ trail.principal?trail.principal.data.name: '' }}</td>
-                                <td>{{ trail.client?trail.client.data.company:'' }}</td>
-                                <td>{{ trail.created_at }}</td>
-                            </tr>
-                            </tbody>
-                        </table>
-                        <div class="col-md-1" style="margin: 6rem auto" v-if="clientTrailsInfo.length === 0">
-                            <img src="https://res.papitube.com/corvus/images/content-none.png" alt=""
-                                 style="width: 100%">
-                        </div>
-                    </div>
-                    <div class="tab-pane animation-fade pb-20" id="forum-project" role="tabpanel">
-                        <table class="table table-hover is-indent example" data-plugin="animateList" data-animate="fade"
-                               data-child="tr"
-                               data-selectable="selectable">
-                            <tr class="animation-fade"
-                                style="animation-fill-mode: backwards; animation-duration: 250ms; animation-delay: 0ms;">
-                                <th class="cell-300" scope="col">项目名称</th>
-                                <th class="cell-300" scope="col">项目状态</th>
-                                <th class="cell-300" scope="col">负责人</th>
-                                <th class="cell-300" scope="col">关联公司</th>
-                                <th class="cell-300" scope="col">录入日期</th>
-                            </tr>
-                            <tr v-for="project in clientProjectsInfo">
-                                <td>
-                                    <router-link :to="{name: 'projects/detail', params: {id: project.id}}">{{
-                                        project.title }}
-                                    </router-link>
-                                </td>
-                                <td>
-                                    <template v-if="project.status === 1"><span style="color:#FF9800">进行中</span></template>
-                                    <template v-if="project.status === 2"><span style="color:#4CAF50">已完成</span></template>
-                                    <template v-if="project.status === 3"><span style="color:#9E9E9E">撤单</span></template>
-                                </td>
-                                <td>{{ project.principal?project.principal.data.name:'' }}</td>
-                                <td>{{ project.trail.data.client.data.company}}</td>
-                                <td>{{ project.created_at }}</td>
-                            </tr>
-                        </table>
-                        <div class="col-md-1" v-if="clientProjectsInfo.length === 0" style="margin: 6rem auto">
-                            <img src="https://res.papitube.com/corvus/images/content-none.png" alt=""
-                                 style="width: 100%">
-                        </div>
-                    </div>
-                    <div class="tab-pane animation-fade pb-20 fixed-button-father" id="forum-task" role="tabpanel">
-                        <table class="table table-hover is-indent example" data-plugin="animateList" data-animate="fade"
-                               data-child="tr"
-                               data-selectable="selectable">
-                            <tr class="animation-fade"
-                                style="animation-fill-mode: backwards; animation-duration: 250ms; animation-delay: 0ms;">
-                                <th class="cell-300" scope="col">任务名称</th>
-                                <th class="cell-300" scope="col">任务类型</th>
-                                <th class="cell-300" scope="col">状态</th>
-                                <th class="cell-300" scope="col">负责人</th>
-                                <th class="cell-300" scope="col">截止时间</th>
-                            </tr>
-                            <tbody>
-                            <tr v-for="task in clientTasksInfo">
-                                <td>
-                                    <router-link :to="{name: 'tasks/detail', params: {id: task.id}}">{{ task.title }}
-                                    </router-link>
-                                </td>
-                                <td>{{ task.type?task.type.data.title:'' }}</td>
-                                <td>
-                                    <template v-if="task.status === 1">进行中</template>
-                                    <template v-if="task.status === 2">已完成</template>
-                                    <template v-if="task.status === 3">已停止</template>
-                                </td>
-                                <td>{{ task.principal?task.principal.data.name:'' }}</td>
-                                <td>{{ task.end_at }}</td>
-                            </tr>
-                            </tbody>
-
-                        </table>
-                        <div class="col-md-1" style="margin: 6rem auto" v-if="clientTasksInfo.length === 0">
-                            <img src="https://res.papitube.com/corvus/images/content-none.png" alt=""
-                                 style="width: 100%">
-                        </div>
-                        <div class="site-action fixed-button" data-plugin="actionBtn" data-toggle="modal"
-                             data-target="#addTask">
-                            <button type="button"
-                                    class="site-action-toggle btn-raised btn btn-success btn-floating waves-effect waves-classic">
-                                <i class="front-icon iconfont icon-tianjia1 animation-scale-up" aria-hidden="true" style="font-size:30px"></i>
-                                <i class="back-icon iconfont icon-tianjia1 animation-scale-up" aria-hidden="true" style="font-size:30px"></i>
-                            </button>
-                        </div>
-                    </div>
-                    <div class="tab-pane animation-fade pb-20" id="forum-base" role="tabpanel">
-                        <div class="card" v-if="clientInfo.company">
+                <div class="panel" style="width: calc(34% - 15px);">
+                    <div class="col-md-12">
+                        <div class="card col-md-12">
                             <div class="card-header card-header-transparent card-header-bordered">
-                                <div class="float-left font-weight-bold third-title">客户详情</div>
-                                <div class="float-right pointer-content" v-show="!isEdit">
-                                    <i class="iconfont icon-bianji2" aria-hidden="true" @click="editBaseInfo"></i>
-                                </div>
-                                <div class="float-right" v-show="isEdit">
-                                    <button class="btn btn-sm btn-white btn-pure" @click="cancelEdit">取消</button>
-                                    <button class="btn btn-primary" @click="changeClientBaseInfo">确定</button>
-                                </div>
+                                <h5>客户跟进</h5>
                             </div>
                             <div class="card-block">
-                                <div class="card-text py-5 clearfix">
-                                    <div class="col-md-1 float-left text-right pl-0">公司名称</div>
-                                    <div class="col-md-5 float-left font-weight-bold">
-                                        <EditInput :content="clientInfo.company" :is-edit="isEdit"
-                                                   @change="changeClientName"></EditInput>
-                                    </div>
-                                    <div class="col-md-1 float-left text-right pl-0">级别</div>
-                                    <div class="col-md-5 float-left font-weight-bold">
-                                        <EditSelector :options="clientLevelArr" :is-edit="isEdit"
-                                                      :content="clientInfo.grade"
-                                                      @change="changeClientLevel"></EditSelector>
-                                    </div>
+                                <div class="col-md-12 pl-0">
+                                    <TaskFollowUp :follow-type="'客户'" :trailId='clientId'
+                                                trailType='clients'></TaskFollowUp>
                                 </div>
-                                <div class="card-text py-5 clearfix">
-                                    <div class="col-md-1 float-left text-right pl-0">负责人</div>
-                                    <div class="col-md-5 float-left font-weight-bold">
-
-                                        <EditInput-selector :is-edit="isEdit" :placeholder="'请选择负责人'"
-                                                            @change="selectPrincipal"
-                                                            :select-type="'principal'"></EditInput-selector>
-                                    </div>
-                                </div>
-                                <div class="card-text py-5 clearfix">
-                                    <div class="col-md-1 float-left text-right pl-0">地区</div>
-                                    <div class="col-md-5 float-left font-weight-bold region">
-                                        <template v-if="!isEdit">
-                                            {{clientInfo.province}}{{clientInfo.city}}{{clientInfo.district}}
-                                        </template>
-                                        <template v-else>
-                                            <RegionSelector :provinceVal="clientInfo.province" :cityVal="clientInfo.city" :areaVal="clientInfo.district" @setAreaData="changeAreaData" />
-                                        </template>
-
-                                    </div>
-                                    <div class="col-md-1 float-left text-right pl-0">详细地址</div>
-                                    <div class="col-md-5 float-left font-weight-bold">
-                                        <EditInput :content="clientInfo.address" :is-edit="isEdit"
-                                                   @change="changeClientAddress"></EditInput>
-                                    </div>
-                                </div>
-
-                                <div class="card-text py-5 clearfix">
-                                    <div class="col-md-1 float-left text-right pl-0">规模</div>
-                                    <div class="col-md-5 float-left font-weight-bold">
-                                        <EditSelector :options="clientScaleArr" :is-edit="isEdit"
-                                                      :content="clientInfo.size"
-                                                      @change="changeClientScale"></EditSelector>
-                                    </div>
-                                    <div class="col-md-1 float-left text-right pl-0">备注</div>
-                                    <div class="col-md-5 float-left font-weight-bold">
-                                        <editTextarea :content="clientInfo.desc"
-                                                      :is-edit="isEdit" @change="changeClientDesc"></editTextarea>
-                                    </div>
-                                </div>
-
-                                <div class="segmentation-line example"></div>
-
-                                <div class="card-text py-5 clearfix">
-                                    <div class="col-md-1 float-left text-right pl-0">录入人</div>
-                                    <div class="col-md-5 float-left font-weight-bold">
-                                        {{clientInfo.creator?clientInfo.creator.data.name:''}}
-                                    </div>
-                                    <div class="col-md-1 float-left text-right pl-0">录入时间</div>
-                                    <div class="col-md-5 float-left font-weight-bold">
-                                        {{clientInfo.created_at?clientInfo.created_at:''}}
-                                    </div>
-                                </div>
-                                <div class="card-text py-5 clearfix">
-                                    <div class="col-md-1 float-left text-right pl-0">最近更新人</div>
-                                    <div class="col-md-5 float-left font-weight-bold">
-                                    {{clientInfo.last_updated_user?clientInfo.last_updated_user:''}}
-                                    </div>
-                                    <div class="col-md-1 float-left text-right pl-0">最近更新时间</div>
-                                    <div class="col-md-5 float-left font-weight-bold">
-                                        {{clientInfo.updated_at?clientInfo.updated_at:''}}
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                    <div class="tab-pane animation-fade pb-20 fixed-button-father" id="forum-contact"
-                         role="tabpanel">
-                        <table class="table table-hover is-indent example" data-plugin="animateList" data-animate="fade"
-                               data-child="tr"
-                               data-selectable="selectable">
-                            <tr class="animation-fade"
-                                style="animation-fill-mode: backwards; animation-duration: 250ms; animation-delay: 0ms;">
-                                <th class="cell-300" scope="col">联系人</th>
-                                <!-- <th class="cell-300" scope="col">关联公司</th> -->
-                                <th class="cell-300" scope="col">关键决策人</th>
-                                <th class="cell-300" scope="col">联系人电话</th>
-                                <th class="cell-300" scope="col">职位</th>
-                                <th class="cell-300" scope="col">负责人</th>
-                                <th class="cell-300" scope="col">操作</th>
-                            </tr>
-                            <tbody>
-                            <tr v-for="contact in clientContactsInfo">
-                                <td>{{ contact.name }}</td>
-                                <!-- <td>{{ clientInfo.company }}</td> -->
-                                <td>
-                                    {{ contact.type === 1 ? '否' : '' }}
-                                    {{ contact.type === 2 ? '是' : '' }}
-                                </td>
-                                <td>{{ contact.phone }}</td>
-                                <td>{{ contact.position }}</td>
-                                <td>{{ clientInfo.principal?clientInfo.principal.data.name:'' }}</td>
-                                <td>
-                                    <span class="pr-20 d-block float-left pointer-content"
-                                          style="color: #b9b9b9;"
-                                          data-plugin="actionBtn" data-toggle="modal"
-                                          data-target="#addContact"
-                                          @click="changeEditStatus(false,contact)"
-                                    >
-                                        <i class="iconfont icon-bianji2" aria-hidden="true"></i>
-                                    </span>
-                                    <span class="d-block float-left"
-                                          style="width: 1px; height: 14px;border-right: 1px solid #b9b9b9;margin: 3px;"></span>
-                                    <span class="pl-20 d-block float-left pointer-content" style="color: #b9b9b9"
-                                          data-plugin="actionBtn" @click="setDelInfo(contact.id)" data-toggle="modal"
-                                          data-target="#confirmFlag" typeText="删除">
-                                        <i class="iconfont icon-shanchu1" aria-hidden="true"></i>
-                                    </span>
-                                </td>
-                            </tr>
-                            </tbody>
-                        </table>
-                        <div class="col-md-1" style="margin: 6rem auto" v-if="clientContactsInfo.length === 0">
-                            <img src="https://res.papitube.com/corvus/images/content-none.png" alt=""
-                                 style="width: 100%">
-                        </div>
-                        <div class="site-action fixed-button" data-plugin="actionBtn" data-toggle="modal"
-                             data-target="#addContact"
-                             @click="changeEditStatus(true)">
-                            <button type="button"
-                                    class="site-action-toggle btn-raised btn btn-success btn-floating waves-effect waves-classic">
-                                <i class="front-icon iconfont icon-tianjia1 animation-scale-up" aria-hidden="true" style="font-size:30px"></i>
-                                <i class="back-icon iconfont icon-tianjia1 animation-scale-up" aria-hidden="true" style="font-size:30px"></i>
-                            </button>
-                        </div>
-
-                    </div>
-
-                </div>
-            </div>
-
-            <div class="panel">
-                <div class="col-md-12">
-                    <div class="card col-md-12">
-                        <div class="card-header card-header-transparent card-header-bordered">
-                            <h5>客户跟进</h5>
-                        </div>
-                        <div class="card-block">
-                            <div class="col-md-7 pl-0">
-                                <TaskFollowUp :follow-type="'客户'" :trailId='clientId'
-                                              trailType='clients'></TaskFollowUp>
                             </div>
                         </div>
                     </div>
@@ -968,12 +969,15 @@
                 })
                 this.$store.commit('changeNewParticipantsInfo', [])
             },
+            linkTo (url) {
+                this.$router.push(url)
+            }
         }
     }
 </script>
 
 <style lang="scss" scoped>
- .region {
+    .region {
         /deep/ .page-content {
             padding: 0;
             .modal-body {
@@ -983,5 +987,18 @@
                 }
             }
         }
+    }
+    table tbody tr {
+       cursor: pointer;
+    }
+
+    .modal-body .example {
+        display: flex;
+        align-items: center;
+    }
+
+    .card-block .card-text {
+        display: flex;
+        align-items: center;
     }
 </style>

@@ -49,12 +49,10 @@
                             <th class="cell-300" scope="col">负责人</th>
                         </tr>
                         <tbody>
-                        <tr v-for="trail in trailsInfo" :key='trail.id'>
+                        <tr v-for="trail in trailsInfo" :key='trail.id' @click="goDetail(trail.id)">
                             <!-- trailFilter?filterData:trailsInfo -->
                             <td class="pointer-content">
-                                <router-link :to="{name:'trails/detail', params: {id: trail.id}}">
-                                    {{ trail.title }}
-                                </router-link>
+                                {{ trail.title }}
                             </td>
 
                             <td>{{ trail.client.data.company }}</td>
@@ -127,7 +125,7 @@
                                        v-model="trailName">
                             </div>
                         </div>
-                        <div class="example trial-origin">
+                        <div class="my-20 trial-origin clearfix">
                             <TrailOrigin class="require" :trailType='trailType'
                                          typeName='线索' alwaysShow='true'
                                          @changeTrailOrigin='changeTrailOrigin'
@@ -144,7 +142,7 @@
                         <div class="example">
                             <div class="col-md-2 text-right float-left require">负责人</div>
                             <div class="col-md-10 float-left pl-0">
-                                <input-selectors :placeholder="'请选择负责人'" otherslot='otherslot'
+                                <input-selectors :placeholder="'请选择负责人'"
                                                  @change="changePrincipal"
                                                  :propSelectMemberName='$store.state.otherSlot.data?$store.state.otherSlot.data.name:currentUser.name'></input-selectors>
                             </div>
@@ -233,6 +231,7 @@
     import fetch from '../../assets/utils/fetch.js'
     import config from '../../assets/js/config'
     import {mapState} from 'vuex'
+    import Cookies from 'js-cookie'
 
     export default {
         data: function () {
@@ -642,6 +641,13 @@
             },
 
             changeTrailType: function (value) {
+                if (value === 3) {
+                    if (Cookies.get('companyType') === '泰洋川禾') {
+                        value = 3;
+                    } else {
+                        value = 4;
+                    }
+                }
                 this.trailType = value;
                 $('#addTrail').modal('show')
                 setTimeout(() => {
@@ -660,8 +666,10 @@
                 this.fetchData.principal_ids = ''
                 this.fetchHandler('get', '/trails/filter')
                 this.$refs.principal_id.setValue('')
+            },
+            goDetail(id) {
+                this.$router.push({path: '/trails/' + id})
             }
-
         }
     }
 </script>
@@ -677,6 +685,15 @@
     }
     .trial-origin .require::before {
         margin-left: 9px;
+        line-height: 34px;
+    }
+    table tbody tr {
+        cursor: pointer;
+    }
+
+    .modal-body .example {
+        display: flex;
+        align-items: center;
     }
 </style>
 

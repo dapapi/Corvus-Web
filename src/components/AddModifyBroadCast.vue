@@ -44,13 +44,13 @@
                         <br/>
                         <div class="form-group row col-sm-12">
                             <label for="" class="col-sm-2 col-form-label"><strong>标题内容</strong></label>
-                                <input type="text" class="form-control col-sm-10" id="" placeholder="输入标题" v-model="title">
+                            <input type="text" class="form-control col-sm-10" id="" placeholder="输入标题" v-model="title">
                         </div>
                         <div class="form-group row col-sm-12">
                             <label for="" class="col-sm-2 col-form-label"><strong>公告范围</strong></label>
-                            <selectors class="scopeSelector" ref='scopeSelector' :options="departments" @valuelistener="changeDepartments"  multiple='true' :placeholder='"请选择范围"'></selectors>
-                            <label for="" class="offset-sm-1 col-sm-2 col-form-label"><strong>选择分类</strong></label>
-                            <selectors ref='classifySelector' :options="classifyArr" @change="changeClassify" placeholder='请选择类型' ></selectors>
+                            <selectors class="scopeSelector col-sm-4" ref='scopeSelector' :options="departments" @valuelistener="changeDepartments"  multiple='true' :placeholder='"请选择范围"'></selectors>
+                            <label for="" class="col-sm-2 col-form-label text-right"><strong>选择分类</strong></label>
+                            <selectors ref='classifySelector' class="col-sm-4" :options="classifyArr" @change="changeClassify" placeholder='请选择类型' ></selectors>
                         </div>
                         <div class="summernote" id="summernote"></div>
                         <File-Uploader class="upload" url="javascript:void()" @changePlus="fileUploaded" :givenfilename='givenfilename'>上传附件</File-Uploader>
@@ -196,7 +196,7 @@ export default {
             if(this.text){
                 $('#summernote').summernote('code', this.text);
             }else{
-                $('#summernote').summernote('code', "输入内容...");
+                // $('#summernote').summernote('code', "输入内容...");
             }
         },
         //获取富文本代码

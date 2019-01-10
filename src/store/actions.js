@@ -27,6 +27,7 @@ export default {
         } else if (params.type === 'bill'){
             data.commit('changeBillInfo', params.data)
         }else {
+            // alert(111)
             data.commit('changeNewParticipantsInfo', params.data);
         }
         

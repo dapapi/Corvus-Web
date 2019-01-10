@@ -1,6 +1,6 @@
 <template>
     <div class="approval-text-container col-md-12">
-        <p class="pl-30">{{data[0].control_title}}</p>
+        <p class="pl-30">{{consdata[0].control_title}}</p>
         <!-- <span class="col-md-2 text-right">{{title || data[0].control_title || '测试文本输入框'}}</span>
         <input type="text" v-model="texdtContent" class="form-control col-md-10" placeholder="请输入"> -->
     </div>    
@@ -8,7 +8,7 @@
 
 <script>
 export default {
-    props:['title','n','data'],
+    props:['title','n','consdata'],
     data(){
         return {
             

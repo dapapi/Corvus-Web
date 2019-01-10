@@ -96,10 +96,9 @@
                                 <th class="cell-300" scope="col">截止时间</th>
                             </tr>
                             <tbody>
-                            <tr v-for="(task, index) in tasksInfo" :key="index">
+                            <tr v-for="(task, index) in tasksInfo" :key="index" @click="goDetail(task.id)">
                                 <td class="pointer-content">
-                                    <router-link :to="{name:'tasks/detail', params: {id: task.id}}">{{ task.title }}
-                                    </router-link>
+                                    {{ task.title }}
                                 </td>
                                 <td>{{task.resource ? task.resource.data.resource.data.title : ''}}
                                     <template v-if="task.resource && task.resource.data.resourceable && task.resource.data.resourceable.data.name">
@@ -245,7 +244,7 @@
                         <div class="example">
                             <div class="col-md-2 text-right float-left">任务说明</div>
                             <div class="col-md-10 float-left pl-0">
-                <textarea class="form-control"
+                        <textarea class="form-control"
                           name="taskDescription"
                           id
                           cols="30"
@@ -602,6 +601,9 @@
                 })
                 this.$store.commit('changeNewParticipantsInfo', [])
             },
+            goDetail (id) {
+                this.$router.push('/tasks/' + id)
+            }
         }
     };
 </script>
@@ -618,5 +620,13 @@
             left: 0;
             display: inline-block;
         }
+    }
+    table tbody tr {
+       cursor: pointer;
+    }
+
+    .modal-body .example {
+        display: flex;
+        align-items: center;
     }
 </style>

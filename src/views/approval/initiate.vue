@@ -1,5 +1,5 @@
 <template>
-    <div class="" style="background-color:#f3f4f5">
+  <div class="page-main" style="background-color:#f3f4f5">
       <div class="page-header page-header-bordered mb-0">
         <h1 class="page-title">发起审批</h1>
       </div>

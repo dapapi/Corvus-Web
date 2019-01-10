@@ -1,19 +1,20 @@
 <template>
     <div class="tree-view-item">
        <div class="level" :class="`level-${menu.level}`" v-for="menu in menus" :key="menu.id">
-           <div v-if="menu.type ==='link'" :class="isSelected == menu.id?'selected':''">
-               <router-link class="link" v-bind:to="menu.url" @click.native="toggle(menu)">
-                   <span v-if="menu.level>1" class="icon md-file-text font-size-18 mr-10 ml-15"></span>
+           <div class="list-group-item" v-if="menu.type ==='link'" :class="isSelected == menu.id?'selected':''">
+               <router-link class="link" v-bind:to="menu.url" @click.native="toggle(menu)" :class="menu.level>1?'pl-15':''">
+                   <span v-if="isShow" class="icon md-file-text font-size-18 mr-10 ml-15" ></span>
                    {{menu.name}}
-                   <span v-if="menu.name == '我的消息'&&unReadMsg>0" class="unRead">{{unReadMsg}}</span>
+                   <span v-if="menu.num>0" class="unRead">{{menu.num}}</span>
+                   
                 </router-link>
            </div>
            <div v-if="menu.type === 'button'">
-                <div class="button heading" :class="{selected:isSelected == menu.id,expand:isExpanded.includes(menu.id)}" @click="toggle(menu)">
-                    <i class="icon md-caret-right mr-10 font-size-20"></i>
+                <div class="list-group-item button heading" :class="{selected:isSelected == menu.id,expand:isExpanded.includes(menu.id)}" @click="toggle(menu)" >
+                    <i class="icon md-caret-right mr-10 font-size-20" style="vertical-align: middle;"></i>
                     <span>{{menu.name}}
                     </span>
-
+                    <span v-if="menu.name=='我的消息'&&unReadMsg>0" class="unRead first">{{unReadMsg}}</span>
                 </div>
                 <transition name="fade">
                     <div class="heading-children" v-if="menu.subMenu && isExpanded.includes(menu.id)">
@@ -35,6 +36,7 @@ export default {
         return {
             canRun:true,
             urlRoute:'',
+            isShow:false
         }
     },
     computed:{
@@ -134,7 +136,7 @@ export default {
     }
     .link,.button{
         display: block;
-        padding:10px 15px;
+        /* padding:10px 15px; */
         transition: background-color 0.2s ease-in-out 0s, color 0.3s ease-in-out 0.1s;
         -moz-user-select: none;
         -webkit-user-select: none;
@@ -147,8 +149,8 @@ export default {
         position: relative;
     }
     .link:hover,.button:hover {
-        /* color: #1976d2; */
-        background-color: #eee;
+        
+        /* background-color: #eee; */
         cursor: pointer;
     }
     .icon {
@@ -200,8 +202,13 @@ export default {
         position: relative;
         bottom:1px;
         position: absolute;
-        top: 14px;
+        top: 3px;
         right: 10px;
+    }
+    .first{
+        position:absolute;
+        top:15px;
+        right:45px;
     }
 </style>
 

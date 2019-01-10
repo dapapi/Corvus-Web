@@ -38,12 +38,11 @@
                                         <div v-for="(value, key, index) in normalUsers" :key="index">
                                             <div class="letter">{{ key }}</div>
                                             <div class="users" v-for="(user, _index) in value"
-                                                v-show="user.name.indexOf(searchKeyWord) > -1"
-                                                :class="checkedIndex === (index + '' + _index) ? 'checked' : ''"
-                                                @click="handelMemberClick(index + '' + _index, user)"
-                                                :key='user.name+Math.random()'>
+                                                 v-show="user.name.indexOf(searchKeyWord) > -1"
+                                                 :class="checkedIndex === (index + '' + _index) ? 'checked' : ''"
+                                                 @click="handelMemberClick(index + '' + _index, user)"
+                                                 :key='user.name+Math.random()'>
                                                 <a class="avatar" href="javascript:void(0)">
-                                                    <!-- <img src="https://res.papitube.com/no-icon.png" alt="..."> -->
                                                     <Avatar :imgUrl="user.icon_url" style="margin-right: 10px; "/>
                                                 </a>
                                                 <span class="pl-1 user-name">{{ user.name }}</span>
@@ -71,125 +70,106 @@
             </div>
         </div>
         <div class="page-main" style="background-color:#f3f4f5">
+            <div class="panel" style="margin-bottom: 0;">
+                <div class="col-md-12 p-0 top-bg">
+                    <img src="https://res-crm.papitube.com/image/address_bg.jpg" alt=""/>
+                </div>
+                <div class="col-md-12" style="margin-top: -70px;">
+                    <div class="py-25 px-25 clearfix position-relative">
+                        <div class="col-md-2 float-left head-img">
+                            <Avatar :imgUrl="personalInfo.icon_url"
+                                    style="width: 140px; height: 140px; font-size: 50px; font-weight: 400;"/>
+                        </div>
+                        <div class="col-md-10 float-left position-absolute" style="bottom: 25px;right: 0;">
+                            <div class="clearfix mb-20">
+                                <div class="col-md-4 float-left">
+                                    <div class="float-left col-md-6">
+                                        <i class="iconfont icon-yonghu pr-2"></i>
+                                        <span class="font-weight-bold">姓名</span>
+                                    </div>
+                                    <div class="float-left col-md-6 pl-0">
+                                        {{ personalInfo.name ? personalInfo.name : ''}}
+                                    </div>
+                                </div>
+                                <div class="col-md-4 float-left">
+                                    <div class="float-left col-md-6">
+                                        <i class="iconfont icon-gongwenbao1 pr-2"></i>
+                                        <span class="font-weight-bold">职位</span>
+                                    </div>
+                                    <div class="float-left col-md-6 pl-0">
+                                        {{ personalInfo.position ? personalInfo.position : ''}}
+                                    </div>
+                                </div>
+                                <div class="col-md-4 float-left">
+                                    <div class="float-left col-md-6">
+                                        <i class="iconfont icon-hierarchy pr-2"></i>
+                                        <span class="font-weight-bold">部门</span>
+                                    </div>
+                                    <div class="float-left col-md-6 pl-0">
+                                        {{ personalInfo.position ? personalInfo.position : ''}}
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="clearfix">
+                                <div class="col-md-4 float-left">
+                                    <div class="float-left col-md-6">
+                                        <i class="iconfont icon-weidu pr-2"></i>
+                                        <span class="font-weight-bold">邮箱</span>
+                                    </div>
+                                    <div class="float-left col-md-6 pl-0">
+                                        {{ personalInfo.work_email ? personalInfo.work_email : ''}}
+                                    </div>
+                                </div>
+                                <div class="col-md-4 float-left">
+                                    <div class="float-left col-md-6">
+                                        <i class="iconfont icon-dianhua pr-2"></i>
+                                        <span class="font-weight-bold">电话</span>
+                                    </div>
+                                    <div class="float-left col-md-6 pl-0">
+                                        {{ personalInfo.phone ? personalInfo.phone : ''}}
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
             <div class="page-content container-fluid">
-                <div class="panel">
-                    <div class="col-md-12">
-                        <div class="py-25 clearfix position-relative">
-                            <div class="col-md-2 float-left head-img">
-                                <Avatar :imgUrl="personalInfo.icon_url" style="width: 90px; height: 90px; font-size: 24px;" />
-                            </div>
-                            <div class="col-md-10 float-left position-absolute" style="bottom: 25px;right: 0;">
-                                <div class="clearfix mb-20">
-                                    <div class="col-md-4 float-left">
-                                        <div class="float-left col-md-6">
-                                            <i class="iconfont icon-yonghu pr-2"></i>
-                                            <span class="font-weight-bold">姓名</span>
-                                        </div>
-                                        <div class="float-left col-md-6 pl-0">{{ personalInfo.name ? personalInfo.name : ''}}</div>
-                                    </div>
-                                    <div class="col-md-4 float-left">
-                                        <div class="float-left col-md-6">
-                                            <i class="iconfont icon-gongwenbao1 pr-2"></i>
-                                            <span class="font-weight-bold">职位</span>
-                                        </div>
-                                        <div class="float-left col-md-6 pl-0">{{ personalInfo.position ? personalInfo.position : ''}}</div>
-                                    </div>
-                                    <div class="col-md-4 float-left">
-                                        <div class="float-left col-md-6">
-                                            <i class="iconfont icon-hierarchy pr-2"></i>
-                                            <span class="font-weight-bold">部门</span>
-                                        </div>
-                                        <div class="float-left col-md-6 pl-0">{{ personalInfo.position ? personalInfo.position : ''}}</div>
-                                    </div>
+                <div class="clearfix">
+                    <div class="panel mb-0 task-panel">
+                        <div class="mx-30 py-10 title-wrap">
+                            <h5>任务</h5>
+                        </div>
+                        <div class="page-content tab-content nav-tabs-animate overflowY py-0">
+                            <div class="list-wrap" v-for="(item, index) in tasks" :key="index">
+                                <div class="flex">
+                                    <Avatar class="small-avatar" :imgUrl="item.principal.data.icon_url"/>
+                                    {{ item.title }}
                                 </div>
-                                <div class="clearfix">
-                                    <div class="col-md-4 float-left">
-                                        <div class="float-left col-md-6">
-                                            <i class="iconfont icon-weidu pr-2"></i>
-                                            <span class="font-weight-bold">邮箱</span>
-                                        </div>
-                                        <div class="float-left col-md-6 pl-0">{{ personalInfo.work_email ? personalInfo.work_email : ''}}</div>
-                                    </div>
-                                    <div class="col-md-4 float-left">
-                                        <div class="float-left col-md-6">
-                                            <i class="iconfont icon-dianhua pr-2"></i>
-                                            <span class="font-weight-bold">电话</span>
-                                        </div>
-                                        <div class="float-left col-md-6 pl-0">{{ personalInfo.phone ? personalInfo.phone : ''}}</div>
-                                    </div>
-                                    <!-- <div class="col-md-4 float-left">
-                                        <div class="float-left col-md-6">
-                                            <i class="iconfont icon-Wechat pr-2"></i>
-                                            <span class="font-weight-bold">WeChat</span>
-                                        </div>
-                                        <div class="float-left col-md-6 pl-0">XXX</div>
-                                    </div> -->
+                                <div class="">{{ item.start_at }}</div>
+                            </div>
+                            <div class="col-md-3" style="margin: 6rem auto" v-if="tasks.length === 0">
+                                <img src="https://res.papitube.com/corvus/images/content-none.png" alt=""
+                                     style="width: 100%">
+                            </div>
+                        </div>
+                    </div>
+                    <div class="panel mb-0 schedule-panel">
+                        <div class="mx-30 py-10 title-wrap">
+                            <h5>最近日程</h5>
+                        </div>
+                        <div class="page-content tab-content nav-tabs-animate overflowY py-0">
+                            <div class="list-wrap" v-for="(item, index) in schedules" :key="index">
+                                <div class="flex">
+                                    <Avatar class="small-avatar" :imgUrl="item.creator.data.icon_url"/>
+                                    {{ item.title }}
                                 </div>
+                                <div class="">{{ item.end_at }}</div>
                             </div>
-                        </div>
-                    </div>
-                </div>
-                <div class="panel task-panel">
-                    <div class="px-30 py-10 title-wrap">
-                        <h5>任务</h5>
-                    </div>
-                    <div class="col-md-12">
-                        <ul class="nav nav-tabs nav-tabs-line" role="tablist">
-                            <li class="nav-item" role="presentation">
-                                <a class="nav-link active" data-toggle="tab"
-                                   href="#forum-tasking"
-                                   aria-controls="forum-base"
-                                   aria-expanded="true" role="tab">正在进行</a>
-                            </li>
-                            <li class="nav-item" role="presentation">
-                                <a class="nav-link" data-toggle="tab"
-                                   href="#forum-task"
-                                   aria-controls="forum-present"
-                                   aria-expanded="false" role="tab">待完成</a>
-                            </li>
-                            <li class="nav-item" role="presentation">
-                                <a class="nav-link" data-toggle="tab"
-                                   href="#forum-task-finish"
-                                   aria-controls="forum-present"
-                                   aria-expanded="false" role="tab">已完成</a>
-                            </li>
-                        </ul>
-                    </div>
-                    <div class="page-content tab-content nav-tabs-animate">
-                        <div class="tab-pane animation-fade active" id="forum-tasking" role="tabpanel">
-                            <div class="clearfix pb-10">
-                                <div class="col-md-6 float-left pl-0">任务1</div>
-                                <div class="col-md-6 float-left">任务1所在项目</div>
+                            <div class="col-md-3" style="margin: 6rem auto" v-if="schedules.length === 0">
+                                <img src="https://res.papitube.com/corvus/images/content-none.png" alt=""
+                                     style="width: 100%">
                             </div>
-                            <div class="clearfix pb-10">
-                                <div class="col-md-6 float-left pl-0">任务2</div>
-                                <div class="col-md-6 float-left">任务2所在项目</div>
-                            </div>
-                            <div class="clearfix pb-10">
-                                <div class="col-md-6 float-left pl-0">任务3</div>
-                                <div class="col-md-6 float-left">任务3所在项目</div>
-                            </div>
-                        </div>
-                        <div class="tab-pane animation-fade" id="forum-task" role="tabpanel">
-                            待完成
-                        </div>
-                        <div class="tab-pane animation-fade" id="forum-task-finish" role="tabpanel">
-                            已完成
-                        </div>
-                    </div>
-                </div>
-                <div class="panel schedule-panel">
-                    <div class="px-30 py-10 title-wrap">
-                        <h5>最近日程</h5>
-                    </div>
-                    <div class="page-content tab-content nav-tabs-animate">
-                        <div class="clearfix pb-10">
-                            <div class="col-md-6 float-left pl-0">日程1</div>
-                            <div class="col-md-6 float-left">2018-09-23 11：22</div>
-                        </div>
-                        <div class="clearfix pb-10">
-                            <div class="col-md-6 float-left pl-0">日程2</div>
-                            <div class="col-md-6 float-left">2018-09-23 11：22</div>
                         </div>
                     </div>
                 </div>
@@ -203,7 +183,7 @@
 <script>
     import fetch from '../../assets/utils/fetch.js'
     import Cookies from 'js-cookie'
-    import { mapState } from 'vuex'
+    import {mapState} from 'vuex'
 
     export default {
         name: 'portal',
@@ -213,13 +193,17 @@
                 normalUsers: '',
                 personalInfo: {},
                 checkedIndex: '',
+                tasks: [], // 任务
+                schedules: [], // 日程
             }
         },
         mounted() {
+            const id = JSON.parse(Cookies.get('user')).id
             fetch('get', '/departments/crew').then(res => {
                 this.normalUsers = res;
-                this.setDefaultInfo(JSON.parse(Cookies.get('user')).id)
+                this.setDefaultInfo(id)
             })
+            this.getSchedules(id)
         },
         computed: {
             ...mapState([
@@ -230,9 +214,10 @@
             memberChange() {
                 this.setDefaultInfo(this.$store.state.newPrincipalInfo.id)
             },
-            handelMemberClick (index, data) {
+            handelMemberClick(index, data) {
                 this.checkedIndex = index
                 this.personalInfo = data
+                this.getSchedules(data.user_id)
             },
             // 设置默认信息
             setDefaultInfo(id) {
@@ -250,10 +235,12 @@
                 }
             },
             // 日程
-            getSchedules () {
-                // todo
+            getSchedules(id) {
+                fetch('get', `/users/${id}?include=tasks,schedules.creator`).then(res => {
+                    this.tasks = res.data.tasks.data
+                    this.schedules = res.data.schedules.data
+                })
             }
-            // 任务  todo
         },
     }
 </script>
@@ -286,34 +273,72 @@
     #forum-team {
         padding-bottom: 40px;
     }
+
     .user-name {
         color: #333;
     }
+
     .users {
         padding: 10px 0 10px 40px;
     }
+
     .users:hover {
-        background: rgba(40,53,147,.03);
+        background: rgba(40, 53, 147, .03);
     }
+
     .letter {
         color: #cacaca;
         padding: 4px 0 4px 44px;
     }
-    .mt-20{
+
+    .mt-20 {
         padding: 0 30px 12px;
     }
+
     .checked {
-        background: rgba(40,53,147,.03);
+        background: rgba(40, 53, 147, .03);
     }
+
     .checked .user-name {
         color: #3f51b5;
     }
+
     .head-img img {
         width: 117px;
         height: 130px;
     }
+
     #forum-department {
         padding-bottom: 30px;
+    }
+
+    .small-avatar {
+        margin-right: 10px;
+    }
+
+    .top-bg {
+        width: 100%;
+    }
+
+    .top-bg img {
+        width: 100%;
+    }
+
+    .overflowY {
+        height: calc(100vh - 400px);
+        overflow-y: auto;
+    }
+
+    .list-wrap {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        margin: 20px 0;
+    }
+
+    .flex {
+        display: flex;
+        align-items: center;
     }
 </style>
 

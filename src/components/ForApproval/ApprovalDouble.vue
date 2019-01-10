@@ -1,7 +1,7 @@
 <template>
 <div class="col-md-12 p-0">
     <div class="approval-text-container col-md-12">
-        <span class="col-md-2 text-right">{{title || data[0].control_title || '测试文本输入框'}}</span>
+        <span class="col-md-2 text-right">{{title || consdata[0].control_title || '测试文本输入框'}}</span>
          <selectors :options="starsArr" @valuelistener="changeTargetStars" :multiple="true"
                                            :placeholder="formid===3?'请选择签约艺人':'请选择解约艺人'"></selectors>
         <!-- <input type="text" v-model="textContent" class="form-control col-md-5" placeholder="请输入"> -->
@@ -16,7 +16,7 @@
     import config from '../../assets/js/config'
 
 export default {
-    props:['title','n','data','formid'],
+    props:['title','n','consdata','formid'],
     data(){
         return {
             textContent:'',
@@ -50,8 +50,8 @@ export default {
         },
         refresh(){
             this.$nextTick(() => {
-                    $('.selectpicker').selectpicker('render');
-                    $('.selectpicker').selectpicker('refresh');
+                $('.selectpicker').selectpicker('render');
+                $('.selectpicker').selectpicker('refresh');
             })
         }
     },

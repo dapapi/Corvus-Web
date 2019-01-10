@@ -2,10 +2,6 @@
     <div class="upload">
         <input type="file" @change="uploadFile"/>
         <slot></slot>
-        <div class="test" v-if="imgExt.indexOf(fileExt) == -1">
-            <div :style="{ backgroundImage: 'url(' + imageUrl + ')' }" class="ext"></div>
-            <span>{{fileInfo.name}}</span>
-        </div>
     </div>
 </template>
 

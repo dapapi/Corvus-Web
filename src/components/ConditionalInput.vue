@@ -12,7 +12,7 @@
             </div>
         </template>
         <template v-else>
-            <span>{{ options.find(item => item.value == content).name }}</span> 
+            <span v-if="content">{{ options.find(item => item.value == content).name }}</span> 
             <span v-if="inputContent">- {{ inputContent }}</span>
         </template>
     </div>
@@ -47,6 +47,8 @@
                     let _this = this;
                     setTimeout(function () {
                         _this.$refs.conditionSelector.setValue(_this.content)
+                        _this.isInputShow = _this.content == _this.condition ? true : false
+                        _this.context = _this.inputContent;
                     }, 100)
                 }
             }

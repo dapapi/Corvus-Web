@@ -82,6 +82,7 @@
 
 <script>
 import fetch from "../../assets/utils/fetch";
+import { mapActions } from 'vuex'
 
 export default {
     name: 'StaffApply',
@@ -97,6 +98,9 @@ export default {
     },
 
     methods: {
+        ...mapActions([
+            'getDepartment'
+        ]),
         // 获取申请列表
         getApplyList () {
             fetch('get', `/entry?entry_status=${this.status}`).then(res => {
@@ -111,6 +115,7 @@ export default {
             fetch('put', `/audit/${userId}`, params).then(res => {
                 toastr.success('已同意！')
                 this.getApplyList()
+                this.getDepartment()
             })
         },
         // 改变显示的列表状态

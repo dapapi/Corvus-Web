@@ -5,6 +5,38 @@ const backRouter = [{
     component: () => import('./views/management/index.vue'),
     children: [
         {
+            path: '/apps',
+            component: () => import('./views/management/apps.vue'),
+        },
+        {
+            path: '/apps/talent',
+            component: () => import('./views/management/talent.vue'),
+        },
+        {
+            path: '/apps/clue',
+            component: () => import('./views/management/clue.vue'),
+        },
+        {
+            path: '/apps/customer',
+            component: () => import('./views/management/customer.vue'),
+        },
+        {
+            path: '/apps/project',
+            component: () => import('./views/management/project.vue'),
+        },
+        {
+            path: '/apps/task',
+            component: () => import('./views/management/task.vue'),
+        },
+        {
+            path: '/apps/calendar',
+            component: () => import('./views/management/calendar.vue'),
+        },
+        {
+            path: '/apps/approval',
+            component: () => import('./views/management/approval.vue'),
+        },
+        {
             path: '/rolemanagement',
             component: () => import('./views/management/rolemanagement.vue')
         }, {

@@ -18,12 +18,10 @@
                                     </tr>
                                 </thead>
                                 <tbody>
-                                <tr class="broadcast-tr" v-for="item in broadCastInfo" :key="item.id" v-if="memberList">
+                                <tr class="broadcast-tr" v-for="item in broadCastInfo" :key="item.id" v-if="memberList" @click="goDetail(item.id)">
                                     <td class="broadcast-title">
                                         <span class="broadcast-title-div">
-                                            <router-link :to="{name:'broadcast/detail', params: {id: item.id}}">
-                                                <span class="">{{item.title}}</span>
-                                            </router-link>
+                                            <span class="">{{item.title}}</span>
                                         </span>
                                         <span class="broadcast-top-flag badge badge-outline badge-info" 
                                             v-if="item.stick">置顶</span>
@@ -99,6 +97,12 @@ export default {
         // 重新请求
         refreshList(){
             this.dataInit()
+        },
+        goDetail (id) {
+            this.$router.push({
+                name: 'broadcast/detail',
+                params: {id: id}
+            })
         }
     }
 }
@@ -132,5 +136,8 @@ export default {
 }
 .panel{
     box-shadow: 0 0 0 0;
+}
+table tbody tr {
+    cursor: pointer;
 }
 </style>

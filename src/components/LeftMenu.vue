@@ -4,23 +4,20 @@
             <div class="py-10 menu-icon"
                  style="position: relative;background-color: #3f51b5;z-index: 2">
                 <div class="icon-wrap" @click.stop="showBackModel">
-                    <label for="console-model">
+                    <label>
                         <img src="https://res.papitube.com/corvus/images/taiyang-icon.png" alt="">
                     </label>
                 </div>
             </div>
-            <ul class="site-menu" @click.stop="hideBackModel" data-plugin="menu" style="transform: translate3d(0px, -1.03409px, 0px);">
+            <ul class="site-menu" @click.stop="hideBackModel" data-plugin="menu"
+                style="transform: translate3d(0px, -1.03409px, 0px);">
                 <li class="site-menu-item" v-for="menu in menuData"
                     :class="{'has-sub': menu.data, 'active' : pageRoute === menu.code || ( menu.data && menu.data.find(item => item.code === pageRoute))}">
                     <template v-if="!menu.data">
                         <router-link :to="'/' + menu.code" class="animsition-link">
                             <div>
-                                        <span class="base-icon">
-                                            <img :src="menu.image" alt="">
-                                        </span>
-                                <span class="hover-icon">
-                                            <img :src="menu.hoverImage" alt="">
-                                        </span>
+                                <span class="base-icon"><img :src="menu.image" alt=""></span>
+                                <span class="hover-icon"><img :src="menu.hoverImage" alt=""></span>
                             </div>
                             <span class="site-menu-title">{{ menu.name }}</span>
                             <span v-if="menu.name =='我的'&&unReadMsg>0" class="unRead ml-5">{{unReadMsg}}</span>
@@ -29,22 +26,16 @@
                     <template v-else>
                         <a class="animsition-link">
                             <div>
-                                        <span class="base-icon">
-                                            <img :src="menu.image" alt="">
-                                        </span>
-                                <span class="hover-icon">
-                                            <img :src="menu.hoverImage" alt="">
-                                        </span>
+                                <span class="base-icon"><img :src="menu.image" alt=""></span>
+                                <span class="hover-icon"><img :src="menu.hoverImage" alt=""></span>
                             </div>
                             <span class="site-menu-title">{{ menu.name }}</span>
                         </a>
                         <ul class="site-menu-sub" style="">
                             <li class="site-menu-item" v-for="subMenu in menu.data"
                                 :class="pageRoute === subMenu.code ? 'active': ''">
-                                <router-link :to="'/' + subMenu.code"
-                                             class="animsition-link">
+                                <router-link :to="'/' + subMenu.code" class="animsition-link">
                                     <span class="site-menu-title">{{ subMenu.name }}</span>
-
                                 </router-link>
                             </li>
                         </ul>
@@ -140,19 +131,19 @@
                     },
                     {
                         name: '通讯录',
-                        code: 'address',
                         image: 'https://res.papitube.com/corvus/images/tongxunlu.png',
                         hoverImage: 'https://res.papitube.com/corvus/images/select-tongxunlu.png',
+                        code: 'address'
                     },
                     // {
                     //     name: '应用',
                     //     image: 'https://res.papitube.com/corvus/images/yingyong.png',
                     //     hoverImage: 'https://res.papitube.com/corvus/images/select-yingyong.png',
                     //     data: [
-                    //         {
-                    //             name: '考勤',
-                    //             code: 'attendance'
-                    //         },
+                    //         // {
+                    //         //     name: '考勤',
+                    //         //     code: 'attendance'
+                    //         // },
                     //         {
                     //             name: '公告',
                     //             code: 'broadcast'
@@ -161,22 +152,14 @@
                     //             name: '简报',
                     //             code: 'brief'
                     //         },
-                    //         // {
-                    //         //     name: '在线编辑',
-                    //         //     code: 'collaboration'
-                    //         // },
-                    //         // {
-                    //         //     name: '网盘',
-                    //         //     code: 'pan'
-                    //         // },
                     //         {
                     //             name: '通讯录',
                     //             code: 'address'
                     //         },
-                    //         {
-                    //             name: '知识库',
-                    //             code: 'knowledgebase'
-                    //         },
+                    //         // {
+                    //         //     name: '知识库',
+                    //         //     code: 'knowledgebase'
+                    //         // },
                     //     ]
                     // },
                 ],
@@ -192,7 +175,7 @@
             ])
         },
         mounted() {
-            this.avatar = JSON.parse(Cookies.get('user')).avatar
+            this.avatar = JSON.parse(Cookies.get('user')).avatar;
             document.body.onclick = () => {
                 this.visible = false
             }
@@ -203,7 +186,7 @@
             },
         },
         methods: {
-            showBackModel () {
+            showBackModel() {
                 this.visible = !this.visible
             },
             // 退出登录
@@ -218,12 +201,12 @@
             goManagement() {
                 this.visible = false
                 if (this.canPassBack) {
-                    window.open('/management')
+                    window.open('/apps')
                 } else {
                     toastr.error('您没有进入后台的权限！')
                 }
             },
-            hideBackModel () {
+            hideBackModel() {
                 this.visible = false
             }
         }
@@ -288,12 +271,6 @@
 
     .active .hover-icon {
         display: block !important;
-    }
-
-    #console-model {
-        opacity: 0;
-        position: absolute;
-        z-index: -1000;
     }
 
     .console {

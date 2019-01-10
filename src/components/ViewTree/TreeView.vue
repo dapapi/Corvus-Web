@@ -1,6 +1,6 @@
 <template>
     <div class="tree-view-menu">
-        <Tree-view-item :menus="menus"></Tree-view-item>
+        <Tree-view-item :menus="menus"  ></Tree-view-item>
     </div>
 </template>
 <script>

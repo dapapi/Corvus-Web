@@ -22,13 +22,13 @@
                         <div class="table-responsive">
                             <table class="table table-hover" data-role="content" data-plugin="selectable" data-row-selectable="true">
                                 <tr>
-                                    <th class="cell-300" scope="col"><i class="iconfont icon-T"></i> 标题</th>
+                                    <th class="cell-300" scope="col">标题</th>
                                     <th class="cell-300" scope="col">分类</th>
                                     <th class="cell-300" scope="col">发布时间</th>
                                     <th class="cell-300" scope="col">发布人</th>
                                 </tr>
                                 <tbody>
-                                <tr class="broadcast-tr" v-for="item in broadCastInfo" :key="item.id" v-if="memberList">
+                                <tr class="broadcast-tr" v-for="item in broadCastInfo" :key="item.id" v-if="memberList" @click="goDetail(item.id)">
                                     <td class="broadcast-title">
                                         <span class="broadcast-title-div">
                                             <router-link :to="{name:'broadcast/detail', params: {id: item.id}}">
@@ -113,6 +113,12 @@ export default {
         // 重新请求
         refreshList(){
             this.dataInit()
+        },
+        goDetail (id) {
+            this.$router.push({
+                name: 'broadcast/detail',
+                params: {id: id}
+            })
         }
     }
 }
@@ -142,5 +148,8 @@ export default {
 .loader-overlay{
         margin-left: 100px;
         background-color: rgba(7, 17, 27, 0.2)
+}
+table tbody tr {
+    cursor: pointer;
 }
 </style>

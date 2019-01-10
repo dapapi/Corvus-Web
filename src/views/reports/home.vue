@@ -11,11 +11,13 @@
                     <div data-role="content" class="scrollable-content" style="width: 259px;">
                         <section class="page-aside-section">
                             <h5 class="page-title pl-30 mb-45">报表管理</h5>
-                            <div class="list-group">
-                                <router-link class="list-group-item" v-for="(item,index) in urlData"
-                                             :key="index" :to="item.url">{{item.name}}
-                                </router-link>
-                            </div>
+                            <treeView :menus="urlData"></treeView>
+
+                            <!--<div class="list-group">-->
+                            <!--<router-link class="list-group-item" v-for="(item,index) in urlData"-->
+                            <!--:key="index" :to="item.url">{{item.name}}-->
+                            <!--</router-link>-->
+                            <!--</div>-->
                         </section>
                     </div>
                 </div>
@@ -35,34 +37,52 @@
             return {
                 urlData: [
                     {
-                        value: 1,
+                        id: 1,
                         name: '商业漏斗分析报表',
-                        url: '/reports/business'
+                        url: '/reports/business',
+                        type: 'link',
+                        isSelected: false,
+                        level: 1,
                     },
                     {
-                        value: 2,
+                        id: 2,
                         name: '销售线索报表',
-                        url: '/reports/trail'
+                        url: '/reports/trail',
+                        type: 'link',
+                        isSelected: false,
+                        level: 1,
                     },
                     {
-                        value: 3,
+                        id: 3,
                         name: '项目报表',
-                        url: '/reports/projects'
+                        url: '/reports/projects',
+                        type: 'link',
+                        isSelected: false,
+                        level: 1,
                     },
                     {
-                        value: 4,
+                        id: 4,
                         name: '客户报表',
-                        url: '/reports/clients'
+                        url: '/reports/clients',
+                        type: 'link',
+                        isSelected: false,
+                        level: 1,
                     },
                     {
-                        value: 5,
+                        id: 5,
                         name: '艺人报表',
-                        url: '/reports/artists'
+                        url: '/reports/artists',
+                        type: 'link',
+                        isSelected: false,
+                        level: 1,
                     },
                     {
-                        value: 6,
+                        id: 6,
                         name: '博主报表',
-                        url: '/reports/blogger'
+                        url: '/reports/blogger',
+                        type: 'link',
+                        isSelected: false,
+                        level: 1,
                     },
 
                 ]

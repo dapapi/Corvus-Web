@@ -47,6 +47,7 @@ export default {
                     this.name = this.imgUrl.substr(this.imgUrl.length - 2, 2)
                     this.color = this.imgUrl.substr(0, 7)
                 } else {
+
                     this.showImg = true
                 }
             }
