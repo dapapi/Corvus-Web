@@ -236,6 +236,18 @@
                                        v-model="signCompanyName">
                             </div>
                         </div>
+                        <!-- <div class="example">
+                            <div class="col-md-2 text-right float-left">头像</div>
+                            <div class="col-md-5 float-left pl-0">
+                                <Upload @change='getUploadUrl' class="upload-image">
+                                    <div class="puls" :style="{ backgroundImage: 'url(' + uploadUrl + ')' }"
+                                         v-if="uploadUrl">
+                                    </div>
+                                    <div v-if="!uploadUrl" class="addMember-trigger-button addMember-trigger-left"><i
+                                            class="iconfont icon-tianjia"></i></div>
+                                </Upload>
+                            </div>
+                        </div> -->
                         <div class="example">
                             <div class="col-md-2 text-right float-left">备注</div>
                             <div class="col-md-10 float-left pl-0">
@@ -321,6 +333,7 @@
                 userData: '',
                 communicationArr: '',
                 communication: '',
+                uploadUrl: '',
                 intention_desc: '',
                 filterObject: {
                     include: 'type,creator,tasks,affixes,producer',
@@ -385,6 +398,7 @@
                 _this.$refs.isSign.setValue('')//其他公司意向
                 _this.artistDesc = '';//备注
                 _this.platformType = [];
+                _this.uploadUrl = ''
             })
         },
         methods: {
@@ -458,7 +472,10 @@
             changeArtistStatus: function (value) {
                 this.artistStatus = value
             },
-
+            //头像
+            getUploadUrl(value) {
+                this.uploadUrl = value
+            },
             changeCheckbox: function (value) {
                 this.platformType = []
                 for (let i = 0; i < value.length; i++) {
@@ -549,7 +566,7 @@
                     star_douyin_infos: this.star_douyin_infos,
                     star_weibo_infos: this.star_weibo_infos,
                     star_xiaohongshu_infos: this.star_xiaohongshu_infos,
-
+                    // avatar: this.uploadUrl
                 };
                 fetch('post', '/bloggers', data).then(function (response) {
                     toastr.success('创建成功');
@@ -605,6 +622,7 @@
                     _this.getArtists()
                     _this.$store.state.participantsInfo = []
                     _this.selectedArtistsArr = []
+                    console.log(_this.selectedArtistsArr)
                 })
 
             },
@@ -648,6 +666,17 @@
     .modal-body .example {
         display: flex;
         align-items: center;
+    }
+     .puls {
+        display: inline-block;
+        background-size: 100px;
+        width: 50px;
+        height: 50px;
+        text-align: center;
+        line-height: 46px;
+        border-radius: 50%;
+        border: 1px dashed #eee;
+
     }
 </style>
 
