@@ -3,7 +3,7 @@
         <hr v-if="mode !== 'detail'">
         <div class="approver-row col-md-12 clearfix">
             <div style='min-width:50px;' class="float-left mt-20 ">审批人</div>
-            <div class="float-left col-md-10">
+            <div class="float-left col-md-12">
                 <div class="approver-container float-left mt-20 ml-0" v-for="(item, index) in approver" :key="index">
                     <div class=" noselect" style="display:flex ">
                         <div class="approver-logo" style='font-size:12px; min-width:50px'>
@@ -18,7 +18,7 @@
                     </div>
                     <div class="splicer" v-if="index < (approver.length-1)">{{item.length}}</div>
                 </div>
-                <div class="approver-container float-left mt-20" v-if="formstatus">
+                <div class="approver-container float-left mt-20" v-if="formstatus && finalShow">
                     <div class="splicer"></div>
                     <i class="iconfont issueicon" :class="iconSelector.split('|')[0]" :style='{color:iconSelector.split("|")[1]}'></i>
                     <div class="status">{{formstatus}}</div>
@@ -60,6 +60,7 @@ export default {
             cover:[],
             waitingFor:'',
             informer:{},
+            finalShow:false,
         }
     },
     computed:{
@@ -95,6 +96,7 @@ export default {
                     let {meta:{notice:{data}}} = params
                      _this.informer = data
                     _this.$store.dispatch('changeParticipantsInfo',{data:Array.from(_this.informer)});
+                    _this.finalShow = true
                     // _this.$store.state.newParticipantsInfo = Array.from(_this.informer)
                 })
             }
@@ -108,6 +110,8 @@ export default {
                     let {meta:{notice:{data}}} = params
                     _this.informer = data
                     _this.$store.dispatch('changeParticipantsInfo',{data:Array.from(_this.informer)});
+                    _this.finalShow = true
+
                     // _this.$store.state.newParticipantsInfo = Array.from(_this.informer)
                     })
                 }
@@ -136,18 +140,24 @@ export default {
 
             }
             let _this = this
-            if(!this.mode){
+            if(!this.mode && value != undefined){
                 fetch('get','/approvals/chains?form_id='+value+'&change_type=222').then((params) => {
                     _this.approver = params.data
                     let {meta:{notice:{data}}} = params
                     _this.informer = data
                     _this.$store.dispatch('changeParticipantsInfo',{data:Array.from(_this.informer)});
+                    _this.finalShow = true
+
                     // _this.$store.state.newParticipantsInfo = Array.from(_this.informer)
                 })
             }else{
+                if(value == undefined){
+                    return
+                }
                 fetch('get','/approval_instances/'+value+'/chains').then((params) => {
                     _this.approver = params.data
                     _this.waitingFor = params.data.find(item=>item.approval_stage === "doing")
+                    
                     if(_this.waitingFor){
                         _this.$emit("waitingfor", _this.waitingFor)
                     }else{
@@ -156,6 +166,8 @@ export default {
                         _this.$emit("waitingfor", _this.waitingFor)
                         params.data.reverse()
                     }
+                    _this.finalShow = true
+
                 })
             }
         },
@@ -192,12 +204,15 @@ export default {
     height: 40px;
     display: flex;
     line-height: 40px;
-    border: 1px solid #eeeeee;
+    border-bottom: 1px solid #eeeeee;
 }
 .approval-detail-title{
-    background: #f5f5f5;
+    /* background: #f5f5f5; */
 }
+.approval-detail-main{
+    border-top: 1px solid #eeeeee;
 
+}
 .approver_text{
     margin-left: 5px;
     margin-bottom: 0;

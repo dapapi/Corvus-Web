@@ -68,7 +68,7 @@ export default {
             },
             directionalSender:function(value){
                 if(value && value.to === this.consdata[0].sort_number){
-                    console.log(value);let _this = this
+                    let _this = this
                     if(this.consdata[0].control_source){
                         fetch('get',this.consdata[0].control_source.url+'?'+this.consdata[0].control_source.parameters+'='+value.data).then((params) => {
                             _this.options = params.data
@@ -129,7 +129,6 @@ export default {
                 if(this.consdata[0].control_source){
                     fetch('get',this.consdata[0].control_source.url).then((params) => {
                         _this.options = params.data
-                        console.log(params);
                         _this.$nextTick(() => {
                             _this.refresh()
                         })

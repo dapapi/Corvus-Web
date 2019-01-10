@@ -94,11 +94,9 @@ export default {
                 if(Array.isArray(this.valueListener)){
                     if(this.valueListener.length>0){
                         this.$emit('change',{key:id,value:this.valueListener,type:related_field})
-                        console.log('emit');
                     }
                 }else{
-                    this.$emit('change',{key:id,value:this.valueListener,type:related_field})    
-                    console.log(2);                
+                    this.$emit('change',{key:id,value:this.valueListener,type:related_field})                
                 }
                 if(control_source){
                     if(control_source.to_sort_number){
