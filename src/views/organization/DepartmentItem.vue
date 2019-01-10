@@ -87,11 +87,18 @@ export default {
         // 编辑部门
         edit (data) {
             this.editDepartment(data)
-            const item = data.users.data.find(item => item.is_department_principal === 1)
-            this.$store.commit('changeNewPrincipal', {
-                name: item.name,
-                id: item.id
-            })
+             if (data.is_department_principal === 1) {
+                this.$store.commit('changeNewPrincipal', {
+                    name: data.is_department_username,
+                    id: data.is_department_user_id
+                })
+            } else {
+                this.$store.commit('changeNewPrincipal', {
+                    name: '',
+                    id: ''
+                })
+            }
+            
         },
         // 删除
         del (data) {

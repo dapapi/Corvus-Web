@@ -62,7 +62,7 @@
                 menuData: [
                     {
                         name: '应用管理',
-                        code: 'appmanagement',
+                        code: 'apps',
                         image: 'https://res.papitube.com/corvus/images/xiaoxi.png',
                         hoverImage: 'https://res.papitube.com/corvus/images/select-xiaoxi.png'
                     },

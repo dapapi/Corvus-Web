@@ -12,14 +12,14 @@
         <div class="page-content container-fluid">
             <div class="panel col-md-12 clearfix py-5">
                 <div class="clearfix">
-                     <div class="col-md-2 example float-left">
+                    <div class="col-md-2 example float-left">
+                        <selectors :options="[{value: '',name: '全部'}, ...staffPositionStatus]" :defaultFirst="true" changeKey="positionType" @select="changeState"></selectors>
+                    </div>
+                    <div class="col-md-2 example float-left">
                         <selectors :options="[{value: '',name: '全部'}, ...hireShapeArr]" :defaultFirst="true" changeKey="hireShape" @select="changeState"></selectors>
                     </div>
                     <div class="col-md-2 example float-left">
                         <selectors :options="[{value: '',name: '全部'}, ...staffStatus]" :defaultFirst="true" changeKey="status" @select="changeState"></selectors>
-                    </div>
-                    <div class="col-md-2 example float-left">
-                        <selectors :options="[{value: '',name: '全部'}, ...staffPositionStatus]" :defaultFirst="true" changeKey="positionType" @select="changeState"></selectors>
                     </div>
                    
                     <div class="col-md-3 example float-left">
@@ -68,7 +68,7 @@
                             <router-link tag="td" :to="{name: 'staffDetail', params: { id: item.id }}">
                                 {{ hireShapeArr.find(n => n.value == item.hire_shape)?hireShapeArr.find(n => n.value == item.hire_shape).name:'' }}
                             </router-link>
-                            <router-link tag="td" :to="{name: 'staffDetail', params: { id: item.id }}">{{ item.company?item.company:'' }}
+                            <router-link tag="td" :to="{name: 'staffDetail', params: { id: item.id }}">{{ item.department.length > 0?item.department[0].name:'' }}
                             </router-link>
                             <router-link tag="td" :to="{name: 'staffDetail', params: { id: item.id }}">{{ item.entry_time }}
                             </router-link>
@@ -81,7 +81,7 @@
                                         <a class="dropdown-item" role="menuitem" @click="changeStaffStatus(item, 2)">转正</a>
                                         <a class="dropdown-item" role="menuitem" @click="showEditPos(item.id)">调岗</a>
                                         <a class="dropdown-item" role="menuitem" @click="changeStaffStatus(item, 3)">离职</a>
-                                        <a v-if="(item.hire_shape == 2 || item.hire_shape == 4) && item.status == 3" 
+                                        <a v-if="(item.hire_shape == 1 || item.hire_shape == 4) && item.status == 3" 
                                             class="dropdown-item" role="menuitem" @click="changeStaffStatus(item, 5)">归档</a>
                                         <!-- 劳务外包 -->
                                     </div>

@@ -288,9 +288,9 @@
                         </div>
                         <div class="example  label-center">
                             <div class="col-md-2 text-right float-left ">资源类型</div>
-                            <div class="col-md-10 float-left pl-0">
+                            <div class="col-md-10 float-left pl-0" >
                                 <Selectors @change="changeRolejob"
-                                           :options="groupingDate" ref="resourceType"></Selectors>
+                                           :options="selectgroupingDate" ref="resourceType" ></Selectors>
                             </div>
                         </div>
                         <div class="example">
@@ -349,7 +349,7 @@
                             <div class="col-md-2 text-right float-left">角色组</div>
                             <div class="col-md-10 float-left pl-0">
                                 <selectors class="form-control" @change="moveGrouping"
-                                           :options="groupingDate"></selectors>
+                                           :options="selectgroupingDate"></selectors>
                             </div>
                         </div>
                     </div>
@@ -382,7 +382,7 @@
                             <div class="col-md-2 text-right float-left">角色组</div>
                             <div class="col-md-10 float-left pl-0">
                                 <Selectors @change="updateRolejob"
-                                           :options="groupingDate" ref="roleGroup"></Selectors>
+                                           :options="selectgroupingDate" ref="roleGroup"></Selectors>
                             </div>
                         </div>
                         <div class="example">
@@ -570,7 +570,8 @@
                 emptyrole_describe: '',
                 isAactive:true,
                 idArray:[],
-                defaultDate:''
+                defaultDate:'',
+                selectgroupingDate:[]
             }
         },
         mounted() {
@@ -592,7 +593,6 @@
                 let _this = this;
                 fetch('get', '/console/role').then(function (response) {
                     _this.roleDate = response.data;
-                   
                 });
             },
             //获取默认数据
@@ -600,7 +600,6 @@
                 let _this = this;
                 fetch('get','/console/director').then(function(resouce){
                     _this.defaultDate = resouce.data
-                     console.log(_this.defaultDate )
                 })
             },
             //获取分组数据
@@ -611,8 +610,13 @@
                     response.data.forEach(item=>{
                        _this.idArray.push(item.id) 
                     })
-                  
+                    _this.groupingDate.map(item=>{
+                        if(item.id!==1994731356){
+                           _this.selectgroupingDate.push(item) 
+                        }
+                    })
                 });
+                
             },
             //获取成员数据
             getmemberDate(id) {
