@@ -38,10 +38,10 @@
                                         <div v-for="(value, key, index) in normalUsers" :key="index">
                                             <div class="letter">{{ key }}</div>
                                             <div class="users" v-for="(user, _index) in value"
-                                                v-show="user.name.indexOf(searchKeyWord) > -1"
-                                                :class="checkedIndex === (index + '' + _index) ? 'checked' : ''"
-                                                @click="handelMemberClick(index + '' + _index, user)"
-                                                :key='user.name+Math.random()'>
+                                                 v-show="user.name.indexOf(searchKeyWord) > -1"
+                                                 :class="checkedIndex === (index + '' + _index) ? 'checked' : ''"
+                                                 @click="handelMemberClick(index + '' + _index, user)"
+                                                 :key='user.name+Math.random()'>
                                                 <a class="avatar" href="javascript:void(0)">
                                                     <Avatar :imgUrl="user.icon_url" style="margin-right: 10px; "/>
                                                 </a>
@@ -72,12 +72,13 @@
         <div class="page-main" style="background-color:#f3f4f5">
             <div class="panel" style="margin-bottom: 0;">
                 <div class="col-md-12 p-0 top-bg">
-                    <img src="https://res-crm.papitube.com/image/address_bg.jpg" alt="" />
+                    <img src="https://res-crm.papitube.com/image/address_bg.jpg" alt=""/>
                 </div>
                 <div class="col-md-12" style="margin-top: -70px;">
                     <div class="py-25 px-25 clearfix position-relative">
                         <div class="col-md-2 float-left head-img">
-                            <Avatar :imgUrl="personalInfo.icon_url" style="width: 140px; height: 140px; font-size: 50px; font-weight: 400;" />
+                            <Avatar :imgUrl="personalInfo.icon_url"
+                                    style="width: 140px; height: 140px; font-size: 50px; font-weight: 400;"/>
                         </div>
                         <div class="col-md-10 float-left position-absolute" style="bottom: 25px;right: 0;">
                             <div class="clearfix mb-20">
@@ -86,21 +87,27 @@
                                         <i class="iconfont icon-yonghu pr-2"></i>
                                         <span class="font-weight-bold">姓名</span>
                                     </div>
-                                    <div class="float-left col-md-6 pl-0">{{ personalInfo.name ? personalInfo.name : ''}}</div>
+                                    <div class="float-left col-md-6 pl-0">
+                                        {{ personalInfo.name ? personalInfo.name : ''}}
+                                    </div>
                                 </div>
                                 <div class="col-md-4 float-left">
                                     <div class="float-left col-md-6">
                                         <i class="iconfont icon-gongwenbao1 pr-2"></i>
                                         <span class="font-weight-bold">职位</span>
                                     </div>
-                                    <div class="float-left col-md-6 pl-0">{{ personalInfo.position ? personalInfo.position : ''}}</div>
+                                    <div class="float-left col-md-6 pl-0">
+                                        {{ personalInfo.position ? personalInfo.position : ''}}
+                                    </div>
                                 </div>
                                 <div class="col-md-4 float-left">
                                     <div class="float-left col-md-6">
                                         <i class="iconfont icon-hierarchy pr-2"></i>
                                         <span class="font-weight-bold">部门</span>
                                     </div>
-                                    <div class="float-left col-md-6 pl-0">{{ personalInfo.position ? personalInfo.position : ''}}</div>
+                                    <div class="float-left col-md-6 pl-0">
+                                        {{ personalInfo.position ? personalInfo.position : ''}}
+                                    </div>
                                 </div>
                             </div>
                             <div class="clearfix">
@@ -109,22 +116,19 @@
                                         <i class="iconfont icon-weidu pr-2"></i>
                                         <span class="font-weight-bold">邮箱</span>
                                     </div>
-                                    <div class="float-left col-md-6 pl-0">{{ personalInfo.work_email ? personalInfo.work_email : ''}}</div>
+                                    <div class="float-left col-md-6 pl-0">
+                                        {{ personalInfo.work_email ? personalInfo.work_email : ''}}
+                                    </div>
                                 </div>
                                 <div class="col-md-4 float-left">
                                     <div class="float-left col-md-6">
                                         <i class="iconfont icon-dianhua pr-2"></i>
                                         <span class="font-weight-bold">电话</span>
                                     </div>
-                                    <div class="float-left col-md-6 pl-0">{{ personalInfo.phone ? personalInfo.phone : ''}}</div>
-                                </div>
-                                <!-- <div class="col-md-4 float-left">
-                                    <div class="float-left col-md-6">
-                                        <i class="iconfont icon-Wechat pr-2"></i>
-                                        <span class="font-weight-bold">WeChat</span>
+                                    <div class="float-left col-md-6 pl-0">
+                                        {{ personalInfo.phone ? personalInfo.phone : ''}}
                                     </div>
-                                    <div class="float-left col-md-6 pl-0">XXX</div>
-                                </div> -->
+                                </div>
                             </div>
                         </div>
                     </div>
@@ -139,12 +143,14 @@
                         <div class="page-content tab-content nav-tabs-animate overflowY py-0">
                             <div class="list-wrap" v-for="(item, index) in tasks" :key="index">
                                 <div class="flex">
-                                    <Avatar class="small-avatar" :imgUrl="item.principal.data.icon_url" />{{ item.title }}
+                                    <Avatar class="small-avatar" :imgUrl="item.principal.data.icon_url"/>
+                                    {{ item.title }}
                                 </div>
                                 <div class="">{{ item.start_at }}</div>
                             </div>
-                            <div class="col-md-1" style="margin: 6rem auto" v-if="tasks.length === 0">
-                                <img src="https://res.papitube.com/corvus/images/content-none.png" alt="" style="width: 100%">
+                            <div class="col-md-3" style="margin: 6rem auto" v-if="tasks.length === 0">
+                                <img src="https://res.papitube.com/corvus/images/content-none.png" alt=""
+                                     style="width: 100%">
                             </div>
                         </div>
                     </div>
@@ -155,12 +161,14 @@
                         <div class="page-content tab-content nav-tabs-animate overflowY py-0">
                             <div class="list-wrap" v-for="(item, index) in schedules" :key="index">
                                 <div class="flex">
-                                    <Avatar class="small-avatar" :imgUrl="item.creator.data.icon_url" />{{ item.title }}
+                                    <Avatar class="small-avatar" :imgUrl="item.creator.data.icon_url"/>
+                                    {{ item.title }}
                                 </div>
                                 <div class="">{{ item.end_at }}</div>
                             </div>
-                            <div class="col-md-1" style="margin: 6rem auto" v-if="schedules.length === 0">
-                                <img src="https://res.papitube.com/corvus/images/content-none.png" alt="" style="width: 100%">
+                            <div class="col-md-3" style="margin: 6rem auto" v-if="schedules.length === 0">
+                                <img src="https://res.papitube.com/corvus/images/content-none.png" alt=""
+                                     style="width: 100%">
                             </div>
                         </div>
                     </div>
@@ -175,7 +183,7 @@
 <script>
     import fetch from '../../assets/utils/fetch.js'
     import Cookies from 'js-cookie'
-    import { mapState } from 'vuex'
+    import {mapState} from 'vuex'
 
     export default {
         name: 'portal',
@@ -206,7 +214,7 @@
             memberChange() {
                 this.setDefaultInfo(this.$store.state.newPrincipalInfo.id)
             },
-            handelMemberClick (index, data) {
+            handelMemberClick(index, data) {
                 this.checkedIndex = index
                 this.personalInfo = data
                 this.getSchedules(data.user_id)
@@ -227,7 +235,7 @@
                 }
             },
             // 日程
-            getSchedules (id) {
+            getSchedules(id) {
                 fetch('get', `/users/${id}?include=tasks,schedules.creator`).then(res => {
                     this.tasks = res.data.tasks.data
                     this.schedules = res.data.schedules.data
@@ -265,54 +273,69 @@
     #forum-team {
         padding-bottom: 40px;
     }
+
     .user-name {
         color: #333;
     }
+
     .users {
         padding: 10px 0 10px 40px;
     }
+
     .users:hover {
-        background: rgba(40,53,147,.03);
+        background: rgba(40, 53, 147, .03);
     }
+
     .letter {
         color: #cacaca;
         padding: 4px 0 4px 44px;
     }
-    .mt-20{
+
+    .mt-20 {
         padding: 0 30px 12px;
     }
+
     .checked {
-        background: rgba(40,53,147,.03);
+        background: rgba(40, 53, 147, .03);
     }
+
     .checked .user-name {
         color: #3f51b5;
     }
+
     .head-img img {
         width: 117px;
         height: 130px;
     }
+
     #forum-department {
         padding-bottom: 30px;
     }
+
     .small-avatar {
         margin-right: 10px;
     }
+
     .top-bg {
         width: 100%;
     }
+
     .top-bg img {
         width: 100%;
     }
+
     .overflowY {
         height: calc(100vh - 400px);
-        overflow-y: scroll;
+        overflow-y: auto;
     }
+
     .list-wrap {
         display: flex;
         justify-content: space-between;
         align-items: center;
         margin: 20px 0;
     }
+
     .flex {
         display: flex;
         align-items: center;

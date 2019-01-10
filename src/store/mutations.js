@@ -6,12 +6,6 @@ export default {
     changeParticipantsInfo(state, data) {
         state.participantsInfo = data
     },
-    //collectInfo:[],//收款金额
-    //payInfo:[],//付款金额
-    //contractInfo:[],//合同类型
-    //divisionInfo:[],//分成比例
-    //incubationInfo:[],//孵化期
-    //bilInfo:[],//账单
     changeCollectInfo: function (state,data) {
         state.collectInfo = data
     },

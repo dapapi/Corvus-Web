@@ -83,12 +83,14 @@ export default {
             valueListener: function (newValue) {
                 let {id} = this.consdata[0]
                 let {control_source} = this.consdata[0]
+                let {related_field} = this.consdata[0]
+
                 if(Array.isArray(this.valueListener)){
                     if(this.valueListener.length>0){
-                        this.$emit('change',{key:id,value:this.valueListener,type:null})
+                        this.$emit('change',{key:id,value:this.valueListener,type:related_field})
                     }
                 }else{
-                    this.$emit('change',{key:id,value:this.valueListener,type:null})                    
+                    this.$emit('change',{key:id,value:this.valueListener,type:related_field})                    
                 }
                 if(control_source){
                     if(control_source.to_sort_number){

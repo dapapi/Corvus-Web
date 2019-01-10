@@ -37,7 +37,7 @@
                     this.isLeftMenuShow = false
                     this.isLeftManageShow = false
                 }
-                else if (this.$route.path === '/management'
+                else if (this.$route.path.indexOf('apps') > 0
                     || this.$route.path === '/rolemanagement'
                     || this.$route.path === '/appmanagement'
                     || this.$route.path === '/organization'

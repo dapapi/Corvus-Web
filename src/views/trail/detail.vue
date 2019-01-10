@@ -734,10 +734,12 @@
                 if (!this.trailInfo.principal) {
                     toastr.error("负责人为必填");
                     return false;
-                } else if (!this.trailInfo.fee) {
+                }
+                 else if (!this.trailInfo.fee) {
                     toastr.error("费用为必填")
                     return false;
-                } else if (!this.trailInfo.client.data.company) {
+                } 
+                else if (!this.trailInfo.client.data.company) {
                     toastr.error("公司名称为必填")
                     return false;
                 } else if (!this.trailInfo.title) {
@@ -913,7 +915,8 @@
                 })
             },
             changeLockStatus(value) {
-                this.trailInfo.lock_status = value
+                // this.trailInfo.lock_status = value
+                this.changeInfo.lock = Number(value)
             },
             getCurrentUser() {
                 let _this = this
