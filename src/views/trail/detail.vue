@@ -1142,4 +1142,7 @@
     table tbody tr {
        cursor: pointer;
     }
+    .page-content{
+        border: none !important;
+    }
 </style>

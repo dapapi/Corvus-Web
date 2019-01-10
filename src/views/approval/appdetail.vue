@@ -91,7 +91,7 @@
                             </div>
                             </div>
                         </div>
-                        <div class="panel col-md-12 col-lg-12">
+                        <div class=" col-md-12 col-lg-12">
                             <div class="caption" style="border:0;">
                                 <h6 class="page-title pb-20" style="border-bottom:1px solid #ccc">审批流程</h6>
                                 <div class="">

@@ -24,6 +24,9 @@ export default {
   .page{
     margin-left: 260px !important;
   }
+  .page-aside{
+    border: none;
+  }
 </style>
 
 

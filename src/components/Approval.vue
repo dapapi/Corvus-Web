@@ -341,6 +341,8 @@ a:link,a:visited,a:hover,a:target{
     }
     .page-aside{
         height: 100% !important;
+        border: none !important;
+
     }
     .sub-box{
         margin-left: 20px;
