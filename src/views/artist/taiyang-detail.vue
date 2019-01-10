@@ -1113,6 +1113,8 @@
                 let _this = this
                 if(expense_type){
                     _this.expense_type = expense_type
+                }else{
+                    _this.expense_type = 0
                 }
                 fetch('get', `/stars/${this.$route.params.id}/bill`, {page: page,expense_type:_this.expense_type}).then(response => {
                     _this.artistBillsInfo = response.data
