@@ -8,7 +8,7 @@
         <div class="dropdown-menu dropdown-menu-left" aria-labelledby="departmentDropdown" role="menu"
              x-placement="bottom-end" style="min-width: calc(100% - 30px); padding: 6px;">
             <template v-for="(item, index) in data">
-                <Departments :data="item" :change="select" :key="index"/>
+                <Departments  v-if="item.id != '1994731356'" :data="item" :change="select" :key="index"/>
             </template>
         </div>
     </div>
@@ -34,6 +34,9 @@
 
 
 <style lang="scss" scoped>
+.department-item {
+    position: relative;
+}
     #departmentDropdown {
         width: 100%;
         text-align: left;

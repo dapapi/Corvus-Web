@@ -81,11 +81,11 @@
                 <div class="col-md-2 text-right float-left require">部门名称</div>
                 <div class="col-md-10 float-left">
                     <input
-                    type="text"
-                    title
-                    class="form-control"
-                    placeholder="请输部门名称"
-                    v-model="departmentName"
+                        type="text"
+                        title
+                        class="form-control"
+                        placeholder="请输部门名称"
+                        v-model="departmentName"
                     >
                 </div>
                 </div>
@@ -152,6 +152,11 @@ export default {
             // 清空state
             this.$store.commit("changeNewParticipantsInfo", []);
         })
+        $('#add-child-department').on('hidden.bs.modal', () => {
+            // 清空state
+            this.cancelAdd()
+        })
+        
         if (this.department.length > 0) {
             this.departmentPId = this.department[0].department_pid;
             this.departmentId = this.department[0].id;
@@ -184,10 +189,6 @@ export default {
                 toastr.error("请填写部门名称");
                 return;
             }
-            // if (!this.principalId) {
-            //     toastr.error("请选择部门负责人");
-            //     return;
-            // }
             const params = {
                 department_pid: this.departmentPId,
                 name: this.departmentName,
@@ -319,6 +320,10 @@ export default {
             this.departmentName = "" // 部门名称
             this.departmentId = 0 // 部门id
             this.departmentPId = 0 // 父级部门id
+            this.$store.commit('changeNewPrincipal', {
+                name: '',
+                id: ''
+            })
         }
     }
 };
