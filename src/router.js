@@ -92,6 +92,11 @@ export default new Router({
             component: () => import('./views/artist/papi-index.vue')
         },
         {
+            path: '/talent',
+            name: 'talent',
+            component: () => import('./views/artist/talent.vue')
+        },
+        {
             path: '/artists/:id',
             name: 'artists',
             component: () => import('./views/artist/taiyang-detail.vue')
