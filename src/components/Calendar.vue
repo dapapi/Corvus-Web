@@ -8,7 +8,7 @@
     import fetch from '../assets/utils/fetch.js'
     //isModel ===true  //调用接口/schedules/all
     export default {
-        props: ['calendars', 'gotoDate', 'meetingRomeList', 'isMeeting','isModel'],
+        props: ['calendars', 'gotoDate', 'meetingRomeList', 'isMeeting', 'isModel'],
         data() {
             return {
                 startDate: '', //获取开始时间
@@ -79,7 +79,7 @@
                     self.endDate = self.timeReformat(end._d);
                     let meetingRomeList = self.meetingRomeList;
                     let url
-                    self.isModel==true?url = '/schedules/all':url = '/schedules'
+                    self.isModel == true ? url = '/schedules/all' : url = '/schedules'
                     if (!meetingRomeList) {
                         meetingRomeList = [];
                     }
@@ -101,8 +101,8 @@
                     } else {
                         data.calendar_ids = self.calendars
                     }
-                    
-                    if(meetingRomeList.length>0 ||self.calendars.length>0){
+
+                    if (meetingRomeList.length > 0 || self.calendars.length > 0) {
                         fetch('get', url, data).then(response => {
                             self.allScheduleInfo = response.data;
                             let events = [];
@@ -149,10 +149,14 @@
 
             timeReformat(value) {
                 let day = value.getDate();
+                let month = value.getMonth() + 1;
                 if (Number(day) < 10) {
                     day = '0' + day;
                 }
-                return `${value.getFullYear()}-${value.getMonth() + 1}-` + day
+                if (Number(month) < 10) {
+                    month = '0' + month;
+                }
+                return `${value.getFullYear()}-` + month + '-' + day
             },
 
             changeView(value) {
