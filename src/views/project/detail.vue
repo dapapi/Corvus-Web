@@ -680,7 +680,7 @@
                                                         </template>
                                                         <template v-else-if="field.field_type === 6">
                                                             <EditSelector
-                                                                    :content="field.values ? field.values.data.value.split('|') : ''"
+                                                                    :content="field.values && field.values.data.value ? field.values.data.value.split('|') : []"
                                                                     :multiple="true"
                                                                     :is-edit="isEdit"
                                                                     :options="field.contentArr"
@@ -734,7 +734,7 @@
                                         <div class="card-text py-10 px-0 clearfix col-md-6 float-left">
                                             <div class="col-md-3 float-left text-right pl-0">最近更新人</div>
                                             <div class="col-md-9 float-left font-weight-bold">
-                                                {{ projectInfo.last_follow_up_user }}
+                                                {{ projectInfo.last_updated_user }}
                                             </div>
                                         </div>
                                         <div class="card-text py-10 px-0 clearfix col-md-6 float-left">
