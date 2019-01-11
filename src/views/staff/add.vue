@@ -89,10 +89,12 @@
                                     <div class="col-md-3 text-right float-left"></div>
                                     <div class="col-md-8 float-left pl-0">
                                         <Avatar v-if="isLook" :imgUrl="avatar" style="width: 90px; height: 90px; font-size: 24px;" />
-                                        <upload @change="uploadImg" v-else>
+                                        <upload @change="uploadImg" v-else accept="image/png, image/jpeg, image/gif, image/jpg">
                                             <div class="upload-head">
-                                                {{ !avatar ? '上传头像':null }}
-                                                <!-- <img v-if="avatar" :src="avatar" alt="头像" /> -->
+                                                <img v-if="avatar" :src="avatar" alt="头像" />
+                                                <template v-else>
+                                                    上传头像
+                                                </template>
                                             </div>
                                         </upload>
                                     </div>
@@ -401,7 +403,6 @@
 import config from "../../assets/js/config";
 const { genderArr, maritalStatusArr, nationalityArr, bloodTypeArr } = config;
 import fetch from "../../assets/utils/fetch";
-import qs from 'qs'
 
 let tempArr = []
 for (let i = 0; i < nationalityArr.length; i++) {
@@ -621,7 +622,7 @@ export default {
 		},
 		// 上传图片
 		uploadImg (fileUrl, fileName, fileSize) {
-			this.avatar = fileUrl
+            this.avatar = fileUrl
 		},
 		// 提交
 		submit () {
