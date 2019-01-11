@@ -18,7 +18,7 @@
                        @click="changeToastrText(2)" v-show="projectInfo.status != 2">完成</a>
                     <a class="dropdown-item" role="menuitem" data-toggle="modal" data-target="#confirmFlag"
                        @click="changeToastrText(3)" v-show="projectInfo.status != 3">撤单</a>
-                    <a class="dropdown-item" role="menuitem" data-toggle="modal" data-target="#addPrivacy">隐私设置</a>
+                    <!--<a class="dropdown-item" role="menuitem" data-toggle="modal" data-target="#addPrivacy">隐私设置</a>-->
                 </div>
             </div>
 
@@ -1481,7 +1481,7 @@
 
         mounted() {
             this.projectId = this.$route.params.id;
-            this.getPrivacy() //获取隐私设置列表
+            // this.getPrivacy() //获取隐私设置列表
             this.getProject();
             this.getClients();
             this.getTaskType();
@@ -1656,10 +1656,10 @@
                             }else if (allPrivacyUsers[i].field == 'contractmoney'){
                                _this.$store.state.collectInfo.push(allPrivacyUsers[i].user.data)
                             }else{}
-                            
+
                         }
                     }
-                    
+
                 })
             },
             cancelPrivacy:function(){

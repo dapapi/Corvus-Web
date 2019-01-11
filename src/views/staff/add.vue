@@ -674,6 +674,7 @@ export default {
 
 			fetch('post', '/personnel' ,params).then(result => {
                 toastr.success('添加成功')
+                this.$router.push({ path: '/staff' });
 			})
         },
         // 获取员工数据

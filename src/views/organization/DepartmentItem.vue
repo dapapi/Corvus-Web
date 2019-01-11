@@ -26,7 +26,7 @@
         <ul v-show="visible" v-if="!isEdit">
             <li v-for="(_item, _index) in data.users.data" :key="_index" :style="{paddingLeft: paddingLeft + 40 + 'px'}">
                 <Avatar :imgUrl="_item.icon_url" style="margin-right: 10px; vertical-align: unset" />{{ _item.name }}
-                <router-link :to="`/staff/detail/${_item.id}`"><i class="icon md-eye" style="float: right;line-height: 50px;" @click.stop></i></router-link>
+                <!-- <router-link :to="`/staff/detail/${_item.id}`"><i class="icon md-eye" style="float: right;line-height: 50px;" @click.stop></i></router-link> -->
             </li>
         </ul>
          <template v-for="(item, index) in data.departments.data">
@@ -87,11 +87,18 @@ export default {
         // 编辑部门
         edit (data) {
             this.editDepartment(data)
-            const item = data.users.data.find(item => item.is_department_principal === 1)
-            this.$store.commit('changeNewPrincipal', {
-                name: item.name,
-                id: item.id
-            })
+             if (data.is_department_principal === 1) {
+                this.$store.commit('changeNewPrincipal', {
+                    name: data.is_department_username,
+                    id: data.is_department_user_id
+                })
+            } else {
+                this.$store.commit('changeNewPrincipal', {
+                    name: '',
+                    id: ''
+                })
+            }
+            
         },
         // 删除
         del (data) {
@@ -171,6 +178,7 @@ ul {
 }
 .drop {
     float: right;
+    position: relative;
 }
 .principal {
     position: absolute;

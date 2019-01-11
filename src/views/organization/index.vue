@@ -92,13 +92,14 @@ import { mapState, mapActions } from 'vuex'
             // 选择
             checkMember (data) {
                 this.departmentId = data.id
-                this.$store.commit('changeNewParticipantsInfo', data.users.data)
+                this.$store.commit('changeNewParticipantsInfo', JSON.parse(JSON.stringify(data.users.data)))
                 $('#check-member').modal()
             },
             // 选择成员
             sureCheckMember () {
+                let length = this.$store.state.newParticipantsInfo.length
                 const params = {
-                    user: this.$store.state.newParticipantsInfo.map(n => n.id)
+                    user: length > 0 ? this.$store.state.newParticipantsInfo.map(n => n.id): ''
                 }
                 fetch('put', `/departments/member/${this.departmentId}`, params).then(res => {
                     $('#check-member').modal('hide')

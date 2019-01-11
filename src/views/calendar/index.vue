@@ -318,7 +318,8 @@
                                 {{ scheduleData.creator.data.name }}
                             </div>
                         </div>
-                        <div class="example" v-if="(scheduleData.project || scheduleData.task) && !noPermission">
+                        <div class="example"
+                             v-if="((scheduleData.project && scheduleData.project.data.length > 0) || (scheduleData.task && scheduleData.task.data.length > 0)) && !noPermission">
                             <div class="col-md-2 px-0 float-left">关联资源</div>
                             <div class="col-md-10 pl-0 float-left">
                                 <div class="pb-5" v-if="scheduleData.project"
@@ -726,9 +727,10 @@
                     };
                 }
                 fetch('get', '/materials/all', data).then(response => {
-                    this.allMeetingRomeList = response.data;
                     if (type) {
                         this.meetingRomeList = response.data;
+                    } else {
+                        this.allMeetingRomeList = response.data;
                     }
                 })
             },
@@ -987,7 +989,7 @@
                         this.$refs.scheduleResource.setValue(this.scheduleData.material.data.id);
                         this.scheduleMaterialId = this.scheduleData.material.data.id;
                     }
-                    if (this.scheduleData.project.data.length > 0){
+                    if (this.scheduleData.project.data.length > 0) {
                         this.linkageSelectedIds.projects = [];
                         for (let i = 0; i < this.scheduleData.project.data.length; i++) {
                             this.linkageSelectedIds.projects.push(this.scheduleData.project.data[i].moduleable_id)
