@@ -171,6 +171,7 @@
                 smsRequestToken: '',
                 isRememberName: false,
                 phone: '',
+                firstClickTime: null,
             }
         },
 
@@ -201,7 +202,7 @@
                     id: "loginContainer",
                     appid: "wx1c8644b3e608c59b",
                     scope: "snsapi_login",
-                    redirect_uri: "https%3a%2f%2fsandbox-api-crm.papitube.com%2fwechat_open%2foauth%2fcallback",
+                    redirect_uri: "https%3a%2f%2fapi-corvus.mttop.cn%2fwechat_open%2foauth%2fcallback",
                     state: "",
                     href: "https://res-crm.papitube.com/css/wxLogin-QrcodeStyle.css"
                 });
@@ -253,12 +254,38 @@
             },
 
             initSendSmsBtn() {
-                if (!Verify.phone(this.phone)) {
-                    return
+                let date = new Date();
+                let currentClickTime = date.getTime();
+                if (this.firstClickTime) {
+                    if (currentClickTime - this.firstClickTime < 1000) {
+                        this.firstClickTime = currentClickTime;
+                        console.log('return');
+                        return
+                    }
+                } else {
+                    this.firstClickTime = currentClickTime;
                 }
-                this.getServicesToken(token => {
-                    this.sendMessage(token)
-                })
+                let _this = this;
+                setTimeout(function () {
+                    if (!Verify.phone(_this.phone)) {
+                        return
+                    }
+                    if (_this.second > 0 && _this.second !== 60) {
+                        return
+                    }
+                    let interval = setInterval(function () {
+                        _this.toastText = _this.second + 's';
+                        _this.second -= 1;
+                        if (_this.second === 0) {
+                            clearInterval(interval);
+                            _this.toastText = '发送验证码';
+                            _this.second = 60;
+                        }
+                    }, 1000);
+                    _this.getServicesToken(token => {
+                        _this.sendMessage(token)
+                    })
+                }, 100)
             },
 
             getServicesToken(callback) {
@@ -320,19 +347,6 @@
             },
 
             sendMessage(token) {
-                if (this.second > 0 && this.second !== 60) {
-                    return
-                }
-                let _this = this;
-                let interval = setInterval(function () {
-                    _this.toastText = _this.second + 's';
-                    _this.second -= 1;
-                    if (_this.second === 0) {
-                        clearInterval(interval);
-                        _this.toastText = '发送验证码';
-                        _this.second = 60;
-                    }
-                }, 1000);
                 let data = {
                     telephone: this.phone,
                     device: this.getDevice(),
@@ -396,7 +410,6 @@
                     statusCode: config.getStatusCode()
                 }).done(function (response) {
                     let userData = response.data;
-                    console.log(response);
                     let json = {
                         id: userData.id,
                         avatar: userData.icon_url,
@@ -413,7 +426,8 @@
                 ) {
                     return false
                 } else if (this.newPassword !== this.repeatNewPassword) {
-                    toastr.error('两次密码不一致')
+                    toastr.error('两次密码不一致');
+                    return
                 }
                 let data = {
                     telephone: this.phone,
