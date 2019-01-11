@@ -98,7 +98,7 @@
                                            @change="(value) => addProjectBaseInfo(value, 'fee')"></NumberSpinner>
                         </div>
                     </div>
-                    <div class="col-md-12 example clearfix" v-for="field in projectFields" :key='field'>
+                    <div class="col-md-12 example clearfix" v-for="field in projectFields" :key='field.key'>
                         <div class="col-md-2 text-right float-left px-0 ">{{ field.key }}</div>
                         <div class="col-md-10 float-left">
                             <template v-if="field.field_type === 1">

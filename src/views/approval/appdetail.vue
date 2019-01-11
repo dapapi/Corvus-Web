@@ -6,19 +6,19 @@
                 <h6 class="page-title nav-head" v-if="info">
                     {{list.title}}
                     <template v-if="list.form_status==232">
-                        <button class="btn btn-success py-5">已审批</button>
+                        <button class="btn btn-success">已审批</button>
                     </template>
                     <template v-if="list.form_status==231">
-                        <button class="btn btn-warning py-5">待审批</button>
+                        <button class="btn btn-warning">待审批</button>
                     </template>
                     <template v-if="list.form_status==234">
-                        <button class="btn py-5">已撤销</button>
+                        <button class="btn">已撤销</button>
                     </template>
                     <template v-if="list.form_status==235">
-                        <button class="btn py-5">已作废</button>
+                        <button class="btn">已作废</button>
                     </template>
                     <template v-if="list.form_status==233">
-                        <button class="btn btn-danger py-5 ">已拒绝</button>
+                        <button class="btn btn-danger ">已拒绝</button>
                     </template>
                 </h6>
             </div>
@@ -85,7 +85,7 @@
                         <div class="row px-20">
                             <div class="col-md-10">
                                 <div class="col-md-6 detail-container px-0 float-left"
-                                     v-for="(item, index) in detailData" :key="index">
+                                     v-for="(item, index) in detailData" :key="index" v-if="item.values">
                                     <div class="col-md-4 float-left text-right detail-key mx-0 noselect">{{item.key}}
                                     </div>
                                     <div class="col-md-8 float-left detail-value"
@@ -341,7 +341,7 @@
 
     .nav-head button {
         color: white;
-        transform: scale(0.7)
+        /* transform: scale(0.7) */
     }
 
     .noselect {

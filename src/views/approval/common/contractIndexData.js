@@ -1,0 +1,29 @@
+export const CONTRACT_INDEX_CONFIG = {
+    contractIndex :[
+        {
+            key:1,
+            value:'papi签约合同',
+            type:1
+        },{
+            key:2,
+            value:'papi解约合同',
+            type:'1'
+        },{
+            key:3,
+            value:'泰洋签约合同',
+            type:2
+        },{
+            key:4,
+            value:'泰洋解约合同',
+            type:2
+        },{
+            key:5,
+            value:'泰洋项目合同',
+            type:2
+        },{
+            key:6,
+            value:'papi项目合同',
+            type:1
+        }
+    ],
+}

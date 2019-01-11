@@ -10,11 +10,11 @@ export const APPROVAL_CONFIG = {
             value: '合同',
             url: 'contract',
         },
-        // {
-        //     key: 3,
-        //     value: '一般审批',
-        //     url: 'common',
-        // }
+        {
+            key: 3,
+            value: '一般审批',
+            url: 'common',
+        }
     ],
     approvalSubSort: [
         {
