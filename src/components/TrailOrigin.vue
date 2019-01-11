@@ -1,6 +1,8 @@
 <template>
     <div class="">
-        <div class="text-right float-left" :class="[detailPage? 'col-md-3': 'col-md-2',isEdit ? 'line-fiexd-height': '']">{{typeName}}来源</div>
+        <div class="text-right float-left"
+             :class="[detailPage? 'col-md-3': 'col-md-2',isEdit ? 'line-fiexd-height': '']">{{typeName}}来源
+        </div>
         <div v-if="isEditSituation || alwaysShow">
             <!-- ⬆️判断是否永久显示 -->
             <div :class="detailPage?'col-md-9 float-left font-weight-bold expfee':'col-md-10 float-left pl-0'">
@@ -9,12 +11,12 @@
                     <selectors :options="trailOriginArr" @change="changeTrailOriginType" ref='contentType'
                                :placeholder="'请选择线索来源'"></selectors>
                 </div>
-                <template v-if="trailOrigin === '1' || trailOrigin === '2' || trailOrigin === '3'">
+                <template v-if="trailOrigin == 1 || trailOrigin == 2 || trailOrigin == 3">
                     <div class="col-md-6 float-left pr-0">
                         <input type="text" class="form-control" title="" v-model="email" ref="focus" @blur="editInput">
                     </div>
                 </template>
-                <template v-else-if="(trailOrigin === '4' || trailOrigin === '5')">
+                <template v-else-if="(trailOrigin == 4 || trailOrigin == 5)">
                     <div class="col-md-6 float-left pr-0">
                         <input-selectors @change="changeTrailOrigin" :placeholder='memberFinder' type="selector"
                                          :propSelectMemberName='trailOriginPerson.name'></input-selectors>
@@ -22,14 +24,18 @@
                 </template>
             </div>
         </div>
-        <div v-if="!isEditSituation  && !(trailOrigin === '4' || trailOrigin === '5')"
+        <div v-if="!isEditSituation  && (trailOrigin == 1 || trailOrigin == 2 || trailOrigin == 3)"
              class="float-left font-weight-bold expfee" :class="detailPage? 'col-md-9' : 'col-md-10'">
             <span>{{typeFinder}}</span>
             <span v-if="content"> - {{content.value || content}}</span>
         </div>
-        <div v-if="!isEditSituation && (trailOrigin === '4' || trailOrigin === '5')"
+        <div v-if="!isEditSituation && (trailOrigin == 4 || trailOrigin == 5)"
              class="float-left font-weight-bold expfee" :class="detailPage? 'col-md-9' : 'col-md-10'">
             <span>{{typeFinder}}  {{memberFinder}}</span>
+        </div>
+        <div v-if="!isEditSituation  && (trailOrigin != 1 && trailOrigin != 2 && trailOrigin != 3 && trailOrigin != 4 && trailOrigin != 5)"
+             class="float-left font-weight-bold expfee" :class="detailPage? 'col-md-9' : 'col-md-10'">
+            <span>{{typeFinder}}</span>
         </div>
     </div>
 </template>
@@ -77,19 +83,19 @@
             ...mapState([
                 'userList'
             ]),
-            _userList () {
+            _userList() {
                 return this.userList
             },
-            contentAndUserList () {
+            contentAndUserList() {
                 return this.members.length > 0 && this.content
             }
         },
         watch: {
-            _userList () {
+            _userList() {
                 this.members = this.userList
             },
             // 当userList和content同时存在时执行
-            contentAndUserList () {
+            contentAndUserList() {
                 if (this.contentAndUserList) {
                     if (this.members.find(item => item.id == this.content)) {
                         this.tempStore = this.content
@@ -147,7 +153,7 @@
             },
 
             editInput: function () {
-                if ((this.trailOrigin == 1 || this.trailOrigin == 2 ) && !verify.email(this.email)) {
+                if ((this.trailOrigin == 1 || this.trailOrigin == 2) && !verify.email(this.email)) {
                     this.$refs.focus.focus();
                     return
                 }
