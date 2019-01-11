@@ -923,7 +923,8 @@
                         </div>
                     </div>
                     <div class="modal-footer">
-                        <button class="btn btn-sm btn-white btn-pure" data-dismiss="modal" @click="cancelPrivacy">取消</button>
+                        <button class="btn btn-sm btn-white btn-pure" data-dismiss="modal" @click="cancelPrivacy">取消
+                        </button>
                         <button class="btn btn-primary" type="submit" @click="setPrivacy">确定</button>
                     </div>
                 </div>
@@ -1356,7 +1357,7 @@
     import fetch from '../../assets/utils/fetch.js'
     import config from '../../assets/js/config'
     import Cookies from 'js-cookie'
-    
+
     export default {
         data: function () {
             return {
@@ -1485,7 +1486,6 @@
             this.getProject();
             this.getClients();
             this.getTaskType();
-            this.getStars();
             this.getProjectTasks();
             this.getProjectTasking();
             this.getProjectProgress();
@@ -1605,11 +1605,12 @@
                     }
 
                     this.isLoading = false
+                    this.getStars()
                 })
             },
             //隐私设置
             setPrivacy: function () {
-                
+
                 let _this = this
                 let data = {
                     fee: this.$store.state.payInfo, //预计订单收入
@@ -1633,9 +1634,9 @@
                     $('#addPrivacy').modal('hide')
                 })
             },
-            getPrivacy:function(){
-                let data ={
-                    project_id:this.$route.params.id
+            getPrivacy: function () {
+                let data = {
+                    project_id: this.$route.params.id
                 }
                 let _this = this
                 fetch('get', `/privacyUsers?include=user`, data).then(function (response) {
@@ -1645,24 +1646,25 @@
                     _this.$store.state.payInfo = []
                     _this.$store.state.contractInfo = []
                     _this.$store.state.collectInfo = []
-                    if(allPrivacyUsers){
+                    if (allPrivacyUsers) {
                         for (let i = 0; i < allPrivacyUsers.length; i++) {
-                            if(allPrivacyUsers[i].field == 'fee'){
+                            if (allPrivacyUsers[i].field == 'fee') {
                                 _this.$store.state.payInfo.push(allPrivacyUsers[i].user.data)
-                            }else if (allPrivacyUsers[i].field == 'projected_expenditure'){
-                               _this.$store.state.divisionInfo.push(allPrivacyUsers[i].user.data)
-                            }else if (allPrivacyUsers[i].field == 'expendituresum'){
-                               _this.$store.state.contractInfo.push(allPrivacyUsers[i].user.data)
-                            }else if (allPrivacyUsers[i].field == 'contractmoney'){
-                               _this.$store.state.collectInfo.push(allPrivacyUsers[i].user.data)
-                            }else{}
+                            } else if (allPrivacyUsers[i].field == 'projected_expenditure') {
+                                _this.$store.state.divisionInfo.push(allPrivacyUsers[i].user.data)
+                            } else if (allPrivacyUsers[i].field == 'expendituresum') {
+                                _this.$store.state.contractInfo.push(allPrivacyUsers[i].user.data)
+                            } else if (allPrivacyUsers[i].field == 'contractmoney') {
+                                _this.$store.state.collectInfo.push(allPrivacyUsers[i].user.data)
+                            } else {
+                            }
 
                         }
                     }
 
                 })
             },
-            cancelPrivacy:function(){
+            cancelPrivacy: function () {
                 this.$store.state.divisionInfo = []
                 this.$store.state.payInfo = []
                 this.$store.state.contractInfo = []
@@ -1670,7 +1672,31 @@
             },
             getStars: function () {
                 let _this = this;
-                fetch('get', '/stars/all').then(function (response) {
+                let url = '';
+                if (this.projectInfo.type === 1 || this.projectInfo.type === 2 || this.projectInfo.type === 3) {
+                    fetch('get', '/stars/all').then(function (response) {
+                        for (let i = 0; i < response.data.length; i++) {
+                            _this.starsArr.push({
+                                name: response.data[i].name,
+                                id: response.data[i].id,
+                                value: response.data[i].id
+                            })
+                        }
+
+                    })
+                } else if (this.projectInfo.type === 4) {
+                    fetch('get', '/bloggers/all').then(function (response) {
+                        for (let i = 0; i < response.data.length; i++) {
+                            _this.starsArr.push({
+                                name: response.data[i].nickname,
+                                id: response.data[i].id,
+                                value: response.data[i].id
+                            })
+                        }
+
+                    })
+                }
+                fetch('get', url).then(function (response) {
                     for (let i = 0; i < response.data.length; i++) {
                         _this.starsArr.push({
                             name: response.data[i].name,
