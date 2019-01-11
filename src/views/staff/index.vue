@@ -68,7 +68,7 @@
                             <router-link tag="td" :to="{name: 'staffDetail', params: { id: item.id }}">
                                 {{ hireShapeArr.find(n => n.value == item.hire_shape)?hireShapeArr.find(n => n.value == item.hire_shape).name:'' }}
                             </router-link>
-                            <router-link tag="td" :to="{name: 'staffDetail', params: { id: item.id }}">{{ item.department.length > 0?item.department[0].name:'' }}
+                            <router-link tag="td" :to="{name: 'staffDetail', params: { id: item.id }}">{{ item.department? item.department.name : '' }}
                             </router-link>
                             <router-link tag="td" :to="{name: 'staffDetail', params: { id: item.id }}">{{ item.entry_time }}
                             </router-link>
