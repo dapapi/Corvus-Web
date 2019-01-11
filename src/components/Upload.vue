@@ -41,6 +41,7 @@ export default {
         uploadFile(e) {
             let file = e.target.files[0];
             let putExtra = null;
+            console.log(file);
             let type = file.type.split('/');
             if (type[type.length - 1] === 'vnd.ms-powerpoint') {
                 type[type.length - 1] = 'ppt';
