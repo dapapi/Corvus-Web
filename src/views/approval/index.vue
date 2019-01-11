@@ -1,7 +1,7 @@
 <template>
-  <div class="page-container">
+    <div class="page page-aside-left">
     <div class="page-aside">
-      <Approval />
+      <Approval class="" />
     </div>
     <div class="page">
       <router-view/>
@@ -18,15 +18,16 @@ export default {
 }
 </script>
 <style scoped>
-  .page-container{
+  /* .page-container{
     margin-left: 100px !important;
   }
   .page{
+    height: 100% !important;
     margin-left: 260px !important;
   }
   .page-aside{
-    border: none;
-  }
+    height: 100% !important;
+  } */
 </style>
 
 
