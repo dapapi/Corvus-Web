@@ -13,7 +13,7 @@
                     <i class="iconfont icon-gengduo1 font-size-24" aria-hidden="true" id="org-dropdown"
                         data-toggle="dropdown" aria-expanded="false" style="cursor: pointer; float: right;line-height: 50px;">
                     </i>
-                    <div class="dropdown-menu dropdown-menu-left" aria-labelledby="org-dropdown" role="menu" x-placement="bottom-start" style="min-width: 0">
+                    <div class="dropdown-menu dropdown-menu-right" aria-labelledby="org-dropdown" role="menu" x-placement="bottom-start" style="min-width: 10px">
                         <a class="dropdown-item" role="menuitem" @click="edit(data)">编辑部门</a>
                         <a class="dropdown-item" role="menuitem" @click="check(data)">选择成员</a>
                         <a class="dropdown-item" role="menuitem" @click="move(data)">移动部门到</a>
