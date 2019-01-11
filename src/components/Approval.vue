@@ -322,8 +322,6 @@
 
     .page-aside {
         height: 100% !important;
-        border: none !important;
-
     }
 
     .sub-box {
