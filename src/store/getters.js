@@ -32,5 +32,5 @@ export default {
     },
     getIsExpanded:function(state){
         return state.isExpanded
-    }
+    },
 }

@@ -995,7 +995,7 @@
                     if (url === 'bloggers' || url === 'stars') {
                         data.sign_contract_status = 2
                     }
-                    fetch('get', `/${url}`, data).then(res => {
+                    fetch('get', `/${url === 'bloggers'? url + '/all' : url}`, data).then(res => {
                         const temp = this.linkData[index]
                         temp.child = res.data.map(n => {
                             return {
