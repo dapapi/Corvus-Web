@@ -97,7 +97,7 @@
                                         <span class="font-weight-bold">职位</span>
                                     </div>
                                     <div class="float-left col-md-6 pl-0">
-                                        {{ personalInfo.position ? personalInfo.position : ''}}
+                                        {{ personalInfo.position_name ? personalInfo.position_name : ''}}
                                     </div>
                                 </div>
                                 <div class="col-md-4 float-left">
@@ -106,7 +106,7 @@
                                         <span class="font-weight-bold">部门</span>
                                     </div>
                                     <div class="float-left col-md-6 pl-0">
-                                        {{ personalInfo.position ? personalInfo.position : ''}}
+                                        {{ personalInfo.department_name ? personalInfo.department_name : ''}}
                                     </div>
                                 </div>
                             </div>

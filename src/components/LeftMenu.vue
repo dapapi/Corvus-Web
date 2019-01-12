@@ -80,7 +80,7 @@
                     },
                     {
                         name: 'Talent',
-                        code: '',
+                        code: 'talent',
                         image: 'https://res.papitube.com/corvus/images/talent.png',
                         hoverImage: 'https://res.papitube.com/corvus/images/select-talent.png',
                         data: [
