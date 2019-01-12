@@ -1065,7 +1065,7 @@
                     _this.uploadUrl = _this.artistInfo.avatar
                     _this.artistProjectsInfo = []
                     _this.artistTasksInfo = response.data.tasks.data
-                    if(response.data.calendar.data){
+                    if(response.data.calendar){
                         _this.calendarId.push(response.data.calendar.data.id)
                     }
                     _this.artistWorksInfo = response.data.works.data
