@@ -26,7 +26,10 @@
                                 <i class="iconfont icon-labelbiaoqian pr-2" aria-hidden="true"></i>类型
                             </div>
                             <div class="font-weight-bold float-left" v-if="clientInfoCopy.type">
-                                {{ clientTypeArr.find(item => item.value == clientInfoCopy.type).name }}
+                                <template v-if="clientInfoCopy.type == 1">影视客户</template>
+                                <template v-if="clientInfoCopy.type == 2">综艺客户</template>
+                                <template v-if="clientInfoCopy.type == 3">商务客户</template>
+                                <template v-if="clientInfoCopy.type == 4">商务客户</template>
                             </div>
                         </div>
                     </div>

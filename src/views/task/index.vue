@@ -534,7 +534,11 @@
             // 获取关联子资源数据
             getChildLinkData(url, index) {
                 if (url) {
-                    fetch('get', `/${url}`).then(res => {
+                    let data = {}
+                    if (url === 'bloggers' || url === 'stars') {
+                        data.sign_contract_status = 2
+                    }
+                    fetch('get', `/${url === 'bloggers'? url + '/all' : url}`, data).then(res => {
                         const temp = this.linkData[index]
                         temp.child = res.data.map(n => {
                             return {

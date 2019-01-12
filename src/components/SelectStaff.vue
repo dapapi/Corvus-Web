@@ -300,7 +300,6 @@
         border: 1px solid #f2f2f2;
         overflow: hidden;
         z-index: 1000;
-        top: 36px;
     }
 
     .page-nav-tabs {
