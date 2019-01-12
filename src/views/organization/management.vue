@@ -56,51 +56,73 @@
                 </div>
                 </div>
                 <div class="example">
-                <div class="col-md-2 text-right float-left">负责人</div>
-                <div class="col-md-10 float-left">
-                    <InputSelectors :placeholder="'请选择负责人'" @change="principalChange"></InputSelectors>
-                </div>
-                </div>
-                <div class="example">
-                <div class="col-md-2 text-right float-left">部门城市</div>
-                <div class="col-md-10 float-left">
-                    <selectors ref="departmentCity" :options="cityArr" @change="changeCity"></selectors>
-                </div>
+                    <div class="col-md-2 text-right float-left">负责人</div>
+                    <div class="col-md-10 float-left">
+                        <InputSelectors :placeholder="'请选择负责人'" @change="principalChange"></InputSelectors>
+                    </div>
                 </div>
                 <div class="example">
-                <div class="col-md-2 text-right float-left">部门所属</div>
-                <div class="col-md-10 float-left">
-                    <DropDepartment :data="department" @change="selectDepartment"/>
+                    <div class="col-md-2 text-right float-left">部门城市</div>
+                    <div class="col-md-10 float-left">
+                        <selectors ref="departmentCity" :options="cityArr" @change="changeCity"></selectors>
+                    </div>
                 </div>
+                <div class="example">
+                    <div class="col-md-2 text-right float-left">部门所属</div>
+                    <div class="col-md-10 float-left">
+                        <DropDepartment :data="department" @change="selectDepartment"/>
+                    </div>
+                </div>
+                <div class="example">
+                    <div class="col-md-2 text-right float-left require">组织</div>
+                    <div class="col-md-10 float-left">
+                        <Selectors
+                            ref="company"
+                            :options="companyArr"
+                            @change=" item => companyId = item"
+                        />
+                        <!-- @change="item => changeState('gender', item)" -->
+                    </div>
                 </div>
             </Modal>
 
             <!-- 新增子部门 -->
             <Modal id="add-child-department" title="添加子部门" @onOK="addChildDepartment">
                 <div class="example">
-                <div class="col-md-2 text-right float-left require">部门名称</div>
-                <div class="col-md-10 float-left">
-                    <input
-                        type="text"
-                        title
-                        class="form-control"
-                        placeholder="请输部门名称"
-                        v-model="departmentName"
-                    >
-                </div>
-                </div>
-                <div class="example">
-                <div class="col-md-2 text-right float-left">负责人</div>
-                <div class="col-md-10 float-left">
-                    <InputSelectors :placeholder="'请选择负责人'" @change="principalChange"></InputSelectors>
-                </div>
+                    <div class="col-md-2 text-right float-left require">部门名称</div>
+                    <div class="col-md-10 float-left">
+                        <input
+                            type="text"
+                            title
+                            class="form-control"
+                            placeholder="请输部门名称"
+                            v-model="departmentName"
+                        >
+                    </div>
                 </div>
                 <div class="example">
-                <div class="col-md-2 text-right float-left">部门所属</div>
-                <div class="col-md-10 float-left">
-                    <DropDepartment :data="department" @change="selectDepartment"/>
+                    <div class="col-md-2 text-right float-left">负责人</div>
+                    <div class="col-md-10 float-left">
+                        <InputSelectors :placeholder="'请选择负责人'" @change="principalChange"></InputSelectors>
+                    </div>
                 </div>
+                <div class="example">
+                    <div class="col-md-2 text-right float-left">部门所属</div>
+                    <div class="col-md-10 float-left">
+                        <DropDepartment :data="department" @change="selectDepartment"/>
+                    </div>
                 </div>
+                <div class="example">
+                    <div class="col-md-2 text-right float-left require">组织</div>
+                    <div class="col-md-10 float-left">
+                        <Selectors
+                            ref="company"
+                            :options="companyArr"
+                            @change=" item => companyId = item"
+                        />
+                    </div>
+                </div>
+                
             </Modal>
 
             <!-- 选择成员 -->
@@ -139,7 +161,10 @@ export default {
             dIndex: -1,
             principalName: '', // 负责人名字
             principalId: '', // 负责人id
-            cityArr: config.departmentCityArr // 部门城市
+            cityArr: config.departmentCityArr, // 部门城市
+            companyArr: [], // 公司
+            companyId: '', // 公司id
+            companyName: '', // 公司name
         };
     },
 
@@ -156,6 +181,7 @@ export default {
             // 清空state
             this.cancelAdd()
         })
+        this.getCompany()
         
         if (this.department.length > 0) {
             this.departmentPId = this.department[0].department_pid;
@@ -189,11 +215,16 @@ export default {
                 toastr.error("请填写部门名称");
                 return;
             }
+            if (!this.companyId) {
+                toastr.error("请选择组织");
+                return;
+            }
             const params = {
-                department_pid: this.departmentPId,
+                department_pid: !this.isEdit ? this.departmentId : this.departmentPId, // 这里对应的是departmentId
                 name: this.departmentName,
                 city: this.city,
-                user_id: this.principalId
+                user_id: this.principalId,
+                company_id: this.companyId
             };
 
             fetch(
@@ -229,6 +260,12 @@ export default {
                 this.principalName = ''
                 this.principalId = ''
             }
+            if (val.company_id) {
+                this.companyName = val.company
+                this.companyId = val.company_id
+                this.$refs.company.setValue(this.companyId)
+            }
+
             //   departmentCity todo
             //   this.city = val.
             $("#add-department").modal();
@@ -275,10 +312,19 @@ export default {
         },
         // 新增子部门
         addChildDepartment() {
+            if (!this.departmentName) {
+                toastr.error("请填写部门名称");
+                return;
+            }
+            if (!this.companyId) {
+                toastr.error("请选择组织");
+                return;
+            }
             const params = {
                 department_pid: this.departmentId,
                 name: this.departmentName,
-                user_id: this.principalId
+                user_id: this.principalId,
+                company_id: this.companyId
             };
             fetch("post", `/departments`, params).then(res => {
                 toastr.success("添加成功");
@@ -323,6 +369,17 @@ export default {
             this.$store.commit('changeNewPrincipal', {
                 name: '',
                 id: ''
+            })
+            this.companyId = ''
+        },
+        getCompany () {
+            fetch('get', '/company').then(res => {
+                this.companyArr = res.data.map( n => {
+                    return {
+                        name: n.name,
+                        value: n.id
+                    }
+                })
             })
         }
     }
