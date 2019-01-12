@@ -41,8 +41,8 @@
         </div>
         <div class="col-md-12 mt-20 mb-50" >
             <span v-if="notice || !mode" style='min-width:50px;' class="float-left ">知会人</span>
-            <div class="approver ml-10 float-left noselect" :style="{backgroundImage:'url('+randomColor(item.icon_url).color+')',backgroundColor:randomColor(item.icon_url).color}" v-if="mode" v-for="(item, index) in notice" :key="index">{{randomColor(item.icon_url).name}}</div>
-            <AddMember v-if="!mode"/>
+            <!-- <div class="approver ml-10 float-left noselect" :style="{backgroundImage:'url('+randomColor(item.icon_url).color+')',backgroundColor:randomColor(item.icon_url).color}" v-if="mode" v-for="(item, index) in notice" :key="index">{{randomColor(item.icon_url).name}}</div> -->
+            <AddMember />
         </div>
     </div>
 </template>
@@ -61,10 +61,15 @@ export default {
             waitingFor:'',
             informer:{},
             finalShow:false,
+            noticeArr:[],
+            noticeDiff:{
+                id:'',
+                operate:0
+            }
         }
     },
     computed:{
-       iconSelector(){
+        iconSelector(){
            switch (this.formstatus) {
                 case '已审批':
                     return 'icon-tongguo|#4daf50'
@@ -82,6 +87,47 @@ export default {
        }
     },
     watch:{
+        'noticeDiff':{
+            handler:function(value){
+                if(value.id){
+                    this.noticeChanger(value)
+                }
+            },
+            deep:true
+        },
+        notice(value){
+            if(value){
+                this.$store.dispatch('changeParticipantsInfo',{data:Array.from(this.notice)});
+                this.noticeArr = JSON.parse(JSON.stringify(this.$store.state.newParticipantsInfo))
+
+            }
+        },
+        '$store.state.newParticipantsInfo':function(value){
+            let valueArr = []
+            let noticeTempArr = []
+            for (const key in value) {
+                valueArr.push(value[key].id)
+            }
+            for (const key in this.noticeArr) {
+                noticeTempArr.push(this.noticeArr[key].id)
+            }
+            if(this.noticeArr.length < value.length){
+                this.noticeDiff.operate = 1
+                for (const key in valueArr) {
+                    if (!noticeTempArr.includes(valueArr[key])) {
+                        this.noticeDiff.id = valueArr[key]
+                    }
+                }
+            }else{
+                this.noticeDiff.operate = 0
+                for (const key in noticeTempArr) {
+                    if (!valueArr.includes(noticeTempArr[key])) {
+                        this.noticeDiff.id = noticeTempArr[key]
+                    }
+                }
+            }
+            this.noticeArr = JSON.parse(JSON.stringify(this.$store.state.newParticipantsInfo))
+        },
         formid:function(value){
             this.getApprover(this.formid)
         },
@@ -111,7 +157,6 @@ export default {
                     _this.informer = data
                     _this.$store.dispatch('changeParticipantsInfo',{data:Array.from(_this.informer)});
                     _this.finalShow = true
-
                     // _this.$store.state.newParticipantsInfo = Array.from(_this.informer)
                     })
                 }
@@ -122,12 +167,16 @@ export default {
     },
     mounted(){
         this.getApprover(this.formid)
-        if(this.notice){
-            // this.$store.state.newParticipantsInfo = Array.from(this.notice)
-            this.$store.dispatch('changeParticipantsInfo',{data:Array.from(this.notice)});
-        }
     },
     methods:{
+        noticeChanger(value){
+            if(this.formid){
+ fetch('post','/approval_instances/'+this.formid+'/participant',value).then((params) => {
+                console.log('aaaa')
+            })
+            }
+           
+        },
         getApprover(value){
             if(!this.mode){
                 if(!value){

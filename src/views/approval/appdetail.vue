@@ -12,10 +12,10 @@
                         <button class="btn btn-warning">待审批</button>
                     </template>
                     <template v-if="list.form_status==234">
-                        <button class="btn">已撤销</button>
+                        <button class="btn" style='color:rgba(7,17,27,0.4)'>已撤销</button>
                     </template>
                     <template v-if="list.form_status==235">
-                        <button class="btn">已作废</button>
+                        <button class="btn" style='color:rgba(7,17,27,0.4)'>已作废</button>
                     </template>
                     <template v-if="list.form_status==233">
                         <button class="btn btn-danger ">已拒绝</button>
