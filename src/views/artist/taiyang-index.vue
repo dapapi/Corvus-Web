@@ -345,7 +345,7 @@
         <!--分配经理人-->
         <div class="modal fade" id="giveBroker" aria-hidden="true" aria-labelledby="addLabelForm"
              role="dialog" tabindex="-1">
-            <div class="modal-dialog modal-simple">
+            <div class="modal-dialog modal-simple" style="max-width: 50rem;">
                 <div class="modal-content">
                     <div class="modal-header">
                         <button type="button" class="close" aria-hidden="true" data-dismiss="modal">
@@ -356,7 +356,7 @@
                             <template v-else>分配宣传人</template>
                         </h4>
                     </div>
-                    <div class="modal-body">
+                    <div class="modal-body clearfix pt-10">
                         <ListSelectMember :listName="'成员列表'" :selectName="'已选择成员'" :type="'change'"></ListSelectMember>
                     </div>
                     <div class="modal-footer">

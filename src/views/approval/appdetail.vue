@@ -84,7 +84,7 @@
                         <h6 class="page-title pb-20 mx-15">审批详情</h6>
                         <div class="row px-20">
                             <div class="col-md-10">
-                                <div class="col-md-6 detail-container px-0 float-left"
+                                <div class="col-md-6 my-5 px-0 float-left"
                                      v-for="(item, index) in detailData" :key="index" v-if="item.values">
                                     <div class="col-md-4 float-left text-right detail-key mx-0 noselect">{{item.key}}
                                     </div>
@@ -114,6 +114,18 @@
                         </div>
                     </div>
                 </div>
+                <!-- <div class="panel">
+                    <div class="card col-md-12">
+                        <div class="card-header card-header-transparent card-header-bordered">
+                            <h5>合同跟进</h5>
+                        </div>
+                        <div class="card-block">
+                            <div class="col-md-12 pl-0">
+                                <TaskFollowUp :follow-type="'线索'" ></TaskFollowUp>
+                            </div>
+                        </div>
+                    </div>
+                </div> -->
             </div>
             <DocPreview :url='previewUrl'/>
         </div>
@@ -125,7 +137,6 @@
              role="dialog" tabindex="-1">
             <div class="modal-dialog modal-simple modal-center modal-lg">
                 <div class="modal-content">
-
                     <div class="modal-header">
                         <button type="button" class="close" data-dismiss="modal" aria-label="Close">
                             <span aria-hidden="true">×</span>

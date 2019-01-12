@@ -1,8 +1,8 @@
-<template>
-    <div class="page">
+ <template>
+   <div class="page">
         <Loading :is-loading="isLoading"></Loading>
         <div class="page-header page-header-bordered">
-            <h1 class="page-title">博主管理</h1>
+            <h1 class="page-title">Talent</h1>
 
             <div class="page-header-actions dropdown show task-dropdown float-right" style="z-index:1000">
                 <i class="iconfont icon-gengduo1 font-size-24" aria-hidden="true" id="taskDropdown"
@@ -12,76 +12,76 @@
                     <a class="dropdown-item" role="menuitem">导入</a>
                     <a class="dropdown-item" role="menuitem">导出</a>
                     <a class="dropdown-item" role="menuitem" data-toggle="modal"
-                       :data-target="selectedArtistsArr.length>0&&'#giveBroker'" @click="judge">分配制作人</a>
+                       :data-target="selectedArtistsArr.length>0&&'#giveProducer'" @click="judge">分配制作人</a>
                 </div>
             </div>
         </div>
 
         <div class="page-content container-fluid">
             <div class="panel col-md-12 clearfix py-5">
-                <div class="clearfix">
-                    <div class="col-md-3 example float-left">
-                        <input type="text" class="form-control" id="inputPlaceholder" placeholder="请输入博主昵称"
-                               v-model="blogName" @blur='getArtists()'>
-                    </div>
-                    <div class="col-md-3 example float-left">
-                        <selectors :options="artistTypeArr" @change="typeFilter" placeholder="请选择博主分类"></selectors>
-                    </div>
-                    <div class="col-md-3 example float-left">
-                        <selectors :options="papiCommunicationStatusArr" @change="CommunicationStatus"
-                                   placeholder="请选择沟通状态"></selectors>
-                    </div>
-                    <!--<div class="col-md-3 example float-left">-->
-                    <!--<button type="button" class="btn btn-default waves-effect waves-classic float-right"-->
-                    <!--data-toggle="modal" data-target="#customizeContent"-->
-                    <!--data-placement="right" title="">-->
-                    <!--自定义筛选-->
-                    <!--</button>-->
-                    <!--</div>-->
-                </div>
-
                 <div class="col-md-12">
-                    <ul class="nav nav-tabs nav-tabs-line" role="tablist">
-                        <li class="nav-item" role="presentation" @click="getArtists(1,1)">
-                            <a class="nav-link active" data-toggle="tab" href="#forum-artist"
+                    <ul class="nav nav-tabs nav-tabs-line" role="tablist" style="position: relative;">
+                        <li class="nav-item" role="presentation">
+                            <a class="nav-link" data-toggle="tab" href="#forum-artist"
                                aria-controls="forum-base"
-                               aria-expanded="true" role="tab">签约中</a>
+                               aria-expanded="true" role="tab" :class="isShow?'active':''" @click="tab">艺人</a>
                         </li>
-                        <li class="nav-item" role="presentation" @click="getArtists(1,2)">
-                            <a class="nav-link" data-toggle="tab" href="#forum-artist"
+                        <li class="nav-item" role="presentation" >
+                            <a class="nav-link" data-toggle="tab" href="#forum-blogger"
                                aria-controls="forum-present"
-                               aria-expanded="false" role="tab">已签约</a>
+                               aria-expanded="false" role="tab" :class="!isShow?'active':''" @click="tab">博主</a>
                         </li>
-                        <li class="nav-item" role="presentation" @click="getArtists(1,3)">
-                            <a class="nav-link" data-toggle="tab" href="#forum-artist"
-                               aria-controls="forum-present"
-                               aria-expanded="false" role="tab">已解约</a>
-                        </li>
+                        <i  v-if="isShow" style="position: absolute;right:10px;top:10px;color: rgb(0, 176, 255);font-style: normal;" @click="getArtists(1,1)">签约中</i>
+                        <i  v-if="!isShow" style="position: absolute;right:10px;top:10px;color: rgb(0, 176, 255);font-style: normal;" @click="getBlogger(1,1)">签约中</i>
                     </ul>
                 </div>
-
-                <div class="page-content tab-content nav-tabs-animate bg-white">
-                    <div class="tab-pane animation-fade active" id="forum-artist" role="tabpanel">
-                        <table class="table table-hover is-indent" data-plugin="selectable"
+              
+                <div class="tab-content nav-tabs-animate bg-white">
+                    <div class="tab-pane animation-fade" id="forum-artist" role="tabpanel" :class="isShow?'active':''">
+                        <div class="clearfix my-20">
+                            <div class="col-md-3 example float-left">
+                                <input type="text" v-model="listData.name" class="form-control" id="inputPlaceholder"
+                                    placeholder="请输入姓名"
+                                    @blur="getArtists">
+                            </div>
+                            <div class="col-md-3 example float-left">
+                                <selectors :options="artistStatusArr" placeholder="请选择艺人沟通状态" @change="getStatus"></selectors>
+                            </div>
+                            <div class="col-md-3 example float-left">
+                                <selectors :options="artistSourceArr" placeholder="请选择艺人来源" @change="getSource"></selectors>
+                            </div>
+                            <!--<div class="col-md-3 example float-left">-->
+                            <!--<button type="button" class="btn btn-default waves-effect waves-classic float-right"-->
+                            <!--data-toggle="modal" data-target="#customizeContent"-->
+                            <!--data-placement="right" title="">-->
+                            <!--自定义筛选-->
+                            <!--</button>-->
+                            <!--</div>-->
+                        </div>
+                        <table class="table table-hover is-indent ml-5" data-plugin="selectable"
                                data-selectable="selectable">
-                            <tr>
+                            <tr v-if="artistsInfo">
                                 <th class="w-50">
-                                        <span class="checkbox-custom checkbox-primary">
-                                            <input class="selectable-all" type="checkbox"
-                                                   @change="selectArtists('all')" v-model="selectAllBlogger">
-                                            <label></label>
-                                        </span>
+                                    <span class="checkbox-custom checkbox-primary">
+                                        <input class="selectable-all" type="checkbox"
+                                               @change="selectArtists('all')" v-model="selectAllStars">
+                                        <label></label>
+                                    </span>
                                 </th>
-                                <th class="cell-300" scope="col">昵称</th>
-                                <th class="cell-300" scope="col">类型</th>
-                                <th class="cell-300" scope="col">沟通状态</th>
-                                <th class="cell-300" scope="col">制作人</th>
+                                <th class="cell-300" scope="col">姓名</th>
+                                <th class="cell-300" scope="col" v-if="artistsInfo.find(item=>item.sign_contract_status==1)">年龄</th>
+                                <th class="cell-300" scope="col" v-if="artistsInfo.find(item=>item.sign_contract_status!==1)">微博粉丝</th>
+                                <th class="cell-300" scope="col" v-if="artistsInfo.find(item=>item.sign_contract_status==1)">艺人来源</th>
+                                <th class="cell-300" scope="col" v-if="artistsInfo.find(item=>item.sign_contract_status==1)">沟通状态</th>
+                                <th class="cell-300" scope="col" v-if="artistsInfo.find(item=>item.sign_contract_status!==1)">类型</th>
+                                <th class="cell-300" scope="col" v-if="artistsInfo.find(item=>item.sign_contract_status==2)">合同起始日</th>
+                                <th class="cell-300" scope="col" v-if="artistsInfo.find(item=>item.sign_contract_status==3)">合同终止日</th>
                                 <th class="cell-300" scope="col">录入时间</th>
                                 <th class="cell-300" scope="col">最后跟进时间</th>
                             </tr>
                             <tbody>
 
-                            <tr v-for="artist in artistsInfo" :key="artist.id" class="pointer-content">
+                            <tr v-for="(artist,index) in artistsInfo" :key="index" class="pointer-content">
                                 <td>
                                     <span class="checkbox-custom checkbox-primary">
                                         <input class="selectable-item" type="checkbox" :id="'row-' + artist.id"
@@ -89,9 +89,95 @@
                                         <label :for="'row-' + artist.id"></label>
                                     </span>
                                 </td>
-                                <td @click="redirectArtistDetail(artist.id)">{{ artist.nickname }}</td>
-                                <td @click="redirectArtistDetail(artist.id)">{{ artist.type.data.name }}</td>
+                                <td @click="redirectArtistDetail(artist.id)">{{ artist.name }}</td>
+                                <td @click="redirectArtistDetail(artist.id)">{{artist.birthday|jsGetAge}}</td>
                                 <td @click="redirectArtistDetail(artist.id)">
+                                    <template v-if="artist.source">
+                                            <span :style="'color:' + artistSourceArr.find(item => item.value == artist.source).color">
+                                                {{ artistSourceArr.find(item => item.value == artist.source).name}}
+                                            </span>
+                                    </template>
+                                </td>
+                                <td @click="redirectArtistDetail(artist.id)">
+                                    <template v-if="artist.communication_status">
+                                            <span :style="{color:taiyangCommunicationStatusArr.find(item => item.value ==
+                                                    artist.communication_status).color}">
+                                                 {{ taiyangCommunicationStatusArr.find(item => item.value ==
+                                                    artist.communication_status).name}}
+                                            </span>
+
+                                    </template>
+                                </td>
+                                <td @click="redirectArtistDetail(artist.id)">{{artist.created_at}}</td>
+                                <td @click="redirectArtistDetail(artist.id)">{{artist.updated_at}}</td>
+                            </tr>
+                            </tbody>
+
+                        </table>
+                        <div v-if="artistsInfo.length === 0" class="col-md-1" style="margin: 6rem auto">
+                            <img src="https://res.papitube.com/corvus/images/content-none.png" alt=""
+                                 style="width: 100%">
+                        </div>
+
+                        <pagination :current_page="current_page" :method="getBlogger" :total_pages="total_pages"
+                                    :total="total"></pagination>
+                    </div>
+                    <div class="tab-pane animation-fade" id="forum-blogger" role="tabpanel" :class="!isShow?'active':''">
+                        <div class="clearfix my-20">
+                            <div class="col-md-3 example float-left">
+                                <input type="text" class="form-control" id="inputPlaceholder" placeholder="请输入博主昵称"
+                                    v-model="blogName" @blur='getBlogger()'>
+                            </div>
+                            <div class="col-md-3 example float-left">
+                                <selectors :options="artistTypeArr" @change="typeFilter" placeholder="请选择博主分类"></selectors>
+                            </div>
+                            <div class="col-md-3 example float-left">
+                                <selectors :options="papiCommunicationStatusArr" @change="CommunicationStatus"
+                                        placeholder="请选择沟通状态"></selectors>
+                            </div>
+                            <!-- <div class="col-md-3 example float-left">
+                                <button type="button" class="btn btn-default waves-effect waves-classic float-right"
+                                data-toggle="modal" data-target="#customizeContent"
+                                data-placement="right" title="">
+                                自定义筛选
+                                </button>
+                            </div> -->
+                        </div>
+                        <table class="table table-hover is-indent ml-5" data-plugin="selectable"
+                               data-selectable="selectable">
+                            <tr v-if="bloggerInfo">
+                                <th class="w-50">
+                                        <span class="checkbox-custom checkbox-primary">
+                                            <input class="selectable-all" type="checkbox"
+                                                   @change="selectArtists('all')" v-model="selectAllBlogger">
+                                            <label></label>
+                                        </span>
+                                </th>
+                                <th class="cell-300" scope="col" v-if="bloggerInfo.find(item=>item.sign_contract_status==1)">昵称</th>
+                                <th class="cell-300" scope="col" v-if="bloggerInfo.find(item=>item.sign_contract_status!==1)">姓名</th>
+                                <th class="cell-300" scope="col" v-if="bloggerInfo.find(item=>item.sign_contract_status!==1)">微博粉丝</th>
+                                <th class="cell-300" scope="col" v-if="bloggerInfo.find(item=>item.sign_contract_status==1)">类型</th>
+                                <th class="cell-300" scope="col" v-if="bloggerInfo.find(item=>item.sign_contract_status==1)">沟通状态</th>
+                                <th class="cell-300" scope="col" v-if="bloggerInfo.find(item=>item.sign_contract_status==1)">制作人</th>
+                                <th class="cell-300" scope="col" v-if="bloggerInfo.find(item=>item.sign_contract_status!==1)">类型</th>
+                                <th class="cell-300" scope="col" v-if="bloggerInfo.find(item=>item.sign_contract_status==2)">合同起始日</th>
+                                <th class="cell-300" scope="col" v-if="bloggerInfo.find(item=>item.sign_contract_status==3)">合同终止日</th>
+                                <th class="cell-300" scope="col">录入时间</th>
+                                <th class="cell-300" scope="col">最后跟进时间</th>
+                            </tr>
+                            <tbody>
+
+                            <tr v-for="artist in bloggerInfo" :key="artist.id" class="pointer-content">
+                                <td>
+                                    <span class="checkbox-custom checkbox-primary">
+                                        <input class="selectable-item" type="checkbox" :id="'row-' + artist.id"
+                                               :value="artist.id" @change="selectArtists(artist.id)">
+                                        <label :for="'row-' + artist.id"></label>
+                                    </span>
+                                </td>
+                                <td @click="redirectBolggerDetail(artist.id)">{{ artist.nickname }}</td>
+                                <td @click="redirectBolggerDetail(artist.id)">{{ artist.type.data.name }}</td>
+                                <td @click="redirectBolggerDetail(artist.id)">
                                     <template v-if="artist.communication_status">
                                         <span :style="{color:papiCommunicationStatusArr.find(item => item.value ==
                                             artist.communication_status).color}">
@@ -101,25 +187,25 @@
 
                                     </template>
                                 </td>
-                                <td @click="redirectArtistDetail(artist.id)">
+                                <td @click="redirectBolggerDetail(artist.id)">
                                     <span v-for="(v,index) in artist.publicity.data" :key="index">
                                         {{v.name}}
                                     </span>
                                 </td>
-                                <td @click="redirectArtistDetail(artist.id)">{{artist.created_at}}</td>
+                                <td @click="redirectBolggerDetail(artist.id)">{{artist.created_at}}</td>
                                 <td v-for="(v,index) in artist.operatelogs.data" :key="index"
-                                    @click="redirectArtistDetail(artist.id)">{{v.created_at}}
+                                    @click="redirectBolggerDetail(artist.id)">{{v.created_at}}
                                 </td>
                             </tr>
 
                             </tbody>
 
                         </table>
-                        <div class="col-md-1" style="margin: 6rem auto" v-if="artistsInfo.length==0">
+                        <div class="col-md-1" style="margin: 6rem auto" v-if="bloggerInfo.length==0">
                             <img src="https://res.papitube.com/corvus/images/content-none.png" alt=""
                                  style="width: 100%">
                         </div>
-                        <pagination :current_page="current_page" :method="getArtists" :total_pages="total_pages"
+                        <pagination :current_page="current_page" :method="getBlogger" :total_pages="total_pages"
                                     :total="total"></pagination>
                     </div>
                 </div>
@@ -130,7 +216,7 @@
 
         <customize-filter :data="customizeInfo" @change="customize"></customize-filter>
 
-        <div class="site-action" data-plugin="actionBtn" data-toggle="modal" data-target="#addArtist">
+        <div class="site-action" data-plugin="actionBtn" data-toggle="modal" data-target="#addBolgger" v-if="!isShow">
             <button type="button"
                     class="site-action-toggle btn-raised btn btn-success btn-floating waves-effect waves-classic">
                 <i class="front-icon iconfont icon-tianjia1 animation-scale-up" aria-hidden="true"
@@ -139,9 +225,8 @@
                    style="font-size:30px"></i>
             </button>
         </div>
-
-        <div class="modal fade" id="addArtist" aria-hidden="true" aria-labelledby="addLabelForm"
-             role="dialog" tabindex="-1">
+        <div class="modal fade" id="addBolgger" aria-hidden="true" aria-labelledby="addLabelForm"
+             role="dialog" tabindex="-1" >
             <div class="modal-dialog modal-simple">
                 <div class="modal-content">
                     <div class="modal-header">
@@ -263,7 +348,7 @@
                 </div>
             </div>
         </div>
-        <div class="modal fade" id="giveBroker" aria-hidden="true" aria-labelledby="addLabelForm"
+        <div class="modal fade" id="giveProducer" aria-hidden="true" aria-labelledby="addLabelForm"
              role="dialog" tabindex="-1">
             <div class="modal-dialog modal-simple" style="max-width: 50rem;">
                 <div class="modal-content">
@@ -284,10 +369,37 @@
                 </div>
             </div>
         </div>
+        
+       
+        <!--分配经理人-->
+        <!-- <div class="modal fade" id="giveBroker" aria-hidden="true" aria-labelledby="addLabelForm"
+             role="dialog" tabindex="-1">
+            <div class="modal-dialog modal-simple">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <button type="button" class="close" aria-hidden="true" data-dismiss="modal">
+                            <i class="iconfont icon-guanbi" aria-hidden="true"></i>
+                        </button>
+                        <h4 class="modal-title">
+                            <template v-if="giveType == 1">分配分配经理人</template>
+                            <template v-else>分配宣传人</template>
+                        </h4>
+                    </div>
+                    <div class="modal-body">
+                        <ListSelectMember :listName="'成员列表'" :selectName="'已选择成员'" :type="'change'"></ListSelectMember>
+                    </div>
+                    <div class="modal-footer">
+                        <button class="btn btn-sm btn-white btn-pure" data-dismiss="modal" @click="cancelGiveBroker()">
+                            取消
+                        </button>
+                        <button class="btn btn-primary" type="submit" @click="giveBroker">确定</button>
+                    </div>
 
+                </div>
+            </div>
+        </div> -->
     </div>
 </template>
-
 <script>
     import fetch from '../../assets/utils/fetch.js'
     import config from '../../assets/js/config'
@@ -312,7 +424,7 @@
                 ],
                 artistStatusArr: config.artistStatusArr,
                 papiCommunicationStatusArr: config.papiCommunicationStatusArr,
-                artistsInfo: '',
+                artistsInfo:[],
                 artistStatus: '',
                 artistName: '',
                 weiboUrl: '',
@@ -367,10 +479,23 @@
                 blogCommunication: '',//沟通状态
                 blogType: '',//博主类型
                 blogName: '',//博主名称
-                blogStatus: 1,//博主状态
+                blogStatus: 2,//博主状态
                 selectedArtistsArr: [],
                 isLoading: true,
                 selectAllBlogger: false,
+                listData: {
+                    include: 'broker,creator',
+                    name: '',
+                    sign_contract_status: 2,//  签约状态
+                    communication_status: '', //沟通状态
+                    source: '', // 艺人来源
+                },
+                selectAllStars: false,
+                artistSourceArr: config.artistSourceArr,
+                taiyangCommunicationStatusArr: config.taiyangCommunicationStatusArr,
+                attachmentTypeArr: config.attachmentTypeArr,
+                bloggerInfo:'',
+                isShow:''
             }
         },
         watch: {
@@ -380,6 +505,8 @@
         },
         mounted() {
             this.getArtists();
+            this.getBlogger();
+            this.getStars();
             this.getBlogType() //获取博主类型
             $('table').asSelectable();
             let _this = this;
@@ -402,7 +529,35 @@
             })
         },
         methods: {
+            //获取沟通状态
+            getStatus: function (value) {
+                this.listData.communication_status = value
+                this.getArtists()
+            },
+            //获取艺人来源
+            getSource: function (value) {
+                this.listData.source = value
+                this.getArtists()
+            },
+            //查询列表
             getArtists: function (page = 1, signStatus) {
+                let _this = this;
+                if (signStatus) {
+                    this.listData.sign_contract_status = signStatus
+                }
+                this.listData.page = page
+                fetch('get', '/stars', this.listData).then(function (response) {
+                    _this.artistsInfo = response.data;
+                    console.log(_this.artistsInfo)
+                    _this.current_page = response.meta.pagination.current_page;
+                    _this.total = response.meta.pagination.total;
+                    _this.total_pages = response.meta.pagination.total_pages;
+                    _this.isLoading = false;
+                    _this.selectAllStars = false;
+                    _this.selectedArtistsArr = [];
+                })
+            },
+            getBlogger: function (page = 1, signStatus) {
 
                 let data = {
                     include: 'type,creator,tasks,affixes,producer,publicity,operatelogs',
@@ -430,7 +585,8 @@
                 data.page = page
                 fetch('get', '/bloggers', data).then(function (response) {
 
-                    _this.artistsInfo = response.data;
+                    _this.bloggerInfo = response.data;
+                    console.log(_this.bloggerInfo)
                     _this.current_page = response.meta.pagination.current_page;
                     _this.total = response.meta.pagination.total;
                     _this.total_pages = response.meta.pagination.total_pages;
@@ -458,13 +614,13 @@
             //选择博主类型
             typeFilter(value) {
                 this.blogType = value
-                this.getArtists()
+                this.getBlogger()
 
             },
             //沟通状态
             CommunicationStatus(value) {
                 this.blogCommunication = value
-                this.getArtists()
+                this.getBlogger()
             },
             customize: function (value) {
 
@@ -572,7 +728,7 @@
                     toastr.success('创建成功');
                     $('#addArtist').modal('hide');
                     _this.$router.push({path: 'blogger/' + response.data.id});
-                    _this.getArtists()
+                    _this.getBlogger()
                 })
 
             },
@@ -580,8 +736,8 @@
             selectArtists: function (value) {
                 if (value === 'all') {
                     this.selectedArtistsArr = [];
-                    for (let i = 0; i < this.artistsInfo.length; i++) {
-                        this.selectedArtistsArr.push(this.artistsInfo[i].id)
+                    for (let i = 0; i < this.bloggerInfo.length; i++) {
+                        this.selectedArtistsArr.push(this.bloggerInfo[i].id)
                     }
                 } else {
                     let index = this.selectedArtistsArr.indexOf(value);
@@ -595,7 +751,10 @@
 
 
             redirectArtistDetail: function (artistId) {
-                this.$router.push({path: 'blogger/' + artistId})
+                this.$router.push({path: 'artists/' + artistId})
+            },
+            redirectBolggerDetail:function(bolggerId){
+                this.$router.push({path: 'blogger/' + bolggerId})
             },
             //分配制作人
             giveBroker: function () {
@@ -619,7 +778,7 @@
                     }
                     toastr.success('分配制作人成功')
                     $('#giveBroker').modal('hide')
-                    _this.getArtists()
+                    _this.getBlogger()
                     _this.$store.state.participantsInfo = []
                     _this.selectedArtistsArr = []
                     console.log(_this.selectedArtistsArr)
@@ -633,53 +792,72 @@
                     this.$store.state.participantsInfo = []
                     return false
                 }
+            },
+             getStars: function () {
+                if (Cookies.get('companyType') === '泰洋川禾') {
+                    this.isShow = true
+                } else {
+                    this.isShow = false
+                }
+
+            },
+            tab:function(){
+                this.isShow = !this.isShow
             }
+        },
+        filters: {
+            jsGetAge: function (strBirthday) {
+                if (strBirthday) {
+                    var returnAge;
+                    // 根据生日计算年龄（"1995-09-25"）
+                    //以下五行是为了获取出生年月日，如果是从身份证上获取需要稍微改变一下
+                    var strBirthdayArr = strBirthday.split("-");
+                    var birthYear = strBirthdayArr[0];
+                    var birthMonth = strBirthdayArr[1];
+                    var birthDay = strBirthdayArr[2];
+
+                    var d = new Date();
+                    var nowYear = d.getFullYear();
+                    var nowMonth = d.getMonth() + 1;
+                    var nowDay = d.getDate();
+
+                    if (nowYear == birthYear) {
+                        returnAge = 0;//同年 则为0岁
+                    }
+                    else {
+                        var ageDiff = nowYear - birthYear; //年之差
+                        if (ageDiff > 0) {
+                            if (nowMonth == birthMonth) {
+                                var dayDiff = nowDay - birthDay;//日之差
+                                if (dayDiff < 0) {
+                                    returnAge = ageDiff - 1;
+                                }
+                                else {
+                                    returnAge = ageDiff;
+                                }
+                            }
+                            else {
+                                var monthDiff = nowMonth - birthMonth;//月之差
+                                if (monthDiff < 0) {
+                                    returnAge = ageDiff - 1;
+                                }
+                                else {
+                                    returnAge = ageDiff;
+                                }
+                            }
+                        }
+                        else {
+                            returnAge = -1;//返回-1 表示出生日期输入错误 晚于今天
+                        }
+                    }
+                    return returnAge;//返回周岁年龄
+                } else {
+                    return strBirthday
+                }
+            },
         }
     }
 </script>
-<style lang="scss" scoped>
-    .task-dropdown {
-        -moz-user-select: none;
-        -webkit-user-select: none;
-        -ms-user-select: none;
-        user-select: none;
-        z-index: 2;
-    }
+<style>
 
-    .task-dropdown-item {
-        position: absolute;
-        transform: translate3d(299px, 36px, 0px);
-        top: 0;
-        left: 0;
-        will-change: transform;
-    }
-
-    #giveBroker .modal-body {
-        padding: 0px;
-    }
-
-    #giveBroker .assistor {
-        position: relative;
-        border: 0px
-    }
-
-    .modal-body .example {
-        display: flex;
-        align-items: center;
-    }
-     .puls {
-        display: inline-block;
-        background-size: 100px;
-        width: 50px;
-        height: 50px;
-        text-align: center;
-        line-height: 46px;
-        border-radius: 50%;
-        border: 1px dashed #eee;
-
-    }
 </style>
-
-
-
-
