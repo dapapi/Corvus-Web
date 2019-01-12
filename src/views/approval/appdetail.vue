@@ -114,6 +114,18 @@
                         </div>
                     </div>
                 </div>
+                <!-- <div class="panel">
+                    <div class="card col-md-12">
+                        <div class="card-header card-header-transparent card-header-bordered">
+                            <h5>合同跟进</h5>
+                        </div>
+                        <div class="card-block">
+                            <div class="col-md-12 pl-0">
+                                <TaskFollowUp :follow-type="'线索'" ></TaskFollowUp>
+                            </div>
+                        </div>
+                    </div>
+                </div> -->
             </div>
             <DocPreview :url='previewUrl'/>
         </div>
@@ -125,7 +137,6 @@
              role="dialog" tabindex="-1">
             <div class="modal-dialog modal-simple modal-center modal-lg">
                 <div class="modal-content">
-
                     <div class="modal-header">
                         <button type="button" class="close" data-dismiss="modal" aria-label="Close">
                             <span aria-hidden="true">×</span>
