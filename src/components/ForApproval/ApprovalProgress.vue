@@ -244,7 +244,7 @@ export default {
     
 }
 .splicer{
-    width: 60px;
+    width: 30px;
     height: 2px;
     margin: 20px 10px 0 10px;
     background-color: #E0E0E0;
