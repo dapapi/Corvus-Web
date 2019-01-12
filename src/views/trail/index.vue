@@ -482,7 +482,7 @@
                 if (this.starsArr.length > 0) {
                     return
                 }
-                fetch('get', '/starandblogger').then(response => {
+                fetch('get', '/starandblogger', {sign_contract_status: 2}).then(response => {
                     for (let i = 0; i < response.data.length; i++) {
                         this.starsArr.push({
                             id: response.data[i].id,

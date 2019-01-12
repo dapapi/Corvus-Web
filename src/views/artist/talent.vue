@@ -350,7 +350,7 @@
         </div>
         <div class="modal fade" id="giveProducer" aria-hidden="true" aria-labelledby="addLabelForm"
              role="dialog" tabindex="-1">
-            <div class="modal-dialog modal-simple">
+            <div class="modal-dialog modal-simple" style="max-width: 50rem;">
                 <div class="modal-content">
                     <div class="modal-header">
                         <button type="button" class="close" aria-hidden="true" data-dismiss="modal">
@@ -358,7 +358,7 @@
                         </button>
                         <h4 class="modal-title">分配制作人</h4>
                     </div>
-                    <div class="modal-body">
+                    <div class="modal-body clearfix pt-10">
                         <ListSelectMember :listName="'成员列表'" :selectName="'已选择成员'" :type="'change'"></ListSelectMember>
                     </div>
                     <div class="modal-footer">
