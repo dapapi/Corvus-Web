@@ -52,7 +52,7 @@
                     <div class="col-md-12 example clearfix" v-show="projectType != 5 && starsArr.length > 0">
                         <div class="col-md-2 text-right float-left px-0 require">目标艺人</div>
                         <div class="col-md-10 float-left">
-                            <Selectors multiple="true" :options="allStarsArr" ref="intentionArtist"
+                            <Selectors multiple="true" :options="starsArr" ref="intentionArtist"
                                        @change="(value) => addProjectBaseInfo(value, 'expectations')"></Selectors>
                         </div>
                     </div>
@@ -212,16 +212,9 @@
                 this.getTrail()
             },
         },
-        computed: {
-            allStarsArr() {
-                return [...this.starsArr, ...this.bloggerArr]
-            }
-
-        },
         created() {
             this.getTrail()
             this.getStars();
-            this.getBloggers()
         },
         mounted() {
             let _this = this;
@@ -249,11 +242,6 @@
             this.user = JSON.parse(Cookies.get('user'));
         },
         methods: {
-            getBloggers() {
-                fetch('get', '/bloggers/all').then((params) => {
-                    this.bloggerArr = params.data
-                })
-            },
             defaultDataFilter() {
                 if (!this.defaultData) {
                     return
@@ -341,10 +329,9 @@
             },
 
             getStars: function () {
-                let _this = this;
-                fetch('get', '/stars/all').then(function (response) {
+                fetch('get', '/starandblogger').then(response => {
                     for (let i = 0; i < response.data.length; i++) {
-                        _this.starsArr.push({
+                        this.starsArr.push({
                             name: response.data[i].name,
                             id: response.data[i].id,
                             value: response.data[i].id

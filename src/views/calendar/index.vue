@@ -736,26 +736,14 @@
             },
 
             getStars: function () {
-                if (Cookies.get('companyType') === '泰洋川禾') {
-                    fetch('get', '/stars/all', {sign_contract_status: 2}).then(response => {
-                        for (let i = 0; i < response.data.length; i++) {
-                            this.starsArr.push({
-                                value: response.data[i].id,
-                                name: response.data[i].name
-                            })
-                        }
-                    })
-                } else {
-                    fetch('get', '/bloggers/all', {sign_contract_status: 2}).then(response => {
-                        for (let i = 0; i < response.data.length; i++) {
-                            this.starsArr.push({
-                                value: response.data[i].id,
-                                name: response.data[i].nickname
-                            })
-                        }
-                    })
-                }
-
+                fetch('get', '/starandblogger').then(response => {
+                    for (let i = 0; i < response.data.length; i++) {
+                        this.starsArr.push({
+                            value: response.data[i].id,
+                            name: response.data[i].name
+                        })
+                    }
+                })
             },
 
             getCalendarList: function () {

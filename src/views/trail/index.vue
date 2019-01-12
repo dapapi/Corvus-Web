@@ -27,11 +27,11 @@
                               @click="clearPrincipalFilter">&nbsp;&nbsp;x</span>
                     </div>
                     <!--<div class="col-md-3 example float-left">-->
-                        <!--<button type="button" class="btn btn-default waves-effect waves-classic float-right"-->
-                                <!--data-toggle="modal" data-target="#customizeContent"-->
-                                <!--data-placement="right" title="">-->
-                            <!--自定义筛选-->
-                        <!--</button>-->
+                    <!--<button type="button" class="btn btn-default waves-effect waves-classic float-right"-->
+                    <!--data-toggle="modal" data-target="#customizeContent"-->
+                    <!--data-placement="right" title="">-->
+                    <!--自定义筛选-->
+                    <!--</button>-->
                     <!--</div>-->
                 </div>
 
@@ -479,30 +479,18 @@
             },
 
             getStars: function () {
-                this.starsArr = []
-                let _this = this;
-                if (this.trailType == 4) {
-                    fetch('get', '/bloggers/all').then(function (response) {
-                        for (let i = 0; i < response.data.length; i++) {
-                            _this.starsArr.push({
-                                id: response.data[i].id,
-                                name: response.data[i].nickname,
-                                value: response.data[i].id
-                            })
-                        }
-                    })
-                } else {
-                    fetch('get', '/stars/all').then(function (response) {
-                        for (let i = 0; i < response.data.length; i++) {
-                            _this.starsArr.push({
-                                id: response.data[i].id,
-                                name: response.data[i].name,
-                                value: response.data[i].id
-                            })
-                        }
-                    })
+                if (this.starsArr.length > 0) {
+                    return
                 }
-
+                fetch('get', '/starandblogger').then(response => {
+                    for (let i = 0; i < response.data.length; i++) {
+                        this.starsArr.push({
+                            id: response.data[i].id,
+                            name: response.data[i].name,
+                            value: response.data[i].id
+                        })
+                    }
+                })
             },
 
             customize: function (value) {
@@ -683,10 +671,12 @@
     .clear-principal-filter {
         cursor: pointer;
     }
+
     .trial-origin .require::before {
         margin-left: 9px;
         line-height: 34px;
     }
+
     table tbody tr {
         cursor: pointer;
     }
