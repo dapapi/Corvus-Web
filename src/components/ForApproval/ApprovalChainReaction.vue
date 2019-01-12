@@ -62,7 +62,7 @@ export default {
                 preList.list.forEach(element => {
                     preArr.push({enum_value:element})
                 });
-                this.subOptions[0].control_title = params.value
+                this.subOptions[0].control_title = params.value+'类别'
                 this.subOptions[0].control_enums = preArr
             }else{
                 this.subOptions[0].control_enums = []
