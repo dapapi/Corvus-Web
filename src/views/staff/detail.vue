@@ -612,17 +612,16 @@ export default {
                 }
                 this.detail.email = data.email || ''
                 this.detail.currentAddress = data.current_address || ''
-                this.info.departmentId = data.department[0].id || ''
-                this.info.department = data.department[0].name || ''
+                this.info.departmentId = data.department ? data.department.id : ''
+                this.info.department = data.department ? data.department.name : ''
                 this.job.status = data.status || ''
-                this.detail.hireShape = data.hire_shape || ''
-                this.info.positionId = data.position.data.id || ''
+                this.detail.hireShape = data.hire_shape && data.hire_shape != 0 ? data.hire_shape : ''
+                this.info.positionId = data.position ? data.position.data.id : ''
 
                 this.infoCopy = JSON.parse(JSON.stringify(this.info))
                 this.detailCopy = JSON.parse(JSON.stringify(this.detail))
                 this.jobCopy = JSON.parse(JSON.stringify(this.job))
                 this.salaryCopy = JSON.parse(JSON.stringify(this.salary))
-
             })
         },
         // 改变data的值

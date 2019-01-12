@@ -5,7 +5,7 @@
             <input type="text" class="form-control" title="" @focus="showMember" :placeholder="placeholder"
                    v-model="selectedMemberName">
         </div>
-        <div class="" v-show="selectMemberShow">
+        <div style="position: relative;top: 36px;" v-show="selectMemberShow">
             <select-staff class="selector" @change="changeSelectMember" :member-type="'principal'"
                           :type="type"></select-staff>
         </div>

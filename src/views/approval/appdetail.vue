@@ -6,19 +6,19 @@
                 <h6 class="page-title nav-head" v-if="info">
                     {{list.title}}
                     <template v-if="list.form_status==232">
-                        <button class="btn btn-success py-5">已审批</button>
+                        <button class="btn btn-success">已审批</button>
                     </template>
                     <template v-if="list.form_status==231">
-                        <button class="btn btn-warning py-5">待审批</button>
+                        <button class="btn btn-warning">待审批</button>
                     </template>
                     <template v-if="list.form_status==234">
-                        <button class="btn py-5">已撤销</button>
+                        <button class="btn">已撤销</button>
                     </template>
                     <template v-if="list.form_status==235">
-                        <button class="btn py-5">已作废</button>
+                        <button class="btn">已作废</button>
                     </template>
                     <template v-if="list.form_status==233">
-                        <button class="btn btn-danger py-5 ">已拒绝</button>
+                        <button class="btn btn-danger ">已拒绝</button>
                     </template>
                 </h6>
             </div>
@@ -84,8 +84,8 @@
                         <h6 class="page-title pb-20 mx-15">审批详情</h6>
                         <div class="row px-20">
                             <div class="col-md-10">
-                                <div class="col-md-6 detail-container px-0 float-left"
-                                     v-for="(item, index) in detailData" :key="index">
+                                <div class="col-md-6 my-5 px-0 float-left"
+                                     v-for="(item, index) in detailData" :key="index" v-if="item.values">
                                     <div class="col-md-4 float-left text-right detail-key mx-0 noselect">{{item.key}}
                                     </div>
                                     <div class="col-md-8 float-left detail-value"
@@ -114,6 +114,18 @@
                         </div>
                     </div>
                 </div>
+                <!-- <div class="panel">
+                    <div class="card col-md-12">
+                        <div class="card-header card-header-transparent card-header-bordered">
+                            <h5>合同跟进</h5>
+                        </div>
+                        <div class="card-block">
+                            <div class="col-md-12 pl-0">
+                                <TaskFollowUp :follow-type="'线索'" ></TaskFollowUp>
+                            </div>
+                        </div>
+                    </div>
+                </div> -->
             </div>
             <DocPreview :url='previewUrl'/>
         </div>
@@ -125,7 +137,6 @@
              role="dialog" tabindex="-1">
             <div class="modal-dialog modal-simple modal-center modal-lg">
                 <div class="modal-content">
-
                     <div class="modal-header">
                         <button type="button" class="close" data-dismiss="modal" aria-label="Close">
                             <span aria-hidden="true">×</span>
@@ -341,7 +352,7 @@
 
     .nav-head button {
         color: white;
-        transform: scale(0.7)
+        /* transform: scale(0.7) */
     }
 
     .noselect {

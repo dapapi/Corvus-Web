@@ -2,21 +2,22 @@
     <div class="addMember">
         <ul class="addMember-items">
             <li class="addMember-item" v-for="member in selectMemberArr" :key="member.id">
-                <!-- <img onerror="noneAvatar(this)" class="avatar" :src="member.avatar" title="Herman Beck" src=""> -->
                 <Avatar :imgUrl="member.icon_url"/>
                 <span class="addMember-remove" @click="removeMember(member.id)">
                     <i class="md-minus-circle"></i>
                 </span>
             </li>
+            <li class="addMember-item">
+                <div class="addMember-trigger" :class="isMemberShow ? 'addMember-active': ''" :id="'selectStaff' + this._uid">
+                    <div class="addMember-trigger-button" :class="selectMemberArr.length > 0 ? 'addMember-trigger-left' : ''"
+                         @click="showMember"><i class="iconfont icon-tianjia"></i></div>
+                    <div class="addMember-trigger-dropdown">
+                        <select-staff :multiple="true" :member-type="'participant'" :type="type"
+                                      @change="changeSelectedMember"></select-staff>
+                    </div>
+                </div>
+            </li>
         </ul>
-        <div class="addMember-trigger" :class="isMemberShow ? 'addMember-active': ''" :id="'selectStaff' + this._uid">
-            <div class="addMember-trigger-button" :class="selectMemberArr.length > 0 ? 'addMember-trigger-left' : ''"
-                 @click="showMember"><i class="iconfont icon-tianjia"></i></div>
-            <div class="addMember-trigger-dropdown">
-                <select-staff :multiple="true" :member-type="'participant'" :type="type"
-                              @change="changeSelectedMember"></select-staff>
-            </div>
-        </div>
     </div>
 </template>
 
@@ -128,17 +129,18 @@
 
 </script>
 <style scoped>
-    .addMember-trigger-left {
-        margin-left: 10px;
+
+    .addMember-items {
+        display: flex;
+        flex-wrap: wrap;
+        margin-left: -10px;
     }
 
     .addMember-item {
         margin-left: 10px;
         margin-right: 0;
         vertical-align: middle;
+        margin-bottom: 10px;
     }
 
-    .addMember-item:first-child {
-        margin-left: 0;
-    }
 </style>

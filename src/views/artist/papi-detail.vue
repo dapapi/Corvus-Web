@@ -95,7 +95,7 @@
                         </div>
                         <div class="col-md-6 float-left pl-18" v-show="artistInfo.sign_contract_status == 1">
                             <div class="float-left pl-0 pr-2 col-md-2">
-                                <i class="iconfont icon-yonghu pr-2" aria-hidden="true"></i>录入时间
+                                <i class="iconfont icon-jieshushijian pr-2" aria-hidden="true"></i>录入时间
                             </div>
                             <div class="font-weight-bold float-left" v-if="principalName">
                                 <template>
@@ -257,7 +257,7 @@
                             <div class="tab-pane animation-fade pb-20 fixed-button-father" id="forum-artist-schedule"
                                 role="tabpanel" :class="artistInfo.sign_contract_status == 2?'active':''">
                                 <div class="col-md-12">
-                                    <calendar  :calendars="calendarId" ref="calendar" :isModel="true" @scheduleClick="showScheduleModal"></calendar>
+                                    <calendar v-if="artistInfo.sign_contract_status == 2" :calendars="calendarId" ref="calendar" :isModel="true" @scheduleClick="showScheduleModal"></calendar>
                                 </div>
                             </div>
                             <div class="tab-pane animation-fade pb-20 fixed-button-father" id="forum-artist-projects"
@@ -983,7 +983,7 @@
                 updateStar_xiaohongshu_infos:{},//修改小红书
                 updatePlatform:'',//修改平台
                 participant:'',
-                tasksInfo:'',
+                tasksInfo:[],
                 ProjectsInfo:[],
                 start_Time:'',
                 end_Time:'',
@@ -1018,6 +1018,7 @@
         },
         computed: {
             completeNum() {
+                // console.log(this.tasksInfo)
                 return this.tasksInfo.filter(n => n.status === 2).length
             }
         },
@@ -1159,7 +1160,7 @@
                             }
                         }
                     }
-                    if(response.data.calendar.data.id){
+                    if(response.data.calendar){
                         _this.calendarId.push(response.data.calendar.data.id)
                     }
                      //项目
@@ -1207,6 +1208,7 @@
                 };
                 fetch('get', '/schedules/' + this.calendarId, data).then(response => {
                     this.scheduleData = response.data;
+                    console.log(this.scheduleData)
                     this.scheduleParticipants = JSON.parse(JSON.stringify(response.data.participants.data));
                     this.$store.dispatch('changeParticipantsInfo', {data: response.data.participants.data});
                 });

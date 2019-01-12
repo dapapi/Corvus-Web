@@ -216,7 +216,7 @@ export default {
 .approver_text{
     margin-left: 5px;
     margin-bottom: 0;
-    font-size: 5px;
+    font-size: 12px;
     min-width: 50px;
 }
 *::-webkit-scrollbar {
@@ -244,7 +244,7 @@ export default {
     
 }
 .splicer{
-    width: 60px;
+    width: 30px;
     height: 2px;
     margin: 20px 10px 0 10px;
     background-color: #E0E0E0;

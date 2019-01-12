@@ -1255,7 +1255,38 @@ let config = {
                 name: '上海',
                 value: 2
             }
-        ]
+        ],
+        // 学历
+        schoolRecordArr: [
+            {
+                name: '博士',
+                value: 1,
+            },
+            {
+                name: '硕士',
+                value: 2,
+            },
+            {
+                name: '本科',
+                value: 3,
+            },
+            {
+                name: '大专',
+                value: 4,
+            },
+            {
+            name: '高中',
+                value: 5,
+            },
+           {
+                name: '中专/中技',
+                value: 6,
+            },
+            {
+                name: '初中及以下',
+                value: 7,
+            }
+        ],
     }
 ;
 

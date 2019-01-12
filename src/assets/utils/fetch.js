@@ -51,6 +51,8 @@ axios.interceptors.response.use((res) => {
         } else {
             toastr.error(response.data.message);
         }
+    } else if (status === 403) {
+
     } else {
         toastr.error(response.data.message);
     }

@@ -92,6 +92,11 @@ export default new Router({
             component: () => import('./views/artist/papi-index.vue')
         },
         {
+            path: '/talent',
+            name: 'talent',
+            component: () => import('./views/artist/talent.vue')
+        },
+        {
             path: '/artists/:id',
             name: 'artists',
             component: () => import('./views/artist/taiyang-detail.vue')
@@ -139,19 +144,19 @@ export default new Router({
                 },
                 {
                     path: '/approval/common/initiate',
-                    component: () => import('./views/approval/initiate.vue')
+                    component: () => import('./views/approval/common/commonIndex.vue')
                 },
                 {
                     path: '/approval/common/application',
-                    component: () => import('./views/approval/application.vue')
+                    component: () => import('./views/approval/common/application.vue')
                 },
                 {
                     path: '/approval/common/my',
-                    component: () => import('./views/approval/my.vue')
+                    component: () => import('./views/approval/common/my.vue')
                 },
                 {
                     path: '/approval/common/only',
-                    component: () => import('./views/approval/only.vue')
+                    component: () => import('./views/approval/common/only.vue')
                 },
                 {
                     path: '/approval/common/general',
