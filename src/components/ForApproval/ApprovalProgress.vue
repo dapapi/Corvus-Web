@@ -216,7 +216,7 @@ export default {
 .approver_text{
     margin-left: 5px;
     margin-bottom: 0;
-    font-size: 5px;
+    font-size: 12px;
     min-width: 50px;
 }
 *::-webkit-scrollbar {
