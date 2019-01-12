@@ -1391,7 +1391,6 @@
     }
 
     .line-center .example {
-        display: flex;
         align-items: center;
     }
 
