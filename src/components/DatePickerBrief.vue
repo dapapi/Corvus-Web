@@ -17,14 +17,14 @@
                 language: "zh-CN",
                 autoclose: true
             }).on("changeDate", function () {
-
+                alert(333)
                 self.$emit('change', $(this)[0].children[0].value);
                 if (self.changeKey) {
                     self.$emit('select', self.changeKey, $(this)[0].children[0].value)
                 }
             });
             if (this.default) {
-                this.setValue(this.default.values.data.value)
+                this.setValue(this.default)
             }
 
         },
@@ -33,6 +33,7 @@
              * 设置时间选择范围，一般用于设置截止时间大于开始时间
              * */
             startDate(newValue) {
+                // alert(555)
                 $(this.$el).datepicker('setStartDate', newValue);
             },
             clear: function (value) {

@@ -6,7 +6,7 @@
 
 <script>
     import fetch from '../assets/utils/fetch.js'
-    //isModel ===true  //调用接口/schedules/all
+    //isModel ===true  调用接口/schedules/all
     export default {
         props: ['calendars', 'gotoDate', 'meetingRomeList', 'isMeeting', 'isModel'],
         data() {
@@ -79,14 +79,22 @@
                     self.endDate = self.timeReformat(end._d);
                     let meetingRomeList = self.meetingRomeList;
                     let url
-                    self.isModel == true ? url = '/schedules/all' : url = '/schedules'
                     if (!meetingRomeList) {
                         meetingRomeList = [];
                     }
-                    if (self.calendars.length === 0 && meetingRomeList.length === 0) {
-                        callback([]);
-                        return
+                    if (self.isModel) {
+                        url = '/schedules/all'
+                        if (self.calendars.length === 0) {
+                            return
+                        }
+                    } else {
+                        if (meetingRomeList.length === 0) {
+                            url = '/schedules/list'
+                        } else {
+                            url = '/schedules'
+                        }
                     }
+
                     let data = {
                         start_date: self.startDate,
                         end_date: self.endDate,
@@ -102,23 +110,21 @@
                         data.calendar_ids = self.calendars
                     }
 
-                    if (meetingRomeList.length > 0 || self.calendars.length > 0) {
-                        fetch('get', url, data).then(response => {
-                            self.allScheduleInfo = response.data;
-                            let events = [];
-                            for (let i = 0; i < response.data.length; i++) {
-                                events.push({
-                                    title: response.data[i].title,
-                                    start: response.data[i].start_at,
-                                    end: response.data[i].end_at,
-                                    color: response.data[i].calendar.data.color,
-                                    allDay: !!response.data[i].is_allday,
-                                    id: response.data[i].id,
-                                })
-                            }
-                            callback(events)
-                        })
-                    }
+                    fetch('get', url, data).then(response => {
+                        self.allScheduleInfo = response.data;
+                        let events = [];
+                        for (let i = 0; i < response.data.length; i++) {
+                            events.push({
+                                title: response.data[i].title,
+                                start: response.data[i].start_at,
+                                end: response.data[i].end_at,
+                                color: response.data[i].calendar.data.color,
+                                allDay: !!response.data[i].is_allday,
+                                id: response.data[i].id,
+                            })
+                        }
+                        callback(events)
+                    })
 
                 },
                 dayClick: function (date, allDay, jsEvent) {

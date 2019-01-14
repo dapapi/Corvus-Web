@@ -1,12 +1,12 @@
 <template>
     <div>
-        <label for="fileUploader" :class="isIcon ? 'md-attachment-alt pr-4': 'btn btn-default waves-effect waves-light waves-round'">
+        <label :for="`fileUploader${mulId}`" :class="isIcon ? 'md-attachment-alt pr-4': 'btn btn-default waves-effect waves-light waves-round'">
             <template v-if="!isIcon">
                 上传附件
             </template>
         </label>
         <span v-show="!isIcon">&nbsp;&nbsp;{{fileName || givenfilename ||"未选择任何附件"}}</span>
-        <input type="file" @change="uploadFile" title='123' id="fileUploader" v-show="false">
+        <input type="file" @change="uploadFile" title='123' :id="`fileUploader${mulId}`" v-show="false">
         <div class="progress progress-xs" v-if="progressShow" v-show="!isIcon">
             <div class="progress-bar progress-bar-striped active" aria-valuemin="0" aria-valuemax="100"
                  :style="'width:'+ uploadProgress+'%'" role="progressbar">
@@ -21,7 +21,7 @@
     import * as qiniu from 'qiniu-js'
 
     export default {
-        props: ['id', 'givenfilename', 'isIcon'],
+        props: ['id', 'givenfilename', 'isIcon','mulId'],
         name: "FileUploader",
         data() {
             return {
