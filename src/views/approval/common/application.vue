@@ -114,7 +114,7 @@
                     include: 'principal,trail.expectations',
                     status:this.pageType
                 };
-                fetch('get', '/approvals_contract/my', data).then(response => {
+                fetch('get', '/approvals_general/my', data).then(response => {
                     _this.projectsInfo = response.data
                     _this.total = response.total;
                     _this.current_page = response.current_page;
@@ -124,7 +124,7 @@
             getList(params) {
                 let _this = this
                 this.pageType = params
-                fetch('get','/approvals_contract/my?status='+params).then((params) => {
+                fetch('get','/approvals_general/my?status='+params).then((params) => {
                     _this.projectsInfo = params.data
                     _this.total = params.total;
                     _this.current_page = params.current_page;

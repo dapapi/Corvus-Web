@@ -119,7 +119,7 @@ import {CONTRACT_INDEX_CONFIG} from '@/views/approval/contractIndex/contractInde
                  if (signStatus) {
                     data.sign_contract_status = signStatus
                 }
-                fetch('get', '/approvals_contract/notify', data).then(response => {
+                fetch('get', '/approvals_general/notify', data).then(response => {
                     _this.projectsInfo = response.data
                     _this.total = response.meta.pagination;
                     _this.current_page = response.meta.current_page;
@@ -129,7 +129,7 @@ import {CONTRACT_INDEX_CONFIG} from '@/views/approval/contractIndex/contractInde
             getList(params) {
                 this.pageType = params
                     let _this = this
-                    fetch('get','/approvals_contract/notify?status='+params).then((params) => {
+                    fetch('get','/approvals_general/notify?status='+params).then((params) => {
                         console.log(params);
                         _this.projectsInfo = params.data
                         _this.total = params.meta.pagination

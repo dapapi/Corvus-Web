@@ -555,7 +555,7 @@
                 companyType: config.companyType,
                 customizeInfo: config.customizeInfo,
                 taskTypeArr: {},
-                taskLevelArr: config.taskLevelArr,
+                taskLevelArr: config.levelArr,
                 taskPrincipal: '',
                 startMinutes: '00:00',
                 taskType: '',
