@@ -653,7 +653,7 @@
         </div>
 
         <div class="modal fade" id="addTask" aria-hidden="true" aria-labelledby="addLabelForm"
-             role="dialog" tabindex="-1">
+             role="dialog" tabindex="-1" data-backdrop="static">
             <div class="modal-dialog modal-simple">
                 <div class="modal-content">
                     <div class="modal-header">
@@ -739,7 +739,7 @@
         </div>
 
         <div class="modal fade" id="addWork" aria-hidden="true" aria-labelledby="addLabelForm"
-             role="dialog" tabindex="-1">
+             role="dialog" tabindex="-1" data-backdrop="static">
             <div class="modal-dialog modal-simple">
                 <div class="modal-content">
                     <div class="modal-header">
@@ -798,7 +798,7 @@
         </div>
         <!--隐私设置-->
         <div class="modal fade" id="addPrivacy" aria-hidden="true" aria-labelledby="addLabelForm"
-             role="dialog" tabindex="-1">
+             role="dialog" tabindex="-1" data-backdrop="static">
             <div class="modal-dialog modal-simple">
                 <div class="modal-content">
                     <div class="modal-header">
@@ -824,7 +824,7 @@
         </div>
 <!-- 分配制作人-->
         <div class="modal fade" id="distributionproducer" aria-hidden="true" aria-labelledby="addLabelForm"
-             role="dialog" tabindex="-1">
+             role="dialog" tabindex="-1" data-backdrop="static">
             <div class="modal-dialog modal-simple" style="max-width: 50rem;">
 
                 <div class="modal-content">
@@ -849,7 +849,7 @@
             </div>
         </div>
         <div class="modal fade" id="checkSchedule" aria-hidden="true" aria-labelledby="addLabelForm"
-             role="dialog" tabindex="-1">
+             role="dialog" tabindex="-1" data-backdrop="static">
             <div class="modal-dialog modal-simple">
                 <div class="modal-content" v-if="scheduleData">
                     <div class="modal-header">

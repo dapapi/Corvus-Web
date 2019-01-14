@@ -270,7 +270,7 @@
         </div>
         <!--新增角色 -->
         <div class="modal fade" id="addRole" aria-hidden="true" aria-labelledby="addLabelForm" role="dialog"
-             tabindex="-1">
+             tabindex="-1" data-backdrop="static">
             <div class="modal-dialog modal-simple">
                 <div class="modal-content">
                     <div class="modal-header">
@@ -309,7 +309,7 @@
         </div>
         <!--新增分组-->
         <div class="modal fade" id="addSubgroup" aria-hidden="true" aria-labelledby="addLabelForm" role="dialog"
-             tabindex="-1">
+             tabindex="-1" data-backdrop="static">
             <div class="modal-dialog modal-simple">
                 <div class="modal-content">
                     <div class="modal-header">
@@ -335,7 +335,7 @@
         </div>
         <!--移动到分组-->
         <div class="modal fade" id="moveSubgroup" aria-hidden="true" aria-labelledby="addLabelForm" role="dialog"
-             tabindex="-1">
+             tabindex="-1" data-backdrop="static">
             <div class="modal-dialog modal-simple">
                 <div class="modal-content">
                     <div class="modal-header">
@@ -362,7 +362,7 @@
         </div>
         <!--修改角色-->
         <div class="modal fade" id="updateSubgroup" aria-hidden="true" aria-labelledby="addLabelForm" role="dialog"
-             tabindex="-1">
+             tabindex="-1" data-backdrop="static">
             <div class="modal-dialog modal-simple">
                 <div class="modal-content">
                     <div class="modal-header">
@@ -402,7 +402,7 @@
         </div>
         <!--重命名-->
         <div class="modal fade" id="Rename" aria-hidden="true" aria-labelledby="addLabelForm" role="dialog"
-             tabindex="-1">
+             tabindex="-1" data-backdrop="static">
             <div class="modal-dialog modal-simple">
                 <div class="modal-content">
                     <div class="modal-header">
@@ -428,7 +428,7 @@
         </div>
         <!--删除分组-->
         <div class="modal fade" id="deleteGrouping" aria-hidden="true" aria-labelledby="addLabelForm" role="dialog"
-             tabindex="-1">
+             tabindex="-1" data-backdrop="static">
             <div class="modal-dialog modal-simple">
                 <div class="modal-content">
                     <div class="modal-header">
@@ -453,7 +453,7 @@
         </div>
         <!--删除角色-->
         <div class="modal fade" id="deleteRole" aria-hidden="true" aria-labelledby="addLabelForm" role="dialog"
-             tabindex="-1">
+             tabindex="-1" data-backdrop="static">
             <div class="modal-dialog modal-simple">
                 <div class="modal-content">
                     <div class="modal-header">
@@ -478,7 +478,7 @@
         </div>
         <!--添加成员-->
         <div class="modal fade" id="addMember" aria-hidden="true" aria-labelledby="addLabelForm" role="dialog"
-             tabindex="-1">
+             tabindex="-1" data-backdrop="static">
             <div class="modal-dialog modal-simple">
                 <div class="modal-content">
                     <div class="modal-header">

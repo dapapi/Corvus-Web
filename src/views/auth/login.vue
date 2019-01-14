@@ -438,6 +438,7 @@
                 };
                 let _this = this;
                 fetch('put', '/users/telephone', data).then(function (response) {
+                    toastr.success('密码修改成功');
                     config.setAccessToken(response.access_token);
                     setTimeout(function () {
                         _this.fetchUserInfo(function (userJson, companyType) {

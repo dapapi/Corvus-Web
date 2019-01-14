@@ -41,7 +41,7 @@
             </button>
         </div>
          <div class="modal fade" id="createField" aria-hidden="true" aria-labelledby="addLabelForm" role="dialog"
-             tabindex="-1">
+             tabindex="-1" data-backdrop="static">
             <div class="modal-dialog modal-simple">
                 <div class="modal-content">
                     <div class="modal-header">

@@ -141,7 +141,7 @@
         </div>
 
         <div class="modal fade" id="addArtist" aria-hidden="true" aria-labelledby="addLabelForm"
-             role="dialog" tabindex="-1">
+             role="dialog" tabindex="-1" data-backdrop="static">
             <div class="modal-dialog modal-simple">
                 <div class="modal-content">
                     <div class="modal-header">
@@ -264,7 +264,7 @@
             </div>
         </div>
         <div class="modal fade" id="giveBroker" aria-hidden="true" aria-labelledby="addLabelForm"
-             role="dialog" tabindex="-1">
+             role="dialog" tabindex="-1" data-backdrop="static">
             <div class="modal-dialog modal-simple" style="max-width: 50rem;">
                 <div class="modal-content">
                     <div class="modal-header">
