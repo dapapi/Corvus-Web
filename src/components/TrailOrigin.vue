@@ -62,7 +62,7 @@
         },
         mounted() {
             if (this.contentType) {
-                this.trailOrigin = String(this.contentType)
+                this.trailOrigin = Number(this.contentType)
             }
         },
         computed: {
@@ -84,6 +84,7 @@
                 'userList'
             ]),
             _userList() {
+                this.members = this.userList
                 return this.userList
             },
             contentAndUserList() {
@@ -104,7 +105,7 @@
             },
             //监听获取当前类型
             contentType(value) {
-                this.trailOrigin = String(value)
+                this.trailOrigin = Number(value)
             },
             //监听获取编辑状态
             isEdit(value) {
