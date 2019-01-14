@@ -84,6 +84,7 @@ export default {
     },
     methods:{
         selectDate:function(start,end){
+            // console.log(start,end)
             this.start_time = start
             this.end_time = end
             this.getlist()

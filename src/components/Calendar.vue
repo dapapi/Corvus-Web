@@ -6,7 +6,7 @@
 
 <script>
     import fetch from '../assets/utils/fetch.js'
-    //isModel ===true  //调用接口/schedules/all
+    //isModel ===true  调用接口/schedules/all
     export default {
         props: ['calendars', 'gotoDate', 'meetingRomeList', 'isMeeting', 'isModel'],
         data() {
