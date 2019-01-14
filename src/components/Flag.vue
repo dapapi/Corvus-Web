@@ -4,6 +4,7 @@
          aria-labelledby="exampleModalTitle"
          role="dialog" tabindex="-1"
          style="display: none;"
+         data-backdrop="static"
          aria-hidden="true">
         <div class="modal-dialog modal-simple">
             <div class="modal-content">

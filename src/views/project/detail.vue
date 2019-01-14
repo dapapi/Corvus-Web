@@ -800,7 +800,7 @@
         </div>
         <!-- 新建任务 -->
         <div class="modal fade" id="addTask" aria-hidden="true" aria-labelledby="addLabelForm"
-             role="dialog" tabindex="-1">
+             role="dialog" tabindex="-1" data-backdrop="static">
             <div class="modal-dialog modal-simple">
                 <div class="modal-content">
                     <div class="modal-header">
@@ -889,7 +889,7 @@
         </div>
         <!-- 隐私设置 -->
         <div class="modal fade" id="addPrivacy" aria-hidden="true" aria-labelledby="addLabelForm"
-             role="dialog" tabindex="-1">
+             role="dialog" tabindex="-1" data-backdrop="static">
             <div class="modal-dialog modal-simple">
                 <div class="modal-content">
                     <div class="modal-header">
@@ -937,7 +937,7 @@
         </div>
         <!-- 撤单原因 -->
         <div class="modal fade" id="withdrawal" aria-hidden="true" aria-labelledby="addLabelForm"
-             role="dialog" tabindex="-1" v-if="projectInfo.type != 5">
+             role="dialog" tabindex="-1" v-if="projectInfo.type != 5" data-backdrop="static">
             <div class="modal-dialog modal-simple">
                 <div class="modal-content">
                     <div class="modal-header">
@@ -964,7 +964,7 @@
         </div>
         <!-- 新建/修改回款期次 -->
         <div class="modal fade" id="addPaybackTime" aria-hidden="true" aria-labelledby="addLabelForm"
-             role="dialog" tabindex="-1" v-if="projectInfo.type != 5">
+             role="dialog" tabindex="-1" data-backdrop="static" v-if="projectInfo.type != 5">
             <div class="modal-dialog modal-simple" v-if="projectInfo.title">
                 <div class="modal-content">
                     <div class="modal-header">
@@ -1038,7 +1038,7 @@
         </div>
         <!-- 新建/修改回款记录 -->
         <div class="modal fade" id="addPayback" aria-hidden="true" aria-labelledby="addLabelForm"
-             role="dialog" tabindex="-1" v-if="projectInfo.type != 5">
+             role="dialog" tabindex="-1" data-backdrop="static" v-if="projectInfo.type != 5">
             <div class="modal-dialog modal-simple" v-if="projectInfo.title">
                 <div class="modal-content">
                     <div class="modal-header">
@@ -1122,7 +1122,7 @@
         <!-- 新建/修改开票记录 -->
         <div class="modal fade" id="addInvoice" aria-hidden="true" aria-labelledby="addLabelForm"
              role="dialog" tabindex="-1" v-if="projectInfo.type != 5">
-            <div class="modal-dialog modal-simple" v-if="projectInfo.title">
+            <div class="modal-dialog modal-simple" data-backdrop="static" v-if="projectInfo.title">
                 <div class="modal-content">
                     <div class="modal-header">
                         <button type="button" class="close" aria-hidden="true" data-dismiss="modal">
@@ -1198,7 +1198,7 @@
         </div>
         <!-- 关联资源 -->
         <div class="modal fade" id="addLinkage" aria-hidden="true" aria-labelledby="addLabelForm"
-             role="dialog" tabindex="-1">
+             role="dialog" tabindex="-1" data-backdrop="static">
             <div class="modal-dialog modal-simple">
                 <div class="modal-content">
                     <div class="modal-header">
@@ -1284,7 +1284,7 @@
         </div>
         <!-- 新增结算单 -->
         <div class="modal fade" id="addBill" aria-hidden="true" aria-labelledby="addLabelForm"
-             role="dialog" tabindex="-1" v-if="projectInfo.type != 5">
+             role="dialog" tabindex="-1" data-backdrop="static" v-if="projectInfo.type != 5">
             <div class="modal-dialog modal-simple">
                 <div class="modal-content">
                     <div class="modal-header">
@@ -1330,7 +1330,7 @@
         <Flag :typeText="changeProjectStatusText" @confirmFlag='changeProjectStatus'/>
         <!-- 删除回款相关 -->
         <div class="modal fade" id="paybackDel" aria-hidden="true" aria-labelledby="addLabelForm"
-             role="dialog" tabindex="-1">
+             role="dialog" tabindex="-1" data-backdrop="static">
             <div class="modal-dialog modal-simple">
                 <div class="modal-content">
                     <div class="modal-header">

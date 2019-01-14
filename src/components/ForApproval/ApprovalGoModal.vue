@@ -1,5 +1,5 @@
 <template>
-    <div class="modal fade" id="approvalGo" aria-labelledby="examplePositionTop" role="dialog" tabindex="-1">
+    <div class="modal fade" id="approvalGo" aria-labelledby="examplePositionTop" role="dialog" tabindex="-1" data-backdrop="static">
         <div class="modal-dialog modal-simple">
             <div class="modal-content">
                 <div class="modal-header">

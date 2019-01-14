@@ -168,6 +168,7 @@
              aria-hidden="true"
              aria-labelledby="addLabelForm"
              role="dialog"
+             data-backdrop="static"
              tabindex="-1">
             <div class="modal-dialog modal-simple">
                 <div class="modal-content">
