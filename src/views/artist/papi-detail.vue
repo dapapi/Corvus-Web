@@ -11,11 +11,11 @@
                      role="menu" x-placement="bottom-end">
                     <a class="dropdown-item" role="menuitem" data-toggle="modal"
                        data-target="#distributionproducer" @click="distributionPerson('publicity')">分配制作人</a>
-                    <!--<a class="dropdown-item" role="menuitem" data-toggle="modal" data-target="#addPrivacy">隐私设置</a>-->
-                    <!--<a class="dropdown-item" role="menuitem" data-toggle="modal" data-target="#addPrivacy">-->
-                        <!--<template v-if="artistInfo.sign_contract_status == 1">签约</template>-->
-                        <!--<template v-if="artistInfo.sign_contract_status == 2">解约</template>-->
-                    <!--</a>-->
+                    <a class="dropdown-item" role="menuitem" data-toggle="modal" data-target="#addPrivacy">隐私设置</a>
+                    <a class="dropdown-item" role="menuitem" data-toggle="modal" data-target="#addPrivacy">
+                        <template v-if="artistInfo.sign_contract_status == 1">签约</template>
+                        <template v-if="artistInfo.sign_contract_status == 2">解约</template>
+                    </a>
                 </div>
             </div>
         </div>
@@ -1062,7 +1062,7 @@
             })
             this.getTimes()
             this.getArtistsBill()
-            // this.getPrivacy() //获取隐私设置
+            this.getPrivacy() //获取隐私设置
         },
         methods: {
             charts: function () {
