@@ -84,6 +84,7 @@
                 'userList'
             ]),
             _userList() {
+                this.members = this.userList
                 return this.userList
             },
             contentAndUserList() {
