@@ -170,10 +170,8 @@ export default {
     },
     methods:{
         noticeChanger(value){
-            if(this.formid){
- fetch('post','/approval_instances/'+this.formid+'/participant',value).then((params) => {
-                console.log('aaaa')
-            })
+            if(this.formid && this.mode === 'detail'){
+                fetch('post','/approval_instances/'+this.formid+'/participant',value)
             }
            
         },
