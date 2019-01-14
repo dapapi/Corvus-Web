@@ -1,6 +1,6 @@
 <template>
     <div class="input-wraper" :class="showButton ? 'focus-border' : ''" id="changeSizeInput">
-        <textarea class="" name="" id="" rows="4" title="" @focus="showTaskFollow" 
+        <textarea class="" name="" id="" rows="3" title="" @focus="showTaskFollow"
                   v-model="taskFollowText"></textarea>
         <div class="text-right pt-5" v-show="showButton">
             <button class="btn btn-sm btn-white btn-pure" @click="cancelTaskFollow">取消</button>
@@ -57,7 +57,7 @@
 <style scoped>
     .input-wraper {
         border: 1px solid #E0E0E0;
-        padding: 15px;
+        padding: 15px 15px 12px;
     }
 
     .focus-border {
