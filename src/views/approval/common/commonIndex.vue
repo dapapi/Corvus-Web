@@ -4,9 +4,9 @@
             <h1 class="page-title ml-10">发起审批</h1>
         </div>
     
-        <div class="page-content panel mt-20 mx-20" v-for="item in indexData" :key="item.id">
+        <div class="page-content" v-for="item in indexData" :key="item.id">
             <div class="page-header">
-                {{item.name}}
+                <h5>{{item.name}}</h5>
             </div>
             <div class="row py-5">
                 <div class="col-lg-4 approval-module" v-for="subitem in item.forms.data" :key="subitem.id">
