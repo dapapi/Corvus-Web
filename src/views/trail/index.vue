@@ -143,7 +143,7 @@
                             <div class="col-md-2 text-right float-left require">负责人</div>
                             <div class="col-md-10 float-left pl-0">
                                 <input-selectors :placeholder="'请选择负责人'"
-                                                 @change="changePrincipal"
+                                                 @change="changePrincipal" otherslot=true
                                                  :propSelectMemberName='$store.state.otherSlot.data?$store.state.otherSlot.data.name:currentUser.name'></input-selectors>
                             </div>
                         </div>
