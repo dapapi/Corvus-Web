@@ -16,7 +16,7 @@
                     </div>
                     <div class="text-right">
                         <span @click="addCondition">
-                           <i class="iconfont icon-tianjia pr-5"></i>添加更多条件
+                           <i class="iconfont icon-tianjia1 pr-5"></i>添加更多条件
                         </span>
                     </div>
 
