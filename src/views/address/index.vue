@@ -148,7 +148,7 @@
                                 </div>
                                 <div class="">{{ item.start_at }}</div>
                             </div>
-                            <div class="col-md-3" style="margin: 6rem auto" v-if="tasks.length === 0">
+                            <div style="margin: 6rem auto;width: 100px" v-if="tasks.length === 0">
                                 <img src="https://res.papitube.com/corvus/images/content-none.png" alt=""
                                      style="width: 100%">
                             </div>
@@ -166,7 +166,7 @@
                                 </div>
                                 <div class="">{{ item.end_at }}</div>
                             </div>
-                            <div class="col-md-3" style="margin: 6rem auto" v-if="schedules.length === 0">
+                            <div style="margin: 6rem auto;width: 100px" v-if="schedules.length === 0">
                                 <img src="https://res.papitube.com/corvus/images/content-none.png" alt=""
                                      style="width: 100%">
                             </div>

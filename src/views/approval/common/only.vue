@@ -63,7 +63,7 @@
                                 </tr>
                                 </tbody>
                             </table>
-                            <div v-if="projectsInfo.length === 0" class="col-md-1" style="margin: 6rem auto">
+                            <div v-if="projectsInfo.length === 0" style="margin: 6rem auto;width: 100px">
                                 <img src="https://res.papitube.com/corvus/images/content-none.png" alt=""
                                      style="width: 100%">
                             </div>

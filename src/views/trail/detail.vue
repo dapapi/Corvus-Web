@@ -383,7 +383,7 @@
                                     </tr>
                                     </tbody>
                                 </table>
-                                <div class="col-md-1" style="margin: 6rem auto" v-if="trailTasksInfo.length === 0">
+                                <div style="margin: 6rem auto;width: 100px" v-if="trailTasksInfo.length === 0">
                                     <img src="https://res.papitube.com/corvus/images/content-none.png" alt=""
                                         style="width: 100%">
                                 </div>
@@ -405,8 +405,8 @@
                 <div class="panel" style="width: calc(34% - 15px);">
                     <div class="col-md-12">
                         <div class="card col-md-12">
-                            <div class="card-header card-header-transparent card-header-bordered">
-                                <h5>销售线索跟进</h5>
+                            <div class="card-header card-header-transparent card-header-bordered p-10" style="font-size: 16px;font-weight: bold;">
+                                <div>销售线索跟进</div>
                             </div>
                             <div class="card-block">
                                 <div class="col-md-12 pl-0">
