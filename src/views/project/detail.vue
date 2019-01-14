@@ -238,7 +238,7 @@
                                             <div>{{ item.finish_at }}</div>
                                         </div>
                                     </div>
-                                    <div class="bar-wrap float-left">
+                                    <div class="bar-wrap float-left ml-10">
                                         <ul>
                                             <li v-for="(item, index) in new Array(36)" :key="index"
                                                 :style="{transform: `rotate(${index * 10}deg)`, opacity:`${index <= coursesLength/8 * 36 ? 1: 0.3}`}"></li>
@@ -784,8 +784,8 @@
                 <div class="panel" style="width: calc(34% - 15px);" v-if="projectId">
                     <div class="col-md-12">
                         <div class="card col-md-12">
-                            <div class="card-header card-header-transparent card-header-bordered">
-                                <h5>项目跟进</h5>
+                            <div class="card-header card-header-transparent card-header-bordered p-10" style="font-size: 16px;font-weight: bold;">
+                                <div>项目跟进</div>
                             </div>
                             <div class="card-block">
                                 <div class="col-md-12 pl-0">

@@ -5,16 +5,16 @@
         <div class="nav-tabs-horizontal example" data-plugin="tabs">
             <ul class="nav nav-tabs no-nav-tab-border" role="tablist">
                 <li class="nav-item" role="presentation">
-                    <a class="nav-link" data-toggle="tab" href="#all-TaskFollowUp"
+                    <a class="nav-link" data-toggle="tab" href="#all-TaskFollowUp" style="padding: 5px 10px;"
                        aria-controls="exampleTabsOne" role="tab" aria-selected="true" @click="taskFilter=1">全部</a>
                 </li>
                 <li class="nav-item" role="presentation">
-                    <a class="nav-link active" data-toggle="tab" href="#all-TaskFollowUp"
+                    <a class="nav-link active" data-toggle="tab" href="#all-TaskFollowUp" style="padding: 5px 10px;"
                        aria-controls="exampleTabsTwo" role="tab" aria-selected="false" @click="taskFilter=3">
                         {{ followType }}跟进</a>
                 </li>
                 <li class="nav-item" role="presentation">
-                    <a class="nav-link" data-toggle="tab" href="#all-TaskFollowUp"
+                    <a class="nav-link" data-toggle="tab" href="#all-TaskFollowUp" style="padding: 5px 10px;"
                        aria-controls="exampleTabsThree" role="tab" aria-selected="false" @click="taskFilter=2">动态</a>
                 </li>
             </ul>

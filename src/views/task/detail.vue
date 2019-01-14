@@ -73,7 +73,7 @@
                     </div>
                 </div>
             </div>
-            
+
              <div style="display: flex; justify-content: space-between; align-items: flex-start">
                 <div class="panel" style="width: calc(66% - 15px);">
 
@@ -266,8 +266,8 @@
                 <div class="panel" style="width: calc(34% - 15px);">
                     <div class="col-md-12">
                         <div class="card col-md-12">
-                            <div class="card-header card-header-transparent card-header-bordered">
-                                <h5>任务跟进</h5>
+                            <div class="card-header card-header-transparent card-header-bordered p-10" style="font-size: 16px;font-weight: bold;">
+                                <div>任务跟进</div>
                             </div>
                             <div class="card-block">
                                 <div class="col-md-12 pl-0">
@@ -1023,7 +1023,7 @@
                         this.$refs.linkage.refresh()
                     }, 100)
                 }
-                
+
             },
             // 获取任务类型列表
             getTaskType() {
