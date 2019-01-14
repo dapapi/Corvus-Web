@@ -282,7 +282,7 @@
                                         <td v-for="(v,index) in item.relate_project_bills_resource.data" :key="index">{{v.bigger_divide}}</td>
                                     </tr>
                                 </table>
-                                <div class="col-md-1" style="margin: 6rem auto" v-if="ProjectsInfo.length === 0">
+                                <div style="margin: 6rem auto;width: 100px" v-if="ProjectsInfo.length === 0">
                                     <img src="https://res.papitube.com/corvus/images/content-none.png" alt=""
                                         style="width: 100%">
                                 </div>
@@ -321,7 +321,7 @@
                                     </tr>
                                     </template>
                                 </table>
-                                <div class="col-md-1" style="margin: 6rem auto" v-if="tasksInfo.length==0">
+                                <div style="margin: 6rem auto;width: 100px" v-if="tasksInfo.length==0">
                                     <img src="https://res.papitube.com/corvus/images/content-none.png" alt=""
                                         style="width: 100%">
                                 </div>
@@ -367,7 +367,7 @@
                                     </tr>
                                     </tbody>
                                 </table>
-                                <div class="col-md-1" style="margin: 6rem auto" v-if="worksData.length==0">
+                                <div style="margin: 6rem auto;width: 100px" v-if="worksData.length==0">
                                     <img src="https://res.papitube.com/corvus/images/content-none.png" alt=""
                                         style="width: 100%">
                                 </div>
@@ -444,7 +444,7 @@
                                     </tr>
                                     </tbody>
                                 </table>
-                                <div class="col-md-1" style="margin: 6rem auto" v-if="artistBillsInfo.length === 0">
+                                <div style="margin: 6rem auto;width: 100px" v-if="artistBillsInfo.length === 0">
                                     <img src="https://res.papitube.com/corvus/images/content-none.png" alt=""
                                         style="width: 100%">
                                 </div>

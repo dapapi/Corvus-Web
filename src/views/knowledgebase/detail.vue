@@ -55,7 +55,7 @@
                         
                             <change-size-input @change="commentSubmit" :addcomment="isComment" />
 
-                        <div class="col-md-1" style="margin: 6rem auto">
+                        <div style="margin: 6rem auto;width: 100px">
                             <img src="https://res.papitube.com/corvus/images/content-none.png" alt="" style="width: 100%">
                         </div>
                     </div>

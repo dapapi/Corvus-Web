@@ -205,7 +205,7 @@
                                             <span class="float-right px-10">{{ attachment.size }}</span>
                                         </li>
                                     </ul>
-                                    <div class="col-md-1" style="margin: 6rem auto"
+                                    <div style="margin: 6rem auto;width: 100px"
                                         v-if="taskInfo.affixes&&taskInfo.affixes.data.length === 0">
                                         <img src="https://res.papitube.com/corvus/images/content-none.png" alt=""
                                             style="width: 100%">
@@ -241,7 +241,7 @@
                                 </tbody>
                             </table>
 
-                            <div class="col-md-1" style="margin: 6rem auto"
+                            <div style="margin: 6rem auto;width: 100px"
                                 v-if="taskInfo.tasks&&taskInfo.tasks.data.length === 0">
                                 <img src="https://res.papitube.com/corvus/images/content-none.png" alt=""
                                     style="width: 100%">

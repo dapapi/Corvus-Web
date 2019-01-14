@@ -15,7 +15,7 @@
                         <input type="text" class="form-control" placeholder="搜索成员、周期">
                     </div>
                 </div>
-                
+
             </div>
             <div class="col-md-12 panel">
                     <div>
@@ -27,7 +27,7 @@
                                 <th class="cell-300" scope="col">成员</th>
                                 <th class="cell-300">已提交</th>
                                 <th class="cell-300">未提交</th>
-                                
+
                                 <th class="cell-300" v-if="showType ==4" v-for="(item,index) in season" :key="index">{{item.name}}</th>
                                 <th class="cell-200" v-if="showType ==3" v-for="item in 12" :key="item">{{item}}月</th>
                                 <th class="cell-300" v-if="showType ==2||showType ==1" v-for="(item,index) in monthWeek[nowYear-1]" :key="index">第{{index+1}}周</th>
@@ -63,7 +63,7 @@
                                 <!--周-->
                                 <td class="cell-300" v-if="showType ==2" v-for="(item2,index2) in monthWeek[nowYear-1]" :key="index2">
                                     <template v-if="item.titles.find(item => item == item2.name)">
-                                        
+
                                         <i class="md-check font-size-20" style="color:#11c26d"></i>
                                     </template>
                                     <template v-else>
@@ -74,10 +74,10 @@
                                 <td class="cell-300" v-if="showType ==1" v-for="(item2,index2) in monthWeek[nowYear-1]" :key="index2">
                                     {{item2.number}}
                                 </td>
-                                
+
                             </tr>
                         </table>
-                        <div v-if="list.length === 0" class="col-md-1" style="margin: 6rem auto">
+                        <div v-if="list.length === 0" style="margin: 6rem auto;width: 100px">
                             <img src="https://res.papitube.com/corvus/images/content-none.png" alt="" style="width: 100%">
                         </div>
                         <pagination :current_page="current_page" :method="getlist" :total_pages="total_pages"
@@ -101,7 +101,7 @@ import switchTimeDetails from '@/components/switchTimeDetails.vue'
 export default {
     data(){
         return {
-            list:[], 
+            list:[],
             end_time:'',
             start_time:'',
             nowMonth:0,
@@ -116,7 +116,7 @@ export default {
         }
     },
     mounted(){
-        
+
     },
     watch:{
         //检测路由参数变化  调用函数
@@ -132,11 +132,11 @@ export default {
        //showType  1 日 2 周 3 月 4 季 5 年
        showType:function(){
            return this.$route.query.type-0
-       }, 
+       },
     },
     mounted(){
-        
-        
+
+
     },
     methods:{
         selectDate:function(start,end,month,year){
@@ -145,7 +145,7 @@ export default {
             this.nowMonth = month
             this.nowYear = year
             this.getlist()
-            
+
         },
         redirectBriefAdd:function(){
             this.$router.push({path:'/brief/add'})
@@ -159,7 +159,7 @@ export default {
                 end_time:this.end_time,
                 start_time:this.start_time
             }
-           
+
             fetch('get',`${config.apiUrl}/review/member/statistic`,data).then((res) => {
                 _this.list = res.data
                 let newList = []
@@ -167,7 +167,7 @@ export default {
                     for (let i = 0; i < _this.list.length; i++) {
                         for (let t = 0; t < _this.list[i].titles.length; t++) {
                             _this.list[i].titles[t] = _this.list[i].titles[t].split(' ')[0]
-                            
+
                             //如果是日报 计算每周有多少天提交日报
                             if(_this.showType == 1){
                                 _this.list[i].titles[t] = _this.list[i].titles[t].split('月')[1]
@@ -177,7 +177,7 @@ export default {
                                     _this.monthWeek[_this.nowYear-1][g].number =0
                                     if(_this.list[i].title[t]>=_this.monthWeek[_this.nowYear-1][g].startDay&&_this.list[i].title[t]<=_this.monthWeek[_this.nowYear-1][g].endDay){
                                         _this.monthWeek[_this.nowYear-1][g].number = _this.monthWeek[_this.nowYear-1][g].number+1
-                                    }    
+                                    }
                                 }
                           }
                         }
@@ -186,7 +186,7 @@ export default {
                 }
                 // console.log(_this.monthWeek[_this.nowMonth-1])
                 // console.log(_this.list)
-                
+
                 _this.current_page=res.meta.pagination.current_page,
                 _this.total_pages=res.meta.pagination.total_pages,
                 _this.total=res.meta.pagination.total

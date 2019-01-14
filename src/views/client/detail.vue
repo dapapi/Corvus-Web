@@ -139,7 +139,7 @@
                                 </tr>
                                 </tbody>
                             </table>
-                            <div class="col-md-1" style="margin: 6rem auto" v-if="clientTrailsInfo.length === 0">
+                            <div style="margin: 6rem auto;width: 100px" v-if="clientTrailsInfo.length === 0">
                                 <img src="https://res.papitube.com/corvus/images/content-none.png" alt=""
                                     style="width: 100%">
                             </div>
@@ -172,7 +172,7 @@
                                     </tr>
                                 </tbody>
                             </table>
-                            <div class="col-md-1" v-if="clientProjectsInfo.length === 0" style="margin: 6rem auto">
+                            <div v-if="clientProjectsInfo.length === 0" style="margin: 6rem auto;width: 100px">
                                 <img src="https://res.papitube.com/corvus/images/content-none.png" alt=""
                                     style="width: 100%">
                             </div>
@@ -206,7 +206,7 @@
                                 </tbody>
 
                             </table>
-                            <div class="col-md-1" style="margin: 6rem auto" v-if="clientTasksInfo.length === 0">
+                            <div style="margin: 6rem auto;width: 100px" v-if="clientTasksInfo.length === 0">
                                 <img src="https://res.papitube.com/corvus/images/content-none.png" alt=""
                                     style="width: 100%">
                             </div>
@@ -357,7 +357,7 @@
                                     </tr>
                                 </tbody>
                             </table>
-                            <div class="col-md-1" style="margin: 6rem auto" v-if="clientContactsInfo.length === 0">
+                            <div style="margin: 6rem auto;width: 100px" v-if="clientContactsInfo.length === 0">
                                 <img src="https://res.papitube.com/corvus/images/content-none.png" alt=""
                                     style="width: 100%">
                             </div>

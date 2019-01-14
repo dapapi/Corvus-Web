@@ -125,7 +125,7 @@
                             </tr>
                             </tbody>
                         </table>
-                        <div class="col-md-1" style="margin: 6rem auto"
+                        <div style="margin: 6rem auto;width: 100px"
                              v-if="tableData.stars && tableData.stars.length === 0">
                             <img src="https://res.papitube.com/corvus/images/content-none.png" alt=""
                                  style="width: 100%">

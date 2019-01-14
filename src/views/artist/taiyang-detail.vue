@@ -210,7 +210,7 @@
                                         </td>
                                     </tr>
                                 </table>
-                                <div class="col-md-1" style="margin: 6rem auto" v-if="artistProjectsInfo.length === 0">
+                                <div style="margin: 6rem auto;width: 100px" v-if="artistProjectsInfo.length === 0">
                                     <img src="https://res.papitube.com/corvus/images/content-none.png" alt=""
                                          style="width: 100%">
                                 </div>
@@ -248,7 +248,7 @@
                                     </tr>
 
                                 </table>
-                                <div class="col-md-1" style="margin: 6rem auto" v-if="artistTasksInfo.length === 0">
+                                <div style="margin: 6rem auto;width: 100px" v-if="artistTasksInfo.length === 0">
                                     <img src="https://res.papitube.com/corvus/images/content-none.png" alt=""
                                          style="width: 100%">
                                 </div>
@@ -290,7 +290,7 @@
                                     </tr>
                                     </tbody>
                                 </table>
-                                <div class="col-md-1" style="margin: 6rem auto" v-if="artistWorksInfo.length === 0">
+                                <div style="margin: 6rem auto;width: 100px" v-if="artistWorksInfo.length === 0">
                                     <img src="https://res.papitube.com/corvus/images/content-none.png" alt=""
                                          style="width: 100%">
                                 </div>
@@ -358,7 +358,7 @@
                                     </tbody>
                                 </table>
 
-                                <div class="col-md-1" style="margin: 6rem auto" v-if="artistBillsInfo.length === 0">
+                                <div style="margin: 6rem auto;width: 100px" v-if="artistBillsInfo.length === 0">
                                     <img src="https://res.papitube.com/corvus/images/content-none.png" alt=""
                                          style="width: 100%">
                                 </div>
