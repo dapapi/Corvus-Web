@@ -1,5 +1,5 @@
 <template>
-    <div class="modal fade" :id="id" aria-labelledby="examplePositionCenter" role="dialog" tabindex="-1" aria-hidden="true" style="display: none;">
+    <div class="modal fade" :id="id" aria-labelledby="examplePositionCenter" role="dialog" tabindex="-1" aria-hidden="true" data-backdrop="static">
         <div class="modal-dialog modal-simple">
             <div class="modal-content">
                 <div class="modal-header">

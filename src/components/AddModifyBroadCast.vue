@@ -25,7 +25,8 @@
         <div id="addNewBroadcast" 
             class="bootbox modal fade modal-simple" 
             tabindex="-1" 
-            role="dialog" 
+            role="dialog"
+             data-backdrop="static"
             style="display: hidden">
             <div class="modal-dialog modal-lg modal-info">
                 <div class="modal-content">

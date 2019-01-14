@@ -21,7 +21,7 @@
             </div>
         </div>
         <!--请假-->
-         <div class="modal fade" id="modalLeave" aria-hidden="true" aria-labelledby="addLabelForm" role="dialog" tabindex="-1">
+         <div class="modal fade" id="modalLeave" aria-hidden="true" aria-labelledby="addLabelForm" role="dialog" tabindex="-1" data-backdrop="static">
             <div class="modal-dialog modal-simple">
                 <div class="modal-content">
                     <div class="modal-header">

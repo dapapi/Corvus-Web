@@ -20,7 +20,7 @@
       </div>
     </div>
     <div class="modal fade" aria-hidden="true" aria-labelledby="addLabelForm"
-         role="dialog" tabindex="-1" id="approval">
+         role="dialog" tabindex="-1" id="approval" data-backdrop="static">
       <div class="modal-dialog modal-simple">
         <div class="modal-content">
           <div class="modal-header">

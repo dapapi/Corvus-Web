@@ -1,6 +1,6 @@
 <template>
     <div>
-        <div class="modal fade" id="approval-great-module" aria-labelledby="approval-great-module" role="dialog" tabindex="-1">
+        <div class="modal fade" id="approval-great-module" aria-labelledby="approval-great-module" role="dialog" tabindex="-1" data-backdrop="static">
             <div class="modal-dialog modal-simple modal-top">
                 <div class="modal-content">
                     <div class="modal-header">
