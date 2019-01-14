@@ -5,7 +5,7 @@
             <h1 class="page-title d-inline">项目详情</h1>
 
             <div class="page-header-actions dropdown show task-dropdown float-right"
-                 v-if="projectInfo.approval_status == 231">
+                 v-if="projectInfo.approval_status == 232 || projectInfo.type == 5">
                 <i class="iconfont icon-gengduo1 font-size-24" aria-hidden="true" id="taskDropdown"
                    data-toggle="dropdown" aria-expanded="false"></i>
                 <div class="dropdown-menu dropdown-menu-right task-dropdown-item" aria-labelledby="taskDropdown"
@@ -62,7 +62,7 @@
                                 <i class="iconfont icon-tubiao- pr-2" aria-hidden="true"></i>项目状态
                             </div>
                             <div class="font-weight-bold float-left">
-                                <template v-if="projectInfo.approval_status != 232">
+                                <template v-if="projectInfo.approval_status != 232 && projectInfo.type != 5">
                                     <span style="color:#FF9800">审批中</span>
                                 </template>
                                 <template v-else>
@@ -249,7 +249,7 @@
                             </div>
                             <!-- 任务 -->
                             <div class="tab-pane animation-fade pb-20 fixed-button-father" id="forum-project-tasks"
-                                 role="tabpanel" v-if="projectInfo.approval_status == 232">
+                                 role="tabpanel" v-if="projectInfo.approval_status == 232 || projectInfo.type == 5">
                                 <table class="table table-hover is-indent example" data-plugin="animateList"
                                        data-animate="fade"
                                        data-child="tr"
@@ -536,7 +536,7 @@
                                     <div class="card-header card-header-transparent card-header-bordered">
                                         <div class="float-left font-weight-bold third-title">项目信息</div>
                                         <div class="float-right"
-                                             v-show="!isEdit && projectInfo.approval_status == 232">
+                                             v-show="(!isEdit && projectInfo.approval_status == 232) || (!isEdit && projectInfo.type == 5)">
                                             <i class="iconfont icon-bianji2 pointer-content" aria-hidden="true"
                                                @click="editBaseInfo"></i>
                                         </div>
