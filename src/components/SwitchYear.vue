@@ -4,7 +4,7 @@
             <i v-if="type !=1" class="icon md-chevron-left font-size-20 goLeft" @click="changeYear('left')"></i>
             <div class="text-center">
                 <div v-if="type == 1">
-                    <date-picker-brief ></date-picker-brief>
+                    <date-picker-brief @change="getDayTime()" :default="`${this.year}-${this.nowMonth}-${this.nowDay}`"></date-picker-brief>
                 </div>
                 <div v-if="type == 2">{{content}}</div>
                 <div v-if="type == 3||type ==4">{{year}}</div>
@@ -14,19 +14,19 @@
        </div>
        <!--切换月-->
        <ul v-if="showDetails&&type == 3" class="row m-0 p-0 mt-20 pl-10">
-           <li @click="changeYear('li',item.startDate,item.endDate)" v-for="(item,index) in month" :key="index" class="col-md-3 py-5"><span>{{item.name}}</span></li>
+           <li @click="clickTime()" v-for="(item,index) in month" :key="index" class="col-md-3 py-5"><span>{{item.name}}</span></li>
        </ul>
 
        <!--切换季-->
        <ul v-show="showDetails&&type == 4" class="mt-20">
-           <li v-for="(item,index) in season" :key="index" class="py-5">
+           <li v-for="(item,index) in season" :key="index" class="py-5" @click="clickTime()">
                <div class="mb-5">{{item.name}}</div>
                <div class="font-size-12" style="color:#ccc">{{item.start}} - {{item.end}}</div>
            </li>
        </ul>
        <!--切换周-->
        <ul v-show="showDetails&&type == 2" class="mt-20">
-           <li v-for="(item,index) in monthWeek[nowMonth-1]" :key="index" class="py-5">
+           <li v-for="(item,index) in monthWeek[nowMonth-1]" :key="index" class="py-5" @click="clickTime()">
                <div class="mb-5">{{item.name}}</div>
                <div class="font-size-12" style="color:#ccc">{{item.start}} - {{item.end}}</div>
            </li>
@@ -34,7 +34,7 @@
        
        <!--切换年-->
        <ul v-show="showDetails&&type == 5" class="mt-20 row mx-0 pl-10">
-           <li v-for="(item,index) in allYear" :key="index" class="py-5 col-md-3 font-size-12 text-center px-0">
+           <li v-for="(item,index) in allYear" :key="index" class="py-5 col-md-3 font-size-12 text-center px-0" @click="clickTime()">
                {{item. value}}
            </li>
        </ul>
@@ -74,7 +74,9 @@ export default {
            content:`${new Date().getMonth()+1}月`,
            monthWeek:{},
            allYear:[],
-           switchYear:''
+           switchYear:'',
+           leftYear:'',
+           rightYear:''
         }
     },
     created(){
@@ -85,9 +87,14 @@ export default {
         document.onselectstart = function(){return false}
     },
     mounted(){
-
+        if(this.type == 1){
+            this.$emit('click',`${this.year}-${this.nowMonth}-${this.nowDay}`,`${this.year}-${this.nowMonth}-${this.nowDay}`)
+        }
     },
     methods:{
+        getDayTime:function(start,end){
+            alert(start,end)
+        },
         changeYear:function(move,start,end){
             if(this.type == 3||this.type ==4){
                 if(move == 'left'){
@@ -97,10 +104,10 @@ export default {
                 }else{
 
                 }
-                this.$emit('click',`${this.year}`,`${this.year}`,this.year)
+                this.$emit('click',`${this.year}-01-01`,`${this.year}-12-31`)
             }else if(this.type == 2){
                 if(move == 'left'){
-               
+                    
                     if(this.nowMonth <= 1){
                         this.year = this.year-1
                         this.nowMonth = 12
@@ -121,37 +128,39 @@ export default {
                 }
                 this.content = `${this.year}年${this.nowMonth}月`
                 this.$emit('click',`${this.month.find(item => item.value == this.nowMonth).startDate}`,`${this.month.find(item => item.value == this.nowMonth).endDate}`,this.year,this.nowMonth)
-            }else if(this.type ==1){
-                if(move == 'left'){
-                    if(this.nowDay <=1){
-                        this.nowMonth = this.nowMonth-1
-                        this.nowDay = this.monthDay[this.nowMonth-1]
-                        if(this.nowMonth<1){
-                            this.year = this.year-1
-                            this.nowMonth = 12
-                            this.nowDay  = this.monthDay[this.nowMonth-1]
-                        }
-                    }else{
-                        this.nowDay = this.f-1
-                    }
-                    
-                }else if(move == 'right'){
-                   if(this.nowDay>=this.monthDay[this.nowMonth-1]) {   
-                       if(this.nowMonth>=12){
-                            this.year = this.year+1
-                            this.nowMonth = 1
-                            this.nowDay  = 1
-                       }else{
-                           this.nowMonth = this.nowMonth+1
-                           this.nowDay = 1
-                       }
-                   }else{
-                       this.nowDay = this.nowDay+1
-                   } 
-                }else{}
-                this.day = `${this.year}-${this.nowMonth}-${this.nowDay}`
-                this.$emit('click',`${this.day}`,`${this.day}`,this.nowMonth)
             }
+            
+            // else if(this.type ==1){
+            //     if(move == 'left'){
+            //         if(this.nowDay <=1){
+            //             this.nowMonth = this.nowMonth-1
+            //             this.nowDay = this.monthDay[this.nowMonth-1]
+            //             if(this.nowMonth<1){
+            //                 this.year = this.year-1
+            //                 this.nowMonth = 12
+            //                 this.nowDay  = this.monthDay[this.nowMonth-1]
+            //             }
+            //         }else{
+            //             this.nowDay = this.f-1
+            //         }
+                    
+            //     }else if(move == 'right'){
+            //        if(this.nowDay>=this.monthDay[this.nowMonth-1]) {   
+            //            if(this.nowMonth>=12){
+            //                 this.year = this.year+1
+            //                 this.nowMonth = 1
+            //                 this.nowDay  = 1
+            //            }else{
+            //                this.nowMonth = this.nowMonth+1
+            //                this.nowDay = 1
+            //            }
+            //        }else{
+            //            this.nowDay = this.nowDay+1
+            //        } 
+            //     }else{}
+            //     this.day = `${this.year}-${this.nowMonth}-${this.nowDay}`
+            //     this.$emit('click',`${this.day}`,`${this.day}`,this.nowMonth)
+            // }
             
             // else if(this.type == 4){
             //     if(move == 'left'){
@@ -172,15 +181,20 @@ export default {
             //     this.$emit('click',`${this.year}-${this.season.find(item=> item.value == this.nowSeason).startTime}`,`${this.year}-${this.season.find(item=> item.value == this.nowSeason).endTime}`,this.year)
             // }
             else if(this.type == 5){
+                
                 if(move == 'left'){
-                    let leftYear = Number(this.allYear[0].value)-2
-                    this.getYear(leftYear)
+                    this.leftYear = Number(this.allYear[0].value)-2
+                    this.getYear(this.leftYear)
 
                 }else if(move == 'right'){
-                    let rightYear =Number(this.allYear[19].value)+19
-                    this.getYear(rightYear)
+                    this.rightYear =Number(this.allYear[19].value)+19
+                    this.getYear(this.rightYear)
                 }else{}
             }else{}
+            
+        },
+        clickTime:function(start,end){
+            this.$emit('click',start,end)
         },
         getMonth:function(){
             
@@ -221,6 +235,7 @@ export default {
                 this.allYear.push(data)
                 
             }
+            this.$emit('click',`${this.allYear[0].value}-01-01`,`${this.allYear[19].value}-12-31`)
         },
         changeMonth:function(){
            
