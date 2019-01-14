@@ -124,7 +124,7 @@
             </div>
 
             <div style="display: flex; justify-content: space-between; align-items: flex-start">
-                <div class="panel" style="width: calc(66% - 15px);" v-if="projectInfo.title">
+                <div class="panel" style="width: calc(66% - 15px);z-index: 100;" v-if="projectInfo.title">
                     <div class="col-md-12">
                         <ul class="nav nav-tabs nav-tabs-line" role="tablist">
                             <li class="nav-item" role="presentation"
@@ -555,6 +555,17 @@
                                                                @change="(value) => changeProjectBaseInfo(value, 'title')"></EditInput>
                                                 </div>
                                             </div>
+                                            <div class="py-10 px-0 clearfix col-md-6 float-left "
+                                                 v-if="projectInfo.type != 5">
+                                                <TrailOrigin :trailType='projectInfo.trail.data.type'
+                                                             typeName='项目' :isEdit='isEdit'
+                                                             :content='projectInfo.trail.data.resource'
+                                                             @changeTrailOrigin="(value) => changeProjectBaseInfo(value, 'resource_type')"
+                                                             :contentType='projectInfo.trail.data.resource_type'
+                                                             @changeEmail="(value) => changeProjectBaseInfo(value, 'resource')"
+                                                             detailPage='true'
+                                                             @changeTrailOriginPerson="(value) => changeProjectBaseInfo(value.id, 'resource')"/>
+                                            </div>
                                             <div class="card-text py-10 px-0 clearfix col-md-6 float-left ">
                                                 <div class="col-md-3 float-left text-right pl-0">负责人</div>
                                                 <div class="col-md-9 float-left font-weight-bold">
@@ -568,17 +579,6 @@
                                                     <EditAddMember :is-edit="isEdit"
                                                                    @change="(value) => changeProjectBaseInfo(value, 'participant_ids')"></EditAddMember>
                                                 </div>
-                                            </div>
-                                            <div class="py-10 px-0 clearfix col-md-6 float-left "
-                                                 v-if="projectInfo.type != 5">
-                                                <TrailOrigin :trailType='projectInfo.trail.data.type'
-                                                             typeName='项目' :isEdit='isEdit'
-                                                             :content='projectInfo.trail.data.resource'
-                                                             @changeTrailOrigin="(value) => changeProjectBaseInfo(value, 'resource_type')"
-                                                             :contentType='projectInfo.trail.data.resource_type'
-                                                             @changeEmail="(value) => changeProjectBaseInfo(value, 'resource')"
-                                                             detailPage='true'
-                                                             @changeTrailOriginPerson="(value) => changeProjectBaseInfo(value.id, 'resource')"/>
                                             </div>
                                             <div class="card-text py-10 px-0 clearfix col-md-6 float-left "
                                                  v-if="projectInfo.type != 5">

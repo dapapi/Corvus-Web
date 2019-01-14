@@ -104,8 +104,12 @@
                                 code: 'projects'
                             },
                             {
-                                name: '销售',
+                                name: '线索',
                                 code: 'trails'
+                            },
+                            {
+                                name: '线索公海池',
+                                code: 'publictrails'
                             },
                             {
                                 name: '客户',

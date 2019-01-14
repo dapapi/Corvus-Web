@@ -47,6 +47,11 @@ export default new Router({
             component: () => import('./views/trail/index.vue'),
         },
         {
+            path: '/publictrails',
+            name: 'publictrails',
+            component: () => import('./views/trail/public.vue'),
+        },
+        {
             path: '/trails/:id',
             name: 'trails/detail',
             component: () => import('./views/trail/detail.vue')
