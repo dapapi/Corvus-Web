@@ -845,30 +845,16 @@
                 }
             },
             getStars: function () {
-                let _this = this;
-                if (this.trailInfo.type == 4) {
-                    fetch('get', '/bloggers/all').then(function (response) {
-                        _this.starsArr = []
-                        for (let i = 0; i < response.data.length; i++) {
-                            _this.starsArr.push({
-                                id: response.data[i].id,
-                                name: response.data[i].nickname,
-                                value: response.data[i].id
-                            })
-                        }
-                    })
-                } else {
-                    fetch('get', '/stars/all').then(function (response) {
-                        _this.starsArr = []
-                        for (let i = 0; i < response.data.length; i++) {
-                            _this.starsArr.push({
-                                id: response.data[i].id,
-                                name: response.data[i].name,
-                                value: response.data[i].id
-                            })
-                        }
-                    })
-                }
+                fetch('get', '/starandblogger', {sign_contract_status: 2}).then(response => {
+                    for (let i = 0; i < response.data.length; i++) {
+                        this.starsArr.push({
+                            name: response.data[i].name,
+                            id: response.data[i].id,
+                            value: response.data[i].id
+                        })
+                    }
+
+                })
             },
 
             editBaseInfo: function () {

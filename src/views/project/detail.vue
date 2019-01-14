@@ -345,9 +345,9 @@
                                         <div class="float-left pr-40">我司分成 <span class="money-color">10000元</span></div>
                                     </div>
                                     <div class="float-right" style="padding: .715rem 0">
-                            <span class="pointer-content hover-content" data-toggle="modal"
-                                  data-target="#addBill">
-                            <i class="iconfont icon-tianjia pr-5"></i>新增结算单</span>
+                                        <span class="pointer-content hover-content" data-toggle="modal"
+                                              data-target="#addBill">
+                                            <i class="iconfont icon-tianjia pr-5"></i>新增结算单</span>
                                     </div>
                                 </div>
                                 <table class="table table-hover" data-child="tr">
@@ -1676,34 +1676,9 @@
                 this.$store.state.collectInfo = []
             },
             getStars: function () {
-                let _this = this;
-                let url = '';
-                if (this.projectInfo.type === 1 || this.projectInfo.type === 2 || this.projectInfo.type === 3) {
-                    fetch('get', '/stars/all').then(function (response) {
-                        for (let i = 0; i < response.data.length; i++) {
-                            _this.starsArr.push({
-                                name: response.data[i].name,
-                                id: response.data[i].id,
-                                value: response.data[i].id
-                            })
-                        }
-
-                    })
-                } else if (this.projectInfo.type === 4) {
-                    fetch('get', '/bloggers/all').then(function (response) {
-                        for (let i = 0; i < response.data.length; i++) {
-                            _this.starsArr.push({
-                                name: response.data[i].nickname,
-                                id: response.data[i].id,
-                                value: response.data[i].id
-                            })
-                        }
-
-                    })
-                }
-                fetch('get', url).then(function (response) {
+                fetch('get', '/starandblogger', {sign_contract_status: 2}).then(response => {
                     for (let i = 0; i < response.data.length; i++) {
-                        _this.starsArr.push({
+                        this.starsArr.push({
                             name: response.data[i].name,
                             id: response.data[i].id,
                             value: response.data[i].id
