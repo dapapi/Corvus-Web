@@ -112,7 +112,7 @@
                 if (signStatus) {
                     data.sign_contract_status = signStatus
                 }
-                fetch('get', '/approvals_contract/approval', data).then(response => {
+                fetch('get', '/approvals_general/approval', data).then(response => {
                     _this.projectsInfo = response.data
                     _this.total = response.meta.pagination;
                     _this.current_page = response.meta.current_page;
@@ -122,7 +122,7 @@
              getList(params) {
                 this.pageType = params
                 let _this = this
-                    fetch('get','/approvals_contract/approval?status='+params).then((params) => {
+                    fetch('get','/approvals_general/approval?status='+params).then((params) => {
                         _this.projectsInfo = params.data
                         _this.total = params.meta.pagination
                         _this.current_page = params.meta.current_page;
