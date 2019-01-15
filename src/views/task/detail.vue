@@ -619,7 +619,7 @@
                 this.pushReason = ''
             })
             // 请求问卷
-            // this.getQuestionId()
+            this.getQuestionId()
         },
 
         watch: {
