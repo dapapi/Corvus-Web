@@ -6,7 +6,7 @@
             <i class="icon md-calendar" aria-hidden="true"></i>
         </span>
         <input type="text" class="form-control" id="start" name="start">
-        <span class="input-group-addon">to</span>
+        <span class="input-group-addon">至</span>
         <input type="text" class="form-control" id="end" name="end">
     </div>
 </template>
