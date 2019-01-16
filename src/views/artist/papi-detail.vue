@@ -22,7 +22,7 @@
 
         <div class="page-content container-fluid">
             <div class="panel col-md-12">
-                    <!-- <div class="card-block clearfix">
+                    <div class="card-block clearfix">
                         <Upload @change='getUploadUrl' class="upload-image float-left mr-5" style="width:80px;height:80px;border-radius:50%;position:relative">
                             <div  class="puls" :style="{ backgroundImage: 'url(' + uploadUrl + ')' }" v-if="uploadUrl">
                             </div>
@@ -67,8 +67,8 @@
                             </div>
 
                         </div>
-                    </div> -->
-                    <div class="card-block">
+                    </div>
+                    <!-- <div class="card-block">
                     <h4 class="card-title">{{artistInfo.nickname}}</h4>
                      <div class="clearfix">
                         <div class=" clearfix example">
@@ -105,7 +105,7 @@
                         </div>
                         </div>
                     </div>
-                     </div>
+                     </div> -->
                 <div class="clearfix">
                     <div class="col-md-6 float-left pl-1 mb-20 pr-1"  v-if="artistInfo.sign_contract_status == 2&&tasksInfo.length>0">
                         <div class="col-md-6"><i class="iconfont icon-iconset0399 pr-2"></i> 任务</div>
@@ -535,7 +535,7 @@
                                                 </div>
                                             </div>
                                             <div class="card-text py-10 px-0 clearfix col-md-6 float-left ">
-                                                <div class="col-md-4 float-left text-right pl-0">抖音Id</div>
+                                                <div class="col-md-4 float-left text-right pl-0">抖音ID</div>
                                                 <div class="col-md-8 float-left font-weight-bold">
                                                     <EditInput :content="artistInfo.douyin_id" :is-edit="isEdit"
                                                             @change="changeArtistDouyin_id"></EditInput>
@@ -571,6 +571,15 @@
                                                 </div>
                                             </div>
                                             <div class="card-text py-10 px-0 clearfix col-md-6 float-left ">
+                                                <div class="col-md-4 float-left text-right pl-0">签约状态</div>
+                                                <div class="col-md-8 float-left font-weight-bold">
+                                                    <EditSelector :content="artistInfo.level"
+                                                                :options="signState"
+                                                                :is-edit="isEdit"
+                                                                @change="changebloggerstatus"></EditSelector>
+                                                </div>
+                                            </div>
+                                            <div class="card-text py-10 px-0 clearfix col-md-6 float-left ">
                                                 <div class="col-md-4 float-left text-right pl-0">博主级别</div>
                                                 <div class="col-md-8 float-left font-weight-bold">
                                                     <EditSelector :content="artistInfo.level"
@@ -580,20 +589,19 @@
                                                 </div>
                                             </div>
                                             <div class="card-text py-10 px-0 clearfix col-md-6 float-left ">
-                                                <div class="col-md-4 float-left text-right pl-0">孵化期</div>
-                                                <div class="col-md-8 float-left font-weight-bold" >
-                                                    <EditGroupDatePicker :content="Incubationperiod" :is-edit="isEdit"
-                                                                        @change="changeArtistHatch"></EditGroupDatePicker>
-                                                </div>
-                                            </div>
-                                            <div class="card-text py-10 px-0 clearfix col-md-6 float-left ">
                                                 <div class="col-md-4 float-left text-right pl-0">商务合作要求</div>
                                                 <div class="col-md-8 float-left font-weight-bold">
                                                     <EditInput :content="artistInfo.cooperation_demand" :is-edit="isEdit"
                                                             @change="changeArtistDemand"></EditInput>
                                                 </div>
                                             </div>
-                                           
+                                            <div class="card-text py-10 px-0 clearfix col-md-6 float-left ">
+                                                <div class="col-md-4 float-left text-right pl-0">孵化期</div>
+                                                <div class="col-md-12 float-left font-weight-bold" >
+                                                    <EditGroupDatePicker :content="Incubationperiod" :is-edit="isEdit"
+                                                                        @change="changeArtistHatch"></EditGroupDatePicker>
+                                                </div>
+                                            </div>
 
                                             <div class="segmentation-line example float-left"></div>
 
@@ -966,6 +974,7 @@
                 isEdit: false,
                 isStatrtEdit: true,
                 papiCommunicationStatusArr: config.papiCommunicationStatusArr,
+                signState:config.signState,
                 updateNickname:'',
                 updateType:'',
                 updateSign_contract_other:'',
@@ -989,7 +998,6 @@
                 end_Time:'',
                 principalId:'',
                 principalIds:[],
-                taskLevelArr:config.taskLevelArr,
                 updatelevel:'',//博主级别
                 updatedemand:'',//合作需求
                 updatehatch_start:'',//孵化期开始
@@ -1372,6 +1380,9 @@
             //平台id
             changeArtistPlatform_id(value) {
                 this.updatePlatform = value.join(',')
+            },
+            changebloggerstatus(value){
+
             },
             changeArtistSigning(value,name){
                 if(name === 'intention'){
