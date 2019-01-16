@@ -485,7 +485,7 @@ let config = {
         lockArr: [
             {
                 name: '否',
-                value: 0
+                value: 2
             },
             {
                 name: '是',
