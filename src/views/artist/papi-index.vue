@@ -236,7 +236,7 @@
                                        v-model="signCompanyName">
                             </div>
                         </div>
-                        <!-- <div class="example">
+                        <div class="example">
                             <div class="col-md-2 text-right float-left">头像</div>
                             <div class="col-md-5 float-left pl-0">
                                 <Upload @change='getUploadUrl' class="upload-image">
@@ -247,7 +247,7 @@
                                             class="iconfont icon-tianjia"></i></div>
                                 </Upload>
                             </div>
-                        </div> -->
+                        </div>
                         <div class="example">
                             <div class="col-md-2 text-right float-left">备注</div>
                             <div class="col-md-10 float-left pl-0">
@@ -431,6 +431,7 @@
                 fetch('get', '/bloggers', data).then(function (response) {
 
                     _this.artistsInfo = response.data;
+                    console.log(response.data)
                     _this.current_page = response.meta.pagination.current_page;
                     _this.total = response.meta.pagination.total;
                     _this.total_pages = response.meta.pagination.total_pages;
