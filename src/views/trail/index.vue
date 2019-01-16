@@ -18,7 +18,7 @@
                     </div>
                     <div class="col-md-3 example float-left">
                         <selectors :options="progressStatus" :resetinfo='resetInfo' @change="progressStatusFilter"
-                                   placeholder="请选择销售进展"></selectors>
+                                   placeholder="请选择线索类型"></selectors>
                     </div>
                     <div class="col-md-3 example float-left">
                         <selectors ref='principal_id' :options="memberList" multiple='true'
@@ -43,10 +43,10 @@
                             style="animation-fill-mode: backwards; animation-duration: 250ms; animation-delay: 0ms;">
                             <th class="cell-300" scope="col">线索名称</th>
                             <th class="cell-300" scope="col">公司名称</th>
-                            <th class="cell-300" scope="col">级别</th>
                             <th class="cell-300" scope="col">目标艺人</th>
                             <th class="cell-300" scope="col">预计订单收入</th>
                             <th class="cell-300" scope="col">负责人</th>
+                            <th class="cell-300" scope="col">跟进时间</th>
                         </tr>
                         <tbody>
                         <tr v-for="trail in trailsInfo" :key='trail.id' @click="goDetail(trail.id)">
@@ -57,10 +57,6 @@
 
                             <td>{{ trail.client.data.company }}</td>
                             <td>
-                                <template v-if="trail.client.data.grade === 1">直客</template>
-                                <template v-if="trail.client.data.grade === 2">代理公司</template>
-                            </td>
-                            <td>
                                 <span class="overflowsp" v-for="(item , index) in trail.expectations.data" :key="index"
                                       v-if="index < 2">{{item.name || item.nickname}}&nbsp;&nbsp;</span>
                             </td>
@@ -69,6 +65,9 @@
                                 <template v-if="trail.principal">
                                     {{ trail.principal.data.name }}
                                 </template>
+                            </td>
+                            <td>
+                                <template>{{trail.last_updated_at || '-'}}</template>
                             </td>
                         </tr>
                         </tbody>
@@ -276,13 +275,13 @@
                     'name': '全部',
                     'value': ''
                 }, {
-                    'name': '已拒绝',
+                    'name': '商务线索',
                     'value': '0'
                 }, {
-                    'name': '未确定合作',
+                    'name': '影视线索',
                     'value': '1'
                 }, {
-                    'name': '已确定合作',
+                    'name': '综艺线索',
                     'value': '2'
                 }],
                 memberList: [],
