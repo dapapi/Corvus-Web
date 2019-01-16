@@ -391,11 +391,18 @@
             },
             // show add
             showAddModal(val) {
-                if (val === 3) {
-                    if (Cookies.get('companyType') === '泰洋川禾') {
-                        val = 3;
-                    } else {
-                        val = 4;
+                // if (val === 3) {
+                //     if (Cookies.get('companyType') === '泰洋川禾') {
+                //         val = 3;
+                //     } else {
+                //         val = 4;
+                //     }
+                // }
+                if(val === 3){
+                    if(Cookies.get('user').organization_id == 411){
+                        val = 3
+                    }else if(Cookies.get('user').organization_id == 412){
+                        val = 4
                     }
                 }
                 this.setDefaultPrincipal()

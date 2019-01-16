@@ -413,7 +413,8 @@
                     let json = {
                         id: userData.id,
                         avatar: userData.icon_url,
-                        nickname: userData.name
+                        nickname: userData.name,
+                        organization_id:userData.organization_id
                     };
                     callback(json, userData.company)
                 })
