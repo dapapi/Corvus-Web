@@ -220,16 +220,20 @@ let config = {
 
         taskLevelArr: [
             {
-                name: '高',
+                name: 'S',
                 value: 1
             },
             {
-                name: '中',
+                name: 'A',
                 value: 2
             },
             {
-                name: '低',
+                name: 'B',
                 value: 3
+            },
+            {
+                name: 'C',
+                value: 0
             },
         ],
 
