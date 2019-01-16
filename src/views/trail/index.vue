@@ -268,7 +268,7 @@
                 industriesArr: [],
                 industry: '',
                 priority: '',
-                priorityArr: config.priorityArr,
+                priorityArr: config.taskLevelArr,
                 trailStatus: '',
                 cooperation: '',
                 filterData: '',
