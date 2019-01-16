@@ -266,14 +266,23 @@
             },
 
             changeProjectType: function (value) {
-                if (value === 3) {
-                    if (Cookies.get('companyType') === '泰洋川禾') {
-                        value = 3;
-                    } else {
-                        value = 4;
+                // if (value === 3) {
+                //     if (Cookies.get('companyType') === '泰洋川禾') {
+                //         value = 3;
+                //     } else {
+                //         value = 4;
+                //     }
+                // }
+                let  organization_id = JSON.parse(Cookies.get('user')).organization_id
+                if(value == 3){
+                    if(organization_id == 411){
+                        value = 3
+                    }else if(organization_id == 412){
+                        value = 4
                     }
                 }
                 this.projectType = value;
+                
                 this.selectProjectType();
                 $('#addProject').modal('show');
             },

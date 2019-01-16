@@ -602,6 +602,7 @@
                 showAllResource: true,
                 selectMemberShow: false,
                 starId: '',
+                starFlag:'',
                 calendarVisible: 1,
                 calendarDetailInfo: '',
                 calendarActionType: '',
@@ -641,6 +642,7 @@
             $('#addCalendar').on('hidden.bs.modal', function () {
                 _this.$store.dispatch('changeParticipantsInfo', {data: []});
                 _this.starId = '';
+                _this.starFlag = '';
                 _this.scheduleName = '';
                 _this.checkColor = '';
                 _this.calendarVisible = 1;
@@ -740,7 +742,8 @@
                     for (let i = 0; i < response.data.length; i++) {
                         this.starsArr.push({
                             value: response.data[i].id,
-                            name: response.data[i].name
+                            name: response.data[i].name,
+                            flag:response.data[i].flag  //根据flag 区分艺人和博主
                         })
                     }
                 })
@@ -770,11 +773,16 @@
                     this.calendarVisible = response.data.privacy;
                     this.$refs.visibleSelector.setValue(response.data.privacy);
                     this.$store.dispatch('changeParticipantsInfo', {data: response.data.participants.data});
+                    // console.log(response.data.starable)
                     if (response.data.starable) {
                         let starId = response.data.starable.data.id;
+                        let starFlag = response.data.starable.data.flag
                         this.starId = starId;
+                        this.starFlag = starFlag;
                         this.$refs.linkageStar.setValue(starId)
                     }
+                    // console.log(this.starId)
+                    // console.log(this.starFlag)
                 })
             },
 
@@ -1109,7 +1117,8 @@
                     start_at: startTime,
                     end_at: endTime,
                     repeat: this.scheduleRepeat,
-                    desc: this.eventDesc
+                    desc: this.eventDesc,
+                    
                 };
                 if (this.eventPlace) {
                     data.position = this.eventPlace;
@@ -1174,7 +1183,9 @@
             },
 
             addCalendarStar: function (value) {
+                // console.log(value)
                 this.starId = value
+                this.starFlag = this.starsArr.find(item =>item.value == value).flag
             },
 
             changeStartTime: function (value) {
@@ -1207,9 +1218,10 @@
                     color: this.checkColor,
                     privacy: this.calendarVisible,
                 };
-                if (this.starId.length > 0) {
+                // if (this.starId.length > 0) {
                     data.star = this.starId
-                }
+                    data.flag = this.starFlag
+                // }
                 let participants = this.$store.state.newParticipantsInfo;
                 if (participants.length > 0) {
                     data.participant_ids = [];
@@ -1230,9 +1242,14 @@
                     color: this.checkColor,
                     privacy: this.calendarVisible,
                 };
-                if (this.starId.length > 0) {
+                console.log(typeof this.starId)
+
+                // if (this.starId.length > 0) {
                     data.star = this.starId
-                }
+                    data.flag= this.starFlag
+                    console.log(data)
+                // }
+                
                 let participants = this.$store.state.newParticipantsInfo;
                 if (participants.length > 0) {
                     data.participant_ids = [];
