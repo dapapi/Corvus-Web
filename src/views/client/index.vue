@@ -398,10 +398,11 @@
                 //         val = 4;
                 //     }
                 // }
-                if(val === 3){
-                    if(Cookies.get('user').organization_id == 411){
+                let  organization_id = JSON.parse(Cookies.get('user')).organization_id
+                if(val == 3){
+                    if(organization_id == 411){
                         val = 3
-                    }else if(Cookies.get('user').organization_id == 412){
+                    }else if(organization_id == 412){
                         val = 4
                     }
                 }

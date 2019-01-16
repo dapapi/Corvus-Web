@@ -635,14 +635,15 @@
                 //         value = 4;
                 //     }
                 // }
-                if(value === 3){
-                    if(Cookies.get('user').organization_id == 411){
+                let  organization_id = JSON.parse(Cookies.get('user')).organization_id
+                if(value == 3){
+                    if(organization_id == 411){
                         value = 3
-                    }else if(Cookies.get('user').organization_id == 412){
+                    }else if(organization_id == 412){
                         value = 4
                     }
                 }
-                this.trailType = value;
+                this.trailType = value
                 $('#addTrail').modal('show')
                 setTimeout(() => {
                     $('.selectpicker').selectpicker('refresh');
