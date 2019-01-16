@@ -20,7 +20,8 @@
             $(this.$el).datepicker({
                 format: "yyyy-mm-dd",
                 language: "zh-CN",
-                autoclose: true
+                autoclose: true,
+                todayHighlight: true
             }).on("changeDate", function () {
 
                 self.$emit('change', $(this)[0].children[0].value);
