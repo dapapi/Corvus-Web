@@ -84,7 +84,7 @@
                         <h6 class="page-title pb-20 mx-15">审批详情</h6>
                         <div class="row px-20">
                             <div class="col-md-10">
-                                <div class="col-md-6 my-5 px-0 float-left">
+                                <div class="col-md-6 my-5 px-0 float-left" v-if="info.contract">
                                     <div class="col-md-4 float-left text-right detail-key mx-0 noselect">
                                         合同编号
                                     </div>
@@ -93,7 +93,7 @@
                                     </div>
                                 </div>
                                 <div class="col-md-6 my-5 px-0 float-left"
-                                     v-for="(item, index) in detailData" :key="index" v-if="item.values">
+                                     v-for="(item, index) in detailData" :key="index" >
                                     <div class="col-md-4 float-left text-right detail-key mx-0 noselect">{{item.key}}
                                     </div>
                                     <div class="col-md-8 float-left detail-value"
