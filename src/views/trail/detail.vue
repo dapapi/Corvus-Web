@@ -50,7 +50,7 @@
                         </div>
                         <div class="col-md-6 float-left pl-0">
                             <div class="float-left pl-0 pr-2 col-md-2">
-                                <i class="iconfont icon-renminbi1688 pr-2" aria-hidden="true"></i>预计收入
+                                <i class="iconfont icon-renminbi1688 pr-2" aria-hidden="true"></i>预计订单收入
                             </div>
                             <div class="font-weight-bold float-left">
                                 <template v-if="trailInfo.fee">

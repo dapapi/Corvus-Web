@@ -505,12 +505,12 @@
 
     .detail-container {
         /* border: 1px solid #eeeeee; */
-        height: 40px;
+        min-height: 40px;
         line-height: 40px;
     }
 
     .detail-key {
-        height: 40px;
+        min-height: 40px;
         /* background: #f5f5f5; */
 
     }
