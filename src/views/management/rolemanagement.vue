@@ -123,7 +123,7 @@
                     </div>
                     <div class="page-content tab-content nav-tabs-animate bg-white pt-20">
                         <div class="tab-pane animation-fade " :class="isAactive?'active':''" :id="'forum-member'+item.id" role="tabpanel">
-                            <span style="font-weight:300;color:#999999;font-size:12px;" v-if="item.group_id==1994731356">如需添加“部门主管”，请到【成员管理】页面，在【编辑部门】中设置“部门主管”，设置完成后自动同步。</span>
+                            <!-- <span style="font-weight:300;color:#999999;font-size:12px;" v-if="item.group_id==1994731356">如需添加“部门主管”，请到【成员管理】页面，在【编辑部门】中设置“部门主管”，设置完成后自动同步。</span> -->
                             <table class="table table-hover" data-plugin="selectable" data-selectable="selectable">
                                
                                 <tr>

@@ -35,7 +35,7 @@
                         </div>
 
                     </Upload>
-                    <div class="float-left ml-10" style="width:calc(100% - 100px)">
+                    <div class="float-left ml-10 mt-10" style="width:calc(100% - 100px)">
                         <h4 class="card-title">{{artistInfo.name}}</h4>
                         <div class=" clearfix example">
                             <div class="col-md-6 float-left pl-0">
@@ -1965,6 +1965,7 @@
                     _this.endTime = ''
                     _this.startMinutes = ''
                     _this.endMinutes = ''
+                    _this.taskIntroduce = ''
                     _this.$refs.taskType.setValue('')
                     _this.$refs.taskStartTime.setValue('')
                     _this.$refs.taskStartDate.setValue('')

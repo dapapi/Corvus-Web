@@ -50,7 +50,7 @@
                         </div>
                         <div class="col-md-6 float-left pl-0">
                             <div class="float-left pl-0 pr-2 col-md-2">
-                                <i class="iconfont icon-renminbi1688 pr-2" aria-hidden="true"></i>预计收入
+                                <i class="iconfont icon-renminbi1688 pr-2" aria-hidden="true"></i>预计订单收入
                             </div>
                             <div class="font-weight-bold float-left">
                                 <template v-if="trailInfo.fee">
@@ -227,7 +227,7 @@
                                                 <div class="col-md-9 float-left font-weight-bold">
                                                     <EditSelector :is-edit="isEdit" :options="lockArr"
                                                                 @change='changeLockStatus'
-                                                                :content="trailInfo.lock_status"></EditSelector>
+                                                                :content="trailInfo.lock_status==0?2:1"></EditSelector>
                                                 </div>
                                             </div>
                                             <div class="card-text py-10 px-0 clearfix col-md-6 float-left"
@@ -902,6 +902,9 @@
             },
             changeLockStatus(value) {
                 // this.trailInfo.lock_status = value
+                if(value==2){
+                    value = 0
+                }
                 this.changeInfo.lock = Number(value)
             },
             getCurrentUser() {
