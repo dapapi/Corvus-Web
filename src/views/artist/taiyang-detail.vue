@@ -42,7 +42,7 @@
                                 <div class="float-left pl-0 pr-2 col-md-2">
                                     <i class="iconfont icon-yonghu pr-2" aria-hidden="true"></i>经理人
                                 </div>
-                                <div class="font-weight-bold float-left col-md-10 pl-0" v-if="artistInfo.broker">
+                                <div class="font-weight-bold float-left col-md-10 pl-0" v-if="artistInfo.broker" style="padding-top:1.5px">
                                     <span v-for="(broker,index) in artistInfo.broker.data" :key="index" class="mr-10">
                                         <span>{{broker.company}}</span>
                                         <span v-if="broker.company">-</span>
@@ -55,7 +55,7 @@
                                 <div class="float-left pl-0 pr-2 col-md-2">
                                     <i class="iconfont icon-yonghu pr-2" aria-hidden="true"></i>宣传人
                                 </div>
-                                <div class="font-weight-bold float-left col-md-10 pl-0" v-if="artistInfo.publicity">
+                                <div class="font-weight-bold float-left col-md-10 pl-0" v-if="artistInfo.publicity" style="padding-top:2px">
                                     <span v-for="(publicity,index) in artistInfo.publicity.data" :key="index"
                                           class="mr-10">
                                         <span>{{publicity.company}}</span>
@@ -370,13 +370,13 @@
                             <div class="tab-pane animation-fade  pb-20 fixed-button-father" id="forum-artist-base"
                                  role="tabpanel" :class="artistInfo.sign_contract_status == 2?'':'active'">
                                 <div class="card">
-                                    <div class="card-header card-header-transparent card-header-bordered">
+                                    <div class="card-header card-header-transparent card-header-bordered" style="position: relative;">
                                         <div class="float-left font-weight-bold third-title">艺人信息</div>
-                                        <div class="float-right pointer-content" v-show="!isEdit">
+                                        <div class="float-right pointer-content" v-show="!isEdit" style="position:absolute;top:10px;right:30px;">
                                             <i class="iconfont icon-bianji2" aria-hidden="true"
                                                @click="editBaseInfo"></i>
                                         </div>
-                                        <div class="float-right mr-40" v-show="isEdit">
+                                        <div class="float-right mr-40" v-show="isEdit" style="position:absolute;top:5px;right:0px;">
                                             <button class="btn btn-sm btn-white btn-pure" @click="cancelEdit">取消
                                             </button>
                                             <button class="btn btn-primary" @click="changeArtist">确定</button>
@@ -504,7 +504,7 @@
                                                 </div>
                                             </div>
                                             <div class="card-text py-10 px-0 clearfix col-md-6 float-left edit-height">
-                                                <div class="col-md-3 float-left text-right pl-0">抖音Id</div>
+                                                <div class="col-md-3 float-left text-right pl-0">抖音ID</div>
                                                 <div class="col-md-9 float-left font-weight-bold">
                                                     <EditInput :content="artistInfo.douyin_id" :is-edit="isEdit"
                                                                @change="(value) => changeArtistBaseInfo(value, 'douyin_id')"></EditInput>
@@ -533,6 +533,12 @@
                                                                @change="changeAttachmentType"
                                                                ref="attachType"></selectors>
 
+                                                </div>
+                                            </div>
+                                            <div class="card-text py-10 px-0 clearfix col-md-6 float-left ">
+                                                <div class="col-md-3 float-left text-right pl-0">签约状态</div>
+                                                <div class="col-md-9 float-left font-weight-bold" v-if="artistInfo.sign_contract_status" :class="isEdit?'py-10':''">
+                                                    {{signState.find(item=>item.value === artistInfo.sign_contract_status).name}}                        
                                                 </div>
                                             </div>
                                             <div class="card-text py-10 px-0 clearfix col-md-6 float-left mt-10"
@@ -1211,6 +1217,7 @@
                 artistSourceArr: config.artistSourceArr,
                 taiyangCommunicationStatusArr: config.taiyangCommunicationStatusArr,
                 yesOrNoArr: config.yesOrNoArr,
+                signState:config.signState,
                 changeArtistInfo: {},
                 artistSocialPlatform: [
                     {
@@ -2061,6 +2068,9 @@
                 if (name === 'platform') {
                     value = value.join(',')
                 }
+                // if(name === 'sign_contract_status'){
+                //     value = 
+                // }
                 if (name === 'broker_id') {
                     if (value) {
                         value = this.$store.state.principalInfo.id
@@ -2435,10 +2445,19 @@
         opacity: 0;
 
     }
-
     .card-block .card-text {
         display: flex;
         align-items: center;
     }
+    .card-header:first-child{
+        border-radius: calc(.215rem - 1px) calc(.215rem - 1px) 0 0;
+        display: flex;
+        align-items: center;
+    }
+    .fixed-button {
+    position: absolute;
+    bottom: 0px;
+    right: 0;
+}
 </style>
 
