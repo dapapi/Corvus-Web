@@ -160,13 +160,16 @@ export default {
             }
         },
         trendApproverChecker(params){
+            console.log(params);
             if(this.formData.condition.includes(params.key)){
                 let tempData = this.formData.condition.indexOf(params.key)
-                this.trendApprover.condition.splice(tempData,1) 
-                this.trendApprover.condition[tempData]=params.value
+                this.trendApprover.condition.splice(tempData,1,params.value)
             }
             if(this.formData.condition.length === this.trendApprover.condition.length){
                 this.trendApprover.ready = true
+            }else{
+                this.trendApprover.ready = false
+
             }
         },
         getFormContractor(){
