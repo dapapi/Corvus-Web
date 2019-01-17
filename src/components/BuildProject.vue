@@ -333,8 +333,7 @@
                     for (let i = 0; i < response.data.length; i++) {
                         this.starsArr.push({
                             name: response.data[i].name,
-                            id: response.data[i].id,
-                            value: response.data[i].id
+                            value: response.data[i].flag + '-' + response.data[i].id,
                         })
                     }
 
@@ -409,7 +408,7 @@
                     case 'resource_type':
                         this.trailOrigin = value;
                         this.projectBaseInfo.trail.resource_type = value;
-                        return
+                        return;
                     case 'expectations':
                         this.projectBaseInfo.trail.expectations = value;
                 }

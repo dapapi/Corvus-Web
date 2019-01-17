@@ -602,7 +602,7 @@
                 showAllResource: true,
                 selectMemberShow: false,
                 starId: '',
-                starFlag:'',
+                starFlag: '',
                 calendarVisible: 1,
                 calendarDetailInfo: '',
                 calendarActionType: '',
@@ -741,9 +741,8 @@
                 fetch('get', '/starandblogger', {sign_contract_status: 2}).then(response => {
                     for (let i = 0; i < response.data.length; i++) {
                         this.starsArr.push({
-                            value: response.data[i].id,
+                            value: response.data[i].flag + '-' + response.data[i].id,
                             name: response.data[i].name,
-                            flag:response.data[i].flag  //根据flag 区分艺人和博主
                         })
                     }
                 })
@@ -773,7 +772,6 @@
                     this.calendarVisible = response.data.privacy;
                     this.$refs.visibleSelector.setValue(response.data.privacy);
                     this.$store.dispatch('changeParticipantsInfo', {data: response.data.participants.data});
-                    // console.log(response.data.starable)
                     if (response.data.starable) {
                         let starId = response.data.starable.data.id;
                         let starFlag = response.data.starable.data.flag
@@ -781,8 +779,6 @@
                         this.starFlag = starFlag;
                         this.$refs.linkageStar.setValue(starId)
                     }
-                    // console.log(this.starId)
-                    // console.log(this.starFlag)
                 })
             },
 
@@ -1118,7 +1114,7 @@
                     end_at: endTime,
                     repeat: this.scheduleRepeat,
                     desc: this.eventDesc,
-                    
+
                 };
                 if (this.eventPlace) {
                     data.position = this.eventPlace;
@@ -1183,9 +1179,9 @@
             },
 
             addCalendarStar: function (value) {
-                // console.log(value)
-                this.starId = value
-                this.starFlag = this.starsArr.find(item =>item.value == value).flag
+                value = value.split('-');
+                this.starFlag = value[0];
+                this.starId = value[1]
             },
 
             changeStartTime: function (value) {
@@ -1218,10 +1214,10 @@
                     color: this.checkColor,
                     privacy: this.calendarVisible,
                 };
-                // if (this.starId.length > 0) {
-                    data.star = this.starId
+                if (this.starId) {
+                    data.star = this.starId;
                     data.flag = this.starFlag
-                // }
+                }
                 let participants = this.$store.state.newParticipantsInfo;
                 if (participants.length > 0) {
                     data.participant_ids = [];
@@ -1242,14 +1238,11 @@
                     color: this.checkColor,
                     privacy: this.calendarVisible,
                 };
-                console.log(typeof this.starId)
 
-                // if (this.starId.length > 0) {
-                    data.star = this.starId
-                    data.flag= this.starFlag
-                    console.log(data)
-                // }
-                
+                if (this.starId) {
+                    data.star = this.starId;
+                    data.flag = this.starFlag
+                }
                 let participants = this.$store.state.newParticipantsInfo;
                 if (participants.length > 0) {
                     data.participant_ids = [];
