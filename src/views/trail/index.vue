@@ -67,7 +67,7 @@
                                 </template>
                             </td>
                             <td>
-                                <template>{{trail.last_updated_at || '-'}}</template>
+                                <template>{{trail.last_updated_at}}</template>
                             </td>
                         </tr>
                         </tbody>
