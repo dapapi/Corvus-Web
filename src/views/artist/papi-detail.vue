@@ -11,11 +11,11 @@
                      role="menu" x-placement="bottom-end">
                     <a class="dropdown-item" role="menuitem" data-toggle="modal"
                        data-target="#distributionproducer" @click="distributionPerson('publicity')">分配制作人</a>
-                    <a class="dropdown-item" role="menuitem" data-toggle="modal" data-target="#addPrivacy">隐私设置</a>
+                    <!-- <a class="dropdown-item" role="menuitem" data-toggle="modal" data-target="#addPrivacy">隐私设置</a>
                     <a class="dropdown-item" role="menuitem" data-toggle="modal" data-target="#addPrivacy">
                         <template v-if="artistInfo.sign_contract_status == 1">签约</template>
                         <template v-if="artistInfo.sign_contract_status == 2">解约</template>
-                    </a>
+                    </a> -->
                 </div>
             </div>
         </div>
@@ -33,11 +33,11 @@
                         <div class="float-left ml-10 mt-10" style="width:calc(100% - 100px)">
                             <h4 class="card-title">{{artistInfo.nickname}}</h4>
                             <div class=" clearfix example">
-                                <div class="col-md-6 float-left pl-0">
-                                    <div class="float-left pl-0 pr-2 col-md-2">
+                                <div class="col-md-6 float-left pl-0" v-if="artistInfo.publicity">
+                                    <div class="float-left pl-0 pr-2 col-md-3" >
                                         <i class="iconfont icon-yonghu pr-2" aria-hidden="true"></i>制作人
                                     </div>
-                                    <div class="font-weight-bold float-left pr-10"  v-show="artistInfo.sign_contract_status == 2&&artistInfo.publicity.data.length>0"
+                                    <div class="font-weight-bold float-left pr-10"  
                                          style="padding-top:1.5px" v-if ="artistInfo.publicity">
                                         <span  v-for="(item,index) in artistInfo.publicity.data" :key="index">
                                             {{item.name}}
@@ -46,7 +46,7 @@
                                     
                                 </div>
                             <div class="col-md-6 float-left pl-0" v-show="artistInfo.sign_contract_status == 1">
-                                    <div class="float-left pl-0 pr-2 col-md-4">
+                                    <div class="float-left pl-0 pr-2 col-md-2">
                                         <i class="iconfont icon-yonghu pr-2" aria-hidden="true"></i>录入人
                                     </div>
                                     <div class="font-weight-bold float-left"   v-for="(entry,index) in artistInfo.creator" :key="index" style="padding-top:1.5px"> 
@@ -55,9 +55,9 @@
                                             <span>{{ entry.name }}</span>    
                                     </div>
                                 </div>
-                                <div class="col-md-6 float-left pl-18" v-show="artistInfo.sign_contract_status == 1">
+                                <div class="col-md-6 float-left pl-0 pt-10" v-show="artistInfo.sign_contract_status == 1">
                                     <div class="float-left pl-0 pr-2 col-md-3">
-                                        <i class="iconfont icon-yonghu pr-2" aria-hidden="true"></i>录入时间
+                                        <i class="iconfont icon-jieshushijian pr-2" aria-hidden="true"></i>录入时间
                                     </div>
                                     <div class="font-weight-bold float-left" v-if="principalName" style="padding-top:1.5px">
                                         <template>
@@ -1207,7 +1207,6 @@
         },
         computed: {
             completeNum() {
-                // console.log(this.tasksInfo)
                 return this.tasksInfo.filter(n => n.status === 2).length
             }
         },
@@ -1329,7 +1328,6 @@
                   
                     let doneTaskNum = 0
                     _this.artistInfo = response.data;
-                    console.log(_this.artistInfo)
                     _this.uploadUrl = _this.artistInfo.avatar;
                     if(_this.artistInfo.intention){
                         _this.artistInfo.intention = 1
@@ -1351,6 +1349,7 @@
                     }
                     if(response.data.calendar){
                         _this.calendarId.push(response.data.calendar.data.id)
+                        _this.calendarName = response.data.calendar.data.title
                     }
                      //项目
                      if(response.data.trails){
@@ -1464,7 +1463,6 @@
                 };
                 fetch('get', '/schedules/' + this.calendarId, data).then(response => {
                     this.scheduleData = response.data;
-                    console.log(this.scheduleData)
                     this.scheduleParticipants = JSON.parse(JSON.stringify(response.data.participants.data));
                     this.$store.dispatch('changeParticipantsInfo', {data: response.data.participants.data});
                 });
@@ -1659,7 +1657,6 @@
                 }
                 let _this = this
                 fetch('get', `/privacyUsers?include=creator`, data).then(function (response) {
-                    // console.log(response)
                     let allPrivacyUsers = response.data
                     _this.$store.state.incubationInfo = []
                    

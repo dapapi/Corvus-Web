@@ -581,7 +581,7 @@
                                                 <template v-if="artistInfo.last_updated_user">
                                                     {{artistInfo.last_updated_user}}
                                                 </template>
-                                                <template v-else>{{ artistInfo.created_at }}</template>
+                                                <template v-else>{{ artistInfo.creator.data.name}}</template>
                                             </div>
                                         </div>
                                         <div class="card-text py-10 px-0 clearfix col-md-6 float-left">
@@ -1332,7 +1332,6 @@
                 fetch('get', '/stars/' + this.artistId, data).then(function (response) {
 
                     _this.artistInfo = response.data;
-                    console.log( response.data)
                     _this.uploadUrl = _this.artistInfo.avatar
                     _this.artistProjectsInfo = []
                     _this.artistTasksInfo = response.data.tasks.data
@@ -1366,7 +1365,6 @@
                         this.noPermission = true;
                         return
                     }
-                    console.log(response.data)
                     this.noPermission = false;
                     this.scheduleData = response.data;
                     this.scheduleParticipants = JSON.parse(JSON.stringify(response.data.participants.data));

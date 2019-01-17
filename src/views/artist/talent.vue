@@ -951,7 +951,7 @@
                     toastr.error('请选择博主类型');
                     return false
                 }
-                if (!this.communication) {
+                if (!this.blogCommunication) {
                     toastr.error('请选择沟通状态');
                     return false
                 }
