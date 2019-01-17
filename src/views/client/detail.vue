@@ -496,10 +496,10 @@
                         <div class="example">
                             <div class="col-md-2 text-right float-left pl-0 require">任务优先级</div>
                             <div class="col-md-10 float-left pl-0">
-                                <selectors ref="taskLevel" :options="taskLevelArr" @change="changeTaskLevel"></selectors>
+                                <selectors ref="taskLevel" :options="priorityArr" @change="changeTaskLevel"></selectors>
                             </div>
                         </div>
-                        <div class="example">
+                        <!-- <div class="example">
                             <div class="col-md-2 text-right float-left require">开始时间</div>
                             <div class="col-md-4 float-left pl-0">
                                 <datepicker ref="startTime" @change="changeStartTime"></datepicker>
@@ -507,6 +507,28 @@
                             <div class="col-md-2 text-right float-left require">截止时间</div>
                             <div class="col-md-4 float-left pl-0">
                                 <datepicker ref="endTime" @change="changeEndTime"></datepicker>
+                            </div>
+                        </div> -->
+                        <div class="example">
+                            <div class="col-md-2 text-right float-left require">开始时间</div>
+                            <div class="col-md-5 float-left pl-0">
+                                <datepicker @change="changeStartTime" :placeholder="'请输入开始时间'"
+                                            ref="startTime"></datepicker>
+                            </div>
+                            <div class="col-md-5 float-left pl-0">
+                                <timepicker :default="startMinutes" @change="changeStartMinutes"
+                                            ref="taskStartTime"></timepicker>
+                            </div>
+                        </div>
+                        <div class="example">
+                            <div class="col-md-2 text-right float-left require">截止时间</div>
+                            <div class="col-md-5 float-left pl-0">
+                                <datepicker @change="changeEndTime" :placeholder="'请输入结束时间'"
+                                            ref="endTime"></datepicker>
+                            </div>
+                            <div class="col-md-5 float-left pl-0">
+                                <timepicker :default="endMinutes" @change="changeEndMinutes"
+                                            ref="taskEndTime"></timepicker>
                             </div>
                         </div>
                         <div class="example">
@@ -547,7 +569,7 @@
                 clientScaleArr: config.clientScaleArr,
                 keyMasterArr: config.isKeyMasterArr,
                 taskTypeArr: [],
-                taskLevelArr: config.taskLevelArr,
+                priorityArr: config.priorityArr,
                 multiple: false,
                 taskType: '',
                 taskName: '',
@@ -558,7 +580,7 @@
                 startMinutes: '00:00',
                 endMinutes: '00:00',
                 taskEndTime: '',
-                taskLevel: 1,
+                taskLevel:'',
                 isEdit: false,
                 clientInfo: {},
                 clientInfoCopy: {},
@@ -809,29 +831,22 @@
             },
 
             addTask: function () {
-                this.setDefaultPrincipal()
-                let _this = this;
-                let data = {
-                    resource_type: 4,
-                    resourceable_id: this.clientId,
-                    title: this.taskName,
-                    type: this.taskType,
-                    principal_id: this.taskPrincipalId, // 负责人 principal_id
-                    priority: this.taskLevel,
-                    start_at: this.taskStartTime + ' ' + this.startMinutes,
-                    end_at: this.taskEndTime + ' ' + this.endMinutes,
-                    desc: this.taskIntroduce,
-                    participant_ids: this.participantIds
-                };
-                if (!data.type) {
+                 if (!this.taskType) {
                     toastr.error('请选择任务类型')
                     return
                 }
-                if (!data.title) {
+                if (!this.taskName) {
                     toastr.error('请填写任务名称')
                     return
                 }
-
+                if (!this.taskPrincipalId) {
+                    toastr.error('请选择负责人')
+                    return
+                }
+                if (!this.taskLevel) {
+                    toastr.error('请选择任务优先级')
+                    return
+                }
                 if (!this.taskStartTime) {
                     toastr.error('请选择开始时间')
                     return
@@ -847,15 +862,24 @@
                     return
                 }
 
-                if (!data.principal_id) {
-                    toastr.error('请选择负责人')
-                    return
-                }
+                
 
-                if (!this.priority) {
-                    toastr.error('请选择任务优先级')
-                    return
-                }
+                
+                this.setDefaultPrincipal()
+                let _this = this;
+                let data = {
+                    resource_type: 4,
+                    resourceable_id: this.clientId,
+                    title: this.taskName,
+                    type: this.taskType,
+                    principal_id: this.taskPrincipalId, // 负责人 principal_id
+                    priority: this.taskLevel,
+                    start_at: this.taskStartTime + ' ' + this.startMinutes,
+                    end_at: this.taskEndTime + ' ' + this.endMinutes,
+                    desc: this.taskIntroduce,
+                    participant_ids: this.participantIds
+                };
+               
 
                 fetch('post', '/tasks', data).then(function (response) {
                     toastr.success('创建成功');
@@ -884,11 +908,15 @@
             changeStartTime: function (value) {
                 this.taskStartTime = value
             },
-
+            changeStartMinutes: function (value) {
+                this.startMinutes = value
+            },
             changeEndTime: function (value) {
                 this.taskEndTime = value
             },
-
+            changeEndMinutes: function(value){
+                this.endMinutes = value
+            },
             changeTaskLevel: function (value) {
                 this.taskLevel = value
             },
@@ -1003,5 +1031,10 @@
     .card-block .card-text {
         display: flex;
         align-items: center;
+    }
+    .fixed-button {
+    position: absolute;
+    bottom: 0px;
+    right: 0;
     }
 </style>

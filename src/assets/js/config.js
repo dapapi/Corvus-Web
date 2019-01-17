@@ -233,7 +233,7 @@ let config = {
             },
             {
                 name: 'C',
-                value: 0
+                value: 4
             },
         ],
 
@@ -449,6 +449,10 @@ let config = {
         ],
 
         priorityArr: [
+            // {
+            //     name: '无',
+            //     value: 0
+            // },
             {
                 name: '高',
                 value: 1
