@@ -1203,6 +1203,7 @@
                     projects: [],
                     tasks: []
                 },
+                scheduleShow:[]
             }
         },
         computed: {
@@ -1322,12 +1323,13 @@
                 this.artistId = this.$route.params.id;
                 let _this = this;
                 let data = {
-                    include: 'creator,tasks,affixes,producer,type,publicity,trails.project,trails.client,trails.project.principal,trails.project.relate_project_bills_resource,calendar,operatelogs',
+                    include: 'creator,tasks,affixes,producer,type,publicity,trails.project,trails.client,trails.project.principal,trails.project.relate_project_bills_resource,calendar,operatelogs,schedule',
                 };
                 fetch('get', '/bloggers/' + this.artistId, data).then(function (response) {
                   
                     let doneTaskNum = 0
                     _this.artistInfo = response.data;
+                    console.log(response.data)
                     _this.uploadUrl = _this.artistInfo.avatar;
                     if(_this.artistInfo.intention){
                         _this.artistInfo.intention = 1
@@ -1351,6 +1353,13 @@
                         _this.calendarId.push(response.data.calendar.data.id)
                         _this.calendarName = response.data.calendar.data.title
                     }
+                    //日程展示
+                    if(response.data.schedule){
+                       for (let i = 0; i < response.data.schedule.data.length; i++) {
+                           _this.scheduleShow.push(response.data.schedule.data[i])
+                       } 
+                    }
+                    console.log(_this.scheduleShow)
                      //项目
                      if(response.data.trails){
                         for (let i = 0; i < response.data.trails.data.length; i++) {
