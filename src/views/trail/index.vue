@@ -290,6 +290,7 @@
                 resetInfo: false,
                 isLoading: true,
                 cleanUp: false,
+                trailIsLocked:'',
             }
         },
         created() {
@@ -616,7 +617,8 @@
             },
 
             changeCheckbox: function (e) {
-                this.trailIsLocked = e.target.checked
+                console.log(Number(e.target.checked));
+                this.trailIsLocked = Number(e.target.checked)
             },
 
             changeIndustry: function (value) {
