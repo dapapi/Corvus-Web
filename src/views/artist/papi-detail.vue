@@ -37,7 +37,7 @@
                                     <div class="float-left pl-0 pr-2 col-md-2">
                                         <i class="iconfont icon-yonghu pr-2" aria-hidden="true"></i>制作人
                                     </div>
-                                    <div class="font-weight-bold float-left pr-10" v-for="(item,index) in artistInfo.publicity.data" :key="index">
+                                    <div class="font-weight-bold float-left pr-10" v-for="(item,index) in artistInfo.publicity.data" :key="index" style="padding-top:1.5px">
                                         <template  >
                                             {{item.name}}
                                         </template>
@@ -48,7 +48,7 @@
                                     <div class="float-left pl-0 pr-2 col-md-4">
                                         <i class="iconfont icon-yonghu pr-2" aria-hidden="true"></i>录入人
                                     </div>
-                                    <div class="font-weight-bold float-left"   v-for="(entry,index) in artistInfo.creator" :key="index">
+                                    <div class="font-weight-bold float-left"   v-for="(entry,index) in artistInfo.creator" :key="index" style="padding-top:1.5px"> 
                                             <span>{{entry.company}}</span>
                                             <span v-if="entry.company">-</span>
                                             <span>{{ entry.name }}</span>    
@@ -58,7 +58,7 @@
                                     <div class="float-left pl-0 pr-2 col-md-3">
                                         <i class="iconfont icon-yonghu pr-2" aria-hidden="true"></i>录入时间
                                     </div>
-                                    <div class="font-weight-bold float-left" v-if="principalName">
+                                    <div class="font-weight-bold float-left" v-if="principalName" style="padding-top:1.5px">
                                         <template>
                                             {{artistInfo.created_at}}
                                         </template>
@@ -107,7 +107,7 @@
                     </div>
                      </div> -->
                 <div class="clearfix">
-                    <div class="col-md-6 float-left pl-1 mb-20 pr-1"  v-if="artistInfo.sign_contract_status == 2&&tasksInfo.length>0">
+                    <div class="col-md-6 float-left pl-1 mb-20 pr-1"  v-if="tasksInfo.length>0">
                         <div class="col-md-6"><i class="iconfont icon-iconset0399 pr-2"></i> 任务</div>
                         <div class="clearfix example taskshow" v-for="(task,index) in tasksInfo" :key="index" @click="JumpDetails(task.id)">
                             <div class="col-md-3 float-left">{{task.title}}</div>
@@ -454,12 +454,12 @@
                             <div class="tab-pane animation-fade fixed-button-father" id="forum-artist-base"
                                 role="tabpanel" :class="artistInfo.sign_contract_status == 2?'':'active'">
                                 <div class="card">
-                                    <div class="card-header card-header-transparent card-header-bordered">
+                                    <div class="card-header card-header-transparent card-header-bordered" style="position: relative;">
                                         <div class="float-left font-weight-bold third-title">博主信息</div>
-                                        <div class="float-right pointer-content" v-show="isStatrtEdit">
+                                        <div class="float-right pointer-content" v-show="isStatrtEdit" style="position:absolute;top:10px;right:30px;">
                                             <i class="iconfont icon-bianji2" aria-hidden="true" @click="editBaseInfo"></i>
                                         </div>
-                                        <div class="float-right mr-40" v-show="isEdit">
+                                        <div class="float-right mr-40" v-show="isEdit" style="position:absolute;top:5px;right:0px;">
                                             <button class="btn btn-sm btn-white btn-pure" @click="cancelEdit">取消</button>
                                             <button class="btn btn-primary" @click="changeArtistBaseInfo">确定</button>
                                         </div>
@@ -570,15 +570,7 @@
                                                             @change="changeArtistDesc"></EditInput>
                                                 </div>
                                             </div>
-                                            <div class="card-text py-10 px-0 clearfix col-md-6 float-left ">
-                                                <div class="col-md-4 float-left text-right pl-0">签约状态</div>
-                                                <div class="col-md-8 float-left font-weight-bold">
-                                                    <EditSelector :content="artistInfo.level"
-                                                                :options="signState"
-                                                                :is-edit="isEdit"
-                                                                @change="changebloggerstatus"></EditSelector>
-                                                </div>
-                                            </div>
+                                            
                                             <div class="card-text py-10 px-0 clearfix col-md-6 float-left ">
                                                 <div class="col-md-4 float-left text-right pl-0">博主级别</div>
                                                 <div class="col-md-8 float-left font-weight-bold">
@@ -593,6 +585,12 @@
                                                 <div class="col-md-8 float-left font-weight-bold">
                                                     <EditInput :content="artistInfo.cooperation_demand" :is-edit="isEdit"
                                                             @change="changeArtistDemand"></EditInput>
+                                                </div>
+                                            </div>
+                                            <div class="card-text py-10 px-0 clearfix col-md-6 float-left ">
+                                                <div class="col-md-4 float-left text-right pl-0">签约状态</div>
+                                                <div class="col-md-8 float-left font-weight-bold" v-if="artistInfo.sign_contract_status" :class="isEdit?'py-10':''">
+                                                    {{signState.find(item=>item.value === artistInfo.sign_contract_status).name}}                        
                                                 </div>
                                             </div>
                                             <div class="card-text py-10 px-0 clearfix col-md-6 float-left ">
@@ -850,7 +848,7 @@
                         </div>
                     </div>
                     <div class="modal-footer">
-                        <button class="btn btn-sm btn-white btn-pure" data-dismiss="modal">取消</button>
+                        <button class="btn btn-sm btn-white btn-pure" data-dismiss="modal" @click="abrogate">取消</button>
                         <button class="btn btn-primary" type="submit" @click="addDistributionPerson">确定</button>
                     </div>
                 </div>
@@ -1275,6 +1273,9 @@
                     this.$store.state.participantsInfo = Object.assign([], this.artistInfo[value].data)
                 }
             },
+            abrogate:function(){
+                this.$store.state.participantsInfo = []
+            },
             //分配制作人
              addDistributionPerson: function () {
                 let toast
@@ -1381,9 +1382,11 @@
             changeArtistPlatform_id(value) {
                 this.updatePlatform = value.join(',')
             },
-            changebloggerstatus(value){
-
-            },
+            // changebloggerstatus(value){
+            //     console.log(value)
+            //     this.artistInfo.sign_contract_status = value
+                
+            // },
             changeArtistSigning(value,name){
                 if(name === 'intention'){
                     if (value.key === 'value') {
@@ -1440,7 +1443,8 @@
                     hatch_star_at: this.artistInfo.hatch_star_at,
                     hatch_end_at: this.artistInfo.hatch_end_at,
                     intention_desc:this.artistInfo.intention_desc,
-                    sign_contract_other_name:this.artistInfo.sign_contract_other_name
+                    sign_contract_other_name:this.artistInfo.sign_contract_other_name,
+                    sign_contract_status:this.artistInfo.sign_contract_status
                 }
                 if(!this.updatelevel){
                     delete(this.changeArtistInfo.level)
@@ -1885,4 +1889,14 @@
     .puls span {
         font-size: 30px;
     }
+    .card-header:first-child{
+        border-radius: calc(.215rem - 1px) calc(.215rem - 1px) 0 0;
+        display: flex;
+        align-items: center;
+    }
+    .fixed-button {
+    position: absolute;
+    bottom: 0px;
+    right: 0;
+}
 </style>
