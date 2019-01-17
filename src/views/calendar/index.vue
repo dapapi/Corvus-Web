@@ -777,7 +777,7 @@
                         let starFlag = response.data.starable.data.flag
                         this.starId = starId;
                         this.starFlag = starFlag;
-                        this.$refs.linkageStar.setValue(starId)
+                        this.$refs.linkageStar.setValue(starFlag + '-' + starId)
                     }
                 })
             },
@@ -1215,8 +1215,10 @@
                     privacy: this.calendarVisible,
                 };
                 if (this.starId) {
-                    data.star = this.starId;
-                    data.flag = this.starFlag
+                    data.star = {
+                        id: this.starId,
+                        flag: this.starFlag
+                    }
                 }
                 let participants = this.$store.state.newParticipantsInfo;
                 if (participants.length > 0) {

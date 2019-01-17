@@ -410,6 +410,14 @@
                         this.projectBaseInfo.trail.resource_type = value;
                         return;
                     case 'expectations':
+                        for (let i = 0; i < value.length; i++) {
+                            let item = value[i].split('-');
+                            value[i] = {
+                                id: item[1],
+                                flag: item[0]
+                            };
+                        }
+
                         this.projectBaseInfo.trail.expectations = value;
                 }
                 this.projectBaseInfo[name] = value

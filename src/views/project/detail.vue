@@ -36,6 +36,7 @@
                                 <i class="iconfont icon-yonghu pr-2" aria-hidden="true"></i>负责人
                             </div>
                             <div class="font-weight-bold float-left" v-if="projectInfo.principal">
+                                {{ projectInfo.principal.data.department.name }} -
                                 {{ projectInfo.principal.data.name }}
                             </div>
                         </div>
@@ -78,12 +79,12 @@
                         </div>
                     </div>
                     <div class="clearfix">
-                        <div v-if="projectTaskingInfo.length > 0" class="col-md-6 float-left pl-0 mb-20">
+                        <div v-if="projectTaskingInfo.length > 0" class="col-md-6 float-left pl-0">
                             <div class="col-md-6 pl-0"><i class="iconfont icon-iconset0399  pr-2"></i> 任务</div>
-                            <div class="clearfix example" v-for="task in projectTaskingInfo">
+                            <div class="clearfix example" v-for="(task,index) in projectTaskingInfo" v-if="index < 3">
                                 <div class="col-md-3 float-left pl-0">{{ task.title }}</div>
-                                <div class="col-md-3 float-left pl-0">{{ task.principal.data.name }}</div>
-                                <div class="col-md-3 float-left pl-0">{{ task.end_at }}</div>
+                                <div class="col-md-2 float-left pl-0">{{ task.principal.data.name }}</div>
+                                <div class="col-md-4 float-left pl-0">{{ task.end_at }}</div>
                                 <div class="col-md-3 float-left pl-0">
                                     <template v-if="task.status === 1">进行中</template>
                                     <template v-if="task.status === 2">已完成</template>
@@ -784,7 +785,8 @@
                 <div class="panel" style="width: calc(34% - 15px);" v-if="projectId">
                     <div class="col-md-12">
                         <div class="card col-md-12">
-                            <div class="card-header card-header-transparent card-header-bordered p-10" style="font-size: 16px;font-weight: bold;">
+                            <div class="card-header card-header-transparent card-header-bordered p-10"
+                                 style="font-size: 16px;font-weight: bold;">
                                 <div>项目跟进</div>
                             </div>
                             <div class="card-block">
@@ -2008,8 +2010,12 @@
                         }
                         break;
                     case 'expectations':
-                        if (this.projectInfo.trail.data.expectations.data.find(item => item.id == value)) {
-                            return
+                        for (let i = 0; i < value.length; i++) {
+                            let item = value[i].split('-');
+                            value[i] = {
+                                id: item[1],
+                                flag: item[0]
+                            };
                         }
                         if (this.projectInfo.trail.data.expectations.data.length === 0 && value.length === 0) {
                             return
