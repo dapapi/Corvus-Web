@@ -67,7 +67,7 @@
                         </div>
                         <table class="table table-hover is-indent ml-5" data-plugin="selectable"
                                data-selectable="selectable">
-                            <tr v-if="artistsInfo">
+                            <tr v-if="artistsInfo.length>0">
                                 <th class="w-50">
                                     <span class="checkbox-custom checkbox-primary">
                                         <input class="selectable-all" type="checkbox"
@@ -76,7 +76,7 @@
                                     </span>
                                 </th>
                                 <th class="cell-300" scope="col">姓名</th>
-                                <th class="cell-300" scope="col" v-if="artistsInfo.find(item=>item.sign_contract_status==1)">年龄</th>
+                                <th class="cell-300" scope="col" v-if="artistsInfo.find(item=>item.sign_contract_status==1)"">年龄</th>
                                 <th class="cell-300" scope="col" v-if="artistsInfo.find(item=>item.sign_contract_status!==1)">微博粉丝</th>
                                 <th class="cell-300" scope="col" v-if="artistsInfo.find(item=>item.sign_contract_status==1)">艺人来源</th>
                                 <th class="cell-300" scope="col" v-if="artistsInfo.find(item=>item.sign_contract_status==1)">沟通状态</th>
@@ -820,6 +820,7 @@
                 }
                 this.listData.page = page
                 fetch('get', '/stars', this.listData).then(function (response) {
+                    console.log( response.data)
                     _this.artistsInfo = response.data;
                     _this.current_page = response.meta.pagination.current_page;
                     _this.total = response.meta.pagination.total;
@@ -1004,6 +1005,7 @@
             },
 
             selectArtists: function (value) {
+                
                 if (value === 'all') {
                     this.selectedArtistsArr = [];
                     for (let i = 0; i < this.bloggerInfo.length; i++) {
@@ -1016,6 +1018,7 @@
                     } else {
                         this.selectedArtistsArr.push(value)
                     }
+                    console.log(this.selectedArtistsArr)
                 }
             },
 
@@ -1075,6 +1078,8 @@
 
             },
             tab:function(value){
+                this.selectedArtistsArr = []
+                console.log( this.selectedArtistsArr)
                 if(value == 0){
                     this.getArtists()
                     

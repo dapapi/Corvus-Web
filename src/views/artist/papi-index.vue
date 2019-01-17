@@ -567,7 +567,7 @@
                     star_douyin_infos: this.star_douyin_infos,
                     star_weibo_infos: this.star_weibo_infos,
                     star_xiaohongshu_infos: this.star_xiaohongshu_infos,
-                    // avatar: this.uploadUrl
+                    avatar: this.uploadUrl
                 };
                 fetch('post', '/bloggers', data).then(function (response) {
                     toastr.success('创建成功');

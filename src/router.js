@@ -86,16 +86,16 @@ export default new Router({
             name: 'calendar',
             component: () => import('./views/calendar/index.vue')
         },
-        {
-            path: '/artists',
-            name: 'usArtists',
-            component: () => import('./views/artist/taiyang-index.vue')
-        },
-        {
-            path: '/blogger',
-            name: 'usBlogger',
-            component: () => import('./views/artist/papi-index.vue')
-        },
+        // {
+        //     path: '/artists',
+        //     name: 'usArtists',
+        //     component: () => import('./views/artist/taiyang-index.vue')
+        // },
+        // {
+        //     path: '/blogger',
+        //     name: 'usBlogger',
+        //     component: () => import('./views/artist/papi-index.vue')
+        // },
         {
             path: '/talent',
             name: 'talent',

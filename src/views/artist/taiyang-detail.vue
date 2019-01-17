@@ -80,8 +80,8 @@
                             <div class="col-md-3 float-left">
                                 {{item.title}}
                             </div>
-                            <div class="col-md-3 float-left">{{item.principal.data.name}}</div>
-                            <div class="col-md-3 float-left">{{item.end_at}}</div>
+                            <div class="col-md-2 float-left">{{item.principal.data.name}}</div>
+                            <div class="col-md-4 float-left">{{item.end_at}}</div>
                             <div class="col-md-3 float-left">
                                 <template v-if="item.status === 1"><span style="color:#FF9800">进行中</span></template>
                                 <template v-if="item.status === 2"><span style="color:#4CAF50">已完成</span></template>
@@ -1332,6 +1332,7 @@
                 fetch('get', '/stars/' + this.artistId, data).then(function (response) {
 
                     _this.artistInfo = response.data;
+                    console.log( response.data)
                     _this.uploadUrl = _this.artistInfo.avatar
                     _this.artistProjectsInfo = []
                     _this.artistTasksInfo = response.data.tasks.data
@@ -1365,6 +1366,7 @@
                         this.noPermission = true;
                         return
                     }
+                    console.log(response.data)
                     this.noPermission = false;
                     this.scheduleData = response.data;
                     this.scheduleParticipants = JSON.parse(JSON.stringify(response.data.participants.data));
