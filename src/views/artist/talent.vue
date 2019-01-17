@@ -330,7 +330,7 @@
                                        v-model="signCompanyName">
                             </div>
                         </div>
-                        <!-- <div class="example">
+                        <div class="example">
                             <div class="col-md-2 text-right float-left">头像</div>
                             <div class="col-md-5 float-left pl-0">
                                 <Upload @change='getUploadUrl' class="upload-image">
@@ -341,7 +341,7 @@
                                             class="iconfont icon-tianjia"></i></div>
                                 </Upload>
                             </div>
-                        </div> -->
+                        </div>
                         <div class="example">
                             <div class="col-md-2 text-right float-left">备注</div>
                             <div class="col-md-10 float-left pl-0">
@@ -951,7 +951,7 @@
                     toastr.error('请选择博主类型');
                     return false
                 }
-                if (!this.blogCommunication) {
+                if (!this.communication) {
                     toastr.error('请选择沟通状态');
                     return false
                 }
@@ -981,7 +981,6 @@
                 let data = {
                     //微博,抖音,小红书
                     nickname: this.bolggerName,
-                    gender: this.artistGender,
                     type_id: this.artistTypeId,
                     communication_status: this.communication,
                     intention: this.signIntention,
@@ -993,7 +992,7 @@
                     star_douyin_infos: this.star_douyin_infos,
                     star_weibo_infos: this.star_weibo_infos,
                     star_xiaohongshu_infos: this.star_xiaohongshu_infos,
-                    // avatar: this.uploadUrl
+                    avatar: this.uploadUrl
                 };
                 fetch('post', '/bloggers', data).then(function (response) {
                     toastr.success('创建成功');
@@ -1079,7 +1078,6 @@
             },
             tab:function(value){
                 this.selectedArtistsArr = []
-                console.log( this.selectedArtistsArr)
                 if(value == 0){
                     this.getArtists()
                     
@@ -1141,7 +1139,7 @@
 
             changeCommunicationType: function (value) {
 
-                this.communicationStatus = value
+                this.communication = value
             },
 
             changeSignIntention: function (value) {
@@ -1219,7 +1217,7 @@
                     toastr.error('请选择沟通平台');
                     return false
                 }
-                if (!this.communicationStatus) {
+                if (!this.communication) {
                     toastr.error('请选择沟通状态');
                     return false
                 }
@@ -1259,7 +1257,7 @@
                     email: this.artistEmail, //邮箱
                     phone: this.artistPhone, //手机
                     wechat: this.artistWeiXin, //微信
-                    communication_status: this.communicationStatus, //沟通状态
+                    communication_status: this.communication, //沟通状态
                     intention: this.signIntention, //签约意向
                     intention_desc: this.notSignReason, //不签约理由
                     sign_contract_other: this.signCompany, //是否签约其他公司
@@ -1309,7 +1307,7 @@
                 this.douyinFansNum = ''
                 this.qitaUrl = ''
                 this.qita_fans_num = ''
-                this.communicationStatus = ''
+                this.communication = ''
                 this.signIntention = ''
                 this.notSignReason = ''
                 this.signCompany = ''
