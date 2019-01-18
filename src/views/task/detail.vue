@@ -9,9 +9,9 @@
                    data-toggle="dropdown" aria-expanded="false"></i>
                 <div class="dropdown-menu dropdown-menu-right task-dropdown-item" aria-labelledby="taskDropdown"
                      role="menu" x-placement="bottom-end">
-                    <a class="dropdown-item" role="menuitem" @click="changeTaskStatus(3)" v-show="oldInfo.status != 3">终止</a>
+                    <a class="dropdown-item" role="menuitem" @click="changeTaskStatus(3)" v-show="oldInfo.status == 1">终止</a>
                     <a class="dropdown-item" role="menuitem" @click="changeTaskStatus(1)" v-show="oldInfo.status != 1">激活</a>
-                    <a class="dropdown-item" role="menuitem" @click="changeTaskStatus(2)" v-show="oldInfo.status != 2">完成</a>
+                    <a class="dropdown-item" role="menuitem" @click="changeTaskStatus(2)" v-show="oldInfo.status == 1">完成</a>
                     <!-- <a class="dropdown-item" role="menuitem" data-toggle="modal" data-target="#customizeFieldContent">自定义字段</a> -->
                     <a class="dropdown-item" role="menuitem" @click="privacyTask">
                         {{oldInfo.privacy == 1 ? '转公开':'转私密'}}</a>
