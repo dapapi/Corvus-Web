@@ -110,11 +110,6 @@
                                            :options="field.contentArr"
                                            @change="(value) => addInfo(value, field.id )"></Selectors>
                             </template>
-                            <template v-if="field.field_type === 3">
-                                <EditableSearchBox :default='newArray.find(item=>item.id === field.id)'
-                                                   :options="starsArr" :multiple="true"
-                                                   @change="(value) => addInfo(value, field.id )"></EditableSearchBox>
-                            </template>
                             <template v-if="field.field_type === 4">
                                 <Datepicker :default='newArray.find(item=>item.id === field.id)'
                                             @change="(value) => addInfo(value, field.id )"></Datepicker>
@@ -152,9 +147,9 @@
                         </div>
                     </div>
                 </div>
-                <template v-if="projectType != 5">
+                <div class="col-md-12" v-if="projectType != 5">
                     <ApprovalProgress :formid='projectType'/>
-                </template>
+                </div>
 
                 <div class="modal-footer">
                     <button class="btn btn-sm btn-white btn-pure" data-dismiss="modal" @click='refreshAddProjectModal'>
@@ -333,8 +328,7 @@
                     for (let i = 0; i < response.data.length; i++) {
                         this.starsArr.push({
                             name: response.data[i].name,
-                            id: response.data[i].id,
-                            value: response.data[i].id
+                            value: response.data[i].flag + '-' + response.data[i].id,
                         })
                     }
 
@@ -409,9 +403,18 @@
                     case 'resource_type':
                         this.trailOrigin = value;
                         this.projectBaseInfo.trail.resource_type = value;
-                        return
+                        return;
                     case 'expectations':
+                        for (let i = 0; i < value.length; i++) {
+                            let item = value[i].split('-');
+                            value[i] = {
+                                id: item[1],
+                                flag: item[0]
+                            };
+                        }
+
                         this.projectBaseInfo.trail.expectations = value;
+                        return;
                 }
                 this.projectBaseInfo[name] = value
             },

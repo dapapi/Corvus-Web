@@ -485,9 +485,8 @@
                 fetch('get', '/starandblogger', {sign_contract_status: 2}).then(response => {
                     for (let i = 0; i < response.data.length; i++) {
                         this.starsArr.push({
-                            id: response.data[i].id,
                             name: response.data[i].name,
-                            value: response.data[i].id
+                            value: response.data[i].flag + '-' + response.data[i].id,
                         })
                     }
                 })
@@ -539,7 +538,8 @@
                 } else {
                     data.resource = ''
                 }
-                if (this.companyType !== '泰洋川禾') {
+                let  organization_id = JSON.parse(Cookies.get('user')).organization_id
+                if (organization_id !== 411) {
                     data.lock = this.trailIsLocked
                 }
                 let _this = this;
@@ -604,11 +604,24 @@
             },
 
             changeTargetStars: function (value) {
-                console.log(123);
+                for (let i = 0; i < value.length; i++) {
+                    let item = value[i].split('-');
+                    value[i] = {
+                        id: item[1],
+                        flag: item[0]
+                    };
+                }
                 this.targetStars = value
             },
 
             changeRecommendStars: function (value) {
+                for (let i = 0; i < value.length; i++) {
+                    let item = value[i].split('-');
+                    value[i] = {
+                        id: item[1],
+                        flag: item[0]
+                    };
+                }
                 this.recommendStars = value
             },
 
@@ -630,13 +643,6 @@
             },
 
             changeTrailType: function (value) {
-                // if (value === 3) {
-                //     if (Cookies.get('companyType') === '泰洋川禾') {
-                //         value = 3;
-                //     } else {
-                //         value = 4;
-                //     }
-                // }
                 let  organization_id = JSON.parse(Cookies.get('user')).organization_id
                 if(value == 3){
                     if(organization_id == 411){

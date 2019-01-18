@@ -19,6 +19,8 @@
                     <a class="dropdown-item" role="menuitem" data-toggle="modal" data-target="#confirmFlag"
                        @click="changeToastrText(3)" v-show="projectInfo.status != 3">撤单</a>
                     <a class="dropdown-item" role="menuitem" data-toggle="modal" data-target="#addPrivacy">隐私设置</a>
+                    <a class="dropdown-item" role="menuitem" @click="getApprovalsFormData"
+                       v-if="projectInfo.approval_status == 232 || projectInfo.type == 5">创建合同</a>
                 </div>
             </div>
 
@@ -36,6 +38,7 @@
                                 <i class="iconfont icon-yonghu pr-2" aria-hidden="true"></i>负责人
                             </div>
                             <div class="font-weight-bold float-left" v-if="projectInfo.principal">
+                                {{ projectInfo.principal.data.department.name }} -
                                 {{ projectInfo.principal.data.name }}
                             </div>
                         </div>
@@ -78,12 +81,12 @@
                         </div>
                     </div>
                     <div class="clearfix">
-                        <div v-if="projectTaskingInfo.length > 0" class="col-md-6 float-left pl-0 mb-20">
+                        <div v-if="projectTaskingInfo.length > 0" class="col-md-6 float-left pl-0">
                             <div class="col-md-6 pl-0"><i class="iconfont icon-iconset0399  pr-2"></i> 任务</div>
-                            <div class="clearfix example" v-for="task in projectTaskingInfo">
+                            <div class="clearfix example" v-for="(task,index) in projectTaskingInfo" v-if="index < 3">
                                 <div class="col-md-3 float-left pl-0">{{ task.title }}</div>
-                                <div class="col-md-3 float-left pl-0">{{ task.principal.data.name }}</div>
-                                <div class="col-md-3 float-left pl-0">{{ task.end_at }}</div>
+                                <div class="col-md-2 float-left pl-0">{{ task.principal.data.name }}</div>
+                                <div class="col-md-4 float-left pl-0">{{ task.end_at }}</div>
                                 <div class="col-md-3 float-left pl-0">
                                     <template v-if="task.status === 1">进行中</template>
                                     <template v-if="task.status === 2">已完成</template>
@@ -417,22 +420,22 @@
                                     <div class="example" v-if="projectReturnInfo.meta">
                                         <div class="col-md-3 float-left pl-0">
                                             <div>合同金额<span class="money-color pl-5">
-                            {{ projectReturnInfo.meta.contractReturnedMoney ? projectReturnInfo.meta.contractReturnedMoney : 0}}</span>/元
+                            {{ projectReturnInfo.meta.contractReturnedMoney ? projectReturnInfo.meta.contractReturnedMoney : 0}}</span>元
                                             </div>
                                         </div>
                                         <div class="col-md-3 float-left pl-0">
                                             <div>已回款<span class="money-color pl-5">
-                            {{ projectReturnInfo.meta.alreadyReturnedMoney ? projectReturnInfo.meta.alreadyReturnedMoney : 0}}</span>/元
+                            {{ projectReturnInfo.meta.alreadyReturnedMoney ? projectReturnInfo.meta.alreadyReturnedMoney : 0}}</span>元
                                             </div>
                                         </div>
                                         <div class="col-md-3 float-left pl-0">
                                             <div>未回款<span class="money-color pl-5">
-                            {{ projectReturnInfo.meta.notReturnedMoney ? projectReturnInfo.meta.notReturnedMoney : 0}}</span>/元
+                            {{ projectReturnInfo.meta.notReturnedMoney ? projectReturnInfo.meta.notReturnedMoney : 0}}</span>元
                                             </div>
                                         </div>
                                         <div class="col-md-3 float-left pl-0">
                                             <div>已开票<span class="money-color pl-5">
-                            {{ projectReturnInfo.meta.alreadyinvoice ? projectReturnInfo.meta.alreadyinvoice : 0}}</span>/元
+                            {{ projectReturnInfo.meta.alreadyinvoice ? projectReturnInfo.meta.alreadyinvoice : 0}}</span>元
                                             </div>
                                         </div>
                                     </div>
@@ -666,11 +669,6 @@
                                                                           :options="field.contentArr"
                                                                           @change="(value) => addInfo(value, field.id )"></EditSelector>
                                                         </template>
-                                                        <template v-else-if="field.field_type === 3">
-                                                            <EditableSearchBox :options="starsArr" :multiple="true"
-                                                                               :is-edit="isEdit"
-                                                                               @change="(value) => addInfo(value, field.id )"></EditableSearchBox>
-                                                        </template>
                                                         <template v-else-if="field.field_type === 4">
                                                             <EditDatepicker
                                                                     :content="field.values ? field.values.data.value : ''"
@@ -784,7 +782,8 @@
                 <div class="panel" style="width: calc(34% - 15px);" v-if="projectId">
                     <div class="col-md-12">
                         <div class="card col-md-12">
-                            <div class="card-header card-header-transparent card-header-bordered p-10" style="font-size: 16px;font-weight: bold;">
+                            <div class="card-header card-header-transparent card-header-bordered p-10"
+                                 style="font-size: 16px;font-weight: bold;">
                                 <div>项目跟进</div>
                             </div>
                             <div class="card-block">
@@ -1355,6 +1354,8 @@
                 </div>
             </div>
         </div>
+
+        <ApprovalGreatModule :formData="formData"></ApprovalGreatModule>
     </div>
 </template>
 
@@ -1482,6 +1483,7 @@
                 metaInfo: '',
                 oldInfo: '',
                 coursesLength: 0,
+                formData: '',
             }
         },
 
@@ -1669,6 +1671,23 @@
 
                 })
             },
+
+            getApprovalsFormData: function () {
+                let data = {
+                    type: 'projects'
+                };
+                let organization_id = Number(JSON.parse(Cookies.get('user')).organization_id);
+                if (organization_id === 411) {
+                    data.status = 1
+                } else if (organization_id === 412) {
+                    data.status = 2
+                }
+                fetch('get', 'approvals/specific_contract', data).then(response => {
+                    this.formData = response.data
+                    $('#approval-great-module').modal('show')
+                })
+            },
+
             cancelPrivacy: function () {
                 this.$store.state.divisionInfo = []
                 this.$store.state.payInfo = []
@@ -1680,8 +1699,7 @@
                     for (let i = 0; i < response.data.length; i++) {
                         this.starsArr.push({
                             name: response.data[i].name,
-                            id: response.data[i].id,
-                            value: response.data[i].id
+                            value: response.data[i].flag + '-' + response.data[i].id,
                         })
                     }
 
@@ -2009,8 +2027,12 @@
                         }
                         break;
                     case 'expectations':
-                        if (this.projectInfo.trail.data.expectations.data.find(item => item.id == value)) {
-                            return
+                        for (let i = 0; i < value.length; i++) {
+                            let item = value[i].split('-');
+                            value[i] = {
+                                id: item[1],
+                                flag: item[0]
+                            };
                         }
                         if (this.projectInfo.trail.data.expectations.data.length === 0 && value.length === 0) {
                             return
