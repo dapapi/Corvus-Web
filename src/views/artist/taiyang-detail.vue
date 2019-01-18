@@ -89,31 +89,19 @@
                             </div>
                         </div>
                     </div>
-                    <div v-if="threeProjectList.length>0" class="col-md-6 float-left pl-20 mb-20">
-                        <div class="col-md-6"><i class="iconfont icon-ego-box"></i>项目</div>
-                        <div class="clearfix example" v-for="(item,index) in artistProjectsInfo" :key="index"
-                             style="cursor: pointer">
-                            <div class="col-md-3 float-left">
-                                {{item.title}}
-                            </div>
-                            <div class="col-md-3 float-left">{{item.principal.data.name}}</div>
-                            <div class="col-md-3 float-left">{{item.end_at}}</div>
-                            <div class="col-md-3 float-left">
-                                <!-- <template v-if="item.status === 1">进行中</template>
-                                <template v-if="item.status === 2">已完成</template>
-                                <template v-if="item.status === 3">已停止</template> -->
-                                <template v-if="item.relate_project_bills_resource">
-                                    {{item.relate_project_bills_resource}}
-                                </template>
-                                <template>0</template>
+                    <div class="col-md-6 float-left pl-0 mb-20" >
+                        <div class="col-md-13" v-if="artistInfo.sign_contract_status == 2&&scheduleShow.length>0" >
+                            <div class="col-md-12"><i class="iconfont icon-ego-box pr-2"></i>日程</div>
+                            <div class="clearfix example projectshow" v-for="(item,index) in scheduleShow" :key="index" >
+                                <div class="col-md-2 float-left">{{item.title}}</div>
+                                <div class="col-md-2 float-left">{{item.creator.data.name}}</div>
+                                <div class="col-md-4 float-left">{{item.start_at}}</div>
+                                <div class="col-md-4 float-left">{{item.end_at}}</div>
                             </div>
                         </div>
                     </div>
-
                 </div>
-
             </div>
-
             <div style="display: flex; justify-content: space-between; align-items: flex-start">
                 <div class="panel" style="width: calc(66% - 15px);">
                     <div class="col-md-12">
@@ -670,7 +658,7 @@
                         <div class="example">
                             <div class="col-md-2 text-right float-left pl-0 require">任务优先级</div>
                             <div class="col-md-10 float-left pl-0">
-                                <selectors :options="taskLevelArr" @change="changeTaskLevel"
+                                <selectors :options="priorityArr" @change="changeTaskLevel"
                                            ref="taskLevel"></selectors>
                             </div>
                         </div>
@@ -1291,7 +1279,9 @@
                 calendarName: '',
                 scheduleRepeat: 0,
                 contractType:'stars',
-                formDate:''
+                formDate:'',
+                scheduleShow:[],
+                priorityArr:config.priorityArr
             }
         },
 
@@ -1305,6 +1295,7 @@
         mounted() {
 
             this.getTaskType();
+            this.getCalendar();
             this.draw();
             this.getArtistsBill()
             this.getTaskList()
@@ -1332,19 +1323,17 @@
                 this.artistId = this.$route.params.id;
 
                 let data = {
-                    include: 'publicity,broker,creator,tasks,affixes,trails.project.principal,works,trails.client,relate_project_bills_resource,calendar',
+                    include: 'publicity,broker,creator,tasks,affixes,trails.project.principal,works,trails.client,relate_project_bills_resource,',
                 };
                 let _this = this;
                 fetch('get', '/stars/' + this.artistId, data).then(function (response) {
 
                     _this.artistInfo = response.data;
+                    console.log(response.data)
                     _this.uploadUrl = _this.artistInfo.avatar
                     _this.artistProjectsInfo = []
                     _this.artistTasksInfo = response.data.tasks.data
-                    if (response.data.calendar) {
-                        _this.calendarId.push(response.data.calendar.data.id)
-                        _this.calendarName = response.data.calendar.data.title
-                    }
+                   
                     _this.artistWorksInfo = response.data.works.data
                     _this.affixes = response.data.affixes.data
                     for (let i = 0; i < response.data.trails.data.length; i++) {
@@ -1353,11 +1342,34 @@
                             _this.artistProjectsInfo.push(response.data.trails.data[i].project.data)
                         }
                     }
+                  
+                   
                     _this.isLoading = false
                 })
 
             },
+            getCalendar:function(){
+                 this.artistId = this.$route.params.id;
 
+                let data = {
+                    include: 'calendar,schedule,schedule.creator',
+                };
+                let _this = this;
+                fetch('get', '/stars/' + this.artistId, data).then(function (response) {
+                     if (response.data.calendar) {
+                        _this.calendarId.push(response.data.calendar.data.id)
+                        _this.calendarName = response.data.calendar.data.title
+                    }
+                      //日程展示
+                     if(response.data.schedule){
+                       for (let i = 0; i < response.data.schedule.data.length; i++) {
+                           _this.scheduleShow.push(response.data.schedule.data[i])  
+                       } 
+                        console.log(_this.scheduleShow)
+                    }
+                })
+                
+            },
             /*查看日历详情 --添加日历 -- 修改日历 */
 
             //获取日历详情
@@ -1969,6 +1981,7 @@
                     _this.allTaskList.push(response.data)
                     $('#addTask').modal('hide');
                     _this.getTaskList()
+                    _this.getArtist()
                     _this.setDefaultPrincipal()
                     _this.$store.state.newParticipantsInfo = []
                     _this.taskType = ''

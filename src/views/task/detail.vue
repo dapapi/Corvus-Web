@@ -482,7 +482,7 @@
                         <div class="example">
                             <div class="col-md-2 text-right float-left pl-0 require">任务优先级</div>
                             <div class="col-md-10 float-left pl-0">
-                                <selectors :options="taskLevelArr" ref="taskLevel" @change="addTaskLevel"></selectors>
+                                <selectors :options="priorityArr" ref="taskLevel" @change="addTaskLevel"></selectors>
                             </div>
                         </div>
                         <div class="example">

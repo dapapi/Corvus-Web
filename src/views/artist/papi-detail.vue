@@ -85,17 +85,13 @@
                         </div>
                     </div>
                     <div class="col-md-6 float-left pl-0 mb-20" >
-                        <div class="col-md-12" v-if="artistInfo.sign_contract_status == 2&&ProjectsInfo.length>0" >
-                            <div class="col-md-12"><i class="iconfont icon-ego-box pr-2"></i>项目</div>
-                            <div class="clearfix example projectshow" v-for="(item,index) in ProjectsInfo" :key="index" @click="projectDetails(item.id)">
-                                <div class="col-md-3 float-left">{{item.title}}</div>
-                                <div class="col-md-2 float-left">{{item.principal.data.name}}</div>
+                        <div class="col-md-13" v-if="artistInfo.sign_contract_status == 2&&scheduleShow.length>0" >
+                            <div class="col-md-12"><i class="iconfont icon-ego-box pr-2"></i>日程</div>
+                            <div class="clearfix example projectshow" v-for="(item,index) in scheduleShow" :key="index" >
+                                <div class="col-md-2 float-left">{{item.title}}</div>
+                                <div class="col-md-2 float-left">{{item.creator.data.name}}</div>
+                                <div class="col-md-4 float-left">{{item.start_at}}</div>
                                 <div class="col-md-4 float-left">{{item.end_at}}</div>
-                                <div class="col-md-3 float-left">
-                                    <template v-if="item.status === 1"><span style="color:#FF9800">进行中</span></template>
-                                    <template v-if="item.status === 2"><span style="color:#4CAF50">已完成</span></template>
-                                    <template v-if="item.status === 3"><span style="color:#9E9E9E">撤单</span></template>
-                                </div>
                             </div>
                         </div>
                        <div class="col-md-12 pl-10" v-show="artistInfo.sign_contract_status == 1">
@@ -673,7 +669,7 @@
                         <div class="example">
                             <div class="col-md-2 text-right float-left pl-0 require">任务优先级</div>
                             <div class="col-md-10 float-left pl-0">
-                                <selectors :options="taskLevelArr" @change="changeTaskLevel" ref="taskpriority"></selectors>
+                                <selectors :options="priorityArr" @change="changeTaskLevel" ref="taskpriority"></selectors>
                             </div>
                         </div>
                         <div class="example">
@@ -1193,6 +1189,7 @@
                 isAllday: false,
                 showMore: false,
                 schedulePrivacy: false,
+                noPermission: false,
                 scheduleType: 'add',
                 scheduleName: '',
                 calendarName: '',
@@ -1207,7 +1204,8 @@
                 },
                 scheduleShow:[],
                 contractType:'bloggers',
-                formDate:{}
+                formDate:{},
+                priorityArr:config.priorityArr
             }
         },
         computed: {
@@ -1223,6 +1221,7 @@
         },
         mounted() {
             this.getTaskDate();
+             this.getCalendar();
             this.charts();
             this.getArtistTasks();
             let _this = this;
@@ -1330,7 +1329,7 @@
                 this.artistId = this.$route.params.id;
                 let _this = this;
                 let data = {
-                    include: 'creator,tasks,affixes,producer,type,publicity,trails.project,trails.client,trails.project.principal,trails.project.relate_project_bills_resource,calendar,operatelogs,',
+                    include: 'creator,tasks,affixes,producer,type,publicity,trails.project,trails.client,trails.project.principal,trails.project.relate_project_bills_resource,operatelogs',
                 };
                 fetch('get', '/bloggers/' + this.artistId, data).then(function (response) {
                   
@@ -1356,16 +1355,6 @@
                             }
                         }
                     }
-                    if(response.data.calendar){
-                        _this.calendarId.push(response.data.calendar.data.id)
-                        _this.calendarName = response.data.calendar.data.title
-                    }
-                    //日程展示
-                    // if(response.data.schedule){
-                    //    for (let i = 0; i < response.data.schedule.data.length; i++) {
-                    //        _this.scheduleShow.push(response.data.schedule.data[i])
-                    //    } 
-                    // }
                      //项目
                      if(response.data.trails){
                         for (let i = 0; i < response.data.trails.data.length; i++) {
@@ -1409,6 +1398,28 @@
             selectDate: function (value) {
                 this.selectedDate = value;
                 this.$refs.meetingRoom.setDate(value)
+            },
+            getCalendar:function(){
+                 this.artistId = this.$route.params.id;
+
+                let data = {
+                    include: 'calendar,schedule,schedule.creator',
+                };
+                let _this = this;
+                fetch('get', '/bloggers/' + this.artistId, data).then(function (response) {
+                     if (response.data.calendar) {
+                        _this.calendarId.push(response.data.calendar.data.id)
+                        _this.calendarName = response.data.calendar.data.title
+                    }
+                      //日程展示
+                     if(response.data.schedule){
+                       for (let i = 0; i < response.data.schedule.data.length; i++) {
+                           _this.scheduleShow.push(response.data.schedule.data[i])  
+                       } 
+                        console.log(_this.scheduleShow)
+                    }
+                })
+                
             },
             addSchedule: function () {
                 let startTime = '';
@@ -1474,9 +1485,15 @@
             },
             showScheduleModal: function (schedule) {
                 let data = {
-                    include: 'calendar,participants,creator,material,affixes',
+                    include: 'calendar,participants,creator,material,affixes,project,task',
                 };
-                fetch('get', '/schedules/' + this.calendarId, data).then(response => {
+                fetch('get', '/schedules/' + schedule.id, data).then(response => {
+                     if (!response) {
+                        this.scheduleData = schedule;
+                        this.noPermission = true;
+                        return
+                    }
+                    this.noPermission = false;
                     this.scheduleData = response.data;
                     this.scheduleParticipants = JSON.parse(JSON.stringify(response.data.participants.data));
                     this.$store.dispatch('changeParticipantsInfo', {data: response.data.participants.data});
@@ -1485,6 +1502,23 @@
             },
              changeIsAllDay: function (e) {
                 this.isScheduleAllday = Number(e.target.checked);
+            },
+             fileUpload: function (url, name, size) {
+                let data = {
+                    title: name,
+                    url: url,
+                    size: size,
+                    type: 1
+                };
+                fetch('post', '/schedules/' + this.scheduleData.id + '/affix', data).then(response => {
+                    toastr.success('上传成功');
+                    if (this.scheduleData.affixes) {
+                        this.scheduleData.affixes.data.push(response.data)
+                    } else {
+                        this.scheduleData.affixes = {data: []};
+                        this.scheduleData.affixes.data.push(response.data)
+                    }
+                })
             },
             showAddScheduleModal: function (date) {
                 if (this.calendarId.length > 0) {
@@ -1495,6 +1529,71 @@
                     $('#changeSchedule').modal('show')
                 } else {
                     toastr.error('该艺人无对应艺人日历，请先创建艺人日历')
+                }
+            },
+             changeScheduleParticipants: function (value) {
+                let data = {};
+                if (value) {
+                    data.participant_del_ids = [value];
+                } else {
+                    let participantsInfo = this.$store.state.newParticipantsInfo;
+                    data.participant_ids = [];
+                    data.participant_del_ids = [];
+                    for (let i = 0; i < participantsInfo.length; i++) {
+                        if (this.scheduleParticipants.map(item => item.id).indexOf(participantsInfo[i].id) === -1) {
+                            data.participant_ids.push(participantsInfo[i].id)
+                        }
+                    }
+                    for (let i = 0; i < this.scheduleParticipants.length; i++) {
+                        if (participantsInfo.map(item => item.id).indexOf(this.scheduleParticipants[i].id) === -1) {
+                            data.participant_del_ids.push(this.scheduleParticipants[i].id)
+                        }
+                    }
+                }
+                fetch('put', '/schedules/' + this.scheduleData.id, data).then(() => {
+                    this.$refs.calendar.refresh();
+                    this.scheduleParticipants = JSON.parse(JSON.stringify(this.$store.state.newParticipantsInfo));
+                })
+            },
+            changeScheduleType: function (type) {
+                this.scheduleType = type;
+                $('#checkSchedule').modal('hide');
+                setTimeout(function () {
+                    $('#changeSchedule').modal('show');
+                }, 400);
+                if (type === 'edit') {
+                    this.scheduleName = this.scheduleData.title;
+                    this.scheduleCalendar = this.scheduleData.calendar.data.id;
+                    this.$refs.scheduleStartDate.setValue(this.scheduleData.start_at.split(' ')[0]);
+                    let startMinutes = this.scheduleData.start_at.split(' ')[1].split(':');
+                    this.$refs.scheduleStartMinute.setValue(startMinutes[0] + ':' + startMinutes[1]);
+                    this.startTime = this.scheduleData.start_at.split(' ')[0];
+                    this.startMinutes = startMinutes[0] + ':' + startMinutes[1];
+                    this.$refs.scheduleEndDate.setValue(this.scheduleData.end_at.split(' ')[0]);
+                    let endMinutes = this.scheduleData.end_at.split(' ')[1].split(':');
+                    this.$refs.scheduleEndMinute.setValue(endMinutes[0] + ':' + endMinutes[1]);
+                    this.endTime = this.scheduleData.end_at.split(' ')[0];
+                    this.endMinutes = endMinutes[0] + ':' + endMinutes[1];
+                    this.isAllday = this.scheduleData.is_allday;
+                    this.eventDesc = this.scheduleData.desc;
+                    this.eventPlace = this.scheduleData.position;
+                    this.$store.dispatch('changeParticipantsInfo', {data: this.scheduleData.participants.data});
+                    if (this.scheduleData.material) {
+                        this.$refs.scheduleResource.setValue(this.scheduleData.material.data.id);
+                        this.scheduleMaterialId = this.scheduleData.material.data.id;
+                    }
+                    if (this.scheduleData.project.data.length > 0) {
+                        this.linkageSelectedIds.projects = [];
+                        for (let i = 0; i < this.scheduleData.project.data.length; i++) {
+                            this.linkageSelectedIds.projects.push(this.scheduleData.project.data[i].moduleable_id)
+                        }
+                    }
+                    if (this.scheduleData.task.data.length > 0) {
+                        this.linkageSelectedIds.tasks = [];
+                        for (let i = 0; i < this.scheduleData.task.data.length; i++) {
+                            this.linkageSelectedIds.tasks.push(this.scheduleData.task.data[i].moduleable_id)
+                        }
+                    }
                 }
             },
             deleteToastr: function (type, calendar = null) {
@@ -2063,9 +2162,9 @@
             JumpDetails(id){
                 this.$router.push({path: '/tasks/' + id})
             },
-            projectDetails(id){
-                this.$router.push({path: '/projects/' + id})
-            },
+            // projectDetails(id){
+            //     $('#checkSchedule').modal('show')
+            // },
             contractlist(status){
                 console.log(status)
                 let _this = this;
@@ -2236,5 +2335,12 @@
     position: absolute;
     bottom: 0px;
     right: 0;
-}
+    }
+    .fileupload {
+        position: absolute;
+        top: 0px;
+        left: 0px;
+        opacity: 0;
+
+    }
 </style>

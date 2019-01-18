@@ -847,7 +847,7 @@
                         <div class="example">
                             <div class="col-md-2 text-right float-left pl-0">任务优先级</div>
                             <div class="col-md-10 float-left pl-0">
-                                <selectors :options="taskLevelArr" ref="taskLevel"
+                                <selectors :options="priorityArr" ref="taskLevel"
                                            @change="changeTaskLevel"></selectors>
                             </div>
                         </div>
@@ -1373,7 +1373,7 @@
                 projectInfo: '',
                 trailInfo: {},
                 taskTypeArr: [],
-                taskLevelArr: config.taskLevelArr,
+                priorityArr: config.priorityArr,
                 taskLevel: '',
                 taskName: '',
                 startTime: '',
