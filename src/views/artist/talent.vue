@@ -4,18 +4,28 @@
         <div class="page-header page-header-bordered">
             <h1 class="page-title">Talent</h1>
 
-            <div class="page-header-actions dropdown show task-dropdown float-right" style="z-index:1000">
+            <div class="page-header-actions dropdown show task-dropdown float-right" style="z-index:1000;right:50px">
                 <i class="iconfont icon-gengduo1 font-size-24" aria-hidden="true" id="taskDropdown"
                    data-toggle="dropdown" aria-expanded="false"></i>
                 <div class="dropdown-menu dropdown-menu-right task-dropdown-item" aria-labelledby="taskDropdown"
-                     role="menu" x-placement="bottom-end" v-if="!isShow">
-                    <!-- <a class="dropdown-item" role="menuitem">导入</a>
-                    <a class="dropdown-item" role="menuitem">导出</a> -->
+                    role="menu" x-placement="bottom-end" v-if="!isShow">  
+                    <import-and-export :type="'import'" :moduleName="'bloggers'">
+                        <a class="dropdown-item" role="menuitem">导入</a>
+                    </import-and-export>
+                    <import-and-export :type="'export'" :moduleName="'bloggers'">
+                        <a class="dropdown-item" role="menuitem">导出</a>
+                    </import-and-export>
                     <a class="dropdown-item" role="menuitem" data-toggle="modal"
                        :data-target="selectedArtistsArr.length>0&&'#giveProducer'" @click="judge">分配制作人</a>
                 </div>
-                <div class="dropdown-menu dropdown-menu-right task-dropdown-item" aria-labelledby="taskDropdown"
-                     role="menu" x-placement="bottom-end" v-if="isShow">
+                <div class="dropdown-menu  dropdown-menu-right task-dropdown-item" aria-labelledby="taskDropdown"
+                    role="menu" x-placement="bottom-end" v-if="isShow">
+                    <!-- <import-and-export :type="'import'" :moduleName="'bloggers'">
+                        <a class="dropdown-item" role="menuitem">导入</a>
+                    </import-and-export>
+                    <import-and-export :type="'export'" :moduleName="'bloggers'">
+                        <a class="dropdown-item" role="menuitem">导出</a>
+                    </import-and-export> -->
                     <a class="dropdown-item" role="menuitem" data-toggle="modal" data-target="#giveBroker"
                        @click="changeMember(1)">分配经理人</a>
                     <a class="dropdown-item" role="menuitem" data-toggle="modal" data-target="#giveBroker"
@@ -73,7 +83,7 @@
                         </div>
                         <table class="table table-hover is-indent ml-5" data-plugin="selectable"
                                data-selectable="selectable">
-                            <tr v-if="artistsInfo.length>0">
+                            <tr v-if="artistsInfo">
                                 <th class="w-50">
                                     <span class="checkbox-custom checkbox-primary">
                                         <input class="selectable-all" type="checkbox"
@@ -82,24 +92,12 @@
                                     </span>
                                 </th>
                                 <th class="cell-300" scope="col">姓名</th>
-                                <th class="cell-300" scope="col"
-                                    v-if="artistsInfo.find(item=>item.sign_contract_status==1)">年龄
-                                </th>
-                                <th class="cell-300" scope="col"
-                                    v-if="artistsInfo.find(item=>item.sign_contract_status!==1)">微博粉丝
-                                </th>
-                                <th class="cell-300" scope="col"
-                                    v-if="artistsInfo.find(item=>item.sign_contract_status==1)">艺人来源
-                                </th>
-                                <th class="cell-300" scope="col"
-                                    v-if="artistsInfo.find(item=>item.sign_contract_status==1)">沟通状态
-                                </th>
-                                <th class="cell-300" scope="col"
-                                    v-if="artistsInfo.find(item=>item.sign_contract_status!==1)">类型
-                                </th>
-                                <th class="cell-300" scope="col"
-                                    v-if="artistsInfo.find(item=>item.sign_contract_status==2)">签约日期
-                                </th>
+                                <th class="cell-300" scope="col" v-if="artistsInfo.find(item=>item.sign_contract_status==1)">年龄</th>
+                                <th class="cell-300" scope="col" v-if="artistsInfo.find(item=>item.sign_contract_status!==1)">微博粉丝</th>
+                                <th class="cell-300" scope="col" v-if="artistsInfo.find(item=>item.sign_contract_status==1)">艺人来源</th>
+                                <th class="cell-300" scope="col" v-if="artistsInfo.find(item=>item.sign_contract_status==1)">沟通状态</th>
+                                <th class="cell-300" scope="col" v-if="artistsInfo.find(item=>item.sign_contract_status!==1)">类型</th>
+                                <th class="cell-300" scope="col" v-if="artistsInfo.find(item=>item.sign_contract_status==2)">签约日期</th>
                                 <!-- <th class="cell-300" scope="col" v-if="artistsInfo.find(item=>item.sign_contract_status==2)">合同起始日</th>
                                 <th class="cell-300" scope="col" v-if="artistsInfo.find(item=>item.sign_contract_status==3)">合同终止日</th> -->
                                 <th class="cell-300" scope="col">录入时间</th>
@@ -172,7 +170,7 @@
                         </div>
                         <table class="table table-hover is-indent ml-5" data-plugin="selectable"
                                data-selectable="selectable">
-                            <tr v-if="bloggerInfo">
+                            <tr v-if="bloggerInfo.length>0">
                                 <th class="w-50">
                                         <span class="checkbox-custom checkbox-primary">
                                             <input class="selectable-all" type="checkbox"
@@ -245,7 +243,7 @@
                             </tbody>
 
                         </table>
-                        <div style="margin: 6rem auto;width: 100px" v-if="bloggerInfo.length==0">
+                        <div style="margin: 6rem auto;width: 100px" v-if="bloggerInfo.length==0&&artistsInfo!=='undefined'">
                             <img src="https://res.papitube.com/corvus/images/content-none.png" alt=""
                                  style="width: 100%">
                         </div>
@@ -664,6 +662,7 @@
     import config from '../../assets/js/config'
     import Cookies from 'js-cookie'
 
+    import ImportAndExport from '../../components/ImportAndExport.vue'
     export default {
         data: function () {
             return {
@@ -813,6 +812,9 @@
                 return this.platformType
             }
         },
+        components: {
+            ImportAndExport
+        },
         mounted() {
             this.getArtists();
             this.getBlogger();
@@ -858,10 +860,14 @@
                 this.listData.page = page
                 fetch('get', '/stars', this.listData).then(function (response) {
                     console.log( response.data)
-                    _this.artistsInfo = response.data;
-                    _this.current_page = response.meta.pagination.current_page;
-                    _this.total = response.meta.pagination.total;
-                    _this.total_pages = response.meta.pagination.total_pages;
+                    if(response.data){
+                        _this.artistsInfo = response.data;
+                    }
+                    if(response.meta){
+                        _this.current_page = response.meta.pagination.current_page;
+                        _this.total = response.meta.pagination.total;
+                        _this.total_pages = response.meta.pagination.total_pages;
+                    }
                     _this.isLoading = false;
                     _this.selectAllStars = false;
                     _this.selectedArtistsArr = [];
@@ -895,6 +901,7 @@
                 data.page = page
                 fetch('get', '/bloggers', data).then(function (response) {
                     _this.bloggerInfo = response.data;
+                    console.log(response.data)
                     _this.current_page = response.meta.pagination.current_page;
                     _this.total = response.meta.pagination.total;
                     _this.total_pages = response.meta.pagination.total_pages;

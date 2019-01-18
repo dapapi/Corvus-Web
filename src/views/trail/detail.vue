@@ -411,12 +411,17 @@
                                      data-target="#addTask">
                                     <button data-v-0aeb4e71="" type="button"
                                             class="site-action-toggle btn-raised btn btn-success btn-floating waves-effect waves-classic">
+<<<<<<< HEAD
                                         <i class="front-icon iconfont icon-tianjia1 animation-scale-up"
                                            aria-hidden="true"
                                            style="font-size: 30px"></i>
                                         <i class="back-icon iconfont icon-tianjia1 animation-scale-up"
                                            aria-hidden="true"
                                            style="font-size: 30px"></i>
+=======
+                                        <i class="front-icon iconfont icon-tianjia1 animation-scale-up" aria-hidden="true" style="font-size:30px"></i>
+                                        <i class="back-icon iconfont icon-tianjia1 animation-scale-up" aria-hidden="true" style="font-size:30px"></i>
+>>>>>>> hp
                                     </button>
                                 </div>
                             </div>
@@ -491,7 +496,7 @@
                         <div class="example">
                             <div class="col-md-2 text-right float-left pl-0 require">任务优先级</div>
                             <div class="col-md-10 float-left pl-0">
-                                <selectors :options="taskLevelArr" @change="changeTaskLevel"></selectors>
+                                <selectors :options="priorityArr" @change="changeTaskLevel"></selectors>
                             </div>
                         </div>
                         <div class="example">
@@ -580,7 +585,7 @@
                 companyType: config.companyType,
                 customizeInfo: config.customizeInfo,
                 taskTypeArr: {},
-                taskLevelArr: config.levelArr,
+                priorityArr: config.priorityArr,
                 taskPrincipal: '',
                 startMinutes: '00:00',
                 taskType: '',

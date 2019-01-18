@@ -3,10 +3,10 @@
         <span v-if="type === 'export'" @click="exportFile">
             <slot></slot>
         </span>
-        <span v-if="type === 'import'">
-            <form action="" style="display:inline-block">
+        <span v-if="type === 'import'" style="width:100%">
+            <form action="" style="display:inline-block;width:100%" >
                 <input type="file" :id="`import_${this.getRandom}`" name="avatar" accept=".xlsx" style="display:none" @change="importFile($event)">
-                <label :for="`import_${this.getRandom}`">
+                <label :for="`import_${this.getRandom}`" style="width:100%">
                 <slot></slot>
                 </label>
             </form>
