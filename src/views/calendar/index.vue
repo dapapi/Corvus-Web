@@ -73,6 +73,10 @@
                                         <i class="iconfont icon-xiangshangjiantou" style="font-size:12px"></i>
                                     </template>
                                 </span>
+                                <span class="float-right pointer-content" v-show="isMeeting"
+                                      @click="displayMeetingRoom">
+                                    回到日历
+                                </span>
                             </div>
                             <div v-show="showAllResource">
                                 <div class="text-center pb-10">
@@ -94,7 +98,7 @@
                               :is-meeting="isMeeting" @calendarDisplay="checkMeetingRoom"
                               @scheduleClick="showScheduleModal"></calendar>
                     <MeetingRoomCalendar v-show="meetingRomeShow" :meetingRomeList="meetingRomeList" ref="meetingRoom"
-                                         @change="changeToCalendar" @return="displayMeetingRoom"></MeetingRoomCalendar>
+                                         @change="changeToCalendar"></MeetingRoomCalendar>
                 </div>
 
             </div>
@@ -260,7 +264,7 @@
         <div class="modal fade" id="checkSchedule" aria-hidden="true" aria-labelledby="addLabelForm"
              role="dialog" tabindex="-1" data-backdrop="static">
             <div class="modal-dialog modal-simple">
-                <div class="modal-content" v-if="scheduleData">
+                <div class="modal-content" v-if="getScheduleFinish">
                     <div class="modal-header">
                         <div style="order: 2">
                             <span v-show="!noPermission">
@@ -346,10 +350,13 @@
                             <div>
                                 <div class="col-md-3 float-left text-center position-relative file-item"
                                      v-for="(affix,index) in scheduleData.affixes.data" :key="index">
-                                    <div class="del-affix iconfont icon-zuofei position-absolute pointer-content"
-                                         @click="delAffix(affix.id)"></div>
                                     <div><i class="iconfont icon-wenjian" style="font-size: 36px"></i></div>
                                     <div @click="openFile(affix.url)" class="pointer-content">{{ affix.title }}</div>
+                                    <div class="del-affix">
+                                        <i class="iconfont icon-liulan pointer-content mr-4"
+                                           @click="openFile(affix.url)"></i>
+                                        <i class="iconfont icon-zuofei pointer-content" @click="delAffix(affix.id)"></i>
+                                    </div>
                                 </div>
                             </div>
                         </div>
@@ -630,6 +637,7 @@
                 materialsIds: [],
                 meetingRomeType: '',
                 noPermission: false,
+                getScheduleFinish: false,
             }
         },
 
@@ -658,6 +666,7 @@
                 if (_this.scheduleType !== 'edit') {
                     _this.$store.dispatch('changeParticipantsInfo', {data: []});
                 }
+                _this.getScheduleFinish = false
             });
 
             $('#addMembers').on('hidden.bs.modal', function () {
@@ -667,9 +676,6 @@
             this.initCalendar();
             let pageContent = $('.container-fluid');
             $('.vertical-line').css('height', (pageContent[0].offsetHeight - 60) + 'px');
-            $('#addLinkage').on('hidden.bs.modal', function () {
-                $('#changeSchedule').modal('handleUpdate')
-            })
         },
 
         watch: {
@@ -886,6 +892,9 @@
 
             addLinkageResource: function () {
                 $('#addLinkage').modal('hide');
+                setTimeout(function () {
+                    $('body').addClass('modal-open')
+                }, 1000)
             },
 
             changeScheduleMaterial: function (value) {
@@ -931,6 +940,7 @@
                     this.scheduleData = response.data;
                     this.scheduleParticipants = JSON.parse(JSON.stringify(response.data.participants.data));
                     this.$store.dispatch('changeParticipantsInfo', {data: response.data.participants.data});
+                    this.getScheduleFinish = true
                 });
                 $('#checkSchedule').modal('show')
             },
@@ -1242,8 +1252,10 @@
                 };
 
                 if (this.starId) {
-                    data.star = this.starId;
-                    data.flag = this.starFlag
+                    data.star = {
+                        id: this.starId,
+                        flag: this.starFlag
+                    }
                 }
                 let participants = this.$store.state.newParticipantsInfo;
                 if (participants.length > 0) {
@@ -1381,13 +1393,11 @@
     }
 
     .del-affix {
-        right: 15px;
-        display: none;
-        color: red;
+        opacity: 0;
     }
 
     .file-item:hover .del-affix {
-        display: block;
+        opacity: 1;
     }
 
     .line-center .example {

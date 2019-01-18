@@ -13,7 +13,6 @@
                             class="fc-agendaDay-button fc-button fc-state-default fc-corner-right fc-state-active">日
                     </button>
 
-                    <span class="ml-4 hover-content pointer-content" @click="returnNormalCalendar">回到日历</span>
                 </div>
             </div>
             <div class="fc-right">
@@ -193,9 +192,6 @@
                 this.getSchedules(this.numberDate)
             },
 
-            returnNormalCalendar() {
-                this.$emit('return', true)
-            }
         }
     }
 </script>
