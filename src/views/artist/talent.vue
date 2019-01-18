@@ -1,5 +1,5 @@
- <template>
-   <div class="page">
+<template>
+    <div class="page">
         <Loading :is-loading="isLoading"></Loading>
         <div class="page-header page-header-bordered">
             <h1 class="page-title">Talent</h1>
@@ -33,29 +33,35 @@
                                aria-controls="forum-base"
                                aria-expanded="true" role="tab" :class="isShow?'active':''" @click="tab(0)">艺人</a>
                         </li>
-                        <li class="nav-item" role="presentation" >
+                        <li class="nav-item" role="presentation">
                             <a class="nav-link" data-toggle="tab" href="#forum-blogger"
                                aria-controls="forum-present"
                                aria-expanded="false" role="tab" :class="!isShow?'active':''" @click="tab(1)">博主</a>
                         </li>
-                        <i  v-if="isShow" style="position: absolute;right:10px;top:10px;color: rgb(0, 176, 255);font-style: normal;" @click="getArtists(1,1)">签约中</i>
-                        <i  v-if="!isShow" style="position: absolute;right:10px;top:10px;color: rgb(0, 176, 255);font-style: normal;" @click="getBlogger(1,1)">签约中</i>
+                        <i v-if="isShow"
+                           style="position: absolute;right:10px;top:10px;color: rgb(0, 176, 255);font-style: normal;"
+                           @click="getArtists(1,1)">签约中</i>
+                        <i v-if="!isShow"
+                           style="position: absolute;right:10px;top:10px;color: rgb(0, 176, 255);font-style: normal;"
+                           @click="getBlogger(1,1)">签约中</i>
                     </ul>
                 </div>
-              
+
                 <div class="tab-content nav-tabs-animate bg-white">
                     <div class="tab-pane animation-fade" id="forum-artist" role="tabpanel" :class="isShow?'active':''">
                         <div class="clearfix my-20">
                             <div class="col-md-3 example float-left">
                                 <input type="text" v-model="listData.name" class="form-control" id="inputPlaceholder"
-                                    placeholder="请输入姓名"
-                                    @blur="getArtists">
+                                       placeholder="请输入姓名"
+                                       @blur="getArtists">
                             </div>
                             <div class="col-md-3 example float-left">
-                                <selectors :options="artistStatusArr" placeholder="请选择艺人沟通状态" @change="getStatus"></selectors>
+                                <selectors :options="artistStatusArr" placeholder="请选择艺人沟通状态"
+                                           @change="getStatus"></selectors>
                             </div>
                             <div class="col-md-3 example float-left">
-                                <selectors :options="artistSourceArr" placeholder="请选择艺人来源" @change="getSource"></selectors>
+                                <selectors :options="artistSourceArr" placeholder="请选择艺人来源"
+                                           @change="getSource"></selectors>
                             </div>
                             <!--<div class="col-md-3 example float-left">-->
                             <!--<button type="button" class="btn btn-default waves-effect waves-classic float-right"-->
@@ -76,12 +82,24 @@
                                     </span>
                                 </th>
                                 <th class="cell-300" scope="col">姓名</th>
-                                <th class="cell-300" scope="col" v-if="artistsInfo.find(item=>item.sign_contract_status==1)">年龄</th>
-                                <th class="cell-300" scope="col" v-if="artistsInfo.find(item=>item.sign_contract_status!==1)">微博粉丝</th>
-                                <th class="cell-300" scope="col" v-if="artistsInfo.find(item=>item.sign_contract_status==1)">艺人来源</th>
-                                <th class="cell-300" scope="col" v-if="artistsInfo.find(item=>item.sign_contract_status==1)">沟通状态</th>
-                                <th class="cell-300" scope="col" v-if="artistsInfo.find(item=>item.sign_contract_status!==1)">类型</th>
-                                <th class="cell-300" scope="col" v-if="artistsInfo.find(item=>item.sign_contract_status==2)">签约日期</th>
+                                <th class="cell-300" scope="col"
+                                    v-if="artistsInfo.find(item=>item.sign_contract_status==1)">年龄
+                                </th>
+                                <th class="cell-300" scope="col"
+                                    v-if="artistsInfo.find(item=>item.sign_contract_status!==1)">微博粉丝
+                                </th>
+                                <th class="cell-300" scope="col"
+                                    v-if="artistsInfo.find(item=>item.sign_contract_status==1)">艺人来源
+                                </th>
+                                <th class="cell-300" scope="col"
+                                    v-if="artistsInfo.find(item=>item.sign_contract_status==1)">沟通状态
+                                </th>
+                                <th class="cell-300" scope="col"
+                                    v-if="artistsInfo.find(item=>item.sign_contract_status!==1)">类型
+                                </th>
+                                <th class="cell-300" scope="col"
+                                    v-if="artistsInfo.find(item=>item.sign_contract_status==2)">签约日期
+                                </th>
                                 <!-- <th class="cell-300" scope="col" v-if="artistsInfo.find(item=>item.sign_contract_status==2)">合同起始日</th>
                                 <th class="cell-300" scope="col" v-if="artistsInfo.find(item=>item.sign_contract_status==3)">合同终止日</th> -->
                                 <th class="cell-300" scope="col">录入时间</th>
@@ -129,18 +147,20 @@
                         <pagination :current_page="current_page" :method="getArtists" :total_pages="total_pages"
                                     :total="total" v-if="isShow"></pagination>
                     </div>
-                    <div class="tab-pane animation-fade" id="forum-blogger" role="tabpanel" :class="!isShow?'active':''">
+                    <div class="tab-pane animation-fade" id="forum-blogger" role="tabpanel"
+                         :class="!isShow?'active':''">
                         <div class="clearfix my-20">
                             <div class="col-md-3 example float-left">
                                 <input type="text" class="form-control" id="inputPlaceholder" placeholder="请输入博主昵称"
-                                    v-model="blogName" @blur='getBlogger()'>
+                                       v-model="blogName" @blur='getBlogger()'>
                             </div>
                             <div class="col-md-3 example float-left">
-                                <selectors :options="artistTypeArr" @change="typeFilter" placeholder="请选择博主分类"></selectors>
+                                <selectors :options="artistTypeArr" @change="typeFilter"
+                                           placeholder="请选择博主分类"></selectors>
                             </div>
                             <div class="col-md-3 example float-left">
                                 <selectors :options="papiCommunicationStatusArr" @change="CommunicationStatus"
-                                        placeholder="请选择沟通状态"></selectors>
+                                           placeholder="请选择沟通状态"></selectors>
                             </div>
                             <!-- <div class="col-md-3 example float-left">
                                 <button type="button" class="btn btn-default waves-effect waves-classic float-right"
@@ -160,14 +180,30 @@
                                             <label></label>
                                         </span>
                                 </th>
-                                <th class="cell-300" scope="col" v-if="bloggerInfo.find(item=>item.sign_contract_status==1)">昵称</th>
-                                <th class="cell-300" scope="col" v-if="bloggerInfo.find(item=>item.sign_contract_status!==1)">姓名</th>
-                                <th class="cell-300" scope="col" v-if="bloggerInfo.find(item=>item.sign_contract_status!==1)">微博粉丝</th>
-                                <th class="cell-300" scope="col" v-if="bloggerInfo.find(item=>item.sign_contract_status==1)">类型</th>
-                                <th class="cell-300" scope="col" v-if="bloggerInfo.find(item=>item.sign_contract_status==1)">沟通状态</th>
-                                <th class="cell-300" scope="col" v-if="bloggerInfo.find(item=>item.sign_contract_status==1)">制作人</th>
-                                <th class="cell-300" scope="col" v-if="bloggerInfo.find(item=>item.sign_contract_status!==1)">类型</th>
-                                <th class="cell-300" scope="col" v-if="bloggerInfo.find(item=>item.sign_contract_status==2)">签约日期</th>
+                                <th class="cell-300" scope="col"
+                                    v-if="bloggerInfo.find(item=>item.sign_contract_status==1)">昵称
+                                </th>
+                                <th class="cell-300" scope="col"
+                                    v-if="bloggerInfo.find(item=>item.sign_contract_status!==1)">姓名
+                                </th>
+                                <th class="cell-300" scope="col"
+                                    v-if="bloggerInfo.find(item=>item.sign_contract_status!==1)">微博粉丝
+                                </th>
+                                <th class="cell-300" scope="col"
+                                    v-if="bloggerInfo.find(item=>item.sign_contract_status==1)">类型
+                                </th>
+                                <th class="cell-300" scope="col"
+                                    v-if="bloggerInfo.find(item=>item.sign_contract_status==1)">沟通状态
+                                </th>
+                                <th class="cell-300" scope="col"
+                                    v-if="bloggerInfo.find(item=>item.sign_contract_status==1)">制作人
+                                </th>
+                                <th class="cell-300" scope="col"
+                                    v-if="bloggerInfo.find(item=>item.sign_contract_status!==1)">类型
+                                </th>
+                                <th class="cell-300" scope="col"
+                                    v-if="bloggerInfo.find(item=>item.sign_contract_status==2)">签约日期
+                                </th>
                                 <!-- <th class="cell-300" scope="col" v-if="bloggerInfo.find(item=>item.sign_contract_status==2)">合同起始日</th>
                                 <th class="cell-300" scope="col" v-if="bloggerInfo.find(item=>item.sign_contract_status==3)">合同终止日</th> -->
                                 <th class="cell-300" scope="col">录入时间</th>
@@ -215,7 +251,7 @@
                         </div>
                         <pagination :current_page="current_page" :method="getBlogger" :total_pages="total_pages"
                                     :total="total" v-if="!isShow"></pagination>
-                        
+
                     </div>
                 </div>
 
@@ -592,8 +628,8 @@
                 </div>
             </div>
         </div>
-        
-       
+
+
         <!--分配经理人-->
         <div class="modal fade" id="giveBroker" aria-hidden="true" aria-labelledby="addLabelForm"
              role="dialog" tabindex="-1" data-backdrop="static">
@@ -620,12 +656,13 @@
 
                 </div>
             </div>
-        </div> 
+        </div>
     </div>
 </template>
 <script>
     import fetch from '../../assets/utils/fetch.js'
     import config from '../../assets/js/config'
+    import Cookies from 'js-cookie'
 
     export default {
         data: function () {
@@ -652,7 +689,7 @@
                 taiyangCommunicationStatusArr: config.taiyangCommunicationStatusArr,
                 companyCityArr: config.companyCityArr,
                 attachmentTypeArr: config.attachmentTypeArr,
-                artistsInfo:[],
+                artistsInfo: [],
                 artistStatus: '',
                 bolggerName: '',
                 weiboUrl: '',
@@ -765,10 +802,10 @@
                 artistLocation: '',
                 notSignReason: '',
                 selectAllStars: false,
-                bloggerInfo:'',
+                bloggerInfo: '',
                 affixes: [],
                 affixesType: '',//附件类型
-                isShow:''
+                isShow: ''
             }
         },
         watch: {
@@ -1023,7 +1060,7 @@
             redirectArtistDetail: function (artistId) {
                 this.$router.push({path: 'artists/' + artistId})
             },
-            redirectBolggerDetail:function(bolggerId){
+            redirectBolggerDetail: function (bolggerId) {
                 this.$router.push({path: 'blogger/' + bolggerId})
             },
             changeMember: function (type) {
@@ -1066,19 +1103,19 @@
                     return false
                 }
             },
-             getStars: function () {
-                if (Cookies.get('companyType') === '泰洋川禾') {
+            getStars: function () {
+                let organization_id = JSON.parse(Cookies.get('user')).organization_id
+                if (organization_id == 411) {
                     this.isShow = true
-                } else {
+                } else if (organization_id == 412) {
                     this.isShow = false
                 }
-
             },
-            tab:function(value){
-                if(value == 0){
+            tab: function (value) {
+                if (value == 0) {
                     this.getArtists()
-                    
-                }else if(value == 1){
+
+                } else if (value == 1) {
                     this.getBlogger()
 
                 }
@@ -1126,7 +1163,7 @@
             cancelGiveBroker: function () {
                 this.$store.state.participantsInfo = []
             },
-                changeCheckbox: function (value) {
+            changeCheckbox: function (value) {
                 this.platformType = []
                 for (let i = 0; i < value.length; i++) {
                     this.platformType.push(value[i].value)

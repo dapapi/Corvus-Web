@@ -537,7 +537,8 @@
                 } else {
                     data.resource = ''
                 }
-                if (this.companyType !== '泰洋川禾') {
+                let  organization_id = JSON.parse(Cookies.get('user')).organization_id
+                if (organization_id !== 411) {
                     data.lock = this.trailIsLocked
                 }
                 let _this = this;
@@ -640,13 +641,6 @@
             },
 
             changeTrailType: function (value) {
-                // if (value === 3) {
-                //     if (Cookies.get('companyType') === '泰洋川禾') {
-                //         value = 3;
-                //     } else {
-                //         value = 4;
-                //     }
-                // }
                 let  organization_id = JSON.parse(Cookies.get('user')).organization_id
                 if(value == 3){
                     if(organization_id == 411){

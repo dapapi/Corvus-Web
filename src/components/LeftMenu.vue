@@ -197,7 +197,6 @@
             layout() {
                 this.visible = false
                 Cookies.remove('user');
-                Cookies.remove('companyType');
                 Cookies.remove('CORVUS-ACCESS-TOKEN');
                 Cookies.remove('selectedCalendar');
                 window.location.href = '/login'

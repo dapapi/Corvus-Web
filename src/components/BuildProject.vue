@@ -147,9 +147,9 @@
                         </div>
                     </div>
                 </div>
-                <template v-if="projectType != 5">
+                <div class="col-md-12" v-if="projectType != 5">
                     <ApprovalProgress :formid='projectType'/>
-                </template>
+                </div>
 
                 <div class="modal-footer">
                     <button class="btn btn-sm btn-white btn-pure" data-dismiss="modal" @click='refreshAddProjectModal'>
@@ -414,6 +414,7 @@
                         }
 
                         this.projectBaseInfo.trail.expectations = value;
+                        return;
                 }
                 this.projectBaseInfo[name] = value
             },

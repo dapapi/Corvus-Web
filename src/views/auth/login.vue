@@ -233,9 +233,8 @@
                 let _this = this;
                 config.setAccessToken(this.access_token);
                 setTimeout(function () {
-                    _this.fetchUserInfo(function (userJson, companyType) {
+                    _this.fetchUserInfo(function (userJson) {
                         _this.storeToLocal(userJson);
-                        _this.storeCompanyTypeToLocal(companyType);
                         redirect('/my')
                     })
                 }, 100)
@@ -316,9 +315,8 @@
                 fetch('post', '/wechat/merge', data).then(function (response) {
                     config.setAccessToken(response.access_token);
                     setTimeout(function () {
-                        _this.fetchUserInfo(function (userJson, companyType) {
+                        _this.fetchUserInfo(function (userJson) {
                             _this.storeToLocal(userJson);
-                            _this.storeCompanyTypeToLocal(companyType);
                             redirect('/my')
                         })
                     }, 100)
@@ -386,9 +384,8 @@
                     let token = response.access_token;
                     config.setAccessToken(token);
                     setTimeout(function () {
-                        _this.fetchUserInfo(function (userJson, companyType) {
+                        _this.fetchUserInfo(function (userJson) {
                             _this.storeToLocal(userJson);
-                            _this.storeCompanyTypeToLocal(companyType);
                             redirect('/my')
                         })
                     }, 100)
@@ -442,9 +439,8 @@
                     toastr.success('密码修改成功');
                     config.setAccessToken(response.access_token);
                     setTimeout(function () {
-                        _this.fetchUserInfo(function (userJson, companyType) {
+                        _this.fetchUserInfo(function (userJson) {
                             _this.storeToLocal(userJson);
-                            _this.storeCompanyTypeToLocal(companyType);
                             redirect('/my')
                         })
                     }, 100)

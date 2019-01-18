@@ -947,6 +947,8 @@
 <script>
     import fetch from '../../assets/utils/fetch.js'
     import config from '../../assets/js/config'
+    import Cookies from 'js-cookie'
+
     export default {
         data: function () {
             return {
