@@ -1,7 +1,7 @@
 <template>
     <div class="">
-        <div class="text-right float-left"
-             :class="[detailPage? 'col-md-3': 'col-md-2',isEdit ? 'line-fiexd-height': '']">{{typeName}}来源
+        <div class="text-right float-left pl-0"
+             :class="[detailPage? 'col-md-3': 'col-md-2',isEdit || alwaysShow ? 'line-fiexd-height': '','trail-origin-title']">{{typeName}}来源
         </div>
         <div v-if="isEditSituation || alwaysShow">
             <!-- ⬆️判断是否永久显示 -->

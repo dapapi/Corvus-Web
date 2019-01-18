@@ -231,58 +231,72 @@
                                         <button class="btn btn-primary" @click="changeClientBaseInfo">确定</button>
                                     </div>
                                 </div>
-                                <div class="card-block">
+                                <div class="card-block px-0">
                                     <div class="card-text py-10 clearfix">
-                                        <div class="col-md-2 float-left text-right pl-0">公司名称</div>
-                                        <div class="col-md-4 float-left font-weight-bold">
-                                            <EditInput :content="clientInfo.company" :is-edit="isEdit"
-                                                    @change="changeClientName"></EditInput>
+                                        <div class="col-md-6 px-0">
+                                            <div class="col-md-3 float-left text-right pl-0">公司名称</div>
+                                            <div class="col-md-9 float-left font-weight-bold">
+                                                <EditInput :content="clientInfo.company" :is-edit="isEdit"
+                                                        @change="changeClientName"></EditInput>
+                                            </div>
                                         </div>
-                                        <div class="col-md-2 float-left text-right pl-0">级别</div>
-                                        <div class="col-md-4 float-left font-weight-bold">
-                                            <EditSelector :options="clientLevelArr" :is-edit="isEdit"
-                                                        :content="clientInfo.grade"
-                                                        @change="changeClientLevel"></EditSelector>
+                                        <div class="col-md-6 px-0">
+                                            <div class="col-md-3 float-left text-right pl-0">级别</div>
+                                            <div class="col-md-9 float-left font-weight-bold">
+                                                <EditSelector :options="clientLevelArr" :is-edit="isEdit"
+                                                            :content="clientInfo.grade"
+                                                            @change="changeClientLevel"></EditSelector>
+                                            </div>
                                         </div>
                                     </div>
                                     <div class="card-text py-10 clearfix">
-                                        <div class="col-md-2 float-left text-right pl-0">负责人</div>
-                                        <div class="col-md-4 float-left font-weight-bold">
+                                        <div class="col-md-6 px-0">
+                                            <div class="col-md-3 float-left text-right pl-0">负责人</div>
+                                            <div class="col-md-9 float-left font-weight-bold">
 
-                                            <EditInput-selector :is-edit="isEdit" :placeholder="'请选择负责人'"
-                                                                @change="selectPrincipal"
-                                                                :select-type="'principal'"></EditInput-selector>
+                                                <EditInput-selector :is-edit="isEdit" :placeholder="'请选择负责人'"
+                                                                    @change="selectPrincipal"
+                                                                    :select-type="'principal'"></EditInput-selector>
+                                            </div>
                                         </div>
-                                        <div class="col-md-2 float-left text-right pl-0">规模</div>
-                                        <div class="col-md-4 float-left font-weight-bold">
-                                            <EditSelector :options="clientScaleArr" :is-edit="isEdit"
-                                                        :content="clientInfo.size"
-                                                        @change="changeClientScale"></EditSelector>
+                                        <div class="col-md-6 px-0">
+                                            <div class="col-md-3 float-left text-right pl-0">规模</div>
+                                            <div class="col-md-9 float-left font-weight-bold">
+                                                <EditSelector :options="clientScaleArr" :is-edit="isEdit"
+                                                            :content="clientInfo.size"
+                                                            @change="changeClientScale"></EditSelector>
+                                            </div>
                                         </div>
                                     </div>
                                     <div class="card-text py-10 clearfix">
-                                        <div class="col-md-2 float-left text-right pl-0">地区</div>
-                                        <div class="col-md-4 float-left font-weight-bold region">
-                                            <template v-if="!isEdit">
-                                                {{clientInfo.province}}{{clientInfo.city}}{{clientInfo.district}}
-                                            </template>
-                                            <template v-else>
-                                                <RegionSelector :provinceVal="clientInfo.province" :cityVal="clientInfo.city" :areaVal="clientInfo.district" @setAreaData="changeAreaData" />
-                                            </template>
+                                        <div class="col-md-6 px-0">
+                                            <div class="col-md-3 float-left text-right pl-0">地区</div>
+                                            <div class="col-md-9 float-left font-weight-bold region">
+                                                <template v-if="!isEdit">
+                                                    {{clientInfo.province}}{{clientInfo.city}}{{clientInfo.district}}
+                                                </template>
+                                                <template v-else>
+                                                    <RegionSelector :provinceVal="clientInfo.province" :cityVal="clientInfo.city" :areaVal="clientInfo.district" @setAreaData="changeAreaData" />
+                                                </template>
 
+                                            </div>
                                         </div>
-                                        <div class="col-md-2 float-left text-right pl-0">详细地址</div>
-                                        <div class="col-md-4 float-left font-weight-bold">
-                                            <EditInput :content="clientInfo.address" :is-edit="isEdit"
-                                                    @change="changeClientAddress"></EditInput>
+                                        <div class="col-md-6 px-0">
+                                            <div class="col-md-3 float-left text-right pl-0">详细地址</div>
+                                            <div class="col-md-9 float-left font-weight-bold">
+                                                <EditInput :content="clientInfo.address" :is-edit="isEdit"
+                                                        @change="changeClientAddress"></EditInput>
+                                            </div>
                                         </div>
                                     </div>
 
                                     <div class="card-text py-10 clearfix">
-                                        <div class="col-md-2 float-left text-right pl-0">备注</div>
-                                        <div class="col-md-4 float-left font-weight-bold">
-                                            <editTextarea :content="clientInfo.desc"
-                                                        :is-edit="isEdit" @change="changeClientDesc"></editTextarea>
+                                        <div class="col-md-6 px-0">
+                                            <div class="col-md-3 float-left text-right pl-0">备注</div>
+                                            <div class="col-md-9 float-left font-weight-bold">
+                                                <editTextarea :content="clientInfo.desc"
+                                                            :is-edit="isEdit" @change="changeClientDesc"></editTextarea>
+                                            </div>
                                         </div>
                                     </div>
 

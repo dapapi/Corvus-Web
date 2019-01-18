@@ -36,7 +36,7 @@
                 <div class="col-md-2">{{item.name}}</div>
                 <div class="col-md-3">{{item.change_state_obj.changed_state}}</div>
                 <div class="col-md-3">{{item.change_at}}</div>
-                <div class="col-md-4">{{item.comment}}</div>
+                <div class="col-md-4 comment-text">{{item.comment}}</div>
             </div>  
         </div>
         <div class="col-md-12 mt-20 mb-50" >
@@ -233,6 +233,9 @@ export default {
 </script>
 
 <style scoped>
+.comment-text{
+    overflow-wrap: break-word;
+}
 .progress-container{
     padding: 0 45px;
 
@@ -248,9 +251,10 @@ export default {
     padding: 0 auto;
 }
 .approval-detail-title,.approval-detail-container{
-    height: 40px;
+    /* height: 40px; */
     display: flex;
     line-height: 40px;
+    /* align-items: center; */
     border-bottom: 1px solid #eeeeee;
 }
 .approval-detail-title{

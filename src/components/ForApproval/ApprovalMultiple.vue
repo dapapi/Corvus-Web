@@ -4,7 +4,7 @@
             <span v-if="!singlemode">{{consdata[0].control_title}}({{i}})</span>
             <hr v-if="!singlemode">
             <div :is='sortChecker(item)' class="approval-multiple-option"
-                v-for="(item, index) in data" ref='selectpicker'
+                v-for="(item, index) in consdata" ref='selectpicker'
                 :key="index+Math.random()" 
                 :n="n"
                 :index = "index"
@@ -12,6 +12,7 @@
                 :options='item.control_enums'
                 :placeholder='item.control_placeholder'
                 v-show="!isShow[index]"
+                :consdata='[item]'
                 @change='saveChangeData'></div>
         </div>
         <span @click="addOption" class="add-option" v-if="!singlemode">添加选项+</span>
@@ -71,7 +72,7 @@ export default {
             this.isShowhandler(1)
         },
         isShowhandler(params){
-            if(this.data[params].form_control_pid == 1 && this.singlemode == 'true' && this.changeData[0] == 1){
+            if(this.consdata[params].form_control_pid == 1 && this.singlemode == 'true' && this.changeData[0] == 1){
                 this.isShow[1] = false
             }else{
                 this.isShow[1] = true

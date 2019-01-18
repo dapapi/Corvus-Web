@@ -34,7 +34,7 @@
                                    data-selectable="selectable">
                                 <tr>
                                     <th class="cell-300" scope="col">审批编号</th>
-                                    <th class="cell-300" scope="col">项目名称</th>
+                                    <!-- <th class="cell-300" scope="col">项目名称</th> -->
                                     <th class="cell-300" scope="col">申请人</th>
                                     <!-- <th class="cell-300 position-relative" scope="col">类型
                                         <i class="iconfont icon-gengduo1" aria-hidden="true"
@@ -46,6 +46,16 @@
                                             <a class="dropdown-item" role="menuitem">papi项目立项</a>
                                         </div>
                                     </th> -->
+                                     <th class="cell-300 position-relative" scope="col">类型
+                                        <i class="iconfont icon-gengduo1" aria-hidden="true"
+                                           id="taskDropdown" data-toggle="dropdown" aria-expanded="false"></i>
+                                        <div class="dropdown-menu" aria-labelledby="taskDropdown" role="menu">
+                                            <a class="dropdown-item" role="menuitem" >此处等</a>
+                                            <a class="dropdown-item" role="menuitem" >后端</a>
+                                            <a class="dropdown-item" role="menuitem" >表单</a>
+                                            <a class="dropdown-item" role="menuitem" >数据</a>
+                                        </div>
+                                    </th>
                                     <th class="cell-300" scope="col">申请时间</th>
                                     <th class="cell-300" scope="col">审批状态</th>
                                 </tr>
@@ -54,12 +64,12 @@
                                     
                                     <router-link :to="'/approval/'+project.form_instance_number"><td>{{project.form_instance_number}}</td></router-link>                                    
                                   
+                                    <td>{{project.form_instance_number}}</td>                              
                                     <td>{{project.title}}</td>
-                                    <td>{{project.name}}</td>
-                                    <!-- <td></td> -->
+                                    <!-- <td>{{project.name}}</td> -->
+                                    <td></td>
                                     <td>{{project.created_at}}</td>
                                     <td>{{getProgressName(project.form_status)}}</td>
-                                    <!-- <td></td> -->
                                 </tr>
                                 </tbody>
                             </table>

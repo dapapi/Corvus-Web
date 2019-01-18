@@ -167,7 +167,7 @@
                                    :class="artistInfo.sign_contract_status == 2?'':'active'">概况</a>
                             </li>
                         </ul>
-                        <div class="tab-content nav-tabs-animate bg-white col-md-12">
+                        <div class="tab-content px-0 nav-tabs-animate bg-white col-md-12">
                             <!--日历日程-->
                             <div class="tab-pane animation-fade pb-20 fixed-button-father" id="forum-artist-schedule"
                                  role="tabpanel" :class="artistInfo.sign_contract_status == 2?'active':''">
@@ -382,7 +382,7 @@
                                             <button class="btn btn-primary" @click="changeArtist">确定</button>
                                         </div>
                                     </div>
-                                    <div class="card-block" v-if="artistInfo.name">
+                                    <div class="card-block px-0" v-if="artistInfo.name">
                                         <div class="clearfix">
                                             <div class="card-text py-10 px-0 clearfix col-md-6 float-left edit-height">
                                                 <div class="col-md-3 float-left text-right pl-0">姓名</div>
@@ -988,7 +988,7 @@
                                             任务</a>
                                     </li>
                                 </ul>
-                                <div class="tab-content" style="max-height: 70vh;overflow-y: auto">
+                                <div class="tab-content px-0" style="max-height: 70vh;overflow-y: auto">
                                     <div class="tab-pane active" id="projectsPane" role="tabpanel">
                                         <div class="input-search mb-20" style="width: 70%">
                                             <button type="submit" class="input-search-btn">

@@ -194,7 +194,7 @@
                 pending: {},
                 currentId: '',
                 isCurrentApprover: false,
-                roleUser: '',
+                roleUser: [],
                 indexData: {},
                 formData: {},
                 previewUrl: '',
@@ -263,10 +263,15 @@
             },
             getCurrentApprover() {
                 let _this = this
+                this.roleUser = []
                 fetch('get', '/users/my?include=department,roleUser').then((params) => {
+                    console.log(params);
                     _this.currentId = params.data.id
-                    _this.roleUser = params.data.roleUser.data[0].role_id
-                    if (_this.currentId === _this.pending.id || _this.roleUser === _this.pending.id) {
+                    for (const key in params.data.roleUser.data) {
+                        _this.roleUser.push(params.data.roleUser.data[key].role_id)
+                    }
+                    // _this.roleUser = params.data.roleUser.data[0].role_id
+                    if (_this.currentId === _this.pending.id || _this.roleUser.includes(_this.pending.id)) {
                         _this.isCurrentApprover = true
                     } else {
                         _this.isCurrentApprover = false

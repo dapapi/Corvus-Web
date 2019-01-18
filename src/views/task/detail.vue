@@ -109,51 +109,51 @@
                                         <button class="btn btn-primary" @click="changeTaskBaseInfo">确定</button>
                                     </div>
                                 </div>
-                                <div class="card-block">
-                                    <div class="card-text py-10 clearfix">
-                                        <div class="col-md-1 float-left text-right pl-0">负责人</div>
-                                        <div class="col-md-11 float-left font-weight-bold">
+                                <div class="card-block px-0">
+                                    <div class="card-text py-10 clearfix col-md-6 px-0">
+                                        <div class="col-md-3 float-left text-right pl-0">负责人</div>
+                                        <div class="col-md-9 float-left font-weight-bold">
                                             <div class="edit-wrap">
                                                 <EditInputSelector :is-edit="isEdit" :select-type="'principal'"
                                                                 @change="changeTaskPrincipal"></EditInputSelector>
                                             </div>
                                         </div>
                                     </div>
-                                    <div class="card-text py-10 clearfix">
-                                        <div class="col-md-1 float-left text-right pl-0">参与人</div>
-                                        <div class="col-md-11 float-left font-weight-bold">
+                                    <div class="card-text py-10 clearfix col-md-6 px-0">
+                                        <div class="col-md-3 float-left text-right pl-0">参与人</div>
+                                        <div class="col-md-9 float-left font-weight-bold">
                                             <EditAddMember :is-edit="isEdit"></EditAddMember>
                                         </div>
                                     </div>
-                                    <div class="card-text py-10 clearfix">
-                                        <div class="col-md-1 float-left text-right pl-0">开始时间</div>
-                                        <div class="col-md-11 float-left font-weight-bold">
+                                    <div class="card-text py-10 clearfix col-md-6 px-0">
+                                        <div class="col-md-3 float-left text-right pl-0">开始时间</div>
+                                        <div class="col-md-9 float-left font-weight-bold">
                                             <div class="edit-wrap">
                                                 <EditDatepicker :content="taskInfo.start_at" :is-edit="isEdit"
                                                                 @change="changeTaskStartTime"></EditDatepicker>
                                             </div>
                                         </div>
                                     </div>
-                                    <div class="card-text py-10 clearfix">
-                                        <div class="col-md-1 float-left text-right pl-0">结束时间</div>
-                                        <div class="col-md-11 float-left font-weight-bold">
+                                    <div class="card-text py-10 clearfix col-md-6 px-0">
+                                        <div class="col-md-3 float-left text-right pl-0">结束时间</div>
+                                        <div class="col-md-9 float-left font-weight-bold">
                                             <div class="edit-wrap">
                                                 <EditDatepicker :content="taskInfo.end_at" :is-edit="isEdit"
                                                                 @change="changeEndTime"></EditDatepicker>
                                             </div>
                                         </div>
                                     </div>
-                                    <div class="card-text py-10 clearfix">
-                                        <div class="col-md-1 float-left text-right pl-0">优先级</div>
-                                        <div class="ml-15 float-left font-weight-bold" style="width: 220px;">
+                                    <div class="card-text py-10 clearfix col-md-6 px-0">
+                                        <div class="col-md-3 float-left text-right pl-0">优先级</div>
+                                        <div class="col-md-9 float-left font-weight-bold" style="width: 220px;">
                                             <EditSelector :content="taskInfo.priority?taskInfo.priority: ''"
                                                         :is-edit="isEdit"
                                                         :options="priorityArr" @change="changeTaskLevel"></EditSelector>
                                         </div>
                                     </div>
-                                    <div class="card-text py-10 clearfix">
-                                        <div class="col-md-1 float-left text-right pl-0">任务说明</div>
-                                        <div class="ml-15 float-left font-weight-bold" style="width: 220px;">
+                                    <div class="card-text py-10 clearfix col-md-6 px-0">
+                                        <div class="col-md-3 float-left text-right pl-0">任务说明</div>
+                                        <div class="col-md-9 float-left font-weight-bold" style="width: 220px;">
                                             <div class="">
                                                 <editTextarea :content="taskInfo.desc"
                                                             :is-edit="isEdit"
@@ -162,21 +162,21 @@
                                         </div>
                                     </div>
 
-                                    <div class="card-text py-10 clearfix" v-if="taskInfo.complete_at">
-                                        <div class="col-md-1 float-left text-right pl-0">完成时间</div>
-                                        <div class="col-md-11 float-left font-weight-bold">
+                                    <div class="card-text py-10 clearfix col-md-6 px-0" v-if="taskInfo.complete_at">
+                                        <div class="col-md-3 float-left text-right pl-0">完成时间</div>
+                                        <div class="col-md-9 float-left font-weight-bold">
                                             {{ taskInfo.complete_at }}
                                         </div>
                                     </div>
-                                    <div class="card-text py-10 clearfix" v-if="taskInfo.stop_at">
-                                        <div class="col-md-1 float-left text-right pl-0">停止时间</div>
-                                        <div class="col-md-11 float-left font-weight-bold">
+                                    <div class="card-text py-10 clearfix col-md-6 px-0" v-if="taskInfo.stop_at">
+                                        <div class="col-md-3 float-left text-right pl-0">停止时间</div>
+                                        <div class="col-md-9 float-left font-weight-bold">
                                             {{ taskInfo.stop_at }}
                                         </div>
                                     </div>
-                                    <div class="card-text py-10 clearfix">
-                                        <div class="col-md-1 float-left text-right pl-0">创建人</div>
-                                        <div class="col-md-11 float-left font-weight-bold">
+                                    <div class="card-text py-10 clearfix col-md-6 px-0">
+                                        <div class="col-md-3 float-left text-right pl-0">创建人</div>
+                                        <div class="col-md-9 float-left font-weight-bold">
                                             {{ taskInfo.creator?taskInfo.creator.data.name:'' }}
                                         </div>
                                     </div>

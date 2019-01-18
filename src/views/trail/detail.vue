@@ -18,7 +18,7 @@
 
                     <div class="card-text clearfix example">
                         <div class="col-md-6 float-left pl-0">
-                            <div class="float-left pl-0 pr-2 col-md-2">
+                            <div class="float-left pl-0 pr-2 col-md-3">
                                 <i class="iconfont icon-laiyuanguanli pr-5" aria-hidden="true"></i>线索类型
                             </div>
                             <div class="font-weight-bold float-left">
@@ -29,7 +29,7 @@
                             </div>
                         </div>
                         <div class="col-md-6 float-left pl-0">
-                            <div class="float-left pl-0 pr-2 col-md-2">
+                            <div class="float-left pl-0 pr-2 col-md-3">
                                 <i class="iconfont icon-kehu pr-2" aria-hidden="true"></i>负责人
                             </div>
                             <div class="font-weight-bold float-left" v-if="trailInfo.principal">
@@ -39,7 +39,7 @@
                     </div>
                     <div class="card-text clearfix example">
                         <div class="col-md-6 float-left pl-0">
-                            <div class="float-left pl-0 pr-2 col-md-2">
+                            <div class="float-left pl-0 pr-2 col-md-3">
                                 <i class="iconfont icon-xiaoshouguanli pr-2" aria-hidden="true"></i>销售进展
                             </div>
                             <div class="font-weight-bold float-left">
@@ -49,7 +49,7 @@
                             </div>
                         </div>
                         <div class="col-md-6 float-left pl-0">
-                            <div class="float-left pl-0 pr-2 col-md-2">
+                            <div class="float-left pl-0 pr-2 col-md-3">
                                 <i class="iconfont icon-renminbi1688 pr-2" aria-hidden="true"></i>预计订单收入
                             </div>
                             <div class="font-weight-bold float-left">
@@ -65,7 +65,7 @@
                     </div>
                     <div class="card-text clearfix example">
                         <div class="col-md-6 float-left pl-0">
-                            <div class="float-left pl-0 pr-2 col-md-2">
+                            <div class="float-left pl-0 pr-2 col-md-3">
                                 <i class="iconfont icon-yiren pr-2" aria-hidden="true"></i>目标艺人
                             </div>
                             <div class="font-weight-bold float-left" v-if="trailInfo.expectations">
@@ -75,7 +75,7 @@
                             </div>
                         </div>
                         <div class="col-md-6 float-left pl-0">
-                            <div class="float-left pl-0 pr-2 col-md-2">
+                            <div class="float-left pl-0 pr-2 col-md-3">
                                 <i class="iconfont icon-tuijian pr-2" aria-hidden="true" style="font-size:17px;"></i>推荐艺人
                             </div>
                             <div class="font-weight-bold float-left" v-if="trailInfo.recommendations">
@@ -88,7 +88,7 @@
 
                     <div class="card-text clearfix example">
                         <div class="col-md-6 float-left pl-0">
-                            <div class="float-left pl-0 pr-2 col-md-2">
+                            <div class="float-left pl-0 pr-2 col-md-3">
                                 <i class="iconfont icon-gongsiguanli pr-2" aria-hidden="true"></i>公司
                             </div>
                             <div class="font-weight-bold float-left pointer-content hover-content"
@@ -97,7 +97,7 @@
                             </div>
                         </div>
                         <div class="col-md-6 float-left pl-0">
-                            <div class="float-left pl-0 pr-2 col-md-2">
+                            <div class="float-left pl-0 pr-2 col-md-3">
                                 <i class="iconfont icon-xiangmu1 pr-2" aria-hidden="true"></i>项目
                             </div>
                             <div class="font-weight-bold float-left pointer-content hover-content"
@@ -131,7 +131,7 @@
                             </li>
                         </ul>
                         <div class="tab-content nav-tabs-animate bg-white col-md-12 row">
-                            <div class="tab-pane animation-fade active col-md-12" id="forum-trail-base" role="tabpanel">
+                            <div class="tab-pane animation-fade active col-md-12 px-0" id="forum-trail-base" role="tabpanel">
                                 <div class="card">
                                     <div class="card-header card-header-transparent card-header-bordered">
                                         <div class="float-left font-weight-bold third-title">销售线索信息</div>
@@ -143,7 +143,7 @@
                                             <button class="btn btn-primary" @click="changeTrailBaseInfo">确定</button>
                                         </div>
                                     </div>
-                                    <div class="card-block">
+                                    <div class="card-block px-0">
                                         <div class="clearfix">
                                             <div class="card-text py-10 px-0 clearfix col-md-6 float-left ">
                                                 <div class="col-md-3 float-left text-right pl-0">线索名称</div>
@@ -353,7 +353,7 @@
                                     </div>
                                 </div>
                             </div>
-                            <div class="tab-pane animation-fade pb-20 fixed-button-father col-md-12" id="forum-trail-tasks"
+                            <div class="tab-pane animation-fade pb-20 fixed-button-father col-md-12 px-0" id="forum-trail-tasks"
                                 role="tabpanel">
                                 <table class="table table-hover is-indent example" data-plugin="animateList"
                                     data-animate="fade"
@@ -389,11 +389,12 @@
                                 </div>
                                 <div class="site-action fixed-button" data-plugin="actionBtn" data-toggle="modal"
                                     data-target="#addTask">
-                                    <button type="button"
+                                    <button data-v-0aeb4e71="" type="button" class="site-action-toggle btn-raised btn btn-success btn-floating waves-effect waves-classic"><i data-v-0aeb4e71="" aria-hidden="true" class="front-icon iconfont icon-tianjia1 animation-scale-up" style="font-size: 30px;"></i><i data-v-0aeb4e71="" aria-hidden="true" class="back-icon iconfont icon-tianjia1 animation-scale-up" style="font-size: 30px;"></i></button>
+                                    <!-- <button type="button"
                                             class="site-action-toggle btn-raised btn btn-success btn-floating waves-effect waves-classic">
                                         <i class="front-icon iconfont icon-tianjia1 animation-scale-up" aria-hidden="true"></i>
                                         <i class="back-icon iconfont icon-tianjia1 animation-scale-up" aria-hidden="true"></i>
-                                    </button>
+                                    </button> -->
                                 </div>
                             </div>
                         </div>
