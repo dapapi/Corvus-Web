@@ -3,6 +3,7 @@ import App from './App.vue';
 import router from './router';
 import store from './store/index.js';
 import AddMember from './components/AddMember.vue';
+import ApprovalGreatModule from './components/ApprovalGreatModule';
 import BuildProject from './components/BuildProject.vue';
 import Calendar from './components/Calendar.vue';
 import Selectors from './components/Selectors.vue';
@@ -69,6 +70,7 @@ import DepartmentPicker from '@/components/DepartmentPicker'
 Vue.config.productionTip = false;
 Vue.component('ApprovalGoModal', ApprovalGoModal);
 Vue.component('AppDetail', AppDetail);
+Vue.component('ApprovalGreatModule', ApprovalGreatModule);
 Vue.component('ApprovalProgress', ApprovalProgress);
 
 Vue.component('AddMember', AddMember);

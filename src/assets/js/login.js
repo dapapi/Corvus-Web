@@ -1,4 +1,5 @@
 import redirect from './bootstrap';
+import Cookies from 'js-cookie';
 import config from './config';
 import User from './user';
 import Tool from './tool';

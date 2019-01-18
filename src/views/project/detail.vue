@@ -19,6 +19,8 @@
                     <a class="dropdown-item" role="menuitem" data-toggle="modal" data-target="#confirmFlag"
                        @click="changeToastrText(3)" v-show="projectInfo.status != 3">撤单</a>
                     <a class="dropdown-item" role="menuitem" data-toggle="modal" data-target="#addPrivacy">隐私设置</a>
+                    <a class="dropdown-item" role="menuitem" @click="getApprovalsFormData"
+                       v-if="projectInfo.approval_status == 232 || projectInfo.type == 5">创建合同</a>
                 </div>
             </div>
 
@@ -1352,6 +1354,8 @@
                 </div>
             </div>
         </div>
+
+        <ApprovalGreatModule :formData="formData"></ApprovalGreatModule>
     </div>
 </template>
 
@@ -1479,6 +1483,7 @@
                 metaInfo: '',
                 oldInfo: '',
                 coursesLength: 0,
+                formData: '',
             }
         },
 
@@ -1666,6 +1671,23 @@
 
                 })
             },
+
+            getApprovalsFormData: function () {
+                let data = {
+                    type: 'projects'
+                };
+                let organization_id = Number(JSON.parse(Cookies.get('user')).organization_id);
+                if (organization_id === 411) {
+                    data.status = 1
+                } else if (organization_id === 412) {
+                    data.status = 2
+                }
+                fetch('get', 'approvals/specific_contract', data).then(response => {
+                    this.formData = response.data
+                    $('#approval-great-module').modal('show')
+                })
+            },
+
             cancelPrivacy: function () {
                 this.$store.state.divisionInfo = []
                 this.$store.state.payInfo = []

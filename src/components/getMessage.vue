@@ -7,6 +7,7 @@
 <script>
 import config from '@/assets/js/config'
 import fetch from '@/assets/utils/fetch'
+import Cookies from 'js-cookie'
 export default {
     data(){
         return {

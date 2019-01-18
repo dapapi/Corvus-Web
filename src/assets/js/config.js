@@ -54,8 +54,6 @@ let config = {
             }
         },
 
-        companyType: Cookies.get('companyType'),
-
         trailOrigin: [
             {
                 name: '商务邮箱',
