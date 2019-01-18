@@ -274,6 +274,13 @@
 .approval-detail-main{
     border-top: 1px solid #eeeeee;
 }
+    .approver_text {
+        margin-left: 5px;
+        margin-bottom: 0;
+        font-size: 12px;
+        min-width: 50px;
+    }
+
     *::-webkit-scrollbar {
         width: 3px !important;
         height: 3px !important;
