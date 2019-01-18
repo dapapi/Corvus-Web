@@ -1,7 +1,7 @@
 <template>
-    <div class="approval-text-container col-md-12 pl-0" v-show="options.length > 0 || consdata[0].disabled">
+    <div class="approval-text-container col-md-12 pl-0" v-show="['昵称','项目名称','相关艺人'].includes(consdata[0].control_title) || options.length > 0 || consdata[0].disabled">
         <span class="col-md-2 text-right pl-0" :class="consdata[0].required===1?'require':''" v-if="title || consdata[0].control_title">{{title || consdata[0].control_title}}</span>
-        <select class="good-picker selectpicker col-md-10" :disabled="consdata[0].disabled?true:false" data-plugin="" :value="value" :data-live-search="isSelectable"
+        <select class="good-picker selectpicker col-md-10" :disabled="consdata[0].disabled?true:false" data-plugin="" :value="value" data-live-search="true"
             :data-show-subtext="isSelectable" 
             :multiple="multiple" :title="placeholder || consdata[0].control_placeholder" v-model="valueListener">
             <option v-if="consdata[0].disabled?true:false" :value="valueListener.name" selected></option>
@@ -22,7 +22,7 @@ export default {
      // 凡是多选，都有搜索框；不是多选传入selectable为true也可以有搜索框
         // changeKey为父组件的data，且可以被改变
         name:'ApprovalSelector',
-        props: ['n', 'multiple', 'placeholder', 'changeKey' , 'value', 'resetinfo', 'selectable','title','consdata','index','clear','directionalSender','defaultData'],
+        props: ['n', 'multiple', 'placeholder', 'changeKey' , 'value', 'resetinfo', 'selectable','title','consdata','index','clear','directionalSender','defaultData','isSelectable'],
         data() {
             return {
                 isDisable: this.disable,
@@ -31,15 +31,15 @@ export default {
             }
         },
         computed: {
-            isSelectable: function () {
-                if (this.selectable) {
-                    return true
-                }
-                if (this.multiple) {
-                    return true
-                }
-                return false
-            },
+            // isSelectable: function () {
+            //     if (this.selectable) {
+            //         return true
+            //     }
+            //     if (this.multiple) {
+            //         return true
+            //     }
+            //     return false
+            // },
             
         },
 

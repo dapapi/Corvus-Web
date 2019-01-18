@@ -14,7 +14,7 @@
                             <div :is='sortChecker(item)' :ref='item[0].control.data_dictionary_id'
                             :consdata='item' :predata='sendData' class="container" :default-data="defaultData"
                             :singlemode='singlemode' :clear='clearFlag' :directional-sender='directionalData'
-                            @change="changeHandler" @directional='directionalWatcher'
+                            @change="changeHandler" @directional='directionalWatcher' is-selectable='true'
                             :formid='form_id'></div>
                             <!-- ⬆️核心模块 -->
                         </div>
