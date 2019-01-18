@@ -316,10 +316,10 @@ let config = {
                 name: '商务项目',
                 value: 3
             },
-            {
-                name: 'papi项目',
-                value: 4
-            },
+            // {
+            //     name: 'papi项目',
+            //     value: 4
+            // },
             {
                 name: '基础项目',
                 value: 5

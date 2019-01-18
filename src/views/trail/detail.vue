@@ -1057,10 +1057,24 @@
                 this.trailInfo.resource_type = value
             },
             changeExpectations: function (value) {
+                for (let i = 0; i < value.length; i++) {
+                    let item = value[i].split('-');
+                    value[i] = {
+                        id: item[1],
+                        flag: item[0]
+                    };
+                }
                 this.trailInfo.expectations = value
             },
 
             changeRecommendations: function (value) {
+                for (let i = 0; i < value.length; i++) {
+                    let item = value[i].split('-');
+                    value[i] = {
+                        id: item[1],
+                        flag: item[0]
+                    };
+                }
                 this.trailInfo.recommendations = value
             },
 

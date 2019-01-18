@@ -418,22 +418,22 @@
                                     <div class="example" v-if="projectReturnInfo.meta">
                                         <div class="col-md-3 float-left pl-0">
                                             <div>合同金额<span class="money-color pl-5">
-                            {{ projectReturnInfo.meta.contractReturnedMoney ? projectReturnInfo.meta.contractReturnedMoney : 0}}</span>/元
+                            {{ projectReturnInfo.meta.contractReturnedMoney ? projectReturnInfo.meta.contractReturnedMoney : 0}}</span>元
                                             </div>
                                         </div>
                                         <div class="col-md-3 float-left pl-0">
                                             <div>已回款<span class="money-color pl-5">
-                            {{ projectReturnInfo.meta.alreadyReturnedMoney ? projectReturnInfo.meta.alreadyReturnedMoney : 0}}</span>/元
+                            {{ projectReturnInfo.meta.alreadyReturnedMoney ? projectReturnInfo.meta.alreadyReturnedMoney : 0}}</span>元
                                             </div>
                                         </div>
                                         <div class="col-md-3 float-left pl-0">
                                             <div>未回款<span class="money-color pl-5">
-                            {{ projectReturnInfo.meta.notReturnedMoney ? projectReturnInfo.meta.notReturnedMoney : 0}}</span>/元
+                            {{ projectReturnInfo.meta.notReturnedMoney ? projectReturnInfo.meta.notReturnedMoney : 0}}</span>元
                                             </div>
                                         </div>
                                         <div class="col-md-3 float-left pl-0">
                                             <div>已开票<span class="money-color pl-5">
-                            {{ projectReturnInfo.meta.alreadyinvoice ? projectReturnInfo.meta.alreadyinvoice : 0}}</span>/元
+                            {{ projectReturnInfo.meta.alreadyinvoice ? projectReturnInfo.meta.alreadyinvoice : 0}}</span>元
                                             </div>
                                         </div>
                                     </div>
@@ -666,11 +666,6 @@
                                                                           :is-edit="isEdit"
                                                                           :options="field.contentArr"
                                                                           @change="(value) => addInfo(value, field.id )"></EditSelector>
-                                                        </template>
-                                                        <template v-else-if="field.field_type === 3">
-                                                            <EditableSearchBox :options="starsArr" :multiple="true"
-                                                                               :is-edit="isEdit"
-                                                                               @change="(value) => addInfo(value, field.id )"></EditableSearchBox>
                                                         </template>
                                                         <template v-else-if="field.field_type === 4">
                                                             <EditDatepicker

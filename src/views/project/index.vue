@@ -14,8 +14,8 @@
                                @blur="getFilterProjects(1)">
                     </div>
                     <div class="col-md-3 example float-left">
-                        <selectors @change="(value) => getFilterProjects(1, 'status', value)" placeholder="请选择项目类型"
-                                   :options="projectStatusArr"></selectors>
+                        <selectors @change="(value) => getFilterProjects(1, 'type', value)" placeholder="请选择项目类型"
+                                   :options="projectTypeArr"></selectors>
                     </div>
                     <div class="col-md-3 example float-left" v-if="allUsers.length > 0">
                         <selectors @change="(value) => getFilterProjects(1, 'principal', value)" placeholder="请选择项目负责人"
@@ -123,6 +123,7 @@
     import Cookies from 'js-cookie'
 
     const projectStatusArr = [{name: '全部', value: ''}, ...config.projectStatusArr];
+    const projectTypeArr = [{name: '全部', value: ''}, ...config.projectTypeArr];
 
     export default {
 
@@ -134,7 +135,7 @@
                 companyArr: [],
                 starsArr: [],
                 projectName: '',
-                projectTypeArr: config.projectTypeArr,
+                projectTypeArr: projectTypeArr,
                 projectFieldsArr: [],
                 projectType: '',
                 projectFields: '',
@@ -219,6 +220,16 @@
                     if (value) {
                         data.status = value;
                     }
+                }
+                if (type === 'type' && value) {
+                    if (value == 3) {
+                        if (Cookies.get('companyType') === '泰洋川禾') {
+                            value = 3;
+                        } else {
+                            value = 4;
+                        }
+                    }
+                    data.type = value
                 }
                 if (type === 'principal' && value) {
                     this.principal_ids = value.join(',');

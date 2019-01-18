@@ -676,10 +676,24 @@
             },
 
             changeTargetStars: function (value) {
+                for (let i = 0; i < value.length; i++) {
+                    let item = value[i].split('-');
+                    value[i] = {
+                        id: item[1],
+                        flag: item[0]
+                    };
+                }
                 this.targetStars = value
             },
 
             changeRecommendStars: function (value) {
+                for (let i = 0; i < value.length; i++) {
+                    let item = value[i].split('-');
+                    value[i] = {
+                        id: item[1],
+                        flag: item[0]
+                    };
+                }
                 this.recommendStars = value
             },
 

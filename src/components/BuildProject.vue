@@ -110,11 +110,6 @@
                                            :options="field.contentArr"
                                            @change="(value) => addInfo(value, field.id )"></Selectors>
                             </template>
-                            <template v-if="field.field_type === 3">
-                                <EditableSearchBox :default='newArray.find(item=>item.id === field.id)'
-                                                   :options="starsArr" :multiple="true"
-                                                   @change="(value) => addInfo(value, field.id )"></EditableSearchBox>
-                            </template>
                             <template v-if="field.field_type === 4">
                                 <Datepicker :default='newArray.find(item=>item.id === field.id)'
                                             @change="(value) => addInfo(value, field.id )"></Datepicker>

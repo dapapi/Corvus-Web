@@ -70,14 +70,15 @@
 </script>
 
 <style>
-.noselect{
-     -webkit-touch-callout: none;
-     -webkit-user-select: none;
-     -khtml-user-select: none;
-     -moz-user-select: none;
-     -ms-user-select: none;
-     user-select: none;
-}
+    .noselect {
+        -webkit-touch-callout: none;
+        -webkit-user-select: none;
+        -khtml-user-select: none;
+        -moz-user-select: none;
+        -ms-user-select: none;
+        user-select: none;
+    }
+
     .popover {
         max-width: 100%;
     }
@@ -167,14 +168,6 @@
         margin-left: 100px !important;
         min-height: 100vh;
     }
-    /* .require::before {
-        content: '*';
-        position: absolute;
-        left: 0px;
-        vertical-align: middle;
-        color: #F44336;
-        font-size: 16px;
-    } */
 
     .require::before {
         content: '*';
@@ -241,6 +234,10 @@
 
     .bootstrap-select:not([class*=col-]):not([class*=form-control]):not(.input-group-btn) {
         height: 36.02px;
+    }
+
+    .fc-unthemed .fc-today {
+        background: #eee;
     }
 
 </style>
