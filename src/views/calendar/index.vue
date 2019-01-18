@@ -93,10 +93,10 @@
                 </div>
                 <div class="vertical-line float-left"></div>
                 <div class="float-left p-0" style="width: 79%;">
-                    <calendar :goto-date="selectedDate" v-show="!meetingRomeShow" @dayClick="showAddScheduleModal"
+                    <calendar :goto-date="selectedDate" v-if="!meetingRomeShow" @dayClick="showAddScheduleModal"
                               :calendars="selectedCalendar" :meeting-rome-list="meetingRomeList" ref="calendar"
                               :is-meeting="isMeeting" @calendarDisplay="checkMeetingRoom"
-                              @scheduleClick="showScheduleModal"></calendar>
+                              @scheduleClick="showScheduleModal" :calendarView="calendarView"></calendar>
                     <MeetingRoomCalendar v-show="meetingRomeShow" :meetingRomeList="meetingRomeList" ref="meetingRoom"
                                          @change="changeToCalendar"></MeetingRoomCalendar>
                 </div>
@@ -638,6 +638,7 @@
                 meetingRomeType: '',
                 noPermission: false,
                 getScheduleFinish: false,
+                calendarView: '',
             }
         },
 
@@ -1325,7 +1326,7 @@
 
             changeToCalendar: function (type) {
                 this.meetingRomeShow = false;
-                this.$refs.calendar.changeView(type)
+                this.calendarView = type;
             },
 
             allCalendarShow: function () {
