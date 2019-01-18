@@ -15,6 +15,7 @@ export default {
     },
     methods:{
         change(params){ 
+            console.log(params);
             let {id} = this.consdata[0]
             let {related_field} = this.consdata[0]
             this.$emit('change',{key:id,value:params,type:related_field})
