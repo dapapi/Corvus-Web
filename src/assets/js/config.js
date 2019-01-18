@@ -6,7 +6,7 @@ let config = {
         // apiUrl: '/api/',
         apiUrl: 'https://sandbox-api-crm.papitube.com',
         imgUrl: 'https://res-crm.papitube.com/',
-        socketUrl:'wss://sandbox-corvus.papitube.com:8081',
+        socketUrl: 'wss://sandbox-corvus.papitube.com:8081',
 
         getHeaders: function () {
             let headers = {
@@ -132,6 +132,38 @@ let config = {
             {
                 name: 'papi线索',
                 value: 4
+            },
+        ],
+        publicTrailTypeArr: [
+            {
+                name: '全部',
+                value: ''
+            },
+            {
+                name: '商务公海池',
+                value: 1
+            },
+            {
+                name: '影视公海池',
+                value: 2
+            },
+            {
+                name: '综艺公海池',
+                value: 3
+            },
+        ],
+        publicTrailTakeType: [
+            {
+                name: '全部',
+                value: ''
+            },
+            {
+                name: '未领取',
+                value: 1
+            },
+            {
+                name: '已领取',
+                value: 2
             },
         ],
         classifyArr: [
@@ -284,10 +316,10 @@ let config = {
                 name: '商务项目',
                 value: 3
             },
-            {
-                name: 'papi项目',
-                value: 4
-            },
+            // {
+            //     name: 'papi项目',
+            //     value: 4
+            // },
             {
                 name: '基础项目',
                 value: 5
@@ -1223,15 +1255,15 @@ let config = {
                 value: 1
             }
         ],
-        week:[
+        week: [
             {
-                name:'日',
-                value:0
+                name: '日',
+                value: 0
 
             },
             {
-                name:'一',
-                value:1
+                name: '一',
+                value: 1
             },
             {
                 name: '二',
@@ -1283,10 +1315,10 @@ let config = {
                 value: 4,
             },
             {
-            name: '高中',
+                name: '高中',
                 value: 5,
             },
-           {
+            {
                 name: '中专/中技',
                 value: 6,
             },

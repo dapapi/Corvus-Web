@@ -5,9 +5,9 @@
         <span class="input-group-addon">
             <i class="icon md-calendar" aria-hidden="true"></i>
         </span>
-        <input type="text" class="form-control" id="start" name="start">
+        <input type="text" class="form-control" id="start" name="start" autocomplete="off">
         <span class="input-group-addon">至</span>
-        <input type="text" class="form-control" id="end" name="end">
+        <input type="text" class="form-control" id="end" name="end" autocomplete="off">
     </div>
 </template>
 <script>
