@@ -83,7 +83,7 @@
                         </div>
                         <table class="table table-hover is-indent ml-5" data-plugin="selectable"
                                data-selectable="selectable">
-                            <tr v-if="artistsInfo">
+                            <tr v-if="artistsInfo.length>0">
                                 <th class="w-50">
                                     <span class="checkbox-custom checkbox-primary">
                                         <input class="selectable-all" type="checkbox"
