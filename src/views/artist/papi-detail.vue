@@ -11,11 +11,11 @@
                      role="menu" x-placement="bottom-end">
                     <a class="dropdown-item" role="menuitem" data-toggle="modal"
                        data-target="#distributionproducer" @click="distributionPerson('publicity')">分配制作人</a>
-                    <!-- <a class="dropdown-item" role="menuitem" data-toggle="modal" data-target="#addPrivacy">隐私设置</a>
-                    <a class="dropdown-item" role="menuitem" data-toggle="modal" data-target="#addPrivacy">
-                        <template v-if="artistInfo.sign_contract_status == 1">签约</template>
+                    <!-- <a class="dropdown-item" role="menuitem" data-toggle="modal" data-target="#addPrivacy">隐私设置</a> -->
+                    <a class="dropdown-item" role="menuitem" @click="contractlist(artistInfo.sign_contract_status)">
+                        <template v-if="artistInfo.sign_contract_status == 1" >签约</template>
                         <template v-if="artistInfo.sign_contract_status == 2">解约</template>
-                    </a> -->
+                    </a>
                 </div>
             </div>
         </div>
@@ -821,6 +821,7 @@
                 </div>
             </div>
         </div>
+        <ApprovalGreatModule :formData="formDate"></ApprovalGreatModule>
         <!-- 新建/修改 日程 -->
         <div class="modal fade line-center" id="changeSchedule" aria-hidden="true" aria-labelledby="addLabelForm"
              role="dialog" tabindex="-1" data-backdrop="static">
@@ -1114,6 +1115,7 @@
 <script>
     import fetch from '../../assets/utils/fetch.js'
     import config from '../../assets/js/config'
+    import ApprovalGreatModule from '../../components/ApprovalGreatModule'
     export default {
         data: function () {
             return {
@@ -1203,13 +1205,18 @@
                     projects: [],
                     tasks: []
                 },
-                scheduleShow:[]
+                scheduleShow:[],
+                contractType:'bloggers',
+                formDate:{}
             }
         },
         computed: {
             completeNum() {
                 return this.tasksInfo.filter(n => n.status === 2).length
             }
+        },
+        components: {
+            ApprovalGreatModule
         },
         created(){
             this.getArtist()
@@ -1323,7 +1330,7 @@
                 this.artistId = this.$route.params.id;
                 let _this = this;
                 let data = {
-                    include: 'creator,tasks,affixes,producer,type,publicity,trails.project,trails.client,trails.project.principal,trails.project.relate_project_bills_resource,calendar,operatelogs,schedule',
+                    include: 'creator,tasks,affixes,producer,type,publicity,trails.project,trails.client,trails.project.principal,trails.project.relate_project_bills_resource,calendar,operatelogs,',
                 };
                 fetch('get', '/bloggers/' + this.artistId, data).then(function (response) {
                   
@@ -1354,12 +1361,11 @@
                         _this.calendarName = response.data.calendar.data.title
                     }
                     //日程展示
-                    if(response.data.schedule){
-                       for (let i = 0; i < response.data.schedule.data.length; i++) {
-                           _this.scheduleShow.push(response.data.schedule.data[i])
-                       } 
-                    }
-                    console.log(_this.scheduleShow)
+                    // if(response.data.schedule){
+                    //    for (let i = 0; i < response.data.schedule.data.length; i++) {
+                    //        _this.scheduleShow.push(response.data.schedule.data[i])
+                    //    } 
+                    // }
                      //项目
                      if(response.data.trails){
                         for (let i = 0; i < response.data.trails.data.length; i++) {
@@ -2060,6 +2066,20 @@
             projectDetails(id){
                 this.$router.push({path: '/projects/' + id})
             },
+            contractlist(status){
+                console.log(status)
+                let _this = this;
+                let data={
+                    type:this.contractType
+                }
+                data.status = status
+                fetch('get','approvals/specific_contract',data).then(function(response){
+                   
+                    _this.formDate = response.data
+                    $('#approval-great-module').modal('show')
+                     console.log( _this.formDate )
+                })
+            }
         },
         filters: {
             getWeek: function (date) {

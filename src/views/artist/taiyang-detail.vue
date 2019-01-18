@@ -14,7 +14,7 @@
                        data-target="#distributionBroker" @click="distributionPerson('broker')">分配经理人</a>
                     <a class="dropdown-item" role="menuitem" data-toggle="modal"
                        data-target="#distributionBroker" @click="distributionPerson('publicity')">分配宣传人</a>
-                    <a class="dropdown-item" role="menuitem" data-toggle="modal" data-target="#addPrivacy">
+                    <a class="dropdown-item" role="menuitem" @click="contractlist(artistInfo.sign_contract_status)">
                         <template v-if="artistInfo.sign_contract_status == 1">签约</template>
                         <template v-if="artistInfo.sign_contract_status == 2">解约</template>
                     </a>
@@ -1177,13 +1177,14 @@
         </div>
         <!--附件预览-->
         <DocPreview :url="previewUrl" :givenFileName="previewName"/>
+        <ApprovalGreatModule :formData='formDate'></ApprovalGreatModule>
     </div>
 </template>
 
 <script>
     import fetch from '../../assets/utils/fetch.js'
     import config from '../../assets/js/config'
-
+    import ApprovalGreatModule from '../../components/ApprovalGreatModule'
     export default {
         data: function () {
             return {
@@ -1289,12 +1290,17 @@
                 delType: '',
                 calendarName: '',
                 scheduleRepeat: 0,
+                contractType:'stars',
+                formDate:''
             }
         },
 
         created() {
             this.getArtist()
 
+        },
+        components: {
+            ApprovalGreatModule
         },
         mounted() {
 
@@ -2250,6 +2256,18 @@
                     toastr.success('删除成功');
                     _this.isEdit = false;
                     _this.getArtist();
+                })
+            },
+            contractlist(status){
+                let _this = this;
+                let data={
+                    type:this.contractType
+                }
+                data.status = status
+                fetch('get','approvals/specific_contract',data).then(function(response){
+                    console.log(response.data)
+                    _this.formDate = response.data
+                    $('#approval-great-module').modal('show')
                 })
             },
             filterProjectFee: function (value) {
