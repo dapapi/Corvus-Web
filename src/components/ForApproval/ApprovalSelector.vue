@@ -22,7 +22,7 @@ export default {
      // 凡是多选，都有搜索框；不是多选传入selectable为true也可以有搜索框
         // changeKey为父组件的data，且可以被改变
         name:'ApprovalSelector',
-        props: ['n', 'multiple', 'placeholder', 'changeKey' , 'value', 'resetinfo', 'selectable','title','consdata','index','clear','directionalSender'],
+        props: ['n', 'multiple', 'placeholder', 'changeKey' , 'value', 'resetinfo', 'selectable','title','consdata','index','clear','directionalSender','defaultData'],
         data() {
             return {
                 isDisable: this.disable,
@@ -45,6 +45,7 @@ export default {
 
         mounted() {
             this.sourceChecker()
+            this.defaultDataChecker()
             // if(!this.multiple){
             //     let self = this;
             //     $(this.$el).selectpicker().on('hidden.bs.select', function () {
@@ -62,6 +63,7 @@ export default {
         },
         update(){
             this.refresh()
+            this.defaultDataChecker()
         },
         watch: {
             consdata:function(value){
@@ -127,16 +129,45 @@ export default {
         }
         },
         methods: {
+            defaultDataChecker(params){
+                if(this.defaultData && this.consdata){
+                    for (const i in this.defaultData) {
+                        if(params){
+                            this.$nextTick(() => {
+                                this.valueListener = params.find(item=>item.title === this.defaultData[i].key).id
+                            })
+                        }else{
+                            if (this.defaultData[i].key === this.consdata[0].control_title) {
+                                this.$nextTick(() => {
+                                    this.valueListener = this.defaultData[i].values.data.value
+                                    this.setValue(this.defaultData[i].values.data.value)
+                                })
+                            }
+                        }
+                    }
+                }
+            },
             sourceChecker(){
                 let _this = this
                 if(this.consdata[0].control_source){
                     if(!this.consdata[0].disabled){
                         fetch('get',this.consdata[0].control_source.url).then((params) => {
-                        _this.options = params.data
-                        _this.$nextTick(() => {
-                            _this.refresh()
+                            _this.options = params.data
+                            _this.$nextTick(() => {
+                                _this.refresh()
+                            })
+                            console.log(params.data);
+                            if(_this.defaultData){
+                                if(params.data[0].id){
+                                    // _this.valueListener = params.data.find(item=>item.title === _this.defaultData)
+                                    _this.defaultDataChecker(params.data)
+                                }
+                                _this.$nextTick(() => {
+                                    _this.defaultDataChecker()
+                                    
+                                })
+                            }
                         })
-                    })
                     }
                 }else{
                     _this.options = this.consdata[0].control_enums

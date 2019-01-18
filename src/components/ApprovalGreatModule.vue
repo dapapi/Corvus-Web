@@ -12,7 +12,7 @@
                     <div class="modal-body modal-greater ">
                         <div v-for="(item, index) in moduleInfo" :key="index" class="great-option example " >
                             <div :is='sortChecker(item)' :ref='item[0].control.data_dictionary_id'
-                            :consdata='item' :predata='sendData' class="container"
+                            :consdata='item' :predata='sendData' class="container" :default-data="defaultData"
                             :singlemode='singlemode' :clear='clearFlag' :directional-sender='directionalData'
                             @change="changeHandler" @directional='directionalWatcher'
                             :formid='form_id'></div>
@@ -86,6 +86,7 @@ export default {
         $('#approval-great-module').on('show.bs.modal',function(){
                 _this.$nextTick(() => {
                     _this.getFormContractor() 
+
                 })
         })
          $('#approval-great-module').on('hidden.bs.modal',function(){
@@ -273,7 +274,7 @@ export default {
     padding-right: 0;
 }
 .modal-greater{
-    margin-top: 20px !important;
+    /* margin-top: 20px !important; */
     height: 100%;
 }
 .great-option{
