@@ -56,10 +56,9 @@
                                 <div class="col-md-3 float-left px-0">{{ clientTypeArr.find(item => item.value == project.type).name }}</div>
                                 <div class="col-md-4 float-left px-0">{{ project.created_at }}</div>
                                 <div class="col-md-2 float-left px-0">
-                                    <template v-if="project.status === 1">进行中</template>
-                                    <template v-if="project.status === 2">完成</template>
-                                    <template v-if="project.status === 3">终止</template>
-                                    <template v-if="project.status === 4">删除</template>
+                                    <template v-if="project.status === 1"><span style="color:#FF9800">进行中</span></template>
+                                    <template v-if="project.status === 2"><span style="color:#4CAF50">已完成</span></template>
+                                    <template v-if="project.status === 3"><span style="color:#9E9E9E">撤单</span></template>
                                 </div>
                             </div>
                         </div>
@@ -414,28 +413,28 @@
                             </div>
                         </div>
                         <div class="example">
-                            <div class="col-md-2 text-right float-left require">联系人</div>
+                            <div class="col-md-2 text-right float-left require pl-0">联系人</div>
                             <div class="col-md-10 float-left">
                                 <input type="text" title="" class="form-control"
                                        placeholder="请输入联系人" v-model="editConfig.name">
                             </div>
                         </div>
                         <div class="example">
-                            <div class="col-md-2 text-right float-left require">关键决策人</div>
+                            <div class="col-md-2 text-right float-left require pl-0">关键决策人</div>
                             <div class="col-md-10 float-left">
                                 <selectors ref="contact" :options="keyMasterArr" :value="editConfig.type"
                                     @change="changeContactClientType"></selectors>
                             </div>
                         </div>
                         <div class="example">
-                            <div class="col-md-2 text-right float-left require">联系人电话</div>
+                            <div class="col-md-2 text-right float-left require pl-0">联系人电话</div>
                             <div class="col-md-10 float-left">
                                 <input type="text" title="" class="form-control"
                                        placeholder="请输入联系人电话" v-model="editConfig.phone"/>
                             </div>
                         </div>
                         <div class="example">
-                            <div class="col-md-2 text-right float-left require">职位</div>
+                            <div class="col-md-2 text-right float-left require pl-0">职位</div>
                             <div class="col-md-10 float-left">
                                 <input type="text" title="" class="form-control"
                                        placeholder="请输入联系人职位" v-model="editConfig.position">

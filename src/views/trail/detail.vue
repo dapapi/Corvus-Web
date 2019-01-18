@@ -391,8 +391,8 @@
                                     data-target="#addTask">
                                     <button type="button"
                                             class="site-action-toggle btn-raised btn btn-success btn-floating waves-effect waves-classic">
-                                        <i class="front-icon iconfont icon-tianjia1 animation-scale-up" aria-hidden="true"></i>
-                                        <i class="back-icon iconfont icon-tianjia1 animation-scale-up" aria-hidden="true"></i>
+                                        <i class="front-icon iconfont icon-tianjia1 animation-scale-up" aria-hidden="true" style="font-size: 30px"></i>
+                                        <i class="back-icon iconfont icon-tianjia1 animation-scale-up" aria-hidden="true" style="font-size: 30px"></i>
                                     </button>
                                 </div>
                             </div>
