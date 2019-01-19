@@ -457,7 +457,7 @@
                 if (this.receive_type) {
                     data.receive_type = this.receive_type
                 }
-                fetch('get', '/pool/index', data).then(response => {
+                fetch('get', '/pool', data).then(response => {
                     this.trailsInfo = response.data;
                     this.total = response.meta.pagination.total;
                     this.current_page = response.meta.pagination.current_page;
