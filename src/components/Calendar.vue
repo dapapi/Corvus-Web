@@ -15,6 +15,8 @@
                 endDate: '',  //获取结束时间
                 allScheduleInfo: '',
                 defaultView: 'month',
+                firstClickTime: '',
+                clickDate: '',
             }
         },
         watch: {
@@ -137,8 +139,19 @@
 
                 },
                 dayClick: function (date, allDay, jsEvent) {
+                    let currentDate = new Date();
+                    let currentClickTime = currentDate.getTime();
                     let formatDate = self.timeReformat(date._d);
-                    self.$emit('dayClick', formatDate);
+                    if (!self.clickDate) {
+                        self.clickDate = formatDate;
+                    }
+                    if (self.firstClickTime && self.clickDate === formatDate) {
+                        if (currentClickTime - self.firstClickTime < 500) {
+                            self.$emit('dayClick', formatDate);
+                        }
+                    }
+                    self.clickDate = formatDate;
+                    self.firstClickTime = currentClickTime;
                 },
                 eventClick: function (event, jsEvent, view) {
                     let data = self.allScheduleInfo.find(item => item.id === event.id);

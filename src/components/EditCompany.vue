@@ -51,7 +51,10 @@
                     type: 'get',
                     url: config.apiUrl + '/clients/all',
                     headers: config.getHeaders(),
+                    
                 }).done(function (response) {
+                    // console.log(response.data)
+                    
                     for (let i = 0; i < response.data.length; i++) {
                         _this.clientArr.push({
                             name: response.data[i].company,
@@ -59,7 +62,9 @@
                             grade: response.data[i].grade
                         })
                     }
+                      
                 })
+              
             },
 
             changeCompanyLevel: function (value) {
