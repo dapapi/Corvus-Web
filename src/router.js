@@ -209,6 +209,11 @@ export default new Router({
                     name: 'approval/project/only',
                     component: () => import('./views/approval/project/only.vue')
                 },
+                {
+                    path:'/approval/contract/contract_management',
+                    name:'approval/contract/contract_management',
+                    component: () => import('./views/approval/contractIndex/contract_management.vue')                    
+                }
             ],
         },
         {
