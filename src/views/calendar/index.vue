@@ -355,7 +355,7 @@
                                     <div class="del-affix">
                                         <i class="iconfont icon-liulan pointer-content mr-4"
                                            @click="openFile(affix.url)"></i>
-                                        <i class="iconfont icon-zuofei pointer-content" @click="delAffix(affix.id)"></i>
+                                        <i class="iconfont icon-shanchu1 pointer-content" @click="delAffix(affix.id)"></i>
                                     </div>
                                 </div>
                             </div>
