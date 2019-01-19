@@ -21,7 +21,7 @@ export default {
      // 凡是多选，都有搜索框；不是多选传入selectable为true也可以有搜索框
         // changeKey为父组件的data，且可以被改变
         name:'ApprovalMultipleSelector',
-        props: ['n', 'placeholder', 'changeKey', 'value', 'resetinfo', 'selectable','title','consdata','index','clear','directionalSender'],
+        props: ['n', 'placeholder', 'changeKey', 'value', 'resetinfo', 'selectable','title','consdata','index','clear','directionalSender','defaultData'],
         data() {
             return {
                 isDisable: this.disable,
@@ -121,9 +121,35 @@ export default {
         }
         },
         methods: {
-            // directionalWatcher(){
-                
-            // },
+           defaultDataChecker(params){
+                if(this.defaultData && this.consdata){
+                    for (const i in this.defaultData) {
+                        if(params && this.defaultData[i].key === this.consdata[0].control_title){
+                            let tempArr = this.defaultData[i].values.data.value.split(',')
+                            for (const j in tempArr) {
+                                this.$nextTick(() => {
+                                    this.valueListener.push({id:params.find(item=>item.name === tempArr[j]).id,name:params.find(item=>item.name === tempArr[j]).name})
+                                    this.setValue(this.valueListener)
+
+                                })
+                            //     console.log(tempArr[j]);
+                            //     console.log(params.find(item=>item.name === tempArr[j]).id);
+                            //    this.valueListener.push(params.find(item=>item.name === tempArr[j]).id)
+                            }
+                            
+                        }else{
+                            if (this.defaultData[i].key === this.consdata[0].control_title) {
+                                this.$nextTick(() => {
+                                    // console.log(this.defaultData[i].values.data.value);
+                                    // $(this.$el).selectpicker('val', this.defaultData[i].values.data.value);
+                                    // this.valueListener = this.defaultData[i].values.data.value
+                                    // this.setValue(this.defaultData[i].values.data.value)
+                                })
+                            }
+                        }
+                    }
+                }
+            },
             sourceChecker(){
                 let _this = this
                 if(this.consdata[0].control_source){
@@ -132,6 +158,16 @@ export default {
                         _this.$nextTick(() => {
                             _this.refresh()
                         })
+                        if(_this.defaultData){
+                                if(params.data[0].id){
+                                    // _this.valueListener = params.data.find(item=>item.title === _this.defaultData)
+                                    _this.defaultDataChecker(params.data)
+                                }
+                                _this.$nextTick(() => {
+                                    _this.defaultDataChecker()
+                                    
+                                })
+                            }
                     })
                 }else{
                     _this.options = this.consdata[0].control_enums

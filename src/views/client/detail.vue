@@ -302,23 +302,31 @@
                                     <div class="segmentation-line example"></div>
 
                                     <div class="card-text py-5 clearfix">
-                                        <div class="col-md-2 float-left text-right pl-0">录入人</div>
-                                        <div class="col-md-4 float-left font-weight-bold">
-                                            {{clientInfo.creator?clientInfo.creator.data.name:''}}
+                                        <div class="col-md-6 px-0">
+                                            <div class="col-md-3 float-left text-right pl-0">录入人</div>
+                                            <div class="col-md-9 float-left font-weight-bold">
+                                                {{clientInfo.creator?clientInfo.creator.data.name:''}}
+                                            </div>
                                         </div>
-                                        <div class="col-md-2 float-left text-right pl-0">录入时间</div>
-                                        <div class="col-md-4 float-left font-weight-bold">
-                                            {{clientInfo.created_at?clientInfo.created_at:''}}
+                                        <div class="col-md-6 px-0">
+                                            <div class="col-md-3 float-left text-right pl-0">录入时间</div>
+                                            <div class="col-md-6 float-left font-weight-bold">
+                                                {{clientInfo.created_at?clientInfo.created_at:''}}
+                                            </div>
                                         </div>
                                     </div>
                                     <div class="card-text py-5 clearfix">
-                                        <div class="col-md-2 float-left text-right pl-0">最近更新人</div>
-                                        <div class="col-md-4 float-left font-weight-bold">
-                                        {{clientInfo.last_updated_user?clientInfo.last_updated_user:''}}
+                                        <div class="col-md-6 px-0">
+                                            <div class="col-md-3 float-left text-right pl-0">最近更新人</div>
+                                            <div class="col-md-6 float-left font-weight-bold">
+                                            {{clientInfo.last_updated_user?clientInfo.last_updated_user:''}}
+                                            </div>
                                         </div>
-                                        <div class="col-md-2 float-left text-right pl-0">最近更新时间</div>
-                                        <div class="col-md-4 float-left font-weight-bold">
-                                            {{clientInfo.updated_at?clientInfo.updated_at:''}}
+                                        <div class="col-md-6 px-0">
+                                            <div class="col-md-3 float-left text-right pl-0">最近更新时间</div>
+                                            <div class="col-md-6 float-left font-weight-bold">
+                                                {{clientInfo.updated_at?clientInfo.updated_at:''}}
+                                            </div>
                                         </div>
                                     </div>
                                 </div>
