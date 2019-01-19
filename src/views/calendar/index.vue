@@ -147,7 +147,7 @@
                             <div class="col-md-5 float-left pl-0">
                                 <datepicker @change="changeStartTime" ref="scheduleStartDate"></datepicker>
                             </div>
-                            <div class="col-md-5 float-left pl-0" v-show="!isAllday">
+                            <div class="col-md-5 float-left pl-0" v-show="!isScheduleAllday">
                                 <timepicker :default="startMinutes" @change="changeStartMinutes"
                                             ref="scheduleStartMinute"></timepicker>
                             </div>
@@ -157,7 +157,7 @@
                             <div class="col-md-5 float-left pl-0">
                                 <datepicker @change="changeEndTime" ref="scheduleEndDate"></datepicker>
                             </div>
-                            <div class="col-md-5 float-left pl-0" v-show="!isAllday">
+                            <div class="col-md-5 float-left pl-0" v-show="!isScheduleAllday">
                                 <timepicker :default="endMinutes" @change="changeEndMinutes"
                                             ref="scheduleEndMinute"></timepicker>
                             </div>
@@ -166,8 +166,8 @@
                             <div class="col-md-2 text-right float-left"></div>
                             <div class="col-md-10 float-left pl-0">
                                 <div class="checkbox-custom checkbox-primary">
-                                    <input type="checkbox" id="isAllDay" @change="changeIsAllDay" v-model="isAllday">
-                                    <label for="isAllDay">全天</label>
+                                    <input type="checkbox" id="isScheduleAllday" @change="changeIsAllDay" v-model="isScheduleAllday">
+                                    <label for="isScheduleAllday">全天</label>
                                 </div>
                             </div>
                         </div>
@@ -622,7 +622,6 @@
                 scheduleRepeat: 0,
                 scheduleData: '',
                 scheduleParticipants: '',
-                isAllday: false,
                 schedulePrivacy: false,
                 meetingRomeList: '',
                 allMeetingRomeList: '',
@@ -955,6 +954,12 @@
                     }
                     this.noPermission = false;
                     this.scheduleData = response.data;
+                    if (this.scheduleData.privacy) {
+                        this.schedulePrivacy = true
+                    }
+                    if (this.scheduleData.is_allday) {
+                        this.isScheduleAllday = true
+                    }
                     this.scheduleParticipants = JSON.parse(JSON.stringify(response.data.participants.data));
                     this.$store.dispatch('changeParticipantsInfo', {data: response.data.participants.data});
                     this.getScheduleFinish = true
@@ -1000,7 +1005,7 @@
                     this.$refs.scheduleEndMinute.setValue(endMinutes[0] + ':' + endMinutes[1]);
                     this.endTime = this.scheduleData.end_at.split(' ')[0];
                     this.endMinutes = endMinutes[0] + ':' + endMinutes[1];
-                    this.isAllday = this.scheduleData.is_allday;
+                    this.isScheduleAllday = this.scheduleData.is_allday;
                     this.eventDesc = this.scheduleData.desc;
                     this.eventPlace = this.scheduleData.position;
                     this.$store.dispatch('changeParticipantsInfo', {data: this.scheduleData.participants.data});
@@ -1184,7 +1189,7 @@
                 this.scheduleRepeat = 0;
                 this.scheduleMaterialId = '';
                 this.eventDesc = '';
-                this.isAllday = false;
+                this.isScheduleAllday = false;
                 this.schedulePrivacy = false;
                 this.scheduleType = 'add';
                 this.linkageSelectedIds = {
