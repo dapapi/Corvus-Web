@@ -77,7 +77,7 @@
                         <img src="https://res.papitube.com/corvus/images/content-none.png" alt="" style="width: 100%">
                     </div>
                     <pagination :current_page="current_page" :method="getSales" :total_pages="total_pages"
-                                :total="total"></pagination>
+                                :total="total" class="mb-50"></pagination>
                 </div>
             </div>
         </div>
