@@ -245,8 +245,8 @@ export default {
                     return this.$options.components.ApprovalNumber
                 case 86 :
                     return this.$options.components.ApprovalTextArea
-                case 88 :
-                    return this.$options.components.ApprovalText
+                // case 88 :
+                //     return this.$options.components.ApprovalText
                 case 89 :
                     return this.$options.components.ApprovalDiv
                 case 91 : 

@@ -2,7 +2,7 @@
     <div class="container-fluid">
         <hr v-if="mode !== 'detail'">
         <div class="approver-row col-md-12 clearfix px-0">
-            <div class="float-left mt-20 col-md-1 px-0">审批人</div>
+            <div class="float-left mt-25 col-md-1 px-0">审批人</div>
             <div class="float-left col-md-11 pr-0">
                 <div class="approver-container float-left mt-20 ml-0" v-for="(item, index) in approver" :key="index">
                     <div class=" noselect" style="display:flex ">

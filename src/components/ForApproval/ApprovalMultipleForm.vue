@@ -1,28 +1,20 @@
 <template>
     <div class="col-md-12 pl-0 pr-0 multiple-container container">
-        <!-- <div v-for="i in n" :key="i" class="approval-multiple"> -->
-            <ApprovalMultipleForm  v-for="i in n" :key="i"  :consdata='consdata' :singlemode='singlemode' :n='i' @change='multipleDataConstructor'/>
-            <!-- <span>{{consdata[0].control_title}}({{i}})</span>
+            <span>{{consdata[0].control_title}}({{n}})</span>
             <hr>
             <div :is='sortChecker(item)' class="approval-multiple-option"
                 v-for="(item, index) in consdata" ref='selectpicker'
                 :key="index+Math.random()" 
-                :n="n"
                 :index = "index"
                 :title='item.control_title'
                 :options='item.control_enums'
                 :placeholder='item.control_placeholder'
-                v-show="!isShow[index]"
                 :consdata='[item]'
-                @change='saveChangeData'></div> -->
-        <!-- </div> -->
-        <span @click="addOption" class="add-option">添加选项+</span>
-        <hr>
+                @change='changeHandler'></div>
     </div>
 </template>
 
 <script>
-import ApprovalMultipleForm from '@/components/ForApproval/ApprovalMultipleForm'
 import ApprovalDiv from '@/components/ForApproval/ApprovalDiv'
 import ApprovalSummerNote from '@/components/ForApproval/ApprovalSummerNote'
 import ApprovalUploader from '@/components/ForApproval/ApprovalUploader'
@@ -39,7 +31,7 @@ import ApprovalMultipleSelector from '@/components/ForApproval/ApprovalMultipleS
 import ApprovalChainReaction from '@/components/ForApproval/ApprovalChainReaction'
 export default {
     name:'ApprovalMultiple',
-    props:['consdata','singlemode'],
+    props:['consdata','singlemode','n'],
     components:{
         ApprovalMultiple,
         ApprovalText,
@@ -54,15 +46,13 @@ export default {
         ApprovalDouble,
         ApprovalDiv,
         ApprovalMultipleSelector,
-        ApprovalChainReaction,
-        ApprovalMultipleForm
+        ApprovalChainReaction
     },
     data(){
         return{
-            n:1,
             changeData:[],
             isShow:{0:false,1:true},
-            multipleData:[]
+            emitData:[],
         }
     },
     computed:{
@@ -81,15 +71,15 @@ export default {
         this.refresh()
     },
     methods:{
-        multipleDataConstructor(params){
-            this.multipleData[params.n-1] = params.data
-            let {id} = this.consdata[0]
-            let {related_field} = this.consdata[0]
-            this.$emit('change',{key:id,value:this.multipleData,type:related_field})
-            // this.$emit('change',this.multipleData)
+        changeHandler(params){
+            if(!this.emitData.find(item=>item.key === params.key)){
+                this.emitData.push(params)
+            }else{
+                Object.assign(this.emitData.find(item=>item.key === params.key),params)
+            }
+            this.$emit('change',{n:this.n,data:this.emitData})
         },
         saveChangeData(params,index){
-            console.log(params,index);
             this.changeData[index] = params
             this.isShowhandler(1)
         },
@@ -99,12 +89,6 @@ export default {
             }else{
                 this.isShow[1] = true
             }
-            // this.$nextTick(() => {
-            //     this.refresh()
-            // })
-        },
-        addOption(){
-            this.n++
             // this.$nextTick(() => {
             //     this.refresh()
             // })
@@ -126,8 +110,8 @@ export default {
                     return this.$options.components.ApprovalNumber
                 case 86 :
                     return this.$options.components.ApprovalTextArea
-                case 88 :
-                    return this.$options.components.ApprovalText
+                // case 88 :
+                //     return this.$options.components.ApprovalText
                 case 89 :
                     return this.$options.components.ApprovalDiv
                 case 91 : 
@@ -158,10 +142,13 @@ export default {
 }
 .approval-multiple-option{
     margin-bottom: 20px;
+    width: 100% !important;
 }
 .add-option{
     cursor: pointer;
     color:royalblue;
     margin-left: 50px;
 }
+
+
 </style>

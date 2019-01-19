@@ -18,6 +18,9 @@
                                                      :to="'/approval/'+item.url+'/'+itemSub.url">
                                             <p>{{itemSub.value}}</p>
                                         </router-link>
+                                        <router-link to="/approval/contract/contract_management">
+                                            <p v-if="item.value === '合同'">合同管理</p>
+                                        </router-link>
                                     </div>
                                 </div>
                             </transition>
