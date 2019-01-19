@@ -3,6 +3,7 @@
             :data-live-search="isSelectable"
             :data-show-subtext="isSelectable" :id="_uid"
             :multiple="multiple" :title="title" v-model="valueListener">
+            <option v-if="!options" value=""></option>
         <selectorsOptions v-for="option in options" v-bind:id="option.id" :val="option.value || option.id"
                           :key="option.id">
             {{option.name || option.title || option.nickname}}

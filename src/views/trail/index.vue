@@ -133,7 +133,7 @@
                         </div>
                         <div class="example">
                             <div class="col-md-2 text-right float-left require">行业</div>
-                            <div class="col-md-10 float-left pl-0" v-if="industriesArr.length > 0">
+                            <div class="col-md-10 float-left pl-0">
                                 <selectors ref='industries' :options="industriesArr"
                                            @change="changeIndustry"></selectors>
                             </div>
@@ -148,14 +148,14 @@
                         </div>
                         <div class="example">
                             <div class="col-md-2 text-right float-left require">目标艺人</div>
-                            <div class="col-md-10 float-left pl-0" v-if="starsArr.length > 0">
+                            <div class="col-md-10 float-left pl-0" >
                                 <selectors :options="starsArr" @valuelistener="changeTargetStars"
                                            :multiple="true"></selectors>
                             </div>
                         </div>
                         <div class="example">
                             <div class="col-md-2 text-right float-left">推荐艺人</div>
-                            <div class="col-md-10 float-left pl-0" v-if="starsArr.length > 0">
+                            <div class="col-md-10 float-left pl-0">
                                 <selectors :options="starsArr" @valuelistener="changeRecommendStars"
                                            :multiple="true"></selectors>
                             </div>
