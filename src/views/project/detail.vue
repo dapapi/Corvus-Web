@@ -88,9 +88,9 @@
                                 <div class="col-md-2 float-left pl-0">{{ task.principal.data.name }}</div>
                                 <div class="col-md-4 float-left pl-0">{{ task.end_at }}</div>
                                 <div class="col-md-3 float-left pl-0">
-                                    <template v-if="task.status === 1">进行中</template>
-                                    <template v-if="task.status === 2">已完成</template>
-                                    <template v-if="task.status === 3">已停止</template>
+                                    <template v-if="task.status === 1"><span style="color: #FF9800;">进行中</span></template>
+                                    <template v-if="task.status === 2"><span style="color: #4CAF50;">已完成</span></template>
+                                    <template v-if="task.status === 3"><span style="color: #9E9E9E;">已停止</span></template>
                                 </div>
                             </div>
                         </div>
@@ -267,14 +267,15 @@
                                     </tr>
                                     <tbody>
                                     <tr v-for="task in projectTasksInfo">
-                                        <td class="pointer-content" @click="redirectTask(task.id)">{{ task.title
-                                            }}
+                                        <td class="pointer-content" @click="redirectTask(task.id)">
+                                            {{ task.title }}
                                         </td>
                                         <td>{{ task.type.data.title }}</td>
                                         <td>
-                                            <template v-if="task.status === 1">进行中</template>
-                                            <template v-if="task.status === 2">已完成</template>
-                                            <template v-if="task.status === 3">已停止</template>
+                                            <template v-if="task.status === 1"><span style="color: #FF9800;">进行中</span></template>
+                                            <template v-if="task.status === 2"><span style="color: #4CAF50;">已完成</span></template>
+                                            <template v-if="task.status === 3"><span style="color: #9E9E9E;">已停止</span></template>
+                                            <template v-if="task.status === 4"><span style="color: #F44336;">已延期</span></template>
                                         </td>
                                         <td>{{ task.principal.data.name }}</td>
                                         <td>{{ task.end_at }}</td>
