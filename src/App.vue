@@ -247,4 +247,9 @@
         -khtml-user-select: none
     }
 
+    .datepicker table tr td.today {
+        background: #e5e5e5 !important;
+        color: black !important;
+    }
+
 </style>

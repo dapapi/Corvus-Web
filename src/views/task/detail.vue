@@ -35,8 +35,16 @@
                         <div class="float-left pl-0 pr-2 col-md-1">
                             <i class="iconfont icon-yonghu pr-2" aria-hidden="true"></i>负责人
                         </div>
-                        <div class="font-weight-bold float-left" v-if="oldInfo">
-                            {{ oldInfo.principal?oldInfo.principal.data.name: '' }}
+                        <div class="font-weight-bold float-left">
+                            {{ oldInfo.principal ? oldInfo.principal.data.name: '' }}
+                        </div>
+                    </div>
+                    <div class="card-text clearfix example">
+                        <div class="float-left pl-0 pr-2 col-md-1">
+                            <i class="iconfont icon-guidang pr-2" aria-hidden="true"></i>任务类型
+                        </div>
+                        <div class="font-weight-bold float-left">
+                            {{ oldInfo.type ? oldInfo.type.data.title: '' }}
                         </div>
                     </div>
                     <div class="card-text clearfix example">
@@ -50,7 +58,7 @@
                             <template v-if="oldInfo.status === 4"><span style="color:#F44336">延期</span></template>
                         </div>
                     </div>
-                    <div class="clearfix example">
+                    <div class="clearfix mt-20">
                         <div class="pl-0">
                             <div class="float-left pl-0 pr-2 col-md-1">
                                 <i class="iconfont icon-jieshushijian pr-2" aria-hidden="true"></i>结束时间
@@ -143,16 +151,24 @@
                                         </div>
                                         <div class="card-text py-10 px-0 clearfix col-md-6 float-left ">
                                             <div class="col-md-3 float-left text-right pl-0">开始时间</div>
-                                            <div class="col-md-9 float-left font-weight-bold">
-                                                <EditDatepicker :content="taskInfo.start_at" :is-edit="isEdit"
+                                            <div class="col-md-9 float-left font-weight-bold" v-if="taskInfo.start_at">
+                                                <EditDatepicker class="col-md-6 px-0 float-left"
+                                                                :content="taskInfo.start_at[0]" :is-edit="isEdit"
                                                                 @change="(value) => changeTaskInfo(value, 'start_at')"></EditDatepicker>
+                                                <EditTimepicker class="col-md-6 px-0 float-left"
+                                                                :content="taskInfo.start_at[1]" :is-edit="isEdit"
+                                                                @change="(value) => changeTaskInfo(value, 'start_minutes')"></EditTimepicker>
                                             </div>
                                         </div>
                                         <div class="card-text py-10 px-0 clearfix col-md-6 float-left ">
                                             <div class="col-md-3 float-left text-right pl-0">结束时间</div>
-                                            <div class="col-md-9 float-left font-weight-bold">
-                                                <EditDatepicker :content="taskInfo.end_at" :is-edit="isEdit"
+                                            <div class="col-md-9 float-left font-weight-bold" v-if="taskInfo.end_at">
+                                                <EditDatepicker class="col-md-6 px-0 float-left"
+                                                                :content="taskInfo.end_at[0]" :is-edit="isEdit"
                                                                 @change="(value) => changeTaskInfo(value, 'end_at')"></EditDatepicker>
+                                                <EditTimepicker class="col-md-6 px-0 float-left"
+                                                                :content="taskInfo.end_at[1]" :is-edit="isEdit"
+                                                                @change="(value) => changeTaskInfo(value, 'end_minutes')"></EditTimepicker>
                                             </div>
                                         </div>
                                         <div class="card-text py-10 px-0 clearfix col-md-6 float-left ">
@@ -479,14 +495,14 @@
                     </div>
                     <div class="modal-body">
                         <!-- 报错？？ -->
-                        <div class="example">
-                            <div class="col-md-2 text-right float-left">关联资源</div>
-                            <div class="col-md-10 float-left">
-                                <normal-linkage-selectors ref="linkage" v-if="linkData.length>0" :myData="linkData"
-                                                          :data="linkData"
-                                                          @change="addLinkage"></normal-linkage-selectors>
-                            </div>
-                        </div>
+                        <!--<div class="example">-->
+                            <!--<div class="col-md-2 text-right float-left">关联资源</div>-->
+                            <!--<div class="col-md-10 float-left">-->
+                                <!--<normal-linkage-selectors ref="linkage" v-if="linkData.length>0" :myData="linkData"-->
+                                                          <!--:data="linkData"-->
+                                                          <!--@change="addLinkage"></normal-linkage-selectors>-->
+                            <!--</div>-->
+                        <!--</div>-->
                         <div class="example">
                             <div class="col-md-2 text-right float-left require">任务类型</div>
                             <div class="col-md-10 float-left pl-0">
@@ -672,9 +688,6 @@
         },
 
         computed: {
-            principalName: function () {
-                return this.$store.state.principalInfo.name
-            },
             routerId() {
                 return this.$route.params.id
             },
@@ -696,8 +709,12 @@
                         }
                     }
 
-                    this.taskInfo = response.data;
                     this.oldInfo = JSON.parse(JSON.stringify(response.data));
+                    this.taskInfo = response.data;
+                    this.taskInfo.start_at = this.taskInfo.start_at.split(' ');
+                    this.taskInfo.end_at = this.taskInfo.end_at.split(' ');
+                    this.taskInfo.start_at[1] = this.taskInfo.start_at[1].split(':')[0] + ':' + this.taskInfo.start_at[1].split(':')[1]
+                    this.taskInfo.end_at[1] = this.taskInfo.end_at[1].split(':')[0] + ':' + this.taskInfo.end_at[1].split(':')[1]
                     for (let i = 0; i < response.data.participants.data.length; i++) {
                         this.flagParticipantsIdArr.push(response.data.participants.data[i].id)
                     }
@@ -713,8 +730,24 @@
             },
 
             changeTaskInfo: function (value, name) {
-                if (name === 'principal_id') {
-                    value = this.$store.state.principalInfo.id;
+                switch (name) {
+                    case 'principal_id':
+                        value = this.$store.state.principalInfo.id;
+                        break;
+                    case 'start_minutes':
+                        if (this.changeInfo.start_at) {
+                            this.changeInfo.start_at = this.changeInfo.start_at + ' ' + value
+                        } else {
+                            this.changeInfo.start_at = this.taskInfo.start_at[0] + ' ' + value
+                        }
+                        return;
+                    case 'end_minutes':
+                        if (this.changeInfo.start_at) {
+                            this.changeInfo.end_at = this.changeInfo.end_at + ' ' + value
+                        } else {
+                            this.changeInfo.end_at = this.taskInfo.end_at[0] + ' ' + value
+                        }
+                        return
                 }
                 this.changeInfo[name] = value
             },
@@ -781,7 +814,6 @@
             },
 
             changeTaskBaseInfo: function () {
-                let changeStatus = false;
                 if (this.changeInfo.principal_id == this.oldInfo.principal.data.id) {
                     delete this.changeInfo.principal_id
                 }
@@ -791,10 +823,9 @@
                         if (this.changeInfo.principal_id) {
                             this.taskInfo.principal.data = this.$store.state.principalInfo
                         }
-                        changeStatus = true;
+                        toastr.success('修改成功')
                     })
                 }
-                // @todo 修改时间组件
                 if (this.changeParticipantInfo) {
                     let changeInfo = this.changeParticipantInfo;
                     let participant_ids = [];
@@ -818,18 +849,14 @@
                     if (del_participant_ids.length > 0) {
                         data.del_person_ids = del_participant_ids
                     }
-                    if (JSON.stringify(this.changeInfo) !== "{}") {
+                    if (JSON.stringify(data) !== "{}") {
                         fetch('post', '/tasks/' + this.taskId + '/participant', data).then(() => {
                             this.getTask();
-                            changeStatus = true;
+                            toastr.success('修改成功')
                         })
                     }
                 }
                 this.isEdit = false;
-                if (changeStatus) {
-                    toastr.success('修改成功')
-                }
-
             },
 
             uploadAttachment: function (url, name, size) {

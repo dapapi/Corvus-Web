@@ -74,11 +74,12 @@
                 }
             },
             memberFinder() {
-                if (this.members && this.tempStore) {
-                    return this.members.find(item => item.id == this.tempStore).name
-                } else {
-                    return ''
+                if (this.members && this.content) {
+                    if (this.contentType == 4 || this.contentType == 5) {
+                        return this.members.find(item => item.id == this.content).name
+                    }
                 }
+                return ''
             },
             ...mapState([
                 'userList'
