@@ -84,10 +84,10 @@ export default {
     mounted(){
         let _this = this
         $('#approval-great-module').on('show.bs.modal',function(){
-                _this.$nextTick(() => {
-                    _this.getFormContractor() 
+                // _this.$nextTick(() => {
+                //     _this.getFormContractor() 
 
-                })
+                // })
         })
          $('#approval-great-module').on('hidden.bs.modal',function(){
                 // _this.clearSignal()
@@ -111,8 +111,12 @@ export default {
         ApprovalChainReaction
     },
     watch:{
-        formData:function(){
+        formData:function(oldVal,newVal){
             this.clearSignal()
+             this.$nextTick(() => {
+                    this.getFormContractor() 
+
+                })
         }
     },
     update(){
@@ -161,7 +165,6 @@ export default {
             }
         },
         trendApproverChecker(params){
-            console.log(params);
             if(this.formData.condition.includes(params.key)){
                 let tempData = this.formData.condition.indexOf(params.key)
                 this.trendApprover.condition.splice(tempData,1,params.value)

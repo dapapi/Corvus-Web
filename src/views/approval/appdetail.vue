@@ -129,7 +129,7 @@
                         </div>
                         <div class="card-block">
                             <div class="col-md-12 pl-0">
-                                <TaskFollowUp :follow-type="'审批'" trail-type="contracts" :trail-id="list.form_instance_number"  ></TaskFollowUp>
+                                <TaskFollowUp :follow-type="'审批'" trail-type="approval_instances" :trail-id="list.form_instance_number"  ></TaskFollowUp>
                             </div>
                         </div>
                     </div>

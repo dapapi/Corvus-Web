@@ -8,6 +8,10 @@
                  v-if="trailInfo.progress_status !== 0">
                 <div class="font-info pointer-content" data-target="#refuseTrail" data-toggle="modal">拒绝</div>
             </div>
+             <div class="page-header-actions dropdown show task-dropdown float-right"
+                 v-if="trailInfo.progress_status == 0">
+                <div class="font-info pointer-content" data-target="#recoverTrail" data-toggle="modal">激活</div>
+            </div>
         </div>
 
         <div class="page-content container-fluid" v-if="trailInfo">
@@ -550,6 +554,29 @@
                     <div class="modal-footer">
                         <button class="btn btn-sm btn-white btn-pure" data-dismiss="modal">取消</button>
                         <button class="btn btn-primary" type="submit" @click="refuseTrail">确定</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+         <div class="modal fade" id="recoverTrail" aria-hidden="true" aria-labelledby="addLabelForm"
+             role="dialog" tabindex="-1" data-backdrop="static">
+            <div class="modal-dialog modal-simple">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <button type="button" class="close" aria-hidden="true" data-dismiss="modal">
+                            <i class="iconfont icon-guanbi" aria-hidden="true"></i>
+                        </button>
+                        <h4 class="modal-title">确认激活</h4>
+                    </div>
+                    <div class="modal-body">
+
+                        <div class="example">
+                           <h5>请确认激活</h5>
+                        </div>
+                    </div>
+                    <div class="modal-footer">
+                        <button class="btn btn-sm btn-white btn-pure" data-dismiss="modal">取消</button>
+                        <button class="btn btn-primary" type="submit" @click="recoverTrail">确定</button>
                     </div>
                 </div>
             </div>
@@ -1124,6 +1151,15 @@
             },
             changeCooperationType(value) {
                 this.trailInfo.cooperation_type = value
+            },
+            recoverTrail:function(){
+                  fetch('put', '/trails/' + this.trailInfo.id + '/recover').then(function (response) {
+                        toastr.success('激活成功');
+                        $('#recoverTrail').modal('hide');
+                        _this.getTrail()
+                    })
+                    this.trailInfo.progress_status = 1
+
             },
             refuseTrail: function () {
                 let _this = this
