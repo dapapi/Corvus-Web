@@ -63,7 +63,11 @@
                 // self.$emit('select', this.options[0].value, this.options[0].name)
             }
             if (this.default) {
-                this.setValue(this.default.values.data.value)
+                if(this.default.values){
+                    this.setValue(this.default.values.data.value)
+                }else{
+                    this.setValue(this.default)
+                }
             }
             if (this.getValue()) {
                 this.$emit('change', this.getValue())
@@ -92,6 +96,9 @@
                 this.$nextTick(() => {
                     this.refresh()
                 })
+            },
+            default:function(value){
+                this.setValue(this.default)
             }
         },
         methods: {
