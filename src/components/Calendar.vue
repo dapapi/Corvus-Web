@@ -149,6 +149,8 @@
                         if (currentClickTime - self.firstClickTime < 500) {
                             self.$emit('dayClick', formatDate);
                         }
+                    } else {
+                        self.$emit('showToast', event.pageX, event.pageY)
                     }
                     self.clickDate = formatDate;
                     self.firstClickTime = currentClickTime;
