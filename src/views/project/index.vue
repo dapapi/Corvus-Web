@@ -53,7 +53,7 @@
                 <div class="page-content tab-content nav-tabs-animate bg-white">
                     <div class="tab-pane animation-fade active" id="forum-project" role="tabpanel">
                         <table class="table table-hover is-indent mb-20" data-plugin="animateList" data-animate="fade"
-                               data-child="tr" data-selectable="selectable" v-if="projectsInfo.length > 0">
+                               data-child="tr" data-selectable="selectable" >
                             <tr class="animation-fade"
                                 style="animation-fill-mode: backwards; animation-duration: 250ms; animation-delay: 0ms;">
                                 <th class="cell-300" scope="col">项目名称</th>

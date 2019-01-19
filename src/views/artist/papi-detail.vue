@@ -22,9 +22,10 @@
 
         <div class="page-content container-fluid">
             <div class="panel col-md-12">
-                    <div class="card-block clearfix">
-                        <Upload @change='getUploadUrl' class="upload-image float-left mr-5" style="width:80px;height:80px;border-radius:50%;position:relative">
-                            <div  class="puls" :style="{ backgroundImage: 'url(' + uploadUrl + ')' }" v-if="uploadUrl">
+                    <div class="card-block clearfix pb-0">
+                        <Upload @change='getUploadUrl' class="upload-image float-left mr-5"
+                            style="width:80px;height:80px;border-radius:50%;position:relative">
+                            <div class="puls" :style="{ backgroundImage: 'url(' + uploadUrl + ')' }" v-if="uploadUrl">
                             </div>
                             <div class="puls" v-if="!uploadUrl">
                                 <img src="https://res-crm.papitube.com/image/artist-no-avatar.png" alt="">
@@ -33,7 +34,7 @@
                         <div class="float-left ml-10 mt-10" style="width:calc(100% - 100px)">
                             <h4 class="card-title">{{artistInfo.nickname}}</h4>
                             <div class=" clearfix example">
-                                <div class="col-md-6 float-left pl-0" v-if="artistInfo.publicity">
+                                <div class="col-md-5 float-left pl-0 mr-15" v-if="artistInfo.publicity">
                                     <div class="float-left pl-0 pr-2 col-md-3" >
                                         <i class="iconfont icon-yonghu pr-2" aria-hidden="true"></i>制作人
                                     </div>
@@ -45,7 +46,7 @@
                                     </div>
                                     
                                 </div>
-                            <div class="col-md-6 float-left pl-0" v-show="artistInfo.sign_contract_status == 1">
+                            <div class="col-md-6 float-left pl-0 ml-50" v-show="artistInfo.sign_contract_status == 1">
                                     <div class="float-left pl-0 pr-2 col-md-2">
                                         <i class="iconfont icon-yonghu pr-2" aria-hidden="true"></i>录入人
                                     </div>
@@ -84,7 +85,7 @@
                             </div>
                         </div>
                     </div>
-                    <div class="col-md-6 float-left pl-0 mb-20" >
+                    <div class="col-md-6 float-left pl-0 " >
                         <div class="col-md-13" v-if="artistInfo.sign_contract_status == 2&&scheduleShow.length>0" >
                             <div class="col-md-12"><i class="iconfont icon-ego-box pr-2"></i>日程</div>
                             <div class="clearfix example projectshow" v-for="(item,index) in scheduleShow" :key="index" >
@@ -94,7 +95,7 @@
                                 <div class="col-md-4 float-left">{{item.end_at}}</div>
                             </div>
                         </div>
-                       <div class="col-md-12 pl-10" v-show="artistInfo.sign_contract_status == 1">
+                       <div class="col-md-12 pl-10 mt-45" v-show="artistInfo.sign_contract_status == 1">
                             <div class="clearfix">
                                 <div class="col-md-8 float-left"><span>沟通状态</span></div>
                                 <div class="col-md-4 float-left font-weight-bold "  v-if="artistInfo.communication_status">
@@ -107,7 +108,7 @@
                             <div class="clearfix example ">
                                 <div class="col-md-8 float-left"><span>平台</span></div>
                                 <div class="col-md-4 float-left font-weight-bold " v-if="artistInfo.platform">
-                                            <template v-if="artistInfo.platform==1">
+                                            <!-- <template v-if="artistInfo.platform==1">
                                                     微博
                                             </template>
                                             <template v-else-if="artistInfo.platform==2">
@@ -118,23 +119,16 @@
                                             </template>
                                             <template v-else>
                                                 微博,抖音,小红书
-                                            </template>
+                                            </template> -->
+                                            <!-- {{artistSocialPlatform.find(item=>item.value.iartistInfo.platform)}} -->
                                 </div>
                             </div>
                             <div class="clearfix example " >
                                 <div class="col-md-8 float-left" >
-                                    <template v-if="artistInfo.platform==1">
-                                            微博地址
-                                    </template>
-                                    <template v-else-if="artistInfo.platform==2">
-                                            抖音地址
-                                    </template>
-                                    <template v-else-if="artistInfo.platform==3">
-                                            小红书地址
-                                    </template>
-                                    <template v-else>
-                                            微博,抖音,小红书地址
-                                    </template>
+                                    <!-- <div v-for="(item,index) in artistInfo.platform" :key="index">
+                                        {{item}}
+                                    </div> -->
+                                    
                                 </div>
                                 <div class="col-md-4 float-left font-weight-bold ">
                                     <template v-if="artistInfo.platform==1">
@@ -455,7 +449,7 @@
                                                 </div>
                                             </div>
                                             <div class="card-text py-10 px-0 clearfix col-md-6 float-left ">
-                                                <div class="col-md-4 float-left text-right pl-0">社交平台</div>
+                                                <div class="col-md-4 float-left text-right pl-0">平台</div>
                                                 <div class="col-md-8 float-left font-weight-bold">
                                                     <EditSelector :is-edit="isEdit" :multiple="true"
                                                                 :content="artistInfo.platform ? artistInfo.platform.split(',') : ''"
@@ -464,7 +458,7 @@
                                                 </div>
                                             </div>
                                             <div class="card-text py-10 px-0 clearfix col-md-6 float-left edit-height">
-                                                <div class="col-md-4 float-left text-right pl-0">与我司签约意向</div>
+                                                <div class="col-md-4 float-left text-right pl-0 pr-2">与我司签约意向</div>
                                                 <div class="col-md-8 float-left font-weight-bold">
                                                     <ConditionalInput ref="condition" :is-edit="isEdit" :content="artistInfo.intention"
                                                                     :input-content="artistInfo.intention_desc"
@@ -556,9 +550,9 @@
                                                     {{signState.find(item=>item.value === artistInfo.sign_contract_status).name}}                        
                                                 </div>
                                             </div>
-                                            <div class="card-text py-10 px-0 clearfix col-md-6 float-left ">
-                                                <div class="col-md-4 float-left text-right pl-0">孵化期</div>
-                                                <div class="col-md-12 float-left font-weight-bold" >
+                                            <div class="card-text py-10 px-0 clearfix col-md-12 float-left ">
+                                                <div class="col-md-2 float-left text-right pl-0">孵化期</div>
+                                                <div class="col-md-10 float-left font-weight-bold" >
                                                     <EditGroupDatePicker :content="Incubationperiod" :is-edit="isEdit"
                                                                         @change="changeArtistHatch"></EditGroupDatePicker>
                                                 </div>
@@ -678,7 +672,7 @@
                                 <datepicker @change="changeStartTime" ref="startTime"></datepicker>
                             </div>
                             <div class="col-md-5 float-left pl-0">
-                                <timepicker :default="startMinutes" @change="changeStartMinutes"></timepicker>
+                                <timepicker :default="startTaskMinutes" @change="changeStartMinutes" ref="taskstart"></timepicker>
                             </div>
                         </div>
                         <div class="example">
@@ -687,7 +681,7 @@
                                 <datepicker @change="changeEndTime" ref="deadline"></datepicker>
                             </div>
                             <div class="col-md-5 float-left pl-0">
-                                <timepicker :default="endMinutes" @change="changeEndMinutes"></timepicker>
+                                <timepicker :default="endTaskMinutes" @change="changeEndMinutes" ref="taskend"></timepicker>
                             </div>
                         </div>
                         <div class="example">
@@ -856,7 +850,7 @@
                                 <datepicker @change="changeStartTime" ref="scheduleStartDate"></datepicker>
                             </div>
                             <div class="col-md-5 float-left pl-0" v-show="!isAllday">
-                                <timepicker :default="startMinutes" @change="changeStartMinutes"
+                                <timepicker :default="startTaskMinutes" @change="changeStartMinutes"
                                             ref="scheduleStartMinute"></timepicker>
                             </div>
                         </div>
@@ -1130,8 +1124,10 @@
                 taskLevel: '',
                 startTime: '',
                 startMinutes: '00:00',
+                startTaskMinutes: '00:00',
                 endTime: '',
                 endMinutes: '00:00',
+                endTaskMinutes: '00:00',
                 taskIntroduce: '',
                 artistWorkName: '',
                 isEdit: false,
@@ -1235,15 +1231,16 @@
             $('#addTask').on('hidden.bs.modal', function () {
                 _this.$refs.mold.setValue('');//类型
                 _this.taskType = ''
-                _this.Person_id = '';//负责人
                 _this.$refs.taskpriority.setValue('');
                 _this.$refs.startTime.setValue('');
                 _this.$refs.deadline.setValue('');
+                _this.$refs.taskstart.setValue('00:00')
+                _this.$refs.taskend.setValue('00:00')
                 _this.$store.state.newParticipantsInfo=[];//参与人
                 _this.taskIntroduce = '';
                 _this.taskName = '';
-                _this.startMinutes = '00:00';
-                _this.endMinutes = '00:00';
+                _this.startTaskMinutes = '00:00';
+                _this.endTaskMinutes = '00:00';
             })
             //  清空视频
             $('#addWork').on('hidden.bs.modal', function () {
@@ -1347,7 +1344,7 @@
                     }else{
                         _this.artistInfo.sign_contract_other=2
                     }
-                    _this.tasksInfo = response.data.tasks.data
+                    _this.tasksInfo = response.data.tasks.data //任务数据
                     if (_this.tasksInfo.length > 0) {
                         for (let i = 0; i < _this.tasksInfo.length; i++) {
                             if (_this.tasksInfo[i].status == 2) {
@@ -1358,10 +1355,9 @@
                      //项目
                      if(response.data.trails){
                         for (let i = 0; i < response.data.trails.data.length; i++) {
-                            
                             if (response.data.trails.data[i].project) {
                                 response.data.trails.data[i].project.data.company = response.data.trails.data[i].client.data.company
-                                _this.ProjectsInfo.push(response.data.trails.data[i].project.data)
+                                _this.ProjectsInfo.push(response.data.trails.data[i].project.data)//项目数据
                             }
                         }
                      }
@@ -1682,6 +1678,7 @@
                     })
                 });
             },
+            //任务数据
             getArtistTasks: function () {
                 let _this = this;
                 fetch('get', '/bloggers/' + this.artistId+'/tasks').then(function (response) {
@@ -2012,8 +2009,8 @@
                 //     return
                 // }
                 let start,end,startMin,endMin
-                startMin = this.startMinutes.split(':')
-                endMin = this.endMinutes.split(':')
+                startMin = this.startTaskMinutes.split(':')
+                endMin = this.endTaskMinutes.split(':')
                 start =new Date(this.startTime).getTime()+startMin[0]*60*60*1000+startMin[1]*60*1000
                 end = new Date(this.endTime).getTime()+endMin[0]*60*60*1000+endMin[1]*60*1000
                 if(start>end){
@@ -2025,8 +2022,8 @@
                    title:this.taskName,
                    principal_id:this.Person_id,//负责人
                    participant_ids:this.participant_ids,
-                   start_at: this.startTime + ' ' + this.startMinutes,
-                   end_at: this.endTime + ' ' + this.endMinutes,
+                   start_at: this.startTime + ' ' + this.startTaskMinutes,
+                   end_at: this.endTime + ' ' + this.endTaskMinutes,
                    resource_type:1,
                    resourceable_id:this.artistInfo.id,
                    priority: this.taskLevel,
@@ -2063,7 +2060,7 @@
             }
             ,
             changeStartMinutes: function (value) {
-                this.startMinutes = value
+                this.startTaskMinutes = value
             }
             ,
             changeEndTime: function (value) {
@@ -2071,7 +2068,7 @@
             }
             ,
             changeEndMinutes: function (value) {
-                this.endMinutes = value
+                this.endTaskMinutes = value
             }
             ,
             //视频时间
@@ -2325,6 +2322,10 @@
 
     .puls span {
         font-size: 30px;
+    }
+    .puls img{
+        width: 100%;
+        height:100%;
     }
     .card-header:first-child{
         border-radius: calc(.215rem - 1px) calc(.215rem - 1px) 0 0;

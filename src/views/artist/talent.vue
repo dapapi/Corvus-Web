@@ -65,7 +65,7 @@
                                 <selectors :options="artistStatusArr" placeholder="请选择艺人沟通状态" @change="getStatus"></selectors>
                             </div>
                             <div class="col-md-3 example float-left">
-                                <selectors :options="artistSourceArr" placeholder="请选择艺人来源" @change="getSource"></selectors>
+                                <selectors :options="signState" placeholder="请选择签约状态" @change="getSource"></selectors>
                             </div>
                             <!--<div class="col-md-3 example float-left">-->
                             <!--<button type="button" class="btn btn-default waves-effect waves-classic float-right"-->
@@ -77,7 +77,7 @@
                         </div>
                         <table class="table table-hover is-indent ml-5" data-plugin="selectable"
                                data-selectable="selectable">
-                            <tr v-if="artistsInfo">
+                            <tr v-if="artistsInfo.length>0">
                                 <th class="w-50">
                                     <span class="checkbox-custom checkbox-primary">
                                         <input class="selectable-all" type="checkbox"
@@ -94,6 +94,21 @@
                                 <th class="cell-300" scope="col" v-if="artistsInfo.find(item=>item.sign_contract_status==2)">签约日期</th>
                                 <!-- <th class="cell-300" scope="col" v-if="artistsInfo.find(item=>item.sign_contract_status==2)">合同起始日</th>
                                 <th class="cell-300" scope="col" v-if="artistsInfo.find(item=>item.sign_contract_status==3)">合同终止日</th> -->
+                                <th class="cell-300" scope="col">录入时间</th>
+                                <th class="cell-300" scope="col">最后跟进时间</th>
+                            </tr>
+                            <tr v-if="artistsInfo.length==0">
+                                <th class="w-50">
+                                    <span class="checkbox-custom checkbox-primary">
+                                        <input class="selectable-all" type="checkbox"
+                                               @change="selectArtists('all')" v-model="selectAllStars">
+                                        <label></label>
+                                    </span>
+                                </th>
+                                <th class="cell-300" scope="col">姓名</th>
+                                <th class="cell-300" scope="col">微博粉丝</th>
+                                <th class="cell-300" scope="col">艺人来源</th>
+                                <th class="cell-300" scope="col">签约日期</th>
                                 <th class="cell-300" scope="col">录入时间</th>
                                 <th class="cell-300" scope="col">最后跟进时间</th>
                             </tr>
@@ -137,7 +152,7 @@
                                  style="width: 100%">
                         </div>
                         <pagination :current_page="current_page" :method="getArtists" :total_pages="total_pages"
-                                    :total="total" v-if="isShow"></pagination>
+                                    :total="total" v-if="isShow" class="mb-50"></pagination>
                     </div>
                     <div class="tab-pane animation-fade" id="forum-blogger" role="tabpanel" :class="!isShow?'active':''">
                         <div class="clearfix my-20">
@@ -146,11 +161,11 @@
                                     v-model="blogName" @blur='getBlogger()'>
                             </div>
                             <div class="col-md-3 example float-left">
-                                <selectors :options="artistTypeArr" @change="typeFilter" placeholder="请选择博主分类"></selectors>
-                            </div>
-                            <div class="col-md-3 example float-left">
                                 <selectors :options="papiCommunicationStatusArr" @change="CommunicationStatus"
                                         placeholder="请选择沟通状态"></selectors>
+                            </div>
+                            <div class="col-md-3 example float-left">
+                                <selectors :options="signState" @change="typeFilter" placeholder="请选择签约状态"></selectors>
                             </div>
                             <!-- <div class="col-md-3 example float-left">
                                 <button type="button" class="btn btn-default waves-effect waves-classic float-right"
@@ -180,6 +195,21 @@
                                 <th class="cell-300" scope="col" v-if="bloggerInfo.find(item=>item.sign_contract_status==2)">签约日期</th>
                                 <!-- <th class="cell-300" scope="col" v-if="bloggerInfo.find(item=>item.sign_contract_status==2)">合同起始日</th>
                                 <th class="cell-300" scope="col" v-if="bloggerInfo.find(item=>item.sign_contract_status==3)">合同终止日</th> -->
+                                <th class="cell-300" scope="col">录入时间</th>
+                                <th class="cell-300" scope="col">最后跟进时间</th>
+                            </tr>
+                            <tr v-if="bloggerInfo.length==0">
+                                <th class="w-50">
+                                    <span class="checkbox-custom checkbox-primary">
+                                        <input class="selectable-all" type="checkbox"
+                                               @change="selectArtists('all')" v-model="selectAllStars">
+                                        <label></label>
+                                    </span>
+                                </th>
+                                <th class="cell-300" scope="col">姓名</th>
+                                <th class="cell-300" scope="col">微博粉丝</th>
+                                <th class="cell-300" scope="col">艺人来源</th>
+                                <th class="cell-300" scope="col">签约日期</th>
                                 <th class="cell-300" scope="col">录入时间</th>
                                 <th class="cell-300" scope="col">最后跟进时间</th>
                             </tr>
@@ -219,12 +249,12 @@
                             </tbody>
 
                         </table>
-                        <div style="margin: 6rem auto;width: 100px" v-if="bloggerInfo.length==0&&artistsInfo!=='undefined'">
+                        <div style="margin: 6rem auto;width: 100px" v-if="bloggerInfo.length==0">
                             <img src="https://res.papitube.com/corvus/images/content-none.png" alt=""
                                  style="width: 100%">
                         </div>
-                        <pagination :current_page="current_page" :method="getBlogger" :total_pages="total_pages"
-                                    :total="total" v-if="!isShow"></pagination>
+                        <pagination :current_page="Bcurrent_page" :method="getBlogger" :total_pages="Btotal_pages"
+                                    :total="Btotal" v-if="!isShow" class="mb-50"></pagination>
                         
                     </div>
                 </div>
@@ -543,14 +573,21 @@
                             </div>
                         </div>
                         <div class="example" v-show="affixesType>0">
-                            <div class="col-md-2 text-right float-left require">上传附件</div>
+                            <div class="col-md-2 text-right float-left require">附件</div>
                             <div class="col-md-5 float-left pl-0">
-                                <span style="color:#01BCD4;cursor:pointer">上传附件</span>
-                                <FileUploader class="fileupload" @change="uploadAttachment"></FileUploader>
+                                <Upload  @change="uploadAttachment" class="upload-image">
+                                    <div  class="addMember-trigger-button addMember-trigger-left"><i
+                                            class="iconfont icon-tianjia"></i></div>
+                                </Upload>
                                 <div class="mt-5" v-for="(attach,index) in affixes" :key="index">
                                     {{attachmentTypeArr.find(item => item.value == attach.type).name}} -
                                     {{attach.title}}
                                 </div>
+                                <!-- <FileUploader class="fileupload" @change="uploadAttachment"></FileUploader>
+                                <div class="mt-5" v-for="(attach,index) in affixes" :key="index">
+                                    {{attachmentTypeArr.find(item => item.value == attach.type).name}} -
+                                    {{attach.title}}
+                                </div> -->
                             </div>
                         </div>
                         <div class="example">
@@ -595,7 +632,7 @@
                         <ListSelectMember :listName="'成员列表'" :selectName="'已选择成员'" :type="'change'"></ListSelectMember>
                     </div>
                     <div class="modal-footer">
-                        <button class="btn btn-sm btn-white btn-pure" data-dismiss="modal">取消</button>
+                        <button class="btn btn-sm btn-white btn-pure" data-dismiss="modal" @click="abrogate">取消</button>
                         <button class="btn btn-primary" type="submit" @click="giveProducer()">确定</button>
                     </div>
 
@@ -643,7 +680,11 @@
                 total: 0,
                 current_page: 1,
                 total_pages: 1,
+                Btotal: 0,
+                Bcurrent_page: 1,
+                Btotal_pages: 1,
                 customizeInfo: config.customizeInfo,
+                signState:config.signState,
                 yesOrNoArrs: [
                     {
                         name: '是',
@@ -716,6 +757,36 @@
                     {
                         value: 4,
                         name: '其他'
+                    },
+                ],
+                platformLists: [
+                    {
+                        value: 1,
+                        name: '微博'
+                    },
+                    {
+                        value: 2,
+                        name: '抖音'
+                    },
+                    {
+                        value: 3,
+                        name: '小红书'
+                    },
+                     {
+                        value: 12,
+                        name: ['微博','抖音']
+                    },
+                     {
+                        value: 13,
+                        name: ['微博','小红书']
+                    },
+                     {
+                        value: 23,
+                        name: ['抖音','小红书']
+                    },
+                     {
+                        value: 123,
+                        name: ['微博','抖音','小红书']
                     },
                 ],
                 star_douyin_infos: {
@@ -822,7 +893,8 @@
             },
             //获取艺人来源
             getSource: function (value) {
-                this.listData.source = value
+                console.log(value)
+                this.listData.sign_contract_status = value
                 this.getArtists()
             },
             //查询列表
@@ -833,7 +905,7 @@
                 }
                 this.listData.page = page
                 fetch('get', '/stars', this.listData).then(function (response) {
-                    console.log( response.data)
+                    console.log( response)
                     if(response.data){
                         _this.artistsInfo = response.data;
                     }
@@ -874,11 +946,14 @@
                 }
                 data.page = page
                 fetch('get', '/bloggers', data).then(function (response) {
-                    _this.bloggerInfo = response.data;
+                    
+                    if(response.data){
+                        _this.bloggerInfo = response.data;
+                    }
                     console.log(response.data)
-                    _this.current_page = response.meta.pagination.current_page;
-                    _this.total = response.meta.pagination.total;
-                    _this.total_pages = response.meta.pagination.total_pages;
+                    _this.Bcurrent_page = response.meta.pagination.current_page;
+                    _this.Btotal = response.meta.pagination.total;
+                    _this.Btotal_pages = response.meta.pagination.total_pages;
                     _this.isLoading = false;
                     _this.selectAllBlogger = false;
                     _this.selectedArtistsArr = [];
@@ -902,7 +977,7 @@
             },
             //选择博主类型
             typeFilter(value) {
-                this.blogType = value
+                this.blogStatus = value
                 this.getBlogger()
 
             },
@@ -1078,6 +1153,9 @@
                 })
 
             },
+             abrogate:function(){
+                this.$store.state.participantsInfo = []
+            },
             judge() {
                 if (this.selectedArtistsArr.length == 0) {
                     toastr.error('请先选择博主，再进行分配')
@@ -1098,12 +1176,12 @@
                 this.selectedArtistsArr = []
                 if(value == 0){
                     this.getArtists()
+                     this.isShow = true
                     
                 }else if(value == 1){
                     this.getBlogger()
-
+                    this.isShow = false
                 }
-                this.isShow = !this.isShow
             },
             giveBroker: function () {
                 let url, toast, data

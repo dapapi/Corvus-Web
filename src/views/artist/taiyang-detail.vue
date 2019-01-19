@@ -1332,14 +1332,14 @@
                     console.log(response.data)
                     _this.uploadUrl = _this.artistInfo.avatar
                     _this.artistProjectsInfo = []
-                    _this.artistTasksInfo = response.data.tasks.data
+                    _this.artistTasksInfo = response.data.tasks.data//任务数据
                    
-                    _this.artistWorksInfo = response.data.works.data
+                    _this.artistWorksInfo = response.data.works.data//作品数据
                     _this.affixes = response.data.affixes.data
                     for (let i = 0; i < response.data.trails.data.length; i++) {
                         if (response.data.trails.data[i].project) {
                             response.data.trails.data[i].project.data.company = response.data.trails.data[i].client.data.company
-                            _this.artistProjectsInfo.push(response.data.trails.data[i].project.data)
+                            _this.artistProjectsInfo.push(response.data.trails.data[i].project.data)//项目数据
                         }
                     }
                   
