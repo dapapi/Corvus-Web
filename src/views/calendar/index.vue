@@ -95,13 +95,16 @@
                 <div class="float-left p-0" style="width: 79%;">
                     <calendar :goto-date="selectedDate" v-if="!meetingRomeShow" @dayClick="showAddScheduleModal"
                               :calendars="selectedCalendar" :meeting-rome-list="meetingRomeList" ref="calendar"
-                              :is-meeting="isMeeting" @calendarDisplay="checkMeetingRoom"
+                              :is-meeting="isMeeting" @calendarDisplay="checkMeetingRoom" @showToast="showToast"
                               @scheduleClick="showScheduleModal" :calendarView="calendarView"></calendar>
                     <MeetingRoomCalendar v-show="meetingRomeShow" :meetingRomeList="meetingRomeList" ref="meetingRoom"
                                          @change="changeToCalendar"></MeetingRoomCalendar>
                 </div>
 
             </div>
+        </div>
+        <div class="calendar-toast" v-show="toastShow"
+             :style="'position: absolute;top:' + toastY + 'px; left: ' + toastX + 'px;'">双击创建日程
         </div>
 
         <!-- 新建/修改 日程 -->
@@ -355,7 +358,8 @@
                                     <div class="del-affix">
                                         <i class="iconfont icon-liulan pointer-content mr-4"
                                            @click="openFile(affix.url)"></i>
-                                        <i class="iconfont icon-shanchu1 pointer-content" @click="delAffix(affix.id)"></i>
+                                        <i class="iconfont icon-shanchu1 pointer-content"
+                                           @click="delAffix(affix.id)"></i>
                                     </div>
                                 </div>
                             </div>
@@ -639,6 +643,9 @@
                 noPermission: false,
                 getScheduleFinish: false,
                 calendarView: '',
+                toastX: 0,
+                toastY: 0,
+                toastShow: false,
             }
         },
 
@@ -848,6 +855,15 @@
                 } else {
                     this.linkageSelectedIds[type].push(value)
                 }
+            },
+
+            showToast: function (clientX, clientY) {
+                this.toastX = clientX - 100;
+                this.toastY = clientY - 25;
+                this.toastShow = true;
+                setTimeout(() => {
+                    this.toastShow = false
+                }, 1000)
             },
 
             addProjectMultipleMember: function () {
@@ -1407,6 +1423,13 @@
 
     .line-center .line-fixed-height {
         line-height: 34px;
+    }
+
+    .calendar-toast {
+        background: #f5f5f5;
+        padding: 2px 3px;
+        border-radius: 2px;
+        z-index: 1000;
     }
 
 </style>
