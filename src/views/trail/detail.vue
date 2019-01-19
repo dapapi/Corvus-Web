@@ -63,7 +63,7 @@
                                 <template v-else>
                                     0
                                 </template>
-                                /元
+                                元
                             </div>
                         </div>
                     </div>
