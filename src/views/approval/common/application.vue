@@ -37,8 +37,10 @@
                                     <!-- <th class="cell-300" scope="col">合同名称</th> -->
                                     <th class="cell-300" scope="col">申请人</th>
                                     <th class="cell-300 position-relative" scope="col">类型
-                                        <i class="iconfont icon-gengduo1" aria-hidden="true"
-                                           id="taskDropdown" data-toggle="dropdown" aria-expanded="false"></i>
+                                        <span class="icon md-caret-right font-size-20 mr-10 leftImg anmite"
+                                        id="taskDropdown" data-toggle="dropdown" aria-expanded="false"></span>
+                                        <!-- <i class="icon md-caret-right font-size-20 mr-10 leftImg anmite" aria-hidden="true"
+                                           id="taskDropdown" data-toggle="dropdown" aria-expanded="false"></i> -->
                                         <div class="dropdown-menu" aria-labelledby="taskDropdown" role="menu">
                                             <a class="dropdown-item" role="menuitem" >此处等</a>
                                             <a class="dropdown-item" role="menuitem" >后端</a>
@@ -144,5 +146,12 @@
     } */
     .project-search::-webkit-input-placeholder{
         font-weight: 200;
+    }
+    .anmite {
+        transform: rotate(90deg);
+        -ms-transform: rotate(90deg); /* IE 9 */
+        -moz-transform: rotate(90deg); /* Firefox */
+        -webkit-transform: rotate(90deg); /* Safari 和 Chrome */
+        -o-transform: rotate(90deg);
     }
 </style>

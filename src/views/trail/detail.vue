@@ -415,17 +415,12 @@
                                      data-target="#addTask">
                                     <button data-v-0aeb4e71="" type="button"
                                             class="site-action-toggle btn-raised btn btn-success btn-floating waves-effect waves-classic">
-<<<<<<< HEAD
                                         <i class="front-icon iconfont icon-tianjia1 animation-scale-up"
                                            aria-hidden="true"
                                            style="font-size: 30px"></i>
                                         <i class="back-icon iconfont icon-tianjia1 animation-scale-up"
                                            aria-hidden="true"
                                            style="font-size: 30px"></i>
-=======
-                                        <i class="front-icon iconfont icon-tianjia1 animation-scale-up" aria-hidden="true" style="font-size:30px"></i>
-                                        <i class="back-icon iconfont icon-tianjia1 animation-scale-up" aria-hidden="true" style="font-size:30px"></i>
->>>>>>> hp
                                     </button>
                                 </div>
                             </div>
@@ -500,7 +495,7 @@
                         <div class="example">
                             <div class="col-md-2 text-right float-left pl-0 require">任务优先级</div>
                             <div class="col-md-10 float-left pl-0">
-                                <selectors :options="priorityArr" @change="changeTaskLevel"></selectors>
+                                <selectors :options="taskLevelArr" @change="changeTaskLevel"></selectors>
                             </div>
                         </div>
                         <div class="example">
@@ -612,7 +607,7 @@
                 companyType: config.companyType,
                 customizeInfo: config.customizeInfo,
                 taskTypeArr: {},
-                priorityArr: config.priorityArr,
+                taskLevelArr: config.levelArr,
                 taskPrincipal: '',
                 startMinutes: '00:00',
                 taskType: '',
@@ -1158,6 +1153,7 @@
                 this.trailInfo.cooperation_type = value
             },
             recoverTrail:function(){
+                let _this = this
                   fetch('put', '/trails/' + this.trailInfo.id + '/recover').then(function (response) {
                         toastr.success('激活成功');
                         $('#recoverTrail').modal('hide');
