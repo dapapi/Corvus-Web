@@ -29,8 +29,15 @@
                 }
             });
             if (this.default) {
-                console.log(this.default.values.data.value);
-                this.setValue(this.default.values.data.value)
+                if(this.default.values){
+                    this.setValue(this.default.values.data.value)
+                }else{
+                    this.$nextTick(() => {
+                    this.setValue(this.default)
+                        
+                    })
+                    console.log(this.default);
+                }
             }
 
         },
@@ -39,7 +46,11 @@
              * 设置时间选择范围，一般用于设置截止时间大于开始时间
              * */
             default(value){
-                this.setValue(this.default.values.data.value)
+                if(this.default.values){
+                    this.setValue(this.default.values.data.value)
+                }else{
+                    this.setValue(this.default)
+                }
             },
             startDate(newValue) {
                 $(this.$el).datepicker('setStartDate', newValue);

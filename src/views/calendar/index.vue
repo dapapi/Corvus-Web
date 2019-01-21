@@ -95,13 +95,16 @@
                 <div class="float-left p-0" style="width: 79%;">
                     <calendar :goto-date="selectedDate" v-if="!meetingRomeShow" @dayClick="showAddScheduleModal"
                               :calendars="selectedCalendar" :meeting-rome-list="meetingRomeList" ref="calendar"
-                              :is-meeting="isMeeting" @calendarDisplay="checkMeetingRoom"
+                              :is-meeting="isMeeting" @calendarDisplay="checkMeetingRoom" @showToast="showToast"
                               @scheduleClick="showScheduleModal" :calendarView="calendarView"></calendar>
                     <MeetingRoomCalendar v-show="meetingRomeShow" :meetingRomeList="meetingRomeList" ref="meetingRoom"
                                          @change="changeToCalendar"></MeetingRoomCalendar>
                 </div>
 
             </div>
+        </div>
+        <div class="calendar-toast" v-show="toastShow"
+             :style="'position: absolute;top:' + toastY + 'px; left: ' + toastX + 'px;'">双击创建日程
         </div>
 
         <!-- 新建/修改 日程 -->
@@ -144,7 +147,7 @@
                             <div class="col-md-5 float-left pl-0">
                                 <datepicker @change="changeStartTime" ref="scheduleStartDate"></datepicker>
                             </div>
-                            <div class="col-md-5 float-left pl-0" v-show="!isAllday">
+                            <div class="col-md-5 float-left pl-0" v-show="!isScheduleAllday">
                                 <timepicker :default="startMinutes" @change="changeStartMinutes"
                                             ref="scheduleStartMinute"></timepicker>
                             </div>
@@ -154,7 +157,7 @@
                             <div class="col-md-5 float-left pl-0">
                                 <datepicker @change="changeEndTime" ref="scheduleEndDate"></datepicker>
                             </div>
-                            <div class="col-md-5 float-left pl-0" v-show="!isAllday">
+                            <div class="col-md-5 float-left pl-0" v-show="!isScheduleAllday">
                                 <timepicker :default="endMinutes" @change="changeEndMinutes"
                                             ref="scheduleEndMinute"></timepicker>
                             </div>
@@ -163,8 +166,8 @@
                             <div class="col-md-2 text-right float-left"></div>
                             <div class="col-md-10 float-left pl-0">
                                 <div class="checkbox-custom checkbox-primary">
-                                    <input type="checkbox" id="isAllDay" @change="changeIsAllDay" v-model="isAllday">
-                                    <label for="isAllDay">全天</label>
+                                    <input type="checkbox" id="isScheduleAllday" @change="changeIsAllDay" v-model="isScheduleAllday">
+                                    <label for="isScheduleAllday">全天</label>
                                 </div>
                             </div>
                         </div>
@@ -355,7 +358,8 @@
                                     <div class="del-affix">
                                         <i class="iconfont icon-liulan pointer-content mr-4"
                                            @click="openFile(affix.url)"></i>
-                                        <i class="iconfont icon-zuofei pointer-content" @click="delAffix(affix.id)"></i>
+                                        <i class="iconfont icon-shanchu1 pointer-content"
+                                           @click="delAffix(affix.id)"></i>
                                     </div>
                                 </div>
                             </div>
@@ -618,7 +622,6 @@
                 scheduleRepeat: 0,
                 scheduleData: '',
                 scheduleParticipants: '',
-                isAllday: false,
                 schedulePrivacy: false,
                 meetingRomeList: '',
                 allMeetingRomeList: '',
@@ -639,6 +642,9 @@
                 noPermission: false,
                 getScheduleFinish: false,
                 calendarView: '',
+                toastX: 0,
+                toastY: 0,
+                toastShow: false,
             }
         },
 
@@ -850,6 +856,15 @@
                 }
             },
 
+            showToast: function (clientX, clientY) {
+                this.toastX = clientX - 100;
+                this.toastY = clientY - 25;
+                this.toastShow = true;
+                setTimeout(() => {
+                    this.toastShow = false
+                }, 1000)
+            },
+
             addProjectMultipleMember: function () {
                 let memberIds = [];
                 let selectedMember = this.$store.state.participantsInfo;
@@ -939,6 +954,12 @@
                     }
                     this.noPermission = false;
                     this.scheduleData = response.data;
+                    if (this.scheduleData.privacy) {
+                        this.schedulePrivacy = true
+                    }
+                    if (this.scheduleData.is_allday) {
+                        this.isScheduleAllday = true
+                    }
                     this.scheduleParticipants = JSON.parse(JSON.stringify(response.data.participants.data));
                     this.$store.dispatch('changeParticipantsInfo', {data: response.data.participants.data});
                     this.getScheduleFinish = true
@@ -984,7 +1005,7 @@
                     this.$refs.scheduleEndMinute.setValue(endMinutes[0] + ':' + endMinutes[1]);
                     this.endTime = this.scheduleData.end_at.split(' ')[0];
                     this.endMinutes = endMinutes[0] + ':' + endMinutes[1];
-                    this.isAllday = this.scheduleData.is_allday;
+                    this.isScheduleAllday = this.scheduleData.is_allday;
                     this.eventDesc = this.scheduleData.desc;
                     this.eventPlace = this.scheduleData.position;
                     this.$store.dispatch('changeParticipantsInfo', {data: this.scheduleData.participants.data});
@@ -1168,7 +1189,7 @@
                 this.scheduleRepeat = 0;
                 this.scheduleMaterialId = '';
                 this.eventDesc = '';
-                this.isAllday = false;
+                this.isScheduleAllday = false;
                 this.schedulePrivacy = false;
                 this.scheduleType = 'add';
                 this.linkageSelectedIds = {
@@ -1407,6 +1428,13 @@
 
     .line-center .line-fixed-height {
         line-height: 34px;
+    }
+
+    .calendar-toast {
+        background: #f5f5f5;
+        padding: 2px 3px;
+        border-radius: 2px;
+        z-index: 1000;
     }
 
 </style>

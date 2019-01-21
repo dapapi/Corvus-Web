@@ -9,7 +9,7 @@
                    data-toggle="dropdown" aria-expanded="false"></i>
                 <div class="dropdown-menu dropdown-menu-right task-dropdown-item" aria-labelledby="taskDropdown"
                      role="menu" x-placement="bottom-end">
-                    <a class="dropdown-item" role="menuitem" data-target="#refuseTrail" data-toggle="modal">拒绝</a>
+                    <a class="dropdown-item" role="menuitem" data-target="#refuseTrail" data-toggle="modal" v-if="trailInfo.progress_status !== 0">拒绝</a>
                     <a class="dropdown-item" role="menuitem" v-if="trailInfo.take_type == 1"
                        @click="changeTrailType(1)">领取</a>
                     <a class="dropdown-item" role="menuitem" v-if="trailInfo.take_type == 1" data-target="#addMembers"

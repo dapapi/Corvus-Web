@@ -1,28 +1,21 @@
 <template>
     <div class="col-md-12 pl-0 pr-0 multiple-container container">
-        <!-- <div v-for="i in n" :key="i" class="approval-multiple"> -->
-            <ApprovalMultipleForm  v-for="i in n" :key="i" :consdata='consdata' :singlemode='singlemode' :n='i' :total='n' @change='multipleDataConstructor' @formMinus='formMinus' :default-data='multipleData'/>
-            <!-- <span>{{consdata[0].control_title}}({{i}})</span>
+            <span>{{consdata[0].control_title}}({{n}})</span>
+            <button type="button" class="close" v-if="total>1" @click='formMinus(n)'><span aria-hidden="true">×</span></button>
             <hr>
             <div :is='sortChecker(item)' class="approval-multiple-option"
                 v-for="(item, index) in consdata" ref='selectpicker'
                 :key="index+Math.random()" 
-                :n="n"
                 :index = "index"
                 :title='item.control_title'
                 :options='item.control_enums'
                 :placeholder='item.control_placeholder'
-                v-show="!isShow[index]"
-                :consdata='[item]'
-                @change='saveChangeData'></div> -->
-        <!-- </div> -->
-        <span @click="addOption" class="add-option">添加选项+</span>
-        <hr>
+                :consdata='consdataHandler(item,index)'
+                @change='changeHandler'></div>
     </div>
 </template>
 
 <script>
-import ApprovalMultipleForm from '@/components/ForApproval/ApprovalMultipleForm'
 import ApprovalDiv from '@/components/ForApproval/ApprovalDiv'
 import ApprovalSummerNote from '@/components/ForApproval/ApprovalSummerNote'
 import ApprovalUploader from '@/components/ForApproval/ApprovalUploader'
@@ -39,7 +32,7 @@ import ApprovalMultipleSelector from '@/components/ForApproval/ApprovalMultipleS
 import ApprovalChainReaction from '@/components/ForApproval/ApprovalChainReaction'
 export default {
     name:'ApprovalMultiple',
-    props:['consdata','singlemode'],
+    props:['consdata','singlemode','n','total','defaultData'],
     components:{
         ApprovalMultiple,
         ApprovalText,
@@ -54,15 +47,13 @@ export default {
         ApprovalDouble,
         ApprovalDiv,
         ApprovalMultipleSelector,
-        ApprovalChainReaction,
-        ApprovalMultipleForm
+        ApprovalChainReaction
     },
     data(){
         return{
-            n:1,
             changeData:[],
             isShow:{0:false,1:true},
-            multipleData:[]
+            emitData:[],
         }
     },
     computed:{
@@ -81,26 +72,26 @@ export default {
         this.refresh()
     },
     methods:{
-        formMinus(params){
-            for (const key in this.consdata) {
-                this.consdata[key].control_value = ''
+        consdataHandler(params,index){
+            if(this.defaultData[this.n-1] && this.defaultData[this.n-1].find(item=>item.key === params.id)){
+                let tempData = this.defaultData[this.n-1].find(item=>item.key === params.id)
+                return [Object.assign(this.consdata[index],{control_value:tempData.value})]
+            }else{
+                return [this.consdata[index]]
             }
-            this.n = this.n-1
-            this.multipleData.splice(params-1,1)
-            let {related_field} = this.consdata[0]
-            let {id} = this.consdata[0]
-            this.$emit('change',{key:id,value:this.multipleData,type:related_field})
-
         },
-        multipleDataConstructor(params){
-            this.multipleData[params.n-1] = params.data
-            let {id} = this.consdata[0]
-            let {related_field} = this.consdata[0]
-            this.$emit('change',{key:id,value:this.multipleData,type:related_field})
-            // this.$emit('change',this.multipleData)
+        formMinus(params){
+            this.$emit('formMinus',params)
+        },
+        changeHandler(params){
+            if(!this.emitData.find(item=>item.key === params.key)){
+                this.emitData.push(params)
+            }else{
+                Object.assign(this.emitData.find(item=>item.key === params.key),params)
+            }
+            this.$emit('change',{n:this.n,data:this.emitData})
         },
         saveChangeData(params,index){
-            console.log(params,index);
             this.changeData[index] = params
             this.isShowhandler(1)
         },
@@ -110,15 +101,6 @@ export default {
             }else{
                 this.isShow[1] = true
             }
-            // this.$nextTick(() => {
-            //     this.refresh()
-            // })
-        },
-        addOption(){
-            for (const key in this.consdata) {
-                this.consdata[key].control_value = ''
-            }
-            this.n++
             // this.$nextTick(() => {
             //     this.refresh()
             // })
@@ -140,8 +122,8 @@ export default {
                     return this.$options.components.ApprovalNumber
                 case 86 :
                     return this.$options.components.ApprovalTextArea
-                case 88 :
-                    return this.$options.components.ApprovalText
+                // case 88 :
+                //     return this.$options.components.ApprovalText
                 case 89 :
                     return this.$options.components.ApprovalDiv
                 case 91 : 
@@ -172,10 +154,16 @@ export default {
 }
 .approval-multiple-option{
     margin-bottom: 20px;
+    width: 100% !important;
 }
 .add-option{
     cursor: pointer;
     color:royalblue;
     margin-left: 50px;
 }
+.close{
+    transform: scale(0.6);
+    color: rgba(7, 17, 27, 0.7)
+}
+
 </style>

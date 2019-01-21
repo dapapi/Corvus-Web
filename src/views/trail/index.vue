@@ -17,22 +17,20 @@
                                v-model="trailFilter" @keyup.enter='filterGo' @blur='filterGo'>
                     </div>
                     <div class="col-md-3 example float-left">
-                        <selectors :options="progressStatus" :resetinfo='resetInfo' @change="progressStatusFilter"
+                        <selectors :options="currentUser.organization_id === 411?businessStatus:papiStatus" :resetinfo='resetInfo' @change="progressStatusFilter"
                                    placeholder="请选择线索类型"></selectors>
                     </div>
                     <div class="col-md-3 example float-left">
                         <selectors ref='principal_id' :options="memberList" multiple='true'
                                    @valuelistener="principalFilter" placeholder="请选择负责人"></selectors>
-                        <span v-if="fetchData.principal_ids" class="clear-principal-filter"
-                              @click="clearPrincipalFilter">&nbsp;&nbsp;x</span>
                     </div>
-                    <!--<div class="col-md-3 example float-left">-->
-                    <!--<button type="button" class="btn btn-default waves-effect waves-classic float-right"-->
-                    <!--data-toggle="modal" data-target="#customizeContent"-->
-                    <!--data-placement="right" title="">-->
-                    <!--自定义筛选-->
-                    <!--</button>-->
-                    <!--</div>-->
+                    <div class="col-md-3 example float-left">
+                    <button type="button" class="btn btn-default waves-effect waves-classic float-right"
+                    data-toggle="modal" data-target="#customizeContent"
+                    data-placement="right" title="">
+                    自定义筛选
+                    </button>
+                    </div>
                 </div>
 
                 <div class="col-md-12">
@@ -77,7 +75,7 @@
                         <img src="https://res.papitube.com/corvus/images/content-none.png" alt="" style="width: 100%">
                     </div>
                     <pagination :current_page="current_page" :method="getSales" :total_pages="total_pages"
-                                :total="total"></pagination>
+                                :total="total" class="mb-50"></pagination>
                 </div>
             </div>
         </div>
@@ -128,12 +126,12 @@
                             <TrailOrigin class="require" :trailType='trailType'
                                          typeName='线索' alwaysShow='true'
                                          @changeTrailOrigin='changeTrailOrigin'
-                                         @changeEmail='changeEmail'
+                                         @changeEmail='changeEmail' submit='true'
                                          @changeTrailOriginPerson='changeTrailOriginPerson'/>
                         </div>
                         <div class="example">
                             <div class="col-md-2 text-right float-left require">行业</div>
-                            <div class="col-md-10 float-left pl-0" v-if="industriesArr.length > 0">
+                            <div class="col-md-10 float-left pl-0">
                                 <selectors ref='industries' :options="industriesArr"
                                            @change="changeIndustry"></selectors>
                             </div>
@@ -148,14 +146,14 @@
                         </div>
                         <div class="example">
                             <div class="col-md-2 text-right float-left require">目标艺人</div>
-                            <div class="col-md-10 float-left pl-0" v-if="starsArr.length > 0">
+                            <div class="col-md-10 float-left pl-0" >
                                 <selectors :options="starsArr" @valuelistener="changeTargetStars"
                                            :multiple="true"></selectors>
                             </div>
                         </div>
                         <div class="example">
                             <div class="col-md-2 text-right float-left">推荐艺人</div>
-                            <div class="col-md-10 float-left pl-0" v-if="starsArr.length > 0">
+                            <div class="col-md-10 float-left pl-0">
                                 <selectors :options="starsArr" @valuelistener="changeRecommendStars"
                                            :multiple="true"></selectors>
                             </div>
@@ -271,12 +269,25 @@
                 trailStatus: '',
                 cooperation: '',
                 filterData: '',
-                progressStatus: [{
+                businessStatus: [{
                     'name': '全部',
                     'value': ''
                 }, {
                     'name': '商务线索',
-                    'value': '0'
+                    'value': '3'
+                }, {
+                    'name': '影视线索',
+                    'value': '1'
+                }, {
+                    'name': '综艺线索',
+                    'value': '2'
+                }],
+                papiStatus: [{
+                    'name': '全部',
+                    'value': ''
+                }, {
+                    'name': 'papi',
+                    'value': '4'
                 }, {
                     'name': '影视线索',
                     'value': '1'
@@ -291,6 +302,7 @@
                 isLoading: true,
                 cleanUp: false,
                 trailIsLocked:'',
+                
             }
         },
         created() {

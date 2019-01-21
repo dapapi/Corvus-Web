@@ -18,16 +18,17 @@ export default {
     },
     methods:{
         defaultDataChecker(){
-            if(this.defaultData && this.consdata){
-                for (const i in this.defaultData) {
-                    if (this.defaultData[i].key === this.consdata[0].control_title) {
-                        console.log(this.defaultData[i]);
-                        this.$nextTick((params) => {
-                            // $(this.$el).selectpicker('val', this.defaultData[i].values.data.value);
-                            this.defaultDate = this.defaultData[i]
-                        })
-                    }
-                }
+            if(this.consdata[0].control_value){
+                this.defaultDate = this.consdata[0].control_value
+                // for (const i in this.defaultData) {
+                //     if (this.defaultData[i].key === this.consdata[0].control_title) {
+                //         console.log(this.defaultData[i]);
+                //         this.$nextTick((params) => {
+                //             // $(this.$el).selectpicker('val', this.defaultData[i].values.data.value);
+                //             this.defaultDate = this.defaultData[i]
+                //         })
+                //     }
+                // }
             }
         },
         change(params){

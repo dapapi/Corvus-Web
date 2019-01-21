@@ -106,8 +106,9 @@
                                            @change="(value) => addInfo(value, field.id )"></EmitInput>
                             </template>
                             <template v-if="field.field_type === 2">
-                                <Selectors :default='newArray.find(item=>item.id === field.id)'
-                                           :options="field.contentArr"
+                                <Selectors :default="['合作类型','状态'].includes(field.key)?(field.key=='合作类型'?cooperationDefault:trailStatusDefault):newArray.find(item=>item.id === field.id)"
+                                           :options="['合作类型','状态'].includes(field.key)?(field.key=='合作类型'?cooperationTypeArr:trailStatusArr):field.contentArr"
+                                           
                                            @change="(value) => addInfo(value, field.id )"></Selectors>
                             </template>
                             <template v-if="field.field_type === 4">
@@ -121,7 +122,7 @@
                             </template>
                             <template v-if="field.field_type === 6">
                                 <Selectors :default='newArray.find(item=>item.id === field.id)'
-                                           :options="field.contentArr" :multiple="true"
+                                           :options="['合作类型','状态'].includes(filed.key)?(filed.key=='合作类型'?cooperationTypeArr:trailStatusArr):field.contentArr" :multiple="true" 
                                            @change="(value) => addInfo(value.join('|'), field.id )"></Selectors>
                             </template>
                             <template v-if="field.field_type === 8">
@@ -183,6 +184,8 @@
                 trailsArr: [],
                 trailOrigin: '',
                 trailOriginArr: config.trailOrigin,
+                trailStatusArr:config.trailStatusArr,
+                cooperationTypeArr:config.cooperationTypeArr,
                 starsArr: [],
                 bloggerArr: [],
                 startTime: '',
@@ -197,6 +200,9 @@
                 approver: [],
                 newArray: [],
                 user: '',
+                cooperationDefault:'',
+                trailStatusDefault:'',
+
             }
         },
         watch: {
@@ -302,6 +308,8 @@
                 this.$refs.trailOrigin.setValue(trailInfo.resource_type);
                 this.trailOrigin = trailInfo.resource_type;
                 this.projectBaseInfo.trail.id = trailInfo.id;
+                this.trailStatusDefault = trailInfo.status
+                this.cooperationDefault = trailInfo.cooperation_type
                 switch (trailInfo.resource_type) {
                     case 1:
                         this.trailOriginContent = JSON.parse(JSON.stringify(trailInfo.resource));

@@ -63,11 +63,11 @@ export default {
         },
         update(){
             this.refresh()
-            this.defaultDataChecker()
         },
         watch: {
             consdata:function(value){
                  this.sourceChecker()
+                 this.defaultDataChecker()
             },
             n:function(value){
 
@@ -129,23 +129,29 @@ export default {
         }
         },
         methods: {
-            defaultDataChecker(params){
-                if(this.defaultData && this.consdata){
-                    for (const i in this.defaultData) {
-                        if(params){
-                            this.$nextTick(() => {
-                                this.valueListener = params.find(item=>item.title === this.defaultData[i].key).id
-                            })
-                        }else{
-                            if (this.defaultData[i].key === this.consdata[0].control_title) {
-                                this.$nextTick(() => {
-                                    this.valueListener = this.defaultData[i].values.data.value
-                                    this.setValue(this.defaultData[i].values.data.value)
-                                })
-                            }
-                        }
-                    }
+            defaultDataChecker(){
+                if(this.consdata[0].control_value){
+                    console.log(this.consdata[0].control_value);
+                        this.valueListener = this.consdata[0].control_value
+                        this.setValue(this.consdata[0].control_value)
+                        this.refresh()
                 }
+                // if(this.defaultData && this.consdata){
+                //     for (const i in this.defaultData) {
+                //         if(params){
+                //             this.$nextTick(() => {
+                //                 this.valueListener = params.find(item=>item.title === this.defaultData[i].key).id
+                //             })
+                //         }else{
+                //             if (this.defaultData[i].key === this.consdata[0].control_title) {
+                //                 this.$nextTick(() => {
+                //                     this.valueListener = this.defaultData[i].values.data.value
+                //                     this.setValue(this.defaultData[i].values.data.value)
+                //                 })
+                //             }
+                //         }
+                //     }
+                // }
             },
             sourceChecker(){
                 let _this = this
@@ -156,17 +162,18 @@ export default {
                             _this.$nextTick(() => {
                                 _this.refresh()
                             })
-                            console.log(params.data);
-                            if(_this.defaultData){
-                                if(params.data[0].id){
-                                    // _this.valueListener = params.data.find(item=>item.title === _this.defaultData)
-                                    _this.defaultDataChecker(params.data)
-                                }
-                                _this.$nextTick(() => {
-                                    _this.defaultDataChecker()
-                                    
-                                })
-                            }
+                            _this.$nextTick(() => {
+                                _this.defaultDataChecker()
+                            })
+                            // if(_this.defaultData){
+                            //     if(params.data[0].id){
+                            //         // _this.valueListener = params.data.find(item=>item.title === _this.defaultData)
+                            //         _this.defaultDataChecker()
+                            //     }
+                            //     _this.$nextTick(() => {
+                            //         _this.defaultDataChecker()
+                            //     })
+                            // }
                         })
                     }
                 }else{

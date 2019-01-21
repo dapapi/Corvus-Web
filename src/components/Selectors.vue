@@ -3,6 +3,7 @@
             :data-live-search="isSelectable"
             :data-show-subtext="isSelectable" :id="_uid"
             :multiple="multiple" :title="title" v-model="valueListener">
+            <option v-if="!options" value=""></option>
         <selectorsOptions v-for="option in options" v-bind:id="option.id" :val="option.value || option.id"
                           :key="option.id">
             {{option.name || option.title || option.nickname}}
@@ -62,7 +63,11 @@
                 // self.$emit('select', this.options[0].value, this.options[0].name)
             }
             if (this.default) {
-                this.setValue(this.default.values.data.value)
+                if(this.default.values){
+                    this.setValue(this.default.values.data.value)
+                }else{
+                    this.setValue(this.default)
+                }
             }
             if (this.getValue()) {
                 this.$emit('change', this.getValue())
@@ -91,6 +96,9 @@
                 this.$nextTick(() => {
                     this.refresh()
                 })
+            },
+            default:function(value){
+                this.setValue(this.default)
             }
         },
         methods: {

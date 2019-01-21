@@ -8,6 +8,10 @@
                  v-if="trailInfo.progress_status !== 0">
                 <div class="font-info pointer-content" data-target="#refuseTrail" data-toggle="modal">拒绝</div>
             </div>
+             <div class="page-header-actions dropdown show task-dropdown float-right"
+                 v-if="trailInfo.progress_status == 0">
+                <div class="font-info pointer-content" data-target="#recoverTrail" data-toggle="modal">激活</div>
+            </div>
         </div>
 
         <div class="page-content container-fluid" v-if="trailInfo">
@@ -59,7 +63,7 @@
                                 <template v-else>
                                     0
                                 </template>
-                                /元
+                                元
                             </div>
                         </div>
                     </div>
@@ -411,17 +415,12 @@
                                      data-target="#addTask">
                                     <button data-v-0aeb4e71="" type="button"
                                             class="site-action-toggle btn-raised btn btn-success btn-floating waves-effect waves-classic">
-<<<<<<< HEAD
                                         <i class="front-icon iconfont icon-tianjia1 animation-scale-up"
                                            aria-hidden="true"
                                            style="font-size: 30px"></i>
                                         <i class="back-icon iconfont icon-tianjia1 animation-scale-up"
                                            aria-hidden="true"
                                            style="font-size: 30px"></i>
-=======
-                                        <i class="front-icon iconfont icon-tianjia1 animation-scale-up" aria-hidden="true" style="font-size:30px"></i>
-                                        <i class="back-icon iconfont icon-tianjia1 animation-scale-up" aria-hidden="true" style="font-size:30px"></i>
->>>>>>> hp
                                     </button>
                                 </div>
                             </div>
@@ -496,7 +495,7 @@
                         <div class="example">
                             <div class="col-md-2 text-right float-left pl-0 require">任务优先级</div>
                             <div class="col-md-10 float-left pl-0">
-                                <selectors :options="priorityArr" @change="changeTaskLevel"></selectors>
+                                <selectors :options="taskLevelArr" @change="changeTaskLevel"></selectors>
                             </div>
                         </div>
                         <div class="example">
@@ -559,6 +558,29 @@
                 </div>
             </div>
         </div>
+         <div class="modal fade" id="recoverTrail" aria-hidden="true" aria-labelledby="addLabelForm"
+             role="dialog" tabindex="-1" data-backdrop="static">
+            <div class="modal-dialog modal-simple">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <button type="button" class="close" aria-hidden="true" data-dismiss="modal">
+                            <i class="iconfont icon-guanbi" aria-hidden="true"></i>
+                        </button>
+                        <h4 class="modal-title">确认激活</h4>
+                    </div>
+                    <div class="modal-body">
+
+                        <div class="example">
+                           <h5>请确认激活</h5>
+                        </div>
+                    </div>
+                    <div class="modal-footer">
+                        <button class="btn btn-sm btn-white btn-pure" data-dismiss="modal">取消</button>
+                        <button class="btn btn-primary" type="submit" @click="recoverTrail">确定</button>
+                    </div>
+                </div>
+            </div>
+        </div>
     </div>
 
 </template>
@@ -585,7 +607,7 @@
                 companyType: config.companyType,
                 customizeInfo: config.customizeInfo,
                 taskTypeArr: {},
-                priorityArr: config.priorityArr,
+                taskLevelArr: config.levelArr,
                 taskPrincipal: '',
                 startMinutes: '00:00',
                 taskType: '',
@@ -1129,6 +1151,16 @@
             },
             changeCooperationType(value) {
                 this.trailInfo.cooperation_type = value
+            },
+            recoverTrail:function(){
+                let _this = this
+                  fetch('put', '/trails/' + this.trailInfo.id + '/recover').then(function (response) {
+                        toastr.success('激活成功');
+                        $('#recoverTrail').modal('hide');
+                        _this.getTrail()
+                    })
+                    this.trailInfo.progress_status = 1
+
             },
             refuseTrail: function () {
                 let _this = this
