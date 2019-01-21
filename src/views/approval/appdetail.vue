@@ -77,13 +77,14 @@
                             </div>
                         </div>
                     </div>
-                    <div class="example pt-20" style="border-top:1px solid #e3e3e3">
+                    <div class="example pt-20" >
 
                     </div>
                     <div class="">
-                        <h6 class="page-title pb-20 mx-15">审批详情</h6>
+                        <h6 class="page-title pb-20 mx-15" style="border-bottom: 1px solid rgb(227, 227, 227);">审批详情</h6>
+                        <!-- <hr> -->
                         <div class="row px-20">
-                            <div class="col-md-10">
+                            <div class="col-md-10 mt-20" >
                                 <div class="col-md-6 my-5 px-0 float-left" v-if="info.contract">
                                     <div class="col-md-4 float-left text-right detail-key mx-0 noselect">
                                         合同编号
@@ -93,11 +94,11 @@
                                     </div>
                                 </div>
                                 <div class="col-md-6 my-5 px-0 float-left"
-                                     v-for="(item, index) in detailData" :key="index" >
-                                    <div class="col-md-4 float-left text-right detail-key mx-0 noselect">{{item.key}}
+                                     v-for="(item, index) in detailData" :key="index" style='align-item:center'>
+                                    <div class="col-md-4 float-left text-right detail-key mx-0 noselect" v-if="(item.key !== '提示：若艺人选择用工作室与我司签约，则输入工作室名称，否则不用输入')">{{item.key}}
                                     </div>
                                     <div class="col-md-8 float-left detail-value"
-                                         v-if="item.values && !item.values.data.value.includes('http')">{{(item.values
+                                         v-if="item.values && !item.values.data.value.includes('http') && (item.key !== '提示：若艺人选择用工作室与我司签约，则输入工作室名称，否则不用输入')">{{(item.values
                                         && item.values.data.value) || ''}}
                                     </div>
                                     <div class="col-md-8 float-left detail-value"

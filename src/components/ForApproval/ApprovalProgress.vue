@@ -94,6 +94,9 @@
                     case '已撤销':
                         return 'icon-chehui|#cacaca'
                         break
+                    case '已作废':
+                        return 'icon-zuofei|#cacaca'
+                        break
                 }
             }
         },

@@ -63,11 +63,11 @@ export default {
         },
         update(){
             this.refresh()
-            this.defaultDataChecker()
         },
         watch: {
             consdata:function(value){
                  this.sourceChecker()
+                 this.defaultDataChecker()
             },
             n:function(value){
 
@@ -131,6 +131,7 @@ export default {
         methods: {
             defaultDataChecker(){
                 if(this.consdata[0].control_value){
+                    console.log(this.consdata[0].control_value);
                         this.valueListener = this.consdata[0].control_value
                         this.setValue(this.consdata[0].control_value)
                         this.refresh()
