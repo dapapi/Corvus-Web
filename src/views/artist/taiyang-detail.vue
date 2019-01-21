@@ -2464,7 +2464,9 @@
         line-height: 76px;
         border-radius: 50%;
         border: 1px solid #eee;
-
+        background-repeat:no-repeat; 
+        background-size:100% 100%;
+        -moz-background-size:100% 100%;
     }
 
     .puls span {
