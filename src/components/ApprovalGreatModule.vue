@@ -12,7 +12,7 @@
                     <div class="modal-body modal-greater ">
                         <div v-for="(item, index) in moduleInfo" :key="index" class="great-option example " >
                             <div :is='sortChecker(item)' :ref='item[0].control.data_dictionary_id'
-                            :consdata='item' :predata='sendData' class="container" :default-data="defaultData"
+                            :consdata='item' :predata='sendData' class="container"
                             :singlemode='singlemode' :clear='clearFlag' :directional-sender='directionalData'
                             @change="changeHandler" @directional='directionalWatcher' is-selectable='true'
                             :formid='form_id'></div>
@@ -56,7 +56,7 @@ import ApprovalDouble from '@/components/ForApproval/ApprovalDouble'
 import ApprovalMultipleSelector from '@/components/ForApproval/ApprovalMultipleSelector'
 import ApprovalChainReaction from '@/components/ForApproval/ApprovalChainReaction'
 export default {
-    props:['formData','singlemode','defaultData'],
+    props:['formData','singlemode','defaultData','contract_id'],
     data(){
         return{
             importData:'',
@@ -179,7 +179,7 @@ export default {
         getFormContractor(){
             let _this = this
             if(this.formData.form_id){
-                fetch('get','/approvals/'+this.formData.form_id+'/form_control?include=approval_form_controls').then((params) => {
+                fetch('get','/approvals/'+this.formData.form_id+'/form_control?include=approval_form_controls&number='+this.contract_id).then((params) => {
                 _this.importData = params.data
                 _this.dataInit()
                 })

@@ -148,6 +148,7 @@
         font-weight: 200;
     }
     .anmite {
+        vertical-align: middle;
         transform: rotate(90deg);
         -ms-transform: rotate(90deg); /* IE 9 */
         -moz-transform: rotate(90deg); /* Firefox */

@@ -66,6 +66,9 @@ export default {
             n:function(value){
 
             },
+            consdata:function(){
+                this.sourceChecker()
+            },
             directionalSender:function(value){
                 if(value && value.to === this.consdata[0].sort_number){
                     let _this = this
@@ -122,32 +125,33 @@ export default {
         },
         methods: {
            defaultDataChecker(params){
-                if(this.defaultData && this.consdata){
-                    for (const i in this.defaultData) {
-                        if(params && this.defaultData[i].key === this.consdata[0].control_title){
-                            let tempArr = this.defaultData[i].values.data.value.split(',')
+                if(params && this.consdata[0].control_value){
+                            console.log(11111);
+                            console.log(this.consdata[0].control_value.split(','));
+                            let tempArr = this.consdata[0].control_value.split(',')
                             for (const j in tempArr) {
                                 this.$nextTick(() => {
                                     this.valueListener.push({id:params.find(item=>item.name === tempArr[j]).id,name:params.find(item=>item.name === tempArr[j]).name})
                                     this.setValue(this.valueListener)
-
+                                    this.$nextTick(() => {
+                                    this.refresh()
+                                        
+                                    })
                                 })
                             //     console.log(tempArr[j]);
                             //     console.log(params.find(item=>item.name === tempArr[j]).id);
                             //    this.valueListener.push(params.find(item=>item.name === tempArr[j]).id)
                             }
-                            
-                        }else{
-                            if (this.defaultData[i].key === this.consdata[0].control_title) {
-                                this.$nextTick(() => {
-                                    // console.log(this.defaultData[i].values.data.value);
-                                    // $(this.$el).selectpicker('val', this.defaultData[i].values.data.value);
-                                    // this.valueListener = this.defaultData[i].values.data.value
-                                    // this.setValue(this.defaultData[i].values.data.value)
-                                })
-                            }
-                        }
-                    }
+                        //     else{
+                        //     if (this.defaultData[i].key === this.consdata[0].control_title) {
+                        //         this.$nextTick(() => {
+                        //             // console.log(this.defaultData[i].values.data.value);
+                        //             // $(this.$el).selectpicker('val', this.defaultData[i].values.data.value);
+                        //             // this.valueListener = this.defaultData[i].values.data.value
+                        //             // this.setValue(this.defaultData[i].values.data.value)
+                        //         })
+                        //     }
+                        // }
                 }
             },
             sourceChecker(){
@@ -158,7 +162,7 @@ export default {
                         _this.$nextTick(() => {
                             _this.refresh()
                         })
-                        if(_this.defaultData){
+                        if(_this.consdata[0].control_value){
                                 if(params.data[0].id){
                                     // _this.valueListener = params.data.find(item=>item.title === _this.defaultData)
                                     _this.defaultDataChecker(params.data)
