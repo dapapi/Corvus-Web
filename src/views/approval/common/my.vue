@@ -102,10 +102,6 @@
         },
         mounted(){
             this.getList(1)
-            // let a = '^1(3|4|5|7|8)\\d{9}$'
-            // let b = new RegExp(a)
-            // console.log(b);
-            // this.test(b)
         },
         computed:{
             getProgressName(){
@@ -115,14 +111,6 @@
             },
         },
         methods: {
-            // test(params){
-            //     let phone = 18787878787
-            //     if (!(params.test(phone))) {
-            //         console.log(111111);
-            //     }else{
-            //         console.log(22222);
-            //     }
-            // },
             getProjects: function (pageNum = 1, signStatus) {
                 let _this = this
                 let data = {

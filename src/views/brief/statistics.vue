@@ -184,8 +184,6 @@ export default {
 
                     }
                 }
-                // console.log(_this.monthWeek[_this.nowMonth-1])
-                // console.log(_this.list)
 
                 _this.current_page=res.meta.pagination.current_page,
                 _this.total_pages=res.meta.pagination.total_pages,
@@ -208,8 +206,7 @@ export default {
                     endDay:`${this.formatDate(end).split(',')[2]}`
                 })
             }
-            // console.log(allWeek)
-            // console.log(allWeek)
+
             for (let i = 0; i < 12; i++) {
                 this.monthWeek[i]=[]
                 for (let t = 0; t < allWeek.length; t++) {
@@ -221,7 +218,6 @@ export default {
                     }
                 }
             }
-            // console.log(this.monthWeek)
         },
         formatDig:function(num){
             return num>9?''+num:'0'+num;

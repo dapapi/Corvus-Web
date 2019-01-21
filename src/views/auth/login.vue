@@ -258,7 +258,6 @@
                 if (this.firstClickTime) {
                     if (currentClickTime - this.firstClickTime < 1000) {
                         this.firstClickTime = currentClickTime;
-                        console.log('return');
                         return
                     }
                 } else {

@@ -281,7 +281,6 @@
                 let _this = this
                 this.roleUser = []
                 fetch('get', '/users/my?include=department,roleUser').then((params) => {
-                    console.log(params);
                     _this.currentId = params.data.id
                     for (const key in params.data.roleUser.data) {
                         _this.roleUser.push(params.data.roleUser.data[key].role_id)
