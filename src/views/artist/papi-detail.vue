@@ -108,43 +108,36 @@
                             <div class="clearfix example ">
                                 <div class="col-md-8 float-left"><span>平台</span></div>
                                 <div class="col-md-4 float-left font-weight-bold " v-if="artistInfo.platform">
-                                            <!-- <template v-if="artistInfo.platform==1">
-                                                    微博
-                                            </template>
-                                            <template v-else-if="artistInfo.platform==2">
-                                                    抖音
-                                            </template>
-                                            <template v-else-if="artistInfo.platform==3">
-                                                    小红书
-                                            </template>
-                                            <template v-else>
-                                                微博,抖音,小红书
-                                            </template> -->
-                                            <!-- {{artistSocialPlatform.find(item=>item.value.iartistInfo.platform)}} -->
+                                            {{platformDate}}
                                 </div>
                             </div>
-                            <div class="clearfix example " >
+                            <div class="clearfix example " v-if="artistInfo.platform">
                                 <div class="col-md-8 float-left" >
-                                    <!-- <div v-for="(item,index) in artistInfo.platform" :key="index">
-                                        {{item}}
-                                    </div> -->
+                                    <div v-for="(item,index) in artistInfo.platform.split(',')" :key="index">
+                                        <template v-if="item==1">
+                                           微博地址
+                                        </template>
+                                          <template v-if="item==2">
+                                           抖音ID
+                                        </template>
+                                          <template v-if="item==3">
+                                           小红书地址
+                                        </template>
+                                    </div>
                                     
                                 </div>
-                                <div class="col-md-4 float-left font-weight-bold ">
-                                    <template v-if="artistInfo.platform==1">
+                                <div class="col-md-4 float-left font-weight-bold " >
+                                    <div v-for="(item,index) in artistInfo.platform.split(',')" :key="index">
+                                        <template v-if="item==1">
                                             {{artistInfo.weibo_url}}
-                                    </template>
-                                    <template v-else-if="artistInfo.platform==2">
+                                        </template>
+                                          <template v-if="item==2">
                                             {{artistInfo.douyin_id}}
-                                    </template>
-                                    <template v-else-if="artistInfo.platform==3">
-                                            {{artistInfo.xiaohongshu_url}}
-                                    </template>
-                                    <template v-else>
-                                            {{artistInfo.weibo_url}}
-                                            {{artistInfo.douyin_id}}
-                                            {{artistInfo.xiaohongshu_url}}
-                                    </template>
+                                        </template>
+                                          <template v-if="item==3">
+                                           {{artistInfo.xiaohongshu_url}}
+                                        </template>
+                                    </div>
                                 </div>
                             </div>
                         </div>
@@ -1203,7 +1196,8 @@
                 scheduleShow:[],
                 contractType:'bloggers',
                 formDate:{},
-                priorityArr:config.priorityArr
+                priorityArr:config.priorityArr,
+                platformDate:''
             }
         },
         computed: {
@@ -1363,6 +1357,11 @@
                             }
                         }
                      }
+                     let data=[]
+                    _this.artistInfo.platform.split(',').forEach(item=>{
+                        data .push(_this.artistSocialPlatform.find(i=>i.value == item).name) 
+                     })
+                     _this.platformDate = data.join(',')
                     //孵化期时间 
                     if(_this.artistInfo.hatch_star_at&&_this.artistInfo.hatch_end_at){
                         _this.Incubationperiod = _this.artistInfo.hatch_star_at+'|'+_this.artistInfo.hatch_end_at
