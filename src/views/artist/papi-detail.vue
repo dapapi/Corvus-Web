@@ -199,7 +199,7 @@
                                 aria-expanded="false" role="tab" :class="artistInfo.sign_contract_status == 2?'':'active'">概况</a>
                             </li>
                         </ul>
-                        <div class="tab-content nav-tabs-animate bg-white col-md-12">
+                        <div class="tab-content  px-0 nav-tabs-animate bg-white col-md-12">
                             <div class="tab-pane animation-fade pb-20 fixed-button-father" id="forum-artist-schedule"
                                 role="tabpanel" :class="artistInfo.sign_contract_status == 2?'active':''">
                                 <div class="col-md-12">
@@ -414,7 +414,7 @@
                                             <button class="btn btn-primary" @click="changeArtistBaseInfo">确定</button>
                                         </div>
                                     </div>
-                                    <div class="card-block" v-if="artistInfo">
+                                    <div class="card-block px-0" v-if="artistInfo">
                                         <div class="clearfix">
                                             <div class="card-text py-10 px-0 clearfix col-md-6 float-left ">
                                                 <div class="col-md-4 float-left text-right pl-0">昵称</div>
@@ -554,30 +554,30 @@
                                             <div class="segmentation-line example float-left"></div>
 
                                             <div class="card-text py-10 px-0 clearfix col-md-6 float-left ">
-                                                <div class="col-md-4 float-left text-right pl-0">录入人</div>
-                                                <div class="col-md-8 float-left font-weight-bold"  v-for="(entry,index) in artistInfo.creator" :key="index">
+                                                <div class="col-md-3 float-left text-right pl-0">录入人</div>
+                                                <div class="col-md-9 float-left font-weight-bold"  v-for="(entry,index) in artistInfo.creator" :key="index">
                                                     <template v-if="artistInfo.creator">
                                                     {{entry.name}}
                                                     </template>
                                                 </div>
                                             </div>
                                             <div class="card-text py-10 px-0 clearfix col-md-6 float-left ">
-                                                <div class="col-md-4 float-left text-right pl-0">录入时间</div>
-                                                <div class="col-md-8 float-left font-weight-bold">
+                                                <div class="col-md-3 float-left text-right pl-0">录入时间</div>
+                                                <div class="col-md-9 float-left font-weight-bold">
                                                     {{artistInfo.created_at}}
                                                 </div>
                                             </div>
                                             <div class="card-text py-10 px-0 clearfix col-md-6 float-left " >
-                                                <div class="col-md-4 float-left text-right pl-0">最近更新人</div>
-                                                <div class="col-md-8 float-left font-weight-bold"  v-if="artistInfo.operatelogs" >
+                                                <div class="col-md-3 float-left text-right pl-0">最近更新人</div>
+                                                <div class="col-md-9 float-left font-weight-bold"  v-if="artistInfo.operatelogs" >
                                                     <span v-for="(entry,index) in artistInfo.operatelogs.data" :key="index">
                                                     {{entry.username}}
                                                     </span>
                                                 </div>
                                             </div>
                                             <div class="card-text py-10 px-0 clearfix col-md-6 float-left ">
-                                                <div class="col-md-4 float-left text-right pl-0">最近更新时间</div>
-                                                <div class="col-md-8 float-left font-weight-bold">
+                                                <div class="col-md-3 float-left text-right pl-0">最近更新时间</div>
+                                                <div class="col-md-9 float-left font-weight-bold">
                                                     {{artistInfo.updated_at}}
                                                 </div>
                                             </div>
@@ -1098,6 +1098,8 @@
 <script>
     import fetch from '../../assets/utils/fetch.js'
     import config from '../../assets/js/config'
+    import Cookies from 'js-cookie'
+
     import ApprovalGreatModule from '../../components/ApprovalGreatModule'
     export default {
         data: function () {

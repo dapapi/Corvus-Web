@@ -8,12 +8,15 @@
     import fetch from '../assets/utils/fetch.js'
     //isModel ===true  调用接口/schedules/all
     export default {
-        props: ['calendars', 'gotoDate', 'meetingRomeList', 'isMeeting', 'isModel'],
+        props: ['calendars', 'gotoDate', 'meetingRomeList', 'isMeeting', 'isModel', 'calendarView'],
         data() {
             return {
                 startDate: '', //获取开始时间
                 endDate: '',  //获取结束时间
                 allScheduleInfo: '',
+                defaultView: 'month',
+                firstClickTime: '',
+                clickDate: '',
             }
         },
         watch: {
@@ -31,6 +34,14 @@
             },
             meetingRomeList: function () {
                 this.refresh();
+            },
+            calendarView: function (newValue) {
+                this.changeView(newValue)
+            }
+        },
+        created() {
+            if (this.calendarView) {
+                this.defaultView = this.calendarView
             }
         },
         mounted() {
@@ -44,7 +55,7 @@
                     center: 'title',
                     left: 'month,agendaWeek,agendaDay'
                 },
-                defaultView: 'month', //设置默认显示月，周，日
+                defaultView: self.defaultView, //设置默认显示月，周，日
                 navLinks: true,
                 editable: false,
                 eventLimit: true,
@@ -128,8 +139,21 @@
 
                 },
                 dayClick: function (date, allDay, jsEvent) {
+                    let currentDate = new Date();
+                    let currentClickTime = currentDate.getTime();
                     let formatDate = self.timeReformat(date._d);
-                    self.$emit('dayClick', formatDate);
+                    if (!self.clickDate) {
+                        self.clickDate = formatDate;
+                    }
+                    if (self.firstClickTime && self.clickDate === formatDate) {
+                        if (currentClickTime - self.firstClickTime < 500) {
+                            self.$emit('dayClick', formatDate);
+                        }
+                    } else {
+                        self.$emit('showToast', event.pageX, event.pageY)
+                    }
+                    self.clickDate = formatDate;
+                    self.firstClickTime = currentClickTime;
                 },
                 eventClick: function (event, jsEvent, view) {
                     let data = self.allScheduleInfo.find(item => item.id === event.id);

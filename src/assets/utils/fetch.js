@@ -3,7 +3,7 @@ import qs from 'qs'
 import config from '../js/config'
 
 // axios 配置
-axios.defaults.timeout = 10000;
+axios.defaults.timeout = 30000;
 axios.defaults.headers.common['Accept'] = 'application/vnd.Corvus.v1+json';
 axios.defaults.headers.common['Access-Control-Expose-Headers'] = 'Location';
 axios.defaults.headers.common['Access-Control-Allow-Headers'] = 'Authorization';
@@ -52,7 +52,7 @@ axios.interceptors.response.use((res) => {
             toastr.error(response.data.message);
         }
     } else if (status === 403) {
-
+        toastr.error(response.data.message)
     } else {
         toastr.error(response.data.message);
     }

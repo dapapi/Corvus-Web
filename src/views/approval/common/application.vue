@@ -34,18 +34,20 @@
                                    data-selectable="selectable">
                                 <tr>
                                     <th class="cell-300" scope="col">审批编号</th>
-                                    <th class="cell-300" scope="col">合同名称</th>
+                                    <!-- <th class="cell-300" scope="col">合同名称</th> -->
                                     <th class="cell-300" scope="col">申请人</th>
-                                    <!-- <th class="cell-300 position-relative" scope="col">类型
-                                        <i class="iconfont icon-gengduo1" aria-hidden="true"
-                                           id="taskDropdown" data-toggle="dropdown" aria-expanded="false"></i>
+                                    <th class="cell-300 position-relative" scope="col">类型
+                                        <span class="icon md-caret-right font-size-20 mr-10 leftImg anmite"
+                                        id="taskDropdown" data-toggle="dropdown" aria-expanded="false"></span>
+                                        <!-- <i class="icon md-caret-right font-size-20 mr-10 leftImg anmite" aria-hidden="true"
+                                           id="taskDropdown" data-toggle="dropdown" aria-expanded="false"></i> -->
                                         <div class="dropdown-menu" aria-labelledby="taskDropdown" role="menu">
-                                            <a class="dropdown-item" role="menuitem" >影视项目立项</a>
-                                            <a class="dropdown-item" role="menuitem" >综艺项目立项</a>
-                                            <a class="dropdown-item" role="menuitem" >商务项目立项</a>
-                                            <a class="dropdown-item" role="menuitem" >papi项目立项</a>
+                                            <a class="dropdown-item" role="menuitem" >此处等</a>
+                                            <a class="dropdown-item" role="menuitem" >后端</a>
+                                            <a class="dropdown-item" role="menuitem" >表单</a>
+                                            <a class="dropdown-item" role="menuitem" >数据</a>
                                         </div>
-                                    </th> -->
+                                    </th>
                                     <th class="cell-300" scope="col">申请时间</th>
                                     <th class="cell-300" scope="col">审批状态</th>
                                 </tr>
@@ -53,8 +55,8 @@
                                 <tr v-for="project in projectsInfo" :key='project.project_number' @click="goDetail(project.form_instance_number)">
                                     <td>{{project.form_instance_number}}</td>                              
                                     <td>{{project.title}}</td>
-                                    <td>{{project.name}}</td>
-                                    <!-- <td></td> -->
+                                    <!-- <td>{{project.name}}</td> -->
+                                    <td></td>
                                     <td>{{project.created_at}}</td>
                                     <td>{{getProgressName(project.form_status)}}</td>
                                 </tr>
@@ -144,5 +146,13 @@
     } */
     .project-search::-webkit-input-placeholder{
         font-weight: 200;
+    }
+    .anmite {
+        vertical-align: middle;
+        transform: rotate(90deg);
+        -ms-transform: rotate(90deg); /* IE 9 */
+        -moz-transform: rotate(90deg); /* Firefox */
+        -webkit-transform: rotate(90deg); /* Safari 和 Chrome */
+        -o-transform: rotate(90deg);
     }
 </style>

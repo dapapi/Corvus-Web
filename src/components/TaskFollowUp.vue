@@ -59,7 +59,9 @@
 
         },
         mounted() {
-            this.getTrail()
+            if(this.trailId){
+                this.getTrail()
+            }
         },
         methods: {
             getTrail() {
@@ -82,6 +84,11 @@
             }
         },
         watch: {
+            trailId:function(value){
+                if(value){
+                    this.getTrail(value)
+                }
+            },
             taskFilter: function (val, oldval) {
                 if (val != oldval) {
                     this.getTrail()

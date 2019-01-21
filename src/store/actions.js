@@ -68,7 +68,7 @@ export default {
     },
     // 获取用户列表
     getUserList ({commit}) {
-        fetch('get', '/users').then(res => {
+        fetch('get', '/user/all').then(res => {
             commit('setUserList', res.data)
         })
     },

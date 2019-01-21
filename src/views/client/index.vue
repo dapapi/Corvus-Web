@@ -17,10 +17,12 @@
             <div class="panel col-md-12 py-5">
                 <div class="clearfix">
                     <div class="col-md-3 example float-left">
-                        <selectors :options="companiesArr" @change="changeCompany" placeholder="请选择公司"></selectors>
+                        <input type="text" class="form-control" placeholder="请输入公司名称" v-model="companyName"
+                               @blur="getClients(1)">
                     </div>
                     <div class="col-md-3 example float-left">
-                        <selectors :options="userList" @change="changePrincipalSelect" :multiple="true"/>
+                        <selectors :options="userList" @change="changePrincipalSelect" placeholder="请选择负责人"
+                                   :multiple="true"/>
                     </div>
                     <div class="col-md-3 example float-left">
                         <selectors :options="clientLevelArr" @change="changeClientLevelSelect"
@@ -193,7 +195,6 @@
                 clientLevelArr: clientLevelArr,
                 keyMasterArr: config.isKeyMasterArr,
                 clientsInfo: [],
-                companiesArr: [],
                 clientScaleArr: config.clientScaleArr,
                 clientType: '',
                 clientName: '',
@@ -218,7 +219,6 @@
 
         mounted() {
             this.getClients();
-            this.getCompanies();
             this.user = JSON.parse(Cookies.get('user'))
             // 清除负责人默认值的设置
             this.clearDefaultPrincipal()
@@ -263,20 +263,6 @@
                     this.total = response.meta.pagination.total;
                     this.total_pages = response.meta.pagination.total_pages;
                     this.isLoading = false;
-                })
-            },
-
-            getCompanies: function () {
-                let _this = this;
-                fetch('get', '/clients/all').then(function (response) {
-                    for (let i = 0; i < response.data.length; i++) {
-                        _this.companiesArr.push({
-                            id: response.data[i].id,
-                            name: response.data[i].company,
-                            value: response.data[i].company,
-                            grade: response.data[i].grade
-                        })
-                    }
                 })
             },
 
@@ -351,11 +337,6 @@
                 this.$router.push({path: 'clients/' + clientId});
             },
 
-            changeCompany: function (value) {
-                this.companyName = value
-                this.getClients()
-            },
-
             changeClientType: function (value) {
                 this.clientType = value;
             },
@@ -391,11 +372,13 @@
             },
             // show add
             showAddModal(val) {
-                if (val === 3) {
-                    if (Cookies.get('companyType') === '泰洋川禾') {
-                        val = 3;
-                    } else {
-                        val = 4;
+                let organization_id = JSON.parse(Cookies.get('user')).organization_id
+                console.log(organization_id)
+                if (val == 3) {
+                    if (organization_id == 411) {
+                        val = 3
+                    } else if (organization_id == 412) {
+                        val = 4
                     }
                 }
                 this.setDefaultPrincipal()
@@ -438,7 +421,7 @@
                 this.clientAddressDetail = ''
                 this.clearDefaultPrincipal()
             },
-            goDetail (id) {
+            goDetail(id) {
                 this.$router.push('/clients/' + id)
             }
         }
@@ -470,8 +453,9 @@
             }
         }
     }
+
     table tbody tr {
-       cursor: pointer;
+        cursor: pointer;
     }
 
     .modal-body .example {

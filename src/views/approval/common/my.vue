@@ -34,7 +34,7 @@
                                    data-selectable="selectable">
                                 <tr>
                                     <th class="cell-300" scope="col">审批编号</th>
-                                    <th class="cell-300" scope="col">合同名称</th>
+                                    <!-- <th class="cell-300" scope="col">合同名称</th> -->
                                     <th class="cell-300" scope="col">申请人</th>
                                     <!-- <th class="cell-300 position-relative" scope="col">类型
                                         <i class="iconfont icon-gengduo1" aria-hidden="true"
@@ -43,18 +43,28 @@
                                             <a class="dropdown-item" role="menuitem" v-for="(item, index) in contractList" :key="index">{{item.value}}</a>
                                         </div>
                                     </th> -->
+                                     <th class="cell-300 position-relative" scope="col">类型
+                                        <i class="iconfont icon-gengduo1" aria-hidden="true"
+                                           id="taskDropdown" data-toggle="dropdown" aria-expanded="false"></i>
+                                        <div class="dropdown-menu" aria-labelledby="taskDropdown" role="menu">
+                                            <a class="dropdown-item" role="menuitem" >此处等</a>
+                                            <a class="dropdown-item" role="menuitem" >后端</a>
+                                            <a class="dropdown-item" role="menuitem" >表单</a>
+                                            <a class="dropdown-item" role="menuitem" >数据</a>
+                                        </div>
+                                    </th>
                                     <th class="cell-300" scope="col">申请时间</th>
                                     <th class="cell-300" scope="col">审批状态</th>
                                 </tr>
                                 <tbody>
                                 <tr v-for="project in projectsInfo" :key=project.id>
                                     <router-link :to="{path:'/approval/'+project.form_instance_number,query:{mode:'approver'}}"><td>{{project.form_instance_number}}</td></router-link>                                    
+                                    <td>{{project.form_instance_number}}</td>                              
                                     <td>{{project.title}}</td>
-                                    <td>{{project.name}}</td>
-                                    <!-- <td></td> -->
+                                    <!-- <td>{{project.name}}</td> -->
+                                    <td></td>
                                     <td>{{project.created_at}}</td>
                                     <td>{{getProgressName(project.form_status)}}</td>
-                                    <!-- <td></td> -->
                                 </tr>
                                 </tbody>
                             </table>
@@ -92,6 +102,10 @@
         },
         mounted(){
             this.getList(1)
+            // let a = '^1(3|4|5|7|8)\\d{9}$'
+            // let b = new RegExp(a)
+            // console.log(b);
+            // this.test(b)
         },
         computed:{
             getProgressName(){
@@ -101,7 +115,14 @@
             },
         },
         methods: {
-            
+            // test(params){
+            //     let phone = 18787878787
+            //     if (!(params.test(phone))) {
+            //         console.log(111111);
+            //     }else{
+            //         console.log(22222);
+            //     }
+            // },
             getProjects: function (pageNum = 1, signStatus) {
                 let _this = this
                 let data = {

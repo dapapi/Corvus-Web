@@ -17,8 +17,8 @@
                                v-model="trailFilter" @keyup.enter='filterGo' @blur='filterGo'>
                     </div>
                     <div class="col-md-3 example float-left">
-                        <selectors :options="progressStatus" :resetinfo='resetInfo' @change="progressStatusFilter"
-                                   placeholder="请选择销售进展"></selectors>
+                        <selectors :options="currentUser.organization_id === 411?businessStatus:papiStatus" :resetinfo='resetInfo' @change="progressStatusFilter"
+                                   placeholder="请选择线索类型"></selectors>
                     </div>
                     <div class="col-md-3 example float-left">
                         <selectors ref='principal_id' :options="memberList" multiple='true'
@@ -43,10 +43,10 @@
                             style="animation-fill-mode: backwards; animation-duration: 250ms; animation-delay: 0ms;">
                             <th class="cell-300" scope="col">线索名称</th>
                             <th class="cell-300" scope="col">公司名称</th>
-                            <th class="cell-300" scope="col">级别</th>
                             <th class="cell-300" scope="col">目标艺人</th>
                             <th class="cell-300" scope="col">预计订单收入</th>
                             <th class="cell-300" scope="col">负责人</th>
+                            <th class="cell-300" scope="col">跟进时间</th>
                         </tr>
                         <tbody>
                         <tr v-for="trail in trailsInfo" :key='trail.id' @click="goDetail(trail.id)">
@@ -57,10 +57,6 @@
 
                             <td>{{ trail.client.data.company }}</td>
                             <td>
-                                <template v-if="trail.client.data.grade === 1">直客</template>
-                                <template v-if="trail.client.data.grade === 2">代理公司</template>
-                            </td>
-                            <td>
                                 <span class="overflowsp" v-for="(item , index) in trail.expectations.data" :key="index"
                                       v-if="index < 2">{{item.name || item.nickname}}&nbsp;&nbsp;</span>
                             </td>
@@ -69,6 +65,9 @@
                                 <template v-if="trail.principal">
                                     {{ trail.principal.data.name }}
                                 </template>
+                            </td>
+                            <td>
+                                <template>{{trail.last_updated_at}}</template>
                             </td>
                         </tr>
                         </tbody>
@@ -129,12 +128,12 @@
                             <TrailOrigin class="require" :trailType='trailType'
                                          typeName='线索' alwaysShow='true'
                                          @changeTrailOrigin='changeTrailOrigin'
-                                         @changeEmail='changeEmail'
+                                         @changeEmail='changeEmail' submit='true'
                                          @changeTrailOriginPerson='changeTrailOriginPerson'/>
                         </div>
                         <div class="example">
                             <div class="col-md-2 text-right float-left require">行业</div>
-                            <div class="col-md-10 float-left pl-0" v-if="industriesArr.length > 0">
+                            <div class="col-md-10 float-left pl-0">
                                 <selectors ref='industries' :options="industriesArr"
                                            @change="changeIndustry"></selectors>
                             </div>
@@ -149,14 +148,14 @@
                         </div>
                         <div class="example">
                             <div class="col-md-2 text-right float-left require">目标艺人</div>
-                            <div class="col-md-10 float-left pl-0" v-if="starsArr.length > 0">
+                            <div class="col-md-10 float-left pl-0" >
                                 <selectors :options="starsArr" @valuelistener="changeTargetStars"
                                            :multiple="true"></selectors>
                             </div>
                         </div>
                         <div class="example">
                             <div class="col-md-2 text-right float-left">推荐艺人</div>
-                            <div class="col-md-10 float-left pl-0" v-if="starsArr.length > 0">
+                            <div class="col-md-10 float-left pl-0">
                                 <selectors :options="starsArr" @valuelistener="changeRecommendStars"
                                            :multiple="true"></selectors>
                             </div>
@@ -268,21 +267,34 @@
                 industriesArr: [],
                 industry: '',
                 priority: '',
-                priorityArr: config.priorityArr,
+                priorityArr: config.taskLevelArr,
                 trailStatus: '',
                 cooperation: '',
                 filterData: '',
-                progressStatus: [{
+                businessStatus: [{
                     'name': '全部',
                     'value': ''
                 }, {
-                    'name': '已拒绝',
-                    'value': '0'
+                    'name': '商务线索',
+                    'value': '3'
                 }, {
-                    'name': '未确定合作',
+                    'name': '影视线索',
                     'value': '1'
                 }, {
-                    'name': '已确定合作',
+                    'name': '综艺线索',
+                    'value': '2'
+                }],
+                papiStatus: [{
+                    'name': '全部',
+                    'value': ''
+                }, {
+                    'name': 'papi',
+                    'value': '4'
+                }, {
+                    'name': '影视线索',
+                    'value': '1'
+                }, {
+                    'name': '综艺线索',
                     'value': '2'
                 }],
                 memberList: [],
@@ -291,6 +303,8 @@
                 resetInfo: false,
                 isLoading: true,
                 cleanUp: false,
+                trailIsLocked:'',
+                
             }
         },
         created() {
@@ -485,9 +499,8 @@
                 fetch('get', '/starandblogger', {sign_contract_status: 2}).then(response => {
                     for (let i = 0; i < response.data.length; i++) {
                         this.starsArr.push({
-                            id: response.data[i].id,
                             name: response.data[i].name,
-                            value: response.data[i].id
+                            value: response.data[i].flag + '-' + response.data[i].id,
                         })
                     }
                 })
@@ -539,7 +552,8 @@
                 } else {
                     data.resource = ''
                 }
-                if (this.companyType !== '泰洋川禾') {
+                let  organization_id = JSON.parse(Cookies.get('user')).organization_id
+                if (organization_id !== 411) {
                     data.lock = this.trailIsLocked
                 }
                 let _this = this;
@@ -604,11 +618,24 @@
             },
 
             changeTargetStars: function (value) {
-                console.log(123);
+                for (let i = 0; i < value.length; i++) {
+                    let item = value[i].split('-');
+                    value[i] = {
+                        id: item[1],
+                        flag: item[0]
+                    };
+                }
                 this.targetStars = value
             },
 
             changeRecommendStars: function (value) {
+                for (let i = 0; i < value.length; i++) {
+                    let item = value[i].split('-');
+                    value[i] = {
+                        id: item[1],
+                        flag: item[0]
+                    };
+                }
                 this.recommendStars = value
             },
 
@@ -617,7 +644,8 @@
             },
 
             changeCheckbox: function (e) {
-                this.trailIsLocked = e.target.checked
+                console.log(Number(e.target.checked));
+                this.trailIsLocked = Number(e.target.checked)
             },
 
             changeIndustry: function (value) {
@@ -629,14 +657,15 @@
             },
 
             changeTrailType: function (value) {
-                if (value === 3) {
-                    if (Cookies.get('companyType') === '泰洋川禾') {
-                        value = 3;
-                    } else {
-                        value = 4;
+                let  organization_id = JSON.parse(Cookies.get('user')).organization_id
+                if(value == 3){
+                    if(organization_id == 411){
+                        value = 3
+                    }else if(organization_id == 412){
+                        value = 4
                     }
                 }
-                this.trailType = value;
+                this.trailType = value
                 $('#addTrail').modal('show')
                 setTimeout(() => {
                     $('.selectpicker').selectpicker('refresh');

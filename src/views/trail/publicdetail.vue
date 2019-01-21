@@ -4,13 +4,19 @@
         <div class="page-header page-header-bordered">
             <h1 class="page-title d-inline">销售线索</h1>
 
-            <div class="page-header-actions dropdown show task-dropdown float-right"
-                 v-if="trailInfo.progress_status !== 0">
-                <div class="font-info pointer-content" data-target="#refuseTrail" data-toggle="modal">拒绝</div>
-            </div>
-             <div class="page-header-actions dropdown show task-dropdown float-right"
-                 v-if="trailInfo.progress_status == 0">
-                <div class="font-info pointer-content" data-target="#recoverTrail" data-toggle="modal">激活</div>
+            <div class="page-header-actions dropdown show task-dropdown float-right">
+                <i class="iconfont icon-gengduo1 font-size-24" aria-hidden="true" id="taskDropdown"
+                   data-toggle="dropdown" aria-expanded="false"></i>
+                <div class="dropdown-menu dropdown-menu-right task-dropdown-item" aria-labelledby="taskDropdown"
+                     role="menu" x-placement="bottom-end">
+                    <a class="dropdown-item" role="menuitem" data-target="#refuseTrail" data-toggle="modal">拒绝</a>
+                    <a class="dropdown-item" role="menuitem" v-if="trailInfo.take_type == 1"
+                       @click="changeTrailType(1)">领取</a>
+                    <a class="dropdown-item" role="menuitem" v-if="trailInfo.take_type == 1" data-target="#addMembers"
+                       data-toggle="modal">分配</a>
+                    <a class="dropdown-item" role="menuitem" v-if="trailInfo.take_type == 2" data-target="#returnTrail"
+                       data-toggle="modal">退回</a>
+                </div>
             </div>
         </div>
 
@@ -22,7 +28,7 @@
 
                     <div class="card-text clearfix example">
                         <div class="col-md-6 float-left pl-0">
-                            <div class="float-left pl-0 pr-2 col-md-3">
+                            <div class="float-left pl-0 pr-2 col-md-2">
                                 <i class="iconfont icon-laiyuanguanli pr-5" aria-hidden="true"></i>线索类型
                             </div>
                             <div class="font-weight-bold float-left">
@@ -33,17 +39,20 @@
                             </div>
                         </div>
                         <div class="col-md-6 float-left pl-0">
-                            <div class="float-left pl-0 pr-2 col-md-3">
-                                <i class="iconfont icon-kehu pr-2" aria-hidden="true"></i>负责人
+                            <div class="float-left pl-0 pr-2 col-md-2">
+                                <i class="iconfont icon-kehu pr-2" aria-hidden="true"></i>领取状态
                             </div>
-                            <div class="font-weight-bold float-left" v-if="trailInfo.principal">
-                                {{ principalName }}
+                            <div class="font-weight-bold float-left">
+                                <template v-if="trailInfo.take_type == 1"><span style="color:#ff9800">未领取</span>
+                                </template>
+                                <template v-if="trailInfo.take_type == 2"><span style="color:#4caf50">已领取</span>
+                                </template>
                             </div>
                         </div>
                     </div>
                     <div class="card-text clearfix example">
                         <div class="col-md-6 float-left pl-0">
-                            <div class="float-left pl-0 pr-2 col-md-3">
+                            <div class="float-left pl-0 pr-2 col-md-2">
                                 <i class="iconfont icon-xiaoshouguanli pr-2" aria-hidden="true"></i>销售进展
                             </div>
                             <div class="font-weight-bold float-left">
@@ -63,13 +72,13 @@
                                 <template v-else>
                                     0
                                 </template>
-                                元
+                                /元
                             </div>
                         </div>
                     </div>
                     <div class="card-text clearfix example">
                         <div class="col-md-6 float-left pl-0">
-                            <div class="float-left pl-0 pr-2 col-md-3">
+                            <div class="float-left pl-0 pr-2 col-md-2">
                                 <i class="iconfont icon-yiren pr-2" aria-hidden="true"></i>目标艺人
                             </div>
                             <div class="font-weight-bold float-left" v-if="trailInfo.expectations">
@@ -79,7 +88,7 @@
                             </div>
                         </div>
                         <div class="col-md-6 float-left pl-0">
-                            <div class="float-left pl-0 pr-2 col-md-3">
+                            <div class="float-left pl-0 pr-2 col-md-2">
                                 <i class="iconfont icon-tuijian pr-2" aria-hidden="true" style="font-size:17px;"></i>推荐艺人
                             </div>
                             <div class="font-weight-bold float-left" v-if="trailInfo.recommendations">
@@ -92,7 +101,7 @@
 
                     <div class="card-text clearfix example">
                         <div class="col-md-6 float-left pl-0">
-                            <div class="float-left pl-0 pr-2 col-md-3">
+                            <div class="float-left pl-0 pr-2 col-md-2">
                                 <i class="iconfont icon-gongsiguanli pr-2" aria-hidden="true"></i>公司
                             </div>
                             <div class="font-weight-bold float-left pointer-content hover-content"
@@ -102,7 +111,7 @@
                             </div>
                         </div>
                         <div class="col-md-6 float-left pl-0">
-                            <div class="float-left pl-0 pr-2 col-md-3">
+                            <div class="float-left pl-0 pr-2 col-md-2">
                                 <i class="iconfont icon-xiangmu1 pr-2" aria-hidden="true"></i>项目
                             </div>
                             <div class="font-weight-bold float-left pointer-content hover-content"
@@ -137,8 +146,7 @@
                             </li>
                         </ul>
                         <div class="tab-content nav-tabs-animate bg-white col-md-12 row">
-                            <div class="tab-pane animation-fade active col-md-12 px-0" id="forum-trail-base"
-                                 role="tabpanel">
+                            <div class="tab-pane animation-fade active col-md-12" id="forum-trail-base" role="tabpanel">
                                 <div class="card">
                                     <div class="card-header card-header-transparent card-header-bordered">
                                         <div class="float-left font-weight-bold third-title">销售线索信息</div>
@@ -152,7 +160,7 @@
                                             <button class="btn btn-primary" @click="changeTrailBaseInfo">确定</button>
                                         </div>
                                     </div>
-                                    <div class="card-block px-0">
+                                    <div class="card-block">
                                         <div class="clearfix">
                                             <div class="card-text py-10 px-0 clearfix col-md-6 float-left ">
                                                 <div class="col-md-3 float-left text-right pl-0">线索名称</div>
@@ -163,6 +171,13 @@
                                                                @change="changeTrailName"></EditInput>
                                                 </div>
                                             </div>
+                                            <div class="card-text py-10 px-0 clearfix col-md-6 float-left">
+                                                <div class="col-md-3 float-left text-right pl-0">负责人</div>
+                                                <div class="col-md-9 float-left font-weight-bold">
+                                                    <EditInput-selector :is-edit="isEdit"
+                                                                        @change="changeTrailPrincipal"></EditInput-selector>
+                                                </div>
+                                            </div>
                                             <div class="py-10 px-0 clearfix col-md-6 float-left ">
                                                 <TrailOrigin :trailType='trailType'
                                                              typeName='线索' :isEdit='isEdit'
@@ -171,13 +186,6 @@
                                                              :contentType='trailInfo.resource_type'
                                                              @changeEmail='changeEmail' detailPage='true'
                                                              @changeTrailOriginPerson='changeTrailOriginPerson'/>
-                                            </div>
-                                            <div class="card-text py-10 px-0 clearfix col-md-6 float-left">
-                                                <div class="col-md-3 float-left text-right pl-0">负责人</div>
-                                                <div class="col-md-9 float-left font-weight-bold">
-                                                    <EditInput-selector :is-edit="isEdit"
-                                                                        @change="changeTrailPrincipal"></EditInput-selector>
-                                                </div>
                                             </div>
                                             <div class="card-text py-10 px-0 clearfix col-md-6 float-left">
                                                 <div class="col-md-3 float-left text-right pl-0">预计订单收入/元</div>
@@ -375,7 +383,7 @@
                                     </div>
                                 </div>
                             </div>
-                            <div class="tab-pane animation-fade pb-20 fixed-button-father col-md-12 px-0"
+                            <div class="tab-pane animation-fade pb-20 fixed-button-father col-md-12"
                                  id="forum-trail-tasks"
                                  role="tabpanel">
                                 <table class="table table-hover is-indent example" data-plugin="animateList"
@@ -413,14 +421,12 @@
                                 </div>
                                 <div class="site-action fixed-button" data-plugin="actionBtn" data-toggle="modal"
                                      data-target="#addTask">
-                                    <button data-v-0aeb4e71="" type="button"
+                                    <button type="button"
                                             class="site-action-toggle btn-raised btn btn-success btn-floating waves-effect waves-classic">
                                         <i class="front-icon iconfont icon-tianjia1 animation-scale-up"
-                                           aria-hidden="true"
-                                           style="font-size: 30px"></i>
+                                           aria-hidden="true" style="font-size: 30px"></i>
                                         <i class="back-icon iconfont icon-tianjia1 animation-scale-up"
-                                           aria-hidden="true"
-                                           style="font-size: 30px"></i>
+                                           aria-hidden="true" style="font-size: 30px"></i>
                                     </button>
                                 </div>
                             </div>
@@ -558,7 +564,8 @@
                 </div>
             </div>
         </div>
-         <div class="modal fade" id="recoverTrail" aria-hidden="true" aria-labelledby="addLabelForm"
+
+        <div class="modal fade" id="returnTrail" aria-hidden="true" aria-labelledby="addLabelForm"
              role="dialog" tabindex="-1" data-backdrop="static">
             <div class="modal-dialog modal-simple">
                 <div class="modal-content">
@@ -566,21 +573,45 @@
                         <button type="button" class="close" aria-hidden="true" data-dismiss="modal">
                             <i class="iconfont icon-guanbi" aria-hidden="true"></i>
                         </button>
-                        <h4 class="modal-title">确认激活</h4>
+                        <h4 class="modal-title">退回</h4>
                     </div>
                     <div class="modal-body">
-
-                        <div class="example">
-                           <h5>请确认激活</h5>
+                        <div class="mt-20">
+                            <div class="col-md-2 text-right float-left">退回原因</div>
+                            <div class="col-md-10 float-left pl-0">
+                                 <textarea class="form-control" title="" placeholder="请输入退回原因"
+                                           v-model="returnReason"></textarea>
+                            </div>
                         </div>
                     </div>
                     <div class="modal-footer">
                         <button class="btn btn-sm btn-white btn-pure" data-dismiss="modal">取消</button>
-                        <button class="btn btn-primary" type="submit" @click="recoverTrail">确定</button>
+                        <button class="btn btn-primary" type="submit" @click="changeTrailType(2)">确定</button>
                     </div>
                 </div>
             </div>
         </div>
+
+        <div class="modal fade" id="addMembers" aria-hidden="true" aria-labelledby="addLabelForm" role="dialog"
+             tabindex="-1" data-backdrop="static">
+            <div class="modal-dialog modal-simple" style="max-width: 50rem;">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <button type="button" aria-hidden="true" data-dismiss="modal" class="close"><i
+                                aria-hidden="true" class="iconfont icon-guanbi"></i></button>
+                        <h4 class="modal-title">分配负责人</h4>
+                    </div>
+                    <div class="modal-body clearfix pt-10">
+                        <ListSelectMember :type="'change'" isSingle="true"></ListSelectMember>
+                    </div>
+                    <div class="modal-footer">
+                        <button class="btn btn-sm btn-white btn-pure" data-dismiss="modal">取消</button>
+                        <button class="btn btn-primary" @click="allotTrail">确定</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+
     </div>
 
 </template>
@@ -636,19 +667,23 @@
                 trailOriginPerson: '',
                 taskCount: {},
                 currentUser: {},
-                principalName: '',
+                returnReason: '',
             }
         },
         created() {
-            this.getAllType()
+            this.getAllType();
             this.getTrail();
-            this.getTrailTask()
+            this.getTrailTask();
             this.getCurrentUser()
 
         },
         mounted() {
             this.getStars();
             this.getIndustries();
+            let _this = this;
+            $('#returnTrail').on('hidden.bs.modal', function () {
+                _this.returnReason = ''
+            })
         },
         computed: {
             getResourceType() {
@@ -770,7 +805,6 @@
 
         methods: {
             changeTrailOriginPerson(value) {
-                console.log(value);
                 this.trailOriginPerson = value
             },
             changeEmail(value) {
@@ -783,15 +817,10 @@
                 })
             },
             trailTypeValidate() {
-                if (!this.trailInfo.principal) {
-                    toastr.error("负责人为必填");
-                    return false;
-                }
-                else if (!this.trailInfo.fee) {
+                if (!this.trailInfo.fee) {
                     toastr.error("费用为必填")
                     return false;
-                }
-                else if (!this.trailInfo.client.data.company) {
+                } else if (!this.trailInfo.client.data.company) {
                     toastr.error("公司名称为必填")
                     return false;
                 } else if (!this.trailInfo.title) {
@@ -896,10 +925,9 @@
                     })
                 }
             },
-            getStars: function () {
 
+            getStars: function () {
                 fetch('get', '/starandblogger', {sign_contract_status: 2}).then(response => {
-                    this.starsArr = []
                     for (let i = 0; i < response.data.length; i++) {
                         this.starsArr.push({
                             name: response.data[i].name,
@@ -907,6 +935,18 @@
                         })
                     }
 
+                })
+            },
+
+            allotTrail() {
+                let data = {
+                    user_id: this.$store.state.principalInfo.id,
+                    id: [this.trailId]
+                };
+                fetch('post', '/pool/allot', data).then(response => {
+                    this.getTrail();
+                    toastr.success('分配成功');
+                    $('#addMembers').modal('hide');
                 })
             },
 
@@ -934,6 +974,29 @@
                 }
             },
 
+            changeTrailType: function (value) {
+                let url = '';
+                let data = {};
+                let toast = '';
+                switch (value) {
+                    case 1:
+                        url = '/pool/receive';
+                        data.id = [this.trailId];
+                        toast = '领取成功';
+                        break;
+                    case 2:
+                        url = '/pool/refund/' + this.trailId;
+                        data.content = this.returnReason;
+                        toast = '退回成功';
+                        break;
+                }
+                fetch('post', url, data).then(response => {
+                    toastr.success(toast);
+                    $('#returnTrail').modal('hide');
+                    this.getTrail();
+                })
+            },
+
             getTrailTask: function () {
                 if (this.trailTasksInfo.length > 0) {
                     return
@@ -954,7 +1017,6 @@
                 })
             },
             changeLockStatus(value) {
-                // this.trailInfo.lock_status = value
                 if (value == 2) {
                     value = 0
                 }
@@ -966,10 +1028,8 @@
                     _this.currentUser = response.data
                     if (!_this.$store.state.newPrincipalInfo.id && _this.currentUser) {
                         _this.principal = _this.currentUser.id
-                        console.log('true', _this.currentUser.id);
                     } else {
                         _this.principal = _this.$store.state.newPrincipalInfo.id
-                        console.log('none', _this.$store.state.newPrincipalInfo.id);
                     }
                 })
             },
@@ -1152,16 +1212,6 @@
             changeCooperationType(value) {
                 this.trailInfo.cooperation_type = value
             },
-            recoverTrail:function(){
-                let _this = this
-                  fetch('put', '/trails/' + this.trailInfo.id + '/recover').then(function (response) {
-                        toastr.success('激活成功');
-                        $('#recoverTrail').modal('hide');
-                        _this.getTrail()
-                    })
-                    this.trailInfo.progress_status = 1
-
-            },
             refuseTrail: function () {
                 let _this = this
                 if (!this.refuseType) {
@@ -1176,11 +1226,13 @@
                     fetch('put', '/trails/' + this.trailInfo.id + '/refuse', data).then(function (response) {
                         toastr.success('拒绝成功');
                         $('#refuseTrail').modal('hide');
+
+                        _this.trailInfo.progress_status = 0
                         _this.getTrail()
                     })
-                    this.trailInfo.progress_status = 0
                 }
             },
+
             goTask(id) {
                 this.$router.push({path: '/tasks/' + id})
             }

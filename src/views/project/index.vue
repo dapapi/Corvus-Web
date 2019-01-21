@@ -9,13 +9,13 @@
             <div class="panel col-md-12 clearfix py-5">
                 <div class="clearfix">
                     <div class="col-md-3 example float-left">
-                        <input type="text" class="form-control" id="inputPlaceholder" placeholder="请输入项目昵称"
+                        <input type="text" class="form-control" id="inputPlaceholder" placeholder="请输入项目名称"
                                v-model="projectKeyword"
                                @blur="getFilterProjects(1)">
                     </div>
                     <div class="col-md-3 example float-left">
-                        <selectors @change="(value) => getFilterProjects(1, 'status', value)" placeholder="请选择项目状态"
-                                   :options="projectStatusArr"></selectors>
+                        <selectors @change="(value) => getFilterProjects(1, 'type', value)" placeholder="请选择项目类型"
+                                   :options="projectTypeArr"></selectors>
                     </div>
                     <div class="col-md-3 example float-left" v-if="allUsers.length > 0">
                         <selectors @change="(value) => getFilterProjects(1, 'principal', value)" placeholder="请选择项目负责人"
@@ -59,7 +59,7 @@
                                 <th class="cell-300" scope="col">项目名称</th>
                                 <th class="cell-300" scope="col">负责人</th>
                                 <th class="cell-300" scope="col">目标艺人</th>
-                                <th class="cell-300" scope="col">优先级</th>
+                                <th class="cell-300" scope="col">预计订单收入</th>
                                 <th class="cell-300" scope="col">跟进时间</th>
                             </tr>
                             <tbody>
@@ -85,8 +85,8 @@
                                     </template>
                                 </td>
                                 <td>
-                                    <template v-if="project.priority">
-                                        {{ levelArr.find(item => item.value == project.priority).name}}
+                                    <template v-if="project.trail">
+                                        {{ project.trail.fee }}
                                     </template>
                                 </td>
                                 <td>{{ project.last_follow_up_at }}</td>
@@ -123,6 +123,7 @@
     import Cookies from 'js-cookie'
 
     const projectStatusArr = [{name: '全部', value: ''}, ...config.projectStatusArr];
+    const projectTypeArr = [{name: '全部', value: ''}, ...config.projectTypeArr];
 
     export default {
 
@@ -134,7 +135,7 @@
                 companyArr: [],
                 starsArr: [],
                 projectName: '',
-                projectTypeArr: config.projectTypeArr,
+                projectTypeArr: projectTypeArr,
                 projectFieldsArr: [],
                 projectType: '',
                 projectFields: '',
@@ -220,6 +221,17 @@
                         data.status = value;
                     }
                 }
+                if (type === 'type' && value) {
+                    let  organization_id = JSON.parse(Cookies.get('user')).organization_id
+                    if(value == 3){
+                        if(organization_id == 411){
+                            value = 3
+                        }else if(organization_id == 412){
+                            value = 4
+                        }
+                    }
+                    data.type = value
+                }
                 if (type === 'principal' && value) {
                     this.principal_ids = value.join(',');
                     data.principal_ids = value.join(',');
@@ -266,14 +278,16 @@
             },
 
             changeProjectType: function (value) {
-                if (value === 3) {
-                    if (Cookies.get('companyType') === '泰洋川禾') {
-                        value = 3;
-                    } else {
-                        value = 4;
+                let organization_id = JSON.parse(Cookies.get('user')).organization_id
+                if (value == 3) {
+                    if (organization_id == 411) {
+                        value = 3
+                    } else if (organization_id == 412) {
+                        value = 4
                     }
                 }
                 this.projectType = value;
+
                 this.selectProjectType();
                 $('#addProject').modal('show');
             },
@@ -318,6 +332,7 @@
             top: -400px !important;
         }
     }
+
     table tbody tr {
         cursor: pointer;
     }

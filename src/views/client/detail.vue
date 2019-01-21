@@ -42,9 +42,10 @@
                                 <div class="col-md-3 float-left px-0">{{ task.principal?task.principal.data.name:'' }}</div>
                                 <div class="col-md-4 float-left px-0">{{ task.end_at }}</div>
                                 <div class="col-md-2 float-left px-0">
-                                    <template v-if="task.status === 1">进行中</template>
-                                    <template v-if="task.status === 2">已完成</template>
-                                    <template v-if="task.status === 3">已停止</template>
+                                    <template v-if="task.status === 1"><span style="color: #FF9800;">进行中</span></template>
+                                    <template v-if="task.status === 2"><span style="color: #4CAF50;">已完成</span></template>
+                                    <template v-if="task.status === 3"><span style="color: #9E9E9E;">已停止</span></template>
+                                    <template v-if="task.status === 4"><span style="color: #F44336;">已延期</span></template>
                                 </div>
                             </div>
                         </div>
@@ -56,10 +57,9 @@
                                 <div class="col-md-3 float-left px-0">{{ clientTypeArr.find(item => item.value == project.type).name }}</div>
                                 <div class="col-md-4 float-left px-0">{{ project.created_at }}</div>
                                 <div class="col-md-2 float-left px-0">
-                                    <template v-if="project.status === 1">进行中</template>
-                                    <template v-if="project.status === 2">完成</template>
-                                    <template v-if="project.status === 3">终止</template>
-                                    <template v-if="project.status === 4">删除</template>
+                                    <template v-if="project.status === 1"><span style="color:#FF9800">进行中</span></template>
+                                    <template v-if="project.status === 2"><span style="color:#4CAF50">已完成</span></template>
+                                    <template v-if="project.status === 3"><span style="color:#9E9E9E">撤单</span></template>
                                 </div>
                             </div>
                         </div>
@@ -196,9 +196,10 @@
                                         </td>
                                         <td>{{ task.type?task.type.data.title:'' }}</td>
                                         <td>
-                                            <template v-if="task.status === 1">进行中</template>
-                                            <template v-if="task.status === 2">已完成</template>
-                                            <template v-if="task.status === 3">已停止</template>
+                                            <template v-if="task.status === 1"><span style="color: #FF9800;">进行中</span></template>
+                                            <template v-if="task.status === 2"><span style="color: #4CAF50;">已完成</span></template>
+                                            <template v-if="task.status === 3"><span style="color: #9E9E9E;">已停止</span></template>
+                                            <template v-if="task.status === 4"><span style="color: #F44336;">已延期</span></template>
                                         </td>
                                         <td>{{ task.principal?task.principal.data.name:'' }}</td>
                                         <td>{{ task.end_at }}</td>
@@ -231,81 +232,103 @@
                                         <button class="btn btn-primary" @click="changeClientBaseInfo">确定</button>
                                     </div>
                                 </div>
-                                <div class="card-block">
+                                <div class="card-block px-0">
                                     <div class="card-text py-10 clearfix">
-                                        <div class="col-md-2 float-left text-right pl-0">公司名称</div>
-                                        <div class="col-md-4 float-left font-weight-bold">
-                                            <EditInput :content="clientInfo.company" :is-edit="isEdit"
-                                                    @change="changeClientName"></EditInput>
+                                        <div class="col-md-6 px-0">
+                                            <div class="col-md-3 float-left text-right pl-0">公司名称</div>
+                                            <div class="col-md-9 float-left font-weight-bold">
+                                                <EditInput :content="clientInfo.company" :is-edit="isEdit"
+                                                        @change="changeClientName"></EditInput>
+                                            </div>
                                         </div>
-                                        <div class="col-md-2 float-left text-right pl-0">级别</div>
-                                        <div class="col-md-4 float-left font-weight-bold">
-                                            <EditSelector :options="clientLevelArr" :is-edit="isEdit"
-                                                        :content="clientInfo.grade"
-                                                        @change="changeClientLevel"></EditSelector>
+                                        <div class="col-md-6 px-0">
+                                            <div class="col-md-3 float-left text-right pl-0">级别</div>
+                                            <div class="col-md-9 float-left font-weight-bold">
+                                                <EditSelector :options="clientLevelArr" :is-edit="isEdit"
+                                                            :content="clientInfo.grade"
+                                                            @change="changeClientLevel"></EditSelector>
+                                            </div>
                                         </div>
                                     </div>
                                     <div class="card-text py-10 clearfix">
-                                        <div class="col-md-2 float-left text-right pl-0">负责人</div>
-                                        <div class="col-md-4 float-left font-weight-bold">
+                                        <div class="col-md-6 px-0">
+                                            <div class="col-md-3 float-left text-right pl-0">负责人</div>
+                                            <div class="col-md-9 float-left font-weight-bold">
 
-                                            <EditInput-selector :is-edit="isEdit" :placeholder="'请选择负责人'"
-                                                                @change="selectPrincipal"
-                                                                :select-type="'principal'"></EditInput-selector>
+                                                <EditInput-selector :is-edit="isEdit" :placeholder="'请选择负责人'"
+                                                                    @change="selectPrincipal"
+                                                                    :select-type="'principal'"></EditInput-selector>
+                                            </div>
                                         </div>
-                                        <div class="col-md-2 float-left text-right pl-0">规模</div>
-                                        <div class="col-md-4 float-left font-weight-bold">
-                                            <EditSelector :options="clientScaleArr" :is-edit="isEdit"
-                                                        :content="clientInfo.size"
-                                                        @change="changeClientScale"></EditSelector>
+                                        <div class="col-md-6 px-0">
+                                            <div class="col-md-3 float-left text-right pl-0">规模</div>
+                                            <div class="col-md-9 float-left font-weight-bold">
+                                                <EditSelector :options="clientScaleArr" :is-edit="isEdit"
+                                                            :content="clientInfo.size"
+                                                            @change="changeClientScale"></EditSelector>
+                                            </div>
                                         </div>
                                     </div>
                                     <div class="card-text py-10 clearfix">
-                                        <div class="col-md-2 float-left text-right pl-0">地区</div>
-                                        <div class="col-md-4 float-left font-weight-bold region">
-                                            <template v-if="!isEdit">
-                                                {{clientInfo.province}}{{clientInfo.city}}{{clientInfo.district}}
-                                            </template>
-                                            <template v-else>
-                                                <RegionSelector :provinceVal="clientInfo.province" :cityVal="clientInfo.city" :areaVal="clientInfo.district" @setAreaData="changeAreaData" />
-                                            </template>
+                                        <div class="col-md-6 px-0">
+                                            <div class="col-md-3 float-left text-right pl-0">地区</div>
+                                            <div class="col-md-9 float-left font-weight-bold region">
+                                                <template v-if="!isEdit">
+                                                    {{clientInfo.province}}{{clientInfo.city}}{{clientInfo.district}}
+                                                </template>
+                                                <template v-else>
+                                                    <RegionSelector :provinceVal="clientInfo.province" :cityVal="clientInfo.city" :areaVal="clientInfo.district" @setAreaData="changeAreaData" />
+                                                </template>
 
+                                            </div>
                                         </div>
-                                        <div class="col-md-2 float-left text-right pl-0">详细地址</div>
-                                        <div class="col-md-4 float-left font-weight-bold">
-                                            <EditInput :content="clientInfo.address" :is-edit="isEdit"
-                                                    @change="changeClientAddress"></EditInput>
+                                        <div class="col-md-6 px-0">
+                                            <div class="col-md-3 float-left text-right pl-0">详细地址</div>
+                                            <div class="col-md-9 float-left font-weight-bold">
+                                                <EditInput :content="clientInfo.address" :is-edit="isEdit"
+                                                        @change="changeClientAddress"></EditInput>
+                                            </div>
                                         </div>
                                     </div>
 
                                     <div class="card-text py-10 clearfix">
-                                        <div class="col-md-2 float-left text-right pl-0">备注</div>
-                                        <div class="col-md-4 float-left font-weight-bold">
-                                            <editTextarea :content="clientInfo.desc"
-                                                        :is-edit="isEdit" @change="changeClientDesc"></editTextarea>
+                                        <div class="col-md-6 px-0">
+                                            <div class="col-md-3 float-left text-right pl-0">备注</div>
+                                            <div class="col-md-9 float-left font-weight-bold">
+                                                <editTextarea :content="clientInfo.desc"
+                                                            :is-edit="isEdit" @change="changeClientDesc"></editTextarea>
+                                            </div>
                                         </div>
                                     </div>
 
                                     <div class="segmentation-line example"></div>
 
                                     <div class="card-text py-5 clearfix">
-                                        <div class="col-md-2 float-left text-right pl-0">录入人</div>
-                                        <div class="col-md-4 float-left font-weight-bold">
-                                            {{clientInfo.creator?clientInfo.creator.data.name:''}}
+                                        <div class="col-md-6 px-0">
+                                            <div class="col-md-3 float-left text-right pl-0">录入人</div>
+                                            <div class="col-md-9 float-left font-weight-bold">
+                                                {{clientInfo.creator?clientInfo.creator.data.name:''}}
+                                            </div>
                                         </div>
-                                        <div class="col-md-2 float-left text-right pl-0">录入时间</div>
-                                        <div class="col-md-4 float-left font-weight-bold">
-                                            {{clientInfo.created_at?clientInfo.created_at:''}}
+                                        <div class="col-md-6 px-0">
+                                            <div class="col-md-3 float-left text-right pl-0">录入时间</div>
+                                            <div class="col-md-6 float-left font-weight-bold">
+                                                {{clientInfo.created_at?clientInfo.created_at:''}}
+                                            </div>
                                         </div>
                                     </div>
                                     <div class="card-text py-5 clearfix">
-                                        <div class="col-md-2 float-left text-right pl-0">最近更新人</div>
-                                        <div class="col-md-4 float-left font-weight-bold">
-                                        {{clientInfo.last_updated_user?clientInfo.last_updated_user:''}}
+                                        <div class="col-md-6 px-0">
+                                            <div class="col-md-3 float-left text-right pl-0">最近更新人</div>
+                                            <div class="col-md-6 float-left font-weight-bold">
+                                            {{clientInfo.last_updated_user?clientInfo.last_updated_user:''}}
+                                            </div>
                                         </div>
-                                        <div class="col-md-2 float-left text-right pl-0">最近更新时间</div>
-                                        <div class="col-md-4 float-left font-weight-bold">
-                                            {{clientInfo.updated_at?clientInfo.updated_at:''}}
+                                        <div class="col-md-6 px-0">
+                                            <div class="col-md-3 float-left text-right pl-0">最近更新时间</div>
+                                            <div class="col-md-6 float-left font-weight-bold">
+                                                {{clientInfo.updated_at?clientInfo.updated_at:''}}
+                                            </div>
                                         </div>
                                     </div>
                                 </div>
@@ -414,28 +437,28 @@
                             </div>
                         </div>
                         <div class="example">
-                            <div class="col-md-2 text-right float-left require">联系人</div>
+                            <div class="col-md-2 text-right float-left require pl-0">联系人</div>
                             <div class="col-md-10 float-left">
                                 <input type="text" title="" class="form-control"
                                        placeholder="请输入联系人" v-model="editConfig.name">
                             </div>
                         </div>
                         <div class="example">
-                            <div class="col-md-2 text-right float-left require">关键决策人</div>
+                            <div class="col-md-2 text-right float-left require pl-0">关键决策人</div>
                             <div class="col-md-10 float-left">
                                 <selectors ref="contact" :options="keyMasterArr" :value="editConfig.type"
                                     @change="changeContactClientType"></selectors>
                             </div>
                         </div>
                         <div class="example">
-                            <div class="col-md-2 text-right float-left require">联系人电话</div>
+                            <div class="col-md-2 text-right float-left require pl-0">联系人电话</div>
                             <div class="col-md-10 float-left">
                                 <input type="text" title="" class="form-control"
                                        placeholder="请输入联系人电话" v-model="editConfig.phone"/>
                             </div>
                         </div>
                         <div class="example">
-                            <div class="col-md-2 text-right float-left require">职位</div>
+                            <div class="col-md-2 text-right float-left require pl-0">职位</div>
                             <div class="col-md-10 float-left">
                                 <input type="text" title="" class="form-control"
                                        placeholder="请输入联系人职位" v-model="editConfig.position">
@@ -558,6 +581,7 @@
 
     import fetch from '../../assets/utils/fetch.js'
     import config from '../../assets/js/config'
+    import Cookies from 'js-cookie'
 
     export default {
         data: function () {
