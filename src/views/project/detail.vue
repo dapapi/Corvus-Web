@@ -88,9 +88,12 @@
                                 <div class="col-md-2 float-left pl-0">{{ task.principal.data.name }}</div>
                                 <div class="col-md-4 float-left pl-0">{{ task.end_at }}</div>
                                 <div class="col-md-3 float-left pl-0">
-                                    <template v-if="task.status === 1"><span style="color: #FF9800;">进行中</span></template>
-                                    <template v-if="task.status === 2"><span style="color: #4CAF50;">已完成</span></template>
-                                    <template v-if="task.status === 3"><span style="color: #9E9E9E;">已停止</span></template>
+                                    <template v-if="task.status === 1"><span style="color: #FF9800;">进行中</span>
+                                    </template>
+                                    <template v-if="task.status === 2"><span style="color: #4CAF50;">已完成</span>
+                                    </template>
+                                    <template v-if="task.status === 3"><span style="color: #9E9E9E;">已停止</span>
+                                    </template>
                                 </div>
                             </div>
                         </div>
@@ -155,7 +158,7 @@
                             <li class="nav-item" role="presentation"
                                 v-if="projectInfo.type != 5 && projectInfo.approval_status == 232">
                                 <a class="nav-link" data-toggle="tab" href="#forum-project-contract"
-                                   aria-controls="forum-present"
+                                   aria-controls="forum-present" @click="getProjectContract()"
                                    aria-expanded="false" role="tab">合同</a>
                             </li>
                             <li class="nav-item" role="presentation" @click="getProjectBill"
@@ -164,7 +167,7 @@
                                    aria-controls="forum-present"
                                    aria-expanded="false" role="tab">账单</a>
                             </li>
-                            <li class="nav-item" role="presentation" @click="getProjectReturned"
+                            <li class="nav-item" role="presentation" @click="getProjectsReturned"
                                 v-if="projectInfo.type != 5 && projectInfo.approval_status == 232">
                                 <a class="nav-link" data-toggle="tab" href="#forum-project-payback"
                                    aria-controls="forum-present"
@@ -266,16 +269,20 @@
                                         <th class="cell-300" scope="col">截止日期</th>
                                     </tr>
                                     <tbody>
-                                    <tr v-for="task in projectTasksInfo">
-                                        <td class="pointer-content" @click="redirectTask(task.id)">
+                                    <tr v-for="task in projectTasksInfo" @click="redirectTask(task.id)">
+                                        <td class="pointer-content">
                                             {{ task.title }}
                                         </td>
                                         <td>{{ task.type.data.title }}</td>
                                         <td>
-                                            <template v-if="task.status === 1"><span style="color: #FF9800;">进行中</span></template>
-                                            <template v-if="task.status === 2"><span style="color: #4CAF50;">已完成</span></template>
-                                            <template v-if="task.status === 3"><span style="color: #9E9E9E;">已停止</span></template>
-                                            <template v-if="task.status === 4"><span style="color: #F44336;">已延期</span></template>
+                                            <template v-if="task.status === 1"><span style="color: #FF9800;">进行中</span>
+                                            </template>
+                                            <template v-if="task.status === 2"><span style="color: #4CAF50;">已完成</span>
+                                            </template>
+                                            <template v-if="task.status === 3"><span style="color: #9E9E9E;">已停止</span>
+                                            </template>
+                                            <template v-if="task.status === 4"><span style="color: #F44336;">已延期</span>
+                                            </template>
                                         </td>
                                         <td>{{ task.principal.data.name }}</td>
                                         <td>{{ task.end_at }}</td>
@@ -303,12 +310,12 @@
 
                             </div>
                             <!-- 合同 -->
-                            <div class="tab-pane animation-fade py-10"
+                            <div class="tab-pane animation-fade pb-20"
                                  v-if="projectInfo.type != 5 && projectInfo.approval_status == 232"
                                  id="forum-project-contract"
                                  role="tabpanel">
                                 <table class="table table-hover example"
-                                       data-child="tr">
+                                       data-child="tr" v-if="projectContractInfo">
                                     <tr>
                                         <th class="cell-300" scope="col">合同编号</th>
                                         <th class="cell-300" scope="col">项目名称</th>
@@ -319,17 +326,33 @@
                                         <th class="cell-300" scope="col">审批状态</th>
                                     </tr>
                                     <tbody>
-                                    <tr>
-                                        <td>#12312sdf231</td>
-                                        <td>测试合同</td>
-                                        <td>papi、bigger</td>
+                                    <tr v-for="contract in projectContractInfo"
+                                        @click="redirectContract(contract.form_instance_number)">
+                                        <td>{{ contract.form_instance_number }}</td>
+                                        <td>{{ contract.title }}</td>
+                                        <td>
+                                            <template v-for="star in contract.stars_name">
+                                                {{ star.name }}
+                                            </template>
+                                        </td>
                                         <td>收入</td>
-                                        <td>陈晓禹</td>
-                                        <td>2018-12-27</td>
-                                        <td>审批中</td>
+                                        <td>{{ contract.creator_name }}</td>
+                                        <td>{{ contract.created_at.split(' ')[0] }}</td>
+                                        <td>
+                                            <template v-if="contract.form_status === 231">待审批</template>
+                                            <template v-if="contract.form_status === 232">已同意</template>
+                                            <template v-if="contract.form_status === 233">已拒绝</template>
+                                            <template v-if="contract.form_status === 234">已撤销</template>
+                                            <template v-if="contract.form_status === 235">已作废</template>
+                                        </td>
                                     </tr>
                                     </tbody>
                                 </table>
+                                <div style="margin: 6rem auto;width: 100px"
+                                     v-if="projectContractInfo.length === 0">
+                                    <img src="https://res.papitube.com/corvus/images/content-none.png" alt=""
+                                         style="width: 100%">
+                                </div>
 
                             </div>
                             <!-- 账单 -->
@@ -400,15 +423,19 @@
                                 <div class="clearfix">
                                     <ul class="nav nav-tabs nav-tabs-line float-left" role="tablist"
                                         style="border-bottom: 0">
-                                        <li class="nav-item" role="presentation">
-                                            <a class="nav-link active" data-toggle="tab" href="#forum-item-bill"
+                                        <li class="nav-item" role="presentation"
+                                            v-for="(contract,index) in projectContractInfo">
+                                            <a class="nav-link" :class="index === 0 ? 'active': ''" data-toggle="tab"
+                                               href="#forum-item-bill"
+                                               @click="getProjectReturned(contract.form_instance_number)"
                                                aria-controls="forum-base"
-                                               aria-expanded="true" role="tab">bigger研究所/papi酱</a>
-                                        </li>
-                                        <li class="nav-item" role="presentation">
-                                            <a class="nav-link" data-toggle="tab" href="#forum-item-bill"
-                                               aria-controls="forum-base"
-                                               aria-expanded="true" role="tab">周冬雨</a>
+                                               aria-expanded="true" role="tab">
+                                                <template v-for="(star,index) in contract.stars_name">
+                                                    {{ star.name }}
+                                                    <template v-if="(index + 1) !== contract.stars_name.length">/
+                                                    </template>
+                                                </template>
+                                            </a>
                                         </li>
                                     </ul>
                                     <div class="float-right" style="padding: .715rem 1.429rem">
@@ -421,7 +448,7 @@
                                     <div class="example" v-if="projectReturnInfo.meta">
                                         <div class="col-md-3 float-left pl-0">
                                             <div>合同金额<span class="money-color pl-5">
-                            {{ projectReturnInfo.meta.contractReturnedMoney ? projectReturnInfo.meta.contractReturnedMoney : 0}}</span>元
+                            {{ projectReturnInfo.meta.appoval ? projectReturnInfo.meta.appoval.money : 0}}</span>元
                                             </div>
                                         </div>
                                         <div class="col-md-3 float-left pl-0">
@@ -1485,6 +1512,8 @@
                 oldInfo: '',
                 coursesLength: 0,
                 formData: '',
+                projectContractInfo: '',
+                contractId: '',
             }
         },
 
@@ -1619,7 +1648,6 @@
             //隐私设置
             setPrivacy: function () {
 
-                let _this = this
                 let data = {
                     fee: this.$store.state.payInfo, //预计订单收入
                     projected_expenditure: this.$store.state.divisionInfo,//预计支出
@@ -1637,7 +1665,7 @@
                         sendData[key].push(data[key][i].id)
                     }
                 }
-                fetch('put', `/projects/${this.$route.params.id}/privacyUser`, sendData).then(function (response) {
+                fetch('put', `/projects/${this.$route.params.id}/privacyUser`, sendData).then(() => {
                     toastr.success('隐私设置成功')
                     $('#addPrivacy').modal('hide')
                 })
@@ -1645,25 +1673,23 @@
             getPrivacy: function () {
                 let data = {
                     project_id: this.$route.params.id
-                }
-                let _this = this
-                fetch('get', `/privacyUsers?include=user`, data).then(function (response) {
-                    // console.log(response)
-                    let allPrivacyUsers = response.data
-                    _this.$store.state.divisionInfo = []
-                    _this.$store.state.payInfo = []
-                    _this.$store.state.contractInfo = []
-                    _this.$store.state.collectInfo = []
+                };
+                fetch('get', `/privacyUsers?include=user`, data).then(response => {
+                    let allPrivacyUsers = response.data;
+                    this.$store.state.divisionInfo = [];
+                    this.$store.state.payInfo = [];
+                    this.$store.state.contractInfo = [];
+                    this.$store.state.collectInfo = [];
                     if (allPrivacyUsers) {
                         for (let i = 0; i < allPrivacyUsers.length; i++) {
-                            if (allPrivacyUsers[i].field == 'fee') {
-                                _this.$store.state.payInfo.push(allPrivacyUsers[i].user.data)
-                            } else if (allPrivacyUsers[i].field == 'projected_expenditure') {
-                                _this.$store.state.divisionInfo.push(allPrivacyUsers[i].user.data)
-                            } else if (allPrivacyUsers[i].field == 'expendituresum') {
-                                _this.$store.state.contractInfo.push(allPrivacyUsers[i].user.data)
-                            } else if (allPrivacyUsers[i].field == 'contractmoney') {
-                                _this.$store.state.collectInfo.push(allPrivacyUsers[i].user.data)
+                            if (allPrivacyUsers[i].field === 'fee') {
+                                this.$store.state.payInfo.push(allPrivacyUsers[i].user.data)
+                            } else if (allPrivacyUsers[i].field === 'projected_expenditure') {
+                                this.$store.state.divisionInfo.push(allPrivacyUsers[i].user.data)
+                            } else if (allPrivacyUsers[i].field === 'expendituresum') {
+                                this.$store.state.contractInfo.push(allPrivacyUsers[i].user.data)
+                            } else if (allPrivacyUsers[i].field === 'contractmoney') {
+                                this.$store.state.collectInfo.push(allPrivacyUsers[i].user.data)
                             } else {
                             }
 
@@ -1695,6 +1721,7 @@
                 this.$store.state.contractInfo = []
                 this.$store.state.collectInfo = []
             },
+
             getStars: function () {
                 fetch('get', '/starandblogger', {sign_contract_status: 2}).then(response => {
                     for (let i = 0; i < response.data.length; i++) {
@@ -1743,24 +1770,22 @@
                 fetch('get', '/projects/' + this.projectId + '/bill').then(response => {
                     this.projectBillsInfo = response.data
                 });
-
-                // fetch('get', '/projects/' + this.projectId + '/store/bill').then(response => {
-                //     console.log(response)
-                // })
             },
 
-            addProjectBill: function () {
-                let data = {
-                    expenses: '',
-                };
-                fetch('post', '/projects/' + this.projectId + '/store/bill', data).then(response => {
-
-                })
+            getProjectContract: function (callback) {
+                fetch('get', '/approvals_contract/projectList', {project_id: this.projectId}).then(response => {
+                    this.projectContractInfo = response.data;
+                    if (callback) {
+                        callback(response.data)
+                    }
+                });
             },
 
-            getProjectReturned: function () {
+            getProjectReturned: function (contractId) {
+                this.contractId = contractId;
                 let data = {
-                    include: 'money.type'
+                    include: 'money.type',
+                    contract_id: contractId
                 };
                 fetch('get', '/projects/' + this.projectId + '/returned/money', data).then(response => {
                     this.projectReturnInfo = response;
@@ -1770,6 +1795,16 @@
                         }
                     }
                 });
+            },
+
+            getProjectsReturned: function () {
+                if (!this.projectContractInfo) {
+                    this.getProjectContract((data) => {
+                        this.getProjectReturned(data[0].form_instance_number);
+                    })
+                } else {
+                    this.getProjectReturned(this.projectContractInfo[0].form_instance_number);
+                }
 
                 if (this.payMethodsArr.length > 0) {
                     return
@@ -1835,24 +1870,23 @@
             },
 
             addProjectPayback: function () {
-                // todo 合同id没有做修改，需要等合同确定才可以
-                this.projectReturnData.contract_id = 22;
+                this.projectReturnData.contract_id = this.contractId;
                 this.projectReturnData.principal_id = this.user.id;
                 this.projectReturnData.issue_name = this.paybackLength;
-                fetch('post', '/projects/' + this.projectId + '/returned/money', this.projectReturnData).then(response => {
+                fetch('post', '/projects/' + this.projectId + '/returned/money', this.projectReturnData).then(() => {
                     $('#addPaybackTime').modal('hide');
                     toastr.success('添加成功');
-                    this.getProjectReturned()
+                    this.getProjectReturned(this.contractId)
                 })
             },
 
             editProjectPayback: function () {
-                fetch('put', '/returned/money/' + this.projectReturnId, this.projectReturnData).then(response => {
+                fetch('put', '/returned/money/' + this.projectReturnId, this.projectReturnData).then(() => {
                     $('#addPaybackTime').modal('hide');
                     $('#addPayback').modal('hide');
                     $('#addInvoice').modal('hide');
                     toastr.success('修改成功');
-                    this.getProjectReturned()
+                    this.getProjectReturned(this.contractId)
                 })
             },
 
@@ -1861,9 +1895,9 @@
             },
 
             delProjectPaybackCallback: function () {
-                fetch('delete', '/returned/money/' + this.delPaybackId).then(response => {
+                fetch('delete', '/returned/money/' + this.delPaybackId).then(() => {
                     toastr.success('删除成功');
-                    this.getProjectReturned()
+                    this.getProjectReturned(this.contractId)
                 })
             },
 
@@ -1883,14 +1917,18 @@
                     toastr.error('请选择票据类型或付款方式')
                     return
                 }
-                this.projectReturnData.contract_id = 22;
+                this.projectReturnData.contract_id = this.contractId;
                 this.projectReturnData.principal_id = this.user.id;
                 fetch('post', '/projects/' + this.projectId + '/returned/' + this.paybackTime.id + '/money', this.projectReturnData).then(response => {
                     $('#addPayback').modal('hide');
                     $('#addInvoice').modal('hide');
                     toastr.success('添加成功');
-                    this.getProjectReturned()
+                    this.getProjectReturned(this.contractId)
                 })
+            },
+
+            redirectContract: function (contractId) {
+                this.$router.push({path: '/approval/' + contractId})
             },
 
             selectedPaybackTime: function (payback) {

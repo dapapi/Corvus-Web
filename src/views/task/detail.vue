@@ -120,14 +120,14 @@
                                 </div>
                                 <div class="py-20 clearfix">
                                     <div class="clearfix">
-                                        <div class="card-text py-10 px-0 clearfix col-md-6 float-left ">
+                                        <div class="card-text py-10 px-0 clearfix col-md-6">
                                             <div class="col-md-3 float-left text-right pl-0">任务名称</div>
                                             <div class="col-md-9 float-left font-weight-bold">
                                                 <EditInput :content="taskInfo.title" :is-edit="isEdit"
                                                            @change="(value) => changeTaskInfo(value, 'title')"></EditInput>
                                             </div>
                                         </div>
-                                        <div class="card-text py-10 px-0 clearfix col-md-6 float-left ">
+                                        <div class="card-text py-10 px-0 clearfix col-md-6">
                                             <div class="col-md-3 float-left text-right pl-0">优先级</div>
                                             <div class="col-md-9 float-left font-weight-bold">
                                                 <EditSelector :content="taskInfo.priority?taskInfo.priority: ''"
@@ -136,20 +136,20 @@
                                                               @change="(value) => changeTaskInfo(value, 'level')"></EditSelector>
                                             </div>
                                         </div>
-                                        <div class="card-text py-10 px-0 clearfix col-md-6 float-left ">
+                                        <div class="card-text py-10 px-0 clearfix col-md-6">
                                             <div class="col-md-3 float-left text-right pl-0">负责人</div>
                                             <div class="col-md-9 float-left font-weight-bold">
                                                 <EditInputSelector :is-edit="isEdit" :select-type="'principal'"
                                                                    @change="(value) => changeTaskInfo(value, 'principal_id')"></EditInputSelector>
                                             </div>
                                         </div>
-                                        <div class="card-text py-10 px-0 clearfix col-md-6 float-left ">
+                                        <div class="card-text py-10 px-0 clearfix col-md-6">
                                             <div class="col-md-3 float-left text-right pl-0">参与人</div>
                                             <div class="col-md-9 float-left font-weight-bold">
                                                 <EditAddMember :is-edit="isEdit"></EditAddMember>
                                             </div>
                                         </div>
-                                        <div class="card-text py-10 px-0 clearfix col-md-6 float-left ">
+                                        <div class="card-text py-10 px-0 clearfix col-md-8">
                                             <div class="col-md-3 float-left text-right pl-0">开始时间</div>
                                             <div class="col-md-9 float-left font-weight-bold" v-if="taskInfo.start_at">
                                                 <EditDatepicker class="col-md-6 px-0 float-left"
@@ -160,7 +160,7 @@
                                                                 @change="(value) => changeTaskInfo(value, 'start_minutes')"></EditTimepicker>
                                             </div>
                                         </div>
-                                        <div class="card-text py-10 px-0 clearfix col-md-6 float-left ">
+                                        <div class="card-text py-10 px-0 clearfix col-md-8">
                                             <div class="col-md-3 float-left text-right pl-0">结束时间</div>
                                             <div class="col-md-9 float-left font-weight-bold" v-if="taskInfo.end_at">
                                                 <EditDatepicker class="col-md-6 px-0 float-left"
@@ -171,7 +171,7 @@
                                                                 @change="(value) => changeTaskInfo(value, 'end_minutes')"></EditTimepicker>
                                             </div>
                                         </div>
-                                        <div class="card-text py-10 px-0 clearfix col-md-6 float-left ">
+                                        <div class="card-text py-10 px-0 clearfix col-md-6">
                                             <div class="col-md-3 float-left text-right pl-0">任务说明</div>
                                             <div class="col-md-9 float-left font-weight-bold">
                                                 <editTextarea :content="taskInfo.desc"
@@ -361,7 +361,6 @@
                                         <div class="progress-bar progress-bar-warning" aria-valuemin="-100"
                                              aria-valuemax="0" aria-valuenow="-40" role="progressbar"
                                              :style="{width: `${questionInfo.reviewanswer.length === 0 ? 0 : hasAnsweredArr.length / questionInfo.reviewanswer.data.length * 100}%`}">
-                                            <!-- <span class="progress-label">{{questionInfo.reviewanswer.length === 0 ? 0 : ~~((hasAnsweredArr.length / questionInfo.reviewanswer.data.length * 100))}}%</span> -->
                                         </div>
                                     </div>
                                     <div style="width: 50px; padding-left: 10px; float: left;">
@@ -494,15 +493,6 @@
                         <h4 class="modal-title">新增子任务</h4>
                     </div>
                     <div class="modal-body">
-                        <!-- 报错？？ -->
-                        <!--<div class="example">-->
-                            <!--<div class="col-md-2 text-right float-left">关联资源</div>-->
-                            <!--<div class="col-md-10 float-left">-->
-                                <!--<normal-linkage-selectors ref="linkage" v-if="linkData.length>0" :myData="linkData"-->
-                                                          <!--:data="linkData"-->
-                                                          <!--@change="addLinkage"></normal-linkage-selectors>-->
-                            <!--</div>-->
-                        <!--</div>-->
                         <div class="example">
                             <div class="col-md-2 text-right float-left require">任务类型</div>
                             <div class="col-md-10 float-left pl-0">
@@ -561,8 +551,6 @@
                             </div>
                         </div>
                     </div>
-                    <!-- 是否确认删除 -->
-
                     <div class="modal-footer">
                         <button class="btn btn-sm btn-white btn-pure" data-dismiss="modal">取消</button>
                         <button class="btn btn-primary" @click="addChildTask">确定</button>
