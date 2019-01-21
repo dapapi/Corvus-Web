@@ -759,36 +759,6 @@
                         name: '其他'
                     },
                 ],
-                platformLists: [
-                    {
-                        value: 1,
-                        name: '微博'
-                    },
-                    {
-                        value: 2,
-                        name: '抖音'
-                    },
-                    {
-                        value: 3,
-                        name: '小红书'
-                    },
-                     {
-                        value: 12,
-                        name: ['微博','抖音']
-                    },
-                     {
-                        value: 13,
-                        name: ['微博','小红书']
-                    },
-                     {
-                        value: 23,
-                        name: ['抖音','小红书']
-                    },
-                     {
-                        value: 123,
-                        name: ['微博','抖音','小红书']
-                    },
-                ],
                 star_douyin_infos: {
                     url: '',
                     avatar: '',
@@ -861,29 +831,12 @@
             ImportAndExport
         },
         mounted() {
-            this.getArtists();
-            this.getBlogger();
             this.getStars();
+            this.getBlogger();
             this.getBlogType() //获取博主类型
+            this.getArtists();
             $('table').asSelectable();
-            let _this = this;
-            $('#addBolgger').on('hidden.bs.modal', function () {
-
-                _this.bolggerName = '';//昵称
-                _this.star_weibo_infos.url = '';//微博地址
-                _this.$refs.weibo.setValue('0');//微博粉丝
-                _this.star_douyin_infos.url = '';//抖音地址
-                _this.$refs.douyin.setValue('0');//抖音粉丝
-                _this.star_xiaohongshu_infos.url = '';//小红书地址
-                _this.$refs.xiaohongshu.setValue('0')//小红书粉丝
-                _this.$refs.papitype.setValue('')//类型
-                _this.$refs.communicationType.setValue('')//沟通类型
-                _this.$refs.signIntention.setValue('')//我公司意向
-                _this.$refs.isSign.setValue('')//其他公司意向
-                _this.artistDesc = '';//备注
-                _this.platformType = [];
-                _this.uploadUrl = ''
-            })
+            
         },
         methods: {
             //获取沟通状态
@@ -891,7 +844,7 @@
                 this.listData.communication_status = value
                 this.getArtists()
             },
-            //获取艺人来源
+            //获取签约状态
             getSource: function (value) {
                 console.log(value)
                 this.listData.sign_contract_status = value
@@ -914,7 +867,6 @@
                         _this.total = response.meta.pagination.total;
                         _this.total_pages = response.meta.pagination.total_pages;
                     }
-                    _this.isLoading = false;
                     _this.selectAllStars = false;
                     _this.selectedArtistsArr = [];
                 })
@@ -922,7 +874,7 @@
             getBlogger: function (page = 1, signStatus) {
 
                 let data = {
-                    include: 'type,creator,tasks,affixes,producer,publicity,operatelogs',
+                    include: 'type,creator,affixes,publicity,operatelogs',
 
                 }
                 let _this = this;
@@ -932,10 +884,6 @@
                     this.blogStatus = signStatus
                 }
                 data.status = this.blogStatus
-                //博主类型
-                if (this.blogType) {
-                    data.type = this.blogType
-                }
                 //沟通状态
                 if (this.blogCommunication) {
                     data.communication_status = this.blogCommunication
@@ -951,15 +899,17 @@
                         _this.bloggerInfo = response.data;
                     }
                     console.log(response.data)
-                    _this.Bcurrent_page = response.meta.pagination.current_page;
-                    _this.Btotal = response.meta.pagination.total;
-                    _this.Btotal_pages = response.meta.pagination.total_pages;
+                    if(response.meta){
+                        _this.Bcurrent_page = response.meta.pagination.current_page;
+                        _this.Btotal = response.meta.pagination.total;
+                        _this.Btotal_pages = response.meta.pagination.total_pages;
+                    }
                     _this.isLoading = false;
                     _this.selectAllBlogger = false;
                     _this.selectedArtistsArr = [];
-
+                    
                 });
-
+                
             },
 
             //获取博主类型
@@ -1092,6 +1042,23 @@
                     $('#addBolgger').modal('hide');
                     _this.$router.push({path: 'blogger/' + response.data.id});
                     _this.getBlogger()
+                    $('#addBolgger').on('hidden.bs.modal', function () {
+
+                        _this.bolggerName = '';//昵称
+                        _this.star_weibo_infos.url = '';//微博地址
+                        _this.$refs.weibo.setValue('0');//微博粉丝
+                        _this.star_douyin_infos.url = '';//抖音地址
+                        _this.$refs.douyin.setValue('0');//抖音粉丝
+                        _this.star_xiaohongshu_infos.url = '';//小红书地址
+                        _this.$refs.xiaohongshu.setValue('0')//小红书粉丝
+                        _this.$refs.papitype.setValue('')//类型
+                        _this.$refs.communicationType.setValue('')//沟通类型
+                        _this.$refs.signIntention.setValue('')//我公司意向
+                        _this.$refs.isSign.setValue('')//其他公司意向
+                        _this.artistDesc = '';//备注
+                        _this.platformType = [];
+                        _this.uploadUrl = ''
+                    })
                 })
 
             },
@@ -1165,12 +1132,12 @@
                 }
             },
              getStars: function () {
-                if (Cookies.get('companyType') === '泰洋川禾') {
-                    this.isShow = true
-                } else {
-                    this.isShow = false
-                }
-
+                let  organization_id = JSON.parse(Cookies.get('user')).organization_id
+                        if(organization_id == 411){                       
+                            this.isShow = true
+                        }else if(organization_id == 412){
+                            this.isShow = false
+                        }
             },
             tab:function(value){
                 this.selectedArtistsArr = []
