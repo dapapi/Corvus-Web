@@ -1,7 +1,7 @@
 <template>
     <div class="approval-text-container col-md-12 pl-0">
         <span class="col-md-2 text-right pl-0" :class="consdata[0].required===1?'require':''">{{title || consdata[0].control_title}}</span>
-        <select class="good-picker selectpicker col-md-10"  data-plugin="" :value="value" :data-live-search="isSelectable"
+        <select class="good-picker selectpicker col-md-10"  data-plugin="" :value="value" :data-live-search="true"
             :data-show-subtext="isSelectable" 
             multiple="true" :title="placeholder || consdata[0].control_placeholder" v-model="valueListener">
             <selectorsOptions v-for="option in options" :id="option.enum_sort" :val="option.enum_value || {name:option.name || option.id,id:option.id}"
