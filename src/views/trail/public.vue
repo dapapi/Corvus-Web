@@ -111,6 +111,11 @@
                         <pagination :current_page="current_page" :method="getTrails" :total_pages="total_pages"
                                     :total="total"></pagination>
                     </div>
+<<<<<<< HEAD
+=======
+                    <pagination :current_page="current_page" :method="getSales" :total_pages="total_pages"
+                                :total="total" class="mb-50"></pagination>
+>>>>>>> hp
                 </div>
             </div>
         </div>

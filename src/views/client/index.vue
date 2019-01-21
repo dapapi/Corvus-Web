@@ -69,7 +69,7 @@
                     </div>
 
                     <pagination :current_page="current_page" :method="getClients" :total_pages="total_pages"
-                                :total="total"></pagination>
+                                :total="total" class="mb-50"></pagination>
                 </div>
 
             </div>
