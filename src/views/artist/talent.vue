@@ -830,8 +830,11 @@
         components: {
             ImportAndExport
         },
-        mounted() {
+        created(){
             this.getStars();
+        },
+        mounted() {
+            
             this.getBlogger();
             this.getBlogType() //获取博主类型
             this.getArtists();
@@ -1133,6 +1136,7 @@
             },
              getStars: function () {
                 let  organization_id = JSON.parse(Cookies.get('user')).organization_id
+                console.log(organization_id)
                         if(organization_id == 411){                       
                             this.isShow = true
                         }else if(organization_id == 412){
