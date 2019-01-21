@@ -1,6 +1,7 @@
 <template>
     <div class="col-md-12 pl-0 pr-0 multiple-container container">
             <span>{{consdata[0].control_title}}({{n}})</span>
+            <button type="button" class="close" v-if="n>1" @click='formMinus(n)'><span aria-hidden="true">×</span></button>
             <hr>
             <div :is='sortChecker(item)' class="approval-multiple-option"
                 v-for="(item, index) in consdata" ref='selectpicker'
@@ -9,7 +10,7 @@
                 :title='item.control_title'
                 :options='item.control_enums'
                 :placeholder='item.control_placeholder'
-                :consdata='[item]'
+                :consdata='consdataHandler(item,index)'
                 @change='changeHandler'></div>
     </div>
 </template>
@@ -31,7 +32,7 @@ import ApprovalMultipleSelector from '@/components/ForApproval/ApprovalMultipleS
 import ApprovalChainReaction from '@/components/ForApproval/ApprovalChainReaction'
 export default {
     name:'ApprovalMultiple',
-    props:['consdata','singlemode','n'],
+    props:['consdata','singlemode','n','total','defaultData'],
     components:{
         ApprovalMultiple,
         ApprovalText,
@@ -71,6 +72,21 @@ export default {
         this.refresh()
     },
     methods:{
+        consdataHandler(params,index){
+            console.log(params);
+            console.log(this.defaultData[this.n-1]);
+            console.log(this.defaultData[this.n-1] && this.defaultData[this.n-1].find(item=>item.key === params.id));
+            if(this.defaultData[this.n-1] && this.defaultData[this.n-1].find(item=>item.key === params.id)){
+                let tempData = this.defaultData[this.n-1].find(item=>item.key === params.id)
+                return [Object.assign(this.consdata[index],{control_value:tempData.value})]
+                console.log(tempData);
+            }else{
+                return [this.consdata[index]]
+            }
+        },
+        formMinus(params){
+            this.$emit('formMinus',params)
+        },
         changeHandler(params){
             if(!this.emitData.find(item=>item.key === params.key)){
                 this.emitData.push(params)
@@ -149,6 +165,9 @@ export default {
     color:royalblue;
     margin-left: 50px;
 }
-
+.close{
+    transform: scale(0.6);
+    color: rgba(7, 17, 27, 0.7)
+}
 
 </style>
