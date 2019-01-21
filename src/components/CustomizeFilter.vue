@@ -71,6 +71,12 @@
         },
         mounted() {
             let _this = this;
+             $(this.$el).on('show.bs.modal',function () {
+             _this.$nextTick((params) => {
+                $('.selectpicker').selectpicker('refresh')
+             })
+            })
+            
             $(this.$el).on('hidden.bs.modal',function () {
                 _this.conditionLength = 0;
                 _this.selectorHidden = [];

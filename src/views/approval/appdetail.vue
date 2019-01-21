@@ -42,6 +42,21 @@
                     <i v-if="[233,234,235].includes(list.form_status) && (info.approval.user_id === currentId || (list.creator && list.creator.data.id === currentId)) ">
                         <button class="btn btn-primary" @click="addProjectTimeout(list.form_id)">重新提交</button>
                     </i>
+                     <template v-if="list.form_status==232" >
+                        <img src="@/assets/img/approval.jpg" style="width:50px;margin-left:20px;" alt="">
+                    </template>
+                    <template v-if="list.form_status==231">
+                        <img src="@/assets/img/pending.jpg" style="width:50px;margin-left:20px;" alt="">
+                    </template>
+                    <template v-if="list.form_status==234">
+                        <img src="@/assets/img/withdraw.jpg" style="width:50px;margin-left:20px;" alt="">
+                    </template>
+                    <template v-if="list.form_status==235">
+                        <img src="@/assets/img/wasted.jpg" style="width:50px;margin-left:20px;" alt="">
+                    </template>
+                    <template v-if="list.form_status==233">
+                        <img src="@/assets/img/denide.jpg" style="width:50px;margin-left:20px;" alt="">
+                    </template>
                     <i v-if="list.form_status==231 && isCurrentApprover && $route.query.mode === 'approver'">
                         <button class="btn btn-success" @click='approvalHandler("agree")'>同意</button>
                         <button class="btn btn-danger" @click='approvalHandler("refuse")'>拒绝</button>
