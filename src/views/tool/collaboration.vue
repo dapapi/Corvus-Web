@@ -17,8 +17,6 @@
         methods: {
             getIdTest() {
                 let item = $(window.parent.document.getElementById('_blank').contentWindow.document).find("#folder_online_doc_tag_td");
-                // console.log($('#folder_online_doc_tag_td'))
-                console.log(item)
 
             }
         }

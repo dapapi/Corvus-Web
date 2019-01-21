@@ -220,7 +220,6 @@
 
                 fetch('get', '/trails/filter_fields').then((params) => {
                     
-                    console.log(params)
                     _this.customizeInfo = params.data
                 })
             },

@@ -8,7 +8,7 @@
                  v-if="trailInfo.progress_status !== 0">
                 <div class="font-info pointer-content" data-target="#refuseTrail" data-toggle="modal">拒绝</div>
             </div>
-             <div class="page-header-actions dropdown show task-dropdown float-right"
+            <div class="page-header-actions dropdown show task-dropdown float-right"
                  v-if="trailInfo.progress_status == 0">
                 <div class="font-info pointer-content" data-target="#recoverTrail" data-toggle="modal">激活</div>
             </div>
@@ -152,7 +152,7 @@
                                             <button class="btn btn-primary" @click="changeTrailBaseInfo">确定</button>
                                         </div>
                                     </div>
-                                    <div class="card-block px-0">
+                                    <div class="card-block px-0" v-if="trailInfo.title">
                                         <div class="clearfix">
                                             <div class="card-text py-10 px-0 clearfix col-md-6 float-left ">
                                                 <div class="col-md-3 float-left text-right pl-0">线索名称</div>
@@ -166,7 +166,7 @@
                                             <div class="py-10 px-0 clearfix col-md-6 float-left ">
                                                 <TrailOrigin :trailType='trailType'
                                                              typeName='线索' :isEdit='isEdit'
-                                                             :content='trailInfo.resource'
+                                                             :content='trailInfo.resource.id'
                                                              @changeTrailOrigin='changeTrailOrigin'
                                                              :contentType='trailInfo.resource_type'
                                                              @changeEmail='changeEmail' detailPage='true'
@@ -197,7 +197,7 @@
                                                     <EditSelector :options="starsArr" :is-edit="isEdit"
                                                                   :multiple="true" :content="selectedExpectationsArr"
                                                                   :contentHide='true'
-                                                                  @valuelistener="changeExpectations"></EditSelector>
+                                                                  @change="changeExpectations"></EditSelector>
                                                 </div>
 
                                             </div>
@@ -213,7 +213,7 @@
                                                                   @refresh='getTrail'
                                                                   :content="selectedRecommendationsArr"
                                                                   :multiple="true" :contentHide='true'
-                                                                  @valuelistener="changeRecommendations"></EditSelector>
+                                                                  @change="changeRecommendations"></EditSelector>
                                                 </div>
                                             </div>
                                             <div class="card-text py-10 px-0 clearfix col-md-6 float-left">
@@ -558,7 +558,7 @@
                 </div>
             </div>
         </div>
-         <div class="modal fade" id="recoverTrail" aria-hidden="true" aria-labelledby="addLabelForm"
+        <div class="modal fade" id="recoverTrail" aria-hidden="true" aria-labelledby="addLabelForm"
              role="dialog" tabindex="-1" data-backdrop="static">
             <div class="modal-dialog modal-simple">
                 <div class="modal-content">
@@ -571,7 +571,7 @@
                     <div class="modal-body">
 
                         <div class="example">
-                           <h5>请确认激活</h5>
+                            <h5>请确认激活</h5>
                         </div>
                     </div>
                     <div class="modal-footer">
@@ -689,8 +689,10 @@
             },
             'trailInfo.principal.data': {
                 handler(newValue, oldValue) {
-                    if (newValue != oldValue) {
-                        this.changeInfo.principal_id = this.$store.state.principalInfo.id
+                    if (oldValue) {
+                        if (newValue != oldValue.id) {
+                            this.changeInfo.principal_id = this.$store.state.principalInfo.id
+                        }
                     }
                 },
                 deep: true
@@ -770,7 +772,6 @@
 
         methods: {
             changeTrailOriginPerson(value) {
-                console.log(value);
                 this.trailOriginPerson = value
             },
             changeEmail(value) {
@@ -831,10 +832,10 @@
                     _this.trailInfo = response.data;
                     _this.oldInfo = JSON.parse(JSON.stringify(response.data));
                     for (let i = 0; i < _this.trailInfo.expectations.data.length; i++) {
-                        _this.selectedExpectationsArr.push(_this.trailInfo.expectations.data[i].id)
+                        _this.selectedExpectationsArr.push(_this.trailInfo.expectations.data[i].moduleable_type + '-' + _this.trailInfo.expectations.data[i].id)
                     }
                     for (let i = 0; i < _this.trailInfo.recommendations.data.length; i++) {
-                        _this.selectedRecommendationsArr.push(_this.trailInfo.recommendations.data[i].id)
+                        _this.selectedRecommendationsArr.push(_this.trailInfo.recommendations.data[i].moduleable_type + '-' + _this.trailInfo.recommendations.data[i].id)
                     }
                     if (response.data.principal) {
                         let params = {
@@ -883,16 +884,15 @@
                     this.changeInfo.resource = ''
                 }
                 if (this.trailTypeValidate()) {
-                    let _this = this;
-
-                    let data = _this.changeInfo;
-                    if (!data.resource_type) {
-                        Object.assign(data, {resource_type: _this.trailInfo.resource_type})
+                    let data = this.changeInfo;
+                    if (JSON.stringify(this.changeInfo) === "{}") {
+                        this.isEdit = false
+                        return
                     }
-                    fetch('put', '/trails/' + this.trailId, data).then(function () {
+                    fetch('put', '/trails/' + this.trailId, data).then(() => {
                         toastr.success('修改成功');
-                        _this.isEdit = false
-                        _this.getTrail()
+                        this.isEdit = false
+                        this.getTrail()
                     })
                 }
             },
@@ -966,10 +966,8 @@
                     _this.currentUser = response.data
                     if (!_this.$store.state.newPrincipalInfo.id && _this.currentUser) {
                         _this.principal = _this.currentUser.id
-                        console.log('true', _this.currentUser.id);
                     } else {
                         _this.principal = _this.$store.state.newPrincipalInfo.id
-                        console.log('none', _this.$store.state.newPrincipalInfo.id);
                     }
                 })
             },
@@ -1073,6 +1071,13 @@
             },
 
             changeTrailFee: function (value) {
+                if (value == this.trailInfo.fee) {
+                    if (this.changeInfo.fee) {
+                        delete this.changeInfo.fee
+                    } else {
+                        return
+                    }
+                }
                 this.changeInfo.fee = value
             },
 
@@ -1111,6 +1116,10 @@
                 this.trailInfo.resource_type = value
             },
             changeExpectations: function (value) {
+                if (value.length === 0) {
+                    toastr.error('目标艺人不能为空');
+                    return
+                }
                 for (let i = 0; i < value.length; i++) {
                     let item = value[i].split('-');
                     value[i] = {
@@ -1122,6 +1131,10 @@
             },
 
             changeRecommendations: function (value) {
+                if (value.length === 0) {
+                    toastr.error('推荐艺人不能为空');
+                    return
+                }
                 for (let i = 0; i < value.length; i++) {
                     let item = value[i].split('-');
                     value[i] = {
@@ -1152,14 +1165,14 @@
             changeCooperationType(value) {
                 this.trailInfo.cooperation_type = value
             },
-            recoverTrail:function(){
+            recoverTrail: function () {
                 let _this = this
-                  fetch('put', '/trails/' + this.trailInfo.id + '/recover').then(function (response) {
-                        toastr.success('激活成功');
-                        $('#recoverTrail').modal('hide');
-                        _this.getTrail()
-                    })
-                    this.trailInfo.progress_status = 1
+                fetch('put', '/trails/' + this.trailInfo.id + '/recover').then(function (response) {
+                    toastr.success('激活成功');
+                    $('#recoverTrail').modal('hide');
+                    _this.getTrail()
+                })
+                this.trailInfo.progress_status = 1
 
             },
             refuseTrail: function () {

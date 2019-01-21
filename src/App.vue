@@ -240,6 +240,12 @@
         background: #eee;
     }
 
+    .fixed-button {
+        position: absolute;
+        bottom: 0px;
+        right: 0;
+    }
+
     body {
         -moz-user-select: none;
         -webkit-user-select: none;

@@ -873,7 +873,6 @@
             },
             //获取签约状态
             getSource: function (value) {
-                console.log(value)
                 this.listData.sign_contract_status = value
                 this.getArtists()
             },
@@ -885,7 +884,6 @@
                 }
                 this.listData.page = page
                 fetch('get', '/stars', this.listData).then(function (response) {
-                    console.log( response)
                     if(response.data){
                         _this.artistsInfo = response.data;
                     }
@@ -925,7 +923,6 @@
                     if(response.data){
                         _this.bloggerInfo = response.data;
                     }
-                    console.log(response.data)
                     if(response.meta){
                         _this.Bcurrent_page = response.meta.pagination.current_page;
                         _this.Btotal = response.meta.pagination.total;
@@ -1104,7 +1101,6 @@
                     } else {
                         this.selectedArtistsArr.push(value)
                     }
-                    console.log(this.selectedArtistsArr)
                 }
             },
 
@@ -1143,7 +1139,6 @@
                     _this.getBlogger()
                     _this.$store.state.participantsInfo = []
                     _this.selectedArtistsArr = []
-                    console.log(_this.selectedArtistsArr)
                 })
 
             },
@@ -1251,7 +1246,6 @@
             },
 
             changeBirthday: function (value) {
-                console.log(value)
                 this.artistBirthday = value
             },
 
@@ -1333,7 +1327,6 @@
                 if (this.signCompany == 2) {
                     this.sign_contract_other_name = ''
                 }
-                // console.log(this.affixesType)
                 if (this.affixesType > 1 && this.affixes.length == 0) {
                     toastr.error('请上传附件');
                     return false

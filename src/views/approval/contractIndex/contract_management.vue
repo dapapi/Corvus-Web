@@ -307,11 +307,9 @@
             
             //查询列表
             getList: function (params) {
-                console.log(params);
                 this.currentStatus = params
                 let _this = this;
                 fetch('get', '/approvals_contract/'+params).then(function (response) {
-                    console.log( response)
                     _this.pageList = response.data
                     if(response.meta){
                         _this.current_page = response.meta.current_page;
@@ -443,7 +441,6 @@
                     } else {
                         this.selectedArtistsArr.push(value)
                     }
-                    console.log(this.selectedArtistsArr)
                 }
             },
 
@@ -479,7 +476,6 @@
                     _this.getBlogger()
                     _this.$store.state.participantsInfo = []
                     _this.selectedArtistsArr = []
-                    console.log(_this.selectedArtistsArr)
                 })
 
             },
@@ -584,7 +580,6 @@
             },
 
             changeBirthday: function (value) {
-                console.log(value)
                 this.artistBirthday = value
             },
 
