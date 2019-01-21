@@ -122,7 +122,7 @@
                             </template>
                             <template v-if="field.field_type === 6">
                                 <Selectors :default='newArray.find(item=>item.id === field.id)'
-                                           :options="['合作类型','状态'].includes(filed.key)?(filed.key=='合作类型'?cooperationTypeArr:trailStatusArr):field.contentArr" :multiple="true" 
+                                           :options="['合作类型','状态'].includes(field.key)?(field.key=='合作类型'?cooperationTypeArr:trailStatusArr):field.contentArr" :multiple="true" 
                                            @change="(value) => addInfo(value.join('|'), field.id )"></Selectors>
                             </template>
                             <template v-if="field.field_type === 8">
