@@ -1093,7 +1093,7 @@ let config = {
                 color: '#4caf50'
             },
             {
-                name: '已解决',
+                name: '已解约',
                 value: 3,
                 color: '#f44336'
             }

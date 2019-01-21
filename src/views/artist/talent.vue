@@ -854,8 +854,11 @@
         components: {
             ImportAndExport
         },
-        mounted() {
+        created(){
             this.getStars();
+        },
+        mounted() {
+            
             this.getBlogger();
             this.getBlogType() //获取博主类型
             this.getArtists();

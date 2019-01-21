@@ -373,6 +373,7 @@
             // show add
             showAddModal(val) {
                 let organization_id = JSON.parse(Cookies.get('user')).organization_id
+                console.log(organization_id)
                 if (val == 3) {
                     if (organization_id == 411) {
                         val = 3
