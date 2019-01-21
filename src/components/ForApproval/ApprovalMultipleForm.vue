@@ -1,7 +1,7 @@
 <template>
     <div class="col-md-12 pl-0 pr-0 multiple-container container">
             <span>{{consdata[0].control_title}}({{n}})</span>
-            <button type="button" class="close" v-if="n>1" @click='formMinus(n)'><span aria-hidden="true">×</span></button>
+            <button type="button" class="close" v-if="total>1" @click='formMinus(n)'><span aria-hidden="true">×</span></button>
             <hr>
             <div :is='sortChecker(item)' class="approval-multiple-option"
                 v-for="(item, index) in consdata" ref='selectpicker'

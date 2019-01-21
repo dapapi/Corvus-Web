@@ -1,7 +1,7 @@
 <template>
     <div class="col-md-12 pl-0 pr-0 multiple-container container">
         <!-- <div v-for="i in n" :key="i" class="approval-multiple"> -->
-            <ApprovalMultipleForm  v-for="i in n" :key="i" :consdata='consdata' :singlemode='singlemode' :n='i' @change='multipleDataConstructor' @formMinus='formMinus' :default-data='multipleData'/>
+            <ApprovalMultipleForm  v-for="i in n" :key="i" :consdata='consdata' :singlemode='singlemode' :n='i' :total='n' @change='multipleDataConstructor' @formMinus='formMinus' :default-data='multipleData'/>
             <!-- <span>{{consdata[0].control_title}}({{i}})</span>
             <hr>
             <div :is='sortChecker(item)' class="approval-multiple-option"
