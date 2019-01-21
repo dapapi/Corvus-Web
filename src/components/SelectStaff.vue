@@ -1,5 +1,5 @@
 <template>
-    <div class="assistor" id="assistor">
+    <div class="assistor" id="assistor" :class='submit?"normal-width":""'>
         <div class="bg-white select-staff">
             <div class="page-nav-tabs">
                 <ul class="nav nav-tabs nav-tabs-line" role="tablist">
@@ -80,7 +80,7 @@
     import { mapState } from 'vuex'
 
     export default {
-        props: ['multiple', 'member-type', 'type', 'otherslot'],
+        props: ['multiple', 'member-type', 'type', 'otherslot','submit'],
         data() {
             return {
                 normalUsers: {},
@@ -301,7 +301,9 @@
         overflow: hidden;
         z-index: 1000;
     }
-
+    .normal-width{
+        width: 100%;
+    }
     .page-nav-tabs {
         position: absolute;
         z-index: 2;

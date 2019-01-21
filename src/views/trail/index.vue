@@ -17,7 +17,7 @@
                                v-model="trailFilter" @keyup.enter='filterGo' @blur='filterGo'>
                     </div>
                     <div class="col-md-3 example float-left">
-                        <selectors :options="progressStatus" :resetinfo='resetInfo' @change="progressStatusFilter"
+                        <selectors :options="currentUser.organization_id === 411?businessStatus:papiStatus" :resetinfo='resetInfo' @change="progressStatusFilter"
                                    placeholder="请选择线索类型"></selectors>
                     </div>
                     <div class="col-md-3 example float-left">
@@ -77,7 +77,7 @@
                         <img src="https://res.papitube.com/corvus/images/content-none.png" alt="" style="width: 100%">
                     </div>
                     <pagination :current_page="current_page" :method="getSales" :total_pages="total_pages"
-                                :total="total"></pagination>
+                                :total="total" class="mb-50"></pagination>
                 </div>
             </div>
         </div>
@@ -128,7 +128,7 @@
                             <TrailOrigin class="require" :trailType='trailType'
                                          typeName='线索' alwaysShow='true'
                                          @changeTrailOrigin='changeTrailOrigin'
-                                         @changeEmail='changeEmail'
+                                         @changeEmail='changeEmail' submit='true'
                                          @changeTrailOriginPerson='changeTrailOriginPerson'/>
                         </div>
                         <div class="example">
@@ -271,12 +271,25 @@
                 trailStatus: '',
                 cooperation: '',
                 filterData: '',
-                progressStatus: [{
+                businessStatus: [{
                     'name': '全部',
                     'value': ''
                 }, {
                     'name': '商务线索',
-                    'value': '0'
+                    'value': '3'
+                }, {
+                    'name': '影视线索',
+                    'value': '1'
+                }, {
+                    'name': '综艺线索',
+                    'value': '2'
+                }],
+                papiStatus: [{
+                    'name': '全部',
+                    'value': ''
+                }, {
+                    'name': 'papi',
+                    'value': '4'
                 }, {
                     'name': '影视线索',
                     'value': '1'
@@ -291,6 +304,7 @@
                 isLoading: true,
                 cleanUp: false,
                 trailIsLocked:'',
+                
             }
         },
         created() {
