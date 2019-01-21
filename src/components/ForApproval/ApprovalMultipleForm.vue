@@ -73,13 +73,9 @@ export default {
     },
     methods:{
         consdataHandler(params,index){
-            console.log(params);
-            console.log(this.defaultData[this.n-1]);
-            console.log(this.defaultData[this.n-1] && this.defaultData[this.n-1].find(item=>item.key === params.id));
             if(this.defaultData[this.n-1] && this.defaultData[this.n-1].find(item=>item.key === params.id)){
                 let tempData = this.defaultData[this.n-1].find(item=>item.key === params.id)
                 return [Object.assign(this.consdata[index],{control_value:tempData.value})]
-                console.log(tempData);
             }else{
                 return [this.consdata[index]]
             }
