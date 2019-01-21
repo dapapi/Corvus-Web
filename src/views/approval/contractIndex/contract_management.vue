@@ -29,7 +29,7 @@
                 </div>
 
                 <div class="tab-content nav-tabs-animate bg-white">
-                    <div class="tab-pane animation-fade" id="forum-artist" role="tabpanel">
+                    <!-- <div class="tab-pane animation-fade" id="forum-artist" role="tabpanel">
                         <div class="clearfix my-20">
                             <div class="col-md-3 example float-left">
                                 <input type="text" v-model="listData.name" class="form-control"
@@ -44,24 +44,10 @@
                                 <selectors  placeholder="请选择项目名称"
                                           ></selectors>
                             </div>
-                            <!--<div class="col-md-3 example float-left">-->
-                            <!--<button type="button" class="btn btn-default waves-effect waves-classic float-right"-->
-                            <!--data-toggle="modal" data-target="#customizeContent"-->
-                            <!--data-placement="right" title="">-->
-                            <!--自定义筛选-->
-                            <!--</button>-->
-                            <!--</div>-->
                         </div>
                         <table class="table table-hover is-indent ml-5" data-plugin="selectable"
                                data-selectable="selectable">
                             <tr>
-                                <!-- <th class="w-50">
-                                    <span class="checkbox-custom checkbox-primary">
-                                        <input class="selectable-all" type="checkbox"
-                                               @change="selectArtists('all')" v-model="selectAllStars">
-                                        <label></label>
-                                    </span>
-                                </th> -->
                                 <th class="cell-300" scope="col">合同编号</th>
                                 <th class="cell-300" scope="col">项目名称</th>
                                 <th class="cell-300" scope="col">合同类型</th>
@@ -88,18 +74,22 @@
                         </div>
                         <pagination :current_page="current_page" :total_pages="total_pages"
                                     :total="total"></pagination>
-                    </div>
-                    <div class="tab-pane animation-fade" id="forum-blogger" role="tabpanel"
-                         :class="!isShow?'active':''">
+                    </div> -->
+                    <div class="tab-pane animation-fade active" id="forum-blogger" role="tabpanel">
                         <div class="clearfix my-20">
                             <div class="col-md-3 example float-left">
                                 <input type="text" class="form-control"  placeholder="请输入合同编号"
                                        v-model="blogName" >
                             </div>
-                            <div class="col-md-3 example float-left">
-                                <selectors  @change="typeFilter"
-                                           placeholder="请输入艺人名称"></selectors>
+                             <div class="col-md-3 example float-left" v-if="currentStatus == 'project'">
+                                <selectors  @change="typeFilter" 
+                                           placeholder='请选择项目类型'></selectors>
                             </div>
+                            <div class="col-md-3 example float-left" v-if="currentStatus == 'economic'">
+                                <selectors  @change="typeFilter" 
+                                           placeholder="请输入艺人名称'"></selectors>
+                            </div> 
+                           
                             <div class="col-md-3 example float-left">
                                 <selectors  @change="CommunicationStatus"
                                            placeholder="请选择Talent"></selectors>
@@ -292,6 +282,7 @@
                 affixesType: '',//附件类型
                 isShow: '',
                 projectProgress:PROJECT_CONFIG.approvalProgress,
+                currentStatus:'project'
             }
         },
         watch: {
@@ -316,6 +307,8 @@
             
             //查询列表
             getList: function (params) {
+                console.log(params);
+                this.currentStatus = params
                 let _this = this;
                 fetch('get', '/approvals_contract/'+params).then(function (response) {
                     console.log( response)

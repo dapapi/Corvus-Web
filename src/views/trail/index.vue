@@ -128,7 +128,7 @@
                             <TrailOrigin class="require" :trailType='trailType'
                                          typeName='线索' alwaysShow='true'
                                          @changeTrailOrigin='changeTrailOrigin'
-                                         @changeEmail='changeEmail'
+                                         @changeEmail='changeEmail' submit='true'
                                          @changeTrailOriginPerson='changeTrailOriginPerson'/>
                         </div>
                         <div class="example">
