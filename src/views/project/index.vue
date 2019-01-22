@@ -11,14 +11,14 @@
                     <div class="col-md-3 example float-left">
                         <input type="text" class="form-control" id="inputPlaceholder" placeholder="请输入项目名称"
                                v-model="projectKeyword"
-                               @blur="getFilterProjects(1)">
+                               @blur="getFilterProjects()">
                     </div>
                     <div class="col-md-3 example float-left">
-                        <selectors @change="(value) => getFilterProjects(1, 'type', value)" placeholder="请选择项目类型"
+                        <selectors @change="(value) => getProjectSearch('project_type', value)" placeholder="请选择项目类型"
                                    :options="projectTypeArr"></selectors>
                     </div>
                     <div class="col-md-3 example float-left" v-if="allUsers.length > 0">
-                        <selectors @change="(value) => getFilterProjects(1, 'principal', value)" placeholder="请选择项目负责人"
+                        <selectors @change="(value) => getProjectSearch('principal_ids', value)" placeholder="请选择项目负责人"
                                    :options="allUsers" multiple="true"></selectors>
                     </div>
                     <!--<div class="col-md-3 example float-left">-->
@@ -32,17 +32,17 @@
 
                 <div class="col-md-12">
                     <ul class="nav nav-tabs nav-tabs-line" role="tablist">
-                        <li class="nav-item" role="presentation" @click="getProjects(1)">
+                        <li class="nav-item" role="presentation" @click="getMyProjects()">
                             <a class="nav-link" data-toggle="tab" href="#forum-project"
                                aria-controls="forum-base"
                                aria-expanded="true" role="tab">所有项目</a>
                         </li>
-                        <li class="nav-item" role="presentation" @click="getProjects(1, 2)">
+                        <li class="nav-item" role="presentation" @click="getMyProjects('principal_id')">
                             <a class="nav-link active" data-toggle="tab" href="#forum-project"
                                aria-controls="forum-present"
                                aria-expanded="false" role="tab">我负责的</a>
                         </li>
-                        <li class="nav-item" role="presentation" @click="getProjects(1, 3)">
+                        <li class="nav-item" role="presentation" @click="getMyProjects('adminstration')">
                             <a class="nav-link" data-toggle="tab" href="#forum-project"
                                aria-controls="forum-present"
                                aria-expanded="false" role="tab">我参与的</a>
@@ -97,7 +97,7 @@
                             <img src="https://res.papitube.com/corvus/images/content-none.png" alt=""
                                  style="width: 100%">
                         </div>
-                        <pagination :current_page="current_page" :method="getProjects" :total_pages="total_pages"
+                        <pagination :current_page="current_page" :method="getFilterProjects" :total_pages="total_pages"
                                     :total="total"></pagination>
                     </div>
                 </div>
@@ -149,16 +149,18 @@
                 paginationType: '',
                 projectStatusArr: projectStatusArr,
                 allUsers: [],
-                principal_ids: '',
+                principal_ids: [],
                 keyword: '',
                 status: '',
                 isLoading: true,
+                projectSearchType: '',
+                getProjectStatus: 'principal_id',
             }
         },
 
         mounted() {
             this.getClients();
-            this.getProjects(1, 2);
+            this.getFilterProjects();
             if (this.userList.length > 0) {
                 for (let i = 0; i < this.userList.length; i++) {
                     this.allUsers.push({
@@ -190,68 +192,49 @@
         },
 
         methods: {
-            getProjects: function (pageNum = 1, type = null) {
+            getMyProjects: function (value) {
+                this.getProjectStatus = value;
+                this.getFilterProjects();
+            },
+
+            getProjectSearch: function (type, value) {
+                if (type === 'principal_ids') {
+                    this.principal_ids = value.join(',');
+                } else if (type === 'project_type') {
+                    this.projectSearchType = value
+                }
+                this.getFilterProjects();
+            },
+
+            getFilterProjects: function (pageNum = 1) {
                 let data = {
                     page: pageNum,
                     include: 'principal,trail.expectations'
                 };
-                let url = '/projects';
-                if (type) {
-                    url = '/projects/my';
-                    data.type = type;
+                if (this.getProjectStatus === 'principal_id') {
+                    data.principal_id = 1;
+                } else if (this.getProjectStatus === 'adminstration') {
+                    data.adminstration = 1;
                 }
-                this.paginationType = 'getProjects';
-                fetch('get', url, data).then(response => {
+                if (this.projectSearchType) {
+                    if (this.projectSearchType == 3) {
+                        this.projectSearchType = '3,4'
+                    }
+                    data.type = this.projectSearchType
+                }
+                if (this.projectKeyword) {
+                    data.keyword = this.projectKeyword
+                }
+                if (this.principal_ids.length > 0) {
+                    data.principal_ids = this.principal_ids;
+                }
+                this.paginationType = 'getFilterProjects';
+                fetch('get', '/projects/filter', data).then(response => {
                     this.projectsInfo = response.data;
                     this.total = response.meta.pagination.total;
                     this.current_page = response.meta.pagination.current_page;
                     this.total_pages = response.meta.pagination.total_pages;
                     this.isLoading = false;
-                })
-            },
-
-            getFilterProjects: function (pageNum = 1, type, value) {
-                let data = {
-                    page: pageNum,
-                    include: 'principal,trail.expectations'
-                };
-                if (type === 'status') {
-                    this.status = value;
-                    if (value) {
-                        data.status = value;
-                    }
-                }
-                if (type === 'type' && value) {
-                    let organization_id = JSON.parse(Cookies.get('user')).organization_id
-                    if (value == 3) {
-                        if (organization_id == 411) {
-                            value = 3
-                        } else if (organization_id == 412) {
-                            value = 4
-                        }
-                    }
-                    data.type = value
-                }
-                if (type === 'principal' && value) {
-                    this.principal_ids = value.join(',');
-                    data.principal_ids = value.join(',');
-                }
-                if (this.projectKeyword) {
-                    data.keyword = this.projectKeyword
-                }
-                if (this.status) {
-                    data.status = this.status;
-                }
-                if (this.principal_ids) {
-                    data.principal_ids = this.principal_ids
-                }
-                let _this = this;
-                this.paginationType = 'getFilterProjects';
-                fetch('get', '/projects/filter', data).then(function (response) {
-                    _this.projectsInfo = response.data;
-                    _this.total = response.meta.pagination.total;
-                    _this.current_page = response.meta.pagination.current_page;
-                    _this.total_pages = response.meta.pagination.total_pages;
                 })
             },
 

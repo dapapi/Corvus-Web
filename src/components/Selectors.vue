@@ -49,7 +49,7 @@
                 if (self.changeKey) {
                     self.$emit('select', self.changeKey, $(this).val(), $(this)[0].selectedOptions[0].label)
                 }
-                self.$emit('change', $(this).val(), $(this)[0].selectedOptions[0].label, $(this)[0].selectedOptions[0].id);
+                self.$emit('change', $(this).val());
 
             });
             // 默认选中第一项
