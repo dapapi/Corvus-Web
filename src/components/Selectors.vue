@@ -49,7 +49,6 @@
                 if (self.changeKey) {
                     self.$emit('select', self.changeKey, $(this).val(), $(this)[0].selectedOptions[0].label)
                 }
-                console.log('hidden')
                 self.$emit('change', $(this).val(), $(this)[0].selectedOptions[0].label, $(this)[0].selectedOptions[0].id);
 
             });

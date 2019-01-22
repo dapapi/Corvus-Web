@@ -33,12 +33,12 @@
                 <div class="col-md-12">
                     <ul class="nav nav-tabs nav-tabs-line" role="tablist">
                         <li class="nav-item" role="presentation" @click="getProjects(1)">
-                            <a class="nav-link active" data-toggle="tab" href="#forum-project"
+                            <a class="nav-link" data-toggle="tab" href="#forum-project"
                                aria-controls="forum-base"
                                aria-expanded="true" role="tab">所有项目</a>
                         </li>
                         <li class="nav-item" role="presentation" @click="getProjects(1, 2)">
-                            <a class="nav-link" data-toggle="tab" href="#forum-project"
+                            <a class="nav-link active" data-toggle="tab" href="#forum-project"
                                aria-controls="forum-present"
                                aria-expanded="false" role="tab">我负责的</a>
                         </li>
@@ -53,7 +53,7 @@
                 <div class="page-content tab-content nav-tabs-animate bg-white">
                     <div class="tab-pane animation-fade active" id="forum-project" role="tabpanel">
                         <table class="table table-hover is-indent mb-20" data-plugin="animateList" data-animate="fade"
-                               data-child="tr" data-selectable="selectable" >
+                               data-child="tr" data-selectable="selectable">
                             <tr class="animation-fade"
                                 style="animation-fill-mode: backwards; animation-duration: 250ms; animation-delay: 0ms;">
                                 <th class="cell-300" scope="col">项目名称</th>
@@ -86,7 +86,7 @@
                                 </td>
                                 <td>
                                     <template v-if="project.trail">
-                                        {{ project.trail.fee }}
+                                        {{ project.trail.data.fee }}元
                                     </template>
                                 </td>
                                 <td>{{ project.last_follow_up_at }}</td>
@@ -158,7 +158,7 @@
 
         mounted() {
             this.getClients();
-            this.getProjects();
+            this.getProjects(1, 2);
             if (this.userList.length > 0) {
                 for (let i = 0; i < this.userList.length; i++) {
                     this.allUsers.push({
@@ -222,11 +222,11 @@
                     }
                 }
                 if (type === 'type' && value) {
-                    let  organization_id = JSON.parse(Cookies.get('user')).organization_id
-                    if(value == 3){
-                        if(organization_id == 411){
+                    let organization_id = JSON.parse(Cookies.get('user')).organization_id
+                    if (value == 3) {
+                        if (organization_id == 411) {
                             value = 3
-                        }else if(organization_id == 412){
+                        } else if (organization_id == 412) {
                             value = 4
                         }
                     }
