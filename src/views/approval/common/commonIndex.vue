@@ -23,7 +23,8 @@
                 </div>
             </div>
         </div>
-        <ApprovalGreatModule :form-data='formData' singlemode='true'  />
+        <ApprovalGreatModule :form-data='formData' singlemode='true'  @done='getDataDone' />
+        <Loading :is-loading='isLoading' />        
     </div>
 </template>
 
@@ -44,7 +45,8 @@ export default {
         return{
             indexData:{},
             formData:{},
-            optionIcon:APPROVAL_CONFIG.imgIcon
+            optionIcon:APPROVAL_CONFIG.imgIcon,
+            isLoading:false,
         }
     },
     mounted(){
@@ -58,8 +60,18 @@ export default {
             })
         },
         pullUp(params){
-            this.formData = params
+            if(params.form_id !== this.formData.form_id){
+                this.isLoading = true
+            }else{
+                $('#approval-great-module').modal('show')
+            }
+                this.formData = params
+
+        },
+        getDataDone(){
+            this.isLoading = false
             $('#approval-great-module').modal('show')
+
         }
     }
 }

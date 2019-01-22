@@ -980,7 +980,8 @@
             customize: function (value) {
                 let _this = this
                 fetch('post', '/'+this.customizeContentType+'/filter', value).then((params) => {
-                    _this.trailsInfo = params.data
+                    // _this.bloggerInfo =params.data
+                    _this.artistsInfo = params.data
                     _this.total = params.meta.pagination.total;
                     _this.cleanUp = true
                 })

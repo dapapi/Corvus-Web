@@ -1,7 +1,7 @@
 <template>
 <div class="col-md-12 approval-text-container pl-0">
     <span class="col-md-2 text-right pl-0" :class="consdata[0].required===1?'require':''">{{consdata[0].control_title}}</span>
-    <input ref='number' type="text" class="form-control addtrail" data-plugin="asSpinner" value="0"
+    <input ref='number' type="text" class="form-control addtrail" data-plugin="asSpinner" 
            :class="[shortInput ? 'short-spinner-input' : '']">
 </div>
 </template>
@@ -15,6 +15,7 @@
             }
         },
         mounted() {
+            
             let _this = this;
             $(this.$refs.number).asSpinner(
                 {
@@ -33,6 +34,9 @@
                 _this.$emit('change', {key:id,value:e.currentTarget.value,type:related_field})
             });
             $('.asSpinner').parent().css('width', '50%')
+            if(this.consdata[0].control_value){
+                this.setValue(this.consdata[0].control_value)
+            }
         },
 
         methods: {

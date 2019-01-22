@@ -113,10 +113,10 @@ export default {
     watch:{
         formData:function(oldVal,newVal){
             this.clearSignal()
-             this.$nextTick(() => {
+                this.$nextTick(() => {
                     this.getFormContractor() 
 
-                })
+            })
         }
     },
     update(){
@@ -182,6 +182,7 @@ export default {
                 fetch('get','/approvals/'+this.formData.form_id+'/form_control?include=approval_form_controls&number='+this.contract_id).then((params) => {
                 _this.importData = params.data
                 _this.dataInit()
+                _this.$emit('done')
                 })
             }   
         },

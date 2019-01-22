@@ -13,7 +13,23 @@ export default {
             textContent:''
         }
     },
+    mounted(){
+        this.defaultDataChecker()
+    },
     methods:{
+         defaultDataChecker(){
+            if(this.consdata[0].control_value){
+                this.textContent = this.consdata[0].control_value
+                // for (const i in this.defaultData) {
+                //     if (this.defaultData[i].key === this.consdata[0].control_title) {
+                //         console.log(this.defaultData[i].key);
+                //         this.$nextTick((params) => {
+                //             // $(this.$el).selectpicker('val', this.defaultData[i].values.data.value);
+                //             this.textContent = this.defaultData[i].values.data.value
+                //         })
+                //     }
+                }
+        },
         emitText(){
             let {id} = this.consdata[0]
             let {related_field} = this.consdata[0]
