@@ -37,7 +37,7 @@
                         <div class="col-md-6 float-left pl-0 mb-20" v-if="clientTasksInfo.length > 0">
                             <div class="col-md-6 pl-0"><i class="iconfont icon-iconset0399 pr-2" aria-hidden="true"></i>任务
                             </div>
-                            <div class="clearfix example " v-for="(task, index) in clientTasksInfo" v-if="index < 5"
+                            <div class="clearfix example " v-for="(task, index) in clientTasksInfo" v-if="index < 3"
                                  style="cursor: pointer" :key="index" @click="linkTo('/tasks/' + task.id)">
                                 <div class="col-md-3 float-left px-0">{{ task.title }}</div>
                                 <div class="col-md-3 float-left px-0">{{ task.principal?task.principal.data.name:'' }}
@@ -59,7 +59,7 @@
                             <div class="col-md-6 p-0"><i class="iconfont icon-ego-box pr-2 " aria-hidden="true"></i>项目
                             </div>
                             <div class="clearfix example" v-for="(project, index) in clientProjectsInfo"
-                                 v-if="index < 5" :key="index"
+                                 v-if="index < 3" :key="index"
                                  @click="linkTo('/projects/' + project.id)" style="cursor: pointer">
                                 <div class="col-md-3 float-left px-0">{{project.title}}</div>
                                 <div class="col-md-3 float-left px-0">{{ clientTypeArr.find(item => item.value ==
@@ -309,7 +309,7 @@
                                             <div class="col-md-9 float-left font-weight-bold">
                                                 <EditSelector :options="clientLevelArr" :is-edit="isEdit"
                                                               :content="clientInfo.grade"
-                                                              @change="changeClientLevel"></EditSelector>
+                                                              @change="changeClientGrade"></EditSelector>
                                             </div>
                                         </div>
                                     </div>
@@ -357,6 +357,14 @@
                                     </div>
 
                                     <div class="card-text py-10 clearfix">
+                                        <div class="col-md-6 px-0">
+                                            <div class="col-md-3 float-left text-right pl-0">客户评级</div>
+                                            <div class="col-md-9 float-left font-weight-bold">
+                                                <EditSelector :options="taskLevelArr" :is-edit="isEdit"
+                                                              :content="clientInfo.level"
+                                                              @change="changeClientLevel"></EditSelector>
+                                            </div>
+                                        </div>
                                         <div class="col-md-6 px-0">
                                             <div class="col-md-3 float-left text-right pl-0">备注</div>
                                             <div class="col-md-9 float-left font-weight-bold">
@@ -699,6 +707,7 @@
                 user: {},
                 isLoading: true,
                 clientContractsInfo: [],
+                taskLevelArr: config.taskLevelArr,
             }
         },
         beforeMount() {
@@ -907,7 +916,7 @@
             },
 
             cancelEdit: function () {
-                this.isEdit = false
+                this.isEdit = false;
                 this.getClient()
             },
 
@@ -925,6 +934,10 @@
 
             changeClientLevel: function (value) {
                 this.clientInfo.grade = value
+            },
+
+            changeClientGrade: function (value) {
+                this.clientInfo.level = value
             },
 
             changeClientScale: function (value) {
