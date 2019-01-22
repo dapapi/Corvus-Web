@@ -1388,7 +1388,7 @@
             </div>
         </div>
 
-        <ApprovalGreatModule :formData="formData"></ApprovalGreatModule>
+        <ApprovalGreatModule :formData="formData" :default-value="projectContractDefault"></ApprovalGreatModule>
     </div>
 </template>
 
@@ -1519,6 +1519,7 @@
                 formData: '',
                 projectContractInfo: '',
                 contractId: '',
+                projectContractDefault: '',
             }
         },
 
@@ -1617,6 +1618,9 @@
                     }
                     response.data.fields = fieldsArr;
                     this.projectInfo = response.data;
+                    this.projectContractDefault = {
+                        '项目名称': response.data.title
+                    };
                     let params = {
                         type: 'change',
                     };

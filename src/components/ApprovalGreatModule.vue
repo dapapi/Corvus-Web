@@ -56,7 +56,7 @@ import ApprovalDouble from '@/components/ForApproval/ApprovalDouble'
 import ApprovalMultipleSelector from '@/components/ForApproval/ApprovalMultipleSelector'
 import ApprovalChainReaction from '@/components/ForApproval/ApprovalChainReaction'
 export default {
-    props:['formData','singlemode','defaultData','contract_id'],
+    props:['formData','singlemode','defaultData','contract_id','defaultValue'],
     data(){
         return{
             importData:'',
