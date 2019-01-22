@@ -138,15 +138,15 @@ let config = {
                 value: ''
             },
             {
-                name: '商务公海池',
+                name: '影视公海池',
                 value: 1
             },
             {
-                name: '影视公海池',
+                name: '综艺公海池',
                 value: 2
             },
             {
-                name: '综艺公海池',
+                name: '商务公海池',
                 value: 3
             },
         ],
