@@ -124,7 +124,6 @@
                 this.pageType = params
                 let _this = this
                 fetch('get','/approvals_project/approval?status='+params).then((params) => {
-                    console.log(params);
                     _this.projectsInfo = params.data
                     _this.total = params.meta.pagination;
                     _this.current_page = params.meta.current_page;

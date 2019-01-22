@@ -126,7 +126,6 @@ export default {
     },
     methods:{
         getYear:function(value){
-            console.log(value)
             this.year = value
             this.getList()
         },

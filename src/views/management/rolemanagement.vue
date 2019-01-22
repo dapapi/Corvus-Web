@@ -634,8 +634,6 @@
             },
             //切换内容
             changeCont(value,index) {
-                console.log(index)
-                
                 this.jobCont = value
                 this.selectedIds = []
                 this.defaultId = index
@@ -717,7 +715,6 @@
 
             },
             powerkeep() {
-                console.log(this.selectedIds)
                 fetch('post', '/console/feature/' + this.jobCont, {resouce: this.selectedIds}).then(function (response) {
                     toastr.success('保存成功');
                 })
@@ -864,7 +861,6 @@
             },
             //修改类型
             updateRolejob(value) {
-                console.log(value)
                 this.updateType = value
             },
             //修改描述

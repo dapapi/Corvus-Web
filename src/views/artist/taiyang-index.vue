@@ -535,7 +535,6 @@
             },
 
             changeBirthday: function (value) {
-                console.log(value)
                 this.artistBirthday = value
             },
 
@@ -617,19 +616,10 @@
                 if (this.signCompany == 2) {
                     this.sign_contract_other_name = ''
                 }
-                // console.log(this.affixesType)
                 if (this.affixesType > 1 && this.affixes.length == 0) {
                     toastr.error('请上传附件');
                     return false
                 }
-                // if(this.affixes){
-                //     toastr.error('请上传附件');
-                //     return false
-                // }
-                // if(!this.uploadUrl){
-                //     toastr.error('请上传头像')
-                //     return false
-                // }
 
                 let platform = this.platformType.join(',');
                 let data = {

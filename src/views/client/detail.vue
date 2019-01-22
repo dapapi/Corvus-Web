@@ -96,6 +96,11 @@
                                    aria-controls="forum-present"
                                    aria-expanded="false" role="tab">项目</a>
                             </li>
+                            <li class="nav-item" role="presentation" @click="getClientContract">
+                                <a class="nav-link" data-toggle="tab" href="#forum-contract"
+                                   aria-controls="forum-present"
+                                   aria-expanded="false" role="tab">合同</a>
+                            </li>
                             <li class="nav-item" role="presentation" @click="getClientTask">
                                 <a class="nav-link" data-toggle="tab" href="#forum-task"
                                    aria-controls="forum-present"
@@ -197,6 +202,37 @@
                                      style="width: 100%">
                             </div>
                         </div>
+                        <div class="tab-pane animation-fade pb-20" id="forum-contract" role="tabpanel">
+                            <table class="table table-hover example"
+                                   data-child="tr" v-if="clientContractsInfo">
+                                <tr>
+                                    <th class="cell-300" scope="col">合同编号</th>
+                                    <th class="cell-300" scope="col">项目名称</th>
+                                    <th class="cell-300" scope="col">艺人</th>
+                                    <th class="cell-300" scope="col">合同类型</th>
+                                    <th class="cell-300" scope="col">创建人</th>
+                                </tr>
+                                <tbody>
+                                <tr v-for="contract in clientContractsInfo"
+                                    @click="redirectContract(contract.form_instance_number)">
+                                    <td>{{ contract.form_instance_number }}</td>
+                                    <td>{{ contract.title }}</td>
+                                    <td>
+                                        <template v-for="star in contract.stars_name">
+                                            {{ star.name }}
+                                        </template>
+                                    </td>
+                                    <td>收入</td>
+                                    <td>{{ contract.creator_name }}</td>
+                                </tr>
+                                </tbody>
+                            </table>
+                            <div style="margin: 6rem auto;width: 100px"
+                                 v-if="clientContractsInfo.length === 0">
+                                <img src="https://res.papitube.com/corvus/images/content-none.png" alt=""
+                                     style="width: 100%">
+                            </div>
+                        </div>
                         <div class="tab-pane animation-fade pb-20 fixed-button-father" id="forum-task" role="tabpanel">
                             <table class="table table-hover is-indent example" data-plugin="animateList"
                                    data-animate="fade"
@@ -265,15 +301,15 @@
                                             <div class="col-md-3 float-left text-right pl-0">公司名称</div>
                                             <div class="col-md-9 float-left font-weight-bold">
                                                 <EditInput :content="clientInfo.company" :is-edit="isEdit"
-                                                        @change="changeClientName"></EditInput>
+                                                           @change="changeClientName"></EditInput>
                                             </div>
                                         </div>
                                         <div class="col-md-6 px-0">
                                             <div class="col-md-3 float-left text-right pl-0">级别</div>
                                             <div class="col-md-9 float-left font-weight-bold">
                                                 <EditSelector :options="clientLevelArr" :is-edit="isEdit"
-                                                            :content="clientInfo.grade"
-                                                            @change="changeClientLevel"></EditSelector>
+                                                              :content="clientInfo.grade"
+                                                              @change="changeClientLevel"></EditSelector>
                                             </div>
                                         </div>
                                     </div>
@@ -291,8 +327,8 @@
                                             <div class="col-md-3 float-left text-right pl-0">规模</div>
                                             <div class="col-md-9 float-left font-weight-bold">
                                                 <EditSelector :options="clientScaleArr" :is-edit="isEdit"
-                                                            :content="clientInfo.size"
-                                                            @change="changeClientScale"></EditSelector>
+                                                              :content="clientInfo.size"
+                                                              @change="changeClientScale"></EditSelector>
                                             </div>
                                         </div>
                                     </div>
@@ -304,7 +340,10 @@
                                                     {{clientInfo.province}}{{clientInfo.city}}{{clientInfo.district}}
                                                 </template>
                                                 <template v-else>
-                                                    <RegionSelector :provinceVal="clientInfo.province" :cityVal="clientInfo.city" :areaVal="clientInfo.district" @setAreaData="changeAreaData" />
+                                                    <RegionSelector :provinceVal="clientInfo.province"
+                                                                    :cityVal="clientInfo.city"
+                                                                    :areaVal="clientInfo.district"
+                                                                    @setAreaData="changeAreaData"/>
                                                 </template>
                                             </div>
                                         </div>
@@ -312,7 +351,7 @@
                                             <div class="col-md-3 float-left text-right pl-0">详细地址</div>
                                             <div class="col-md-9 float-left font-weight-bold">
                                                 <EditInput :content="clientInfo.address" :is-edit="isEdit"
-                                                        @change="changeClientAddress"></EditInput>
+                                                           @change="changeClientAddress"></EditInput>
                                             </div>
                                         </div>
                                     </div>
@@ -322,7 +361,8 @@
                                             <div class="col-md-3 float-left text-right pl-0">备注</div>
                                             <div class="col-md-9 float-left font-weight-bold">
                                                 <editTextarea :content="clientInfo.desc"
-                                                            :is-edit="isEdit" @change="changeClientDesc"></editTextarea>
+                                                              :is-edit="isEdit"
+                                                              @change="changeClientDesc"></editTextarea>
                                             </div>
                                         </div>
                                     </div>
@@ -347,7 +387,7 @@
                                         <div class="col-md-6 px-0">
                                             <div class="col-md-3 float-left text-right pl-0">最近更新人</div>
                                             <div class="col-md-6 float-left font-weight-bold">
-                                            {{clientInfo.last_updated_user?clientInfo.last_updated_user:''}}
+                                                {{clientInfo.last_updated_user?clientInfo.last_updated_user:''}}
                                             </div>
                                         </div>
                                         <div class="col-md-6 px-0">
@@ -658,6 +698,7 @@
                 contactId: '', // 联系人id
                 user: {},
                 isLoading: true,
+                clientContractsInfo: [],
             }
         },
         beforeMount() {
@@ -789,13 +830,22 @@
             },
 
             getClientContact: function () {
-                // if (this.clientContactsInfo.length > 0) {
-                //     return
-                // }
+                if (this.clientContactsInfo.length > 0) {
+                    return
+                }
                 let _this = this;
                 fetch('get', '/clients/' + this.clientId + '/contacts').then(function (response) {
                     _this.clientContactsInfo = response.data
+                })
+            },
 
+            getClientContract: function () {
+                if (this.clientContractsInfo.length > 0) {
+                    return
+                }
+                let _this = this;
+                fetch('get', '/clients/' + this.clientId + '/contracts').then(function (response) {
+                    _this.clientContractsInfo = response.data
                 })
             },
 
@@ -1080,9 +1130,4 @@
         align-items: center;
     }
 
-    .fixed-button {
-        position: absolute;
-        bottom: 0px;
-        right: 0;
-    }
 </style>
