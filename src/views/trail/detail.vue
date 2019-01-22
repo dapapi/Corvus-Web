@@ -131,7 +131,7 @@
                                    aria-expanded="false" role="tab">
                                     <span v-if="!taskCount.count">任务</span>
                                     <ToolTips :title="'已完成数量'+taskCount.finished" v-if="taskCount.count">
-                                        任务{{taskCount.finished}}/{{taskCount.count}}
+                                        任务（{{taskCount.finished}}/{{taskCount.count}}）
                                     </ToolTips>
                                 </a>
                             </li>
