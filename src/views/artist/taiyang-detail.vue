@@ -58,7 +58,7 @@
                                 <div class="font-weight-bold float-left col-md-10 pl-0" v-if="artistInfo.publicity" style="padding-top:2px">
                                     <span v-for="(publicity,index) in artistInfo.publicity.data" :key="index"
                                           class="mr-10">
-                                        <span>{{publicity.company}}</span>
+                                        <span>{{publicity.department.name}}</span>
                                         <span v-if="publicity.company">-</span>
                                         <span>{{ publicity.name }}</span>
                                         
@@ -121,7 +121,7 @@
                                 <a class="nav-link"
                                    data-toggle="tab" href="#forum-artist-tasks"
                                    aria-controls="forum-present"
-                                   aria-expanded="true" role="tab">
+                                   aria-expanded="true" role="tab" @click="getTaskList">
                                     <template v-if="allTaskList.length > 0">
                                         <ToolTips :title="`已完成数量${doneTaskNum}`">
                                             任务 ({{taskNum}})
@@ -135,7 +135,7 @@
                             <li class="nav-item" role="presentation" v-if="artistInfo.sign_contract_status == 2">
                                 <a class="nav-link" data-toggle="tab" href="#forum-artist-work"
                                    aria-controls="forum-present"
-                                   aria-expanded="false" role="tab">作品库</a>
+                                   aria-expanded="false" role="tab" >作品库</a>
                             </li>
                             <!--<li class="nav-item" role="presentation" v-show="artistInfo.sign_contract_status == 2">-->
                             <!--<a class="nav-link" data-toggle="tab" href="#forum-artist-fans"-->
@@ -227,9 +227,14 @@
                                             <template v-else></template>
                                         </td>
                                         <td>
-                                            <template v-if="task.status === 1">进行中</template>
-                                            <template v-if="task.status === 2">已完成</template>
-                                            <template v-if="task.status === 3">已停止</template>
+                                            <template v-if="task.status === 1"><span style="color:#FF9800">进行中</span>
+                                            </template>
+                                            <template v-if="task.status === 2"><span style="color:#4CAF50">已完成</span>
+                                            </template>
+                                            <template v-if="task.status === 3"><span style="color:#9E9E9E">已停止</span>
+                                            </template>
+                                            <template v-if="task.status === 4"><span style="color:#F44336">延期</span>
+                                            </template>
                                         </td>
                                         <td>{{ task.principal.data.name }}</td>
                                         <td>{{ task.end_at }}</td>
@@ -240,6 +245,8 @@
                                     <img src="https://res.papitube.com/corvus/images/content-none.png" alt=""
                                          style="width: 100%">
                                 </div>
+                                <pagination :current_page="current_page" :method="getTaskList" :total_pages="total_pages"
+                                    :total="total"  class="mb-50"></pagination>
                                 <div class="site-action fixed-button" data-plugin="actionBtn" data-toggle="modal"
                                      data-target="#addTask">
                                     <button type="button"
@@ -282,7 +289,8 @@
                                     <img src="https://res.papitube.com/corvus/images/content-none.png" alt=""
                                          style="width: 100%">
                                 </div>
-
+                                <pagination :current_page="current_page" :method="getTaskList" :total_pages="total_pages"
+                                    :total="total"  class="mb-50"></pagination>
                                 <div class="site-action fixed-button" data-plugin="actionBtn" data-toggle="modal"
                                      data-target="#addWork">
                                     <button type="button"
@@ -1756,6 +1764,9 @@
                 let _this = this
                 fetch('get', `/stars/${this.$route.params.id}/tasks`).then(response => {
                     _this.allTaskList = response.data
+                    _this.current_page = response.meta.pagination.current_page;
+                    _this.total = response.meta.pagination.total;
+                    _this.total_pages = response.meta.pagination.total_pages;
                     if (_this.allTaskList.length > 0) {
                         for (let i = 0; i < _this.allTaskList.length; i++) {
                             if (_this.allTaskList[i].status == 2) {
@@ -2464,7 +2475,9 @@
         line-height: 76px;
         border-radius: 50%;
         border: 1px solid #eee;
-
+        background-repeat:no-repeat; 
+        background-size:100% 100%;
+        -moz-background-size:100% 100%;
     }
 
     .puls span {

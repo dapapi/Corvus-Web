@@ -35,15 +35,18 @@
                             <h4 class="card-title">{{artistInfo.nickname}}</h4>
                             <div class=" clearfix example">
                                 <div class="col-md-5 float-left pl-0 mr-15" v-if="artistInfo.publicity">
-                                    <div class="float-left pl-0 pr-2 col-md-3" >
+                                    <div class="float-left pl-0 pr-2 col-md-12 mr-20" >
                                         <i class="iconfont icon-yonghu pr-2" aria-hidden="true"></i>制作人
-                                    </div>
-                                    <div class="font-weight-bold float-left pr-10"  
+                                        <span class="font-weight-bold pr-10"  
                                          style="padding-top:1.5px" v-if ="artistInfo.publicity">
-                                        <span  v-for="(item,index) in artistInfo.publicity.data" :key="index">
-                                            {{item.name}}
+                                        <span  v-for="(item,index) in artistInfo.publicity.data" :key="index" class="pl-10">
+                                            <span>{{item.department.data.name}}</span>
+                                            <span v-if="item.department">-</span>
+                                            <span>{{item.name}}</span>
                                         </span>
+                                    </span>
                                     </div>
+                                    
                                     
                                 </div>
                             <div class="col-md-6 float-left pl-0 ml-50" v-show="artistInfo.sign_contract_status == 1">
@@ -51,7 +54,7 @@
                                         <i class="iconfont icon-yonghu pr-2" aria-hidden="true"></i>录入人
                                     </div>
                                     <div class="font-weight-bold float-left"   v-for="(entry,index) in artistInfo.creator" :key="index" style="padding-top:1.5px"> 
-                                            <span>{{entry.company}}</span>
+                                            <span>{{entry.department.name}}</span>
                                             <span v-if="entry.company">-</span>
                                             <span>{{ entry.name }}</span>    
                                     </div>
@@ -161,7 +164,7 @@
                             <li class="nav-item" role="presentation" >
                                 <a class="nav-link" data-toggle="tab" href="#forum-artist-tasks"
                                 aria-controls="forum-present"
-                                aria-expanded="false" role="tab" >
+                                aria-expanded="false" role="tab" @click="getArtistTasks">
                                     <!-- <template v-if="tasksInfo.length > 0">
                                         <ToolTips :title="`已完成数量${completeNum}`">
                                             任务 ({{completeNum}}/{{tasksInfo.length}})
@@ -181,7 +184,7 @@
                             <li class="nav-item" role="presentation" v-show="artistInfo.sign_contract_status == 2">
                                 <a class="nav-link" data-toggle="tab" href="#forum-artist-work"
                                 aria-controls="forum-present"
-                                aria-expanded="false" role="tab" >作品库</a>
+                                aria-expanded="false" role="tab" @click="getTaskDate">作品库</a>
                             </li>
                             <li class="nav-item" role="presentation" v-show="artistInfo.sign_contract_status == 3">
                                 <a class="nav-link" data-toggle="tab" href="#forum-artist-fans"
@@ -275,6 +278,8 @@
                                     <img src="https://res.papitube.com/corvus/images/content-none.png" alt=""
                                         style="width: 100%">
                                 </div>
+                                <pagination :current_page="current_page" :method="getArtistTasks" :total_pages="total_pages"
+                                    :total="total"  class="mb-50"></pagination>
                                 <div class="site-action fixed-button" data-plugin="actionBtn" data-toggle="modal"
                                     data-target="#addTask">
                                     <button type="button"
@@ -321,6 +326,8 @@
                                     <img src="https://res.papitube.com/corvus/images/content-none.png" alt=""
                                         style="width: 100%">
                                 </div>
+                                <pagination :current_page="current_page" :method="getTaskDate" :total_pages="total_pages"
+                                    :total="total"  class="mb-50"></pagination>
                                 <div class="site-action fixed-button" data-plugin="actionBtn" data-toggle="modal"
                                     data-target="#addWork">
                                     <button type="button"
@@ -1240,7 +1247,6 @@
             })
             //  清空视频
             $('#addWork').on('hidden.bs.modal', function () {
-                _this.artistInfo.nickname = '';
                 _this.artistWorkName = '';
                 _this.artistWorkProportion = '';
                 _this.videoUrl = '';
@@ -1322,7 +1328,7 @@
                 this.artistId = this.$route.params.id;
                 let _this = this;
                 let data = {
-                    include: 'creator,tasks,affixes,producer,type,publicity,trails.project,trails.client,trails.project.principal,trails.project.relate_project_bills_resource,operatelogs',
+                    include: 'creator,tasks,affixes,producer,type,publicity,trails.project,trails.client,trails.project.principal,trails.project.relate_project_bills_resource,operatelogs,publicity.department',
                 };
                 fetch('get', '/bloggers/' + this.artistId, data).then(function (response) {
                   
@@ -1375,22 +1381,21 @@
                 fetch('get', '/bloggers/gettype').then(function (response) {
                     _this.artistTypeArr = response.data
                 })
-                //  fetch('get','/bloggers/select?include=users').then(function(response){
-                //     response.data.forEach(item=>{
-                //          _this.principalIds.push(item.users.data.id)
-                //     })
-                // })
+                 fetch('get','/bloggers/select?include=users').then(function(response){
+                    response.data.forEach(item=>{
+                         _this.principalIds.push(item.users.data.id)
+                    })
+                })
             },
             //上传头像 ---修改头像
             getUploadUrl(res) {
+                console.log(res)
                 let _this = this
                 if(!this.isEdit) {
                     this.changeArtistInfo = {}
                 }
                 _this.uploadUrl = res
-                _this.run(res,function(){
-                    _this.changeArtistBaseInfo()
-                })                         
+                _this.changeArtistBaseInfo()                        
             },
             selectDate: function (value) {
                 this.selectedDate = value;
@@ -1413,7 +1418,6 @@
                        for (let i = 0; i < response.data.schedule.data.length; i++) {
                            _this.scheduleShow.push(response.data.schedule.data[i])  
                        } 
-                        console.log(_this.scheduleShow)
                     }
                 })
                 
@@ -1670,6 +1674,10 @@
                 let _this = this;
                 fetch('get','/bloggers/index/production?blogger_id='+this.artistId+'').then(function(response){
                     _this.worksData=response.data
+                    _this.current_page = response.meta.pagination.current_page;
+                    _this.total = response.meta.pagination.total;
+                    _this.total_pages = response.meta.pagination.total_pages;
+                    console.log(response)
                     response.data.forEach(item=>{
                         let time=new Date(item.release_time)
                         let Y = time.getFullYear() + '-';
@@ -1683,7 +1691,17 @@
             getArtistTasks: function () {
                 let _this = this;
                 fetch('get', '/bloggers/' + this.artistId+'/tasks').then(function (response) {
+                   
                     _this.alltaskshow = response.data
+                    _this.current_page = response.meta.pagination.current_page;
+                    _this.total = response.meta.pagination.total;
+                    _this.total_pages = response.meta.pagination.total_pages;
+                    response.data.forEach(item=>{
+                        if(item.status!==2&&new Date(item.end_at).getTime() < new Date().getTime()){
+                            item.status = 4
+                        }  
+                    })
+                 
                 })
             },
             editBaseInfo: function () {
@@ -1865,7 +1883,8 @@
                     hatch_end_at: this.artistInfo.hatch_end_at,
                     intention_desc:this.artistInfo.intention_desc,
                     sign_contract_other_name:this.artistInfo.sign_contract_other_name,
-                    sign_contract_status:this.artistInfo.sign_contract_status
+                    sign_contract_status:this.artistInfo.sign_contract_status,
+                    avatar:this.uploadUrl
                 }
                 if(!this.updatelevel){
                     delete(this.changeArtistInfo.level)
@@ -2318,7 +2337,9 @@
         line-height: 76px;
         border-radius: 50%;
         border: 1px solid #eee;
-
+        background-repeat:no-repeat; 
+        background-size:100% 100%;
+        -moz-background-size:100% 100%;
     }
 
     .puls span {

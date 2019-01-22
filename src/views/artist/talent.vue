@@ -858,10 +858,10 @@
             this.getStars();
         },
         mounted() {
-            
+             this.getArtists();
             this.getBlogger();
             this.getBlogType() //获取博主类型
-            this.getArtists();
+            
             $('table').asSelectable();
             
         },
@@ -894,6 +894,7 @@
                         _this.total = response.meta.pagination.total;
                         _this.total_pages = response.meta.pagination.total_pages;
                     }
+                    _this.isLoading = false;
                     _this.selectAllStars = false;
                     _this.selectedArtistsArr = [];
                 })
@@ -1162,8 +1163,10 @@
                 let  organization_id = JSON.parse(Cookies.get('user')).organization_id
                         if(organization_id == 411){                       
                             this.isShow = true
+                           
                         }else if(organization_id == 412){
                             this.isShow = false
+                             
                         }
             },
             tab:function(value){
@@ -1479,5 +1482,29 @@
     }
 </script>
 <style>
+    .puls {
+        display: inline-block;
+        background-size: 100px;
+        width: 50px;
+        height: 50px;
+        text-align: center;
+        line-height: 46px;
+        border-radius: 50%;
+        border: 1px dashed #eee;
+        background-repeat:no-repeat; 
+        background-size:100% 100%;
+        -moz-background-size:100% 100%;
+    }
 
+    .puls span {
+        font-size: 30px;
+    }
+
+    .fileupload {
+        position: absolute;
+        top: 0px;
+        left: 0px;
+        opacity: 0;
+
+    }
 </style>
