@@ -138,15 +138,15 @@ let config = {
                 value: ''
             },
             {
-                name: '商务公海池',
+                name: '影视公海池',
                 value: 1
             },
             {
-                name: '影视公海池',
+                name: '综艺公海池',
                 value: 2
             },
             {
-                name: '综艺公海池',
+                name: '商务公海池',
                 value: 3
             },
         ],
@@ -825,43 +825,43 @@ let config = {
         remindArr: [
             {
                 name: '无',
-                value: '0'
-            },
-            {
-                name: '日程发生时',
                 value: 1
             },
             {
-                name: '5分钟前',
+                name: '日程发生时',
                 value: 2
             },
             {
-                name: '10分钟前',
+                name: '5分钟前',
                 value: 3
             },
             {
-                name: '15分钟前',
+                name: '10分钟前',
                 value: 4
             },
             {
-                name: '30分钟前',
+                name: '15分钟前',
                 value: 5
             },
             {
-                name: '1小时前',
+                name: '30分钟前',
                 value: 6
             },
             {
-                name: '2小时前',
+                name: '1小时前',
                 value: 7
             },
             {
-                name: '1天前',
+                name: '2小时前',
                 value: 8
             },
             {
-                name: '2天前',
+                name: '1天前',
                 value: 9
+            },
+            {
+                name: '2天前',
+                value: 10
             }
         ],
         repeatArr: [

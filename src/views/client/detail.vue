@@ -12,7 +12,7 @@
                     <h4 class="card-title">{{ clientInfoCopy.company }}</h4>
                     <div class="card-text clearfix example">
                         <div class="col-md-6 float-left clearfix pl-0">
-                            <div class="float-left pl-0 pr-2 col-md-2">
+                            <div class="float-left pl-0 pr-2 col-md-3">
                                 <i class="iconfont icon-kehu pr-2" aria-hidden="true"></i>负责人
                             </div>
                             <div class="font-weight-bold float-left" v-if="clientInfoCopy.principal">
@@ -22,7 +22,7 @@
                     </div>
                     <div class="card-text clearfix example">
                         <div class="col-md-6 float-left clearfix pl-0">
-                            <div class="float-left pl-0 pr-2 col-md-2">
+                            <div class="float-left pl-0 pr-2 col-md-3">
                                 <i class="iconfont icon-labelbiaoqian pr-2" aria-hidden="true"></i>类型
                             </div>
                             <div class="font-weight-bold float-left" v-if="clientInfoCopy.type">
@@ -30,6 +30,16 @@
                                 <template v-if="clientInfoCopy.type == 2">综艺客户</template>
                                 <template v-if="clientInfoCopy.type == 3">商务客户</template>
                                 <template v-if="clientInfoCopy.type == 4">商务客户</template>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="card-text clearfix example">
+                        <div class="col-md-6 float-left clearfix pl-0">
+                            <div class="float-left pl-0 pr-2 col-md-3">
+                                <i class="iconfont icon-kehu pr-2" aria-hidden="true"></i>关键决策人
+                            </div>
+                            <div class="font-weight-bold float-left" v-if="clientInfoCopy.keyman">
+                                {{ clientInfoCopy.keyman }}
                             </div>
                         </div>
                     </div>

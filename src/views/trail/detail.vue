@@ -166,7 +166,7 @@
                                             <div class="py-10 px-0 clearfix col-md-6 float-left ">
                                                 <TrailOrigin :trailType='trailType'
                                                              typeName='线索' :isEdit='isEdit'
-                                                             :content='trailInfo.resource.id'
+                                                             :content='trailInfo.resource'
                                                              @changeTrailOrigin='changeTrailOrigin'
                                                              :contentType='trailInfo.resource_type'
                                                              @changeEmail='changeEmail' detailPage='true'
@@ -189,14 +189,9 @@
                                             <div class="card-text py-10 px-0 clearfix col-md-6 float-left">
                                                 <div class="col-md-3 float-left text-right pl-0">目标艺人</div>
                                                 <div class="col-md-9 float-left font-weight-bold"
-                                                     v-if="trailInfo.expectations">
-                                                    <span v-for="expectation in trailInfo.expectations.data"
-                                                          :key="expectation.name" v-if="!isEdit">
-                                                        {{ expectation.name || expectation.nickname}}
-                                                    </span>
+                                                     v-if="trailInfo.title">
                                                     <EditSelector :options="starsArr" :is-edit="isEdit"
                                                                   :multiple="true" :content="selectedExpectationsArr"
-                                                                  :contentHide='true'
                                                                   @change="changeExpectations"></EditSelector>
                                                 </div>
 
@@ -204,15 +199,11 @@
                                             <div class="card-text py-10 px-0 clearfix col-md-6 float-left">
                                                 <div class="col-md-3 float-left text-right pl-0">推荐艺人</div>
                                                 <div class="col-md-9 float-left font-weight-bold"
-                                                     v-if="trailInfo.recommendations">
-                                                    <span v-for="recommendations in trailInfo.recommendations.data"
-                                                          :key="recommendations.name" v-if="!isEdit">
-                                                        {{ recommendations.name || recommendations.nickname}}
-                                                    </span>
+                                                     v-if="trailInfo.title">
                                                     <EditSelector :options="starsArr" :is-edit="isEdit"
                                                                   @refresh='getTrail'
                                                                   :content="selectedRecommendationsArr"
-                                                                  :multiple="true" :contentHide='true'
+                                                                  :multiple="true"
                                                                   @change="changeRecommendations"></EditSelector>
                                                 </div>
                                             </div>
@@ -667,7 +658,7 @@
             }
         },
         watch: {
-            'trailInfo.type': function (newValue) {
+            'trailInfo.type': function () {
                 if (this.trailInfo.type === 4) {
                     this.trailOriginArr = config.trailBloggerOrigin
                     this.getStars()
@@ -678,8 +669,12 @@
                 }
 
             },
-            'trailInfo.resource': function (newValue) {
-                this.changeInfo.resource = newValue
+            'trailInfo.resource': function (newValue, oldValue) {
+                if (oldValue) {
+                    if (newValue != this.oldInfo.resource) {
+                        this.changeInfo.resource = newValue
+                    }
+                }
             },
             'trailInfo.priority': function (newValue) {
                 this.changeInfo.priority = newValue
@@ -738,15 +733,6 @@
                     }
                 }
             },
-            'trailInfo.client.data.company': function (newValue) {
-                if (this.changeInfo.client) {
-                    this.changeInfo.client.company = newValue
-                } else {
-                    this.changeInfo.client = {
-                        company: newValue
-                    }
-                }
-            },
             'trailInfo.industry_id': function (newValue) {
                 this.changeInfo.industry_id = newValue
             },
@@ -762,9 +748,6 @@
             'trailInfo.cooperation_type': function (newValue) {
                 this.changeInfo.cooperation_type = newValue
             },
-            'expectations': function (newValue) {
-                this.expectation = newValue
-            },
             'trailInfo.lock_status': function (newValue) {
                 this.changeInfo.lock_status = newValue
             }
@@ -772,10 +755,10 @@
 
         methods: {
             changeTrailOriginPerson(value) {
-                this.trailOriginPerson = value
+                this.changeInfo.resource = value.id
             },
             changeEmail(value) {
-                this.email = value
+                this.changeInfo.resource = value
             },
             getAllType() {
                 let _this = this
@@ -787,19 +770,14 @@
                 if (!this.trailInfo.principal) {
                     toastr.error("负责人为必填");
                     return false;
-                }
-                else if (!this.trailInfo.fee) {
+                } else if (!this.trailInfo.fee) {
                     toastr.error("费用为必填")
                     return false;
-                }
-                else if (!this.trailInfo.client.data.company) {
+                } else if (!this.trailInfo.client.data.company) {
                     toastr.error("公司名称为必填")
                     return false;
                 } else if (!this.trailInfo.title) {
                     toastr.error("线索名称为必填")
-                    return false;
-                } else if (!this.trailInfo.expectations) {
-                    toastr.error("目标艺人为必填")
                     return false;
                 } else if (!this.trailInfo.contact.data.name) {
                     toastr.error("联系人为必填")
@@ -823,33 +801,40 @@
 
             getTrail: function () {
                 this.trailId = this.$route.params.id;
-                let _this = this;
                 let data = {
-                    include: 'principal,client,contact,recommendations,expectations,project',
+                    include: 'principal,client,contact,starexceptions,bloggerexceptions,starrecommendations,bloggerrecommendations,project',
                 };
-                fetch('get', '/trails/' + this.trailId, data).then(function (response) {
-                    _this.trailType = response.data.type
-                    _this.trailInfo = response.data;
-                    _this.oldInfo = JSON.parse(JSON.stringify(response.data));
-                    for (let i = 0; i < _this.trailInfo.expectations.data.length; i++) {
-                        _this.selectedExpectationsArr.push(_this.trailInfo.expectations.data[i].moduleable_type + '-' + _this.trailInfo.expectations.data[i].id)
+                fetch('get', '/trails/' + this.trailId, data).then(response => {
+                    this.trailType = response.data.type;
+                    this.trailInfo = response.data;
+                    this.oldInfo = JSON.parse(JSON.stringify(response.data));
+                    this.selectedExpectationsArr = [];
+                    this.selectedRecommendationsArr = [];
+                    for (let i = 0; i < this.trailInfo.starexceptions.data.length; i++) {
+                        this.selectedExpectationsArr.push(this.trailInfo.starexceptions.data[i].flag + '-' + this.trailInfo.starexceptions.data[i].id)
                     }
-                    for (let i = 0; i < _this.trailInfo.recommendations.data.length; i++) {
-                        _this.selectedRecommendationsArr.push(_this.trailInfo.recommendations.data[i].moduleable_type + '-' + _this.trailInfo.recommendations.data[i].id)
+                    for (let i = 0; i < this.trailInfo.bloggerexceptions.data.length; i++) {
+                        this.selectedExpectationsArr.push(this.trailInfo.bloggerexceptions.data[i].flag + '-' + this.trailInfo.bloggerexceptions.data[i].id)
+                    }
+                    for (let i = 0; i < this.trailInfo.starrecommendations.data.length; i++) {
+                        this.selectedRecommendationsArr.push(this.trailInfo.starrecommendations.data[i].flag + '-' + this.trailInfo.starrecommendations.data[i].id)
+                    }
+                    for (let i = 0; i < this.trailInfo.bloggerrecommendations.data.length; i++) {
+                        this.selectedRecommendationsArr.push(this.trailInfo.bloggerrecommendations.data[i].flag + '-' + this.trailInfo.bloggerrecommendations.data[i].id)
                     }
                     if (response.data.principal) {
                         let params = {
                             type: 'change',
                             data: response.data.principal.data
                         };
-                        _this.$store.dispatch('changePrincipal', params);
+                        this.$store.dispatch('changePrincipal', params);
                     }
-                    _this.isLoading = false
-                    _this.$nextTick((params) => {
-                        _this.$store.state.newPrincipalInfo.id = Number(_this.trailInfo.resource)
-                        _this.$store.state.principalInfo = _this.trailInfo.principal.data
+                    this.isLoading = false
+                    this.$nextTick(() => {
+                        this.$store.state.newPrincipalInfo.id = Number(this.trailInfo.resource)
+                        this.$store.state.principalInfo = this.trailInfo.principal.data
                     })
-                    _this.principalName = _this.trailInfo.principal.data.name
+                    this.principalName = this.trailInfo.principal.data.name
                 })
             },
 
@@ -866,22 +851,23 @@
                 })
             },
             changeTrailOrigin: function (value) {
-                this.$store.state.newPrincipalInfo.id = this.trailInfo.resource
-                this.trailInfo.resource = ''
-                this.email = ''
-                this.trailOriginPerson = ''
-                this.changeInfo.resource_type = value
+                this.trailInfo.resource = '';
+                this.changeInfo.resource_type = value;
                 this.trailOrigin = value
-                this.trailInfo.resource = this.$store.state.newPrincipalInfo.id
             },
 
             changeTrailBaseInfo: function () {
-                if (this.trailOrigin == 1 || this.trailOrigin == 2 || this.trailOrigin == 3) {
-                    this.changeInfo.resource = this.email
-                } else if (this.trailOrigin == 4 || this.trailOrigin == 5) {
-                    this.changeInfo.resource = this.trailOriginPerson.id
-                } else {
-                    this.changeInfo.resource = ''
+                if (this.changeInfo.resource_type) {
+                    if (this.changeInfo.resource_type == this.oldInfo.resource_type) {
+                        delete this.changeInfo.resource_type
+                    } else {
+                        this.changeInfo.resource_type = Number(this.changeInfo.resource_type)
+                    }
+                }
+                if (this.changeInfo.hasOwnProperty('resource') && this.changeInfo.resource != this.oldInfo.resource) {
+                    if (!this.changeInfo.resource_type) {
+                        this.changeInfo.resource_type = Number(this.oldInfo.resource_type)
+                    }
                 }
                 if (this.trailTypeValidate()) {
                     let data = this.changeInfo;
@@ -954,7 +940,6 @@
                 })
             },
             changeLockStatus(value) {
-                // this.trailInfo.lock_status = value
                 if (value == 2) {
                     value = 0
                 }
@@ -1127,7 +1112,7 @@
                         flag: item[0]
                     };
                 }
-                this.trailInfo.expectations = value
+                this.changeInfo.expectations = value
             },
 
             changeRecommendations: function (value) {
@@ -1142,7 +1127,7 @@
                         flag: item[0]
                     };
                 }
-                this.trailInfo.recommendations = value
+                this.changeInfo.recommendations = value
             },
 
             changePriority: function (value) {

@@ -207,7 +207,6 @@
         },
         watch: {
             projectFieldsArr(newValue) {
-                console.log(111);
                 return this.projectFields = newValue
             },
             projectType() {

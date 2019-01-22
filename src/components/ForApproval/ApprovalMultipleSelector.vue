@@ -126,8 +126,6 @@ export default {
         methods: {
            defaultDataChecker(params){
                 if(params && this.consdata[0].control_value){
-                            console.log(11111);
-                            console.log(this.consdata[0].control_value.split(','));
                             let tempArr = this.consdata[0].control_value.split(',')
                             for (const j in tempArr) {
                                 this.$nextTick(() => {
