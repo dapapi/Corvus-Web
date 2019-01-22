@@ -254,7 +254,10 @@
     padding: 0 45px;
 
     }
-
+.approval-detail-container div{
+    padding-right: 0;
+    border-right: 1px solid #eeeeee;
+}
 .iconfont-logo{
     position: relative;
     z-index: 1288;
@@ -265,14 +268,18 @@
     padding: 0 auto;
 }
 .approval-detail-title,.approval-detail-container{
+    padding: 0;
+    margin: 0;
     /* height: 40px; */
     display: flex;
     line-height: 40px;
     /* align-items: center; */
     border-bottom: 1px solid #eeeeee;
+    border-right: 1px solid #eeeeee;
+    border-left: 1px solid #eeeeee;
 }
 .approval-detail-title{
-    /* background: #f5f5f5; */
+    background: #f5f5f5;
 }
 .approval-detail-main{
     border-top: 1px solid #eeeeee;
@@ -325,7 +332,7 @@
         width: 30px;
         height: 30px;
         border-radius: 100%;
-        /* background-color: rgba(7, 17, 27, 0.2); */
+        background-color: rgba(7, 17, 27, 0.2);
         text-align: center;
         line-height: 30px;
     }
