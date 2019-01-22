@@ -21,6 +21,8 @@
                     format: function format(value) {
                         return value;
                     },
+                    precision:2,
+                    step: 0.01,
                     min: 0,
                     max: 100000000,
                 }

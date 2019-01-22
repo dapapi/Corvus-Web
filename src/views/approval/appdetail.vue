@@ -403,6 +403,7 @@
         background-size: 30px;
         text-align: center;
         line-height: 30px;
+        vertical-align: middle;
     }
 
     .loader-overlay {
@@ -438,7 +439,7 @@
     .title-status i {
         position: absolute;
         right: 10px;
-        top: 0;
+        top: 10px;
     }
 
     .caption {
