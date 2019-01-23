@@ -56,8 +56,8 @@
                 </div>
                 <div class="page-content tab-content nav-tabs-animate bg-white">
                     <div class="tab-pane animation-fade active" id="forum-trail-report" role="tabpanel">
-                        <div class="clearfix">
-                            <Selectors :options="clientTypeArr" @change="changeClientType"></Selectors>
+                        <div class="clearfix col-md-3 pl-0">
+                            <Selectors :options="clientTypeArr" @change="changeClientType" placeholder="请选择客户类型"></Selectors>
                         </div>
                         <table class="table table-hover is-indent example" data-plugin="animateList" data-animate="fade"
                                data-child="tr"

@@ -12,17 +12,15 @@
                     <h4 class="card-title">{{ clientInfoCopy.company }}</h4>
                     <div class="card-text clearfix example">
                         <div class="col-md-6 float-left clearfix pl-0">
-                            <div class="float-left pl-0 pr-2 col-md-2">
+                            <div class="float-left pl-0 pr-2 col-md-3">
                                 <i class="iconfont icon-kehu pr-2" aria-hidden="true"></i>负责人
                             </div>
                             <div class="font-weight-bold float-left" v-if="clientInfoCopy.principal">
                                 {{ clientInfoCopy.principal?clientInfoCopy.principal.data.name:'' }}
                             </div>
                         </div>
-                    </div>
-                    <div class="card-text clearfix example">
                         <div class="col-md-6 float-left clearfix pl-0">
-                            <div class="float-left pl-0 pr-2 col-md-2">
+                            <div class="float-left pl-0 pr-2 col-md-3">
                                 <i class="iconfont icon-labelbiaoqian pr-2" aria-hidden="true"></i>类型
                             </div>
                             <div class="font-weight-bold float-left" v-if="clientInfoCopy.type">
@@ -33,13 +31,23 @@
                             </div>
                         </div>
                     </div>
+                    <div class="card-text clearfix example">
+                        <div class="col-md-6 float-left clearfix pl-0">
+                            <div class="float-left pl-0 pr-2 col-md-3">
+                                <i class="iconfont icon-kehu pr-2" aria-hidden="true"></i>关键决策人
+                            </div>
+                            <div class="font-weight-bold float-left" v-if="clientInfoCopy.keyman">
+                                {{ clientInfoCopy.keyman }}
+                            </div>
+                        </div>
+                    </div>
                     <div class="clearfix">
-                        <div class="col-md-6 float-left pl-0 mb-20" v-if="clientTasksInfo.length > 0">
+                        <div class="col-md-6 float-left pl-0" v-if="clientTasksInfo.length > 0">
                             <div class="col-md-6 pl-0"><i class="iconfont icon-iconset0399 pr-2" aria-hidden="true"></i>任务
                             </div>
-                            <div class="clearfix example " v-for="(task, index) in clientTasksInfo" v-if="index < 5"
+                            <div class="clearfix example " v-for="(task, index) in clientTasksInfo" v-if="index < 3"
                                  style="cursor: pointer" :key="index" @click="linkTo('/tasks/' + task.id)">
-                                <div class="col-md-3 float-left px-0">{{ task.title }}</div>
+                                <div class="col-md-3 float-left px-0 exceeded-display">{{ task.title }}</div>
                                 <div class="col-md-3 float-left px-0">{{ task.principal?task.principal.data.name:'' }}
                                 </div>
                                 <div class="col-md-4 float-left px-0">{{ task.end_at }}</div>
@@ -55,13 +63,13 @@
                                 </div>
                             </div>
                         </div>
-                        <div class="col-md-6 float-left pl-0 mb-20" v-if="clientProjectsInfo.length > 0">
+                        <div class="col-md-6 float-left pl-0" v-if="clientProjectsInfo.length > 0">
                             <div class="col-md-6 p-0"><i class="iconfont icon-ego-box pr-2 " aria-hidden="true"></i>项目
                             </div>
                             <div class="clearfix example" v-for="(project, index) in clientProjectsInfo"
-                                 v-if="index < 5" :key="index"
+                                 v-if="index < 3" :key="index"
                                  @click="linkTo('/projects/' + project.id)" style="cursor: pointer">
-                                <div class="col-md-3 float-left px-0">{{project.title}}</div>
+                                <div class="col-md-3 float-left px-0 exceeded-display">{{project.title}}</div>
                                 <div class="col-md-3 float-left px-0">{{ clientTypeArr.find(item => item.value ==
                                     project.type).name }}
                                 </div>
@@ -96,6 +104,11 @@
                                    aria-controls="forum-present"
                                    aria-expanded="false" role="tab">项目</a>
                             </li>
+                            <li class="nav-item" role="presentation" @click="getClientContract">
+                                <a class="nav-link" data-toggle="tab" href="#forum-contract"
+                                   aria-controls="forum-present"
+                                   aria-expanded="false" role="tab">合同</a>
+                            </li>
                             <li class="nav-item" role="presentation" @click="getClientTask">
                                 <a class="nav-link" data-toggle="tab" href="#forum-task"
                                    aria-controls="forum-present"
@@ -123,7 +136,7 @@
                         </ul>
                     </div>
                     <div class="tab-content nav-tabs-animate bg-white col-md-12" v-if="clientInfo">
-                        <div class="tab-pane animation-fade pb-20 active" id="forum-trail" role="tabpanel">
+                        <div class="tab-pane animation-fade active" id="forum-trail" role="tabpanel">
 
                             <table class="table table-hover is-indent example" data-plugin="animateList"
                                    data-animate="fade"
@@ -158,8 +171,10 @@
                                 <img src="https://res.papitube.com/corvus/images/content-none.png" alt=""
                                      style="width: 100%">
                             </div>
+                            <pagination :current_page="current_page" :method="getClient"
+                                        :total_pages="total_pages" :total="total"></pagination>
                         </div>
-                        <div class="tab-pane animation-fade pb-20" id="forum-project" role="tabpanel">
+                        <div class="tab-pane animation-fade" id="forum-project" role="tabpanel">
                             <table class="table table-hover is-indent example" data-plugin="animateList"
                                    data-animate="fade"
                                    data-child="tr"
@@ -196,8 +211,43 @@
                                 <img src="https://res.papitube.com/corvus/images/content-none.png" alt=""
                                      style="width: 100%">
                             </div>
+                            <pagination :current_page="current_page" :method="getClientProject"
+                                        :total_pages="total_pages" :total="total"></pagination>
                         </div>
-                        <div class="tab-pane animation-fade pb-20 fixed-button-father" id="forum-task" role="tabpanel">
+                        <div class="tab-pane animation-fade" id="forum-contract" role="tabpanel">
+                            <table class="table table-hover example"
+                                   data-child="tr" v-if="clientContractsInfo">
+                                <tr>
+                                    <th class="cell-300" scope="col">合同编号</th>
+                                    <th class="cell-300" scope="col">项目名称</th>
+                                    <th class="cell-300" scope="col">艺人</th>
+                                    <th class="cell-300" scope="col">合同类型</th>
+                                    <th class="cell-300" scope="col">创建人</th>
+                                </tr>
+                                <tbody>
+                                <tr v-for="contract in clientContractsInfo"
+                                    @click="redirectContract(contract.form_instance_number)">
+                                    <td>{{ contract.form_instance_number }}</td>
+                                    <td>{{ contract.title }}</td>
+                                    <td>
+                                        <template v-for="star in contract.stars_name">
+                                            {{ star.name }}
+                                        </template>
+                                    </td>
+                                    <td>收入</td>
+                                    <td>{{ contract.creator_name }}</td>
+                                </tr>
+                                </tbody>
+                            </table>
+                            <div style="margin: 6rem auto;width: 100px"
+                                 v-if="clientContractsInfo.length === 0">
+                                <img src="https://res.papitube.com/corvus/images/content-none.png" alt=""
+                                     style="width: 100%">
+                            </div>
+                            <pagination :current_page="current_page" :method="getClientContract"
+                                        :total_pages="total_pages" :total="total"></pagination>
+                        </div>
+                        <div class="tab-pane animation-fade fixed-button-father" id="forum-task" role="tabpanel">
                             <table class="table table-hover is-indent example" data-plugin="animateList"
                                    data-animate="fade"
                                    data-child="tr"
@@ -236,6 +286,8 @@
                                 <img src="https://res.papitube.com/corvus/images/content-none.png" alt=""
                                      style="width: 100%">
                             </div>
+                            <pagination :current_page="current_page" :method="getClientTask"
+                                        :total_pages="total_pages" :total="total"></pagination>
                             <div class="site-action fixed-button" data-plugin="actionBtn" data-toggle="modal"
                                  data-target="#addTask">
                                 <button type="button"
@@ -247,7 +299,7 @@
                                 </button>
                             </div>
                         </div>
-                        <div class="tab-pane animation-fade pb-20" id="forum-base" role="tabpanel">
+                        <div class="tab-pane animation-fade" id="forum-base" role="tabpanel">
                             <div class="card" v-if="clientInfo.company">
                                 <div class="card-header card-header-transparent card-header-bordered">
                                     <div class="float-left font-weight-bold third-title">客户详情</div>
@@ -265,15 +317,15 @@
                                             <div class="col-md-3 float-left text-right pl-0">公司名称</div>
                                             <div class="col-md-9 float-left font-weight-bold">
                                                 <EditInput :content="clientInfo.company" :is-edit="isEdit"
-                                                        @change="changeClientName"></EditInput>
+                                                           @change="changeClientName"></EditInput>
                                             </div>
                                         </div>
                                         <div class="col-md-6 px-0">
                                             <div class="col-md-3 float-left text-right pl-0">级别</div>
                                             <div class="col-md-9 float-left font-weight-bold">
                                                 <EditSelector :options="clientLevelArr" :is-edit="isEdit"
-                                                            :content="clientInfo.grade"
-                                                            @change="changeClientLevel"></EditSelector>
+                                                              :content="clientInfo.grade"
+                                                              @change="changeClientGrade"></EditSelector>
                                             </div>
                                         </div>
                                     </div>
@@ -291,8 +343,8 @@
                                             <div class="col-md-3 float-left text-right pl-0">规模</div>
                                             <div class="col-md-9 float-left font-weight-bold">
                                                 <EditSelector :options="clientScaleArr" :is-edit="isEdit"
-                                                            :content="clientInfo.size"
-                                                            @change="changeClientScale"></EditSelector>
+                                                              :content="clientInfo.size"
+                                                              @change="changeClientScale"></EditSelector>
                                             </div>
                                         </div>
                                     </div>
@@ -304,7 +356,10 @@
                                                     {{clientInfo.province}}{{clientInfo.city}}{{clientInfo.district}}
                                                 </template>
                                                 <template v-else>
-                                                    <RegionSelector :provinceVal="clientInfo.province" :cityVal="clientInfo.city" :areaVal="clientInfo.district" @setAreaData="changeAreaData" />
+                                                    <RegionSelector :provinceVal="clientInfo.province"
+                                                                    :cityVal="clientInfo.city"
+                                                                    :areaVal="clientInfo.district"
+                                                                    @setAreaData="changeAreaData"/>
                                                 </template>
                                             </div>
                                         </div>
@@ -312,17 +367,26 @@
                                             <div class="col-md-3 float-left text-right pl-0">详细地址</div>
                                             <div class="col-md-9 float-left font-weight-bold">
                                                 <EditInput :content="clientInfo.address" :is-edit="isEdit"
-                                                        @change="changeClientAddress"></EditInput>
+                                                           @change="changeClientAddress"></EditInput>
                                             </div>
                                         </div>
                                     </div>
 
                                     <div class="card-text py-10 clearfix">
                                         <div class="col-md-6 px-0">
+                                            <div class="col-md-3 float-left text-right pl-0">客户评级</div>
+                                            <div class="col-md-9 float-left font-weight-bold">
+                                                <EditSelector :options="taskLevelArr" :is-edit="isEdit"
+                                                              :content="clientInfo.level"
+                                                              @change="changeClientLevel"></EditSelector>
+                                            </div>
+                                        </div>
+                                        <div class="col-md-6 px-0">
                                             <div class="col-md-3 float-left text-right pl-0">备注</div>
                                             <div class="col-md-9 float-left font-weight-bold">
                                                 <editTextarea :content="clientInfo.desc"
-                                                            :is-edit="isEdit" @change="changeClientDesc"></editTextarea>
+                                                              :is-edit="isEdit"
+                                                              @change="changeClientDesc"></editTextarea>
                                             </div>
                                         </div>
                                     </div>
@@ -347,7 +411,7 @@
                                         <div class="col-md-6 px-0">
                                             <div class="col-md-3 float-left text-right pl-0">最近更新人</div>
                                             <div class="col-md-6 float-left font-weight-bold">
-                                            {{clientInfo.last_updated_user?clientInfo.last_updated_user:''}}
+                                                {{clientInfo.last_updated_user?clientInfo.last_updated_user:''}}
                                             </div>
                                         </div>
                                         <div class="col-md-6 px-0">
@@ -360,7 +424,7 @@
                                 </div>
                             </div>
                         </div>
-                        <div class="tab-pane animation-fade pb-20 fixed-button-father" id="forum-contact"
+                        <div class="tab-pane animation-fade fixed-button-father" id="forum-contact"
                              role="tabpanel">
                             <table class="table table-hover is-indent example" data-plugin="animateList"
                                    data-animate="fade"
@@ -412,6 +476,8 @@
                                 <img src="https://res.papitube.com/corvus/images/content-none.png" alt=""
                                      style="width: 100%">
                             </div>
+                            <pagination :current_page="current_page" :method="getClientContact"
+                                        :total_pages="total_pages" :total="total"></pagination>
                             <div class="site-action fixed-button" data-plugin="actionBtn" data-toggle="modal"
                                  data-target="#addContact"
                                  @click="changeEditStatus(true)">
@@ -617,6 +683,9 @@
     export default {
         data: function () {
             return {
+                total: 0,
+                current_page: 1,
+                total_pages: 1,
                 clientId: '',
                 changeInfo: {},
                 clientTypeArr: config.clientTypeArr,
@@ -658,6 +727,8 @@
                 contactId: '', // 联系人id
                 user: {},
                 isLoading: true,
+                clientContractsInfo: [],
+                taskLevelArr: config.taskLevelArr,
             }
         },
         beforeMount() {
@@ -731,32 +802,30 @@
         methods: {
 
             getClient: function () {
-                let _this = this;
-                fetch('get', '/clients/' + this.clientId, {include: 'principal,creator'}).then(function (response) {
-                    _this.clientInfo = response.data;
-                    _this.clientInfoCopy = JSON.parse(JSON.stringify(response.data))
+                fetch('get', '/clients/' + this.clientId, {include: 'principal,creator'}).then(response => {
+                    this.clientInfo = response.data;
+                    this.clientInfoCopy = JSON.parse(JSON.stringify(response.data))
 
                     let params = {
                         type: 'change',
                         data: response.data.principal.data
                     };
-                    _this.$store.dispatch('changePrincipal', params);
-                    _this.isLoading = false
+                    this.$store.dispatch('changePrincipal', params);
+                    this.isLoading = false
                 })
             },
 
             getClientTrail: function () {
-                if (this.clientTrailsInfo.length > 0) {
-                    return
-                }
-                let _this = this;
                 let data = {
                     type: 'clients',
                     id: this.clientId,
                     include: 'principal,client'
                 };
-                fetch('get', '/trails/search', data).then(function (response) {
-                    _this.clientTrailsInfo = response.data
+                fetch('get', '/trails/search', data).then(response => {
+                    this.clientTrailsInfo = response.data;
+                    this.total = response.meta.pagination.total;
+                    this.current_page = response.meta.pagination.current_page;
+                    this.total_pages = response.meta.pagination.total_pages;
                 })
             },
 
@@ -769,38 +838,48 @@
                     id: this.clientId,
                     include: 'principal'
                 };
-                let _this = this;
-                fetch('get', '/clients/' + this.clientId + '/tasks', data).then(function (response) {
-                    _this.clientTasksInfo = response.data;
+                fetch('get', '/clients/' + this.clientId + '/tasks', data).then(response => {
+                    this.clientTasksInfo = response.data;
+                    this.total = response.meta.pagination.total;
+                    this.current_page = response.meta.pagination.current_page;
+                    this.total_pages = response.meta.pagination.total_pages;
                 })
             },
 
             getClientProject: function () {
-                if (this.clientProjectsInfo.length > 0) {
-                    return
-                }
                 let data = {
                     include: 'principal,trail.expectations,trail.client'
                 };
-                let _this = this;
-                fetch('get', `/clients/${this.clientId}/projects`, data).then(function (response) {
-                    _this.clientProjectsInfo = response.data
+                fetch('get', `/clients/${this.clientId}/projects`, data).then(response => {
+                    this.clientProjectsInfo = response.data;
+                    this.total = response.meta.pagination.total;
+                    this.current_page = response.meta.pagination.current_page;
+                    this.total_pages = response.meta.pagination.total_pages;
                 })
             },
 
             getClientContact: function () {
-                // if (this.clientContactsInfo.length > 0) {
-                //     return
-                // }
-                let _this = this;
-                fetch('get', '/clients/' + this.clientId + '/contacts').then(function (response) {
-                    _this.clientContactsInfo = response.data
+                if (this.clientContactsInfo.length > 0) {
+                    return
+                }
+                fetch('get', '/clients/' + this.clientId + '/contacts').then(response => {
+                    this.clientContactsInfo = response.data;
+                    this.total = response.meta.pagination.total;
+                    this.current_page = response.meta.pagination.current_page;
+                    this.total_pages = response.meta.pagination.total_pages;
+                })
+            },
 
+            getClientContract: function () {
+                fetch('get', '/clients/' + this.clientId + '/contracts').then(response => {
+                    this.clientContractsInfo = response.data;
+                    this.total = response.meta.pagination.total;
+                    this.current_page = response.meta.pagination.current_page;
+                    this.total_pages = response.meta.pagination.total_pages;
                 })
             },
 
             addContact: function () {
-                let data = {}
                 if (!this.editConfig.name) {
                     toastr.error('请输入联系人！')
                     return
@@ -818,36 +897,33 @@
                     toastr.error('请输入职位！')
                     return
                 }
-                data = {
+                let data = {
                     name: this.editConfig.name || '',
                     phone: this.editConfig.phone,
                     position: this.editConfig.position,
                     type: this.editConfig.type
                 }
 
-                let _this = this
-                fetch(this.isEditContact ? 'post' : 'put', `/clients/${this.clientId}/contacts${!this.isEditContact ? '/' + this.editConfig.id : ''}`, data).then(function (response) {
-                    _this.clientContactsInfo.push(response.data);
-                    toastr.success(_this.isEditContact ? '添加成功！' : '修改成功')
-                    _this.getClientContact()
+                fetch(this.isEditContact ? 'post' : 'put', `/clients/${this.clientId}/contacts${!this.isEditContact ? '/' + this.editConfig.id : ''}`, data).then(response => {
+                    this.clientContactsInfo.push(response.data);
+                    toastr.success(this.isEditContact ? '添加成功！' : '修改成功')
+                    this.getClientContact()
                     $('#addContact').modal('hide')
                 })
             },
             delContact() {
-                let _this = this
-                fetch('delete', `/clients/${this.clientId}/contacts/${this.contactId}`).then(function (response) {
+                fetch('delete', `/clients/${this.clientId}/contacts/${this.contactId}`).then(() => {
                     toastr.success('删除成功')
-                    _this.getClientContact()
+                    this.getClientContact()
                 })
             },
 
             changeClientBaseInfo: function () {
-                let _this = this;
-                fetch('put', '/clients/' + this.clientId, this.changeInfo).then(function () {
-                    _this.isEdit = false;
+                fetch('put', '/clients/' + this.clientId, this.changeInfo).then(() => {
+                    this.isEdit = false;
                     toastr.success('修改成功')
-                    _this.getClient();
-                    _this.getClientTrail();
+                    this.getClient();
+                    this.getClientTrail();
                 })
             },
 
@@ -857,7 +933,7 @@
             },
 
             cancelEdit: function () {
-                this.isEdit = false
+                this.isEdit = false;
                 this.getClient()
             },
 
@@ -875,6 +951,10 @@
 
             changeClientLevel: function (value) {
                 this.clientInfo.grade = value
+            },
+
+            changeClientGrade: function (value) {
+                this.clientInfo.level = value
             },
 
             changeClientScale: function (value) {
@@ -919,7 +999,6 @@
 
 
                 this.setDefaultPrincipal()
-                let _this = this;
                 let data = {
                     resource_type: 4,
                     resourceable_id: this.clientId,
@@ -934,14 +1013,14 @@
                 };
 
 
-                fetch('post', '/tasks', data).then(function (response) {
+                fetch('post', '/tasks', data).then(response => {
                     toastr.success('创建成功');
                     $('#addTask').modal('hide');
-                    _this.editConfig = {}
-                    _this.clientTasksInfo.push(response.data)
-                    _this.getClient();
-                    _this.getClientTrail();
-                    _this.getClientProject()
+                    this.editConfig = {}
+                    this.clientTasksInfo.push(response.data)
+                    this.getClient();
+                    this.getClientTrail();
+                    this.getClientProject()
                 })
             },
 
@@ -1080,9 +1159,4 @@
         align-items: center;
     }
 
-    .fixed-button {
-        position: absolute;
-        bottom: 0px;
-        right: 0;
-    }
 </style>

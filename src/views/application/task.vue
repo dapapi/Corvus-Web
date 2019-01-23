@@ -1,5 +1,6 @@
 <template>
     <div class="page-main" style="background-color:#f3f4f5">
+        <Loading :is-loading="isLoading"></Loading>
         <div class="page-header page-header-bordered">
             <h1 class="page-title">我的任务</h1>
         </div>
@@ -38,8 +39,8 @@
                     </ul>
                 </div>
 
-                <div class="page-content tab-content nav-tabs-animate bg-white ">
-                    <div class="tab-pane animation-fade active pt-20" id="forum-task" role="tabpanel">
+                <div class="page-content tab-content nav-tabs-animate bg-white pb-0">
+                    <div class="tab-pane animation-fade active" id="forum-task" role="tabpanel">
                         <table class="table table-hover is-indent" data-plugin="animateList" data-animate="fade"
                                 data-child="tr"
                                 data-selectable="selectable">
@@ -100,6 +101,115 @@
                         </template>
                     </div>
                 </div>
+                <div class="site-action" data-plugin="actionBtn" data-toggle="modal" data-target="#addTask">
+            <button type="button"
+                    class="site-action-toggle btn-raised btn btn-success btn-floating waves-effect waves-classic">
+                <i class="front-icon iconfont icon-tianjia1 animation-scale-up" aria-hidden="true"
+                   style="font-size:30px"></i>
+                <i class="back-icon iconfont icon-tianjia1 animation-scale-up" aria-hidden="true"
+                   style="font-size:30px"></i>
+            </button>
+        </div>
+
+        <div class="modal fade"
+             id="addTask"
+             aria-hidden="true"
+             aria-labelledby="addLabelForm"
+             role="dialog"
+             data-backdrop="static"
+             tabindex="-1">
+            <div class="modal-dialog modal-simple">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <button type="button" class="close" aria-hidden="true" data-dismiss="modal">
+                            <i class="iconfont icon-guanbi" aria-hidden="true"></i>
+                        </button>
+                        <h4 class="modal-title">新增任务</h4>
+                    </div>
+                    <div class="modal-body">
+                        <div class="example">
+                            <div class="col-md-2 text-right float-left">关联资源</div>
+                            <div class="col-md-10 float-left">
+                                <normal-linkage-selectors ref="linkage" v-if="linkData.length>0" :myData="linkData"
+                                                          :data="linkData"
+                                                          @change="addLinkage"></normal-linkage-selectors>
+                            </div>
+                        </div>
+                        <div class="example">
+                            <div class="col-md-2 text-right float-left require">任务类型</div>
+                            <div class="col-md-10 float-left pl-0">
+                                <Selectors :options="taskTypeArr" ref="taskType"
+                                           @change="changeTaskType"></Selectors>
+                            </div>
+                        </div>
+                        <div class="example">
+                            <div class="col-md-2 text-right float-left require">任务名称</div>
+                            <div class="col-md-10 float-left pl-0">
+                                <input type="text" class="form-control" placeholder="请输入任务名称" v-model="taskName">
+                            </div>
+                        </div>
+                        <div class="example">
+                            <div class="col-md-2 text-right float-left require">负责人</div>
+                            <div class="col-md-5 float-left pl-0">
+                                <InputSelectors :placeholder="'请选择负责人'" @change="principalChange"></InputSelectors>
+                            </div>
+                        </div>
+                        <div class="example">
+                            <div class="col-md-2 text-right float-left">参与人</div>
+                            <div class="col-md-10 float-left pl-0">
+                                <AddMember @change="participantChange"></AddMember>
+                            </div>
+                        </div>
+                        <div class="example">
+                            <div class="col-md-2 text-right float-left pl-0 require">任务优先级</div>
+                            <div class="col-md-10 float-left pl-0">
+                                <Selectors
+                                        :options="taskLevelArr"
+                                        @change="changeTaskLevel"
+                                        ref="taskLevel"
+                                ></Selectors>
+                            </div>
+                        </div>
+                        <div class="example">
+                            <div class="col-md-2 text-right float-left require">开始时间</div>
+                            <div class="col-md-5 float-left pl-0">
+                                <Datepicker ref="startTime" @change="changeStartTime"></Datepicker>
+                            </div>
+                            <div class="col-md-5 float-left pl-0">
+                                <Timepicker ref="startMinutes" :default="startMinutes"
+                                            @change="changeStartMinutes"></Timepicker>
+                            </div>
+                        </div>
+                        <div class="example">
+                            <div class="col-md-2 text-right float-left require">截止时间</div>
+                            <div class="col-md-5 float-left pl-0">
+                                <Datepicker ref="endTime" @change="changeEndTime"></Datepicker>
+                            </div>
+                            <div class="col-md-5 float-left pl-0">
+                                <Timepicker ref="endMinutes" :default="endMinutes"
+                                            @change="changeEndMinutes"></Timepicker>
+                            </div>
+                        </div>
+                        <div class="example">
+                            <div class="col-md-2 text-right float-left">任务说明</div>
+                            <div class="col-md-10 float-left pl-0">
+                        <textarea class="form-control"
+                          name="taskDescription"
+                          id
+                          cols="30"
+                          rows="5"
+                          title
+                          v-model="taskIntroduce"></textarea>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="modal-footer">
+                        <button class="btn btn-sm btn-white btn-pure" data-dismiss="modal">取消</button>
+                        <button class="btn btn-primary" type="submit" @click="addTask">确定</button>
+                    </div>
+                </div>
+            </div>
+        </div>
             </div>
         </div>
     </div>
@@ -141,7 +251,8 @@
                 taskStatusSearch: "", // 搜索的任务状态
                 resourceType: "", // 资源type
                 resourceableId: "", // 资源id
-                user: {} // 个人信息
+                user: {}, // 个人信息
+                isLoading:true
             };
         },
         created() {
@@ -187,6 +298,7 @@
 
                 fetch("get", url, params).then(response => {
                     this.tasksInfo = response.data;
+                    this.isLoading = false;
                     this.current_page = response.meta.pagination.current_page;
                     this.total = response.meta.pagination.total;
                     this.total_pages = response.meta.pagination.total_pages;
@@ -214,9 +326,11 @@
                     data: data
                 }).done(function (response) {
                     _this.tasksInfo = response.data;
+                    
                     _this.current_page = response.meta.pagination.current_page;
                     _this.total = response.meta.pagination.total;
                     _this.total_pages = response.meta.pagination.total_pages;
+                    
                 });
             },
 
@@ -448,9 +562,7 @@
 .panel{
     box-shadow: 0 0 0 0;
 }
-.tab-content{
-    padding: 10px 0 10px 20px;
-}
+
 .page-item{
     cursor: pointer;
 }

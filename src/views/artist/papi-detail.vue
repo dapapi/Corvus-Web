@@ -35,15 +35,18 @@
                             <h4 class="card-title">{{artistInfo.nickname}}</h4>
                             <div class=" clearfix example">
                                 <div class="col-md-5 float-left pl-0 mr-15" v-if="artistInfo.publicity">
-                                    <div class="float-left pl-0 pr-2 col-md-3" >
+                                    <div class="float-left pl-0 pr-2 col-md-12 mr-20" >
                                         <i class="iconfont icon-yonghu pr-2" aria-hidden="true"></i>制作人
-                                    </div>
-                                    <div class="font-weight-bold float-left pr-10"  
+                                        <span class="font-weight-bold pr-10"  
                                          style="padding-top:1.5px" v-if ="artistInfo.publicity">
-                                        <span  v-for="(item,index) in artistInfo.publicity.data" :key="index">
-                                            {{item.name}}
+                                        <span  v-for="(item,index) in artistInfo.publicity.data" :key="index" class="pl-10">
+                                            <span>{{item.department.data.name}}</span>
+                                            <span v-if="item.department">-</span>
+                                            <span>{{item.name}}</span>
                                         </span>
+                                    </span>
                                     </div>
+                                    
                                     
                                 </div>
                             <div class="col-md-6 float-left pl-0 ml-50" v-show="artistInfo.sign_contract_status == 1">
@@ -51,7 +54,7 @@
                                         <i class="iconfont icon-yonghu pr-2" aria-hidden="true"></i>录入人
                                     </div>
                                     <div class="font-weight-bold float-left"   v-for="(entry,index) in artistInfo.creator" :key="index" style="padding-top:1.5px"> 
-                                            <span>{{entry.company}}</span>
+                                            <span>{{entry.department.name}}</span>
                                             <span v-if="entry.company">-</span>
                                             <span>{{ entry.name }}</span>    
                                     </div>
@@ -88,8 +91,8 @@
                     <div class="col-md-6 float-left pl-0 " >
                         <div class="col-md-13" v-if="artistInfo.sign_contract_status == 2&&scheduleShow.length>0" >
                             <div class="col-md-12"><i class="iconfont icon-ego-box pr-2"></i>日程</div>
-                            <div class="clearfix example projectshow" v-for="(item,index) in scheduleShow" :key="index" >
-                                <div class="col-md-2 float-left">{{item.title}}</div>
+                            <div class="clearfix example projectshow" v-for="(item,index) in scheduleShow" :key="index" @click="ScheduleBox(item)">
+                                <div class="col-md-2 float-left" style="overflow:hidden;text-overflow:ellipsis;white-space:nowrap">{{item.title}}</div>
                                 <div class="col-md-2 float-left">{{item.creator.data.name}}</div>
                                 <div class="col-md-4 float-left">{{item.start_at}}</div>
                                 <div class="col-md-4 float-left">{{item.end_at}}</div>
@@ -161,27 +164,21 @@
                             <li class="nav-item" role="presentation" >
                                 <a class="nav-link" data-toggle="tab" href="#forum-artist-tasks"
                                 aria-controls="forum-present"
-                                aria-expanded="false" role="tab" >
-                                    <!-- <template v-if="tasksInfo.length > 0">
-                                        <ToolTips :title="`已完成数量${completeNum}`">
-                                            任务 ({{completeNum}}/{{tasksInfo.length}})
+                                aria-expanded="false" role="tab" @click="getArtistTasks">
+                                     <template v-if="alltaskshow.length > 0">
+                                        <ToolTips :title="`已完成数量${doneTaskNum}`">
+                                            任务 ({{taskNum}})
                                         </ToolTips>
-                                    </template> -->
-                                    <!-- <template v-if="tasksInfo.length == 0">
-                                        <ToolTips :title="`已完成数量${0}`">
-                                            任务 ({{0}}/{{tasksInfo.length}})
-                                        </ToolTips>
-                                    </template> -->
-                                    <ToolTips v-if="alltaskshow.length > 0" :title="`已完成数量${completeNum}`">
-                                        任务 ({{completeNum}}/{{alltaskshow.length}})
-                                    </ToolTips>
-                                    <span v-else>任务</span>
+                                    </template>
+                                    <template v-else>
+                                        任务
+                                    </template>
                                 </a>
                             </li>
                             <li class="nav-item" role="presentation" v-show="artistInfo.sign_contract_status == 2">
                                 <a class="nav-link" data-toggle="tab" href="#forum-artist-work"
                                 aria-controls="forum-present"
-                                aria-expanded="false" role="tab" >作品库</a>
+                                aria-expanded="false" role="tab" @click="getTaskDate">作品库</a>
                             </li>
                             <li class="nav-item" role="presentation" v-show="artistInfo.sign_contract_status == 3">
                                 <a class="nav-link" data-toggle="tab" href="#forum-artist-fans"
@@ -205,7 +202,7 @@
                                 <div class="col-md-12">
                                     <calendar v-if="artistInfo.sign_contract_status == 2" :goto-date="selectedDate"
                                               :calendars="calendarId" ref="calendar" 
-                                              :isModel="true" 
+                                              :isModel="true" @showToast="showToast"
                                               @scheduleClick="showScheduleModal"
                                               @dayClick="showAddScheduleModal"></calendar>
                                 </div>
@@ -275,6 +272,8 @@
                                     <img src="https://res.papitube.com/corvus/images/content-none.png" alt=""
                                         style="width: 100%">
                                 </div>
+                                <pagination :current_page="current_page" :method="getArtistTasks" :total_pages="total_pages"
+                                    :total="total"  class="mb-30"></pagination>
                                 <div class="site-action fixed-button" data-plugin="actionBtn" data-toggle="modal"
                                     data-target="#addTask">
                                     <button type="button"
@@ -311,7 +310,7 @@
                                         <td v-if="work.advertising==1">
                                             是
                                         </td>
-                                        <td v-else-if="work.advertising==0">
+                                        <td v-if="work.advertising==0">
                                             否
                                         </td>
                                     </tr>
@@ -321,6 +320,8 @@
                                     <img src="https://res.papitube.com/corvus/images/content-none.png" alt=""
                                         style="width: 100%">
                                 </div>
+                                <pagination :current_page="current_page" :method="getTaskDate" :total_pages="total_pages"
+                                    :total="total" class="mb-30"></pagination>
                                 <div class="site-action fixed-button" data-plugin="actionBtn" data-toggle="modal"
                                     data-target="#addWork">
                                     <button type="button"
@@ -399,7 +400,7 @@
                                         style="width: 100%">
                                 </div>
                                 <pagination :current_page="current_page" :method="getArtistsBill" :total_pages="total_pages"
-                                            :total="total"></pagination>
+                                            :total="total" class="mb-30"></pagination>
                             </div>
                             <div class="tab-pane animation-fade fixed-button-father" id="forum-artist-base"
                                 role="tabpanel" :class="artistInfo.sign_contract_status == 2?'':'active'">
@@ -608,6 +609,10 @@
 
         </div>
 
+        <div class="calendar-toast" v-show="toastShow"
+             :style="'position: absolute;top:' + toastY + 'px; left: ' + toastX + 'px;'">双击创建日程
+        </div>
+
         <div class="modal fade" id="addTask" aria-hidden="true" aria-labelledby="addLabelForm"
              role="dialog" tabindex="-1" data-backdrop="static">
             <div class="modal-dialog modal-simple">
@@ -686,7 +691,7 @@
                         </div>
                     </div>
                     <div class="modal-footer">
-                        <button class="btn btn-sm btn-white btn-pure" data-dismiss="modal">取消</button>
+                        <button class="btn btn-sm btn-white btn-pure" data-dismiss="modal" @click="taskcancel">取消</button>
                         <button class="btn btn-primary" type="submit" @click="addTask">确定</button>
                     </div>
 
@@ -1175,6 +1180,8 @@
                 calendarId:[],
                 scheduleData:'',
                 uploadUrl:'',
+                taskNum: '',
+                doneTaskNum: 0,
                 participant_ids:[],
                 delType: '',
                 isAllday: false,
@@ -1197,7 +1204,11 @@
                 contractType:'bloggers',
                 formDate:{},
                 priorityArr:config.priorityArr,
-                platformDate:''
+                platformDate:'',
+                scoreId:'',
+                toastShow: false,
+                toastX: 0,
+                toastY: 0,
             }
         },
         computed: {
@@ -1215,7 +1226,7 @@
             this.getTaskDate();
              this.getCalendar();
             this.charts();
-            this.getArtistTasks();
+            this.getTaskNum();
             let _this = this;
             this.user = JSON.parse(Cookies.get('user'))
             this.$store.commit('changeNewPrincipal', {
@@ -1240,7 +1251,6 @@
             })
             //  清空视频
             $('#addWork').on('hidden.bs.modal', function () {
-                _this.artistInfo.nickname = '';
                 _this.artistWorkName = '';
                 _this.artistWorkProportion = '';
                 _this.videoUrl = '';
@@ -1322,13 +1332,12 @@
                 this.artistId = this.$route.params.id;
                 let _this = this;
                 let data = {
-                    include: 'creator,tasks,affixes,producer,type,publicity,trails.project,trails.client,trails.project.principal,trails.project.relate_project_bills_resource,operatelogs',
+                    include: 'creator,tasks,affixes,producer,type,publicity,trails.project,trails.client,trails.project.principal,trails.project.relate_project_bills_resource,operatelogs,publicity.department',
                 };
                 fetch('get', '/bloggers/' + this.artistId, data).then(function (response) {
                   
-                    let doneTaskNum = 0
+                    
                     _this.artistInfo = response.data;
-                    console.log(response.data)
                     _this.uploadUrl = _this.artistInfo.avatar;
                     if(_this.artistInfo.intention){
                         _this.artistInfo.intention = 1
@@ -1341,13 +1350,7 @@
                         _this.artistInfo.sign_contract_other=2
                     }
                     _this.tasksInfo = response.data.tasks.data //任务数据
-                    if (_this.tasksInfo.length > 0) {
-                        for (let i = 0; i < _this.tasksInfo.length; i++) {
-                            if (_this.tasksInfo[i].status == 2) {
-                                doneTaskNum = doneTaskNum + 1
-                            }
-                        }
-                    }
+                    
                      //项目
                      if(response.data.trails){
                         for (let i = 0; i < response.data.trails.data.length; i++) {
@@ -1370,27 +1373,34 @@
                 });
                 //任务状态跑组。试戏
                 fetch('get', '/task_types').then(function (response) {
+                    
                     _this.tasksType = response.data;
+                    response.data.forEach(item=>{
+                        
+                        if(item.title == '视频评分'){
+                           _this.scoreId = item.id 
+                           console.log(_this.scoreId)
+                        }
+                    })
                 })
                 fetch('get', '/bloggers/gettype').then(function (response) {
                     _this.artistTypeArr = response.data
                 })
-                //  fetch('get','/bloggers/select?include=users').then(function(response){
-                //     response.data.forEach(item=>{
-                //          _this.principalIds.push(item.users.data.id)
-                //     })
-                // })
+                 fetch('get','/bloggers/select?include=users').then(function(response){
+                    response.data.forEach(item=>{
+                         _this.principalIds.push(item.users.data.id)
+                    })
+                })
             },
             //上传头像 ---修改头像
             getUploadUrl(res) {
+                console.log(res)
                 let _this = this
                 if(!this.isEdit) {
                     this.changeArtistInfo = {}
                 }
                 _this.uploadUrl = res
-                _this.run(res,function(){
-                    _this.changeArtistBaseInfo()
-                })                         
+                _this.changeArtistBaseInfo()                        
             },
             selectDate: function (value) {
                 this.selectedDate = value;
@@ -1413,10 +1423,12 @@
                        for (let i = 0; i < response.data.schedule.data.length; i++) {
                            _this.scheduleShow.push(response.data.schedule.data[i])  
                        } 
-                        console.log(_this.scheduleShow)
                     }
                 })
                 
+            },
+            ScheduleBox: function(value){
+                this.showScheduleModal(value)
             },
             addSchedule: function () {
                 let startTime = '';
@@ -1481,6 +1493,7 @@
                 })
             },
             showScheduleModal: function (schedule) {
+                console.log(schedule)
                 let data = {
                     include: 'calendar,participants,creator,material,affixes,project,task',
                 };
@@ -1496,6 +1509,14 @@
                     this.$store.dispatch('changeParticipantsInfo', {data: response.data.participants.data});
                 });
                 $('#checkSchedule').modal('show')
+            },
+            showToast: function (clientX, clientY) {
+                this.toastX = clientX - 100;
+                this.toastY = clientY - 25;
+                this.toastShow = true;
+                setTimeout(() => {
+                    this.toastShow = false
+                }, 1000)
             },
              changeIsAllDay: function (e) {
                 this.isScheduleAllday = Number(e.target.checked);
@@ -1517,6 +1538,7 @@
                     }
                 })
             },
+           
             showAddScheduleModal: function (date) {
                 if (this.calendarId.length > 0) {
                     this.$refs.scheduleStartDate.setValue(date);
@@ -1670,6 +1692,10 @@
                 let _this = this;
                 fetch('get','/bloggers/index/production?blogger_id='+this.artistId+'').then(function(response){
                     _this.worksData=response.data
+                    _this.current_page = response.meta.pagination.current_page;
+                    _this.total = response.meta.pagination.total;
+                    _this.total_pages = response.meta.pagination.total_pages;
+                    console.log(response)
                     response.data.forEach(item=>{
                         let time=new Date(item.release_time)
                         let Y = time.getFullYear() + '-';
@@ -1684,6 +1710,35 @@
                 let _this = this;
                 fetch('get', '/bloggers/' + this.artistId+'/tasks').then(function (response) {
                     _this.alltaskshow = response.data
+                    console.log( response.data)
+                    _this.current_page = response.meta.pagination.current_page;
+                    _this.total = response.meta.pagination.total;
+                    _this.total_pages = response.meta.pagination.total_pages;
+                    response.data.forEach(item=>{
+                        if(item.status!==2&&new Date(item.end_at).getTime() < new Date().getTime()){
+                            item.status = 4
+                        }  
+                    })
+                    
+                 
+                })
+            },
+            taskcancel:function(){
+                this.$store.state.newParticipantsInfo = []
+            },
+            getTaskNum:function(){
+                let _this = this;
+                fetch('get', '/bloggers/' + this.artistId+'/tasks').then(function (response) {
+                
+                    _this.alltaskshow = response.data
+                    if (_this.alltaskshow.length > 0) {
+                            for (let i = 0; i < _this.alltaskshow.length; i++) {
+                                if (_this.alltaskshow[i].status == 2) {
+                                _this.doneTaskNum = _this.doneTaskNum + 1
+                                }
+                            }
+                    }
+                     _this.taskNum = `${_this.doneTaskNum}/${_this.alltaskshow.length}`
                 })
             },
             editBaseInfo: function () {
@@ -1865,7 +1920,8 @@
                     hatch_end_at: this.artistInfo.hatch_end_at,
                     intention_desc:this.artistInfo.intention_desc,
                     sign_contract_other_name:this.artistInfo.sign_contract_other_name,
-                    sign_contract_status:this.artistInfo.sign_contract_status
+                    sign_contract_status:this.artistInfo.sign_contract_status,
+                    avatar:this.uploadUrl
                 }
                 if(!this.updatelevel){
                     delete(this.changeArtistInfo.level)
@@ -1892,17 +1948,16 @@
                 }
             },
             changeWorkAd: function (value) {
-                if (value) {
-                    this.advertisingType = value.id;
-                } else {
+                console.log(value)
+                if (value == 1) {
+                    this.advertisingType = 1
+                } 
+                else if(value == 2){
                     this.advertisingType = 0;
                 }
             },
             //添加作品
             addWork: function () {
-                if (this.advertisingType == 2) {
-                    this.advertisingType = 0
-                }
                 let _this = this;
                 let data = {
                     nickname: this.artistInfo.nickname,
@@ -1918,21 +1973,24 @@
                     $('#addWork').modal('hide');
                     _this.getTaskDate()
                 })
-                // let obj={
-                //     title:'制作人视频评分-视频评分',
-                //     principal_id:this.user.id,
-                //     start_at:this.start_Time,
-                //     end_at:this.end_Time,
-                //     participant_ids:this.principalIds,
-                //     resource_type:1,
-                //     resourceable_id:this.artistId,
-                //     desc:'这是一个评分问卷任务',//默认
-                //     type:1609922710//评分问卷
-                // }
-                // fetch('post', '/tasks', obj
-                // ).then(function (response) {
-                //     _this.getArtist()
-                // })
+                if(this.scoreId){
+                    let obj={
+                    title:'制作人视频评分-视频评分',
+                    principal_id:this.user.id,
+                    start_at:this.start_Time,
+                    end_at:this.end_Time,
+                    participant_ids:this.principalIds,
+                    resource_type:1,
+                    resourceable_id:this.artistId,
+                    desc:'这是一个评分问卷任务',//默认
+                    type:this.scoreId//评分问卷
+                }
+                fetch('post', '/tasks', obj
+                ).then(function (response) {
+                    _this.getTaskNum();
+                })
+                }
+                
             },
             //孵化期截止时间计算
             getTimes:function(){
@@ -2160,11 +2218,7 @@
             JumpDetails(id){
                 this.$router.push({path: '/tasks/' + id})
             },
-            // projectDetails(id){
-            //     $('#checkSchedule').modal('show')
-            // },
             contractlist(status){
-                console.log(status)
                 let _this = this;
                 let data={
                     type:this.contractType
@@ -2174,7 +2228,6 @@
                    
                     _this.formDate = response.data
                     $('#approval-great-module').modal('show')
-                     console.log( _this.formDate )
                 })
             }
         },
@@ -2318,7 +2371,9 @@
         line-height: 76px;
         border-radius: 50%;
         border: 1px solid #eee;
-
+        background-repeat:no-repeat; 
+        background-size:100% 100%;
+        -moz-background-size:100% 100%;
     }
 
     .puls span {
@@ -2333,16 +2388,23 @@
         display: flex;
         align-items: center;
     }
-    .fixed-button {
-    position: absolute;
-    bottom: 0px;
-    right: 0;
-    }
+
     .fileupload {
         position: absolute;
         top: 0px;
         left: 0px;
         opacity: 0;
+    }
+    .fixed-button {
+        position: absolute;
+        bottom: 45px;
+        right: 0;
+    }
 
+    .calendar-toast {
+        background: #f5f5f5;
+        padding: 2px 3px;
+        border-radius: 2px;
+        z-index: 1000;
     }
 </style>

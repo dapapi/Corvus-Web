@@ -70,8 +70,8 @@
                 <div class="page-content tab-content nav-tabs-animate bg-white">
                     <div class="tab-pane animation-fade active" id="forum-trail-report" role="tabpanel">
                         <div class="clearfix">
-                            <div class="col-md-2 float-left pl-0">
-                                <Selectors :options="projectsTypeArr" @change="changeProjectType"></Selectors>
+                            <div class="col-md-3 float-left pl-0">
+                                <Selectors :options="projectsTypeArr" @change="changeProjectType" placeholder="请选择项目类型"></Selectors>
                             </div>
                             <div class="col-md-3 float-left pl-0" v-if="departmentsInfo.length > 1">
                                 <DropDepartment name="组别" :data="departmentsInfo" @change="selectDepartment"/>
@@ -115,11 +115,11 @@
                     </div>
                     <div class="tab-pane animation-fade" id="forum-trail-add" role="tabpanel">
                         <div class="clearfix pb-20">
-                            <div class="col-md-2 float-left pl-0">
-                                <Selectors :options="newTrailSearchArr" @change="changeSelectTime"></Selectors>
+                            <div class="col-md-3 float-left pl-0">
+                                <Selectors :options="newTrailSearchArr" @change="changeSelectTime" placeholder="请选择查询时间"></Selectors>
                             </div>
-                            <div class="col-md-2 float-left pl-0">
-                                <Selectors :options="starsArr" @change="changeStar"></Selectors>
+                            <div class="col-md-3 float-left pl-0">
+                                <Selectors :options="starsArr" @change="changeStar" placeholder="请选择目标艺人"></Selectors>
                             </div>
                             <div class="col-md-3 float-left">
                                 <DropDepartment name="组别" :data="departmentsInfo" @change="selectNewDepartment"/>
@@ -131,8 +131,8 @@
                     </div>
                     <div class="tab-pane animation-fade" id="forum-industry-analysis" role="tabpanel">
                         <div class="clearfix pb-20">
-                            <div class="col-md-2 float-left pl-0">
-                                <Selectors :options="starsArr" @change="changeProportionStar"></Selectors>
+                            <div class="col-md-3 float-left pl-0">
+                                <Selectors :options="starsArr" @change="changeProportionStar" placeholder="请选择目标艺人"></Selectors>
                             </div>
                             <div class="col-md-3 float-left pl-0" v-if="departmentsInfo.length > 1">
                                 <DropDepartment name="组别" :data="departmentsInfo" @change="selectProportionDepartment"/>
@@ -233,7 +233,6 @@
         },
          watch: {
             _department () {
-                console.log(1)
                 this.departmentsInfo = this.departmentsInfo.concat(this.department);
             }
         },

@@ -74,7 +74,6 @@ export default {
         },
         getlist:function(){
             fetch('get',`${config.apiUrl}/launch`).then((res) => {
-                // console.log(res.data)
                 let data={}
                 for (let i = 0; i < this.leftData.length; i++) {
                     if(this.leftData[i].id == 3){
@@ -123,7 +122,6 @@ export default {
                     }
                     
                 }
-                // console.log(this.leftData)
             })
         }
      }

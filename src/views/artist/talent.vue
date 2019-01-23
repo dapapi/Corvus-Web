@@ -97,8 +97,8 @@
                                 <th class="cell-300" scope="col" v-if="artistsInfo.find(item=>item.sign_contract_status==1)">沟通状态</th>
                                 <th class="cell-300" scope="col" v-if="artistsInfo.find(item=>item.sign_contract_status!==1)">类型</th>
                                 <th class="cell-300" scope="col" v-if="artistsInfo.find(item=>item.sign_contract_status==2)">签约日期</th>
-                                <!-- <th class="cell-300" scope="col" v-if="artistsInfo.find(item=>item.sign_contract_status==2)">合同起始日</th>
-                                <th class="cell-300" scope="col" v-if="artistsInfo.find(item=>item.sign_contract_status==3)">合同终止日</th> -->
+                                <!-- <th class="cell-300" scope="col" v-if="artistsInfo.find(item=>item.sign_contract_status==2)">合同起始日</th> -->
+                                <th class="cell-300" scope="col" v-if="artistsInfo.find(item=>item.sign_contract_status==3)">合同终止日</th>
                                 <th class="cell-300" scope="col">录入时间</th>
                                 <th class="cell-300" scope="col">最后跟进时间</th>
                             </tr>
@@ -157,7 +157,7 @@
                                  style="width: 100%">
                         </div>
                         <pagination :current_page="current_page" :method="getArtists" :total_pages="total_pages"
-                                    :total="total" v-if="isShow" class="mb-50"></pagination>
+                                    :total="total" v-if="isShow" class=""></pagination>
                     </div>
                     <div class="tab-pane animation-fade" id="forum-blogger" role="tabpanel"
                          :class="!isShow?'active':''">
@@ -276,7 +276,7 @@
                                  style="width: 100%">
                         </div>
                         <pagination :current_page="Bcurrent_page" :method="getBlogger" :total_pages="Btotal_pages"
-                                    :total="Btotal" v-if="!isShow" class="mb-50"></pagination>
+                                    :total="Btotal" v-if="!isShow"></pagination>
                         
                     </div>
                 </div>
@@ -864,9 +864,10 @@
             this.getStars();
         },
         mounted() {
+            this.getArtists();
             this.getBlogger();
             this.getBlogType() //获取博主类型
-            this.getArtists();
+            
             $('table').asSelectable();
             
         },
@@ -890,7 +891,6 @@
             },
             //获取签约状态
             getSource: function (value) {
-                console.log(value)
                 this.listData.sign_contract_status = value
                 this.getArtists()
             },
@@ -902,7 +902,6 @@
                 }
                 this.listData.page = page
                 fetch('get', '/stars', this.listData).then(function (response) {
-                    console.log( response)
                     if(response.data){
                         _this.artistsInfo = response.data;
                     }
@@ -911,6 +910,7 @@
                         _this.total = response.meta.pagination.total;
                         _this.total_pages = response.meta.pagination.total_pages;
                     }
+                    _this.isLoading = false;
                     _this.selectAllStars = false;
                     _this.selectedArtistsArr = [];
                 })
@@ -942,7 +942,6 @@
                     if(response.data){
                         _this.bloggerInfo = response.data;
                     }
-                    console.log(response.data)
                     if(response.meta){
                         _this.Bcurrent_page = response.meta.pagination.current_page;
                         _this.Btotal = response.meta.pagination.total;
@@ -982,8 +981,9 @@
             },
             customize: function (value) {
                 let _this = this
-                fetch('post', '/'+this.customizeContentType+'/filter?include=principal,client,contact,recommendations,expectations', value).then((params) => {
-                    _this.trailsInfo = params.data
+                fetch('post', '/'+this.customizeContentType+'/filter', value).then((params) => {
+                    // _this.bloggerInfo =params.data
+                    _this.artistsInfo = params.data
                     _this.total = params.meta.pagination.total;
                     _this.cleanUp = true
                 })
@@ -1127,7 +1127,6 @@
                     } else {
                         this.selectedArtistsArr.push(value)
                     }
-                    console.log(this.selectedArtistsArr)
                 }
             },
 
@@ -1163,10 +1162,10 @@
                     }
                     toastr.success('分配制作人成功')
                     $('#giveProducer').modal('hide')
+                    _this.selectedArtistsArr = []
                     _this.getBlogger()
                     _this.$store.state.participantsInfo = []
                     _this.selectedArtistsArr = []
-                    console.log(_this.selectedArtistsArr)
                 })
 
             },
@@ -1185,8 +1184,10 @@
                 let  organization_id = JSON.parse(Cookies.get('user')).organization_id
                         if(organization_id == 411){                       
                             this.isShow = true
+                           
                         }else if(organization_id == 412){
                             this.isShow = false
+                             
                         }
             },
             tab:function(value){
@@ -1274,7 +1275,6 @@
             },
 
             changeBirthday: function (value) {
-                console.log(value)
                 this.artistBirthday = value
             },
 
@@ -1356,7 +1356,6 @@
                 if (this.signCompany == 2) {
                     this.sign_contract_other_name = ''
                 }
-                // console.log(this.affixesType)
                 if (this.affixesType > 1 && this.affixes.length == 0) {
                     toastr.error('请上传附件');
                     return false
@@ -1502,5 +1501,29 @@
     }
 </script>
 <style>
+    .puls {
+        display: inline-block;
+        background-size: 100px;
+        width: 50px;
+        height: 50px;
+        text-align: center;
+        line-height: 46px;
+        border-radius: 50%;
+        border: 1px dashed #eee;
+        background-repeat:no-repeat; 
+        background-size:100% 100%;
+        -moz-background-size:100% 100%;
+    }
 
+    .puls span {
+        font-size: 30px;
+    }
+
+    .fileupload {
+        position: absolute;
+        top: 0px;
+        left: 0px;
+        opacity: 0;
+
+    }
 </style>

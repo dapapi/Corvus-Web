@@ -25,8 +25,8 @@
                         
                     </ul>
                 </div>
-                <div class="page-content tab-content nav-tabs-animate bg-white">
-                    <div class="tab-pane animation-fade active pt-20" id="forum-task" role="tabpanel">
+                <div class="page-content tab-content nav-tabs-animate bg-white pb-0">
+                    <div class="tab-pane animation-fade active" id="forum-task" role="tabpanel">
                         <table class="table table-hover is-indent" data-plugin="animateList" data-animate="fade"
                                 data-child="tr"
                                 data-selectable="selectable" >
@@ -100,6 +100,8 @@
                 </div>
             </div>
         </div>
+        <AddClientType type="project" @change="changeProjectType"></AddClientType>
+        <BuildProject :project-fields-arr="projectFieldsArr" :project-type="projectType"></BuildProject>
    </div>
 </template>
 <script>
@@ -131,7 +133,9 @@ export default {
                 customizeInfo: config.customizeInfo,
                 projectStatus:1,//项目区别
                 projectInfo:'',
-                myType:''
+                myType:'',
+                projectFieldsArr: [],
+                projectType: '',
             }
 
 
@@ -154,7 +158,6 @@ export default {
                 //     this.projectStatus = signStatus
                 // }
                 fetch('get', '/projects/my_all', data).then(function (response) {
-                    console.log(response.data)
                     _this.projectInfo = response.data;
                     _this.current_page = response.meta.pagination.current_page;
                     _this.total = response.meta.pagination.total;
@@ -173,11 +176,49 @@ export default {
                 }
                 data.type=this.myType
                 fetch('get', '/projects/my', data).then(function (response) {
-                    console.log(response.data)
                     _this.projectInfo = response.data;
                     _this.current_page = response.meta.pagination.current_page;
                     _this.total = response.meta.pagination.total;
                     _this.total_pages = response.meta.pagination.total_pages;
+                });
+            },
+            changeProjectType: function (value) {
+                let organization_id = JSON.parse(Cookies.get('user')).organization_id
+                if (value == 3) {
+                    if (organization_id == 411) {
+                        value = 3
+                    } else if (organization_id == 412) {
+                        value = 4
+                    }
+                }
+                this.projectType = value;
+
+                this.selectProjectType();
+                $('#addProject').modal('show');
+            },
+            selectProjectType: function () {
+                this.projectFieldsArr = [];
+                if (this.projectType == 5) {
+                    return
+                }
+                let _this = this;
+                fetch('get', '/project_fields', {
+                    type: _this.projectType,
+                    status: 1,
+                }).then(function (response) {
+                    for (let i = 0; i < response.data.length; i++) {
+                        if (response.data[i].field_type === 2 || response.data[i].field_type === 6) {
+                            response.data[i].contentArr = [];
+                            for (let j = 0; j < response.data[i].content.length; j++) {
+                                response.data[i].contentArr.push({
+                                    value: response.data[i].content[j],
+                                    name: response.data[i].content[j]
+                                })
+                            }
+                        }
+                    }
+                    _this.projectFieldsArr = response.data
+
                 });
             },
             projectDetail(projectId){

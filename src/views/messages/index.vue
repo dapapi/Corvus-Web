@@ -16,7 +16,7 @@
             <div class="row mx-0" style="background-color:#fff">
                 <!-- <div class="col-md-2">
                  <div class="list-group mt-20" style="border-right:1px solid #E0E0E0">
-                    <a :class="item.id == moduleType?'checked list-group-item mr-10 px-10':'list-group-item mr-10 px-10'" v-for="(item,index) in moduleList" :key="index" href="javascript:void(0)" role="menuitem" @click="renderMsg(item.id,state)">{{item.name}}<span v-show="item.un_read>0" class="unRead ml-5">{{item.un_read}}</span></a>
+                    <a :class="item.id == moduleType?'checked list-group-item mr-10 px-10':'list-group-item mr-10 px-10'" v-for="(item,index) in moduleList" :key="index" href="javascript:void(0)" role="menuitem" @click="renderMsg(item.id,state)">{{item.name}}<span v-show="item.unread>0" class="unRead ml-5">{{item.unread}}</span></a>
                 </div>
             </div> -->
             <div class="col-md-12 py-5">
@@ -101,7 +101,7 @@ export default {
       pageData:{},              //页面数据
       readFilter:true,          //阅读状态筛选
       messageFilter:"全部消息",   //消息过滤器状态
-      moduleList:{},//模块list
+      moduleList:[],//模块list
       moduleType:'',
       messageList:[],//消息list
       iconList:{//每个模块的icon
@@ -140,7 +140,6 @@ export default {
       //数据初始化
       this.getModule()
       
-    //   console.log(this.$route.query.moduleType)
   },
   computed:{
       ...mapState([
@@ -149,8 +148,6 @@ export default {
   },
   watch:{
        unReadMsg:function(){
-        //    alert(222)
-        //    console.log(this.unReadMsg)
            this.getModule();
            
        },
@@ -178,11 +175,11 @@ export default {
     },
     getModule:function(){
         fetch('get',`${config.apiUrl}/getmodules`).then((res) => {
-            this.moduleList = res
-            // console.log(res)
+            this.moduleList = res.data
+            console.log(this.moduleList)
             let num = 0
-            for (let i = 0; i < res.length; i++) {
-                num = num + res[i].un_read
+            for (let i = 0; i < res.data.length; i++) {
+                num = num + res.data[i].unread
             }
             this.$store.state.unReadMsg = num
             if(this.moduleType){
@@ -191,8 +188,6 @@ export default {
                 this.renderMsg(this.moduleList[0].id,1)
             }
         })
-        // console.log(this.moduleList)
-        // console.log(this.moduleType)
     },
     msgStatus:function(id,type){
         let data = {}

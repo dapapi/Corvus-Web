@@ -55,7 +55,7 @@
                                 <div class="checkbox-custom checkbox-inline checkbox-primary checkbox-sm float-left">
                                     <input type="checkbox" id="inputCheckbox" name="remember" :checked="isRememberName"
                                            @change="rememberName">
-                                    <label for="inputCheckbox">记住帐号</label>
+                                    <label for="inputCheckbox">记住密码</label>
                                 </div>
                                 <span class="float-right pointer-content font-info" @click="forgetPassword">忘记密码</span>
                             </div>
@@ -172,6 +172,7 @@
                 isRememberName: false,
                 phone: '',
                 firstClickTime: null,
+                userInfo: '',
             }
         },
 
@@ -179,18 +180,28 @@
             this.checkBindTelephone();
             this.checkWechatLogin();
             if (Cookies.get('user_account')) {
-                this.username = Cookies.get('user_account');
+                this.userInfo = JSON.parse(Cookies.get('user_account'));
+                this.username = this.userInfo.name;
+                this.password = this.userInfo.password;
                 this.isRememberName = true;
+            }
+        },
+
+        watch: {
+            username(newValue) {
+                if (this.userInfo) {
+                    if (newValue !== this.userInfo.name) {
+                        this.password = '';
+                    } else {
+                        this.password = this.userInfo.password
+                    }
+                }
             }
         },
 
         methods: {
             storeToLocal(json) {
                 Cookies.set('user', json)
-            },
-
-            storeCompanyTypeToLocal(type) {
-                Cookies.set('companyType', type)
             },
 
             rememberName(value) {
@@ -258,7 +269,6 @@
                 if (this.firstClickTime) {
                     if (currentClickTime - this.firstClickTime < 1000) {
                         this.firstClickTime = currentClickTime;
-                        console.log('return');
                         return
                     }
                 } else {
@@ -359,7 +369,6 @@
                 if (!Verify.username(this.username) || !Verify.password(this.password)) {
                     return
                 }
-                let _this = this;
                 let username = this.username;
                 let password = this.password;
                 let data = {
@@ -380,23 +389,27 @@
                             toastr.error('用户名或密码错误')
                         },
                     }
-                }).done(function (response) {
+                }).done(response => {
                     let token = response.access_token;
                     config.setAccessToken(token);
-                    setTimeout(function () {
-                        _this.fetchUserInfo(function (userJson) {
-                            _this.storeToLocal(userJson);
+                    setTimeout(() => {
+                        this.fetchUserInfo(userJson => {
+                            this.storeToLocal(userJson);
+                            if (this.isRememberName) {
+                                let data = {
+                                    name: this.username,
+                                    password: this.password
+                                };
+                                Cookies.set('user_account', data)
+                            } else {
+                                if (Cookies.get('user_account')) {
+                                    Cookies.remove('user_account')
+                                }
+                            }
                             redirect('/my')
                         })
                     }, 100)
                 });
-                if (this.isRememberName) {
-                    Cookies.set('user_account', this.username)
-                } else {
-                    if (Cookies.get('user_account')) {
-                        Cookies.remove('user_account')
-                    }
-                }
             },
 
             fetchUserInfo(callback) {
@@ -411,7 +424,7 @@
                         id: userData.id,
                         avatar: userData.icon_url,
                         nickname: userData.name,
-                        organization_id:userData.organization_id
+                        organization_id: userData.organization_id
                     };
                     callback(json, userData.company)
                 })

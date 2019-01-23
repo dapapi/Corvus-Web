@@ -118,7 +118,11 @@
                                     </div>
                                     <div class="col-md-8 float-left detail-value"
                                          v-if="item.values && item.values.data.value.includes('http')"
-                                         @click='previewHandler(item.values.data.value)'>点击查看
+                                         @click='previewHandler(item.values.data.value)'>
+                                        <figure style="text-align:center" class="float-left"> 
+                                            <img src="@/assets/img/attachment.png" alt="" style="width:20px">
+                                            <p>点击查看</p>
+                                        </figure>
                                     </div>
                                 </div>
                             </div>
@@ -144,7 +148,7 @@
                             <h5>审批跟进</h5>
                         </div>
                         <div class="card-block">
-                            <div class="col-md-12 pl-0">
+                            <div class="col-md-5 pl-0">
                                 <TaskFollowUp :follow-type="'审批'" trail-type="approval_instances" :trail-id="list.form_instance_number"  ></TaskFollowUp>
                             </div>
                         </div>
@@ -281,7 +285,6 @@
                 let _this = this
                 this.roleUser = []
                 fetch('get', '/users/my?include=department,roleUser').then((params) => {
-                    console.log(params);
                     _this.currentId = params.data.id
                     for (const key in params.data.roleUser.data) {
                         _this.roleUser.push(params.data.roleUser.data[key].role_id)
@@ -404,6 +407,7 @@
         background-size: 30px;
         text-align: center;
         line-height: 30px;
+        vertical-align: middle;
     }
 
     .loader-overlay {
@@ -439,7 +443,7 @@
     .title-status i {
         position: absolute;
         right: 10px;
-        top: 0;
+        top: 10px;
     }
 
     .caption {

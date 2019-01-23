@@ -141,7 +141,7 @@
                             <h5>任务</h5>
                         </div>
                         <div class="page-content tab-content nav-tabs-animate overflowY py-0">
-                            <div class="list-wrap" v-for="(item, index) in tasks" :key="index">
+                            <div class="list-wrap" v-for="(item, index) in tasks" :key="index" @click="taskDetail(item.id)">
                                 <div class="flex">
                                     <Avatar class="small-avatar" :imgUrl="item.principal.data.icon_url"/>
                                     {{ item.title }}
@@ -159,7 +159,7 @@
                             <h5>最近日程</h5>
                         </div>
                         <div class="page-content tab-content nav-tabs-animate overflowY py-0">
-                            <div class="list-wrap" v-for="(item, index) in schedules" :key="index">
+                            <div class="list-wrap" v-for="(item, index) in schedules" :key="index" @click="showScheduleModal(item.id)">
                                 <div class="flex">
                                     <Avatar class="small-avatar" :imgUrl="item.creator.data.icon_url"/>
                                     {{ item.title }}
@@ -176,7 +176,110 @@
             </div>
 
         </div>
-
+         <div class="modal fade" id="checkSchedule" aria-hidden="true" aria-labelledby="addLabelForm"
+             role="dialog" tabindex="-1" data-backdrop="static">
+            <div class="modal-dialog modal-simple">
+                <div class="modal-content" v-if="getScheduleFinish">
+                    <div class="modal-header">
+                        <div style="order: 2">
+                            <span v-show="!noPermission">
+                                <i class="iconfont icon-bianji2 pr-4 font-size-16 pointer-content"
+                                    aria-hidden="true"></i>
+                                <FileUploader is-icon="true" class="float-left" @change="fileUpload"></FileUploader>
+                                <i class="iconfont icon-shanchu1 pr-4 font-size-16 pointer-content" data-toggle="modal"
+                                   data-target="#delModel" aria-hidden="true"></i>
+                            </span>
+                            <i class="iconfont icon-guanbi pointer-content" aria-hidden="true" data-dismiss="modal"></i>
+                        </div>
+                        <h5 class="modal-title">{{ scheduleData.calendar.data.title }}</h5>
+                    </div>
+                    <div class="modal-body px-40">
+                        <div class="">
+                            <h4 class="my-20">{{ scheduleData.title }}</h4>
+                        </div>
+                        <div class="example">
+                            <div class="">
+                                <div class="col-md-3 float-left px-0">
+                                    <div class="">{{ (scheduleData.start_at.split(' ')[0]).split('-')[1] }}月
+                                        {{ (scheduleData.start_at.split(' ')[0]).split('-')[2] }}日
+                                        {{ scheduleData.start_at|getWeek(scheduleData.start_at) }}
+                                    </div>
+                                    <div class="big-time">{{ (scheduleData.start_at.split(' ')[1]).slice(0,5) }}</div>
+                                </div>
+                                <div class="col-md-2 float-left pl-0">
+                                    <div class="" style="color: white"> -</div>
+                                    <div class="big-time text-center"> -</div>
+                                </div>
+                                <div class="col-md-3 float-left px-0">
+                                    <div class="">{{ (scheduleData.end_at.split(' ')[0]).split('-')[1] }}月
+                                        {{ (scheduleData.end_at.split(' ')[0]).split('-')[2] }}日
+                                        {{ scheduleData.end_at|getWeek(scheduleData.end_at) }}
+                                    </div>
+                                    <div class="big-time">{{ (scheduleData.end_at.split(' ')[1]).slice(0,5) }}</div>
+                                </div>
+                                <div class="col-md-2 float-left" v-show="scheduleData.is_allday">
+                                    <div class="" style="color: white"> -</div>
+                                    <div class="big-time font-size-18" style="line-height: 75px">全天</div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="example" v-if="scheduleData.position">
+                            <div class="col-md-2 px-0 float-left">地点</div>
+                            <div class="col-md-10 pl-0 float-left">{{ scheduleData.position }}</div>
+                        </div>
+                        <div class="example" v-if="scheduleData.material">
+                            <div class="col-md-2 px-0 float-left">资源</div>
+                            <div class="col-md-10 pl-0 float-left">{{ scheduleData.material.data.name }}</div>
+                        </div>
+                        <div class="example">
+                            <div class="col-md-2 px-0 float-left">组织人</div>
+                            <div class="col-md-10 pl-0 float-left">
+                                {{ scheduleData.creator.data.name }}
+                            </div>
+                        </div>
+                        <div class="example"
+                             v-if="((scheduleData.project && scheduleData.project.data.length > 0) || (scheduleData.task && scheduleData.task.data.length > 0)) && !noPermission">
+                            <div class="col-md-2 px-0 float-left">关联资源</div>
+                            <div class="col-md-10 pl-0 float-left">
+                                <div class="pb-5" v-if="scheduleData.project"
+                                     v-for="project in scheduleData.project.data">
+                                    <span>项目 - {{ project.title }}</span>
+                                </div>
+                                <div class="pb-5" v-if="scheduleData.task" v-for="task in scheduleData.task.data">
+                                    <span>任务 - {{ task.title }}</span>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="example" v-if="scheduleData.participants && !noPermission">
+                            <div class="col-md-2 px-0 float-left">参与人</div>
+                            <div class="col-md-10 pl-0 float-left">
+                                <AddMember type="add" @change="changeScheduleParticipants"></AddMember>
+                            </div>
+                        </div>
+                        <div class="example" v-if="scheduleData.desc && !noPermission">
+                            <div class="col-md-2 px-0 float-left">备注</div>
+                            <div class="col-md-10 pl-0 float-left">{{ scheduleData.desc }}</div>
+                        </div>
+                        <div class="example" v-if="scheduleData.affixes && scheduleData.affixes.data.length > 0">
+                            <div>附件</div>
+                            <div>
+                                <div class="col-md-3 float-left text-center position-relative file-item"
+                                     v-for="(affix,index) in scheduleData.affixes.data" :key="index">
+                                    <div><i class="iconfont icon-wenjian" style="font-size: 36px"></i></div>
+                                    <div @click="openFile(affix.url)" class="pointer-content">{{ affix.title }}</div>
+                                    <div class="del-affix">
+                                        <i class="iconfont icon-liulan pointer-content mr-4"
+                                           @click="openFile(affix.url)"></i>
+                                        <i class="iconfont icon-shanchu1 pointer-content"
+                                           @click="delAffix(affix.id)"></i>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
     </div>
 </template>
 
@@ -195,6 +298,10 @@
                 checkedIndex: '',
                 tasks: [], // 任务
                 schedules: [], // 日程
+                noPermission: false,
+                scheduleData: '',
+                scheduleParticipants: [],
+                getScheduleFinish: false,
             }
         },
         mounted() {
@@ -204,11 +311,49 @@
                 this.setDefaultInfo(id)
             })
             this.getSchedules(id)
+            let _this = this
+            $('#checkSchedule').on('hide.bs.modal', function () {
+                if (_this.scheduleType !== 'edit') {
+                    _this.$store.dispatch('changeParticipantsInfo', {data: []});
+                }
+                _this.getScheduleFinish = false
+            });
         },
         computed: {
             ...mapState([
                 'department',
             ]),
+        },
+
+        filters: {
+            getWeek: function (date) {
+                let week = new Date(date).getDay();
+                let value = '';
+                switch (week) {
+                    case 0:
+                        value = '周日';
+                        break;
+                    case 1:
+                        value = '周一';
+                        break;
+                    case 2:
+                        value = '周二';
+                        break;
+                    case 3:
+                        value = '周三';
+                        break;
+                    case 4:
+                        value = '周四';
+                        break;
+                    case 5:
+                        value = '周五';
+                        break;
+                    case 6:
+                        value = '周六';
+                        break;
+                }
+                return value;
+            }
         },
         methods: {
             memberChange() {
@@ -240,7 +385,71 @@
                     this.tasks = res.data.tasks.data
                     this.schedules = res.data.schedules.data
                 })
-            }
+            },
+            taskDetail(taskId){
+                this.$router.push({path: '/tasks/' + taskId})
+            },
+            showScheduleModal: function (id) {
+               
+                let data = {
+                    include: 'calendar,participants,creator,material,affixes,project,task',
+                };
+                fetch('get', '/schedules/' + id, data).then(response => {
+                    this.noPermission = false;
+                    this.scheduleData = response.data;
+                    if (this.scheduleData.privacy) {
+                        this.schedulePrivacy = true
+                    }
+                    if (this.scheduleData.is_allday) {
+                        this.isScheduleAllday = true
+                    }
+                    this.scheduleParticipants = JSON.parse(JSON.stringify(response.data.participants.data));
+                    this.$store.dispatch('changeParticipantsInfo', {data: response.data.participants.data});
+                    this.getScheduleFinish = true
+                });
+                $('#checkSchedule').modal('show')
+            },
+            fileUpload: function (url, name, size) {
+                let data = {
+                    title: name,
+                    url: url,
+                    size: size,
+                    type: 1
+                };
+                fetch('post', '/schedules/' + this.scheduleData.id + '/affix', data).then(response => {
+                    toastr.success('上传成功');
+                    if (this.scheduleData.affixes) {
+                        this.scheduleData.affixes.data.push(response.data)
+                    } else {
+                        this.scheduleData.affixes = {data: []};
+                        this.scheduleData.affixes.data.push(response.data)
+                    }
+                })
+            },
+            changeScheduleParticipants: function (value) {
+                let data = {};
+                if (value) {
+                    data.participant_del_ids = [value];
+                } else {
+                    let participantsInfo = this.$store.state.newParticipantsInfo;
+                    data.participant_ids = [];
+                    data.participant_del_ids = [];
+                    for (let i = 0; i < participantsInfo.length; i++) {
+                        if (this.scheduleParticipants.map(item => item.id).indexOf(participantsInfo[i].id) === -1) {
+                            data.participant_ids.push(participantsInfo[i].id)
+                        }
+                    }
+                    for (let i = 0; i < this.scheduleParticipants.length; i++) {
+                        if (participantsInfo.map(item => item.id).indexOf(this.scheduleParticipants[i].id) === -1) {
+                            data.participant_del_ids.push(this.scheduleParticipants[i].id)
+                        }
+                    }
+                }
+                fetch('put', '/schedules/' + this.scheduleData.id, data).then(() => {
+                    this.$refs.calendar.refresh();
+                    this.scheduleParticipants = JSON.parse(JSON.stringify(this.$store.state.newParticipantsInfo));
+                })
+            },
         },
     }
 </script>
@@ -335,10 +544,17 @@
         align-items: center;
         margin: 20px 0;
     }
-
+    .list-wrap :hover{
+        cursor: pointer;
+    }
     .flex {
         display: flex;
         align-items: center;
+    }
+     .big-time {
+        font-size: 48px;
+        color: #3F51B5;
+        font-weight: bold;
     }
 </style>
 

@@ -166,7 +166,8 @@
                             <div class="col-md-2 text-right float-left"></div>
                             <div class="col-md-10 float-left pl-0">
                                 <div class="checkbox-custom checkbox-primary">
-                                    <input type="checkbox" id="isScheduleAllday" @change="changeIsAllDay" v-model="isScheduleAllday">
+                                    <input type="checkbox" id="isScheduleAllday" @change="changeIsAllDay"
+                                           v-model="isScheduleAllday">
                                     <label for="isScheduleAllday">全天</label>
                                 </div>
                             </div>
@@ -208,7 +209,8 @@
                             <div class="example">
                                 <div class="col-md-2 text-right float-left">提醒</div>
                                 <div class="col-md-10 float-left pl-0">
-                                    <selectors :options="remindArr" ref="scheduleNotice"></selectors>
+                                    <selectors :options="remindArr" ref="scheduleRemind"
+                                               @change="changeScheduleRemind"></selectors>
                                 </div>
                             </div>
                             <div class="clearfix my-20">
@@ -331,10 +333,10 @@
                             <div class="col-md-10 pl-0 float-left">
                                 <div class="pb-5" v-if="scheduleData.project"
                                      v-for="project in scheduleData.project.data">
-                                    <span>项目 - {{ project.title }}</span>
+                                    <span class="pointer-content" @click="redirectProject(project.moduleable_id)">项目 - {{ project.title }}</span>
                                 </div>
                                 <div class="pb-5" v-if="scheduleData.task" v-for="task in scheduleData.task.data">
-                                    <span>任务 - {{ task.title }}</span>
+                                    <span class="pointer-content" @click="redirectTask(task.moduleable_id)">任务 - {{ task.title }}</span>
                                 </div>
                             </div>
                         </div>
@@ -645,6 +647,7 @@
                 toastX: 0,
                 toastY: 0,
                 toastShow: false,
+                scheduleRemind: '',
             }
         },
 
@@ -837,6 +840,14 @@
                 window.open(url)
             },
 
+            redirectProject: function (projectId) {
+                this.$router.replace({path: '/projects/' + projectId});
+            },
+
+            redirectTask: function (taskId) {
+                this.$router.replace({path: '/tasks/' + taskId});
+            },
+
             selectProjectLinkage: function (value) {
                 this.linkageResource = value;
                 if (!this.allProjectsInfo) {
@@ -917,6 +928,10 @@
                 this.scheduleMaterialId = value;
             },
 
+            changeScheduleRemind: function (value) {
+                this.scheduleRemind = value;
+            },
+
             changeScheduleParticipants: function (value) {
                 let data = {};
                 if (value) {
@@ -943,17 +958,20 @@
             },
 
             showScheduleModal: function (schedule) {
+                console.log(schedule)
                 let data = {
                     include: 'calendar,participants,creator,material,affixes,project,task',
                 };
                 fetch('get', '/schedules/' + schedule.id, data).then(response => {
                     if (!response) {
                         this.scheduleData = schedule;
+                        console.log(this.scheduleData)
                         this.noPermission = true;
                         return
                     }
                     this.noPermission = false;
                     this.scheduleData = response.data;
+                    console.log(this.scheduleData)
                     if (this.scheduleData.privacy) {
                         this.schedulePrivacy = true
                     }
@@ -1007,6 +1025,7 @@
                     this.endMinutes = endMinutes[0] + ':' + endMinutes[1];
                     this.isScheduleAllday = this.scheduleData.is_allday;
                     this.eventDesc = this.scheduleData.desc;
+                    this.$refs.scheduleRemind.setValue(this.scheduleData.remind);
                     this.eventPlace = this.scheduleData.position;
                     this.$store.dispatch('changeParticipantsInfo', {data: this.scheduleData.participants.data});
                     if (this.scheduleData.material) {
@@ -1146,6 +1165,7 @@
                     end_at: endTime,
                     repeat: this.scheduleRepeat,
                     desc: this.eventDesc,
+                    remind: this.scheduleRemind
 
                 };
                 if (this.eventPlace) {
@@ -1203,7 +1223,7 @@
                 this.$refs.scheduleEndMinute.setValue('00:00');
                 this.$refs.scheduleResource.setValue('');
                 this.$refs.scheduleRepeat.setValue('0');
-                this.$refs.scheduleNotice.setValue('0');
+                this.$refs.scheduleRemind.setValue('0');
             },
 
             addCalendarVisible: function (value) {

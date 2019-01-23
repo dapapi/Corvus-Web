@@ -65,10 +65,10 @@
                     <div class="tab-pane animation-fade active" id="forum-business-report" role="tabpanel">
                         <div class="clearfix">
                             <div class="col-md-2 float-left pl-0">
-                                <Selectors :options="artistStatusArr" @change="changeArtistStatus"></Selectors>
+                                <Selectors :options="artistStatusArr" @change="changeArtistStatus" placeholder="请选择博主状态"></Selectors>
                             </div>
                             <div class="col-md-2 float-left pl-0" v-if="artistStatus != 1">
-                                <Selectors :options="trailsNumArr" @change="changeTrailsNum"></Selectors>
+                                <Selectors :options="trailsNumArr" @change="changeTrailsNum" placeholder="请选择线索数量"></Selectors>
                             </div>
                             <div class="col-md-3 float-left pl-0"
                                  v-if="departmentsInfo.length > 1 && artistStatus != 1">

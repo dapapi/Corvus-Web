@@ -69,10 +69,11 @@ export default {
         },
         getModule:function(){
             fetch('get',`/getmodules`).then((res) => {
+                // console.log(res)
                 let unRead =0
-                for (let i = 0; i < res.length; i++) {
-                    if(res[i].un_read){
-                        unRead = unRead+res[i].un_read
+                for (let i = 0; i < res.data.length; i++) {
+                    if(res.data[i].unread){
+                        unRead = unRead+res.data[i].unread
                     }
                 }
                 this.$store.state.unReadMsg = unRead

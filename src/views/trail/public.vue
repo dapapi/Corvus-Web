@@ -27,7 +27,7 @@
                     </div>
                     <div class="col-md-3 example float-left">
                         <selectors :options="publicTrailTakeType" @change="progressStatusFilter"
-                                   placeholder="请选择线索状态"></selectors>
+                                   placeholder="请选择领取状态"></selectors>
                     </div>
                     <!--<div class="col-md-3 example float-left">-->
                     <!--<button type="button" class="btn btn-default waves-effect waves-classic float-right"-->
@@ -40,12 +40,12 @@
 
                 <div class="col-md-12">
                     <ul class="nav nav-tabs nav-tabs-line" role="tablist">
-                        <li class="nav-item" role="presentation" @click="getTrails(1)">
+                        <li class="nav-item" role="presentation" @click="changeTakeType()">
                             <a class="nav-link active" data-toggle="tab" href="#forum-project"
                                aria-controls="forum-base"
                                aria-expanded="true" role="tab">所有线索</a>
                         </li>
-                        <li class="nav-item" role="presentation" @click="getTrails(1, 1)">
+                        <li class="nav-item" role="presentation" @click="changeTakeType(1)">
                             <a class="nav-link" data-toggle="tab" href="#forum-project"
                                aria-controls="forum-present"
                                aria-expanded="false" role="tab">未被领取</a>
@@ -53,7 +53,7 @@
                     </ul>
                 </div>
 
-                <div class="page-content tab-content nav-tabs-animate bg-white">
+                <div class="page-content tab-content nav-tabs-animate bg-white pb-0">
                     <div class="tab-pane animation-fade active" id="forum-project" role="tabpanel">
                         <table class="table table-hover is-indent" data-plugin="animateList" data-animate="fade"
                                data-child="tr"
@@ -189,6 +189,7 @@
                 keyword: '',
                 take_type: '',
                 pool_type: '',
+                trailTakeType: '',
             }
         },
         created() {
@@ -219,8 +220,6 @@
                 let _this = this
 
                 fetch('get', '/trails/filter_fields').then((params) => {
-                    
-                    console.log(params)
                     _this.customizeInfo = params.data
                 })
             },
@@ -233,13 +232,19 @@
                 })
             },
 
-            getTrails(pageNum = 1, type) {
+            changeTakeType(type) {
+                this.trailTakeType = type;
+                this.getTrails()
+            },
+
+            getTrails(pageNum = 1) {
                 this.selectedTrailsArr = [];
+                this.selectAllTrail = false;
                 let data = {
                     page: pageNum
                 };
-                if (type) {
-                    data.take_type = type
+                if (this.trailTakeType) {
+                    data.take_type = this.trailTakeType
                 }
                 if (this.keyword) {
                     data.keyword = this.keyword

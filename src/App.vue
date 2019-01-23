@@ -49,6 +49,19 @@
                     this.isLeftMenuShow = true
                     this.isLeftManageShow = false
                 }
+                this.$store.state.participantsInfo = [];
+                this.$store.state.newParticipantsInfo = [];
+                this.$store.state.collectInfo = [];
+                this.$store.state.payInfo = [];
+                this.$store.state.contractInfo = [];
+                this.$store.state.divisionInfo = [];
+                this.$store.state.incubationInfo = [];
+                this.$store.state.billInfo = [];
+                this.$store.state.principalInfo = {};
+                this.$store.state.newPrincipalInfo = {};
+                this.$store.state.selectPrincipalInfo = {};
+                this.$store.state.otherSlot = [];
+                this.$store.state.principalInfo = [];
             },
 
         },
@@ -240,6 +253,12 @@
         background: #eee;
     }
 
+    .fixed-button {
+        position: absolute;
+        bottom: 0px;
+        right: 0;
+    }
+
     body {
         -moz-user-select: none;
         -webkit-user-select: none;
@@ -250,6 +269,12 @@
     .datepicker table tr td.today {
         background: #e5e5e5 !important;
         color: black !important;
+    }
+
+    .exceeded-display {
+        overflow: hidden;
+        text-overflow:ellipsis;
+        white-space: nowrap;
     }
 
 </style>

@@ -69,11 +69,11 @@
                 <div class="page-content tab-content nav-tabs-animate bg-white">
                     <div class="tab-pane animation-fade active" id="forum-business-report" role="tabpanel">
                         <div class="clearfix">
-                            <div class="col-md-2 float-left pl-0">
-                                <Selectors :options="artistStatusArr" @change="changeArtistStatus"></Selectors>
+                            <div class="col-md-3 float-left pl-0">
+                                <Selectors :options="artistStatusArr" @change="changeArtistStatus" placeholder="请选择艺人状态"></Selectors>
                             </div>
-                            <div class="col-md-2 float-left pl-0" v-if="artistStatus != 1">
-                                <Selectors :options="trailsNumArr" @change="changeTrailsNum"></Selectors>
+                            <div class="col-md-3 float-left pl-0" v-if="artistStatus != 1">
+                                <Selectors :options="trailsNumArr" @change="changeTrailsNum" placeholder="请选择项目类型"></Selectors>
                             </div>
                             <div class="col-md-3 float-left pl-0"
                                  v-if="departmentsInfo.length > 1 && artistStatus != 1">
@@ -133,8 +133,8 @@
                     </div>
                     <div class="tab-pane animation-fade" id="forum-sales-funnel" role="tabpanel">
                         <div class="clearfix pb-20">
-                            <div class="col-md-2 float-left pl-0">
-                                <Selectors :options="starsArr" @change="changeStar"></Selectors>
+                            <div class="col-md-3 float-left pl-0">
+                                <Selectors :options="starsArr" @change="changeStar" placeholder="请选择目标艺人"></Selectors>
                             </div>
                             <div class="col-md-3 float-left pl-0" v-if="departmentsInfo.length > 1">
                                 <DropDepartment name="组别" :data="departmentsInfo" @change="selectAnalysisDepartment"/>
@@ -404,7 +404,7 @@
 
                 let myChart = echarts.init(this.$refs.main, 'mttop');
 
-                fetch('get', '/reportfrom/starprojectanalysis', data).then(function (response) {
+                fetch('get', '/reportfrom/startrailanalysis', data).then(function (response) {
                     let firstInfo = [];
                     let secondName = [];
                     let secondInfo = [];

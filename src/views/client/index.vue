@@ -28,13 +28,13 @@
                         <selectors :options="clientLevelArr" @change="changeClientLevelSelect"
                                    placeholder="请选择公司级别"></selectors>
                     </div>
-                    <!--<div class="col-md-3 example float-left">-->
-                    <!--<button type="button" class="btn btn-default waves-effect waves-classic float-right"-->
-                    <!--data-toggle="modal" data-target="#customizeContent"-->
-                    <!--data-placement="right" title="">-->
-                    <!--自定义筛选-->
-                    <!--</button>-->
-                    <!--</div>-->
+                    <div class="col-md-3 example float-left">
+                    <button type="button" class="btn btn-default waves-effect waves-classic float-right"
+                    data-toggle="modal" data-target="#customizeContent"
+                    data-placement="right" title="">
+                    自定义筛选
+                    </button>
+                    </div>
                 </div>
                 <div class="col-md-12">
                     <table class="table table-hover is-indent mb-20" data-plugin="animateList" data-animate="fade"
@@ -69,14 +69,15 @@
                     </div>
 
                     <pagination :current_page="current_page" :method="getClients" :total_pages="total_pages"
-                                :total="total" class="mb-50"></pagination>
+                                :total="total"></pagination>
                 </div>
 
             </div>
 
         </div>
 
-        <customize-filter :data="customizeInfo" @change="customize"></customize-filter>
+        <customize-filter :data="customizeInfo" @change="customize" :cleanup="cleanUp"
+                          @cleanupdone='cleanUp=false'></customize-filter>
 
         <AddClientType @change="showAddModal"/>
 
@@ -155,6 +156,13 @@
                             </div>
                         </div>
                         <div class="example">
+                            <div class="col-md-2 text-right float-left">客户评级</div>
+                            <div class="col-md-10 float-left pl-0">
+                                <selectors ref="clientLevel" :options="taskLevelArr"
+                                           @change="changeClientScale"></selectors>
+                            </div>
+                        </div>
+                        <div class="example">
                             <div class="col-md-2 text-right float-left">备注</div>
                             <div class="col-md-10 float-left pl-0">
                                 <textarea name="" id="" title="" class="form-control" v-model="clientRemark"></textarea>
@@ -190,7 +198,7 @@
                 total: 0,
                 current_page: 0,
                 total_pages: 0,
-                customizeInfo: config.customizeInfo,
+                customizeInfo: {},
                 clientTypeArr: config.clientTypeArr,
                 clientLevelArr: clientLevelArr,
                 keyMasterArr: config.isKeyMasterArr,
@@ -214,10 +222,13 @@
                 ragion: {}, // 区域
                 clientScale: '',
                 isLoading: true,
+                taskLevelArr: config.taskLevelArr,
+                cleanUp:false,
             }
         },
 
         mounted() {
+            this.getField()
             this.getClients();
             this.user = JSON.parse(Cookies.get('user'))
             // 清除负责人默认值的设置
@@ -235,6 +246,12 @@
         },
 
         methods: {
+            getField() {
+                let _this = this
+                fetch('get', '/clients/filter_fields').then((params) => {
+                    _this.customizeInfo = params.data
+                })
+            },
             getClients: function (pageNum = 1) {
                 const params = {
                     page: pageNum,
@@ -329,7 +346,13 @@
                 })
             },
 
-            customize: function () {
+             customize: function (value) {
+                let _this = this
+                fetch('post', '/clients/filter', value).then((params) => {
+                    _this.trailsInfo = params.data
+                    _this.total = params.meta.pagination.total;
+                    _this.cleanUp = true
+                })
 
             },
 
@@ -373,7 +396,6 @@
             // show add
             showAddModal(val) {
                 let organization_id = JSON.parse(Cookies.get('user')).organization_id
-                console.log(organization_id)
                 if (val == 3) {
                     if (organization_id == 411) {
                         val = 3

@@ -17,7 +17,8 @@
                                v-model="trailFilter" @keyup.enter='filterGo' @blur='filterGo'>
                     </div>
                     <div class="col-md-3 example float-left">
-                        <selectors :options="currentUser.organization_id === 411?businessStatus:papiStatus" :resetinfo='resetInfo' @change="progressStatusFilter"
+                        <selectors :options="currentUser.organization_id === 411?businessStatus:papiStatus"
+                                   :resetinfo='resetInfo' @change="progressStatusFilter"
                                    placeholder="请选择线索类型"></selectors>
                     </div>
                     <div class="col-md-3 example float-left">
@@ -25,11 +26,11 @@
                                    @valuelistener="principalFilter" placeholder="请选择负责人"></selectors>
                     </div>
                     <div class="col-md-3 example float-left">
-                    <button type="button" class="btn btn-default waves-effect waves-classic float-right"
-                    data-toggle="modal" data-target="#customizeContent"
-                    data-placement="right" title="">
-                    自定义筛选
-                    </button>
+                        <button type="button" class="btn btn-default waves-effect waves-classic float-right"
+                                data-toggle="modal" data-target="#customizeContent"
+                                data-placement="right" title="">
+                            自定义筛选
+                        </button>
                     </div>
                 </div>
 
@@ -65,7 +66,7 @@
                                 </template>
                             </td>
                             <td>
-                                <template>{{trail.last_updated_at}}</template>
+                                <template>{{trail.last_follow_up_at}}</template>
                             </td>
                         </tr>
                         </tbody>
@@ -75,7 +76,7 @@
                         <img src="https://res.papitube.com/corvus/images/content-none.png" alt="" style="width: 100%">
                     </div>
                     <pagination :current_page="current_page" :method="getSales" :total_pages="total_pages"
-                                :total="total" class="mb-50"></pagination>
+                                :total="total"></pagination>
                 </div>
             </div>
         </div>
@@ -146,8 +147,8 @@
                         </div>
                         <div class="example">
                             <div class="col-md-2 text-right float-left require">目标艺人</div>
-                            <div class="col-md-10 float-left pl-0" >
-                                <selectors :options="starsArr" @valuelistener="changeTargetStars"
+                            <div class="col-md-10 float-left pl-0">
+                                <selectors :options="starsArr" @change="changeTargetStars"
                                            :multiple="true"></selectors>
                             </div>
                         </div>
@@ -274,7 +275,7 @@
                     'value': ''
                 }, {
                     'name': '商务线索',
-                    'value': '3'
+                    'value': '3,4'
                 }, {
                     'name': '影视线索',
                     'value': '1'
@@ -286,8 +287,8 @@
                     'name': '全部',
                     'value': ''
                 }, {
-                    'name': 'papi',
-                    'value': '4'
+                    'name': '商务线索',
+                    'value': '3,4'
                 }, {
                     'name': '影视线索',
                     'value': '1'
@@ -301,8 +302,8 @@
                 resetInfo: false,
                 isLoading: true,
                 cleanUp: false,
-                trailIsLocked:'',
-                
+                trailIsLocked: '',
+
             }
         },
         created() {
@@ -506,8 +507,7 @@
 
             customize: function (value) {
                 let _this = this
-                console.log(value);
-                fetch('post', '/trails/filter?include=principal,client,contact,recommendations,expectations', value).then((params) => {
+                fetch('post', '/trails/filter', value).then((params) => {
                     _this.trailsInfo = params.data
                     _this.total = params.meta.pagination.total;
                     _this.cleanUp = true
@@ -550,7 +550,7 @@
                 } else {
                     data.resource = ''
                 }
-                let  organization_id = JSON.parse(Cookies.get('user')).organization_id
+                let organization_id = JSON.parse(Cookies.get('user')).organization_id
                 if (organization_id !== 411) {
                     data.lock = this.trailIsLocked
                 }
@@ -642,7 +642,6 @@
             },
 
             changeCheckbox: function (e) {
-                console.log(Number(e.target.checked));
                 this.trailIsLocked = Number(e.target.checked)
             },
 
@@ -655,11 +654,11 @@
             },
 
             changeTrailType: function (value) {
-                let  organization_id = JSON.parse(Cookies.get('user')).organization_id
-                if(value == 3){
-                    if(organization_id == 411){
+                let organization_id = JSON.parse(Cookies.get('user')).organization_id
+                if (value == 3) {
+                    if (organization_id == 411) {
                         value = 3
-                    }else if(organization_id == 412){
+                    } else if (organization_id == 412) {
                         value = 4
                     }
                 }

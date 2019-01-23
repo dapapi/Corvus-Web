@@ -141,8 +141,7 @@ export default {
     },
     methods:{
         getTime:function(start,end){
-            console.log(start,end)
-            this.startTime = `${start} 00:00:00` 
+            this.startTime = `${start} 00:00:00`
             this.endTime = `${end} 23:59:59`
             this.getAll()
         },

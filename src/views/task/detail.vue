@@ -293,7 +293,7 @@
                                      style="width: 100%">
                             </div>
 
-                            <div class="site-action fixed-button" data-plugin="actionBtn" data-toggle="modal"
+                            <div class="site-action fixed-button mt-20" data-plugin="actionBtn" data-toggle="modal"
                                  data-target="#addChildTask">
                                 <button type="button"
                                         class="site-action-toggle btn-raised btn btn-success btn-floating waves-effect waves-classic">

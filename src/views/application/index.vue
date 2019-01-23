@@ -74,20 +74,22 @@
             },
             getList:function(){
                 fetch('get',`${config.apiUrl}/getmodules`).then((res) => {
+                    console.log(res.data)
                     this.moduleList = res
                     let data={}
                     for (let i = 0; i < this.leftData.length; i++) {
                     if(this.leftData[i].id == 1){
-                        for (let t = 0; t < res.length; t++) {
+                        for (let t = 0; t < res.data.length; t++) {
+                            console.log(res.data)
                             data={
-                                id:`${res[t].id}`,
-                                name:`${res[t].name}`,
-                                url:`/my/message?moduleType=${res[t].id}`,
+                                id:`${res.data[t].id}`,
+                                name:`${res.data[t].name}`,
+                                url:`/my/message?moduleType=${res.data[t].id}`,
                                 type:'link',
                                 level:2,
                                 isExpanded:false,
                                 isSelected:false,
-                                num:res[t].un_read,
+                                num:res.data[t].unread,
                             }
                             this.leftData[i].subMenu.push(data)
                             
