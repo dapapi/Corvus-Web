@@ -1,11 +1,12 @@
 <template>
     <div class="addMember">
         <ul class="addMember-items">
-            <li class="addMember-item" v-for="member in selectMemberArr" :key="member.id">
+            <li class="addMember-item" v-for="(member,index) in selectMemberArr" :key="member.id" :style="otherslot?'display:flex':''">
                 <Avatar :imgUrl="member.icon_url"/>
-                <span class="addMember-remove" @click="removeMember(member.id)">
+                <span class="addMember-remove" @click="removeMember(member.id)" :class="otherslot?'addmember-other':''">
                     <i class="md-minus-circle"></i>
                 </span>
+                <div class="splicer" v-if="otherslot && (index < selectMemberArr.length-1)"></div>
             </li>
             <li class="addMember-item">
                 <div class="addMember-trigger" :class="isMemberShow ? 'addMember-active': ''" :id="'selectStaff' + this._uid">
@@ -109,7 +110,7 @@
                 }else if(this.type === 'bill'){
                     participantInfo = this.$store.state.billInfo;
                 }else if(this.otherslot){
-                    return this.$store.state.otherSlot
+                    participantInfo = this.$store.state.otherSlot
                 }
                     
                 else {
@@ -121,7 +122,7 @@
                     data: participantInfo
                 };
                 if(this.otherslot){
-                    this.$store.dispatch('changeOtherSlot', params);
+                    this.$store.dispatch('changeOtherSlot', params.data);
                 }else{
                     this.$store.dispatch('changeParticipantsInfo', params);
                 }
@@ -149,6 +150,16 @@
         margin-right: 0;
         vertical-align: middle;
         margin-bottom: 10px;
+    }
+
+    .splicer {
+        width: 30px;
+        height: 2px;
+        margin: 15px 10px 0 10px;
+        background-color: #E0E0E0;
+    }
+    .addmember-other{
+        left: 22px;
     }
 
 </style>

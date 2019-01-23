@@ -74,22 +74,29 @@
             },
             getList:function(){
                 fetch('get',`${config.apiUrl}/getmodules`).then((res) => {
+<<<<<<< HEAD
                     console.log(res.data)
                     this.moduleList = res
+=======
+                    this.moduleList = res.data
+>>>>>>> fc198f72ed7dc566a0b905522d4bc71663aa4ebf
                     let data={}
                     for (let i = 0; i < this.leftData.length; i++) {
                     if(this.leftData[i].id == 1){
                         for (let t = 0; t < res.data.length; t++) {
+<<<<<<< HEAD
                             console.log(res.data)
+=======
+>>>>>>> fc198f72ed7dc566a0b905522d4bc71663aa4ebf
                             data={
-                                id:`${res[t].id}`,
-                                name:`${res[t].name}`,
-                                url:`/my/message?moduleType=${res[t].id}`,
+                                id:`${res.data[t].id}`,
+                                name:`${res.data[t].name}`,
+                                url:`/my/message?moduleType=${res.data[t].id}`,
                                 type:'link',
                                 level:2,
                                 isExpanded:false,
                                 isSelected:false,
-                                num:res[t].un_read,
+                                num:res.data[t].unread,
                             }
                             this.leftData[i].subMenu.push(data)
                             
