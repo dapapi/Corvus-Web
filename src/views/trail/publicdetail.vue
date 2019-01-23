@@ -424,7 +424,8 @@
                                          style="width: 100%">
                                 </div>
                                 <div class="site-action fixed-button" data-plugin="actionBtn" data-toggle="modal"
-                                     data-target="#addTask">
+                                     data-target="#addTask"
+                                     v-if="trailInfo.principal && trailInfo.take_type == 2 && trailInfo.principal.data.id == userInfo.id">
                                     <button type="button"
                                             class="site-action-toggle btn-raised btn btn-success btn-floating waves-effect waves-classic">
                                         <i class="front-icon iconfont icon-tianjia1 animation-scale-up"

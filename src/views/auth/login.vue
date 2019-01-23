@@ -172,6 +172,7 @@
                 isRememberName: false,
                 phone: '',
                 firstClickTime: null,
+                userInfo: '',
             }
         },
 
@@ -179,10 +180,22 @@
             this.checkBindTelephone();
             this.checkWechatLogin();
             if (Cookies.get('user_account')) {
-                let userInfo = JSON.parse(Cookies.get('user_account'));
-                this.username = userInfo.name;
-                this.password = userInfo.password;
+                this.userInfo = JSON.parse(Cookies.get('user_account'));
+                this.username = this.userInfo.name;
+                this.password = this.userInfo.password;
                 this.isRememberName = true;
+            }
+        },
+
+        watch: {
+            username(newValue) {
+                if (this.userInfo) {
+                    if (newValue !== this.userInfo.name) {
+                        this.password = '';
+                    } else {
+                        this.password = this.userInfo.password
+                    }
+                }
             }
         },
 
@@ -356,7 +369,6 @@
                 if (!Verify.username(this.username) || !Verify.password(this.password)) {
                     return
                 }
-                let _this = this;
                 let username = this.username;
                 let password = this.password;
                 let data = {
@@ -377,27 +389,27 @@
                             toastr.error('用户名或密码错误')
                         },
                     }
-                }).done(function (response) {
+                }).done(response => {
                     let token = response.access_token;
                     config.setAccessToken(token);
-                    setTimeout(function () {
-                        _this.fetchUserInfo(function (userJson) {
-                            _this.storeToLocal(userJson);
+                    setTimeout(() => {
+                        this.fetchUserInfo(userJson => {
+                            this.storeToLocal(userJson);
+                            if (this.isRememberName) {
+                                let data = {
+                                    name: this.username,
+                                    password: this.password
+                                };
+                                Cookies.set('user_account', data)
+                            } else {
+                                if (Cookies.get('user_account')) {
+                                    Cookies.remove('user_account')
+                                }
+                            }
                             redirect('/my')
                         })
                     }, 100)
                 });
-                if (this.isRememberName) {
-                    let data = {
-                        name: this.username,
-                        password: this.password
-                    };
-                    Cookies.set('user_account', data)
-                } else {
-                    if (Cookies.get('user_account')) {
-                        Cookies.remove('user_account')
-                    }
-                }
             },
 
             fetchUserInfo(callback) {
