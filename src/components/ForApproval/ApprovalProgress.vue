@@ -31,7 +31,7 @@
                     </div>
                     <div class="splicer" v-if="index < (approver.length-1)">{{item.length}}</div>
                 </div>
-                <div class="approver-container float-left mt-20" v-if="formstatus && finalShow">
+                <div class="approver-container float-left mt-20 final-status" v-if="formstatus && finalShow">
                     <div class="splicer"></div>
                     <i class="iconfont issueicon" :class="iconSelector.split('|')[0]"
                        :style='{color:iconSelector.split("|")[1]}'></i>
@@ -253,6 +253,9 @@
 </script>
 
 <style scoped>
+.final-status{
+    margin-top: -10px;
+}
 .comment-text{
     overflow-wrap: break-word;
 }
@@ -356,11 +359,11 @@
         /* margin-left: -5px; */
         /* background-color: rgba(7, 17, 27, 0.2); */
         text-align: center;
-        line-height: 40px;
+        /* line-height: 40px; */
     }
 
     .issueicon {
         font-size: 20px;
-        line-height: 45px;
+        /* line-height: 45px; */
     }
 </style>
