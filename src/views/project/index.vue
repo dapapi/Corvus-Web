@@ -21,13 +21,13 @@
                         <selectors @change="(value) => getProjectSearch('principal_ids', value)" placeholder="请选择项目负责人"
                                    :options="allUsers" multiple="true"></selectors>
                     </div>
-                    <!--<div class="col-md-3 example float-left">-->
-                    <!--<button type="button" class="btn btn-default waves-effect waves-classic float-right"-->
-                    <!--data-toggle="modal" data-target="#customizeContent"-->
-                    <!--data-placement="right" title="">-->
-                    <!--自定义筛选-->
-                    <!--</button>-->
-                    <!--</div>-->
+                    <div class="col-md-3 example float-left">
+                    <button type="button" class="btn btn-default waves-effect waves-classic float-right"
+                    data-toggle="modal" data-target="#customizeContent"
+                    data-placement="right" title="">
+                    自定义筛选
+                    </button>
+                    </div>
                 </div>
 
                 <div class="col-md-12">
@@ -107,7 +107,8 @@
 
         </div>
 
-        <customize-filter :data="customizeInfo" @change="customize"></customize-filter>
+        <customize-filter :data="customizeInfo" @change="customize" :stararr='starsArr'  :cleanup="cleanUp"
+                          @cleanupdone='cleanUp=false'></customize-filter>
 
         <AddClientType type="project" @change="changeProjectType"></AddClientType>
 
@@ -140,7 +141,7 @@
                 projectType: '',
                 projectFields: '',
                 projectsInfo: '',
-                customizeInfo: config.customizeInfo,
+                customizeInfo: {},
                 addInfoArr: {},
                 levelArr: config.levelArr,
                 trailsAllInfo: '',
@@ -155,10 +156,12 @@
                 isLoading: true,
                 projectSearchType: '',
                 getProjectStatus: 'principal_id',
+                cleanUp:false,
             }
         },
 
         mounted() {
+            this.getField()
             this.getClients();
             this.getFilterProjects();
             if (this.userList.length > 0) {
@@ -192,6 +195,12 @@
         },
 
         methods: {
+            getField() {
+                let _this = this
+                fetch('get', '/projects/filter_fields').then((params) => {
+                    _this.customizeInfo = params.data
+                })
+            },
             getMyProjects: function (value) {
                 this.getProjectStatus = value;
                 this.getFilterProjects();
@@ -256,8 +265,14 @@
                 this.$router.push({path: '/projects/' + projectId})
             },
 
-            customize: function (value) {
-                console.log(value)
+           customize: function (value) {
+                let _this = this
+                fetch('post', '/projects/filter', value).then((params) => {
+                    _this.trailsInfo = params.data
+                    _this.total = params.meta.pagination.total;
+                    _this.cleanUp = true
+                })
+
             },
 
             changeProjectType: function (value) {

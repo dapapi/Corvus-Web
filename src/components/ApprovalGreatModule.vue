@@ -83,15 +83,6 @@ export default {
     },
     mounted(){
         let _this = this
-        $('#approval-great-module').on('show.bs.modal',function(){
-                // _this.$nextTick(() => {
-                //     _this.getFormContractor() 
-
-                // })
-        })
-         $('#approval-great-module').on('hidden.bs.modal',function(){
-                // _this.clearSignal()
-        })
         this.refresh()
     },
     components:{
@@ -115,7 +106,6 @@ export default {
             this.clearSignal()
                 this.$nextTick(() => {
                     this.getFormContractor() 
-
             })
         }
     },
@@ -132,10 +122,22 @@ export default {
         }
     },
     methods:{
+        defaultValueChecker(){
+            if(this.defaultValue){
+                for (const key in this.defaultValue) {
+                    if (this.moduleInfo.find(item=>item[0].control_title ===key)) {
+                        // this.moduleInfo.find(item=>item[0].control_title === key)[0].control_value ={id:'1082168698',value:this.defaultValue[key]}  
+                    }
+                }
+            }
+            // this.moduleInfo.find(item=>item[0].control_title)
+        },
         directionalWatcher(params){
           this.directionalData = params
         },
         clearSignal(){
+            // this.$store.dispatch('changeOtherSlot',{data:[]});
+
             this.$store.dispatch('changeParticipantsInfo',{data:[]});
             
             this.trendApprover={
@@ -235,6 +237,7 @@ export default {
             }
             descriptionArr.push(tempArr)
             this.moduleInfo = descriptionArr
+            this.defaultValueChecker()
             this.$nextTick((params) => {
                 this.refresh()
             })
