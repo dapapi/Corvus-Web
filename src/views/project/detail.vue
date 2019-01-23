@@ -689,11 +689,19 @@
                                                 </div>
                                             </div>
                                             <div class="card-text py-10 px-0 clearfix col-md-6 float-left ">
-                                                <div class="col-md-3 float-left text-right pl-0">开始时间</div>
+                                                <div class="col-md-3 float-left text-right pl-0">合作类型</div>
                                                 <div class="col-md-9 float-left font-weight-bold">
-                                                    <EditDatepicker :is-edit="isEdit"
-                                                                    :content="projectInfo.start_at"
-                                                                    @change="(value) => changeProjectBaseInfo(value, 'start_at')"></EditDatepicker>
+                                                    <EditSelector :is-edit="isEdit" :options="cooperationTypeArr"
+                                                                  :content="projectInfo.trail.data.cooperation_type"
+                                                                  @change="(value) => changeProjectBaseInfo(value, 'cooperation_type')"></EditSelector>
+                                                </div>
+                                            </div>
+                                            <div class="card-text py-10 px-0 clearfix col-md-6 float-left ">
+                                                <div class="col-md-3 float-left text-right pl-0">状态</div>
+                                                <div class="col-md-9 float-left font-weight-bold">
+                                                    <EditSelector :is-edit="isEdit" :options="trailStatusArr"
+                                                                    :content="projectInfo.trail.data.status"
+                                                                    @change="(value) => changeProjectBaseInfo(value, 'status')"></EditSelector>
                                                 </div>
                                             </div>
                                             <div class="card-text py-10 px-0 clearfix col-md-6 float-left ">
@@ -1435,6 +1443,8 @@
                 trailInfo: {},
                 taskTypeArr: [],
                 priorityArr: config.priorityArr,
+                cooperationTypeArr: config.cooperationTypeArr,
+                trailStatusArr: config.trailStatusArr,
                 taskLevel: '',
                 taskName: '',
                 startTime: '',
@@ -2149,6 +2159,9 @@
                         return;
                     case 'resource':
                         if (value == this.projectInfo.trail.data.resource) {
+                            if (this.changeInfo.trail && this.changeInfo.trail.resource) {
+                                delete this.changeInfo.trail.resource
+                            }
                             return
                         }
                         if (this.changeInfo.trail) {
@@ -2157,6 +2170,38 @@
                             this.changeInfo['trail'] = {
                                 id: this.projectInfo.trail.data.id,
                                 resource: value
+                            };
+                        }
+                        return;
+                    case 'cooperation_type':
+                        if (value == this.projectInfo.trail.data.cooperation_type) {
+                            if (this.changeInfo.trail && this.changeInfo.trail.cooperation_type) {
+                                delete this.changeInfo.trail.cooperation_type
+                            }
+                            return
+                        }
+                        if (this.changeInfo.trail) {
+                            this.changeInfo.trail.cooperation_type = value
+                        } else {
+                            this.changeInfo['trail'] = {
+                                id: this.projectInfo.trail.data.id,
+                                cooperation_type: value
+                            };
+                        }
+                        return;
+                    case 'status':
+                        if (value == this.projectInfo.trail.data.status) {
+                            if (this.changeInfo.trail && this.changeInfo.trail.status) {
+                                delete this.changeInfo.trail.status
+                            }
+                            return
+                        }
+                        if (this.changeInfo.trail) {
+                            this.changeInfo.trail.status = value
+                        } else {
+                            this.changeInfo['trail'] = {
+                                id: this.projectInfo.trail.data.id,
+                                status: value
                             };
                         }
                         return;

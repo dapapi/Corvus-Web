@@ -29,11 +29,11 @@
                                    placeholder="请选择公司级别"></selectors>
                     </div>
                     <div class="col-md-3 example float-left">
-                    <button type="button" class="btn btn-default waves-effect waves-classic float-right"
-                    data-toggle="modal" data-target="#customizeContent"
-                    data-placement="right" title="">
-                    自定义筛选
-                    </button>
+                        <button type="button" class="btn btn-default waves-effect waves-classic float-right"
+                                data-toggle="modal" data-target="#customizeContent"
+                                data-placement="right" title="">
+                            自定义筛选
+                        </button>
                     </div>
                 </div>
                 <div class="col-md-12">
@@ -156,7 +156,7 @@
                             </div>
                         </div>
                         <div class="example">
-                            <div class="col-md-2 text-right float-left">客户评级</div>
+                            <div class="col-md-2 text-right float-left require">客户评级</div>
                             <div class="col-md-10 float-left pl-0">
                                 <selectors ref="clientLevel" :options="taskLevelArr"
                                            @change="changeClientScale"></selectors>
@@ -223,7 +223,7 @@
                 clientScale: '',
                 isLoading: true,
                 taskLevelArr: config.taskLevelArr,
-                cleanUp:false,
+                cleanUp: false,
             }
         },
 
@@ -306,6 +306,10 @@
                     toastr.error('请选择关键决策人！')
                     return
                 }
+                if (!this.clientScale) {
+                    toastr.error('请选择客户评级！')
+                    return
+                }
                 if (this.clientContactPhone.length !== 11) {
                     toastr.error('手机号码格式不对！');
                     return
@@ -318,7 +322,6 @@
                     type: this.clientType,
                     company: this.clientName,
                     grade: this.clientLevel,
-                    // region_id: '',
                     province: this.ragion.province || '',
                     city: this.ragion.city || '',
                     district: this.ragion.district || '',
@@ -330,8 +333,7 @@
                         position: this.clientContactPosition,
                         type: this.clientContactType,
                     },
-                    // keyman: this.clientDecision,
-                    size: this.clientScale,
+                    client_rating: this.clientScale,
                     desc: this.clientRemark
                 };
                 if (!data.principal_id) {
@@ -346,7 +348,7 @@
                 })
             },
 
-             customize: function (value) {
+            customize: function (value) {
                 let _this = this
                 fetch('post', '/clients/filter', value).then((params) => {
                     _this.trailsInfo = params.data

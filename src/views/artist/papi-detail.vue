@@ -1379,7 +1379,6 @@
                         
                         if(item.title == '视频评分'){
                            _this.scoreId = item.id 
-                           console.log(_this.scoreId)
                         }
                     })
                 })
@@ -1394,7 +1393,6 @@
             },
             //上传头像 ---修改头像
             getUploadUrl(res) {
-                console.log(res)
                 let _this = this
                 if(!this.isEdit) {
                     this.changeArtistInfo = {}
@@ -1493,7 +1491,6 @@
                 })
             },
             showScheduleModal: function (schedule) {
-                console.log(schedule)
                 let data = {
                     include: 'calendar,participants,creator,material,affixes,project,task',
                 };
@@ -1695,7 +1692,6 @@
                     _this.current_page = response.meta.pagination.current_page;
                     _this.total = response.meta.pagination.total;
                     _this.total_pages = response.meta.pagination.total_pages;
-                    console.log(response)
                     response.data.forEach(item=>{
                         let time=new Date(item.release_time)
                         let Y = time.getFullYear() + '-';
@@ -1710,7 +1706,6 @@
                 let _this = this;
                 fetch('get', '/bloggers/' + this.artistId+'/tasks').then(function (response) {
                     _this.alltaskshow = response.data
-                    console.log( response.data)
                     _this.current_page = response.meta.pagination.current_page;
                     _this.total = response.meta.pagination.total;
                     _this.total_pages = response.meta.pagination.total_pages;
@@ -1948,7 +1943,6 @@
                 }
             },
             changeWorkAd: function (value) {
-                console.log(value)
                 if (value == 1) {
                     this.advertisingType = 1
                 } 

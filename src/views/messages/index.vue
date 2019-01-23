@@ -176,7 +176,6 @@ export default {
     getModule:function(){
         fetch('get',`${config.apiUrl}/getmodules`).then((res) => {
             this.moduleList = res.data
-            console.log(this.moduleList)
             let num = 0
             for (let i = 0; i < res.data.length; i++) {
                 num = num + res.data[i].unread
