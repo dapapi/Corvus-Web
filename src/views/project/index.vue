@@ -50,7 +50,7 @@
                     </ul>
                 </div>
 
-                <div class="page-content tab-content nav-tabs-animate bg-white">
+                <div class="page-content tab-content nav-tabs-animate bg-white pb-0">
                     <div class="tab-pane animation-fade active" id="forum-project" role="tabpanel">
                         <table class="table table-hover is-indent mb-20" data-plugin="animateList" data-animate="fade"
                                data-child="tr" data-selectable="selectable">
