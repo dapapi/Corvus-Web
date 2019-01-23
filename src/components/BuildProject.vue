@@ -10,17 +10,17 @@
                     <h4 class="modal-title">新增项目</h4>
                 </div>
                 <div class="modal-body">
-                    <div class="col-md-12 example clearfix" v-show="projectType != 5 && trailsArr.length > 0">
+                    <div class="col-md-12 example clearfix" v-show="projectType != 5">
                         <div class="col-md-2 text-right float-left px-0 require">销售线索</div>
                         <div class="col-md-10 float-left">
                             <Selectors :options="trailsArr" @change="addProjectTrail" ref="trails"
                                        selectable="true"></Selectors>
                         </div>
                     </div>
-                    <div class="col-md-12 example clearfix" v-show="projectType != 5">
+                    <div class="col-md-12 my-20 clearfix" v-show="projectType != 5">
                         <div class="col-md-2 text-right float-left px-0 require">项目来源</div>
                         <div class="col-md-10 float-left">
-                            <div class="col-md-6 float-left pl-0" v-if="trailOriginArr.length > 0">
+                            <div class="col-md-6 float-left pl-0">
                                 <Selectors :options="trailOriginArr"
                                            @change="(value) => addProjectBaseInfo(value, 'resource_type')"
                                            ref="trailOrigin"></Selectors>
@@ -49,7 +49,7 @@
                                     @change="(value) => addProjectBaseInfo(value, 'principal_id')"></InputSelectors>
                         </div>
                     </div>
-                    <div class="col-md-12 example clearfix" v-show="projectType != 5 && starsArr.length > 0">
+                    <div class="col-md-12 example clearfix" v-show="projectType != 5">
                         <div class="col-md-2 text-right float-left px-0 require">目标艺人</div>
                         <div class="col-md-10 float-left">
                             <Selectors multiple="true" :options="starsArr" ref="intentionArtist"
@@ -106,14 +106,11 @@
                                            @change="(value) => addInfo(value, field.id )"></EmitInput>
                             </template>
                             <template v-if="field.field_type === 2">
-                                <Selectors :default='newArray.find(item=>item.id === field.id)'
-                                           :options="field.contentArr"
-                                           @change="(value) => addInfo(value, field.id )"></Selectors>
-                            </template>
-                            <template v-if="field.field_type === 3">
-                                <EditableSearchBox :default='newArray.find(item=>item.id === field.id)'
-                                                   :options="starsArr" :multiple="true"
-                                                   @change="(value) => addInfo(value, field.id )"></EditableSearchBox>
+                                <Selectors
+                                        :default="['合作类型','状态'].includes(field.key)?(field.key=='合作类型'?cooperationDefault:trailStatusDefault):newArray.find(item=>item.id === field.id)"
+                                        :options="['合作类型','状态'].includes(field.key)?(field.key=='合作类型'?cooperationTypeArr:trailStatusArr):field.contentArr"
+
+                                        @change="(value) => addInfo(value, field.id )"></Selectors>
                             </template>
                             <template v-if="field.field_type === 4">
                                 <Datepicker :default='newArray.find(item=>item.id === field.id)'
@@ -126,7 +123,8 @@
                             </template>
                             <template v-if="field.field_type === 6">
                                 <Selectors :default='newArray.find(item=>item.id === field.id)'
-                                           :options="field.contentArr" :multiple="true"
+                                           :options="['合作类型','状态'].includes(field.key)?(field.key=='合作类型'?cooperationTypeArr:trailStatusArr):field.contentArr"
+                                           :multiple="true"
                                            @change="(value) => addInfo(value.join('|'), field.id )"></Selectors>
                             </template>
                             <template v-if="field.field_type === 8">
@@ -152,9 +150,9 @@
                         </div>
                     </div>
                 </div>
-                <template v-if="projectType != 5">
+                <div class="col-md-12" v-if="projectType != 5">
                     <ApprovalProgress :formid='projectType'/>
-                </template>
+                </div>
 
                 <div class="modal-footer">
                     <button class="btn btn-sm btn-white btn-pure" data-dismiss="modal" @click='refreshAddProjectModal'>
@@ -173,6 +171,7 @@
     import fetch from '../assets/utils/fetch.js'
     import ApprovalProgress from '@/components/ForApproval/ApprovalProgress'
     import Cookies from 'js-cookie'
+    import {mapState} from 'vuex'
 
     export default {
         components: {
@@ -188,6 +187,8 @@
                 trailsArr: [],
                 trailOrigin: '',
                 trailOriginArr: config.trailOrigin,
+                trailStatusArr: config.trailStatusArr,
+                cooperationTypeArr: config.cooperationTypeArr,
                 starsArr: [],
                 bloggerArr: [],
                 startTime: '',
@@ -202,6 +203,9 @@
                 approver: [],
                 newArray: [],
                 user: '',
+                cooperationDefault: '',
+                trailStatusDefault: '',
+
             }
         },
         watch: {
@@ -212,6 +216,13 @@
                 this.getTrail()
             },
         },
+
+        computed: {
+            ...mapState([
+                'userList'
+            ])
+        },
+
         created() {
             this.getTrail()
             this.getStars();
@@ -307,6 +318,8 @@
                 this.$refs.trailOrigin.setValue(trailInfo.resource_type);
                 this.trailOrigin = trailInfo.resource_type;
                 this.projectBaseInfo.trail.id = trailInfo.id;
+                this.trailStatusDefault = trailInfo.status
+                this.cooperationDefault = trailInfo.cooperation_type
                 switch (trailInfo.resource_type) {
                     case 1:
                         this.trailOriginContent = JSON.parse(JSON.stringify(trailInfo.resource));
@@ -318,10 +331,16 @@
                         this.trailOriginContent = JSON.parse(JSON.stringify(trailInfo.resource));
                         break;
                     case 4:
-                        this.$store.dispatch('changePrincipal', {type: 'selector', data: trailInfo.resource});
+                        this.$store.dispatch('changePrincipal', {
+                            type: 'selector',
+                            data: this.memberFinder(trailInfo.resource)
+                        });
                         break;
                     case 5:
-                        this.$store.dispatch('changePrincipal', {type: 'selector', data: trailInfo.resource});
+                        this.$store.dispatch('changePrincipal', {
+                            type: 'selector',
+                            data: this.memberFinder(trailInfo.resource)
+                        });
                         break;
                     default:
                         break;
@@ -333,8 +352,7 @@
                     for (let i = 0; i < response.data.length; i++) {
                         this.starsArr.push({
                             name: response.data[i].name,
-                            id: response.data[i].id,
-                            value: response.data[i].id
+                            value: response.data[i].flag + '-' + response.data[i].id,
                         })
                     }
 
@@ -358,6 +376,10 @@
                     this.trailsAllInfo = response.data;
                     this.$refs.trails.refresh();
                 })
+            },
+
+            memberFinder(value) {
+                return this.userList.find(item => item.id == value);
             },
 
             addProject: function () {
@@ -409,9 +431,18 @@
                     case 'resource_type':
                         this.trailOrigin = value;
                         this.projectBaseInfo.trail.resource_type = value;
-                        return
+                        return;
                     case 'expectations':
+                        for (let i = 0; i < value.length; i++) {
+                            let item = value[i].split('-');
+                            value[i] = {
+                                id: item[1],
+                                flag: item[0]
+                            };
+                        }
+
                         this.projectBaseInfo.trail.expectations = value;
+                        return;
                 }
                 this.projectBaseInfo[name] = value
             },

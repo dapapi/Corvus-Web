@@ -403,9 +403,13 @@
                 this.$emit('change', value)
             },
 
-            setValue (value) {
+            setValue(value) {
                 this.$refs.timepicker.setValue(value)
-            }
+            },
+
+            destroy() {
+                this.$refs.timepicker.destroy()
+            },
 
         }
     }

@@ -12,7 +12,7 @@
                     <h4 class="card-title">{{ clientInfoCopy.company }}</h4>
                     <div class="card-text clearfix example">
                         <div class="col-md-6 float-left clearfix pl-0">
-                            <div class="float-left pl-0 pr-2 col-md-2">
+                            <div class="float-left pl-0 pr-2 col-md-3">
                                 <i class="iconfont icon-kehu pr-2" aria-hidden="true"></i>负责人
                             </div>
                             <div class="font-weight-bold float-left" v-if="clientInfoCopy.principal">
@@ -22,7 +22,7 @@
                     </div>
                     <div class="card-text clearfix example">
                         <div class="col-md-6 float-left clearfix pl-0">
-                            <div class="float-left pl-0 pr-2 col-md-2">
+                            <div class="float-left pl-0 pr-2 col-md-3">
                                 <i class="iconfont icon-labelbiaoqian pr-2" aria-hidden="true"></i>类型
                             </div>
                             <div class="font-weight-bold float-left" v-if="clientInfoCopy.type">
@@ -33,33 +33,56 @@
                             </div>
                         </div>
                     </div>
+                    <div class="card-text clearfix example">
+                        <div class="col-md-6 float-left clearfix pl-0">
+                            <div class="float-left pl-0 pr-2 col-md-3">
+                                <i class="iconfont icon-kehu pr-2" aria-hidden="true"></i>关键决策人
+                            </div>
+                            <div class="font-weight-bold float-left" v-if="clientInfoCopy.keyman">
+                                {{ clientInfoCopy.keyman }}
+                            </div>
+                        </div>
+                    </div>
                     <div class="clearfix">
                         <div class="col-md-6 float-left pl-0 mb-20" v-if="clientTasksInfo.length > 0">
-                            <div class="col-md-6 pl-0"><i class="iconfont icon-iconset0399 pr-2" aria-hidden="true"></i>任务</div>
-                            <div class="clearfix example " v-for="(task, index) in newArray(clientTasksInfo)" 
-                                style="cursor: pointer" :key="index" @click="linkTo('/tasks/' + task.id)">
+                            <div class="col-md-6 pl-0"><i class="iconfont icon-iconset0399 pr-2" aria-hidden="true"></i>任务
+                            </div>
+                            <div class="clearfix example " v-for="(task, index) in clientTasksInfo" v-if="index < 3"
+                                 style="cursor: pointer" :key="index" @click="linkTo('/tasks/' + task.id)">
                                 <div class="col-md-3 float-left px-0">{{ task.title }}</div>
-                                <div class="col-md-3 float-left px-0">{{ task.principal?task.principal.data.name:'' }}</div>
+                                <div class="col-md-3 float-left px-0">{{ task.principal?task.principal.data.name:'' }}
+                                </div>
                                 <div class="col-md-4 float-left px-0">{{ task.end_at }}</div>
                                 <div class="col-md-2 float-left px-0">
-                                    <template v-if="task.status === 1">进行中</template>
-                                    <template v-if="task.status === 2">已完成</template>
-                                    <template v-if="task.status === 3">已停止</template>
+                                    <template v-if="task.status === 1"><span style="color: #FF9800;">进行中</span>
+                                    </template>
+                                    <template v-if="task.status === 2"><span style="color: #4CAF50;">已完成</span>
+                                    </template>
+                                    <template v-if="task.status === 3"><span style="color: #9E9E9E;">已停止</span>
+                                    </template>
+                                    <template v-if="task.status === 4"><span style="color: #F44336;">已延期</span>
+                                    </template>
                                 </div>
                             </div>
                         </div>
                         <div class="col-md-6 float-left pl-0 mb-20" v-if="clientProjectsInfo.length > 0">
-                            <div class="col-md-6 p-0"><i class="iconfont icon-ego-box pr-2 " aria-hidden="true"></i>项目</div>
-                            <div class="clearfix example" v-for="(project, index) in newArray(clientProjectsInfo)" :key="index" 
-                                @click="linkTo('/projects/' + project.id)" style="cursor: pointer">
+                            <div class="col-md-6 p-0"><i class="iconfont icon-ego-box pr-2 " aria-hidden="true"></i>项目
+                            </div>
+                            <div class="clearfix example" v-for="(project, index) in clientProjectsInfo"
+                                 v-if="index < 3" :key="index"
+                                 @click="linkTo('/projects/' + project.id)" style="cursor: pointer">
                                 <div class="col-md-3 float-left px-0">{{project.title}}</div>
-                                <div class="col-md-3 float-left px-0">{{ clientTypeArr.find(item => item.value == project.type).name }}</div>
+                                <div class="col-md-3 float-left px-0">{{ clientTypeArr.find(item => item.value ==
+                                    project.type).name }}
+                                </div>
                                 <div class="col-md-4 float-left px-0">{{ project.created_at }}</div>
                                 <div class="col-md-2 float-left px-0">
-                                    <template v-if="project.status === 1">进行中</template>
-                                    <template v-if="project.status === 2">完成</template>
-                                    <template v-if="project.status === 3">终止</template>
-                                    <template v-if="project.status === 4">删除</template>
+                                    <template v-if="project.status === 1"><span style="color:#FF9800">进行中</span>
+                                    </template>
+                                    <template v-if="project.status === 2"><span style="color:#4CAF50">已完成</span>
+                                    </template>
+                                    <template v-if="project.status === 3"><span style="color:#9E9E9E">撤单</span>
+                                    </template>
                                 </div>
                             </div>
                         </div>
@@ -75,18 +98,23 @@
                         <ul class="nav nav-tabs nav-tabs-line" role="tablist">
                             <li class="nav-item" role="presentation">
                                 <a class="nav-link active" data-toggle="tab" href="#forum-trail"
-                                aria-controls="forum-present"
-                                aria-expanded="false" role="tab">销售线索</a>
+                                   aria-controls="forum-present"
+                                   aria-expanded="false" role="tab">销售线索</a>
                             </li>
                             <li class="nav-item" role="presentation" @click="getClientProject">
                                 <a class="nav-link" data-toggle="tab" href="#forum-project"
-                                aria-controls="forum-present"
-                                aria-expanded="false" role="tab">项目</a>
+                                   aria-controls="forum-present"
+                                   aria-expanded="false" role="tab">项目</a>
+                            </li>
+                            <li class="nav-item" role="presentation" @click="getClientContract">
+                                <a class="nav-link" data-toggle="tab" href="#forum-contract"
+                                   aria-controls="forum-present"
+                                   aria-expanded="false" role="tab">合同</a>
                             </li>
                             <li class="nav-item" role="presentation" @click="getClientTask">
                                 <a class="nav-link" data-toggle="tab" href="#forum-task"
-                                    aria-controls="forum-present"
-                                    aria-expanded="false" role="tab">
+                                   aria-controls="forum-present"
+                                   aria-expanded="false" role="tab">
                                     <template v-if="clientTasksInfo.length > 0">
                                         <ToolTips :title="`已完成数量${completeNum}`">
                                             任务 ({{completeNum}}/{{clientTasksInfo.length}})
@@ -99,22 +127,23 @@
                             </li>
                             <li class="nav-item" role="presentation">
                                 <a class="nav-link" data-toggle="tab" href="#forum-base"
-                                aria-controls="forum-present"
-                                aria-expanded="false" role="tab">概况</a>
+                                   aria-controls="forum-present"
+                                   aria-expanded="false" role="tab">概况</a>
                             </li>
                             <li class="nav-item" role="presentation" @click="getClientContact">
                                 <a class="nav-link" data-toggle="tab" href="#forum-contact"
-                                aria-controls="forum-present"
-                                aria-expanded="false" role="tab">联系人</a>
+                                   aria-controls="forum-present"
+                                   aria-expanded="false" role="tab">联系人</a>
                             </li>
                         </ul>
                     </div>
                     <div class="tab-content nav-tabs-animate bg-white col-md-12" v-if="clientInfo">
                         <div class="tab-pane animation-fade pb-20 active" id="forum-trail" role="tabpanel">
 
-                            <table class="table table-hover is-indent example" data-plugin="animateList" data-animate="fade"
-                                data-child="tr"
-                                data-selectable="selectable">
+                            <table class="table table-hover is-indent example" data-plugin="animateList"
+                                   data-animate="fade"
+                                   data-child="tr"
+                                   data-selectable="selectable">
                                 <tr class="animation-fade"
                                     style="animation-fill-mode: backwards; animation-duration: 250ms; animation-delay: 0ms;">
                                     <th class="cell-300" scope="col">线索名称</th>
@@ -124,7 +153,8 @@
                                     <th class="cell-300" scope="col">录入日期</th>
                                 </tr>
                                 <tbody>
-                                <tr v-for="trail in clientTrailsInfo" :key="trail.id" @click="linkTo('/trails/' + trail.id)">
+                                <tr v-for="trail in clientTrailsInfo" :key="trail.id"
+                                    @click="linkTo('/trails/' + trail.id)">
                                     <td>
                                         {{ trail.title }}
                                     </td>
@@ -141,13 +171,14 @@
                             </table>
                             <div style="margin: 6rem auto;width: 100px" v-if="clientTrailsInfo.length === 0">
                                 <img src="https://res.papitube.com/corvus/images/content-none.png" alt=""
-                                    style="width: 100%">
+                                     style="width: 100%">
                             </div>
                         </div>
                         <div class="tab-pane animation-fade pb-20" id="forum-project" role="tabpanel">
-                            <table class="table table-hover is-indent example" data-plugin="animateList" data-animate="fade"
-                                data-child="tr"
-                                data-selectable="selectable">
+                            <table class="table table-hover is-indent example" data-plugin="animateList"
+                                   data-animate="fade"
+                                   data-child="tr"
+                                   data-selectable="selectable">
                                 <tr class="animation-fade"
                                     style="animation-fill-mode: backwards; animation-duration: 250ms; animation-delay: 0ms;">
                                     <th class="cell-300" scope="col">项目名称</th>
@@ -157,30 +188,66 @@
                                     <th class="cell-300" scope="col">录入日期</th>
                                 </tr>
                                 <tbody>
-                                    <tr v-for="project in clientProjectsInfo" :key="project.id" @click="linkTo('/projects/' + project.id)">
-                                        <td>
-                                            {{ project.title }}
-                                        </td>
-                                        <td>
-                                            <template v-if="project.status === 1"><span style="color:#FF9800">进行中</span></template>
-                                            <template v-if="project.status === 2"><span style="color:#4CAF50">已完成</span></template>
-                                            <template v-if="project.status === 3"><span style="color:#9E9E9E">撤单</span></template>
-                                        </td>
-                                        <td>{{ project.principal?project.principal.data.name:'' }}</td>
-                                        <td>{{ project.trail.data.client.data.company}}</td>
-                                        <td>{{ project.created_at }}</td>
-                                    </tr>
+                                <tr v-for="project in clientProjectsInfo" :key="project.id"
+                                    @click="linkTo('/projects/' + project.id)">
+                                    <td>
+                                        {{ project.title }}
+                                    </td>
+                                    <td>
+                                        <template v-if="project.status === 1"><span style="color:#FF9800">进行中</span>
+                                        </template>
+                                        <template v-if="project.status === 2"><span style="color:#4CAF50">已完成</span>
+                                        </template>
+                                        <template v-if="project.status === 3"><span style="color:#9E9E9E">撤单</span>
+                                        </template>
+                                    </td>
+                                    <td>{{ project.principal?project.principal.data.name:'' }}</td>
+                                    <td>{{ project.trail.data.client.data.company}}</td>
+                                    <td>{{ project.created_at }}</td>
+                                </tr>
                                 </tbody>
                             </table>
                             <div v-if="clientProjectsInfo.length === 0" style="margin: 6rem auto;width: 100px">
                                 <img src="https://res.papitube.com/corvus/images/content-none.png" alt=""
-                                    style="width: 100%">
+                                     style="width: 100%">
+                            </div>
+                        </div>
+                        <div class="tab-pane animation-fade pb-20" id="forum-contract" role="tabpanel">
+                            <table class="table table-hover example"
+                                   data-child="tr" v-if="clientContractsInfo">
+                                <tr>
+                                    <th class="cell-300" scope="col">合同编号</th>
+                                    <th class="cell-300" scope="col">项目名称</th>
+                                    <th class="cell-300" scope="col">艺人</th>
+                                    <th class="cell-300" scope="col">合同类型</th>
+                                    <th class="cell-300" scope="col">创建人</th>
+                                </tr>
+                                <tbody>
+                                <tr v-for="contract in clientContractsInfo"
+                                    @click="redirectContract(contract.form_instance_number)">
+                                    <td>{{ contract.form_instance_number }}</td>
+                                    <td>{{ contract.title }}</td>
+                                    <td>
+                                        <template v-for="star in contract.stars_name">
+                                            {{ star.name }}
+                                        </template>
+                                    </td>
+                                    <td>收入</td>
+                                    <td>{{ contract.creator_name }}</td>
+                                </tr>
+                                </tbody>
+                            </table>
+                            <div style="margin: 6rem auto;width: 100px"
+                                 v-if="clientContractsInfo.length === 0">
+                                <img src="https://res.papitube.com/corvus/images/content-none.png" alt=""
+                                     style="width: 100%">
                             </div>
                         </div>
                         <div class="tab-pane animation-fade pb-20 fixed-button-father" id="forum-task" role="tabpanel">
-                            <table class="table table-hover is-indent example" data-plugin="animateList" data-animate="fade"
-                                data-child="tr"
-                                data-selectable="selectable">
+                            <table class="table table-hover is-indent example" data-plugin="animateList"
+                                   data-animate="fade"
+                                   data-child="tr"
+                                   data-selectable="selectable">
                                 <tr class="animation-fade"
                                     style="animation-fill-mode: backwards; animation-duration: 250ms; animation-delay: 0ms;">
                                     <th class="cell-300" scope="col">任务名称</th>
@@ -190,32 +257,39 @@
                                     <th class="cell-300" scope="col">截止时间</th>
                                 </tr>
                                 <tbody>
-                                    <tr v-for="task in clientTasksInfo" :key="task.id" @click="linkTo('/tasks/' + task.id)">
-                                        <td>
-                                            {{ task.title }}
-                                        </td>
-                                        <td>{{ task.type?task.type.data.title:'' }}</td>
-                                        <td>
-                                            <template v-if="task.status === 1">进行中</template>
-                                            <template v-if="task.status === 2">已完成</template>
-                                            <template v-if="task.status === 3">已停止</template>
-                                        </td>
-                                        <td>{{ task.principal?task.principal.data.name:'' }}</td>
-                                        <td>{{ task.end_at }}</td>
-                                    </tr>
+                                <tr v-for="task in clientTasksInfo" :key="task.id" @click="linkTo('/tasks/' + task.id)">
+                                    <td>
+                                        {{ task.title }}
+                                    </td>
+                                    <td>{{ task.type?task.type.data.title:'' }}</td>
+                                    <td>
+                                        <template v-if="task.status === 1"><span style="color: #FF9800;">进行中</span>
+                                        </template>
+                                        <template v-if="task.status === 2"><span style="color: #4CAF50;">已完成</span>
+                                        </template>
+                                        <template v-if="task.status === 3"><span style="color: #9E9E9E;">已停止</span>
+                                        </template>
+                                        <template v-if="task.status === 4"><span style="color: #F44336;">已延期</span>
+                                        </template>
+                                    </td>
+                                    <td>{{ task.principal?task.principal.data.name:'' }}</td>
+                                    <td>{{ task.end_at }}</td>
+                                </tr>
                                 </tbody>
 
                             </table>
                             <div style="margin: 6rem auto;width: 100px" v-if="clientTasksInfo.length === 0">
                                 <img src="https://res.papitube.com/corvus/images/content-none.png" alt=""
-                                    style="width: 100%">
+                                     style="width: 100%">
                             </div>
                             <div class="site-action fixed-button" data-plugin="actionBtn" data-toggle="modal"
-                                data-target="#addTask">
+                                 data-target="#addTask">
                                 <button type="button"
                                         class="site-action-toggle btn-raised btn btn-success btn-floating waves-effect waves-classic">
-                                    <i class="front-icon iconfont icon-tianjia1 animation-scale-up" aria-hidden="true" style="font-size:30px"></i>
-                                    <i class="back-icon iconfont icon-tianjia1 animation-scale-up" aria-hidden="true" style="font-size:30px"></i>
+                                    <i class="front-icon iconfont icon-tianjia1 animation-scale-up" aria-hidden="true"
+                                       style="font-size:30px"></i>
+                                    <i class="back-icon iconfont icon-tianjia1 animation-scale-up" aria-hidden="true"
+                                       style="font-size:30px"></i>
                                 </button>
                             </div>
                         </div>
@@ -231,91 +305,125 @@
                                         <button class="btn btn-primary" @click="changeClientBaseInfo">确定</button>
                                     </div>
                                 </div>
-                                <div class="card-block">
+                                <div class="card-block px-0">
                                     <div class="card-text py-10 clearfix">
-                                        <div class="col-md-2 float-left text-right pl-0">公司名称</div>
-                                        <div class="col-md-4 float-left font-weight-bold">
-                                            <EditInput :content="clientInfo.company" :is-edit="isEdit"
-                                                    @change="changeClientName"></EditInput>
+                                        <div class="col-md-6 px-0">
+                                            <div class="col-md-3 float-left text-right pl-0">公司名称</div>
+                                            <div class="col-md-9 float-left font-weight-bold">
+                                                <EditInput :content="clientInfo.company" :is-edit="isEdit"
+                                                           @change="changeClientName"></EditInput>
+                                            </div>
                                         </div>
-                                        <div class="col-md-2 float-left text-right pl-0">级别</div>
-                                        <div class="col-md-4 float-left font-weight-bold">
-                                            <EditSelector :options="clientLevelArr" :is-edit="isEdit"
-                                                        :content="clientInfo.grade"
-                                                        @change="changeClientLevel"></EditSelector>
+                                        <div class="col-md-6 px-0">
+                                            <div class="col-md-3 float-left text-right pl-0">级别</div>
+                                            <div class="col-md-9 float-left font-weight-bold">
+                                                <EditSelector :options="clientLevelArr" :is-edit="isEdit"
+                                                              :content="clientInfo.grade"
+                                                              @change="changeClientGrade"></EditSelector>
+                                            </div>
                                         </div>
                                     </div>
                                     <div class="card-text py-10 clearfix">
-                                        <div class="col-md-2 float-left text-right pl-0">负责人</div>
-                                        <div class="col-md-4 float-left font-weight-bold">
+                                        <div class="col-md-6 px-0">
+                                            <div class="col-md-3 float-left text-right pl-0">负责人</div>
+                                            <div class="col-md-9 float-left font-weight-bold">
 
-                                            <EditInput-selector :is-edit="isEdit" :placeholder="'请选择负责人'"
-                                                                @change="selectPrincipal"
-                                                                :select-type="'principal'"></EditInput-selector>
+                                                <EditInput-selector :is-edit="isEdit" :placeholder="'请选择负责人'"
+                                                                    @change="selectPrincipal"
+                                                                    :select-type="'principal'"></EditInput-selector>
+                                            </div>
                                         </div>
-                                        <div class="col-md-2 float-left text-right pl-0">规模</div>
-                                        <div class="col-md-4 float-left font-weight-bold">
-                                            <EditSelector :options="clientScaleArr" :is-edit="isEdit"
-                                                        :content="clientInfo.size"
-                                                        @change="changeClientScale"></EditSelector>
+                                        <div class="col-md-6 px-0">
+                                            <div class="col-md-3 float-left text-right pl-0">规模</div>
+                                            <div class="col-md-9 float-left font-weight-bold">
+                                                <EditSelector :options="clientScaleArr" :is-edit="isEdit"
+                                                              :content="clientInfo.size"
+                                                              @change="changeClientScale"></EditSelector>
+                                            </div>
                                         </div>
                                     </div>
                                     <div class="card-text py-10 clearfix">
-                                        <div class="col-md-2 float-left text-right pl-0">地区</div>
-                                        <div class="col-md-4 float-left font-weight-bold region">
-                                            <template v-if="!isEdit">
-                                                {{clientInfo.province}}{{clientInfo.city}}{{clientInfo.district}}
-                                            </template>
-                                            <template v-else>
-                                                <RegionSelector :provinceVal="clientInfo.province" :cityVal="clientInfo.city" :areaVal="clientInfo.district" @setAreaData="changeAreaData" />
-                                            </template>
-
+                                        <div class="col-md-6 px-0">
+                                            <div class="col-md-3 float-left text-right pl-0">地区</div>
+                                            <div class="col-md-9 float-left font-weight-bold region">
+                                                <template v-if="!isEdit">
+                                                    {{clientInfo.province}}{{clientInfo.city}}{{clientInfo.district}}
+                                                </template>
+                                                <template v-else>
+                                                    <RegionSelector :provinceVal="clientInfo.province"
+                                                                    :cityVal="clientInfo.city"
+                                                                    :areaVal="clientInfo.district"
+                                                                    @setAreaData="changeAreaData"/>
+                                                </template>
+                                            </div>
                                         </div>
-                                        <div class="col-md-2 float-left text-right pl-0">详细地址</div>
-                                        <div class="col-md-4 float-left font-weight-bold">
-                                            <EditInput :content="clientInfo.address" :is-edit="isEdit"
-                                                    @change="changeClientAddress"></EditInput>
+                                        <div class="col-md-6 px-0">
+                                            <div class="col-md-3 float-left text-right pl-0">详细地址</div>
+                                            <div class="col-md-9 float-left font-weight-bold">
+                                                <EditInput :content="clientInfo.address" :is-edit="isEdit"
+                                                           @change="changeClientAddress"></EditInput>
+                                            </div>
                                         </div>
                                     </div>
 
                                     <div class="card-text py-10 clearfix">
-                                        <div class="col-md-2 float-left text-right pl-0">备注</div>
-                                        <div class="col-md-4 float-left font-weight-bold">
-                                            <editTextarea :content="clientInfo.desc"
-                                                        :is-edit="isEdit" @change="changeClientDesc"></editTextarea>
+                                        <div class="col-md-6 px-0">
+                                            <div class="col-md-3 float-left text-right pl-0">客户评级</div>
+                                            <div class="col-md-9 float-left font-weight-bold">
+                                                <EditSelector :options="taskLevelArr" :is-edit="isEdit"
+                                                              :content="clientInfo.level"
+                                                              @change="changeClientLevel"></EditSelector>
+                                            </div>
+                                        </div>
+                                        <div class="col-md-6 px-0">
+                                            <div class="col-md-3 float-left text-right pl-0">备注</div>
+                                            <div class="col-md-9 float-left font-weight-bold">
+                                                <editTextarea :content="clientInfo.desc"
+                                                              :is-edit="isEdit"
+                                                              @change="changeClientDesc"></editTextarea>
+                                            </div>
                                         </div>
                                     </div>
 
                                     <div class="segmentation-line example"></div>
 
                                     <div class="card-text py-5 clearfix">
-                                        <div class="col-md-2 float-left text-right pl-0">录入人</div>
-                                        <div class="col-md-4 float-left font-weight-bold">
-                                            {{clientInfo.creator?clientInfo.creator.data.name:''}}
+                                        <div class="col-md-6 px-0">
+                                            <div class="col-md-3 float-left text-right pl-0">录入人</div>
+                                            <div class="col-md-9 float-left font-weight-bold">
+                                                {{clientInfo.creator?clientInfo.creator.data.name:''}}
+                                            </div>
                                         </div>
-                                        <div class="col-md-2 float-left text-right pl-0">录入时间</div>
-                                        <div class="col-md-4 float-left font-weight-bold">
-                                            {{clientInfo.created_at?clientInfo.created_at:''}}
+                                        <div class="col-md-6 px-0">
+                                            <div class="col-md-3 float-left text-right pl-0">录入时间</div>
+                                            <div class="col-md-6 float-left font-weight-bold">
+                                                {{clientInfo.created_at?clientInfo.created_at:''}}
+                                            </div>
                                         </div>
                                     </div>
                                     <div class="card-text py-5 clearfix">
-                                        <div class="col-md-2 float-left text-right pl-0">最近更新人</div>
-                                        <div class="col-md-4 float-left font-weight-bold">
-                                        {{clientInfo.last_updated_user?clientInfo.last_updated_user:''}}
+                                        <div class="col-md-6 px-0">
+                                            <div class="col-md-3 float-left text-right pl-0">最近更新人</div>
+                                            <div class="col-md-6 float-left font-weight-bold">
+                                                {{clientInfo.last_updated_user?clientInfo.last_updated_user:''}}
+                                            </div>
                                         </div>
-                                        <div class="col-md-2 float-left text-right pl-0">最近更新时间</div>
-                                        <div class="col-md-4 float-left font-weight-bold">
-                                            {{clientInfo.updated_at?clientInfo.updated_at:''}}
+                                        <div class="col-md-6 px-0">
+                                            <div class="col-md-3 float-left text-right pl-0">最近更新时间</div>
+                                            <div class="col-md-6 float-left font-weight-bold">
+                                                {{clientInfo.updated_at?clientInfo.updated_at:''}}
+                                            </div>
                                         </div>
                                     </div>
                                 </div>
                             </div>
                         </div>
                         <div class="tab-pane animation-fade pb-20 fixed-button-father" id="forum-contact"
-                            role="tabpanel">
-                            <table class="table table-hover is-indent example" data-plugin="animateList" data-animate="fade"
-                                data-child="tr"
-                                data-selectable="selectable">
+                             role="tabpanel">
+                            <table class="table table-hover is-indent example" data-plugin="animateList"
+                                   data-animate="fade"
+                                   data-child="tr"
+                                   data-selectable="selectable">
                                 <tr class="animation-fade"
                                     style="animation-fill-mode: backwards; animation-duration: 250ms; animation-delay: 0ms;">
                                     <th class="cell-300" scope="col">联系人</th>
@@ -327,47 +435,50 @@
                                     <th class="cell-300" scope="col">操作</th>
                                 </tr>
                                 <tbody>
-                                    <tr v-for="(contact, index) in clientContactsInfo" :key="index">
-                                        <td>{{ contact.name }}</td>
-                                        <!-- <td>{{ clientInfo.company }}</td> -->
-                                        <td>
-                                            {{ contact.type === 1 ? '否' : '' }}
-                                            {{ contact.type === 2 ? '是' : '' }}
-                                        </td>
-                                        <td>{{ contact.phone }}</td>
-                                        <td>{{ contact.position }}</td>
-                                        <td>{{ clientInfo.principal?clientInfo.principal.data.name:'' }}</td>
-                                        <td>
+                                <tr v-for="(contact, index) in clientContactsInfo" :key="index">
+                                    <td>{{ contact.name }}</td>
+                                    <!-- <td>{{ clientInfo.company }}</td> -->
+                                    <td>
+                                        {{ contact.type === 1 ? '否' : '' }}
+                                        {{ contact.type === 2 ? '是' : '' }}
+                                    </td>
+                                    <td>{{ contact.phone }}</td>
+                                    <td>{{ contact.position }}</td>
+                                    <td>{{ clientInfo.principal?clientInfo.principal.data.name:'' }}</td>
+                                    <td>
                                             <span class="pr-20 d-block float-left pointer-content"
-                                                style="color: #b9b9b9;"
-                                                data-plugin="actionBtn" data-toggle="modal"
-                                                data-target="#addContact"
-                                                @click="changeEditStatus(false,contact)"
+                                                  style="color: #b9b9b9;"
+                                                  data-plugin="actionBtn" data-toggle="modal"
+                                                  data-target="#addContact"
+                                                  @click="changeEditStatus(false,contact)"
                                             >
                                                 <i class="iconfont icon-bianji2" aria-hidden="true"></i>
                                             </span>
-                                            <span class="d-block float-left"
-                                                style="width: 1px; height: 14px;border-right: 1px solid #b9b9b9;margin: 3px;"></span>
-                                            <span class="pl-20 d-block float-left pointer-content" style="color: #b9b9b9"
-                                                data-plugin="actionBtn" @click="setDelInfo(contact.id)" data-toggle="modal"
-                                                data-target="#confirmFlag" typeText="删除">
+                                        <span class="d-block float-left"
+                                              style="width: 1px; height: 14px;border-right: 1px solid #b9b9b9;margin: 3px;"></span>
+                                        <span class="pl-20 d-block float-left pointer-content" style="color: #b9b9b9"
+                                              data-plugin="actionBtn" @click="setDelInfo(contact.id)"
+                                              data-toggle="modal"
+                                              data-target="#confirmFlag" typeText="删除">
                                                 <i class="iconfont icon-shanchu1" aria-hidden="true"></i>
                                             </span>
-                                        </td>
-                                    </tr>
+                                    </td>
+                                </tr>
                                 </tbody>
                             </table>
                             <div style="margin: 6rem auto;width: 100px" v-if="clientContactsInfo.length === 0">
                                 <img src="https://res.papitube.com/corvus/images/content-none.png" alt=""
-                                    style="width: 100%">
+                                     style="width: 100%">
                             </div>
                             <div class="site-action fixed-button" data-plugin="actionBtn" data-toggle="modal"
-                                data-target="#addContact"
-                                @click="changeEditStatus(true)">
+                                 data-target="#addContact"
+                                 @click="changeEditStatus(true)">
                                 <button type="button"
                                         class="site-action-toggle btn-raised btn btn-success btn-floating waves-effect waves-classic">
-                                    <i class="front-icon iconfont icon-tianjia1 animation-scale-up" aria-hidden="true" style="font-size:30px"></i>
-                                    <i class="back-icon iconfont icon-tianjia1 animation-scale-up" aria-hidden="true" style="font-size:30px"></i>
+                                    <i class="front-icon iconfont icon-tianjia1 animation-scale-up" aria-hidden="true"
+                                       style="font-size:30px"></i>
+                                    <i class="back-icon iconfont icon-tianjia1 animation-scale-up" aria-hidden="true"
+                                       style="font-size:30px"></i>
                                 </button>
                             </div>
 
@@ -379,13 +490,14 @@
                 <div class="panel" style="width: calc(34% - 15px);">
                     <div class="col-md-12">
                         <div class="card col-md-12">
-                            <div class="card-header card-header-transparent card-header-bordered p-10" style="font-size: 16px;font-weight: bold;">
+                            <div class="card-header card-header-transparent card-header-bordered p-10"
+                                 style="font-size: 16px;font-weight: bold;">
                                 <div>客户跟进</div>
                             </div>
                             <div class="card-block">
                                 <div class="col-md-12 pl-0">
                                     <TaskFollowUp :follow-type="'客户'" :trailId='clientId'
-                                                trailType='clients'></TaskFollowUp>
+                                                  trailType='clients'></TaskFollowUp>
                                 </div>
                             </div>
                         </div>
@@ -414,28 +526,28 @@
                             </div>
                         </div>
                         <div class="example">
-                            <div class="col-md-2 text-right float-left require">联系人</div>
+                            <div class="col-md-2 text-right float-left require pl-0">联系人</div>
                             <div class="col-md-10 float-left">
                                 <input type="text" title="" class="form-control"
                                        placeholder="请输入联系人" v-model="editConfig.name">
                             </div>
                         </div>
                         <div class="example">
-                            <div class="col-md-2 text-right float-left require">关键决策人</div>
+                            <div class="col-md-2 text-right float-left require pl-0">关键决策人</div>
                             <div class="col-md-10 float-left">
                                 <selectors ref="contact" :options="keyMasterArr" :value="editConfig.type"
-                                    @change="changeContactClientType"></selectors>
+                                           @change="changeContactClientType"></selectors>
                             </div>
                         </div>
                         <div class="example">
-                            <div class="col-md-2 text-right float-left require">联系人电话</div>
+                            <div class="col-md-2 text-right float-left require pl-0">联系人电话</div>
                             <div class="col-md-10 float-left">
                                 <input type="text" title="" class="form-control"
                                        placeholder="请输入联系人电话" v-model="editConfig.phone"/>
                             </div>
                         </div>
                         <div class="example">
-                            <div class="col-md-2 text-right float-left require">职位</div>
+                            <div class="col-md-2 text-right float-left require pl-0">职位</div>
                             <div class="col-md-10 float-left">
                                 <input type="text" title="" class="form-control"
                                        placeholder="请输入联系人职位" v-model="editConfig.position">
@@ -496,10 +608,10 @@
                         <div class="example">
                             <div class="col-md-2 text-right float-left pl-0 require">任务优先级</div>
                             <div class="col-md-10 float-left pl-0">
-                                <selectors ref="taskLevel" :options="taskLevelArr" @change="changeTaskLevel"></selectors>
+                                <selectors ref="taskLevel" :options="priorityArr" @change="changeTaskLevel"></selectors>
                             </div>
                         </div>
-                        <div class="example">
+                        <!-- <div class="example">
                             <div class="col-md-2 text-right float-left require">开始时间</div>
                             <div class="col-md-4 float-left pl-0">
                                 <datepicker ref="startTime" @change="changeStartTime"></datepicker>
@@ -507,6 +619,28 @@
                             <div class="col-md-2 text-right float-left require">截止时间</div>
                             <div class="col-md-4 float-left pl-0">
                                 <datepicker ref="endTime" @change="changeEndTime"></datepicker>
+                            </div>
+                        </div> -->
+                        <div class="example">
+                            <div class="col-md-2 text-right float-left require">开始时间</div>
+                            <div class="col-md-5 float-left pl-0">
+                                <datepicker @change="changeStartTime" :placeholder="'请输入开始时间'"
+                                            ref="startTime"></datepicker>
+                            </div>
+                            <div class="col-md-5 float-left pl-0">
+                                <timepicker :default="startMinutes" @change="changeStartMinutes"
+                                            ref="taskStartTime"></timepicker>
+                            </div>
+                        </div>
+                        <div class="example">
+                            <div class="col-md-2 text-right float-left require">截止时间</div>
+                            <div class="col-md-5 float-left pl-0">
+                                <datepicker @change="changeEndTime" :placeholder="'请输入结束时间'"
+                                            ref="endTime"></datepicker>
+                            </div>
+                            <div class="col-md-5 float-left pl-0">
+                                <timepicker :default="endMinutes" @change="changeEndMinutes"
+                                            ref="taskEndTime"></timepicker>
                             </div>
                         </div>
                         <div class="example">
@@ -536,6 +670,7 @@
 
     import fetch from '../../assets/utils/fetch.js'
     import config from '../../assets/js/config'
+    import Cookies from 'js-cookie'
 
     export default {
         data: function () {
@@ -547,7 +682,7 @@
                 clientScaleArr: config.clientScaleArr,
                 keyMasterArr: config.isKeyMasterArr,
                 taskTypeArr: [],
-                taskLevelArr: config.taskLevelArr,
+                priorityArr: config.priorityArr,
                 multiple: false,
                 taskType: '',
                 taskName: '',
@@ -558,7 +693,7 @@
                 startMinutes: '00:00',
                 endMinutes: '00:00',
                 taskEndTime: '',
-                taskLevel: 1,
+                taskLevel: '',
                 isEdit: false,
                 clientInfo: {},
                 clientInfoCopy: {},
@@ -581,6 +716,8 @@
                 contactId: '', // 联系人id
                 user: {},
                 isLoading: true,
+                clientContractsInfo: [],
+                taskLevelArr: config.taskLevelArr,
             }
         },
         beforeMount() {
@@ -607,8 +744,8 @@
             })
         },
         computed: {
-            completeNum () {
-                return this.clientTasksInfo.filter( n => n.status === 2).length
+            completeNum() {
+                return this.clientTasksInfo.filter(n => n.status === 2).length
             }
         },
 
@@ -712,13 +849,22 @@
             },
 
             getClientContact: function () {
-                // if (this.clientContactsInfo.length > 0) {
-                //     return
-                // }
+                if (this.clientContactsInfo.length > 0) {
+                    return
+                }
                 let _this = this;
                 fetch('get', '/clients/' + this.clientId + '/contacts').then(function (response) {
                     _this.clientContactsInfo = response.data
+                })
+            },
 
+            getClientContract: function () {
+                if (this.clientContractsInfo.length > 0) {
+                    return
+                }
+                let _this = this;
+                fetch('get', '/clients/' + this.clientId + '/contracts').then(function (response) {
+                    _this.clientContractsInfo = response.data
                 })
             },
 
@@ -780,7 +926,7 @@
             },
 
             cancelEdit: function () {
-                this.isEdit = false
+                this.isEdit = false;
                 this.getClient()
             },
 
@@ -800,6 +946,10 @@
                 this.clientInfo.grade = value
             },
 
+            changeClientGrade: function (value) {
+                this.clientInfo.level = value
+            },
+
             changeClientScale: function (value) {
                 this.clientInfo.size = value
             },
@@ -809,29 +959,22 @@
             },
 
             addTask: function () {
-                this.setDefaultPrincipal()
-                let _this = this;
-                let data = {
-                    resource_type: 4,
-                    resourceable_id: this.clientId,
-                    title: this.taskName,
-                    type: this.taskType,
-                    principal_id: this.taskPrincipalId, // 负责人 principal_id
-                    priority: this.taskLevel,
-                    start_at: this.taskStartTime + ' ' + this.startMinutes,
-                    end_at: this.taskEndTime + ' ' + this.endMinutes,
-                    desc: this.taskIntroduce,
-                    participant_ids: this.participantIds
-                };
-                if (!data.type) {
+                if (!this.taskType) {
                     toastr.error('请选择任务类型')
                     return
                 }
-                if (!data.title) {
+                if (!this.taskName) {
                     toastr.error('请填写任务名称')
                     return
                 }
-
+                if (!this.taskPrincipalId) {
+                    toastr.error('请选择负责人')
+                    return
+                }
+                if (!this.taskLevel) {
+                    toastr.error('请选择任务优先级')
+                    return
+                }
                 if (!this.taskStartTime) {
                     toastr.error('请选择开始时间')
                     return
@@ -847,15 +990,22 @@
                     return
                 }
 
-                if (!data.principal_id) {
-                    toastr.error('请选择负责人')
-                    return
-                }
 
-                if (!this.priority) {
-                    toastr.error('请选择任务优先级')
-                    return
-                }
+                this.setDefaultPrincipal()
+                let _this = this;
+                let data = {
+                    resource_type: 4,
+                    resourceable_id: this.clientId,
+                    title: this.taskName,
+                    type: this.taskType,
+                    principal_id: this.taskPrincipalId, // 负责人 principal_id
+                    priority: this.taskLevel,
+                    start_at: this.taskStartTime + ' ' + this.startMinutes,
+                    end_at: this.taskEndTime + ' ' + this.endMinutes,
+                    desc: this.taskIntroduce,
+                    participant_ids: this.participantIds
+                };
+
 
                 fetch('post', '/tasks', data).then(function (response) {
                     toastr.success('创建成功');
@@ -884,11 +1034,15 @@
             changeStartTime: function (value) {
                 this.taskStartTime = value
             },
-
+            changeStartMinutes: function (value) {
+                this.startMinutes = value
+            },
             changeEndTime: function (value) {
                 this.taskEndTime = value
             },
-
+            changeEndMinutes: function (value) {
+                this.endMinutes = value
+            },
             changeTaskLevel: function (value) {
                 this.taskLevel = value
             },
@@ -920,7 +1074,7 @@
                 this.contactId = id
             },
             // 选择地区
-            changeAreaData (val) {
+            changeAreaData(val) {
                 if (val.area.name) {
                     this.changeInfo.province = val.province.name
                     this.changeInfo.city = val.city.name !== '市辖区' ? val.city.name : val.province.name
@@ -928,18 +1082,11 @@
                 }
             },
             // 关键决策人
-            changeContactClientType (val) {
+            changeContactClientType(val) {
                 this.editConfig.type = val
             },
-            // 返回前5组数据
-            newArray (arr) {
-                if (arr.length > 5) {
-                    arr.length = 5
-                }
-                return arr
-            },
             // 关闭添加任务弹出层
-            cancleTask () {
+            cancleTask() {
                 this.taskName = ''
                 this.taskType = ''
                 this.$refs.taskType.setValue('')
@@ -955,7 +1102,7 @@
                 // participant_ids: this.participantIds
             },
             // 关闭新增联系人
-            cancleContact () {
+            cancleContact() {
                 this.editConfig = {
                     position: '',
                     name: '',
@@ -965,14 +1112,14 @@
                 this.$refs.contact.setValue('')
             },
             // 设置默认负责人
-            setDefaultPrincipal () {
+            setDefaultPrincipal() {
                 this.$store.commit('changeNewPrincipal', {
                     name: this.user.nickname,
                     id: this.user.id
                 })
                 this.$store.commit('changeNewParticipantsInfo', [])
             },
-            linkTo (url) {
+            linkTo(url) {
                 this.$router.push(url)
             }
         }
@@ -991,8 +1138,9 @@
             }
         }
     }
+
     table tbody tr {
-       cursor: pointer;
+        cursor: pointer;
     }
 
     .modal-body .example {
@@ -1004,4 +1152,5 @@
         display: flex;
         align-items: center;
     }
+
 </style>

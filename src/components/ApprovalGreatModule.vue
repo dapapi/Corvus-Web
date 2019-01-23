@@ -1,7 +1,7 @@
 <template>
     <div>
         <div class="modal fade" id="approval-great-module" aria-labelledby="approval-great-module" role="dialog" tabindex="-1" data-backdrop="static">
-            <div class="modal-dialog modal-simple modal-top">
+            <div class="modal-dialog modal-simple">
                 <div class="modal-content">
                     <div class="modal-header">
                         <button type="button" class="close" data-dismiss="modal" aria-label="Close">
@@ -14,11 +14,11 @@
                             <div :is='sortChecker(item)' :ref='item[0].control.data_dictionary_id'
                             :consdata='item' :predata='sendData' class="container"
                             :singlemode='singlemode' :clear='clearFlag' :directional-sender='directionalData'
-                            @change="changeHandler" @directional='directionalWatcher'
+                            @change="changeHandler" @directional='directionalWatcher' is-selectable='true'
                             :formid='form_id'></div>
                             <!-- ⬆️核心模块 -->
                         </div>
-                        <ApprovalProgress :formid='form_id' :trend='trendApprover.condition[0]?trendApprover:""' />
+                        <ApprovalProgress :formid='form_id' :trend='trendApprover.condition[0]?trendApprover:""' :free-progress='isFree' />
 
                     </div>
                     <div class="modal-footer">
@@ -56,7 +56,7 @@ import ApprovalDouble from '@/components/ForApproval/ApprovalDouble'
 import ApprovalMultipleSelector from '@/components/ForApproval/ApprovalMultipleSelector'
 import ApprovalChainReaction from '@/components/ForApproval/ApprovalChainReaction'
 export default {
-    props:['formData','singlemode','defaultData'],
+    props:['formData','singlemode','defaultData','contract_id','defaultValue'],
     data(){
         return{
             importData:'',
@@ -84,9 +84,10 @@ export default {
     mounted(){
         let _this = this
         $('#approval-great-module').on('show.bs.modal',function(){
-                _this.$nextTick(() => {
-                    _this.getFormContractor() 
-                })
+                // _this.$nextTick(() => {
+                //     _this.getFormContractor() 
+
+                // })
         })
          $('#approval-great-module').on('hidden.bs.modal',function(){
                 // _this.clearSignal()
@@ -110,12 +111,25 @@ export default {
         ApprovalChainReaction
     },
     watch:{
-        formData:function(){
+        formData:function(oldVal,newVal){
             this.clearSignal()
+                this.$nextTick(() => {
+                    this.getFormContractor() 
+
+            })
         }
     },
     update(){
         
+    },
+    computed:{
+        isFree(){
+            if(this.formData.change_type.id === 223){
+                return true
+            }else{
+                return false
+            }
+        }
     },
     methods:{
         directionalWatcher(params){
@@ -162,19 +176,22 @@ export default {
         trendApproverChecker(params){
             if(this.formData.condition.includes(params.key)){
                 let tempData = this.formData.condition.indexOf(params.key)
-                this.trendApprover.condition.splice(tempData,1) 
-                this.trendApprover.condition[tempData]=params.value
+                this.trendApprover.condition.splice(tempData,1,params.value)
             }
             if(this.formData.condition.length === this.trendApprover.condition.length){
                 this.trendApprover.ready = true
+            }else{
+                this.trendApprover.ready = false
+
             }
         },
         getFormContractor(){
             let _this = this
             if(this.formData.form_id){
-                fetch('get','/approvals/'+this.formData.form_id+'/form_control?include=approval_form_controls').then((params) => {
+                fetch('get','/approvals/'+this.formData.form_id+'/form_control?include=approval_form_controls&number='+this.contract_id).then((params) => {
                 _this.importData = params.data
                 _this.dataInit()
+                _this.$emit('done')
                 })
             }   
         },
@@ -238,8 +255,8 @@ export default {
                     return this.$options.components.ApprovalNumber
                 case 86 :
                     return this.$options.components.ApprovalTextArea
-                case 88 :
-                    return this.$options.components.ApprovalText
+                // case 88 :
+                //     return this.$options.components.ApprovalText
                 case 89 :
                     return this.$options.components.ApprovalDiv
                 case 91 : 
@@ -270,7 +287,7 @@ export default {
     padding-right: 0;
 }
 .modal-greater{
-    margin-top: 20px !important;
+    /* margin-top: 20px !important; */
     height: 100%;
 }
 .great-option{

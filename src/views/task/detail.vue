@@ -9,9 +9,9 @@
                    data-toggle="dropdown" aria-expanded="false"></i>
                 <div class="dropdown-menu dropdown-menu-right task-dropdown-item" aria-labelledby="taskDropdown"
                      role="menu" x-placement="bottom-end">
-                    <a class="dropdown-item" role="menuitem" @click="changeTaskStatus(3)" v-show="oldInfo.status != 3">终止</a>
+                    <a class="dropdown-item" role="menuitem" @click="changeTaskStatus(3)" v-show="oldInfo.status == 1">终止</a>
                     <a class="dropdown-item" role="menuitem" @click="changeTaskStatus(1)" v-show="oldInfo.status != 1">激活</a>
-                    <a class="dropdown-item" role="menuitem" @click="changeTaskStatus(2)" v-show="oldInfo.status != 2">完成</a>
+                    <a class="dropdown-item" role="menuitem" @click="changeTaskStatus(2)" v-show="oldInfo.status == 1">完成</a>
                     <!-- <a class="dropdown-item" role="menuitem" data-toggle="modal" data-target="#customizeFieldContent">自定义字段</a> -->
                     <a class="dropdown-item" role="menuitem" @click="privacyTask">
                         {{oldInfo.privacy == 1 ? '转公开':'转私密'}}</a>
@@ -35,8 +35,16 @@
                         <div class="float-left pl-0 pr-2 col-md-1">
                             <i class="iconfont icon-yonghu pr-2" aria-hidden="true"></i>负责人
                         </div>
-                        <div class="font-weight-bold float-left" v-if="oldInfo">
-                            {{ oldInfo.principal?oldInfo.principal.data.name: '' }}
+                        <div class="font-weight-bold float-left">
+                            {{ oldInfo.principal ? oldInfo.principal.data.name: '' }}
+                        </div>
+                    </div>
+                    <div class="card-text clearfix example">
+                        <div class="float-left pl-0 pr-2 col-md-1">
+                            <i class="iconfont icon-guidang pr-2" aria-hidden="true"></i>任务类型
+                        </div>
+                        <div class="font-weight-bold float-left">
+                            {{ oldInfo.type ? oldInfo.type.data.title: '' }}
                         </div>
                     </div>
                     <div class="card-text clearfix example">
@@ -50,7 +58,7 @@
                             <template v-if="oldInfo.status === 4"><span style="color:#F44336">延期</span></template>
                         </div>
                     </div>
-                    <div class="clearfix example">
+                    <div class="clearfix mt-20">
                         <div class="pl-0">
                             <div class="float-left pl-0 pr-2 col-md-1">
                                 <i class="iconfont icon-jieshushijian pr-2" aria-hidden="true"></i>结束时间
@@ -74,25 +82,25 @@
                 </div>
             </div>
 
-             <div style="display: flex; justify-content: space-between; align-items: flex-start">
-                <div class="panel" style="width: calc(66% - 15px);">
+            <div style="display: flex; justify-content: space-between; align-items: flex-start">
+                <div class="panel" style="width: calc(66% - 15px);z-index: 10">
 
                     <div class="col-md-12">
                         <ul class="nav nav-tabs nav-tabs-line" role="tablist" id="taskTab">
                             <li class="nav-item" role="presentation">
                                 <a class="nav-link active" data-toggle="tab" href="#forum-task-base"
-                                aria-controls="forum-base"
-                                aria-expanded="true" role="tab">概况</a>
+                                   aria-controls="forum-base"
+                                   aria-expanded="true" role="tab">概况</a>
                             </li>
                             <li class="nav-item" role="presentation">
                                 <a class="nav-link" data-toggle="tab" href="#forum-task-annex"
-                                aria-controls="forum-present"
-                                aria-expanded="false" role="tab">附件</a>
+                                   aria-controls="forum-present"
+                                   aria-expanded="false" role="tab">附件</a>
                             </li>
                             <li class="nav-item" role="presentation" v-if="taskInfo.task_p">
                                 <a class="nav-link" data-toggle="tab" href="#forum-task-subtasks"
-                                aria-controls="forum-present"
-                                aria-expanded="false" role="tab">子任务</a>
+                                   aria-controls="forum-present"
+                                   aria-expanded="false" role="tab">子任务</a>
                             </li>
                         </ul>
                     </div>
@@ -102,84 +110,117 @@
                                 <div class="card-header card-header-transparent card-header-bordered">
                                     <div class="float-left font-weight-bold third-title">任务详情</div>
                                     <div class="float-right pointer-content">
-                                        <i class="iconfont icon-bianji2" aria-hidden="true" @click="editBaseInfo" v-show="!isEdit"></i>
+                                        <i class="iconfont icon-bianji2" aria-hidden="true" @click="editBaseInfo"
+                                           v-show="!isEdit"></i>
                                     </div>
                                     <div class="float-right mr-40" v-show="isEdit">
                                         <button class="btn btn-sm btn-white btn-pure" @click="cancelEdit">取消</button>
                                         <button class="btn btn-primary" @click="changeTaskBaseInfo">确定</button>
                                     </div>
                                 </div>
-                                <div class="card-block">
-                                    <div class="card-text py-10 clearfix">
-                                        <div class="col-md-1 float-left text-right pl-0">负责人</div>
-                                        <div class="col-md-11 float-left font-weight-bold">
-                                            <div class="edit-wrap">
+                                <div class="py-20 clearfix">
+                                    <div class="clearfix">
+                                        <div class="card-text py-10 px-0 clearfix col-md-8">
+                                            <div class="col-md-2 float-left text-right pl-0">任务名称</div>
+                                            <div class="col-md-10 float-left font-weight-bold">
+                                                <EditInput :content="taskInfo.title" :is-edit="isEdit"
+                                                           @change="(value) => changeTaskInfo(value, 'title')"></EditInput>
+                                            </div>
+                                        </div>
+                                        <div class="card-text py-10 px-0 clearfix col-md-8">
+                                            <div class="col-md-2 float-left text-right pl-0">优先级</div>
+                                            <div class="col-md-10 float-left font-weight-bold">
+                                                <EditSelector :content="taskInfo.priority?taskInfo.priority: ''"
+                                                              :is-edit="isEdit"
+                                                              :options="priorityArr"
+                                                              @change="(value) => changeTaskInfo(value, 'level')"></EditSelector>
+                                            </div>
+                                        </div>
+                                        <div class="card-text py-10 px-0 clearfix col-md-8">
+                                            <div class="col-md-2 float-left text-right pl-0">负责人</div>
+                                            <div class="col-md-10 float-left font-weight-bold">
                                                 <EditInputSelector :is-edit="isEdit" :select-type="'principal'"
-                                                                @change="changeTaskPrincipal"></EditInputSelector>
+                                                                   @change="(value) => changeTaskInfo(value, 'principal_id')"></EditInputSelector>
                                             </div>
                                         </div>
-                                    </div>
-                                    <div class="card-text py-10 clearfix">
-                                        <div class="col-md-1 float-left text-right pl-0">参与人</div>
-                                        <div class="col-md-11 float-left font-weight-bold">
-                                            <EditAddMember :is-edit="isEdit"></EditAddMember>
-                                        </div>
-                                    </div>
-                                    <div class="card-text py-10 clearfix">
-                                        <div class="col-md-1 float-left text-right pl-0">开始时间</div>
-                                        <div class="col-md-11 float-left font-weight-bold">
-                                            <div class="edit-wrap">
-                                                <EditDatepicker :content="taskInfo.start_at" :is-edit="isEdit"
-                                                                @change="changeTaskStartTime"></EditDatepicker>
+                                        <div class="card-text py-10 px-0 clearfix col-md-8">
+                                            <div class="col-md-2 float-left text-right pl-0">参与人</div>
+                                            <div class="col-md-10 float-left font-weight-bold">
+                                                <EditAddMember :is-edit="isEdit"></EditAddMember>
                                             </div>
                                         </div>
-                                    </div>
-                                    <div class="card-text py-10 clearfix">
-                                        <div class="col-md-1 float-left text-right pl-0">结束时间</div>
-                                        <div class="col-md-11 float-left font-weight-bold">
-                                            <div class="edit-wrap">
-                                                <EditDatepicker :content="taskInfo.end_at" :is-edit="isEdit"
-                                                                @change="changeEndTime"></EditDatepicker>
+                                        <div class="card-text py-10 px-0 clearfix col-md-8">
+                                            <div class="col-md-2 float-left text-right pl-0">开始时间</div>
+                                            <div class="col-md-10 float-left font-weight-bold" v-if="taskInfo.start_at">
+                                                <EditDatepicker class="col-md-6 px-0 float-left"
+                                                                :content="taskInfo.start_at[0]" :is-edit="isEdit"
+                                                                @change="(value) => changeTaskInfo(value, 'start_at')"></EditDatepicker>
+                                                <EditTimepicker class="col-md-6 px-0 float-left"
+                                                                :content="taskInfo.start_at[1]" :is-edit="isEdit"
+                                                                @change="(value) => changeTaskInfo(value, 'start_minutes')"></EditTimepicker>
                                             </div>
                                         </div>
-                                    </div>
-                                    <div class="card-text py-10 clearfix">
-                                        <div class="col-md-1 float-left text-right pl-0">优先级</div>
-                                        <div class="ml-15 float-left font-weight-bold" style="width: 220px;">
-                                            <EditSelector :content="taskInfo.priority?taskInfo.priority: ''"
-                                                        :is-edit="isEdit"
-                                                        :options="priorityArr" @change="changeTaskLevel"></EditSelector>
+                                        <div class="card-text py-10 px-0 clearfix col-md-8">
+                                            <div class="col-md-2 float-left text-right pl-0">结束时间</div>
+                                            <div class="col-md-10 float-left font-weight-bold" v-if="taskInfo.end_at">
+                                                <EditDatepicker class="col-md-6 px-0 float-left"
+                                                                :content="taskInfo.end_at[0]" :is-edit="isEdit"
+                                                                @change="(value) => changeTaskInfo(value, 'end_at')"></EditDatepicker>
+                                                <EditTimepicker class="col-md-6 px-0 float-left"
+                                                                :content="taskInfo.end_at[1]" :is-edit="isEdit"
+                                                                @change="(value) => changeTaskInfo(value, 'end_minutes')"></EditTimepicker>
+                                            </div>
                                         </div>
-                                    </div>
-                                    <div class="card-text py-10 clearfix">
-                                        <div class="col-md-1 float-left text-right pl-0">任务说明</div>
-                                        <div class="ml-15 float-left font-weight-bold" style="width: 220px;">
-                                            <div class="">
+                                        <div class="card-text py-10 px-0 clearfix col-md-8">
+                                            <div class="col-md-2 float-left text-right pl-0">任务说明</div>
+                                            <div class="col-md-10 float-left font-weight-bold">
                                                 <editTextarea :content="taskInfo.desc"
-                                                            :is-edit="isEdit"
-                                                            @change="changeTaskIntroduce"></editTextarea>
+                                                              :is-edit="isEdit"
+                                                              @change="(value) => changeTaskInfo(value, 'desc')"></editTextarea>
                                             </div>
                                         </div>
                                     </div>
 
-                                    <div class="card-text py-10 clearfix" v-if="taskInfo.complete_at">
-                                        <div class="col-md-1 float-left text-right pl-0">完成时间</div>
-                                        <div class="col-md-11 float-left font-weight-bold">
+                                    <div class="segmentation-line example"></div>
+
+                                    <div class="card-text py-10 px-0 clearfix col-md-6 float-left"
+                                         v-if="taskInfo.creator">
+                                        <div class="col-md-3 float-left text-right pl-0">录入人</div>
+                                        <div class="col-md-9 float-left font-weight-bold">
+                                            {{ taskInfo.creator.data.name }}
+                                        </div>
+                                    </div>
+                                    <div class="card-text py-10 px-0 clearfix col-md-6 float-left">
+                                        <div class="col-md-3 float-left text-right pl-0">录入时间</div>
+                                        <div class="col-md-9 float-left font-weight-bold">
+                                            {{ taskInfo.created_at }}
+                                        </div>
+                                    </div>
+                                    <div class="card-text py-10 px-0 clearfix col-md-6 float-left">
+                                        <div class="col-md-3 float-left text-right pl-0">最近更新人</div>
+                                        <div class="col-md-9 float-left font-weight-bold">
+                                            {{ taskInfo.last_updated_user }}
+                                        </div>
+                                    </div>
+                                    <div class="card-text py-10 px-0 clearfix col-md-6 float-left">
+                                        <div class="col-md-3 float-left text-right pl-0">最近更新时间</div>
+                                        <div class="col-md-9 float-left font-weight-bold">
+                                            {{ taskInfo.last_updated_at }}
+                                        </div>
+                                    </div>
+                                    <div class="card-text py-10 px-0 clearfix col-md-6 float-left">
+                                        <div class="col-md-3 float-left text-right pl-0">完成时间</div>
+                                        <div class="col-md-9 float-left font-weight-bold">
                                             {{ taskInfo.complete_at }}
                                         </div>
                                     </div>
-                                    <div class="card-text py-10 clearfix" v-if="taskInfo.stop_at">
-                                        <div class="col-md-1 float-left text-right pl-0">停止时间</div>
-                                        <div class="col-md-11 float-left font-weight-bold">
+                                    <div class="card-text py-10 px-0 clearfix col-md-6 float-left">
+                                        <div class="col-md-3 float-left text-right pl-0">停止时间</div>
+                                        <div class="col-md-9 float-left font-weight-bold">
                                             {{ taskInfo.stop_at }}
                                         </div>
                                     </div>
-                                    <div class="card-text py-10 clearfix">
-                                        <div class="col-md-1 float-left text-right pl-0">创建人</div>
-                                        <div class="col-md-11 float-left font-weight-bold">
-                                            {{ taskInfo.creator?taskInfo.creator.data.name:'' }}
-                                        </div>
-                                    </div>
+
                                 </div>
                             </div>
                         </div>
@@ -194,30 +235,34 @@
                                 <div class="card-block">
                                     <ul class="file-list">
                                         <li v-for="attachment in taskInfo.affixes?taskInfo.affixes.data:[]">
-                                            <i class="iconfont icon-wenjian pr-5" style="color: #3298dc;"></i>{{ attachment.title }}
+                                            <i class="iconfont icon-wenjian pr-5" style="color: #3298dc;"></i>
+                                            {{ attachment.title }}
                                             <span class="float-right pl-10 pointer-content"
-                                                data-plugin="actionBtn" @click="setDelInfo(attachment.id)"
-                                                data-toggle="modal"
-                                                data-target="#confirmFlag"><i class="iconfont icon-iconfonttubiao"></i> 删除</span>
+                                                  data-plugin="actionBtn" @click="setDelInfo(attachment.id)"
+                                                  data-toggle="modal"
+                                                  data-target="#confirmFlag"><i
+                                                    class="iconfont icon-shanchu1"></i> 删除</span>
                                             <span class="float-right px-10">|</span>
                                             <span class="float-right px-10 pointer-content"
-                                                @click="downloadAttachment(attachment.id, attachment.url)"><i class="iconfont icon-download"></i> 下载</span>
+                                                  @click="downloadAttachment(attachment.id, attachment.url)"><i
+                                                    class="iconfont icon-download"></i> 下载</span>
                                             <span class="float-right px-10">{{ attachment.size }}</span>
                                         </li>
                                     </ul>
                                     <div style="margin: 6rem auto;width: 100px"
-                                        v-if="taskInfo.affixes&&taskInfo.affixes.data.length === 0">
+                                         v-if="taskInfo.affixes&&taskInfo.affixes.data.length === 0">
                                         <img src="https://res.papitube.com/corvus/images/content-none.png" alt=""
-                                            style="width: 100%">
+                                             style="width: 100%">
                                     </div>
                                 </div>
                             </div>
                         </div>
                         <div class="tab-pane animation-fade pb-20 fixed-button-father" id="forum-task-subtasks"
-                            role="tabpanel">
-                            <table class="table table-hover is-indent example" data-plugin="animateList" data-animate="fade"
-                                data-child="tr"
-                                data-selectable="selectable">
+                             role="tabpanel">
+                            <table class="table table-hover is-indent example" data-plugin="animateList"
+                                   data-animate="fade"
+                                   data-child="tr"
+                                   data-selectable="selectable">
                                 <tr class="animation-fade"
                                     style="animation-fill-mode: backwards; animation-duration: 250ms; animation-delay: 0ms;">
                                     <th class="cell-300" scope="col">任务名称</th>
@@ -227,7 +272,8 @@
                                     <th class="cell-300" scope="col">截止日期</th>
                                 </tr>
                                 <tbody>
-                                <tr v-for="task in taskInfo.tasks?taskInfo.tasks.data:[]" :key="task.id" @click="redirectTaskDetail(task.id)">
+                                <tr v-for="task in taskInfo.tasks?taskInfo.tasks.data:[]" :key="task.id"
+                                    @click="redirectTaskDetail(task.id)">
                                     <td>{{ task.title }}</td>
                                     <td>{{ task.type.data.title }}</td>
                                     <td>
@@ -242,19 +288,19 @@
                             </table>
 
                             <div style="margin: 6rem auto;width: 100px"
-                                v-if="taskInfo.tasks&&taskInfo.tasks.data.length === 0">
+                                 v-if="taskInfo.tasks&&taskInfo.tasks.data.length === 0">
                                 <img src="https://res.papitube.com/corvus/images/content-none.png" alt=""
-                                    style="width: 100%">
+                                     style="width: 100%">
                             </div>
 
-                            <div class="site-action fixed-button" data-plugin="actionBtn" data-toggle="modal"
-                                data-target="#addChildTask">
+                            <div class="site-action fixed-button mt-20" data-plugin="actionBtn" data-toggle="modal"
+                                 data-target="#addChildTask">
                                 <button type="button"
                                         class="site-action-toggle btn-raised btn btn-success btn-floating waves-effect waves-classic">
                                     <i class="front-icon iconfont icon-tianjia1 animation-scale-up" aria-hidden="true"
-                                    style="font-size:30px"></i>
+                                       style="font-size:30px"></i>
                                     <i class="back-icon iconfont icon-tianjia1 animation-scale-up" aria-hidden="true"
-                                    style="font-size:30px"></i>
+                                       style="font-size:30px"></i>
                                 </button>
                             </div>
 
@@ -266,164 +312,165 @@
                 <div class="panel" style="width: calc(34% - 15px);">
                     <div class="col-md-12">
                         <div class="card col-md-12">
-                            <div class="card-header card-header-transparent card-header-bordered p-10" style="font-size: 16px;font-weight: bold;">
+                            <div class="card-header card-header-transparent card-header-bordered p-10"
+                                 style="font-size: 16px;font-weight: bold;">
                                 <div>任务跟进</div>
                             </div>
                             <div class="card-block">
                                 <div class="col-md-12 pl-0">
-                                    <TaskFollowUp :follow-type="'任务'" :trailId='taskId' trailType='tasks'></TaskFollowUp>
+                                    <TaskFollowUp :follow-type="'任务'" :trailId='taskId'
+                                                  trailType='tasks'></TaskFollowUp>
                                 </div>
                             </div>
                         </div>
                     </div>
                 </div>
-             </div>
-             <div class="panel col-md-12 col-lg-12" v-if="questionId && visible">
-                    <div class="tab-content nav-tabs-animate bg-white">
-                        <div class="card">
-                            <div class="card-header card-header-transparent card-header-bordered"
-                                style="display: flex; justify-content: space-between; align-items: center;">
-                                <div class="font-weight-bold third-title">问卷详情</div>
-                                <div class="">
-                                    <button type="button"
-                                            class="btn btn-primary"
-                                            v-if="!~hasAnsweredArr.indexOf(user.id)"
-                                            @click="submit">提交
-                                    </button>
-                                    <button type="button" class="btn btn-primary" data-plugin="actionBtn"
-                                            data-toggle="modal"
-                                            v-if="questionInfo.reviewanswer
+            </div>
+            <div class="panel col-md-12 col-lg-12" v-if="questionId && visible">
+                <div class="tab-content nav-tabs-animate bg-white">
+                    <div class="card">
+                        <div class="card-header card-header-transparent card-header-bordered"
+                             style="display: flex; justify-content: space-between; align-items: center;">
+                            <div class="font-weight-bold third-title">问卷详情</div>
+                            <div class="">
+                                <button type="button"
+                                        class="btn btn-primary"
+                                        v-if="!~hasAnsweredArr.indexOf(user.id)"
+                                        @click="submit">提交
+                                </button>
+                                <button type="button" class="btn btn-primary" data-plugin="actionBtn"
+                                        data-toggle="modal"
+                                        v-if="questionInfo.reviewanswer
                                             && principalId === user.id 
                                             && hasAnsweredArr.length > 0 
                                             && hasAnsweredArr.length === questionInfo.reviewanswer.data.length"
-                                            && !questionInfo.excellent
-                                            data-target="#push-reason">推优
-                                    </button>
+                                        && !questionInfo.excellent
+                                        data-target="#push-reason">推优
+                                </button>
+                            </div>
+                        </div>
+                        <div class="card-block">
+                            <h4 style="color: #3F51B5">平均分
+                                {{ questionInfo.sum ? (questionInfo.sum.data[0]
+                                ?questionInfo.sum.data[0].truncate : 0) : 0}}
+                            </h4>
+                            <div class="row">
+                                <div class="col-md-8 clearfix" style="padding-right: 0;">
+                                    <div class="progress" data-labeltype="percentage" data-goal="-40"
+                                         data-plugin="progress" style="width: calc(100% - 100px); float:left;">
+                                        <div class="progress-bar progress-bar-warning" aria-valuemin="-100"
+                                             aria-valuemax="0" aria-valuenow="-40" role="progressbar"
+                                             :style="{width: `${questionInfo.reviewanswer.length === 0 ? 0 : hasAnsweredArr.length / questionInfo.reviewanswer.data.length * 100}%`}">
+                                        </div>
+                                    </div>
+                                    <div style="width: 50px; padding-left: 10px; float: left;">
+                                        {{questionInfo.reviewanswer.length === 0 ? 0 : ~~((hasAnsweredArr.length /
+                                        questionInfo.reviewanswer.data.length * 100))}}%
+                                    </div>
                                 </div>
                             </div>
-                            <div class="card-block">
-                                <h4 style="color: #3F51B5">平均分
-                                    {{ questionInfo.sum ? (questionInfo.sum.data[0]
-                                    ?questionInfo.sum.data[0].truncate : 0) : 0}}
-                                </h4>
-                                <div class="row">
-                                    <div class="col-md-8 clearfix" style="padding-right: 0;">
-                                        <div class="progress" data-labeltype="percentage" data-goal="-40"
-                                            data-plugin="progress" style="width: calc(100% - 100px); float:left;">
-                                            <div class="progress-bar progress-bar-warning" aria-valuemin="-100"
-                                                aria-valuemax="0" aria-valuenow="-40" role="progressbar"
-                                                :style="{width: `${questionInfo.reviewanswer.length === 0 ? 0 : hasAnsweredArr.length / questionInfo.reviewanswer.data.length * 100}%`}">
-                                                <!-- <span class="progress-label">{{questionInfo.reviewanswer.length === 0 ? 0 : ~~((hasAnsweredArr.length / questionInfo.reviewanswer.data.length * 100))}}%</span> -->
-                                            </div>
-                                        </div>
-                                        <div style="width: 50px; padding-left: 10px; float: left;">
-                                            {{questionInfo.reviewanswer.length === 0 ? 0 : ~~((hasAnsweredArr.length /
-                                            questionInfo.reviewanswer.data.length * 100))}}%
-                                        </div>
+                            <div class="all-menber clearfix">
+                                <template v-for="(item, index) in questionInfo.reviewanswer.data">
+                                    <Avatar :imgUrl="item.users.data.icon_url" :key="index" style="margin: 5px;"/>
+                                </template>
+                            </div>
+                            <div class="card-text py-5 clearfix">
+                                <div class="col-md-1 float-left text-right pl-0">作者</div>
+                                <div class="col-md-11 float-left font-weight-bold">
+                                    <div class="edit-wrap">
+                                        {{ questionInfo.creator ? questionInfo.creator.data.name : '' }}
                                     </div>
                                 </div>
-                                <div class="all-menber clearfix">
-                                    <template v-for="(item, index) in questionInfo.reviewanswer.data">
-                                        <Avatar :imgUrl="item.users.data.icon_url" :key="index" style="margin: 5px;" />
-                                    </template>
+                            </div>
+                            <div class="card-text py-5 clearfix">
+                                <div class="col-md-1 float-left text-right pl-0">视频名称</div>
+                                <div class="col-md-11 float-left font-weight-bold">
+                                    <div class="edit-wrap">
+                                        {{ questionInfo.production ? questionInfo.production.data[0].nickname : '' }}
+                                    </div>
                                 </div>
-                                <div class="card-text py-5 clearfix">
-                                    <div class="col-md-1 float-left text-right pl-0">作者</div>
-                                    <div class="col-md-11 float-left font-weight-bold">
-                                        <div class="edit-wrap">
-                                            {{ questionInfo.creator ? questionInfo.creator.data.name : '' }}
+                            </div>
+                            <div class="card-text py-5 clearfix">
+                                <div class="col-md-1 float-left text-right pl-0">阅转比</div>
+                                <div class="col-md-11 float-left font-weight-bold">
+                                    <div class="edit-wrap">
+                                        {{ questionInfo.production ? questionInfo.production.data[0].read_proportion :
+                                        '' }}
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="card-text py-5 clearfix" v-if="questionInfo.excellent">
+                                <div class="col-md-1 float-left text-right pl-0">推优分</div>
+                                <div class="col-md-11 float-left font-weight-bold">
+                                    <div class="edit-wrap">
+                                        {{ questionInfo.excellent_sum }}
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="card-text py-5 clearfix" v-if="questionInfo.excellent">
+                                <div class="col-md-1 float-left text-right pl-0">推优原因</div>
+                                <div class="col-md-11 float-left font-weight-bold">
+                                    <div class="edit-wrap">
+                                        {{ questionInfo.excellent }}
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="card-text py-5 clearfix">
+                                <div class="col-md-1 float-left text-right pl-0">视频链接</div>
+                                <div class="col-md-11 float-left font-weight-bold">
+                                    <router-link
+                                            :to="questionInfo.production ? questionInfo.production.data[0].link : ''">
+                                        <div class="edit-wrap" style="color: #3298DC; cursor: pointer; width: 100%;">
+                                            {{ questionInfo.production ? questionInfo.production.data[0].link : '' }}
                                         </div>
-                                    </div>
+                                    </router-link>
                                 </div>
-                                <div class="card-text py-5 clearfix">
-                                    <div class="col-md-1 float-left text-right pl-0">视频名称</div>
-                                    <div class="col-md-11 float-left font-weight-bold">
-                                        <div class="edit-wrap">
-                                            {{ questionInfo.production ? questionInfo.production.data[0].nickname : '' }}
-                                        </div>
-                                    </div>
-                                </div>
-                                <div class="card-text py-5 clearfix">
-                                    <div class="col-md-1 float-left text-right pl-0">阅转比</div>
-                                    <div class="col-md-11 float-left font-weight-bold">
-                                        <div class="edit-wrap">
-                                            {{ questionInfo.production ? questionInfo.production.data[0].read_proportion :
-                                            '' }}
-                                        </div>
-                                    </div>
-                                </div>
-                                <div class="card-text py-5 clearfix" v-if="questionInfo.excellent">
-                                    <div class="col-md-1 float-left text-right pl-0">推优分</div>
-                                    <div class="col-md-11 float-left font-weight-bold">
-                                        <div class="edit-wrap">
-                                            {{ questionInfo.excellent_sum }}
-                                        </div>
-                                    </div>
-                                </div>
-                                <div class="card-text py-5 clearfix" v-if="questionInfo.excellent">
-                                    <div class="col-md-1 float-left text-right pl-0">推优原因</div>
-                                    <div class="col-md-11 float-left font-weight-bold">
-                                        <div class="edit-wrap">
-                                            {{ questionInfo.excellent }}
-                                        </div>
-                                    </div>
-                                </div>
-                                <div class="card-text py-5 clearfix">
-                                    <div class="col-md-1 float-left text-right pl-0">视频链接</div>
-                                    <div class="col-md-11 float-left font-weight-bold">
-                                        <router-link
-                                                :to="questionInfo.production ? questionInfo.production.data[0].link : ''">
-                                            <div class="edit-wrap" style="color: #3298DC; cursor: pointer; width: 100%;">
-                                                {{ questionInfo.production ? questionInfo.production.data[0].link : '' }}
-                                            </div>
-                                        </router-link>
-                                    </div>
-                                </div>
+                            </div>
 
-                                <div class="question" v-for="(items, index) in questionData" :key="index">
-                                    <div class="name">{{index + 1}}. {{ items.title }}</div>
-                                    <div class="options clearfix" v-for="(item, _index) in items.items.data" :key="_index">
-                                        <div class="title">
-                                            <label>
-                                                <div class="radio-custom radio-primary" style="display: inline-block;">
-                                                    <input type="radio" @click="answerList[index] = item"
-                                                        :disabled="hasAnsweredArr.includes(user.id)"
-                                                        :checked="answerList[index] === item.value
+                            <div class="question" v-for="(items, index) in questionData" :key="index">
+                                <div class="name">{{index + 1}}. {{ items.title }}</div>
+                                <div class="options clearfix" v-for="(item, _index) in items.items.data" :key="_index">
+                                    <div class="title">
+                                        <label>
+                                            <div class="radio-custom radio-primary" style="display: inline-block;">
+                                                <input type="radio" @click="answerList[index] = item"
+                                                       :disabled="hasAnsweredArr.includes(user.id)"
+                                                       :checked="answerList[index] === item.value
                                                             || items.selectrows.data.find(n => n.review_question_item_id === item.id && n.creator.data.id === user.id)"
-                                                        :name="items.id"/>
-                                                    <label></label>
+                                                       :name="items.id"/>
+                                                <label></label>
+                                            </div>
+                                            {{ item.value }}: {{ item.title }}
+                                        </label>
+                                    </div>
+                                    <div class="row">
+                                        <div class="col-md-8" style="padding-right: 0;">
+                                            <div class="progress" data-labeltype="percentage" data-goal="-40"
+                                                 data-plugin="progress" style="width: calc(100% - 100px); float: left;">
+                                                <div class="progress-bar progress-bar-warning" aria-valuemin="-100"
+                                                     aria-valuemax="0" aria-valuenow="-40" role="progressbar"
+                                                     :style="{width: `${items.selectrows.data.filter(n => n.review_question_item_id === item.id).length / hasAnsweredArr.length * 100}%`}">
                                                 </div>
-                                                {{ item.value }}: {{ item.title }}
-                                            </label>
+                                            </div>
+                                            <div style="width: 50px; padding-left: 10px; float: left;">
+                                                {{ hasAnsweredArr.length > 0 ? items.selectrows.data.filter(n =>
+                                                n.review_question_item_id ===
+                                                item.id).length / hasAnsweredArr.length * 100: '0' }}%
+                                            </div>
+                                            <div style="width: 50px; padding-left: 10px; float: right;">
+                                                {{items.selectrows.data.filter(n => n.review_question_item_id ===
+                                                item.id)?
+                                                items.selectrows.data.filter(n => n.review_question_item_id ===
+                                                item.id).length
+                                                :0}}票
+                                            </div>
                                         </div>
-                                        <div class="row">
-                                            <div class="col-md-8" style="padding-right: 0;">
-                                                <div class="progress" data-labeltype="percentage" data-goal="-40"
-                                                    data-plugin="progress" style="width: calc(100% - 100px); float: left;">
-                                                    <div class="progress-bar progress-bar-warning" aria-valuemin="-100"
-                                                        aria-valuemax="0" aria-valuenow="-40" role="progressbar"
-                                                        :style="{width: `${items.selectrows.data.filter(n => n.review_question_item_id === item.id).length / hasAnsweredArr.length * 100}%`}">
-                                                    </div>
-                                                </div>
-                                                <div style="width: 50px; padding-left: 10px; float: left;">
-                                                    {{ hasAnsweredArr.length > 0 ? items.selectrows.data.filter(n =>
-                                                    n.review_question_item_id ===
-                                                    item.id).length / hasAnsweredArr.length * 100: '0' }}%
-                                                </div>
-                                                <div style="width: 50px; padding-left: 10px; float: right;">
-                                                    {{items.selectrows.data.filter(n => n.review_question_item_id ===
-                                                    item.id)?
-                                                    items.selectrows.data.filter(n => n.review_question_item_id ===
-                                                    item.id).length
-                                                    :0}}票
-                                                </div>
-                                            </div>
-                                            <div class="col-md-4 clearfix" style="padding-left: 0; margin-top: -9px;">
-                                                <template v-for="(_item, nameIndex) in items.selectrows.data">
-                                                    <Avatar v-if="_item.review_question_item_id === item.id"
-                                                        :imgUrl="_item.creator.data.icon_url" :key="nameIndex" style="margin: 5px;" />
-                                                </template>
-                                            </div>
+                                        <div class="col-md-4 clearfix" style="padding-left: 0; margin-top: -9px;">
+                                            <template v-for="(_item, nameIndex) in items.selectrows.data">
+                                                <Avatar v-if="_item.review_question_item_id === item.id"
+                                                        :imgUrl="_item.creator.data.icon_url" :key="nameIndex"
+                                                        style="margin: 5px;"/>
+                                            </template>
                                         </div>
                                     </div>
                                 </div>
@@ -431,6 +478,7 @@
                         </div>
                     </div>
                 </div>
+            </div>
 
         </div>
 
@@ -445,15 +493,6 @@
                         <h4 class="modal-title">新增子任务</h4>
                     </div>
                     <div class="modal-body">
-                        <!-- 报错？？ -->
-                        <div class="example">
-                            <div class="col-md-2 text-right float-left">关联资源</div>
-                            <div class="col-md-10 float-left">
-                                <normal-linkage-selectors ref="linkage" v-if="linkData.length>0" :myData="linkData"
-                                                          :data="linkData"
-                                                          @change="addLinkage"></normal-linkage-selectors>
-                            </div>
-                        </div>
                         <div class="example">
                             <div class="col-md-2 text-right float-left require">任务类型</div>
                             <div class="col-md-10 float-left pl-0">
@@ -482,7 +521,7 @@
                         <div class="example">
                             <div class="col-md-2 text-right float-left pl-0 require">任务优先级</div>
                             <div class="col-md-10 float-left pl-0">
-                                <selectors :options="taskLevelArr" ref="taskLevel" @change="addTaskLevel"></selectors>
+                                <selectors :options="priorityArr" ref="taskLevel" @change="addTaskLevel"></selectors>
                             </div>
                         </div>
                         <div class="example">
@@ -512,8 +551,6 @@
                             </div>
                         </div>
                     </div>
-                    <!-- 是否确认删除 -->
-
                     <div class="modal-footer">
                         <button class="btn btn-sm btn-white btn-pure" data-dismiss="modal">取消</button>
                         <button class="btn btn-primary" @click="addChildTask">确定</button>
@@ -539,6 +576,7 @@
 <script>
     import fetch from '../../assets/utils/fetch.js'
     import config from '../../assets/js/config'
+    import Cookies from 'js-cookie'
 
     export default {
 
@@ -550,7 +588,6 @@
                 total: 0,
                 current_page: 0,
                 total_pages: 0,
-                // showChildTask: false,
                 taskInfo: {},
                 participantsArr: [],
                 flagParticipantsIdArr: [],
@@ -600,8 +637,6 @@
             $('#addChildTask').on('show.bs.modal', function () {
                 // this.showChildTask = true;
                 this.isEdit = false;
-            }).on('hidden.bs.modal', function () {
-                // this.showChildTask = false;
             })
             this.user = JSON.parse(Cookies.get('user'))
             // 负责人默认值的设置
@@ -623,9 +658,6 @@
         },
 
         watch: {
-            'taskInfo.principal_id': function (newValue) {
-                this.changeInfo.principal_id = newValue
-            },
             'taskInfo.participants.data': {
                 handler(newValue, oldValue) {
                     if (newValue && oldValue) {
@@ -633,21 +665,6 @@
                     }
                 },
                 deep: true
-            },
-            'taskInfo.start_at': function (newValue) {
-                this.changeInfo.start_at = newValue
-            },
-            'taskInfo.status': function (newValue) {
-                this.changeInfo.status = newValue
-            },
-            'taskInfo.priority': function (newValue) {
-                this.changeInfo.priority = newValue
-            },
-            'taskInfo.desc': function (newValue) {
-                this.changeInfo.desc = newValue
-            },
-            'taskInfo.end_at': function (newValue) {
-                this.changeInfo.end_at = newValue
             },
             routerId(id) {
                 this.taskId = id
@@ -659,9 +676,6 @@
         },
 
         computed: {
-            principalName: function () {
-                return this.$store.state.principalInfo.name
-            },
             routerId() {
                 return this.$route.params.id
             },
@@ -675,30 +689,55 @@
                     include: 'creator,principal,pTask,tasks.type,resource.resourceable,resource.resource,affixes,participants',
                 };
 
-                let _this = this;
-
-                fetch('get', '/tasks/' + this.taskId, data).then(function (response) {
+                fetch('get', '/tasks/' + this.taskId, data).then(response => {
                     if (response.data.affixes) {
                         for (let i = 0; i < response.data.affixes.data.length; i++) {
                             let size = response.data.affixes.data[i].size;
-                            response.data.affixes.data[i].size = _this.unitConversion(size)
+                            response.data.affixes.data[i].size = this.unitConversion(size)
                         }
                     }
 
-                    _this.taskInfo = response.data;
-                    _this.oldInfo = JSON.parse(JSON.stringify(response.data))
+                    this.oldInfo = JSON.parse(JSON.stringify(response.data));
+                    this.taskInfo = response.data;
+                    this.taskInfo.start_at = this.taskInfo.start_at.split(' ');
+                    this.taskInfo.end_at = this.taskInfo.end_at.split(' ');
+                    this.taskInfo.start_at[1] = this.taskInfo.start_at[1].split(':')[0] + ':' + this.taskInfo.start_at[1].split(':')[1]
+                    this.taskInfo.end_at[1] = this.taskInfo.end_at[1].split(':')[0] + ':' + this.taskInfo.end_at[1].split(':')[1]
                     for (let i = 0; i < response.data.participants.data.length; i++) {
-                        _this.flagParticipantsIdArr.push(response.data.participants.data[i].id)
+                        this.flagParticipantsIdArr.push(response.data.participants.data[i].id)
                     }
                     let params = {
                         type: 'change',
                         data: response.data.participants.data
                     };
-                    _this.$store.dispatch('changeParticipantsInfo', params);
+                    this.$store.dispatch('changeParticipantsInfo', params);
                     params.data = response.data.principal.data;
-                    _this.$store.dispatch('changePrincipal', params)
-                    _this.isLoading = false;
+                    this.$store.dispatch('changePrincipal', params);
+                    this.isLoading = false;
                 })
+            },
+
+            changeTaskInfo: function (value, name) {
+                switch (name) {
+                    case 'principal_id':
+                        value = this.$store.state.principalInfo.id;
+                        break;
+                    case 'start_minutes':
+                        if (this.changeInfo.start_at) {
+                            this.changeInfo.start_at = this.changeInfo.start_at + ' ' + value
+                        } else {
+                            this.changeInfo.start_at = this.taskInfo.start_at[0] + ' ' + value
+                        }
+                        return;
+                    case 'end_minutes':
+                        if (this.changeInfo.start_at) {
+                            this.changeInfo.end_at = this.changeInfo.end_at + ' ' + value
+                        } else {
+                            this.changeInfo.end_at = this.taskInfo.end_at[0] + ' ' + value
+                        }
+                        return
+                }
+                this.changeInfo[name] = value
             },
 
             editBaseInfo: function () {
@@ -710,45 +749,36 @@
                 console.log(value)
             },
 
-            showSelectMember: function (value) {
-                this.isInputSelectShow = value
-            },
-
             cancelEdit: function () {
                 this.isEdit = false;
-                 this.getTask();
-                // this.taskInfo = JSON.parse(JSON.stringify(this.oldInfo))
-                // this.taskInfo = this.oldInfo
+                this.getTask();
             },
 
             changeTaskStatus: function (status) {
-                let _this = this;
-                fetch('put', '/tasks/' + this.taskId + '/status', {status: status}).then(function (response) {
+                fetch('put', '/tasks/' + this.taskId + '/status', {status: status}).then(() => {
                     if (status === 2) {
-                        _this.taskInfo.status = status;
                         toastr.success("完成任务成功");
                     } else if (status === 3) {
                         toastr.success("暂停任务成功");
                     } else if (status === 1) {
                         toastr.success("激活任务成功");
                     }
-                    _this.getTask();
+                    this.taskInfo.status = status;
+                    this.getTask();
                 })
             },
 
             privacyTask: function () {
-                let self = this
-                fetch('put', '/tasks/' + this.taskId + '/privacy').then(function () {
+                fetch('put', '/tasks/' + this.taskId + '/privacy').then(() => {
                     toastr.success(self.taskInfo.privacy == 1 ? '转公开成功!' : '转私密成功!');
-                    self.getTask()
+                    this.getTask()
                 })
             },
 
             deleteTask: function () {
-                let _this = this;
-                fetch('delete', '/tasks/' + this.taskId).then(function () {
+                fetch('delete', '/tasks/' + this.taskId).then(() => {
                     toastr.success("删除任务成功");
-                    _this.$router.push({path: '/tasks'})
+                    this.$router.push({path: '/tasks'})
                 })
             },
 
@@ -772,22 +802,21 @@
             },
 
             changeTaskBaseInfo: function () {
-                let _this = this;
-                if (this.changeInfo) {
-                    fetch('put', '/tasks/' + this.taskId, this.changeInfo).then(function (response) {
-                        _this.isEdit = false;
-                        if (_this.changeInfo.principal_id) {
-                            _this.taskInfo.principal.data = _this.$store.state.principalInfo
+                if (this.changeInfo.principal_id == this.oldInfo.principal.data.id) {
+                    delete this.changeInfo.principal_id
+                }
+                if (JSON.stringify(this.changeInfo) !== "{}") {
+                    fetch('put', '/tasks/' + this.taskId, this.changeInfo).then(() => {
+                        this.getTask();
+                        if (this.changeInfo.principal_id) {
+                            this.taskInfo.principal.data = this.$store.state.principalInfo
                         }
+                        toastr.success('修改成功')
                     })
                 }
-                // @todo 修改时间组件
                 if (this.changeParticipantInfo) {
                     let changeInfo = this.changeParticipantInfo;
                     let participant_ids = [];
-                    for (let i = 0; i < changeInfo.length; i++) {
-                        participant_ids.push(changeInfo[i].id)
-                    }
 
                     let flagInfo = this.flagParticipantsIdArr;
                     let del_participant_ids = [];
@@ -796,38 +825,26 @@
                             del_participant_ids.push(flagInfo[j])
                         }
                     }
-                    let data = {
-                        person_ids: participant_ids,
-                        del_person_ids: del_participant_ids
-                    };
-                    fetch('post', '/tasks/' + this.taskId + '/participant', data).then(function () {
-                        _this.isEdit = false;
-
-                    })
+                    for (let j = 0; j < changeInfo.length; j++) {
+                        if (flagInfo.indexOf(changeInfo[j].id) === -1) {
+                            participant_ids.push(changeInfo[j].id)
+                        }
+                    }
+                    let data = {};
+                    if (participant_ids.length > 0) {
+                        data.person_ids = participant_ids
+                    }
+                    if (del_participant_ids.length > 0) {
+                        data.del_person_ids = del_participant_ids
+                    }
+                    if (JSON.stringify(data) !== "{}") {
+                        fetch('post', '/tasks/' + this.taskId + '/participant', data).then(() => {
+                            this.getTask();
+                            toastr.success('修改成功')
+                        })
+                    }
                 }
-
-                toastr.success('修改成功')
-
-            },
-
-            changeEndTime: function (value) {
-                this.taskInfo.end_at = value
-            },
-
-            changeTaskIntroduce: function (value) {
-                this.taskInfo.desc = value
-            },
-
-            changeTaskLevel: function (value) {
-                this.taskInfo.priority = value
-            },
-
-            changeTaskStartTime: function (value) {
-                this.taskInfo.start_at = value
-            },
-
-            changeTaskPrincipal: function () {
-                this.changeInfo.principal_id = this.$store.state.principalInfo.id;
+                this.isEdit = false;
             },
 
             uploadAttachment: function (url, name, size) {
@@ -907,7 +924,6 @@
                 fetch('post', '/tasks/' + this.taskId + '/subtask', data).then(function (response) {
                     toastr.success('添加成功');
                     $('#addChildTask').modal('hide');
-                    // this.taskInfo.tasks.data.push(response.data)
                     self.getTask();
                 })
             },
@@ -963,11 +979,7 @@
             // 获取关联父资源数据
             getLinkData() {
                 fetch('get', '/resources').then(res => {
-                    // let code = 0
                     this.linkData = res.data.map((n, i) => {
-                        // if (i === 0) {
-                        //     code = n.code
-                        // }
                         return {
                             name: n.title,
                             id: n.type,
@@ -977,12 +989,12 @@
                         }
                     })
                     this.linkData.unshift({
-                            name: '暂不关联任何资源',
-                            id: '',
-                            value: '',
-                            // type: n.type,
-                            child: []
-                        })
+                        name: '暂不关联任何资源',
+                        id: '',
+                        value: '',
+                        // type: n.type,
+                        child: []
+                    })
                     if (this.linkData[0].child.length === 0) {
                         this.getChildLinkData('', 0)
                     }
@@ -995,7 +1007,7 @@
                     if (url === 'bloggers' || url === 'stars') {
                         data.sign_contract_status = 2
                     }
-                    fetch('get', `/${url === 'bloggers'? url + '/all' : url}`, data).then(res => {
+                    fetch('get', `/${url === 'bloggers' ? url + '/all' : url}`, data).then(res => {
                         const temp = this.linkData[index]
                         temp.child = res.data.map(n => {
                             return {
@@ -1246,17 +1258,6 @@
         right: -46px;
     }
 
-    .progress-label:after {
-        /* content: '';
-        position: absolute;
-        width: 14px;
-        height: 14px;
-        background: #fff;
-        right: 38px;
-        border: 1px solid #eee;
-        border-radius: 50%; */
-    }
-
     .options {
         margin: 10px 0;
     }
@@ -1287,8 +1288,9 @@
     .radio-custom label {
         top: 2px;
     }
+
     table tbody tr {
-       cursor: pointer;
+        cursor: pointer;
     }
 
     .modal-body .example {

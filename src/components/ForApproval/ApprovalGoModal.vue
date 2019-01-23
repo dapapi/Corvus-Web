@@ -6,7 +6,7 @@
                     <button type="button" class="close" data-dismiss="modal" aria-label="Close">
                         <span aria-hidden="true">×</span>
                     </button>
-                    <h4 class="modal-title" id="exampleModalTitle">审批流转</h4>
+                    <h4 class="modal-title" id="exampleModalTitle">审批意见</h4>
                 </div>
                 <div class="modal-body col-md-12 row px-50 pt-20" v-if="mode === 'transfer'">
                     <span class="col-md-4">请选择转交目标</span>

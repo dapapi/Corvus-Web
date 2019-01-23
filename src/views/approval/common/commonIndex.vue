@@ -4,8 +4,9 @@
             <h1 class="page-title ml-10">发起审批</h1>
         </div>
     
-        <div class="page-content" v-for="item in indexData" :key="item.id">
+        <div class="page-content" v-for="(item,index) in indexData" :key="item.id">
             <div class="page-header">
+                <!-- <img src="@/assets/img/sp1.png" class="option-icon"> -->
                 <h5>{{item.name}}</h5>
             </div>
             <div class="row py-5">
@@ -22,11 +23,13 @@
                 </div>
             </div>
         </div>
-        <ApprovalGreatModule :form-data='formData' singlemode='true'  />
+        <ApprovalGreatModule :form-data='formData' singlemode='true'  @done='getDataDone' />
+        <Loading :is-loading='isLoading' />        
     </div>
 </template>
 
 <script>
+import {APPROVAL_CONFIG} from '@/components/ForApproval/config.js'
 import ApprovalGreatModule from '@/components/ApprovalGreatModule'
 import config from '@/assets/js/config.js'
 import fetch from '@/assets/utils/fetch.js'
@@ -42,6 +45,8 @@ export default {
         return{
             indexData:{},
             formData:{},
+            optionIcon:APPROVAL_CONFIG.imgIcon,
+            isLoading:false,
         }
     },
     mounted(){
@@ -55,8 +60,18 @@ export default {
             })
         },
         pullUp(params){
-            this.formData = params
+            if(params.form_id !== this.formData.form_id){
+                this.isLoading = true
+            }else{
+                $('#approval-great-module').modal('show')
+            }
+                this.formData = params
+
+        },
+        getDataDone(){
+            this.isLoading = false
             $('#approval-great-module').modal('show')
+
         }
     }
 }
@@ -114,5 +129,9 @@ export default {
   }
   .card-block:hover{
     /* box-shadow:4px 4px 12px 1px rgba(7,17,27,0.2); */
+  }
+  .option-icon{
+      width: 50px;
+      height: 50px;
   }
 </style>

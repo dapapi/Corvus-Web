@@ -6,7 +6,7 @@ let config = {
         // apiUrl: '/api/',
         apiUrl: 'https://sandbox-api-crm.papitube.com',
         imgUrl: 'https://res-crm.papitube.com/',
-        socketUrl:'wss://sandbox-corvus.papitube.com:8081',
+        socketUrl: 'wss://sandbox-corvus.papitube.com:8081',
 
         getHeaders: function () {
             let headers = {
@@ -53,8 +53,6 @@ let config = {
                 }
             }
         },
-
-        companyType: Cookies.get('companyType'),
 
         trailOrigin: [
             {
@@ -132,6 +130,38 @@ let config = {
             {
                 name: 'papi线索',
                 value: 4
+            },
+        ],
+        publicTrailTypeArr: [
+            {
+                name: '全部',
+                value: ''
+            },
+            {
+                name: '影视公海池',
+                value: 1
+            },
+            {
+                name: '综艺公海池',
+                value: 2
+            },
+            {
+                name: '商务公海池',
+                value: 3
+            },
+        ],
+        publicTrailTakeType: [
+            {
+                name: '全部',
+                value: ''
+            },
+            {
+                name: '未领取',
+                value: 1
+            },
+            {
+                name: '已领取',
+                value: 2
             },
         ],
         classifyArr: [
@@ -233,7 +263,7 @@ let config = {
             },
             {
                 name: 'C',
-                value: 0
+                value: 4
             },
         ],
 
@@ -284,10 +314,10 @@ let config = {
                 name: '商务项目',
                 value: 3
             },
-            {
-                name: 'papi项目',
-                value: 4
-            },
+            // {
+            //     name: 'papi项目',
+            //     value: 4
+            // },
             {
                 name: '基础项目',
                 value: 5
@@ -449,6 +479,10 @@ let config = {
         ],
 
         priorityArr: [
+            // {
+            //     name: '无',
+            //     value: 0
+            // },
             {
                 name: '高',
                 value: 1
@@ -791,43 +825,43 @@ let config = {
         remindArr: [
             {
                 name: '无',
-                value: '0'
-            },
-            {
-                name: '日程发生时',
                 value: 1
             },
             {
-                name: '5分钟前',
+                name: '日程发生时',
                 value: 2
             },
             {
-                name: '10分钟前',
+                name: '5分钟前',
                 value: 3
             },
             {
-                name: '15分钟前',
+                name: '10分钟前',
                 value: 4
             },
             {
-                name: '30分钟前',
+                name: '15分钟前',
                 value: 5
             },
             {
-                name: '1小时前',
+                name: '30分钟前',
                 value: 6
             },
             {
-                name: '2小时前',
+                name: '1小时前',
                 value: 7
             },
             {
-                name: '1天前',
+                name: '2小时前',
                 value: 8
             },
             {
-                name: '2天前',
+                name: '1天前',
                 value: 9
+            },
+            {
+                name: '2天前',
+                value: 10
             }
         ],
         repeatArr: [
@@ -1059,7 +1093,7 @@ let config = {
                 color: '#4caf50'
             },
             {
-                name: '已解决',
+                name: '已解约',
                 value: 3,
                 color: '#f44336'
             }
@@ -1219,15 +1253,15 @@ let config = {
                 value: 1
             }
         ],
-        week:[
+        week: [
             {
-                name:'日',
-                value:0
+                name: '日',
+                value: 0
 
             },
             {
-                name:'一',
-                value:1
+                name: '一',
+                value: 1
             },
             {
                 name: '二',
@@ -1279,10 +1313,10 @@ let config = {
                 value: 4,
             },
             {
-            name: '高中',
+                name: '高中',
                 value: 5,
             },
-           {
+            {
                 name: '中专/中技',
                 value: 6,
             },

@@ -1,21 +1,31 @@
- <template>
-   <div class="page">
+<template>
+    <div class="page">
         <Loading :is-loading="isLoading"></Loading>
         <div class="page-header page-header-bordered">
             <h1 class="page-title">Talent</h1>
 
-            <div class="page-header-actions dropdown show task-dropdown float-right" style="z-index:1000">
+            <div class="page-header-actions dropdown show task-dropdown float-right" style="z-index:1000;right:50px">
                 <i class="iconfont icon-gengduo1 font-size-24" aria-hidden="true" id="taskDropdown"
                    data-toggle="dropdown" aria-expanded="false"></i>
                 <div class="dropdown-menu dropdown-menu-right task-dropdown-item" aria-labelledby="taskDropdown"
-                     role="menu" x-placement="bottom-end" v-if="!isShow">
-                    <!-- <a class="dropdown-item" role="menuitem">导入</a>
-                    <a class="dropdown-item" role="menuitem">导出</a> -->
+                    role="menu" x-placement="bottom-end" v-if="!isShow">  
+                    <import-and-export :type="'import'" :moduleName="'bloggers'">
+                        <a class="dropdown-item" role="menuitem">导入</a>
+                    </import-and-export>
+                    <import-and-export :type="'export'" :moduleName="'bloggers'">
+                        <a class="dropdown-item" role="menuitem">导出</a>
+                    </import-and-export>
                     <a class="dropdown-item" role="menuitem" data-toggle="modal"
                        :data-target="selectedArtistsArr.length>0&&'#giveProducer'" @click="judge">分配制作人</a>
                 </div>
-                <div class="dropdown-menu dropdown-menu-right task-dropdown-item" aria-labelledby="taskDropdown"
-                     role="menu" x-placement="bottom-end" v-if="isShow">
+                <div class="dropdown-menu  dropdown-menu-right task-dropdown-item" aria-labelledby="taskDropdown"
+                    role="menu" x-placement="bottom-end" v-if="isShow">
+                    <!-- <import-and-export :type="'import'" :moduleName="'bloggers'">
+                        <a class="dropdown-item" role="menuitem">导入</a>
+                    </import-and-export>
+                    <import-and-export :type="'export'" :moduleName="'bloggers'">
+                        <a class="dropdown-item" role="menuitem">导出</a>
+                    </import-and-export> -->
                     <a class="dropdown-item" role="menuitem" data-toggle="modal" data-target="#giveBroker"
                        @click="changeMember(1)">分配经理人</a>
                     <a class="dropdown-item" role="menuitem" data-toggle="modal" data-target="#giveBroker"
@@ -33,41 +43,46 @@
                                aria-controls="forum-base"
                                aria-expanded="true" role="tab" :class="isShow?'active':''" @click="tab(0)">艺人</a>
                         </li>
-                        <li class="nav-item" role="presentation" >
+                        <li class="nav-item" role="presentation">
                             <a class="nav-link" data-toggle="tab" href="#forum-blogger"
                                aria-controls="forum-present"
                                aria-expanded="false" role="tab" :class="!isShow?'active':''" @click="tab(1)">博主</a>
                         </li>
-                        <i  v-if="isShow" style="position: absolute;right:10px;top:10px;color: rgb(0, 176, 255);font-style: normal;" @click="getArtists(1,1)">签约中</i>
-                        <i  v-if="!isShow" style="position: absolute;right:10px;top:10px;color: rgb(0, 176, 255);font-style: normal;" @click="getBlogger(1,1)">签约中</i>
+                        <i v-if="isShow"
+                           style="position: absolute;right:10px;top:10px;color: rgb(0, 176, 255);font-style: normal;"
+                           @click="getArtists(1,1)">签约中</i>
+                        <i v-if="!isShow"
+                           style="position: absolute;right:10px;top:10px;color: rgb(0, 176, 255);font-style: normal;"
+                           @click="getBlogger(1,1)">签约中</i>
                     </ul>
                 </div>
-              
+
                 <div class="tab-content nav-tabs-animate bg-white">
                     <div class="tab-pane animation-fade" id="forum-artist" role="tabpanel" :class="isShow?'active':''">
                         <div class="clearfix my-20">
                             <div class="col-md-3 example float-left">
-                                <input type="text" v-model="listData.name" class="form-control" id="inputPlaceholder"
-                                    placeholder="请输入姓名"
-                                    @blur="getArtists">
+                                <input type="text" v-model="listData.name" class="form-control"
+                                       placeholder="请输入姓名"
+                                       @blur="getArtists">
                             </div>
                             <div class="col-md-3 example float-left">
-                                <selectors :options="artistStatusArr" placeholder="请选择艺人沟通状态" @change="getStatus"></selectors>
+                                <selectors :options="artistStatusArr" placeholder="请选择艺人沟通状态"
+                                           @change="getStatus"></selectors>
                             </div>
                             <div class="col-md-3 example float-left">
-                                <selectors :options="artistSourceArr" placeholder="请选择艺人来源" @change="getSource"></selectors>
+                                <selectors :options="signState" placeholder="请选择签约状态" @change="getSource"></selectors>
                             </div>
-                            <!--<div class="col-md-3 example float-left">-->
-                            <!--<button type="button" class="btn btn-default waves-effect waves-classic float-right"-->
-                            <!--data-toggle="modal" data-target="#customizeContent"-->
-                            <!--data-placement="right" title="">-->
-                            <!--自定义筛选-->
-                            <!--</button>-->
-                            <!--</div>-->
+                            <div class="col-md-3 example float-left">
+                            <button type="button" class="btn btn-default waves-effect waves-classic float-right"
+                            data-toggle="modal" data-target="#customizeContent" @click='customizeContentType="stars"'
+                            data-placement="right" title="">
+                            自定义筛选
+                            </button>
+                            </div>
                         </div>
                         <table class="table table-hover is-indent ml-5" data-plugin="selectable"
                                data-selectable="selectable">
-                            <tr v-if="artistsInfo">
+                            <tr v-if="artistsInfo.length>0">
                                 <th class="w-50">
                                     <span class="checkbox-custom checkbox-primary">
                                         <input class="selectable-all" type="checkbox"
@@ -84,6 +99,21 @@
                                 <th class="cell-300" scope="col" v-if="artistsInfo.find(item=>item.sign_contract_status==2)">签约日期</th>
                                 <!-- <th class="cell-300" scope="col" v-if="artistsInfo.find(item=>item.sign_contract_status==2)">合同起始日</th>
                                 <th class="cell-300" scope="col" v-if="artistsInfo.find(item=>item.sign_contract_status==3)">合同终止日</th> -->
+                                <th class="cell-300" scope="col">录入时间</th>
+                                <th class="cell-300" scope="col">最后跟进时间</th>
+                            </tr>
+                            <tr v-if="artistsInfo.length==0">
+                                <th class="w-50">
+                                    <span class="checkbox-custom checkbox-primary">
+                                        <input class="selectable-all" type="checkbox"
+                                               @change="selectArtists('all')" v-model="selectAllStars">
+                                        <label></label>
+                                    </span>
+                                </th>
+                                <th class="cell-300" scope="col">姓名</th>
+                                <th class="cell-300" scope="col">微博粉丝</th>
+                                <th class="cell-300" scope="col">艺人来源</th>
+                                <th class="cell-300" scope="col">签约日期</th>
                                 <th class="cell-300" scope="col">录入时间</th>
                                 <th class="cell-300" scope="col">最后跟进时间</th>
                             </tr>
@@ -127,32 +157,33 @@
                                  style="width: 100%">
                         </div>
                         <pagination :current_page="current_page" :method="getArtists" :total_pages="total_pages"
-                                    :total="total" v-if="isShow"></pagination>
+                                    :total="total" v-if="isShow" class=""></pagination>
                     </div>
-                    <div class="tab-pane animation-fade" id="forum-blogger" role="tabpanel" :class="!isShow?'active':''">
+                    <div class="tab-pane animation-fade" id="forum-blogger" role="tabpanel"
+                         :class="!isShow?'active':''">
                         <div class="clearfix my-20">
                             <div class="col-md-3 example float-left">
-                                <input type="text" class="form-control" id="inputPlaceholder" placeholder="请输入博主昵称"
-                                    v-model="blogName" @blur='getBlogger()'>
-                            </div>
-                            <div class="col-md-3 example float-left">
-                                <selectors :options="artistTypeArr" @change="typeFilter" placeholder="请选择博主分类"></selectors>
+                                <input type="text" class="form-control"  placeholder="请输入博主昵称"
+                                       v-model="blogName" @blur='getBlogger()'>
                             </div>
                             <div class="col-md-3 example float-left">
                                 <selectors :options="papiCommunicationStatusArr" @change="CommunicationStatus"
-                                        placeholder="请选择沟通状态"></selectors>
+                                           placeholder="请选择沟通状态"></selectors>
                             </div>
-                            <!-- <div class="col-md-3 example float-left">
+                            <div class="col-md-3 example float-left">
+                                <selectors :options="signState" @change="typeFilter" placeholder="请选择签约状态"></selectors>
+                            </div>
+                            <div class="col-md-3 example float-left">
                                 <button type="button" class="btn btn-default waves-effect waves-classic float-right"
-                                data-toggle="modal" data-target="#customizeContent"
+                                data-toggle="modal" data-target="#customizeContent" @click='customizeContentType="bloggers"'
                                 data-placement="right" title="">
                                 自定义筛选
                                 </button>
-                            </div> -->
+                            </div>
                         </div>
                         <table class="table table-hover is-indent ml-5" data-plugin="selectable"
                                data-selectable="selectable">
-                            <tr v-if="bloggerInfo">
+                            <tr v-if="bloggerInfo.length>0">
                                 <th class="w-50">
                                         <span class="checkbox-custom checkbox-primary">
                                             <input class="selectable-all" type="checkbox"
@@ -160,16 +191,47 @@
                                             <label></label>
                                         </span>
                                 </th>
-                                <th class="cell-300" scope="col" v-if="bloggerInfo.find(item=>item.sign_contract_status==1)">昵称</th>
-                                <th class="cell-300" scope="col" v-if="bloggerInfo.find(item=>item.sign_contract_status!==1)">姓名</th>
-                                <th class="cell-300" scope="col" v-if="bloggerInfo.find(item=>item.sign_contract_status!==1)">微博粉丝</th>
-                                <th class="cell-300" scope="col" v-if="bloggerInfo.find(item=>item.sign_contract_status==1)">类型</th>
-                                <th class="cell-300" scope="col" v-if="bloggerInfo.find(item=>item.sign_contract_status==1)">沟通状态</th>
-                                <th class="cell-300" scope="col" v-if="bloggerInfo.find(item=>item.sign_contract_status==1)">制作人</th>
-                                <th class="cell-300" scope="col" v-if="bloggerInfo.find(item=>item.sign_contract_status!==1)">类型</th>
-                                <th class="cell-300" scope="col" v-if="bloggerInfo.find(item=>item.sign_contract_status==2)">签约日期</th>
+                                <th class="cell-300" scope="col"
+                                    v-if="bloggerInfo.find(item=>item.sign_contract_status==1)">昵称
+                                </th>
+                                <th class="cell-300" scope="col"
+                                    v-if="bloggerInfo.find(item=>item.sign_contract_status!==1)">姓名
+                                </th>
+                                <th class="cell-300" scope="col"
+                                    v-if="bloggerInfo.find(item=>item.sign_contract_status!==1)">微博粉丝
+                                </th>
+                                <th class="cell-300" scope="col"
+                                    v-if="bloggerInfo.find(item=>item.sign_contract_status==1)">类型
+                                </th>
+                                <th class="cell-300" scope="col"
+                                    v-if="bloggerInfo.find(item=>item.sign_contract_status==1)">沟通状态
+                                </th>
+                                <th class="cell-300" scope="col"
+                                    v-if="bloggerInfo.find(item=>item.sign_contract_status==1)">制作人
+                                </th>
+                                <th class="cell-300" scope="col"
+                                    v-if="bloggerInfo.find(item=>item.sign_contract_status!==1)">类型
+                                </th>
+                                <th class="cell-300" scope="col"
+                                    v-if="bloggerInfo.find(item=>item.sign_contract_status==2)">签约日期
+                                </th>
                                 <!-- <th class="cell-300" scope="col" v-if="bloggerInfo.find(item=>item.sign_contract_status==2)">合同起始日</th>
                                 <th class="cell-300" scope="col" v-if="bloggerInfo.find(item=>item.sign_contract_status==3)">合同终止日</th> -->
+                                <th class="cell-300" scope="col">录入时间</th>
+                                <th class="cell-300" scope="col">最后跟进时间</th>
+                            </tr>
+                            <tr v-if="bloggerInfo.length==0">
+                                <th class="w-50">
+                                    <span class="checkbox-custom checkbox-primary">
+                                        <input class="selectable-all" type="checkbox"
+                                               @change="selectArtists('all')" v-model="selectAllStars">
+                                        <label></label>
+                                    </span>
+                                </th>
+                                <th class="cell-300" scope="col">姓名</th>
+                                <th class="cell-300" scope="col">微博粉丝</th>
+                                <th class="cell-300" scope="col">艺人来源</th>
+                                <th class="cell-300" scope="col">签约日期</th>
                                 <th class="cell-300" scope="col">录入时间</th>
                                 <th class="cell-300" scope="col">最后跟进时间</th>
                             </tr>
@@ -213,8 +275,8 @@
                             <img src="https://res.papitube.com/corvus/images/content-none.png" alt=""
                                  style="width: 100%">
                         </div>
-                        <pagination :current_page="current_page" :method="getBlogger" :total_pages="total_pages"
-                                    :total="total" v-if="!isShow"></pagination>
+                        <pagination :current_page="Bcurrent_page" :method="getBlogger" :total_pages="Btotal_pages"
+                                    :total="Btotal" v-if="!isShow"></pagination>
                         
                     </div>
                 </div>
@@ -223,7 +285,7 @@
 
         </div>
 
-        <customize-filter :data="customizeInfo" @change="customize"></customize-filter>
+        <customize-filter :data="customizeContentType==='stars'?customizeInfoStars:customizeInfoBloggers" @change="customize"></customize-filter>
 
         <div class="site-action" data-plugin="actionBtn" data-toggle="modal" data-target="#addBolgger" v-if="!isShow">
             <button type="button"
@@ -330,7 +392,7 @@
                                        v-model="signCompanyName">
                             </div>
                         </div>
-                        <!-- <div class="example">
+                        <div class="example">
                             <div class="col-md-2 text-right float-left">头像</div>
                             <div class="col-md-5 float-left pl-0">
                                 <Upload @change='getUploadUrl' class="upload-image">
@@ -341,7 +403,7 @@
                                             class="iconfont icon-tianjia"></i></div>
                                 </Upload>
                             </div>
-                        </div> -->
+                        </div>
                         <div class="example">
                             <div class="col-md-2 text-right float-left">备注</div>
                             <div class="col-md-10 float-left pl-0">
@@ -533,14 +595,21 @@
                             </div>
                         </div>
                         <div class="example" v-show="affixesType>0">
-                            <div class="col-md-2 text-right float-left require">上传附件</div>
+                            <div class="col-md-2 text-right float-left require">附件</div>
                             <div class="col-md-5 float-left pl-0">
-                                <span style="color:#01BCD4;cursor:pointer">上传附件</span>
-                                <FileUploader class="fileupload" @change="uploadAttachment"></FileUploader>
+                                <Upload  @change="uploadAttachment" class="upload-image">
+                                    <div  class="addMember-trigger-button addMember-trigger-left"><i
+                                            class="iconfont icon-tianjia"></i></div>
+                                </Upload>
                                 <div class="mt-5" v-for="(attach,index) in affixes" :key="index">
                                     {{attachmentTypeArr.find(item => item.value == attach.type).name}} -
                                     {{attach.title}}
                                 </div>
+                                <!-- <FileUploader class="fileupload" @change="uploadAttachment"></FileUploader>
+                                <div class="mt-5" v-for="(attach,index) in affixes" :key="index">
+                                    {{attachmentTypeArr.find(item => item.value == attach.type).name}} -
+                                    {{attach.title}}
+                                </div> -->
                             </div>
                         </div>
                         <div class="example">
@@ -585,15 +654,15 @@
                         <ListSelectMember :listName="'成员列表'" :selectName="'已选择成员'" :type="'change'"></ListSelectMember>
                     </div>
                     <div class="modal-footer">
-                        <button class="btn btn-sm btn-white btn-pure" data-dismiss="modal">取消</button>
+                        <button class="btn btn-sm btn-white btn-pure" data-dismiss="modal" @click="abrogate">取消</button>
                         <button class="btn btn-primary" type="submit" @click="giveProducer()">确定</button>
                     </div>
 
                 </div>
             </div>
         </div>
-        
-       
+
+
         <!--分配经理人-->
         <div class="modal fade" id="giveBroker" aria-hidden="true" aria-labelledby="addLabelForm"
              role="dialog" tabindex="-1" data-backdrop="static">
@@ -620,20 +689,28 @@
 
                 </div>
             </div>
-        </div> 
+        </div>
     </div>
 </template>
 <script>
     import fetch from '../../assets/utils/fetch.js'
     import config from '../../assets/js/config'
+    import Cookies from 'js-cookie'
 
+    import ImportAndExport from '../../components/ImportAndExport.vue'
     export default {
         data: function () {
             return {
+                customizeContentType:'',
                 total: 0,
                 current_page: 1,
                 total_pages: 1,
-                customizeInfo: config.customizeInfo,
+                Btotal: 0,
+                Bcurrent_page: 1,
+                Btotal_pages: 1,
+                customizeInfoStars: {},
+                customizeInfoBloggers:{},
+                signState:config.signState,
                 yesOrNoArrs: [
                     {
                         name: '是',
@@ -652,7 +729,7 @@
                 taiyangCommunicationStatusArr: config.taiyangCommunicationStatusArr,
                 companyCityArr: config.companyCityArr,
                 attachmentTypeArr: config.attachmentTypeArr,
-                artistsInfo:[],
+                artistsInfo: [],
                 artistStatus: '',
                 bolggerName: '',
                 weiboUrl: '',
@@ -661,6 +738,7 @@
                 douyinFansNum: '',
                 xhsUrl: '',
                 xhsFansNum: '',
+                starsArr:[],
                 platformType: [],//平台类型
                 signIntention: '',
                 signCompany: '',
@@ -765,10 +843,10 @@
                 artistLocation: '',
                 notSignReason: '',
                 selectAllStars: false,
-                bloggerInfo:'',
+                bloggerInfo: '',
                 affixes: [],
                 affixesType: '',//附件类型
-                isShow:''
+                isShow: ''
             }
         },
         watch: {
@@ -776,40 +854,44 @@
                 return this.platformType
             }
         },
+        components: {
+            ImportAndExport
+        },
+        created(){
+            this.getStarsField()
+            this.getBloggerField()
+
+            this.getStars();
+        },
         mounted() {
             this.getArtists();
             this.getBlogger();
-            this.getStars();
             this.getBlogType() //获取博主类型
+            
             $('table').asSelectable();
-            let _this = this;
-            $('#addBolgger').on('hidden.bs.modal', function () {
-
-                _this.bolggerName = '';//昵称
-                _this.star_weibo_infos.url = '';//微博地址
-                _this.$refs.weibo.setValue('0');//微博粉丝
-                _this.star_douyin_infos.url = '';//抖音地址
-                _this.$refs.douyin.setValue('0');//抖音粉丝
-                _this.star_xiaohongshu_infos.url = '';//小红书地址
-                _this.$refs.xiaohongshu.setValue('0')//小红书粉丝
-                _this.$refs.papitype.setValue('')//类型
-                _this.$refs.communicationType.setValue('')//沟通类型
-                _this.$refs.signIntention.setValue('')//我公司意向
-                _this.$refs.isSign.setValue('')//其他公司意向
-                _this.artistDesc = '';//备注
-                _this.platformType = [];
-                _this.uploadUrl = ''
-            })
+            
         },
         methods: {
+            getStarsField() {
+                let _this = this
+                fetch('get', '/stars/filter_fields').then((params) => {
+                    _this.customizeInfoStars = params.data
+                })
+            },
+            getBloggerField(){
+                let _this = this
+                fetch('get', '/bloggers/filter_fields').then((params) => {
+                    _this.customizeInfoBloggers = params.data
+                })
+            },
             //获取沟通状态
             getStatus: function (value) {
                 this.listData.communication_status = value
                 this.getArtists()
             },
-            //获取艺人来源
+            //获取签约状态
             getSource: function (value) {
-                this.listData.source = value
+                this.listData.sign_contract_status = value
                 this.getArtists()
             },
             //查询列表
@@ -820,10 +902,14 @@
                 }
                 this.listData.page = page
                 fetch('get', '/stars', this.listData).then(function (response) {
-                    _this.artistsInfo = response.data;
-                    _this.current_page = response.meta.pagination.current_page;
-                    _this.total = response.meta.pagination.total;
-                    _this.total_pages = response.meta.pagination.total_pages;
+                    if(response.data){
+                        _this.artistsInfo = response.data;
+                    }
+                    if(response.meta){
+                        _this.current_page = response.meta.pagination.current_page;
+                        _this.total = response.meta.pagination.total;
+                        _this.total_pages = response.meta.pagination.total_pages;
+                    }
                     _this.isLoading = false;
                     _this.selectAllStars = false;
                     _this.selectedArtistsArr = [];
@@ -832,7 +918,7 @@
             getBlogger: function (page = 1, signStatus) {
 
                 let data = {
-                    include: 'type,creator,tasks,affixes,producer,publicity,operatelogs',
+                    include: 'type,creator,affixes,publicity,operatelogs',
 
                 }
                 let _this = this;
@@ -842,10 +928,6 @@
                     this.blogStatus = signStatus
                 }
                 data.status = this.blogStatus
-                //博主类型
-                if (this.blogType) {
-                    data.type = this.blogType
-                }
                 //沟通状态
                 if (this.blogCommunication) {
                     data.communication_status = this.blogCommunication
@@ -856,16 +938,21 @@
                 }
                 data.page = page
                 fetch('get', '/bloggers', data).then(function (response) {
-                    _this.bloggerInfo = response.data;
-                    _this.current_page = response.meta.pagination.current_page;
-                    _this.total = response.meta.pagination.total;
-                    _this.total_pages = response.meta.pagination.total_pages;
+                    
+                    if(response.data){
+                        _this.bloggerInfo = response.data;
+                    }
+                    if(response.meta){
+                        _this.Bcurrent_page = response.meta.pagination.current_page;
+                        _this.Btotal = response.meta.pagination.total;
+                        _this.Btotal_pages = response.meta.pagination.total_pages;
+                    }
                     _this.isLoading = false;
                     _this.selectAllBlogger = false;
                     _this.selectedArtistsArr = [];
-
+                    
                 });
-
+                
             },
 
             //获取博主类型
@@ -883,7 +970,7 @@
             },
             //选择博主类型
             typeFilter(value) {
-                this.blogType = value
+                this.blogStatus = value
                 this.getBlogger()
 
             },
@@ -893,6 +980,13 @@
                 this.getBlogger()
             },
             customize: function (value) {
+                let _this = this
+                fetch('post', '/'+this.customizeContentType+'/filter', value).then((params) => {
+                    // _this.bloggerInfo =params.data
+                    _this.artistsInfo = params.data
+                    _this.total = params.meta.pagination.total;
+                    _this.cleanUp = true
+                })
 
             },
             changeArtistStatus: function (value) {
@@ -980,7 +1074,6 @@
                 let data = {
                     //微博,抖音,小红书
                     nickname: this.bolggerName,
-                    gender: this.artistGender,
                     type_id: this.artistTypeId,
                     communication_status: this.communication,
                     intention: this.signIntention,
@@ -992,18 +1085,36 @@
                     star_douyin_infos: this.star_douyin_infos,
                     star_weibo_infos: this.star_weibo_infos,
                     star_xiaohongshu_infos: this.star_xiaohongshu_infos,
-                    // avatar: this.uploadUrl
+                    avatar: this.uploadUrl
                 };
                 fetch('post', '/bloggers', data).then(function (response) {
                     toastr.success('创建成功');
                     $('#addBolgger').modal('hide');
                     _this.$router.push({path: 'blogger/' + response.data.id});
                     _this.getBlogger()
+                    $('#addBolgger').on('hidden.bs.modal', function () {
+
+                        _this.bolggerName = '';//昵称
+                        _this.star_weibo_infos.url = '';//微博地址
+                        _this.$refs.weibo.setValue('0');//微博粉丝
+                        _this.star_douyin_infos.url = '';//抖音地址
+                        _this.$refs.douyin.setValue('0');//抖音粉丝
+                        _this.star_xiaohongshu_infos.url = '';//小红书地址
+                        _this.$refs.xiaohongshu.setValue('0')//小红书粉丝
+                        _this.$refs.papitype.setValue('')//类型
+                        _this.$refs.communicationType.setValue('')//沟通类型
+                        _this.$refs.signIntention.setValue('')//我公司意向
+                        _this.$refs.isSign.setValue('')//其他公司意向
+                        _this.artistDesc = '';//备注
+                        _this.platformType = [];
+                        _this.uploadUrl = ''
+                    })
                 })
 
             },
 
             selectArtists: function (value) {
+                
                 if (value === 'all') {
                     this.selectedArtistsArr = [];
                     for (let i = 0; i < this.bloggerInfo.length; i++) {
@@ -1023,7 +1134,7 @@
             redirectArtistDetail: function (artistId) {
                 this.$router.push({path: 'artists/' + artistId})
             },
-            redirectBolggerDetail:function(bolggerId){
+            redirectBolggerDetail: function (bolggerId) {
                 this.$router.push({path: 'blogger/' + bolggerId})
             },
             changeMember: function (type) {
@@ -1051,12 +1162,15 @@
                     }
                     toastr.success('分配制作人成功')
                     $('#giveProducer').modal('hide')
+                    _this.selectedArtistsArr = []
                     _this.getBlogger()
                     _this.$store.state.participantsInfo = []
                     _this.selectedArtistsArr = []
-                    console.log(_this.selectedArtistsArr)
                 })
 
+            },
+             abrogate:function(){
+                this.$store.state.participantsInfo = []
             },
             judge() {
                 if (this.selectedArtistsArr.length == 0) {
@@ -1067,22 +1181,25 @@
                 }
             },
              getStars: function () {
-                if (Cookies.get('companyType') === '泰洋川禾') {
-                    this.isShow = true
-                } else {
-                    this.isShow = false
-                }
-
+                let  organization_id = JSON.parse(Cookies.get('user')).organization_id
+                        if(organization_id == 411){                       
+                            this.isShow = true
+                           
+                        }else if(organization_id == 412){
+                            this.isShow = false
+                             
+                        }
             },
             tab:function(value){
+                this.selectedArtistsArr = []
                 if(value == 0){
                     this.getArtists()
+                     this.isShow = true
                     
                 }else if(value == 1){
                     this.getBlogger()
-
+                    this.isShow = false
                 }
-                this.isShow = !this.isShow
             },
             giveBroker: function () {
                 let url, toast, data
@@ -1126,7 +1243,7 @@
             cancelGiveBroker: function () {
                 this.$store.state.participantsInfo = []
             },
-                changeCheckbox: function (value) {
+            changeCheckbox: function (value) {
                 this.platformType = []
                 for (let i = 0; i < value.length; i++) {
                     this.platformType.push(value[i].value)
@@ -1136,7 +1253,7 @@
 
             changeCommunicationType: function (value) {
 
-                this.communicationStatus = value
+                this.communication = value
             },
 
             changeSignIntention: function (value) {
@@ -1158,7 +1275,6 @@
             },
 
             changeBirthday: function (value) {
-                console.log(value)
                 this.artistBirthday = value
             },
 
@@ -1214,7 +1330,7 @@
                     toastr.error('请选择沟通平台');
                     return false
                 }
-                if (!this.communicationStatus) {
+                if (!this.communication) {
                     toastr.error('请选择沟通状态');
                     return false
                 }
@@ -1240,7 +1356,6 @@
                 if (this.signCompany == 2) {
                     this.sign_contract_other_name = ''
                 }
-                // console.log(this.affixesType)
                 if (this.affixesType > 1 && this.affixes.length == 0) {
                     toastr.error('请上传附件');
                     return false
@@ -1254,7 +1369,7 @@
                     email: this.artistEmail, //邮箱
                     phone: this.artistPhone, //手机
                     wechat: this.artistWeiXin, //微信
-                    communication_status: this.communicationStatus, //沟通状态
+                    communication_status: this.communication, //沟通状态
                     intention: this.signIntention, //签约意向
                     intention_desc: this.notSignReason, //不签约理由
                     sign_contract_other: this.signCompany, //是否签约其他公司
@@ -1304,7 +1419,7 @@
                 this.douyinFansNum = ''
                 this.qitaUrl = ''
                 this.qita_fans_num = ''
-                this.communicationStatus = ''
+                this.communication = ''
                 this.signIntention = ''
                 this.notSignReason = ''
                 this.signCompany = ''
@@ -1386,5 +1501,29 @@
     }
 </script>
 <style>
+    .puls {
+        display: inline-block;
+        background-size: 100px;
+        width: 50px;
+        height: 50px;
+        text-align: center;
+        line-height: 46px;
+        border-radius: 50%;
+        border: 1px dashed #eee;
+        background-repeat:no-repeat; 
+        background-size:100% 100%;
+        -moz-background-size:100% 100%;
+    }
 
+    .puls span {
+        font-size: 30px;
+    }
+
+    .fileupload {
+        position: absolute;
+        top: 0px;
+        left: 0px;
+        opacity: 0;
+
+    }
 </style>

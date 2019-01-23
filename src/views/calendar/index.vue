@@ -73,6 +73,10 @@
                                         <i class="iconfont icon-xiangshangjiantou" style="font-size:12px"></i>
                                     </template>
                                 </span>
+                                <span class="float-right pointer-content" v-show="isMeeting"
+                                      @click="displayMeetingRoom">
+                                    回到日历
+                                </span>
                             </div>
                             <div v-show="showAllResource">
                                 <div class="text-center pb-10">
@@ -89,15 +93,18 @@
                 </div>
                 <div class="vertical-line float-left"></div>
                 <div class="float-left p-0" style="width: 79%;">
-                    <calendar :goto-date="selectedDate" v-show="!meetingRomeShow" @dayClick="showAddScheduleModal"
+                    <calendar :goto-date="selectedDate" v-if="!meetingRomeShow" @dayClick="showAddScheduleModal"
                               :calendars="selectedCalendar" :meeting-rome-list="meetingRomeList" ref="calendar"
-                              :is-meeting="isMeeting" @calendarDisplay="checkMeetingRoom"
-                              @scheduleClick="showScheduleModal"></calendar>
+                              :is-meeting="isMeeting" @calendarDisplay="checkMeetingRoom" @showToast="showToast"
+                              @scheduleClick="showScheduleModal" :calendarView="calendarView"></calendar>
                     <MeetingRoomCalendar v-show="meetingRomeShow" :meetingRomeList="meetingRomeList" ref="meetingRoom"
-                                         @change="changeToCalendar" @return="displayMeetingRoom"></MeetingRoomCalendar>
+                                         @change="changeToCalendar"></MeetingRoomCalendar>
                 </div>
 
             </div>
+        </div>
+        <div class="calendar-toast" v-show="toastShow"
+             :style="'position: absolute;top:' + toastY + 'px; left: ' + toastX + 'px;'">双击创建日程
         </div>
 
         <!-- 新建/修改 日程 -->
@@ -140,7 +147,7 @@
                             <div class="col-md-5 float-left pl-0">
                                 <datepicker @change="changeStartTime" ref="scheduleStartDate"></datepicker>
                             </div>
-                            <div class="col-md-5 float-left pl-0" v-show="!isAllday">
+                            <div class="col-md-5 float-left pl-0" v-show="!isScheduleAllday">
                                 <timepicker :default="startMinutes" @change="changeStartMinutes"
                                             ref="scheduleStartMinute"></timepicker>
                             </div>
@@ -150,7 +157,7 @@
                             <div class="col-md-5 float-left pl-0">
                                 <datepicker @change="changeEndTime" ref="scheduleEndDate"></datepicker>
                             </div>
-                            <div class="col-md-5 float-left pl-0" v-show="!isAllday">
+                            <div class="col-md-5 float-left pl-0" v-show="!isScheduleAllday">
                                 <timepicker :default="endMinutes" @change="changeEndMinutes"
                                             ref="scheduleEndMinute"></timepicker>
                             </div>
@@ -159,8 +166,9 @@
                             <div class="col-md-2 text-right float-left"></div>
                             <div class="col-md-10 float-left pl-0">
                                 <div class="checkbox-custom checkbox-primary">
-                                    <input type="checkbox" id="isAllDay" @change="changeIsAllDay" v-model="isAllday">
-                                    <label for="isAllDay">全天</label>
+                                    <input type="checkbox" id="isScheduleAllday" @change="changeIsAllDay"
+                                           v-model="isScheduleAllday">
+                                    <label for="isScheduleAllday">全天</label>
                                 </div>
                             </div>
                         </div>
@@ -201,7 +209,8 @@
                             <div class="example">
                                 <div class="col-md-2 text-right float-left">提醒</div>
                                 <div class="col-md-10 float-left pl-0">
-                                    <selectors :options="remindArr" ref="scheduleNotice"></selectors>
+                                    <selectors :options="remindArr" ref="scheduleRemind"
+                                               @change="changeScheduleRemind"></selectors>
                                 </div>
                             </div>
                             <div class="clearfix my-20">
@@ -260,7 +269,7 @@
         <div class="modal fade" id="checkSchedule" aria-hidden="true" aria-labelledby="addLabelForm"
              role="dialog" tabindex="-1" data-backdrop="static">
             <div class="modal-dialog modal-simple">
-                <div class="modal-content" v-if="scheduleData">
+                <div class="modal-content" v-if="getScheduleFinish">
                     <div class="modal-header">
                         <div style="order: 2">
                             <span v-show="!noPermission">
@@ -346,10 +355,14 @@
                             <div>
                                 <div class="col-md-3 float-left text-center position-relative file-item"
                                      v-for="(affix,index) in scheduleData.affixes.data" :key="index">
-                                    <div class="del-affix iconfont icon-zuofei position-absolute pointer-content"
-                                         @click="delAffix(affix.id)"></div>
                                     <div><i class="iconfont icon-wenjian" style="font-size: 36px"></i></div>
                                     <div @click="openFile(affix.url)" class="pointer-content">{{ affix.title }}</div>
+                                    <div class="del-affix">
+                                        <i class="iconfont icon-liulan pointer-content mr-4"
+                                           @click="openFile(affix.url)"></i>
+                                        <i class="iconfont icon-shanchu1 pointer-content"
+                                           @click="delAffix(affix.id)"></i>
+                                    </div>
                                 </div>
                             </div>
                         </div>
@@ -602,7 +615,7 @@
                 showAllResource: true,
                 selectMemberShow: false,
                 starId: '',
-                starFlag:'',
+                starFlag: '',
                 calendarVisible: 1,
                 calendarDetailInfo: '',
                 calendarActionType: '',
@@ -611,7 +624,6 @@
                 scheduleRepeat: 0,
                 scheduleData: '',
                 scheduleParticipants: '',
-                isAllday: false,
                 schedulePrivacy: false,
                 meetingRomeList: '',
                 allMeetingRomeList: '',
@@ -630,6 +642,12 @@
                 materialsIds: [],
                 meetingRomeType: '',
                 noPermission: false,
+                getScheduleFinish: false,
+                calendarView: '',
+                toastX: 0,
+                toastY: 0,
+                toastShow: false,
+                scheduleRemind: '',
             }
         },
 
@@ -658,6 +676,7 @@
                 if (_this.scheduleType !== 'edit') {
                     _this.$store.dispatch('changeParticipantsInfo', {data: []});
                 }
+                _this.getScheduleFinish = false
             });
 
             $('#addMembers').on('hidden.bs.modal', function () {
@@ -667,9 +686,6 @@
             this.initCalendar();
             let pageContent = $('.container-fluid');
             $('.vertical-line').css('height', (pageContent[0].offsetHeight - 60) + 'px');
-            $('#addLinkage').on('hidden.bs.modal', function () {
-                $('#changeSchedule').modal('handleUpdate')
-            })
         },
 
         watch: {
@@ -741,9 +757,8 @@
                 fetch('get', '/starandblogger', {sign_contract_status: 2}).then(response => {
                     for (let i = 0; i < response.data.length; i++) {
                         this.starsArr.push({
-                            value: response.data[i].id,
+                            value: response.data[i].flag + '-' + response.data[i].id,
                             name: response.data[i].name,
-                            flag:response.data[i].flag  //根据flag 区分艺人和博主
                         })
                     }
                 })
@@ -773,16 +788,13 @@
                     this.calendarVisible = response.data.privacy;
                     this.$refs.visibleSelector.setValue(response.data.privacy);
                     this.$store.dispatch('changeParticipantsInfo', {data: response.data.participants.data});
-                    // console.log(response.data.starable)
                     if (response.data.starable) {
                         let starId = response.data.starable.data.id;
                         let starFlag = response.data.starable.data.flag
                         this.starId = starId;
                         this.starFlag = starFlag;
-                        this.$refs.linkageStar.setValue(starId)
+                        this.$refs.linkageStar.setValue(starFlag + '-' + starId)
                     }
-                    // console.log(this.starId)
-                    // console.log(this.starFlag)
                 })
             },
 
@@ -847,6 +859,15 @@
                 }
             },
 
+            showToast: function (clientX, clientY) {
+                this.toastX = clientX - 100;
+                this.toastY = clientY - 25;
+                this.toastShow = true;
+                setTimeout(() => {
+                    this.toastShow = false
+                }, 1000)
+            },
+
             addProjectMultipleMember: function () {
                 let memberIds = [];
                 let selectedMember = this.$store.state.participantsInfo;
@@ -890,10 +911,17 @@
 
             addLinkageResource: function () {
                 $('#addLinkage').modal('hide');
+                setTimeout(function () {
+                    $('body').addClass('modal-open')
+                }, 1000)
             },
 
             changeScheduleMaterial: function (value) {
                 this.scheduleMaterialId = value;
+            },
+
+            changeScheduleRemind: function (value) {
+                this.scheduleRemind = value;
             },
 
             changeScheduleParticipants: function (value) {
@@ -922,19 +950,29 @@
             },
 
             showScheduleModal: function (schedule) {
+                console.log(schedule)
                 let data = {
                     include: 'calendar,participants,creator,material,affixes,project,task',
                 };
                 fetch('get', '/schedules/' + schedule.id, data).then(response => {
                     if (!response) {
                         this.scheduleData = schedule;
+                        console.log(this.scheduleData)
                         this.noPermission = true;
                         return
                     }
                     this.noPermission = false;
                     this.scheduleData = response.data;
+                       console.log(this.scheduleData)
+                    if (this.scheduleData.privacy) {
+                        this.schedulePrivacy = true
+                    }
+                    if (this.scheduleData.is_allday) {
+                        this.isScheduleAllday = true
+                    }
                     this.scheduleParticipants = JSON.parse(JSON.stringify(response.data.participants.data));
                     this.$store.dispatch('changeParticipantsInfo', {data: response.data.participants.data});
+                    this.getScheduleFinish = true
                 });
                 $('#checkSchedule').modal('show')
             },
@@ -977,8 +1015,9 @@
                     this.$refs.scheduleEndMinute.setValue(endMinutes[0] + ':' + endMinutes[1]);
                     this.endTime = this.scheduleData.end_at.split(' ')[0];
                     this.endMinutes = endMinutes[0] + ':' + endMinutes[1];
-                    this.isAllday = this.scheduleData.is_allday;
+                    this.isScheduleAllday = this.scheduleData.is_allday;
                     this.eventDesc = this.scheduleData.desc;
+                    this.$refs.scheduleRemind.setValue(this.scheduleData.remind);
                     this.eventPlace = this.scheduleData.position;
                     this.$store.dispatch('changeParticipantsInfo', {data: this.scheduleData.participants.data});
                     if (this.scheduleData.material) {
@@ -1118,7 +1157,8 @@
                     end_at: endTime,
                     repeat: this.scheduleRepeat,
                     desc: this.eventDesc,
-                    
+                    remind: this.scheduleRemind
+
                 };
                 if (this.eventPlace) {
                     data.position = this.eventPlace;
@@ -1161,7 +1201,7 @@
                 this.scheduleRepeat = 0;
                 this.scheduleMaterialId = '';
                 this.eventDesc = '';
-                this.isAllday = false;
+                this.isScheduleAllday = false;
                 this.schedulePrivacy = false;
                 this.scheduleType = 'add';
                 this.linkageSelectedIds = {
@@ -1175,7 +1215,7 @@
                 this.$refs.scheduleEndMinute.setValue('00:00');
                 this.$refs.scheduleResource.setValue('');
                 this.$refs.scheduleRepeat.setValue('0');
-                this.$refs.scheduleNotice.setValue('0');
+                this.$refs.scheduleRemind.setValue('0');
             },
 
             addCalendarVisible: function (value) {
@@ -1183,9 +1223,9 @@
             },
 
             addCalendarStar: function (value) {
-                // console.log(value)
-                this.starId = value
-                this.starFlag = this.starsArr.find(item =>item.value == value).flag
+                value = value.split('-');
+                this.starFlag = value[0];
+                this.starId = value[1]
             },
 
             changeStartTime: function (value) {
@@ -1218,10 +1258,12 @@
                     color: this.checkColor,
                     privacy: this.calendarVisible,
                 };
-                // if (this.starId.length > 0) {
-                    data.star = this.starId
-                    data.flag = this.starFlag
-                // }
+                if (this.starId) {
+                    data.star = {
+                        id: this.starId,
+                        flag: this.starFlag
+                    }
+                }
                 let participants = this.$store.state.newParticipantsInfo;
                 if (participants.length > 0) {
                     data.participant_ids = [];
@@ -1242,14 +1284,13 @@
                     color: this.checkColor,
                     privacy: this.calendarVisible,
                 };
-                console.log(typeof this.starId)
 
-                // if (this.starId.length > 0) {
-                    data.star = this.starId
-                    data.flag= this.starFlag
-                    console.log(data)
-                // }
-                
+                if (this.starId) {
+                    data.star = {
+                        id: this.starId,
+                        flag: this.starFlag
+                    }
+                }
                 let participants = this.$store.state.newParticipantsInfo;
                 if (participants.length > 0) {
                     data.participant_ids = [];
@@ -1318,7 +1359,7 @@
 
             changeToCalendar: function (type) {
                 this.meetingRomeShow = false;
-                this.$refs.calendar.changeView(type)
+                this.calendarView = type;
             },
 
             allCalendarShow: function () {
@@ -1386,13 +1427,11 @@
     }
 
     .del-affix {
-        right: 15px;
-        display: none;
-        color: red;
+        opacity: 0;
     }
 
     .file-item:hover .del-affix {
-        display: block;
+        opacity: 1;
     }
 
     .line-center .example {
@@ -1401,6 +1440,13 @@
 
     .line-center .line-fixed-height {
         line-height: 34px;
+    }
+
+    .calendar-toast {
+        background: #f5f5f5;
+        padding: 2px 3px;
+        border-radius: 2px;
+        z-index: 1000;
     }
 
 </style>

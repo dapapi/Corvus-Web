@@ -17,22 +17,21 @@
                                v-model="trailFilter" @keyup.enter='filterGo' @blur='filterGo'>
                     </div>
                     <div class="col-md-3 example float-left">
-                        <selectors :options="progressStatus" :resetinfo='resetInfo' @change="progressStatusFilter"
+                        <selectors :options="currentUser.organization_id === 411?businessStatus:papiStatus"
+                                   :resetinfo='resetInfo' @change="progressStatusFilter"
                                    placeholder="请选择线索类型"></selectors>
                     </div>
                     <div class="col-md-3 example float-left">
                         <selectors ref='principal_id' :options="memberList" multiple='true'
                                    @valuelistener="principalFilter" placeholder="请选择负责人"></selectors>
-                        <span v-if="fetchData.principal_ids" class="clear-principal-filter"
-                              @click="clearPrincipalFilter">&nbsp;&nbsp;x</span>
                     </div>
-                    <!--<div class="col-md-3 example float-left">-->
-                    <!--<button type="button" class="btn btn-default waves-effect waves-classic float-right"-->
-                    <!--data-toggle="modal" data-target="#customizeContent"-->
-                    <!--data-placement="right" title="">-->
-                    <!--自定义筛选-->
-                    <!--</button>-->
-                    <!--</div>-->
+                    <div class="col-md-3 example float-left">
+                        <button type="button" class="btn btn-default waves-effect waves-classic float-right"
+                                data-toggle="modal" data-target="#customizeContent"
+                                data-placement="right" title="">
+                            自定义筛选
+                        </button>
+                    </div>
                 </div>
 
                 <div class="col-md-12">
@@ -67,7 +66,7 @@
                                 </template>
                             </td>
                             <td>
-                                <template>{{trail.last_updated_at || '-'}}</template>
+                                <template>{{trail.last_follow_up_at}}</template>
                             </td>
                         </tr>
                         </tbody>
@@ -128,12 +127,12 @@
                             <TrailOrigin class="require" :trailType='trailType'
                                          typeName='线索' alwaysShow='true'
                                          @changeTrailOrigin='changeTrailOrigin'
-                                         @changeEmail='changeEmail'
+                                         @changeEmail='changeEmail' submit='true'
                                          @changeTrailOriginPerson='changeTrailOriginPerson'/>
                         </div>
                         <div class="example">
                             <div class="col-md-2 text-right float-left require">行业</div>
-                            <div class="col-md-10 float-left pl-0" v-if="industriesArr.length > 0">
+                            <div class="col-md-10 float-left pl-0">
                                 <selectors ref='industries' :options="industriesArr"
                                            @change="changeIndustry"></selectors>
                             </div>
@@ -148,14 +147,14 @@
                         </div>
                         <div class="example">
                             <div class="col-md-2 text-right float-left require">目标艺人</div>
-                            <div class="col-md-10 float-left pl-0" v-if="starsArr.length > 0">
-                                <selectors :options="starsArr" @valuelistener="changeTargetStars"
+                            <div class="col-md-10 float-left pl-0">
+                                <selectors :options="starsArr" @change="changeTargetStars"
                                            :multiple="true"></selectors>
                             </div>
                         </div>
                         <div class="example">
                             <div class="col-md-2 text-right float-left">推荐艺人</div>
-                            <div class="col-md-10 float-left pl-0" v-if="starsArr.length > 0">
+                            <div class="col-md-10 float-left pl-0">
                                 <selectors :options="starsArr" @valuelistener="changeRecommendStars"
                                            :multiple="true"></selectors>
                             </div>
@@ -271,12 +270,25 @@
                 trailStatus: '',
                 cooperation: '',
                 filterData: '',
-                progressStatus: [{
+                businessStatus: [{
                     'name': '全部',
                     'value': ''
                 }, {
                     'name': '商务线索',
-                    'value': '0'
+                    'value': '3,4'
+                }, {
+                    'name': '影视线索',
+                    'value': '1'
+                }, {
+                    'name': '综艺线索',
+                    'value': '2'
+                }],
+                papiStatus: [{
+                    'name': '全部',
+                    'value': ''
+                }, {
+                    'name': '商务线索',
+                    'value': '3,4'
                 }, {
                     'name': '影视线索',
                     'value': '1'
@@ -290,6 +302,8 @@
                 resetInfo: false,
                 isLoading: true,
                 cleanUp: false,
+                trailIsLocked: '',
+
             }
         },
         created() {
@@ -484,9 +498,8 @@
                 fetch('get', '/starandblogger', {sign_contract_status: 2}).then(response => {
                     for (let i = 0; i < response.data.length; i++) {
                         this.starsArr.push({
-                            id: response.data[i].id,
                             name: response.data[i].name,
-                            value: response.data[i].id
+                            value: response.data[i].flag + '-' + response.data[i].id,
                         })
                     }
                 })
@@ -494,7 +507,6 @@
 
             customize: function (value) {
                 let _this = this
-                console.log(value);
                 fetch('post', '/trails/filter?include=principal,client,contact,recommendations,expectations', value).then((params) => {
                     _this.trailsInfo = params.data
                     _this.total = params.meta.pagination.total;
@@ -538,7 +550,8 @@
                 } else {
                     data.resource = ''
                 }
-                if (this.companyType !== '泰洋川禾') {
+                let organization_id = JSON.parse(Cookies.get('user')).organization_id
+                if (organization_id !== 411) {
                     data.lock = this.trailIsLocked
                 }
                 let _this = this;
@@ -603,11 +616,24 @@
             },
 
             changeTargetStars: function (value) {
-                console.log(123);
+                for (let i = 0; i < value.length; i++) {
+                    let item = value[i].split('-');
+                    value[i] = {
+                        id: item[1],
+                        flag: item[0]
+                    };
+                }
                 this.targetStars = value
             },
 
             changeRecommendStars: function (value) {
+                for (let i = 0; i < value.length; i++) {
+                    let item = value[i].split('-');
+                    value[i] = {
+                        id: item[1],
+                        flag: item[0]
+                    };
+                }
                 this.recommendStars = value
             },
 
@@ -616,7 +642,7 @@
             },
 
             changeCheckbox: function (e) {
-                this.trailIsLocked = e.target.checked
+                this.trailIsLocked = Number(e.target.checked)
             },
 
             changeIndustry: function (value) {
@@ -628,18 +654,11 @@
             },
 
             changeTrailType: function (value) {
-                // if (value === 3) {
-                //     if (Cookies.get('companyType') === '泰洋川禾') {
-                //         value = 3;
-                //     } else {
-                //         value = 4;
-                //     }
-                // }
-                let  organization_id = JSON.parse(Cookies.get('user')).organization_id
-                if(value == 3){
-                    if(organization_id == 411){
+                let organization_id = JSON.parse(Cookies.get('user')).organization_id
+                if (value == 3) {
+                    if (organization_id == 411) {
                         value = 3
-                    }else if(organization_id == 412){
+                    } else if (organization_id == 412) {
                         value = 4
                     }
                 }

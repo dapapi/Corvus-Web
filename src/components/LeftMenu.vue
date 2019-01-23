@@ -83,16 +83,16 @@
                         code: 'talent',
                         image: 'https://res.papitube.com/corvus/images/talent.png',
                         hoverImage: 'https://res.papitube.com/corvus/images/select-talent.png',
-                        data: [
-                            {
-                                name: '艺人',
-                                code: 'artists'
-                            },
-                            {
-                                name: '博主',
-                                code: 'blogger'
-                            }
-                        ]
+                        // data: [
+                        //     {
+                        //         name: '艺人',
+                        //         code: 'artists'
+                        //     },
+                        //     {
+                        //         name: '博主',
+                        //         code: 'blogger'
+                        //     }
+                        // ]
                     },
                     {
                         name: 'CRM',
@@ -197,7 +197,6 @@
             layout() {
                 this.visible = false
                 Cookies.remove('user');
-                Cookies.remove('companyType');
                 Cookies.remove('CORVUS-ACCESS-TOKEN');
                 Cookies.remove('selectedCalendar');
                 window.location.href = '/login'

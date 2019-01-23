@@ -13,7 +13,7 @@
                          @click="showMember"><i class="iconfont icon-tianjia"></i></div>
                     <div class="addMember-trigger-dropdown">
                         <select-staff :multiple="true" :member-type="'participant'" :type="type"
-                                      @change="changeSelectedMember"></select-staff>
+                                      @change="changeSelectedMember" :otherslot='otherslot'></select-staff>
                     </div>
                 </div>
             </li>
@@ -24,7 +24,7 @@
 <script>
     export default {
         name: "",
-        props: ['type'],
+        props: ['type','otherslot'],
         data() {
             return {
                 isMemberShow: false,
@@ -57,6 +57,8 @@
                     return this.$store.state.incubationInfo
                 }else if(this.type === 'bill'){
                     return this.$store.state.billInfo
+                }else if(this.otherslot){
+                    return this.$store.state.otherSlot
                 }
                 else {
                     
@@ -106,6 +108,8 @@
                     participantInfo = this.$store.state.incubationInfo;
                 }else if(this.type === 'bill'){
                     participantInfo = this.$store.state.billInfo;
+                }else if(this.otherslot){
+                    return this.$store.state.otherSlot
                 }
                     
                 else {
@@ -116,7 +120,11 @@
                     type: this.type,
                     data: participantInfo
                 };
-                this.$store.dispatch('changeParticipantsInfo', params);
+                if(this.otherslot){
+                    this.$store.dispatch('changeOtherSlot', params);
+                }else{
+                    this.$store.dispatch('changeParticipantsInfo', params);
+                }
                 this.$emit('change', userId)
             },
 

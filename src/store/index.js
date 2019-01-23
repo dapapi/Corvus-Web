@@ -22,7 +22,7 @@ const state = {
     newPrincipalInfo: {},
     companyInfo: {},
     selectPrincipalInfo: {},
-    otherSlot:{},
+    otherSlot:[],
     unReadMsg:0,//未读消息
     isSelected:'',
     isExpanded:[],

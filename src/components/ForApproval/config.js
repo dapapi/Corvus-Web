@@ -37,5 +37,6 @@ export const APPROVAL_CONFIG = {
             value:'知会我的',
             url: 'only'
         }
-    ]
+    ],
+    imgIcon:['@/img/sp1.png','@/img/sp2.png','@/img/sp3.png']
 }

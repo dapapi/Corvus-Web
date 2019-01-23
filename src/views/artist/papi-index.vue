@@ -431,7 +431,6 @@
                 fetch('get', '/bloggers', data).then(function (response) {
 
                     _this.artistsInfo = response.data;
-                    console.log(response.data)
                     _this.current_page = response.meta.pagination.current_page;
                     _this.total = response.meta.pagination.total;
                     _this.total_pages = response.meta.pagination.total_pages;
@@ -567,7 +566,7 @@
                     star_douyin_infos: this.star_douyin_infos,
                     star_weibo_infos: this.star_weibo_infos,
                     star_xiaohongshu_infos: this.star_xiaohongshu_infos,
-                    // avatar: this.uploadUrl
+                    avatar: this.uploadUrl
                 };
                 fetch('post', '/bloggers', data).then(function (response) {
                     toastr.success('创建成功');
@@ -623,7 +622,6 @@
                     _this.getArtists()
                     _this.$store.state.participantsInfo = []
                     _this.selectedArtistsArr = []
-                    console.log(_this.selectedArtistsArr)
                 })
 
             },
@@ -677,7 +675,6 @@
         line-height: 46px;
         border-radius: 50%;
         border: 1px dashed #eee;
-
     }
 </style>
 

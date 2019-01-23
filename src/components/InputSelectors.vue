@@ -6,14 +6,14 @@
                    v-model="selectedMemberName">
         </div>
         <div style="position: relative;top: 36px;" v-show="selectMemberShow">
-            <select-staff class="selector" @change="changeSelectMember" :member-type="'principal'"
+            <select-staff class="selector" @change="changeSelectMember" :member-type="'principal'" :submit='submit'
                           :type="type" :otherslot='otherslot'></select-staff>
         </div>
     </div>
 </template>
 <script>
     export default {
-        props: ['placeholder', 'type', 'propSelectMemberName', 'otherslot'],
+        props: ['placeholder', 'type', 'propSelectMemberName', 'otherslot','submit'],
         data() {
             return {
                 selectMemberShow: false

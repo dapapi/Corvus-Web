@@ -1,5 +1,5 @@
 <template>
-    <div class="assistor" id="assistor">
+    <div class="assistor" id="assistor" :class='submit?"normal-width":""'>
         <div class="bg-white select-staff">
             <div class="page-nav-tabs">
                 <ul class="nav nav-tabs nav-tabs-line" role="tablist">
@@ -80,7 +80,7 @@
     import { mapState } from 'vuex'
 
     export default {
-        props: ['multiple', 'member-type', 'type', 'otherslot'],
+        props: ['multiple', 'member-type', 'type', 'otherslot','submit'],
         data() {
             return {
                 normalUsers: {},
@@ -111,6 +111,8 @@
                     return this.$store.state.principalInfo
                 } else if (this.type === 'selector') {
                     return this.$store.state.selectPrincipalInfo
+                }else if(this.otherslot){
+                    return this.$store.state.otherSlot
                 } else {
                     return this.$store.state.newPrincipalInfo
                 }
@@ -131,8 +133,9 @@
                     return this.$store.state.incubationInfo
                 }else if(this.type === 'bill'){
                     return this.$store.state.billInfo
+                }else if(this.otherslot){
+                    return this.$store.state.otherSlot
                 }
-                
                 else {
                     return this.$store.state.newParticipantsInfo
                 }
@@ -179,7 +182,9 @@
                 }else if(this.type === 'bill'){
                     participantInfo = this.$store.state.billInfo
                 }
-                
+                else if(this.otherslot){
+                    participantInfo = this.$store.state.otherSlot
+                }
                 else {
                     participantInfo = this.$store.state.newParticipantsInfo;
                 }
@@ -189,7 +194,11 @@
                     }
                 }
                 this.params.data = participantInfo;
-                this.$store.dispatch('changeParticipantsInfo', this.params);
+                if(this.otherslot){
+                    this.$store.dispatch('changeOtherSlot', this.params.data);
+                }else{
+                    this.$store.dispatch('changeParticipantsInfo', this.params);
+                }
                 this.$emit('change', false)
             },
 
@@ -213,6 +222,8 @@
                         participantInfo = this.$store.state.incubationInfo
                     }else if(this.type === 'bill'){
                         participantInfo = this.$store.state.billInfo
+                    } else if(this.otherslot){
+                        participantInfo = this.$store.state.otherSlot
                     }
                     else {
                         participantInfo = this.$store.state.newParticipantsInfo;
@@ -224,10 +235,11 @@
                         participantInfo.push(user)
                     }
                     this.params.data = participantInfo;
+                    if(this.otherslot){
+                    this.$store.dispatch('changeOtherSlot', this.params.data);
+                }else{
                     this.$store.dispatch('changeParticipantsInfo', this.params);
                 }
-                if (this.otherslot) {
-                    this.$store.dispatch('changeOtherSlot', this.params);
                 }
                 this.$emit('change', false)
             },
@@ -301,7 +313,9 @@
         overflow: hidden;
         z-index: 1000;
     }
-
+    .normal-width{
+        width: 100%;
+    }
     .page-nav-tabs {
         position: absolute;
         z-index: 2;

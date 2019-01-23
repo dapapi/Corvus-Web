@@ -42,6 +42,21 @@
                     <i v-if="[233,234,235].includes(list.form_status) && (info.approval.user_id === currentId || (list.creator && list.creator.data.id === currentId)) ">
                         <button class="btn btn-primary" @click="addProjectTimeout(list.form_id)">重新提交</button>
                     </i>
+                     <template v-if="list.form_status==232" >
+                        <img src="@/assets/img/approval.jpg" style="width:50px;margin-left:20px;" alt="">
+                    </template>
+                    <template v-if="list.form_status==231">
+                        <img src="@/assets/img/pending.jpg" style="width:50px;margin-left:20px;" alt="">
+                    </template>
+                    <template v-if="list.form_status==234">
+                        <img src="@/assets/img/withdraw.jpg" style="width:50px;margin-left:20px;" alt="">
+                    </template>
+                    <template v-if="list.form_status==235">
+                        <img src="@/assets/img/wasted.jpg" style="width:50px;margin-left:20px;" alt="">
+                    </template>
+                    <template v-if="list.form_status==233">
+                        <img src="@/assets/img/denide.jpg" style="width:50px;margin-left:20px;" alt="">
+                    </template>
                     <i v-if="list.form_status==231 && isCurrentApprover && $route.query.mode === 'approver'">
                         <button class="btn btn-success" @click='approvalHandler("agree")'>同意</button>
                         <button class="btn btn-danger" @click='approvalHandler("refuse")'>拒绝</button>
@@ -77,13 +92,14 @@
                             </div>
                         </div>
                     </div>
-                    <div class="example pt-20" style="border-top:1px solid #e3e3e3">
+                    <div class="example pt-20" >
 
                     </div>
                     <div class="">
-                        <h6 class="page-title pb-20 mx-15">审批详情</h6>
+                        <h6 class="page-title pb-20 mx-15" style="border-bottom: 1px solid rgb(227, 227, 227);">审批详情</h6>
+                        <!-- <hr> -->
                         <div class="row px-20">
-                            <div class="col-md-10">
+                            <div class="col-md-10 mt-20" >
                                 <div class="col-md-6 my-5 px-0 float-left" v-if="info.contract">
                                     <div class="col-md-4 float-left text-right detail-key mx-0 noselect">
                                         合同编号
@@ -93,16 +109,20 @@
                                     </div>
                                 </div>
                                 <div class="col-md-6 my-5 px-0 float-left"
-                                     v-for="(item, index) in detailData" :key="index" >
-                                    <div class="col-md-4 float-left text-right detail-key mx-0 noselect">{{item.key}}
+                                     v-for="(item, index) in detailData" :key="index" style='align-item:center'>
+                                    <div class="col-md-4 float-left text-right detail-key mx-0 noselect" v-if="(item.key !== '提示：若艺人选择用工作室与我司签约，则输入工作室名称，否则不用输入')">{{item.key}}
                                     </div>
                                     <div class="col-md-8 float-left detail-value"
-                                         v-if="item.values && !item.values.data.value.includes('http')">{{(item.values
+                                         v-if="item.values && !item.values.data.value.includes('http') && (item.key !== '提示：若艺人选择用工作室与我司签约，则输入工作室名称，否则不用输入')">{{(item.values
                                         && item.values.data.value) || ''}}
                                     </div>
                                     <div class="col-md-8 float-left detail-value"
                                          v-if="item.values && item.values.data.value.includes('http')"
-                                         @click='previewHandler(item.values.data.value)'>点击查看
+                                         @click='previewHandler(item.values.data.value)'>
+                                        <figure style="text-align:center" class="float-left"> 
+                                            <img src="@/assets/img/attachment.png" alt="" style="width:20px">
+                                            <p>点击查看</p>
+                                        </figure>
                                     </div>
                                 </div>
                             </div>
@@ -110,7 +130,7 @@
                         <div class=" col-md-12 col-lg-12">
                             <div class="caption" style="border:0;">
                                 <h6 class="page-title pb-20" style="border-bottom:1px solid #e3e3e3">审批流程</h6>
-                                <div class="">
+                                <div class="mb-20">
                                     <ApprovalProgress mode='detail'
                                                       :formid='list.form_instance_number'
                                                       :formstatus='currentStatus'
@@ -128,8 +148,8 @@
                             <h5>审批跟进</h5>
                         </div>
                         <div class="card-block">
-                            <div class="col-md-12 pl-0">
-                                <TaskFollowUp :follow-type="'审批'" trail-type="contracts" :trail-id="list.form_instance_number"  ></TaskFollowUp>
+                            <div class="col-md-5 pl-0">
+                                <TaskFollowUp :follow-type="'审批'" trail-type="approval_instances" :trail-id="list.form_instance_number"  ></TaskFollowUp>
                             </div>
                         </div>
                     </div>
@@ -139,7 +159,7 @@
         </div>
         <BuildProject :project-type="projectType" :project-fields-arr="projectFieldsArr"
                       :default-data='{fields:(info.fields && info.fields.data),list:list,trailInfo:trailInfo}'></BuildProject>
-        <ApprovalGreatModule :form-data='formData' singlemode='true' :default-data='detailData'/>
+        <ApprovalGreatModule :form-data='formData' singlemode='true' :default-data='detailData' :contract_id='$route.params.id'/>
         <ApprovalGoModal :mode='approvalMode' :id='list.form_instance_number' @approvaldone='approvalDone'/>
         <div class="modal fade  bootbox" id="docPreviewSelector" aria-labelledby="docPreviewPositionCenter" data-backdrop="static"
              role="dialog" tabindex="-1">
@@ -194,7 +214,7 @@
                 pending: {},
                 currentId: '',
                 isCurrentApprover: false,
-                roleUser: '',
+                roleUser: [],
                 indexData: {},
                 formData: {},
                 previewUrl: '',
@@ -263,10 +283,14 @@
             },
             getCurrentApprover() {
                 let _this = this
+                this.roleUser = []
                 fetch('get', '/users/my?include=department,roleUser').then((params) => {
                     _this.currentId = params.data.id
-                    _this.roleUser = params.data.roleUser.data[0].role_id
-                    if (_this.currentId === _this.pending.id || _this.roleUser === _this.pending.id) {
+                    for (const key in params.data.roleUser.data) {
+                        _this.roleUser.push(params.data.roleUser.data[key].role_id)
+                    }
+                    // _this.roleUser = params.data.roleUser.data[0].role_id
+                    if (_this.currentId === _this.pending.id || _this.roleUser.includes(_this.pending.id)) {
                         _this.isCurrentApprover = true
                     } else {
                         _this.isCurrentApprover = false
@@ -383,6 +407,7 @@
         background-size: 30px;
         text-align: center;
         line-height: 30px;
+        vertical-align: middle;
     }
 
     .loader-overlay {
@@ -418,7 +443,7 @@
     .title-status i {
         position: absolute;
         right: 10px;
-        top: 0;
+        top: 10px;
     }
 
     .caption {
