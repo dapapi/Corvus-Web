@@ -157,7 +157,7 @@
                                  style="width: 100%">
                         </div>
                         <pagination :current_page="current_page" :method="getArtists" :total_pages="total_pages"
-                                    :total="total" v-if="isShow" class="mb-50"></pagination>
+                                    :total="total" v-if="isShow" class=""></pagination>
                     </div>
                     <div class="tab-pane animation-fade" id="forum-blogger" role="tabpanel"
                          :class="!isShow?'active':''">
@@ -276,7 +276,7 @@
                                  style="width: 100%">
                         </div>
                         <pagination :current_page="Bcurrent_page" :method="getBlogger" :total_pages="Btotal_pages"
-                                    :total="Btotal" v-if="!isShow" class="mb-50"></pagination>
+                                    :total="Btotal" v-if="!isShow"></pagination>
                         
                     </div>
                 </div>
