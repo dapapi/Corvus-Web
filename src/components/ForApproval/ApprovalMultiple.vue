@@ -39,7 +39,7 @@ import ApprovalMultipleSelector from '@/components/ForApproval/ApprovalMultipleS
 import ApprovalChainReaction from '@/components/ForApproval/ApprovalChainReaction'
 export default {
     name:'ApprovalMultiple',
-    props:['consdata','singlemode'],
+    props:['consdata','singlemode','clear'],
     components:{
         ApprovalMultiple,
         ApprovalText,
@@ -79,6 +79,12 @@ export default {
     },
     mounted(){
         this.refresh()
+    },
+    watch:{
+        clear:function(){
+            this.multipleData = []
+            this.n =1
+        }
     },
     methods:{
         formMinus(params){
