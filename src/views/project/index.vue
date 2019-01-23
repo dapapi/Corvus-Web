@@ -42,7 +42,7 @@
                                aria-controls="forum-present"
                                aria-expanded="false" role="tab">我负责的</a>
                         </li>
-                        <li class="nav-item" role="presentation" @click="getMyProjects('adminstration')">
+                        <li class="nav-item" role="presentation" @click="getMyProjects('administration')">
                             <a class="nav-link" data-toggle="tab" href="#forum-project"
                                aria-controls="forum-present"
                                aria-expanded="false" role="tab">我参与的</a>
@@ -213,8 +213,8 @@
                 };
                 if (this.getProjectStatus === 'principal_id') {
                     data.principal_id = 1;
-                } else if (this.getProjectStatus === 'adminstration') {
-                    data.adminstration = 1;
+                } else if (this.getProjectStatus === 'administration') {
+                    data.administration = 1;
                 }
                 if (this.projectSearchType) {
                     if (this.projectSearchType == 3) {
