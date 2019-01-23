@@ -1339,7 +1339,6 @@
                 fetch('get', '/stars/' + this.artistId, data).then(function (response) {
 
                     _this.artistInfo = response.data;
-                    console.log(response.data)
                     _this.uploadUrl = _this.artistInfo.avatar
                     _this.artistProjectsInfo = []
                     _this.artistTasksInfo = response.data.tasks.data//任务数据
@@ -1375,7 +1374,6 @@
                        for (let i = 0; i < response.data.schedule.data.length; i++) {
                            _this.scheduleShow.push(response.data.schedule.data[i])  
                        } 
-                        console.log(_this.scheduleShow)
                     }
                 })
                 
@@ -1786,10 +1784,7 @@
             getProjectList: function () {
                 let _this = this
                 fetch('get', `/projects/star/${this.$route.params.id}`).then(response => {
-                    // console.log(response)
-                    // if(){
                     _this.threeProjectList = response
-                    // }
                 })
             },
             //粉丝数据
@@ -2095,14 +2090,10 @@
             },
             //修改基本信息
             changeArtistBaseInfo: function (value, name) {
-                // alert('是否一开始就调用')
-                // console.log(value,name)
                 if (name === 'platform') {
                     value = value.join(',')
                 }
-                // if(name === 'sign_contract_status'){
-                //     value = 
-                // }
+
                 if (name === 'broker_id') {
                     if (value) {
                         value = this.$store.state.principalInfo.id
@@ -2228,7 +2219,6 @@
                     toast = '分配宣传人成功'
                 }
                 let _this = this;
-                console.log(this.$store.state.participantsInfo)
                 fetch('post', '/distribution/person', data).then(function (response) {
                     toastr.success(toast)
                     $('#distributionBroker').modal('hide');
@@ -2270,7 +2260,6 @@
                 this.affixId = id
             },
             previewFile: function (url, name) {
-                console.log(url, name)
                 this.previewUrl = url
                 this.previewName = name
             },
@@ -2291,7 +2280,6 @@
                 }
                 data.status = status
                 fetch('get','approvals/specific_contract',data).then(function(response){
-                    console.log(response.data)
                     _this.formDate = response.data
                     $('#approval-great-module').modal('show')
                 })
@@ -2500,10 +2488,5 @@
         display: flex;
         align-items: center;
     }
-    .fixed-button {
-    position: absolute;
-    bottom: 0px;
-    right: 0;
-}
 </style>
 

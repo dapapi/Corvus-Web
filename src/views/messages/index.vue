@@ -140,7 +140,6 @@ export default {
       //数据初始化
       this.getModule()
       
-    //   console.log(this.$route.query.moduleType)
   },
   computed:{
       ...mapState([
@@ -149,8 +148,6 @@ export default {
   },
   watch:{
        unReadMsg:function(){
-        //    alert(222)
-        //    console.log(this.unReadMsg)
            this.getModule();
            
        },
@@ -179,7 +176,6 @@ export default {
     getModule:function(){
         fetch('get',`${config.apiUrl}/getmodules`).then((res) => {
             this.moduleList = res
-            // console.log(res)
             let num = 0
             for (let i = 0; i < res.length; i++) {
                 num = num + res[i].un_read
@@ -191,8 +187,6 @@ export default {
                 this.renderMsg(this.moduleList[0].id,1)
             }
         })
-        // console.log(this.moduleList)
-        // console.log(this.moduleType)
     },
     msgStatus:function(id,type){
         let data = {}

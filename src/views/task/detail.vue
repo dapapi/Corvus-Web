@@ -120,38 +120,38 @@
                                 </div>
                                 <div class="py-20 clearfix">
                                     <div class="clearfix">
-                                        <div class="card-text py-10 px-0 clearfix col-md-6">
-                                            <div class="col-md-3 float-left text-right pl-0">任务名称</div>
-                                            <div class="col-md-9 float-left font-weight-bold">
-                                                <EditInput :content="taskInfo.title" :is-edi_this.unitConvert="isEdit"
+                                        <div class="card-text py-10 px-0 clearfix col-md-8">
+                                            <div class="col-md-2 float-left text-right pl-0">任务名称</div>
+                                            <div class="col-md-10 float-left font-weight-bold">
+                                                <EditInput :content="taskInfo.title" :is-edit="isEdit"
                                                            @change="(value) => changeTaskInfo(value, 'title')"></EditInput>
                                             </div>
                                         </div>
-                                        <div class="card-text py-10 px-0 clearfix col-md-6">
-                                            <div class="col-md-3 float-left text-right pl-0">优先级</div>
-                                            <div class="col-md-9 float-left font-weight-bold">
+                                        <div class="card-text py-10 px-0 clearfix col-md-8">
+                                            <div class="col-md-2 float-left text-right pl-0">优先级</div>
+                                            <div class="col-md-10 float-left font-weight-bold">
                                                 <EditSelector :content="taskInfo.priority?taskInfo.priority: ''"
                                                               :is-edit="isEdit"
                                                               :options="priorityArr"
                                                               @change="(value) => changeTaskInfo(value, 'level')"></EditSelector>
                                             </div>
                                         </div>
-                                        <div class="card-text py-10 px-0 clearfix col-md-6">
-                                            <div class="col-md-3 float-left text-right pl-0">负责人</div>
-                                            <div class="col-md-9 float-left font-weight-bold">
+                                        <div class="card-text py-10 px-0 clearfix col-md-8">
+                                            <div class="col-md-2 float-left text-right pl-0">负责人</div>
+                                            <div class="col-md-10 float-left font-weight-bold">
                                                 <EditInputSelector :is-edit="isEdit" :select-type="'principal'"
                                                                    @change="(value) => changeTaskInfo(value, 'principal_id')"></EditInputSelector>
                                             </div>
                                         </div>
-                                        <div class="card-text py-10 px-0 clearfix col-md-6">
-                                            <div class="col-md-3 float-left text-right pl-0">参与人</div>
-                                            <div class="col-md-9 float-left font-weight-bold">
+                                        <div class="card-text py-10 px-0 clearfix col-md-8">
+                                            <div class="col-md-2 float-left text-right pl-0">参与人</div>
+                                            <div class="col-md-10 float-left font-weight-bold">
                                                 <EditAddMember :is-edit="isEdit"></EditAddMember>
                                             </div>
                                         </div>
                                         <div class="card-text py-10 px-0 clearfix col-md-8">
-                                            <div class="col-md-3 float-left text-right pl-0">开始时间</div>
-                                            <div class="col-md-9 float-left font-weight-bold" v-if="taskInfo.start_at">
+                                            <div class="col-md-2 float-left text-right pl-0">开始时间</div>
+                                            <div class="col-md-10 float-left font-weight-bold" v-if="taskInfo.start_at">
                                                 <EditDatepicker class="col-md-6 px-0 float-left"
                                                                 :content="taskInfo.start_at[0]" :is-edit="isEdit"
                                                                 @change="(value) => changeTaskInfo(value, 'start_at')"></EditDatepicker>
@@ -161,8 +161,8 @@
                                             </div>
                                         </div>
                                         <div class="card-text py-10 px-0 clearfix col-md-8">
-                                            <div class="col-md-3 float-left text-right pl-0">结束时间</div>
-                                            <div class="col-md-9 float-left font-weight-bold" v-if="taskInfo.end_at">
+                                            <div class="col-md-2 float-left text-right pl-0">结束时间</div>
+                                            <div class="col-md-10 float-left font-weight-bold" v-if="taskInfo.end_at">
                                                 <EditDatepicker class="col-md-6 px-0 float-left"
                                                                 :content="taskInfo.end_at[0]" :is-edit="isEdit"
                                                                 @change="(value) => changeTaskInfo(value, 'end_at')"></EditDatepicker>
@@ -171,9 +171,9 @@
                                                                 @change="(value) => changeTaskInfo(value, 'end_minutes')"></EditTimepicker>
                                             </div>
                                         </div>
-                                        <div class="card-text py-10 px-0 clearfix col-md-6">
-                                            <div class="col-md-3 float-left text-right pl-0">任务说明</div>
-                                            <div class="col-md-9 float-left font-weight-bold">
+                                        <div class="card-text py-10 px-0 clearfix col-md-8">
+                                            <div class="col-md-2 float-left text-right pl-0">任务说明</div>
+                                            <div class="col-md-10 float-left font-weight-bold">
                                                 <editTextarea :content="taskInfo.desc"
                                                               :is-edit="isEdit"
                                                               @change="(value) => changeTaskInfo(value, 'desc')"></editTextarea>
@@ -293,7 +293,7 @@
                                      style="width: 100%">
                             </div>
 
-                            <div class="site-action fixed-button" data-plugin="actionBtn" data-toggle="modal"
+                            <div class="site-action fixed-button mt-20" data-plugin="actionBtn" data-toggle="modal"
                                  data-target="#addChildTask">
                                 <button type="button"
                                         class="site-action-toggle btn-raised btn btn-success btn-floating waves-effect waves-classic">

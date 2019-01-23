@@ -431,7 +431,6 @@
                 fetch('get', '/bloggers', data).then(function (response) {
 
                     _this.artistsInfo = response.data;
-                    console.log(response.data)
                     _this.current_page = response.meta.pagination.current_page;
                     _this.total = response.meta.pagination.total;
                     _this.total_pages = response.meta.pagination.total_pages;
@@ -623,7 +622,6 @@
                     _this.getArtists()
                     _this.$store.state.participantsInfo = []
                     _this.selectedArtistsArr = []
-                    console.log(_this.selectedArtistsArr)
                 })
 
             },

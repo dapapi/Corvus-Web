@@ -3,7 +3,7 @@ import qs from 'qs'
 import config from '../js/config'
 
 // axios 配置
-axios.defaults.timeout = 30000;
+axios.defaults.timeout = 300000;
 axios.defaults.headers.common['Accept'] = 'application/vnd.Corvus.v1+json';
 axios.defaults.headers.common['Access-Control-Expose-Headers'] = 'Location';
 axios.defaults.headers.common['Access-Control-Allow-Headers'] = 'Authorization';

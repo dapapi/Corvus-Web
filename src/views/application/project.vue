@@ -158,7 +158,6 @@ export default {
                 //     this.projectStatus = signStatus
                 // }
                 fetch('get', '/projects/my_all', data).then(function (response) {
-                    console.log(response.data)
                     _this.projectInfo = response.data;
                     _this.current_page = response.meta.pagination.current_page;
                     _this.total = response.meta.pagination.total;
@@ -177,7 +176,6 @@ export default {
                 }
                 data.type=this.myType
                 fetch('get', '/projects/my', data).then(function (response) {
-                    console.log(response.data)
                     _this.projectInfo = response.data;
                     _this.current_page = response.meta.pagination.current_page;
                     _this.total = response.meta.pagination.total;

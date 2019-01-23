@@ -1334,7 +1334,6 @@
                   
                     let doneTaskNum = 0
                     _this.artistInfo = response.data;
-                    console.log(response.data)
                     _this.uploadUrl = _this.artistInfo.avatar;
                     if(_this.artistInfo.intention){
                         _this.artistInfo.intention = 1
@@ -2179,11 +2178,7 @@
             JumpDetails(id){
                 this.$router.push({path: '/tasks/' + id})
             },
-            // projectDetails(id){
-            //     $('#checkSchedule').modal('show')
-            // },
             contractlist(status){
-                console.log(status)
                 let _this = this;
                 let data={
                     type:this.contractType
@@ -2193,7 +2188,6 @@
                    
                     _this.formDate = response.data
                     $('#approval-great-module').modal('show')
-                     console.log( _this.formDate )
                 })
             }
         },
@@ -2354,11 +2348,7 @@
         display: flex;
         align-items: center;
     }
-    .fixed-button {
-    position: absolute;
-    bottom: 0px;
-    right: 0;
-    }
+
     .fileupload {
         position: absolute;
         top: 0px;

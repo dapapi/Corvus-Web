@@ -62,8 +62,8 @@
 
                 <div class="page-content tab-content nav-tabs-animate bg-white">
                     <div class="tab-pane animation-fade active" id="forum-artist" role="tabpanel">
-                        <table class="table table-hover is-indent" data-plugin="selectable"
-                               data-selectable="selectable">
+                        <table class="table table-hover is-indent" data-plugin="animateList" data-animate="fade"
+                               data-child="tr" data-selectable="selectable">
                             <tr>
                                 <th class="w-50">
                                     <span class="checkbox-custom checkbox-primary">
@@ -487,7 +487,7 @@
                 this.listData.page = page
                 fetch('get', '/stars', this.listData).then(function (response) {
                     _this.artistsInfo = response.data;
-                    
+
                     _this.current_page = response.meta.pagination.current_page;
                     _this.total = response.meta.pagination.total;
                     _this.total_pages = response.meta.pagination.total_pages;
@@ -535,7 +535,6 @@
             },
 
             changeBirthday: function (value) {
-                console.log(value)
                 this.artistBirthday = value
             },
 
@@ -617,19 +616,10 @@
                 if (this.signCompany == 2) {
                     this.sign_contract_other_name = ''
                 }
-                // console.log(this.affixesType)
                 if (this.affixesType > 1 && this.affixes.length == 0) {
                     toastr.error('请上传附件');
                     return false
                 }
-                // if(this.affixes){
-                //     toastr.error('请上传附件');
-                //     return false
-                // }
-                // if(!this.uploadUrl){
-                //     toastr.error('请上传头像')
-                //     return false
-                // }
 
                 let platform = this.platformType.join(',');
                 let data = {

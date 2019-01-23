@@ -92,13 +92,9 @@ export default {
     },
     computed:{
         type:function(){
-            // console.log(this.$route.query.type)
             return (this.$route.query.type-0)
         },
     },
-    // mounted(){
-    //     this.getlist()
-    // },
     methods:{
         getProps:function(id,status,name,temName){
             this.temId = id

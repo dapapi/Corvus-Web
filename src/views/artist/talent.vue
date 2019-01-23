@@ -74,7 +74,7 @@
                             </div>
                             <div class="col-md-3 example float-left">
                             <button type="button" class="btn btn-default waves-effect waves-classic float-right"
-                            data-toggle="modal" data-target="#customizeContent"
+                            data-toggle="modal" data-target="#customizeContent" @click='customizeContentType="stars"'
                             data-placement="right" title="">
                             自定义筛选
                             </button>
@@ -173,13 +173,13 @@
                             <div class="col-md-3 example float-left">
                                 <selectors :options="signState" @change="typeFilter" placeholder="请选择签约状态"></selectors>
                             </div>
-                            <!-- <div class="col-md-3 example float-left">
+                            <div class="col-md-3 example float-left">
                                 <button type="button" class="btn btn-default waves-effect waves-classic float-right"
-                                data-toggle="modal" data-target="#customizeContent"
+                                data-toggle="modal" data-target="#customizeContent" @click='customizeContentType="bloggers"'
                                 data-placement="right" title="">
                                 自定义筛选
                                 </button>
-                            </div> -->
+                            </div>
                         </div>
                         <table class="table table-hover is-indent ml-5" data-plugin="selectable"
                                data-selectable="selectable">
@@ -285,7 +285,7 @@
 
         </div>
 
-        <customize-filter :data="customizeInfo" @change="customize"></customize-filter>
+        <customize-filter :data="customizeContentType==='stars'?customizeInfoStars:customizeInfoBloggers" @change="customize"></customize-filter>
 
         <div class="site-action" data-plugin="actionBtn" data-toggle="modal" data-target="#addBolgger" v-if="!isShow">
             <button type="button"
@@ -701,13 +701,15 @@
     export default {
         data: function () {
             return {
+                customizeContentType:'',
                 total: 0,
                 current_page: 1,
                 total_pages: 1,
                 Btotal: 0,
                 Bcurrent_page: 1,
                 Btotal_pages: 1,
-                customizeInfo: config.customizeInfo,
+                customizeInfoStars: {},
+                customizeInfoBloggers:{},
                 signState:config.signState,
                 yesOrNoArrs: [
                     {
@@ -736,6 +738,7 @@
                 douyinFansNum: '',
                 xhsUrl: '',
                 xhsFansNum: '',
+                starsArr:[],
                 platformType: [],//平台类型
                 signIntention: '',
                 signCompany: '',
@@ -855,10 +858,13 @@
             ImportAndExport
         },
         created(){
+            this.getStarsField()
+            this.getBloggerField()
+
             this.getStars();
         },
         mounted() {
-             this.getArtists();
+            this.getArtists();
             this.getBlogger();
             this.getBlogType() //获取博主类型
             
@@ -866,6 +872,18 @@
             
         },
         methods: {
+            getStarsField() {
+                let _this = this
+                fetch('get', '/stars/filter_fields').then((params) => {
+                    _this.customizeInfoStars = params.data
+                })
+            },
+            getBloggerField(){
+                let _this = this
+                fetch('get', '/bloggers/filter_fields').then((params) => {
+                    _this.customizeInfoBloggers = params.data
+                })
+            },
             //获取沟通状态
             getStatus: function (value) {
                 this.listData.communication_status = value
@@ -873,7 +891,6 @@
             },
             //获取签约状态
             getSource: function (value) {
-                console.log(value)
                 this.listData.sign_contract_status = value
                 this.getArtists()
             },
@@ -885,7 +902,6 @@
                 }
                 this.listData.page = page
                 fetch('get', '/stars', this.listData).then(function (response) {
-                    console.log( response)
                     if(response.data){
                         _this.artistsInfo = response.data;
                     }
@@ -926,7 +942,6 @@
                     if(response.data){
                         _this.bloggerInfo = response.data;
                     }
-                    console.log(response.data)
                     if(response.meta){
                         _this.Bcurrent_page = response.meta.pagination.current_page;
                         _this.Btotal = response.meta.pagination.total;
@@ -965,6 +980,13 @@
                 this.getBlogger()
             },
             customize: function (value) {
+                let _this = this
+                fetch('post', '/'+this.customizeContentType+'/filter', value).then((params) => {
+                    // _this.bloggerInfo =params.data
+                    _this.artistsInfo = params.data
+                    _this.total = params.meta.pagination.total;
+                    _this.cleanUp = true
+                })
 
             },
             changeArtistStatus: function (value) {
@@ -1105,7 +1127,6 @@
                     } else {
                         this.selectedArtistsArr.push(value)
                     }
-                    console.log(this.selectedArtistsArr)
                 }
             },
 
@@ -1144,7 +1165,7 @@
                     _this.selectedArtistsArr = []
                     _this.getBlogger()
                     _this.$store.state.participantsInfo = []
-                    console.log(_this.selectedArtistsArr)
+                    _this.selectedArtistsArr = []
                 })
 
             },
@@ -1254,7 +1275,6 @@
             },
 
             changeBirthday: function (value) {
-                console.log(value)
                 this.artistBirthday = value
             },
 
@@ -1336,7 +1356,6 @@
                 if (this.signCompany == 2) {
                     this.sign_contract_other_name = ''
                 }
-                // console.log(this.affixesType)
                 if (this.affixesType > 1 && this.affixes.length == 0) {
                     toastr.error('请上传附件');
                     return false
