@@ -92,8 +92,8 @@
                     <div class="col-md-6 float-left pl-0 mb-20" >
                         <div class="col-md-13" v-if="artistInfo.sign_contract_status == 2&&scheduleShow.length>0" >
                             <div class="col-md-12"><i class="iconfont icon-ego-box pr-2"></i>日程</div>
-                            <div class="clearfix example projectshow" v-for="(item,index) in scheduleShow" :key="index" >
-                                <div class="col-md-2 float-left">{{item.title}}</div>
+                            <div class="clearfix example projectshow" v-for="(item,index) in scheduleShow" :key="index" @click="ScheduleBox(item)">
+                                <div class="col-md-2 float-left" style="overflow:hidden;text-overflow:ellipsis;white-space:nowrap">{{item.title}}</div>
                                 <div class="col-md-2 float-left">{{item.creator.data.name}}</div>
                                 <div class="col-md-4 float-left">{{item.start_at}}</div>
                                 <div class="col-md-4 float-left">{{item.end_at}}</div>
@@ -246,7 +246,7 @@
                                          style="width: 100%">
                                 </div>
                                 <pagination :current_page="current_page" :method="getTaskList" :total_pages="total_pages"
-                                    :total="total"  class="mb-50"></pagination>
+                                    :total="total"  class="mb-30"></pagination>
                                 <div class="site-action fixed-button" data-plugin="actionBtn" data-toggle="modal"
                                      data-target="#addTask">
                                     <button type="button"
@@ -290,7 +290,7 @@
                                          style="width: 100%">
                                 </div>
                                 <pagination :current_page="current_page" :method="getTaskList" :total_pages="total_pages"
-                                    :total="total"  class="mb-50"></pagination>
+                                    :total="total"  class="mb-30"></pagination>
                                 <div class="site-action fixed-button" data-plugin="actionBtn" data-toggle="modal"
                                      data-target="#addWork">
                                     <button type="button"
@@ -701,7 +701,7 @@
                         </div>
                     </div>
                     <div class="modal-footer">
-                        <button class="btn btn-sm btn-white btn-pure" data-dismiss="modal">取消</button>
+                        <button class="btn btn-sm btn-white btn-pure" data-dismiss="modal" @click="taskcancel">取消</button>
                         <button class="btn btn-primary" type="submit" @click="addTask">确定</button>
                     </div>
 
@@ -1293,7 +1293,9 @@
                 contractType:'stars',
                 formDate:'',
                 scheduleShow:[],
-                priorityArr:config.priorityArr
+                priorityArr:config.priorityArr,
+                scheduleStartTime:'',
+                scheduleEndTime:'',
             }
         },
 
@@ -1359,6 +1361,9 @@
                 })
 
             },
+            add0(m){
+                return m<10?'0'+m:m 
+            },
             getCalendar:function(){
                  this.artistId = this.$route.params.id;
 
@@ -1379,6 +1384,9 @@
                     }
                 })
                 
+            },
+             ScheduleBox: function(value){
+                this.showScheduleModal(value)
             },
             /*查看日历详情 --添加日历 -- 修改日历 */
 
@@ -1513,6 +1521,9 @@
                     $('#changeSchedule').modal('hide');
                     toastr.success('修改成功')
                 })
+            },
+            taskcancel:function(){
+                this.$store.state.newParticipantsInfo = []
             },
             selectScheduleCalendar: function (value) {
                 this.scheduleCalendar = value
@@ -2489,6 +2500,14 @@
         border-radius: calc(.215rem - 1px) calc(.215rem - 1px) 0 0;
         display: flex;
         align-items: center;
+    }
+    .projectshow:hover{
+        cursor: pointer;
+    }
+    .fixed-button {
+        position: absolute;
+        bottom: 45px;
+        right: 0;
     }
 </style>
 

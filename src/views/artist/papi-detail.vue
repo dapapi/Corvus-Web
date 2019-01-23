@@ -91,8 +91,8 @@
                     <div class="col-md-6 float-left pl-0 " >
                         <div class="col-md-13" v-if="artistInfo.sign_contract_status == 2&&scheduleShow.length>0" >
                             <div class="col-md-12"><i class="iconfont icon-ego-box pr-2"></i>日程</div>
-                            <div class="clearfix example projectshow" v-for="(item,index) in scheduleShow" :key="index" >
-                                <div class="col-md-2 float-left">{{item.title}}</div>
+                            <div class="clearfix example projectshow" v-for="(item,index) in scheduleShow" :key="index" @click="ScheduleBox(item)">
+                                <div class="col-md-2 float-left" style="overflow:hidden;text-overflow:ellipsis;white-space:nowrap">{{item.title}}</div>
                                 <div class="col-md-2 float-left">{{item.creator.data.name}}</div>
                                 <div class="col-md-4 float-left">{{item.start_at}}</div>
                                 <div class="col-md-4 float-left">{{item.end_at}}</div>
@@ -165,20 +165,14 @@
                                 <a class="nav-link" data-toggle="tab" href="#forum-artist-tasks"
                                 aria-controls="forum-present"
                                 aria-expanded="false" role="tab" @click="getArtistTasks">
-                                    <!-- <template v-if="tasksInfo.length > 0">
-                                        <ToolTips :title="`已完成数量${completeNum}`">
-                                            任务 ({{completeNum}}/{{tasksInfo.length}})
+                                     <template v-if="alltaskshow.length > 0">
+                                        <ToolTips :title="`已完成数量${doneTaskNum}`">
+                                            任务 ({{taskNum}})
                                         </ToolTips>
-                                    </template> -->
-                                    <!-- <template v-if="tasksInfo.length == 0">
-                                        <ToolTips :title="`已完成数量${0}`">
-                                            任务 ({{0}}/{{tasksInfo.length}})
-                                        </ToolTips>
-                                    </template> -->
-                                    <ToolTips v-if="alltaskshow.length > 0" :title="`已完成数量${completeNum}`">
-                                        任务 ({{completeNum}}/{{alltaskshow.length}})
-                                    </ToolTips>
-                                    <span v-else>任务</span>
+                                    </template>
+                                    <template v-else>
+                                        任务
+                                    </template>
                                 </a>
                             </li>
                             <li class="nav-item" role="presentation" v-show="artistInfo.sign_contract_status == 2">
@@ -279,7 +273,7 @@
                                         style="width: 100%">
                                 </div>
                                 <pagination :current_page="current_page" :method="getArtistTasks" :total_pages="total_pages"
-                                    :total="total"  class="mb-50"></pagination>
+                                    :total="total"  class="mb-30"></pagination>
                                 <div class="site-action fixed-button" data-plugin="actionBtn" data-toggle="modal"
                                     data-target="#addTask">
                                     <button type="button"
@@ -316,7 +310,7 @@
                                         <td v-if="work.advertising==1">
                                             是
                                         </td>
-                                        <td v-else-if="work.advertising==0">
+                                        <td v-if="work.advertising==0">
                                             否
                                         </td>
                                     </tr>
@@ -327,7 +321,7 @@
                                         style="width: 100%">
                                 </div>
                                 <pagination :current_page="current_page" :method="getTaskDate" :total_pages="total_pages"
-                                    :total="total"  class="mb-50"></pagination>
+                                    :total="total" class="mb-30"></pagination>
                                 <div class="site-action fixed-button" data-plugin="actionBtn" data-toggle="modal"
                                     data-target="#addWork">
                                     <button type="button"
@@ -406,7 +400,7 @@
                                         style="width: 100%">
                                 </div>
                                 <pagination :current_page="current_page" :method="getArtistsBill" :total_pages="total_pages"
-                                            :total="total"></pagination>
+                                            :total="total" class="mb-30"></pagination>
                             </div>
                             <div class="tab-pane animation-fade fixed-button-father" id="forum-artist-base"
                                 role="tabpanel" :class="artistInfo.sign_contract_status == 2?'':'active'">
@@ -693,7 +687,7 @@
                         </div>
                     </div>
                     <div class="modal-footer">
-                        <button class="btn btn-sm btn-white btn-pure" data-dismiss="modal">取消</button>
+                        <button class="btn btn-sm btn-white btn-pure" data-dismiss="modal" @click="taskcancel">取消</button>
                         <button class="btn btn-primary" type="submit" @click="addTask">确定</button>
                     </div>
 
@@ -1182,6 +1176,8 @@
                 calendarId:[],
                 scheduleData:'',
                 uploadUrl:'',
+                taskNum: '',
+                doneTaskNum: 0,
                 participant_ids:[],
                 delType: '',
                 isAllday: false,
@@ -1204,7 +1200,8 @@
                 contractType:'bloggers',
                 formDate:{},
                 priorityArr:config.priorityArr,
-                platformDate:''
+                platformDate:'',
+                scoreId:''
             }
         },
         computed: {
@@ -1222,7 +1219,7 @@
             this.getTaskDate();
              this.getCalendar();
             this.charts();
-            this.getArtistTasks();
+            this.getTaskNum();
             let _this = this;
             this.user = JSON.parse(Cookies.get('user'))
             this.$store.commit('changeNewPrincipal', {
@@ -1332,7 +1329,7 @@
                 };
                 fetch('get', '/bloggers/' + this.artistId, data).then(function (response) {
                   
-                    let doneTaskNum = 0
+                    
                     _this.artistInfo = response.data;
                     _this.uploadUrl = _this.artistInfo.avatar;
                     if(_this.artistInfo.intention){
@@ -1346,13 +1343,7 @@
                         _this.artistInfo.sign_contract_other=2
                     }
                     _this.tasksInfo = response.data.tasks.data //任务数据
-                    if (_this.tasksInfo.length > 0) {
-                        for (let i = 0; i < _this.tasksInfo.length; i++) {
-                            if (_this.tasksInfo[i].status == 2) {
-                                doneTaskNum = doneTaskNum + 1
-                            }
-                        }
-                    }
+                    
                      //项目
                      if(response.data.trails){
                         for (let i = 0; i < response.data.trails.data.length; i++) {
@@ -1375,7 +1366,15 @@
                 });
                 //任务状态跑组。试戏
                 fetch('get', '/task_types').then(function (response) {
+                    
                     _this.tasksType = response.data;
+                    response.data.forEach(item=>{
+                        
+                        if(item.title == '视频评分'){
+                           _this.scoreId = item.id 
+                           console.log(_this.scoreId)
+                        }
+                    })
                 })
                 fetch('get', '/bloggers/gettype').then(function (response) {
                     _this.artistTypeArr = response.data
@@ -1420,6 +1419,9 @@
                     }
                 })
                 
+            },
+            ScheduleBox: function(value){
+                this.showScheduleModal(value)
             },
             addSchedule: function () {
                 let startTime = '';
@@ -1484,6 +1486,7 @@
                 })
             },
             showScheduleModal: function (schedule) {
+                console.log(schedule)
                 let data = {
                     include: 'calendar,participants,creator,material,affixes,project,task',
                 };
@@ -1520,6 +1523,7 @@
                     }
                 })
             },
+           
             showAddScheduleModal: function (date) {
                 if (this.calendarId.length > 0) {
                     this.$refs.scheduleStartDate.setValue(date);
@@ -1690,8 +1694,8 @@
             getArtistTasks: function () {
                 let _this = this;
                 fetch('get', '/bloggers/' + this.artistId+'/tasks').then(function (response) {
-                   
                     _this.alltaskshow = response.data
+                    console.log( response.data)
                     _this.current_page = response.meta.pagination.current_page;
                     _this.total = response.meta.pagination.total;
                     _this.total_pages = response.meta.pagination.total_pages;
@@ -1700,7 +1704,26 @@
                             item.status = 4
                         }  
                     })
+                    
                  
+                })
+            },
+            taskcancel:function(){
+                this.$store.state.newParticipantsInfo = []
+            },
+            getTaskNum:function(){
+                let _this = this;
+                fetch('get', '/bloggers/' + this.artistId+'/tasks').then(function (response) {
+                
+                    _this.alltaskshow = response.data
+                    if (_this.alltaskshow.length > 0) {
+                            for (let i = 0; i < _this.alltaskshow.length; i++) {
+                                if (_this.alltaskshow[i].status == 2) {
+                                _this.doneTaskNum = _this.doneTaskNum + 1
+                                }
+                            }
+                    }
+                     _this.taskNum = `${_this.doneTaskNum}/${_this.alltaskshow.length}`
                 })
             },
             editBaseInfo: function () {
@@ -1910,17 +1933,16 @@
                 }
             },
             changeWorkAd: function (value) {
-                if (value) {
-                    this.advertisingType = value.id;
-                } else {
+                console.log(value)
+                if (value == 1) {
+                    this.advertisingType = 1
+                } 
+                else if(value == 2){
                     this.advertisingType = 0;
                 }
             },
             //添加作品
             addWork: function () {
-                if (this.advertisingType == 2) {
-                    this.advertisingType = 0
-                }
                 let _this = this;
                 let data = {
                     nickname: this.artistInfo.nickname,
@@ -1936,7 +1958,8 @@
                     $('#addWork').modal('hide');
                     _this.getTaskDate()
                 })
-                let obj={
+                if(this.scoreId){
+                    let obj={
                     title:'制作人视频评分-视频评分',
                     principal_id:this.user.id,
                     start_at:this.start_Time,
@@ -1945,12 +1968,14 @@
                     resource_type:1,
                     resourceable_id:this.artistId,
                     desc:'这是一个评分问卷任务',//默认
-                    type:1609922710//评分问卷
+                    type:this.scoreId//评分问卷
                 }
                 fetch('post', '/tasks', obj
                 ).then(function (response) {
-                    _this.getArtist()
+                    _this.getTaskNum();
                 })
+                }
+                
             },
             //孵化期截止时间计算
             getTimes:function(){
@@ -2354,6 +2379,10 @@
         top: 0px;
         left: 0px;
         opacity: 0;
-
+    }
+    .fixed-button {
+        position: absolute;
+        bottom: 45px;
+        right: 0;
     }
 </style>
