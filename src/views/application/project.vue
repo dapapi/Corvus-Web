@@ -100,6 +100,8 @@
                 </div>
             </div>
         </div>
+        <AddClientType type="project" @change="changeProjectType"></AddClientType>
+        <BuildProject :project-fields-arr="projectFieldsArr" :project-type="projectType"></BuildProject>
    </div>
 </template>
 <script>
@@ -131,7 +133,9 @@ export default {
                 customizeInfo: config.customizeInfo,
                 projectStatus:1,//项目区别
                 projectInfo:'',
-                myType:''
+                myType:'',
+                projectFieldsArr: [],
+                projectType: '',
             }
 
 
@@ -176,6 +180,45 @@ export default {
                     _this.current_page = response.meta.pagination.current_page;
                     _this.total = response.meta.pagination.total;
                     _this.total_pages = response.meta.pagination.total_pages;
+                });
+            },
+            changeProjectType: function (value) {
+                let organization_id = JSON.parse(Cookies.get('user')).organization_id
+                if (value == 3) {
+                    if (organization_id == 411) {
+                        value = 3
+                    } else if (organization_id == 412) {
+                        value = 4
+                    }
+                }
+                this.projectType = value;
+
+                this.selectProjectType();
+                $('#addProject').modal('show');
+            },
+            selectProjectType: function () {
+                this.projectFieldsArr = [];
+                if (this.projectType == 5) {
+                    return
+                }
+                let _this = this;
+                fetch('get', '/project_fields', {
+                    type: _this.projectType,
+                    status: 1,
+                }).then(function (response) {
+                    for (let i = 0; i < response.data.length; i++) {
+                        if (response.data[i].field_type === 2 || response.data[i].field_type === 6) {
+                            response.data[i].contentArr = [];
+                            for (let j = 0; j < response.data[i].content.length; j++) {
+                                response.data[i].contentArr.push({
+                                    value: response.data[i].content[j],
+                                    name: response.data[i].content[j]
+                                })
+                            }
+                        }
+                    }
+                    _this.projectFieldsArr = response.data
+
                 });
             },
             projectDetail(projectId){

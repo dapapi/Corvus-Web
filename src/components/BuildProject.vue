@@ -10,7 +10,7 @@
                     <h4 class="modal-title">新增项目</h4>
                 </div>
                 <div class="modal-body">
-                    <div class="col-md-12 example clearfix" v-show="projectType != 5 && trailsArr.length > 0">
+                    <div class="col-md-12 example clearfix" v-show="projectType != 5">
                         <div class="col-md-2 text-right float-left px-0 require">销售线索</div>
                         <div class="col-md-10 float-left">
                             <Selectors :options="trailsArr" @change="addProjectTrail" ref="trails"
@@ -20,7 +20,7 @@
                     <div class="col-md-12 example clearfix" v-show="projectType != 5">
                         <div class="col-md-2 text-right float-left px-0 require">项目来源</div>
                         <div class="col-md-10 float-left">
-                            <div class="col-md-6 float-left pl-0" v-if="trailOriginArr.length > 0">
+                            <div class="col-md-6 float-left pl-0">
                                 <Selectors :options="trailOriginArr"
                                            @change="(value) => addProjectBaseInfo(value, 'resource_type')"
                                            ref="trailOrigin"></Selectors>
@@ -49,7 +49,7 @@
                                     @change="(value) => addProjectBaseInfo(value, 'principal_id')"></InputSelectors>
                         </div>
                     </div>
-                    <div class="col-md-12 example clearfix" v-show="projectType != 5 && starsArr.length > 0">
+                    <div class="col-md-12 example clearfix" v-show="projectType != 5">
                         <div class="col-md-2 text-right float-left px-0 require">目标艺人</div>
                         <div class="col-md-10 float-left">
                             <Selectors multiple="true" :options="starsArr" ref="intentionArtist"

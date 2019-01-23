@@ -40,12 +40,12 @@
 
                 <div class="col-md-12">
                     <ul class="nav nav-tabs nav-tabs-line" role="tablist">
-                        <li class="nav-item" role="presentation" @click="getTrails(1)">
+                        <li class="nav-item" role="presentation" @click="changeTakeType()">
                             <a class="nav-link active" data-toggle="tab" href="#forum-project"
                                aria-controls="forum-base"
                                aria-expanded="true" role="tab">所有线索</a>
                         </li>
-                        <li class="nav-item" role="presentation" @click="getTrails(1, 1)">
+                        <li class="nav-item" role="presentation" @click="changeTakeType(1)">
                             <a class="nav-link" data-toggle="tab" href="#forum-project"
                                aria-controls="forum-present"
                                aria-expanded="false" role="tab">未被领取</a>
@@ -189,6 +189,7 @@
                 keyword: '',
                 take_type: '',
                 pool_type: '',
+                trailTakeType: '',
             }
         },
         created() {
@@ -231,14 +232,19 @@
                 })
             },
 
-            getTrails(pageNum = 1, type) {
+            changeTakeType(type) {
+                this.trailTakeType = type;
+                this.getTrails()
+            },
+
+            getTrails(pageNum = 1) {
                 this.selectedTrailsArr = [];
                 this.selectAllTrail = false;
                 let data = {
                     page: pageNum
                 };
-                if (type) {
-                    data.take_type = type
+                if (this.trailTakeType) {
+                    data.take_type = this.trailTakeType
                 }
                 if (this.keyword) {
                     data.keyword = this.keyword
