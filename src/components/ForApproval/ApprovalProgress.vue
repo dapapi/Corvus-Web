@@ -54,7 +54,7 @@
                 <div class="col-md-4 comment-text">{{item.comment}}</div>
             </div>  
         </div>
-        <div class="col-md-12 mt-20 px-0">
+        <div class="col-md-12 mt-20 px-0" v-if="!projcetinfo">
             <div class="col-md-1 px-0 float-left">知会人</div>
             <div class="col-md-11 float-left pr-0">
                 <AddMember/>
@@ -69,7 +69,7 @@
 
     export default {
                     //这是啥    提交页/详情页   231/232...   知会人     自由流程
-        props: ['formid', 'mode', 'formstatus', 'notice', 'trend','freeProgress'],
+        props: ['formid', 'mode', 'formstatus', 'notice', 'trend','freeProgress','projcetinfo'],
         data() {
             return {
                 colorArr: ['#F23E7C', '#FF68E2', '#FB8C00', '#B53FAF', '#27D3A8', '#2CCCDA', '#38BA5D', '#3F51B5'],
