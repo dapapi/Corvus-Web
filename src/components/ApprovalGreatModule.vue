@@ -124,7 +124,7 @@ export default {
     },
     computed:{
         isFree(){
-            if(this.formData.change_type.id === 223){
+            if(this.formData.change_type && this.formData.change_type.id === 223){
                 return true
             }else{
                 return false
@@ -163,6 +163,7 @@ export default {
             let _this = this
             if(this.getRequiredArr()){
                 Object.assign(this.sendData,{notice:this.$store.state.newParticipantsInfo})
+                Object.assign(this.sendData,{chains:this.$store.state.otherSlot})
                 fetch('post','/approvals/'+this.formData.form_id,this.sendData).then((params) => {
                     toastr.success('提交成功')
                     $('#approval-great-module').modal('hide')
