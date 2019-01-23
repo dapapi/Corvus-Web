@@ -275,7 +275,7 @@
                     'value': ''
                 }, {
                     'name': '商务线索',
-                    'value': '3'
+                    'value': '3,4'
                 }, {
                     'name': '影视线索',
                     'value': '1'
@@ -287,8 +287,8 @@
                     'name': '全部',
                     'value': ''
                 }, {
-                    'name': 'papi',
-                    'value': '4'
+                    'name': '商务线索',
+                    'value': '3,4'
                 }, {
                     'name': '影视线索',
                     'value': '1'
