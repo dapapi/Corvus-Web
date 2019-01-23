@@ -484,19 +484,35 @@
                                             </div>
                                         </div>
                                         <div class="clearfix">
-                                            <div class="col-md-2 float-left pl-0">回款日期<span class="pl-5">{{ returnMoney.plan_returned_time }}</span>
+                                            <div class="float-left" style="width: 20%">回款日期
+                                                <span class="pl-5">{{ returnMoney.plan_returned_time }}</span>
                                             </div>
-                                            <div class="col-md-2 float-left pl-0">计划回款
+                                            <div class="float-left" style="width: 20%">计划回款
                                                 <span class="money-color pl-5">
-                            {{ returnMoney.plan_returned_money }}元
-                            </span>
+                                                    {{ returnMoney.plan_returned_money }}元
+                                                </span>
                                             </div>
-                                            <div class="col-md-2 float-left pl-0">实际回款<span class="money-color pl-5">{{ returnMoney.practicalsum }}元</span>
+                                            <div class="float-left" style="width: 20%">实际回款
+                                                <span class="money-color pl-5">
+                                                <template v-if="returnMoney.practicalsum.data > 0">
+                                                    {{ returnMoney.practicalsum.data[0].practicalsum ? returnMoney.practicalsum.data[0].practicalsum:'0' }}元
+                                                </template>
+                                                <template v-else>
+                                                    0元
+                                                </template>
+                                                </span>
                                             </div>
-                                            <div class="col-md-2 float-left pl-0">开票金额<span
-                                                    class="money-color pl-5">{{ returnMoney.invoicesum }}元</span>
+                                            <div class="float-left" style="width: 20%">开票金额<span
+                                                    class="money-color pl-5">
+                                                <template v-if="returnMoney.invoicesum.data > 0">
+                                                    {{ returnMoney.invoicesum.data[0].invoicesum ? returnMoney.invoicesum.data[0].invoicesum:'0' }}元
+                                                </template>
+                                                <template v-else>
+                                                    0元
+                                                </template>
+                                                </span>
                                             </div>
-                                            <div class="col-md-2 float-right pr-0 text-right" style="color: #cccccc;">
+                                            <div class="float-right text-right" style="color: #cccccc;width: 20%;">
                                                 <i class="iconfont icon-bianji2 pr-40 pointer-content"
                                                    data-toggle="modal"
                                                    data-target="#addPaybackTime"
@@ -512,17 +528,17 @@
                                             <div v-if="item.type.data.type === 1">
                                                 <div class="font-weight-bold">回款记录</div>
                                                 <div class="clearfix">
-                                                    <div class="col-md-2 float-left pl-0">回款日期<span
+                                                    <div class="float-left" style="width: 20%">回款日期<span
                                                             class="pl-5">{{ item.plan_returned_time }}</span>
                                                     </div>
-                                                    <div class="col-md-2 float-left pl-0">回款金额<span
+                                                    <div class="float-left" style="width: 20%">回款金额<span
                                                             class="money-color pl-5">{{ item.plan_returned_money }}元</span>
                                                     </div>
                                                     <div class="col-md-2 float-left pl-0">付款方式<span
                                                             class="pl-5">{{ item.type.data.plan_returned_money }}</span>
                                                     </div>
-                                                    <div class="col-md-2 float-right pr-0 text-right"
-                                                         style="color: #cccccc;">
+                                                    <div class="float-right text-right"
+                                                         style="color: #cccccc;width: 20%;">
                                                         <i class="iconfont icon-bianji2 pr-40 pointer-content"
                                                            data-toggle="modal" data-target="#addPayback"
                                                            @click="editProjectPaybackRecording(item, returnMoney, 'payback')"></i>
@@ -535,16 +551,16 @@
                                             <div v-if="item.type.data.type === 2">
                                                 <div class="font-weight-bold">开票记录</div>
                                                 <div class="clearfix">
-                                                    <div class="col-md-2 float-left pl-0">开票日期<span
+                                                    <div class="float-left" style="width: 20%">开票日期<span
                                                             class="pl-5">{{ item.plan_returned_time }}</span>
                                                     </div>
-                                                    <div class="col-md-2 float-left pl-0">开票金额<span
+                                                    <div class="float-left" style="width: 20%">开票金额<span
                                                             class="money-color pl-5">{{ item.plan_returned_money }}元</span>
                                                     </div>
-                                                    <div class="col-md-2 float-left pl-0">票据类型<span class="pl-5">{{ item.type.data.plan_returned_money }}</span>
+                                                    <div class="float-left" style="width: 20%">票据类型<span class="pl-5">{{ item.type.data.plan_returned_money }}</span>
                                                     </div>
-                                                    <div class="col-md-2 float-right pr-0 text-right"
-                                                         style="color: #cccccc;">
+                                                    <div class="float-right text-right"
+                                                         style="color: #cccccc;width: 20%;">
                                                         <i class="iconfont icon-bianji2 pr-40 pointer-content"
                                                            data-toggle="modal" data-target="#addInvoice"
                                                            @click="editProjectPaybackRecording(item, returnMoney)"></i>
