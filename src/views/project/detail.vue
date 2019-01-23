@@ -84,7 +84,7 @@
                         <div v-if="projectTaskingInfo.length > 0" class="col-md-6 float-left pl-0">
                             <div class="col-md-6 pl-0"><i class="iconfont icon-iconset0399  pr-2"></i> 任务</div>
                             <div class="clearfix example" v-for="(task,index) in projectTaskingInfo" v-if="index < 3">
-                                <div class="col-md-3 float-left pl-0">{{ task.title }}</div>
+                                <div class="col-md-3 float-left pl-0 exceeded-display">{{ task.title }}</div>
                                 <div class="col-md-2 float-left pl-0">{{ task.principal.data.name }}</div>
                                 <div class="col-md-4 float-left pl-0">{{ task.end_at }}</div>
                                 <div class="col-md-3 float-left pl-0">
@@ -97,7 +97,7 @@
                                 </div>
                             </div>
                         </div>
-                        <div class="col-md-6 float-left pl-0 mb-20 px-0" v-if="projectInfo.type != 5">
+                        <div class="col-md-6 float-left pl-0 px-0" v-if="projectInfo.type != 5">
                             <div class="mb-20 float-left clearfix col-md-6 pl-0">
                                 <div class="float-left col-md-5 px-0"><i class="iconfont icon-renminbi1688  pr-2"></i>预计订单收入
                                 </div>

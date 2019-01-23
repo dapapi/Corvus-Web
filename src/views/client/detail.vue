@@ -42,12 +42,12 @@
                         </div>
                     </div>
                     <div class="clearfix">
-                        <div class="col-md-6 float-left pl-0 mb-20" v-if="clientTasksInfo.length > 0">
+                        <div class="col-md-6 float-left pl-0" v-if="clientTasksInfo.length > 0">
                             <div class="col-md-6 pl-0"><i class="iconfont icon-iconset0399 pr-2" aria-hidden="true"></i>任务
                             </div>
                             <div class="clearfix example " v-for="(task, index) in clientTasksInfo" v-if="index < 3"
                                  style="cursor: pointer" :key="index" @click="linkTo('/tasks/' + task.id)">
-                                <div class="col-md-3 float-left px-0">{{ task.title }}</div>
+                                <div class="col-md-3 float-left px-0 exceeded-display">{{ task.title }}</div>
                                 <div class="col-md-3 float-left px-0">{{ task.principal?task.principal.data.name:'' }}
                                 </div>
                                 <div class="col-md-4 float-left px-0">{{ task.end_at }}</div>
@@ -63,13 +63,13 @@
                                 </div>
                             </div>
                         </div>
-                        <div class="col-md-6 float-left pl-0 mb-20" v-if="clientProjectsInfo.length > 0">
+                        <div class="col-md-6 float-left pl-0" v-if="clientProjectsInfo.length > 0">
                             <div class="col-md-6 p-0"><i class="iconfont icon-ego-box pr-2 " aria-hidden="true"></i>项目
                             </div>
                             <div class="clearfix example" v-for="(project, index) in clientProjectsInfo"
                                  v-if="index < 3" :key="index"
                                  @click="linkTo('/projects/' + project.id)" style="cursor: pointer">
-                                <div class="col-md-3 float-left px-0">{{project.title}}</div>
+                                <div class="col-md-3 float-left px-0 exceeded-display">{{project.title}}</div>
                                 <div class="col-md-3 float-left px-0">{{ clientTypeArr.find(item => item.value ==
                                     project.type).name }}
                                 </div>

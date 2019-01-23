@@ -271,4 +271,10 @@
         color: black !important;
     }
 
+    .exceeded-display {
+        overflow: hidden;
+        text-overflow:ellipsis;
+        white-space: nowrap;
+    }
+
 </style>
