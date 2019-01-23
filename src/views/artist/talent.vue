@@ -215,8 +215,8 @@
                                 <th class="cell-300" scope="col"
                                     v-if="bloggerInfo.find(item=>item.sign_contract_status==2)">签约日期
                                 </th>
-                                <!-- <th class="cell-300" scope="col" v-if="bloggerInfo.find(item=>item.sign_contract_status==2)">合同起始日</th>
-                                <th class="cell-300" scope="col" v-if="bloggerInfo.find(item=>item.sign_contract_status==3)">合同终止日</th> -->
+                                <!-- <th class="cell-300" scope="col" v-if="bloggerInfo.find(item=>item.sign_contract_status==2)">合同起始日</th> -->
+                                <th class="cell-300" scope="col" v-if="bloggerInfo.find(item=>item.sign_contract_status==3)">合同终止日</th>
                                 <th class="cell-300" scope="col">录入时间</th>
                                 <th class="cell-300" scope="col">最后跟进时间</th>
                             </tr>
@@ -646,7 +646,7 @@
                 <div class="modal-content">
                     <div class="modal-header">
                         <button type="button" class="close" aria-hidden="true" data-dismiss="modal">
-                            <i class="iconfont icon-guanbi" aria-hidden="true"></i>
+                            <i class="iconfont icon-guanbi" aria-hidden="true" @click="abrogate"></i>
                         </button>
                         <h4 class="modal-title">分配制作人</h4>
                     </div>
@@ -670,7 +670,7 @@
                 <div class="modal-content">
                     <div class="modal-header">
                         <button type="button" class="close" aria-hidden="true" data-dismiss="modal">
-                            <i class="iconfont icon-guanbi" aria-hidden="true"></i>
+                            <i class="iconfont icon-guanbi" aria-hidden="true" @click="cancelGiveBroker()"></i>
                         </button>
                         <h4 class="modal-title">
                             <template v-if="giveType == 1">分配分配经理人</template>
@@ -1142,7 +1142,6 @@
             },
             //分配制作人
             giveProducer: function () {
-
                 let _this = this
                 let data = {}
                 data = {
