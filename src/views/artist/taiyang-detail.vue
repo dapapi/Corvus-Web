@@ -42,7 +42,8 @@
                                 <div class="float-left pl-0 pr-2 col-md-2">
                                     <i class="iconfont icon-yonghu pr-2" aria-hidden="true"></i>经理人
                                 </div>
-                                <div class="font-weight-bold float-left col-md-10 pl-0" v-if="artistInfo.broker" style="padding-top:1.5px">
+                                <div class="font-weight-bold float-left col-md-10 pl-0" v-if="artistInfo.broker"
+                                     style="padding-top:1.5px">
                                     <span v-for="(broker,index) in artistInfo.broker.data" :key="index" class="mr-10">
                                         <span>{{broker.company}}</span>
                                         <span v-if="broker.company">-</span>
@@ -55,7 +56,8 @@
                                 <div class="float-left pl-0 pr-2 col-md-2">
                                     <i class="iconfont icon-yonghu pr-2" aria-hidden="true"></i>宣传人
                                 </div>
-                                <div class="font-weight-bold float-left col-md-10 pl-0" v-if="artistInfo.publicity" style="padding-top:2px">
+                                <div class="font-weight-bold float-left col-md-10 pl-0" v-if="artistInfo.publicity"
+                                     style="padding-top:2px">
                                     <span v-for="(publicity,index) in artistInfo.publicity.data" :key="index"
                                           class="mr-10">
                                         <span>{{publicity.department.name}}</span>
@@ -89,10 +91,10 @@
                             </div>
                         </div>
                     </div>
-                    <div class="col-md-6 float-left pl-0 mb-20" >
-                        <div class="col-md-13" v-if="artistInfo.sign_contract_status == 2&&scheduleShow.length>0" >
+                    <div class="col-md-6 float-left pl-0 mb-20">
+                        <div class="col-md-13" v-if="artistInfo.sign_contract_status == 2&&scheduleShow.length>0">
                             <div class="col-md-12"><i class="iconfont icon-ego-box pr-2"></i>日程</div>
-                            <div class="clearfix example projectshow" v-for="(item,index) in scheduleShow" :key="index" >
+                            <div class="clearfix example projectshow" v-for="(item,index) in scheduleShow" :key="index">
                                 <div class="col-md-2 float-left">{{item.title}}</div>
                                 <div class="col-md-2 float-left">{{item.creator.data.name}}</div>
                                 <div class="col-md-4 float-left">{{item.start_at}}</div>
@@ -135,7 +137,7 @@
                             <li class="nav-item" role="presentation" v-if="artistInfo.sign_contract_status == 2">
                                 <a class="nav-link" data-toggle="tab" href="#forum-artist-work"
                                    aria-controls="forum-present"
-                                   aria-expanded="false" role="tab" >作品库</a>
+                                   aria-expanded="false" role="tab">作品库</a>
                             </li>
                             <!--<li class="nav-item" role="presentation" v-show="artistInfo.sign_contract_status == 2">-->
                             <!--<a class="nav-link" data-toggle="tab" href="#forum-artist-fans"-->
@@ -161,7 +163,7 @@
                                  role="tabpanel" :class="artistInfo.sign_contract_status == 2?'active':''">
                                 <div class="col-md-12">
                                     <calendar v-if="artistInfo.sign_contract_status == 2" :goto-date="selectedDate"
-                                              :calendars="calendarId" ref="calendar"
+                                              :calendars="calendarId" ref="calendar" @showToast="showToast"
                                               @scheduleClick="showScheduleModal" :isModel="true"
                                               @dayClick="showAddScheduleModal"></calendar>
                                 </div>
@@ -245,8 +247,9 @@
                                     <img src="https://res.papitube.com/corvus/images/content-none.png" alt=""
                                          style="width: 100%">
                                 </div>
-                                <pagination :current_page="current_page" :method="getTaskList" :total_pages="total_pages"
-                                    :total="total"  class="mb-50"></pagination>
+                                <pagination :current_page="current_page" :method="getTaskList"
+                                            :total_pages="total_pages"
+                                            :total="total" class="mb-50"></pagination>
                                 <div class="site-action fixed-button" data-plugin="actionBtn" data-toggle="modal"
                                      data-target="#addTask">
                                     <button type="button"
@@ -289,8 +292,9 @@
                                     <img src="https://res.papitube.com/corvus/images/content-none.png" alt=""
                                          style="width: 100%">
                                 </div>
-                                <pagination :current_page="current_page" :method="getTaskList" :total_pages="total_pages"
-                                    :total="total"  class="mb-50"></pagination>
+                                <pagination :current_page="current_page" :method="getTaskList"
+                                            :total_pages="total_pages"
+                                            :total="total" class="mb-50"></pagination>
                                 <div class="site-action fixed-button" data-plugin="actionBtn" data-toggle="modal"
                                      data-target="#addWork">
                                     <button type="button"
@@ -366,13 +370,16 @@
                             <div class="tab-pane animation-fade  pb-20 fixed-button-father" id="forum-artist-base"
                                  role="tabpanel" :class="artistInfo.sign_contract_status == 2?'':'active'">
                                 <div class="card">
-                                    <div class="card-header card-header-transparent card-header-bordered" style="position: relative;">
+                                    <div class="card-header card-header-transparent card-header-bordered"
+                                         style="position: relative;">
                                         <div class="float-left font-weight-bold third-title">艺人信息</div>
-                                        <div class="float-right pointer-content" v-show="!isEdit" style="position:absolute;top:10px;right:30px;">
+                                        <div class="float-right pointer-content" v-show="!isEdit"
+                                             style="position:absolute;top:10px;right:30px;">
                                             <i class="iconfont icon-bianji2" aria-hidden="true"
                                                @click="editBaseInfo"></i>
                                         </div>
-                                        <div class="float-right mr-40" v-show="isEdit" style="position:absolute;top:5px;right:0px;">
+                                        <div class="float-right mr-40" v-show="isEdit"
+                                             style="position:absolute;top:5px;right:0px;">
                                             <button class="btn btn-sm btn-white btn-pure" @click="cancelEdit">取消
                                             </button>
                                             <button class="btn btn-primary" @click="changeArtist">确定</button>
@@ -533,8 +540,10 @@
                                             </div>
                                             <div class="card-text py-10 px-0 clearfix col-md-6 float-left ">
                                                 <div class="col-md-3 float-left text-right pl-0">签约状态</div>
-                                                <div class="col-md-9 float-left font-weight-bold" v-if="artistInfo.sign_contract_status" :class="isEdit?'py-10':''">
-                                                    {{signState.find(item=>item.value === artistInfo.sign_contract_status).name}}                        
+                                                <div class="col-md-9 float-left font-weight-bold"
+                                                     v-if="artistInfo.sign_contract_status" :class="isEdit?'py-10':''">
+                                                    {{signState.find(item=>item.value ===
+                                                    artistInfo.sign_contract_status).name}}
                                                 </div>
                                             </div>
                                             <div class="card-text py-10 px-0 clearfix col-md-6 float-left mt-10"
@@ -600,7 +609,8 @@
                 <div class="panel" style="width: calc(34% - 15px);">
                     <div class="col-md-12">
                         <div class="card col-md-12">
-                            <div class="card-header card-header-transparent card-header-bordered p-10" style="font-size: 16px;font-weight: bold;">
+                            <div class="card-header card-header-transparent card-header-bordered p-10"
+                                 style="font-size: 16px;font-weight: bold;">
                                 <div>艺人跟进</div>
                             </div>
                             <div class="card-block">
@@ -616,6 +626,9 @@
 
         </div>
 
+        <div class="calendar-toast" v-show="toastShow"
+             :style="'position: absolute;top:' + toastY + 'px; left: ' + toastX + 'px;'">双击创建日程
+        </div>
 
         <modal :id="'affix'" :title="'删除附件'" @onOK="deleteAffix">
             <div class="text-center m-20">您确认删除该附件吗？</div>
@@ -1183,6 +1196,7 @@
     import Cookies from 'js-cookie'
 
     import ApprovalGreatModule from '../../components/ApprovalGreatModule'
+
     export default {
         data: function () {
             return {
@@ -1216,7 +1230,7 @@
                 artistSourceArr: config.artistSourceArr,
                 taiyangCommunicationStatusArr: config.taiyangCommunicationStatusArr,
                 yesOrNoArr: config.yesOrNoArr,
-                signState:config.signState,
+                signState: config.signState,
                 changeArtistInfo: {},
                 artistSocialPlatform: [
                     {
@@ -1288,10 +1302,13 @@
                 delType: '',
                 calendarName: '',
                 scheduleRepeat: 0,
-                contractType:'stars',
-                formDate:'',
-                scheduleShow:[],
-                priorityArr:config.priorityArr
+                contractType: 'stars',
+                formDate: '',
+                scheduleShow: [],
+                priorityArr: config.priorityArr,
+                toastShow: false,
+                toastX: 0,
+                toastY: 0,
             }
         },
 
@@ -1342,7 +1359,7 @@
                     _this.uploadUrl = _this.artistInfo.avatar
                     _this.artistProjectsInfo = []
                     _this.artistTasksInfo = response.data.tasks.data//任务数据
-                   
+
                     _this.artistWorksInfo = response.data.works.data//作品数据
                     _this.affixes = response.data.affixes.data
                     for (let i = 0; i < response.data.trails.data.length; i++) {
@@ -1351,32 +1368,32 @@
                             _this.artistProjectsInfo.push(response.data.trails.data[i].project.data)//项目数据
                         }
                     }
-                  
-                   
+
+
                     _this.isLoading = false
                 })
 
             },
-            getCalendar:function(){
-                 this.artistId = this.$route.params.id;
+            getCalendar: function () {
+                this.artistId = this.$route.params.id;
 
                 let data = {
                     include: 'calendar,schedule,schedule.creator',
                 };
                 let _this = this;
                 fetch('get', '/stars/' + this.artistId, data).then(function (response) {
-                     if (response.data.calendar) {
+                    if (response.data.calendar) {
                         _this.calendarId.push(response.data.calendar.data.id)
                         _this.calendarName = response.data.calendar.data.title
                     }
-                      //日程展示
-                     if(response.data.schedule){
-                       for (let i = 0; i < response.data.schedule.data.length; i++) {
-                           _this.scheduleShow.push(response.data.schedule.data[i])  
-                       } 
+                    //日程展示
+                    if (response.data.schedule) {
+                        for (let i = 0; i < response.data.schedule.data.length; i++) {
+                            _this.scheduleShow.push(response.data.schedule.data[i])
+                        }
                     }
                 })
-                
+
             },
             /*查看日历详情 --添加日历 -- 修改日历 */
 
@@ -1459,6 +1476,14 @@
                     $('#changeSchedule').modal('hide');
                     toastr.success('添加成功')
                 })
+            },
+            showToast: function (clientX, clientY) {
+                this.toastX = clientX - 100;
+                this.toastY = clientY - 25;
+                this.toastShow = true;
+                setTimeout(() => {
+                    this.toastShow = false
+                }, 1000)
             },
             changeSchedule: function () {
                 let startTime = '';
@@ -2273,13 +2298,13 @@
                     _this.getArtist();
                 })
             },
-            contractlist(status){
+            contractlist(status) {
                 let _this = this;
-                let data={
-                    type:this.contractType
+                let data = {
+                    type: this.contractType
                 }
                 data.status = status
-                fetch('get','approvals/specific_contract',data).then(function(response){
+                fetch('get', 'approvals/specific_contract', data).then(function (response) {
                     _this.formDate = response.data
                     $('#approval-great-module').modal('show')
                 })
@@ -2463,9 +2488,9 @@
         line-height: 76px;
         border-radius: 50%;
         border: 1px solid #eee;
-        background-repeat:no-repeat; 
-        background-size:100% 100%;
-        -moz-background-size:100% 100%;
+        background-repeat: no-repeat;
+        background-size: 100% 100%;
+        -moz-background-size: 100% 100%;
     }
 
     .puls span {
@@ -2479,14 +2504,23 @@
         opacity: 0;
 
     }
+
     .card-block .card-text {
         display: flex;
         align-items: center;
     }
-    .card-header:first-child{
+
+    .card-header:first-child {
         border-radius: calc(.215rem - 1px) calc(.215rem - 1px) 0 0;
         display: flex;
         align-items: center;
+    }
+
+    .calendar-toast {
+        background: #f5f5f5;
+        padding: 2px 3px;
+        border-radius: 2px;
+        z-index: 1000;
     }
 </style>
 

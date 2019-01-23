@@ -124,10 +124,12 @@ export default {
     },
     computed:{
         isFree(){
-            if(this.formData.change_type.id === 223){
-                return true
-            }else{
-                return false
+            if (this.formData) {
+                if(this.formData.change_type.id === 223){
+                    return true
+                }else{
+                    return false
+                }
             }
         }
     },
