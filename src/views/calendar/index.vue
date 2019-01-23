@@ -950,17 +950,20 @@
             },
 
             showScheduleModal: function (schedule) {
+                console.log(schedule)
                 let data = {
                     include: 'calendar,participants,creator,material,affixes,project,task',
                 };
                 fetch('get', '/schedules/' + schedule.id, data).then(response => {
                     if (!response) {
                         this.scheduleData = schedule;
+                        console.log(this.scheduleData)
                         this.noPermission = true;
                         return
                     }
                     this.noPermission = false;
                     this.scheduleData = response.data;
+                       console.log(this.scheduleData)
                     if (this.scheduleData.privacy) {
                         this.schedulePrivacy = true
                     }

@@ -675,7 +675,6 @@
         line-height: 46px;
         border-radius: 50%;
         border: 1px dashed #eee;
-
     }
 </style>
 
