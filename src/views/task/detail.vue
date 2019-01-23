@@ -453,9 +453,9 @@
                                                 </div>
                                             </div>
                                             <div style="width: 50px; padding-left: 10px; float: left;">
-                                                {{ hasAnsweredArr.length > 0 ? items.selectrows.data.filter(n =>
+                                                {{ hasAnsweredArr.length > 0 ? (items.selectrows.data.filter(n =>
                                                 n.review_question_item_id ===
-                                                item.id).length / hasAnsweredArr.length * 100: '0' }}%
+                                                item.id).length / hasAnsweredArr.length * 100).toFixed(0): '0' }}%
                                             </div>
                                             <div style="width: 50px; padding-left: 10px; float: right;">
                                                 {{items.selectrows.data.filter(n => n.review_question_item_id ===
