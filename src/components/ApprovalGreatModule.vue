@@ -18,7 +18,7 @@
                             :formid='form_id'></div>
                             <!-- ⬆️核心模块 -->
                         </div>
-                        <ApprovalProgress :formid='form_id' :trend='trendApprover.condition[0]?trendApprover:""' />
+                        <ApprovalProgress :formid='form_id' :trend='trendApprover.condition[0]?trendApprover:""' :free-progress='isFree' />
 
                     </div>
                     <div class="modal-footer">
@@ -121,6 +121,15 @@ export default {
     },
     update(){
         
+    },
+    computed:{
+        isFree(){
+            if(this.formData.change_type.id === 223){
+                return true
+            }else{
+                return false
+            }
+        }
     },
     methods:{
         directionalWatcher(params){

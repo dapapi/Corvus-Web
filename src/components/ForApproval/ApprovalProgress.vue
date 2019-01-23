@@ -3,6 +3,7 @@
         <hr v-if="mode !== 'detail'">
         <div class="approver-row col-md-12 clearfix px-0">
             <div class="float-left mt-25 col-md-1 px-0">审批人</div>
+                <AddMember otherslot='true'/>
             <div class="float-left col-md-11 pr-0">
                 <div class="approver-container float-left mt-20 ml-0" v-for="(item, index) in approver" :key="index">
                     <div class=" noselect" style="display:flex ">
@@ -62,8 +63,8 @@
     import fetch from '@/assets/utils/fetch.js'
 
     export default {
-        //这是啥    提交页/详情页   231/232...   知会人
-        props: ['formid', 'mode', 'formstatus', 'notice', 'trend'],
+                    //这是啥    提交页/详情页   231/232...   知会人     自由流程
+        props: ['formid', 'mode', 'formstatus', 'notice', 'trend','freeProgress'],
         data() {
             return {
                 colorArr: ['#F23E7C', '#FF68E2', '#FB8C00', '#B53FAF', '#27D3A8', '#2CCCDA', '#38BA5D', '#3F51B5'],
