@@ -577,7 +577,7 @@
                                                 <template v-if="artistInfo.last_updated_user">
                                                     {{artistInfo.last_updated_user}}
                                                 </template>
-                                                <template v-else>{{ artistInfo.creator.data.name}}</template>
+                                                <template v-else>{{ artistInfo.creator.data.name }}</template>
                                             </div>
                                         </div>
                                         <div class="card-text py-10 px-0 clearfix col-md-6 float-left">
@@ -1178,6 +1178,8 @@
 </template>
 
 <script>
+
+    //项目列表include 头部三个项目单独接口  作品include 任务列表单独接口  头部三个任务include  
     import fetch from '../../assets/utils/fetch.js'
     import config from '../../assets/js/config'
     import Cookies from 'js-cookie'
