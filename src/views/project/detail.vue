@@ -256,7 +256,7 @@
                                 </div>
                             </div>
                             <!-- 任务 -->
-                            <div class="tab-pane animation-fade pb-20 fixed-button-father" id="forum-project-tasks"
+                            <div class="tab-pane animation-fade fixed-button-father" id="forum-project-tasks"
                                  role="tabpanel" v-if="projectInfo.approval_status == 232 || projectInfo.type == 5">
                                 <table class="table table-hover is-indent example" data-plugin="animateList"
                                        data-animate="fade"
@@ -296,6 +296,8 @@
                                     <img src="https://res.papitube.com/corvus/images/content-none.png" alt=""
                                          style="width: 100%">
                                 </div>
+                                <pagination :current_page="current_page" :method="getProjectTasks"
+                                            :total_pages="total_pages" :total="total"></pagination>
 
                                 <div class="site-action fixed-button" data-plugin="actionBtn" data-toggle="modal"
                                      data-target="#addTask">
@@ -312,7 +314,7 @@
 
                             </div>
                             <!-- 合同 -->
-                            <div class="tab-pane animation-fade pb-20"
+                            <div class="tab-pane animation-fade"
                                  v-if="projectInfo.type != 5 && projectInfo.approval_status == 232"
                                  id="forum-project-contract"
                                  role="tabpanel">
@@ -355,15 +357,18 @@
                                     <img src="https://res.papitube.com/corvus/images/content-none.png" alt=""
                                          style="width: 100%">
                                 </div>
+                                <pagination :current_page="current_page" :method="getProjectContract"
+                                            :total_pages="total_pages"
+                                            :total="total"></pagination>
 
                             </div>
                             <!-- 账单 -->
-                            <div class="tab-pane animation-fade py-10"
+                            <div class="tab-pane animation-fade"
                                  v-if="projectInfo.type != 5 && projectInfo.approval_status == 232"
                                  id="forum-project-bill"
                                  role="tabpanel">
                                 <div class="clearfix">
-                                    <div class="float-left" style="padding: .715rem 1.429rem">
+                                    <div class="float-left col-md-10" style="padding: .715rem 1.429rem">
                                         <div class="float-left pr-40">合同金额 <span class="money-color">10000元</span></div>
                                         <div class="float-left pr-40">支出金额 <span class="money-color">1000元</span></div>
                                         <div class="float-left pr-40">税费 <span class="money-color">10000元</span></div>
@@ -373,7 +378,7 @@
                                         </div>
                                         <div class="float-left pr-40">我司分成 <span class="money-color">10000元</span></div>
                                     </div>
-                                    <div class="float-right" style="padding: .715rem 0">
+                                    <div class="float-left col-md-2 text-right" style="padding: .715rem 0">
                                         <span class="pointer-content hover-content" data-toggle="modal"
                                               data-target="#addBill">
                                             <i class="iconfont icon-tianjia pr-5"></i>新增结算单</span>
@@ -417,6 +422,9 @@
                                     <img src="https://res.papitube.com/corvus/images/content-none.png" alt=""
                                          style="width: 100%">
                                 </div>
+                                <pagination :current_page="current_page" :method="getProjectBill"
+                                            :total_pages="total_pages"
+                                            :total="total"></pagination>
                             </div>
                             <!-- 回款 -->
                             <div class="tab-pane animation-fade pt-10 pb-20"
@@ -440,10 +448,10 @@
                                             </a>
                                         </li>
                                     </ul>
-                                    <div class="float-right" style="padding: .715rem 1.429rem">
-                            <span class="pointer-content hover-content" data-toggle="modal"
-                                  data-target="#addPaybackTime" @click="editProjectPaybackTime(false)">
-                            <i class="iconfont icon-tianjia pr-5"></i>新建回款期次</span>
+                                    <div class="float-right" style="padding: .715rem 0">
+                                        <span class="pointer-content hover-content" data-toggle="modal"
+                                              data-target="#addPaybackTime" @click="editProjectPaybackTime(false)">
+                                            <i class="iconfont icon-tianjia pr-5"></i>新建回款期次</span>
                                     </div>
                                 </div>
                                 <div class="tab-pane animation-fade" id="forum-item-payback">
@@ -494,8 +502,8 @@
                                             </div>
                                             <div class="float-left" style="width: 20%">实际回款
                                                 <span class="money-color pl-5">
-                                                <template v-if="returnMoney.practicalsum.data > 0">
-                                                    {{ returnMoney.practicalsum.data[0].practicalsum ? returnMoney.practicalsum.data[0].practicalsum:'0' }}元
+                                                <template v-if="returnMoney.practicalsum">
+                                                    {{ returnMoney.practicalsum.data.practicalsum ? returnMoney.practicalsum.data.practicalsum:'0' }}元
                                                 </template>
                                                 <template v-else>
                                                     0元
@@ -504,8 +512,8 @@
                                             </div>
                                             <div class="float-left" style="width: 20%">开票金额<span
                                                     class="money-color pl-5">
-                                                <template v-if="returnMoney.invoicesum.data > 0">
-                                                    {{ returnMoney.invoicesum.data[0].invoicesum ? returnMoney.invoicesum.data[0].invoicesum:'0' }}元
+                                                <template v-if="returnMoney.invoicesum">
+                                                    {{ returnMoney.invoicesum.data.invoicesum ? returnMoney.invoicesum.data.invoicesum:'0' }}元
                                                 </template>
                                                 <template v-else>
                                                     0元
@@ -1416,6 +1424,9 @@
     export default {
         data: function () {
             return {
+                total: 0,
+                current_page: 1,
+                total_pages: 1,
                 isLoading: true,
                 projectId: '',
                 changeInfo: {},
@@ -1785,7 +1796,10 @@
 
             getProjectTasks: function () {
                 fetch('get', '/projects/' + this.projectId + '/tasks').then(response => {
-                    this.projectTasksInfo = response.data
+                    this.projectTasksInfo = response.data;
+                    this.total = response.meta.pagination.total;
+                    this.current_page = response.meta.pagination.current_page;
+                    this.total_pages = response.meta.pagination.total_pages;
                 })
             },
 
@@ -1799,17 +1813,20 @@
             },
 
             getProjectBill: function () {
-                if (this.projectBillsInfo.length > 0) {
-                    return;
-                }
                 fetch('get', '/projects/' + this.projectId + '/bill').then(response => {
-                    this.projectBillsInfo = response.data
+                    this.projectBillsInfo = response.data;
+                    this.total = response.meta.pagination.total;
+                    this.current_page = response.meta.pagination.current_page;
+                    this.total_pages = response.meta.pagination.total_pages;
                 });
             },
 
             getProjectContract: function (callback) {
                 fetch('get', '/approvals_contract/projectList', {project_id: this.projectId}).then(response => {
                     this.projectContractInfo = response.data;
+                    this.total = response.meta.pagination.total;
+                    this.current_page = response.meta.pagination.current_page;
+                    this.total_pages = response.meta.pagination.total_pages;
                     if (callback) {
                         callback(response.data)
                     }
@@ -1825,8 +1842,9 @@
                 fetch('get', '/projects/' + this.projectId + '/returned/money', data).then(response => {
                     this.projectReturnInfo = response;
                     for (let i = 0; i < response.data.length; i++) {
-                        if (Number(response.data[i].issue_name) >= this.paybackLength) {
-                            this.paybackLength = Number(response.data[i].issue_name) + 1
+                        let length = Number(response.data[i].issue_name.slice(1, -1));
+                        if (length >= this.paybackLength) {
+                            this.paybackLength = length + 1
                         }
                     }
                 });
