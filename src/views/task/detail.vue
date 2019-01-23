@@ -1133,7 +1133,7 @@
                 }
                 fetch('post', `/reviews/${this.questionId}/store/Answer`, params).then(res => {
                     toastr.success('问卷提交成功！')
-                    this.getQuestionData()
+                    this.getQuestionId()
 
                 })
             },
@@ -1150,7 +1150,7 @@
                 fetch('post', `/reviewquestionnaires/${this.questionId}/create/excellent`, params).then(res => {
                     $("#push-reason").modal("hide");
                     toastr.success('推优成功！')
-                    this.getQuestionData()
+                    this. getQuestionId()
                 })
             },
             // 根据任务id获取是否有问卷
