@@ -1,5 +1,5 @@
 <template>
-    <div class="approval-text-container col-md-12 pl-0" v-show="['昵称','项目名称','相关艺人','签约主体'].includes(consdata[0].control_title) || options.length > 0 || consdata[0].disabled">
+    <div class="approval-text-container col-md-12 pl-0" v-show="['昵称','项目名称','相关艺人','签约主体','解约主体'].includes(consdata[0].control_title) || options.length > 0 || consdata[0].disabled">
         <span class="col-md-2 text-right pl-0" :class="consdata[0].required===1?'require':''" v-if="title || consdata[0].control_title">{{title || consdata[0].control_title}}</span>
         <select class="good-picker selectpicker col-md-10" :disabled="consdata[0].disabled?true:false" data-plugin="" :value="value" data-live-search="true"
             :data-show-subtext="isSelectable" 
