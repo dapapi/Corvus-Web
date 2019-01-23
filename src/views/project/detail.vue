@@ -107,7 +107,7 @@
                                 </div>
                             </div>
                             <div class="mb-20 float-left clearfix col-md-6 pl-0">
-                                <div class="float-left col-md-5 px-0 pt-3">预计支出</div>
+                                <div class="float-left col-md-5 px-0 pt-3"><i class="iconfont icon-renminbi1688  pr-2"></i>预计支出</div>
                                 <div class="float-left col-md-7">
                                     {{ projectInfo.projected_expenditure ? projectInfo.projected_expenditure : 0 }}元
                                 </div>
@@ -120,7 +120,7 @@
                                 </div>
                             </div>
                             <div class="mb-20 float-left clearfix col-md-6 pl-0">
-                                <div class="float-left col-md-5 px-0 pt-3">实际支出</div>
+                                <div class="float-left col-md-5 px-0 pt-3"><i class="iconfont icon-renminbi1688  pr-2"></i>实际支出</div>
                                 <div class="float-left col-md-7">
                                     {{ metaInfo.expendituresum ? metaInfo.expendituresum : 0 }}元
                                 </div>
