@@ -1,10 +1,15 @@
 <template>
     <div class="container-fluid">
         <hr v-if="mode !== 'detail'">
-        <div class="approver-row col-md-12 clearfix px-0">
+        <div class="col-md-12 mt-20 px-0" v-if="freeProgress">
+            <div class="col-md-1 px-0 float-left">审批人</div>
+            <div class="col-md-11 float-left pr-0">
+                <AddMember  otherslot='true' />                
+            </div>
+        </div>
+        <div class="approver-row col-md-12 clearfix px-0" v-if="!freeProgress">
             <div class="float-left mt-25 col-md-1 px-0">审批人</div>
-                <AddMember otherslot='true'/>
-            <div class="float-left col-md-11 pr-0">
+            <div class="float-left col-md-11 pr-0" >
                 <div class="approver-container float-left mt-20 ml-0" v-for="(item, index) in approver" :key="index">
                     <div class=" noselect" style="display:flex ">
                         <div class="approver-logo" style='font-size:12px; min-width:50px'>
