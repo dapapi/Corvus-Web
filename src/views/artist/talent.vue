@@ -1141,9 +1141,9 @@
                     }
                     toastr.success('分配制作人成功')
                     $('#giveProducer').modal('hide')
+                    _this.selectedArtistsArr = []
                     _this.getBlogger()
                     _this.$store.state.participantsInfo = []
-                    _this.selectedArtistsArr = []
                     console.log(_this.selectedArtistsArr)
                 })
 

@@ -1937,21 +1937,21 @@
                     $('#addWork').modal('hide');
                     _this.getTaskDate()
                 })
-                // let obj={
-                //     title:'制作人视频评分-视频评分',
-                //     principal_id:this.user.id,
-                //     start_at:this.start_Time,
-                //     end_at:this.end_Time,
-                //     participant_ids:this.principalIds,
-                //     resource_type:1,
-                //     resourceable_id:this.artistId,
-                //     desc:'这是一个评分问卷任务',//默认
-                //     type:1609922710//评分问卷
-                // }
-                // fetch('post', '/tasks', obj
-                // ).then(function (response) {
-                //     _this.getArtist()
-                // })
+                let obj={
+                    title:'制作人视频评分-视频评分',
+                    principal_id:this.user.id,
+                    start_at:this.start_Time,
+                    end_at:this.end_Time,
+                    participant_ids:this.principalIds,
+                    resource_type:1,
+                    resourceable_id:this.artistId,
+                    desc:'这是一个评分问卷任务',//默认
+                    type:1609922710//评分问卷
+                }
+                fetch('post', '/tasks', obj
+                ).then(function (response) {
+                    _this.getArtist()
+                })
             },
             //孵化期截止时间计算
             getTimes:function(){
