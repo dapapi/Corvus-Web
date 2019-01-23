@@ -58,7 +58,7 @@
                                 <div class="font-weight-bold float-left col-md-10 pl-0" v-if="artistInfo.publicity" style="padding-top:2px">
                                     <span v-for="(publicity,index) in artistInfo.publicity.data" :key="index"
                                           class="mr-10">
-                                        <span>{{publicity.company}}</span>
+                                        <span>{{publicity.department.name}}</span>
                                         <span v-if="publicity.company">-</span>
                                         <span>{{ publicity.name }}</span>
                                         
@@ -92,8 +92,8 @@
                     <div class="col-md-6 float-left pl-0 mb-20" >
                         <div class="col-md-13" v-if="artistInfo.sign_contract_status == 2&&scheduleShow.length>0" >
                             <div class="col-md-12"><i class="iconfont icon-ego-box pr-2"></i>日程</div>
-                            <div class="clearfix example projectshow" v-for="(item,index) in scheduleShow" :key="index" >
-                                <div class="col-md-2 float-left">{{item.title}}</div>
+                            <div class="clearfix example projectshow" v-for="(item,index) in scheduleShow" :key="index" @click="ScheduleBox(item)">
+                                <div class="col-md-2 float-left" style="overflow:hidden;text-overflow:ellipsis;white-space:nowrap">{{item.title}}</div>
                                 <div class="col-md-2 float-left">{{item.creator.data.name}}</div>
                                 <div class="col-md-4 float-left">{{item.start_at}}</div>
                                 <div class="col-md-4 float-left">{{item.end_at}}</div>
@@ -121,7 +121,7 @@
                                 <a class="nav-link"
                                    data-toggle="tab" href="#forum-artist-tasks"
                                    aria-controls="forum-present"
-                                   aria-expanded="true" role="tab">
+                                   aria-expanded="true" role="tab" @click="getTaskList">
                                     <template v-if="allTaskList.length > 0">
                                         <ToolTips :title="`已完成数量${doneTaskNum}`">
                                             任务 ({{taskNum}})
@@ -135,7 +135,7 @@
                             <li class="nav-item" role="presentation" v-if="artistInfo.sign_contract_status == 2">
                                 <a class="nav-link" data-toggle="tab" href="#forum-artist-work"
                                    aria-controls="forum-present"
-                                   aria-expanded="false" role="tab">作品库</a>
+                                   aria-expanded="false" role="tab" >作品库</a>
                             </li>
                             <!--<li class="nav-item" role="presentation" v-show="artistInfo.sign_contract_status == 2">-->
                             <!--<a class="nav-link" data-toggle="tab" href="#forum-artist-fans"-->
@@ -227,9 +227,14 @@
                                             <template v-else></template>
                                         </td>
                                         <td>
-                                            <template v-if="task.status === 1">进行中</template>
-                                            <template v-if="task.status === 2">已完成</template>
-                                            <template v-if="task.status === 3">已停止</template>
+                                            <template v-if="task.status === 1"><span style="color:#FF9800">进行中</span>
+                                            </template>
+                                            <template v-if="task.status === 2"><span style="color:#4CAF50">已完成</span>
+                                            </template>
+                                            <template v-if="task.status === 3"><span style="color:#9E9E9E">已停止</span>
+                                            </template>
+                                            <template v-if="task.status === 4"><span style="color:#F44336">延期</span>
+                                            </template>
                                         </td>
                                         <td>{{ task.principal.data.name }}</td>
                                         <td>{{ task.end_at }}</td>
@@ -240,6 +245,8 @@
                                     <img src="https://res.papitube.com/corvus/images/content-none.png" alt=""
                                          style="width: 100%">
                                 </div>
+                                <pagination :current_page="current_page" :method="getTaskList" :total_pages="total_pages"
+                                    :total="total"  class="mb-50"></pagination>
                                 <div class="site-action fixed-button" data-plugin="actionBtn" data-toggle="modal"
                                      data-target="#addTask">
                                     <button type="button"
@@ -282,7 +289,8 @@
                                     <img src="https://res.papitube.com/corvus/images/content-none.png" alt=""
                                          style="width: 100%">
                                 </div>
-
+                                <pagination :current_page="current_page" :method="getTaskList" :total_pages="total_pages"
+                                    :total="total"  class="mb-50"></pagination>
                                 <div class="site-action fixed-button" data-plugin="actionBtn" data-toggle="modal"
                                      data-target="#addWork">
                                     <button type="button"
@@ -693,7 +701,7 @@
                         </div>
                     </div>
                     <div class="modal-footer">
-                        <button class="btn btn-sm btn-white btn-pure" data-dismiss="modal">取消</button>
+                        <button class="btn btn-sm btn-white btn-pure" data-dismiss="modal" @click="taskcancel">取消</button>
                         <button class="btn btn-primary" type="submit" @click="addTask">确定</button>
                     </div>
 
@@ -1283,7 +1291,9 @@
                 contractType:'stars',
                 formDate:'',
                 scheduleShow:[],
-                priorityArr:config.priorityArr
+                priorityArr:config.priorityArr,
+                scheduleStartTime:'',
+                scheduleEndTime:'',
             }
         },
 
@@ -1331,7 +1341,6 @@
                 fetch('get', '/stars/' + this.artistId, data).then(function (response) {
 
                     _this.artistInfo = response.data;
-                    console.log(response.data)
                     _this.uploadUrl = _this.artistInfo.avatar
                     _this.artistProjectsInfo = []
                     _this.artistTasksInfo = response.data.tasks.data//任务数据
@@ -1350,6 +1359,9 @@
                 })
 
             },
+            add0(m){
+                return m<10?'0'+m:m 
+            },
             getCalendar:function(){
                  this.artistId = this.$route.params.id;
 
@@ -1367,10 +1379,12 @@
                        for (let i = 0; i < response.data.schedule.data.length; i++) {
                            _this.scheduleShow.push(response.data.schedule.data[i])  
                        } 
-                        console.log(_this.scheduleShow)
                     }
                 })
                 
+            },
+             ScheduleBox: function(value){
+                this.showScheduleModal(value)
             },
             /*查看日历详情 --添加日历 -- 修改日历 */
 
@@ -1505,6 +1519,9 @@
                     $('#changeSchedule').modal('hide');
                     toastr.success('修改成功')
                 })
+            },
+            taskcancel:function(){
+                this.$store.state.newParticipantsInfo = []
             },
             selectScheduleCalendar: function (value) {
                 this.scheduleCalendar = value
@@ -1756,6 +1773,9 @@
                 let _this = this
                 fetch('get', `/stars/${this.$route.params.id}/tasks`).then(response => {
                     _this.allTaskList = response.data
+                    _this.current_page = response.meta.pagination.current_page;
+                    _this.total = response.meta.pagination.total;
+                    _this.total_pages = response.meta.pagination.total_pages;
                     if (_this.allTaskList.length > 0) {
                         for (let i = 0; i < _this.allTaskList.length; i++) {
                             if (_this.allTaskList[i].status == 2) {
@@ -1775,10 +1795,7 @@
             getProjectList: function () {
                 let _this = this
                 fetch('get', `/projects/star/${this.$route.params.id}`).then(response => {
-                    // console.log(response)
-                    // if(){
                     _this.threeProjectList = response
-                    // }
                 })
             },
             //粉丝数据
@@ -2084,14 +2101,10 @@
             },
             //修改基本信息
             changeArtistBaseInfo: function (value, name) {
-                // alert('是否一开始就调用')
-                // console.log(value,name)
                 if (name === 'platform') {
                     value = value.join(',')
                 }
-                // if(name === 'sign_contract_status'){
-                //     value = 
-                // }
+
                 if (name === 'broker_id') {
                     if (value) {
                         value = this.$store.state.principalInfo.id
@@ -2217,7 +2230,6 @@
                     toast = '分配宣传人成功'
                 }
                 let _this = this;
-                console.log(this.$store.state.participantsInfo)
                 fetch('post', '/distribution/person', data).then(function (response) {
                     toastr.success(toast)
                     $('#distributionBroker').modal('hide');
@@ -2259,7 +2271,6 @@
                 this.affixId = id
             },
             previewFile: function (url, name) {
-                console.log(url, name)
                 this.previewUrl = url
                 this.previewName = name
             },
@@ -2280,7 +2291,6 @@
                 }
                 data.status = status
                 fetch('get','approvals/specific_contract',data).then(function(response){
-                    console.log(response.data)
                     _this.formDate = response.data
                     $('#approval-great-module').modal('show')
                 })
@@ -2489,10 +2499,8 @@
         display: flex;
         align-items: center;
     }
-    .fixed-button {
-    position: absolute;
-    bottom: 0px;
-    right: 0;
-}
+    .projectshow:hover{
+        cursor: pointer;
+    }
 </style>
 

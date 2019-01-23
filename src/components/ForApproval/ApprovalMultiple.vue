@@ -1,7 +1,7 @@
 <template>
     <div class="col-md-12 pl-0 pr-0 multiple-container container">
         <!-- <div v-for="i in n" :key="i" class="approval-multiple"> -->
-            <ApprovalMultipleForm  v-for="i in n" :key="i"  :consdata='consdata' :singlemode='singlemode' :n='i' @change='multipleDataConstructor'/>
+            <ApprovalMultipleForm  v-for="i in n" :key="i" :consdata='consdata' :singlemode='singlemode' :n='i' :total='n' @change='multipleDataConstructor' @formMinus='formMinus' :default-data='multipleData'/>
             <!-- <span>{{consdata[0].control_title}}({{i}})</span>
             <hr>
             <div :is='sortChecker(item)' class="approval-multiple-option"
@@ -81,6 +81,17 @@ export default {
         this.refresh()
     },
     methods:{
+        formMinus(params){
+            for (const key in this.consdata) {
+                this.consdata[key].control_value = ''
+            }
+            this.n = this.n-1
+            this.multipleData.splice(params-1,1)
+            let {related_field} = this.consdata[0]
+            let {id} = this.consdata[0]
+            this.$emit('change',{key:id,value:this.multipleData,type:related_field})
+
+        },
         multipleDataConstructor(params){
             this.multipleData[params.n-1] = params.data
             let {id} = this.consdata[0]
@@ -104,6 +115,9 @@ export default {
             // })
         },
         addOption(){
+            for (const key in this.consdata) {
+                this.consdata[key].control_value = ''
+            }
             this.n++
             // this.$nextTick(() => {
             //     this.refresh()

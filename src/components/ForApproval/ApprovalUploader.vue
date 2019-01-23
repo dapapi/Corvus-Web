@@ -12,14 +12,24 @@
     <div class="upload col-md-12">
         <div class="col-md-2 text-right" :class="consdata[0].required===1?'require':''">{{consdata[0].control_title}}</div>
         <div class="image-show">
-            <div v-for="(item, index) in fileInfo" :key="index" class="float-left pr-10">
-                <div>{{item.fileName}}</div>
-                <hr>
-                <div class="icon-control">
-                    <!-- <i class="iconfont icon-liulan" @click='previewHandler(item)' data-target='#docPreview' data-toggle='modal'></i> -->
-                    <i class="iconfont icon-shanchu1" @click="imgDelete(item)"></i>
+            <figure v-for="(item, index) in fileInfo" :key="index" style="margin-right:0px;">
+            <!-- <div class="image-show" v-if="fileInfo.length > 0" style="backgroundImage:url(../../../assets/img/attachment.png)"></div> -->
+            <figure style="text-align:center;margin-top:30px;" class="attachdetail"> 
+                <img src="@/assets/img/attachment.png" alt="" style="width:40px">
+                <p>{{item.fileName}}</p>
+                <div class="img-control">
+                    <hr>
+                    <div class="icon-control">
+                        <a :href="item.fileUrl" target="_blank">
+                            <i class="iconfont icon-download"></i>
+                        </a>
+                        <i class="iconfont icon-shanchu1" @click="imgDelete(item)"></i>
+                    </div>
                 </div>
-            </div>
+            </figure>
+            
+            <!-- <p>{{item.fileName.split('.')[0]}}</p> -->
+        </figure>
             <div>
                 <input type="file" @change="uploadFile" id="fileUploader" v-show="false"/>
                 <label for="fileUploader" class="pt-10 noselect" style="color:#00bcd4">
@@ -154,6 +164,9 @@ export default {
 </script>
 
 <style lang="scss" scoped>
+a:hover, a:visited, a:link, a:active {
+    text-decoration: none;
+}
 .icon-control{
     display: flex;
     justify-content: space-between;

@@ -404,7 +404,7 @@
 
                 let myChart = echarts.init(this.$refs.main, 'mttop');
 
-                fetch('get', '/reportfrom/starprojectanalysis', data).then(function (response) {
+                fetch('get', '/reportfrom/startrailanalysis', data).then(function (response) {
                     let firstInfo = [];
                     let secondName = [];
                     let secondInfo = [];

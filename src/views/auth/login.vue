@@ -55,7 +55,7 @@
                                 <div class="checkbox-custom checkbox-inline checkbox-primary checkbox-sm float-left">
                                     <input type="checkbox" id="inputCheckbox" name="remember" :checked="isRememberName"
                                            @change="rememberName">
-                                    <label for="inputCheckbox">记住帐号</label>
+                                    <label for="inputCheckbox">记住密码</label>
                                 </div>
                                 <span class="float-right pointer-content font-info" @click="forgetPassword">忘记密码</span>
                             </div>
@@ -179,7 +179,9 @@
             this.checkBindTelephone();
             this.checkWechatLogin();
             if (Cookies.get('user_account')) {
-                this.username = Cookies.get('user_account');
+                let userInfo = JSON.parse(Cookies.get('user_account'));
+                this.username = userInfo.name;
+                this.password = userInfo.password;
                 this.isRememberName = true;
             }
         },
@@ -187,10 +189,6 @@
         methods: {
             storeToLocal(json) {
                 Cookies.set('user', json)
-            },
-
-            storeCompanyTypeToLocal(type) {
-                Cookies.set('companyType', type)
             },
 
             rememberName(value) {
@@ -258,7 +256,6 @@
                 if (this.firstClickTime) {
                     if (currentClickTime - this.firstClickTime < 1000) {
                         this.firstClickTime = currentClickTime;
-                        console.log('return');
                         return
                     }
                 } else {
@@ -391,7 +388,11 @@
                     }, 100)
                 });
                 if (this.isRememberName) {
-                    Cookies.set('user_account', this.username)
+                    let data = {
+                        name: this.username,
+                        password: this.password
+                    };
+                    Cookies.set('user_account', data)
                 } else {
                     if (Cookies.get('user_account')) {
                         Cookies.remove('user_account')
@@ -411,7 +412,7 @@
                         id: userData.id,
                         avatar: userData.icon_url,
                         nickname: userData.name,
-                        organization_id:userData.organization_id
+                        organization_id: userData.organization_id
                     };
                     callback(json, userData.company)
                 })

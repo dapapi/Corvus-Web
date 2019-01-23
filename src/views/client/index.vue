@@ -155,6 +155,13 @@
                             </div>
                         </div>
                         <div class="example">
+                            <div class="col-md-2 text-right float-left">客户评级</div>
+                            <div class="col-md-10 float-left pl-0">
+                                <selectors ref="clientLevel" :options="taskLevelArr"
+                                           @change="changeClientScale"></selectors>
+                            </div>
+                        </div>
+                        <div class="example">
                             <div class="col-md-2 text-right float-left">备注</div>
                             <div class="col-md-10 float-left pl-0">
                                 <textarea name="" id="" title="" class="form-control" v-model="clientRemark"></textarea>
@@ -214,6 +221,7 @@
                 ragion: {}, // 区域
                 clientScale: '',
                 isLoading: true,
+                taskLevelArr: config.taskLevelArr,
             }
         },
 
@@ -373,7 +381,6 @@
             // show add
             showAddModal(val) {
                 let organization_id = JSON.parse(Cookies.get('user')).organization_id
-                console.log(organization_id)
                 if (val == 3) {
                     if (organization_id == 411) {
                         val = 3

@@ -233,7 +233,6 @@
         },
          watch: {
             _department () {
-                console.log(1)
                 this.departmentsInfo = this.departmentsInfo.concat(this.department);
             }
         },

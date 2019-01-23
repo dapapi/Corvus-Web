@@ -219,8 +219,6 @@
                 let _this = this
 
                 fetch('get', '/trails/filter_fields').then((params) => {
-                    
-                    console.log(params)
                     _this.customizeInfo = params.data
                 })
             },
@@ -235,6 +233,7 @@
 
             getTrails(pageNum = 1, type) {
                 this.selectedTrailsArr = [];
+                this.selectAllTrail = false;
                 let data = {
                     page: pageNum
                 };

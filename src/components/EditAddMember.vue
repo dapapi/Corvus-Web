@@ -4,7 +4,7 @@
             <add-member @change="changeMember" :type="'change'"></add-member>
         </template>
         <template v-else>
-            {{ selectedMember.join('、') }}
+            {{ selectedMember.join(' ') }}
         </template>
     </div>
 </template>
