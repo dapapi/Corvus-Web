@@ -49,6 +49,19 @@
                     this.isLeftMenuShow = true
                     this.isLeftManageShow = false
                 }
+                this.$store.state.participantsInfo = [];
+                this.$store.state.newParticipantsInfo = [];
+                this.$store.state.collectInfo = [];
+                this.$store.state.payInfo = [];
+                this.$store.state.contractInfo = [];
+                this.$store.state.divisionInfo = [];
+                this.$store.state.incubationInfo = [];
+                this.$store.state.billInfo = [];
+                this.$store.state.principalInfo = {};
+                this.$store.state.newPrincipalInfo = {};
+                this.$store.state.selectPrincipalInfo = {};
+                this.$store.state.otherSlot = [];
+                this.$store.state.principalInfo = [];
             },
 
         },
