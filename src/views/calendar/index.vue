@@ -841,10 +841,12 @@
             },
 
             redirectProject: function (projectId) {
+                $('#checkSchedule').modal('hide');
                 this.$router.replace({path: '/projects/' + projectId});
             },
 
             redirectTask: function (taskId) {
+                $('#checkSchedule').modal('hide');
                 this.$router.replace({path: '/tasks/' + taskId});
             },
 
