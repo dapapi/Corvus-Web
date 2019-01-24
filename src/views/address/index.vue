@@ -36,7 +36,7 @@
                                         </div>
 
                                         <div v-for="(value, key, index) in normalUsers" :key="index">
-                                            <div class="letter">{{ key }}</div>
+                                            <div class="letter" >{{ key }}</div>
                                             <div class="users" v-for="(user, _index) in value"
                                                  v-show="user.name.indexOf(searchKeyWord) > -1"
                                                  :class="checkedIndex === (index + '' + _index) ? 'checked' : ''"
@@ -302,6 +302,7 @@
                 scheduleData: '',
                 scheduleParticipants: [],
                 getScheduleFinish: false,
+                isShow:true
             }
         },
         mounted() {

@@ -120,7 +120,7 @@
                             <li class="nav-item" role="presentation" v-if="artistInfo.sign_contract_status == 2">
                                 <a class="nav-link" data-toggle="tab" href="#forum-artist-projects"
                                    aria-controls="forum-present"
-                                   aria-expanded="false" role="tab">项目</a>
+                                   aria-expanded="false" role="tab" @click="getProject">项目</a>
                             </li>
                             <li class="nav-item" role="presentation">
                                 <a class="nav-link"
@@ -162,7 +162,7 @@
                         </ul>
                         <div class="tab-content px-0 nav-tabs-animate bg-white col-md-12">
                             <!--日历日程-->
-                            <div class="tab-pane animation-fade pb-20 fixed-button-father" id="forum-artist-schedule"
+                            <div class="tab-pane animation-fade  fixed-button-father" id="forum-artist-schedule"
                                  role="tabpanel" :class="artistInfo.sign_contract_status == 2?'active':''">
                                 <div class="col-md-12">
                                     <calendar v-if="artistInfo.sign_contract_status == 2" :goto-date="selectedDate"
@@ -172,7 +172,7 @@
                                 </div>
                             </div>
                             <!--项目-->
-                            <div class="tab-pane animation-fade pb-20 fixed-button-father" id="forum-artist-projects"
+                            <div class="tab-pane animation-fade  fixed-button-father" id="forum-artist-projects"
                                  role="tabpanel">
                                 <table class="table table-hover is-indent example" data-plugin="animateList"
                                        data-animate="fade"
@@ -192,9 +192,10 @@
                                             {{item.title}}
                                         </td>
 
-                                        <td>{{item.principal.data.name}}</td>
+                                        <td v-if="item.principal">{{item.principal.data.name}}</td>
+                                        <td v-if="!item.principal"></td>
                                         <td>{{item.company}}</td>
-                                        <td>{{item.created_at}}</td>
+                                        <td>{{item.created_at.date}}</td>
                                         <td>
                                             <template v-if="item.relate_project_bills_resource">
                                                 {{item.relate_project_bills_resource}}
@@ -207,9 +208,11 @@
                                     <img src="https://res.papitube.com/corvus/images/content-none.png" alt=""
                                          style="width: 100%">
                                 </div>
+                                <pagination :current_page="current_page" :method="getProject" :total_pages="total_pages"
+                                    :total="total" ></pagination>
                             </div>
                             <!--任务-->
-                            <div class="tab-pane animation-fade pb-20 fixed-button-father"
+                            <div class="tab-pane animation-fade  fixed-button-father"
                                  id="forum-artist-tasks"
                                  role="tabpanel">
                                 <table class="table table-hover is-indent example" data-plugin="animateList"
@@ -250,9 +253,8 @@
                                     <img src="https://res.papitube.com/corvus/images/content-none.png" alt=""
                                          style="width: 100%">
                                 </div>
-                                <pagination :current_page="current_page" :method="getTaskList"
-                                            :total_pages="total_pages"
-                                            :total="total" class="mb-30"></pagination>
+                                <pagination :current_page="current_page" :method="getTaskList" :total_pages="total_pages"
+                                    :total="total" ></pagination>
                                 <div class="site-action fixed-button" data-plugin="actionBtn" data-toggle="modal"
                                      data-target="#addTask">
                                     <button type="button"
@@ -267,7 +269,7 @@
                                 </div>
                             </div>
                             <!--作品库-->
-                            <div class="tab-pane animation-fade pb-20 fixed-button-father" id="forum-artist-work"
+                            <div class="tab-pane animation-fade  fixed-button-father" id="forum-artist-work"
                                  role="tabpanel">
                                 <table class="table table-hover is-indent example" data-plugin="animateList"
                                        data-animate="fade" data-child="tr">
@@ -295,9 +297,14 @@
                                     <img src="https://res.papitube.com/corvus/images/content-none.png" alt=""
                                          style="width: 100%">
                                 </div>
+<<<<<<< HEAD
                                 <pagination :current_page="current_page" :method="getTaskList"
                                             :total_pages="total_pages"
                                             :total="total" class="mb-30"></pagination>
+=======
+                                <pagination :current_page="current_page" :method="getTaskList" :total_pages="total_pages"
+                                    :total="total"></pagination>
+>>>>>>> hp
                                 <div class="site-action fixed-button" data-plugin="actionBtn" data-toggle="modal"
                                      data-target="#addWork">
                                     <button type="button"
@@ -316,7 +323,7 @@
                                      style="width:80vw ;height:400px; margin-top:30px;padding-bottom: 20px"></div>
                             </div>
                             <!--账单-->
-                            <div class="tab-pane animation-fade  pb-20 fixed-button-father" id="forum-artist-bill"
+                            <div class="tab-pane animation-fade   fixed-button-father" id="forum-artist-bill"
                                  role="tabpanel">
                                 <div class="clearfix my-10">
                                     <div class="float-left my-10 ml-10">
@@ -370,7 +377,7 @@
                                             :total="total"></pagination>
                             </div>
                             <!--概况-->
-                            <div class="tab-pane animation-fade  pb-20 fixed-button-father" id="forum-artist-base"
+                            <div class="tab-pane animation-fade   fixed-button-father" id="forum-artist-base"
                                  role="tabpanel" :class="artistInfo.sign_contract_status == 2?'':'active'">
                                 <div class="card">
                                     <div class="card-header card-header-transparent card-header-bordered"
@@ -1221,7 +1228,7 @@
                 taskIntroduce: '',
                 artistTasksInfo: [],//任务
                 artistWorksInfo: [],//作品库
-                artistProjectsInfo: [],//项目
+                artistProjectsInfo:'',//项目
                 artistWorkName: '', //作品名称
                 artistWorkDirector: '',//导演名称
                 artistBillsInfo: [],//账单
@@ -1333,7 +1340,7 @@
             this.getCalendar();
             this.draw();
             this.getArtistsBill()
-            this.getTaskList()
+            this.getTaskDate()
             this.getProjectList()
             this.selectProjectLinkage();
             this.getResources();
@@ -1365,25 +1372,32 @@
 
                     _this.artistInfo = response.data;
                     _this.uploadUrl = _this.artistInfo.avatar
-                    _this.artistProjectsInfo = []
+                    // _this.artistProjectsInfo = []
                     _this.artistTasksInfo = response.data.tasks.data//任务数据
 
                     _this.artistWorksInfo = response.data.works.data//作品数据
                     _this.affixes = response.data.affixes.data
-                    for (let i = 0; i < response.data.trails.data.length; i++) {
-                        if (response.data.trails.data[i].project) {
-                            response.data.trails.data[i].project.data.company = response.data.trails.data[i].client.data.company
-                            _this.artistProjectsInfo.push(response.data.trails.data[i].project.data)//项目数据
-                        }
-                    }
-
-
+                    // for (let i = 0; i < response.data.trails.data.length; i++) {
+                    //     if (response.data.trails.data[i].project) {
+                    //         response.data.trails.data[i].project.data.company = response.data.trails.data[i].client.data.company
+                    //         _this.artistProjectsInfo.push(response.data.trails.data[i].project.data)//项目数据
+                    //     }
+                    // }
+                  
+                   
                     _this.isLoading = false
                 })
 
             },
-            add0(m) {
-                return m < 10 ? '0' + m : m
+            getProject(){
+                let _this = this;
+                fetch('get', '/stars/' + this.artistId+'/project').then(function (response) {
+                    console.log(response)
+                    _this.artistProjectsInfo  = response.data
+                    _this.current_page = response.meta.pagination.current_page;
+                    _this.total = response.meta.pagination.total;
+                    _this.total_pages = response.meta.pagination.total_pages;
+                })      
             },
             getCalendar: function () {
                 this.artistId = this.$route.params.id;
@@ -1837,7 +1851,14 @@
                     _this.current_page = response.meta.pagination.current_page;
                     _this.total = response.meta.pagination.total;
                     _this.total_pages = response.meta.pagination.total_pages;
-                    if (_this.allTaskList.length > 0) {
+                   
+                })
+            },
+            getTaskDate:function(){
+                let _this = this
+                fetch('get', `/stars/${this.$route.params.id}/tasks`).then(response => {
+                    _this.allTaskList = response.data
+                 if (_this.allTaskList.length > 0) {
                         for (let i = 0; i < _this.allTaskList.length; i++) {
                             if (_this.allTaskList[i].status == 2) {
                                 _this.doneTaskNum = _this.doneTaskNum + 1
@@ -1846,9 +1867,8 @@
                         }
                     }
                     _this.taskNum = `${_this.doneTaskNum}/${_this.allTaskList.length}`
-                })
-            }
-            ,
+                 })
+            },
             selectDate: function (value) {
                 this.selectedDate = value;
                 this.$refs.meetingRoom.setDate(value)
@@ -2600,18 +2620,5 @@
         cursor: pointer;
     }
 
-    .fixed-button {
-        position: absolute;
-        bottom: 45px;
-        right: 0;
-
-    }
-
-    .calendar-toast {
-        background: #f5f5f5;
-        padding: 2px 3px;
-        border-radius: 2px;
-        z-index: 1000;
-    }
 </style>
 

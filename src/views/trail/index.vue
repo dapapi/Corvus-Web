@@ -541,7 +541,7 @@
                     data.principal_id = this.$store.state.otherSlot.data.id
                 }
                 if (this.trailType != 4) {
-                    //    todo 添加线索状态
+                    data.status = this.trailStatus
                 }
                 if (this.trailOrigin == 1 || this.trailOrigin == 2 || this.trailOrigin == 3) {
                     data.resource = this.email

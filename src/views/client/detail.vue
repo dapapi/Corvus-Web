@@ -70,8 +70,13 @@
                                  v-if="index < 3" :key="index"
                                  @click="linkTo('/projects/' + project.id)" style="cursor: pointer">
                                 <div class="col-md-3 float-left px-0 exceeded-display">{{project.title}}</div>
-                                <div class="col-md-3 float-left px-0">{{ clientTypeArr.find(item => item.value ==
-                                    project.type).name }}
+                                <div class="col-md-3 float-left px-0">
+                                    <template v-if="project.type === 4">
+                                        商务客户
+                                    </template>
+                                    <template v-else>
+                                        {{ clientTypeArr.find(item => item.value == project.type).name }}
+                                    </template>
                                 </div>
                                 <div class="col-md-4 float-left px-0">{{ project.created_at }}</div>
                                 <div class="col-md-2 float-left px-0">
@@ -226,15 +231,11 @@
                                 </tr>
                                 <tbody>
                                 <tr v-for="contract in clientContractsInfo"
-                                    @click="redirectContract(contract.form_instance_number)">
-                                    <td>{{ contract.form_instance_number }}</td>
-                                    <td>{{ contract.title }}</td>
-                                    <td>
-                                        <template v-for="star in contract.stars_name">
-                                            {{ star.name }}
-                                        </template>
-                                    </td>
-                                    <td>收入</td>
+                                    @click="redirectContract(contract.contract_number)">
+                                    <td>{{ contract.contract_number }}</td>
+                                    <td>{{ contract.project }}</td>
+                                    <td>{{ contract.talents }}</td>
+                                    <td>{{ contract.type }}</td>
                                     <td>{{ contract.creator_name }}</td>
                                 </tr>
                                 </tbody>
@@ -377,7 +378,7 @@
                                             <div class="col-md-3 float-left text-right pl-0">客户评级</div>
                                             <div class="col-md-9 float-left font-weight-bold">
                                                 <EditSelector :options="taskLevelArr" :is-edit="isEdit"
-                                                              :content="clientInfo.level"
+                                                              :content="clientInfo.client_rating"
                                                               @change="changeClientLevel"></EditSelector>
                                             </div>
                                         </div>
@@ -433,7 +434,6 @@
                                 <tr class="animation-fade"
                                     style="animation-fill-mode: backwards; animation-duration: 250ms; animation-delay: 0ms;">
                                     <th class="cell-300" scope="col">联系人</th>
-                                    <!-- <th class="cell-300" scope="col">关联公司</th> -->
                                     <th class="cell-300" scope="col">关键决策人</th>
                                     <th class="cell-300" scope="col">联系人电话</th>
                                     <th class="cell-300" scope="col">职位</th>
@@ -443,7 +443,6 @@
                                 <tbody>
                                 <tr v-for="(contact, index) in clientContactsInfo" :key="index">
                                     <td>{{ contact.name }}</td>
-                                    <!-- <td>{{ clientInfo.company }}</td> -->
                                     <td>
                                         {{ contact.type === 1 ? '否' : '' }}
                                         {{ contact.type === 2 ? '是' : '' }}
@@ -859,9 +858,6 @@
             },
 
             getClientContact: function () {
-                if (this.clientContactsInfo.length > 0) {
-                    return
-                }
                 fetch('get', '/clients/' + this.clientId + '/contacts').then(response => {
                     this.clientContactsInfo = response.data;
                     this.total = response.meta.pagination.total;
@@ -902,12 +898,13 @@
                     phone: this.editConfig.phone,
                     position: this.editConfig.position,
                     type: this.editConfig.type
-                }
+                };
 
                 fetch(this.isEditContact ? 'post' : 'put', `/clients/${this.clientId}/contacts${!this.isEditContact ? '/' + this.editConfig.id : ''}`, data).then(response => {
-                    this.clientContactsInfo.push(response.data);
+                    this.getClientContact();
+                    this.getClient();
+                    // this.clientContactsInfo.push(response.data);
                     toastr.success(this.isEditContact ? '添加成功！' : '修改成功')
-                    this.getClientContact()
                     $('#addContact').modal('hide')
                 })
             },
@@ -950,11 +947,11 @@
             },
 
             changeClientLevel: function (value) {
-                this.clientInfo.grade = value
+                this.changeInfo.client_rating = value
             },
 
             changeClientGrade: function (value) {
-                this.clientInfo.level = value
+                this.clientInfo.grade = value
             },
 
             changeClientScale: function (value) {

@@ -159,7 +159,7 @@
                             <li class="nav-item" role="presentation" v-show="artistInfo.sign_contract_status == 2">
                                 <a class="nav-link" data-toggle="tab" href="#forum-artist-projects"
                                 aria-controls="forum-present"
-                                aria-expanded="false" role="tab" >项目</a>
+                                aria-expanded="false" role="tab" @click="getProject()">项目</a>
                             </li>
                             <li class="nav-item" role="presentation" >
                                 <a class="nav-link" data-toggle="tab" href="#forum-artist-tasks"
@@ -223,9 +223,10 @@
                                     </tr>
                                     <tr v-for="(item,index) in ProjectsInfo" :key="index" @click="projectdetil(item.id)" class="Jump">
                                         <td>{{item.title}}</td>
-                                        <td>{{item.principal.data.name}}</td>
+                                        <td v-if="item.principal">{{item.principal.data.name}}</td>
+                                        <td v-if="!item.principal"></td>
                                         <td>{{item.company}}</td>
-                                        <td>{{item.created_at}}</td>
+                                        <td>{{item.created_at.date}}</td>
                                         <td v-for="(v,index) in item.relate_project_bills_resource.data" :key="index">{{v.bigger_divide}}</td>
                                     </tr>
                                 </table>
@@ -233,6 +234,8 @@
                                     <img src="https://res.papitube.com/corvus/images/content-none.png" alt=""
                                         style="width: 100%">
                                 </div>
+                                <pagination :current_page="current_page" :method="getProject" :total_pages="total_pages"
+                                    :total="total" ></pagination>
                             </div>
                             <div class="tab-pane animation-fade pb-20 fixed-button-father" id="forum-artist-tasks"
                                 role="tabpanel" >
@@ -1209,6 +1212,7 @@
                 toastShow: false,
                 toastX: 0,
                 toastY: 0,
+                artistProjectsInfo:''
             }
         },
         computed: {
@@ -1379,7 +1383,6 @@
                         
                         if(item.title == '视频评分'){
                            _this.scoreId = item.id 
-                           console.log(_this.scoreId)
                         }
                     })
                 })
@@ -1392,9 +1395,17 @@
                     })
                 })
             },
+            getProject(){
+                let _this =this;
+                 fetch('get', '/bloggers/' + this.artistId+'/project').then(function (response) {
+                     _this.ProjectsInfo  = response.data
+                    _this.current_page = response.meta.pagination.current_page;
+                    _this.total = response.meta.pagination.total;
+                    _this.total_pages = response.meta.pagination.total_pages;
+                 })      
+            },
             //上传头像 ---修改头像
             getUploadUrl(res) {
-                console.log(res)
                 let _this = this
                 if(!this.isEdit) {
                     this.changeArtistInfo = {}
@@ -1493,7 +1504,6 @@
                 })
             },
             showScheduleModal: function (schedule) {
-                console.log(schedule)
                 let data = {
                     include: 'calendar,participants,creator,material,affixes,project,task',
                 };
@@ -1695,7 +1705,6 @@
                     _this.current_page = response.meta.pagination.current_page;
                     _this.total = response.meta.pagination.total;
                     _this.total_pages = response.meta.pagination.total_pages;
-                    console.log(response)
                     response.data.forEach(item=>{
                         let time=new Date(item.release_time)
                         let Y = time.getFullYear() + '-';
@@ -1710,7 +1719,6 @@
                 let _this = this;
                 fetch('get', '/bloggers/' + this.artistId+'/tasks').then(function (response) {
                     _this.alltaskshow = response.data
-                    console.log( response.data)
                     _this.current_page = response.meta.pagination.current_page;
                     _this.total = response.meta.pagination.total;
                     _this.total_pages = response.meta.pagination.total_pages;
@@ -1932,6 +1940,7 @@
                 }
                 fetch('put', '/bloggers/' + this.artistId, this.changeArtistInfo).then(function (response) {
                     toastr.success('修改成功');
+                   
                     _this.getArtist()
                     $('.selectpicker').selectpicker('refresh')
                 })
@@ -1948,7 +1957,6 @@
                 }
             },
             changeWorkAd: function (value) {
-                console.log(value)
                 if (value == 1) {
                     this.advertisingType = 1
                 } 
@@ -2182,8 +2190,10 @@
             ,
             //孵化期
             changeArtistHatch: function (start, end) {
+                console.log(start,end)
                 this.artistInfo.hatch_star_at = start
                 this.artistInfo.hatch_end_at = end
+                 
             }
             ,
             //合作需求
