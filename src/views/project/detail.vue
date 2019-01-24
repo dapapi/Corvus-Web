@@ -107,7 +107,9 @@
                                 </div>
                             </div>
                             <div class="mb-20 float-left clearfix col-md-6 pl-0">
-                                <div class="float-left col-md-5 px-0 pt-3"><i class="iconfont icon-renminbi1688  pr-2"></i>预计支出</div>
+                                <div class="float-left col-md-5 px-0 pt-3"><i
+                                        class="iconfont icon-renminbi1688  pr-2"></i>预计支出
+                                </div>
                                 <div class="float-left col-md-7">
                                     {{ projectInfo.projected_expenditure ? projectInfo.projected_expenditure : 0 }}元
                                 </div>
@@ -120,7 +122,9 @@
                                 </div>
                             </div>
                             <div class="mb-20 float-left clearfix col-md-6 pl-0">
-                                <div class="float-left col-md-5 px-0 pt-3"><i class="iconfont icon-renminbi1688  pr-2"></i>实际支出</div>
+                                <div class="float-left col-md-5 px-0 pt-3"><i
+                                        class="iconfont icon-renminbi1688  pr-2"></i>实际支出
+                                </div>
                                 <div class="float-left col-md-7">
                                     {{ metaInfo.expendituresum ? metaInfo.expendituresum : 0 }}元
                                 </div>
@@ -700,8 +704,8 @@
                                                 <div class="col-md-3 float-left text-right pl-0">状态</div>
                                                 <div class="col-md-9 float-left font-weight-bold">
                                                     <EditSelector :is-edit="isEdit" :options="trailStatusArr"
-                                                                    :content="projectInfo.trail.data.status"
-                                                                    @change="(value) => changeProjectBaseInfo(value, 'status')"></EditSelector>
+                                                                  :content="projectInfo.trail.data.status"
+                                                                  @change="(value) => changeProjectBaseInfo(value, 'status')"></EditSelector>
                                                 </div>
                                             </div>
                                             <div class="card-text py-10 px-0 clearfix col-md-6 float-left ">
@@ -826,6 +830,14 @@
                                                     <template v-for="task in projectInfo.relate_tasks.data">
                                                         <span class="pointer-content" @click="redirectTask(task.id)">{{ task.title }}</span>
                                                     </template>
+                                                </div>
+                                            </div>
+                                            <div class="card-text py-10 px-0 clearfix col-md-6 float-left"
+                                                 v-if="projectInfo.trail">
+                                                <div class="col-md-3 float-left text-right pl-0">关联销售线索</div>
+                                                <div class="col-md-9 float-left font-weight-bold">
+                                                    <span class="pointer-content"
+                                                          @click="redirectTrail(projectInfo.trail.data.id)">{{ projectInfo.trail.data.title }}</span>
                                                 </div>
                                             </div>
                                         </div>
@@ -2020,6 +2032,10 @@
 
             redirectTask: function (taskId) {
                 this.$router.push({path: '/tasks/' + taskId})
+            },
+
+            redirectTrail: function (trailId) {
+                this.$router.push({path: '/trails/' + trailId})
             },
 
             redirectProject: function (projectId) {
