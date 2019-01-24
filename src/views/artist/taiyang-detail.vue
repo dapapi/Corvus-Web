@@ -42,7 +42,8 @@
                                 <div class="float-left pl-0 pr-2 col-md-2">
                                     <i class="iconfont icon-yonghu pr-2" aria-hidden="true"></i>经理人
                                 </div>
-                                <div class="font-weight-bold float-left col-md-10 pl-0" v-if="artistInfo.broker" style="padding-top:1.5px">
+                                <div class="font-weight-bold float-left col-md-10 pl-0" v-if="artistInfo.broker"
+                                     style="padding-top:1.5px">
                                     <span v-for="(broker,index) in artistInfo.broker.data" :key="index" class="mr-10">
                                         <span>{{broker.company}}</span>
                                         <span v-if="broker.company">-</span>
@@ -55,7 +56,8 @@
                                 <div class="float-left pl-0 pr-2 col-md-2">
                                     <i class="iconfont icon-yonghu pr-2" aria-hidden="true"></i>宣传人
                                 </div>
-                                <div class="font-weight-bold float-left col-md-10 pl-0" v-if="artistInfo.publicity" style="padding-top:2px">
+                                <div class="font-weight-bold float-left col-md-10 pl-0" v-if="artistInfo.publicity"
+                                     style="padding-top:2px">
                                     <span v-for="(publicity,index) in artistInfo.publicity.data" :key="index"
                                           class="mr-10">
                                         <span>{{publicity.department.name}}</span>
@@ -89,11 +91,14 @@
                             </div>
                         </div>
                     </div>
-                    <div class="col-md-6 float-left pl-0 mb-20" >
-                        <div class="col-md-13" v-if="artistInfo.sign_contract_status == 2&&scheduleShow.length>0" >
+                    <div class="col-md-6 float-left pl-0 mb-20">
+                        <div class="col-md-13" v-if="artistInfo.sign_contract_status == 2&&scheduleShow.length>0">
                             <div class="col-md-12"><i class="iconfont icon-ego-box pr-2"></i>日程</div>
-                            <div class="clearfix example projectshow" v-for="(item,index) in scheduleShow" :key="index" >
-                                <div class="col-md-2 float-left">{{item.title}}</div>
+                            <div class="clearfix example projectshow" v-for="(item,index) in scheduleShow" :key="index"
+                                 @click="ScheduleBox(item)">
+                                <div class="col-md-2 float-left"
+                                     style="overflow:hidden;text-overflow:ellipsis;white-space:nowrap">{{item.title}}
+                                </div>
                                 <div class="col-md-2 float-left">{{item.creator.data.name}}</div>
                                 <div class="col-md-4 float-left">{{item.start_at}}</div>
                                 <div class="col-md-4 float-left">{{item.end_at}}</div>
@@ -115,7 +120,7 @@
                             <li class="nav-item" role="presentation" v-if="artistInfo.sign_contract_status == 2">
                                 <a class="nav-link" data-toggle="tab" href="#forum-artist-projects"
                                    aria-controls="forum-present"
-                                   aria-expanded="false" role="tab">项目</a>
+                                   aria-expanded="false" role="tab" @click="getProject">项目</a>
                             </li>
                             <li class="nav-item" role="presentation">
                                 <a class="nav-link"
@@ -135,7 +140,7 @@
                             <li class="nav-item" role="presentation" v-if="artistInfo.sign_contract_status == 2">
                                 <a class="nav-link" data-toggle="tab" href="#forum-artist-work"
                                    aria-controls="forum-present"
-                                   aria-expanded="false" role="tab" >作品库</a>
+                                   aria-expanded="false" role="tab">作品库</a>
                             </li>
                             <!--<li class="nav-item" role="presentation" v-show="artistInfo.sign_contract_status == 2">-->
                             <!--<a class="nav-link" data-toggle="tab" href="#forum-artist-fans"-->
@@ -157,17 +162,17 @@
                         </ul>
                         <div class="tab-content px-0 nav-tabs-animate bg-white col-md-12">
                             <!--日历日程-->
-                            <div class="tab-pane animation-fade pb-20 fixed-button-father" id="forum-artist-schedule"
+                            <div class="tab-pane animation-fade  fixed-button-father" id="forum-artist-schedule"
                                  role="tabpanel" :class="artistInfo.sign_contract_status == 2?'active':''">
                                 <div class="col-md-12">
                                     <calendar v-if="artistInfo.sign_contract_status == 2" :goto-date="selectedDate"
-                                              :calendars="calendarId" ref="calendar"
+                                              :calendars="calendarId" ref="calendar" @showToast="showToast"
                                               @scheduleClick="showScheduleModal" :isModel="true"
                                               @dayClick="showAddScheduleModal"></calendar>
                                 </div>
                             </div>
                             <!--项目-->
-                            <div class="tab-pane animation-fade pb-20 fixed-button-father" id="forum-artist-projects"
+                            <div class="tab-pane animation-fade  fixed-button-father" id="forum-artist-projects"
                                  role="tabpanel">
                                 <table class="table table-hover is-indent example" data-plugin="animateList"
                                        data-animate="fade"
@@ -187,9 +192,10 @@
                                             {{item.title}}
                                         </td>
 
-                                        <td>{{item.principal.data.name}}</td>
+                                        <td v-if="item.principal">{{item.principal.data.name}}</td>
+                                        <td v-if="!item.principal"></td>
                                         <td>{{item.company}}</td>
-                                        <td>{{item.created_at}}</td>
+                                        <td>{{item.created_at.date}}</td>
                                         <td>
                                             <template v-if="item.relate_project_bills_resource">
                                                 {{item.relate_project_bills_resource}}
@@ -202,9 +208,11 @@
                                     <img src="https://res.papitube.com/corvus/images/content-none.png" alt=""
                                          style="width: 100%">
                                 </div>
+                                <pagination :current_page="current_page" :method="getProject" :total_pages="total_pages"
+                                    :total="total" ></pagination>
                             </div>
                             <!--任务-->
-                            <div class="tab-pane animation-fade pb-20 fixed-button-father"
+                            <div class="tab-pane animation-fade  fixed-button-father"
                                  id="forum-artist-tasks"
                                  role="tabpanel">
                                 <table class="table table-hover is-indent example" data-plugin="animateList"
@@ -246,7 +254,7 @@
                                          style="width: 100%">
                                 </div>
                                 <pagination :current_page="current_page" :method="getTaskList" :total_pages="total_pages"
-                                    :total="total"  class="mb-50"></pagination>
+                                    :total="total" ></pagination>
                                 <div class="site-action fixed-button" data-plugin="actionBtn" data-toggle="modal"
                                      data-target="#addTask">
                                     <button type="button"
@@ -261,7 +269,7 @@
                                 </div>
                             </div>
                             <!--作品库-->
-                            <div class="tab-pane animation-fade pb-20 fixed-button-father" id="forum-artist-work"
+                            <div class="tab-pane animation-fade  fixed-button-father" id="forum-artist-work"
                                  role="tabpanel">
                                 <table class="table table-hover is-indent example" data-plugin="animateList"
                                        data-animate="fade" data-child="tr">
@@ -289,8 +297,14 @@
                                     <img src="https://res.papitube.com/corvus/images/content-none.png" alt=""
                                          style="width: 100%">
                                 </div>
+<<<<<<< HEAD
+                                <pagination :current_page="current_page" :method="getTaskList"
+                                            :total_pages="total_pages"
+                                            :total="total" class="mb-30"></pagination>
+=======
                                 <pagination :current_page="current_page" :method="getTaskList" :total_pages="total_pages"
-                                    :total="total"  class="mb-50"></pagination>
+                                    :total="total"></pagination>
+>>>>>>> hp
                                 <div class="site-action fixed-button" data-plugin="actionBtn" data-toggle="modal"
                                      data-target="#addWork">
                                     <button type="button"
@@ -309,7 +323,7 @@
                                      style="width:80vw ;height:400px; margin-top:30px;padding-bottom: 20px"></div>
                             </div>
                             <!--账单-->
-                            <div class="tab-pane animation-fade  pb-20 fixed-button-father" id="forum-artist-bill"
+                            <div class="tab-pane animation-fade   fixed-button-father" id="forum-artist-bill"
                                  role="tabpanel">
                                 <div class="clearfix my-10">
                                     <div class="float-left my-10 ml-10">
@@ -363,16 +377,19 @@
                                             :total="total"></pagination>
                             </div>
                             <!--概况-->
-                            <div class="tab-pane animation-fade  pb-20 fixed-button-father" id="forum-artist-base"
+                            <div class="tab-pane animation-fade   fixed-button-father" id="forum-artist-base"
                                  role="tabpanel" :class="artistInfo.sign_contract_status == 2?'':'active'">
                                 <div class="card">
-                                    <div class="card-header card-header-transparent card-header-bordered" style="position: relative;">
+                                    <div class="card-header card-header-transparent card-header-bordered"
+                                         style="position: relative;">
                                         <div class="float-left font-weight-bold third-title">艺人信息</div>
-                                        <div class="float-right pointer-content" v-show="!isEdit" style="position:absolute;top:10px;right:30px;">
+                                        <div class="float-right pointer-content" v-show="!isEdit"
+                                             style="position:absolute;top:10px;right:30px;">
                                             <i class="iconfont icon-bianji2" aria-hidden="true"
                                                @click="editBaseInfo"></i>
                                         </div>
-                                        <div class="float-right mr-40" v-show="isEdit" style="position:absolute;top:5px;right:0px;">
+                                        <div class="float-right mr-40" v-show="isEdit"
+                                             style="position:absolute;top:5px;right:0px;">
                                             <button class="btn btn-sm btn-white btn-pure" @click="cancelEdit">取消
                                             </button>
                                             <button class="btn btn-primary" @click="changeArtist">确定</button>
@@ -533,8 +550,10 @@
                                             </div>
                                             <div class="card-text py-10 px-0 clearfix col-md-6 float-left ">
                                                 <div class="col-md-3 float-left text-right pl-0">签约状态</div>
-                                                <div class="col-md-9 float-left font-weight-bold" v-if="artistInfo.sign_contract_status" :class="isEdit?'py-10':''">
-                                                    {{signState.find(item=>item.value === artistInfo.sign_contract_status).name}}                        
+                                                <div class="col-md-9 float-left font-weight-bold"
+                                                     v-if="artistInfo.sign_contract_status" :class="isEdit?'py-10':''">
+                                                    {{signState.find(item=>item.value ===
+                                                    artistInfo.sign_contract_status).name}}
                                                 </div>
                                             </div>
                                             <div class="card-text py-10 px-0 clearfix col-md-6 float-left mt-10"
@@ -600,7 +619,8 @@
                 <div class="panel" style="width: calc(34% - 15px);">
                     <div class="col-md-12">
                         <div class="card col-md-12">
-                            <div class="card-header card-header-transparent card-header-bordered p-10" style="font-size: 16px;font-weight: bold;">
+                            <div class="card-header card-header-transparent card-header-bordered p-10"
+                                 style="font-size: 16px;font-weight: bold;">
                                 <div>艺人跟进</div>
                             </div>
                             <div class="card-block">
@@ -616,6 +636,9 @@
 
         </div>
 
+        <div class="calendar-toast" v-show="toastShow"
+             :style="'position: absolute;top:' + toastY + 'px; left: ' + toastX + 'px;'">双击创建日程
+        </div>
 
         <modal :id="'affix'" :title="'删除附件'" @onOK="deleteAffix">
             <div class="text-center m-20">您确认删除该附件吗？</div>
@@ -701,7 +724,8 @@
                         </div>
                     </div>
                     <div class="modal-footer">
-                        <button class="btn btn-sm btn-white btn-pure" data-dismiss="modal">取消</button>
+                        <button class="btn btn-sm btn-white btn-pure" data-dismiss="modal" @click="taskcancel">取消
+                        </button>
                         <button class="btn btn-primary" type="submit" @click="addTask">确定</button>
                     </div>
 
@@ -1185,6 +1209,7 @@
     import Cookies from 'js-cookie'
 
     import ApprovalGreatModule from '../../components/ApprovalGreatModule'
+
     export default {
         data: function () {
             return {
@@ -1203,7 +1228,7 @@
                 taskIntroduce: '',
                 artistTasksInfo: [],//任务
                 artistWorksInfo: [],//作品库
-                artistProjectsInfo: [],//项目
+                artistProjectsInfo:'',//项目
                 artistWorkName: '', //作品名称
                 artistWorkDirector: '',//导演名称
                 artistBillsInfo: [],//账单
@@ -1218,7 +1243,7 @@
                 artistSourceArr: config.artistSourceArr,
                 taiyangCommunicationStatusArr: config.taiyangCommunicationStatusArr,
                 yesOrNoArr: config.yesOrNoArr,
-                signState:config.signState,
+                signState: config.signState,
                 changeArtistInfo: {},
                 artistSocialPlatform: [
                     {
@@ -1290,10 +1315,15 @@
                 delType: '',
                 calendarName: '',
                 scheduleRepeat: 0,
-                contractType:'stars',
-                formDate:'',
-                scheduleShow:[],
-                priorityArr:config.priorityArr
+                contractType: 'stars',
+                formDate: '',
+                scheduleShow: [],
+                priorityArr: config.priorityArr,
+                scheduleStartTime: '',
+                scheduleEndTime: '',
+                toastShow: false,
+                toastX: 0,
+                toastY: 0,
             }
         },
 
@@ -1310,7 +1340,7 @@
             this.getCalendar();
             this.draw();
             this.getArtistsBill()
-            this.getTaskList()
+            this.getTaskDate()
             this.getProjectList()
             this.selectProjectLinkage();
             this.getResources();
@@ -1342,44 +1372,60 @@
 
                     _this.artistInfo = response.data;
                     _this.uploadUrl = _this.artistInfo.avatar
-                    _this.artistProjectsInfo = []
+                    // _this.artistProjectsInfo = []
                     _this.artistTasksInfo = response.data.tasks.data//任务数据
-                   
+
                     _this.artistWorksInfo = response.data.works.data//作品数据
                     _this.affixes = response.data.affixes.data
-                    for (let i = 0; i < response.data.trails.data.length; i++) {
-                        if (response.data.trails.data[i].project) {
-                            response.data.trails.data[i].project.data.company = response.data.trails.data[i].client.data.company
-                            _this.artistProjectsInfo.push(response.data.trails.data[i].project.data)//项目数据
-                        }
-                    }
+                    // for (let i = 0; i < response.data.trails.data.length; i++) {
+                    //     if (response.data.trails.data[i].project) {
+                    //         response.data.trails.data[i].project.data.company = response.data.trails.data[i].client.data.company
+                    //         _this.artistProjectsInfo.push(response.data.trails.data[i].project.data)//项目数据
+                    //     }
+                    // }
                   
                    
                     _this.isLoading = false
                 })
 
             },
-            getCalendar:function(){
-                 this.artistId = this.$route.params.id;
+            getProject(){
+                let _this = this;
+                fetch('get', '/stars/' + this.artistId+'/project').then(function (response) {
+                    console.log(response)
+                    _this.artistProjectsInfo  = response.data
+                    _this.current_page = response.meta.pagination.current_page;
+                    _this.total = response.meta.pagination.total;
+                    _this.total_pages = response.meta.pagination.total_pages;
+                })      
+            },
+            getCalendar: function () {
+                this.artistId = this.$route.params.id;
 
                 let data = {
                     include: 'calendar,schedule,schedule.creator',
                 };
                 let _this = this;
                 fetch('get', '/stars/' + this.artistId, data).then(function (response) {
-                     if (response.data.calendar) {
+                    if (response.data.calendar) {
                         _this.calendarId.push(response.data.calendar.data.id)
                         _this.calendarName = response.data.calendar.data.title
                     }
-                      //日程展示
-                     if(response.data.schedule){
-                       for (let i = 0; i < response.data.schedule.data.length; i++) {
-                           _this.scheduleShow.push(response.data.schedule.data[i])  
-                       } 
+                    //日程展示
+                    if (response.data.schedule) {
+                        for (let i = 0; i < response.data.schedule.data.length; i++) {
+                            _this.scheduleShow.push(response.data.schedule.data[i])
+                        }
                     }
                 })
-                
-            },
+
+            }
+
+            ,
+            ScheduleBox: function (value) {
+                this.showScheduleModal(value)
+            }
+            ,
             /*查看日历详情 --添加日历 -- 修改日历 */
 
             //获取日历详情
@@ -1399,7 +1445,8 @@
                     this.$store.dispatch('changeParticipantsInfo', {data: response.data.participants.data});
                 });
                 $('#checkSchedule').modal('show')
-            },
+            }
+            ,
             addSchedule: function () {
                 let startTime = '';
                 let endTime = '';
@@ -1461,7 +1508,17 @@
                     $('#changeSchedule').modal('hide');
                     toastr.success('添加成功')
                 })
-            },
+            }
+            ,
+            showToast: function (clientX, clientY) {
+                this.toastX = clientX - 100;
+                this.toastY = clientY - 25;
+                this.toastShow = true;
+                setTimeout(() => {
+                    this.toastShow = false
+                }, 1000)
+            }
+            ,
             changeSchedule: function () {
                 let startTime = '';
                 let endTime = '';
@@ -1513,13 +1570,20 @@
                     $('#changeSchedule').modal('hide');
                     toastr.success('修改成功')
                 })
-            },
+            }
+            ,
+            taskcancel: function () {
+                this.$store.state.newParticipantsInfo = []
+            }
+            ,
             selectScheduleCalendar: function (value) {
                 this.scheduleCalendar = value
-            },
+            }
+            ,
             changeIsAllDay: function (e) {
                 this.isScheduleAllday = Number(e.target.checked);
-            },
+            }
+            ,
             showAddScheduleModal: function (date) {
                 if (this.calendarId.length > 0) {
                     this.$refs.scheduleStartDate.setValue(date);
@@ -1530,7 +1594,8 @@
                 } else {
                     toastr.error('该艺人无对应艺人日历，请先创建艺人日历')
                 }
-            },
+            }
+            ,
             selectProjectLinkage: function (value) {
                 this.linkageResource = value;
                 if (!this.allProjectsInfo) {
@@ -1539,20 +1604,24 @@
                 if (!this.allTasksInfo) {
                     this.getAllTasks()
                 }
-            },
+            }
+            ,
             getAllProjects: function () {
                 fetch('get', '/projects/all').then(response => {
                     this.allProjectsInfo = response.data
                 })
-            },
+            }
+            ,
             getAllTasks: function () {
                 fetch('get', '/tasksAll').then(response => {
                     this.allTasksInfo = response.data
                 })
-            },
+            }
+            ,
             addLinkageResource: function () {
                 $('#addLinkage').modal('hide');
-            },
+            }
+            ,
             selectResource: function (type, value) {
                 let index = this.linkageSelectedIds[type].indexOf(value);
                 if (index > -1) {
@@ -1560,14 +1629,17 @@
                 } else {
                     this.linkageSelectedIds[type].push(value)
                 }
-            },
+            }
+            ,
             delNewScheduleLinkage: function (type, value) {
                 let index = this.linkageSelectedIds[type].indexOf(value);
                 this.linkageSelectedIds[type].splice(index, 1)
-            },
+            }
+            ,
             changeCalendarColor: function (value) {
                 this.checkColor = value;
-            },
+            }
+            ,
             getResources(type) {
                 let data = {};
                 if (type) {
@@ -1582,16 +1654,20 @@
                         this.allMeetingRomeList = response.data;
                     }
                 })
-            },
+            }
+            ,
             changeScheduleRepeat: function (value) {
                 this.scheduleRepeat = value;
-            },
+            }
+            ,
             isShowMore: function () {
                 this.showMore = !this.showMore
-            },
+            }
+            ,
             changeScheduleMaterial: function (value) {
                 this.scheduleMaterialId = value;
-            },
+            }
+            ,
             fileUpload: function (url, name, size) {
                 let data = {
                     title: name,
@@ -1608,7 +1684,8 @@
                         this.scheduleData.affixes.data.push(response.data)
                     }
                 })
-            },
+            }
+            ,
             changeScheduleParticipants: function (value) {
                 let data = {};
                 if (value) {
@@ -1632,7 +1709,8 @@
                     this.$refs.calendar.refresh();
                     this.scheduleParticipants = JSON.parse(JSON.stringify(this.$store.state.newParticipantsInfo));
                 })
-            },
+            }
+            ,
             changeScheduleType: function (type) {
                 this.scheduleType = type;
                 $('#checkSchedule').modal('hide');
@@ -1673,7 +1751,8 @@
                         }
                     }
                 }
-            },
+            }
+            ,
             deleteToastr: function (type, calendar = null) {
                 this.delType = type;
                 if (calendar) {
@@ -1682,14 +1761,16 @@
                 if (type === 'schedule') {
                     $('#checkSchedule').modal('hide');
                 }
-            },
+            }
+            ,
             deleteSchedule: function () {
                 fetch('delete', '/schedules/' + this.scheduleData.id).then(() => {
                     $('#delModel').modal('hide');
                     toastr.success('删除成功');
                     this.$refs.calendar.refresh()
                 })
-            },
+            }
+            ,
             initAddScheduleModal: function () {
                 this.showMore = false;
                 this.$store.dispatch('changeParticipantsInfo', {data: []});
@@ -1719,7 +1800,8 @@
                 this.$refs.scheduleResource.setValue('');
                 this.$refs.scheduleRepeat.setValue('0');
                 this.$refs.scheduleNotice.setValue('0');
-            },
+            }
+            ,
             /*查看日历详情 --添加日历 -- 修改日历 --结束*/
 
             //获取账单
@@ -1746,7 +1828,8 @@
                         _this.expendituresum = response.meta.expendituresum.toFixed(2)//支出总和
                     }
                 })
-            },
+            }
+            ,
 
             getTaskType: function () {
                 let _this = this;
@@ -1758,7 +1841,8 @@
                         })
                     }
                 })
-            },
+            }
+            ,
             //获取任务列表
             getTaskList: function () {
                 let _this = this
@@ -1767,7 +1851,14 @@
                     _this.current_page = response.meta.pagination.current_page;
                     _this.total = response.meta.pagination.total;
                     _this.total_pages = response.meta.pagination.total_pages;
-                    if (_this.allTaskList.length > 0) {
+                   
+                })
+            },
+            getTaskDate:function(){
+                let _this = this
+                fetch('get', `/stars/${this.$route.params.id}/tasks`).then(response => {
+                    _this.allTaskList = response.data
+                 if (_this.allTaskList.length > 0) {
                         for (let i = 0; i < _this.allTaskList.length; i++) {
                             if (_this.allTaskList[i].status == 2) {
                                 _this.doneTaskNum = _this.doneTaskNum + 1
@@ -1776,19 +1867,21 @@
                         }
                     }
                     _this.taskNum = `${_this.doneTaskNum}/${_this.allTaskList.length}`
-                })
+                 })
             },
             selectDate: function (value) {
                 this.selectedDate = value;
                 this.$refs.meetingRoom.setDate(value)
-            },
+            }
+            ,
             //获取三个项目
             getProjectList: function () {
                 let _this = this
                 fetch('get', `/projects/star/${this.$route.params.id}`).then(response => {
                     _this.threeProjectList = response
                 })
-            },
+            }
+            ,
             //粉丝数据
             draw: function () {
                 let myChart = echarts.init(document.getElementById('myChart'));
@@ -1867,14 +1960,17 @@
 
                 // 使用刚指定的配置项和数据显示图表。
                 myChart.setOption(option);
-            },
+            }
+            ,
             getArtistWorks: function () {
 
-            },
+            }
+            ,
             run: function (res, callback) {
                 this.changeArtistBaseInfo(res, 'avatar')
                 return callback()
-            },
+            }
+            ,
             //上传头像 ---修改头像
             getUploadUrl(res) {
                 let _this = this
@@ -1885,32 +1981,39 @@
                 _this.run(res, function () {
                     _this.changeArtist()
                 })
-            },
+            }
+            ,
             changeTaskType: function (value) {
                 this.taskType = value
-            },
+            }
+            ,
 
             changeTaskLevel: function (value) {
                 this.taskLevel = value
-            },
+            }
+            ,
 
             changeStartTime: function (value) {
 
                 this.startTime = value
 
-            },
+            }
+            ,
 
             changeStartMinutes: function (value) {
                 this.startMinutes = value
-            },
+            }
+            ,
 
             changeEndTime: function (value) {
                 this.endTime = value
-            },
+            }
+            ,
 
             changeEndMinutes: function (value) {
                 this.endMinutes = value
-            },
+            }
+            ,
             //设置默认负责人
             // setDefault:function(){
             //     // let defaultParams = 
@@ -2009,7 +2112,8 @@
                     _this.$refs.taskEndTime.setValue('')
                     _this.$refs.taskLevel.setValue('')
                 })
-            },
+            }
+            ,
             //设置默认负责人
             setDefaultPrincipal() {
                 this.$store.commit('changeNewPrincipal', {
@@ -2017,7 +2121,8 @@
                     id: this.user.id
                 })
                 this.$store.commit('changeNewParticipantsInfo', [])
-            },
+            }
+            ,
             //添加作品
             addWork: function () {
                 if (!this.artistWorkName) {
@@ -2062,7 +2167,8 @@
                     _this.$refs.workType.setValue('')
                     _this.$refs.workTime.setValue('');
                 })
-            },
+            }
+            ,
 
             addPrivacy: function () {
                 $('#addPrivacy').modal('hide')
@@ -2072,24 +2178,29 @@
                 this.$store.state.divisionInfo = []
                 this.$store.state.incubationInfo = []
                 this.$store.state.billInfo = []
-            },
+            }
+            ,
 
             changeWorkReleaseTime: function (value) {
                 this.workReleaseTime = value
-            },
+            }
+            ,
 
             changeWorkType: function (value) {
                 this.workType = value
-            },
+            }
+            ,
 
             editBaseInfo: function () {
                 this.isEdit = true;
                 this.changeArtistInfo = {};
-            },
+            }
+            ,
 
             cancelEdit: function () {
                 this.isEdit = false
-            },
+            }
+            ,
             //修改基本信息
             changeArtistBaseInfo: function (value, name) {
                 if (name === 'platform') {
@@ -2121,7 +2232,8 @@
                     value = value.value
                 }
                 this.changeArtistInfo[name] = value
-            },
+            }
+            ,
 
             changeArtist: function () {
 
@@ -2157,7 +2269,8 @@
                     }
                     _this.getArtist();
                 })
-            },
+            }
+            ,
 
             distributionPerson: function (value) {
 
@@ -2182,7 +2295,8 @@
                 //         this.$store.dispatch('changeParticipantsInfo', params);
                 //     }
                 // }
-            },
+            }
+            ,
 
             addDistributionPerson: function () {
                 let toast
@@ -2227,11 +2341,13 @@
                     _this.getArtist();
                     _this.$store.state.participantsInfo = []
                 })
-            },
+            }
+            ,
             //获取附件类型
             changeAttachmentType: function (value) {
                 this.affixesType = value
-            },
+            }
+            ,
             //上传附件
             uploadAttachment: function (url, name, size) {
                 if (!this.affixesType) {
@@ -2256,15 +2372,18 @@
                 })
                 this.changeArtistBaseInfo(this.affixes, 'affix')
 
-            },
+            }
+            ,
             //获取附件id
             getAffixId: function (id) {
                 this.affixId = id
-            },
+            }
+            ,
             previewFile: function (url, name) {
                 this.previewUrl = url
                 this.previewName = name
-            },
+            }
+            ,
             //删除附件
             deleteAffix: function () {
                 let _this = this
@@ -2274,25 +2393,29 @@
                     _this.isEdit = false;
                     _this.getArtist();
                 })
-            },
-            contractlist(status){
+            }
+            ,
+            contractlist(status) {
                 let _this = this;
-                let data={
-                    type:this.contractType
+                let data = {
+                    type: this.contractType
                 }
                 data.status = status
-                fetch('get','approvals/specific_contract',data).then(function(response){
+                fetch('get', 'approvals/specific_contract', data).then(function (response) {
                     _this.formDate = response.data
                     $('#approval-great-module').modal('show')
                 })
-            },
+            }
+            ,
             filterProjectFee: function (value) {
                 this.filterFee = value;
-            },
+            }
+            ,
             toProject: function (id) {
                 this.$router.push({path: '/projects/' + id});
 
-            },
+            }
+            ,
             toTask: function (id) {
                 this.$router.push({path: '/tasks/' + id});
             }
@@ -2465,9 +2588,9 @@
         line-height: 76px;
         border-radius: 50%;
         border: 1px solid #eee;
-        background-repeat:no-repeat; 
-        background-size:100% 100%;
-        -moz-background-size:100% 100%;
+        background-repeat: no-repeat;
+        background-size: 100% 100%;
+        -moz-background-size: 100% 100%;
     }
 
     .puls span {
@@ -2481,14 +2604,21 @@
         opacity: 0;
 
     }
+
     .card-block .card-text {
         display: flex;
         align-items: center;
     }
-    .card-header:first-child{
+
+    .card-header:first-child {
         border-radius: calc(.215rem - 1px) calc(.215rem - 1px) 0 0;
         display: flex;
         align-items: center;
     }
+
+    .projectshow:hover {
+        cursor: pointer;
+    }
+
 </style>
 

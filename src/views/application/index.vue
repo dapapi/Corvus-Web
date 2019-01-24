@@ -74,7 +74,7 @@
             },
             getList:function(){
                 fetch('get',`${config.apiUrl}/getmodules`).then((res) => {
-                    this.moduleList = res.data
+                    this.moduleList = res
                     let data={}
                     for (let i = 0; i < this.leftData.length; i++) {
                     if(this.leftData[i].id == 1){

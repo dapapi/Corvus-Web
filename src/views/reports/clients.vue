@@ -6,10 +6,10 @@
         <div class="page-content container-fluid">
             <div class="bg-white">
                 <div class="clearfix">
-                    <div class="col-md-5 p-20 clearfix float-left">
+                    <div class="col-md-5 p-20 clearfix float-left" style="z-index: 0">
                         <GroupDatepicker ref="timeInterval" @change="changeDate"></GroupDatepicker>
                     </div>
-                    <div class="col-md-7 p-20 clearfix float-left">
+                    <div class="col-md-7 p-20 clearfix float-left" style="z-index: 0">
                         <div class="col-md-3 float-left">
                             <button type="button" class="btn btn-block btn-success waves-effect waves-classic"
                                     :disabled="designationDateNum === 'day'" @click="selectDate('day')">7天
@@ -56,8 +56,8 @@
                 </div>
                 <div class="page-content tab-content nav-tabs-animate bg-white">
                     <div class="tab-pane animation-fade active" id="forum-trail-report" role="tabpanel">
-                        <div class="clearfix">
-                            <Selectors :options="clientTypeArr" @change="changeClientType"></Selectors>
+                        <div class="clearfix col-md-3 pl-0">
+                            <Selectors :options="clientTypeArr" @change="changeClientType" placeholder="请选择客户类型"></Selectors>
                         </div>
                         <table class="table table-hover is-indent example" data-plugin="animateList" data-animate="fade"
                                data-child="tr"

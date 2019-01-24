@@ -19,8 +19,6 @@
                                 {{ clientInfoCopy.principal?clientInfoCopy.principal.data.name:'' }}
                             </div>
                         </div>
-                    </div>
-                    <div class="card-text clearfix example">
                         <div class="col-md-6 float-left clearfix pl-0">
                             <div class="float-left pl-0 pr-2 col-md-3">
                                 <i class="iconfont icon-labelbiaoqian pr-2" aria-hidden="true"></i>类型
@@ -44,12 +42,12 @@
                         </div>
                     </div>
                     <div class="clearfix">
-                        <div class="col-md-6 float-left pl-0 mb-20" v-if="clientTasksInfo.length > 0">
+                        <div class="col-md-6 float-left pl-0" v-if="clientTasksInfo.length > 0">
                             <div class="col-md-6 pl-0"><i class="iconfont icon-iconset0399 pr-2" aria-hidden="true"></i>任务
                             </div>
                             <div class="clearfix example " v-for="(task, index) in clientTasksInfo" v-if="index < 3"
                                  style="cursor: pointer" :key="index" @click="linkTo('/tasks/' + task.id)">
-                                <div class="col-md-3 float-left px-0">{{ task.title }}</div>
+                                <div class="col-md-3 float-left px-0 exceeded-display">{{ task.title }}</div>
                                 <div class="col-md-3 float-left px-0">{{ task.principal?task.principal.data.name:'' }}
                                 </div>
                                 <div class="col-md-4 float-left px-0">{{ task.end_at }}</div>
@@ -65,15 +63,20 @@
                                 </div>
                             </div>
                         </div>
-                        <div class="col-md-6 float-left pl-0 mb-20" v-if="clientProjectsInfo.length > 0">
+                        <div class="col-md-6 float-left pl-0" v-if="clientProjectsInfo.length > 0">
                             <div class="col-md-6 p-0"><i class="iconfont icon-ego-box pr-2 " aria-hidden="true"></i>项目
                             </div>
                             <div class="clearfix example" v-for="(project, index) in clientProjectsInfo"
                                  v-if="index < 3" :key="index"
                                  @click="linkTo('/projects/' + project.id)" style="cursor: pointer">
-                                <div class="col-md-3 float-left px-0">{{project.title}}</div>
-                                <div class="col-md-3 float-left px-0">{{ clientTypeArr.find(item => item.value ==
-                                    project.type).name }}
+                                <div class="col-md-3 float-left px-0 exceeded-display">{{project.title}}</div>
+                                <div class="col-md-3 float-left px-0">
+                                    <template v-if="project.type === 4">
+                                        商务客户
+                                    </template>
+                                    <template v-else>
+                                        {{ clientTypeArr.find(item => item.value == project.type).name }}
+                                    </template>
                                 </div>
                                 <div class="col-md-4 float-left px-0">{{ project.created_at }}</div>
                                 <div class="col-md-2 float-left px-0">
@@ -138,7 +141,7 @@
                         </ul>
                     </div>
                     <div class="tab-content nav-tabs-animate bg-white col-md-12" v-if="clientInfo">
-                        <div class="tab-pane animation-fade pb-20 active" id="forum-trail" role="tabpanel">
+                        <div class="tab-pane animation-fade active" id="forum-trail" role="tabpanel">
 
                             <table class="table table-hover is-indent example" data-plugin="animateList"
                                    data-animate="fade"
@@ -173,8 +176,10 @@
                                 <img src="https://res.papitube.com/corvus/images/content-none.png" alt=""
                                      style="width: 100%">
                             </div>
+                            <pagination :current_page="current_page" :method="getClient"
+                                        :total_pages="total_pages" :total="total"></pagination>
                         </div>
-                        <div class="tab-pane animation-fade pb-20" id="forum-project" role="tabpanel">
+                        <div class="tab-pane animation-fade" id="forum-project" role="tabpanel">
                             <table class="table table-hover is-indent example" data-plugin="animateList"
                                    data-animate="fade"
                                    data-child="tr"
@@ -211,8 +216,10 @@
                                 <img src="https://res.papitube.com/corvus/images/content-none.png" alt=""
                                      style="width: 100%">
                             </div>
+                            <pagination :current_page="current_page" :method="getClientProject"
+                                        :total_pages="total_pages" :total="total"></pagination>
                         </div>
-                        <div class="tab-pane animation-fade pb-20" id="forum-contract" role="tabpanel">
+                        <div class="tab-pane animation-fade" id="forum-contract" role="tabpanel">
                             <table class="table table-hover example"
                                    data-child="tr" v-if="clientContractsInfo">
                                 <tr>
@@ -224,15 +231,11 @@
                                 </tr>
                                 <tbody>
                                 <tr v-for="contract in clientContractsInfo"
-                                    @click="redirectContract(contract.form_instance_number)">
-                                    <td>{{ contract.form_instance_number }}</td>
-                                    <td>{{ contract.title }}</td>
-                                    <td>
-                                        <template v-for="star in contract.stars_name">
-                                            {{ star.name }}
-                                        </template>
-                                    </td>
-                                    <td>收入</td>
+                                    @click="redirectContract(contract.contract_number)">
+                                    <td>{{ contract.contract_number }}</td>
+                                    <td>{{ contract.project }}</td>
+                                    <td>{{ contract.talents }}</td>
+                                    <td>{{ contract.type }}</td>
                                     <td>{{ contract.creator_name }}</td>
                                 </tr>
                                 </tbody>
@@ -242,8 +245,10 @@
                                 <img src="https://res.papitube.com/corvus/images/content-none.png" alt=""
                                      style="width: 100%">
                             </div>
+                            <pagination :current_page="current_page" :method="getClientContract"
+                                        :total_pages="total_pages" :total="total"></pagination>
                         </div>
-                        <div class="tab-pane animation-fade pb-20 fixed-button-father" id="forum-task" role="tabpanel">
+                        <div class="tab-pane animation-fade fixed-button-father" id="forum-task" role="tabpanel">
                             <table class="table table-hover is-indent example" data-plugin="animateList"
                                    data-animate="fade"
                                    data-child="tr"
@@ -282,6 +287,8 @@
                                 <img src="https://res.papitube.com/corvus/images/content-none.png" alt=""
                                      style="width: 100%">
                             </div>
+                            <pagination :current_page="current_page" :method="getClientTask"
+                                        :total_pages="total_pages" :total="total"></pagination>
                             <div class="site-action fixed-button" data-plugin="actionBtn" data-toggle="modal"
                                  data-target="#addTask">
                                 <button type="button"
@@ -293,7 +300,7 @@
                                 </button>
                             </div>
                         </div>
-                        <div class="tab-pane animation-fade pb-20" id="forum-base" role="tabpanel">
+                        <div class="tab-pane animation-fade" id="forum-base" role="tabpanel">
                             <div class="card" v-if="clientInfo.company">
                                 <div class="card-header card-header-transparent card-header-bordered">
                                     <div class="float-left font-weight-bold third-title">客户详情</div>
@@ -371,7 +378,7 @@
                                             <div class="col-md-3 float-left text-right pl-0">客户评级</div>
                                             <div class="col-md-9 float-left font-weight-bold">
                                                 <EditSelector :options="taskLevelArr" :is-edit="isEdit"
-                                                              :content="clientInfo.level"
+                                                              :content="clientInfo.client_rating"
                                                               @change="changeClientLevel"></EditSelector>
                                             </div>
                                         </div>
@@ -418,7 +425,7 @@
                                 </div>
                             </div>
                         </div>
-                        <div class="tab-pane animation-fade pb-20 fixed-button-father" id="forum-contact"
+                        <div class="tab-pane animation-fade fixed-button-father" id="forum-contact"
                              role="tabpanel">
                             <table class="table table-hover is-indent example" data-plugin="animateList"
                                    data-animate="fade"
@@ -427,7 +434,6 @@
                                 <tr class="animation-fade"
                                     style="animation-fill-mode: backwards; animation-duration: 250ms; animation-delay: 0ms;">
                                     <th class="cell-300" scope="col">联系人</th>
-                                    <!-- <th class="cell-300" scope="col">关联公司</th> -->
                                     <th class="cell-300" scope="col">关键决策人</th>
                                     <th class="cell-300" scope="col">联系人电话</th>
                                     <th class="cell-300" scope="col">职位</th>
@@ -437,7 +443,6 @@
                                 <tbody>
                                 <tr v-for="(contact, index) in clientContactsInfo" :key="index">
                                     <td>{{ contact.name }}</td>
-                                    <!-- <td>{{ clientInfo.company }}</td> -->
                                     <td>
                                         {{ contact.type === 1 ? '否' : '' }}
                                         {{ contact.type === 2 ? '是' : '' }}
@@ -470,6 +475,8 @@
                                 <img src="https://res.papitube.com/corvus/images/content-none.png" alt=""
                                      style="width: 100%">
                             </div>
+                            <pagination :current_page="current_page" :method="getClientContact"
+                                        :total_pages="total_pages" :total="total"></pagination>
                             <div class="site-action fixed-button" data-plugin="actionBtn" data-toggle="modal"
                                  data-target="#addContact"
                                  @click="changeEditStatus(true)">
@@ -675,6 +682,9 @@
     export default {
         data: function () {
             return {
+                total: 0,
+                current_page: 1,
+                total_pages: 1,
                 clientId: '',
                 changeInfo: {},
                 clientTypeArr: config.clientTypeArr,
@@ -791,32 +801,30 @@
         methods: {
 
             getClient: function () {
-                let _this = this;
-                fetch('get', '/clients/' + this.clientId, {include: 'principal,creator'}).then(function (response) {
-                    _this.clientInfo = response.data;
-                    _this.clientInfoCopy = JSON.parse(JSON.stringify(response.data))
+                fetch('get', '/clients/' + this.clientId, {include: 'principal,creator'}).then(response => {
+                    this.clientInfo = response.data;
+                    this.clientInfoCopy = JSON.parse(JSON.stringify(response.data))
 
                     let params = {
                         type: 'change',
                         data: response.data.principal.data
                     };
-                    _this.$store.dispatch('changePrincipal', params);
-                    _this.isLoading = false
+                    this.$store.dispatch('changePrincipal', params);
+                    this.isLoading = false
                 })
             },
 
             getClientTrail: function () {
-                if (this.clientTrailsInfo.length > 0) {
-                    return
-                }
-                let _this = this;
                 let data = {
                     type: 'clients',
                     id: this.clientId,
                     include: 'principal,client'
                 };
-                fetch('get', '/trails/search', data).then(function (response) {
-                    _this.clientTrailsInfo = response.data
+                fetch('get', '/trails/search', data).then(response => {
+                    this.clientTrailsInfo = response.data;
+                    this.total = response.meta.pagination.total;
+                    this.current_page = response.meta.pagination.current_page;
+                    this.total_pages = response.meta.pagination.total_pages;
                 })
             },
 
@@ -829,47 +837,45 @@
                     id: this.clientId,
                     include: 'principal'
                 };
-                let _this = this;
-                fetch('get', '/clients/' + this.clientId + '/tasks', data).then(function (response) {
-                    _this.clientTasksInfo = response.data;
+                fetch('get', '/clients/' + this.clientId + '/tasks', data).then(response => {
+                    this.clientTasksInfo = response.data;
+                    this.total = response.meta.pagination.total;
+                    this.current_page = response.meta.pagination.current_page;
+                    this.total_pages = response.meta.pagination.total_pages;
                 })
             },
 
             getClientProject: function () {
-                if (this.clientProjectsInfo.length > 0) {
-                    return
-                }
                 let data = {
                     include: 'principal,trail.expectations,trail.client'
                 };
-                let _this = this;
-                fetch('get', `/clients/${this.clientId}/projects`, data).then(function (response) {
-                    _this.clientProjectsInfo = response.data
+                fetch('get', `/clients/${this.clientId}/projects`, data).then(response => {
+                    this.clientProjectsInfo = response.data;
+                    this.total = response.meta.pagination.total;
+                    this.current_page = response.meta.pagination.current_page;
+                    this.total_pages = response.meta.pagination.total_pages;
                 })
             },
 
             getClientContact: function () {
-                if (this.clientContactsInfo.length > 0) {
-                    return
-                }
-                let _this = this;
-                fetch('get', '/clients/' + this.clientId + '/contacts').then(function (response) {
-                    _this.clientContactsInfo = response.data
+                fetch('get', '/clients/' + this.clientId + '/contacts').then(response => {
+                    this.clientContactsInfo = response.data;
+                    this.total = response.meta.pagination.total;
+                    this.current_page = response.meta.pagination.current_page;
+                    this.total_pages = response.meta.pagination.total_pages;
                 })
             },
 
             getClientContract: function () {
-                if (this.clientContractsInfo.length > 0) {
-                    return
-                }
-                let _this = this;
-                fetch('get', '/clients/' + this.clientId + '/contracts').then(function (response) {
-                    _this.clientContractsInfo = response.data
+                fetch('get', '/clients/' + this.clientId + '/contracts').then(response => {
+                    this.clientContractsInfo = response.data;
+                    this.total = response.meta.pagination.total;
+                    this.current_page = response.meta.pagination.current_page;
+                    this.total_pages = response.meta.pagination.total_pages;
                 })
             },
 
             addContact: function () {
-                let data = {}
                 if (!this.editConfig.name) {
                     toastr.error('请输入联系人！')
                     return
@@ -887,36 +893,34 @@
                     toastr.error('请输入职位！')
                     return
                 }
-                data = {
+                let data = {
                     name: this.editConfig.name || '',
                     phone: this.editConfig.phone,
                     position: this.editConfig.position,
                     type: this.editConfig.type
-                }
+                };
 
-                let _this = this
-                fetch(this.isEditContact ? 'post' : 'put', `/clients/${this.clientId}/contacts${!this.isEditContact ? '/' + this.editConfig.id : ''}`, data).then(function (response) {
-                    _this.clientContactsInfo.push(response.data);
-                    toastr.success(_this.isEditContact ? '添加成功！' : '修改成功')
-                    _this.getClientContact()
+                fetch(this.isEditContact ? 'post' : 'put', `/clients/${this.clientId}/contacts${!this.isEditContact ? '/' + this.editConfig.id : ''}`, data).then(response => {
+                    this.getClientContact();
+                    this.getClient();
+                    toastr.success(this.isEditContact ? '添加成功！' : '修改成功')
                     $('#addContact').modal('hide')
                 })
             },
+
             delContact() {
-                let _this = this
-                fetch('delete', `/clients/${this.clientId}/contacts/${this.contactId}`).then(function (response) {
+                fetch('delete', `/clients/${this.clientId}/contacts/${this.contactId}`).then(() => {
                     toastr.success('删除成功')
-                    _this.getClientContact()
+                    this.getClientContact()
                 })
             },
 
             changeClientBaseInfo: function () {
-                let _this = this;
-                fetch('put', '/clients/' + this.clientId, this.changeInfo).then(function () {
-                    _this.isEdit = false;
+                fetch('put', '/clients/' + this.clientId, this.changeInfo).then(() => {
+                    this.isEdit = false;
                     toastr.success('修改成功')
-                    _this.getClient();
-                    _this.getClientTrail();
+                    this.getClient();
+                    this.getClientTrail();
                 })
             },
 
@@ -943,11 +947,11 @@
             },
 
             changeClientLevel: function (value) {
-                this.clientInfo.grade = value
+                this.changeInfo.client_rating = value
             },
 
             changeClientGrade: function (value) {
-                this.clientInfo.level = value
+                this.clientInfo.grade = value
             },
 
             changeClientScale: function (value) {
@@ -992,7 +996,6 @@
 
 
                 this.setDefaultPrincipal()
-                let _this = this;
                 let data = {
                     resource_type: 4,
                     resourceable_id: this.clientId,
@@ -1007,14 +1010,14 @@
                 };
 
 
-                fetch('post', '/tasks', data).then(function (response) {
+                fetch('post', '/tasks', data).then(response => {
                     toastr.success('创建成功');
                     $('#addTask').modal('hide');
-                    _this.editConfig = {}
-                    _this.clientTasksInfo.push(response.data)
-                    _this.getClient();
-                    _this.getClientTrail();
-                    _this.getClientProject()
+                    this.editConfig = {}
+                    this.clientTasksInfo.push(response.data)
+                    this.getClient();
+                    this.getClientTrail();
+                    this.getClientProject()
                 })
             },
 

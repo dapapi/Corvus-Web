@@ -27,7 +27,7 @@
                     </div>
                     <div class="col-md-3 example float-left">
                         <selectors :options="publicTrailTakeType" @change="progressStatusFilter"
-                                   placeholder="请选择线索状态"></selectors>
+                                   placeholder="请选择领取状态"></selectors>
                     </div>
                     <!--<div class="col-md-3 example float-left">-->
                     <!--<button type="button" class="btn btn-default waves-effect waves-classic float-right"-->

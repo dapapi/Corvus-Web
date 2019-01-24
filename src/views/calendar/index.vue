@@ -333,10 +333,10 @@
                             <div class="col-md-10 pl-0 float-left">
                                 <div class="pb-5" v-if="scheduleData.project"
                                      v-for="project in scheduleData.project.data">
-                                    <span>项目 - {{ project.title }}</span>
+                                    <span class="pointer-content" @click="redirectProject(project.moduleable_id)">项目 - {{ project.title }}</span>
                                 </div>
                                 <div class="pb-5" v-if="scheduleData.task" v-for="task in scheduleData.task.data">
-                                    <span>任务 - {{ task.title }}</span>
+                                    <span class="pointer-content" @click="redirectTask(task.moduleable_id)">任务 - {{ task.title }}</span>
                                 </div>
                             </div>
                         </div>
@@ -840,6 +840,16 @@
                 window.open(url)
             },
 
+            redirectProject: function (projectId) {
+                $('#checkSchedule').modal('hide');
+                this.$router.replace({path: '/projects/' + projectId});
+            },
+
+            redirectTask: function (taskId) {
+                $('#checkSchedule').modal('hide');
+                this.$router.replace({path: '/tasks/' + taskId});
+            },
+
             selectProjectLinkage: function (value) {
                 this.linkageResource = value;
                 if (!this.allProjectsInfo) {
@@ -950,20 +960,17 @@
             },
 
             showScheduleModal: function (schedule) {
-                console.log(schedule)
                 let data = {
                     include: 'calendar,participants,creator,material,affixes,project,task',
                 };
                 fetch('get', '/schedules/' + schedule.id, data).then(response => {
                     if (!response) {
                         this.scheduleData = schedule;
-                        console.log(this.scheduleData)
                         this.noPermission = true;
                         return
                     }
                     this.noPermission = false;
                     this.scheduleData = response.data;
-                       console.log(this.scheduleData)
                     if (this.scheduleData.privacy) {
                         this.schedulePrivacy = true
                     }

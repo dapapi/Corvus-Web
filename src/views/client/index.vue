@@ -28,13 +28,13 @@
                         <selectors :options="clientLevelArr" @change="changeClientLevelSelect"
                                    placeholder="请选择公司级别"></selectors>
                     </div>
-                    <!--<div class="col-md-3 example float-left">-->
-                    <!--<button type="button" class="btn btn-default waves-effect waves-classic float-right"-->
-                    <!--data-toggle="modal" data-target="#customizeContent"-->
-                    <!--data-placement="right" title="">-->
-                    <!--自定义筛选-->
-                    <!--</button>-->
-                    <!--</div>-->
+                    <div class="col-md-3 example float-left">
+                        <button type="button" class="btn btn-default waves-effect waves-classic float-right"
+                                data-toggle="modal" data-target="#customizeContent"
+                                data-placement="right" title="">
+                            自定义筛选
+                        </button>
+                    </div>
                 </div>
                 <div class="col-md-12">
                     <table class="table table-hover is-indent mb-20" data-plugin="animateList" data-animate="fade"
@@ -76,7 +76,8 @@
 
         </div>
 
-        <customize-filter :data="customizeInfo" @change="customize"></customize-filter>
+        <customize-filter :data="customizeInfo" @change="customize" :cleanup="cleanUp"
+                          @cleanupdone='cleanUp=false'></customize-filter>
 
         <AddClientType @change="showAddModal"/>
 
@@ -155,7 +156,7 @@
                             </div>
                         </div>
                         <div class="example">
-                            <div class="col-md-2 text-right float-left">客户评级</div>
+                            <div class="col-md-2 text-right float-left require">客户评级</div>
                             <div class="col-md-10 float-left pl-0">
                                 <selectors ref="clientLevel" :options="taskLevelArr"
                                            @change="changeClientScale"></selectors>
@@ -197,7 +198,7 @@
                 total: 0,
                 current_page: 0,
                 total_pages: 0,
-                customizeInfo: config.customizeInfo,
+                customizeInfo: {},
                 clientTypeArr: config.clientTypeArr,
                 clientLevelArr: clientLevelArr,
                 keyMasterArr: config.isKeyMasterArr,
@@ -222,10 +223,12 @@
                 clientScale: '',
                 isLoading: true,
                 taskLevelArr: config.taskLevelArr,
+                cleanUp: false,
             }
         },
 
         mounted() {
+            this.getField()
             this.getClients();
             this.user = JSON.parse(Cookies.get('user'))
             // 清除负责人默认值的设置
@@ -243,6 +246,12 @@
         },
 
         methods: {
+            getField() {
+                let _this = this
+                fetch('get', '/clients/filter_fields').then((params) => {
+                    _this.customizeInfo = params.data
+                })
+            },
             getClients: function (pageNum = 1) {
                 const params = {
                     page: pageNum,
@@ -297,6 +306,10 @@
                     toastr.error('请选择关键决策人！')
                     return
                 }
+                if (!this.clientScale) {
+                    toastr.error('请选择客户评级！')
+                    return
+                }
                 if (this.clientContactPhone.length !== 11) {
                     toastr.error('手机号码格式不对！');
                     return
@@ -309,7 +322,6 @@
                     type: this.clientType,
                     company: this.clientName,
                     grade: this.clientLevel,
-                    // region_id: '',
                     province: this.ragion.province || '',
                     city: this.ragion.city || '',
                     district: this.ragion.district || '',
@@ -321,8 +333,7 @@
                         position: this.clientContactPosition,
                         type: this.clientContactType,
                     },
-                    // keyman: this.clientDecision,
-                    size: this.clientScale,
+                    client_rating: this.clientScale,
                     desc: this.clientRemark
                 };
                 if (!data.principal_id) {
@@ -337,7 +348,15 @@
                 })
             },
 
-            customize: function () {
+            customize: function (value) {
+                let _this = this
+                fetch('post', '/clients/filter?include=principal', value).then((params) => {
+                    _this.clientsInfo = params.data
+                    _this.total = params.meta.pagination.total;
+                    _this.total_pages = params.meta.pagination.total_pages;
+                    _this.current_page = params.meta.pagination.current_page
+                    _this.cleanUp = true
+                })
 
             },
 

@@ -157,7 +157,7 @@
             </div>
             <DocPreview :url='previewUrl'/>
         </div>
-        <BuildProject :project-type="projectType" :project-fields-arr="projectFieldsArr"
+        <BuildProject :project-type="projectTypeTemp" :project-fields-arr="projectFieldsArr" mode='detail'
                       :default-data='{fields:(info.fields && info.fields.data),list:list,trailInfo:trailInfo}'></BuildProject>
         <ApprovalGreatModule :form-data='formData' singlemode='true' :default-data='detailData' :contract_id='$route.params.id'/>
         <ApprovalGoModal :mode='approvalMode' :id='list.form_instance_number' @approvaldone='approvalDone'/>
@@ -219,6 +219,7 @@
                 formData: {},
                 previewUrl: '',
                 previewUrlArr: [],
+                projectTypeTemp:'',
             }
         },
 
@@ -270,7 +271,9 @@
             },
             pullUp(params) {
                 this.formData = params
-                $('#approval-great-module').modal('show')
+                this.$nextTick((params) => {
+                    $('#approval-great-module').modal('show') 
+                })
             },
             approvalDone() {
                 if (this.list.project_number) {
@@ -319,11 +322,14 @@
 
             },
             addProject(value) {
+                console.log(value);
                 this.projectType = value;
+                let _this = this
                 if (this.list.title.includes('合同')) {
                     this.pullUp(this.indexData.find(item => item.form_id === this.projectType))
                 } else {
                     this.selectProjectType(function () {
+                        _this.projectTypeTemp = _this.projectType
                         $('#addProject').modal('show')
                     });
                 }

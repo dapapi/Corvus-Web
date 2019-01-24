@@ -178,8 +178,8 @@
             ApprovalProgress
         },
         name: "BuildProject",
-        //projectType 项目类型   projectFieldsArr 不同项目类型的数据   
-        props: ['projectType', 'projectFieldsArr', 'defaultData'],
+            //projectType 项目类型   projectFieldsArr 不同项目类型的数据   
+        props: ['projectType', 'projectFieldsArr', 'defaultData','mode'],
         data() {
             return {
                 visibleRangeArr: config.visibleRangeArr,
@@ -232,6 +232,7 @@
             this.setDefaultValue()
             this.defaultDataFilter()
             $('#addProject').on('hidden.bs.modal', function () {
+                
                 _this.refreshAddProjectModal()
             });
             $('#addProject').on('show.bs.modal', function () {
@@ -258,6 +259,7 @@
                     return
                 }
                 this.newArray = this.defaultData.fields.filter((params) => {
+                    console.log(params.hasOwnProperty('values'));
                     return params.hasOwnProperty('values')
                 })
             },

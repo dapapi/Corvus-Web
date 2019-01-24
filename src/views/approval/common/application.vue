@@ -54,9 +54,9 @@
                                 <tbody>
                                 <tr v-for="project in projectsInfo" :key='project.project_number' @click="goDetail(project.form_instance_number)">
                                     <td>{{project.form_instance_number}}</td>                              
-                                    <td>{{project.title}}</td>
-                                    <!-- <td>{{project.name}}</td> -->
-                                    <td></td>
+                                    <!-- <td>{{project.title}}</td> -->
+                                    <td>{{project.name}}</td>
+                                    <td>{{project.group_name}}</td>
                                     <td>{{project.created_at}}</td>
                                     <td>{{getProgressName(project.form_status)}}</td>
                                 </tr>
