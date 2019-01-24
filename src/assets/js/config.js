@@ -1325,6 +1325,51 @@ let config = {
                 value: 7,
             }
         ],
+        //消息模块link
+        msgLink:[
+            {
+                value: '207',
+                name: '/artists'//艺人管理
+            },
+            {
+                 value: '208',
+                 name: '/blogger' //博主管理
+            },
+            {
+              value: '209',
+              name: '/trails' //销售线索管理
+            },
+            {
+              value: '210',
+              name: '/clients' //客户管理
+            },
+            {
+              value: '211',
+              name: '/projects' //项目管理
+            },
+            {
+              value: '212',
+              name: '/tasks' //任务管理
+            },
+            {
+              value: '213',
+              name: '/approval' //合同管理
+            },
+            {
+              value: '214',
+              name: '/calendar' //日历管理
+            },
+            {
+              value: '216',
+              name: '/approval' //审批管理
+            },
+            {
+              value: '218',
+              name: '/broadcast' //公告
+            },
+        ]
+
+
     }
 ;
 

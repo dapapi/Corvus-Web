@@ -42,8 +42,8 @@
                                 <span class="time_con bg-white font-size-18">{{key}} 星期{{week.find(item => item.value == new Date(key).getDay()).name}}</span>
                             </div>
                             <ul class="list mt-40 ml-0 pl-0">
-                                <li class="mb-30" v-for="(item2,index2) in item" :key="index2">
-                                    <router-link class="row" :to="item2.link">
+                                <li class="mb-30 row" v-for="(item2,index2) in item" :key="index2">
+                                    <!-- <router-link class="row" :to="msgLink.find(link => link.value == item2.module).name+'/'+item2.module_data_id"> -->
                                         <div class="clearfix col-md-12 module">
                                             <div class="float-left mr-10 pic">
                                                 <i class="iconfont  font-size-30 icon-color" :class="iconList[moduleList.find(item => item.id == moduleType).val]"></i>
@@ -53,7 +53,7 @@
                                                 <p class="desc txt font-size-16">{{item2.message_title}}</p>
                                             </div>
                                         </div>
-                                        <div class="content py-15 pl-40 col-md-8 ml-80" @click="msgStatus(item2.message_id)">
+                                        <div class="content py-15 pl-40 col-md-8 ml-80" @click="msgStatus(item2.message_id,item2.module,item2.module_data_id)">
                                                 <span class="is_read" v-show="item2.state == 1"></span>
                                                 <div class="title font-size-16 mb-15">{{item2.message_subheading}}</div>
                                                 <div class="row">
@@ -63,7 +63,7 @@
                                                      </div>
                                                 </div>                                                                                 
                                         </div>
-                                    </router-link>
+                                    <!-- </router-link> -->
                                 </li>
                             </ul>
                         </div>
@@ -76,7 +76,7 @@
             </div>
             </div>
         </div>
-        <Flag typeText="全部标记为已读" @confirmFlag="msgStatus('',moduleType)"/>
+        <Flag typeText="全部标记为已读" @confirmFlag="msgStatus('','','',moduleType)"/>
     </div>
 </template>
 
@@ -133,6 +133,7 @@ export default {
       week:config.week,
       state:1,// 1未读 2已读
       websocket:null,
+      msgLink:config.msgLink,//模块跳转link
     //   moduleId :this.$route.query.moduleType
     };
   },
@@ -176,7 +177,6 @@ export default {
     getModule:function(){
         fetch('get',`${config.apiUrl}/getmodules`).then((res) => {
             this.moduleList = res.data
-            console.log(this.moduleList)
             let num = 0
             for (let i = 0; i < res.data.length; i++) {
                 num = num + res.data[i].unread
@@ -189,7 +189,7 @@ export default {
             }
         })
     },
-    msgStatus:function(id,type){
+    msgStatus:function(id,module_id,module_data_id,type){
         let data = {}
         if(type){
             data={
@@ -204,6 +204,10 @@ export default {
 
         fetch('get',`${config.apiUrl}/changestae`,data).then((res) => {
             this.getModule()
+            if(!type){
+                this.$router.push(`${this.msgLink.find(item =>item.value == module_id).name}/${module_data_id}`)
+            }
+            
         })
     }
   },
