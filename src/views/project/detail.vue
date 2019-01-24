@@ -834,7 +834,7 @@
 
                                         <div v-if="projectInfo.type != 5">
                                             <ApprovalProgress :formid="projectInfo.form_instance_number"
-                                                              :formstatus="projectInfo.approval_text"
+                                                              :formstatus="projectInfo.approval_text" projcetinfo='true'
                                                               mode="detail"></ApprovalProgress>
                                         </div>
                                     </div>

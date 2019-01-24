@@ -179,7 +179,7 @@
         },
         name: "BuildProject",
         //projectType 项目类型   projectFieldsArr 不同项目类型的数据   
-        props: ['projectType', 'projectFieldsArr', 'defaultData'],
+        props: ['projectType', 'projectFieldsArr', 'defaultData','mode'],
         data() {
             return {
                 visibleRangeArr: config.visibleRangeArr,

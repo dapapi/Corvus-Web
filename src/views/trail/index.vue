@@ -507,7 +507,7 @@
 
             customize: function (value) {
                 let _this = this
-                fetch('post', '/trails/filter', value).then((params) => {
+                fetch('post', '/trails/filter?include=principal,client,contact,recommendations,expectations', value).then((params) => {
                     _this.trailsInfo = params.data
                     _this.total = params.meta.pagination.total;
                     _this.cleanUp = true
