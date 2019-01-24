@@ -322,12 +322,14 @@
 
             },
             addProject(value) {
+                console.log(value);
                 this.projectType = value;
+                let _this = this
                 if (this.list.title.includes('合同')) {
                     this.pullUp(this.indexData.find(item => item.form_id === this.projectType))
                 } else {
                     this.selectProjectType(function () {
-                        this.projectTypeTemp = this.projectType
+                        _this.projectTypeTemp = _this.projectType
                         $('#addProject').modal('show')
                     });
                 }

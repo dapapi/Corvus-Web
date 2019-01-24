@@ -185,7 +185,6 @@
             }
         },
         mounted() {
-            console.log(this.mode);
             this.getApprover(this.formid)
         },
         methods: {
@@ -196,7 +195,6 @@
 
             },
             getApprover(value) {
-                console.log(value);
                 if (!this.mode) {
                     if (!value) {
                         return
@@ -209,7 +207,6 @@
                 }
                 let _this = this
                 if (!this.mode && value != undefined) {
-                    console.log(this.mode);
                     fetch('get', '/approvals/chains?form_id=' + value + '&change_type=222').then((params) => {
                         _this.approver = params.data
                         let {meta: {notice: {data}}} = params
