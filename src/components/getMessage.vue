@@ -47,7 +47,7 @@ export default {
             this.websocketsend(JSON.stringify(login))
         },
         websocketonmessage:function(evt){
-            // console.log(evt)
+            console.log(evt)
             var received_msg = evt.data;
             let msg = eval("'" + evt.data + "'")
             msg = JSON.parse(msg)
