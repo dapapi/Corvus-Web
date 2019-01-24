@@ -22,11 +22,11 @@
                                    :options="allUsers" multiple="true"></selectors>
                     </div>
                     <div class="col-md-3 example float-left">
-                    <button type="button" class="btn btn-default waves-effect waves-classic float-right"
-                    data-toggle="modal" data-target="#customizeContent"
-                    data-placement="right" title="">
-                    自定义筛选
-                    </button>
+                        <button type="button" class="btn btn-default waves-effect waves-classic float-right"
+                                data-toggle="modal" data-target="#customizeContent"
+                                data-placement="right" title="">
+                            自定义筛选
+                        </button>
                     </div>
                 </div>
 
@@ -86,7 +86,13 @@
                                 </td>
                                 <td>
                                     <template v-if="project.trail">
-                                        {{ project.trail.data.fee }}元
+                                        <template v-if="project.trail.data.fee === 'privacy'">
+                                            **
+                                        </template>
+                                        <template v-else>
+                                            {{ project.trail.data.fee ? project.trail.data.fee : 0 }}
+                                        </template>
+                                        元
                                     </template>
                                 </td>
                                 <td>{{ project.last_follow_up_at }}</td>
@@ -107,7 +113,7 @@
 
         </div>
 
-        <customize-filter :data="customizeInfo" @change="customize" :stararr='starsArr'  :cleanup="cleanUp"
+        <customize-filter :data="customizeInfo" @change="customize" :stararr='starsArr' :cleanup="cleanUp"
                           @cleanupdone='cleanUp=false'></customize-filter>
 
         <AddClientType type="project" @change="changeProjectType"></AddClientType>
@@ -156,7 +162,7 @@
                 isLoading: true,
                 projectSearchType: '',
                 getProjectStatus: 'principal_id',
-                cleanUp:false,
+                cleanUp: false,
             }
         },
 
@@ -265,7 +271,7 @@
                 this.$router.push({path: '/projects/' + projectId})
             },
 
-           customize: function (value) {
+            customize: function (value) {
                 let _this = this
                 fetch('post', '/projects/filter?include=principal,trail.expectations', value).then((params) => {
                     _this.projectsInfo = params.data
