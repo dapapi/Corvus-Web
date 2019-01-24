@@ -453,9 +453,9 @@
                                                 </div>
                                             </div>
                                             <div style="width: 50px; padding-left: 10px; float: left;">
-                                                {{ hasAnsweredArr.length > 0 ? items.selectrows.data.filter(n =>
+                                                {{ hasAnsweredArr.length > 0 ? (items.selectrows.data.filter(n =>
                                                 n.review_question_item_id ===
-                                                item.id).length / hasAnsweredArr.length * 100: '0' }}%
+                                                item.id).length / hasAnsweredArr.length * 100).toFixed(0): '0' }}%
                                             </div>
                                             <div style="width: 50px; padding-left: 10px; float: right;">
                                                 {{items.selectrows.data.filter(n => n.review_question_item_id ===
@@ -1133,7 +1133,7 @@
                 }
                 fetch('post', `/reviews/${this.questionId}/store/Answer`, params).then(res => {
                     toastr.success('问卷提交成功！')
-                    this.getQuestionData()
+                    this.getQuestionId()
 
                 })
             },
@@ -1150,7 +1150,7 @@
                 fetch('post', `/reviewquestionnaires/${this.questionId}/create/excellent`, params).then(res => {
                     $("#push-reason").modal("hide");
                     toastr.success('推优成功！')
-                    this.getQuestionData()
+                    this. getQuestionId()
                 })
             },
             // 根据任务id获取是否有问卷

@@ -202,7 +202,7 @@
                                 <div class="col-md-12">
                                     <calendar v-if="artistInfo.sign_contract_status == 2" :goto-date="selectedDate"
                                               :calendars="calendarId" ref="calendar" 
-                                              :isModel="true" 
+                                              :isModel="true" @showToast="showToast"
                                               @scheduleClick="showScheduleModal"
                                               @dayClick="showAddScheduleModal"></calendar>
                                 </div>
@@ -607,6 +607,10 @@
                 </div>
             </div>
 
+        </div>
+
+        <div class="calendar-toast" v-show="toastShow"
+             :style="'position: absolute;top:' + toastY + 'px; left: ' + toastX + 'px;'">双击创建日程
         </div>
 
         <div class="modal fade" id="addTask" aria-hidden="true" aria-labelledby="addLabelForm"
@@ -1201,7 +1205,10 @@
                 formDate:{},
                 priorityArr:config.priorityArr,
                 platformDate:'',
-                scoreId:''
+                scoreId:'',
+                toastShow: false,
+                toastX: 0,
+                toastY: 0,
             }
         },
         computed: {
@@ -1502,6 +1509,14 @@
                     this.$store.dispatch('changeParticipantsInfo', {data: response.data.participants.data});
                 });
                 $('#checkSchedule').modal('show')
+            },
+            showToast: function (clientX, clientY) {
+                this.toastX = clientX - 100;
+                this.toastY = clientY - 25;
+                this.toastShow = true;
+                setTimeout(() => {
+                    this.toastShow = false
+                }, 1000)
             },
              changeIsAllDay: function (e) {
                 this.isScheduleAllday = Number(e.target.checked);
@@ -2384,5 +2399,12 @@
         position: absolute;
         bottom: 45px;
         right: 0;
+    }
+
+    .calendar-toast {
+        background: #f5f5f5;
+        padding: 2px 3px;
+        border-radius: 2px;
+        z-index: 1000;
     }
 </style>
