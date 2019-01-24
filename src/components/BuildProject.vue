@@ -224,7 +224,6 @@
         },
 
         created() {
-            this.getTrail()
             this.getStars();
         },
         mounted() {
@@ -363,7 +362,7 @@
 
             getTrail: function () {
                 let data = {
-                    include: 'principal,expectations',
+                    include: 'principal,starexpectations,bloggerexpectations',
                     type: this.projectType
                 };
                 this.trailsArr = [];
