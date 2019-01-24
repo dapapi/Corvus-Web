@@ -57,7 +57,8 @@
                 <div class="page-content tab-content nav-tabs-animate bg-white">
                     <div class="tab-pane animation-fade active" id="forum-trail-report" role="tabpanel">
                         <div class="clearfix col-md-3 pl-0">
-                            <Selectors :options="clientTypeArr" @change="changeClientType" placeholder="请选择客户类型"></Selectors>
+                            <Selectors :options="clientTypeArr" @change="changeClientType"
+                                       placeholder="请选择客户类型"></Selectors>
                         </div>
                         <table class="table table-hover is-indent example" data-plugin="animateList" data-animate="fade"
                                data-child="tr"
@@ -67,18 +68,22 @@
                                 <th class="cell-100" scope="col">公司名称</th>
                                 <th class="cell-100" scope="col">级别</th>
                                 <th class="cell-100" scope="col">决策关键人/部门</th>
-                                <th class="cell-100" scope="col">联系人</th>
-                                <th class="cell-100" scope="col">联系人电话</th>
+                                <th class="cell-100" scope="col">规模</th>
+                                <th class="cell-100" scope="col">客户评级</th>
                                 <th class="cell-100" scope="col">负责人</th>
                             </tr>
                             <tbody>
                             <tr v-for="data in tableData.client">
                                 <td>{{ data.company }}</td>
-                                <td>{{ clientLevelArr.find(item => item.value == data.grade).name }}</td>
+                                <td>{{ clientLevelArr.find(item => item.value == data.grade)?clientLevelArr.find(item =>
+                                    item.value == data.grade).name : '' }}
+                                </td>
                                 <td>{{ data.keyman }}</td>
-                                <td>{{ data.contact_name }}</td>
-                                <td style="overflow: hidden;text-overflow: ellipsis;word-break: break-all;">
-                                    {{ data.contact_phone }}
+                                <td>{{ data.size }}</td>
+                                <td>
+                                    {{ taskLevelArr.find(item => item.value ==
+                                    data.client_rating)?taskLevelArr.find(item => item.value == data.client_rating).name
+                                    : '' }}
                                 </td>
                                 <td>{{ data.principal_name }}</td>
                             </tr>
@@ -111,6 +116,7 @@
                 nowDate: '',
                 designationDateNum: 'day',
                 clientLevelArr: config.clientLevelArr,
+                taskLevelArr: config.taskLevelArr,
                 clientTypeArr: [
                     {
                         name: '客户类型',

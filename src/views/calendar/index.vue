@@ -648,6 +648,7 @@
                 toastY: 0,
                 toastShow: false,
                 scheduleRemind: '',
+                userInfo: '',
             }
         },
 
@@ -686,6 +687,7 @@
             this.initCalendar();
             let pageContent = $('.container-fluid');
             $('.vertical-line').css('height', (pageContent[0].offsetHeight - 60) + 'px');
+            this.userInfo = JSON.parse(Cookies.get('user'));
         },
 
         watch: {
@@ -987,6 +989,12 @@
             showAddScheduleModal: function (date) {
                 this.$refs.scheduleStartDate.setValue(date);
                 this.$refs.scheduleEndDate.setValue(date);
+                this.$store.dispatch('changeParticipantsInfo', {
+                    data: [{
+                        icon_url: this.userInfo.avatar,
+                        id: this.userInfo.id
+                    }]
+                });
                 this.startTime = date;
                 this.endTime = date;
                 $('#changeSchedule').modal('show')
