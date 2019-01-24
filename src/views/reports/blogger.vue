@@ -6,10 +6,10 @@
         <div class="page-content container-fluid">
             <div class="bg-white">
                 <div class="clearfix">
-                    <div class="col-md-5 p-20 clearfix float-left">
+                    <div class="col-md-5 p-20 clearfix float-left" style="z-index: 0">
                         <GroupDatepicker ref="timeInterval" @change="changeDate"></GroupDatepicker>
                     </div>
-                    <div class="col-md-7 p-20 clearfix float-left">
+                    <div class="col-md-7 p-20 clearfix float-left" style="z-index: 0;">
                         <div class="col-md-3 float-left">
                             <button type="button" class="btn btn-block btn-success waves-effect waves-classic"
                                     :disabled="designationDateNum === 'day'" @click="selectDate('day')">7天
