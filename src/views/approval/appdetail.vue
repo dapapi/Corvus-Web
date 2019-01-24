@@ -271,7 +271,9 @@
             },
             pullUp(params) {
                 this.formData = params
-                $('#approval-great-module').modal('show')
+                this.$nextTick((params) => {
+                    $('#approval-great-module').modal('show') 
+                })
             },
             approvalDone() {
                 if (this.list.project_number) {
