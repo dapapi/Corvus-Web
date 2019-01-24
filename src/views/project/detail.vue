@@ -1566,7 +1566,6 @@
             this.getProject();
             this.getClients();
             this.getTaskType();
-            this.getProjectTasks();
             this.getProjectTasking();
             this.getProjectProgress();
             this.user = JSON.parse(Cookies.get('user'));

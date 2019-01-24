@@ -939,6 +939,7 @@
 
             getStars: function () {
                 fetch('get', '/starandblogger', {sign_contract_status: 2}).then(response => {
+                    this.starsArr = [];
                     for (let i = 0; i < response.data.length; i++) {
                         this.starsArr.push({
                             name: response.data[i].name,
