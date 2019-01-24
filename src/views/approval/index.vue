@@ -8,7 +8,7 @@
 </template>
 
 <script>
-import {APPROVAL_CONFIG} from '@/components/ForApproval/config.js'
+    import {APPROVAL_CONFIG} from '@/components/ForApproval/config.js'
     import Approval from '@/components/Approval.vue'
     import SecondLeft from '@/components/SecondLeft.vue'
     export default {
