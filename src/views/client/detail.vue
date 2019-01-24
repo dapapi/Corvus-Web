@@ -903,11 +903,11 @@
                 fetch(this.isEditContact ? 'post' : 'put', `/clients/${this.clientId}/contacts${!this.isEditContact ? '/' + this.editConfig.id : ''}`, data).then(response => {
                     this.getClientContact();
                     this.getClient();
-                    // this.clientContactsInfo.push(response.data);
                     toastr.success(this.isEditContact ? '添加成功！' : '修改成功')
                     $('#addContact').modal('hide')
                 })
             },
+
             delContact() {
                 fetch('delete', `/clients/${this.clientId}/contacts/${this.contactId}`).then(() => {
                     toastr.success('删除成功')
