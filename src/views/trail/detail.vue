@@ -818,6 +818,7 @@
                     include: 'principal,client,contact,starexceptions,bloggerexceptions,starrecommendations,bloggerrecommendations,project',
                 };
                 fetch('get', '/trails/' + this.trailId, data).then(response => {
+                    console.log(response);
                     this.trailType = response.data.type;
                     this.trailInfo = response.data;
                     this.oldInfo = JSON.parse(JSON.stringify(response.data));
