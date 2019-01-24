@@ -1,7 +1,7 @@
 <template>
     <div class="page page-aside-left">
         <div class="page-aside">
-            <SecondLeft :leftData="leftData"/>
+            <SecondLeft :leftData="leftData"  :title="'审批'"/>
         </div>
         <router-view/>
     </div>
@@ -22,5 +22,11 @@ import {APPROVAL_CONFIG} from '@/components/ForApproval/config.js'
         }
     }
 </script>
-
+<style scoped>
+    .page-aside{
+        overflow: hidden !important;
+        position: fixed;
+        left: 100px;
+    }
+</style>
 
