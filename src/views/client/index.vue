@@ -353,6 +353,8 @@
                 fetch('post', '/clients/filter?include=principal', value).then((params) => {
                     _this.clientsInfo = params.data
                     _this.total = params.meta.pagination.total;
+                    _this.total_pages = params.meta.pagination.total_pages;
+                    _this.current_page = params.meta.pagination.current_page
                     _this.cleanUp = true
                 })
 

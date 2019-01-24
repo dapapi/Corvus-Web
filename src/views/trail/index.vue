@@ -510,6 +510,8 @@
                 fetch('post', '/trails/filter?include=principal,client,contact,recommendations,expectations', value).then((params) => {
                     _this.trailsInfo = params.data
                     _this.total = params.meta.pagination.total;
+                    _this.total_pages = params.meta.pagination.total_pages;
+                    _this.current_page = params.meta.pagination.current_page
                     _this.cleanUp = true
                 })
 
