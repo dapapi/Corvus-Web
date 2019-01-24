@@ -20,10 +20,10 @@
                 </div>
                 <div class="dropdown-menu  dropdown-menu-right task-dropdown-item" aria-labelledby="taskDropdown"
                     role="menu" x-placement="bottom-end" v-if="isShow">
-                    <!-- <import-and-export :type="'import'" :moduleName="'bloggers'">
+                     <!-- <import-and-export :type="'import'" :moduleName="'stars'">
                         <a class="dropdown-item" role="menuitem">导入</a>
                     </import-and-export>
-                    <import-and-export :type="'export'" :moduleName="'bloggers'">
+                    <import-and-export :type="'export'" :moduleName="'stars'">
                         <a class="dropdown-item" role="menuitem">导出</a>
                     </import-and-export> -->
                     <a class="dropdown-item" role="menuitem" data-toggle="modal" data-target="#giveBroker"
@@ -82,23 +82,48 @@
                         </div>
                         <table class="table table-hover is-indent ml-5" data-plugin="selectable"
                                data-selectable="selectable">
-                            <tr v-if="artistsInfo.length>0">
+                              <tr v-if="artistsInfo.length&&artistsInfo.find(item=>item.sign_contract_status==1)">
                                 <th class="w-50">
-                                    <span class="checkbox-custom checkbox-primary">
-                                        <input class="selectable-all" type="checkbox"
-                                               @change="selectArtists('all')" v-model="selectAllStars">
-                                        <label></label>
-                                    </span>
+                                        <span class="checkbox-custom checkbox-primary">
+                                            <input class="selectable-all" type="checkbox"
+                                                   @change="selectArtists('all')" v-model="selectAllStars">
+                                            <label></label>
+                                        </span>
                                 </th>
                                 <th class="cell-300" scope="col">姓名</th>
-                                <th class="cell-300" scope="col" v-if="artistsInfo.find(item=>item.sign_contract_status==1)">年龄</th>
-                                <th class="cell-300" scope="col" v-if="artistsInfo.find(item=>item.sign_contract_status!==1)">微博粉丝</th>
-                                <th class="cell-300" scope="col" v-if="artistsInfo.find(item=>item.sign_contract_status==1)">艺人来源</th>
-                                <th class="cell-300" scope="col" v-if="artistsInfo.find(item=>item.sign_contract_status==1)">沟通状态</th>
-                                <th class="cell-300" scope="col" v-if="artistsInfo.find(item=>item.sign_contract_status!==1)">类型</th>
-                                <th class="cell-300" scope="col" v-if="artistsInfo.find(item=>item.sign_contract_status==2)">签约日期</th>
-                                <!-- <th class="cell-300" scope="col" v-if="artistsInfo.find(item=>item.sign_contract_status==2)">合同起始日</th> -->
-                                <th class="cell-300" scope="col" v-if="artistsInfo.find(item=>item.sign_contract_status==3)">合同终止日</th>
+                                <th class="cell-300" scope="col">年龄</th>
+                                <th class="cell-300" scope="col">艺人来源</th> 
+                                <th class="cell-300" scope="col">沟通状态</th> 
+                                <th class="cell-300" scope="col">录入时间</th>
+                                <th class="cell-300" scope="col">最后跟进时间</th>
+                            </tr>
+                            <tr v-if="artistsInfo.length&&artistsInfo.find(item=>item.sign_contract_status==2)">
+                                <th class="w-50">
+                                        <span class="checkbox-custom checkbox-primary">
+                                            <input class="selectable-all" type="checkbox"
+                                                   @change="selectArtists('all')" v-model="selectAllStars">
+                                            <label></label>
+                                        </span>
+                                </th>
+                                <th class="cell-300" scope="col">姓名</th>
+                                <th class="cell-300" scope="col">微博粉丝</th>
+                                <th class="cell-300" scope="col">艺人来源</th>
+                                <th class="cell-300" scope="col">合同起始日</th>
+                                <th class="cell-300" scope="col">录入时间</th>
+                                <th class="cell-300" scope="col">最后跟进时间</th>
+                            </tr>
+                            <tr v-if="artistsInfo.length&&artistsInfo.find(item=>item.sign_contract_status==3)">
+                               <th class="w-50">
+                                        <span class="checkbox-custom checkbox-primary">
+                                            <input class="selectable-all" type="checkbox"
+                                                   @change="selectArtists('all')" v-model="selectAllStars">
+                                            <label></label>
+                                        </span>
+                                </th>
+                                <th class="cell-300" scope="col">姓名</th>
+                                <th class="cell-300" scope="col">微博粉丝</th>
+                                <th class="cell-300" scope="col">艺人来源</th>
+                                <th class="cell-300" scope="col">合同终止日</th>
                                 <th class="cell-300" scope="col">录入时间</th>
                                 <th class="cell-300" scope="col">最后跟进时间</th>
                             </tr>
@@ -113,7 +138,7 @@
                                 <th class="cell-300" scope="col">姓名</th>
                                 <th class="cell-300" scope="col">微博粉丝</th>
                                 <th class="cell-300" scope="col">艺人来源</th>
-                                <th class="cell-300" scope="col">签约日期</th>
+                                <th class="cell-300" scope="col">合同起始日</th>
                                 <th class="cell-300" scope="col">录入时间</th>
                                 <th class="cell-300" scope="col">最后跟进时间</th>
                             </tr>
@@ -128,7 +153,8 @@
                                     </span>
                                 </td>
                                 <td @click="redirectArtistDetail(artist.id)">{{ artist.name }}</td>
-                                <td @click="redirectArtistDetail(artist.id)">{{artist.birthday|jsGetAge}}</td>
+                                <td @click="redirectArtistDetail(artist.id)" v-if="artistsInfo.find(item=>item.sign_contract_status==1)">{{artist.birthday|jsGetAge}}</td>
+                                <td @click="redirectArtistDetail(artist.id)" v-if="artistsInfo.find(item=>item.sign_contract_status!==1)">暂无</td>
                                 <td @click="redirectArtistDetail(artist.id)">
                                     <template v-if="artist.source">
                                             <span :style="'color:' + artistSourceArr.find(item => item.value == artist.source).color">
@@ -146,8 +172,8 @@
 
                                     </template>
                                 </td>
-                                <td @click="redirectArtistDetail(artist.id)">{{artist.created_at.date}}</td>
-                                <td @click="redirectArtistDetail(artist.id)">{{artist.updated_at.date}}</td>
+                                <td @click="redirectArtistDetail(artist.id)">{{artist.created_at}}</td>
+                                <td @click="redirectArtistDetail(artist.id)">{{artist.updated_at}}</td>
                             </tr>
                             </tbody>
 
@@ -191,31 +217,18 @@
                                             <label></label>
                                         </span>
                                 </th>
-                                <th class="cell-300" scope="col"
-                                    v-if="bloggerInfo.find(item=>item.sign_contract_status==1)">昵称
-                                </th>
-                                <th class="cell-300" scope="col"
-                                    v-if="bloggerInfo.find(item=>item.sign_contract_status!==1)">姓名
-                                </th>
+                                <th class="cell-300" scope="col">昵称</th>
                                 <th class="cell-300" scope="col"
                                     v-if="bloggerInfo.find(item=>item.sign_contract_status!==1)">微博粉丝
                                 </th>
-                                <th class="cell-300" scope="col"
-                                    v-if="bloggerInfo.find(item=>item.sign_contract_status==1)">类型
-                                </th>
+                                <th class="cell-300" scope="col">类型</th>
                                 <th class="cell-300" scope="col"
                                     v-if="bloggerInfo.find(item=>item.sign_contract_status==1)">沟通状态
                                 </th>
                                 <th class="cell-300" scope="col"
                                     v-if="bloggerInfo.find(item=>item.sign_contract_status==1)">制作人
                                 </th>
-                                <th class="cell-300" scope="col"
-                                    v-if="bloggerInfo.find(item=>item.sign_contract_status!==1)">类型
-                                </th>
-                                <th class="cell-300" scope="col"
-                                    v-if="bloggerInfo.find(item=>item.sign_contract_status==2)">签约日期
-                                </th>
-                                <!-- <th class="cell-300" scope="col" v-if="bloggerInfo.find(item=>item.sign_contract_status==2)">合同起始日</th> -->
+                                <th class="cell-300" scope="col" v-if="bloggerInfo.find(item=>item.sign_contract_status==2)">合同起始日</th>
                                 <th class="cell-300" scope="col" v-if="bloggerInfo.find(item=>item.sign_contract_status==3)">合同终止日</th>
                                 <th class="cell-300" scope="col">录入时间</th>
                                 <th class="cell-300" scope="col">最后跟进时间</th>
@@ -246,6 +259,7 @@
                                     </span>
                                 </td>
                                 <td @click="redirectBolggerDetail(artist.id)">{{ artist.nickname }}</td>
+                                <td @click="redirectBolggerDetail(artist.id)" v-if="bloggerInfo.find(item=>item.sign_contract_status!==1)">暂无</td>
                                 <td @click="redirectBolggerDetail(artist.id)">{{ artist.type.data.name }}</td>
                                 <td @click="redirectBolggerDetail(artist.id)">
                                     <template v-if="artist.communication_status">
@@ -257,7 +271,7 @@
 
                                     </template>
                                 </td>
-                                <td @click="redirectBolggerDetail(artist.id)">
+                                <td @click="redirectBolggerDetail(artist.id)" v-if="bloggerInfo.find(item=>item.sign_contract_status==1)">
                                     <span v-for="(v,index) in artist.publicity.data" :key="index">
                                         {{v.name}}
                                     </span>
@@ -729,7 +743,6 @@
                 taiyangCommunicationStatusArr: config.taiyangCommunicationStatusArr,
                 companyCityArr: config.companyCityArr,
                 attachmentTypeArr: config.attachmentTypeArr,
-                artistsInfo: [],
                 artistStatus: '',
                 bolggerName: '',
                 weiboUrl: '',
@@ -846,7 +859,8 @@
                 bloggerInfo: '',
                 affixes: [],
                 affixesType: '',//附件类型
-                isShow: ''
+                isShow: '',
+                isContract:false
             }
         },
         watch: {
@@ -891,7 +905,9 @@
             },
             //获取签约状态
             getSource: function (value) {
-                this.listData.sign_contract_status = value
+                if(value){
+                    this.listData.sign_contract_status = value
+                } 
                 this.getArtists()
             },
             //查询列表
@@ -905,6 +921,11 @@
                     if(response.data){
                         _this.artistsInfo = response.data;
                     }
+                    _this.artistsInfo.forEach(item=>{
+                        if(item.sign_contract_status){
+                            _this.isContract = true
+                        }
+                    })
                     if(response.meta){
                         _this.current_page = response.meta.pagination.current_page;
                         _this.total = response.meta.pagination.total;
@@ -983,7 +1004,12 @@
                 let _this = this
                 fetch('post', '/'+this.customizeContentType+'/filter', value).then((params) => {
                     // _this.bloggerInfo =params.data
-                    _this.artistsInfo = params.data
+                    if(_this.customizeContentType == 'stars'){
+                        _this.artistsInfo = params.data
+                    }else if(_this.customizeContentType == 'bloggers'){
+                        console.log(params)
+                        _this.bloggerInfo = params.data;
+                    }
                     _this.total = params.meta.pagination.total;
                     _this.cleanUp = true
                 })

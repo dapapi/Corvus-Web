@@ -135,7 +135,7 @@
                             <li class="nav-item" role="presentation" v-if="artistInfo.sign_contract_status == 2">
                                 <a class="nav-link" data-toggle="tab" href="#forum-artist-work"
                                    aria-controls="forum-present"
-                                   aria-expanded="false" role="tab" >作品库</a>
+                                   aria-expanded="false" role="tab" @click="getWoks">作品库</a>
                             </li>
                             <!--<li class="nav-item" role="presentation" v-show="artistInfo.sign_contract_status == 2">-->
                             <!--<a class="nav-link" data-toggle="tab" href="#forum-artist-fans"-->
@@ -244,7 +244,7 @@
                                     </tr>
 
                                 </table>
-                                <div style="margin: 6rem auto;width: 100px" v-if="artistTasksInfo.length === 0">
+                                <div style="margin: 6rem auto;width: 100px" v-if="allTaskList.length === 0">
                                     <img src="https://res.papitube.com/corvus/images/content-none.png" alt=""
                                          style="width: 100%">
                                 </div>
@@ -292,7 +292,7 @@
                                     <img src="https://res.papitube.com/corvus/images/content-none.png" alt=""
                                          style="width: 100%">
                                 </div>
-                                <pagination :current_page="current_page" :method="getTaskList" :total_pages="total_pages"
+                                <pagination :current_page="current_page" :method="getWoks" :total_pages="total_pages"
                                     :total="total"></pagination>
                                 <div class="site-action fixed-button" data-plugin="actionBtn" data-toggle="modal"
                                      data-target="#addWork">
@@ -1349,8 +1349,7 @@
                     _this.uploadUrl = _this.artistInfo.avatar
                     // _this.artistProjectsInfo = []
                     _this.artistTasksInfo = response.data.tasks.data//任务数据
-                   
-                    _this.artistWorksInfo = response.data.works.data//作品数据
+                    console.log(_this.artistTasksInfo)
                     _this.affixes = response.data.affixes.data
                     // for (let i = 0; i < response.data.trails.data.length; i++) {
                     //     if (response.data.trails.data[i].project) {
@@ -1373,6 +1372,16 @@
                     _this.total = response.meta.pagination.total;
                     _this.total_pages = response.meta.pagination.total_pages;
                 })      
+            },
+            getWoks(){
+                let _this = this;
+                fetch('get', '/stars/' + this.artistId+'/works').then(function (response) {
+                    console.log(response)
+                    _this.artistWorksInfo  = response.data
+                    _this.current_page = response.meta.pagination.current_page;
+                    _this.total = response.meta.pagination.total;
+                    _this.total_pages = response.meta.pagination.total_pages;
+                }) 
             },
             getCalendar:function(){
                  this.artistId = this.$route.params.id;
@@ -1787,8 +1796,12 @@
                     _this.allTaskList = response.data
                     _this.current_page = response.meta.pagination.current_page;
                     _this.total = response.meta.pagination.total;
-                    _this.total_pages = response.meta.pagination.total_pages;
-                   
+                    _this.total_pages = response.meta.pagination.total_pages;   
+                    response.data.forEach(item=>{
+                        if(item.status!==2&&new Date(item.end_at).getTime() < new Date().getTime()){
+                            item.status = 4
+                        }  
+                    })
                 })
             },
             getTaskDate:function(){
