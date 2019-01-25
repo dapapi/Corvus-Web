@@ -1,11 +1,11 @@
 <template>
     <div class="upload col-md-12 pl-0 ">
         <div class="col-md-2 text-right pl-0" :class="consdata[0].required===1?'require':''">{{consdata[0].control_title}}</div>
-        <figure v-for="(item, index) in fileInfo" :key="index" style="margin-right:0px;" class="ml-10">
+        <figure v-for="(item, index) in fileInfo" :key="index" style="margin-right:0px;width:60px;overflow-hidden" class="ml-10">
             <!-- <div class="image-show" v-if="fileInfo.length > 0" style="backgroundImage:url(../../../assets/img/attachment.png)"></div> -->
             <figure style="text-align:center;margin-top:30px;" class="attachdetail"> 
                 <img src="@/assets/img/attachment.png" alt="" style="width:40px">
-                <p>{{item.fileName}}</p>
+                <p style="width:60px;overflow-hidden;text-overflow:ellipsis;">{{item.fileName}}</p>
                 <div class="img-control">
                     <!-- <hr> -->
                     <div class="icon-control">
