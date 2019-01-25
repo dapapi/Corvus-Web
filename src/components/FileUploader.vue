@@ -1,13 +1,27 @@
 <template>
-    <div>
-        <label :for="`fileUploader${mulId}`" :class="isIcon ? 'md-attachment-alt pr-4': 'btn btn-default waves-effect waves-light waves-round'">
-            <template v-if="!isIcon">
-                上传附件
-            </template>
-        </label>
-        <span v-show="!isIcon">&nbsp;&nbsp;{{fileName || givenfilename ||"未选择任何附件"}}</span>
+    <div class="" >
+        <div style="display:flex">
+            <label :for="`fileUploader${mulId}`" :class="isIcon ? 'md-attachment-alt pr-4': 'btn btn-default waves-effect waves-light waves-round'" style='height:35px'>
+                <template v-if="!isIcon">
+                    上传附件
+                </template>
+            </label>
+            <figure style="text-align:center;" class="attachdetail ml-20"> 
+                <img src="@/assets/img/attachment.png" alt="" style="width:40px" v-if="fileName || givenfilename ">
+                <p class="pt-10">{{fileName || givenfilename ||"未选择任何附件"}}</p>
+                <div class="img-control" v-if="fileName || givenfilename ">
+                    <div class="icon-control">
+                        <a :href="fileUrl" target="_blank">
+                            <i class="iconfont icon-liulan"></i>
+                        </a>
+                        <i class="iconfont icon-shanchu1" @click="imgDelete"></i>
+                    </div>
+                </div>
+            </figure>
+        </div>
+        <!-- <span v-show="!isIcon">&nbsp;&nbsp;{{fileName || givenfilename ||"未选择任何附件"}}</span> -->
         <input type="file" @change="uploadFile" title='123' :id="`fileUploader${mulId}`" v-show="false">
-        <div class="progress progress-xs" v-if="progressShow" v-show="!isIcon">
+        <div class="progress progress-xs pl-88" v-if="progressShow" v-show="!isIcon">
             <div class="progress-bar progress-bar-striped active" aria-valuemin="0" aria-valuemax="100"
                  :style="'width:'+ uploadProgress+'%'" role="progressbar">
                 <span class="sr-only">Uploading</span>
@@ -28,9 +42,14 @@
                 uploadProgress: 0,
                 progressShow: false,
                 fileName: '',
+                fileUrl:'',
             }
         },
         methods: {
+            imgDelete(){
+                this.fileName = ''
+                this.$emit('deleteAttachment')
+            },
             uploadFile(e) {
                 this.progressShow = true
                 this.uploadProgress = 0
@@ -71,6 +90,7 @@
                         _this.$emit('change', fileUrl, fileName, fileSize, _this.id);
                         _this.$emit('changePlus', {fileUrl, fileName, fileSize})
                         _this.fileName = fileName
+                        _this.fileUrl = fileUrl
                     })
                 });
             },
@@ -102,5 +122,9 @@
     .progress {
         margin-top: 10px;
         width: 200px;
+    }
+    .icon-control{
+        display: flex;
+        justify-content: space-around;
     }
 </style>

@@ -251,19 +251,19 @@ let config = {
         taskLevelArr: [
             {
                 name: 'S',
-                value: 1
+                value: 4
             },
             {
                 name: 'A',
-                value: 2
-            },
-            {
-                name: 'B',
                 value: 3
             },
             {
+                name: 'B',
+                value: 2
+            },
+            {
                 name: 'C',
-                value: 4
+                value: 1
             },
         ],
 

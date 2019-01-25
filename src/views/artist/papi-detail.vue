@@ -911,7 +911,7 @@
                             <div class="example">
                                 <div class="col-md-2 text-right float-left">提醒</div>
                                 <div class="col-md-10 float-left pl-0">
-                                    <selectors :options="remindArr" ref="scheduleNotice"></selectors>
+                                    <selectors :options="remindArr" ref="scheduleRemind" @change="changeScheduleRemind"></selectors>
                                 </div>
                             </div>
                             <div class="clearfix my-20">
@@ -1282,7 +1282,7 @@
                 },
                 scheduleShow:[],
                 contractType:'bloggers',
-                formDate:{},
+                formDate:'',
                 priorityArr:config.priorityArr,
                 platformDate:'',
                 scoreId:'',
@@ -1293,7 +1293,11 @@
                 allTasksInfo:'',
                 isScheduleAllday: 0,
                 scheduleRepeat:0,
-                scheduleCalendar:''
+                scheduleCalendar:'',
+                toastShow: false,
+                toastX: 0,
+                toastY: 0,
+                scheduleRemind:''
             }
         },
         computed: {
@@ -1529,6 +1533,9 @@
                     this.getAllTasks()
                 }
             },
+            changeScheduleRemind: function (value) {
+                this.scheduleRemind = value;
+            },
             getAllProjects: function () {
                 fetch('get', '/projects/all').then(response => {
                     this.allProjectsInfo = response.data
@@ -1564,17 +1571,17 @@
                         let startMinutesArr = this.startMinutes.split(':');
                         let endMinutesArr = this.endMinutes.split(':');
                         if (startMinutesArr[0] === endMinutesArr[0]) {
-                            // if ((Number(endMinutesArr[1]) - Number(startMinutesArr[1])) < 30) {
-                            //     toastr.error('日程时间不能小于30分钟');
-                            //     return
-                            // }
+                            if ((Number(endMinutesArr[1]) - Number(startMinutesArr[1])) < 30) {
+                                toastr.error('日程时间不能小于30分钟');
+                                return
+                            }
 
                         }
                     }
                 }
                 let data = {
                     title: this.scheduleName,
-                    calendar_id: this.scheduleCalendar,
+                    calendar_id: this.calendarId[0],
                     is_allday: this.isScheduleAllday,
                     privacy: Number(this.schedulePrivacy),
                     start_at: startTime,
@@ -1607,6 +1614,7 @@
                     this.$refs.calendar.refresh();
                     $('#changeSchedule').modal('hide');
                     toastr.success('添加成功')
+                    this.initAddScheduleModal()
                 })
             },
             showScheduleModal: function (schedule) {
@@ -1734,6 +1742,7 @@
                     this.$refs.calendar.refresh();
                     $('#changeSchedule').modal('hide');
                     toastr.success('修改成功')
+                    this.initAddScheduleModal()
                 })
             },
              changeScheduleParticipants: function (value) {
@@ -1779,6 +1788,7 @@
                     this.$refs.scheduleEndMinute.setValue(endMinutes[0] + ':' + endMinutes[1]);
                     this.endTime = this.scheduleData.end_at.split(' ')[0];
                     this.endMinutes = endMinutes[0] + ':' + endMinutes[1];
+                    this.$refs.scheduleRemind.setValue(this.scheduleData.remind);
                     this.isAllday = this.scheduleData.is_allday;
                     this.eventDesc = this.scheduleData.desc;
                     this.eventPlace = this.scheduleData.position;
@@ -1846,6 +1856,7 @@
                 this.$refs.scheduleResource.setValue('');
                 this.$refs.scheduleRepeat.setValue('0');
                 this.$refs.scheduleNotice.setValue('0');
+                this.$refs.scheduleRemind.setValue('0');
             },
             changeScheduleRepeat: function (value) {
                 this.scheduleRepeat = value;
@@ -2576,11 +2587,6 @@
         top: 0px;
         left: 0px;
         opacity: 0;
-    }
-    .fixed-button {
-        position: absolute;
-        bottom: 45px;
-        right: 0;
     }
 
     .calendar-toast {

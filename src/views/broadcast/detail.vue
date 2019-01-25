@@ -14,27 +14,51 @@
       </div>
         <div class="page-header page-header-bordered">
             <h1 class="page-title">
-                <i class="md-chevron-left" @click="goBack"></i>公告&nbsp;&nbsp;</h1>
-            <i class="md-flower"
+                <i class="md-chevron-left" @click="goBack"></i>
+                <span class="mx-20" style='color:#000'>公告</span>
+            </h1>
+            <i class="iconfont icon-gengduo1" aria-hidden="true"
+            id="taskDropdown" data-toggle="dropdown" aria-expanded="false"  v-if="my_id === creator_id"></i>
+            <div class="dropdown-menu" aria-labelledby="taskDropdown" role="menu">
+                <a class="dropdown-item" role="menuitem" data-plugin="actionBtn" 
+            data-toggle="modal" 
+            data-target="#confirmFlag"
+            aria-hidden="true"
+            data-backdrop="static"
+            v-if="my_id === creator_id">删除</a>
+                <a class="dropdown-item" role="menuitem" data-plugin="actionBtn" 
+            data-toggle="modal" 
+            data-target="#addNewBroadcast"
+            aria-hidden="true"
+            data-backdrop="static"
+            v-if="my_id === creator_id">修改</a>
+            </div>
+             <!-- <i class="iconfont icon-shanchu1 mr-30"
+            data-plugin="actionBtn" 
+            data-toggle="modal" 
+            data-target="#confirmFlag"
+            aria-hidden="true"
+            data-backdrop="static"
+            v-if="my_id === creator_id"></i>
+            <i class="iconfont icon-bianji2"
             data-plugin="actionBtn" 
             data-toggle="modal" 
             data-target="#addNewBroadcast"
             aria-hidden="true"
             data-backdrop="static"
-            v-if="my_id === creator_id"></i>
+            v-if="my_id === creator_id"></i> -->
         </div> 
         <div class="page-content container-fluid">
             <div class="panel" id="">
                 <div class="panel-body">
-                    <div class="panel-title"><h4>{{currentData.title}}</h4></div>
-                    <div class="panel-content info" v-if="currentData.creator">
-                        <div class="rounded-circle img-thumbnail messages-img" 
-                            :style="{ backgroundImage: 'url('+currentData.cover+')'}">
-                            {{currentData.cover?'':currentData.creator.data.name.slice(-1)}}
-                            </div>
-                        <span class="">{{currentData.creator.data.name}}</span>
+                    <h4 class="pt-20 pb-12">{{currentData.title}}</h4>
+                    <div class="" v-if="currentData.creator" style='display:flex;line-height:28px;'>
+                        <div class="rounded-circle messages-img" 
+                            :style="{ backgroundImage: 'url('+userList.find(item=>item.id === creator_id).icon_url+')'}">
+                        </div>
+                        <span class="ml-6">{{currentData.creator.data.name}}</span>
                         <span class="">{{currentData.created_at}}</span>
-                        <span v-if="classifyArr[0]" class="">{{classifyArr.find(classifyArr => classifyArr.value == currentData.classify).name}}</span>
+                        <span v-if="classifyArr[0]" class="ml-20">{{classifyArr.find(classifyArr => classifyArr.value == currentData.classify).name}}</span>
                     </div>
                     <br>
                     <hr/>
@@ -87,11 +111,12 @@ export default {
         this.dataInit()
     },
     mounted(){
-        
+        console.log(this.userList);
     },
     computed: {
         ...mapState([
             'department',
+            'userList'
         ]),
     },
     methods:{
@@ -125,6 +150,9 @@ export default {
 </script>
 
 <style scoped>
+hr{
+    margin: 0 !important;
+}
 iframe{
     position: fixed;
 
@@ -136,7 +164,7 @@ iframe{
 .broadcast-content{
     min-height: 200px;
 }
-.md-flower{
+.iconfont{
     position: absolute;
     right: 41px;
     top: 28px;
@@ -158,27 +186,23 @@ h5{
     margin-bottom: 20px;
     line-height: 25px;
 }
-.info span{
-    margin-left: 20px;
-}
+/* .info span{
+    margin-left: 6px;
+} */
 span{
 font-family:PingFangSC-Regular;
 font-weight:400;
 color:rgba(153,153,153,1);
-/* margin-left: 20px; */
+margin-left: 6px;
 }
 .badge-dark{
     background-color: rgba(236, 236, 236, 1);
     color: #999999;
 }
 .messages-img{
-    line-height: 16px;
-    font-weight: 700;
     display: inline-flex;
-    width: 24px;
-    height: 24px;
-    background: #D8D8D8;
-    border: 1px solid #979797;
-    background-size: 24px 24px;
+    width: 28px;
+    height: 28px;
+    background-size: 28px 28px;
 }
 </style>
