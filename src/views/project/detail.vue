@@ -81,9 +81,11 @@
                         </div>
                     </div>
                     <div class="clearfix">
-                        <div v-if="projectTaskingInfo.length > 0" class="col-md-6 float-left pl-0">
+                        <div v-if="projectInfo.task && projectInfo.task.data.length > 0"
+                             class="col-md-6 float-left pl-0">
                             <div class="col-md-6 pl-0"><i class="iconfont icon-iconset0399  pr-2"></i> 任务</div>
-                            <div class="clearfix example" v-for="(task,index) in projectTaskingInfo" v-if="index < 3">
+                            <div class="clearfix example" v-for="(task,index) in projectInfo.task.data"
+                                 v-if="index < 3">
                                 <div class="col-md-3 float-left pl-0 exceeded-display">{{ task.title }}</div>
                                 <div class="col-md-2 float-left pl-0">{{ task.principal.data.name }}</div>
                                 <div class="col-md-4 float-left pl-0">{{ task.end_at }}</div>
@@ -1697,7 +1699,7 @@
 
             getProject: function () {
                 let data = {
-                    include: 'principal,participants,creator,fields,trail.expectations,trail.client,relate_tasks,relate_projects,type',
+                    include: 'principal,participants,tasks,creator,fields,trail.expectations,trail.client,relate_tasks,relate_projects,type',
                 };
                 fetch('get', '/projects/' + this.projectId, data).then(response => {
                     this.oldInfo = JSON.parse(JSON.stringify(response));
@@ -1913,6 +1915,7 @@
                 fetch('post', '/projects/' + this.projectId + '/store/bill', data).then(() => {
                     this.getProjectBill();
                     toastr.success('添加成功');
+                    $('#addBill').modal('hide');
                 })
             },
 
@@ -1925,6 +1928,7 @@
                 fetch('put', '/', data).then(() => {
                     this.getProjectBill();
                     toastr.success('修改成功');
+                    $('#addBill').modal('hide');
                 })
             },
 
