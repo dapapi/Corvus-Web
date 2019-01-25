@@ -173,7 +173,11 @@
             ])
         },
         mounted() {
-            this.avatar = JSON.parse(Cookies.get('user')).avatar;
+            // console.log(JSON.parse(Cookies.get('user')).avatar)
+            if(Cookies.get('user')){
+                 this.avatar = JSON.parse(Cookies.get('user')).avatar;
+            }
+            // console.log(this.avatar)
             document.body.onclick = () => {
                 this.visible = false
             }
@@ -182,6 +186,7 @@
             '$route'(to, from) {
                 this.pageRoute = to.path.split('/')[1];
             },
+            
         },
         methods: {
             showBackModel() {

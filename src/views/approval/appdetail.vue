@@ -92,8 +92,22 @@
                             </div>
                         </div>
                     </div>
-                    <div class="example pt-20" >
-
+                    <div class="example pt-20" v-if="detail_control" >
+                        <div v-for="(item, index) in detail_control" :key="index">
+                            <div>
+                                <div style='color:#00bcd4'>{{list.title}}详情{{index+1}}
+                                    <hr>
+                                </div>
+                            </div>
+                            <div v-for="(subitem, index) in item" :key="index" class="col-md-6 my-5 px-0 float-left">
+                                 <div class="col-md-4 float-left text-right detail-key mx-0 noselect">
+                                    {{subitem.key}}
+                                </div>
+                                <div class="col-md-8 float-left detail-value">
+                                    {{subitem.values.data.value}}
+                                </div>
+                            </div>
+                        </div>
                     </div>
                     <div class="">
                         <h6 class="page-title pb-20 mx-15" style="border-bottom: 1px solid rgb(227, 227, 227);">审批详情</h6>
@@ -221,6 +235,7 @@
                 previewUrl: '',
                 previewUrlArr: [],
                 projectTypeTemp:'',
+                detail_control:{},
             }
         },
 
@@ -362,7 +377,7 @@
             },
             getData() {
                 let _this = this
-                fetch('get', '/approval_instances/' + this.$route.params.id + '?include=principal,creator,fields,trail').then((params) => {
+                fetch('get', '/approval_instances/' + this.$route.params.id + '?include=principal,creator,fields,trail,detail_control').then((params) => {
                     console.log(params);
                     let {meta} = params
                     _this.list = params.data
@@ -371,6 +386,7 @@
                     let {fields: {data}} = meta
                     _this.detailData = data
                     _this.trailInfo = params.data.trail
+                    _this.detail_control = params.meta.detail_control
                 })
             },
             participantChange: function (value) {

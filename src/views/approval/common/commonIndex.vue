@@ -5,9 +5,9 @@
         </div>
     
         <div class="page-content py-0" v-for="(item,index) in indexData" :key="item.id">
-            <div class="page-header">
-                <!-- <img src="@/assets/img/sp1.png" class="option-icon"> -->
-                <h5>{{item.name}}</h5>
+            <div class="page-header" style="display:flex;vertical-item:middle">
+                <img :src="item.icon" style="width: 15px;height: 15px;" class="option-icon">
+                <h5 class="my-0 mx-1">{{item.name}}</h5>
             </div>
             <div class="row py-5">
                 <div class="col-lg-4 approval-module" v-for="subitem in item.forms.data" :key="subitem.id">

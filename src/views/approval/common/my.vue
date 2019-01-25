@@ -59,10 +59,10 @@
                                 <tbody>
                                 <tr v-for="project in projectsInfo" :key=project.id>
                                     <router-link :to="{path:'/approval/'+project.form_instance_number,query:{mode:'approver'}}"><td>{{project.form_instance_number}}</td></router-link>                                    
-                                    <td>{{project.form_instance_number}}</td>                              
-                                    <td>{{project.title}}</td>
-                                    <!-- <td>{{project.name}}</td> -->
-                                    <td></td>
+                                     <!-- <td>{{project.form_instance_number}}</td>                               -->
+                                    <!-- <td>{{project.title}}</td> -->
+                                    <td>{{project.name}}</td>
+                                    <td>{{project.group_name}}</td>
                                     <td>{{project.created_at}}</td>
                                     <td>{{getProgressName(project.form_status)}}</td>
                                 </tr>
