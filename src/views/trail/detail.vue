@@ -365,7 +365,7 @@
                                         <div class="card-text py-10 px-0 clearfix col-md-6 float-left">
                                             <div class="col-md-3 float-left text-right pl-0">锁价人</div>
                                             <div class="col-md-9 float-left font-weight-bold">
-                                                {{trailInfo.lock_user}}
+                                                {{lockUser.data.name}} 
                                             </div>
                                         </div>
                                         <div class="card-text py-10 px-0 clearfix col-md-6 float-left">
@@ -643,6 +643,7 @@
                 taskCount: {},
                 currentUser: {},
                 principalName: '',
+                lockUser:{},
             }
         },
         created() {
@@ -817,9 +818,10 @@
             getTrail: function () {
                 this.trailId = this.$route.params.id;
                 let data = {
-                    include: 'principal,client,contact,starexpectations,bloggerexpectations,starrecommendations,bloggerrecommendations,project',
+                    include: 'principal,client,lockuser,contact,starexpectations,bloggerexpectations,starrecommendations,bloggerrecommendations,project',
                 };
                 fetch('get', '/trails/' + this.trailId, data).then(response => {
+                    this.lockUser = response.data.lockuser
                     this.trailType = response.data.type;
                     this.trailInfo = response.data;
                     this.oldInfo = JSON.parse(JSON.stringify(response.data));
