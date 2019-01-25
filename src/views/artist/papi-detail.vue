@@ -1909,11 +1909,11 @@
                     _this.current_page = response.meta.pagination.current_page;
                     _this.total = response.meta.pagination.total;
                     _this.total_pages = response.meta.pagination.total_pages;
-                    response.data.forEach(item=>{
-                        if(item.status!==2&&new Date(item.end_at).getTime() < new Date().getTime()){
-                            item.status = 4
-                        }  
-                    })
+                    // response.data.forEach(item=>{
+                    //     if(item.status!==2&&new Date(item.end_at).getTime() < new Date().getTime()){
+                    //         item.status = 4
+                    //     }  
+                    // })
                     
                  
                 })

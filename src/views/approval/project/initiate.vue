@@ -3,7 +3,7 @@
         <div class="page-header page-header-bordered">
             <h1 class="page-title">发起审批</h1>
         </div>
-        <div class="page-content container-fluid">
+        <div class="page-content container-fluid" v-if="myOrganization">
             <div class="">
                 <div class="row py-5">
                     <div class="col-lg-4 pointer-content" v-for="item in list" :key="item.id" @click="addProject(item.value)" v-if="(myOrganization === 411 && item.value === 3) || (myOrganization === 412 && item.value === 4) || item.value === 1 || item.value === 2">
@@ -57,8 +57,10 @@
                 myOrganization:'',
             }
         },
-        mounted(){
+        created(){
             this.whoAmI()
+        },
+        mounted(){
         },
         methods: {
             addProject(value) {

@@ -70,6 +70,7 @@ export default {
             xhh.onreadystatechange = function () {
                 if (xhh.readyState === 4 && xhh.status === 200) {
                     var filename = xhh.getResponseHeader("Content-disposition")
+                        console.log(filename)
                         filename = decodeURI(filename)
                         filename = filename.split("filename*=utf-8''")[1]
                     var blob = new Blob([xhh.response], {type: 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet;charset=utf-8'})
