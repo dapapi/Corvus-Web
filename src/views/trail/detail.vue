@@ -365,7 +365,7 @@
                                         <div class="card-text py-10 px-0 clearfix col-md-6 float-left">
                                             <div class="col-md-3 float-left text-right pl-0">锁价人</div>
                                             <div class="col-md-9 float-left font-weight-bold">
-                                                {{lockuser.data.name}} 
+                                                {{lockUser.data.name}} 
                                             </div>
                                         </div>
                                         <div class="card-text py-10 px-0 clearfix col-md-6 float-left">
