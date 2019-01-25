@@ -1562,17 +1562,17 @@
                         let startMinutesArr = this.startMinutes.split(':');
                         let endMinutesArr = this.endMinutes.split(':');
                         if (startMinutesArr[0] === endMinutesArr[0]) {
-                            // if ((Number(endMinutesArr[1]) - Number(startMinutesArr[1])) < 30) {
-                            //     toastr.error('日程时间不能小于30分钟');
-                            //     return
-                            // }
+                            if ((Number(endMinutesArr[1]) - Number(startMinutesArr[1])) < 30) {
+                                toastr.error('日程时间不能小于30分钟');
+                                return
+                            }
 
                         }
                     }
                 }
                 let data = {
                     title: this.scheduleName,
-                    calendar_id: this.scheduleCalendar,
+                    calendar_id: this.calendarId[0],
                     is_allday: this.isScheduleAllday,
                     privacy: Number(this.schedulePrivacy),
                     start_at: startTime,
