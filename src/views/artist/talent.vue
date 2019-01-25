@@ -20,12 +20,12 @@
                 </div>
                 <div class="dropdown-menu  dropdown-menu-right task-dropdown-item" aria-labelledby="taskDropdown"
                     role="menu" x-placement="bottom-end" v-if="isShow">
-                     <!-- <import-and-export :type="'import'" :moduleName="'stars'">
+                     <import-and-export :type="'import'" :moduleName="'stars'">
                         <a class="dropdown-item" role="menuitem">导入</a>
                     </import-and-export>
                     <import-and-export :type="'export'" :moduleName="'stars'">
                         <a class="dropdown-item" role="menuitem">导出</a>
-                    </import-and-export> -->
+                    </import-and-export>
                     <a class="dropdown-item" role="menuitem" data-toggle="modal" data-target="#giveBroker"
                        @click="changeMember(1)">分配经理人</a>
                     <a class="dropdown-item" role="menuitem" data-toggle="modal" data-target="#giveBroker"
