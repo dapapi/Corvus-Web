@@ -11,7 +11,7 @@
                      role="menu" x-placement="bottom-end">
                     <a class="dropdown-item" role="menuitem" data-toggle="modal"
                        data-target="#distributionproducer" @click="distributionPerson('publicity')">分配制作人</a>
-                    <!-- <a class="dropdown-item" role="menuitem" data-toggle="modal" data-target="#addPrivacy">隐私设置</a> -->
+                    <a class="dropdown-item" role="menuitem" data-toggle="modal" data-target="#addPrivacy">隐私设置</a>
                     <a class="dropdown-item" role="menuitem" @click="contractlist(artistInfo.sign_contract_status)">
                         <template v-if="artistInfo.sign_contract_status == 1" >签约</template>
                         <template v-if="artistInfo.sign_contract_status == 2">解约</template>
@@ -271,7 +271,7 @@
                                     </tr>
                                     </template>
                                 </table>
-                                <div style="margin: 6rem auto;width: 100px" v-if="tasksInfo.length==0">
+                                <div style="margin: 6rem auto;width: 100px" v-if="alltaskshow.length==0">
                                     <img src="https://res.papitube.com/corvus/images/content-none.png" alt=""
                                         style="width: 100%">
                                 </div>
@@ -547,7 +547,7 @@
                                                     {{signState.find(item=>item.value === artistInfo.sign_contract_status).name}}                        
                                                 </div>
                                             </div>
-                                            <div class="card-text py-10 px-0 clearfix col-md-12 float-left ">
+                                            <div class="card-text py-10 px-0 clearfix col-md-12 float-left" v-if="isShowPrivacy">
                                                 <div class="col-md-2 float-left text-right pl-0">孵化期</div>
                                                 <div class="col-md-10 float-left font-weight-bold" >
                                                     <EditGroupDatePicker :content="Incubationperiod" :is-edit="isEdit"
@@ -954,7 +954,7 @@
                         </div>
                     </div>
                     <div class="modal-footer">
-                        <button class="btn btn-sm btn-white btn-pure" data-dismiss="modal">取消</button>
+                        <button class="btn btn-sm btn-white btn-pure" data-dismiss="modal" @click="cancelSchedule">取消</button>
                         <template v-if="scheduleType === 'add'">
                             <button class="btn btn-primary" type="submit" @click="addSchedule">确定</button>
                         </template>
@@ -1209,10 +1209,8 @@
                 priorityArr:config.priorityArr,
                 platformDate:'',
                 scoreId:'',
-                toastShow: false,
-                toastX: 0,
-                toastY: 0,
-                artistProjectsInfo:''
+                artistProjectsInfo:'',
+                isShowPrivacy:false
             }
         },
         computed: {
@@ -1264,6 +1262,7 @@
             })
             this.getTimes()
             this.getArtistsBill()
+            this.getResources();
             this.getPrivacy() //获取隐私设置
         },
         methods: {
@@ -1354,7 +1353,6 @@
                         _this.artistInfo.sign_contract_other=2
                     }
                     _this.tasksInfo = response.data.tasks.data //任务数据
-                    
                      //项目
                      if(response.data.trails){
                         for (let i = 0; i < response.data.trails.data.length; i++) {
@@ -1370,8 +1368,9 @@
                      })
                      _this.platformDate = data.join(',')
                     //孵化期时间 
-                    if(_this.artistInfo.hatch_star_at&&_this.artistInfo.hatch_end_at){
+                    if(_this.artistInfo.hatch_star_at!=="privacy"&&_this.artistInfo.hatch_end_at!=="privacy"){
                         _this.Incubationperiod = _this.artistInfo.hatch_star_at+'|'+_this.artistInfo.hatch_end_at
+                        _this.isShowPrivacy = true
                     }
                     _this.isLoading = false;
                 });
@@ -1548,7 +1547,10 @@
                     }
                 })
             },
-           
+            cancelSchedule:function(){
+                this.scheduleType = 'add'
+                this.initAddScheduleModal()
+            },
             showAddScheduleModal: function (date) {
                 if (this.calendarId.length > 0) {
                     this.$refs.scheduleStartDate.setValue(date);
@@ -1559,6 +1561,73 @@
                 } else {
                     toastr.error('该艺人无对应艺人日历，请先创建艺人日历')
                 }
+            },
+            getResources(type) {
+                let data = {};
+                if (type) {
+                    data = {
+                        type: type
+                    };
+                }
+                fetch('get', '/materials/all', data).then(response => {
+                    if (type) {
+                        this.meetingRomeList = response.data;
+                    } else {
+                        this.allMeetingRomeList = response.data;
+                    }
+                })
+            },
+             changeSchedule: function () {
+                let startTime = '';
+                let endTime = '';
+                if (this.isScheduleAllday) {
+                    startTime = this.startTime;
+                    endTime = this.endTime;
+                } else {
+                    startTime = this.startTime + ' ' + this.startMinutes;
+                    endTime = this.endTime + ' ' + this.endMinutes;
+                }
+                let data = {
+                    title: this.scheduleName,
+                    calendar_id: this.scheduleCalendar,
+                    is_allday: this.isScheduleAllday,
+                    privacy: Number(this.schedulePrivacy),
+                    start_at: startTime,
+                    end_at: endTime,
+                    repeat: this.scheduleRepeat,
+                    desc: this.eventDesc,
+                    material_id: this.scheduleMaterialId
+                };
+                if (this.eventPlace) {
+                    data.position = this.eventPlace;
+                }
+
+                data.participant_del_ids = [];
+                data.participant_ids = [];
+                let flagInfo = this.$store.state.newParticipantsInfo;
+                for (let i = 0; i < this.scheduleParticipants.length; i++) {
+                    if (flagInfo.map(item => item.id).indexOf(this.scheduleParticipants[i].id) === -1) {
+                        data.participant_del_ids.push(this.scheduleParticipants[i].id)
+                    }
+                }
+                for (let i = 0; i < flagInfo.length; i++) {
+                    if (this.scheduleParticipants.map(item => item.id).indexOf(flagInfo[i].id) === -1) {
+                        data.participant_ids.push(flagInfo[i].id)
+                    }
+                }
+
+                if (this.linkageSelectedIds.projects.length > 0) {
+                    data.project_ids = this.linkageSelectedIds.projects;
+                }
+                if (this.linkageSelectedIds.tasks.length > 0) {
+                    data.task_ids = this.linkageSelectedIds.tasks;
+                }
+
+                fetch('put', '/schedules/' + this.scheduleData.id, data).then(() => {
+                    this.$refs.calendar.refresh();
+                    $('#changeSchedule').modal('hide');
+                    toastr.success('修改成功')
+                })
             },
              changeScheduleParticipants: function (value) {
                 let data = {};
@@ -1933,10 +2002,6 @@
                 }
                 if(!this.updatelevel){
                     delete(this.changeArtistInfo.level)
-                }
-                if(!this.artistInfo.hatch_star_at||!this.artistInfo.hatch_end_at){
-                    delete(this.changeArtistInfo.hatch_star_at)
-                    delete(this.changeArtistInfo.hatch_end_at)
                 }
                 fetch('put', '/bloggers/' + this.artistId, this.changeArtistInfo).then(function (response) {
                     toastr.success('修改成功');
