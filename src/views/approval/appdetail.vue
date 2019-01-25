@@ -112,6 +112,7 @@
                                      v-for="(item, index) in detailData" :key="index" style='align-item:center'>
                                     <div class="col-md-4 float-left text-right detail-key mx-0 noselect" v-if="(item.key !== '提示：若艺人选择用工作室与我司签约，则输入工作室名称，否则不用输入')">{{item.key}}
                                     </div>
+                                    {{item.values.data.value}}
                                     <div class="col-md-8 float-left detail-value"
                                          v-if="item.values && !item.values.data.value.includes('http') && (item.key !== '提示：若艺人选择用工作室与我司签约，则输入工作室名称，否则不用输入')">{{(item.values
                                         && item.values.data.value) || ''}}
@@ -362,6 +363,7 @@
             getData() {
                 let _this = this
                 fetch('get', '/approval_instances/' + this.$route.params.id + '?include=principal,creator,fields,trail').then((params) => {
+                    console.log(params);
                     let {meta} = params
                     _this.list = params.data
                     _this.projectType = params.data.type
