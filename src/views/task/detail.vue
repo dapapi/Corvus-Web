@@ -85,13 +85,27 @@
             <div style="display: flex; justify-content: space-between; align-items: flex-start">
                 <div class="panel" style="width: calc(66% - 15px);z-index: 10">
 
-                    <div class="col-md-12">
+                    <div class="col-md-12 tab-title">
                         <ul class="nav nav-tabs nav-tabs-line" role="tablist" id="taskTab">
-                            <li class="nav-item" role="presentation">
+                            <template v-if="questionId && visible">
+                                <li class="nav-item" role="presentation">
+                                    <a class="nav-link active" data-toggle="tab" href="#forum-task-question"
+                                    aria-controls="forum-base"
+                                    aria-expanded="true" role="tab">问卷详情</a>
+                                </li>
+                                <li class="nav-item" role="presentation">
+                                    <a class="nav-link" data-toggle="tab" href="#forum-task-base"
+                                    aria-controls="forum-base"
+                                    aria-expanded="false" role="tab">概况</a>
+                                </li>
+                            </template>
+
+                            <li class="nav-item" role="presentation" v-else>
                                 <a class="nav-link active" data-toggle="tab" href="#forum-task-base"
                                    aria-controls="forum-base"
                                    aria-expanded="true" role="tab">概况</a>
                             </li>
+
                             <li class="nav-item" role="presentation">
                                 <a class="nav-link" data-toggle="tab" href="#forum-task-annex"
                                    aria-controls="forum-present"
@@ -103,9 +117,157 @@
                                    aria-expanded="false" role="tab">子任务</a>
                             </li>
                         </ul>
+                        <div class="" v-if="questionId && visible">
+                            <button type="button"
+                                class="btn btn-primary"
+                                v-if="!~hasAnsweredArr.indexOf(user.id)"
+                                @click="submit">提交
+                            </button>
+                            <button type="button" class="btn btn-primary" data-plugin="actionBtn"
+                                data-toggle="modal"
+                                v-if="questionInfo.reviewanswer
+                                    && principalId === user.id 
+                                    && hasAnsweredArr.length > 0 
+                                    && hasAnsweredArr.length === questionInfo.reviewanswer.data.length
+                                    && !questionInfo.excellent
+                                "
+                                data-target="#push-reason">推优
+                            </button>
+                        </div>
                     </div>
                     <div class="tab-content nav-tabs-animate bg-white col-md-12" v-if="taskInfo">
-                        <div class="tab-pane animation-fade active" id="forum-task-base" role="tabpanel">
+                        <div class="tab-pane animation-fade active"  v-if="questionId && visible" id="forum-task-question" role="tabpanel">
+                            <div class="card">
+                                <div class="card-block">
+                                    <h4 style="color: #3F51B5">平均分
+                                        {{ questionInfo.sum ? (questionInfo.sum.data[0]
+                                        ?questionInfo.sum.data[0].truncate : 0) : 0}}
+                                    </h4>
+                                    <div class="row">
+                                        <div class="col-md-12 clearfix" style="padding-right: 0;">
+                                            <div class="progress" data-labeltype="percentage" data-goal="-40"
+                                                data-plugin="progress" style="width: calc(100% - 100px); float:left;">
+                                                <div class="progress-bar progress-bar-warning" aria-valuemin="-100"
+                                                    aria-valuemax="0" aria-valuenow="-40" role="progressbar"
+                                                    :style="{width: `${questionInfo.reviewanswer.length === 0 ? 0 : hasAnsweredArr.length / questionInfo.reviewanswer.data.length * 100}%`}">
+                                                </div>
+                                            </div>
+                                            <div style="width: 50px; padding-left: 10px; float: left;">
+                                                {{questionInfo.reviewanswer.length === 0 ? 0 : ~~((hasAnsweredArr.length /
+                                                questionInfo.reviewanswer.data.length * 100))}}%
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="all-menber clearfix">
+                                        <template v-for="(item, index) in questionInfo.reviewanswer.data">
+                                            <Avatar :imgUrl="item.users.data.icon_url" :key="index" style="margin: 5px;"/>
+                                        </template>
+                                    </div>
+                                    <div class="card-text py-5 clearfix">
+                                        <div class="col-md-1 float-left text-right pl-0">作者</div>
+                                        <div class="col-md-11 float-left font-weight-bold">
+                                            <div class="edit-wrap">
+                                                {{ questionInfo.creator ? questionInfo.creator.data.name : '' }}
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="card-text py-5 clearfix">
+                                        <div class="col-md-1 float-left text-right pl-0">视频名称</div>
+                                        <div class="col-md-11 float-left font-weight-bold">
+                                            <div class="edit-wrap">
+                                                {{ questionInfo.production ? questionInfo.production.data[0].nickname : '' }}
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="card-text py-5 clearfix">
+                                        <div class="col-md-1 float-left text-right pl-0">阅转比</div>
+                                        <div class="col-md-11 float-left font-weight-bold">
+                                            <div class="edit-wrap">
+                                                {{ questionInfo.production ? questionInfo.production.data[0].read_proportion :
+                                                '' }}
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="card-text py-5 clearfix" v-if="questionInfo.excellent">
+                                        <div class="col-md-1 float-left text-right pl-0">推优分</div>
+                                        <div class="col-md-11 float-left font-weight-bold">
+                                            <div class="edit-wrap">
+                                                {{ questionInfo.excellent_sum }}
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="card-text py-5 clearfix" v-if="questionInfo.excellent">
+                                        <div class="col-md-1 float-left text-right pl-0">推优原因</div>
+                                        <div class="col-md-11 float-left font-weight-bold">
+                                            <div class="edit-wrap">
+                                                {{ questionInfo.excellent }}
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="card-text py-5 clearfix">
+                                        <div class="col-md-1 float-left text-right pl-0">视频链接</div>
+                                        <div class="col-md-11 float-left font-weight-bold">
+                                            <!-- <a
+                                                :href="questionInfo.production ? questionInfo.production.data[0].link : ''"> -->
+                                            <div class="edit-wrap" style="color: #3298DC; cursor: pointer; width: 100%;" @click="openUrl(questionInfo.production)">
+                                                {{ questionInfo.production ? questionInfo.production.data[0].link : '' }}
+                                            </div>
+                                            <!-- </a> -->
+                                        </div>
+                                    </div>
+
+                                    <div class="question" v-for="(items, index) in questionData" :key="index">
+                                        <div class="name">{{index + 1}}. {{ items.title }}</div>
+                                        <div class="options clearfix" v-for="(item, _index) in items.items.data" :key="_index">
+                                            <div class="title">
+                                                <label>
+                                                    <div class="radio-custom radio-primary" style="display: inline-block;">
+                                                        <input type="radio" @click="answerList[index] = item"
+                                                            :disabled="hasAnsweredArr.includes(user.id)"
+                                                            :checked="answerList[index] === item.value
+                                                                    || items.selectrows.data.find(n => n.review_question_item_id === item.id && n.creator.data.id === user.id)"
+                                                            :name="items.id"/>
+                                                        <label></label>
+                                                    </div>
+                                                    {{ item.value }}: {{ item.title }}
+                                                </label>
+                                            </div>
+                                            <div class="row">
+                                                <div class="col-md-8" style="padding-right: 0;">
+                                                    <div class="progress" data-labeltype="percentage" data-goal="-40"
+                                                        data-plugin="progress" style="width: calc(100% - 100px); float: left;">
+                                                        <div class="progress-bar progress-bar-warning" aria-valuemin="-100"
+                                                            aria-valuemax="0" aria-valuenow="-40" role="progressbar"
+                                                            :style="{width: `${items.selectrows.data.filter(n => n.review_question_item_id === item.id).length / hasAnsweredArr.length * 100}%`}">
+                                                        </div>
+                                                    </div>
+                                                    <div style="width: 50px; padding-left: 10px; float: left;">
+                                                        {{ hasAnsweredArr.length > 0 ? (items.selectrows.data.filter(n =>
+                                                        n.review_question_item_id ===
+                                                        item.id).length / hasAnsweredArr.length * 100).toFixed(0): '0' }}%
+                                                    </div>
+                                                    <div style="width: 50px; padding-left: 10px; float: right;">
+                                                        {{items.selectrows.data.filter(n => n.review_question_item_id ===
+                                                        item.id)?
+                                                        items.selectrows.data.filter(n => n.review_question_item_id ===
+                                                        item.id).length
+                                                        :0}}票
+                                                    </div>
+                                                </div>
+                                                <div class="col-md-4 clearfix" style="padding-left: 0; margin-top: -9px;">
+                                                    <template v-for="(_item, nameIndex) in items.selectrows.data">
+                                                        <Avatar v-if="_item.review_question_item_id === item.id"
+                                                                :imgUrl="_item.creator.data.icon_url" :key="nameIndex"
+                                                                style="margin: 5px;"/>
+                                                    </template>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="tab-pane animation-fade" :class="!questionId || !visible ? 'active': ''" id="forum-task-base" role="tabpanel">
                             <div class="card">
                                 <div class="card-header card-header-transparent card-header-bordered">
                                     <div class="float-left font-weight-bold third-title">任务详情</div>
@@ -326,160 +488,6 @@
                     </div>
                 </div>
             </div>
-            <div class="panel col-md-12 col-lg-12" v-if="questionId && visible">
-                <div class="tab-content nav-tabs-animate bg-white">
-                    <div class="card">
-                        <div class="card-header card-header-transparent card-header-bordered"
-                             style="display: flex; justify-content: space-between; align-items: center;">
-                            <div class="font-weight-bold third-title">问卷详情</div>
-                            <div class="">
-                                <button type="button"
-                                        class="btn btn-primary"
-                                        v-if="!~hasAnsweredArr.indexOf(user.id)"
-                                        @click="submit">提交
-                                </button>
-                                <button type="button" class="btn btn-primary" data-plugin="actionBtn"
-                                        data-toggle="modal"
-                                        v-if="questionInfo.reviewanswer
-                                            && principalId === user.id 
-                                            && hasAnsweredArr.length > 0 
-                                            && hasAnsweredArr.length === questionInfo.reviewanswer.data.length"
-                                        && !questionInfo.excellent
-                                        data-target="#push-reason">推优
-                                </button>
-                            </div>
-                        </div>
-                        <div class="card-block">
-                            <h4 style="color: #3F51B5">平均分
-                                {{ questionInfo.sum ? (questionInfo.sum.data[0]
-                                ?questionInfo.sum.data[0].truncate : 0) : 0}}
-                            </h4>
-                            <div class="row">
-                                <div class="col-md-8 clearfix" style="padding-right: 0;">
-                                    <div class="progress" data-labeltype="percentage" data-goal="-40"
-                                         data-plugin="progress" style="width: calc(100% - 100px); float:left;">
-                                        <div class="progress-bar progress-bar-warning" aria-valuemin="-100"
-                                             aria-valuemax="0" aria-valuenow="-40" role="progressbar"
-                                             :style="{width: `${questionInfo.reviewanswer.length === 0 ? 0 : hasAnsweredArr.length / questionInfo.reviewanswer.data.length * 100}%`}">
-                                        </div>
-                                    </div>
-                                    <div style="width: 50px; padding-left: 10px; float: left;">
-                                        {{questionInfo.reviewanswer.length === 0 ? 0 : ~~((hasAnsweredArr.length /
-                                        questionInfo.reviewanswer.data.length * 100))}}%
-                                    </div>
-                                </div>
-                            </div>
-                            <div class="all-menber clearfix">
-                                <template v-for="(item, index) in questionInfo.reviewanswer.data">
-                                    <Avatar :imgUrl="item.users.data.icon_url" :key="index" style="margin: 5px;"/>
-                                </template>
-                            </div>
-                            <div class="card-text py-5 clearfix">
-                                <div class="col-md-1 float-left text-right pl-0">作者</div>
-                                <div class="col-md-11 float-left font-weight-bold">
-                                    <div class="edit-wrap">
-                                        {{ questionInfo.creator ? questionInfo.creator.data.name : '' }}
-                                    </div>
-                                </div>
-                            </div>
-                            <div class="card-text py-5 clearfix">
-                                <div class="col-md-1 float-left text-right pl-0">视频名称</div>
-                                <div class="col-md-11 float-left font-weight-bold">
-                                    <div class="edit-wrap">
-                                        {{ questionInfo.production ? questionInfo.production.data[0].nickname : '' }}
-                                    </div>
-                                </div>
-                            </div>
-                            <div class="card-text py-5 clearfix">
-                                <div class="col-md-1 float-left text-right pl-0">阅转比</div>
-                                <div class="col-md-11 float-left font-weight-bold">
-                                    <div class="edit-wrap">
-                                        {{ questionInfo.production ? questionInfo.production.data[0].read_proportion :
-                                        '' }}
-                                    </div>
-                                </div>
-                            </div>
-                            <div class="card-text py-5 clearfix" v-if="questionInfo.excellent">
-                                <div class="col-md-1 float-left text-right pl-0">推优分</div>
-                                <div class="col-md-11 float-left font-weight-bold">
-                                    <div class="edit-wrap">
-                                        {{ questionInfo.excellent_sum }}
-                                    </div>
-                                </div>
-                            </div>
-                            <div class="card-text py-5 clearfix" v-if="questionInfo.excellent">
-                                <div class="col-md-1 float-left text-right pl-0">推优原因</div>
-                                <div class="col-md-11 float-left font-weight-bold">
-                                    <div class="edit-wrap">
-                                        {{ questionInfo.excellent }}
-                                    </div>
-                                </div>
-                            </div>
-                            <div class="card-text py-5 clearfix">
-                                <div class="col-md-1 float-left text-right pl-0">视频链接</div>
-                                <div class="col-md-11 float-left font-weight-bold">
-                                    <router-link
-                                            :to="questionInfo.production ? questionInfo.production.data[0].link : ''">
-                                        <div class="edit-wrap" style="color: #3298DC; cursor: pointer; width: 100%;">
-                                            {{ questionInfo.production ? questionInfo.production.data[0].link : '' }}
-                                        </div>
-                                    </router-link>
-                                </div>
-                            </div>
-
-                            <div class="question" v-for="(items, index) in questionData" :key="index">
-                                <div class="name">{{index + 1}}. {{ items.title }}</div>
-                                <div class="options clearfix" v-for="(item, _index) in items.items.data" :key="_index">
-                                    <div class="title">
-                                        <label>
-                                            <div class="radio-custom radio-primary" style="display: inline-block;">
-                                                <input type="radio" @click="answerList[index] = item"
-                                                       :disabled="hasAnsweredArr.includes(user.id)"
-                                                       :checked="answerList[index] === item.value
-                                                            || items.selectrows.data.find(n => n.review_question_item_id === item.id && n.creator.data.id === user.id)"
-                                                       :name="items.id"/>
-                                                <label></label>
-                                            </div>
-                                            {{ item.value }}: {{ item.title }}
-                                        </label>
-                                    </div>
-                                    <div class="row">
-                                        <div class="col-md-8" style="padding-right: 0;">
-                                            <div class="progress" data-labeltype="percentage" data-goal="-40"
-                                                 data-plugin="progress" style="width: calc(100% - 100px); float: left;">
-                                                <div class="progress-bar progress-bar-warning" aria-valuemin="-100"
-                                                     aria-valuemax="0" aria-valuenow="-40" role="progressbar"
-                                                     :style="{width: `${items.selectrows.data.filter(n => n.review_question_item_id === item.id).length / hasAnsweredArr.length * 100}%`}">
-                                                </div>
-                                            </div>
-                                            <div style="width: 50px; padding-left: 10px; float: left;">
-                                                {{ hasAnsweredArr.length > 0 ? (items.selectrows.data.filter(n =>
-                                                n.review_question_item_id ===
-                                                item.id).length / hasAnsweredArr.length * 100).toFixed(0): '0' }}%
-                                            </div>
-                                            <div style="width: 50px; padding-left: 10px; float: right;">
-                                                {{items.selectrows.data.filter(n => n.review_question_item_id ===
-                                                item.id)?
-                                                items.selectrows.data.filter(n => n.review_question_item_id ===
-                                                item.id).length
-                                                :0}}票
-                                            </div>
-                                        </div>
-                                        <div class="col-md-4 clearfix" style="padding-left: 0; margin-top: -9px;">
-                                            <template v-for="(_item, nameIndex) in items.selectrows.data">
-                                                <Avatar v-if="_item.review_question_item_id === item.id"
-                                                        :imgUrl="_item.creator.data.icon_url" :key="nameIndex"
-                                                        style="margin: 5px;"/>
-                                            </template>
-                                        </div>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-            </div>
-
         </div>
 
         <div class="modal fade" id="addChildTask" aria-hidden="true" aria-labelledby="addLabelForm"
@@ -1162,6 +1170,16 @@
                     }
                 })
             },
+            // 打开视频链接
+            openUrl (url) {
+                if (url) {
+                    let _url = url.data[0].link
+                    if (_url.indexOf('http') < 0) {
+                        _url = '//' + _url
+                    }
+                    window.open(_url)
+                }
+            }
         }
     }
 </script>
@@ -1301,5 +1319,10 @@
     .card-block .card-text {
         display: flex;
         align-items: center;
+    }
+    .tab-title button {
+        position: absolute;
+        top: 4px;
+        right: 14px;
     }
 </style>

@@ -171,12 +171,6 @@
         position: relative;
     }
 
-    .fixed-button {
-        position: absolute;
-        bottom: 20px;
-        right: 0;
-    }
-
     .page {
         margin-left: 100px !important;
         min-height: 100vh;
