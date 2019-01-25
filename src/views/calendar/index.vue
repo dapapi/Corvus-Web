@@ -683,6 +683,14 @@
             $('#addMembers').on('hidden.bs.modal', function () {
                 _this.$store.dispatch('changeParticipantsInfo', {type: 'change', data: []});
             });
+            $('#addCalendar').on('show.bs.modal', () => {
+                this.$store.dispatch('changeParticipantsInfo', {
+                    data: [{
+                        icon_url: this.userInfo.avatar,
+                        id: this.userInfo.id
+                    }]
+                });
+            });
             this.globalClick(this.removeSelector);
             this.initCalendar();
             let pageContent = $('.container-fluid');
