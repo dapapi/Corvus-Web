@@ -16,15 +16,17 @@ export default {
         }
     },
     created(){
-      if(JSON.parse(Cookies.get('user')&&this.errorNum<=3)){
-        //   alert(this.errorNum)
+      if(Cookies.get('user')&&this.errorNum<=3){
           this.initWebSocket()
           this.getModule()
       }
       
     },
     destroyed(){
-        this.websocket.close()
+        if(Cookies.get('user')&&this.errorNum<=3){
+          this.websocket.close()
+        }
+        
     },
     methods:{
         initWebSocket:function(){
@@ -51,6 +53,7 @@ export default {
             let msg = eval("'" + evt.data + "'")
             msg = JSON.parse(msg)
             if(msg.action == 'sendmessage'){
+                console.log(22222)
                 toastr.success(msg.title)
                 this.suportNotify(msg.title)
                 this.getModule()
