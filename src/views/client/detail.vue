@@ -42,10 +42,12 @@
                         </div>
                     </div>
                     <div class="clearfix">
-                        <div class="col-md-6 float-left pl-0" v-if="clientTasksInfo.length > 0">
+                        <div class="col-md-6 float-left pl-0"
+                             v-if="clientInfo.tasks && clientInfo.tasks.data.length > 0">
                             <div class="col-md-6 pl-0"><i class="iconfont icon-iconset0399 pr-2" aria-hidden="true"></i>任务
                             </div>
-                            <div class="clearfix example " v-for="(task, index) in clientTasksInfo" v-if="index < 3"
+                            <div class="clearfix example " v-for="(task, index) in clientInfo.tasks.data"
+                                 v-if="index < 3"
                                  style="cursor: pointer" :key="index" @click="linkTo('/tasks/' + task.id)">
                                 <div class="col-md-3 float-left px-0 exceeded-display">{{ task.title }}</div>
                                 <div class="col-md-3 float-left px-0">{{ task.principal?task.principal.data.name:'' }}
@@ -738,8 +740,7 @@
             setTimeout(function () {
                 _this.getClient();
                 _this.getClientTrail();
-                _this.getClientProject()
-                _this.getClientTask()
+                _this.getClientProject();
             }, 100);
             this.user = JSON.parse(Cookies.get('user'))
             this.setDefaultPrincipal()
@@ -801,7 +802,7 @@
         methods: {
 
             getClient: function () {
-                fetch('get', '/clients/' + this.clientId, {include: 'principal,creator'}).then(response => {
+                fetch('get', '/clients/' + this.clientId, {include: 'principal,creator,tasks'}).then(response => {
                     this.clientInfo = response.data;
                     this.clientInfoCopy = JSON.parse(JSON.stringify(response.data))
 

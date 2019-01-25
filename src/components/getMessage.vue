@@ -92,7 +92,6 @@ export default {
         },
         //判断浏览器是否支持弹出实例
         showMess:function(content){
-            alert(222)
             setTimeout(function () {
                 // console.log('1：'+Notification.permission);
                 //如果支持window.Notification 并且 许可不是拒绝状态
