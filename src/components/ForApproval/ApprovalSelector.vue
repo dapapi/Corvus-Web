@@ -79,7 +79,7 @@ export default {
                         fetch('get',this.consdata[0].control_source.url+'?'+this.consdata[0].control_source.parameters+'='+value.data).then((params) => {
                             _this.options = params.data
                             _this.$nextTick(() => {
-                                _this.valueListener={name:_this.options[0].title,id:_this.options[0].client_id}                            
+                                _this.valueListener={name:_this.options[0].title,id:_this.options[0].client_id}                        
                                 _this.refresh()
                                 _this.$nextTick(() => {
                                     _this.refresh()
@@ -101,7 +101,8 @@ export default {
                     this.$emit('change',{key:id,value:this.valueListener,type:related_field})                
                 }
                 if(control_source){
-                    if(control_source.to_sort_number){
+                    if(control_source.to_sort_number && this.valueListener){
+                        this.defaultDataChecker()
                         this.$emit('directional',{to:control_source.to_sort_number,data:this.valueListener.id})
                     }
                 }
@@ -131,7 +132,6 @@ export default {
         methods: {
             defaultDataChecker(){
                 if(this.consdata[0].control_value){
-                    console.log(this.consdata[0].control_value);
                         this.valueListener = this.consdata[0].control_value
                         this.setValue(this.consdata[0].control_value)
                         this.refresh()
