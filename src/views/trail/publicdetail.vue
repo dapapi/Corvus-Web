@@ -81,13 +81,13 @@
                                 <i class="iconfont icon-yiren pr-2" aria-hidden="true"></i>目标艺人
                             </div>
                             <div class="font-weight-bold float-left" v-if="trailInfo.title">
-                                <span v-if="trailInfo.bloggerexceptions"
-                                      v-for="expectation in trailInfo.bloggerexceptions.data"
+                                <span v-if="trailInfo.bloggerexpectations"
+                                      v-for="expectation in trailInfo.bloggerexpectations.data"
                                       :key="expectation.nickname">
                                     {{ expectation.nickname}}
                                 </span>
-                                <span v-if="trailInfo.starexceptions"
-                                      v-for="expectation in trailInfo.starexceptions.data" :key="expectation.name">
+                                <span v-if="trailInfo.starexpectations"
+                                      v-for="expectation in trailInfo.starexpectations.data" :key="expectation.name">
                                     {{ expectation.name}}
                                 </span>
                             </div>
@@ -855,7 +855,7 @@
             getTrail: function () {
                 this.trailId = this.$route.params.id;
                 let data = {
-                    include: 'principal,client,contact,starexceptions,bloggerexceptions,starrecommendations,bloggerrecommendations,project',
+                    include: 'principal,client,contact,starexpectations,bloggerexpectations,starrecommendations,bloggerrecommendations,project',
                 };
                 fetch('get', '/trails/' + this.trailId, data).then(response => {
                     this.trailType = response.data.type;
@@ -863,11 +863,11 @@
                     this.oldInfo = JSON.parse(JSON.stringify(response.data));
                     this.selectedExpectationsArr = [];
                     this.selectedRecommendationsArr = [];
-                    for (let i = 0; i < this.trailInfo.starexceptions.data.length; i++) {
-                        this.selectedExpectationsArr.push(this.trailInfo.starexceptions.data[i].flag + '-' + this.trailInfo.starexceptions.data[i].id)
+                    for (let i = 0; i < this.trailInfo.starexpectations.data.length; i++) {
+                        this.selectedExpectationsArr.push(this.trailInfo.starexpectations.data[i].flag + '-' + this.trailInfo.starexpectations.data[i].id)
                     }
-                    for (let i = 0; i < this.trailInfo.bloggerexceptions.data.length; i++) {
-                        this.selectedExpectationsArr.push(this.trailInfo.bloggerexceptions.data[i].flag + '-' + this.trailInfo.bloggerexceptions.data[i].id)
+                    for (let i = 0; i < this.trailInfo.bloggerexpectations.data.length; i++) {
+                        this.selectedExpectationsArr.push(this.trailInfo.bloggerexpectations.data[i].flag + '-' + this.trailInfo.bloggerexpectations.data[i].id)
                     }
                     for (let i = 0; i < this.trailInfo.starrecommendations.data.length; i++) {
                         this.selectedRecommendationsArr.push(this.trailInfo.starrecommendations.data[i].flag + '-' + this.trailInfo.starrecommendations.data[i].id)
