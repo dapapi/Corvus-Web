@@ -16,14 +16,17 @@ export default {
         }
     },
     created(){
-      if(JSON.parse(Cookies.get('user')&&this.errorNum<=3)){
+      if(Cookies.get('user')&&this.errorNum<=3){
           this.initWebSocket()
           this.getModule()
       }
       
     },
     destroyed(){
-        this.websocket.close()
+        if(Cookies.get('user')&&this.errorNum<=3){
+          this.websocket.close()
+        }
+        
     },
     methods:{
         initWebSocket:function(){
