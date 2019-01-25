@@ -216,7 +216,7 @@
                             <div class="col-md-2 text-right float-left pl-0 require">任务优先级</div>
                             <div class="col-md-10 float-left pl-0">
                                 <Selectors
-                                        :options="taskLevelArr"
+                                        :options="priorityArr"
                                         @change="changeTaskLevel"
                                         ref="taskLevel"
                                 ></Selectors>
@@ -304,6 +304,7 @@
                 resourceableId: "", // 资源id
                 user: {}, // 个人信息
                 isLoading: true,
+                priorityArr:config.priorityArr
             };
         },
         created() {

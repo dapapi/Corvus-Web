@@ -36,7 +36,7 @@
                                         </div>
 
                                         <div v-for="(value, key, index) in normalUsers" :key="index">
-                                            <div class="letter" >{{ key }}</div>
+                                            <div class="letter" v-if="value.find(item=>item.name.includes(searchKeyWord))">{{ key }}</div>
                                             <div class="users" v-for="(user, _index) in value"
                                                  v-show="user.name.indexOf(searchKeyWord) > -1"
                                                  :class="checkedIndex === (index + '' + _index) ? 'checked' : ''"
@@ -309,6 +309,7 @@
             const id = JSON.parse(Cookies.get('user')).id
             fetch('get', '/departments/crew').then(res => {
                 this.normalUsers = res;
+                console.log(res)
                 this.setDefaultInfo(id)
             })
             this.getSchedules(id)

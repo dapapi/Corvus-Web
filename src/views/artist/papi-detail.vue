@@ -961,6 +961,83 @@
                 </div>
             </div>
         </div>
+        <div class="modal fade" id="addLinkage" aria-hidden="true" aria-labelledby="addLabelForm"
+             role="dialog" tabindex="-1" data-backdrop="static">
+            <div class="modal-dialog modal-simple">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <button type="button" class="close" aria-hidden="true" data-dismiss="modal">
+                            <i class="iconfont icon-guanbi" aria-hidden="true"></i>
+                        </button>
+                        <h4 class="modal-title">关联资源</h4>
+                    </div>
+                    <div class="modal-body">
+                        <div class="tab-pane p-20" role="tabpanel">
+                            <div class="nav-tabs-vertical" data-plugin="tabs" style="margin: 0 -20px -30px  -20px ">
+                                <ul class="nav nav-tabs nav-tabs-line mr-25" role="tablist">
+                                    <li class="nav-item" role="presentation" @click="selectProjectLinkage('project')">
+                                        <a class="nav-link active" data-toggle="tab" href="#projectsPane"
+                                           aria-controls="exampleTabsLineLeftOne" role="tab" aria-selected="false">
+                                            项目</a>
+                                    </li>
+                                    <li class="nav-item" role="presentation" @click="selectProjectLinkage('task')">
+                                        <a class="nav-link" data-toggle="tab" href="#tasksPane"
+                                           aria-controls="exampleTabsLineLeftOne" role="tab" aria-selected="false">
+                                            任务</a>
+                                    </li>
+                                </ul>
+                                <div class="tab-content px-0" style="max-height: 70vh;overflow-y: auto">
+                                    <div class="tab-pane active" id="projectsPane" role="tabpanel">
+                                        <div class="input-search mb-20" style="width: 70%">
+                                            <button type="submit" class="input-search-btn">
+                                                <i class="iconfont icon-buoumaotubiao13" aria-hidden="true"></i>
+                                            </button>
+                                            <input type="text" class="form-control" name="" placeholder="搜索关键字..."
+                                                   v-model="searchKeyWord">
+                                        </div>
+                                        <ul class="nav">
+                                            <li class="nav-link pointer-content" style="width: 95%"
+                                                v-for="(project,index) in allProjectsInfo" :key="index"
+                                                v-show="project.title.indexOf(searchKeyWord) > -1"
+                                                @click="selectResource('projects', project.id)">{{ project.title }}
+                                                <span class="float-right"
+                                                      v-show="linkageSelectedIds.projects.indexOf(project.id) > -1">
+                                                    <i class="md-check"></i>
+                                                </span>
+                                            </li>
+                                        </ul>
+                                    </div>
+                                    <div class="tab-pane" id="tasksPane" role="tabpanel">
+                                        <div class="input-search mb-20" style="width: 70%">
+                                            <button type="submit" class="input-search-btn">
+                                                <i class="iconfont icon-buoumaotubiao13" aria-hidden="true"></i>
+                                            </button>
+                                            <input type="text" class="form-control" name="" placeholder="搜索关键字..."
+                                                   v-model="searchKeyWord">
+                                        </div>
+                                        <ul class="nav">
+                                            <li class="nav-link pointer-content" style="width: 95%"
+                                                v-for="(task,index) in allTasksInfo" :key="index"
+                                                v-show="task.title.indexOf(searchKeyWord) > -1"
+                                                @click="selectResource('tasks', task.id)">{{ task.title }}
+                                                <span class="float-right"
+                                                      v-show="linkageSelectedIds.tasks.indexOf(task.id) > -1">
+                                                    <i class="md-check"></i>
+                                                </span>
+                                            </li>
+                                        </ul>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="modal-footer">
+                        <button class="btn btn-sm btn-white btn-pure" data-dismiss="modal">取消</button>
+                        <button class="btn btn-primary" type="submit" @click="addLinkageResource">确定</button>
+                    </div>
+                </div>
+            </div>
+        </div>
         <!-- 查看日程 -->
         <div class="modal fade" id="checkSchedule" aria-hidden="true" aria-labelledby="addLabelForm"
              role="dialog" tabindex="-1" data-backdrop="static">
@@ -1206,7 +1283,13 @@
                 platformDate:'',
                 scoreId:'',
                 artistProjectsInfo:'',
-                isShowPrivacy:false
+                isShowPrivacy:false,
+                allProjectsInfo:'',
+                searchKeyWord: '',
+                allTasksInfo:'',
+                isScheduleAllday: 0,
+                scheduleRepeat:0,
+                scheduleCalendar:''
             }
         },
         computed: {
@@ -1435,6 +1518,28 @@
                 })
                 
             },
+             selectProjectLinkage: function (value) {
+                this.linkageResource = value;
+                if (!this.allProjectsInfo) {
+                    this.getAllProjects()
+                }
+                if (!this.allTasksInfo) {
+                    this.getAllTasks()
+                }
+            },
+            getAllProjects: function () {
+                fetch('get', '/projects/all').then(response => {
+                    this.allProjectsInfo = response.data
+                })
+            },
+            getAllTasks: function () {
+                fetch('get', '/tasksAll').then(response => {
+                    this.allTasksInfo = response.data
+                })
+            },
+            addLinkageResource: function () {
+                $('#addLinkage').modal('hide');
+            },
             ScheduleBox: function(value){
                 this.showScheduleModal(value)
             },
@@ -1457,23 +1562,25 @@
                         let startMinutesArr = this.startMinutes.split(':');
                         let endMinutesArr = this.endMinutes.split(':');
                         if (startMinutesArr[0] === endMinutesArr[0]) {
-                            if ((Number(endMinutesArr[1]) - Number(startMinutesArr[1])) < 30) {
-                                toastr.error('日程时间不能小于30分钟');
-                                return
-                            }
+                            // if ((Number(endMinutesArr[1]) - Number(startMinutesArr[1])) < 30) {
+                            //     toastr.error('日程时间不能小于30分钟');
+                            //     return
+                            // }
 
                         }
                     }
                 }
                 let data = {
                     title: this.scheduleName,
-                    calendar_id: this.calendarId[0],
+                    calendar_id: this.scheduleCalendar,
                     is_allday: this.isScheduleAllday,
                     privacy: Number(this.schedulePrivacy),
                     start_at: startTime,
                     end_at: endTime,
                     repeat: this.scheduleRepeat,
-                    desc: this.eventDesc
+                    desc: this.eventDesc,
+                    remind: this.scheduleRemind
+
                 };
                 if (this.eventPlace) {
                     data.position = this.eventPlace;
@@ -2185,7 +2292,7 @@
             }
             ,
             changeStartMinutes: function (value) {
-                this.startTaskMinutes = value
+                this.startMinutes = value
             }
             ,
             changeEndTime: function (value) {
@@ -2193,7 +2300,7 @@
             }
             ,
             changeEndMinutes: function (value) {
-                this.endTaskMinutes = value
+                this.endMinutes = value
             }
             ,
             //视频时间
