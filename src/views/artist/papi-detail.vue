@@ -911,7 +911,7 @@
                             <div class="example">
                                 <div class="col-md-2 text-right float-left">提醒</div>
                                 <div class="col-md-10 float-left pl-0">
-                                    <selectors :options="remindArr" ref="scheduleNotice"></selectors>
+                                    <selectors :options="remindArr" ref="scheduleRemind" @change="changeScheduleRemind"></selectors>
                                 </div>
                             </div>
                             <div class="clearfix my-20">
@@ -961,6 +961,83 @@
                         <template v-if="scheduleType === 'edit'">
                             <button class="btn btn-primary" type="submit" @click="changeSchedule">确定</button>
                         </template>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="modal fade" id="addLinkage" aria-hidden="true" aria-labelledby="addLabelForm"
+             role="dialog" tabindex="-1" data-backdrop="static">
+            <div class="modal-dialog modal-simple">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <button type="button" class="close" aria-hidden="true" data-dismiss="modal">
+                            <i class="iconfont icon-guanbi" aria-hidden="true"></i>
+                        </button>
+                        <h4 class="modal-title">关联资源</h4>
+                    </div>
+                    <div class="modal-body">
+                        <div class="tab-pane p-20" role="tabpanel">
+                            <div class="nav-tabs-vertical" data-plugin="tabs" style="margin: 0 -20px -30px  -20px ">
+                                <ul class="nav nav-tabs nav-tabs-line mr-25" role="tablist">
+                                    <li class="nav-item" role="presentation" @click="selectProjectLinkage('project')">
+                                        <a class="nav-link active" data-toggle="tab" href="#projectsPane"
+                                           aria-controls="exampleTabsLineLeftOne" role="tab" aria-selected="false">
+                                            项目</a>
+                                    </li>
+                                    <li class="nav-item" role="presentation" @click="selectProjectLinkage('task')">
+                                        <a class="nav-link" data-toggle="tab" href="#tasksPane"
+                                           aria-controls="exampleTabsLineLeftOne" role="tab" aria-selected="false">
+                                            任务</a>
+                                    </li>
+                                </ul>
+                                <div class="tab-content px-0" style="max-height: 70vh;overflow-y: auto">
+                                    <div class="tab-pane active" id="projectsPane" role="tabpanel">
+                                        <div class="input-search mb-20" style="width: 70%">
+                                            <button type="submit" class="input-search-btn">
+                                                <i class="iconfont icon-buoumaotubiao13" aria-hidden="true"></i>
+                                            </button>
+                                            <input type="text" class="form-control" name="" placeholder="搜索关键字..."
+                                                   v-model="searchKeyWord">
+                                        </div>
+                                        <ul class="nav">
+                                            <li class="nav-link pointer-content" style="width: 95%"
+                                                v-for="(project,index) in allProjectsInfo" :key="index"
+                                                v-show="project.title.indexOf(searchKeyWord) > -1"
+                                                @click="selectResource('projects', project.id)">{{ project.title }}
+                                                <span class="float-right"
+                                                      v-show="linkageSelectedIds.projects.indexOf(project.id) > -1">
+                                                    <i class="md-check"></i>
+                                                </span>
+                                            </li>
+                                        </ul>
+                                    </div>
+                                    <div class="tab-pane" id="tasksPane" role="tabpanel">
+                                        <div class="input-search mb-20" style="width: 70%">
+                                            <button type="submit" class="input-search-btn">
+                                                <i class="iconfont icon-buoumaotubiao13" aria-hidden="true"></i>
+                                            </button>
+                                            <input type="text" class="form-control" name="" placeholder="搜索关键字..."
+                                                   v-model="searchKeyWord">
+                                        </div>
+                                        <ul class="nav">
+                                            <li class="nav-link pointer-content" style="width: 95%"
+                                                v-for="(task,index) in allTasksInfo" :key="index"
+                                                v-show="task.title.indexOf(searchKeyWord) > -1"
+                                                @click="selectResource('tasks', task.id)">{{ task.title }}
+                                                <span class="float-right"
+                                                      v-show="linkageSelectedIds.tasks.indexOf(task.id) > -1">
+                                                    <i class="md-check"></i>
+                                                </span>
+                                            </li>
+                                        </ul>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="modal-footer">
+                        <button class="btn btn-sm btn-white btn-pure" data-dismiss="modal">取消</button>
+                        <button class="btn btn-primary" type="submit" @click="addLinkageResource">确定</button>
                     </div>
                 </div>
             </div>
@@ -1205,12 +1282,22 @@
                 },
                 scheduleShow:[],
                 contractType:'bloggers',
-                formDate:{},
+                formDate:'',
                 priorityArr:config.priorityArr,
                 platformDate:'',
                 scoreId:'',
                 artistProjectsInfo:'',
-                isShowPrivacy:false
+                isShowPrivacy:false,
+                allProjectsInfo:'',
+                searchKeyWord: '',
+                allTasksInfo:'',
+                isScheduleAllday: 0,
+                scheduleRepeat:0,
+                scheduleCalendar:'',
+                toastShow: false,
+                toastX: 0,
+                toastY: 0,
+                scheduleRemind:''
             }
         },
         computed: {
@@ -1437,6 +1524,31 @@
                 })
                 
             },
+             selectProjectLinkage: function (value) {
+                this.linkageResource = value;
+                if (!this.allProjectsInfo) {
+                    this.getAllProjects()
+                }
+                if (!this.allTasksInfo) {
+                    this.getAllTasks()
+                }
+            },
+            changeScheduleRemind: function (value) {
+                this.scheduleRemind = value;
+            },
+            getAllProjects: function () {
+                fetch('get', '/projects/all').then(response => {
+                    this.allProjectsInfo = response.data
+                })
+            },
+            getAllTasks: function () {
+                fetch('get', '/tasksAll').then(response => {
+                    this.allTasksInfo = response.data
+                })
+            },
+            addLinkageResource: function () {
+                $('#addLinkage').modal('hide');
+            },
             ScheduleBox: function(value){
                 this.showScheduleModal(value)
             },
@@ -1475,7 +1587,9 @@
                     start_at: startTime,
                     end_at: endTime,
                     repeat: this.scheduleRepeat,
-                    desc: this.eventDesc
+                    desc: this.eventDesc,
+                    remind: this.scheduleRemind
+
                 };
                 if (this.eventPlace) {
                     data.position = this.eventPlace;
@@ -1500,6 +1614,7 @@
                     this.$refs.calendar.refresh();
                     $('#changeSchedule').modal('hide');
                     toastr.success('添加成功')
+                    this.initAddScheduleModal()
                 })
             },
             showScheduleModal: function (schedule) {
@@ -1627,6 +1742,7 @@
                     this.$refs.calendar.refresh();
                     $('#changeSchedule').modal('hide');
                     toastr.success('修改成功')
+                    this.initAddScheduleModal()
                 })
             },
              changeScheduleParticipants: function (value) {
@@ -1672,6 +1788,7 @@
                     this.$refs.scheduleEndMinute.setValue(endMinutes[0] + ':' + endMinutes[1]);
                     this.endTime = this.scheduleData.end_at.split(' ')[0];
                     this.endMinutes = endMinutes[0] + ':' + endMinutes[1];
+                    this.$refs.scheduleRemind.setValue(this.scheduleData.remind);
                     this.isAllday = this.scheduleData.is_allday;
                     this.eventDesc = this.scheduleData.desc;
                     this.eventPlace = this.scheduleData.position;
@@ -1739,6 +1856,7 @@
                 this.$refs.scheduleResource.setValue('');
                 this.$refs.scheduleRepeat.setValue('0');
                 this.$refs.scheduleNotice.setValue('0');
+                this.$refs.scheduleRemind.setValue('0');
             },
             changeScheduleRepeat: function (value) {
                 this.scheduleRepeat = value;
@@ -2192,7 +2310,7 @@
             }
             ,
             changeStartMinutes: function (value) {
-                this.startTaskMinutes = value
+                this.startMinutes = value
             }
             ,
             changeEndTime: function (value) {
@@ -2200,7 +2318,7 @@
             }
             ,
             changeEndMinutes: function (value) {
-                this.endTaskMinutes = value
+                this.endMinutes = value
             }
             ,
             //视频时间
@@ -2469,11 +2587,6 @@
         top: 0px;
         left: 0px;
         opacity: 0;
-    }
-    .fixed-button {
-        position: absolute;
-        bottom: 45px;
-        right: 0;
     }
 
     .calendar-toast {
