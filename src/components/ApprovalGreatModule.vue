@@ -135,7 +135,7 @@
                 if (this.defaultValue) {
                     for (const key in this.defaultValue) {
                         if (this.moduleInfo.find(item => item[0].control_title === key)) {
-                            this.moduleInfo.find(item=>item[0].control_title === key)[0].control_value ={id:1082168698,value:this.defaultValue[key]}
+                            this.moduleInfo.find(item=>item[0].control_title === key)[0].control_value ={id:1082168698,title:this.defaultValue[key]}
                         }
                     }
                 }
