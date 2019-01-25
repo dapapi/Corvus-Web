@@ -77,7 +77,7 @@
                     </div> -->
                     <div class="tab-pane animation-fade active" id="forum-blogger" role="tabpanel">
                         <div class="clearfix my-20">
-                            <div class="col-md-3 example float-left">
+                            <!-- <div class="col-md-3 example float-left">
                                 <input type="text" class="form-control"  placeholder="请输入合同编号"
                                        v-model="blogName" >
                             </div>
@@ -93,7 +93,7 @@
                             <div class="col-md-3 example float-left">
                                 <selectors  @change="CommunicationStatus"
                                            placeholder="请选择Talent"></selectors>
-                            </div>
+                            </div> -->
                             <!-- <div class="col-md-3 example float-left">
                                 <button type="button" class="btn btn-default waves-effect waves-classic float-right"
                                 data-toggle="modal" data-target="#customizeContent"
