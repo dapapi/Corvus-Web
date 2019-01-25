@@ -112,13 +112,13 @@
                                      v-for="(item, index) in detailData" :key="index" style='align-item:center'>
                                     <div class="col-md-4 float-left text-right detail-key mx-0 noselect" v-if="(item.key !== '提示：若艺人选择用工作室与我司签约，则输入工作室名称，否则不用输入')">{{item.key}}
                                     </div>
-                                    {{item.values.data.value}}
+
                                     <div class="col-md-8 float-left detail-value"
-                                         v-if="item.values && !item.values.data.value.includes('http') && (item.key !== '提示：若艺人选择用工作室与我司签约，则输入工作室名称，否则不用输入')">{{(item.values
+                                         v-if="item.values && !String(item.values.data.value).includes('http') && (item.key !== '提示：若艺人选择用工作室与我司签约，则输入工作室名称，否则不用输入')">{{(item.values
                                         && item.values.data.value) || ''}}
                                     </div>
                                     <div class="col-md-8 float-left detail-value"
-                                         v-if="item.values && item.values.data.value.includes('http')"
+                                         v-if="item.values && String(item.values.data.value).includes('http')"
                                          @click='previewHandler(item.values.data.value)'>
                                         <figure style="text-align:center" class="float-left"> 
                                             <img src="@/assets/img/attachment.png" alt="" style="width:20px">
