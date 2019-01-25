@@ -1282,7 +1282,7 @@
                 },
                 scheduleShow:[],
                 contractType:'bloggers',
-                formDate:{},
+                formDate:'',
                 priorityArr:config.priorityArr,
                 platformDate:'',
                 scoreId:'',
@@ -1293,7 +1293,10 @@
                 allTasksInfo:'',
                 isScheduleAllday: 0,
                 scheduleRepeat:0,
-                scheduleCalendar:''
+                scheduleCalendar:'',
+                toastShow: false,
+                toastX: 0,
+                toastY: 0,
             }
         },
         computed: {
@@ -1564,10 +1567,10 @@
                         let startMinutesArr = this.startMinutes.split(':');
                         let endMinutesArr = this.endMinutes.split(':');
                         if (startMinutesArr[0] === endMinutesArr[0]) {
-                            // if ((Number(endMinutesArr[1]) - Number(startMinutesArr[1])) < 30) {
-                            //     toastr.error('日程时间不能小于30分钟');
-                            //     return
-                            // }
+                            if ((Number(endMinutesArr[1]) - Number(startMinutesArr[1])) < 30) {
+                                toastr.error('日程时间不能小于30分钟');
+                                return
+                            }
 
                         }
                     }
