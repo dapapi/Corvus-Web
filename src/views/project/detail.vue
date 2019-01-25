@@ -749,6 +749,14 @@
                                                 </div>
                                             </div>
                                             <div class="card-text py-10 px-0 clearfix col-md-6 float-left ">
+                                                <div class="col-md-3 float-left text-right pl-0">开始时间</div>
+                                                <div class="col-md-9 float-left font-weight-bold">
+                                                    <EditDatepicker :is-edit="isEdit"
+                                                                    :content="projectInfo.start_at"
+                                                                    @change="(value) => changeProjectBaseInfo(value, 'start_at')"></EditDatepicker>
+                                                </div>
+                                            </div>
+                                            <div class="card-text py-10 px-0 clearfix col-md-6 float-left ">
                                                 <div class="col-md-3 float-left text-right pl-0">截止时间</div>
                                                 <div class="col-md-9 float-left font-weight-bold">
                                                     <EditDatepicker :is-edit="isEdit"
