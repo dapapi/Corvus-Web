@@ -130,7 +130,7 @@
                             <template v-if="field.field_type === 8">
                                 <GroupDatepicker
                                         :default='newArray.find(item=>item.id === field.id)'
-                                        @change="(from, to) => addInfo(from + '|' + to, field.id )"></GroupDatepicker>
+                                        @change="(from, to) => addInfo(from + ' | ' + to, field.id )"></GroupDatepicker>
                             </template>
                             <template v-if="field.field_type === 10">
                                 <InputSelectors :default='newArray.find(item=>item.id === field.id)'

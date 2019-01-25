@@ -98,39 +98,55 @@
                             </div>
                         </div>
                         <div class="col-md-6 float-left pl-0 px-0" v-if="projectInfo.type != 5">
-                            <div class="mb-20 float-left clearfix col-md-6 pl-0"
-                                 v-if="projectInfo.trail && projectInfo.trail.data.fee !== 'privacy'">
+                            <div class="mb-20 float-left clearfix col-md-6 pl-0">
                                 <div class="float-left col-md-5 px-0"><i class="iconfont icon-renminbi1688  pr-2"></i>预计订单收入
                                 </div>
                                 <div class="float-left col-md-7">
-                                    {{ (projectInfo.trail && projectInfo.trail.data.fee) ? projectInfo.trail.data.fee :
-                                    0 }}元
+                                    <template v-if="projectInfo.trail && projectInfo.trail.data.fee === 'privacy'">
+                                        **元
+                                    </template>
+                                    <template v-else>
+                                        {{ (projectInfo.trail && projectInfo.trail.data.fee) ?
+                                        projectInfo.trail.data.fee : 0 }}元
+                                    </template>
                                 </div>
                             </div>
-                            <div class="mb-20 float-left clearfix col-md-6 pl-0"
-                                 v-if="projectInfo.projected_expenditure !== 'privacy'">
+                            <div class="mb-20 float-left clearfix col-md-6 pl-0">
                                 <div class="float-left col-md-5 px-0 pt-3"><i
                                         class="iconfont icon-renminbi1688  pr-2"></i>预计支出
                                 </div>
                                 <div class="float-left col-md-7">
-                                    {{ projectInfo.projected_expenditure ? projectInfo.projected_expenditure : 0 }}元
+                                    <template v-if="projectInfo.projected_expenditure === 'privacy'">
+                                        **元
+                                    </template>
+                                    <template v-else>
+                                        {{ projectInfo.projected_expenditure ? projectInfo.projected_expenditure : 0 }}元
+                                    </template>
                                 </div>
                             </div>
-                            <div class="mb-20 float-left clearfix col-md-6 pl-0"
-                                 v-if="projectInfo.contractmoney !== 'privacy'">
+                            <div class="mb-20 float-left clearfix col-md-6 pl-0">
                                 <div class="float-left col-md-5 px-0"><i class="iconfont icon-renminbi1688  pr-2"></i>实际收入
                                 </div>
                                 <div class="float-left col-md-7">
-                                    {{ metaInfo.contractmoney ? metaInfo.contractmoney : 0 }}元
+                                    <template v-if="metaInfo.contractmoney === 'privacy'">
+                                        **元
+                                    </template>
+                                    <template v-else>
+                                        {{ metaInfo.contractmoney ? metaInfo.contractmoney : 0 }}元
+                                    </template>
                                 </div>
                             </div>
-                            <div class="mb-20 float-left clearfix col-md-6 pl-0"
-                                 v-if="projectInfo.expendituresum !== 'privacy'">
+                            <div class="mb-20 float-left clearfix col-md-6 pl-0">
                                 <div class="float-left col-md-5 px-0 pt-3"><i
                                         class="iconfont icon-renminbi1688  pr-2"></i>实际支出
                                 </div>
                                 <div class="float-left col-md-7">
-                                    {{ metaInfo.expendituresum ? metaInfo.expendituresum : 0 }}元
+                                    <template v-if="metaInfo.expendituresum === 'privacy'">
+                                        **元
+                                    </template>
+                                    <template v-else>
+                                        {{ metaInfo.expendituresum ? metaInfo.expendituresum : 0 }}元
+                                    </template>
                                 </div>
                             </div>
                         </div>
@@ -400,7 +416,14 @@
                                     <div class="float-left col-md-2 text-right" style="padding: .715rem 0">
                                         <span class="pointer-content hover-content" data-toggle="modal"
                                               data-target="#addBill">
-                                            <i class="iconfont icon-tianjia pr-5"></i>新增结算单</span>
+                                            <template
+                                                    v-if="projectBillMetaInfo.divide && projectBillMetaInfo.divide.length === 0">
+                                                <i class="iconfont icon-tianjia pr-5"></i>新增结算单
+                                            </template>
+                                            <template v-else>
+                                                <i class="iconfont icon-bianji2 pr-5"></i>修改结算单
+                                            </template>
+                                        </span>
                                     </div>
                                 </div>
                                 <table class="table table-hover" data-child="tr">
@@ -1382,7 +1405,12 @@
                         <button type="button" class="close" aria-hidden="true" data-dismiss="modal">
                             <i class="iconfont icon-guanbi" aria-hidden="true"></i>
                         </button>
-                        <h4 class="modal-title">新增结算单</h4>
+                        <template v-if="projectBillMetaInfo.divide && projectBillMetaInfo.divide.length === 0">
+                            <h4 class="modal-title">新增结算单</h4>
+                        </template>
+                        <template v-if="">
+                            <h4 class="modal-title">修改结算单</h4>
+                        </template>
                     </div>
                     <div class="modal-body">
                         <div class="example">
@@ -1406,7 +1434,13 @@
                     </div>
                     <div class="modal-footer">
                         <button class="btn btn-sm btn-white btn-pure" data-dismiss="modal">取消</button>
-                        <button class="btn btn-primary" type="submit" @click="">确定</button>
+                        <template
+                                v-if="projectBillMetaInfo.divide && projectBillMetaInfo.divide.length === 0">
+                            <button class="btn btn-primary" type="submit" @click="addProjectBill">确定</button>
+                        </template>
+                        <template v-else>
+                            <button class="btn btn-primary" type="submit" @click="changeProjectBill">确定</button>
+                        </template>
                     </div>
                 </div>
             </div>
@@ -1594,45 +1628,48 @@
             this.getProjectTasking();
             this.getProjectProgress();
             this.user = JSON.parse(Cookies.get('user'));
-            let _this = this;
-            $('#addPaybackTime').on('hidden.bs.modal', function () {
-                _this.projectReturnDesc = '';
-                _this.$refs.paybackMoney.setValue('0');
-                _this.$refs.paybackTime.setValue();
-                _this.projectReturnData = {};
+            $('#addPaybackTime').on('hidden.bs.modal', () => {
+                this.projectReturnDesc = '';
+                this.$refs.paybackMoney.setValue('0');
+                this.$refs.paybackTime.setValue();
+                this.projectReturnData = {};
             });
 
-            $('#addPayback').on('hidden.bs.modal', function () {
-                _this.$refs.paybackMoney1.setValue('0');
-                _this.$refs.paybackTime1.setValue();
-                _this.$refs.payMethod.setValue();
-                _this.projectReturnData = {};
+            $('#addPayback').on('hidden.bs.modal', () => {
+                this.$refs.paybackMoney1.setValue('0');
+                this.$refs.paybackTime1.setValue();
+                this.$refs.payMethod.setValue();
+                this.projectReturnData = {};
             });
 
-            $('#addInvoice').on('hidden.bs.modal', function () {
-                _this.$refs.paybackMoney2.setValue('0');
-                _this.$refs.paybackTime2.setValue();
-                _this.$refs.payMethod1.setValue();
-                _this.projectReturnData = {};
+            $('#addInvoice').on('hidden.bs.modal', () => {
+                this.$refs.paybackMoney2.setValue('0');
+                this.$refs.paybackTime2.setValue();
+                this.$refs.payMethod1.setValue();
+                this.projectReturnData = {};
             });
 
-            $('#addTask').on('hidden.bs.modal', function () {
-                _this.taskName = '';
-                _this.taskLevel = '';
-                _this.$refs.taskLevel.setValue('');
-                _this.taskType = '';
-                _this.$refs.taskType.setValue('');
-                _this.startTime = '';
-                _this.endTime = '';
-                _this.startMinutes = '';
-                _this.endMinutes = '';
-                _this.taskIntroduce = '';
-                _this.$refs.startTime.setValue('');
-                _this.$refs.startMinutes.setValue('00:00');
-                _this.$refs.endTime.setValue('');
-                _this.$refs.endMinutes.setValue('00:00');
-                _this.$store.commit('changeNewPrincipal', {});
-                _this.$store.commit('changeNewParticipantsInfo', [])
+            $('#addBill').on('hidden.bs.modal', () => {
+                this.cancelChangeBill();
+            });
+
+            $('#addTask').on('hidden.bs.modal', () => {
+                this.taskName = '';
+                this.taskLevel = '';
+                this.$refs.taskLevel.setValue('');
+                this.taskType = '';
+                this.$refs.taskType.setValue('');
+                this.startTime = '';
+                this.endTime = '';
+                this.startMinutes = '';
+                this.endMinutes = '';
+                this.taskIntroduce = '';
+                this.$refs.startTime.setValue('');
+                this.$refs.startMinutes.setValue('00:00');
+                this.$refs.endTime.setValue('');
+                this.$refs.endMinutes.setValue('00:00');
+                this.$store.commit('changeNewPrincipal', {});
+                this.$store.commit('changeNewParticipantsInfo', [])
             })
         },
 
@@ -1848,9 +1885,8 @@
 
             getProjectBill: function () {
                 fetch('get', '/projects/' + this.projectId + '/bill').then(response => {
-                    console.log(response)
                     this.projectBillsInfo = response.data;
-                    this.projectBillMetaInfo = response.meta;
+                    this.projectBillMetaInfo = JSON.parse(JSON.stringify(response.meta));
                     this.total = response.meta.pagination.total;
                     this.current_page = response.meta.pagination.current_page;
                     this.total_pages = response.meta.pagination.total_pages;
@@ -1866,6 +1902,44 @@
                         }
                     }
                 });
+            },
+
+            addProjectBill: function () {
+                let data = {
+                    expenses: this.billExpenses,
+                    my_divide: this.myDivide,
+                    star: this.divideArrInfo,
+                };
+                fetch('post', '/projects/' + this.projectId + '/store/bill', data).then(() => {
+                    this.getProjectBill();
+                    toastr.success('添加成功');
+                })
+            },
+
+            changeProjectBill: function () {
+                let data = {
+                    expenses: this.billExpenses,
+                    my_divide: this.myDivide,
+                    star: this.divideArrInfo,
+                };
+                fetch('put', '/', data).then(() => {
+                    this.getProjectBill();
+                    toastr.success('修改成功');
+                })
+            },
+
+            cancelChangeBill: function () {
+                this.myDivide = this.projectBillMetaInfo.my_divide;
+                this.billExpenses = this.projectBillMetaInfo.expenses;
+                this.divideArrInfo = JSON.parse(JSON.stringify(this.projectBillMetaInfo.divide));
+                for (let i = 0; i < this.projectBillMetaInfo.datatitle.length; i++) {
+                    if (!this.divideArrInfo.find(item => item.moduleable_title === this.projectBillMetaInfo.datatitle[i])) {
+                        this.divideArrInfo.push({
+                            money: 0,
+                            moduleable_title: this.projectBillMetaInfo.datatitle[i]
+                        })
+                    }
+                }
             },
 
             getProjectContract: function (callback) {
