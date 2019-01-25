@@ -27,15 +27,15 @@
                     </div>
                     <div class="col-md-3 example float-left">
                         <selectors :options="publicTrailTakeType" @change="progressStatusFilter"
-                                   placeholder="请选择线索状态"></selectors>
+                                   placeholder="请选择领取状态"></selectors>
                     </div>
-                    <!--<div class="col-md-3 example float-left">-->
-                    <!--<button type="button" class="btn btn-default waves-effect waves-classic float-right"-->
-                    <!--data-toggle="modal" data-target="#customizeContent"-->
-                    <!--data-placement="right" title="">-->
-                    <!--自定义筛选-->
-                    <!--</button>-->
-                    <!--</div>-->
+                    <div class="col-md-3 example float-left">
+                    <button type="button" class="btn btn-default waves-effect waves-classic float-right"
+                    data-toggle="modal" data-target="#customizeContent"
+                    data-placement="right" title="">
+                    自定义筛选
+                    </button>
+                    </div>
                 </div>
 
                 <div class="col-md-12">
@@ -193,7 +193,7 @@
             }
         },
         created() {
-            // this.getField();
+            this.getField();
             this.getCurrentUser()
         },
         mounted() {
@@ -219,7 +219,7 @@
             getField() {
                 let _this = this
 
-                fetch('get', '/trails/filter_fields').then((params) => {
+                fetch('get', '/pool/filter_fields').then((params) => {
                     _this.customizeInfo = params.data
                 })
             },
@@ -349,6 +349,7 @@
                 fetch('post', '/trails/filter?include=principal,client,contact,recommendations,expectations', value).then((params) => {
                     _this.trailsInfo = params.data
                     _this.total = params.meta.pagination.total;
+                    _this.total_pages = params.meta.pagination.total_pages
                     _this.cleanUp = true
                 })
 

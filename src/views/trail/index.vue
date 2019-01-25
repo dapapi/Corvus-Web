@@ -155,7 +155,7 @@
                         <div class="example">
                             <div class="col-md-2 text-right float-left">推荐艺人</div>
                             <div class="col-md-10 float-left pl-0">
-                                <selectors :options="starsArr" @valuelistener="changeRecommendStars"
+                                <selectors :options="starsArr" @change="changeRecommendStars"
                                            :multiple="true"></selectors>
                             </div>
                         </div>
@@ -510,6 +510,8 @@
                 fetch('post', '/trails/filter?include=principal,client,contact,recommendations,expectations', value).then((params) => {
                     _this.trailsInfo = params.data
                     _this.total = params.meta.pagination.total;
+                    _this.total_pages = params.meta.pagination.total_pages;
+                    _this.current_page = params.meta.pagination.current_page
                     _this.cleanUp = true
                 })
 
@@ -541,7 +543,7 @@
                     data.principal_id = this.$store.state.otherSlot.data.id
                 }
                 if (this.trailType != 4) {
-                    //    todo 添加线索状态
+                    data.status = this.trailStatus
                 }
                 if (this.trailOrigin == 1 || this.trailOrigin == 2 || this.trailOrigin == 3) {
                     data.resource = this.email

@@ -202,7 +202,7 @@
                                 <div class="col-md-12">
                                     <calendar v-if="artistInfo.sign_contract_status == 2" :goto-date="selectedDate"
                                               :calendars="calendarId" ref="calendar" 
-                                              :isModel="true" 
+                                              :isModel="true" @showToast="showToast"
                                               @scheduleClick="showScheduleModal"
                                               @dayClick="showAddScheduleModal"></calendar>
                                 </div>
@@ -612,6 +612,10 @@
 
         </div>
 
+        <div class="calendar-toast" v-show="toastShow"
+             :style="'position: absolute;top:' + toastY + 'px; left: ' + toastX + 'px;'">双击创建日程
+        </div>
+
         <div class="modal fade" id="addTask" aria-hidden="true" aria-labelledby="addLabelForm"
              role="dialog" tabindex="-1" data-backdrop="static">
             <div class="modal-dialog modal-simple">
@@ -907,7 +911,7 @@
                             <div class="example">
                                 <div class="col-md-2 text-right float-left">提醒</div>
                                 <div class="col-md-10 float-left pl-0">
-                                    <selectors :options="remindArr" ref="scheduleNotice"></selectors>
+                                    <selectors :options="remindArr" ref="scheduleRemind" @change="changeScheduleRemind"></selectors>
                                 </div>
                             </div>
                             <div class="clearfix my-20">
@@ -1278,7 +1282,7 @@
                 },
                 scheduleShow:[],
                 contractType:'bloggers',
-                formDate:{},
+                formDate:'',
                 priorityArr:config.priorityArr,
                 platformDate:'',
                 scoreId:'',
@@ -1289,7 +1293,11 @@
                 allTasksInfo:'',
                 isScheduleAllday: 0,
                 scheduleRepeat:0,
-                scheduleCalendar:''
+                scheduleCalendar:'',
+                toastShow: false,
+                toastX: 0,
+                toastY: 0,
+                scheduleRemind:''
             }
         },
         computed: {
@@ -1461,7 +1469,6 @@
                         
                         if(item.title == '视频评分'){
                            _this.scoreId = item.id 
-                           console.log(_this.scoreId)
                         }
                     })
                 })
@@ -1485,7 +1492,6 @@
             },
             //上传头像 ---修改头像
             getUploadUrl(res) {
-                console.log(res)
                 let _this = this
                 if(!this.isEdit) {
                     this.changeArtistInfo = {}
@@ -1526,6 +1532,9 @@
                 if (!this.allTasksInfo) {
                     this.getAllTasks()
                 }
+            },
+            changeScheduleRemind: function (value) {
+                this.scheduleRemind = value;
             },
             getAllProjects: function () {
                 fetch('get', '/projects/all').then(response => {
@@ -1605,10 +1614,10 @@
                     this.$refs.calendar.refresh();
                     $('#changeSchedule').modal('hide');
                     toastr.success('添加成功')
+                    this.initAddScheduleModal()
                 })
             },
             showScheduleModal: function (schedule) {
-                console.log(schedule)
                 let data = {
                     include: 'calendar,participants,creator,material,affixes,project,task',
                 };
@@ -1624,6 +1633,14 @@
                     this.$store.dispatch('changeParticipantsInfo', {data: response.data.participants.data});
                 });
                 $('#checkSchedule').modal('show')
+            },
+            showToast: function (clientX, clientY) {
+                this.toastX = clientX - 100;
+                this.toastY = clientY - 25;
+                this.toastShow = true;
+                setTimeout(() => {
+                    this.toastShow = false
+                }, 1000)
             },
              changeIsAllDay: function (e) {
                 this.isScheduleAllday = Number(e.target.checked);
@@ -1725,6 +1742,7 @@
                     this.$refs.calendar.refresh();
                     $('#changeSchedule').modal('hide');
                     toastr.success('修改成功')
+                    this.initAddScheduleModal()
                 })
             },
              changeScheduleParticipants: function (value) {
@@ -1770,6 +1788,7 @@
                     this.$refs.scheduleEndMinute.setValue(endMinutes[0] + ':' + endMinutes[1]);
                     this.endTime = this.scheduleData.end_at.split(' ')[0];
                     this.endMinutes = endMinutes[0] + ':' + endMinutes[1];
+                    this.$refs.scheduleRemind.setValue(this.scheduleData.remind);
                     this.isAllday = this.scheduleData.is_allday;
                     this.eventDesc = this.scheduleData.desc;
                     this.eventPlace = this.scheduleData.position;
@@ -1837,6 +1856,7 @@
                 this.$refs.scheduleResource.setValue('');
                 this.$refs.scheduleRepeat.setValue('0');
                 this.$refs.scheduleNotice.setValue('0');
+                this.$refs.scheduleRemind.setValue('0');
             },
             changeScheduleRepeat: function (value) {
                 this.scheduleRepeat = value;
@@ -1886,7 +1906,6 @@
                 let _this = this;
                 fetch('get', '/bloggers/' + this.artistId+'/tasks').then(function (response) {
                     _this.alltaskshow = response.data
-                    console.log( response.data)
                     _this.current_page = response.meta.pagination.current_page;
                     _this.total = response.meta.pagination.total;
                     _this.total_pages = response.meta.pagination.total_pages;
@@ -2121,7 +2140,6 @@
                 }
             },
             changeWorkAd: function (value) {
-                console.log(value)
                 if (value == 1) {
                     this.advertisingType = 1
                 } 
@@ -2574,5 +2592,12 @@
         position: absolute;
         bottom: 45px;
         right: 0;
+    }
+
+    .calendar-toast {
+        background: #f5f5f5;
+        padding: 2px 3px;
+        border-radius: 2px;
+        z-index: 1000;
     }
 </style>

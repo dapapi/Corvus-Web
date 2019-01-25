@@ -72,13 +72,13 @@
                             <div class="col-md-3 example float-left">
                                 <selectors :options="signState" placeholder="请选择签约状态" @change="getSource"></selectors>
                             </div>
-                            <div class="col-md-3 example float-left">
+                            <!-- <div class="col-md-3 example float-left">
                             <button type="button" class="btn btn-default waves-effect waves-classic float-right"
                             data-toggle="modal" data-target="#customizeContent" @click='customizeContentType="stars"'
                             data-placement="right" title="">
                             自定义筛选
                             </button>
-                            </div>
+                            </div> -->
                         </div>
                         <table class="table table-hover is-indent ml-5" data-plugin="selectable"
                                data-selectable="selectable">
@@ -199,13 +199,13 @@
                             <div class="col-md-3 example float-left">
                                 <selectors :options="signState" @change="typeFilter" placeholder="请选择签约状态"></selectors>
                             </div>
-                            <div class="col-md-3 example float-left">
+                            <!-- <div class="col-md-3 example float-left">
                                 <button type="button" class="btn btn-default waves-effect waves-classic float-right"
                                 data-toggle="modal" data-target="#customizeContent" @click='customizeContentType="bloggers"'
                                 data-placement="right" title="">
                                 自定义筛选
                                 </button>
-                            </div>
+                            </div> -->
                         </div>
                         <table class="table table-hover is-indent ml-5" data-plugin="selectable"
                                data-selectable="selectable">

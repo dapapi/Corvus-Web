@@ -198,5 +198,12 @@
 
 <style>
 
+    .fc-button.fc-state-active, .fc-button.fc-state-hover {
+        background-color: #e5e5e5;
+    }
+
+    .fc-button.fc-prev-button, .fc-button.fc-next-button {
+        background-color: #fff;
+    }
 
 </style>

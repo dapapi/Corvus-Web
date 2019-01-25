@@ -38,7 +38,9 @@ export default {
         }
     },
     watch:{
-       
+       defaultDate:function(value){
+           this.change(value)
+       }
     }
 }
 </script>

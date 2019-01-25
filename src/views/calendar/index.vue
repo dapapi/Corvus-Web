@@ -333,10 +333,10 @@
                             <div class="col-md-10 pl-0 float-left">
                                 <div class="pb-5" v-if="scheduleData.project"
                                      v-for="project in scheduleData.project.data">
-                                    <span>项目 - {{ project.title }}</span>
+                                    <span class="pointer-content" @click="redirectProject(project.moduleable_id)">项目 - {{ project.title }}</span>
                                 </div>
                                 <div class="pb-5" v-if="scheduleData.task" v-for="task in scheduleData.task.data">
-                                    <span>任务 - {{ task.title }}</span>
+                                    <span class="pointer-content" @click="redirectTask(task.moduleable_id)">任务 - {{ task.title }}</span>
                                 </div>
                             </div>
                         </div>
@@ -648,6 +648,7 @@
                 toastY: 0,
                 toastShow: false,
                 scheduleRemind: '',
+                userInfo: '',
             }
         },
 
@@ -686,6 +687,7 @@
             this.initCalendar();
             let pageContent = $('.container-fluid');
             $('.vertical-line').css('height', (pageContent[0].offsetHeight - 60) + 'px');
+            this.userInfo = JSON.parse(Cookies.get('user'));
         },
 
         watch: {
@@ -840,6 +842,16 @@
                 window.open(url)
             },
 
+            redirectProject: function (projectId) {
+                $('#checkSchedule').modal('hide');
+                this.$router.replace({path: '/projects/' + projectId});
+            },
+
+            redirectTask: function (taskId) {
+                $('#checkSchedule').modal('hide');
+                this.$router.replace({path: '/tasks/' + taskId});
+            },
+
             selectProjectLinkage: function (value) {
                 this.linkageResource = value;
                 if (!this.allProjectsInfo) {
@@ -950,20 +962,17 @@
             },
 
             showScheduleModal: function (schedule) {
-                console.log(schedule)
                 let data = {
                     include: 'calendar,participants,creator,material,affixes,project,task',
                 };
                 fetch('get', '/schedules/' + schedule.id, data).then(response => {
                     if (!response) {
                         this.scheduleData = schedule;
-                        console.log(this.scheduleData)
                         this.noPermission = true;
                         return
                     }
                     this.noPermission = false;
                     this.scheduleData = response.data;
-                       console.log(this.scheduleData)
                     if (this.scheduleData.privacy) {
                         this.schedulePrivacy = true
                     }
@@ -980,6 +989,12 @@
             showAddScheduleModal: function (date) {
                 this.$refs.scheduleStartDate.setValue(date);
                 this.$refs.scheduleEndDate.setValue(date);
+                this.$store.dispatch('changeParticipantsInfo', {
+                    data: [{
+                        icon_url: this.userInfo.avatar,
+                        id: this.userInfo.id
+                    }]
+                });
                 this.startTime = date;
                 this.endTime = date;
                 $('#changeSchedule').modal('show')
@@ -1060,7 +1075,7 @@
                 let data = {
                     title: this.scheduleName,
                     calendar_id: this.scheduleCalendar,
-                    is_allday: this.isScheduleAllday,
+                    is_allday: Number(this.isScheduleAllday),
                     privacy: Number(this.schedulePrivacy),
                     start_at: startTime,
                     end_at: endTime,
@@ -1151,7 +1166,7 @@
                 let data = {
                     title: this.scheduleName,
                     calendar_id: this.scheduleCalendar,
-                    is_allday: this.isScheduleAllday,
+                    is_allday: Number(this.isScheduleAllday),
                     privacy: Number(this.schedulePrivacy),
                     start_at: startTime,
                     end_at: endTime,

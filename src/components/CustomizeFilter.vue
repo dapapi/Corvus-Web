@@ -11,9 +11,9 @@
                 </div>
                 <div class="modal-body">
 
-                    <h5>筛选关键字</h5>
+                    <!-- <h5>筛选关键字</h5>
                     <input type="text" class="form-control" id="inputPlaceholder" placeholder="输入筛选名称"
-                           v-model="customizeKeyWords">
+                           v-model="customizeKeyWords"> -->
 
                     <h5>筛选条件</h5>
                     <div v-for="n in conditionLength" class="clearfix" :key="n">

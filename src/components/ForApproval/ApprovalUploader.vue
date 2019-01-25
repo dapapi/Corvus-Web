@@ -9,16 +9,16 @@
             <input type="file" @change="uploadFile" />
         </div>
     </div> -->
-    <div class="upload col-md-12">
+    <div class="upload col-md-12 px-0">
         <div class="col-md-2 text-right" :class="consdata[0].required===1?'require':''">{{consdata[0].control_title}}</div>
         <div class="image-show">
-            <figure v-for="(item, index) in fileInfo" :key="index" style="margin-right:0px;">
+            <figure v-for="(item, index) in fileInfo" :key="index" style="margin-right:0px;" class="">
             <!-- <div class="image-show" v-if="fileInfo.length > 0" style="backgroundImage:url(../../../assets/img/attachment.png)"></div> -->
             <figure style="text-align:center;margin-top:30px;" class="attachdetail"> 
                 <img src="@/assets/img/attachment.png" alt="" style="width:40px">
                 <p>{{item.fileName}}</p>
                 <div class="img-control">
-                    <hr>
+                    <!-- <hr> -->
                     <div class="icon-control">
                         <a :href="item.fileUrl" target="_blank">
                             <i class="iconfont icon-download"></i>
@@ -167,9 +167,12 @@ export default {
 a:hover, a:visited, a:link, a:active {
     text-decoration: none;
 }
+p{
+    margin-bottom: 0 !important;
+}
 .icon-control{
     display: flex;
-    justify-content: space-between;
+    justify-content: space-around;
     padding: 0 5px 0 5px;
 }
 .upload-text{

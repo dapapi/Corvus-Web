@@ -1,13 +1,13 @@
 <template>
     <div class="upload col-md-12 pl-0 ">
         <div class="col-md-2 text-right pl-0" :class="consdata[0].required===1?'require':''">{{consdata[0].control_title}}</div>
-        <figure v-for="(item, index) in fileInfo" :key="index" style="margin-right:0px;">
+        <figure v-for="(item, index) in fileInfo" :key="index" style="margin-right:0px;" class="ml-10">
             <!-- <div class="image-show" v-if="fileInfo.length > 0" style="backgroundImage:url(../../../assets/img/attachment.png)"></div> -->
             <figure style="text-align:center;margin-top:30px;" class="attachdetail"> 
                 <img src="@/assets/img/attachment.png" alt="" style="width:40px">
                 <p>{{item.fileName}}</p>
                 <div class="img-control">
-                    <hr>
+                    <!-- <hr> -->
                     <div class="icon-control">
                         <a :href="item.fileUrl" target="_blank">
                             <i class="iconfont icon-liulan"></i>
@@ -153,6 +153,7 @@ export default {
 <style lang="scss" scoped>
 p{
     text-align: center;
+    margin-bottom: 0 !important;
 }
 figure{
 
@@ -163,7 +164,7 @@ figure{
 // }
 .icon-control{
     display: flex;
-    justify-content: space-between;
+    justify-content: space-around;
     padding: 0 5px 0 5px;
 }
 .image-show{

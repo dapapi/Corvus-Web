@@ -130,7 +130,7 @@
                             <template v-if="field.field_type === 8">
                                 <GroupDatepicker
                                         :default='newArray.find(item=>item.id === field.id)'
-                                        @change="(from, to) => addInfo(from + '|' + to, field.id )"></GroupDatepicker>
+                                        @change="(from, to) => addInfo(from + ' | ' + to, field.id )"></GroupDatepicker>
                             </template>
                             <template v-if="field.field_type === 10">
                                 <InputSelectors :default='newArray.find(item=>item.id === field.id)'
@@ -178,8 +178,8 @@
             ApprovalProgress
         },
         name: "BuildProject",
-        //projectType 项目类型   projectFieldsArr 不同项目类型的数据   
-        props: ['projectType', 'projectFieldsArr', 'defaultData'],
+            //projectType 项目类型   projectFieldsArr 不同项目类型的数据   
+        props: ['projectType', 'projectFieldsArr', 'defaultData','mode'],
         data() {
             return {
                 visibleRangeArr: config.visibleRangeArr,
@@ -224,7 +224,6 @@
         },
 
         created() {
-            this.getTrail()
             this.getStars();
         },
         mounted() {
@@ -232,6 +231,7 @@
             this.setDefaultValue()
             this.defaultDataFilter()
             $('#addProject').on('hidden.bs.modal', function () {
+                
                 _this.refreshAddProjectModal()
             });
             $('#addProject').on('show.bs.modal', function () {
@@ -258,6 +258,7 @@
                     return
                 }
                 this.newArray = this.defaultData.fields.filter((params) => {
+                    console.log(params.hasOwnProperty('values'));
                     return params.hasOwnProperty('values')
                 })
             },
@@ -307,8 +308,11 @@
                 });
                 this.projectBaseInfo.principal_id = trailInfo.principal.data.id;
                 let artistsArr = [];
-                for (let i = 0; i < trailInfo.expectations.data.length; i++) {
-                    artistsArr.push(trailInfo.expectations.data[i].id)
+                for (let i = 0; i < trailInfo.starexpectations.data.length; i++) {
+                    artistsArr.push(trailInfo.starexpectations.data[i].flag + '-' +trailInfo.starexpectations.data[i].id)
+                }
+                for (let i = 0; i < trailInfo.bloggerexpectations.data.length; i++) {
+                    artistsArr.push(trailInfo.bloggerexpectations.data[i].flag + '-' +trailInfo.bloggerexpectations.data[i].id)
                 }
                 this.$refs.intentionArtist.setValue(artistsArr);
                 this.projectBaseInfo.expectations = artistsArr;
@@ -361,7 +365,7 @@
 
             getTrail: function () {
                 let data = {
-                    include: 'principal,expectations',
+                    include: 'principal,starexpectations,bloggerexpectations',
                     type: this.projectType
                 };
                 this.trailsArr = [];
