@@ -17,7 +17,23 @@
                 <i class="md-chevron-left" @click="goBack"></i>
                 <span class="mx-20" style='color:#000'>公告</span>
             </h1>
-             <i class="iconfont icon-shanchu1 mr-30"
+            <i class="iconfont icon-gengduo1" aria-hidden="true"
+            id="taskDropdown" data-toggle="dropdown" aria-expanded="false"  v-if="my_id === creator_id"></i>
+            <div class="dropdown-menu" aria-labelledby="taskDropdown" role="menu">
+                <a class="dropdown-item" role="menuitem" data-plugin="actionBtn" 
+            data-toggle="modal" 
+            data-target="#confirmFlag"
+            aria-hidden="true"
+            data-backdrop="static"
+            v-if="my_id === creator_id">删除</a>
+                <a class="dropdown-item" role="menuitem" data-plugin="actionBtn" 
+            data-toggle="modal" 
+            data-target="#addNewBroadcast"
+            aria-hidden="true"
+            data-backdrop="static"
+            v-if="my_id === creator_id">修改</a>
+            </div>
+             <!-- <i class="iconfont icon-shanchu1 mr-30"
             data-plugin="actionBtn" 
             data-toggle="modal" 
             data-target="#confirmFlag"
@@ -30,13 +46,13 @@
             data-target="#addNewBroadcast"
             aria-hidden="true"
             data-backdrop="static"
-            v-if="my_id === creator_id"></i>
+            v-if="my_id === creator_id"></i> -->
         </div> 
         <div class="page-content container-fluid">
             <div class="panel" id="">
                 <div class="panel-body">
                     <h4 class="pt-20 pb-12">{{currentData.title}}</h4>
-                    <div class="" v-if="currentData.creator" style='display:flex'>
+                    <div class="" v-if="currentData.creator" style='display:flex;line-height:28px;'>
                         <div class="rounded-circle messages-img" 
                             :style="{ backgroundImage: 'url('+userList.find(item=>item.id === creator_id).icon_url+')'}">
                         </div>
@@ -185,8 +201,8 @@ margin-left: 6px;
 }
 .messages-img{
     display: inline-flex;
-    width: 24px;
-    height: 24px;
-    background-size: 24px 24px;
+    width: 28px;
+    height: 28px;
+    background-size: 28px 28px;
 }
 </style>
