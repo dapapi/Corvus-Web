@@ -209,7 +209,7 @@
                                          style="width: 100%">
                                 </div>
                                 <pagination :current_page="current_page" :method="getProject" :total_pages="total_pages"
-                                    :total="total" ></pagination>
+                                            :total="total"></pagination>
                             </div>
                             <!--任务-->
                             <div class="tab-pane animation-fade  fixed-button-father"
@@ -253,8 +253,9 @@
                                     <img src="https://res.papitube.com/corvus/images/content-none.png" alt=""
                                          style="width: 100%">
                                 </div>
-                                <pagination :current_page="current_page" :method="getTaskList" :total_pages="total_pages"
-                                    :total="total" ></pagination>
+                                <pagination :current_page="current_page" :method="getTaskList"
+                                            :total_pages="total_pages"
+                                            :total="total"></pagination>
                                 <div class="site-action fixed-button" data-plugin="actionBtn" data-toggle="modal"
                                      data-target="#addTask">
                                     <button type="button"
@@ -297,18 +298,9 @@
                                     <img src="https://res.papitube.com/corvus/images/content-none.png" alt=""
                                          style="width: 100%">
                                 </div>
-<<<<<<< HEAD
-<<<<<<< HEAD
-                                <pagination :current_page="current_page" :method="getTaskList"
-                                            :total_pages="total_pages"
-                                            :total="total" class="mb-30"></pagination>
-=======
-                                <pagination :current_page="current_page" :method="getTaskList" :total_pages="total_pages"
-=======
+
                                 <pagination :current_page="current_page" :method="getWoks" :total_pages="total_pages"
->>>>>>> hp
-                                    :total="total"></pagination>
->>>>>>> hp
+                                            :total="total"></pagination>
                                 <div class="site-action fixed-button" data-plugin="actionBtn" data-toggle="modal"
                                      data-target="#addWork">
                                     <button type="button"
@@ -1232,7 +1224,7 @@
                 taskIntroduce: '',
                 artistTasksInfo: [],//任务
                 artistWorksInfo: [],//作品库
-                artistProjectsInfo:'',//项目
+                artistProjectsInfo: '',//项目
                 artistWorkName: '', //作品名称
                 artistWorkDirector: '',//导演名称
                 artistBillsInfo: [],//账单
@@ -1391,34 +1383,34 @@
                     //         _this.artistProjectsInfo.push(response.data.trails.data[i].project.data)//项目数据
                     //     }
                     // }
-                  
-                   
+
+
                     _this.isLoading = false
                 })
 
             },
-            getProject(){
+            getProject() {
                 let _this = this;
-                fetch('get', '/stars/' + this.artistId+'/project').then(function (response) {
+                fetch('get', '/stars/' + this.artistId + '/project').then(function (response) {
                     console.log(response)
-                    _this.artistProjectsInfo  = response.data
+                    _this.artistProjectsInfo = response.data
                     _this.current_page = response.meta.pagination.current_page;
                     _this.total = response.meta.pagination.total;
                     _this.total_pages = response.meta.pagination.total_pages;
-                })      
+                })
             },
-            getWoks(){
+            getWoks() {
                 let _this = this;
-                fetch('get', '/stars/' + this.artistId+'/works').then(function (response) {
+                fetch('get', '/stars/' + this.artistId + '/works').then(function (response) {
                     console.log(response)
-                    _this.artistWorksInfo  = response.data
+                    _this.artistWorksInfo = response.data
                     _this.current_page = response.meta.pagination.current_page;
                     _this.total = response.meta.pagination.total;
                     _this.total_pages = response.meta.pagination.total_pages;
-                }) 
+                })
             },
-            getCalendar:function(){
-                 this.artistId = this.$route.params.id;
+            getCalendar: function () {
+                this.artistId = this.$route.params.id;
 
 
                 let data = {
@@ -1869,19 +1861,19 @@
                     _this.allTaskList = response.data
                     _this.current_page = response.meta.pagination.current_page;
                     _this.total = response.meta.pagination.total;
-                    _this.total_pages = response.meta.pagination.total_pages;   
-                    response.data.forEach(item=>{
-                        if(item.status!==2&&new Date(item.end_at).getTime() < new Date().getTime()){
+                    _this.total_pages = response.meta.pagination.total_pages;
+                    response.data.forEach(item => {
+                        if (item.status !== 2 && new Date(item.end_at).getTime() < new Date().getTime()) {
                             item.status = 4
-                        }  
+                        }
                     })
                 })
             },
-            getTaskDate:function(){
+            getTaskDate: function () {
                 let _this = this
                 fetch('get', `/stars/${this.$route.params.id}/tasks`).then(response => {
                     _this.allTaskList = response.data
-                 if (_this.allTaskList.length > 0) {
+                    if (_this.allTaskList.length > 0) {
                         for (let i = 0; i < _this.allTaskList.length; i++) {
                             if (_this.allTaskList[i].status == 2) {
                                 _this.doneTaskNum = _this.doneTaskNum + 1
@@ -1890,7 +1882,7 @@
                         }
                     }
                     _this.taskNum = `${_this.doneTaskNum}/${_this.allTaskList.length}`
-                 })
+                })
             },
             selectDate: function (value) {
                 this.selectedDate = value;

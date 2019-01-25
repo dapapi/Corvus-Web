@@ -13,8 +13,8 @@
                     <a class="dropdown-item" role="menuitem" @click="changeTaskStatus(1)" v-show="oldInfo.status != 1">激活</a>
                     <a class="dropdown-item" role="menuitem" @click="changeTaskStatus(2)" v-show="oldInfo.status == 1">完成</a>
                     <!-- <a class="dropdown-item" role="menuitem" data-toggle="modal" data-target="#customizeFieldContent">自定义字段</a> -->
-                    <a class="dropdown-item" role="menuitem" @click="privacyTask">
-                        {{oldInfo.privacy == 1 ? '转公开':'转私密'}}</a>
+                    <a class="dropdown-item" role="menuitem" @click="privacyTask(oldInfo.privacy ? 0 : 1)">
+                        {{oldInfo.privacy ? '转公开':'转私密'}}</a>
                     <a class="dropdown-item" role="menuitem" @click="deleteTask">删除</a>
                 </div>
             </div>
@@ -768,9 +768,9 @@
                 })
             },
 
-            privacyTask: function () {
-                fetch('put', '/tasks/' + this.taskId + '/privacy').then(() => {
-                    toastr.success(self.taskInfo.privacy == 1 ? '转公开成功!' : '转私密成功!');
+            privacyTask: function (value) {
+                fetch('post', '/task/secret/' + this.taskId, {privacy: value}).then(() => {
+                    toastr.success(this.taskInfo.privacy ? '转公开成功!' : '转私密成功!');
                     this.getTask()
                 })
             },
@@ -1150,7 +1150,7 @@
                 fetch('post', `/reviewquestionnaires/${this.questionId}/create/excellent`, params).then(res => {
                     $("#push-reason").modal("hide");
                     toastr.success('推优成功！')
-                    this. getQuestionId()
+                    this.getQuestionId()
                 })
             },
             // 根据任务id获取是否有问卷
