@@ -377,14 +377,25 @@
                                  role="tabpanel">
                                 <div class="clearfix">
                                     <div class="float-left col-md-10" style="padding: .715rem 1.429rem">
-                                        <div class="float-left pr-40">合同金额 <span class="money-color">10000元</span></div>
-                                        <div class="float-left pr-40">支出金额 <span class="money-color">1000元</span></div>
-                                        <div class="float-left pr-40">税费 <span class="money-color">10000元</span></div>
-                                        <div class="float-left pr-40">papi分成 <span class="money-color">10000元</span>
+                                        <div class="float-left pr-40">合同金额
+                                            <span class="money-color" v-if="projectBillMetaInfo.appoval">
+                                                {{ projectBillMetaInfo.appoval.money ? projectBillMetaInfo.appoval.money : 0 }}元
+                                            </span>
                                         </div>
-                                        <div class="float-left pr-40">bigger分成 <span class="money-color">10000元</span>
+                                        <div class="float-left pr-40">支出金额
+                                            <span class="money-color">{{ projectBillMetaInfo.expendituresum}}元</span>
                                         </div>
-                                        <div class="float-left pr-40">我司分成 <span class="money-color">10000元</span></div>
+                                        <div class="float-left pr-40">税费
+                                            <span class="money-color">
+                                                {{ projectBillMetaInfo.expenses ? projectBillMetaInfo.expenses : 0 }}元
+                                            </span>
+                                        </div>
+                                        <div class="float-left pr-40" v-for="divide in projectBillMetaInfo.divide">
+                                            {{ divide.moduleable_title }}
+                                            <span class="money-color">{{ divide.money }}元</span>
+                                        </div>
+                                        <div class="float-left pr-40">我司分成 <span class="money-color">{{ projectBillMetaInfo.my_divide ? projectBillMetaInfo.my_divide : 0 }}元</span>
+                                        </div>
                                     </div>
                                     <div class="float-left col-md-2 text-right" style="padding: .715rem 0">
                                         <span class="pointer-content hover-content" data-toggle="modal"
@@ -1377,25 +1388,19 @@
                         <div class="example">
                             <div class="col-md-2 text-right float-left px-0">税费</div>
                             <div class="col-md-10 float-left">
-                                <input type="text" class="form-control" title="">
+                                <input type="text" class="form-control" title="" v-model="billExpenses">
                             </div>
                         </div>
-                        <div class="example">
-                            <div class="col-md-2 text-right float-left px-0">papi分成</div>
+                        <div class="example" v-for="title in divideArrInfo">
+                            <div class="col-md-2 text-right float-left px-0">{{ title.moduleable_title }}分成</div>
                             <div class="col-md-10 float-left">
-                                <input type="text" class="form-control" title="">
-                            </div>
-                        </div>
-                        <div class="example">
-                            <div class="col-md-2 text-right float-left px-0">bigger分成</div>
-                            <div class="col-md-10 float-left">
-                                <input type="text" class="form-control" title="">
+                                <input type="text" class="form-control" title="" v-model="title.money">
                             </div>
                         </div>
                         <div class="example">
                             <div class="col-md-2 text-right float-left px-0">我司分成</div>
                             <div class="col-md-10 float-left">
-                                <input type="text" class="form-control" title="">
+                                <input type="text" class="form-control" title="" v-model="myDivide">
                             </div>
                         </div>
                     </div>
@@ -1573,6 +1578,10 @@
                 projectContractInfo: '',
                 contractId: '',
                 projectContractDefault: '',
+                projectBillMetaInfo: '',
+                myDivide: 0,
+                billExpenses: 0,
+                divideArrInfo: '',
             }
         },
 
@@ -1839,10 +1848,23 @@
 
             getProjectBill: function () {
                 fetch('get', '/projects/' + this.projectId + '/bill').then(response => {
+                    console.log(response)
                     this.projectBillsInfo = response.data;
+                    this.projectBillMetaInfo = response.meta;
                     this.total = response.meta.pagination.total;
                     this.current_page = response.meta.pagination.current_page;
                     this.total_pages = response.meta.pagination.total_pages;
+                    this.myDivide = response.meta.my_divide;
+                    this.billExpenses = response.meta.expenses;
+                    this.divideArrInfo = JSON.parse(JSON.stringify(response.meta.divide));
+                    for (let i = 0; i < response.meta.datatitle.length; i++) {
+                        if (!this.divideArrInfo.find(item => item.moduleable_title === response.meta.datatitle[i])) {
+                            this.divideArrInfo.push({
+                                money: 0,
+                                moduleable_title: response.meta.datatitle[i]
+                            })
+                        }
+                    }
                 });
             },
 
