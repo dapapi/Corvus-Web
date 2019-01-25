@@ -6,7 +6,6 @@
                    <span v-if="isShow" class="icon md-file-text font-size-18 mr-10 ml-15" ></span>
                    {{menu.name}}
                    <span v-if="menu.num>0" class="unRead">{{menu.num}}</span>
-                   
                 </router-link>
            </div>
            <div v-if="menu.type === 'button'">
@@ -67,7 +66,6 @@ export default {
     },
 
     mounted(){
-        // console.log()
         this.$nextTick(()=>{
            this.setExpand(this.menus,this.urlRoute)
         })
