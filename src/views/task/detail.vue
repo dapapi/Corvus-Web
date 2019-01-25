@@ -88,39 +88,39 @@
                     <div class="col-md-12 tab-title">
                         <ul class="nav nav-tabs nav-tabs-line" role="tablist" id="taskTab">
                             <template v-if="questionId && visible">
-                                <li class="nav-item" role="presentation">
+                                <li class="nav-item" role="presentation" @click="tabIndex = 0">
                                     <a class="nav-link active" data-toggle="tab" href="#forum-task-question"
                                     aria-controls="forum-base"
                                     aria-expanded="true" role="tab">问卷详情</a>
                                 </li>
-                                <li class="nav-item" role="presentation">
+                                <li class="nav-item" role="presentation" @click="tabIndex = 1">
                                     <a class="nav-link" data-toggle="tab" href="#forum-task-base"
                                     aria-controls="forum-base"
                                     aria-expanded="false" role="tab">概况</a>
                                 </li>
                             </template>
 
-                            <li class="nav-item" role="presentation" v-else>
+                            <li class="nav-item" role="presentation" @click="tabIndex = 1" v-else>
                                 <a class="nav-link active" data-toggle="tab" href="#forum-task-base"
                                    aria-controls="forum-base"
                                    aria-expanded="true" role="tab">概况</a>
                             </li>
 
-                            <li class="nav-item" role="presentation">
+                            <li class="nav-item" role="presentation" @click="tabIndex = 2">
                                 <a class="nav-link" data-toggle="tab" href="#forum-task-annex"
                                    aria-controls="forum-present"
                                    aria-expanded="false" role="tab">附件</a>
                             </li>
-                            <li class="nav-item" role="presentation" v-if="taskInfo.task_p">
+                            <li class="nav-item" role="presentation" @click="tabIndex = 3" v-if="taskInfo.task_p">
                                 <a class="nav-link" data-toggle="tab" href="#forum-task-subtasks"
                                    aria-controls="forum-present"
                                    aria-expanded="false" role="tab">子任务</a>
                             </li>
                         </ul>
-                        <div class="" v-if="questionId && visible">
+                        <div class="" v-if="questionId && visible && tabIndex === 0">
                             <button type="button"
                                 class="btn btn-primary"
-                                v-if="!~hasAnsweredArr.indexOf(user.id)"
+                                v-if="!~hasAnsweredArr.indexOf(user.id) && canSend"
                                 @click="submit">提交
                             </button>
                             <button type="button" class="btn btn-primary" data-plugin="actionBtn"
@@ -160,7 +160,11 @@
                                     </div>
                                     <div class="all-menber clearfix">
                                         <template v-for="(item, index) in questionInfo.reviewanswer.data">
-                                            <Avatar :imgUrl="item.users.data.icon_url" :key="index" style="margin: 5px;"/>
+                                            <div style="position: relative; display: inline-block" :key="index">
+                                                <Avatar :imgUrl="item.users.data.icon_url" style="margin: 5px;"/>
+                                                <div :class="hasAnsweredArr.indexOf(item.users.data.id) > -1 ? 'has-answer': 'un-answer'" ></div>
+                                                <!-- hasAnsweredArr -->
+                                            </div>
                                         </template>
                                     </div>
                                     <div class="card-text py-5 clearfix">
@@ -634,6 +638,8 @@
                 questionId: '', // 问卷id
                 visible: false, // 是否展示问卷
                 isLoading: true,
+                tabIndex: 0,
+                canSend: true, // 是否可以提交问卷
             }
         },
         created() {
@@ -1139,11 +1145,13 @@
                     toastr.error('您有未作答题目，请作答完成后提交！')
                     return
                 }
-                fetch('post', `/reviews/${this.questionId}/store/Answer`, params).then(res => {
-                    toastr.success('问卷提交成功！')
-                    this.getQuestionId()
-
-                })
+                if (this.canSend) {
+                    this.canSend = false
+                    fetch('post', `/reviews/${this.questionId}/store/Answer`, params).then(res => {
+                        toastr.success('问卷提交成功！')
+                        this.getQuestionId()
+                    })
+                }
             },
             // 推优原因提交
             submitPush() {
@@ -1324,5 +1332,27 @@
         position: absolute;
         top: 4px;
         right: 14px;
+    }
+    .has-answer, .un-answer {
+        position: absolute;
+        bottom: 4px;
+        right: 4px;
+        width: 12px;
+        height: 12px;
+        border-radius: 50%;
+        background-color: #fff;
+    }
+    .has-answer:before, .un-answer:before {
+        content: '';
+        position: absolute;
+        bottom: 2px;
+        right: 2px;
+        width: 8px;
+        height: 8px;
+        border-radius: 50%;
+        background-color: #4DAF50;
+    }
+    .un-answer:before {
+        background-color: #FF9800;
     }
 </style>
