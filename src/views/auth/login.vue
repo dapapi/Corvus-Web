@@ -457,9 +457,6 @@
                             redirect('/my')
                         })
                     }, 100)
-                }).catch(function (e) {
-                    console.log(e);
-                    Cookies.remove('deviceId');
                 })
             },
 

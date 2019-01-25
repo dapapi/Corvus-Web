@@ -451,7 +451,7 @@
                                     </tr>
                                     <tbody>
                                     <tr v-for="bill in projectBillsInfo">
-                                        <td>{{ bill.expence_name }}</td>
+                                        <td>{{ bill.expense_name }}</td>
                                         <td>{{ bill.expense_type }}</td>
                                         <td>{{ bill.artist_name }}</td>
                                         <td>{{ bill.money }}</td>
