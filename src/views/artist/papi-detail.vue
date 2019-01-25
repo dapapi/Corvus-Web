@@ -2470,11 +2470,6 @@
         left: 0px;
         opacity: 0;
     }
-    .fixed-button {
-        position: absolute;
-        bottom: 45px;
-        right: 0;
-    }
 
     .calendar-toast {
         background: #f5f5f5;
