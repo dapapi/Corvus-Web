@@ -81,10 +81,10 @@
                         </div>
                     </div>
                     <div class="clearfix">
-                        <div v-if="projectInfo.task && projectInfo.task.data.length > 0"
+                        <div v-if="projectInfo.tasks && projectInfo.tasks.data.length > 0"
                              class="col-md-6 float-left pl-0">
                             <div class="col-md-6 pl-0"><i class="iconfont icon-iconset0399  pr-2"></i> 任务</div>
-                            <div class="clearfix example" v-for="(task,index) in projectInfo.task.data"
+                            <div class="clearfix example" v-for="(task,index) in projectInfo.tasks.data"
                                  v-if="index < 3">
                                 <div class="col-md-3 float-left pl-0 exceeded-display">{{ task.title }}</div>
                                 <div class="col-md-2 float-left pl-0">{{ task.principal.data.name }}</div>
