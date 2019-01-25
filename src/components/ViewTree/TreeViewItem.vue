@@ -195,7 +195,6 @@ export default {
         font-size: 12px;
         font-weight: bold;
         text-align: center;
-        line-height: 17px;
         border-radius: 50%;
         position: relative;
         bottom:1px;

@@ -155,7 +155,7 @@
                         <div class="example">
                             <div class="col-md-2 text-right float-left">推荐艺人</div>
                             <div class="col-md-10 float-left pl-0">
-                                <selectors :options="starsArr" @valuelistener="changeRecommendStars"
+                                <selectors :options="starsArr" @change="changeRecommendStars"
                                            :multiple="true"></selectors>
                             </div>
                         </div>

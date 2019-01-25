@@ -4,7 +4,7 @@
             <number-spinner ref="number" @change="changeNumber"></number-spinner>
         </template>
         <template v-else>
-            {{ content }}
+            {{ content ? content : 0 }}
         </template>
     </div>
 </template>

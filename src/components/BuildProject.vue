@@ -308,8 +308,11 @@
                 });
                 this.projectBaseInfo.principal_id = trailInfo.principal.data.id;
                 let artistsArr = [];
-                for (let i = 0; i < trailInfo.expectations.data.length; i++) {
-                    artistsArr.push(trailInfo.expectations.data[i].id)
+                for (let i = 0; i < trailInfo.starexpectations.data.length; i++) {
+                    artistsArr.push(trailInfo.starexpectations.data[i].flag + '-' +trailInfo.starexpectations.data[i].id)
+                }
+                for (let i = 0; i < trailInfo.bloggerexpectations.data.length; i++) {
+                    artistsArr.push(trailInfo.bloggerexpectations.data[i].flag + '-' +trailInfo.bloggerexpectations.data[i].id)
                 }
                 this.$refs.intentionArtist.setValue(artistsArr);
                 this.projectBaseInfo.expectations = artistsArr;
