@@ -133,9 +133,10 @@
         methods: {
             defaultValueChecker() {
                 if (this.defaultValue) {
-                    for (const key in this.defaultValue) {
+                    console.log(this.defaultValue);
+                    for (const key in this.defaultValue.value) {
                         if (this.moduleInfo.find(item => item[0].control_title === key)) {
-                            this.moduleInfo.find(item=>item[0].control_title === key)[0].control_value ={id:'1082168698',value:this.defaultValue[key]}
+                            Object.assign(this.moduleInfo.find(item=>item[0].control_title === key)[0],{control_value:{id:this.defaultValue.id,name:this.defaultValue.value[key]}})
                         }
                     }
                 }

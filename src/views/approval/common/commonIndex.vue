@@ -4,7 +4,7 @@
             <h1 class="page-title ml-10">发起审批</h1>
         </div>
     
-        <div class="page-content" v-for="(item,index) in indexData" :key="item.id">
+        <div class="page-content py-0" v-for="(item,index) in indexData" :key="item.id">
             <div class="page-header">
                 <!-- <img src="@/assets/img/sp1.png" class="option-icon"> -->
                 <h5>{{item.name}}</h5>
@@ -13,7 +13,7 @@
                 <div class="col-lg-4 approval-module" v-for="subitem in item.forms.data" :key="subitem.id">
                     <div class="card">
                         <div class="card-block" style="display:flex" @click='pullUp(subitem)'>
-                             <img :src="!subitem.name.includes('Papi')?'https://res-crm.papitube.com/contract-dark-blue.png':'https://res-crm.papitube.com/contract-blue.png'" alt=""
+                             <img :src="subitem.icon" alt=""
                                          style="width: 40px;height: 40px;">
                             <!-- <i class="icon float-left" style="font-size:3rem"></i> -->
                             

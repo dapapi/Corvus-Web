@@ -1075,7 +1075,7 @@
                 let data = {
                     title: this.scheduleName,
                     calendar_id: this.scheduleCalendar,
-                    is_allday: this.isScheduleAllday,
+                    is_allday: Number(this.isScheduleAllday),
                     privacy: Number(this.schedulePrivacy),
                     start_at: startTime,
                     end_at: endTime,
@@ -1166,7 +1166,7 @@
                 let data = {
                     title: this.scheduleName,
                     calendar_id: this.scheduleCalendar,
-                    is_allday: this.isScheduleAllday,
+                    is_allday: Number(this.isScheduleAllday),
                     privacy: Number(this.schedulePrivacy),
                     start_at: startTime,
                     end_at: endTime,
