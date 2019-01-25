@@ -133,7 +133,7 @@ export default {
             defaultDataChecker(){
                 if(this.consdata[0].control_value){
                         this.valueListener = this.consdata[0].control_value
-                        this.setValue(this.consdata[0].control_value)
+                        this.setValue(this.consdata[0].control_value.value)
                         this.refresh()
                 }
                 // if(this.defaultData && this.consdata){

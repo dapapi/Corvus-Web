@@ -1475,7 +1475,7 @@
             </div>
         </div>
 
-        <ApprovalGreatModule :formData="formData" :default-value="projectContractDefault"></ApprovalGreatModule>
+        <ApprovalGreatModule :formData="formData" :default-value="{value:projectContractDefault,id:$route.params.id}"></ApprovalGreatModule>
     </div>
 </template>
 
