@@ -182,6 +182,7 @@ export default {
                 num = num + res.data[i].unread
             }
             this.$store.state.unReadMsg = num
+            console.log(this.$store.state.unReadMsg)
             if(this.moduleType){
                 this.renderMsg(this.moduleType,this.state)
             }else{
