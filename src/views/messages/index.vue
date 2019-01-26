@@ -14,11 +14,6 @@
         </div>
         <div class="page-content container-fluid" >
             <div class="row mx-0" style="background-color:#fff">
-                <!-- <div class="col-md-2">
-                 <div class="list-group mt-20" style="border-right:1px solid #E0E0E0">
-                    <a :class="item.id == moduleType?'checked list-group-item mr-10 px-10':'list-group-item mr-10 px-10'" v-for="(item,index) in moduleList" :key="index" href="javascript:void(0)" role="menuitem" @click="renderMsg(item.id,state)">{{item.name}}<span v-show="item.unread>0" class="unRead ml-5">{{item.unread}}</span></a>
-                </div>
-            </div> -->
             <div class="col-md-12 py-5">
                 <div class="col-md-12">
                     <ul class="nav nav-tabs nav-tabs-line" role="tablist">
@@ -77,6 +72,100 @@
             </div>
         </div>
         <Flag typeText="全部标记为已读" @confirmFlag="msgStatus('','','',moduleType)"/>
+        <!-- 查看日程 -->
+        <div class="modal fade" id="checkSchedule" aria-hidden="true" aria-labelledby="addLabelForm"
+             role="dialog" tabindex="-1" data-backdrop="static">
+            <div class="modal-dialog modal-simple">
+                <div class="modal-content" v-if="scheduleData">
+                    <div class="modal-header">
+                        <div style="order: 2">
+                            <i class="iconfont icon-guanbi pointer-content" aria-hidden="true" data-dismiss="modal"></i>
+                        </div>
+                        <h5 class="modal-title" v-if="scheduleData.calendar">{{ scheduleData.calendar.data.title }}</h5>
+                    </div>
+                    <div class="modal-body px-40">
+                        <div class="">
+                            <h4 class="my-20">{{ scheduleData.title }}</h4>
+                        </div>
+                        <div class="example">
+                            <div class="">
+                                <div  class="col-md-3 float-left px-0">
+                                    <div class="" >{{ (start_at.split(' ')[0]).split('-')[1] }}月
+                                        {{ (start_at.split(' ')[0]).split('-')[2] }}日
+                                        {{ start_at|getWeek(start_at) }}
+                                    </div>
+                                    <div  class="big-time">{{startBigTime}}</div>
+                                </div>
+                                <div class="col-md-2 float-left pl-0">
+                                    <div class="" style="color: white"> -</div>
+                                    <div class="big-time text-center"> -</div>
+                                </div>
+                                <div class="col-md-3 float-left px-0">
+                                    <div class="">{{ (end_at.split(' ')[0]).split('-')[1] }}月
+                                        {{ (end_at.split(' ')[0]).split('-')[2] }}日
+                                        {{ end_at|getWeek(end_at) }}
+                                    </div>
+                                    <div class="big-time">{{ endBigTime }}</div>
+                                </div>
+                                <div class="col-md-2 float-left" v-show="scheduleData.is_allday">
+                                    <div class="" style="color: white"> -</div>
+                                    <div class="big-time font-size-18" style="line-height: 75px">全天</div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="example" v-if="scheduleData.position">
+                            <div class="col-md-2 px-0 float-left">地点</div>
+                            <div class="col-md-10 pl-0 float-left">{{ scheduleData.position }}</div>
+                        </div>
+                        <div class="example" v-if="scheduleData.material">
+                            <div class="col-md-2 px-0 float-left">资源</div>
+                            <div class="col-md-10 pl-0 float-left" v-if="scheduleData.material">{{ scheduleData.material.data.name }}</div>
+                        </div>
+                        <div class="example">
+                            <div class="col-md-2 px-0 float-left">组织人</div>
+                            <div class="col-md-10 pl-0 float-left" v-if="scheduleData.creator">
+                                {{ scheduleData.creator.data.name }}
+                            </div>
+                        </div>
+                        <div class="example"
+                             v-if="((scheduleData.project && scheduleData.project.data.length > 0) || (scheduleData.task && scheduleData.task.data.length > 0))">
+                            <div class="col-md-2 px-0 float-left">关联资源</div>
+                            <div class="col-md-10 pl-0 float-left">
+                                <div class="pb-5" v-if="scheduleData.project"
+                                     v-for="project in scheduleData.project.data">
+                                    <span>项目 - {{ project.title }}</span>
+                                </div>
+                                <div class="pb-5" v-if="scheduleData.task" v-for="task in scheduleData.task.data">
+                                    <span>任务 - {{ task.title }}</span>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="example" v-if="scheduleData.participants">
+                            <div class="col-md-2 px-0 float-left">参与人</div>
+                            <div class="col-md-10 pl-0 float-left">
+                                <span v-for="(person,index) in scheduleParticipants" :key="index" class="mr-5">{{person}}</span>
+                            </div>
+                        </div>
+                        <div class="example" v-if="scheduleData.desc">
+                            <div class="col-md-2 px-0 float-left">备注</div>
+                            <div class="col-md-10 pl-0 float-left">{{ scheduleData.desc }}</div>
+                        </div>
+                        <div class="example" v-if="scheduleData.affixes && scheduleData.affixes.data.length > 0">
+                            <div>附件</div>
+                            <div>
+                                <div class="col-md-3 float-left text-center position-relative file-item"
+                                     v-for="(affix,index) in scheduleData.affixes.data" :key="index">
+                                    <div class="del-affix iconfont icon-zuofei position-absolute pointer-content"
+                                         @click="delAffix(affix.id)"></div>
+                                    <div><i class="iconfont icon-wenjian" style="font-size: 36px"></i></div>
+                                    <div @click="openFile(affix.url)" class="pointer-content">{{ affix.title }}</div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
     </div>
 </template>
 
@@ -134,7 +223,13 @@ export default {
       state:1,// 1未读 2已读
       websocket:null,
       msgLink:config.msgLink,//模块跳转link
-    //   moduleId :this.$route.query.moduleType
+      scheduleData:{},
+      scheduleParticipants:[],
+      end_at:'',
+      start_at:'',
+      endBigTime:'',
+      startBigTime:''
+
     };
   },
   mounted() {
@@ -156,6 +251,12 @@ export default {
        moduleList:function(){
            this.renderMsg()
        },
+       scheduleData:function(){
+           this.end_at = this.scheduleData.end_at
+           this.start_at = this.scheduleData.start_at
+           this.endBigTime = (this.end_at.split(' ')[1]).slice(0,5)
+           this.startBigTime = (this.start_at.split(' ')[1]).slice(0,5)
+       },
        "$route":"renderMsg"
   },
   methods: {
@@ -174,16 +275,17 @@ export default {
     renderMsg:function(){
         if(this.$route.query.moduleType){
             this.moduleType = this.$route.query.moduleType
-        }else{
-            this.$router.push(`/my/message?moduleType=${this.moduleList[0].id}`)
-        }
-        
-        fetch('get',`${config.apiUrl}/getmsg?include=recive.data&module=${this.moduleType}&state=${this.state}`).then((res) => {
+            fetch('get',`${config.apiUrl}/getmsg?include=recive.data&module=${this.moduleType}&state=${this.state}`).then((res) => {
         
             this.messageList = res.data
            
 
         })
+        }else{
+            this.$router.push(`/my/message?moduleType=${this.moduleList[0].id}`)
+        }
+        
+        
     },
     getModule:function(){
         this.getModuleList()
@@ -205,16 +307,76 @@ export default {
         fetch('get',`${config.apiUrl}/changestae`,data).then((res) => {
             this.getModule()
             if(!type){
-                this.$router.push(`${this.msgLink.find(item =>item.value == module_id).name}/${module_data_id}`)
+                // console.log(module_data_id,this.msgLink.find(item =>item.value == module_id).name)
+                if(module_id == 214){
+                    this.showScheduleModal(module_data_id)
+                }else{
+                    
+                    this.$router.push(`${this.msgLink.find(item =>item.value == module_id).name}/${module_data_id}`)
+                    
+                }
             }
             
         })
+    },
+    //获取日历详情
+    showScheduleModal: function (scheduleId) {
+        let data = {
+            include: 'calendar,participants,creator,material,affixes,project,task',
+        };
+        fetch('get', '/schedules/' + scheduleId, data).then(response => {
+            
+            this.scheduleData = response.data;
+            for (let i = 0; i < this.scheduleData.participants.data.length; i++) {
+                this.scheduleParticipants.push(this.scheduleData.participants.data[i].name)
+                
+            }
+            $('#checkSchedule').modal('show')
+            // this.scheduleParticipants 
+        });
+        
     }
+
   },
+  filters: {
+            getWeek: function (date) {
+                let week = new Date(date).getDay();
+                let value = '';
+                switch (week) {
+                    case 0:
+                        value = '周日';
+                        break;
+                    case 1:
+                        value = '周一';
+                        break;
+                    case 2:
+                        value = '周二';
+                        break;
+                    case 3:
+                        value = '周三';
+                        break;
+                    case 4:
+                        value = '周四';
+                        break;
+                    case 5:
+                        value = '周五';
+                        break;
+                    case 6:
+                        value = '周六';
+                        break;
+                }
+                return value;
+            }
+        },
 };
 </script>
 
 <style lang="scss" scoped>
+.big-time {
+        font-size: 48px;
+        color: #3F51B5;
+        font-weight: bold;
+    }
 a:hover{
     text-decoration: none;
     cursor: pointer;
