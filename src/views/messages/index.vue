@@ -40,10 +40,10 @@
                                 <li class="mb-30 row" v-for="(item2,index2) in item" :key="index2">
                                     <!-- <router-link class="row" :to="msgLink.find(link => link.value == item2.module).name+'/'+item2.module_data_id"> -->
                                         <div class="clearfix col-md-12 module">
-                                            <div class="float-left mr-10 pic ">
+                                            <div class="float-left mr-10 pic col-md-1">
                                                 <i class="iconfont  font-size-30 icon-color" :class="iconList[moduleList.find(item => item.id == moduleType).val]"></i>
                                             </div>
-                                            <div class="float-left mb-10">
+                                            <div class="float-left mb-10 col-md-11" style="margin-left:-10px">
                                                 <p class="mb-5"><span class="module_title mr-5 title">{{moduleList.find(item=>item.id ==moduleType).name}}助手</span><i class="timesR">{{item2.created_at}}</i></p>
                                                 <p class="desc txt font-size-16">{{item2.message_title}}</p>
                                             </div>
