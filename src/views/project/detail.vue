@@ -1902,7 +1902,11 @@
                     this.total_pages = response.meta.pagination.total_pages;
                     this.myDivide = response.meta.my_divide;
                     this.billExpenses = response.meta.expenses;
-                    this.divideArrInfo = JSON.parse(JSON.stringify(response.meta.divide));
+                    if(response.meta.divide) {
+                        this.divideArrInfo = JSON.parse(JSON.stringify(response.meta.divide));
+                    } else {
+                        this.divideArrInfo = [];
+                    }
                     for (let i = 0; i < response.meta.datatitle.length; i++) {
                         if (!this.divideArrInfo.find(item => item.moduleable_title === response.meta.datatitle[i])) {
                             this.divideArrInfo.push({
