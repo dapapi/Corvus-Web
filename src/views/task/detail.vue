@@ -640,6 +640,7 @@
                 isLoading: true,
                 tabIndex: 0,
                 canSend: true, // 是否可以提交问卷
+                questionMemberList: [] // 问卷评优团人员
             }
         },
         created() {
@@ -647,6 +648,7 @@
         },
 
         mounted() {
+            
             this.getTask();
             $('#addChildTask').on('show.bs.modal', function () {
                 // this.showChildTask = true;
@@ -1167,6 +1169,7 @@
                     $("#push-reason").modal("hide");
                     toastr.success('推优成功！')
                     this.getQuestionId()
+                    this.addQuestionTask()
                 })
             },
             // 根据任务id获取是否有问卷
@@ -1175,6 +1178,7 @@
                     if (res.data) {
                         this.questionId = res.data.id
                         this.getQuestionData(res.data.id)
+                        this.getQuestionMember()
                     }
                 })
             },
@@ -1187,6 +1191,30 @@
                     }
                     window.open(_url)
                 }
+            },
+            // 新增评审任务（推优后，新增一个任务）
+            addQuestionTask () {
+                let data = {
+                    // resource_type: this.resourceType ,
+                    // resourceable_id: this.resourceableId,
+                    type: this.taskTypeArr.find(n => n.name === '视频评分').id,
+                    title: '评优团视频评分任务-视频评分',
+                    principal_id: this.questionMemberList[0].user_id,
+                    participant_ids: this.questionMemberList.map(n => n.user_id),
+                    priority: 2,
+                    start_at: moment(new Date()).format('YYYY-MM-DD HH:MM'),
+                    end_at: moment(new Date()).add(7, 'days').format('YYYY-MM-DD HH:MM'),
+                    desc: '评优团视频评分任务'
+                }
+                fetch('post', '/tasks', data).then(res => {
+                    // toastr.success("评优团视频评分任务创建成功!")
+                })
+            },
+            // 获取品优团成员
+            getQuestionMember () {
+                fetch('get', '/data_dictionary/appraising/448').then(res => {
+                    this.questionMemberList = res.data
+                })
             }
         }
     }
