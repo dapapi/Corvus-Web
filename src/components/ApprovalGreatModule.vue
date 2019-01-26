@@ -133,7 +133,6 @@
         methods: {
             defaultValueChecker() {
                 if (this.defaultValue) {
-                    console.log(this.defaultValue);
                     for (const key in this.defaultValue.value) {
                         if (this.moduleInfo.find(item => item[0].control_title === key)) {
                             Object.assign(this.moduleInfo.find(item=>item[0].control_title === key)[0],{control_value:{id:this.defaultValue.id,name:this.defaultValue.value[key]}})
@@ -147,9 +146,7 @@
             },
             clearSignal() {
                 // this.$store.dispatch('changeOtherSlot',{data:[]});
-
-                this.$store.dispatch('changeParticipantsInfo', {data: []});
-
+                // this.$store.dispatch('changeParticipantsInfo', {data: []});
                 this.trendApprover = {
                     condition: [],
                     ready: false,

@@ -54,7 +54,7 @@
                             <selectors ref='classifySelector' class="col-sm-4" :options="classifyArr" @change="changeClassify" placeholder='请选择类型' ></selectors>
                         </div>
                         <div class="summernote" id="summernote"></div>
-                        <File-Uploader class="upload" url="javascript:void()" @changePlus="fileUploaded" :givenfilename='givenfilename' @deleteAtachment='deleteAttachment'>上传附件</File-Uploader>
+                        <File-Uploader class="upload" url="javascript:void()" @changePlus="fileUploaded" :givenfilename='givenfilename' @deleteAtachment='deleteAttachment' broadcast='true'>上传附件</File-Uploader>
                         <br/>
                         <input type="checkbox" v-model="topFlag">
                         <span class="set-top-flag" >&nbsp;&nbsp;置顶</span>

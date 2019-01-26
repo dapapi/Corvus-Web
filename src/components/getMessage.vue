@@ -7,6 +7,7 @@
 <script>
 import config from '@/assets/js/config'
 import fetch from '@/assets/utils/fetch'
+import {mapState, mapGetters,mapActions} from 'vuex'
 import Cookies from 'js-cookie'
 export default {
     data(){
@@ -15,18 +16,29 @@ export default {
             errorNum:0
         }
     },
+    computed:{
+        ...mapState([
+          'unReadMsg',
+          'moduleList'
+      ])   
+    },
     created(){
-      if(JSON.parse(Cookies.get('user')&&this.errorNum<=3)){
-        //   alert(this.errorNum)
+      if(Cookies.get('user')&&this.errorNum<=3){
           this.initWebSocket()
           this.getModule()
       }
       
     },
     destroyed(){
-        this.websocket.close()
+        if(Cookies.get('user')&&this.errorNum<=3){
+          this.websocket.close()
+        }
+        
     },
     methods:{
+        ...mapActions([
+             'getModuleList'
+        ]),
         initWebSocket:function(){
             this.websocket = new WebSocket(config.socketUrl)
             this.websocket.onmessage = this.websocketonmessage
@@ -67,17 +79,18 @@ export default {
 
         },
         getModule:function(){
-            fetch('get',`/getmodules`).then((res) => {
-                // console.log(res)
-                let unRead =0
-                for (let i = 0; i < res.data.length; i++) {
-                    if(res.data[i].unread){
-                        unRead = unRead+res.data[i].unread
-                    }
-                }
-                this.$store.state.unReadMsg = unRead
+            this.getModuleList()
+            // fetch('get',`/getmodules`).then((res) => {
+            //     // console.log(res)
+            //     let unRead =0
+            //     for (let i = 0; i < res.data.length; i++) {
+            //         if(res.data[i].unread){
+            //             unRead = unRead+res.data[i].unread
+            //         }
+            //     }
+            //     this.$store.state.unReadMsg = unRead
                 
-            })
+            // })
         },
         suportNotify:function (content){
             if (window.Notification) {

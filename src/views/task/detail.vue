@@ -299,7 +299,7 @@
                                                 <EditSelector :content="taskInfo.priority?taskInfo.priority: ''"
                                                               :is-edit="isEdit"
                                                               :options="priorityArr"
-                                                              @change="(value) => changeTaskInfo(value, 'level')"></EditSelector>
+                                                              @change="(value) => changeTaskInfo(value, 'priority')"></EditSelector>
                                             </div>
                                         </div>
                                         <div class="card-text py-10 px-0 clearfix col-md-8">

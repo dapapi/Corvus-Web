@@ -81,10 +81,10 @@
                         </div>
                     </div>
                     <div class="clearfix">
-                        <div v-if="projectInfo.task && projectInfo.task.data.length > 0"
+                        <div v-if="projectInfo.tasks && projectInfo.tasks.data.length > 0"
                              class="col-md-6 float-left pl-0">
                             <div class="col-md-6 pl-0"><i class="iconfont icon-iconset0399  pr-2"></i> 任务</div>
-                            <div class="clearfix example" v-for="(task,index) in projectInfo.task.data"
+                            <div class="clearfix example" v-for="(task,index) in projectInfo.tasks.data"
                                  v-if="index < 3">
                                 <div class="col-md-3 float-left pl-0 exceeded-display">{{ task.title }}</div>
                                 <div class="col-md-2 float-left pl-0">{{ task.principal.data.name }}</div>
@@ -746,6 +746,14 @@
                                                     <EditSelector :is-edit="isEdit" :options="trailStatusArr"
                                                                   :content="projectInfo.trail.data.status"
                                                                   @change="(value) => changeProjectBaseInfo(value, 'status')"></EditSelector>
+                                                </div>
+                                            </div>
+                                            <div class="card-text py-10 px-0 clearfix col-md-6 float-left ">
+                                                <div class="col-md-3 float-left text-right pl-0">开始时间</div>
+                                                <div class="col-md-9 float-left font-weight-bold">
+                                                    <EditDatepicker :is-edit="isEdit"
+                                                                    :content="projectInfo.start_at"
+                                                                    @change="(value) => changeProjectBaseInfo(value, 'start_at')"></EditDatepicker>
                                                 </div>
                                             </div>
                                             <div class="card-text py-10 px-0 clearfix col-md-6 float-left ">
