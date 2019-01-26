@@ -162,8 +162,10 @@
                                             </span>
                                     </template>
                                 </td>
-                                <td @click="redirectArtistDetail(artist.id)">
-                                    <template v-if="artist.communication_status">
+                                <td @click="redirectArtistDetail(artist.id)" v-if="artistsInfo.find(item=>item.sign_contract_status==2)">{{ artist.contracts.data.contract_start_date }}</td>
+                                <td @click="redirectArtistDetail(artist.id)" v-if="artistsInfo.find(item=>item.sign_contract_status==3)">{{ artist.contracts.data.contract_end_date}}</td>
+                                <td @click="redirectArtistDetail(artist.id)" v-if="artist.communication_status&&artistsInfo.find(item=>item.sign_contract_status==1)">
+                                    <template >
                                             <span :style="{color:taiyangCommunicationStatusArr.find(item => item.value ==
                                                     artist.communication_status).color}">
                                                  {{ taiyangCommunicationStatusArr.find(item => item.value ==
@@ -261,8 +263,10 @@
                                 <td @click="redirectBolggerDetail(artist.id)">{{ artist.nickname }}</td>
                                 <td @click="redirectBolggerDetail(artist.id)" v-if="bloggerInfo.find(item=>item.sign_contract_status!==1)">暂无</td>
                                 <td @click="redirectBolggerDetail(artist.id)">{{ artist.type.data.name }}</td>
-                                <td @click="redirectBolggerDetail(artist.id)">
-                                    <template v-if="artist.communication_status">
+                                <td @click="redirectBolggerDetail(artist.id)" v-if="bloggerInfo.find(item=>item.sign_contract_status==2)">{{ artist.contracts.data.contract_start_date }}</td>
+                                <td @click="redirectBolggerDetail(artist.id)" v-if="bloggerInfo.find(item=>item.sign_contract_status==3)">{{ artist.contracts.data.contract_end_date}}</td>
+                                <td @click="redirectBolggerDetail(artist.id)" v-if="artist.communication_status&&bloggerInfo.find(item=>item.sign_contract_status==1)">
+                                    <template >
                                         <span :style="{color:papiCommunicationStatusArr.find(item => item.value ==
                                             artist.communication_status).color}">
                                             {{ papiCommunicationStatusArr.find(item => item.value ==
@@ -819,7 +823,7 @@
                 isLoading: true,
                 selectAllBlogger: false,
                 listData: {
-                    include: 'broker,creator',
+                    include: 'broker,creator,contracts',
                     name: '',
                     sign_contract_status: 2,//  签约状态
                     communication_status: '', //沟通状态
@@ -920,6 +924,7 @@
                 fetch('get', '/stars', this.listData).then(function (response) {
                     if(response.data){
                         _this.artistsInfo = response.data;
+                        console.log(response.data)
                     }
                     _this.artistsInfo.forEach(item=>{
                         if(item.sign_contract_status){
@@ -939,7 +944,7 @@
             getBlogger: function (page = 1, signStatus) {
 
                 let data = {
-                    include: 'type,creator,affixes,publicity,operatelogs',
+                    include: 'type,creator,affixes,publicity,operatelogs,contracts',
 
                 }
                 let _this = this;
@@ -962,6 +967,7 @@
                     
                     if(response.data){
                         _this.bloggerInfo = response.data;
+                        console.log(response.data)
                     }
                     if(response.meta){
                         _this.Bcurrent_page = response.meta.pagination.current_page;

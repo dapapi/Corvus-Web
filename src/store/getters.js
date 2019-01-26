@@ -27,6 +27,9 @@ export default {
     getUnReadMsg:function(state){
         return state.unReadMsg
     },
+    getModule:function(state){
+        return state.moduleList
+    },
     getIsSelected:function(state){
         return state.isSelected
     },

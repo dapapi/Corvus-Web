@@ -29,6 +29,9 @@ const state = {
     department: [], // 部门数据
     userList: [], // 用户列表
     canPassBack: false, // 能否进入后台
+
+    //消息模块列表
+    moduleList:[]
 };
 
 export default new Vuex.Store({
