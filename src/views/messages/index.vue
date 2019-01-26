@@ -182,7 +182,6 @@ export default {
                 num = num + res.data[i].unread
             }
             this.$store.state.unReadMsg = num
-            console.log(this.$store.state.unReadMsg)
             if(this.moduleType){
                 this.renderMsg(this.moduleType,this.state)
             }else{
@@ -191,6 +190,7 @@ export default {
         })
     },
     msgStatus:function(id,module_id,module_data_id,type){
+        
         let data = {}
         if(type){
             data={
