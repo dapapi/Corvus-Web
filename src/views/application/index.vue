@@ -31,7 +31,8 @@
         },
         watch:{
             moduleList:function(){
-                 this.setData()
+                this.setData()
+
             }
         },
         methods: {
@@ -105,7 +106,7 @@
                     }
                     
                 }
-                
+               
             
             },
         }

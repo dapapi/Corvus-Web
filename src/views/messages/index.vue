@@ -153,6 +153,9 @@ export default {
            this.getModule();
            
        },
+       moduleList:function(){
+           this.renderMsg()
+       },
        "$route":"renderMsg"
   },
   methods: {
@@ -169,7 +172,12 @@ export default {
         this.renderMsg()
     },
     renderMsg:function(){
-        this.moduleType = this.$route.query.moduleType
+        if(this.$route.query.moduleType){
+            this.moduleType = this.$route.query.moduleType
+        }else{
+            this.$router.push(`/my/message?moduleType=${this.moduleList[0].id}`)
+        }
+        
         fetch('get',`${config.apiUrl}/getmsg?include=recive.data&module=${this.moduleType}&state=${this.state}`).then((res) => {
         
             this.messageList = res.data
@@ -179,11 +187,10 @@ export default {
     },
     getModule:function(){
         this.getModuleList()
-        this.renderMsg()
+        // this.renderMsg()
     },
     msgStatus:function(id,module_id,module_data_id,type){
         let data = {}
-        console.log(type)
         if(type){
             data={
                 module:this.moduleType,
