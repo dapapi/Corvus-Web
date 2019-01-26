@@ -1902,7 +1902,7 @@
                     this.total_pages = response.meta.pagination.total_pages;
                     this.myDivide = response.meta.my_divide;
                     this.billExpenses = response.meta.expenses;
-                    if(response.meta.divide) {
+                    if (response.meta.divide) {
                         this.divideArrInfo = JSON.parse(JSON.stringify(response.meta.divide));
                     } else {
                         this.divideArrInfo = [];
@@ -1937,7 +1937,7 @@
                     my_divide: this.myDivide,
                     star: this.divideArrInfo,
                 };
-                fetch('put', '/', data).then(() => {
+                fetch('put', '/projects/' + this.projectId + '/edit/bill', data).then(() => {
                     this.getProjectBill();
                     toastr.success('修改成功');
                     $('#addBill').modal('hide');
