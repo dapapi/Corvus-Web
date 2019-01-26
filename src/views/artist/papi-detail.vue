@@ -2377,7 +2377,6 @@
             ,
             //孵化期
             changeArtistHatch: function (start, end) {
-                console.log(start,end)
                 this.artistInfo.hatch_star_at = start
                 this.artistInfo.hatch_end_at = end
                  

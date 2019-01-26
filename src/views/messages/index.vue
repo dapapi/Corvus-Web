@@ -304,8 +304,22 @@ export default {
         //         this.renderMsg(this.moduleList[0].id,1)
         //     }
         // })
+        fetch('get',`${config.apiUrl}/getmodules`).then((res) => {
+            this.moduleList = res.data
+            let num = 0
+            for (let i = 0; i < res.data.length; i++) {
+                num = num + res.data[i].unread
+            }
+            this.$store.state.unReadMsg = num
+            if(this.moduleType){
+                this.renderMsg(this.moduleType,this.state)
+            }else{
+                this.renderMsg(this.moduleList[0].id,1)
+            }
+        })
     },
     msgStatus:function(id,module_id,module_data_id,type){
+        
         let data = {}
         if(type){
             data={

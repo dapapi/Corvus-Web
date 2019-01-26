@@ -1375,25 +1375,11 @@
 
                     _this.artistWorksInfo = response.data.works.data//作品数据
 
-                    console.log(_this.artistTasksInfo)
 
                     _this.affixes = response.data.affixes.data
-                    // for (let i = 0; i < response.data.trails.data.length; i++) {
-                    //     if (response.data.trails.data[i].project) {
-                    //         response.data.trails.data[i].project.data.company = response.data.trails.data[i].client.data.company
-                    //         _this.artistProjectsInfo.push(response.data.trails.data[i].project.data)//项目数据
-                    //     }
-                    // }
-                    if(response.data.sign_contract_status === 1){
-                        _this.projectContractDefault = {
-                            '签约主体': response.data.name
-                        };
-                    }else{
-                        _this.projectContractDefault = {
-                            '解约主体': response.data.name
-                        };
-                    }
-                    
+
+
+
                     _this.isLoading = false
                 })
 
@@ -1401,7 +1387,7 @@
             getProject() {
                 let _this = this;
                 fetch('get', '/stars/' + this.artistId + '/project').then(function (response) {
-                    console.log(response)
+
                     _this.artistProjectsInfo = response.data
                     _this.current_page = response.meta.pagination.current_page;
                     _this.total = response.meta.pagination.total;
@@ -1411,7 +1397,6 @@
             getWoks() {
                 let _this = this;
                 fetch('get', '/stars/' + this.artistId + '/works').then(function (response) {
-                    console.log(response)
                     _this.artistWorksInfo = response.data
                     _this.current_page = response.meta.pagination.current_page;
                     _this.total = response.meta.pagination.total;
