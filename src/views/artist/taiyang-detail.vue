@@ -45,8 +45,8 @@
                                 <div class="font-weight-bold float-left col-md-10 pl-0" v-if="artistInfo.broker"
                                      style="padding-top:1.5px">
                                     <span v-for="(broker,index) in artistInfo.broker.data" :key="index" class="mr-10">
-                                        <span>{{broker.company}}</span>
-                                        <span v-if="broker.company">-</span>
+                                        <span>{{broker.department.name}}</span>
+                                        <span v-if="broker.department.name">-</span>
                                         <span>{{ broker.name }}</span>
                                         
                                     </span>
