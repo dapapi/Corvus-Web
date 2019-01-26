@@ -114,8 +114,7 @@
                                 </div>
                             </div>
                             <div class="mb-20 float-left clearfix col-md-6 pl-0">
-                                <div class="float-left col-md-5 px-0 pt-3"><i
-                                        class="iconfont icon-renminbi1688  pr-2"></i>预计支出
+                                <div class="float-left col-md-5 px-0"><i class="iconfont icon-renminbi1688 pr-2"></i>预计支出
                                 </div>
                                 <div class="float-left col-md-7">
                                     <template v-if="projectInfo.projected_expenditure === 'privacy'">
@@ -127,7 +126,7 @@
                                 </div>
                             </div>
                             <div class="mb-20 float-left clearfix col-md-6 pl-0">
-                                <div class="float-left col-md-5 px-0"><i class="iconfont icon-renminbi1688  pr-2"></i>实际收入
+                                <div class="float-left col-md-5 px-0"><i class="iconfont icon-renminbi1688 pr-2"></i>实际收入
                                 </div>
                                 <div class="float-left col-md-7">
                                     <template v-if="metaInfo.contractmoney === 'privacy'">
@@ -139,8 +138,8 @@
                                 </div>
                             </div>
                             <div class="mb-20 float-left clearfix col-md-6 pl-0">
-                                <div class="float-left col-md-5 px-0 pt-3"><i
-                                        class="iconfont icon-renminbi1688  pr-2"></i>实际支出
+                                <div class="float-left col-md-5 px-0"><i
+                                        class="iconfont icon-renminbi1688 pr-2"></i>实际支出
                                 </div>
                                 <div class="float-left col-md-7">
                                     <template v-if="metaInfo.expendituresum === 'privacy'">
@@ -1485,7 +1484,8 @@
             </div>
         </div>
 
-        <ApprovalGreatModule :formData="formData" :default-value="{value:projectContractDefault,id:$route.params.id}"></ApprovalGreatModule>
+        <ApprovalGreatModule :formData="formData"
+                             :default-value="{value:projectContractDefault,id:$route.params.id}"></ApprovalGreatModule>
     </div>
 </template>
 
