@@ -924,7 +924,6 @@
                 fetch('get', '/stars', this.listData).then(function (response) {
                     if(response.data){
                         _this.artistsInfo = response.data;
-                        console.log(response.data)
                     }
                     _this.artistsInfo.forEach(item=>{
                         if(item.sign_contract_status){
@@ -967,7 +966,6 @@
                     
                     if(response.data){
                         _this.bloggerInfo = response.data;
-                        console.log(response.data)
                     }
                     if(response.meta){
                         _this.Bcurrent_page = response.meta.pagination.current_page;
@@ -1013,7 +1011,6 @@
                     if(_this.customizeContentType == 'stars'){
                         _this.artistsInfo = params.data
                     }else if(_this.customizeContentType == 'bloggers'){
-                        console.log(params)
                         _this.bloggerInfo = params.data;
                     }
                     _this.total = params.meta.pagination.total;

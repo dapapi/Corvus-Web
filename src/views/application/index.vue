@@ -103,6 +103,7 @@
                             this.leftData[i].subMenu.push(data)
                             
                         }
+                        console.log(this.leftData)
                     }
                     
                 }

@@ -1,6 +1,7 @@
 // import menusModule from "./menusModule"; 
 import router from '../router'
 import backRouter from '../backRouter'
+import { CLIENT_RENEG_LIMIT } from 'tls';
 
 export default {
     changeParticipantsInfo(state, data) {
@@ -46,9 +47,9 @@ export default {
     changeOtherSlot(state,data){
         state.otherSlot = data
     },
-    changeUnReadMsg(state,data){
-        state.unReadMsg = data
-    },
+    // changeUnReadMsg(state,data){
+    //     state.unReadMsg = data
+    // },
     changeIsSelected(state,data){
         state.isSelected = data
     },
