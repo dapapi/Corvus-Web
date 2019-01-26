@@ -5,7 +5,7 @@
                <router-link class="link" v-bind:to="menu.url" @click.native="toggle(menu)" :class="menu.level>1?'pl-15':''">
                    <span v-if="isShow" class="icon md-file-text font-size-18 mr-10 ml-15" ></span>
                    {{menu.name}}
-                   <span v-if="menu.num>0&&unReadMsg>0" class="unRead">{{unReadMsg}}</span>
+                   <span v-if="menu.num>0&&unReadMsg>0" class="unRead">{{menu.num}}</span>
                 </router-link>
            </div>
            <div v-if="menu.type === 'button'">

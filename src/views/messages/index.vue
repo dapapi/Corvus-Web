@@ -40,7 +40,7 @@
                                 <li class="mb-30 row" v-for="(item2,index2) in item" :key="index2">
                                     <!-- <router-link class="row" :to="msgLink.find(link => link.value == item2.module).name+'/'+item2.module_data_id"> -->
                                         <div class="clearfix col-md-12 module">
-                                            <div class="float-left mr-10 pic">
+                                            <div class="float-left mr-10 pic ">
                                                 <i class="iconfont  font-size-30 icon-color" :class="iconList[moduleList.find(item => item.id == moduleType).val]"></i>
                                             </div>
                                             <div class="float-left mb-10">
@@ -238,10 +238,10 @@ export default {
       
   },
   computed:{
-      ...mapState([
-          'unReadMsg',
-          'moduleList'
-      ])      
+      ...mapState({
+          unReadMsg:state => state.unReadMsg,
+          moduleList: state => state.moduleList
+      })      
   },
   watch:{
        unReadMsg:function(){
@@ -290,20 +290,20 @@ export default {
     getModule:function(){
         this.getModuleList()
         // this.renderMsg()
-        fetch('get',`${config.apiUrl}/getmodules`).then((res) => {
-            this.moduleList = res.data
-            let num = 0
-            for (let i = 0; i < res.data.length; i++) {
-                num = num + res.data[i].unread
-            }
-            this.$store.state.unReadMsg = num
-            console.log(this.$store.state.unReadMsg)
-            if(this.moduleType){
-                this.renderMsg(this.moduleType,this.state)
-            }else{
-                this.renderMsg(this.moduleList[0].id,1)
-            }
-        })
+        // fetch('get',`${config.apiUrl}/getmodules`).then((res) => {
+        //     this.moduleList = res.data
+        //     let num = 0
+        //     for (let i = 0; i < res.data.length; i++) {
+        //         num = num + res.data[i].unread
+        //     }
+        //     this.$store.state.unReadMsg = num
+        //     console.log(this.$store.state.unReadMsg)
+        //     if(this.moduleType){
+        //         this.renderMsg(this.moduleType,this.state)
+        //     }else{
+        //         this.renderMsg(this.moduleList[0].id,1)
+        //     }
+        // })
     },
     msgStatus:function(id,module_id,module_data_id,type){
         let data = {}

@@ -23,7 +23,7 @@ const state = {
     companyInfo: {},
     selectPrincipalInfo: {},
     otherSlot:[],
-    unReadMsg:0,//未读消息
+    
     isSelected:'',
     isExpanded:[],
     department: [], // 部门数据
@@ -31,7 +31,8 @@ const state = {
     canPassBack: false, // 能否进入后台
 
     //消息模块列表
-    moduleList:[]
+    moduleList:[],
+    unReadMsg: 0, //未读消息
 };
 
 export default new Vuex.Store({

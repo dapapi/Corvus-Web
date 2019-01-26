@@ -98,12 +98,7 @@ export default {
           data.num = num
           data.moduleList = res.data
           commit('setModule',data)
-        //   this.$store.state.unReadMsg = num
-        //   if (this.moduleType) {
-        //     this.renderMsg(this.moduleType, this.state)
-        //   } else {
-        //     this.renderMsg(this.moduleList[0].id, 1)
-        //   }
+          
         })
     }
 }
