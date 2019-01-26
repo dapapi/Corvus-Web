@@ -1193,7 +1193,7 @@
         </div>
         <!--附件预览-->
         <DocPreview :url="previewUrl" :givenFileName="previewName"/>
-        <ApprovalGreatModule :formData='formDate'></ApprovalGreatModule>
+        <ApprovalGreatModule :formData='formDate' :default-value="{value:projectContractDefault,id:$route.params.id}"></ApprovalGreatModule>
     </div>
 </template>
 
@@ -1320,6 +1320,7 @@
                 toastShow: false,
                 toastX: 0,
                 toastY: 0,
+                projectContractDefault:'',
             }
         },
 
@@ -1383,8 +1384,16 @@
                     //         _this.artistProjectsInfo.push(response.data.trails.data[i].project.data)//项目数据
                     //     }
                     // }
-
-
+                    if(response.data.sign_contract_status === 1){
+                        _this.projectContractDefault = {
+                            '签约主体': response.data.name
+                        };
+                    }else{
+                        _this.projectContractDefault = {
+                            '解约主体': response.data.name
+                        };
+                    }
+                    
                     _this.isLoading = false
                 })
 
