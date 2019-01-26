@@ -6,9 +6,9 @@
                     上传附件
                 </template>
             </label>
-            <figure style="text-align:center;" class="attachdetail ml-20"> 
+            <figure style="text-align:center;width:100px" class="attachdetail ml-20" v-if="broadcast"> 
                 <img src="@/assets/img/attachment.png" alt="" style="width:40px" v-if="fileName || givenfilename ">
-                <p class="pt-10">{{fileName || givenfilename ||"未选择任何附件"}}</p>
+                <p class="pt-10" :class="broadcast?'broadcast':''">{{fileName || givenfilename ||"未选择任何附件"}}</p>
                 <div class="img-control" v-if="fileName || givenfilename ">
                     <div class="icon-control">
                         <a :href="fileUrl" target="_blank">
@@ -19,7 +19,7 @@
                 </div>
             </figure>
         </div>
-        <!-- <span v-show="!isIcon">&nbsp;&nbsp;{{fileName || givenfilename ||"未选择任何附件"}}</span> -->
+        <span v-show="!isIcon && !broadcast">&nbsp;&nbsp;{{fileName || givenfilename ||"未选择任何附件"}}</span>
         <input type="file" @change="uploadFile" title='123' :id="`fileUploader${mulId}`" v-show="false">
         <div class="progress progress-xs pl-88" v-if="progressShow" v-show="!isIcon">
             <div class="progress-bar progress-bar-striped active" aria-valuemin="0" aria-valuemax="100"
@@ -35,7 +35,7 @@
     import * as qiniu from 'qiniu-js'
 
     export default {
-        props: ['id', 'givenfilename', 'isIcon','mulId'],
+        props: ['id', 'givenfilename', 'isIcon','mulId','broadcast'],
         name: "FileUploader",
         data() {
             return {
@@ -119,6 +119,14 @@
 </script>
 
 <style scoped>
+.broadcast{
+    text-align: center;
+    margin-bottom: 0 !important;
+    text-overflow: ellipsis;
+    overflow: hidden;
+   white-space: nowrap;
+   text-overflow: ellipsis;
+}
     .progress {
         margin-top: 10px;
         width: 200px;
