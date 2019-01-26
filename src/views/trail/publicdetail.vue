@@ -27,7 +27,7 @@
 
                     <div class="card-text clearfix example">
                         <div class="col-md-6 float-left pl-0">
-                            <div class="float-left pl-0 pr-2 col-md-2">
+                            <div class="float-left pl-0 pr-2 col-md-3">
                                 <i class="iconfont icon-laiyuanguanli pr-5" aria-hidden="true"></i>线索类型
                             </div>
                             <div class="font-weight-bold float-left">
@@ -38,7 +38,7 @@
                             </div>
                         </div>
                         <div class="col-md-6 float-left pl-0">
-                            <div class="float-left pl-0 pr-2 col-md-2">
+                            <div class="float-left pl-0 pr-2 col-md-3">
                                 <i class="iconfont icon-kehu pr-2" aria-hidden="true"></i>领取状态
                             </div>
                             <div class="font-weight-bold float-left">
@@ -51,7 +51,7 @@
                     </div>
                     <div class="card-text clearfix example">
                         <div class="col-md-6 float-left pl-0">
-                            <div class="float-left pl-0 pr-2 col-md-2">
+                            <div class="float-left pl-0 pr-2 col-md-3">
                                 <i class="iconfont icon-xiaoshouguanli pr-2" aria-hidden="true"></i>销售进展
                             </div>
                             <div class="font-weight-bold float-left">
@@ -77,7 +77,7 @@
                     </div>
                     <div class="card-text clearfix example">
                         <div class="col-md-6 float-left pl-0">
-                            <div class="float-left pl-0 pr-2 col-md-2">
+                            <div class="float-left pl-0 pr-2 col-md-3">
                                 <i class="iconfont icon-yiren pr-2" aria-hidden="true"></i>目标艺人
                             </div>
                             <div class="font-weight-bold float-left" v-if="trailInfo.title">
@@ -93,7 +93,7 @@
                             </div>
                         </div>
                         <div class="col-md-6 float-left pl-0">
-                            <div class="float-left pl-0 pr-2 col-md-2">
+                            <div class="float-left pl-0 pr-2 col-md-3">
                                 <i class="iconfont icon-tuijian pr-2" aria-hidden="true" style="font-size:17px;"></i>推荐艺人
                             </div>
                             <div class="font-weight-bold float-left" v-if="trailInfo.title">
@@ -113,7 +113,7 @@
 
                     <div class="card-text clearfix example">
                         <div class="col-md-6 float-left pl-0">
-                            <div class="float-left pl-0 pr-2 col-md-2">
+                            <div class="float-left pl-0 pr-2 col-md-3">
                                 <i class="iconfont icon-gongsiguanli pr-2" aria-hidden="true"></i>公司
                             </div>
                             <div class="font-weight-bold float-left pointer-content hover-content"
@@ -123,7 +123,7 @@
                             </div>
                         </div>
                         <div class="col-md-6 float-left pl-0">
-                            <div class="float-left pl-0 pr-2 col-md-2">
+                            <div class="float-left pl-0 pr-2 col-md-3">
                                 <i class="iconfont icon-xiangmu1 pr-2" aria-hidden="true"></i>项目
                             </div>
                             <div class="font-weight-bold float-left pointer-content hover-content"

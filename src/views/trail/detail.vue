@@ -613,7 +613,7 @@
                 companyType: config.companyType,
                 customizeInfo: config.customizeInfo,
                 taskTypeArr: {},
-                taskLevelArr: config.levelArr,
+                taskLevelArr: config.priorityArr,
                 taskPrincipal: '',
                 startMinutes: '00:00',
                 taskType: '',
