@@ -1,10 +1,12 @@
 <template>
-
+    
     <div class="page-main" style="background-color:#f3f4f5">
+         <Loading :is-loading="isLoading" style="margin-left:200px"></Loading>
         <div class="page-header page-header-bordered mb-0">
             <h1 class="page-title">角色管理</h1>
         </div>
         <div class="page-content container-fluid pt-30">
+            
             <div class="panel col-md-12 clearfix py-5">
                 <div class="col-md-3 float-left ">
                     <div class=" py-20 px-0 float-left fuound col-md-12 clearfix"
@@ -19,6 +21,7 @@
                         </span>
                     </div>
                     <div class="clearfix py-50">
+                        
                         <section class="page-aside-section">
                             <div class="site-menubar-body" style="width:260px;">
                                 <!--渲染分组 -->
@@ -571,7 +574,8 @@
                 isAactive:true,
                 idArray:[],
                 defaultDate:'',
-                selectgroupingDate:[]
+                selectgroupingDate:[],
+                isLoading:true
             }
         },
         mounted() {
@@ -593,6 +597,7 @@
                 let _this = this;
                 fetch('get', '/console/role').then(function (response) {
                     _this.roleDate = response.data;
+                    _this.isLoading = false
                 });
             },
             //获取默认数据
