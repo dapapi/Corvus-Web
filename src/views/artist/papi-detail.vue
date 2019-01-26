@@ -812,7 +812,7 @@
                 </div>
             </div>
         </div>
-        <ApprovalGreatModule :formData="formDate"></ApprovalGreatModule>
+        <ApprovalGreatModule :formData="formDate" :default-value="{value:projectContractDefault,id:$route.params.id}" ></ApprovalGreatModule>
         <!-- 新建/修改 日程 -->
         <div class="modal fade line-center" id="changeSchedule" aria-hidden="true" aria-labelledby="addLabelForm"
              role="dialog" tabindex="-1" data-backdrop="static">
@@ -1297,7 +1297,8 @@
                 toastShow: false,
                 toastX: 0,
                 toastY: 0,
-                scheduleRemind:''
+                scheduleRemind:'',
+                projectContractDefault:''
             }
         },
         computed: {
@@ -1459,6 +1460,9 @@
                         _this.Incubationperiod = _this.artistInfo.hatch_star_at+'|'+_this.artistInfo.hatch_end_at
                         _this.isShowPrivacy = true
                     }
+                    _this.projectContractDefault = {
+                        '昵称': response.data.nickname
+                    };
                     _this.isLoading = false;
                 });
                 //任务状态跑组。试戏
