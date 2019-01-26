@@ -98,6 +98,20 @@
                                            @change="(value) => addProjectBaseInfo(value, 'fee')"></NumberSpinner>
                         </div>
                     </div>
+                    <div class="col-md-12 example clearfix" v-show="projectType == 3">
+                        <div class="col-md-2 text-right float-left px-0 require">合作类型</div>
+                        <div class="col-md-10 float-left">
+                            <Selectors ref="projectCooperation" :options="cooperationTypeArr"
+                                       @change="(value) => addProjectBaseInfo(value, 'cooperation_type')"></Selectors>
+                        </div>
+                    </div>
+                    <div class="col-md-12 example clearfix" v-show="projectType == 3">
+                        <div class="col-md-2 text-right float-left px-0 require">状态</div>
+                        <div class="col-md-10 float-left">
+                            <Selectors ref="projectTrailStatus" :options="trailStatusArr"
+                                       @change="(value) => addProjectBaseInfo(value, 'status')"></Selectors>
+                        </div>
+                    </div>
                     <div class="col-md-12 example clearfix" v-for="field in projectFields" :key='field.key'>
                         <div class="col-md-2 text-right float-left px-0 ">{{ field.key }}</div>
                         <div class="col-md-10 float-left">
@@ -106,11 +120,9 @@
                                            @change="(value) => addInfo(value, field.id )"></EmitInput>
                             </template>
                             <template v-if="field.field_type === 2">
-                                <Selectors
-                                        :default="['合作类型','状态'].includes(field.key)?(field.key=='合作类型'?cooperationDefault:trailStatusDefault):newArray.find(item=>item.id === field.id)"
-                                        :options="['合作类型','状态'].includes(field.key)?(field.key=='合作类型'?cooperationTypeArr:trailStatusArr):field.contentArr"
-
-                                        @change="(value) => addInfo(value, field.id )"></Selectors>
+                                <Selectors :default='newArray.find(item=>item.id === field.id)'
+                                           :options="field.contentArr"
+                                           @change="(value) => addInfo(value, field.id )"></Selectors>
                             </template>
                             <template v-if="field.field_type === 4">
                                 <Datepicker :default='newArray.find(item=>item.id === field.id)'
@@ -123,8 +135,7 @@
                             </template>
                             <template v-if="field.field_type === 6">
                                 <Selectors :default='newArray.find(item=>item.id === field.id)'
-                                           :options="['合作类型','状态'].includes(field.key)?(field.key=='合作类型'?cooperationTypeArr:trailStatusArr):field.contentArr"
-                                           :multiple="true"
+                                           :options="field.contentArr" :multiple="true"
                                            @change="(value) => addInfo(value.join('|'), field.id )"></Selectors>
                             </template>
                             <template v-if="field.field_type === 8">
@@ -178,8 +189,8 @@
             ApprovalProgress
         },
         name: "BuildProject",
-            //projectType 项目类型   projectFieldsArr 不同项目类型的数据   
-        props: ['projectType', 'projectFieldsArr', 'defaultData','mode'],
+        //projectType 项目类型   projectFieldsArr 不同项目类型的数据
+        props: ['projectType', 'projectFieldsArr', 'defaultData', 'mode'],
         data() {
             return {
                 visibleRangeArr: config.visibleRangeArr,
@@ -231,7 +242,7 @@
             this.setDefaultValue()
             this.defaultDataFilter()
             $('#addProject').on('hidden.bs.modal', function () {
-                
+
                 _this.refreshAddProjectModal()
             });
             $('#addProject').on('show.bs.modal', function () {
@@ -309,10 +320,10 @@
                 this.projectBaseInfo.principal_id = trailInfo.principal.data.id;
                 let artistsArr = [];
                 for (let i = 0; i < trailInfo.starexpectations.data.length; i++) {
-                    artistsArr.push(trailInfo.starexpectations.data[i].flag + '-' +trailInfo.starexpectations.data[i].id)
+                    artistsArr.push(trailInfo.starexpectations.data[i].flag + '-' + trailInfo.starexpectations.data[i].id)
                 }
                 for (let i = 0; i < trailInfo.bloggerexpectations.data.length; i++) {
-                    artistsArr.push(trailInfo.bloggerexpectations.data[i].flag + '-' +trailInfo.bloggerexpectations.data[i].id)
+                    artistsArr.push(trailInfo.bloggerexpectations.data[i].flag + '-' + trailInfo.bloggerexpectations.data[i].id)
                 }
                 this.$refs.intentionArtist.setValue(artistsArr);
                 this.projectBaseInfo.expectations = artistsArr;
@@ -320,10 +331,12 @@
                 this.projectBaseInfo.priority = trailInfo.priority;
                 this.$refs.projectFee.setValue(trailInfo.fee);
                 this.$refs.trailOrigin.setValue(trailInfo.resource_type);
+                if (this.projectType == 3) {
+                    this.$refs.projectCooperation.setValue(trailInfo.cooperation_type);
+                    this.$refs.projectTrailStatus.setValue(trailInfo.status);
+                }
                 this.trailOrigin = trailInfo.resource_type;
                 this.projectBaseInfo.trail.id = trailInfo.id;
-                this.trailStatusDefault = trailInfo.status
-                this.cooperationDefault = trailInfo.cooperation_type
                 switch (trailInfo.resource_type) {
                     case 1:
                         this.trailOriginContent = JSON.parse(JSON.stringify(trailInfo.resource));
@@ -446,6 +459,12 @@
                         }
 
                         this.projectBaseInfo.trail.expectations = value;
+                        return;
+                    case 'cooperation_type':
+                        this.projectBaseInfo.trail.cooperation_type = value;
+                        return;
+                    case 'status':
+                        this.projectBaseInfo.trail.status = value;
                         return;
                 }
                 this.projectBaseInfo[name] = value
