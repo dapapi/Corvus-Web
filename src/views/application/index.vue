@@ -9,7 +9,7 @@
     import fetch from '@/assets/utils/fetch'
     import secondLeft from '@/components/SecondLeft.vue'
     import config from '@/assets/js/config'
-
+    import {mapState, mapGetters,mapActions} from 'vuex'
     export default {
         components: {
             secondLeft
@@ -22,6 +22,18 @@
         },
         mounted() {
             this.setData()
+        },
+        computed:{
+           ...mapState([
+                'unReadMsg',
+                'moduleList'
+            ])   
+        },
+        watch:{
+            moduleList:function(){
+                this.setData()
+
+            }
         },
         methods: {
             setData: function () {
@@ -73,21 +85,20 @@
                 this.getList()
             },
             getList:function(){
-                fetch('get',`${config.apiUrl}/getmodules`).then((res) => {
-                    this.moduleList = res
+                
                     let data={}
                     for (let i = 0; i < this.leftData.length; i++) {
                     if(this.leftData[i].id == 1){
-                        for (let t = 0; t < res.data.length; t++) {
+                        for (let t = 0; t < this.moduleList.length; t++) {
                             data={
-                                id:`${res.data[t].id}`,
-                                name:`${res.data[t].name}`,
-                                url:`/my/message?moduleType=${res.data[t].id}`,
+                                id:`${this.moduleList[t].id}`,
+                                name:`${this.moduleList[t].name}`,
+                                url:`/my/message?moduleType=${this.moduleList[t].id}`,
                                 type:'link',
                                 level:2,
                                 isExpanded:false,
                                 isSelected:false,
-                                num:res.data[t].unread,
+                                num:this.moduleList[t].unread,
                             }
                             this.leftData[i].subMenu.push(data)
                             
@@ -95,7 +106,7 @@
                     }
                     
                 }
-                })
+               
             
             },
         }

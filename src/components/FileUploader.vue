@@ -6,9 +6,9 @@
                     上传附件
                 </template>
             </label>
-            <figure style="text-align:center;" class="attachdetail ml-20" v-if="broadcast"> 
+            <figure style="text-align:center;width:100px" class="attachdetail ml-20" v-if="broadcast"> 
                 <img src="@/assets/img/attachment.png" alt="" style="width:40px" v-if="fileName || givenfilename ">
-                <p class="pt-10">{{fileName || givenfilename ||"未选择任何附件"}}</p>
+                <p class="pt-10" :class="broadcast?'broadcast':''">{{fileName || givenfilename ||"未选择任何附件"}}</p>
                 <div class="img-control" v-if="fileName || givenfilename ">
                     <div class="icon-control">
                         <a :href="fileUrl" target="_blank">
@@ -119,6 +119,14 @@
 </script>
 
 <style scoped>
+.broadcast{
+    text-align: center;
+    margin-bottom: 0 !important;
+    text-overflow: ellipsis;
+    overflow: hidden;
+   white-space: nowrap;
+   text-overflow: ellipsis;
+}
     .progress {
         margin-top: 10px;
         width: 200px;

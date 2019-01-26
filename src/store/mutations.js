@@ -74,5 +74,9 @@ export default {
                 redirect: "/404"
             }])
         }
+    },
+    setModule(state,data){
+        state.moduleList = data.moduleList
+        state.unReadMsg = data.num
     }
 }

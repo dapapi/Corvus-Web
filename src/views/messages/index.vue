@@ -85,7 +85,7 @@ import Main from './detail.vue';
 import messagesData from './messages.json'
 import fetch from '@/assets/utils/fetch'
 import config from '@/assets/js/config'
-import {mapState, mapGetters} from 'vuex'
+import {mapState, mapGetters,mapActions} from 'vuex'
 export default {
   name: 'messagesIndex',
   components: {
@@ -101,7 +101,7 @@ export default {
       pageData:{},              //页面数据
       readFilter:true,          //阅读状态筛选
       messageFilter:"全部消息",   //消息过滤器状态
-      moduleList:[],//模块list
+    //   moduleList:[],//模块list
       moduleType:'',
       messageList:[],//消息list
       iconList:{//每个模块的icon
@@ -144,7 +144,8 @@ export default {
   },
   computed:{
       ...mapState([
-          'unReadMsg'
+          'unReadMsg',
+          'moduleList'
       ])      
   },
   watch:{
@@ -152,10 +153,15 @@ export default {
            this.getModule();
            
        },
+       moduleList:function(){
+           this.renderMsg()
+       },
        "$route":"renderMsg"
   },
   methods: {
-    
+    ...mapActions([
+         'getModuleList'
+    ]),
     getModuleData:function(state){
         this.state = state
         if(this.state == 1){
@@ -166,7 +172,12 @@ export default {
         this.renderMsg()
     },
     renderMsg:function(){
-        this.moduleType = this.$route.query.moduleType
+        if(this.$route.query.moduleType){
+            this.moduleType = this.$route.query.moduleType
+        }else{
+            this.$router.push(`/my/message?moduleType=${this.moduleList[0].id}`)
+        }
+        
         fetch('get',`${config.apiUrl}/getmsg?include=recive.data&module=${this.moduleType}&state=${this.state}`).then((res) => {
         
             this.messageList = res.data
@@ -175,19 +186,8 @@ export default {
         })
     },
     getModule:function(){
-        fetch('get',`${config.apiUrl}/getmodules`).then((res) => {
-            this.moduleList = res.data
-            let num = 0
-            for (let i = 0; i < res.data.length; i++) {
-                num = num + res.data[i].unread
-            }
-            this.$store.state.unReadMsg = num
-            if(this.moduleType){
-                this.renderMsg(this.moduleType,this.state)
-            }else{
-                this.renderMsg(this.moduleList[0].id,1)
-            }
-        })
+        this.getModuleList()
+        // this.renderMsg()
     },
     msgStatus:function(id,module_id,module_data_id,type){
         let data = {}
