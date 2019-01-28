@@ -976,6 +976,7 @@
                 fetch('get', '/schedules/' + schedule.id, data).then(response => {
                     if (!response) {
                         this.scheduleData = schedule;
+                        this.getScheduleFinish = true;
                         this.noPermission = true;
                         return
                     }
