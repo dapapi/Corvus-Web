@@ -116,39 +116,39 @@
                         <div class="col-md-2 text-right float-left px-0 require">{{ field.key }}</div>
                         <div class="col-md-10 float-left">
                             <template v-if="field.field_type === 1">
-                                <EmitInput :default='newArray.find(item=>item.id === field.id)'
+                                <EmitInput :default='newArray.find(item=>item.key === field.key)'
                                            @change="(value) => addInfo(value, field.id )"></EmitInput>
                             </template>
                             <template v-if="field.field_type === 2">
-                                <Selectors :default='newArray.find(item=>item.id === field.id)'
+                                <Selectors :default='newArray.find(item=>item.key === field.key)'
                                            :options="field.contentArr"
                                            @change="(value) => addInfo(value, field.id )"></Selectors>
                             </template>
                             <template v-if="field.field_type === 4">
-                                <Datepicker :default='newArray.find(item=>item.id === field.id)'
+                                <Datepicker :default='newArray.find(item=>item.key === field.key)'
                                             @change="(value) => addInfo(value, field.id )"></Datepicker>
                             </template>
                             <template v-if="field.field_type === 5">
-                                <NormalTextarea :default='newArray.find(item=>item.id == field.id)' title=""
+                                <NormalTextarea :default='newArray.find(item=>item.key == field.key)' title=""
                                                 class="form-control"
                                                 @change="(value) => addInfo(value, field.id )"></NormalTextarea>
                             </template>
                             <template v-if="field.field_type === 6">
-                                <Selectors :default='newArray.find(item=>item.id === field.id)'
+                                <Selectors :default='newArray.find(item=>item.key === field.key)'
                                            :options="field.contentArr" :multiple="true"
                                            @change="(value) => addInfo(value.join('|'), field.id )"></Selectors>
                             </template>
                             <template v-if="field.field_type === 8">
                                 <GroupDatepicker
-                                        :default='newArray.find(item=>item.id === field.id)'
+                                        :default='newArray.find(item=>item.key === field.key)'
                                         @change="(from, to) => addInfo(from + ' | ' + to, field.id )"></GroupDatepicker>
                             </template>
                             <template v-if="field.field_type === 10">
-                                <InputSelectors :default='newArray.find(item=>item.id === field.id)'
+                                <InputSelectors :default='newArray.find(item=>item.key === field.key)'
                                                 @change="(value) => addInfo(value, field.id )"></InputSelectors>
                             </template>
                             <template v-if="field.field_type === 11">
-                                <NumberSpinner :default='newArray.find(item=>item.id === field.id)'
+                                <NumberSpinner :default='newArray.find(item=>item.key === field.key)'
                                                @change="(value) => addInfo(value, field.id )"></NumberSpinner>
                             </template>
                         </div>
@@ -204,7 +204,7 @@
                 bloggerArr: [],
                 startTime: '',
                 trailOriginContent: '',
-                trailsAllInfo: '',
+                trailsAllInfo: [],
                 addInfoArr: {},
                 projectBaseInfo: {
                     trail: {},
@@ -218,6 +218,34 @@
                 trailStatusDefault: '',
 
             }
+        }, 
+        created() {
+            this.getStars();
+
+        },
+        mounted() {
+            this.setDefaultValue()
+            // $('#addProject').on('hidden.bs.modal', function () {
+            //     console.log(22222);
+            //     _this.refreshAddProjectModal()
+            // });
+            // $('#addProject').on('show.bs.modal', function () {
+            //     if (_this.defaultData) {
+            //         _this.setDefaultValue()
+            //         _this.$nextTick(() => {
+            //             _this.$refs.trails.setValue(_this.defaultData.trailInfo.data.id)
+            //             _this.$nextTick(function () {
+            //                 _this.addProjectTrail(_this.defaultData.trailInfo.data.id)
+            //                 _this.$forceUpdate()
+            //             })
+            //         })
+            //     } else {
+            //         if (!_this.$store.state.newPrincipalInfo.id) {
+            //             _this.$store.dispatch('changePrincipal', {data: {id: _this.user.id, name: _this.user.nickname}})
+            //         }
+            //     }
+            // });
+            this.user = JSON.parse(Cookies.get('user'));
         },
         watch: {
             projectFieldsArr(newValue) {
@@ -225,6 +253,8 @@
             },
             projectType() {
                 this.getTrail()
+                this.defaultDataFilter()
+
             },
         },
 
@@ -234,42 +264,13 @@
             ])
         },
 
-        created() {
-            this.getStars();
-        },
-        mounted() {
-            let _this = this;
-            this.setDefaultValue()
-            this.defaultDataFilter()
-            $('#addProject').on('hidden.bs.modal', function () {
-
-                _this.refreshAddProjectModal()
-            });
-            $('#addProject').on('show.bs.modal', function () {
-                if (_this.defaultData) {
-                    _this.setDefaultValue()
-                    _this.$nextTick(() => {
-                        _this.$refs.trails.setValue(_this.defaultData.trailInfo.data.id)
-                        _this.$nextTick(function () {
-                            _this.addProjectTrail(_this.defaultData.trailInfo.data.id)
-                            _this.$forceUpdate()
-                        })
-                    })
-                } else {
-                    if (!_this.$store.state.newPrincipalInfo.id) {
-                        _this.$store.dispatch('changePrincipal', {data: {id: _this.user.id, name: _this.user.nickname}})
-                    }
-                }
-            });
-            this.user = JSON.parse(Cookies.get('user'));
-        },
+       
         methods: {
             defaultDataFilter() {
                 if (!this.defaultData) {
                     return
                 }
                 this.newArray = this.defaultData.fields.filter((params) => {
-                    console.log(params.hasOwnProperty('values'));
                     return params.hasOwnProperty('values')
                 })
             },
@@ -302,7 +303,7 @@
                     Object.assign(this.projectBaseInfo, {'priority': this.defaultData.list.priority})
                     this.$refs.startTime.setValue(this.defaultData.list.start_at);
                     this.$refs.endTime.setValue(this.defaultData.list.end_at);
-                    this.$refs.projectExpenditureFee.setValue(this.defaultData.list.expenditure_fee)
+                    this.$refs.projectExpenditureFee.setValue(this.defaultData.list.projected_expenditure)
                     this.$store.dispatch('changePrincipal', this.defaultData.list.principal);
                 }
             },
@@ -377,6 +378,7 @@
             },
 
             getTrail: function () {
+                let _this = this
                 let data = {
                     include: 'principal,starexpectations,bloggerexpectations',
                     type: this.projectType
@@ -392,6 +394,20 @@
                     }
                     this.trailsAllInfo = response.data;
                     this.$refs.trails.refresh();
+                        let _this = this
+                if (_this.defaultData) {
+                    _this.setDefaultValue()
+                    _this.$nextTick(() => {
+                        _this.$refs.trails.setValue(_this.defaultData.trailInfo.data.id)
+                        _this.$nextTick(function () {
+                            _this.addProjectTrail(_this.defaultData.trailInfo.data.id)
+                        })
+                    })
+                } else {
+                    if (!_this.$store.state.newPrincipalInfo.id) {
+                        _this.$store.dispatch('changePrincipal', {data: {id: _this.user.id, name: _this.user.nickname}})
+                    }
+                }
                 })
             },
 
