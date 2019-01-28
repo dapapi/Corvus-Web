@@ -98,7 +98,6 @@ export default {
           data.num = num
           data.moduleList = res.data
           commit('setModule',data)
-          
         })
     }
 }

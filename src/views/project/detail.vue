@@ -2024,7 +2024,7 @@
                     flagInfo['finish_at'] = response.data.updated_at;
                     flagInfo['isFinish'] = 1;
                     this.coursesLength += 1;
-                    toastr.success('修改成功');
+                    toastr.success('进度更新成功');
                     this.getProjectProgress();
                 })
             },
