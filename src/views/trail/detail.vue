@@ -991,6 +991,10 @@
             },
             addTask: function () {
                 let _this = this;
+                let flagArr = [];
+                for (let i = 0; i < this.$store.state.newParticipantsInfo.length; i++) {
+                    flagArr.push(this.$store.state.newParticipantsInfo[i].id)
+                }
                 let data = {
                     resource_type: 5,
                     resourceable_id: this.trailId,
@@ -1001,7 +1005,7 @@
                     start_at: this.startTime + ' ' + this.startMinutes,
                     end_at: this.endTime + ' ' + this.endMinutes,
                     desc: this.taskIntroduce,
-                    participants: this.$store.state.newParticipantsInfo,
+                    participant_ids: flagArr,
                     lock_status: Number(this.trailInfo.lock_status)
                 };
 
