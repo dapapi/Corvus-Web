@@ -122,7 +122,7 @@
                             <tbody>
 
                            <tr v-for="(item,index) in pageList" :key="index" class="pointer-content">
-                                <td @click="redirectContractDetail(item.form_instance_number)">{{item.form_instance_number }}</td>
+                                <td @click="redirectContractDetail(item.form_instance_number)">{{item.contract_number }}</td>
                                 <td @click="redirectContractDetail(item.form_instance_number)">{{item.title}}</td>
                                 <td @click="redirectContractDetail(item.form_instance_number)">{{item.form_name}}</td>
                                 <td @click="redirectContractDetail(item.form_instance_number)">{{item.name}}</td>
