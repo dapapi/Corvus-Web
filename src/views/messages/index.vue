@@ -235,6 +235,7 @@ export default {
   mounted() {
       //数据初始化
       this.getModule()
+      console.log(this.$route.fullPath)
       
   },
   computed:{

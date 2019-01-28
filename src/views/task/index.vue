@@ -36,7 +36,7 @@
 
                 <div class="col-md-12">
                     <ul class="nav nav-tabs nav-tabs-line" role="tablist">
-                        <li class="nav-item" role="presentation" @click="getTasks(1)">
+                        <li class="nav-item" role="presentation" @click="getMyTasks()">
                             <a class="nav-link active"
                                data-toggle="tab"
                                href="#forum-task"
@@ -44,7 +44,7 @@
                                aria-expanded="true"
                                role="tab">所有任务</a>
                         </li>
-                        <li class="nav-item" role="presentation" @click="getMyTasks(1,3)">
+                        <li class="nav-item" role="presentation" @click="getMyTasks(3)">
                             <a class="nav-link"
                                data-toggle="tab"
                                href="#forum-task"
@@ -52,7 +52,7 @@
                                aria-expanded="false"
                                role="tab">我负责的</a>
                         </li>
-                        <li class="nav-item" role="presentation" @click="getMyTasks(1,2)">
+                        <li class="nav-item" role="presentation" @click="getMyTasks(2)">
                             <a class="nav-link"
                                data-toggle="tab"
                                href="#forum-task"
@@ -60,7 +60,7 @@
                                aria-expanded="false"
                                role="tab">我参与的</a>
                         </li>
-                        <li class="nav-item" role="presentation" @click="getMyTasks(1,1)">
+                        <li class="nav-item" role="presentation" @click="getMyTasks(1)">
                             <a class="nav-link"
                                data-toggle="tab"
                                href="#forum-task"
@@ -68,7 +68,7 @@
                                aria-expanded="false"
                                role="tab">我创建的</a>
                         </li>
-                        <li class="nav-item" role="presentation" @click="getMyTasks(1,4)">
+                        <li class="nav-item" role="presentation" @click="getMyTasks(4)">
                             <a class="nav-link"
                                data-toggle="tab"
                                href="#forum-task"
@@ -134,18 +134,22 @@
                             <img src="https://res.papitube.com/corvus/images/content-none.png" alt=""
                                  style="width: 100%">
                         </div>
-                        <template v-if="!taskStatus && !taskFinishType">
+                        <Pagination :current_page="current_page"
+                                        :method="getTasks"
+                                        :total_pages="total_pages"
+                                        :total="total"></Pagination>
+                        <!-- <template v-if="!taskStatus && !taskFinishType">
                             <Pagination :current_page="current_page"
                                         :method="getTasks"
                                         :total_pages="total_pages"
                                         :total="total"></Pagination>
-                        </template>
-                        <template v-else>
+                        </template> -->
+                        <!-- <template v-else>
                             <Pagination :current_page="current_page"
                                         :method="getMyTasks"
                                         :total_pages="total_pages"
                                         :total="total"></Pagination>
-                        </template>
+                        </template> -->
                     </div>
                 </div>
             </div>
@@ -304,7 +308,8 @@
                 resourceableId: "", // 资源id
                 user: {}, // 个人信息
                 isLoading: true,
-                priorityArr:config.priorityArr
+                priorityArr:config.priorityArr,
+                my:'',//tasks 筛选  3我负责的 2 我参与的 1我创建的 4我分配的
             };
         },
         created() {
@@ -326,11 +331,14 @@
         },
 
         methods: {
+
+            //任务列表的请求都用url = /tasks  上下联动筛选
             getTasks(pageNum = 1) {
+                
                 let params = {
                     page: pageNum,
-                    include:
-                        "principal,pTask,tasks,resource.resourceable,resource.resource,participants"
+                    my:this.my,
+                    include:"principal,pTask,tasks,resource.resourceable,resource.resource,participants"
                 };
                 let url = "/tasks";
 
@@ -343,11 +351,6 @@
                 if (this.taskTypeSearch) {
                     params.type_id = this.taskTypeSearch;
                 }
-
-                if (this.taskNameSearch || this.taskStatusSearch || this.taskTypeSearch) {
-                    url = "/tasks/filter";
-                }
-
                 fetch("get", url, params).then(response => {
                     this.tasksInfo = response.data;
                     this.current_page = response.meta.pagination.current_page;
@@ -356,34 +359,12 @@
                     this.isLoading = false;
                 });
             },
-
-            getMyTasks(pageNum = 1, type = null) {
-                let _this = this;
-                if (type) {
-                    this.taskFinishType = type;
-                }
-
-                let data = {
-                    page: pageNum,
-                    include:
-                        "principal,pTask,tasks,resource.resourceable,resource.resource,participants",
-                    type: this.taskFinishType,
-                    status: 0
-                };
-
-                $.ajax({
-                    type: "get",
-                    url: config.apiUrl + "/tasks/my",
-                    headers: config.getHeaders(),
-                    data: data
-                }).done(function (response) {
-                    _this.tasksInfo = response.data;
-                    _this.current_page = response.meta.pagination.current_page;
-                    _this.total = response.meta.pagination.total;
-                    _this.total_pages = response.meta.pagination.total_pages;
-                });
+            //任务我的筛选
+            getMyTasks(my) {
+                this.my = my
+                this.getTasks(1)
+                
             },
-
             addTask() {
                 // 校验
                 if (!this.taskName) {
