@@ -67,6 +67,7 @@
              * */
             setValue(value) {
                 $(this.$el).datepicker('update', value);
+                // this.getInputValue()
             },
 
             destroy() {
