@@ -2454,7 +2454,7 @@
                 let regex = /(https?:\/\/)?(\w+\.?)+(\/[a-zA-Z0-9\?%=_\-\+\/]+)?/gi//http,https有无检测
                 var re = new RegExp(str);
                 if (!re.test(value)) {
-                    alert('您的网址不正确')
+                    toastr.error('您的网址不正确');
                 } else {
                     value = value.replace(regex, function (match, capture) {
                         if (capture) {
