@@ -234,7 +234,7 @@
                                             <div class="col-md-3 float-left text-right pl-0">优先级</div>
                                             <div class="col-md-9 float-left font-weight-bold">
                                                 <EditSelector :is-edit="isEdit"
-                                                              :options="taskLevelArr"
+                                                              :options="trailLevelArr"
                                                               :content="trailInfo.priority"
                                                               @change='changeTrailTaskLevel'></EditSelector>
                                             </div>
@@ -614,6 +614,7 @@
                 customizeInfo: config.customizeInfo,
                 taskTypeArr: {},
                 taskLevelArr: config.priorityArr,
+                trailLevelArr:config.levelArr,
                 taskPrincipal: '',
                 startMinutes: '00:00',
                 taskType: '',
@@ -759,10 +760,10 @@
                 this.changeInfo.recommendations = newValue
             },
             'trailStatus': function (newValue) {
-                this.changeInfo.status = newValue
+                this.changeInfo.status = Number(newValue)
             },
             'trailInfo.cooperation_type': function (newValue) {
-                this.changeInfo.cooperation_type = newValue
+                this.changeInfo.cooperation_type = Number(newValue)
             },
             'trailInfo.lock_status': function (newValue) {
                 this.changeInfo.lock_status = newValue
@@ -895,7 +896,13 @@
                     if (JSON.stringify(this.changeInfo) === "{}") {
                         this.isEdit = false
                         return
+                }
+                if([1,2,3,4,5].includes(this.trailOrigin)){
+                    if(!this.changeInfo.resource){
+                        toastr.error('线索来源不能为空')
+                        return
                     }
+                }
                     fetch('put', '/trails/' + this.trailId, data).then(() => {
                         toastr.success('修改成功');
                         this.isEdit = false
@@ -984,6 +991,10 @@
             },
             addTask: function () {
                 let _this = this;
+                let flagArr = [];
+                for (let i = 0; i < this.$store.state.newParticipantsInfo.length; i++) {
+                    flagArr.push(this.$store.state.newParticipantsInfo[i].id)
+                }
                 let data = {
                     resource_type: 5,
                     resourceable_id: this.trailId,
@@ -994,7 +1005,7 @@
                     start_at: this.startTime + ' ' + this.startMinutes,
                     end_at: this.endTime + ' ' + this.endMinutes,
                     desc: this.taskIntroduce,
-                    participants: this.$store.state.newParticipantsInfo,
+                    participant_ids: flagArr,
                     lock_status: Number(this.trailInfo.lock_status)
                 };
 
@@ -1071,8 +1082,6 @@
                 this.trailInfo.resource = value
             },
             changeTrailPrincipal: function (value) {
-                console.log('12312312313123');
-                console.log(value);
                 if (this.trailInfo.principal) {
                     this.trailInfo.principal.data = value
                 } else {
@@ -1081,7 +1090,6 @@
                     };
                 }
                 this.changeInfo.principal_id = value
-                console.log(this.changeInfo)
             },
 
             changeTrailFee: function (value) {
@@ -1105,6 +1113,11 @@
 
             changeTrailCompanyLevel: function (value) {
                 this.trailInfo.client.data.grade = value
+                if(this.changeInfo.client){
+                    this.changeInfo.client.grade = value
+                }else{
+                    Object.assign(this.changeInfo,{client:{grade:value}})
+                }
             },
 
             changeTrailContact: function (value) {
