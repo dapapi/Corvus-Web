@@ -2216,7 +2216,7 @@
                     read_proportion: this.artistWorkProportion,
                     link: this.videoUrl,
                     advertising: this.advertisingType,
-                    blogger_id: this.artistInfo.id
+                    blogger_id: this.$route.params.id
                 }
                 fetch('post', '/bloggers/new/production', data).then(function (response) {
                     toastr.success('创建成功');
