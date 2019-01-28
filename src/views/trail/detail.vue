@@ -234,7 +234,7 @@
                                             <div class="col-md-3 float-left text-right pl-0">优先级</div>
                                             <div class="col-md-9 float-left font-weight-bold">
                                                 <EditSelector :is-edit="isEdit"
-                                                              :options="taskLevelArr"
+                                                              :options="trailLevelArr"
                                                               :content="trailInfo.priority"
                                                               @change='changeTrailTaskLevel'></EditSelector>
                                             </div>
@@ -614,6 +614,7 @@
                 customizeInfo: config.customizeInfo,
                 taskTypeArr: {},
                 taskLevelArr: config.priorityArr,
+                trailLevelArr:config.levelArr,
                 taskPrincipal: '',
                 startMinutes: '00:00',
                 taskType: '',
@@ -895,7 +896,13 @@
                     if (JSON.stringify(this.changeInfo) === "{}") {
                         this.isEdit = false
                         return
+                }
+                if([1,2,3,4,5].includes(this.trailOrigin)){
+                    if(!this.changeInfo.resource){
+                        toastr.error('线索来源不能为空')
+                        return
                     }
+                }
                     fetch('put', '/trails/' + this.trailId, data).then(() => {
                         toastr.success('修改成功');
                         this.isEdit = false
@@ -1071,8 +1078,6 @@
                 this.trailInfo.resource = value
             },
             changeTrailPrincipal: function (value) {
-                console.log('12312312313123');
-                console.log(value);
                 if (this.trailInfo.principal) {
                     this.trailInfo.principal.data = value
                 } else {
@@ -1081,7 +1086,6 @@
                     };
                 }
                 this.changeInfo.principal_id = value
-                console.log(this.changeInfo)
             },
 
             changeTrailFee: function (value) {
