@@ -204,7 +204,7 @@
                 bloggerArr: [],
                 startTime: '',
                 trailOriginContent: '',
-                trailsAllInfo: '',
+                trailsAllInfo: [],
                 addInfoArr: {},
                 projectBaseInfo: {
                     trail: {},
@@ -218,6 +218,35 @@
                 trailStatusDefault: '',
 
             }
+        }, 
+        created() {
+            this.getStars();
+
+        },
+        mounted() {
+            this.setDefaultValue()
+            this.defaultDataFilter()
+            // $('#addProject').on('hidden.bs.modal', function () {
+            //     console.log(22222);
+            //     _this.refreshAddProjectModal()
+            // });
+            // $('#addProject').on('show.bs.modal', function () {
+            //     if (_this.defaultData) {
+            //         _this.setDefaultValue()
+            //         _this.$nextTick(() => {
+            //             _this.$refs.trails.setValue(_this.defaultData.trailInfo.data.id)
+            //             _this.$nextTick(function () {
+            //                 _this.addProjectTrail(_this.defaultData.trailInfo.data.id)
+            //                 _this.$forceUpdate()
+            //             })
+            //         })
+            //     } else {
+            //         if (!_this.$store.state.newPrincipalInfo.id) {
+            //             _this.$store.dispatch('changePrincipal', {data: {id: _this.user.id, name: _this.user.nickname}})
+            //         }
+            //     }
+            // });
+            this.user = JSON.parse(Cookies.get('user'));
         },
         watch: {
             projectFieldsArr(newValue) {
@@ -234,35 +263,7 @@
             ])
         },
 
-        created() {
-            this.getStars();
-        },
-        mounted() {
-            let _this = this;
-            this.setDefaultValue()
-            this.defaultDataFilter()
-            $('#addProject').on('hidden.bs.modal', function () {
-
-                _this.refreshAddProjectModal()
-            });
-            $('#addProject').on('show.bs.modal', function () {
-                if (_this.defaultData) {
-                    _this.setDefaultValue()
-                    _this.$nextTick(() => {
-                        _this.$refs.trails.setValue(_this.defaultData.trailInfo.data.id)
-                        _this.$nextTick(function () {
-                            _this.addProjectTrail(_this.defaultData.trailInfo.data.id)
-                            _this.$forceUpdate()
-                        })
-                    })
-                } else {
-                    if (!_this.$store.state.newPrincipalInfo.id) {
-                        _this.$store.dispatch('changePrincipal', {data: {id: _this.user.id, name: _this.user.nickname}})
-                    }
-                }
-            });
-            this.user = JSON.parse(Cookies.get('user'));
-        },
+       
         methods: {
             defaultDataFilter() {
                 if (!this.defaultData) {
@@ -377,6 +378,7 @@
             },
 
             getTrail: function () {
+                let _this = this
                 let data = {
                     include: 'principal,starexpectations,bloggerexpectations',
                     type: this.projectType
@@ -392,6 +394,20 @@
                     }
                     this.trailsAllInfo = response.data;
                     this.$refs.trails.refresh();
+                        let _this = this
+                if (_this.defaultData) {
+                    _this.setDefaultValue()
+                    _this.$nextTick(() => {
+                        _this.$refs.trails.setValue(_this.defaultData.trailInfo.data.id)
+                        _this.$nextTick(function () {
+                            _this.addProjectTrail(_this.defaultData.trailInfo.data.id)
+                        })
+                    })
+                } else {
+                    if (!_this.$store.state.newPrincipalInfo.id) {
+                        _this.$store.dispatch('changePrincipal', {data: {id: _this.user.id, name: _this.user.nickname}})
+                    }
+                }
                 })
             },
 
