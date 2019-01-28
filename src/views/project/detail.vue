@@ -357,7 +357,7 @@
                                     <tbody>
                                     <tr v-for="contract in projectContractInfo"
                                         @click="redirectContract(contract.form_instance_number)">
-                                        <td>{{ contract.form_instance_number }}</td>
+                                        <td>{{ contract.contract_number }}</td>
                                         <td>{{ contract.title }}</td>
                                         <td>
                                             <template v-for="star in contract.stars_name">
@@ -1648,14 +1648,14 @@
             $('#addPayback').on('hidden.bs.modal', () => {
                 this.$refs.paybackMoney1.setValue('0');
                 this.$refs.paybackTime1.setValue();
-                this.$refs.payMethod.setValue();
+                this.$refs.payMethod.setValue('');
                 this.projectReturnData = {};
             });
 
             $('#addInvoice').on('hidden.bs.modal', () => {
                 this.$refs.paybackMoney2.setValue('0');
                 this.$refs.paybackTime2.setValue();
-                this.$refs.payMethod1.setValue();
+                this.$refs.payMethod1.setValue('');
                 this.projectReturnData = {};
             });
 
