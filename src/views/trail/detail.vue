@@ -1025,7 +1025,7 @@
                     fetch('post', '/tasks', data).then(function (response) {
                         toastr.success('创建成功');
                         $('#addTask').modal('hide');
-                        _this.trailTasksInfo.push(response.data);
+                        _this.getTrailTask()
                     })
                 }
             },
