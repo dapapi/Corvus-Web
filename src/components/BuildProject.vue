@@ -224,7 +224,8 @@
 
         },
         mounted() {
-            this.setDefaultValue()
+            
+            // this.setDefaultValue()
             // $('#addProject').on('hidden.bs.modal', function () {
             //     console.log(22222);
             //     _this.refreshAddProjectModal()
@@ -254,7 +255,6 @@
             projectType() {
                 this.getTrail()
                 this.defaultDataFilter()
-
             },
         },
 
@@ -385,6 +385,7 @@
                 };
                 this.trailsArr = [];
                 fetch('get', '/trails/all', data).then(response => {
+                    console.log(response);
                     for (let i = 0; i < response.data.length; i++) {
                         this.trailsArr.push({
                             name: response.data[i].title,
