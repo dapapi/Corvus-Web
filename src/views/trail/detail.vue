@@ -760,10 +760,10 @@
                 this.changeInfo.recommendations = newValue
             },
             'trailStatus': function (newValue) {
-                this.changeInfo.status = newValue
+                this.changeInfo.status = Number(newValue)
             },
             'trailInfo.cooperation_type': function (newValue) {
-                this.changeInfo.cooperation_type = newValue
+                this.changeInfo.cooperation_type = Number(newValue)
             },
             'trailInfo.lock_status': function (newValue) {
                 this.changeInfo.lock_status = newValue
@@ -1109,6 +1109,11 @@
 
             changeTrailCompanyLevel: function (value) {
                 this.trailInfo.client.data.grade = value
+                if(this.changeInfo.client){
+                    this.changeInfo.client.grade = value
+                }else{
+                    Object.assign(this.changeInfo,{client:{grade:value}})
+                }
             },
 
             changeTrailContact: function (value) {
