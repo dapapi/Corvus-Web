@@ -746,7 +746,7 @@
                         }
                         return;
                     case 'end_minutes':
-                        if (this.changeInfo.start_at) {
+                        if (this.changeInfo.end_at) {
                             this.changeInfo.end_at = this.changeInfo.end_at + ' ' + value
                         } else {
                             this.changeInfo.end_at = this.taskInfo.end_at[0] + ' ' + value
