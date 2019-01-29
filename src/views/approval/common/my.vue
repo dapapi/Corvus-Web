@@ -5,14 +5,14 @@
         </div>
         <div class="page-content container-fluid">
             <div class="panel">
-                <div class="col-md-4  p-20">
-                    <div class="input-search">
-                        <button type="button" class="input-search-btn"><i class="iconfont icon-buoumaotubiao13" aria-hidden="true"></i>
-                        </button>
-                        <input v-model="keywords" type="text" class="form-control" placeholder="输入编号、类型或申请人"
-                               @blur="getList">
-                    </div>
-                </div>
+                <!--<div class="col-md-4  p-20">-->
+                    <!--<div class="input-search">-->
+                        <!--<button type="button" class="input-search-btn"><i class="iconfont icon-buoumaotubiao13" aria-hidden="true"></i>-->
+                        <!--</button>-->
+                        <!--<input v-model="keywords" type="text" class="form-control" placeholder="输入编号、类型或申请人"-->
+                               <!--@blur="getList">-->
+                    <!--</div>-->
+                <!--</div>-->
                 <div class="col-md-12">
                     <ul class="nav nav-tabs nav-tabs-line" role="tablist">
                         <li class="nav-item" role="presentation" @click="getList(1)">
@@ -34,7 +34,7 @@
                                    data-selectable="selectable">
                                 <tr>
                                     <th class="cell-300" scope="col">审批编号</th>
-                                    <th class="cell-300" scope="col">合同名称</th>
+                                    <!-- <th class="cell-300" scope="col">合同名称</th> -->
                                     <th class="cell-300" scope="col">申请人</th>
                                     <!-- <th class="cell-300 position-relative" scope="col">类型
                                         <i class="iconfont icon-gengduo1" aria-hidden="true"
@@ -43,23 +43,33 @@
                                             <a class="dropdown-item" role="menuitem" v-for="(item, index) in contractList" :key="index">{{item.value}}</a>
                                         </div>
                                     </th> -->
+                                     <th class="cell-300 position-relative" scope="col">类型
+                                        <!-- <span class="icon md-caret-right font-size-20 mr-10 leftImg anmite"
+                                        id="taskDropdown" data-toggle="dropdown" aria-expanded="false"></span> -->
+                                        <div class="dropdown-menu" aria-labelledby="taskDropdown" role="menu">
+                                            <a class="dropdown-item" role="menuitem" >此处等</a>
+                                            <a class="dropdown-item" role="menuitem" >后端</a>
+                                            <a class="dropdown-item" role="menuitem" >表单</a>
+                                            <a class="dropdown-item" role="menuitem" >数据</a>
+                                        </div>
+                                    </th>
                                     <th class="cell-300" scope="col">申请时间</th>
                                     <th class="cell-300" scope="col">审批状态</th>
                                 </tr>
                                 <tbody>
                                 <tr v-for="project in projectsInfo" :key=project.id>
                                     <router-link :to="{path:'/approval/'+project.form_instance_number,query:{mode:'approver'}}"><td>{{project.form_instance_number}}</td></router-link>                                    
-                                    <td>{{project.title}}</td>
+                                     <!-- <td>{{project.form_instance_number}}</td>                               -->
+                                    <!-- <td>{{project.title}}</td> -->
                                     <td>{{project.name}}</td>
-                                    <!-- <td></td> -->
+                                    <td>{{project.group_name}}</td>
                                     <td>{{project.created_at}}</td>
                                     <td>{{getProgressName(project.form_status)}}</td>
-                                    <!-- <td></td> -->
                                 </tr>
                                 </tbody>
                             </table>
 
-                            <div v-if="projectsInfo.length === 0" class="col-md-1" style="margin: 6rem auto">
+                            <div v-if="projectsInfo.length === 0" style="margin: 6rem auto;width: 100px">
                                 <img src="https://res.papitube.com/corvus/images/content-none.png" alt=""
                                      style="width: 100%">
                             </div>
@@ -101,7 +111,6 @@
             },
         },
         methods: {
-            
             getProjects: function (pageNum = 1, signStatus) {
                 let _this = this
                 let data = {
@@ -112,21 +121,21 @@
                 if (signStatus) {
                     data.sign_contract_status = signStatus
                 }
-                fetch('get', '/approvals_contract/approval', data).then(response => {
+                fetch('get', '/approvals_general/approval', data).then(response => {
                     _this.projectsInfo = response.data
-                    _this.total = response.meta.pagination;
-                    _this.current_page = response.meta.current_page;
-                    _this.total_pages = response.meta.total_pages;
+                  _this.total = response.meta.pagination.total;
+                    _this.current_page = response.meta.pagination.current_page;
+                    _this.total_pages = response.meta.pagination.total_pages;
                 })
             },
              getList(params) {
                 this.pageType = params
                 let _this = this
-                    fetch('get','/approvals_contract/approval?status='+params).then((params) => {
+                    fetch('get','/approvals_general/approval?status='+params).then((params) => {
                         _this.projectsInfo = params.data
-                        _this.total = params.meta.pagination
-                        _this.current_page = params.meta.current_page;
-                        _this.total_pages = params.meta.total_pages;
+                        _this.total = params.meta.pagination.total;
+                        _this.current_page = params.meta.pagination.current_page;
+                        _this.total_pages = params.meta.pagination.total_pages;
                     })
                 }
         }

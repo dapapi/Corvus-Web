@@ -25,7 +25,8 @@
         <div id="addNewBroadcast" 
             class="bootbox modal fade modal-simple" 
             tabindex="-1" 
-            role="dialog" 
+            role="dialog"
+             data-backdrop="static"
             style="display: hidden">
             <div class="modal-dialog modal-lg modal-info">
                 <div class="modal-content">
@@ -35,11 +36,11 @@
                                 <path fill-rule="evenodd" d="M7.48 8l3.75 3.75-1.48 1.48L6 9.48l-3.75 3.75-1.48-1.48L4.52 8 .77 4.25l1.48-1.48L6 6.52l3.75-3.75 1.48 1.48L7.48 8z"/>
                             </svg>
                         </button>
-                        <button type="button" data-target="#confirmFlag" data-toggle="modal" class="bootbox-close-button close" aria-hidden="true" style="margin-top: 10px;" v-if="pageType === '修改'">
+                        <!-- <button type="button" data-target="#confirmFlag" data-toggle="modal" class="bootbox-close-button close" aria-hidden="true" style="margin-top: 10px;" v-if="pageType === '修改'">
                             <svg width="12" height="16" viewBox="0 0 12 16">
                                 <path fill-rule="evenodd" d="M11 2H9c0-.55-.45-1-1-1H5c-.55 0-1 .45-1 1H2c-.55 0-1 .45-1 1v1c0 .55.45 1 1 1v9c0 .55.45 1 1 1h7c.55 0 1-.45 1-1V5c.55 0 1-.45 1-1V3c0-.55-.45-1-1-1zm-1 12H3V5h1v8h1V5h1v8h1V5h1v8h1V5h1v9zm1-10H2V3h9v1z"/>
                             </svg>
-                        </button>
+                        </button> -->
                         <div class="bootbox-body"><h4>{{pageType}}公告</h4></div>
                         <br/>
                         <div class="form-group row col-sm-12">
@@ -53,7 +54,7 @@
                             <selectors ref='classifySelector' class="col-sm-4" :options="classifyArr" @change="changeClassify" placeholder='请选择类型' ></selectors>
                         </div>
                         <div class="summernote" id="summernote"></div>
-                        <File-Uploader class="upload" url="javascript:void()" @changePlus="fileUploaded" :givenfilename='givenfilename'>上传附件</File-Uploader>
+                        <File-Uploader class="upload" url="javascript:void()" @changePlus="fileUploaded" :givenfilename='givenfilename' @deleteAtachment='deleteAttachment' broadcast='true'>上传附件</File-Uploader>
                         <br/>
                         <input type="checkbox" v-model="topFlag">
                         <span class="set-top-flag" >&nbsp;&nbsp;置顶</span>
@@ -134,6 +135,10 @@ export default {
         }
     },
     methods:{
+        deleteAttachment(){
+            this.accessory_name = ''
+            this.accessory = ''
+        },
         //数据初始化
         noteInit(){
             if(this.notedata){

@@ -20,13 +20,14 @@ export default {
                     control_enums:[],
                     control_placeholder:'请选择',
                     required:this.consdata[0].required,
-                    
+                    control_value:''
             }],
             subOptions:[{
                     control_enums:[],
                     control_placeholder:'请选择',
                     required:this.consdata[0].required,
                     control_title:'',
+                    control_value:''
             }],
             hasList:[],
             emitData:{
@@ -35,10 +36,25 @@ export default {
             }
         }
     },
+    created(){
+        this.defaultDataChecker()
+    },
     mounted(){
         this.dataInit()
     },
+    watch:{
+        consdata:function(value){
+            
+        }
+    },
     methods:{
+        defaultDataChecker(){
+            if(this.consdata[0].control_value){
+                let tempArr = this.consdata[0].control_value.split(',')
+                this.options[0].control_value = tempArr[0]
+                this.subOptions[0].control_value = tempArr[1]
+            }
+        },
         dataInit(){
             this.consdata[0].control_enums.forEach(element => {
                 if(element.enum_value.hasOwnProperty('list')){
@@ -62,7 +78,7 @@ export default {
                 preList.list.forEach(element => {
                     preArr.push({enum_value:element})
                 });
-                this.subOptions[0].control_title = params.value
+                this.subOptions[0].control_title = params.value+'类别'
                 this.subOptions[0].control_enums = preArr
             }else{
                 this.subOptions[0].control_enums = []
@@ -74,7 +90,11 @@ export default {
             let {related_field} = this.consdata[0]
 
             this.emitData.subValue = params.value
-            this.$emit('change',{key:id,value:[this.emitData.mainValue,this.emitData.subValue],type:related_field})
+            if(this.emitData.subValue){
+                this.$emit('change',{key:id,value:[this.emitData.mainValue,this.emitData.subValue],type:related_field})
+            }else{
+                this.$emit('change',{key:id,value:[this.emitData.mainValue],type:related_field})
+            }
         }
     }
 }

@@ -47,9 +47,19 @@ export default new Router({
             component: () => import('./views/trail/index.vue'),
         },
         {
+            path: '/publictrails',
+            name: 'publictrails',
+            component: () => import('./views/trail/public.vue'),
+        },
+        {
             path: '/trails/:id',
             name: 'trails/detail',
             component: () => import('./views/trail/detail.vue')
+        },
+        {
+            path: '/publictrails/:id',
+            name: 'public/detail',
+            component: () => import('./views/trail/publicdetail.vue'),
         },
         {
             path: '/projects',
@@ -81,16 +91,16 @@ export default new Router({
             name: 'calendar',
             component: () => import('./views/calendar/index.vue')
         },
-        {
-            path: '/artists',
-            name: 'usArtists',
-            component: () => import('./views/artist/taiyang-index.vue')
-        },
-        {
-            path: '/blogger',
-            name: 'usBlogger',
-            component: () => import('./views/artist/papi-index.vue')
-        },
+        // {
+        //     path: '/artists',
+        //     name: 'usArtists',
+        //     component: () => import('./views/artist/taiyang-index.vue')
+        // },
+        // {
+        //     path: '/blogger',
+        //     name: 'usBlogger',
+        //     component: () => import('./views/artist/papi-index.vue')
+        // },
         {
             path: '/talent',
             name: 'talent',
@@ -199,6 +209,11 @@ export default new Router({
                     name: 'approval/project/only',
                     component: () => import('./views/approval/project/only.vue')
                 },
+                {
+                    path:'/approval/contract/contract_management',
+                    name:'approval/contract/contract_management',
+                    component: () => import('./views/approval/contractIndex/contract_management.vue')                    
+                }
             ],
         },
         {

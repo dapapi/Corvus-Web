@@ -48,7 +48,7 @@
                                 </td>
                             </tr>
                         </table>
-                        <div v-if="list.length === 0" class="col-md-1" style="margin: 6rem auto">
+                        <div v-if="list.length === 0" style="margin: 6rem auto;width: 100px">
                             <img src="https://res.papitube.com/corvus/images/content-none.png" alt="" style="width: 100%">
                         </div>
                         <pagination :current_page="current_page" :method="getlist" :total_pages="total_pages"
@@ -92,13 +92,9 @@ export default {
     },
     computed:{
         type:function(){
-            // console.log(this.$route.query.type)
             return (this.$route.query.type-0)
         },
     },
-    // mounted(){
-    //     this.getlist()
-    // },
     methods:{
         getProps:function(id,status,name,temName){
             this.temId = id

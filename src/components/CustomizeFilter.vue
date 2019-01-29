@@ -1,6 +1,6 @@
 <template>
     <div class="modal fade" id="customizeContent" aria-hidden="true" aria-labelledby="addLabelForm"
-         role="dialog" tabindex="-1" >
+         role="dialog" tabindex="-1" data-backdrop="static">
         <div class="modal-dialog modal-simple">
             <div class="modal-content">
                 <div class="modal-header">
@@ -11,9 +11,9 @@
                 </div>
                 <div class="modal-body">
 
-                    <h5>筛选关键字</h5>
+                    <!-- <h5>筛选关键字</h5>
                     <input type="text" class="form-control" id="inputPlaceholder" placeholder="输入筛选名称"
-                           v-model="customizeKeyWords">
+                           v-model="customizeKeyWords"> -->
 
                     <h5>筛选条件</h5>
                     <div v-for="n in conditionLength" class="clearfix" :key="n">
@@ -71,6 +71,12 @@
         },
         mounted() {
             let _this = this;
+             $(this.$el).on('show.bs.modal',function () {
+             _this.$nextTick((params) => {
+                $('.selectpicker').selectpicker('refresh')
+             })
+            })
+            
             $(this.$el).on('hidden.bs.modal',function () {
                 _this.conditionLength = 0;
                 _this.selectorHidden = [];

@@ -22,13 +22,17 @@ const state = {
     newPrincipalInfo: {},
     companyInfo: {},
     selectPrincipalInfo: {},
-    otherSlot:{},
-    unReadMsg:0,//未读消息
+    otherSlot:[],
+    
     isSelected:'',
     isExpanded:[],
     department: [], // 部门数据
     userList: [], // 用户列表
     canPassBack: false, // 能否进入后台
+
+    //消息模块列表
+    moduleList:[],
+    unReadMsg: 0, //未读消息
 };
 
 export default new Vuex.Store({

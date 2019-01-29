@@ -5,8 +5,7 @@
                <router-link class="link" v-bind:to="menu.url" @click.native="toggle(menu)" :class="menu.level>1?'pl-15':''">
                    <span v-if="isShow" class="icon md-file-text font-size-18 mr-10 ml-15" ></span>
                    {{menu.name}}
-                   <span v-if="menu.num>0" class="unRead">{{menu.num}}</span>
-                   
+                   <span v-if="menu.num>0&&unReadMsg>0" class="unRead">{{menu.num}}</span>
                 </router-link>
            </div>
            <div v-if="menu.type === 'button'">
@@ -67,7 +66,6 @@ export default {
     },
 
     mounted(){
-        // console.log()
         this.$nextTick(()=>{
            this.setExpand(this.menus,this.urlRoute)
         })
@@ -190,14 +188,13 @@ export default {
     }
     .unRead {
         display: inline-block;
-        width: 16px;
-        height: 16px;
+        width: 17px;
+        height: 17px;
         background-color: red;
         color: #fff;
         font-size: 12px;
         font-weight: bold;
         text-align: center;
-        line-height: 16px;
         border-radius: 50%;
         position: relative;
         bottom:1px;

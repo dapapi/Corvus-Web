@@ -1,6 +1,6 @@
 <template>
 
-    <input type="text" class="form-control addtrail" data-plugin="asSpinner" value="0"
+    <input type="text" class="form-control addtrail" data-plugin="asSpinner" value="0" increment="0.1"
            :class="[shortInput ? 'short-spinner-input' : '']">
 
 </template>
@@ -16,7 +16,8 @@
                         return value;
                     },
                     min: 0,
-                    max: 100000000,
+                    max: 1000000000,
+                    precision: 2
                 }
             ).on('asSpinner::change', function (e) {
                 self.$emit('change', e.currentTarget.value)

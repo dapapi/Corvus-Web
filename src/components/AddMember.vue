@@ -1,11 +1,12 @@
 <template>
     <div class="addMember">
         <ul class="addMember-items">
-            <li class="addMember-item" v-for="member in selectMemberArr" :key="member.id">
+            <li class="addMember-item" v-for="(member,index) in selectMemberArr" :key="member.id" :style="otherslot?'display:flex':''">
                 <Avatar :imgUrl="member.icon_url"/>
-                <span class="addMember-remove" @click="removeMember(member.id)">
+                <span class="addMember-remove" @click="removeMember(member.id)" :class="otherslot?'addmember-other':''">
                     <i class="md-minus-circle"></i>
                 </span>
+                <div class="splicer" v-if="otherslot && (index < selectMemberArr.length-1)"></div>
             </li>
             <li class="addMember-item">
                 <div class="addMember-trigger" :class="isMemberShow ? 'addMember-active': ''" :id="'selectStaff' + this._uid">
@@ -13,7 +14,7 @@
                          @click="showMember"><i class="iconfont icon-tianjia"></i></div>
                     <div class="addMember-trigger-dropdown">
                         <select-staff :multiple="true" :member-type="'participant'" :type="type"
-                                      @change="changeSelectedMember"></select-staff>
+                                      @change="changeSelectedMember" :otherslot='otherslot'></select-staff>
                     </div>
                 </div>
             </li>
@@ -24,7 +25,7 @@
 <script>
     export default {
         name: "",
-        props: ['type'],
+        props: ['type','otherslot'],
         data() {
             return {
                 isMemberShow: false,
@@ -57,6 +58,8 @@
                     return this.$store.state.incubationInfo
                 }else if(this.type === 'bill'){
                     return this.$store.state.billInfo
+                }else if(this.otherslot){
+                    return this.$store.state.otherSlot
                 }
                 else {
                     
@@ -106,6 +109,8 @@
                     participantInfo = this.$store.state.incubationInfo;
                 }else if(this.type === 'bill'){
                     participantInfo = this.$store.state.billInfo;
+                }else if(this.otherslot){
+                    participantInfo = this.$store.state.otherSlot
                 }
                     
                 else {
@@ -116,7 +121,11 @@
                     type: this.type,
                     data: participantInfo
                 };
-                this.$store.dispatch('changeParticipantsInfo', params);
+                if(this.otherslot){
+                    this.$store.dispatch('changeOtherSlot', params.data);
+                }else{
+                    this.$store.dispatch('changeParticipantsInfo', params);
+                }
                 this.$emit('change', userId)
             },
 
@@ -141,6 +150,16 @@
         margin-right: 0;
         vertical-align: middle;
         margin-bottom: 10px;
+    }
+
+    .splicer {
+        width: 30px;
+        height: 2px;
+        margin: 15px 10px 0 10px;
+        background-color: #E0E0E0;
+    }
+    .addmember-other{
+        left: 22px;
     }
 
 </style>

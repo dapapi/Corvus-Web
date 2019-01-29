@@ -3,36 +3,38 @@
         <Loading :is-loading="isLoading"></Loading>
         <div class="page-header page-header-bordered">
             <h1 class="page-title">客户管理</h1>
-            <!-- <div class="page-header-actions">
-                <import-and-export :type="'export'" :moduleName="'clients'">
+            <div class="page-header-actions">
+                <import-and-export class="float-left" :type="'export'" :moduleName="'clients'">
                     <i class="iconfont icon-daoru px-5 font-size-20 pr-20" aria-hidden="true"></i>
                 </import-and-export>
-                <import-and-export :type="'import'" :moduleName="'clients'">
+                <import-and-export class="float-left" :type="'import'" :moduleName="'clients'">
                     <i class="iconfont icon-daochu font-size-20" aria-hidden="true"></i>
                 </import-and-export>
-            </div> -->
+            </div>
         </div>
 
         <div class="page-content container-fluid">
             <div class="panel col-md-12 py-5">
                 <div class="clearfix">
                     <div class="col-md-3 example float-left">
-                        <selectors :options="companiesArr" @change="changeCompany" placeholder="请选择公司"></selectors>
+                        <input type="text" class="form-control" placeholder="请输入公司名称" v-model="companyName"
+                               @blur="getClients(1)">
                     </div>
                     <div class="col-md-3 example float-left">
-                        <selectors :options="userList" @change="changePrincipalSelect" :multiple="true"/>
+                        <selectors :options="userList" @change="changePrincipalSelect" placeholder="请选择负责人"
+                                   :multiple="true"/>
                     </div>
                     <div class="col-md-3 example float-left">
                         <selectors :options="clientLevelArr" @change="changeClientLevelSelect"
                                    placeholder="请选择公司级别"></selectors>
                     </div>
-                    <!--<div class="col-md-3 example float-left">-->
-                    <!--<button type="button" class="btn btn-default waves-effect waves-classic float-right"-->
-                    <!--data-toggle="modal" data-target="#customizeContent"-->
-                    <!--data-placement="right" title="">-->
-                    <!--自定义筛选-->
-                    <!--</button>-->
-                    <!--</div>-->
+                    <!-- <div class="col-md-3 example float-left">
+                        <button type="button" class="btn btn-default waves-effect waves-classic float-right"
+                                data-toggle="modal" data-target="#customizeContent"
+                                data-placement="right" title="">
+                            自定义筛选
+                        </button>
+                    </div> -->
                 </div>
                 <div class="col-md-12">
                     <table class="table table-hover is-indent mb-20" data-plugin="animateList" data-animate="fade"
@@ -62,7 +64,7 @@
                         </tbody>
                     </table>
 
-                    <div class="col-md-1" style="margin: 6rem auto" v-if="clientsInfo.length === 0">
+                    <div style="margin: 6rem auto;width: 100px" v-if="clientsInfo.length === 0">
                         <img src="https://res.papitube.com/corvus/images/content-none.png" alt="" style="width: 100%">
                     </div>
 
@@ -74,12 +76,13 @@
 
         </div>
 
-        <customize-filter :data="customizeInfo" @change="customize"></customize-filter>
+        <customize-filter :data="customizeInfo" @change="customize" :cleanup="cleanUp"
+                          @cleanupdone='cleanUp=false'></customize-filter>
 
         <AddClientType @change="showAddModal"/>
 
         <div class="modal fade" id="addClient" aria-hidden="true" aria-labelledby="addLabelForm"
-             role="dialog" tabindex="-1">
+             role="dialog" tabindex="-1" data-backdrop="static">
             <div class="modal-dialog modal-simple">
                 <div class="modal-content">
                     <div class="modal-header">
@@ -153,6 +156,13 @@
                             </div>
                         </div>
                         <div class="example">
+                            <div class="col-md-2 text-right float-left require">客户评级</div>
+                            <div class="col-md-10 float-left pl-0">
+                                <selectors ref="clientLevel" :options="taskLevelArr"
+                                           @change="changeClientScale"></selectors>
+                            </div>
+                        </div>
+                        <div class="example">
                             <div class="col-md-2 text-right float-left">备注</div>
                             <div class="col-md-10 float-left pl-0">
                                 <textarea name="" id="" title="" class="form-control" v-model="clientRemark"></textarea>
@@ -188,12 +198,11 @@
                 total: 0,
                 current_page: 0,
                 total_pages: 0,
-                customizeInfo: config.customizeInfo,
+                customizeInfo: {},
                 clientTypeArr: config.clientTypeArr,
                 clientLevelArr: clientLevelArr,
                 keyMasterArr: config.isKeyMasterArr,
                 clientsInfo: [],
-                companiesArr: [],
                 clientScaleArr: config.clientScaleArr,
                 clientType: '',
                 clientName: '',
@@ -213,12 +222,14 @@
                 ragion: {}, // 区域
                 clientScale: '',
                 isLoading: true,
+                taskLevelArr: config.taskLevelArr,
+                cleanUp: false,
             }
         },
 
         mounted() {
+            this.getField()
             this.getClients();
-            this.getCompanies();
             this.user = JSON.parse(Cookies.get('user'))
             // 清除负责人默认值的设置
             this.clearDefaultPrincipal()
@@ -235,6 +246,12 @@
         },
 
         methods: {
+            getField() {
+                let _this = this
+                fetch('get', '/clients/filter_fields').then((params) => {
+                    _this.customizeInfo = params.data
+                })
+            },
             getClients: function (pageNum = 1) {
                 const params = {
                     page: pageNum,
@@ -266,20 +283,6 @@
                 })
             },
 
-            getCompanies: function () {
-                let _this = this;
-                fetch('get', '/clients/all').then(function (response) {
-                    for (let i = 0; i < response.data.length; i++) {
-                        _this.companiesArr.push({
-                            id: response.data[i].id,
-                            name: response.data[i].company,
-                            value: response.data[i].company,
-                            grade: response.data[i].grade
-                        })
-                    }
-                })
-            },
-
             addClient: function () {
 
 
@@ -303,6 +306,10 @@
                     toastr.error('请选择关键决策人！')
                     return
                 }
+                if (!this.clientScale) {
+                    toastr.error('请选择客户评级！')
+                    return
+                }
                 if (this.clientContactPhone.length !== 11) {
                     toastr.error('手机号码格式不对！');
                     return
@@ -315,7 +322,6 @@
                     type: this.clientType,
                     company: this.clientName,
                     grade: this.clientLevel,
-                    // region_id: '',
                     province: this.ragion.province || '',
                     city: this.ragion.city || '',
                     district: this.ragion.district || '',
@@ -327,8 +333,7 @@
                         position: this.clientContactPosition,
                         type: this.clientContactType,
                     },
-                    // keyman: this.clientDecision,
-                    size: this.clientScale,
+                    client_rating: this.clientScale,
                     desc: this.clientRemark
                 };
                 if (!data.principal_id) {
@@ -343,17 +348,20 @@
                 })
             },
 
-            customize: function () {
+            customize: function (value) {
+                let _this = this
+                fetch('post', '/clients/filter?include=principal', value).then((params) => {
+                    _this.clientsInfo = params.data
+                    _this.total = params.meta.pagination.total;
+                    _this.total_pages = params.meta.pagination.total_pages;
+                    _this.current_page = params.meta.pagination.current_page
+                    _this.cleanUp = true
+                })
 
             },
 
             redirectClientDetail: function (clientId) {
                 this.$router.push({path: 'clients/' + clientId});
-            },
-
-            changeCompany: function (value) {
-                this.companyName = value
-                this.getClients()
             },
 
             changeClientType: function (value) {
@@ -391,11 +399,12 @@
             },
             // show add
             showAddModal(val) {
-                if (val === 3) {
-                    if (Cookies.get('companyType') === '泰洋川禾') {
-                        val = 3;
-                    } else {
-                        val = 4;
+                let organization_id = JSON.parse(Cookies.get('user')).organization_id
+                if (val == 3) {
+                    if (organization_id == 411) {
+                        val = 3
+                    } else if (organization_id == 412) {
+                        val = 4
                     }
                 }
                 this.setDefaultPrincipal()
@@ -438,7 +447,7 @@
                 this.clientAddressDetail = ''
                 this.clearDefaultPrincipal()
             },
-            goDetail (id) {
+            goDetail(id) {
                 this.$router.push('/clients/' + id)
             }
         }
@@ -470,8 +479,9 @@
             }
         }
     }
+
     table tbody tr {
-       cursor: pointer;
+        cursor: pointer;
     }
 
     .modal-body .example {

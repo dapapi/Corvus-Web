@@ -54,8 +54,6 @@ let config = {
             }
         },
 
-        companyType: Cookies.get('companyType'),
-
         trailOrigin: [
             {
                 name: '商务邮箱',
@@ -132,6 +130,38 @@ let config = {
             {
                 name: 'papi线索',
                 value: 4
+            },
+        ],
+        publicTrailTypeArr: [
+            {
+                name: '全部',
+                value: ''
+            },
+            {
+                name: '影视公海池',
+                value: 1
+            },
+            {
+                name: '综艺公海池',
+                value: 2
+            },
+            {
+                name: '商务公海池',
+                value: 3
+            },
+        ],
+        publicTrailTakeType: [
+            {
+                name: '全部',
+                value: ''
+            },
+            {
+                name: '未领取',
+                value: 1
+            },
+            {
+                name: '已领取',
+                value: 2
             },
         ],
         classifyArr: [
@@ -220,16 +250,20 @@ let config = {
 
         taskLevelArr: [
             {
-                name: '高',
-                value: 1
+                name: 'S',
+                value: 4
             },
             {
-                name: '中',
+                name: 'A',
+                value: 3
+            },
+            {
+                name: 'B',
                 value: 2
             },
             {
-                name: '低',
-                value: 3
+                name: 'C',
+                value: 1
             },
         ],
 
@@ -280,10 +314,10 @@ let config = {
                 name: '商务项目',
                 value: 3
             },
-            {
-                name: 'papi项目',
-                value: 4
-            },
+            // {
+            //     name: 'papi项目',
+            //     value: 4
+            // },
             {
                 name: '基础项目',
                 value: 5
@@ -445,6 +479,10 @@ let config = {
         ],
 
         priorityArr: [
+            // {
+            //     name: '无',
+            //     value: 0
+            // },
             {
                 name: '高',
                 value: 1
@@ -481,7 +519,7 @@ let config = {
         lockArr: [
             {
                 name: '否',
-                value: 0
+                value: 2
             },
             {
                 name: '是',
@@ -787,43 +825,43 @@ let config = {
         remindArr: [
             {
                 name: '无',
-                value: '0'
-            },
-            {
-                name: '日程发生时',
                 value: 1
             },
             {
-                name: '5分钟前',
+                name: '日程发生时',
                 value: 2
             },
             {
-                name: '10分钟前',
+                name: '5分钟前',
                 value: 3
             },
             {
-                name: '15分钟前',
+                name: '10分钟前',
                 value: 4
             },
             {
-                name: '30分钟前',
+                name: '15分钟前',
                 value: 5
             },
             {
-                name: '1小时前',
+                name: '30分钟前',
                 value: 6
             },
             {
-                name: '2小时前',
+                name: '1小时前',
                 value: 7
             },
             {
-                name: '1天前',
+                name: '2小时前',
                 value: 8
             },
             {
-                name: '2天前',
+                name: '1天前',
                 value: 9
+            },
+            {
+                name: '2天前',
+                value: 10
             }
         ],
         repeatArr: [
@@ -1055,7 +1093,7 @@ let config = {
                 color: '#4caf50'
             },
             {
-                name: '已解决',
+                name: '已解约',
                 value: 3,
                 color: '#f44336'
             }
@@ -1215,15 +1253,15 @@ let config = {
                 value: 1
             }
         ],
-        week:[
+        week: [
             {
-                name:'日',
-                value:0
+                name: '日',
+                value: 0
 
             },
             {
-                name:'一',
-                value:1
+                name: '一',
+                value: 1
             },
             {
                 name: '二',
@@ -1275,10 +1313,10 @@ let config = {
                 value: 4,
             },
             {
-            name: '高中',
+                name: '高中',
                 value: 5,
             },
-           {
+            {
                 name: '中专/中技',
                 value: 6,
             },
@@ -1287,6 +1325,61 @@ let config = {
                 value: 7,
             }
         ],
+        //消息模块link
+        msgLink:[
+            {
+                value: '207',
+                name: '/artists',//艺人管理
+                url: '/stars/'
+            },
+            {
+                 value: '208',
+                 name: '/blogger', //博主管理
+                 url: '/bloggers/'
+            },
+            {
+              value: '209',
+              name: '/trails', //销售线索管理
+              url: '/trails/'
+            },
+            {
+              value: '210',
+              name: '/clients', //客户管理
+              url: '/clients/'
+            },
+            {
+              value: '211',
+              name: '/projects', //项目管理
+              url: '/projects/'
+            },
+            {
+              value: '212',
+              name: '/tasks', //任务管理
+              url: '/tasks/'
+            },
+            {
+              value: '213',
+              name: '/approval', //合同管理
+              url: '/approval_instances/'
+            },
+            {
+              value: '214',
+              name: '/calendar', //日历管理
+              url: '/calendar/'
+            },
+            {
+              value: '216',
+              name: '/approval', //审批管理
+              url: '/approval_instances/'
+            },
+            {
+              value: '218',
+              name: '/broadcast', //公告
+              url: '/announcements/'
+            },
+        ]
+
+
     }
 ;
 

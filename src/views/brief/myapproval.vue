@@ -57,7 +57,7 @@
                                 
                             </tr>
                         </table>
-                        <div v-if="list.length === 0" class="col-md-1" style="margin: 6rem auto">
+                        <div v-if="list.length === 0" style="margin: 6rem auto;width: 100px">
                             <img src="https://res.papitube.com/corvus/images/content-none.png" alt="" style="width: 100%">
                         </div>
                         <pagination :current_page="current_page" :method="getlist" :total_pages="total_pages"
@@ -107,10 +107,8 @@ export default {
            
             fetch('get',`${config.apiUrl}/review`,{search:this.search,status:this.status}).then((res) => {
                 _this.list = res.data
-                // console.log(_this.list)
                 for (let i = 0; i < _this.list.length; i++) {
                     if(_this.list[i].title){
-                        console.log(_this.list[i].title)
                         _this.list[i].title = _this.list[i].title.split(',')
                     }else{
                          _this.list[i].title = ['','']

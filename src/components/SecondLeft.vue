@@ -63,6 +63,7 @@
 </style>
 <script>
     import {mapState, mapGetters} from 'vuex'
+    import Cookies from 'js-cookie'
 
     export default {
         props: {

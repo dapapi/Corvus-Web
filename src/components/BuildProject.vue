@@ -1,6 +1,6 @@
 <template>
     <div class="modal fade" id="addProject" aria-hidden="true" aria-labelledby="addLabelForm"
-         role="dialog" tabindex="-1">
+         role="dialog" tabindex="-1" data-backdrop="static">
         <div class="modal-dialog modal-simple">
             <div class="modal-content">
                 <div class="modal-header">
@@ -10,17 +10,17 @@
                     <h4 class="modal-title">新增项目</h4>
                 </div>
                 <div class="modal-body">
-                    <div class="col-md-12 example clearfix" v-show="projectType != 5 && trailsArr.length > 0">
+                    <div class="col-md-12 example clearfix" v-show="projectType != 5">
                         <div class="col-md-2 text-right float-left px-0 require">销售线索</div>
                         <div class="col-md-10 float-left">
                             <Selectors :options="trailsArr" @change="addProjectTrail" ref="trails"
                                        selectable="true"></Selectors>
                         </div>
                     </div>
-                    <div class="col-md-12 example clearfix" v-show="projectType != 5">
+                    <div class="col-md-12 my-20 clearfix" v-show="projectType != 5">
                         <div class="col-md-2 text-right float-left px-0 require">项目来源</div>
                         <div class="col-md-10 float-left">
-                            <div class="col-md-6 float-left pl-0" v-if="trailOriginArr.length > 0">
+                            <div class="col-md-6 float-left pl-0">
                                 <Selectors :options="trailOriginArr"
                                            @change="(value) => addProjectBaseInfo(value, 'resource_type')"
                                            ref="trailOrigin"></Selectors>
@@ -49,7 +49,7 @@
                                     @change="(value) => addProjectBaseInfo(value, 'principal_id')"></InputSelectors>
                         </div>
                     </div>
-                    <div class="col-md-12 example clearfix" v-show="projectType != 5 && starsArr.length > 0">
+                    <div class="col-md-12 example clearfix" v-show="projectType != 5">
                         <div class="col-md-2 text-right float-left px-0 require">目标艺人</div>
                         <div class="col-md-10 float-left">
                             <Selectors multiple="true" :options="starsArr" ref="intentionArtist"
@@ -98,48 +98,57 @@
                                            @change="(value) => addProjectBaseInfo(value, 'fee')"></NumberSpinner>
                         </div>
                     </div>
+                    <div class="col-md-12 example clearfix" v-show="projectType == 3">
+                        <div class="col-md-2 text-right float-left px-0 require">合作类型</div>
+                        <div class="col-md-10 float-left">
+                            <Selectors ref="projectCooperation" :options="cooperationTypeArr"
+                                       @change="(value) => addProjectBaseInfo(value, 'cooperation_type')"></Selectors>
+                        </div>
+                    </div>
+                    <div class="col-md-12 example clearfix" v-show="projectType == 3">
+                        <div class="col-md-2 text-right float-left px-0 require">状态</div>
+                        <div class="col-md-10 float-left">
+                            <Selectors ref="projectTrailStatus" :options="trailStatusArr"
+                                       @change="(value) => addProjectBaseInfo(value, 'status')"></Selectors>
+                        </div>
+                    </div>
                     <div class="col-md-12 example clearfix" v-for="field in projectFields" :key='field.key'>
-                        <div class="col-md-2 text-right float-left px-0 ">{{ field.key }}</div>
+                        <div class="col-md-2 text-right float-left px-0 require">{{ field.key }}</div>
                         <div class="col-md-10 float-left">
                             <template v-if="field.field_type === 1">
-                                <EmitInput :default='newArray.find(item=>item.id === field.id)'
+                                <EmitInput :default='newArray.find(item=>item.key === field.key)'
                                            @change="(value) => addInfo(value, field.id )"></EmitInput>
                             </template>
                             <template v-if="field.field_type === 2">
-                                <Selectors :default='newArray.find(item=>item.id === field.id)'
+                                <Selectors :default='newArray.find(item=>item.key === field.key)'
                                            :options="field.contentArr"
                                            @change="(value) => addInfo(value, field.id )"></Selectors>
                             </template>
-                            <template v-if="field.field_type === 3">
-                                <EditableSearchBox :default='newArray.find(item=>item.id === field.id)'
-                                                   :options="starsArr" :multiple="true"
-                                                   @change="(value) => addInfo(value, field.id )"></EditableSearchBox>
-                            </template>
                             <template v-if="field.field_type === 4">
-                                <Datepicker :default='newArray.find(item=>item.id === field.id)'
+                                <Datepicker :default='newArray.find(item=>item.key === field.key)'
                                             @change="(value) => addInfo(value, field.id )"></Datepicker>
                             </template>
                             <template v-if="field.field_type === 5">
-                                <NormalTextarea :default='newArray.find(item=>item.id == field.id)' title=""
+                                <NormalTextarea :default='newArray.find(item=>item.key == field.key)' title=""
                                                 class="form-control"
                                                 @change="(value) => addInfo(value, field.id )"></NormalTextarea>
                             </template>
                             <template v-if="field.field_type === 6">
-                                <Selectors :default='newArray.find(item=>item.id === field.id)'
+                                <Selectors :default='newArray.find(item=>item.key === field.key)'
                                            :options="field.contentArr" :multiple="true"
                                            @change="(value) => addInfo(value.join('|'), field.id )"></Selectors>
                             </template>
                             <template v-if="field.field_type === 8">
                                 <GroupDatepicker
-                                        :default='newArray.find(item=>item.id === field.id)'
-                                        @change="(from, to) => addInfo(from + '|' + to, field.id )"></GroupDatepicker>
+                                        :default='newArray.find(item=>item.key === field.key)'
+                                        @change="(from, to) => addInfo(from + ' | ' + to, field.id )"></GroupDatepicker>
                             </template>
                             <template v-if="field.field_type === 10">
-                                <InputSelectors :default='newArray.find(item=>item.id === field.id)'
+                                <InputSelectors :default='newArray.find(item=>item.key === field.key)'
                                                 @change="(value) => addInfo(value, field.id )"></InputSelectors>
                             </template>
                             <template v-if="field.field_type === 11">
-                                <NumberSpinner :default='newArray.find(item=>item.id === field.id)'
+                                <NumberSpinner :default='newArray.find(item=>item.key === field.key)'
                                                @change="(value) => addInfo(value, field.id )"></NumberSpinner>
                             </template>
                         </div>
@@ -152,9 +161,9 @@
                         </div>
                     </div>
                 </div>
-                <template v-if="projectType != 5">
+                <div class="col-md-12" v-if="projectType != 5">
                     <ApprovalProgress :formid='projectType'/>
-                </template>
+                </div>
 
                 <div class="modal-footer">
                     <button class="btn btn-sm btn-white btn-pure" data-dismiss="modal" @click='refreshAddProjectModal'>
@@ -173,14 +182,15 @@
     import fetch from '../assets/utils/fetch.js'
     import ApprovalProgress from '@/components/ForApproval/ApprovalProgress'
     import Cookies from 'js-cookie'
+    import {mapState} from 'vuex'
 
     export default {
         components: {
             ApprovalProgress
         },
         name: "BuildProject",
-        //projectType 项目类型   projectFieldsArr 不同项目类型的数据   
-        props: ['projectType', 'projectFieldsArr', 'defaultData'],
+        //projectType 项目类型   projectFieldsArr 不同项目类型的数据
+        props: ['projectType', 'projectFieldsArr', 'defaultData', 'mode'],
         data() {
             return {
                 visibleRangeArr: config.visibleRangeArr,
@@ -188,11 +198,13 @@
                 trailsArr: [],
                 trailOrigin: '',
                 trailOriginArr: config.trailOrigin,
+                trailStatusArr: config.trailStatusArr,
+                cooperationTypeArr: config.cooperationTypeArr,
                 starsArr: [],
                 bloggerArr: [],
                 startTime: '',
                 trailOriginContent: '',
-                trailsAllInfo: '',
+                trailsAllInfo: [],
                 addInfoArr: {},
                 projectBaseInfo: {
                     trail: {},
@@ -202,7 +214,39 @@
                 approver: [],
                 newArray: [],
                 user: '',
+                cooperationDefault: '',
+                trailStatusDefault: '',
+
             }
+        }, 
+        created() {
+            this.getStars();
+
+        },
+        mounted() {
+            
+            // this.setDefaultValue()
+            // $('#addProject').on('hidden.bs.modal', function () {
+            //     console.log(22222);
+            //     _this.refreshAddProjectModal()
+            // });
+            // $('#addProject').on('show.bs.modal', function () {
+            //     if (_this.defaultData) {
+            //         _this.setDefaultValue()
+            //         _this.$nextTick(() => {
+            //             _this.$refs.trails.setValue(_this.defaultData.trailInfo.data.id)
+            //             _this.$nextTick(function () {
+            //                 _this.addProjectTrail(_this.defaultData.trailInfo.data.id)
+            //                 _this.$forceUpdate()
+            //             })
+            //         })
+            //     } else {
+            //         if (!_this.$store.state.newPrincipalInfo.id) {
+            //             _this.$store.dispatch('changePrincipal', {data: {id: _this.user.id, name: _this.user.nickname}})
+            //         }
+            //     }
+            // });
+            this.user = JSON.parse(Cookies.get('user'));
         },
         watch: {
             projectFieldsArr(newValue) {
@@ -210,37 +254,17 @@
             },
             projectType() {
                 this.getTrail()
+                this.defaultDataFilter()
             },
         },
-        created() {
-            this.getTrail()
-            this.getStars();
+
+        computed: {
+            ...mapState([
+                'userList'
+            ])
         },
-        mounted() {
-            let _this = this;
-            this.setDefaultValue()
-            this.defaultDataFilter()
-            $('#addProject').on('hidden.bs.modal', function () {
-                _this.refreshAddProjectModal()
-            });
-            $('#addProject').on('show.bs.modal', function () {
-                if (_this.defaultData) {
-                    _this.setDefaultValue()
-                    _this.$nextTick(() => {
-                        _this.$refs.trails.setValue(_this.defaultData.trailInfo.data.id)
-                        _this.$nextTick(function () {
-                            _this.addProjectTrail(_this.defaultData.trailInfo.data.id)
-                            _this.$forceUpdate()
-                        })
-                    })
-                } else {
-                    if (!_this.$store.state.newPrincipalInfo.id) {
-                        _this.$store.dispatch('changePrincipal', {data: {id: _this.user.id, name: _this.user.nickname}})
-                    }
-                }
-            });
-            this.user = JSON.parse(Cookies.get('user'));
-        },
+
+       
         methods: {
             defaultDataFilter() {
                 if (!this.defaultData) {
@@ -279,7 +303,7 @@
                     Object.assign(this.projectBaseInfo, {'priority': this.defaultData.list.priority})
                     this.$refs.startTime.setValue(this.defaultData.list.start_at);
                     this.$refs.endTime.setValue(this.defaultData.list.end_at);
-                    this.$refs.projectExpenditureFee.setValue(this.defaultData.list.expenditure_fee)
+                    this.$refs.projectExpenditureFee.setValue(this.defaultData.list.projected_expenditure)
                     this.$store.dispatch('changePrincipal', this.defaultData.list.principal);
                 }
             },
@@ -296,8 +320,11 @@
                 });
                 this.projectBaseInfo.principal_id = trailInfo.principal.data.id;
                 let artistsArr = [];
-                for (let i = 0; i < trailInfo.expectations.data.length; i++) {
-                    artistsArr.push(trailInfo.expectations.data[i].id)
+                for (let i = 0; i < trailInfo.starexpectations.data.length; i++) {
+                    artistsArr.push(trailInfo.starexpectations.data[i].flag + '-' + trailInfo.starexpectations.data[i].id)
+                }
+                for (let i = 0; i < trailInfo.bloggerexpectations.data.length; i++) {
+                    artistsArr.push(trailInfo.bloggerexpectations.data[i].flag + '-' + trailInfo.bloggerexpectations.data[i].id)
                 }
                 this.$refs.intentionArtist.setValue(artistsArr);
                 this.projectBaseInfo.expectations = artistsArr;
@@ -305,6 +332,10 @@
                 this.projectBaseInfo.priority = trailInfo.priority;
                 this.$refs.projectFee.setValue(trailInfo.fee);
                 this.$refs.trailOrigin.setValue(trailInfo.resource_type);
+                if (this.projectType == 3) {
+                    this.$refs.projectCooperation.setValue(trailInfo.cooperation_type);
+                    this.$refs.projectTrailStatus.setValue(trailInfo.status);
+                }
                 this.trailOrigin = trailInfo.resource_type;
                 this.projectBaseInfo.trail.id = trailInfo.id;
                 switch (trailInfo.resource_type) {
@@ -318,10 +349,16 @@
                         this.trailOriginContent = JSON.parse(JSON.stringify(trailInfo.resource));
                         break;
                     case 4:
-                        this.$store.dispatch('changePrincipal', {type: 'selector', data: trailInfo.resource});
+                        this.$store.dispatch('changePrincipal', {
+                            type: 'selector',
+                            data: this.memberFinder(trailInfo.resource)
+                        });
                         break;
                     case 5:
-                        this.$store.dispatch('changePrincipal', {type: 'selector', data: trailInfo.resource});
+                        this.$store.dispatch('changePrincipal', {
+                            type: 'selector',
+                            data: this.memberFinder(trailInfo.resource)
+                        });
                         break;
                     default:
                         break;
@@ -333,8 +370,7 @@
                     for (let i = 0; i < response.data.length; i++) {
                         this.starsArr.push({
                             name: response.data[i].name,
-                            id: response.data[i].id,
-                            value: response.data[i].id
+                            value: response.data[i].flag + '-' + response.data[i].id,
                         })
                     }
 
@@ -342,12 +378,14 @@
             },
 
             getTrail: function () {
+                let _this = this
                 let data = {
-                    include: 'principal,expectations',
+                    include: 'principal,starexpectations,bloggerexpectations',
                     type: this.projectType
                 };
                 this.trailsArr = [];
                 fetch('get', '/trails/all', data).then(response => {
+                    console.log(response);
                     for (let i = 0; i < response.data.length; i++) {
                         this.trailsArr.push({
                             name: response.data[i].title,
@@ -357,7 +395,25 @@
                     }
                     this.trailsAllInfo = response.data;
                     this.$refs.trails.refresh();
+                        let _this = this
+                if (_this.defaultData) {
+                    _this.setDefaultValue()
+                    _this.$nextTick(() => {
+                        _this.$refs.trails.setValue(_this.defaultData.trailInfo.data.id)
+                        _this.$nextTick(function () {
+                            _this.addProjectTrail(_this.defaultData.trailInfo.data.id)
+                        })
+                    })
+                } else {
+                    if (!_this.$store.state.newPrincipalInfo.id) {
+                        _this.$store.dispatch('changePrincipal', {data: {id: _this.user.id, name: _this.user.nickname}})
+                    }
+                }
                 })
+            },
+
+            memberFinder(value) {
+                return this.userList.find(item => item.id == value);
             },
 
             addProject: function () {
@@ -409,9 +465,24 @@
                     case 'resource_type':
                         this.trailOrigin = value;
                         this.projectBaseInfo.trail.resource_type = value;
-                        return
+                        return;
                     case 'expectations':
+                        for (let i = 0; i < value.length; i++) {
+                            let item = value[i].split('-');
+                            value[i] = {
+                                id: item[1],
+                                flag: item[0]
+                            };
+                        }
+
                         this.projectBaseInfo.trail.expectations = value;
+                        return;
+                    case 'cooperation_type':
+                        this.projectBaseInfo.trail.cooperation_type = value;
+                        return;
+                    case 'status':
+                        this.projectBaseInfo.trail.status = value;
+                        return;
                 }
                 this.projectBaseInfo[name] = value
             },

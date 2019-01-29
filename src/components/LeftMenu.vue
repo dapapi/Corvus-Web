@@ -83,16 +83,16 @@
                         code: 'talent',
                         image: 'https://res.papitube.com/corvus/images/talent.png',
                         hoverImage: 'https://res.papitube.com/corvus/images/select-talent.png',
-                        data: [
-                            {
-                                name: '艺人',
-                                code: 'artists'
-                            },
-                            {
-                                name: '博主',
-                                code: 'blogger'
-                            }
-                        ]
+                        // data: [
+                        //     {
+                        //         name: '艺人',
+                        //         code: 'artists'
+                        //     },
+                        //     {
+                        //         name: '博主',
+                        //         code: 'blogger'
+                        //     }
+                        // ]
                     },
                     {
                         name: 'CRM',
@@ -104,8 +104,12 @@
                                 code: 'projects'
                             },
                             {
-                                name: '销售',
+                                name: '线索',
                                 code: 'trails'
+                            },
+                            {
+                                name: '线索公海池',
+                                code: 'publictrails'
                             },
                             {
                                 name: '客户',
@@ -130,38 +134,32 @@
                         hoverImage: 'https://res.papitube.com/corvus/images/select-baobiao.png',
                     },
                     {
-                        name: '通讯录',
-                        image: 'https://res.papitube.com/corvus/images/tongxunlu.png',
-                        hoverImage: 'https://res.papitube.com/corvus/images/select-tongxunlu.png',
-                        code: 'address'
+                        name: '应用',
+                        image: 'https://res.papitube.com/corvus/images/yingyong.png',
+                        hoverImage: 'https://res.papitube.com/corvus/images/select-yingyong.png',
+                        data: [
+                            // {
+                            //     name: '考勤',
+                            //     code: 'attendance'
+                            // },
+                            {
+                                name: '公告',
+                                code: 'broadcast'
+                            },
+                            // {
+                            //     name: '简报',
+                            //     code: 'brief'
+                            // },
+                            {
+                                name: '通讯录',
+                                code: 'address'
+                            },
+                            // {
+                            //     name: '知识库',
+                            //     code: 'knowledgebase'
+                            // },
+                        ]
                     },
-                    // {
-                    //     name: '应用',
-                    //     image: 'https://res.papitube.com/corvus/images/yingyong.png',
-                    //     hoverImage: 'https://res.papitube.com/corvus/images/select-yingyong.png',
-                    //     data: [
-                    //         // {
-                    //         //     name: '考勤',
-                    //         //     code: 'attendance'
-                    //         // },
-                    //         {
-                    //             name: '公告',
-                    //             code: 'broadcast'
-                    //         },
-                    //         {
-                    //             name: '简报',
-                    //             code: 'brief'
-                    //         },
-                    //         {
-                    //             name: '通讯录',
-                    //             code: 'address'
-                    //         },
-                    //         // {
-                    //         //     name: '知识库',
-                    //         //     code: 'knowledgebase'
-                    //         // },
-                    //     ]
-                    // },
                 ],
                 pageRoute: '',
                 visible: false,
@@ -175,7 +173,11 @@
             ])
         },
         mounted() {
-            this.avatar = JSON.parse(Cookies.get('user')).avatar;
+            // console.log(JSON.parse(Cookies.get('user')).avatar)
+            if(Cookies.get('user')){
+                 this.avatar = JSON.parse(Cookies.get('user')).avatar;
+            }
+            // console.log(this.avatar)
             document.body.onclick = () => {
                 this.visible = false
             }
@@ -184,6 +186,7 @@
             '$route'(to, from) {
                 this.pageRoute = to.path.split('/')[1];
             },
+            
         },
         methods: {
             showBackModel() {
@@ -193,7 +196,6 @@
             layout() {
                 this.visible = false
                 Cookies.remove('user');
-                Cookies.remove('companyType');
                 Cookies.remove('CORVUS-ACCESS-TOKEN');
                 Cookies.remove('selectedCalendar');
                 window.location.href = '/login'

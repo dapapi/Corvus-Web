@@ -1,19 +1,19 @@
 <!-- 选择员工，单人 -->
 <template>
     <div class="selector" :id="'inputSelectMember' + _uid">
-        <div class="float-left input-selectors-div" :class='otherslot?"":"input-selectors-add"'>
+        <div class="float-left input-selectors-div" :class="'input-selectors-add'">
             <input type="text" class="form-control" title="" @focus="showMember" :placeholder="placeholder"
                    v-model="selectedMemberName">
         </div>
         <div style="position: relative;top: 36px;" v-show="selectMemberShow">
-            <select-staff class="selector" @change="changeSelectMember" :member-type="'principal'"
-                          :type="type"></select-staff>
+            <select-staff class="selector" @change="changeSelectMember" :member-type="'principal'" :submit='submit'
+                          :type="type" :otherslot='otherslot'></select-staff>
         </div>
     </div>
 </template>
 <script>
     export default {
-        props: ['placeholder', 'type', 'propSelectMemberName', 'otherslot'],
+        props: ['placeholder', 'type', 'propSelectMemberName', 'otherslot','submit'],
         data() {
             return {
                 selectMemberShow: false

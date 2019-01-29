@@ -6,10 +6,10 @@
         <div class="page-content container-fluid">
             <div class="bg-white">
                 <div class="clearfix">
-                    <div class="col-md-5 p-20 clearfix float-left">
+                    <div class="col-md-5 p-20 clearfix float-left" style="z-index: 0">
                         <GroupDatepicker ref="timeInterval" @change="changeDate"></GroupDatepicker>
                     </div>
-                    <div class="col-md-7 p-20 clearfix float-left">
+                    <div class="col-md-7 p-20 clearfix float-left" style="z-index: 0;">
                         <div class="col-md-3 float-left">
                             <button type="button" class="btn btn-block btn-success waves-effect waves-classic"
                                     :disabled="designationDateNum === 'day'" @click="selectDate('day')">7天
@@ -69,11 +69,13 @@
                 <div class="page-content tab-content nav-tabs-animate bg-white">
                     <div class="tab-pane animation-fade active" id="forum-business-report" role="tabpanel">
                         <div class="clearfix">
-                            <div class="col-md-2 float-left pl-0">
-                                <Selectors :options="artistStatusArr" @change="changeArtistStatus"></Selectors>
+                            <div class="col-md-3 float-left pl-0">
+                                <Selectors :options="artistStatusArr" @change="changeArtistStatus"
+                                           placeholder="请选择艺人状态"></Selectors>
                             </div>
-                            <div class="col-md-2 float-left pl-0" v-if="artistStatus != 1">
-                                <Selectors :options="trailsNumArr" @change="changeTrailsNum"></Selectors>
+                            <div class="col-md-3 float-left pl-0" v-if="artistStatus != 1">
+                                <Selectors :options="trailsNumArr" @change="changeTrailsNum"
+                                           placeholder="请选择项目类型"></Selectors>
                             </div>
                             <div class="col-md-3 float-left pl-0"
                                  v-if="departmentsInfo.length > 1 && artistStatus != 1">
@@ -111,10 +113,12 @@
                                             {{ artistSourceArr.find(item => item.value == data.source).name }}
                                         </template>
                                     </td>
-                                    <td>{{ data.created_at }}</td>
-                                    <td>
-                                        <template v-if="data.last_update_at">{{ data.last_update_at }}</template>
+                                    <td>{{ taiyangCommunicationStatusArr.find(item => item.value ==
+                                        data.communication_status) ? taiyangCommunicationStatusArr.find(item => item.value ==
+                                        data.communication_status).name : '' }}
                                     </td>
+                                    <td>{{ data.created_at }}</td>
+                                    <td>{{ data.last_update_at}}</td>
                                 </template>
                                 <template v-else>
                                     <td>{{ data.department_name }}</td>
@@ -125,7 +129,7 @@
                             </tr>
                             </tbody>
                         </table>
-                        <div class="col-md-1" style="margin: 6rem auto"
+                        <div style="margin: 6rem auto;width: 100px"
                              v-if="tableData.stars && tableData.stars.length === 0">
                             <img src="https://res.papitube.com/corvus/images/content-none.png" alt=""
                                  style="width: 100%">
@@ -133,8 +137,8 @@
                     </div>
                     <div class="tab-pane animation-fade" id="forum-sales-funnel" role="tabpanel">
                         <div class="clearfix pb-20">
-                            <div class="col-md-2 float-left pl-0">
-                                <Selectors :options="starsArr" @change="changeStar"></Selectors>
+                            <div class="col-md-3 float-left pl-0">
+                                <Selectors :options="starsArr" @change="changeStar" placeholder="请选择目标艺人"></Selectors>
                             </div>
                             <div class="col-md-3 float-left pl-0" v-if="departmentsInfo.length > 1">
                                 <DropDepartment name="组别" :data="departmentsInfo" @change="selectAnalysisDepartment"/>
@@ -151,7 +155,7 @@
 </template>
 
 <script>
-    import { mapState } from 'vuex'
+    import {mapState} from 'vuex'
     import fetch from '../../assets/utils/fetch.js'
     import config from '../../assets/js/config'
 
@@ -249,13 +253,13 @@
             ...mapState([
                 'department',
             ]),
-            _department () {
+            _department() {
                 return this.department
             }
         },
 
         watch: {
-            _department () {
+            _department() {
                 this.departmentsInfo = this.departmentsInfo.concat(this.department);
             }
         },
@@ -404,7 +408,7 @@
 
                 let myChart = echarts.init(this.$refs.main, 'mttop');
 
-                fetch('get', '/reportfrom/starprojectanalysis', data).then(function (response) {
+                fetch('get', '/reportfrom/startrailanalysis', data).then(function (response) {
                     let firstInfo = [];
                     let secondName = [];
                     let secondInfo = [];

@@ -33,13 +33,13 @@
                                         <span class="broadcast-title-div">
                                             <router-link :to="{name:'broadcast/detail', params: {id: item.id}}">
                                                 <span class="">{{item.title}}</span>
+                                                <span class="broadcast-top-flag badge badge-outline badge-info ml-20" 
+                                                v-if="item.stick">置顶</span>
                                             </router-link>
                                         </span>
-                                        <span class="broadcast-top-flag badge badge-outline badge-info" 
-                                            v-if="item.stick">置顶</span>
-                                        <span class="broadcast-new-flag" v-if="!item.readflag">
+                                        <!-- <span class="broadcast-new-flag" v-if="!item.readflag">
                                            NEW
-                                        </span>
+                                        </span> -->
                                     </td>
                                     <td>{{classifyArr.find(classifyArr => classifyArr.value == item.classify).name}}</td>
                                     <td>
@@ -51,7 +51,7 @@
                                 </tr>
                                 </tbody>
                             </table>
-                            <div class="col-md-1" style="margin: 6rem auto" v-if="broadCastInfo.length === 0">
+                            <div style="margin: 6rem auto;width: 100px" v-if="broadCastInfo.length === 0">
                                 <img src="https://res.papitube.com/corvus/images/content-none.png" alt="" style="width: 100%">
                             </div>
                         </div>
@@ -138,7 +138,7 @@ export default {
 }
 .broadcast-top-flag{
     margin-left: 20px;
-    color: #3298DC !important;
+    color: #00bcd4 !important;
 }
 .broadcast-new-flag{
     margin-left: 20px;

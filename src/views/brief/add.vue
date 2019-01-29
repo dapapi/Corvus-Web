@@ -50,7 +50,7 @@
             </button>
         </div>
         <!--添加模版弹框开始-->
-        <div class="modal fade" ref="addModelDetails" id="addModelDetails" aria-hidden="true" aria-labelledby="addLabelForm" role="dialog" tabindex="-1">
+        <div class="modal fade" ref="addModelDetails" id="addModelDetails" aria-hidden="true" aria-labelledby="addLabelForm" role="dialog" tabindex="-1" data-backdrop="static">
             <div class="modal-dialog modal-simple">
                 <div class="modal-content">
                     <div class="modal-header">
@@ -87,7 +87,7 @@
         </div>
         <!--添加模版弹框结束-->
         <!--添加模版添加问题弹框开始-->
-        <div class="modal fade" id="addQues" aria-hidden="true" aria-labelledby="addLabelForm" role="dialog" tabindex="-1">
+        <div class="modal fade" id="addQues" aria-hidden="true" aria-labelledby="addLabelForm" role="dialog" tabindex="-1" data-backdrop="static">
             <div class="modal-dialog modal-simple">
                 <div class="modal-content">
                     <div class="modal-header">
@@ -134,7 +134,7 @@
         </div>
         <!--添加模版添加问题弹框结束-->
         <!--添加问题二级弹框开始-->
-        <div class="modal fade" id="addQuesDetails" aria-hidden="true" aria-labelledby="addLabelForm" role="dialog" tabindex="-1">
+        <div class="modal fade" id="addQuesDetails" aria-hidden="true" aria-labelledby="addLabelForm" role="dialog" tabindex="-1" data-backdrop="static">
             <div class="modal-dialog modal-simple">
                 <div class="modal-content">
                     <div class="modal-header">
@@ -185,7 +185,7 @@
         </div>
         <!--添加问题二级弹框结束-->
         <!--删除模版弹框开始-->
-        <div class="modal fade" id="delModel" aria-hidden="true" aria-labelledby="addLabelForm" role="dialog" tabindex="-1">
+        <div class="modal fade" id="delModel" aria-hidden="true" aria-labelledby="addLabelForm" role="dialog" tabindex="-1" data-backdrop="static">
             <div class="modal-dialog modal-simple">
                 <div class="modal-content">
                     <div class="modal-header">
@@ -207,7 +207,7 @@
         </div>
         <!--删除模版弹框结束-->
         <!--删除问题弹框开始-->
-        <div class="modal fade" id="delQues" aria-hidden="true" aria-labelledby="addLabelForm" role="dialog" tabindex="-1">
+        <div class="modal fade" id="delQues" aria-hidden="true" aria-labelledby="addLabelForm" role="dialog" tabindex="-1" data-backdrop="static">
             <div class="modal-dialog modal-simple">
                 <div class="modal-content">
                     <div class="modal-header">

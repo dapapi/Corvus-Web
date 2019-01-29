@@ -1,7 +1,7 @@
 <template>
-    <div class="approval-text-container col-md-12 pl-0" v-show="options.length > 0 || consdata[0].disabled">
+    <div class="approval-text-container col-md-12 pl-0" v-show="['昵称','项目名称','相关艺人','签约主体','解约主体'].includes(consdata[0].control_title) || options.length > 0 || consdata[0].disabled">
         <span class="col-md-2 text-right pl-0" :class="consdata[0].required===1?'require':''" v-if="title || consdata[0].control_title">{{title || consdata[0].control_title}}</span>
-        <select class="good-picker selectpicker col-md-10" :disabled="consdata[0].disabled?true:false" data-plugin="" :value="value" :data-live-search="isSelectable"
+        <select class="good-picker selectpicker col-md-10" :disabled="consdata[0].disabled?true:false" data-plugin="" :value="value" data-live-search="true"
             :data-show-subtext="isSelectable" 
             :multiple="multiple" :title="placeholder || consdata[0].control_placeholder" v-model="valueListener">
             <option v-if="consdata[0].disabled?true:false" :value="valueListener.name" selected></option>
@@ -22,7 +22,7 @@ export default {
      // 凡是多选，都有搜索框；不是多选传入selectable为true也可以有搜索框
         // changeKey为父组件的data，且可以被改变
         name:'ApprovalSelector',
-        props: ['n', 'multiple', 'placeholder', 'changeKey' , 'value', 'resetinfo', 'selectable','title','consdata','index','clear','directionalSender'],
+        props: ['n', 'multiple', 'placeholder', 'changeKey' , 'value', 'resetinfo', 'selectable','title','consdata','index','clear','directionalSender','defaultData','isSelectable'],
         data() {
             return {
                 isDisable: this.disable,
@@ -31,20 +31,21 @@ export default {
             }
         },
         computed: {
-            isSelectable: function () {
-                if (this.selectable) {
-                    return true
-                }
-                if (this.multiple) {
-                    return true
-                }
-                return false
-            },
+            // isSelectable: function () {
+            //     if (this.selectable) {
+            //         return true
+            //     }
+            //     if (this.multiple) {
+            //         return true
+            //     }
+            //     return false
+            // },
             
         },
 
         mounted() {
             this.sourceChecker()
+            this.defaultDataChecker()
             // if(!this.multiple){
             //     let self = this;
             //     $(this.$el).selectpicker().on('hidden.bs.select', function () {
@@ -66,6 +67,7 @@ export default {
         watch: {
             consdata:function(value){
                  this.sourceChecker()
+                 this.defaultDataChecker()
             },
             n:function(value){
 
@@ -77,7 +79,7 @@ export default {
                         fetch('get',this.consdata[0].control_source.url+'?'+this.consdata[0].control_source.parameters+'='+value.data).then((params) => {
                             _this.options = params.data
                             _this.$nextTick(() => {
-                                _this.valueListener={name:_this.options[0].title,id:_this.options[0].client_id}                            
+                                _this.valueListener={name:_this.options[0].title,id:_this.options[0].client_id}                        
                                 _this.refresh()
                                 _this.$nextTick(() => {
                                     _this.refresh()
@@ -99,7 +101,8 @@ export default {
                     this.$emit('change',{key:id,value:this.valueListener,type:related_field})                
                 }
                 if(control_source){
-                    if(control_source.to_sort_number){
+                    if(control_source.to_sort_number && this.valueListener){
+                        this.defaultDataChecker()
                         this.$emit('directional',{to:control_source.to_sort_number,data:this.valueListener.id})
                     }
                 }
@@ -127,16 +130,54 @@ export default {
         }
         },
         methods: {
+            defaultDataChecker(){
+                if(this.consdata[0].control_value){
+                        this.valueListener = this.consdata[0].control_value
+                        this.setValue(this.consdata[0].control_value.value)
+                        this.refresh()
+                        this.$nextTick(() => {
+                            this.refresh()  
+                        })
+                }
+                // if(this.defaultData && this.consdata){
+                //     for (const i in this.defaultData) {
+                //         if(params){
+                //             this.$nextTick(() => {
+                //                 this.valueListener = params.find(item=>item.title === this.defaultData[i].key).id
+                //             })
+                //         }else{
+                //             if (this.defaultData[i].key === this.consdata[0].control_title) {
+                //                 this.$nextTick(() => {
+                //                     this.valueListener = this.defaultData[i].values.data.value
+                //                     this.setValue(this.defaultData[i].values.data.value)
+                //                 })
+                //             }
+                //         }
+                //     }
+                // }
+            },
             sourceChecker(){
                 let _this = this
                 if(this.consdata[0].control_source){
                     if(!this.consdata[0].disabled){
                         fetch('get',this.consdata[0].control_source.url).then((params) => {
-                        _this.options = params.data
-                        _this.$nextTick(() => {
-                            _this.refresh()
+                            _this.options = params.data
+                            _this.$nextTick(() => {
+                                _this.refresh()
+                            })
+                            _this.$nextTick(() => {
+                                _this.defaultDataChecker()
+                            })
+                            // if(_this.defaultData){
+                            //     if(params.data[0].id){
+                            //         // _this.valueListener = params.data.find(item=>item.title === _this.defaultData)
+                            //         _this.defaultDataChecker()
+                            //     }
+                            //     _this.$nextTick(() => {
+                            //         _this.defaultDataChecker()
+                            //     })
+                            // }
                         })
-                    })
                     }
                 }else{
                     _this.options = this.consdata[0].control_enums

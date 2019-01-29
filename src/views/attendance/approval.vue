@@ -5,16 +5,16 @@
             <h1 class="page-title">我审批的</h1>
         </div>
         <div class="page-content container-fluid">
-            <div class="panel">
-                <div class="col-md-4  p-20">
-                    <div class="input-search">
-                        <button type="button" class="input-search-btn"><i class="iconfont icon-buoumaotubiao13" aria-hidden="true"></i>
-                        </button>
-                        <input type="text" class="form-control" placeholder="输入编号、类型或申请人">
-                    </div>
-                </div>
-                
-            </div>
+            <!--<div class="panel">-->
+                <!--<div class="col-md-4  p-20">-->
+                    <!--<div class="input-search">-->
+                        <!--<button type="button" class="input-search-btn"><i class="iconfont icon-buoumaotubiao13" aria-hidden="true"></i>-->
+                        <!--</button>-->
+                        <!--<input type="text" class="form-control" placeholder="输入编号、类型或申请人">-->
+                    <!--</div>-->
+                <!--</div>-->
+                <!---->
+            <!--</div>-->
             <div class="col-md-12 panel">
                     <ul class="nav nav-tabs nav-tabs-line" role="tablist">
                         <li class="nav-item" role="presentation">

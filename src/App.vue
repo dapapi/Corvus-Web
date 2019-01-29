@@ -49,6 +49,19 @@
                     this.isLeftMenuShow = true
                     this.isLeftManageShow = false
                 }
+                this.$store.state.participantsInfo = [];
+                this.$store.state.newParticipantsInfo = [];
+                this.$store.state.collectInfo = [];
+                this.$store.state.payInfo = [];
+                this.$store.state.contractInfo = [];
+                this.$store.state.divisionInfo = [];
+                this.$store.state.incubationInfo = [];
+                this.$store.state.billInfo = [];
+                this.$store.state.principalInfo = {};
+                this.$store.state.newPrincipalInfo = {};
+                this.$store.state.selectPrincipalInfo = {};
+                this.$store.state.otherSlot = [];
+                this.$store.state.principalInfo = [];
             },
 
         },
@@ -70,14 +83,15 @@
 </script>
 
 <style>
-.noselect{
-     -webkit-touch-callout: none;
-     -webkit-user-select: none;
-     -khtml-user-select: none;
-     -moz-user-select: none;
-     -ms-user-select: none;
-     user-select: none;
-}
+    .noselect {
+        -webkit-touch-callout: none;
+        -webkit-user-select: none;
+        -khtml-user-select: none;
+        -moz-user-select: none;
+        -ms-user-select: none;
+        user-select: none;
+    }
+
     .popover {
         max-width: 100%;
     }
@@ -157,24 +171,10 @@
         position: relative;
     }
 
-    .fixed-button {
-        position: absolute;
-        bottom: 20px;
-        right: 0;
-    }
-
     .page {
         margin-left: 100px !important;
         min-height: 100vh;
     }
-    /* .require::before {
-        content: '*';
-        position: absolute;
-        left: 0px;
-        vertical-align: middle;
-        color: #F44336;
-        font-size: 16px;
-    } */
 
     .require::before {
         content: '*';
@@ -241,6 +241,34 @@
 
     .bootstrap-select:not([class*=col-]):not([class*=form-control]):not(.input-group-btn) {
         height: 36.02px;
+    }
+
+    .fc-unthemed .fc-today {
+        background: #eee;
+    }
+
+    .fixed-button {
+        position: absolute;
+        bottom: 0px;
+        right: 0;
+    }
+
+    body {
+        -moz-user-select: none;
+        -webkit-user-select: none;
+        -ms-user-select: none;
+        -khtml-user-select: none
+    }
+
+    .datepicker table tr td.today {
+        background: #e5e5e5 !important;
+        color: black !important;
+    }
+
+    .exceeded-display {
+        overflow: hidden;
+        text-overflow:ellipsis;
+        white-space: nowrap;
     }
 
 </style>

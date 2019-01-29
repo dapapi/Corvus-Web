@@ -13,7 +13,6 @@
                             class="fc-agendaDay-button fc-button fc-state-default fc-corner-right fc-state-active">日
                     </button>
 
-                    <span class="ml-4 hover-content pointer-content" @click="returnNormalCalendar">回到日历</span>
                 </div>
             </div>
             <div class="fc-right">
@@ -45,7 +44,7 @@
                     </div>
                 </template>
             </div>
-            <div class="col-md-2" style="margin: 10rem auto" v-if="!isNothing">
+            <div style="margin: 10rem auto;width: 100px" v-if="!isNothing">
                 <img src="https://res.papitube.com/corvus/images/content-none.png" alt=""
                      style="width: 100%">
             </div>
@@ -140,7 +139,7 @@
                             creator: response.data[i].creator.data.name
                         };
                         let material = JSON.parse(JSON.stringify(this.meetingRomeList.find(item => item.id == response.data[i].material.data.id)));
-                        if ( this.meetingRomeListInfo.find(item => item.id == material.id)) {
+                        if (this.meetingRomeListInfo.find(item => item.id == material.id)) {
                             let info = this.meetingRomeListInfo.find(item => item.id == material.id);
                             if (info.events) {
                                 info.events.push(event)
@@ -193,9 +192,6 @@
                 this.getSchedules(this.numberDate)
             },
 
-            returnNormalCalendar() {
-                this.$emit('return', true)
-            }
         }
     }
 </script>

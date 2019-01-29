@@ -126,7 +126,7 @@
         </div> -->
 
         <div class="modal fade" id="changeSchedule" aria-hidden="true" aria-labelledby="addLabelForm"
-             role="dialog" tabindex="-1">
+             role="dialog" tabindex="-1" data-backdrop="static">
             <div class="modal-dialog modal-simple">
                 <div class="modal-content">
                     <div class="modal-header">
@@ -443,8 +443,6 @@
 
         methods: {
             getTime:function(value){
-                alert(1111)
-                  console.log(value)
             },
             getClients: function () {
                 fetch('get', '/clients').then(function (response) {
@@ -495,8 +493,6 @@
 
             selectDate: function (value) {
                 this.selectedDate = value
-                console.log(value)
-                alert(111)
             },
 
             // checkCalendar: function (value) {
@@ -535,7 +531,6 @@
             },
 
             displayMeetingRoom: function (value) {
-                console.log(value)
                 this.meetingRomeShow = false
             },
             getCalendar:function(){

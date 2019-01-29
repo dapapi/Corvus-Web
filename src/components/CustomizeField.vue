@@ -1,6 +1,6 @@
 <template>
     <div class="modal fade" id="customizeFieldContent" aria-hidden="true" aria-labelledby="addLabelForm"
-         role="dialog" tabindex="-1">
+         role="dialog" tabindex="-1" data-backdrop="static">
         <div class="modal-dialog modal-simple">
             <div class="modal-content">
                 <div class="modal-header">
@@ -16,7 +16,7 @@
                     </div>
                     <div class="text-right">
                         <span @click="addCondition">
-                           <i class="iconfont icon-tianjia pr-5"></i>添加更多条件
+                           <i class="iconfont icon-tianjia1 pr-5"></i>添加更多条件
                         </span>
                     </div>
 

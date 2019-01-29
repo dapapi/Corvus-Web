@@ -5,7 +5,7 @@
             <h1 class="page-title d-inline">项目详情</h1>
 
             <div class="page-header-actions dropdown show task-dropdown float-right"
-                 v-if="projectInfo.approval_status == 231">
+                 v-if="projectInfo.approval_status == 232 || projectInfo.type == 5">
                 <i class="iconfont icon-gengduo1 font-size-24" aria-hidden="true" id="taskDropdown"
                    data-toggle="dropdown" aria-expanded="false"></i>
                 <div class="dropdown-menu dropdown-menu-right task-dropdown-item" aria-labelledby="taskDropdown"
@@ -18,7 +18,9 @@
                        @click="changeToastrText(2)" v-show="projectInfo.status != 2">完成</a>
                     <a class="dropdown-item" role="menuitem" data-toggle="modal" data-target="#confirmFlag"
                        @click="changeToastrText(3)" v-show="projectInfo.status != 3">撤单</a>
-                    <!--<a class="dropdown-item" role="menuitem" data-toggle="modal" data-target="#addPrivacy">隐私设置</a>-->
+                    <a class="dropdown-item" role="menuitem" data-toggle="modal" data-target="#addPrivacy">隐私设置</a>
+                    <a class="dropdown-item" role="menuitem" @click="getApprovalsFormData"
+                       v-if="projectInfo.approval_status == 232 || projectInfo.type == 5">创建合同</a>
                 </div>
             </div>
 
@@ -36,6 +38,7 @@
                                 <i class="iconfont icon-yonghu pr-2" aria-hidden="true"></i>负责人
                             </div>
                             <div class="font-weight-bold float-left" v-if="projectInfo.principal">
+                                {{ projectInfo.principal.data.department.name }} -
                                 {{ projectInfo.principal.data.name }}
                             </div>
                         </div>
@@ -62,7 +65,7 @@
                                 <i class="iconfont icon-tubiao- pr-2" aria-hidden="true"></i>项目状态
                             </div>
                             <div class="font-weight-bold float-left">
-                                <template v-if="projectInfo.approval_status != 232">
+                                <template v-if="projectInfo.approval_status != 232 && projectInfo.type != 5">
                                     <span style="color:#FF9800">审批中</span>
                                 </template>
                                 <template v-else>
@@ -78,43 +81,73 @@
                         </div>
                     </div>
                     <div class="clearfix">
-                        <div v-if="projectTaskingInfo.length > 0" class="col-md-6 float-left pl-0 mb-20">
+                        <div v-if="projectInfo.tasks && projectInfo.tasks.data.length > 0"
+                             class="col-md-6 float-left pl-0">
                             <div class="col-md-6 pl-0"><i class="iconfont icon-iconset0399  pr-2"></i> 任务</div>
-                            <div class="clearfix example" v-for="task in projectTaskingInfo">
-                                <div class="col-md-3 float-left pl-0">{{ task.title }}</div>
-                                <div class="col-md-3 float-left pl-0">{{ task.principal.data.name }}</div>
-                                <div class="col-md-3 float-left pl-0">{{ task.end_at }}</div>
+                            <div class="clearfix example" v-for="(task,index) in projectInfo.tasks.data"
+                                 v-if="index < 3">
+                                <div class="col-md-3 float-left pl-0 exceeded-display">{{ task.title }}</div>
+                                <div class="col-md-2 float-left pl-0">{{ task.principal.data.name }}</div>
+                                <div class="col-md-4 float-left pl-0">{{ task.end_at }}</div>
                                 <div class="col-md-3 float-left pl-0">
-                                    <template v-if="task.status === 1">进行中</template>
-                                    <template v-if="task.status === 2">已完成</template>
-                                    <template v-if="task.status === 3">已停止</template>
+                                    <template v-if="task.status === 1"><span style="color: #FF9800;">进行中</span>
+                                    </template>
+                                    <template v-if="task.status === 2"><span style="color: #4CAF50;">已完成</span>
+                                    </template>
+                                    <template v-if="task.status === 3"><span style="color: #9E9E9E;">已停止</span>
+                                    </template>
                                 </div>
                             </div>
                         </div>
-                        <div class="col-md-6 float-left pl-0 mb-20 px-0" v-if="projectInfo.type != 5">
+                        <div class="col-md-6 float-left pl-0 px-0" v-if="projectInfo.type != 5">
                             <div class="mb-20 float-left clearfix col-md-6 pl-0">
-                                <div class="float-left col-md-5 px-0">预计订单收入</div>
+                                <div class="float-left col-md-5 px-0"><i class="iconfont icon-renminbi1688  pr-2"></i>预计订单收入
+                                </div>
                                 <div class="float-left col-md-7">
-                                    {{ (projectInfo.trail && projectInfo.trail.data.fee) ? projectInfo.trail.data.fee :
-                                    0 }}元
+                                    <template v-if="projectInfo.trail && projectInfo.trail.data.fee === 'privacy'">
+                                        **元
+                                    </template>
+                                    <template v-else>
+                                        {{ (projectInfo.trail && projectInfo.trail.data.fee) ?
+                                        projectInfo.trail.data.fee : 0 }}元
+                                    </template>
                                 </div>
                             </div>
                             <div class="mb-20 float-left clearfix col-md-6 pl-0">
-                                <div class="float-left col-md-5 px-0">预计支出</div>
+                                <div class="float-left col-md-5 px-0"><i class="iconfont icon-renminbi1688 pr-2"></i>预计支出
+                                </div>
                                 <div class="float-left col-md-7">
-                                    {{ projectInfo.projected_expenditure ? projectInfo.projected_expenditure : 0 }}元
+                                    <template v-if="projectInfo.projected_expenditure === 'privacy'">
+                                        **元
+                                    </template>
+                                    <template v-else>
+                                        {{ projectInfo.projected_expenditure ? projectInfo.projected_expenditure : 0 }}元
+                                    </template>
                                 </div>
                             </div>
                             <div class="mb-20 float-left clearfix col-md-6 pl-0">
-                                <div class="float-left col-md-5 px-0">实际收入</div>
+                                <div class="float-left col-md-5 px-0"><i class="iconfont icon-renminbi1688 pr-2"></i>实际收入
+                                </div>
                                 <div class="float-left col-md-7">
-                                    {{ metaInfo.contractmoney ? metaInfo.contractmoney : 0 }}元
+                                    <template v-if="metaInfo.contractmoney === 'privacy'">
+                                        **元
+                                    </template>
+                                    <template v-else>
+                                        {{ metaInfo.contractmoney ? metaInfo.contractmoney : 0 }}元
+                                    </template>
                                 </div>
                             </div>
                             <div class="mb-20 float-left clearfix col-md-6 pl-0">
-                                <div class="float-left col-md-5 px-0">实际支出</div>
+                                <div class="float-left col-md-5 px-0"><i
+                                        class="iconfont icon-renminbi1688 pr-2"></i>实际支出
+                                </div>
                                 <div class="float-left col-md-7">
-                                    {{ metaInfo.expendituresum ? metaInfo.expendituresum : 0 }}元
+                                    <template v-if="metaInfo.expendituresum === 'privacy'">
+                                        **元
+                                    </template>
+                                    <template v-else>
+                                        {{ metaInfo.expendituresum ? metaInfo.expendituresum : 0 }}元
+                                    </template>
                                 </div>
                             </div>
                         </div>
@@ -124,7 +157,7 @@
             </div>
 
             <div style="display: flex; justify-content: space-between; align-items: flex-start">
-                <div class="panel" style="width: calc(66% - 15px);" v-if="projectInfo.title">
+                <div class="panel" style="width: calc(66% - 15px);z-index: 100;" v-if="projectInfo.title">
                     <div class="col-md-12">
                         <ul class="nav nav-tabs nav-tabs-line" role="tablist">
                             <li class="nav-item" role="presentation"
@@ -149,24 +182,24 @@
                                     </template>
                                 </a>
                             </li>
-                            <!--<li class="nav-item" role="presentation"-->
-                            <!--v-if="projectInfo.type != 5 && projectInfo.approval_status == 232">-->
-                            <!--<a class="nav-link" data-toggle="tab" href="#forum-project-contract"-->
-                            <!--aria-controls="forum-present"-->
-                            <!--aria-expanded="false" role="tab">合同</a>-->
-                            <!--</li>-->
-                            <!--<li class="nav-item" role="presentation" @click="getProjectBill"-->
-                            <!--v-if="projectInfo.type != 5 && projectInfo.approval_status == 232">-->
-                            <!--<a class="nav-link" data-toggle="tab" href="#forum-project-bill"-->
-                            <!--aria-controls="forum-present"-->
-                            <!--aria-expanded="false" role="tab">账单</a>-->
-                            <!--</li>-->
-                            <!--<li class="nav-item" role="presentation" @click="getProjectReturned"-->
-                            <!--v-if="projectInfo.type != 5 && projectInfo.approval_status == 232">-->
-                            <!--<a class="nav-link" data-toggle="tab" href="#forum-project-payback"-->
-                            <!--aria-controls="forum-present"-->
-                            <!--aria-expanded="false" role="tab">回款</a>-->
-                            <!--</li>-->
+                            <li class="nav-item" role="presentation"
+                                v-if="projectInfo.type != 5 && projectInfo.approval_status == 232">
+                                <a class="nav-link" data-toggle="tab" href="#forum-project-contract"
+                                   aria-controls="forum-present" @click="getProjectContract()"
+                                   aria-expanded="false" role="tab">合同</a>
+                            </li>
+                            <li class="nav-item" role="presentation" @click="getProjectBill"
+                                v-if="projectInfo.type != 5 && projectInfo.approval_status == 232">
+                                <a class="nav-link" data-toggle="tab" href="#forum-project-bill"
+                                   aria-controls="forum-present"
+                                   aria-expanded="false" role="tab">账单</a>
+                            </li>
+                            <li class="nav-item" role="presentation" @click="getProjectsReturned"
+                                v-if="projectInfo.type != 5 && projectInfo.approval_status == 232">
+                                <a class="nav-link" data-toggle="tab" href="#forum-project-payback"
+                                   aria-controls="forum-present"
+                                   aria-expanded="false" role="tab">回款</a>
+                            </li>
                             <li class="nav-item" role="presentation">
                                 <a class="nav-link"
                                    :class="(projectInfo.type == 5 || projectInfo.approval_status != 232) ? 'active' : ''"
@@ -238,7 +271,7 @@
                                             <div>{{ item.finish_at }}</div>
                                         </div>
                                     </div>
-                                    <div class="bar-wrap float-left">
+                                    <div class="bar-wrap float-left ml-10">
                                         <ul>
                                             <li v-for="(item, index) in new Array(36)" :key="index"
                                                 :style="{transform: `rotate(${index * 10}deg)`, opacity:`${index <= coursesLength/8 * 36 ? 1: 0.3}`}"></li>
@@ -248,8 +281,8 @@
                                 </div>
                             </div>
                             <!-- 任务 -->
-                            <div class="tab-pane animation-fade pb-20 fixed-button-father" id="forum-project-tasks"
-                                 role="tabpanel" v-if="projectInfo.approval_status == 232">
+                            <div class="tab-pane animation-fade fixed-button-father" id="forum-project-tasks"
+                                 role="tabpanel" v-if="projectInfo.approval_status == 232 || projectInfo.type == 5">
                                 <table class="table table-hover is-indent example" data-plugin="animateList"
                                        data-animate="fade"
                                        data-child="tr"
@@ -263,26 +296,33 @@
                                         <th class="cell-300" scope="col">截止日期</th>
                                     </tr>
                                     <tbody>
-                                    <tr v-for="task in projectTasksInfo">
-                                        <td class="pointer-content" @click="redirectTask(task.id)">{{ task.title
-                                            }}
+                                    <tr v-for="task in projectTasksInfo" @click="redirectTask(task.id)">
+                                        <td class="pointer-content">
+                                            {{ task.title }}
                                         </td>
                                         <td>{{ task.type.data.title }}</td>
                                         <td>
-                                            <template v-if="task.status === 1">进行中</template>
-                                            <template v-if="task.status === 2">已完成</template>
-                                            <template v-if="task.status === 3">已停止</template>
+                                            <template v-if="task.status === 1"><span style="color: #FF9800;">进行中</span>
+                                            </template>
+                                            <template v-if="task.status === 2"><span style="color: #4CAF50;">已完成</span>
+                                            </template>
+                                            <template v-if="task.status === 3"><span style="color: #9E9E9E;">已停止</span>
+                                            </template>
+                                            <template v-if="task.status === 4"><span style="color: #F44336;">已延期</span>
+                                            </template>
                                         </td>
                                         <td>{{ task.principal.data.name }}</td>
                                         <td>{{ task.end_at }}</td>
                                     </tr>
                                     </tbody>
                                 </table>
-                                <div class="col-md-1" style="margin: 6rem auto"
+                                <div style="margin: 6rem auto;width: 100px"
                                      v-if="projectTasksInfo.length === 0">
                                     <img src="https://res.papitube.com/corvus/images/content-none.png" alt=""
                                          style="width: 100%">
                                 </div>
+                                <pagination :current_page="current_page" :method="getProjectTasks"
+                                            :total_pages="total_pages" :total="total"></pagination>
 
                                 <div class="site-action fixed-button" data-plugin="actionBtn" data-toggle="modal"
                                      data-target="#addTask">
@@ -299,229 +339,294 @@
 
                             </div>
                             <!-- 合同 -->
-                            <!--<div class="tab-pane animation-fade py-10"-->
-                            <!--v-if="projectInfo.type != 5 && projectInfo.approval_status == 232"-->
-                            <!--id="forum-project-contract"-->
-                            <!--role="tabpanel">-->
-                            <!--<table class="table table-hover example"-->
-                            <!--data-child="tr">-->
-                            <!--<tr>-->
-                            <!--<th class="cell-300" scope="col">合同编号</th>-->
-                            <!--<th class="cell-300" scope="col">项目名称</th>-->
-                            <!--<th class="cell-300" scope="col">艺人</th>-->
-                            <!--<th class="cell-300" scope="col">合同类型</th>-->
-                            <!--<th class="cell-300" scope="col">创建人</th>-->
-                            <!--<th class="cell-300" scope="col">创建时间</th>-->
-                            <!--<th class="cell-300" scope="col">审批状态</th>-->
-                            <!--</tr>-->
-                            <!--<tbody>-->
-                            <!--<tr>-->
-                            <!--<td>#12312sdf231</td>-->
-                            <!--<td>测试合同</td>-->
-                            <!--<td>papi、bigger</td>-->
-                            <!--<td>收入</td>-->
-                            <!--<td>陈晓禹</td>-->
-                            <!--<td>2018-12-27</td>-->
-                            <!--<td>审批中</td>-->
-                            <!--</tr>-->
-                            <!--</tbody>-->
-                            <!--</table>-->
+                            <div class="tab-pane animation-fade"
+                                 v-if="projectInfo.type != 5 && projectInfo.approval_status == 232"
+                                 id="forum-project-contract"
+                                 role="tabpanel">
+                                <table class="table table-hover example"
+                                       data-child="tr" v-if="projectContractInfo">
+                                    <tr>
+                                        <th class="cell-300" scope="col">合同编号</th>
+                                        <th class="cell-300" scope="col">项目名称</th>
+                                        <th class="cell-300" scope="col">艺人</th>
+                                        <th class="cell-300" scope="col">合同类型</th>
+                                        <th class="cell-300" scope="col">创建人</th>
+                                        <th class="cell-300" scope="col">创建时间</th>
+                                        <th class="cell-300" scope="col">审批状态</th>
+                                    </tr>
+                                    <tbody>
+                                    <tr v-for="contract in projectContractInfo"
+                                        @click="redirectContract(contract.form_instance_number)">
+                                        <td>{{ contract.contract_number }}</td>
+                                        <td>{{ contract.title }}</td>
+                                        <td>
+                                            <template v-for="star in contract.stars_name">
+                                                {{ star.name }}
+                                            </template>
+                                        </td>
+                                        <td>收入</td>
+                                        <td>{{ contract.creator_name }}</td>
+                                        <td>{{ contract.created_at.split(' ')[0] }}</td>
+                                        <td>
+                                            <template v-if="contract.form_status === 231">待审批</template>
+                                            <template v-if="contract.form_status === 232">已同意</template>
+                                            <template v-if="contract.form_status === 233">已拒绝</template>
+                                            <template v-if="contract.form_status === 234">已撤销</template>
+                                            <template v-if="contract.form_status === 235">已作废</template>
+                                        </td>
+                                    </tr>
+                                    </tbody>
+                                </table>
+                                <div style="margin: 6rem auto;width: 100px"
+                                     v-if="projectContractInfo.length === 0">
+                                    <img src="https://res.papitube.com/corvus/images/content-none.png" alt=""
+                                         style="width: 100%">
+                                </div>
+                                <pagination :current_page="current_page" :method="getProjectContract"
+                                            :total_pages="total_pages"
+                                            :total="total"></pagination>
 
-                            <!--</div>-->
-                            <!--&lt;!&ndash; 账单 &ndash;&gt;-->
-                            <!--<div class="tab-pane animation-fade py-10"-->
-                            <!--v-if="projectInfo.type != 5 && projectInfo.approval_status == 232" id="forum-project-bill"-->
-                            <!--role="tabpanel">-->
-                            <!--<div class="clearfix">-->
-                            <!--<div class="float-left" style="padding: .715rem 1.429rem">-->
-                            <!--<div class="float-left pr-40">合同金额 <span class="money-color">10000元</span></div>-->
-                            <!--<div class="float-left pr-40">支出金额 <span class="money-color">1000元</span></div>-->
-                            <!--<div class="float-left pr-40">税费 <span class="money-color">10000元</span></div>-->
-                            <!--<div class="float-left pr-40">papi分成 <span class="money-color">10000元</span></div>-->
-                            <!--<div class="float-left pr-40">bigger分成 <span class="money-color">10000元</span></div>-->
-                            <!--<div class="float-left pr-40">我司分成 <span class="money-color">10000元</span></div>-->
-                            <!--</div>-->
-                            <!--<div class="float-right" style="padding: .715rem 0">-->
-                            <!--<span class="pointer-content hover-content" data-toggle="modal"-->
-                            <!--data-target="#addBill">-->
-                            <!--<i class="iconfont icon-tianjia pr-5"></i>新增结算单</span>-->
-                            <!--</div>-->
-                            <!--</div>-->
-                            <!--<table class="table table-hover" data-child="tr">-->
-                            <!--<tr>-->
-                            <!--<th class="cell-300" scope="col">费用类型</th>-->
-                            <!--<th class="cell-300 position-relative" scope="col">-->
-                            <!--<template v-if="filterFee === 1">全部</template>-->
-                            <!--<template v-if="filterFee === 2">成本</template>-->
-                            <!--<template v-if="filterFee === 3">收入</template>-->
-                            <!--<i class="iconfont icon-plus-select-down pl-2" aria-hidden="true"-->
-                            <!--id="projectDropdown" data-toggle="dropdown" aria-expanded="false"></i>-->
-                            <!--<div class="dropdown-menu" aria-labelledby="projectDropdown" role="menu">-->
-                            <!--<a class="dropdown-item" role="menuitem" v-show="filterFee !== 1"-->
-                            <!--@click="filterProjectFee(1)">全部</a>-->
-                            <!--<a class="dropdown-item" role="menuitem" v-show="filterFee !== 2"-->
-                            <!--@click="filterProjectFee(2)">成本</a>-->
-                            <!--<a class="dropdown-item" role="menuitem" v-show="filterFee !== 3"-->
-                            <!--@click="filterProjectFee(3)">收入</a>-->
-                            <!--</div>-->
-                            <!--</th>-->
-                            <!--<th class="cell-300" scope="col">艺人</th>-->
-                            <!--<th class="cell-300" scope="col">金额</th>-->
-                            <!--<th class="cell-300" scope="col">收款/审批时间</th>-->
-                            <!--<th class="cell-300" scope="col">操作人</th>-->
-                            <!--</tr>-->
-                            <!--<tbody>-->
-                            <!--<tr v-for="bill in projectBillsInfo">-->
-                            <!--<td>{{ bill.expence_name }}</td>-->
-                            <!--<td>{{ bill.expense_type }}</td>-->
-                            <!--<td>{{ bill.artist_name }}</td>-->
-                            <!--<td>{{ bill.money }}</td>-->
-                            <!--<td>{{ bill.pay_rec_time }}</td>-->
-                            <!--<td>{{ bill.action_user }}</td>-->
-                            <!--</tr>-->
-                            <!--</tbody>-->
-                            <!--</table>-->
-                            <!--<div class="col-md-1" style="margin: 6rem auto" v-if="projectBillsInfo.length === 0">-->
-                            <!--<img src="https://res.papitube.com/corvus/images/content-none.png" alt=""-->
-                            <!--style="width: 100%">-->
-                            <!--</div>-->
-                            <!--</div>-->
-                            <!--&lt;!&ndash; 回款 &ndash;&gt;-->
-                            <!--<div class="tab-pane animation-fade pt-10 pb-20"-->
-                            <!--v-if="projectInfo.type != 5 && projectInfo.approval_status == 232"-->
-                            <!--id="forum-project-payback" role="tabpanel">-->
-                            <!--<div class="clearfix">-->
-                            <!--<ul class="nav nav-tabs nav-tabs-line float-left" role="tablist"-->
-                            <!--style="border-bottom: 0">-->
-                            <!--<li class="nav-item" role="presentation">-->
-                            <!--<a class="nav-link active" data-toggle="tab" href="#forum-item-bill"-->
-                            <!--aria-controls="forum-base"-->
-                            <!--aria-expanded="true" role="tab">bigger研究所/papi酱</a>-->
-                            <!--</li>-->
-                            <!--<li class="nav-item" role="presentation">-->
-                            <!--<a class="nav-link" data-toggle="tab" href="#forum-item-bill"-->
-                            <!--aria-controls="forum-base"-->
-                            <!--aria-expanded="true" role="tab">周冬雨</a>-->
-                            <!--</li>-->
-                            <!--</ul>-->
-                            <!--<div class="float-right" style="padding: .715rem 1.429rem">-->
-                            <!--<span class="pointer-content hover-content" data-toggle="modal"-->
-                            <!--data-target="#addPaybackTime" @click="editProjectPaybackTime(false)">-->
-                            <!--<i class="iconfont icon-tianjia pr-5"></i>新建回款期次</span>-->
-                            <!--</div>-->
-                            <!--</div>-->
-                            <!--<div class="tab-pane animation-fade" id="forum-item-payback">-->
-                            <!--<div class="example" v-if="projectReturnInfo.meta">-->
-                            <!--<div class="col-md-3 float-left pl-0">-->
-                            <!--<div>合同金额<span class="money-color pl-5">-->
-                            <!--{{ projectReturnInfo.meta.contractReturnedMoney ? projectReturnInfo.meta.contractReturnedMoney : 0}}</span>/元-->
-                            <!--</div>-->
-                            <!--</div>-->
-                            <!--<div class="col-md-3 float-left pl-0">-->
-                            <!--<div>已回款<span class="money-color pl-5">-->
-                            <!--{{ projectReturnInfo.meta.alreadyReturnedMoney ? projectReturnInfo.meta.alreadyReturnedMoney : 0}}</span>/元-->
-                            <!--</div>-->
-                            <!--</div>-->
-                            <!--<div class="col-md-3 float-left pl-0">-->
-                            <!--<div>未回款<span class="money-color pl-5">-->
-                            <!--{{ projectReturnInfo.meta.notReturnedMoney ? projectReturnInfo.meta.notReturnedMoney : 0}}</span>/元-->
-                            <!--</div>-->
-                            <!--</div>-->
-                            <!--<div class="col-md-3 float-left pl-0">-->
-                            <!--<div>已开票<span class="money-color pl-5">-->
-                            <!--{{ projectReturnInfo.meta.alreadyinvoice ? projectReturnInfo.meta.alreadyinvoice : 0}}</span>/元-->
-                            <!--</div>-->
-                            <!--</div>-->
-                            <!--</div>-->
-                            <!--<div class="dividing-line"></div>-->
-                            <!--<div v-for="returnMoney in projectReturnInfo.data">-->
-                            <!--<div class="clearfix py-20">-->
-                            <!--<div class="float-left font-weight-bold">{{ returnMoney.issue_name }}</div>-->
-                            <!--<div class="float-right">-->
-                            <!--<span class="mr-40 pointer-content hover-content" data-toggle="modal"-->
-                            <!--data-target="#addPayback" @click="selectedPaybackTime(returnMoney)">-->
-                            <!--<i class="iconfont icon-tianjia pr-5"></i>回款记录</span>-->
-                            <!--<span class="pointer-content hover-content" data-toggle="modal"-->
-                            <!--data-target="#addInvoice" @click="selectedPaybackTime(returnMoney)">-->
-                            <!--<i class="iconfont icon-tianjia pr-5"></i>开票记录</span>-->
-                            <!--</div>-->
-                            <!--</div>-->
-                            <!--<div class="clearfix">-->
-                            <!--<div class="col-md-2 float-left pl-0">回款日期<span class="pl-5">{{ returnMoney.plan_returned_time }}</span>-->
-                            <!--</div>-->
-                            <!--<div class="col-md-2 float-left pl-0">计划回款-->
-                            <!--<span class="money-color pl-5">-->
-                            <!--{{ returnMoney.plan_returned_money }}元-->
-                            <!--</span>-->
-                            <!--</div>-->
-                            <!--<div class="col-md-2 float-left pl-0">实际回款<span class="money-color pl-5">22312031203元</span>-->
-                            <!--</div>-->
-                            <!--<div class="col-md-2 float-left pl-0">开票金额<span-->
-                            <!--class="money-color pl-5">12312222元</span>-->
-                            <!--</div>-->
-                            <!--<div class="col-md-2 float-right pr-0 text-right" style="color: #cccccc;">-->
-                            <!--<i class="iconfont icon-bianji2 pr-40 pointer-content" data-toggle="modal"-->
-                            <!--data-target="#addPaybackTime"-->
-                            <!--@click="editProjectPaybackTime(true, returnMoney)"></i>-->
-                            <!--<i class="iconfont icon-shanchu1 pointer-content"-->
-                            <!--data-toggle="modal" data-target="#paybackDel"-->
-                            <!--@click="delProjectPayback(returnMoney.id)"></i>-->
-                            <!--</div>-->
-                            <!--</div>-->
+                            </div>
+                            <!-- 账单 -->
+                            <div class="tab-pane animation-fade"
+                                 v-if="projectInfo.type != 5 && projectInfo.approval_status == 232"
+                                 id="forum-project-bill"
+                                 role="tabpanel">
+                                <div class="clearfix">
+                                    <div class="float-left col-md-10" style="padding: .715rem 1.429rem">
+                                        <div class="float-left pr-40">合同金额
+                                            <span class="money-color" v-if="projectBillMetaInfo.appoval">
+                                                {{ projectBillMetaInfo.appoval.money ? projectBillMetaInfo.appoval.money : 0 }}元
+                                            </span>
+                                        </div>
+                                        <div class="float-left pr-40">支出金额
+                                            <span class="money-color">{{ projectBillMetaInfo.expendituresum}}元</span>
+                                        </div>
+                                        <div class="float-left pr-40">税费
+                                            <span class="money-color">
+                                                {{ projectBillMetaInfo.expenses ? projectBillMetaInfo.expenses : 0 }}元
+                                            </span>
+                                        </div>
+                                        <div class="float-left pr-40" v-for="divide in projectBillMetaInfo.divide">
+                                            {{ divide.moduleable_title }}
+                                            <span class="money-color">{{ divide.money }}元</span>
+                                        </div>
+                                        <div class="float-left pr-40">我司分成 <span class="money-color">{{ projectBillMetaInfo.my_divide ? projectBillMetaInfo.my_divide : 0 }}元</span>
+                                        </div>
+                                    </div>
+                                    <div class="float-left col-md-2 text-right" style="padding: .715rem 0">
+                                        <span class="pointer-content hover-content" data-toggle="modal"
+                                              data-target="#addBill">
+                                            <template
+                                                    v-if="projectBillMetaInfo.divide && projectBillMetaInfo.divide.length === 0">
+                                                <i class="iconfont icon-tianjia pr-5"></i>新增结算单
+                                            </template>
+                                            <template v-else>
+                                                <i class="iconfont icon-bianji2 pr-5"></i>修改结算单
+                                            </template>
+                                        </span>
+                                    </div>
+                                </div>
+                                <table class="table table-hover" data-child="tr">
+                                    <tr>
+                                        <th class="cell-300" scope="col">费用类型</th>
+                                        <th class="cell-300 position-relative" scope="col">
+                                            <template v-if="filterFee === 1">全部</template>
+                                            <template v-if="filterFee === 2">成本</template>
+                                            <template v-if="filterFee === 3">收入</template>
+                                            <i class="iconfont icon-plus-select-down pl-2" aria-hidden="true"
+                                               id="projectDropdown" data-toggle="dropdown" aria-expanded="false"></i>
+                                            <div class="dropdown-menu" aria-labelledby="projectDropdown" role="menu">
+                                                <a class="dropdown-item" role="menuitem" v-show="filterFee !== 1"
+                                                   @click="filterProjectFee(1)">全部</a>
+                                                <a class="dropdown-item" role="menuitem" v-show="filterFee !== 2"
+                                                   @click="filterProjectFee(2)">成本</a>
+                                                <a class="dropdown-item" role="menuitem" v-show="filterFee !== 3"
+                                                   @click="filterProjectFee(3)">收入</a>
+                                            </div>
+                                        </th>
+                                        <th class="cell-300" scope="col">艺人</th>
+                                        <th class="cell-300" scope="col">金额</th>
+                                        <th class="cell-300" scope="col">收款/审批时间</th>
+                                        <th class="cell-300" scope="col">操作人</th>
+                                    </tr>
+                                    <tbody>
+                                    <tr v-for="bill in projectBillsInfo">
+                                        <td>{{ bill.expense_name }}</td>
+                                        <td>{{ bill.expense_type }}</td>
+                                        <td>{{ bill.artist_name }}</td>
+                                        <td>{{ bill.money }}</td>
+                                        <td>{{ bill.pay_rec_time }}</td>
+                                        <td>{{ bill.action_user }}</td>
+                                    </tr>
+                                    </tbody>
+                                </table>
+                                <div style="margin: 6rem auto;width: 100px" v-if="projectBillsInfo.length === 0">
+                                    <img src="https://res.papitube.com/corvus/images/content-none.png" alt=""
+                                         style="width: 100%">
+                                </div>
+                                <pagination :current_page="current_page" :method="getProjectBill"
+                                            :total_pages="total_pages"
+                                            :total="total"></pagination>
+                            </div>
+                            <!-- 回款 -->
+                            <div class="tab-pane animation-fade pt-10 pb-20"
+                                 v-if="projectInfo.type != 5 && projectInfo.approval_status == 232"
+                                 id="forum-project-payback" role="tabpanel">
+                                <div class="clearfix">
+                                    <ul class="nav nav-tabs nav-tabs-line float-left" role="tablist"
+                                        style="border-bottom: 0">
+                                        <li class="nav-item" role="presentation"
+                                            v-for="(contract,index) in projectContractInfo">
+                                            <a class="nav-link" :class="index === 0 ? 'active': ''" data-toggle="tab"
+                                               href="#forum-item-bill"
+                                               @click="getProjectReturned(contract.form_instance_number)"
+                                               aria-controls="forum-base"
+                                               aria-expanded="true" role="tab">
+                                                <template v-for="(star,index) in contract.stars_name">
+                                                    {{ star.name }}
+                                                    <template v-if="(index + 1) !== contract.stars_name.length">/
+                                                    </template>
+                                                </template>
+                                            </a>
+                                        </li>
+                                    </ul>
+                                    <div class="float-right" style="padding: .715rem 0">
+                                        <span class="pointer-content hover-content" data-toggle="modal"
+                                              data-target="#addPaybackTime" @click="editProjectPaybackTime(false)">
+                                            <i class="iconfont icon-tianjia pr-5"></i>新建回款期次</span>
+                                    </div>
+                                </div>
+                                <div class="tab-pane animation-fade" id="forum-item-payback">
+                                    <div class="example" v-if="projectReturnInfo.meta">
+                                        <div class="col-md-3 float-left pl-0">
+                                            <div>合同金额<span class="money-color pl-5">
+                            {{ projectReturnInfo.meta.appoval ? projectReturnInfo.meta.appoval.money : 0}}</span>元
+                                            </div>
+                                        </div>
+                                        <div class="col-md-3 float-left pl-0">
+                                            <div>已回款<span class="money-color pl-5">
+                            {{ projectReturnInfo.meta.alreadyReturnedMoney ? projectReturnInfo.meta.alreadyReturnedMoney : 0}}</span>元
+                                            </div>
+                                        </div>
+                                        <div class="col-md-3 float-left pl-0">
+                                            <div>未回款<span class="money-color pl-5">
+                            {{ projectReturnInfo.meta.notReturnedMoney ? projectReturnInfo.meta.notReturnedMoney : 0}}</span>元
+                                            </div>
+                                        </div>
+                                        <div class="col-md-3 float-left pl-0">
+                                            <div>已开票<span class="money-color pl-5">
+                            {{ projectReturnInfo.meta.alreadyinvoice ? projectReturnInfo.meta.alreadyinvoice : 0}}</span>元
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="dividing-line"></div>
+                                    <div v-for="returnMoney in projectReturnInfo.data">
+                                        <div class="clearfix py-20">
+                                            <div class="float-left font-weight-bold">{{ returnMoney.issue_name }}</div>
+                                            <div class="float-right">
+                            <span class="mr-40 pointer-content hover-content" data-toggle="modal"
+                                  data-target="#addPayback" @click="selectedPaybackTime(returnMoney)">
+                            <i class="iconfont icon-tianjia pr-5"></i>回款记录</span>
+                                                <span class="pointer-content hover-content" data-toggle="modal"
+                                                      data-target="#addInvoice"
+                                                      @click="selectedPaybackTime(returnMoney)">
+                            <i class="iconfont icon-tianjia pr-5"></i>开票记录</span>
+                                            </div>
+                                        </div>
+                                        <div class="clearfix">
+                                            <div class="float-left" style="width: 20%">回款日期
+                                                <span class="pl-5">{{ returnMoney.plan_returned_time }}</span>
+                                            </div>
+                                            <div class="float-left" style="width: 20%">计划回款
+                                                <span class="money-color pl-5">
+                                                    {{ returnMoney.plan_returned_money }}元
+                                                </span>
+                                            </div>
+                                            <div class="float-left" style="width: 20%">实际回款
+                                                <span class="money-color pl-5">
+                                                <template v-if="returnMoney.practicalsum">
+                                                    {{ returnMoney.practicalsum.data.practicalsum ? returnMoney.practicalsum.data.practicalsum:'0' }}元
+                                                </template>
+                                                <template v-else>
+                                                    0元
+                                                </template>
+                                                </span>
+                                            </div>
+                                            <div class="float-left" style="width: 20%">开票金额<span
+                                                    class="money-color pl-5">
+                                                <template v-if="returnMoney.invoicesum">
+                                                    {{ returnMoney.invoicesum.data.invoicesum ? returnMoney.invoicesum.data.invoicesum:'0' }}元
+                                                </template>
+                                                <template v-else>
+                                                    0元
+                                                </template>
+                                                </span>
+                                            </div>
+                                            <div class="float-right text-right" style="color: #cccccc;width: 20%;">
+                                                <i class="iconfont icon-bianji2 pr-40 pointer-content"
+                                                   data-toggle="modal"
+                                                   data-target="#addPaybackTime"
+                                                   @click="editProjectPaybackTime(true, returnMoney)"></i>
+                                                <i class="iconfont icon-shanchu1 pointer-content"
+                                                   data-toggle="modal" data-target="#paybackDel"
+                                                   @click="delProjectPayback(returnMoney.id)"></i>
+                                            </div>
+                                        </div>
 
-                            <!--<div v-for="item in returnMoney.money.data">-->
-                            <!--<div class="segmentation-line example"></div>-->
-                            <!--<div v-if="item.type.data.type === 1">-->
-                            <!--<div class="font-weight-bold">回款记录</div>-->
-                            <!--<div class="clearfix">-->
-                            <!--<div class="col-md-2 float-left pl-0">回款日期<span-->
-                            <!--class="pl-5">{{ item.plan_returned_time }}</span>-->
-                            <!--</div>-->
-                            <!--<div class="col-md-2 float-left pl-0">回款金额<span-->
-                            <!--class="money-color pl-5">{{ item.plan_returned_money }}元</span>-->
-                            <!--</div>-->
-                            <!--<div class="col-md-2 float-left pl-0">付款方式<span-->
-                            <!--class="pl-5">{{ item.type.data.plan_returned_money }}</span>-->
-                            <!--</div>-->
-                            <!--<div class="col-md-2 float-right pr-0 text-right"-->
-                            <!--style="color: #cccccc;">-->
-                            <!--<i class="iconfont icon-bianji2 pr-40 pointer-content"-->
-                            <!--data-toggle="modal" data-target="#addPayback"-->
-                            <!--@click="editProjectPaybackRecording(item, returnMoney, 'payback')"></i>-->
-                            <!--<i class="iconfont icon-shanchu1 pointer-content"-->
-                            <!--data-toggle="modal" data-target="#paybackDel"-->
-                            <!--@click="delProjectPayback(item.id)"></i>-->
-                            <!--</div>-->
-                            <!--</div>-->
-                            <!--</div>-->
-                            <!--<div v-if="item.type.data.type === 2">-->
-                            <!--<div class="font-weight-bold">开票记录</div>-->
-                            <!--<div class="clearfix">-->
-                            <!--<div class="col-md-2 float-left pl-0">开票日期<span-->
-                            <!--class="pl-5">{{ item.plan_returned_time }}</span>-->
-                            <!--</div>-->
-                            <!--<div class="col-md-2 float-left pl-0">开票金额<span-->
-                            <!--class="money-color pl-5">{{ item.plan_returned_money }}元</span>-->
-                            <!--</div>-->
-                            <!--<div class="col-md-2 float-left pl-0">票据类型<span class="pl-5">{{ item.type.data.plan_returned_money }}</span>-->
-                            <!--</div>-->
-                            <!--<div class="col-md-2 float-right pr-0 text-right"-->
-                            <!--style="color: #cccccc;">-->
-                            <!--<i class="iconfont icon-bianji2 pr-40 pointer-content"-->
-                            <!--data-toggle="modal" data-target="#addInvoice"-->
-                            <!--@click="editProjectPaybackRecording(item, returnMoney)"></i>-->
-                            <!--<i class="iconfont icon-shanchu1 pointer-content"-->
-                            <!--data-toggle="modal" data-target="#paybackDel"-->
-                            <!--@click="delProjectPayback(item.id)"></i>-->
-                            <!--</div>-->
-                            <!--</div>-->
-                            <!--</div>-->
-                            <!--</div>-->
+                                        <div v-for="item in returnMoney.money.data">
+                                            <div class="segmentation-line example"></div>
+                                            <div v-if="item.type.data.type === 1">
+                                                <div class="font-weight-bold">回款记录</div>
+                                                <div class="clearfix">
+                                                    <div class="float-left" style="width: 20%">回款日期<span
+                                                            class="pl-5">{{ item.plan_returned_time }}</span>
+                                                    </div>
+                                                    <div class="float-left" style="width: 20%">回款金额<span
+                                                            class="money-color pl-5">{{ item.plan_returned_money }}元</span>
+                                                    </div>
+                                                    <div class="col-md-2 float-left pl-0">付款方式<span
+                                                            class="pl-5">{{ item.type.data.plan_returned_money }}</span>
+                                                    </div>
+                                                    <div class="float-right text-right"
+                                                         style="color: #cccccc;width: 20%;">
+                                                        <i class="iconfont icon-bianji2 pr-40 pointer-content"
+                                                           data-toggle="modal" data-target="#addPayback"
+                                                           @click="editProjectPaybackRecording(item, returnMoney, 'payback')"></i>
+                                                        <i class="iconfont icon-shanchu1 pointer-content"
+                                                           data-toggle="modal" data-target="#paybackDel"
+                                                           @click="delProjectPayback(item.id)"></i>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                            <div v-if="item.type.data.type === 2">
+                                                <div class="font-weight-bold">开票记录</div>
+                                                <div class="clearfix">
+                                                    <div class="float-left" style="width: 20%">开票日期<span
+                                                            class="pl-5">{{ item.plan_returned_time }}</span>
+                                                    </div>
+                                                    <div class="float-left" style="width: 20%">开票金额<span
+                                                            class="money-color pl-5">{{ item.plan_returned_money }}元</span>
+                                                    </div>
+                                                    <div class="float-left" style="width: 20%">票据类型<span class="pl-5">{{ item.type.data.plan_returned_money }}</span>
+                                                    </div>
+                                                    <div class="float-right text-right"
+                                                         style="color: #cccccc;width: 20%;">
+                                                        <i class="iconfont icon-bianji2 pr-40 pointer-content"
+                                                           data-toggle="modal" data-target="#addInvoice"
+                                                           @click="editProjectPaybackRecording(item, returnMoney)"></i>
+                                                        <i class="iconfont icon-shanchu1 pointer-content"
+                                                           data-toggle="modal" data-target="#paybackDel"
+                                                           @click="delProjectPayback(item.id)"></i>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
 
-                            <!--<div class="dividing-line example"></div>-->
-                            <!--</div>-->
-                            <!--</div>-->
-                            <!--</div>-->
+                                        <div class="dividing-line example"></div>
+                                    </div>
+                                </div>
+                            </div>
                             <!-- 概况 -->
                             <div class="tab-pane animation-fade" v-if="projectInfo"
                                  :class="(projectInfo.type == 5 || projectInfo.approval_status != 232) ? 'active' : ''"
@@ -531,7 +636,7 @@
                                     <div class="card-header card-header-transparent card-header-bordered">
                                         <div class="float-left font-weight-bold third-title">项目信息</div>
                                         <div class="float-right"
-                                             v-show="!isEdit && projectInfo.approval_status == 232">
+                                             v-show="(!isEdit && projectInfo.approval_status == 232) || (!isEdit && projectInfo.type == 5)">
                                             <i class="iconfont icon-bianji2 pointer-content" aria-hidden="true"
                                                @click="editBaseInfo"></i>
                                         </div>
@@ -550,6 +655,17 @@
                                                                @change="(value) => changeProjectBaseInfo(value, 'title')"></EditInput>
                                                 </div>
                                             </div>
+                                            <div class="py-10 px-0 clearfix col-md-6 float-left "
+                                                 v-if="projectInfo.type != 5">
+                                                <TrailOrigin :trailType='projectInfo.trail.data.type'
+                                                             typeName='项目' :isEdit='isEdit'
+                                                             :content='projectInfo.trail.data.resource'
+                                                             @changeTrailOrigin="(value) => changeProjectBaseInfo(value, 'resource_type')"
+                                                             :contentType='projectInfo.trail.data.resource_type'
+                                                             @changeEmail="(value) => changeProjectBaseInfo(value, 'resource')"
+                                                             detailPage='true'
+                                                             @changeTrailOriginPerson="(value) => changeProjectBaseInfo(value.id, 'resource')"/>
+                                            </div>
                                             <div class="card-text py-10 px-0 clearfix col-md-6 float-left ">
                                                 <div class="col-md-3 float-left text-right pl-0">负责人</div>
                                                 <div class="col-md-9 float-left font-weight-bold">
@@ -563,17 +679,6 @@
                                                     <EditAddMember :is-edit="isEdit"
                                                                    @change="(value) => changeProjectBaseInfo(value, 'participant_ids')"></EditAddMember>
                                                 </div>
-                                            </div>
-                                            <div class="py-10 px-0 clearfix col-md-6 float-left "
-                                                 v-if="projectInfo.type != 5">
-                                                <TrailOrigin :trailType='projectInfo.trail.data.type'
-                                                             typeName='项目' :isEdit='isEdit'
-                                                             :content='projectInfo.trail.data.resource'
-                                                             @changeTrailOrigin="(value) => changeProjectBaseInfo(value, 'resource_type')"
-                                                             :contentType='projectInfo.trail.data.resource_type'
-                                                             @changeEmail="(value) => changeProjectBaseInfo(value, 'resource')"
-                                                             detailPage='true'
-                                                             @changeTrailOriginPerson="(value) => changeProjectBaseInfo(value.id, 'resource')"/>
                                             </div>
                                             <div class="card-text py-10 px-0 clearfix col-md-6 float-left "
                                                  v-if="projectInfo.type != 5">
@@ -601,7 +706,7 @@
                                                 </div>
                                             </div>
                                             <div class="card-text py-10 px-0 clearfix col-md-6 float-left "
-                                                 v-if="projectInfo.type != 5">
+                                                 v-if="projectInfo.type != 5 && projectInfo.trail && projectInfo.trail.data.fee !== 'privacy'">
                                                 <div class="col-md-3 float-left text-right pl-0">预计订单收入/元</div>
                                                 <div class="col-md-9 float-left font-weight-bold">
                                                     <EditNumberSpinner :is-edit="isEdit"
@@ -610,7 +715,7 @@
                                                 </div>
                                             </div>
                                             <div class="card-text py-10 px-0 clearfix col-md-6 float-left "
-                                                 v-if="projectInfo.type != 5">
+                                                 v-if="projectInfo.type != 5 && projectInfo.projected_expenditure !== 'privacy'">
                                                 <div class="col-md-3 float-left text-right pl-0">预计支出/元</div>
                                                 <div class="col-md-9 float-left font-weight-bold">
                                                     <EditNumberSpinner :is-edit="isEdit"
@@ -624,6 +729,22 @@
                                                     <EditSelector :is-edit="isEdit" :options="levelArr"
                                                                   :content="projectInfo.priority"
                                                                   @change="(value) => changeProjectBaseInfo(value, 'priority')"></EditSelector>
+                                                </div>
+                                            </div>
+                                            <div class="card-text py-10 px-0 clearfix col-md-6 float-left ">
+                                                <div class="col-md-3 float-left text-right pl-0">合作类型</div>
+                                                <div class="col-md-9 float-left font-weight-bold">
+                                                    <EditSelector :is-edit="isEdit" :options="cooperationTypeArr"
+                                                                  :content="projectInfo.trail.data.cooperation_type"
+                                                                  @change="(value) => changeProjectBaseInfo(value, 'cooperation_type')"></EditSelector>
+                                                </div>
+                                            </div>
+                                            <div class="card-text py-10 px-0 clearfix col-md-6 float-left ">
+                                                <div class="col-md-3 float-left text-right pl-0">状态</div>
+                                                <div class="col-md-9 float-left font-weight-bold">
+                                                    <EditSelector :is-edit="isEdit" :options="trailStatusArr"
+                                                                  :content="projectInfo.trail.data.status"
+                                                                  @change="(value) => changeProjectBaseInfo(value, 'status')"></EditSelector>
                                                 </div>
                                             </div>
                                             <div class="card-text py-10 px-0 clearfix col-md-6 float-left ">
@@ -660,11 +781,6 @@
                                                                           :is-edit="isEdit"
                                                                           :options="field.contentArr"
                                                                           @change="(value) => addInfo(value, field.id )"></EditSelector>
-                                                        </template>
-                                                        <template v-else-if="field.field_type === 3">
-                                                            <EditableSearchBox :options="starsArr" :multiple="true"
-                                                                               :is-edit="isEdit"
-                                                                               @change="(value) => addInfo(value, field.id )"></EditableSearchBox>
                                                         </template>
                                                         <template v-else-if="field.field_type === 4">
                                                             <EditDatepicker
@@ -718,47 +834,58 @@
 
                                         <div class="segmentation-line example"></div>
 
-                                        <div class="card-text py-10 px-0 clearfix col-md-6 float-left"
-                                             v-if="projectInfo.creator">
-                                            <div class="col-md-3 float-left text-right pl-0">录入人</div>
-                                            <div class="col-md-9 float-left font-weight-bold">
-                                                {{ projectInfo.creator.data.name }}
+                                        <div class="clearfix">
+                                            <div class="card-text py-10 px-0 clearfix col-md-6 float-left"
+                                                 v-if="projectInfo.creator">
+                                                <div class="col-md-3 float-left text-right pl-0">录入人</div>
+                                                <div class="col-md-9 float-left font-weight-bold">
+                                                    {{ projectInfo.creator.data.name }}
+                                                </div>
                                             </div>
-                                        </div>
-                                        <div class="card-text py-10 px-0 clearfix col-md-6 float-left">
-                                            <div class="col-md-3 float-left text-right pl-0">录入时间</div>
-                                            <div class="col-md-9 float-left font-weight-bold">
-                                                {{ projectInfo.created_at }}
+                                            <div class="card-text py-10 px-0 clearfix col-md-6 float-left">
+                                                <div class="col-md-3 float-left text-right pl-0">录入时间</div>
+                                                <div class="col-md-9 float-left font-weight-bold">
+                                                    {{ projectInfo.created_at }}
+                                                </div>
                                             </div>
-                                        </div>
-                                        <div class="card-text py-10 px-0 clearfix col-md-6 float-left">
-                                            <div class="col-md-3 float-left text-right pl-0">最近更新人</div>
-                                            <div class="col-md-9 float-left font-weight-bold">
-                                                {{ projectInfo.last_updated_user }}
+                                            <div class="card-text py-10 px-0 clearfix col-md-6 float-left">
+                                                <div class="col-md-3 float-left text-right pl-0">最近更新人</div>
+                                                <div class="col-md-9 float-left font-weight-bold">
+                                                    {{ projectInfo.last_updated_user }}
+                                                </div>
                                             </div>
-                                        </div>
-                                        <div class="card-text py-10 px-0 clearfix col-md-6 float-left">
-                                            <div class="col-md-3 float-left text-right pl-0">最近更新时间</div>
-                                            <div class="col-md-9 float-left font-weight-bold">
-                                                {{ projectInfo.last_updated_at }}
+                                            <div class="card-text py-10 px-0 clearfix col-md-6 float-left">
+                                                <div class="col-md-3 float-left text-right pl-0">最近更新时间</div>
+                                                <div class="col-md-9 float-left font-weight-bold">
+                                                    {{ projectInfo.last_updated_at }}
+                                                </div>
                                             </div>
-                                        </div>
-                                        <div class="card-text py-10 px-0 clearfix col-md-6 float-left"
-                                             v-if="projectInfo.relate_projects">
-                                            <div class="col-md-3 float-left text-right pl-0">关联项目</div>
-                                            <div class="col-md-9 float-left font-weight-bold">
-                                                <template v-for="project in projectInfo.relate_projects.data">
-                                                    <span @click="redirectProject(project.id)">{{project.title }}</span>
-                                                </template>
+                                            <div class="card-text py-10 px-0 clearfix col-md-6 float-left"
+                                                 v-if="projectInfo.relate_projects">
+                                                <div class="col-md-3 float-left text-right pl-0">关联项目</div>
+                                                <div class="col-md-9 float-left font-weight-bold">
+                                                    <template v-for="project in projectInfo.relate_projects.data">
+                                                        <span class="pointer-content"
+                                                              @click="redirectProject(project.id)">{{project.title }}</span>
+                                                    </template>
+                                                </div>
                                             </div>
-                                        </div>
-                                        <div class="card-text py-10 px-0 clearfix col-md-6 float-left"
-                                             v-if="projectInfo.relate_tasks">
-                                            <div class="col-md-3 float-left text-right pl-0">关联任务</div>
-                                            <div class="col-md-9 float-left font-weight-bold">
-                                                <template v-for="task in projectInfo.relate_tasks.data">
-                                                    <span @click="redirectTask(task.id)">{{ task.title }}</span>
-                                                </template>
+                                            <div class="card-text py-10 px-0 clearfix col-md-6 float-left"
+                                                 v-if="projectInfo.relate_tasks">
+                                                <div class="col-md-3 float-left text-right pl-0">关联任务</div>
+                                                <div class="col-md-9 float-left font-weight-bold">
+                                                    <template v-for="task in projectInfo.relate_tasks.data">
+                                                        <span class="pointer-content" @click="redirectTask(task.id)">{{ task.title }}</span>
+                                                    </template>
+                                                </div>
+                                            </div>
+                                            <div class="card-text py-10 px-0 clearfix col-md-6 float-left"
+                                                 v-if="projectInfo.trail">
+                                                <div class="col-md-3 float-left text-right pl-0">关联销售线索</div>
+                                                <div class="col-md-9 float-left font-weight-bold">
+                                                    <span class="pointer-content"
+                                                          @click="redirectTrail(projectInfo.trail.data.id)">{{ projectInfo.trail.data.title }}</span>
+                                                </div>
                                             </div>
                                         </div>
 
@@ -766,7 +893,7 @@
 
                                         <div v-if="projectInfo.type != 5">
                                             <ApprovalProgress :formid="projectInfo.form_instance_number"
-                                                              :formstatus="projectInfo.approval_text"
+                                                              :formstatus="projectInfo.approval_text" projcetinfo='true'
                                                               mode="detail"></ApprovalProgress>
                                         </div>
                                     </div>
@@ -779,8 +906,9 @@
                 <div class="panel" style="width: calc(34% - 15px);" v-if="projectId">
                     <div class="col-md-12">
                         <div class="card col-md-12">
-                            <div class="card-header card-header-transparent card-header-bordered">
-                                <h5>项目跟进</h5>
+                            <div class="card-header card-header-transparent card-header-bordered p-10"
+                                 style="font-size: 16px;font-weight: bold;">
+                                <div>项目跟进</div>
                             </div>
                             <div class="card-block">
                                 <div class="col-md-12 pl-0">
@@ -795,7 +923,7 @@
         </div>
         <!-- 新建任务 -->
         <div class="modal fade" id="addTask" aria-hidden="true" aria-labelledby="addLabelForm"
-             role="dialog" tabindex="-1">
+             role="dialog" tabindex="-1" data-backdrop="static">
             <div class="modal-dialog modal-simple">
                 <div class="modal-content">
                     <div class="modal-header">
@@ -842,7 +970,7 @@
                         <div class="example">
                             <div class="col-md-2 text-right float-left pl-0">任务优先级</div>
                             <div class="col-md-10 float-left pl-0">
-                                <selectors :options="taskLevelArr" ref="taskLevel"
+                                <selectors :options="priorityArr" ref="taskLevel"
                                            @change="changeTaskLevel"></selectors>
                             </div>
                         </div>
@@ -884,7 +1012,7 @@
         </div>
         <!-- 隐私设置 -->
         <div class="modal fade" id="addPrivacy" aria-hidden="true" aria-labelledby="addLabelForm"
-             role="dialog" tabindex="-1">
+             role="dialog" tabindex="-1" data-backdrop="static">
             <div class="modal-dialog modal-simple">
                 <div class="modal-content">
                     <div class="modal-header">
@@ -932,7 +1060,7 @@
         </div>
         <!-- 撤单原因 -->
         <div class="modal fade" id="withdrawal" aria-hidden="true" aria-labelledby="addLabelForm"
-             role="dialog" tabindex="-1" v-if="projectInfo.type != 5">
+             role="dialog" tabindex="-1" v-if="projectInfo.type != 5" data-backdrop="static">
             <div class="modal-dialog modal-simple">
                 <div class="modal-content">
                     <div class="modal-header">
@@ -959,7 +1087,7 @@
         </div>
         <!-- 新建/修改回款期次 -->
         <div class="modal fade" id="addPaybackTime" aria-hidden="true" aria-labelledby="addLabelForm"
-             role="dialog" tabindex="-1" v-if="projectInfo.type != 5">
+             role="dialog" tabindex="-1" data-backdrop="static" v-if="projectInfo.type != 5">
             <div class="modal-dialog modal-simple" v-if="projectInfo.title">
                 <div class="modal-content">
                     <div class="modal-header">
@@ -1033,7 +1161,7 @@
         </div>
         <!-- 新建/修改回款记录 -->
         <div class="modal fade" id="addPayback" aria-hidden="true" aria-labelledby="addLabelForm"
-             role="dialog" tabindex="-1" v-if="projectInfo.type != 5">
+             role="dialog" tabindex="-1" data-backdrop="static" v-if="projectInfo.type != 5">
             <div class="modal-dialog modal-simple" v-if="projectInfo.title">
                 <div class="modal-content">
                     <div class="modal-header">
@@ -1117,7 +1245,7 @@
         <!-- 新建/修改开票记录 -->
         <div class="modal fade" id="addInvoice" aria-hidden="true" aria-labelledby="addLabelForm"
              role="dialog" tabindex="-1" v-if="projectInfo.type != 5">
-            <div class="modal-dialog modal-simple" v-if="projectInfo.title">
+            <div class="modal-dialog modal-simple" data-backdrop="static" v-if="projectInfo.title">
                 <div class="modal-content">
                     <div class="modal-header">
                         <button type="button" class="close" aria-hidden="true" data-dismiss="modal">
@@ -1193,7 +1321,7 @@
         </div>
         <!-- 关联资源 -->
         <div class="modal fade" id="addLinkage" aria-hidden="true" aria-labelledby="addLabelForm"
-             role="dialog" tabindex="-1">
+             role="dialog" tabindex="-1" data-backdrop="static">
             <div class="modal-dialog modal-simple">
                 <div class="modal-content">
                     <div class="modal-header">
@@ -1279,44 +1407,49 @@
         </div>
         <!-- 新增结算单 -->
         <div class="modal fade" id="addBill" aria-hidden="true" aria-labelledby="addLabelForm"
-             role="dialog" tabindex="-1" v-if="projectInfo.type != 5">
+             role="dialog" tabindex="-1" data-backdrop="static" v-if="projectInfo.type != 5">
             <div class="modal-dialog modal-simple">
                 <div class="modal-content">
                     <div class="modal-header">
                         <button type="button" class="close" aria-hidden="true" data-dismiss="modal">
                             <i class="iconfont icon-guanbi" aria-hidden="true"></i>
                         </button>
-                        <h4 class="modal-title">新增结算单</h4>
+                        <template v-if="projectBillMetaInfo.divide && projectBillMetaInfo.divide.length === 0">
+                            <h4 class="modal-title">新增结算单</h4>
+                        </template>
+                        <template v-if="">
+                            <h4 class="modal-title">修改结算单</h4>
+                        </template>
                     </div>
                     <div class="modal-body">
                         <div class="example">
                             <div class="col-md-2 text-right float-left px-0">税费</div>
                             <div class="col-md-10 float-left">
-                                <input type="text" class="form-control" title="">
+                                <input type="text" class="form-control" title="" v-model="billExpenses">
                             </div>
                         </div>
-                        <div class="example">
-                            <div class="col-md-2 text-right float-left px-0">papi分成</div>
+                        <div class="example" v-for="title in divideArrInfo">
+                            <div class="col-md-2 text-right float-left px-0">{{ title.moduleable_title }}分成</div>
                             <div class="col-md-10 float-left">
-                                <input type="text" class="form-control" title="">
-                            </div>
-                        </div>
-                        <div class="example">
-                            <div class="col-md-2 text-right float-left px-0">bigger分成</div>
-                            <div class="col-md-10 float-left">
-                                <input type="text" class="form-control" title="">
+                                <input type="text" class="form-control" title="" v-model="title.money">
                             </div>
                         </div>
                         <div class="example">
                             <div class="col-md-2 text-right float-left px-0">我司分成</div>
                             <div class="col-md-10 float-left">
-                                <input type="text" class="form-control" title="">
+                                <input type="text" class="form-control" title="" v-model="myDivide">
                             </div>
                         </div>
                     </div>
                     <div class="modal-footer">
                         <button class="btn btn-sm btn-white btn-pure" data-dismiss="modal">取消</button>
-                        <button class="btn btn-primary" type="submit" @click="">确定</button>
+                        <template
+                                v-if="projectBillMetaInfo.divide && projectBillMetaInfo.divide.length === 0">
+                            <button class="btn btn-primary" type="submit" @click="addProjectBill">确定</button>
+                        </template>
+                        <template v-else>
+                            <button class="btn btn-primary" type="submit" @click="changeProjectBill">确定</button>
+                        </template>
                     </div>
                 </div>
             </div>
@@ -1325,7 +1458,7 @@
         <Flag :typeText="changeProjectStatusText" @confirmFlag='changeProjectStatus'/>
         <!-- 删除回款相关 -->
         <div class="modal fade" id="paybackDel" aria-hidden="true" aria-labelledby="addLabelForm"
-             role="dialog" tabindex="-1">
+             role="dialog" tabindex="-1" data-backdrop="static">
             <div class="modal-dialog modal-simple">
                 <div class="modal-content">
                     <div class="modal-header">
@@ -1350,6 +1483,9 @@
                 </div>
             </div>
         </div>
+
+        <ApprovalGreatModule :formData="formData"
+                             :default-value="{value:projectContractDefault,id:$route.params.id}"></ApprovalGreatModule>
     </div>
 </template>
 
@@ -1361,6 +1497,9 @@
     export default {
         data: function () {
             return {
+                total: 0,
+                current_page: 1,
+                total_pages: 1,
                 isLoading: true,
                 projectId: '',
                 changeInfo: {},
@@ -1368,7 +1507,9 @@
                 projectInfo: '',
                 trailInfo: {},
                 taskTypeArr: [],
-                taskLevelArr: config.taskLevelArr,
+                priorityArr: config.priorityArr,
+                cooperationTypeArr: config.cooperationTypeArr,
+                trailStatusArr: config.trailStatusArr,
                 taskLevel: '',
                 taskName: '',
                 startTime: '',
@@ -1477,58 +1618,68 @@
                 metaInfo: '',
                 oldInfo: '',
                 coursesLength: 0,
+                formData: '',
+                projectContractInfo: '',
+                contractId: '',
+                projectContractDefault: '',
+                projectBillMetaInfo: '',
+                myDivide: 0,
+                billExpenses: 0,
+                divideArrInfo: '',
             }
         },
 
         mounted() {
             this.projectId = this.$route.params.id;
-            // this.getPrivacy() //获取隐私设置列表
+            this.getPrivacy() //获取隐私设置列表
             this.getProject();
             this.getClients();
             this.getTaskType();
-            this.getProjectTasks();
             this.getProjectTasking();
             this.getProjectProgress();
             this.user = JSON.parse(Cookies.get('user'));
-            let _this = this;
-            $('#addPaybackTime').on('hidden.bs.modal', function () {
-                _this.projectReturnDesc = '';
-                _this.$refs.paybackMoney.setValue('0');
-                _this.$refs.paybackTime.setValue();
-                _this.projectReturnData = {};
+            $('#addPaybackTime').on('hidden.bs.modal', () => {
+                this.projectReturnDesc = '';
+                this.$refs.paybackMoney.setValue('0');
+                this.$refs.paybackTime.setValue();
+                this.projectReturnData = {};
             });
 
-            $('#addPayback').on('hidden.bs.modal', function () {
-                _this.$refs.paybackMoney1.setValue('0');
-                _this.$refs.paybackTime1.setValue();
-                _this.$refs.payMethod.setValue();
-                _this.projectReturnData = {};
+            $('#addPayback').on('hidden.bs.modal', () => {
+                this.$refs.paybackMoney1.setValue('0');
+                this.$refs.paybackTime1.setValue();
+                this.$refs.payMethod.setValue('');
+                this.projectReturnData = {};
             });
 
-            $('#addInvoice').on('hidden.bs.modal', function () {
-                _this.$refs.paybackMoney2.setValue('0');
-                _this.$refs.paybackTime2.setValue();
-                _this.$refs.payMethod1.setValue();
-                _this.projectReturnData = {};
+            $('#addInvoice').on('hidden.bs.modal', () => {
+                this.$refs.paybackMoney2.setValue('0');
+                this.$refs.paybackTime2.setValue();
+                this.$refs.payMethod1.setValue('');
+                this.projectReturnData = {};
             });
 
-            $('#addTask').on('hidden.bs.modal', function () {
-                _this.taskName = '';
-                _this.taskLevel = '';
-                _this.$refs.taskLevel.setValue('');
-                _this.taskType = '';
-                _this.$refs.taskType.setValue('');
-                _this.startTime = '';
-                _this.endTime = '';
-                _this.startMinutes = '';
-                _this.endMinutes = '';
-                _this.taskIntroduce = '';
-                _this.$refs.startTime.setValue('');
-                _this.$refs.startMinutes.setValue('00:00');
-                _this.$refs.endTime.setValue('');
-                _this.$refs.endMinutes.setValue('00:00');
-                _this.$store.commit('changeNewPrincipal', {});
-                _this.$store.commit('changeNewParticipantsInfo', [])
+            $('#addBill').on('hidden.bs.modal', () => {
+                this.cancelChangeBill();
+            });
+
+            $('#addTask').on('hidden.bs.modal', () => {
+                this.taskName = '';
+                this.taskLevel = '';
+                this.$refs.taskLevel.setValue('');
+                this.taskType = '';
+                this.$refs.taskType.setValue('');
+                this.startTime = '';
+                this.endTime = '';
+                this.startMinutes = '';
+                this.endMinutes = '';
+                this.taskIntroduce = '';
+                this.$refs.startTime.setValue('');
+                this.$refs.startMinutes.setValue('00:00');
+                this.$refs.endTime.setValue('');
+                this.$refs.endMinutes.setValue('00:00');
+                this.$store.commit('changeNewPrincipal', {});
+                this.$store.commit('changeNewParticipantsInfo', [])
             })
         },
 
@@ -1536,21 +1687,27 @@
             projectReturnDesc: function (newValue) {
                 this.addProjectReturn(newValue, 'desc')
             },
-            "$route": function () {
-                this.getProject();
-            },
+            routerId(id) {
+                this.projectId = id;
+                setTimeout(() => {
+                    this.getProject();
+                }, 100);
+            }
         },
         computed: {
             completeNum() {
                 return this.projectTasksInfo.filter(n => n.status === 2).length
-            }
+            },
+            routerId() {
+                return this.$route.params.id
+            },
         },
 
         methods: {
 
             getProject: function () {
                 let data = {
-                    include: 'principal,participants,creator,fields,trail.expectations,trail.client,relate_tasks,relate_projects,type',
+                    include: 'principal,participants,tasks,creator,fields,trail.expectations,trail.client,relate_tasks,relate_projects,type',
                 };
                 fetch('get', '/projects/' + this.projectId, data).then(response => {
                     this.oldInfo = JSON.parse(JSON.stringify(response));
@@ -1569,6 +1726,9 @@
                     }
                     response.data.fields = fieldsArr;
                     this.projectInfo = response.data;
+                    this.projectContractDefault = {
+                        '项目名称': response.data.title
+                    };
                     let params = {
                         type: 'change',
                     };
@@ -1593,8 +1753,9 @@
                         }
                     }
                     if (response.data.trail) {
+                        this.selectedExpectationsArr = [];
                         for (let i = 0; i < response.data.trail.data.expectations.data.length; i++) {
-                            this.selectedExpectationsArr.push(response.data.trail.data.expectations.data[i].id)
+                            this.selectedExpectationsArr.push(response.data.trail.data.expectations.data[i].moduleable_type + '-' + response.data.trail.data.expectations.data[i].id)
                         }
                     }
 
@@ -1611,7 +1772,6 @@
             //隐私设置
             setPrivacy: function () {
 
-                let _this = this
                 let data = {
                     fee: this.$store.state.payInfo, //预计订单收入
                     projected_expenditure: this.$store.state.divisionInfo,//预计支出
@@ -1629,7 +1789,7 @@
                         sendData[key].push(data[key][i].id)
                     }
                 }
-                fetch('put', `/projects/${this.$route.params.id}/privacyUser`, sendData).then(function (response) {
+                fetch('put', `/projects/${this.$route.params.id}/privacyUser`, sendData).then(() => {
                     toastr.success('隐私设置成功')
                     $('#addPrivacy').modal('hide')
                 })
@@ -1637,25 +1797,23 @@
             getPrivacy: function () {
                 let data = {
                     project_id: this.$route.params.id
-                }
-                let _this = this
-                fetch('get', `/privacyUsers?include=user`, data).then(function (response) {
-                    // console.log(response)
-                    let allPrivacyUsers = response.data
-                    _this.$store.state.divisionInfo = []
-                    _this.$store.state.payInfo = []
-                    _this.$store.state.contractInfo = []
-                    _this.$store.state.collectInfo = []
+                };
+                fetch('get', `/privacyUsers?include=user`, data).then(response => {
+                    let allPrivacyUsers = response.data;
+                    this.$store.state.divisionInfo = [];
+                    this.$store.state.payInfo = [];
+                    this.$store.state.contractInfo = [];
+                    this.$store.state.collectInfo = [];
                     if (allPrivacyUsers) {
                         for (let i = 0; i < allPrivacyUsers.length; i++) {
-                            if (allPrivacyUsers[i].field == 'fee') {
-                                _this.$store.state.payInfo.push(allPrivacyUsers[i].user.data)
-                            } else if (allPrivacyUsers[i].field == 'projected_expenditure') {
-                                _this.$store.state.divisionInfo.push(allPrivacyUsers[i].user.data)
-                            } else if (allPrivacyUsers[i].field == 'expendituresum') {
-                                _this.$store.state.contractInfo.push(allPrivacyUsers[i].user.data)
-                            } else if (allPrivacyUsers[i].field == 'contractmoney') {
-                                _this.$store.state.collectInfo.push(allPrivacyUsers[i].user.data)
+                            if (allPrivacyUsers[i].field === 'fee') {
+                                this.$store.state.payInfo.push(allPrivacyUsers[i].user.data)
+                            } else if (allPrivacyUsers[i].field === 'projected_expenditure') {
+                                this.$store.state.divisionInfo.push(allPrivacyUsers[i].user.data)
+                            } else if (allPrivacyUsers[i].field === 'expendituresum') {
+                                this.$store.state.contractInfo.push(allPrivacyUsers[i].user.data)
+                            } else if (allPrivacyUsers[i].field === 'contractmoney') {
+                                this.$store.state.collectInfo.push(allPrivacyUsers[i].user.data)
                             } else {
                             }
 
@@ -1664,44 +1822,39 @@
 
                 })
             },
+
+            getApprovalsFormData: function () {
+                let data = {
+                    type: 'projects'
+                };
+                let organization_id = Number(JSON.parse(Cookies.get('user')).organization_id);
+                if (organization_id === 411) {
+                    data.status = 1
+                } else if (organization_id === 412) {
+                    data.status = 2
+                }
+                fetch('get', 'approvals/specific_contract', data).then(response => {
+                    this.formData = response.data;
+                    $('#approval-great-module').modal('show')
+                })
+            },
+
             cancelPrivacy: function () {
-                this.$store.state.divisionInfo = []
-                this.$store.state.payInfo = []
-                this.$store.state.contractInfo = []
+                this.$store.state.divisionInfo = [];
+                this.$store.state.payInfo = [];
+                this.$store.state.contractInfo = [];
                 this.$store.state.collectInfo = []
             },
+
             getStars: function () {
-                let _this = this;
-                let url = '';
-                if (this.projectInfo.type === 1 || this.projectInfo.type === 2 || this.projectInfo.type === 3) {
-                    fetch('get', '/stars/all').then(function (response) {
-                        for (let i = 0; i < response.data.length; i++) {
-                            _this.starsArr.push({
-                                name: response.data[i].name,
-                                id: response.data[i].id,
-                                value: response.data[i].id
-                            })
-                        }
-
-                    })
-                } else if (this.projectInfo.type === 4) {
-                    fetch('get', '/bloggers/all').then(function (response) {
-                        for (let i = 0; i < response.data.length; i++) {
-                            _this.starsArr.push({
-                                name: response.data[i].nickname,
-                                id: response.data[i].id,
-                                value: response.data[i].id
-                            })
-                        }
-
-                    })
+                if (this.starsArr.length > 0) {
+                    return
                 }
-                fetch('get', url).then(function (response) {
+                fetch('get', '/starandblogger', {sign_contract_status: 2}).then(response => {
                     for (let i = 0; i < response.data.length; i++) {
-                        _this.starsArr.push({
+                        this.starsArr.push({
                             name: response.data[i].name,
-                            id: response.data[i].id,
-                            value: response.data[i].id
+                            value: response.data[i].flag + '-' + response.data[i].id,
                         })
                     }
 
@@ -1724,7 +1877,10 @@
 
             getProjectTasks: function () {
                 fetch('get', '/projects/' + this.projectId + '/tasks').then(response => {
-                    this.projectTasksInfo = response.data
+                    this.projectTasksInfo = response.data;
+                    this.total = response.meta.pagination.total;
+                    this.current_page = response.meta.pagination.current_page;
+                    this.total_pages = response.meta.pagination.total_pages;
                 })
             },
 
@@ -1738,39 +1894,107 @@
             },
 
             getProjectBill: function () {
-                if (this.projectBillsInfo.length > 0) {
-                    return;
-                }
                 fetch('get', '/projects/' + this.projectId + '/bill').then(response => {
-                    this.projectBillsInfo = response.data
+                    this.projectBillsInfo = response.data;
+                    this.projectBillMetaInfo = JSON.parse(JSON.stringify(response.meta));
+                    this.total = response.meta.pagination.total;
+                    this.current_page = response.meta.pagination.current_page;
+                    this.total_pages = response.meta.pagination.total_pages;
+                    this.myDivide = response.meta.my_divide;
+                    this.billExpenses = response.meta.expenses;
+                    if (response.meta.divide) {
+                        this.divideArrInfo = JSON.parse(JSON.stringify(response.meta.divide));
+                    } else {
+                        this.divideArrInfo = [];
+                    }
+                    for (let i = 0; i < response.meta.datatitle.length; i++) {
+                        if (!this.divideArrInfo.find(item => item.moduleable_title === response.meta.datatitle[i])) {
+                            this.divideArrInfo.push({
+                                money: 0,
+                                moduleable_title: response.meta.datatitle[i]
+                            })
+                        }
+                    }
                 });
-
-                // fetch('get', '/projects/' + this.projectId + '/store/bill').then(response => {
-                //     console.log(response)
-                // })
             },
 
             addProjectBill: function () {
                 let data = {
-                    expenses: '',
+                    expenses: this.billExpenses,
+                    my_divide: this.myDivide,
+                    star: this.divideArrInfo,
                 };
-                fetch('post', '/projects/' + this.projectId + '/store/bill', data).then(response => {
-
+                fetch('post', '/projects/' + this.projectId + '/store/bill', data).then(() => {
+                    this.getProjectBill();
+                    toastr.success('添加成功');
+                    $('#addBill').modal('hide');
                 })
             },
 
-            getProjectReturned: function () {
+            changeProjectBill: function () {
                 let data = {
-                    include: 'money.type'
+                    expenses: this.billExpenses,
+                    my_divide: this.myDivide,
+                    star: this.divideArrInfo,
+                };
+                fetch('put', '/projects/' + this.projectId + '/edit/bill', data).then(() => {
+                    this.getProjectBill();
+                    toastr.success('修改成功');
+                    $('#addBill').modal('hide');
+                })
+            },
+
+            cancelChangeBill: function () {
+                this.myDivide = this.projectBillMetaInfo.my_divide;
+                this.billExpenses = this.projectBillMetaInfo.expenses;
+                this.divideArrInfo = JSON.parse(JSON.stringify(this.projectBillMetaInfo.divide));
+                for (let i = 0; i < this.projectBillMetaInfo.datatitle.length; i++) {
+                    if (!this.divideArrInfo.find(item => item.moduleable_title === this.projectBillMetaInfo.datatitle[i])) {
+                        this.divideArrInfo.push({
+                            money: 0,
+                            moduleable_title: this.projectBillMetaInfo.datatitle[i]
+                        })
+                    }
+                }
+            },
+
+            getProjectContract: function (callback) {
+                fetch('get', '/approvals_contract/projectList', {project_id: this.projectId}).then(response => {
+                    this.projectContractInfo = response.data;
+                    this.total = response.meta.pagination.total;
+                    this.current_page = response.meta.pagination.current_page;
+                    this.total_pages = response.meta.pagination.total_pages;
+                    if (callback) {
+                        callback(response.data)
+                    }
+                });
+            },
+
+            getProjectReturned: function (contractId) {
+                this.contractId = contractId;
+                let data = {
+                    include: 'money.type,practicalsum,invoicesum',
+                    contract_id: contractId
                 };
                 fetch('get', '/projects/' + this.projectId + '/returned/money', data).then(response => {
                     this.projectReturnInfo = response;
                     for (let i = 0; i < response.data.length; i++) {
-                        if (Number(response.data[i].issue_name) >= this.paybackLength) {
-                            this.paybackLength = Number(response.data[i].issue_name) + 1
+                        let length = Number(response.data[i].issue_name.slice(1, -1));
+                        if (length >= this.paybackLength) {
+                            this.paybackLength = length + 1
                         }
                     }
                 });
+            },
+
+            getProjectsReturned: function () {
+                if (!this.projectContractInfo) {
+                    this.getProjectContract((data) => {
+                        this.getProjectReturned(data[0].form_instance_number);
+                    })
+                } else {
+                    this.getProjectReturned(this.projectContractInfo[0].form_instance_number);
+                }
 
                 if (this.payMethodsArr.length > 0) {
                     return
@@ -1800,7 +2024,7 @@
                     flagInfo['finish_at'] = response.data.updated_at;
                     flagInfo['isFinish'] = 1;
                     this.coursesLength += 1;
-                    toastr.success('修改成功');
+                    toastr.success('进度更新成功');
                     this.getProjectProgress();
                 })
             },
@@ -1836,24 +2060,23 @@
             },
 
             addProjectPayback: function () {
-                // todo 合同id没有做修改，需要等合同确定才可以
-                this.projectReturnData.contract_id = 22;
+                this.projectReturnData.contract_id = this.contractId;
                 this.projectReturnData.principal_id = this.user.id;
                 this.projectReturnData.issue_name = this.paybackLength;
-                fetch('post', '/projects/' + this.projectId + '/returned/money', this.projectReturnData).then(response => {
+                fetch('post', '/projects/' + this.projectId + '/returned/money', this.projectReturnData).then(() => {
                     $('#addPaybackTime').modal('hide');
                     toastr.success('添加成功');
-                    this.getProjectReturned()
+                    this.getProjectReturned(this.contractId)
                 })
             },
 
             editProjectPayback: function () {
-                fetch('put', '/returned/money/' + this.projectReturnId, this.projectReturnData).then(response => {
+                fetch('put', '/returned/money/' + this.projectReturnId, this.projectReturnData).then(() => {
                     $('#addPaybackTime').modal('hide');
                     $('#addPayback').modal('hide');
                     $('#addInvoice').modal('hide');
                     toastr.success('修改成功');
-                    this.getProjectReturned()
+                    this.getProjectReturned(this.contractId)
                 })
             },
 
@@ -1862,9 +2085,9 @@
             },
 
             delProjectPaybackCallback: function () {
-                fetch('delete', '/returned/money/' + this.delPaybackId).then(response => {
+                fetch('delete', '/returned/money/' + this.delPaybackId).then(() => {
                     toastr.success('删除成功');
-                    this.getProjectReturned()
+                    this.getProjectReturned(this.contractId)
                 })
             },
 
@@ -1884,14 +2107,18 @@
                     toastr.error('请选择票据类型或付款方式')
                     return
                 }
-                this.projectReturnData.contract_id = 22;
+                this.projectReturnData.contract_id = this.contractId;
                 this.projectReturnData.principal_id = this.user.id;
                 fetch('post', '/projects/' + this.projectId + '/returned/' + this.paybackTime.id + '/money', this.projectReturnData).then(response => {
                     $('#addPayback').modal('hide');
                     $('#addInvoice').modal('hide');
                     toastr.success('添加成功');
-                    this.getProjectReturned()
+                    this.getProjectReturned(this.contractId)
                 })
+            },
+
+            redirectContract: function (contractId) {
+                this.$router.push({path: '/approval/' + contractId})
             },
 
             selectedPaybackTime: function (payback) {
@@ -1923,8 +2150,11 @@
                 this.$router.push({path: '/tasks/' + taskId})
             },
 
+            redirectTrail: function (trailId) {
+                this.$router.push({path: '/trails/' + trailId})
+            },
+
             redirectProject: function (projectId) {
-                // todo 跳转到同样的路由下，只有id变化，页面内容不刷新
                 this.$router.push({path: '/projects/' + projectId})
             },
 
@@ -1933,12 +2163,9 @@
             },
 
             changeTrailOrigin: function (value) {
-                // this.$store.state.newPrincipalInfo = this.trailInfo.resource;
                 this.trailInfo.resource = '';
                 this.email = '';
-                this.trailOriginPerson = '';
                 this.changeInfo.resource_type = value;
-                this.trailOrigin = value
             },
 
             addTask: function () {
@@ -2029,8 +2256,12 @@
                         }
                         break;
                     case 'expectations':
-                        if (this.projectInfo.trail.data.expectations.data.find(item => item.id == value)) {
-                            return
+                        for (let i = 0; i < value.length; i++) {
+                            let item = value[i].split('-');
+                            value[i] = {
+                                id: item[1],
+                                flag: item[0]
+                            };
                         }
                         if (this.projectInfo.trail.data.expectations.data.length === 0 && value.length === 0) {
                             return
@@ -2059,6 +2290,9 @@
                         return;
                     case 'resource':
                         if (value == this.projectInfo.trail.data.resource) {
+                            if (this.changeInfo.trail && this.changeInfo.trail.resource) {
+                                delete this.changeInfo.trail.resource
+                            }
                             return
                         }
                         if (this.changeInfo.trail) {
@@ -2067,6 +2301,38 @@
                             this.changeInfo['trail'] = {
                                 id: this.projectInfo.trail.data.id,
                                 resource: value
+                            };
+                        }
+                        return;
+                    case 'cooperation_type':
+                        if (value == this.projectInfo.trail.data.cooperation_type) {
+                            if (this.changeInfo.trail && this.changeInfo.trail.cooperation_type) {
+                                delete this.changeInfo.trail.cooperation_type
+                            }
+                            return
+                        }
+                        if (this.changeInfo.trail) {
+                            this.changeInfo.trail.cooperation_type = value
+                        } else {
+                            this.changeInfo['trail'] = {
+                                id: this.projectInfo.trail.data.id,
+                                cooperation_type: value
+                            };
+                        }
+                        return;
+                    case 'status':
+                        if (value == this.projectInfo.trail.data.status) {
+                            if (this.changeInfo.trail && this.changeInfo.trail.status) {
+                                delete this.changeInfo.trail.status
+                            }
+                            return
+                        }
+                        if (this.changeInfo.trail) {
+                            this.changeInfo.trail.status = value
+                        } else {
+                            this.changeInfo['trail'] = {
+                                id: this.projectInfo.trail.data.id,
+                                status: value
                             };
                         }
                         return;
@@ -2161,7 +2427,7 @@
                 this.linkageSelectedIds.tasks = [];
                 this.linkageSelectedIds.projects = [];
                 for (let i = 0; i < this.oldInfo.data.relate_tasks.data.length; i++) {
-                    this.linkageSelectedIds.tasks.push(this.oldInfoa.relate_tasks.data[i].id)
+                    this.linkageSelectedIds.tasks.push(this.oldInfo.data.relate_tasks.data[i].id)
                 }
                 for (let i = 0; i < this.oldInfo.data.relate_projects.data.length; i++) {
                     this.linkageSelectedIds.projects.push(this.oldInfo.data.relate_projects.data[i].id)
@@ -2169,7 +2435,7 @@
                 if (this.oldInfo.data.trail) {
                     this.selectedExpectationsArr = [];
                     for (let i = 0; i < this.oldInfo.data.trail.data.expectations.data.length; i++) {
-                        this.selectedExpectationsArr.push(this.oldInfo.data.trail.data.expectations.data[i].id)
+                        this.selectedExpectationsArr.push(this.oldInfo.data.trail.data.expectations.data[i].moduleable_type + '-' + this.oldInfo.data.trail.data.expectations.data[i].id)
                     }
                 }
                 this.isEdit = false;

@@ -5,14 +5,14 @@
         </div>
         <div class="page-content container-fluid">
             <div class="panel">
-                <div class="col-md-4  p-20">
-                    <div class="input-search">
-                        <button type="button" class="input-search-btn"><i class="iconfont icon-buoumaotubiao13" aria-hidden="true"></i>
-                        </button>
-                        <input v-model="keywords" type="text" class="form-control project-search" placeholder="输入编号、类型或申请人"
-                               @blur="getList">
-                    </div>
-                </div>
+                <!--<div class="col-md-4  p-20">-->
+                    <!--<div class="input-search">-->
+                        <!--<button type="button" class="input-search-btn"><i class="iconfont icon-buoumaotubiao13" aria-hidden="true"></i>-->
+                        <!--</button>-->
+                        <!--<input v-model="keywords" type="text" class="form-control project-search" placeholder="输入编号、类型或申请人"-->
+                               <!--@blur="getList">-->
+                    <!--</div>-->
+                <!--</div>-->
                 <div class="col-md-12">
                     <ul class="nav nav-tabs nav-tabs-line" role="tablist">
                         <li class="nav-item" role="presentation" @click="getList(1)">
@@ -34,34 +34,36 @@
                                    data-selectable="selectable">
                                 <tr>
                                     <th class="cell-300" scope="col">审批编号</th>
-                                    <th class="cell-300" scope="col">合同名称</th>
+                                    <!-- <th class="cell-300" scope="col">合同名称</th> -->
                                     <th class="cell-300" scope="col">申请人</th>
-                                    <!-- <th class="cell-300 position-relative" scope="col">类型
-                                        <i class="iconfont icon-gengduo1" aria-hidden="true"
-                                           id="taskDropdown" data-toggle="dropdown" aria-expanded="false"></i>
+                                    <th class="cell-300 position-relative" scope="col">类型
+                                        <!-- <span class="icon md-caret-right font-size-20 mr-10 leftImg anmite"
+                                        id="taskDropdown" data-toggle="dropdown" aria-expanded="false"></span> -->
+                                        <!-- <i class="icon md-caret-right font-size-20 mr-10 leftImg anmite" aria-hidden="true"
+                                           id="taskDropdown" data-toggle="dropdown" aria-expanded="false"></i> -->
                                         <div class="dropdown-menu" aria-labelledby="taskDropdown" role="menu">
-                                            <a class="dropdown-item" role="menuitem" >影视项目立项</a>
-                                            <a class="dropdown-item" role="menuitem" >综艺项目立项</a>
-                                            <a class="dropdown-item" role="menuitem" >商务项目立项</a>
-                                            <a class="dropdown-item" role="menuitem" >papi项目立项</a>
+                                            <a class="dropdown-item" role="menuitem" >此处等</a>
+                                            <a class="dropdown-item" role="menuitem" >后端</a>
+                                            <a class="dropdown-item" role="menuitem" >表单</a>
+                                            <a class="dropdown-item" role="menuitem" >数据</a>
                                         </div>
-                                    </th> -->
+                                    </th>
                                     <th class="cell-300" scope="col">申请时间</th>
                                     <th class="cell-300" scope="col">审批状态</th>
                                 </tr>
                                 <tbody>
                                 <tr v-for="project in projectsInfo" :key='project.project_number' @click="goDetail(project.form_instance_number)">
                                     <td>{{project.form_instance_number}}</td>                              
-                                    <td>{{project.title}}</td>
+                                    <!-- <td>{{project.title}}</td> -->
                                     <td>{{project.name}}</td>
-                                    <!-- <td></td> -->
+                                    <td>{{project.group_name}}</td>
                                     <td>{{project.created_at}}</td>
                                     <td>{{getProgressName(project.form_status)}}</td>
                                 </tr>
                                 </tbody>
                             </table>
 
-                            <div v-if="projectsInfo.length === 0" class="col-md-1" style="margin: 6rem auto">
+                            <div v-if="projectsInfo.length === 0" style="margin: 6rem auto;width: 100px">
                                 <img src="https://res.papitube.com/corvus/images/content-none.png" alt=""
                                      style="width: 100%">
                             </div>
@@ -114,21 +116,21 @@
                     include: 'principal,trail.expectations',
                     status:this.pageType
                 };
-                fetch('get', '/approvals_contract/my', data).then(response => {
+                fetch('get', '/approvals_general/my', data).then(response => {
                     _this.projectsInfo = response.data
-                    _this.total = response.total;
-                    _this.current_page = response.current_page;
-                    _this.total_pages = response.last_page;
+                   _this.total = response.meta.pagination.total;
+                    _this.current_page = response.meta.pagination.current_page;
+                    _this.total_pages = response.meta.pagination.total_pages;
                 })
             },
             getList(params) {
                 let _this = this
                 this.pageType = params
-                fetch('get','/approvals_contract/my?status='+params).then((params) => {
+                fetch('get','/approvals_general/my?status='+params).then((params) => {
                     _this.projectsInfo = params.data
-                    _this.total = params.total;
-                    _this.current_page = params.current_page;
-                    _this.total_pages = params.last_page;
+                    _this.total = params.meta.pagination.total;
+                    _this.current_page = params.meta.pagination.current_page;
+                    _this.total_pages = params.meta.pagination.total_pages;
                 })
             },
             goDetail (num) {
@@ -144,5 +146,13 @@
     } */
     .project-search::-webkit-input-placeholder{
         font-weight: 200;
+    }
+    .anmite {
+        vertical-align: middle;
+        transform: rotate(90deg);
+        -ms-transform: rotate(90deg); /* IE 9 */
+        -moz-transform: rotate(90deg); /* Firefox */
+        -webkit-transform: rotate(90deg); /* Safari 和 Chrome */
+        -o-transform: rotate(90deg);
     }
 </style>

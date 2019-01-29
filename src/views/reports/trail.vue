@@ -6,10 +6,10 @@
         <div class="page-content container-fluid">
             <div class="bg-white">
                 <div class="clearfix">
-                    <div class="col-md-5 p-20 clearfix float-left">
+                    <div class="col-md-5 p-20 clearfix float-left" style="z-index: 0">
                         <GroupDatepicker ref="timeInterval" @change="changeDate"></GroupDatepicker>
                     </div>
-                    <div class="col-md-7 p-20 clearfix float-left">
+                    <div class="col-md-7 p-20 clearfix float-left" style="z-index: 0">
                         <div class="col-md-3 float-left">
                             <button type="button" class="btn btn-block btn-success waves-effect waves-classic"
                                     :disabled="designationDateNum === 'day'" @click="selectDate('day')">7天
@@ -66,8 +66,9 @@
                 <div class="page-content tab-content nav-tabs-animate bg-white">
                     <div class="tab-pane animation-fade active" id="forum-trail-report" role="tabpanel">
                         <div class="clearfix">
-                            <div class="col-md-2 float-left pl-0">
-                                <Selectors :options="trailTypeArr" @change="changeTrailType"></Selectors>
+                            <div class="col-md-3 float-left pl-0">
+                                <Selectors :options="trailTypeArr" @change="changeTrailType"
+                                           placeholder="请选择线索类型"></Selectors>
                             </div>
                             <div class="col-md-3 float-left pl-0" v-if="departmentsInfo.length > 1">
                                 <DropDepartment name="组别" :data="departmentsInfo" @change="selectDepartment"/>
@@ -106,13 +107,19 @@
                                 <td>{{ data.deparment_name }}</td>
                                 <td>{{ data.star_name }}</td>
                                 <td>{{ data.fee }}元</td>
-                                <td><span :style="{color:trailStatusArr.find(item => item.value == data.status).color}">{{ trailStatusArr.find(item => item.value == data.status).name }}</span> </td>
-                                <td>{{ priorityArr.find(item => item.value == data.priority).name }}</td>
+                                <td>
+                                    <template v-if="trailStatusArr.find(item => item.value == data.status)">
+                                        <span :style="{color:trailStatusArr.find(item => item.value == data.status).color}">{{ trailStatusArr.find(item => item.value == data.status).name }}</span>
+                                    </template>
+                                </td>
+                                <td>{{ priorityArr.find(item => item.value == data.priority) ? priorityArr.find(item =>
+                                    item.value == data.priority).name : '' }}
+                                </td>
                                 <td>{{ data.principal_user }}</td>
                             </tr>
                             </tbody>
                         </table>
-                        <div class="col-md-1" style="margin: 6rem auto"
+                        <div style="margin: 6rem auto;width: 100px"
                              v-if="tableData.trail_list && tableData.trail_list.length === 0">
                             <img src="https://res.papitube.com/corvus/images/content-none.png" alt=""
                                  style="width: 100%">
@@ -120,11 +127,12 @@
                     </div>
                     <div class="tab-pane animation-fade" id="forum-trail-add" role="tabpanel">
                         <div class="clearfix pb-20">
-                            <div class="col-md-2 float-left pl-0">
-                                <Selectors :options="newTrailSearchArr" @change="changeSelectTime"></Selectors>
+                            <div class="col-md-3 float-left pl-0">
+                                <Selectors :options="newTrailSearchArr" @change="changeSelectTime"
+                                           placeholder="请选择查询时间"></Selectors>
                             </div>
-                            <div class="col-md-2 float-left pl-0">
-                                <Selectors :options="starsArr" @change="changeStar"></Selectors>
+                            <div class="col-md-3 float-left pl-0">
+                                <Selectors :options="starsArr" @change="changeStar" placeholder="请选择目标艺人"></Selectors>
                             </div>
                             <div class="col-md-3 float-left">
                                 <DropDepartment name="组别" :data="departmentsInfo" @change="selectAddDepartment"/>
@@ -135,7 +143,7 @@
                         </div>
                     </div>
                     <div class="tab-pane animation-fade" id="forum-industry-analysis" role="tabpanel">
-                        <div class="">
+                        <div class="col-md-3 pl-0">
                             <Selectors :options="trailTypeArr" @change="changeIndustryTrailType"></Selectors>
                         </div>
                         <div class="col-md-12">
@@ -149,7 +157,7 @@
 </template>
 
 <script>
-    import { mapState } from 'vuex'
+    import {mapState} from 'vuex'
     import fetch from '../../assets/utils/fetch.js'
     import config from '../../assets/js/config'
 
@@ -228,13 +236,13 @@
             ...mapState([
                 'department',
             ]),
-            _department () {
+            _department() {
                 return this.department
             }
         },
 
         watch: {
-            _department () {
+            _department() {
                 this.departmentsInfo = this.departmentsInfo.concat(this.department);
             }
         },

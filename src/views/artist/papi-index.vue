@@ -115,7 +115,7 @@
                             </tbody>
 
                         </table>
-                        <div class="col-md-1" style="margin: 6rem auto" v-if="artistsInfo.length==0">
+                        <div style="margin: 6rem auto;width: 100px" v-if="artistsInfo.length==0">
                             <img src="https://res.papitube.com/corvus/images/content-none.png" alt=""
                                  style="width: 100%">
                         </div>
@@ -141,7 +141,7 @@
         </div>
 
         <div class="modal fade" id="addArtist" aria-hidden="true" aria-labelledby="addLabelForm"
-             role="dialog" tabindex="-1">
+             role="dialog" tabindex="-1" data-backdrop="static">
             <div class="modal-dialog modal-simple">
                 <div class="modal-content">
                     <div class="modal-header">
@@ -236,7 +236,7 @@
                                        v-model="signCompanyName">
                             </div>
                         </div>
-                        <!-- <div class="example">
+                        <div class="example">
                             <div class="col-md-2 text-right float-left">头像</div>
                             <div class="col-md-5 float-left pl-0">
                                 <Upload @change='getUploadUrl' class="upload-image">
@@ -247,7 +247,7 @@
                                             class="iconfont icon-tianjia"></i></div>
                                 </Upload>
                             </div>
-                        </div> -->
+                        </div>
                         <div class="example">
                             <div class="col-md-2 text-right float-left">备注</div>
                             <div class="col-md-10 float-left pl-0">
@@ -264,7 +264,7 @@
             </div>
         </div>
         <div class="modal fade" id="giveBroker" aria-hidden="true" aria-labelledby="addLabelForm"
-             role="dialog" tabindex="-1">
+             role="dialog" tabindex="-1" data-backdrop="static">
             <div class="modal-dialog modal-simple" style="max-width: 50rem;">
                 <div class="modal-content">
                     <div class="modal-header">
@@ -566,7 +566,7 @@
                     star_douyin_infos: this.star_douyin_infos,
                     star_weibo_infos: this.star_weibo_infos,
                     star_xiaohongshu_infos: this.star_xiaohongshu_infos,
-                    // avatar: this.uploadUrl
+                    avatar: this.uploadUrl
                 };
                 fetch('post', '/bloggers', data).then(function (response) {
                     toastr.success('创建成功');
@@ -622,7 +622,6 @@
                     _this.getArtists()
                     _this.$store.state.participantsInfo = []
                     _this.selectedArtistsArr = []
-                    console.log(_this.selectedArtistsArr)
                 })
 
             },
@@ -676,7 +675,6 @@
         line-height: 46px;
         border-radius: 50%;
         border: 1px dashed #eee;
-
     }
 </style>
 

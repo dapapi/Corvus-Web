@@ -68,7 +68,7 @@ export default {
     },
     // 获取用户列表
     getUserList ({commit}) {
-        fetch('get', '/users').then(res => {
+        fetch('get', '/user/all').then(res => {
             commit('setUserList', res.data)
         })
     },
@@ -85,6 +85,19 @@ export default {
                 }
             }
             commit('setPassBack', canPassBack)
+        })
+    },
+    getModuleList({commit}){
+        fetch('get', `/getmodules`).then((res) => {
+          
+          let num = 0
+          let data = {}
+          for (let i = 0; i < res.data.length; i++) {
+            num = num + res.data[i].unread
+          }
+          data.num = num
+          data.moduleList = res.data
+          commit('setModule',data)
         })
     }
 }

@@ -5,16 +5,16 @@
             <h1 class="page-title">我申请的</h1>
         </div>
         <div class="page-content container-fluid">
-            <div class="panel">
-                <div class="col-md-4  p-20">
-                    <div class="input-search">
-                        <button type="button" class="input-search-btn"><i class="iconfont icon-buoumaotubiao13" aria-hidden="true"></i>
-                        </button>
-                        <input v-model="sendData.search" type="text" class="form-control" placeholder="输入编号、类型或申请人" @blur="getlist">
-                    </div>
-                </div>
-                
-            </div>
+            <!--<div class="panel">-->
+                <!--<div class="col-md-4  p-20">-->
+                    <!--<div class="input-search">-->
+                        <!--<button type="button" class="input-search-btn"><i class="iconfont icon-buoumaotubiao13" aria-hidden="true"></i>-->
+                        <!--</button>-->
+                        <!--<input v-model="sendData.search" type="text" class="form-control" placeholder="输入编号、类型或申请人" @blur="getlist">-->
+                    <!--</div>-->
+                <!--</div>-->
+                <!---->
+            <!--</div>-->
             <div class="col-md-12 panel">
                     <ul class="nav nav-tabs nav-tabs-line" role="tablist">
                         <li class="nav-item" role="presentation" @click="getlist(1)">
@@ -58,7 +58,7 @@
                             </tr>
                             
                         </table>
-                        <div v-else class="col-md-1" style="margin: 6rem auto">
+                        <div v-else style="margin: 6rem auto;width: 100px">
                             <img src="https://res.papitube.com/corvus/images/content-none.png" alt="" style="width: 100%">
                         </div>
                         <!-- <pagination :current_page="current_page" :method="getProjects" :total_pages="total_pages"

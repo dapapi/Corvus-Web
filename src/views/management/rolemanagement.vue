@@ -1,10 +1,12 @@
 <template>
-
+    
     <div class="page-main" style="background-color:#f3f4f5">
+         <Loading :is-loading="isLoading" style="margin-left:200px"></Loading>
         <div class="page-header page-header-bordered mb-0">
             <h1 class="page-title">角色管理</h1>
         </div>
         <div class="page-content container-fluid pt-30">
+            
             <div class="panel col-md-12 clearfix py-5">
                 <div class="col-md-3 float-left ">
                     <div class=" py-20 px-0 float-left fuound col-md-12 clearfix"
@@ -19,6 +21,7 @@
                         </span>
                     </div>
                     <div class="clearfix py-50">
+                        
                         <section class="page-aside-section">
                             <div class="site-menubar-body" style="width:260px;">
                                 <!--渲染分组 -->
@@ -123,7 +126,7 @@
                     </div>
                     <div class="page-content tab-content nav-tabs-animate bg-white pt-20">
                         <div class="tab-pane animation-fade " :class="isAactive?'active':''" :id="'forum-member'+item.id" role="tabpanel">
-                            <span style="font-weight:300;color:#999999;font-size:12px;" v-if="item.group_id==1994731356">如需添加“部门主管”，请到【成员管理】页面，在【编辑部门】中设置“部门主管”，设置完成后自动同步。</span>
+                            <!-- <span style="font-weight:300;color:#999999;font-size:12px;" v-if="item.group_id==1994731356">如需添加“部门主管”，请到【成员管理】页面，在【编辑部门】中设置“部门主管”，设置完成后自动同步。</span> -->
                             <table class="table table-hover" data-plugin="selectable" data-selectable="selectable">
                                
                                 <tr>
@@ -270,7 +273,7 @@
         </div>
         <!--新增角色 -->
         <div class="modal fade" id="addRole" aria-hidden="true" aria-labelledby="addLabelForm" role="dialog"
-             tabindex="-1">
+             tabindex="-1" data-backdrop="static">
             <div class="modal-dialog modal-simple">
                 <div class="modal-content">
                     <div class="modal-header">
@@ -309,7 +312,7 @@
         </div>
         <!--新增分组-->
         <div class="modal fade" id="addSubgroup" aria-hidden="true" aria-labelledby="addLabelForm" role="dialog"
-             tabindex="-1">
+             tabindex="-1" data-backdrop="static">
             <div class="modal-dialog modal-simple">
                 <div class="modal-content">
                     <div class="modal-header">
@@ -335,7 +338,7 @@
         </div>
         <!--移动到分组-->
         <div class="modal fade" id="moveSubgroup" aria-hidden="true" aria-labelledby="addLabelForm" role="dialog"
-             tabindex="-1">
+             tabindex="-1" data-backdrop="static">
             <div class="modal-dialog modal-simple">
                 <div class="modal-content">
                     <div class="modal-header">
@@ -362,7 +365,7 @@
         </div>
         <!--修改角色-->
         <div class="modal fade" id="updateSubgroup" aria-hidden="true" aria-labelledby="addLabelForm" role="dialog"
-             tabindex="-1">
+             tabindex="-1" data-backdrop="static">
             <div class="modal-dialog modal-simple">
                 <div class="modal-content">
                     <div class="modal-header">
@@ -402,7 +405,7 @@
         </div>
         <!--重命名-->
         <div class="modal fade" id="Rename" aria-hidden="true" aria-labelledby="addLabelForm" role="dialog"
-             tabindex="-1">
+             tabindex="-1" data-backdrop="static">
             <div class="modal-dialog modal-simple">
                 <div class="modal-content">
                     <div class="modal-header">
@@ -428,7 +431,7 @@
         </div>
         <!--删除分组-->
         <div class="modal fade" id="deleteGrouping" aria-hidden="true" aria-labelledby="addLabelForm" role="dialog"
-             tabindex="-1">
+             tabindex="-1" data-backdrop="static">
             <div class="modal-dialog modal-simple">
                 <div class="modal-content">
                     <div class="modal-header">
@@ -453,7 +456,7 @@
         </div>
         <!--删除角色-->
         <div class="modal fade" id="deleteRole" aria-hidden="true" aria-labelledby="addLabelForm" role="dialog"
-             tabindex="-1">
+             tabindex="-1" data-backdrop="static">
             <div class="modal-dialog modal-simple">
                 <div class="modal-content">
                     <div class="modal-header">
@@ -478,7 +481,7 @@
         </div>
         <!--添加成员-->
         <div class="modal fade" id="addMember" aria-hidden="true" aria-labelledby="addLabelForm" role="dialog"
-             tabindex="-1">
+             tabindex="-1" data-backdrop="static">
             <div class="modal-dialog modal-simple">
                 <div class="modal-content">
                     <div class="modal-header">
@@ -571,7 +574,8 @@
                 isAactive:true,
                 idArray:[],
                 defaultDate:'',
-                selectgroupingDate:[]
+                selectgroupingDate:[],
+                isLoading:true
             }
         },
         mounted() {
@@ -593,6 +597,7 @@
                 let _this = this;
                 fetch('get', '/console/role').then(function (response) {
                     _this.roleDate = response.data;
+                    _this.isLoading = false
                 });
             },
             //获取默认数据
@@ -634,8 +639,6 @@
             },
             //切换内容
             changeCont(value,index) {
-                console.log(index)
-                
                 this.jobCont = value
                 this.selectedIds = []
                 this.defaultId = index
@@ -717,7 +720,6 @@
 
             },
             powerkeep() {
-                console.log(this.selectedIds)
                 fetch('post', '/console/feature/' + this.jobCont, {resouce: this.selectedIds}).then(function (response) {
                     toastr.success('保存成功');
                 })
@@ -864,7 +866,6 @@
             },
             //修改类型
             updateRolejob(value) {
-                console.log(value)
                 this.updateType = value
             },
             //修改描述

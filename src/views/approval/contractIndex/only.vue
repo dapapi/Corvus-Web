@@ -5,14 +5,14 @@
         </div>
         <div class="page-content container-fluid">
             <div class="panel">
-                <div class="col-md-4  p-20">
-                    <div class="input-search">
-                        <button type="button" class="input-search-btn"><i class="iconfont icon-buoumaotubiao13" aria-hidden="true"></i>
-                        </button>
-                        <input v-model="keywords" type="text" class="form-control" placeholder="输入编号、类型或申请人"
-                               @blur="getList">
-                    </div>
-                </div>
+                <!--<div class="col-md-4  p-20">-->
+                    <!--<div class="input-search">-->
+                        <!--<button type="button" class="input-search-btn"><i class="iconfont icon-buoumaotubiao13" aria-hidden="true"></i>-->
+                        <!--</button>-->
+                        <!--<input v-model="keywords" type="text" class="form-control" placeholder="输入编号、类型或申请人"-->
+                               <!--@blur="getList">-->
+                    <!--</div>-->
+                <!--</div>-->
                 <div class="col-md-12">
                     <ul class="nav nav-tabs nav-tabs-line" role="tablist">
                         <li class="nav-item" role="presentation" @click="getList(1)">
@@ -63,7 +63,7 @@
                                 </tr>
                                 </tbody>
                             </table>
-                            <div v-if="projectsInfo.length === 0" class="col-md-1" style="margin: 6rem auto">
+                            <div v-if="projectsInfo.length === 0" style="margin: 6rem auto;width: 100px">
                                 <img src="https://res.papitube.com/corvus/images/content-none.png" alt=""
                                      style="width: 100%">
                             </div>
@@ -121,20 +121,19 @@ import {CONTRACT_INDEX_CONFIG} from '@/views/approval/contractIndex/contractInde
                 }
                 fetch('get', '/approvals_contract/notify', data).then(response => {
                     _this.projectsInfo = response.data
-                    _this.total = response.meta.pagination;
-                    _this.current_page = response.meta.current_page;
-                    _this.total_pages = response.meta.total_pages;
+                   _this.total = response.meta.pagination.total;
+                    _this.current_page = response.meta.pagination.current_page;
+                    _this.total_pages = response.meta.pagination.total_pages;
                 })
             },
             getList(params) {
                 this.pageType = params
                     let _this = this
                     fetch('get','/approvals_contract/notify?status='+params).then((params) => {
-                        console.log(params);
                         _this.projectsInfo = params.data
-                        _this.total = params.meta.pagination
-                        _this.current_page = params.meta.current_page;
-                        _this.total_pages = params.meta.total_pages;
+                       _this.total = params.meta.pagination.total;
+                    _this.current_page = params.meta.pagination.current_page;
+                    _this.total_pages = params.meta.pagination.total_pages;
                     })
             }
         }

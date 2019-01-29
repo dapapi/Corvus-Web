@@ -3,12 +3,12 @@
         <div class="page-header page-header-bordered">
             <h1 class="page-title">发起审批</h1>
         </div>
-        <div class="page-content container-fluid">
+        <div class="page-content container-fluid" v-if="myOrganization">
             <div class="">
                 <div class="row py-5">
-                    <div class="col-lg-4 pointer-content" v-for="item in list" :key="item.id" @click="addProject(item.value)">
-                        <div class="card">
-                            <div class="card-block clearfix">
+                    <div class="col-lg-4 pointer-content" v-for="item in list" :key="item.id" @click="addProject(item.value)" v-if="(myOrganization === 411 && item.value === 3) || (myOrganization === 412 && item.value === 4) || item.value === 1 || item.value === 2">
+                        <div class="card" >
+                            <div class="card-block clearfix" >
                                 <div class="float-left" style="width: 40px;height: 40px;">
                                     <img src="https://res-crm.papitube.com/contract-dark-blue.png" alt=""
                                         style="width: 100%">
@@ -48,23 +48,32 @@
                         value: 3
                     },
                     {
-                        name: 'papi项目立项',
+                        name: '商务项目立项',
                         value: 4
                     },
                 ],
                 projectType: '',
                 projectFieldsArr: [],
+                myOrganization:'',
             }
+        },
+        created(){
+            this.whoAmI()
+        },
+        mounted(){
         },
         methods: {
             addProject(value) {
-                console.log(value);
                 this.projectType = value;
                 this.selectProjectType(function () {
                     $('#addProject').modal('show')
                 });
             },
-
+            whoAmI(){
+                fetch('get','/users/my').then((params) => {
+                    this.myOrganization = params.data.organization_id
+                })
+            },
             selectProjectType(callback) {
                 fetch('get', '/project_fields', {
                     type: this.projectType,
@@ -82,7 +91,6 @@
                         }
                     }
                     this.projectFieldsArr = response.data;
-                    console.log(this.projectFieldsArr);
                     callback();
                 });
             },

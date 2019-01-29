@@ -6,14 +6,17 @@
 
 <script>
     import fetch from '../assets/utils/fetch.js'
-    //isModel ===true  //调用接口/schedules/all
+    //isModel ===true  调用接口/schedules/all
     export default {
-        props: ['calendars', 'gotoDate', 'meetingRomeList', 'isMeeting', 'isModel'],
+        props: ['calendars', 'gotoDate', 'meetingRomeList', 'isMeeting', 'isModel', 'calendarView'],
         data() {
             return {
                 startDate: '', //获取开始时间
                 endDate: '',  //获取结束时间
                 allScheduleInfo: '',
+                defaultView: 'month',
+                firstClickTime: '',
+                clickDate: '',
             }
         },
         watch: {
@@ -31,6 +34,14 @@
             },
             meetingRomeList: function () {
                 this.refresh();
+            },
+            calendarView: function (newValue) {
+                this.changeView(newValue)
+            }
+        },
+        created() {
+            if (this.calendarView) {
+                this.defaultView = this.calendarView
             }
         },
         mounted() {
@@ -44,7 +55,7 @@
                     center: 'title',
                     left: 'month,agendaWeek,agendaDay'
                 },
-                defaultView: 'month', //设置默认显示月，周，日
+                defaultView: self.defaultView, //设置默认显示月，周，日
                 navLinks: true,
                 editable: false,
                 eventLimit: true,
@@ -79,14 +90,22 @@
                     self.endDate = self.timeReformat(end._d);
                     let meetingRomeList = self.meetingRomeList;
                     let url
-                    self.isModel == true ? url = '/schedules/all' : url = '/schedules'
                     if (!meetingRomeList) {
                         meetingRomeList = [];
                     }
-                    if (self.calendars.length === 0 && meetingRomeList.length === 0) {
-                        callback([]);
-                        return
+                    if (self.isModel) {
+                        url = '/schedules/all'
+                        if (self.calendars.length === 0) {
+                            return
+                        }
+                    } else {
+                        if (meetingRomeList.length === 0) {
+                            url = '/schedules/list'
+                        } else {
+                            url = '/schedules'
+                        }
                     }
+
                     let data = {
                         start_date: self.startDate,
                         end_date: self.endDate,
@@ -102,28 +121,39 @@
                         data.calendar_ids = self.calendars
                     }
 
-                    if (meetingRomeList.length > 0 || self.calendars.length > 0) {
-                        fetch('get', url, data).then(response => {
-                            self.allScheduleInfo = response.data;
-                            let events = [];
-                            for (let i = 0; i < response.data.length; i++) {
-                                events.push({
-                                    title: response.data[i].title,
-                                    start: response.data[i].start_at,
-                                    end: response.data[i].end_at,
-                                    color: response.data[i].calendar.data.color,
-                                    allDay: !!response.data[i].is_allday,
-                                    id: response.data[i].id,
-                                })
-                            }
-                            callback(events)
-                        })
-                    }
+                    fetch('get', url, data).then(response => {
+                        self.allScheduleInfo = response.data;
+                        let events = [];
+                        for (let i = 0; i < response.data.length; i++) {
+                            events.push({
+                                title: response.data[i].title,
+                                start: response.data[i].start_at,
+                                end: response.data[i].end_at,
+                                color: response.data[i].calendar.data.color,
+                                allDay: !!response.data[i].is_allday,
+                                id: response.data[i].id,
+                            })
+                        }
+                        callback(events)
+                    })
 
                 },
                 dayClick: function (date, allDay, jsEvent) {
+                    let currentDate = new Date();
+                    let currentClickTime = currentDate.getTime();
                     let formatDate = self.timeReformat(date._d);
-                    self.$emit('dayClick', formatDate);
+                    if (!self.clickDate) {
+                        self.clickDate = formatDate;
+                    }
+                    if (self.firstClickTime && self.clickDate === formatDate) {
+                        if (currentClickTime - self.firstClickTime < 500) {
+                            self.$emit('dayClick', formatDate);
+                        }
+                    } else {
+                        self.$emit('showToast', event.pageX, event.pageY)
+                    }
+                    self.clickDate = formatDate;
+                    self.firstClickTime = currentClickTime;
                 },
                 eventClick: function (event, jsEvent, view) {
                     let data = self.allScheduleInfo.find(item => item.id === event.id);
@@ -168,5 +198,12 @@
 
 <style>
 
+    .fc-button.fc-state-active, .fc-button.fc-state-hover {
+        background-color: #e5e5e5;
+    }
+
+    .fc-button.fc-prev-button, .fc-button.fc-next-button {
+        background-color: #fff;
+    }
 
 </style>

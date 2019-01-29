@@ -3,10 +3,10 @@
         <span v-if="type === 'export'" @click="exportFile">
             <slot></slot>
         </span>
-        <span v-if="type === 'import'">
-            <form action="" style="display:inline-block">
+        <span v-if="type === 'import'" style="width:100%">
+            <form action="" style="display:inline-block;width:100%" >
                 <input type="file" :id="`import_${this.getRandom}`" name="avatar" accept=".xlsx" style="display:none" @change="importFile($event)">
-                <label :for="`import_${this.getRandom}`">
+                <label :for="`import_${this.getRandom}`" style="width:100%">
                 <slot></slot>
                 </label>
             </form>
@@ -70,6 +70,7 @@ export default {
             xhh.onreadystatechange = function () {
                 if (xhh.readyState === 4 && xhh.status === 200) {
                     var filename = xhh.getResponseHeader("Content-disposition")
+                        console.log(filename)
                         filename = decodeURI(filename)
                         filename = filename.split("filename*=utf-8''")[1]
                     var blob = new Blob([xhh.response], {type: 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet;charset=utf-8'})

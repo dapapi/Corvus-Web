@@ -2,7 +2,7 @@
     <div class="list">
         <div class="left">
             <div class="left-cont">
-                <SelectStaff :member-type="'participant'" :multiple="true" :type="type"></SelectStaff>
+                <SelectStaff :member-type="memberType" :multiple="!isSingle" :type="type"></SelectStaff>
             </div>
         </div>
         <div class="middle">
@@ -13,17 +13,32 @@
         <div class="right">
             <div class="right-cont">
                 <div class="right-head">已选择成员</div>
-                <ul class="pointer-content selected-member">
-                    <li v-for="(item,index) in participantsInfo" :key="index" class="users">
-                        <a class="avatar" href="javascript:void(0)">
-                            <Avatar :imgUrl="item.icon_url" style="margin-right: 10px;"/>
-                        </a>
-                        <span class="pl-1">{{ item.name }}</span>
-                        <span class="float-right" @click="delMember(item.id)">
+                <template v-if="memberType === 'principal'">
+                    <ul class="pointer-content selected-member" v-if="participantsInfo.name">
+                        <li class="users">
+                            <a class="avatar" href="javascript:void(0)">
+                                <Avatar :imgUrl="participantsInfo.icon_url" style="margin-right: 10px;"/>
+                            </a>
+                            <span class="pl-1">{{ participantsInfo.name }}</span>
+                            <span class="float-right" @click="delMember(participantsInfo.id)">
                             <i class="icon iconfont icon-guanbi"></i>
                         </span>
-                    </li>
-                </ul>
+                        </li>
+                    </ul>
+                </template>
+                <template v-else>
+                    <ul class="pointer-content selected-member">
+                        <li v-for="(item,index) in participantsInfo" :key="index" class="users">
+                            <a class="avatar" href="javascript:void(0)">
+                                <Avatar :imgUrl="item.icon_url" style="margin-right: 10px;"/>
+                            </a>
+                            <span class="pl-1">{{ item.name }}</span>
+                            <span class="float-right" @click="delMember(item.id)">
+                            <i class="icon iconfont icon-guanbi"></i>
+                        </span>
+                        </li>
+                    </ul>
+                </template>
             </div>
 
         </div>
@@ -33,7 +48,7 @@
 <script>
     export default {
         name: "ListSelectMember",
-        props: ['type'],
+        props: ['type', 'isSingle'],
         data() {
             return {
                 params: {
@@ -46,28 +61,47 @@
         computed: {
             participantsInfo: function () {
                 if (this.type === 'change') {
-                    return this.$store.state.participantsInfo
+                    if (this.memberType === 'principal') {
+                        return this.$store.state.principalInfo
+                    } else {
+                        return this.$store.state.participantsInfo
+                    }
+                } else {
+                    if (this.memberType === 'principal') {
+                        return this.$store.state.newPrincipalInfo
+                    } else {
+                        return this.$store.state.newParticipantsInfo
+                    }
                 }
-                 else {
-                    return this.$store.state.newParticipantsInfo
-                }
-                
+
             },
+            memberType: function () {
+                if (this.isSingle) {
+                    return 'principal'
+                } else {
+                    return 'participant'
+                }
+            }
+
         },
 
         methods: {
             delMember(memberId) {
-                let participantInfo = '';
-                if (this.type === 'change') {
-                    participantInfo = this.$store.state.participantsInfo;
-                } 
-                else {
-                    participantInfo = this.$store.state.newParticipantsInfo;
-                }
-                participantInfo.splice(participantInfo.map(item => item.id).indexOf(memberId), 1)
+                if (this.memberType === 'principal') {
+                    this.params.data = [];
+                    this.$store.dispatch('changePrincipal', this.params);
+                } else {
+                    let participantInfo = '';
+                    if (this.type === 'change') {
+                        participantInfo = this.$store.state.participantsInfo;
+                    } else {
+                        participantInfo = this.$store.state.newParticipantsInfo;
+                    }
+                    participantInfo.splice(participantInfo.map(item => item.id).indexOf(memberId), 1)
 
-                this.params.data = participantInfo;
-                this.$store.dispatch('changeParticipantsInfo', this.params);
+                    this.params.data = participantInfo;
+                    this.$store.dispatch('changeParticipantsInfo', this.params);
+                }
             }
         }
     }

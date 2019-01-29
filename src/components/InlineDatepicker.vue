@@ -18,6 +18,7 @@
                 inline: true,
                 format: "yyyy-mm-dd",
                 language: "zh-CN",
+                todayHighlight: true
             }).on("changeDate", function () {
                 self.$emit('change', $(this)[0].children[0].value);
             });
