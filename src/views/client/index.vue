@@ -28,13 +28,13 @@
                         <selectors :options="clientLevelArr" @change="changeClientLevelSelect"
                                    placeholder="请选择公司级别"></selectors>
                     </div>
-                    <div class="col-md-3 example float-left">
+                    <!-- <div class="col-md-3 example float-left">
                         <button type="button" class="btn btn-default waves-effect waves-classic float-right"
                                 data-toggle="modal" data-target="#customizeContent"
                                 data-placement="right" title="">
                             自定义筛选
                         </button>
-                    </div>
+                    </div> -->
                 </div>
                 <div class="col-md-12">
                     <table class="table table-hover is-indent mb-20" data-plugin="animateList" data-animate="fade"
