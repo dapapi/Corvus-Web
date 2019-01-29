@@ -130,9 +130,9 @@ import {CONTRACT_INDEX_CONFIG} from '@/views/approval/contractIndex/contractInde
                 }
                 fetch('get', '/approvals_general/notify', data).then(response => {
                     _this.projectsInfo = response.data
-                    _this.total = params.meta.pagination.total;
-                    _this.current_page = params.meta.pagination.current_page;
-                    _this.total_pages = params.meta.pagination.total_pages;
+                    _this.total = response.meta.pagination.total;
+                    _this.current_page = response.meta.pagination.current_page;
+                    _this.total_pages = response.meta.pagination.total_pages;
                 })
             },
             getList(params) {
