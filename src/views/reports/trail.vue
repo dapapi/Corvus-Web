@@ -143,7 +143,7 @@
                         </div>
                     </div>
                     <div class="tab-pane animation-fade" id="forum-industry-analysis" role="tabpanel">
-                        <div class="">
+                        <div class="col-md-3 pl-0">
                             <Selectors :options="trailTypeArr" @change="changeIndustryTrailType"></Selectors>
                         </div>
                         <div class="col-md-12">
