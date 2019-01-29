@@ -361,7 +361,7 @@
                                         <td>{{ contract.title }}</td>
                                         <td>
                                             <template v-for="star in contract.stars_name">
-                                                {{ star.name }}
+                                                {{ star.name || star.nickname}}
                                             </template>
                                         </td>
                                         <td>收入</td>
