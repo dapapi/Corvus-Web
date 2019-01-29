@@ -116,9 +116,9 @@
                 };
                 fetch('get', '/approvals_contract/my', data).then(response => {
                     _this.projectsInfo = response.data
-                    _this.total = response.total;
-                    _this.current_page = response.current_page;
-                    _this.total_pages = response.last_page;
+                   _this.total = params.meta.pagination.total;
+                    _this.current_page = params.meta.pagination.current_page;
+                    _this.total_pages = params.meta.pagination.total_pages;
                 })
             },
             getList(params) {
@@ -126,9 +126,9 @@
                 this.pageType = params
                 fetch('get','/approvals_contract/my?status='+params).then((params) => {
                     _this.projectsInfo = params.data
-                    _this.total = params.total;
-                    _this.current_page = params.current_page;
-                    _this.total_pages = params.last_page;
+                   _this.total = params.meta.pagination.total;
+                    _this.current_page = params.meta.pagination.current_page;
+                    _this.total_pages = params.meta.pagination.total_pages;
                 })
             },
             goDetail (num) {
