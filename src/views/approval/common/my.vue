@@ -44,8 +44,8 @@
                                         </div>
                                     </th> -->
                                      <th class="cell-300 position-relative" scope="col">类型
-                                        <i class="iconfont icon-gengduo1" aria-hidden="true"
-                                           id="taskDropdown" data-toggle="dropdown" aria-expanded="false"></i>
+                                        <!-- <span class="icon md-caret-right font-size-20 mr-10 leftImg anmite"
+                                        id="taskDropdown" data-toggle="dropdown" aria-expanded="false"></span> -->
                                         <div class="dropdown-menu" aria-labelledby="taskDropdown" role="menu">
                                             <a class="dropdown-item" role="menuitem" >此处等</a>
                                             <a class="dropdown-item" role="menuitem" >后端</a>

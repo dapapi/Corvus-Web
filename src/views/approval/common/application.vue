@@ -37,8 +37,8 @@
                                     <!-- <th class="cell-300" scope="col">合同名称</th> -->
                                     <th class="cell-300" scope="col">申请人</th>
                                     <th class="cell-300 position-relative" scope="col">类型
-                                        <span class="icon md-caret-right font-size-20 mr-10 leftImg anmite"
-                                        id="taskDropdown" data-toggle="dropdown" aria-expanded="false"></span>
+                                        <!-- <span class="icon md-caret-right font-size-20 mr-10 leftImg anmite"
+                                        id="taskDropdown" data-toggle="dropdown" aria-expanded="false"></span> -->
                                         <!-- <i class="icon md-caret-right font-size-20 mr-10 leftImg anmite" aria-hidden="true"
                                            id="taskDropdown" data-toggle="dropdown" aria-expanded="false"></i> -->
                                         <div class="dropdown-menu" aria-labelledby="taskDropdown" role="menu">
