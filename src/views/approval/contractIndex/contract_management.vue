@@ -137,7 +137,7 @@
                             <img src="https://res.papitube.com/corvus/images/content-none.png" alt=""
                                  style="width: 100%">
                         </div>
-                        <pagination :current_page="current_page" :total_pages="total_pages"
+                        <pagination :current_page="current_page"  :method="getProjects" :total_pages="total_pages"
                                     :total="total"></pagination>
 
                     </div>
@@ -304,7 +304,20 @@
             },
         },
         methods: {
-            
+            getProjects: function (pageNum = 1, signStatus) {
+                let _this = this
+                let data = {
+                    page: pageNum,
+                    // include: 'principal,trail.expectations',
+                    status:this.pageType
+                };
+                fetch('get', '/approvals_contract/'+this.currentStatus, data).then(response => {
+                    _this.pageList = response.data                    
+                    _this.total = response.meta.pagination;
+                    _this.current_page = response.meta.current_page;
+                    _this.total_pages = response.meta.total_pages;
+                })
+            },
             //查询列表
             getList: function (params) {
                 this.currentStatus = params

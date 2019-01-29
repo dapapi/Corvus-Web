@@ -77,15 +77,15 @@
              })
             })
             
-            // $(this.$el).on('hidden.bs.modal',function () {
-            //     _this.conditionLength = 0;
-            //     _this.selectorHidden = [];
-            //     _this.conditionData = {};
-            //     _this.customizeKeyWords = '';
-            //     setTimeout(function () {
-            //         _this.conditionLength = 1;
-            //     }, 0);
-            // })
+            $(this.$el).on('hidden.bs.modal',function () {
+                _this.conditionLength = 0;
+                _this.selectorHidden = [];
+                _this.conditionData = {};
+                _this.customizeKeyWords = '';
+                setTimeout(function () {
+                    _this.conditionLength = 1;
+                }, 0);
+            })
         },
 
         methods: {
