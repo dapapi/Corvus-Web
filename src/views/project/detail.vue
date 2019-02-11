@@ -1951,7 +1951,7 @@
                 if (this.projectBillMetaInfo.divide) {
                     this.divideArrInfo = JSON.parse(JSON.stringify(this.projectBillMetaInfo.divide));
                 } else {
-                    this.divideArrInfo = {};
+                    this.divideArrInfo = [];
                 }
                 for (let i = 0; i < this.projectBillMetaInfo.datatitle.length; i++) {
                     if (!this.divideArrInfo.find(item => item.moduleable_title === this.projectBillMetaInfo.datatitle[i])) {
