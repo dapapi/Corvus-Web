@@ -219,7 +219,7 @@
                                     <div class="project-progress" v-for="item in projectProgressInfo">
                                         <template v-if="!item.isFinish">
                                             <div class="clearfix pointer-content"
-                                                 @click="addProjectProgress(item.status)">
+                                                 @click="changeProjectProgress(item.status)">
                                                 <div class="col-md-4 p-0 float-left">
                                                     <div class="image-wraper">
                                                         <template v-if="item.isFinish == 1">
@@ -1085,6 +1085,34 @@
                 </div>
             </div>
         </div>
+        <!-- 修改项目进度 -->
+        <div class="modal fade modal-simple" id="changeProjectProgress" aria-labelledby="exampleModalTitle"
+             role="dialog"
+             tabindex="-1" data-backdrop="static" aria-hidden="true">
+            <div class="modal-dialog modal-simple">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <button type="button" class="close" aria-hidden="true" data-dismiss="modal">
+                            <i class="iconfont icon-guanbi" aria-hidden="true"></i>
+                        </button>
+                        <h4 class="modal-title">修改项目节点</h4>
+                    </div>
+                    <div class="modal-body">
+                        <p class="mt-20">是否确认已完成当前项目进度节点</p>
+                    </div>
+                    <div class="modal-footer">
+                        <button type="button"
+                                class="btn btn-default btn-pure waves-effect waves-classic"
+                                data-dismiss="modal">取消
+                        </button>
+                        <button type="button"
+                                class="btn btn-primary waves-effect waves-classic"
+                                data-dismiss="modal" @click='addProjectProgress'>确认
+                        </button>
+                    </div>
+                </div>
+            </div>
+        </div>
         <!-- 新建/修改回款期次 -->
         <div class="modal fade" id="addPaybackTime" aria-hidden="true" aria-labelledby="addLabelForm"
              role="dialog" tabindex="-1" data-backdrop="static" v-if="projectInfo.type != 5">
@@ -1627,6 +1655,7 @@
                 myDivide: 0,
                 billExpenses: 0,
                 divideArrInfo: '',
+                projectProgress: '',
             }
         },
 
@@ -2022,9 +2051,14 @@
                 })
             },
 
-            addProjectProgress: function (status) {
-                fetch('put', '/projects/' + this.projectId + '/course', {status: status}).then(response => {
-                    let flagInfo = this.projectProgressInfo.find(item => item.status == status);
+            changeProjectProgress: function (status) {
+                this.projectProgress = status;
+                $('#changeProjectProgress').modal('show')
+            },
+
+            addProjectProgress: function () {
+                fetch('put', '/projects/' + this.projectId + '/course', {status: this.projectProgress}).then(response => {
+                    let flagInfo = this.projectProgressInfo.find(item => item.status == this.projectProgress);
                     flagInfo['finisher'] = response.data.user;
                     flagInfo['finish_at'] = response.data.updated_at;
                     flagInfo['isFinish'] = 1;
