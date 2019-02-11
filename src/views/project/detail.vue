@@ -418,7 +418,7 @@
                                         <span class="pointer-content hover-content" data-toggle="modal"
                                               data-target="#addBill">
                                             <template
-                                                    v-if="projectBillMetaInfo.divide && projectBillMetaInfo.divide.length === 0">
+                                                    v-if="!projectBillMetaInfo.divide">
                                                 <i class="iconfont icon-tianjia pr-5"></i>新增结算单
                                             </template>
                                             <template v-else>
@@ -1414,10 +1414,11 @@
                         <button type="button" class="close" aria-hidden="true" data-dismiss="modal">
                             <i class="iconfont icon-guanbi" aria-hidden="true"></i>
                         </button>
-                        <template v-if="projectBillMetaInfo.divide && projectBillMetaInfo.divide.length === 0">
+                        <template
+                                v-if="!projectBillMetaInfo.divide">
                             <h4 class="modal-title">新增结算单</h4>
                         </template>
-                        <template v-if="">
+                        <template v-else>
                             <h4 class="modal-title">修改结算单</h4>
                         </template>
                     </div>
@@ -1444,7 +1445,7 @@
                     <div class="modal-footer">
                         <button class="btn btn-sm btn-white btn-pure" data-dismiss="modal">取消</button>
                         <template
-                                v-if="projectBillMetaInfo.divide && projectBillMetaInfo.divide.length === 0">
+                                v-if="!projectBillMetaInfo.divide">
                             <button class="btn btn-primary" type="submit" @click="addProjectBill">确定</button>
                         </template>
                         <template v-else>
@@ -1947,7 +1948,11 @@
             cancelChangeBill: function () {
                 this.myDivide = this.projectBillMetaInfo.my_divide;
                 this.billExpenses = this.projectBillMetaInfo.expenses;
-                this.divideArrInfo = JSON.parse(JSON.stringify(this.projectBillMetaInfo.divide));
+                if (this.projectBillMetaInfo.divide) {
+                    this.divideArrInfo = JSON.parse(JSON.stringify(this.projectBillMetaInfo.divide));
+                } else {
+                    this.divideArrInfo = {};
+                }
                 for (let i = 0; i < this.projectBillMetaInfo.datatitle.length; i++) {
                     if (!this.divideArrInfo.find(item => item.moduleable_title === this.projectBillMetaInfo.datatitle[i])) {
                         this.divideArrInfo.push({

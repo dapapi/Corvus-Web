@@ -1433,6 +1433,10 @@
         border-bottom: 1px solid #E0E0E0;
     }
 
+    .calendar-list ul li:hover {
+        background-color: #f5f5f5;
+    }
+
     .calendar-list ul {
         padding: 0 20px;
         margin-top: 10px;
