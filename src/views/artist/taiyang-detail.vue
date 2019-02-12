@@ -1321,6 +1321,7 @@
                 toastX: 0,
                 toastY: 0,
                 projectContractDefault:'',
+                taskDate:{}
             }
         },
 
@@ -1384,9 +1385,9 @@
                 })
 
             },
-            getProject() {
+            getProject(page = 1) {
                 let _this = this;
-                fetch('get', '/stars/' + this.artistId + '/project').then(function (response) {
+                fetch('get', '/stars/' + this.artistId + '/project',{page:page}).then(function (response) {
 
                     _this.artistProjectsInfo = response.data
                     _this.current_page = response.meta.pagination.current_page;
@@ -1849,10 +1850,14 @@
             }
             ,
             //获取任务列表
-            getTaskList: function () {
+            getTaskList: function (page = 1) {
+               
                 let _this = this
-                fetch('get', `/stars/${this.$route.params.id}/tasks`).then(response => {
+                fetch('get', `/stars/${this.$route.params.id}/tasks/`,{
+                    page:page
+                }).then(response => {
                     _this.allTaskList = response.data
+                    console.log(response)
                     _this.current_page = response.meta.pagination.current_page;
                     _this.total = response.meta.pagination.total;
                     _this.total_pages = response.meta.pagination.total_pages;
@@ -1875,7 +1880,7 @@
 
                         }
                     }
-                    _this.taskNum = `${_this.doneTaskNum}/${_this.allTaskList.length}`
+                    _this.taskNum = `${_this.doneTaskNum}/${response.meta.pagination.total}`
                 })
             },
             selectDate: function (value) {

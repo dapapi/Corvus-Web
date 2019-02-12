@@ -277,7 +277,7 @@
                         </div>
                         <div class="example">
                             <div class="col-md-2 text-right float-left require">与我司签约意向</div>
-                            <div class="col-md-10 float-left pl-0">
+                            <div class="col-md-5 float-left pl-0">
                                 <selectors :options="yesOrNoArr" @change="changeSignIntention"
                                            ref="signIntention"></selectors>
                             </div>

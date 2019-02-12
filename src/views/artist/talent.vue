@@ -586,7 +586,7 @@
                         </div>
                         <div class="example">
                             <div class="col-md-2 text-right float-left require">与我司签约意向</div>
-                            <div class="col-md-10 float-left pl-0">
+                            <div class="col-md-5 float-left pl-0">
                                 <selectors :options="yesOrNoArr" @change="changeSignIntention"
                                            ref="signIntention"></selectors>
                             </div>
@@ -614,14 +614,14 @@
                         </div>
                         <div class="example" v-show="affixesType>0">
                             <div class="col-md-2 text-right float-left require">附件</div>
-                            <div class="col-md-5 float-left pl-0">
+                            <div class="col-md-10 float-left pl-0">
                                 <Upload  @change="uploadAttachment" class="upload-image">
                                     <div  class="addMember-trigger-button addMember-trigger-left"><i
                                             class="iconfont icon-tianjia"></i></div>
                                 </Upload>
                                 <div class="mt-5" v-for="(attach,index) in affixes" :key="index">
-                                    {{attachmentTypeArr.find(item => item.value == attach.type).name}} -
-                                    {{attach.title}}
+                                    <span>{{attachmentTypeArr.find(item => item.value == attach.type).name}}-{{attach.title}}</span>
+                                    <a :href="Preview" style="text-decoration:none;">预览</a>
                                 </div>
                                 <!-- <FileUploader class="fileupload" @change="uploadAttachment"></FileUploader>
                                 <div class="mt-5" v-for="(attach,index) in affixes" :key="index">
@@ -864,7 +864,8 @@
                 affixes: [],
                 affixesType: '',//附件类型
                 isShow: '',
-                isContract:false
+                isContract:false,
+                Preview:''
             }
         },
         watch: {
@@ -1310,6 +1311,7 @@
                 this.artistSource = value
             },
             uploadAttachment: function (url, name, size) {
+                this.Preview = url
                 for (let i = 0; i < this.affixes.length; i++) {
                     if (this.affixes[i].type == this.affixesType) {
 

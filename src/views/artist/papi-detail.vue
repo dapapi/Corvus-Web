@@ -573,10 +573,10 @@
                                             </div>
                                             <div class="card-text py-10 px-0 clearfix col-md-6 float-left " >
                                                 <div class="col-md-4 float-left text-right pl-0">最近更新人</div>
-                                                <div class="col-md-8 float-left font-weight-bold"  v-if="artistInfo.operatelogs" >
-                                                    <span v-for="(entry,index) in artistInfo.operatelogs.data" :key="index">
-                                                    {{entry.username}}
-                                                    </span>
+                                                <div class="col-md-9 float-left font-weight-bold">
+                                                    <template v-if="artistInfo.last_updated_user">
+                                                        {{artistInfo.last_updated_user}}
+                                                    </template>
                                                 </div>
                                             </div>
                                             <div class="card-text py-10 px-0 clearfix col-md-6 float-left ">
@@ -1314,7 +1314,7 @@
         },
         mounted() {
             this.getTaskDate();
-             this.getCalendar();
+            this.getCalendar();
             this.charts();
             this.getTaskNum();
             let _this = this;
@@ -1429,6 +1429,7 @@
                   
                     
                     _this.artistInfo = response.data;
+                    console.log(response.data)
                     _this.uploadUrl = _this.artistInfo.avatar;
                     if(_this.artistInfo.intention){
                         _this.artistInfo.intention = 1
@@ -1440,7 +1441,10 @@
                     }else{
                         _this.artistInfo.sign_contract_other=2
                     }
-                    _this.tasksInfo = response.data.tasks.data //任务数据
+                    if(response.data.tasks.length>0){
+                         _this.tasksInfo = response.data.tasks.data
+                    }
+                    //任务数据
                      //项目
                      if(response.data.trails){
                         for (let i = 0; i < response.data.trails.data.length; i++) {
@@ -1485,10 +1489,12 @@
                     })
                 })
             },
-            getProject(){
+            getProject(page = 1){
                 let _this =this;
-                 fetch('get', '/bloggers/' + this.artistId+'/project').then(function (response) {
-                     _this.ProjectsInfo  = response.data
+                 fetch('get', '/bloggers/' + this.artistId+'/project',{
+                     page:page
+                 }).then(function (response) {
+                    _this.ProjectsInfo  = response.data
                     _this.current_page = response.meta.pagination.current_page;
                     _this.total = response.meta.pagination.total;
                     _this.total_pages = response.meta.pagination.total_pages;
@@ -1889,9 +1895,11 @@
                 })
             },
             //作品
-            getTaskDate:function(){
+            getTaskDate:function(page = 1){
                 let _this = this;
-                fetch('get','/bloggers/index/production?blogger_id='+this.artistId+'').then(function(response){
+                fetch('get','/bloggers/index/production?blogger_id='+this.artistId+'',{
+                    page:page
+                }).then(function(response){
                     _this.worksData=response.data
                     _this.current_page = response.meta.pagination.current_page;
                     _this.total = response.meta.pagination.total;
@@ -1906,9 +1914,11 @@
                 });
             },
             //任务数据
-            getArtistTasks: function () {
+            getArtistTasks: function (page = 1) {
                 let _this = this;
-                fetch('get', '/bloggers/' + this.artistId+'/tasks').then(function (response) {
+                fetch('get', '/bloggers/' + this.artistId+'/tasks',{
+                    page:page
+                }).then(function (response) {
                     _this.alltaskshow = response.data
                     _this.current_page = response.meta.pagination.current_page;
                     _this.total = response.meta.pagination.total;
@@ -1930,6 +1940,7 @@
                 fetch('get', '/bloggers/' + this.artistId+'/tasks').then(function (response) {
                 
                     _this.alltaskshow = response.data
+                    console.log(_this.alltaskshow)
                     if (_this.alltaskshow.length > 0) {
                             for (let i = 0; i < _this.alltaskshow.length; i++) {
                                 if (_this.alltaskshow[i].status == 2) {
@@ -1937,7 +1948,7 @@
                                 }
                             }
                     }
-                     _this.taskNum = `${_this.doneTaskNum}/${_this.alltaskshow.length}`
+                     _this.taskNum = `${_this.doneTaskNum}/${response.meta.pagination.total}`
                 })
             },
             editBaseInfo: function () {
@@ -2477,6 +2488,9 @@
     }
     .Jump,.taskshow,.projectshow{
         cursor:pointer;
+    }
+    .Jump:hover{
+        
     }
     textarea{
         overflow: hidden;
