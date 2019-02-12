@@ -1661,11 +1661,12 @@
 
         mounted() {
             this.projectId = this.$route.params.id;
-            this.getPrivacy() //获取隐私设置列表
+            this.getPrivacy(); //获取隐私设置列表
             this.getProject();
             this.getClients();
             this.getTaskType();
             this.getProjectTasking();
+            this.getProjectTasks();
             this.getProjectProgress();
             this.user = JSON.parse(Cookies.get('user'));
             $('#addPaybackTime').on('hidden.bs.modal', () => {
