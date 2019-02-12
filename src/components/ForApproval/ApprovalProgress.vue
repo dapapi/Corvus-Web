@@ -269,8 +269,8 @@
 .iconfont-logo{
     position: relative;
     z-index: 1288;
-    bottom: 15px;
-    left: 30px;
+    bottom: 14px;
+    left: 31px;
 }
 .approver-logo{
     padding: 0 auto;
@@ -363,6 +363,7 @@
 
     .issueicon {
         font-size: 20px;
+        
         /* line-height: 45px; */
     }
 </style>

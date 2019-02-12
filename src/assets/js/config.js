@@ -1329,43 +1329,53 @@ let config = {
         msgLink:[
             {
                 value: '207',
-                name: '/artists'//艺人管理
+                name: '/artists',//艺人管理
+                url: '/stars/'
             },
             {
                  value: '208',
-                 name: '/blogger' //博主管理
+                 name: '/blogger', //博主管理
+                 url: '/bloggers/'
             },
             {
               value: '209',
-              name: '/trails' //销售线索管理
+              name: '/trails', //销售线索管理
+              url: '/trails/'
             },
             {
               value: '210',
-              name: '/clients' //客户管理
+              name: '/clients', //客户管理
+              url: '/clients/'
             },
             {
               value: '211',
-              name: '/projects' //项目管理
+              name: '/projects', //项目管理
+              url: '/projects/'
             },
             {
               value: '212',
-              name: '/tasks' //任务管理
+              name: '/tasks', //任务管理
+              url: '/tasks/'
             },
             {
               value: '213',
-              name: '/approval' //合同管理
+              name: '/approval', //合同管理
+              url: '/approval_instances/'
             },
             {
               value: '214',
-              name: '/calendar' //日历管理
+              name: '/calendar', //日历管理
+              url: '/calendar/'
             },
             {
               value: '216',
-              name: '/approval' //审批管理
+              name: '/approval', //审批管理
+              url: '/approval_instances/'
             },
             {
               value: '218',
-              name: '/broadcast' //公告
+              name: '/broadcast', //公告
+              url: '/announcements/'
             },
         ]
 

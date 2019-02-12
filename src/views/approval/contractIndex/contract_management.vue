@@ -122,7 +122,7 @@
                             <tbody>
 
                            <tr v-for="(item,index) in pageList" :key="index" class="pointer-content">
-                                <td @click="redirectContractDetail(item.form_instance_number)">{{item.form_instance_number }}</td>
+                                <td @click="redirectContractDetail(item.form_instance_number)">{{item.contract_number }}</td>
                                 <td @click="redirectContractDetail(item.form_instance_number)">{{item.title}}</td>
                                 <td @click="redirectContractDetail(item.form_instance_number)">{{item.form_name}}</td>
                                 <td @click="redirectContractDetail(item.form_instance_number)">{{item.name}}</td>
@@ -137,7 +137,7 @@
                             <img src="https://res.papitube.com/corvus/images/content-none.png" alt=""
                                  style="width: 100%">
                         </div>
-                        <pagination :current_page="current_page" :total_pages="total_pages"
+                        <pagination :current_page="current_page"  :method="getProjects" :total_pages="total_pages"
                                     :total="total"></pagination>
 
                     </div>
@@ -304,61 +304,32 @@
             },
         },
         methods: {
-            
+            getProjects: function (pageNum = 1, signStatus) {
+                let _this = this
+                let data = {
+                    page: pageNum,
+                    // include: 'principal,trail.expectations',
+                    status:this.pageType
+                };
+                fetch('get', '/approvals_contract/'+this.currentStatus, data).then(response => {
+                    _this.pageList = response.data                    
+                   _this.total = response.meta.pagination.total;
+                        _this.current_page = response.meta.pagination.current_page;
+                        _this.total_pages = response.meta.pagination.total_pages;
+                })
+            },
             //查询列表
             getList: function (params) {
                 this.currentStatus = params
                 let _this = this;
                 fetch('get', '/approvals_contract/'+params).then(function (response) {
                     _this.pageList = response.data
-                    if(response.meta){
-                        _this.current_page = response.meta.current_page;
-                        _this.total = response.meta.pagination;
-                        _this.total_pages = response.meta.total_pages;
-                    }
+                    _this.total = response.meta.pagination.total;
+                    _this.current_page = response.meta.pagination.current_page;
+                    _this.total_pages = response.meta.pagination.total_pages;
                     _this.isLoading = false;
                 })
             },
-            // getBlogger: function (page = 1, signStatus) {
-
-            //     let data = {
-            //         include: 'type,creator,tasks,affixes,producer,publicity,operatelogs',
-
-            //     }
-            //     let _this = this;
-
-            //     //博主状态
-            //     if (signStatus) {
-            //         this.blogStatus = signStatus
-            //     }
-            //     data.status = this.blogStatus
-            //     //博主类型
-            //     if (this.blogType) {
-            //         data.type = this.blogType
-            //     }
-            //     //沟通状态
-            //     if (this.blogCommunication) {
-            //         data.communication_status = this.blogCommunication
-            //     }
-            //     //博主名称
-            //     if (this.blogName) {
-            //         data.name = this.blogName
-            //     }
-            //     data.page = page
-            //     fetch('get', '/bloggers', data).then(function (response) {
-            //         _this.bloggerInfo = response.data;
-            //         console.log(response.data)
-            //         _this.current_page = response.meta.pagination.current_page;
-            //         _this.total = response.meta.pagination.total;
-            //         _this.total_pages = response.meta.pagination.total_pages;
-            //         _this.isLoading = false;
-            //         _this.selectAllBlogger = false;
-            //         _this.selectedArtistsArr = [];
-
-            //     });
-
-            // },
-
             //获取博主类型
             getBlogType() {
                 let _this = this

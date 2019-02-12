@@ -201,13 +201,13 @@
                             <div class="col-md-3 example float-left">
                                 <selectors :options="signState" @change="typeFilter" placeholder="请选择签约状态"></selectors>
                             </div>
-                            <!-- <div class="col-md-3 example float-left">
+                            <div class="col-md-3 example float-left">
                                 <button type="button" class="btn btn-default waves-effect waves-classic float-right"
                                 data-toggle="modal" data-target="#customizeContent" @click='customizeContentType="bloggers"'
                                 data-placement="right" title="">
                                 自定义筛选
                                 </button>
-                            </div> -->
+                            </div>
                         </div>
                         <table class="table table-hover is-indent ml-5" data-plugin="selectable"
                                data-selectable="selectable">
@@ -1008,6 +1008,7 @@
             customize: function (value) {
                 let _this = this
                 fetch('post', '/'+this.customizeContentType+'/filter', value).then((params) => {
+                    console.log(params.data);
                     // _this.bloggerInfo =params.data
                     if(_this.customizeContentType == 'stars'){
                         _this.artistsInfo = params.data
@@ -1425,7 +1426,7 @@
                 fetch('post', '/stars', data).then(function (response) {
                     toastr.success('创建成功');
                     $('#addArtist').modal('hide');
-                    _this.$router.push({path: '/artists/' + response.data.id});
+                    // _this.$router.push({path: '/artists/' + response.data.id});
                     _this.cancleData()
                 })
             },

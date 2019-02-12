@@ -91,7 +91,7 @@
                         </table>
                     </div>
                     <div class="tab-pane animation-fade" id="forum-trail-add" role="tabpanel">
-                        <div class="clearfix pb-20">
+                        <div class="clearfix pb-20 col-md-3">
                             <Selectors :options="newTrailSearchArr" @change="changeSelectTime"></Selectors>
                         </div>
                         <div class="col-md-12">

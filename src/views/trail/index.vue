@@ -25,13 +25,13 @@
                         <selectors ref='principal_id' :options="memberList" multiple='true'
                                    @valuelistener="principalFilter" placeholder="请选择负责人"></selectors>
                     </div>
-                    <div class="col-md-3 example float-left">
+                    <!-- <div class="col-md-3 example float-left">
                         <button type="button" class="btn btn-default waves-effect waves-classic float-right"
                                 data-toggle="modal" data-target="#customizeContent"
                                 data-placement="right" title="">
                             自定义筛选
                         </button>
-                    </div>
+                    </div> -->
                 </div>
 
                 <div class="col-md-12">

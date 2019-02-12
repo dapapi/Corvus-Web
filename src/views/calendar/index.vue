@@ -976,6 +976,7 @@
                 fetch('get', '/schedules/' + schedule.id, data).then(response => {
                     if (!response) {
                         this.scheduleData = schedule;
+                        this.getScheduleFinish = true;
                         this.noPermission = true;
                         return
                     }
@@ -1430,6 +1431,10 @@
     .calendar-list ul li {
         padding: 7px 0;
         border-bottom: 1px solid #E0E0E0;
+    }
+
+    .calendar-list ul li:hover {
+        background-color: #f5f5f5;
     }
 
     .calendar-list ul {

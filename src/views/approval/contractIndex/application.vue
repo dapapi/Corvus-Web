@@ -5,14 +5,14 @@
         </div>
         <div class="page-content container-fluid">
             <div class="panel">
-                <div class="col-md-4  p-20">
-                    <div class="input-search">
-                        <button type="button" class="input-search-btn"><i class="iconfont icon-buoumaotubiao13" aria-hidden="true"></i>
-                        </button>
-                        <input v-model="keywords" type="text" class="form-control project-search" placeholder="输入编号、类型或申请人"
-                               @blur="getList">
-                    </div>
-                </div>
+                <!--<div class="col-md-4  p-20">-->
+                    <!--<div class="input-search">-->
+                        <!--<button type="button" class="input-search-btn"><i class="iconfont icon-buoumaotubiao13" aria-hidden="true"></i>-->
+                        <!--</button>-->
+                        <!--<input v-model="keywords" type="text" class="form-control project-search" placeholder="输入编号、类型或申请人"-->
+                               <!--@blur="getList">-->
+                    <!--</div>-->
+                <!--</div>-->
                 <div class="col-md-12">
                     <ul class="nav nav-tabs nav-tabs-line" role="tablist">
                         <li class="nav-item" role="presentation" @click="getList(1)">
@@ -116,9 +116,9 @@
                 };
                 fetch('get', '/approvals_contract/my', data).then(response => {
                     _this.projectsInfo = response.data
-                    _this.total = response.total;
-                    _this.current_page = response.current_page;
-                    _this.total_pages = response.last_page;
+                   _this.total = response.meta.pagination.total;
+                    _this.current_page = response.meta.pagination.current_page;
+                    _this.total_pages = response.meta.pagination.total_pages;
                 })
             },
             getList(params) {
@@ -126,9 +126,9 @@
                 this.pageType = params
                 fetch('get','/approvals_contract/my?status='+params).then((params) => {
                     _this.projectsInfo = params.data
-                    _this.total = params.total;
-                    _this.current_page = params.current_page;
-                    _this.total_pages = params.last_page;
+                   _this.total = params.meta.pagination.total;
+                    _this.current_page = params.meta.pagination.current_page;
+                    _this.total_pages = params.meta.pagination.total_pages;
                 })
             },
             goDetail (num) {

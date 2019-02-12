@@ -219,7 +219,7 @@
                                     <div class="project-progress" v-for="item in projectProgressInfo">
                                         <template v-if="!item.isFinish">
                                             <div class="clearfix pointer-content"
-                                                 @click="addProjectProgress(item.status)">
+                                                 @click="changeProjectProgress(item.status)">
                                                 <div class="col-md-4 p-0 float-left">
                                                     <div class="image-wraper">
                                                         <template v-if="item.isFinish == 1">
@@ -357,11 +357,11 @@
                                     <tbody>
                                     <tr v-for="contract in projectContractInfo"
                                         @click="redirectContract(contract.form_instance_number)">
-                                        <td>{{ contract.form_instance_number }}</td>
+                                        <td>{{ contract.contract_number }}</td>
                                         <td>{{ contract.title }}</td>
                                         <td>
                                             <template v-for="star in contract.stars_name">
-                                                {{ star.name }}
+                                                {{ star.name || star.nickname}}
                                             </template>
                                         </td>
                                         <td>收入</td>
@@ -418,7 +418,7 @@
                                         <span class="pointer-content hover-content" data-toggle="modal"
                                               data-target="#addBill">
                                             <template
-                                                    v-if="projectBillMetaInfo.divide && projectBillMetaInfo.divide.length === 0">
+                                                    v-if="!projectBillMetaInfo.divide">
                                                 <i class="iconfont icon-tianjia pr-5"></i>新增结算单
                                             </template>
                                             <template v-else>
@@ -1085,6 +1085,34 @@
                 </div>
             </div>
         </div>
+        <!-- 修改项目进度 -->
+        <div class="modal fade modal-simple" id="changeProjectProgress" aria-labelledby="exampleModalTitle"
+             role="dialog"
+             tabindex="-1" data-backdrop="static" aria-hidden="true">
+            <div class="modal-dialog modal-simple">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <button type="button" class="close" aria-hidden="true" data-dismiss="modal">
+                            <i class="iconfont icon-guanbi" aria-hidden="true"></i>
+                        </button>
+                        <h4 class="modal-title">修改项目节点</h4>
+                    </div>
+                    <div class="modal-body">
+                        <p class="mt-20">是否确认已完成当前项目进度节点</p>
+                    </div>
+                    <div class="modal-footer">
+                        <button type="button"
+                                class="btn btn-default btn-pure waves-effect waves-classic"
+                                data-dismiss="modal">取消
+                        </button>
+                        <button type="button"
+                                class="btn btn-primary waves-effect waves-classic"
+                                data-dismiss="modal" @click='addProjectProgress'>确认
+                        </button>
+                    </div>
+                </div>
+            </div>
+        </div>
         <!-- 新建/修改回款期次 -->
         <div class="modal fade" id="addPaybackTime" aria-hidden="true" aria-labelledby="addLabelForm"
              role="dialog" tabindex="-1" data-backdrop="static" v-if="projectInfo.type != 5">
@@ -1414,10 +1442,11 @@
                         <button type="button" class="close" aria-hidden="true" data-dismiss="modal">
                             <i class="iconfont icon-guanbi" aria-hidden="true"></i>
                         </button>
-                        <template v-if="projectBillMetaInfo.divide && projectBillMetaInfo.divide.length === 0">
+                        <template
+                                v-if="!projectBillMetaInfo.divide">
                             <h4 class="modal-title">新增结算单</h4>
                         </template>
-                        <template v-if="">
+                        <template v-else>
                             <h4 class="modal-title">修改结算单</h4>
                         </template>
                     </div>
@@ -1444,7 +1473,7 @@
                     <div class="modal-footer">
                         <button class="btn btn-sm btn-white btn-pure" data-dismiss="modal">取消</button>
                         <template
-                                v-if="projectBillMetaInfo.divide && projectBillMetaInfo.divide.length === 0">
+                                v-if="!projectBillMetaInfo.divide">
                             <button class="btn btn-primary" type="submit" @click="addProjectBill">确定</button>
                         </template>
                         <template v-else>
@@ -1626,16 +1655,18 @@
                 myDivide: 0,
                 billExpenses: 0,
                 divideArrInfo: '',
+                projectProgress: '',
             }
         },
 
         mounted() {
             this.projectId = this.$route.params.id;
-            this.getPrivacy() //获取隐私设置列表
+            this.getPrivacy(); //获取隐私设置列表
             this.getProject();
             this.getClients();
             this.getTaskType();
             this.getProjectTasking();
+            this.getProjectTasks();
             this.getProjectProgress();
             this.user = JSON.parse(Cookies.get('user'));
             $('#addPaybackTime').on('hidden.bs.modal', () => {
@@ -1648,14 +1679,14 @@
             $('#addPayback').on('hidden.bs.modal', () => {
                 this.$refs.paybackMoney1.setValue('0');
                 this.$refs.paybackTime1.setValue();
-                this.$refs.payMethod.setValue();
+                this.$refs.payMethod.setValue('');
                 this.projectReturnData = {};
             });
 
             $('#addInvoice').on('hidden.bs.modal', () => {
                 this.$refs.paybackMoney2.setValue('0');
                 this.$refs.paybackTime2.setValue();
-                this.$refs.payMethod1.setValue();
+                this.$refs.payMethod1.setValue('');
                 this.projectReturnData = {};
             });
 
@@ -1902,7 +1933,7 @@
                     this.total_pages = response.meta.pagination.total_pages;
                     this.myDivide = response.meta.my_divide;
                     this.billExpenses = response.meta.expenses;
-                    if(response.meta.divide) {
+                    if (response.meta.divide) {
                         this.divideArrInfo = JSON.parse(JSON.stringify(response.meta.divide));
                     } else {
                         this.divideArrInfo = [];
@@ -1937,7 +1968,7 @@
                     my_divide: this.myDivide,
                     star: this.divideArrInfo,
                 };
-                fetch('put', '/', data).then(() => {
+                fetch('put', '/projects/' + this.projectId + '/edit/bill', data).then(() => {
                     this.getProjectBill();
                     toastr.success('修改成功');
                     $('#addBill').modal('hide');
@@ -1947,7 +1978,11 @@
             cancelChangeBill: function () {
                 this.myDivide = this.projectBillMetaInfo.my_divide;
                 this.billExpenses = this.projectBillMetaInfo.expenses;
-                this.divideArrInfo = JSON.parse(JSON.stringify(this.projectBillMetaInfo.divide));
+                if (this.projectBillMetaInfo.divide) {
+                    this.divideArrInfo = JSON.parse(JSON.stringify(this.projectBillMetaInfo.divide));
+                } else {
+                    this.divideArrInfo = [];
+                }
                 for (let i = 0; i < this.projectBillMetaInfo.datatitle.length; i++) {
                     if (!this.divideArrInfo.find(item => item.moduleable_title === this.projectBillMetaInfo.datatitle[i])) {
                         this.divideArrInfo.push({
@@ -2017,14 +2052,19 @@
                 })
             },
 
-            addProjectProgress: function (status) {
-                fetch('put', '/projects/' + this.projectId + '/course', {status: status}).then(response => {
-                    let flagInfo = this.projectProgressInfo.find(item => item.status == status);
+            changeProjectProgress: function (status) {
+                this.projectProgress = status;
+                $('#changeProjectProgress').modal('show')
+            },
+
+            addProjectProgress: function () {
+                fetch('put', '/projects/' + this.projectId + '/course', {status: this.projectProgress}).then(response => {
+                    let flagInfo = this.projectProgressInfo.find(item => item.status == this.projectProgress);
                     flagInfo['finisher'] = response.data.user;
                     flagInfo['finish_at'] = response.data.updated_at;
                     flagInfo['isFinish'] = 1;
                     this.coursesLength += 1;
-                    toastr.success('修改成功');
+                    toastr.success('进度更新成功');
                     this.getProjectProgress();
                 })
             },

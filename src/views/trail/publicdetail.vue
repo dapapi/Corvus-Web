@@ -1005,6 +1005,13 @@
                 fetch('post', url, data).then(response => {
                     toastr.success(toast);
                     $('#returnTrail').modal('hide');
+                    if (!response.principal_name && value === 2) {
+                        let params = {
+                            type: 'change',
+                            data: {}
+                        };
+                        this.$store.dispatch('changePrincipal', params);
+                    }
                     this.getTrail();
                 })
             },

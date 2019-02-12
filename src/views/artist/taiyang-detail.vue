@@ -560,14 +560,21 @@
                                                               style="color:#01BCD4;cursor:pointer">上传附件</span>
                                                     <FileUploader v-show="isEdit" class="uploadAttach"
                                                                   @change="uploadAttachment" mulId="aff"></FileUploader>
-                                                    <div class="mt-5" v-for="(attach,index) in affixes" :key="index">
-                                                        <span class="mr-20">{{attachmentTypeArr.find(item => item.value == attach.type).name}} - {{attach.title}}</span>
-
-                                                        <i class="iconfont icon-shanchu1 mr-10" data-toggle="modal"
-                                                           data-target="#affix" @click="getAffixId(attach.id)"></i>
-                                                        <a data-toggle="modal" data-target='#docPreview'
-                                                           @click="previewFile(attach.url,attach.title)"
-                                                           class="md-download"></a>
+                                                    <div class="mt-5" >
+                                                        <div class="row" v-for="(attach,index) in affixes" :key="index">
+                                                            <div class="col-md-2 p-0">
+                                                                <i class="iconfont icon-wenjian" style="color:#1e88e5;font-size:36px"></i>
+                                                            </div>
+                                                            
+                                                            <div class="col-md-10 mt-5">
+                                                                <span class="mr-20 single">{{attachmentTypeArr.find(item => item.value == attach.type).name}} - {{attach.title}}</span>     
+                                                                <a data-toggle="modal" data-target='#docPreview'
+                                                                @click="previewFile(attach.url,attach.title)"
+                                                                class="iconfont icon-liulan  mr-15" style="color:#3f51b5"></a>
+                                                                <i class="iconfont icon-shanchu1" data-toggle="modal"
+                                                                data-target="#affix" @click="getAffixId(attach.id)"></i>
+                                                            </div>
+                                                        </div>
                                                     </div>
                                                 </div>
                                             </div>
@@ -2632,6 +2639,13 @@
 
     .projectshow:hover {
         cursor: pointer;
+    }
+    .single{
+        display: inline-block;
+        width: 100%;
+        overflow:hidden; /*内容超出宽度时隐藏超出部分的内容 */
+        text-overflow:ellipsis;/* 当对象内文本溢出时显示省略标记(...) ；需与overflow:hidden;一起使用。*/
+        white-space:nowrap;
     }
 
 </style>

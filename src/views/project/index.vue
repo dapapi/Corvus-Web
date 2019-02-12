@@ -21,13 +21,13 @@
                         <selectors @change="(value) => getProjectSearch('principal_ids', value)" placeholder="请选择项目负责人"
                                    :options="allUsers" multiple="true"></selectors>
                     </div>
-                    <div class="col-md-3 example float-left">
+                    <!-- <div class="col-md-3 example float-left">
                         <button type="button" class="btn btn-default waves-effect waves-classic float-right"
                                 data-toggle="modal" data-target="#customizeContent"
                                 data-placement="right" title="">
                             自定义筛选
                         </button>
-                    </div>
+                    </div> -->
                 </div>
 
                 <div class="col-md-12">
@@ -37,12 +37,12 @@
                                aria-controls="forum-base"
                                aria-expanded="true" role="tab">所有项目</a>
                         </li>
-                        <li class="nav-item" role="presentation" @click="getMyProjects('principal_id')">
+                        <li class="nav-item" role="presentation" @click="getMyProjects('my_principal')">
                             <a class="nav-link active" data-toggle="tab" href="#forum-project"
                                aria-controls="forum-present"
                                aria-expanded="false" role="tab">我负责的</a>
                         </li>
-                        <li class="nav-item" role="presentation" @click="getMyProjects('administration')">
+                        <li class="nav-item" role="presentation" @click="getMyProjects('my_participant')">
                             <a class="nav-link" data-toggle="tab" href="#forum-project"
                                aria-controls="forum-present"
                                aria-expanded="false" role="tab">我参与的</a>
@@ -153,7 +153,6 @@
                 trailsAllInfo: '',
                 trailOriginContent: '',
                 projectKeyword: '',
-                paginationType: '',
                 projectStatusArr: projectStatusArr,
                 allUsers: [],
                 principal_ids: [],
@@ -226,10 +225,8 @@
                     page: pageNum,
                     include: 'principal,trail.expectations'
                 };
-                if (this.getProjectStatus === 'principal_id') {
-                    data.principal_id = 1;
-                } else if (this.getProjectStatus === 'administration') {
-                    data.administration = 1;
+                if (this.getProjectStatus) {
+                    data.my = this.getProjectStatus;
                 }
                 if (this.projectSearchType) {
                     if (this.projectSearchType == 3) {
@@ -243,8 +240,7 @@
                 if (this.principal_ids.length > 0) {
                     data.principal_ids = this.principal_ids;
                 }
-                this.paginationType = 'getFilterProjects';
-                fetch('get', '/projects/filter', data).then(response => {
+                fetch('get', '/projects', data).then(response => {
                     this.projectsInfo = response.data;
                     this.total = response.meta.pagination.total;
                     this.current_page = response.meta.pagination.current_page;

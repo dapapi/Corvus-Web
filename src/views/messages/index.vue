@@ -235,13 +235,14 @@ export default {
   mounted() {
       //数据初始化
       this.getModule()
+      console.log(this.$route.fullPath)
       
   },
   computed:{
-      ...mapState({
-          unReadMsg:state => state.unReadMsg,
-          moduleList: state => state.moduleList
-      })      
+      ...mapState([
+         'unReadMsg',
+         'moduleList' 
+      ])      
   },
   watch:{
        unReadMsg:function(){
@@ -278,10 +279,9 @@ export default {
             fetch('get',`${config.apiUrl}/getmsg?include=recive.data&module=${this.moduleType}&state=${this.state}`).then((res) => {
         
             this.messageList = res.data
-           
-
         })
         }else{
+            //如果没有moduleType  跳转
             this.$router.push(`/my/message?moduleType=${this.moduleList[0].id}`)
         }
         
@@ -289,63 +289,52 @@ export default {
     },
     getModule:function(){
         this.getModuleList()
-        // this.renderMsg()
-        // fetch('get',`${config.apiUrl}/getmodules`).then((res) => {
-        //     this.moduleList = res.data
-        //     let num = 0
-        //     for (let i = 0; i < res.data.length; i++) {
-        //         num = num + res.data[i].unread
-        //     }
-        //     this.$store.state.unReadMsg = num
-        //     console.log(this.$store.state.unReadMsg)
-        //     if(this.moduleType){
-        //         this.renderMsg(this.moduleType,this.state)
-        //     }else{
-        //         this.renderMsg(this.moduleList[0].id,1)
-        //     }
-        // })
-        fetch('get',`${config.apiUrl}/getmodules`).then((res) => {
-            this.moduleList = res.data
-            let num = 0
-            for (let i = 0; i < res.data.length; i++) {
-                num = num + res.data[i].unread
-            }
-            this.$store.state.unReadMsg = num
-            if(this.moduleType){
-                this.renderMsg(this.moduleType,this.state)
-            }else{
-                this.renderMsg(this.moduleList[0].id,1)
-            }
-        })
     },
+    //修改消息状态
     msgStatus:function(id,module_id,module_data_id,type){
-        
-        let data = {}
-        if(type){
-            data={
-                module:this.moduleType,
-                all:'yes'
-            }
+        if(this.state == 2){
+            this.isAuthority(module_id,module_data_id)
         }else{
-            data ={
-               message_id:id
+            let data = {}
+            if(type){
+                data={
+                    module:this.moduleType,
+                    all:'yes'
+                }
+            }else{
+                data ={
+                message_id:id
+                }
             }
+            fetch('get',`${config.apiUrl}/changestae`,data).then((res) => {
+                this.getModule()
+                if(!type){
+                    this.isAuthority(module_id,module_data_id)
+                }
+            })
         }
-
-        fetch('get',`${config.apiUrl}/changestae`,data).then((res) => {
-            this.getModule()
-            if(!type){
-                // console.log(module_data_id,this.msgLink.find(item =>item.value == module_id).name)
+    },
+    //是否有权限进行跳转
+    isAuthority:function(module_id,module_data_id){
+        let data = {
+            method:'get',
+            uri:`${this.msgLink.find(item => item.value == module_id).url}${module_data_id}`,
+            id:module_data_id
+        }
+        // console.log(`${config.apiUrl}${this.msgLink.find(item => item.value == module_id).url}${module_data_id}`)
+        fetch('get', '/console/checkpower', data).then(response => {
+            // console.log(response.data.power)
+            //日历模块显示弹框
+            
+            if(response.data.power === 'true'){
                 if(module_id == 214){
                     this.showScheduleModal(module_data_id)
                 }else{
-                    
-                    this.$router.push(`${this.msgLink.find(item =>item.value == module_id).name}/${module_data_id}`)
-                    
+                    this.$router.push(`${this.msgLink.find(item =>item.value == module_id).name}/${module_data_id}`) 
                 }
             }
             
-        })
+        });
     },
     //获取日历详情
     showScheduleModal: function (scheduleId) {
@@ -456,6 +445,7 @@ a:hover{
         height: 50px;
         border-radius: 50%;
         text-align: center;
+        padding:0px;
         
     }
     
