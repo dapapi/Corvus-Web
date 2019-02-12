@@ -1,11 +1,12 @@
 <template>
     <div class="input-group date">
-        <input type="text" id="dateInput" autocomplete="off" class="form-control" title="" :placeholder="this.placeholder"
-            @change="getInputValue">
+        <input type="text" id="dateInput" autocomplete="off" class="form-control" title=""
+               :placeholder="this.placeholder"
+               @change="getInputValue">
         <span class="input-group-addon">
             <i class="icon md-apps" aria-hidden="true"></i>
         </span>
-    </div> 
+    </div>
 </template>
 <script>
     export default {
@@ -29,12 +30,12 @@
                 }
             });
             if (this.default) {
-                if(this.default.values){
+                if (this.default.values) {
                     this.setValue(this.default.values.data.value)
-                }else{
+                } else {
                     this.$nextTick(() => {
-                    this.setValue(this.default)
-                        
+                        this.setValue(this.default)
+
                     })
                     console.log(this.default);
                 }
@@ -45,10 +46,10 @@
             /**
              * 设置时间选择范围，一般用于设置截止时间大于开始时间
              * */
-            default(value){
-                if(this.default.values){
+            default(value) {
+                if (this.default.values) {
                     this.setValue(this.default.values.data.value)
-                }else{
+                } else {
                     this.setValue(this.default)
                 }
             },
