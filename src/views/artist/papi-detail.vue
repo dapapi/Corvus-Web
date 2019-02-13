@@ -232,14 +232,17 @@
                                         <th class="cell-300" scope="col">博主分成</th>
                                     </tr>
                                     <tr v-for="(item,index) in ProjectsInfo" :key="index" @click="projectdetil(item.id)"
-                                        class="Jump">
+                                        class="Jump projectcontent">
                                         <td>{{item.title}}</td>
                                         <td v-if="item.principal">{{item.principal.data.name}}</td>
                                         <td v-if="!item.principal"></td>
                                         <td>{{item.company}}</td>
-                                        <td>{{item.created_at.date}}</td>
-                                        <td v-for="(v,index) in item.relate_project_bills_resource.data" :key="index">
-                                            {{v.bigger_divide}}
+                                        <td>{{item.created_at}}</td>
+                                        <td>
+                                            <template v-if="item.relate_project_bills_resource">
+                                                {{item.relate_project_bills_resource}}
+                                            </template>
+                                            <template>0</template>
                                         </td>
                                     </tr>
                                 </table>
@@ -266,7 +269,7 @@
                                     </tr>
                                     <template v-if="alltaskshow">
                                         <tr v-for="(task,index) in alltaskshow" :key="index"
-                                            @click="taskdetail(task.id)" class="Jump">
+                                            @click="taskdetail(task.id)" class="Jump taskcontent">
                                             <td>{{task.title}}</td>
                                             <td v-if="task.type">{{task.type.data.title}}</td>
                                             <td v-if="!task.type">未选择</td>
@@ -1496,14 +1499,14 @@
                     }
                     //任务数据
                      //项目
-                     if(response.data.trails){
-                        for (let i = 0; i < response.data.trails.data.length; i++) {
-                            if (response.data.trails.data[i].project) {
-                                response.data.trails.data[i].project.data.company = response.data.trails.data[i].client.data.company
-                                _this.ProjectsInfo.push(response.data.trails.data[i].project.data)//项目数据
-                            }
-                        }
-                    }
+                    //  if(response.data.trails){
+                    //     for (let i = 0; i < response.data.trails.data.length; i++) {
+                    //         if (response.data.trails.data[i].project) {
+                    //             response.data.trails.data[i].project.data.company = response.data.trails.data[i].client.data.company
+                    //             _this.ProjectsInfo.push(response.data.trails.data[i].project.data)//项目数据
+                    //         }
+                    //     }
+                    // }
                     let data = []
                     _this.artistInfo.platform.split(',').forEach(item => {
                         data.push(_this.artistSocialPlatform.find(i => i.value == item).name)
@@ -1544,6 +1547,7 @@
                  fetch('get', '/bloggers/' + this.artistId+'/project',{
                      page:page
                  }).then(function (response) {
+                     console.log(response.data)
                     _this.ProjectsInfo  = response.data
                     _this.current_page = response.meta.pagination.current_page;
                     _this.total = response.meta.pagination.total;
@@ -1993,7 +1997,6 @@
                 fetch('get', '/bloggers/' + this.artistId + '/tasks').then(function (response) {
 
                     _this.alltaskshow = response.data
-                    console.log(_this.alltaskshow)
                     if (_this.alltaskshow.length > 0) {
                         for (let i = 0; i < _this.alltaskshow.length; i++) {
                             if (_this.alltaskshow[i].status == 2) {
@@ -2544,9 +2547,9 @@
     .Jump, .taskshow, .projectshow {
         cursor: pointer;
     }
-    .Jump:hover{
+    /* .Jump:hover{
         
-    }
+    } */
     textarea{
         overflow: hidden;
     }
@@ -2670,5 +2673,8 @@
         padding: 2px 3px;
         border-radius: 2px;
         z-index: 1000;
+    }
+    .projectcontent:hover,.taskcontent:hover{
+        background: #eee
     }
 </style>

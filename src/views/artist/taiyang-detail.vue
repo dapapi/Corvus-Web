@@ -187,7 +187,7 @@
                                         <th class="cell-300" scope="col">艺人分成</th>
                                     </tr>
                                     <tr v-for="(item,index) in artistProjectsInfo" :key="index"
-                                        @click="toProject(item.id)" style="cursor: pointer;">
+                                        @click="toProject(item.id)" style="cursor: pointer;" class="projectcontent">
                                         <td>
                                             {{item.title}}
                                         </td>
@@ -195,7 +195,7 @@
                                         <td v-if="item.principal">{{item.principal.data.name}}</td>
                                         <td v-if="!item.principal"></td>
                                         <td>{{item.company}}</td>
-                                        <td>{{item.created_at.date}}</td>
+                                        <td>{{item.created_at}}</td>
                                         <td>
                                             <template v-if="item.relate_project_bills_resource">
                                                 {{item.relate_project_bills_resource}}
@@ -226,7 +226,7 @@
                                         <th class="cell-300" scope="col">截止时间</th>
                                     </tr>
                                     <tr v-for="(task,index) in allTaskList" :key="index" @click="toTask(task.id)"
-                                        style="cursor: pointer;">
+                                        style="cursor: pointer;" class="taskcontent">
                                         <td>
                                             {{task.title}}
                                         </td>
@@ -1392,10 +1392,10 @@
                 })
 
             },
-            getProject(page = 1) {
+            getProject(page) {
                 let _this = this;
                 fetch('get', '/stars/' + this.artistId + '/project',{page:page}).then(function (response) {
-
+                    console.log(response.data)
                     _this.artistProjectsInfo = response.data
                     _this.current_page = response.meta.pagination.current_page;
                     _this.total = response.meta.pagination.total;
@@ -2647,6 +2647,8 @@
         text-overflow:ellipsis;/* 当对象内文本溢出时显示省略标记(...) ；需与overflow:hidden;一起使用。*/
         white-space:nowrap;
     }
-
+    .projectcontent:hover,.taskcontent:hover{
+        background: #eee
+    }
 </style>
 
