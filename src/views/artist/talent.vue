@@ -430,7 +430,7 @@
                         </div>
                     </div>
                     <div class="modal-footer">
-                        <button class="btn btn-sm btn-white btn-pure" data-dismiss="modal">取消</button>
+                        <button class="btn btn-sm btn-white btn-pure" data-dismiss="modal" >取消</button>
                         <button class="btn btn-primary" type="submit" @click="addBolgger">确定</button>
                     </div>
 
@@ -614,19 +614,21 @@
                         </div>
                         <div class="example" v-show="affixesType>0">
                             <div class="col-md-2 text-right float-left require">附件</div>
-                            <div class="col-md-10 float-left pl-0">
-                                <Upload  @change="uploadAttachment" class="upload-image">
+                            <Upload  @change="uploadAttachment" class="upload-image" >
                                     <div  class="addMember-trigger-button addMember-trigger-left"><i
                                             class="iconfont icon-tianjia"></i></div>
                                 </Upload>
-                                <div class="mt-5" v-for="(attach,index) in affixes" :key="index">
+                            <div class="col-md-10 float-left pl-0 ml-100" style="display:flex;flex-wrap:wrap">
+                                
+                                <div class="m-10" v-for="(attach,index) in affixes" :key="index" >
                                     <img src="@/assets/img/attachment.png" alt="" style="width:40px" class="ml-30">
                                     <p class="mb-0 pt-5">{{attachmentTypeArr.find(item => item.value == attach.type).name}}-{{attach.title}}</p>  
                                     <div class="img-control ">
-                                        <div class="icon-control ml-40">
+                                        <div class="icon-control ml-20">
                                             <a data-toggle="modal" data-target='#docPreview'
                                             @click="previewFile(attach.url,attach.title)"
-                                            class="iconfont icon-liulan  mr-15" style="color:#3f51b5 ;cursor:pointer"></a>
+                                            class="iconfont icon-liulan  mr-30" style="color:#3f51b5 ;cursor:pointer"></a>
+                                            <i class="iconfont icon-shanchu1"  @click="deleteAffix(index)"></i>
                                         </div>
                                     </div>
                                 </div>
@@ -686,8 +688,7 @@
                 </div>
             </div>
         </div>
-
-        <DocPreview :url="previewUrl" :givenFileName="previewName"/>
+        
         <!--分配经理人-->
         <div class="modal fade" id="giveBroker" aria-hidden="true" aria-labelledby="addLabelForm"
              role="dialog" tabindex="-1" data-backdrop="static">
@@ -715,6 +716,7 @@
                 </div>
             </div>
         </div>
+        <DocPreview :url="previewUrl" :givenFileName="previewName"/>
     </div>
 </template>
 <script>
@@ -875,6 +877,7 @@
                 Preview:'',
                 previewUrl: '',
                 previewName: '',
+                affixIndex:''
             }
         },
         watch: {
@@ -989,6 +992,17 @@
                 });
                 
             },
+            deleteAffix: function (index) {
+                this.affixes.forEach((item,index)=>{
+                    if(index == this.affixIndex){
+                        this.affixes.splice(index,1)           
+                    }
+                })
+                $('#affix').modal('hide');
+            },
+            // getAffixIndex: function (index) {
+            //     this.affixIndex = index
+            // },
              previewFile: function (url, name) {
                 this.previewUrl = url
                 this.previewName = name
@@ -1037,7 +1051,14 @@
             },
             //头像
             getUploadUrl(value) {
-                this.uploadUrl = value
+                console.log(String(value).split('.').pop())
+                let Suffix = ['png','gif','bmp','jpg','jpeg']
+                if(Suffix.includes(String(value).split('.').pop())){
+                    this.uploadUrl = value
+                }else{
+                    toastr.error("请选择图片作为头像")
+                }
+                
             },
             changeCheckbox: function (value) {
                 this.platformType = []
@@ -1236,7 +1257,7 @@
                 this.selectedArtistsArr = []
                 if(value == 0){
                     this.getArtists()
-                     this.isShow = true
+                    this.isShow = true
                     
                 }else if(value == 1){
                     this.getBlogger()
@@ -1339,7 +1360,6 @@
                     url: url,
                     type: this.affixesType
                 })
-                console.log(this.affixes)
             },
             addArtist: function () {
                 if (!this.artistName) {
@@ -1470,6 +1490,7 @@
                 this.signCompany = ''
                 this.sign_contract_other_name = ''
                 this.affixesType = ''
+                this.affixes = []
                 this.uploadUrl = ''
                 this.$refs.gender.setValue('')
                 this.$refs.birthday.setValue('')
@@ -1487,10 +1508,6 @@
 
             },
 
-            //上传头像
-            getUploadUrl(res) {
-                this.uploadUrl = res
-            },
         },
         filters: {
             jsGetAge: function (strBirthday) {
@@ -1562,6 +1579,7 @@
 
     .puls span {
         font-size: 30px;
+       
     }
 
     .fileupload {
