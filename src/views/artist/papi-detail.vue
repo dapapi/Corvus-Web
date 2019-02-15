@@ -232,14 +232,17 @@
                                         <th class="cell-300" scope="col">博主分成</th>
                                     </tr>
                                     <tr v-for="(item,index) in ProjectsInfo" :key="index" @click="projectdetil(item.id)"
-                                        class="Jump">
+                                        class="Jump projectcontent">
                                         <td>{{item.title}}</td>
                                         <td v-if="item.principal">{{item.principal.data.name}}</td>
                                         <td v-if="!item.principal"></td>
                                         <td>{{item.company}}</td>
-                                        <td>{{item.created_at.date}}</td>
-                                        <td v-for="(v,index) in item.relate_project_bills_resource.data" :key="index">
-                                            {{v.bigger_divide}}
+                                        <td>{{item.created_at}}</td>
+                                        <td>
+                                            <template v-if="item.relate_project_bills_resource">
+                                                {{item.relate_project_bills_resource}}
+                                            </template>
+                                            <template>0</template>
                                         </td>
                                     </tr>
                                 </table>
@@ -266,7 +269,7 @@
                                     </tr>
                                     <template v-if="alltaskshow">
                                         <tr v-for="(task,index) in alltaskshow" :key="index"
-                                            @click="taskdetail(task.id)" class="Jump">
+                                            @click="taskdetail(task.id)" class="Jump taskcontent">
                                             <td>{{task.title}}</td>
                                             <td v-if="task.type">{{task.type.data.title}}</td>
                                             <td v-if="!task.type">未选择</td>
@@ -613,12 +616,10 @@
                                             </div>
                                             <div class="card-text py-10 px-0 clearfix col-md-6 float-left ">
                                                 <div class="col-md-4 float-left text-right pl-0">最近更新人</div>
-                                                <div class="col-md-8 float-left font-weight-bold"
-                                                     v-if="artistInfo.operatelogs">
-                                                    <span v-for="(entry,index) in artistInfo.operatelogs.data"
-                                                          :key="index">
-                                                    {{entry.username}}
-                                                    </span>
+                                                <div class="col-md-9 float-left font-weight-bold">
+                                                    <template v-if="artistInfo.last_updated_user">
+                                                        {{artistInfo.last_updated_user}}
+                                                    </template>
                                                 </div>
                                             </div>
                                             <div class="card-text py-10 px-0 clearfix col-md-6 float-left ">
@@ -1481,6 +1482,7 @@
 
 
                     _this.artistInfo = response.data;
+                    console.log(response.data)
                     _this.uploadUrl = _this.artistInfo.avatar;
                     if (_this.artistInfo.intention) {
                         _this.artistInfo.intention = 1
@@ -1492,16 +1494,19 @@
                     } else {
                         _this.artistInfo.sign_contract_other = 2
                     }
-                    _this.tasksInfo = response.data.tasks.data //任务数据
-                    //项目
-                    if (response.data.trails) {
-                        for (let i = 0; i < response.data.trails.data.length; i++) {
-                            if (response.data.trails.data[i].project) {
-                                response.data.trails.data[i].project.data.company = response.data.trails.data[i].client.data.company
-                                _this.ProjectsInfo.push(response.data.trails.data[i].project.data)//项目数据
-                            }
-                        }
+                    if(response.data.tasks.length>0){
+                         _this.tasksInfo = response.data.tasks.data
                     }
+                    //任务数据
+                     //项目
+                    //  if(response.data.trails){
+                    //     for (let i = 0; i < response.data.trails.data.length; i++) {
+                    //         if (response.data.trails.data[i].project) {
+                    //             response.data.trails.data[i].project.data.company = response.data.trails.data[i].client.data.company
+                    //             _this.ProjectsInfo.push(response.data.trails.data[i].project.data)//项目数据
+                    //         }
+                    //     }
+                    // }
                     let data = []
                     _this.artistInfo.platform.split(',').forEach(item => {
                         data.push(_this.artistSocialPlatform.find(i => i.value == item).name)
@@ -1537,10 +1542,13 @@
                     })
                 })
             },
-            getProject() {
-                let _this = this;
-                fetch('get', '/bloggers/' + this.artistId + '/project').then(function (response) {
-                    _this.ProjectsInfo = response.data
+            getProject(page = 1){
+                let _this =this;
+                 fetch('get', '/bloggers/' + this.artistId+'/project',{
+                     page:page
+                 }).then(function (response) {
+                     console.log(response.data)
+                    _this.ProjectsInfo  = response.data
                     _this.current_page = response.meta.pagination.current_page;
                     _this.total = response.meta.pagination.total;
                     _this.total_pages = response.meta.pagination.total_pages;
@@ -1944,10 +1952,12 @@
                 })
             },
             //作品
-            getTaskDate: function () {
+            getTaskDate:function(page = 1){
                 let _this = this;
-                fetch('get', '/bloggers/index/production?blogger_id=' + this.artistId + '').then(function (response) {
-                    _this.worksData = response.data
+                fetch('get','/bloggers/index/production?blogger_id='+this.artistId+'',{
+                    page:page
+                }).then(function(response){
+                    _this.worksData=response.data
                     _this.current_page = response.meta.pagination.current_page;
                     _this.total = response.meta.pagination.total;
                     _this.total_pages = response.meta.pagination.total_pages;
@@ -1961,9 +1971,11 @@
                 });
             },
             //任务数据
-            getArtistTasks: function () {
+            getArtistTasks: function (page = 1) {
                 let _this = this;
-                fetch('get', '/bloggers/' + this.artistId + '/tasks').then(function (response) {
+                fetch('get', '/bloggers/' + this.artistId+'/tasks',{
+                    page:page
+                }).then(function (response) {
                     _this.alltaskshow = response.data
                     _this.current_page = response.meta.pagination.current_page;
                     _this.total = response.meta.pagination.total;
@@ -1992,7 +2004,7 @@
                             }
                         }
                     }
-                    _this.taskNum = `${_this.doneTaskNum}/${_this.alltaskshow.length}`
+                     _this.taskNum = `${_this.doneTaskNum}/${response.meta.pagination.total}`
                 })
             },
             editBaseInfo: function () {
@@ -2535,8 +2547,10 @@
     .Jump, .taskshow, .projectshow {
         cursor: pointer;
     }
-
-    textarea {
+    /* .Jump:hover{
+        
+    } */
+    textarea{
         overflow: hidden;
     }
 
@@ -2659,5 +2673,8 @@
         padding: 2px 3px;
         border-radius: 2px;
         z-index: 1000;
+    }
+    .projectcontent:hover,.taskcontent:hover{
+        background: #eee
     }
 </style>

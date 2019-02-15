@@ -586,7 +586,7 @@
                         </div>
                         <div class="example">
                             <div class="col-md-2 text-right float-left require">与我司签约意向</div>
-                            <div class="col-md-10 float-left pl-0">
+                            <div class="col-md-5 float-left pl-0">
                                 <selectors :options="yesOrNoArr" @change="changeSignIntention"
                                            ref="signIntention"></selectors>
                             </div>
@@ -614,14 +614,21 @@
                         </div>
                         <div class="example" v-show="affixesType>0">
                             <div class="col-md-2 text-right float-left require">附件</div>
-                            <div class="col-md-5 float-left pl-0">
+                            <div class="col-md-10 float-left pl-0">
                                 <Upload  @change="uploadAttachment" class="upload-image">
                                     <div  class="addMember-trigger-button addMember-trigger-left"><i
                                             class="iconfont icon-tianjia"></i></div>
                                 </Upload>
                                 <div class="mt-5" v-for="(attach,index) in affixes" :key="index">
-                                    {{attachmentTypeArr.find(item => item.value == attach.type).name}} -
-                                    {{attach.title}}
+                                    <img src="@/assets/img/attachment.png" alt="" style="width:40px" class="ml-30">
+                                    <p class="mb-0 pt-5">{{attachmentTypeArr.find(item => item.value == attach.type).name}}-{{attach.title}}</p>  
+                                    <div class="img-control ">
+                                        <div class="icon-control ml-40">
+                                            <a data-toggle="modal" data-target='#docPreview'
+                                            @click="previewFile(attach.url,attach.title)"
+                                            class="iconfont icon-liulan  mr-15" style="color:#3f51b5 ;cursor:pointer"></a>
+                                        </div>
+                                    </div>
                                 </div>
                                 <!-- <FileUploader class="fileupload" @change="uploadAttachment"></FileUploader>
                                 <div class="mt-5" v-for="(attach,index) in affixes" :key="index">
@@ -680,7 +687,7 @@
             </div>
         </div>
 
-
+        <DocPreview :url="previewUrl" :givenFileName="previewName"/>
         <!--分配经理人-->
         <div class="modal fade" id="giveBroker" aria-hidden="true" aria-labelledby="addLabelForm"
              role="dialog" tabindex="-1" data-backdrop="static">
@@ -864,7 +871,10 @@
                 affixes: [],
                 affixesType: '',//附件类型
                 isShow: '',
-                isContract:false
+                isContract:false,
+                Preview:'',
+                previewUrl: '',
+                previewName: '',
             }
         },
         watch: {
@@ -979,7 +989,10 @@
                 });
                 
             },
-
+             previewFile: function (url, name) {
+                this.previewUrl = url
+                this.previewName = name
+            },
             //获取博主类型
             getBlogType() {
                 let _this = this
@@ -1311,19 +1324,22 @@
                 this.artistSource = value
             },
             uploadAttachment: function (url, name, size) {
-                for (let i = 0; i < this.affixes.length; i++) {
-                    if (this.affixes[i].type == this.affixesType) {
+                
+                this.Preview = url
+                // for (let i = 0; i < this.affixes.length; i++) {
+                //     if (this.affixes[i].type == this.affixesType) {
 
-                        this.affixes.splice(i, 1)
-                    }
+                //         this.affixes.splice(i, 1)
+                //     }
 
-                }
+                // }
                 this.affixes.push({
                     title: name,
                     size: size,
                     url: url,
                     type: this.affixesType
                 })
+                console.log(this.affixes)
             },
             addArtist: function () {
                 if (!this.artistName) {
@@ -1553,6 +1569,6 @@
         top: 0px;
         left: 0px;
         opacity: 0;
-
+        
     }
 </style>

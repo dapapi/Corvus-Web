@@ -187,7 +187,7 @@
                                         <th class="cell-300" scope="col">艺人分成</th>
                                     </tr>
                                     <tr v-for="(item,index) in artistProjectsInfo" :key="index"
-                                        @click="toProject(item.id)" style="cursor: pointer;">
+                                        @click="toProject(item.id)" style="cursor: pointer;" class="projectcontent">
                                         <td>
                                             {{item.title}}
                                         </td>
@@ -195,7 +195,7 @@
                                         <td v-if="item.principal">{{item.principal.data.name}}</td>
                                         <td v-if="!item.principal"></td>
                                         <td>{{item.company}}</td>
-                                        <td>{{item.created_at.date}}</td>
+                                        <td>{{item.created_at}}</td>
                                         <td>
                                             <template v-if="item.relate_project_bills_resource">
                                                 {{item.relate_project_bills_resource}}
@@ -226,7 +226,7 @@
                                         <th class="cell-300" scope="col">截止时间</th>
                                     </tr>
                                     <tr v-for="(task,index) in allTaskList" :key="index" @click="toTask(task.id)"
-                                        style="cursor: pointer;">
+                                        style="cursor: pointer;" class="taskcontent">
                                         <td>
                                             {{task.title}}
                                         </td>
@@ -1328,6 +1328,7 @@
                 toastX: 0,
                 toastY: 0,
                 projectContractDefault:'',
+                taskDate:{}
             }
         },
 
@@ -1391,10 +1392,10 @@
                 })
 
             },
-            getProject() {
+            getProject(page) {
                 let _this = this;
-                fetch('get', '/stars/' + this.artistId + '/project').then(function (response) {
-
+                fetch('get', '/stars/' + this.artistId + '/project',{page:page}).then(function (response) {
+                    console.log(response.data)
                     _this.artistProjectsInfo = response.data
                     _this.current_page = response.meta.pagination.current_page;
                     _this.total = response.meta.pagination.total;
@@ -1856,10 +1857,14 @@
             }
             ,
             //获取任务列表
-            getTaskList: function () {
+            getTaskList: function (page = 1) {
+               
                 let _this = this
-                fetch('get', `/stars/${this.$route.params.id}/tasks`).then(response => {
+                fetch('get', `/stars/${this.$route.params.id}/tasks/`,{
+                    page:page
+                }).then(response => {
                     _this.allTaskList = response.data
+                    console.log(response)
                     _this.current_page = response.meta.pagination.current_page;
                     _this.total = response.meta.pagination.total;
                     _this.total_pages = response.meta.pagination.total_pages;
@@ -1882,7 +1887,7 @@
 
                         }
                     }
-                    _this.taskNum = `${_this.doneTaskNum}/${_this.allTaskList.length}`
+                    _this.taskNum = `${_this.doneTaskNum}/${response.meta.pagination.total}`
                 })
             },
             selectDate: function (value) {
@@ -2642,6 +2647,8 @@
         text-overflow:ellipsis;/* 当对象内文本溢出时显示省略标记(...) ；需与overflow:hidden;一起使用。*/
         white-space:nowrap;
     }
-
+    .projectcontent:hover,.taskcontent:hover{
+        background: #eee
+    }
 </style>
 
