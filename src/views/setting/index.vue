@@ -57,7 +57,7 @@
                         role="tabpanel">
                         <div class="title">设置头像</div>
                         <p>选择一张个人正面照片作为头像，企业成员可以更容易认识你</p>
-                        <Avatar style="width: 100px; height: 100px;" :imgUrl="'鲍庆鑫'"/>
+                        <Avatar style="width: 100px; height: 100px;" :imgUrl="iconUrl"/>
                         <div class="my-10">
                             <button class="btn btn-primary">选择照片</button>
                         </div>
@@ -71,7 +71,7 @@
                                 <input 
                                     type="text"
                                     v-model="name"
-                                    placeholder="旧密码"
+                                    placeholder="请输入姓名"
                                     class="form-control"
                                     style="width: 240px"
                                 >
@@ -85,10 +85,8 @@
                         </div>
                          <div class="example" style="margin-top: -20px">
                             <div class="float-left" style="width: 40px;">职位</div>
-                            <div class="float-left pl-0">
-                                <!-- <selectors placeholder="请选择项目负责人"
-                                   :options="jobArr"></selectors> -->
-                                <selectors :options="jobArr" :defaultFirst="true" @change="changeJob"></selectors>
+                            <div class="float-left pl-0" style="width: 240px;">
+                                <selectors :options="jobArr" @change="changeJob"></selectors>
                             </div>
                         </div>
                         <div class="example mt-10 mb-20">
@@ -96,6 +94,9 @@
                             <div class="float-left pl-0">
                                 <p>企业成员知道你在做什么</p>
                             </div>
+                        </div>
+                        <div class="my-10">
+                            <button class="btn btn-primary" @click="saveInfo">保存设置</button>
                         </div>
 
                     </div>
@@ -117,6 +118,8 @@ export default {
             name: '',
             job: '',
             userId: '',
+            departmentId: '', // 部门id
+            iconUrl: '', // 头像
             jobArr: [] // 职位数组
         }
     },
@@ -160,6 +163,8 @@ export default {
         getAccountInfo () {
             fetch('get', '/users/my').then(res => {
                 this.userId = res.data.id
+                this.iconUrl = res.data.icon_url
+                this.departmentId = res.data.department.id
             })
         },
         // 获取职位列表
@@ -175,6 +180,18 @@ export default {
         },
         changeJob (value) {
             this.job = value
+        },
+        // 保存个人信息
+        saveInfo() {
+            const params = {
+                positionId: this.job,
+                name: this.name,
+                department_id: this.departmentId
+            }
+            alert('等等等...')
+            // fetch('put', `/edit/${this.userId}/personal`, params).then(res => {
+            //     console.log(res)
+            // })
         }
     }
 }
@@ -198,8 +215,11 @@ export default {
     margin: 20px 0;
 }
 .example {
-    // width: 240px;
     display: flex;
     align-items: center;
+}
+.tab-pane {
+    padding-left: 10px;
+    padding-right: 10px;
 }
 </style>
