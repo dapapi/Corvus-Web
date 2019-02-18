@@ -14,8 +14,8 @@ export default {
         }
     },
     mounted(){
-        // this.getSummernote()
-        // this.setNote()
+        this.getSummernote()
+        this.setNote()
     },
     methods:{
          getSummernote(){

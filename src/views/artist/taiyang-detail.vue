@@ -392,6 +392,7 @@
                                         </div>
                                     </div>
                                     <div class="card-block px-0" v-if="artistInfo.name">
+                                        <h5 class="pl-15">基本资料</h5>
                                         <div class="clearfix">
                                             <div class="card-text py-10 px-0 clearfix col-md-6 float-left edit-height">
                                                 <div class="col-md-3 float-left text-right pl-0">姓名</div>
@@ -414,6 +415,12 @@
                                                     <EditDatepicker :content="artistInfo.birthday"
                                                                     :is-edit="isEdit"
                                                                     @change="(value) => changeArtistBaseInfo(value, 'birthday')"></EditDatepicker>
+                                                </div>
+                                            </div>
+                                            <div class="card-text py-10 px-0 clearfix col-md-6 float-left edit-height">
+                                                <div class="col-md-3 float-left text-right pl-0">年龄</div>
+                                                <div class="col-md-9 float-left font-weight-bold">
+                                                    {{artistInfo.birthday|jsGetAge}}
                                                 </div>
                                             </div>
                                             <div class="card-text py-10 px-0 clearfix col-md-6 float-left edit-height">
@@ -468,6 +475,7 @@
                                                                @change="(value) => changeArtistBaseInfo(value, 'star_location')"></EditInput>
                                                 </div>
                                             </div>
+                                            <h5 class="pl-15 pt-10 clearfix col-md-12 float-left">联系信息</h5>
                                             <div class="card-text py-10 px-0 clearfix col-md-6 float-left edit-height">
                                                 <div class="col-md-3 float-left text-right pl-0">手机号</div>
                                                 <div class="col-md-9 float-left font-weight-bold">
@@ -534,6 +542,7 @@
                                                                   @change="(value) => changeArtistBaseInfo(value, 'desc')"></editTextarea>
                                                 </div>
                                             </div>
+                                            
                                             <div v-show="isEdit"
                                                  class="card-text py-10 px-0 clearfix col-md-6 float-left edit-height">
                                                 <div class="col-md-3 float-left text-right pl-0">附件类型</div>
@@ -579,7 +588,7 @@
                                             </div>
                                         </div>
 
-                                        <div class="segmentation-line example"></div>
+                                        <h5 class="pl-15 pt-10">更新信息</h5>
                                         <div class="card-text py-10 px-0 clearfix col-md-6 float-left">
                                             <div class="col-md-3 float-left text-right pl-0">录入人</div>
                                             <div class="col-md-9 float-left font-weight-bold">
@@ -2469,7 +2478,56 @@
                         break;
                 }
                 return value;
-            }
+            },
+            jsGetAge: function (strBirthday) {
+                if (strBirthday) {
+                    var returnAge;
+                    // 根据生日计算年龄（"1995-09-25"）
+                    //以下五行是为了获取出生年月日，如果是从身份证上获取需要稍微改变一下
+                    var strBirthdayArr = strBirthday.split("-");
+                    var birthYear = strBirthdayArr[0];
+                    var birthMonth = strBirthdayArr[1];
+                    var birthDay = strBirthdayArr[2];
+
+                    var d = new Date();
+                    var nowYear = d.getFullYear();
+                    var nowMonth = d.getMonth() + 1;
+                    var nowDay = d.getDate();
+
+                    if (nowYear == birthYear) {
+                        returnAge = 0;//同年 则为0岁
+                    }
+                    else {
+                        var ageDiff = nowYear - birthYear; //年之差
+                        if (ageDiff > 0) {
+                            if (nowMonth == birthMonth) {
+                                var dayDiff = nowDay - birthDay;//日之差
+                                if (dayDiff < 0) {
+                                    returnAge = ageDiff - 1;
+                                }
+                                else {
+                                    returnAge = ageDiff;
+                                }
+                            }
+                            else {
+                                var monthDiff = nowMonth - birthMonth;//月之差
+                                if (monthDiff < 0) {
+                                    returnAge = ageDiff - 1;
+                                }
+                                else {
+                                    returnAge = ageDiff;
+                                }
+                            }
+                        }
+                        else {
+                            returnAge = -1;//返回-1 表示出生日期输入错误 晚于今天
+                        }
+                    }
+                    return returnAge;//返回周岁年龄
+                } else {
+                    return strBirthday
+                }
+            },
         },
     }
 
@@ -2491,10 +2549,10 @@
         left: 0;
         will-change: transform;
     }
-
+/* 
     . {
         height: 57px;
-    }
+    } */
 
     .uploadContent {
         position: relative;

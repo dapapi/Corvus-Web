@@ -5,7 +5,10 @@
                <router-link class="link" v-bind:to="menu.url" @click.native="toggle(menu)" :class="menu.level>1?'pl-15':''">
                    <span v-if="isShow" class="icon md-file-text font-size-18 mr-10 ml-15" ></span>
                    {{menu.name}}
-                   <span v-if="menu.num>0&&unReadMsg>0" class="unRead">{{menu.num}}</span>
+                   <span v-if="menu.num>0&&unReadMsg>0" class="unRead" :class="menu.num>=100?'unReadLine':''">
+                       <template v-if="menu.num>=100">...</template>
+                       <template v-else>{{menu.num}}</template>
+                   </span>
                 </router-link>
            </div>
            <div v-if="menu.type === 'button'">
@@ -13,7 +16,10 @@
                     <i class="icon md-caret-right mr-10 font-size-20" style="vertical-align: middle;"></i>
                     <span>{{menu.name}}
                     </span>
-                    <span v-if="menu.name=='我的消息'&&unReadMsg>0" class="unRead first">{{unReadMsg}}</span>
+                    <span v-if="menu.name=='我的消息'&&unReadMsg>0" class="unRead first" :class="unReadMsg>=100?'unReadLine':''">
+                        <template v-if="unReadMsg>=100">...</template>
+                        <template v-else>{{unReadMsg}}</template>
+                    </span>
                 </div>
                 <transition name="fade">
                     <div class="heading-children" v-if="menu.subMenu && isExpanded.includes(menu.id)">
@@ -201,6 +207,9 @@ export default {
         position: absolute;
         top: 3px;
         right: 10px;
+    }
+    .unReadLine{
+        line-height: 12px;
     }
     .first{
         position:absolute;

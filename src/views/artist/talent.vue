@@ -143,13 +143,13 @@
                                 <th class="cell-300" scope="col">最后跟进时间</th>
                             </tr>
                             <tbody>
-
-                            <tr v-for="(artist,index) in artistsInfo" :key="index" class="pointer-content">
+                            
+                            <tr v-for="artist in artistsInfo" :key="artist.id" class="pointer-content">
                                 <td>
                                     <span class="checkbox-custom checkbox-primary">
-                                        <input class="selectable-item" type="checkbox" :id="'row-' + artist.id"
+                                        <input class="selectable-item" type="checkbox" :id="'artist-' + artist.id"
                                                :value="artist.id" @change="selectArtists(artist.id)">
-                                        <label :for="'row-' + artist.id"></label>
+                                        <label :for="'artist-' + artist.id"></label>
                                     </span>
                                 </td>
                                 <td @click="redirectArtistDetail(artist.id)">{{ artist.name }}</td>
@@ -988,6 +988,7 @@
                     _this.isLoading = false;
                     _this.selectAllBlogger = false;
                     _this.selectedArtistsArr = [];
+                    
                     
                 });
                 
