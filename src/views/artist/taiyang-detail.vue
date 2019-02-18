@@ -556,8 +556,7 @@
                                                  style="min-height:57px">
                                                 <div class="col-md-3 float-left text-right pl-0">附件</div>
                                                 <div class="col-md-9 float-left font-weight-bold">
-                                                        <span v-show="isEdit"
-                                                              style="color:#01BCD4;cursor:pointer">上传附件</span>
+                                                    <span v-show="isEdit" style="color:#01BCD4;cursor:pointer">上传附件</span>
                                                     <FileUploader v-show="isEdit" class="uploadAttach"
                                                                   @change="uploadAttachment" mulId="aff"></FileUploader>
                                                     <div class="mt-5" >
