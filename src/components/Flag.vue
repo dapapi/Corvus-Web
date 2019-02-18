@@ -3,14 +3,13 @@
          id="confirmFlag"
          aria-labelledby="exampleModalTitle"
          role="dialog" tabindex="-1"
-         style="display: none;"
          data-backdrop="static"
          aria-hidden="true">
         <div class="modal-dialog modal-simple">
             <div class="modal-content">
                 <div class="modal-header">
-                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-                        <span aria-hidden="true">×</span>
+                    <button type="button" class="close" aria-hidden="true" data-dismiss="modal">
+                        <i class="iconfont icon-guanbi" aria-hidden="true"></i>
                     </button>
                     <h4 class="modal-title">确认{{typeText}}</h4>
                 </div>

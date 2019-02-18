@@ -746,7 +746,7 @@
                         }
                         return;
                     case 'end_minutes':
-                        if (this.changeInfo.start_at) {
+                        if (this.changeInfo.end_at) {
                             this.changeInfo.end_at = this.changeInfo.end_at + ' ' + value
                         } else {
                             this.changeInfo.end_at = this.taskInfo.end_at[0] + ' ' + value
@@ -1169,7 +1169,7 @@
                     $("#push-reason").modal("hide");
                     toastr.success('推优成功！')
                     this.getQuestionId()
-                    this.addQuestionTask()
+                    // this.addQuestionTask() // 2019.02.12注释 暂时不需要前端新增任务 由后台创建
                 })
             },
             // 根据任务id获取是否有问卷

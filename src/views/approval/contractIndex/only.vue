@@ -121,9 +121,9 @@ import {CONTRACT_INDEX_CONFIG} from '@/views/approval/contractIndex/contractInde
                 }
                 fetch('get', '/approvals_contract/notify', data).then(response => {
                     _this.projectsInfo = response.data
-                    _this.total = response.meta.pagination;
-                    _this.current_page = response.meta.current_page;
-                    _this.total_pages = response.meta.total_pages;
+                   _this.total = response.meta.pagination.total;
+                    _this.current_page = response.meta.pagination.current_page;
+                    _this.total_pages = response.meta.pagination.total_pages;
                 })
             },
             getList(params) {
@@ -131,9 +131,9 @@ import {CONTRACT_INDEX_CONFIG} from '@/views/approval/contractIndex/contractInde
                     let _this = this
                     fetch('get','/approvals_contract/notify?status='+params).then((params) => {
                         _this.projectsInfo = params.data
-                        _this.total = params.meta.pagination
-                        _this.current_page = params.meta.current_page;
-                        _this.total_pages = params.meta.total_pages;
+                       _this.total = params.meta.pagination.total;
+                    _this.current_page = params.meta.pagination.current_page;
+                    _this.total_pages = params.meta.pagination.total_pages;
                     })
             }
         }

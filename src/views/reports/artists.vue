@@ -70,10 +70,12 @@
                     <div class="tab-pane animation-fade active" id="forum-business-report" role="tabpanel">
                         <div class="clearfix">
                             <div class="col-md-3 float-left pl-0">
-                                <Selectors :options="artistStatusArr" @change="changeArtistStatus" placeholder="请选择艺人状态"></Selectors>
+                                <Selectors :options="artistStatusArr" @change="changeArtistStatus"
+                                           placeholder="请选择艺人状态"></Selectors>
                             </div>
                             <div class="col-md-3 float-left pl-0" v-if="artistStatus != 1">
-                                <Selectors :options="trailsNumArr" @change="changeTrailsNum" placeholder="请选择项目类型"></Selectors>
+                                <Selectors :options="trailsNumArr" @change="changeTrailsNum"
+                                           placeholder="请选择项目类型"></Selectors>
                             </div>
                             <div class="col-md-3 float-left pl-0"
                                  v-if="departmentsInfo.length > 1 && artistStatus != 1">
@@ -111,10 +113,12 @@
                                             {{ artistSourceArr.find(item => item.value == data.source).name }}
                                         </template>
                                     </td>
-                                    <td>{{ data.created_at }}</td>
-                                    <td>
-                                        <template v-if="data.last_update_at">{{ data.last_update_at }}</template>
+                                    <td>{{ taiyangCommunicationStatusArr.find(item => item.value ==
+                                        data.communication_status) ? taiyangCommunicationStatusArr.find(item => item.value ==
+                                        data.communication_status).name : '' }}
                                     </td>
+                                    <td>{{ data.created_at }}</td>
+                                    <td>{{ data.last_update_at}}</td>
                                 </template>
                                 <template v-else>
                                     <td>{{ data.department_name }}</td>
@@ -151,7 +155,7 @@
 </template>
 
 <script>
-    import { mapState } from 'vuex'
+    import {mapState} from 'vuex'
     import fetch from '../../assets/utils/fetch.js'
     import config from '../../assets/js/config'
 
@@ -249,13 +253,13 @@
             ...mapState([
                 'department',
             ]),
-            _department () {
+            _department() {
                 return this.department
             }
         },
 
         watch: {
-            _department () {
+            _department() {
                 this.departmentsInfo = this.departmentsInfo.concat(this.department);
             }
         },

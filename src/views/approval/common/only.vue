@@ -47,8 +47,8 @@
                                         </div>
                                     </th> -->
                                      <th class="cell-300 position-relative" scope="col">类型
-                                        <i class="iconfont icon-gengduo1" aria-hidden="true"
-                                           id="taskDropdown" data-toggle="dropdown" aria-expanded="false"></i>
+                                        <!-- <span class="icon md-caret-right font-size-20 mr-10 leftImg anmite"
+                                        id="taskDropdown" data-toggle="dropdown" aria-expanded="false"></span> -->
                                         <div class="dropdown-menu" aria-labelledby="taskDropdown" role="menu">
                                             <a class="dropdown-item" role="menuitem" >此处等</a>
                                             <a class="dropdown-item" role="menuitem" >后端</a>
@@ -130,9 +130,9 @@ import {CONTRACT_INDEX_CONFIG} from '@/views/approval/contractIndex/contractInde
                 }
                 fetch('get', '/approvals_general/notify', data).then(response => {
                     _this.projectsInfo = response.data
-                    _this.total = response.meta.pagination;
-                    _this.current_page = response.meta.current_page;
-                    _this.total_pages = response.meta.total_pages;
+                    _this.total = response.meta.pagination.total;
+                    _this.current_page = response.meta.pagination.current_page;
+                    _this.total_pages = response.meta.pagination.total_pages;
                 })
             },
             getList(params) {
@@ -140,9 +140,9 @@ import {CONTRACT_INDEX_CONFIG} from '@/views/approval/contractIndex/contractInde
                     let _this = this
                     fetch('get','/approvals_general/notify?status='+params).then((params) => {
                         _this.projectsInfo = params.data
-                        _this.total = params.meta.pagination
-                        _this.current_page = params.meta.current_page;
-                        _this.total_pages = params.meta.total_pages;
+                       _this.total = params.meta.pagination.total;
+                    _this.current_page = params.meta.pagination.current_page;
+                    _this.total_pages = params.meta.pagination.total_pages;
                     })
             }
         }

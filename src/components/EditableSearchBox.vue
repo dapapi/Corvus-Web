@@ -103,6 +103,8 @@
         background: white;
         z-index: 10;
         border: 1px solid #e0e0e0;
+        max-height: 400px;
+        overflow-y: auto;
     }
 
     .editable-select-wrap {

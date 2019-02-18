@@ -56,7 +56,7 @@
                                     <td>{{project.name}}</td>
                                     <!-- <td></td> -->
                                     <td>{{project.created_at}}</td>
-                                    <td>{{getProgressName(project.form_status)}}</td>
+                                    <td>{{getProgressName(project.approval_status)}}</td>
                                 </tr>
                                 </tbody>
                             </table>
@@ -117,9 +117,9 @@
                 }
                 fetch('get', '/approvals_project/my', data).then(response => {
                     _this.projectsInfo = response.data
-                    _this.total = response.total;
-                    _this.current_page = response.current_page;
-                    _this.total_pages = response.last_page;
+                    _this.total = response.meta.pagination.total;
+                    _this.current_page = response.meta.pagination.current_page;
+                    _this.total_pages = response.meta.pagination.total_pages;
                 })
             },
             getList(params) {
@@ -127,9 +127,9 @@
                 let _this = this
                 fetch('get','/approvals_project/my?status='+params).then((params) => {
                     _this.projectsInfo = params.data
-                    _this.total = params.total;
-                    _this.current_page = params.current_page;
-                    _this.total_pages = params.last_page;
+                    _this.total = params.meta.pagination.total;
+                    _this.current_page = params.meta.pagination.current_page;
+                    _this.total_pages = params.meta.pagination.total_pages;
                 })
             },
             goDetail (id) {

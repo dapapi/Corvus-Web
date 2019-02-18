@@ -37,8 +37,8 @@
                                     <!-- <th class="cell-300" scope="col">合同名称</th> -->
                                     <th class="cell-300" scope="col">申请人</th>
                                     <th class="cell-300 position-relative" scope="col">类型
-                                        <span class="icon md-caret-right font-size-20 mr-10 leftImg anmite"
-                                        id="taskDropdown" data-toggle="dropdown" aria-expanded="false"></span>
+                                        <!-- <span class="icon md-caret-right font-size-20 mr-10 leftImg anmite"
+                                        id="taskDropdown" data-toggle="dropdown" aria-expanded="false"></span> -->
                                         <!-- <i class="icon md-caret-right font-size-20 mr-10 leftImg anmite" aria-hidden="true"
                                            id="taskDropdown" data-toggle="dropdown" aria-expanded="false"></i> -->
                                         <div class="dropdown-menu" aria-labelledby="taskDropdown" role="menu">
@@ -118,9 +118,9 @@
                 };
                 fetch('get', '/approvals_general/my', data).then(response => {
                     _this.projectsInfo = response.data
-                    _this.total = response.total;
-                    _this.current_page = response.current_page;
-                    _this.total_pages = response.last_page;
+                   _this.total = response.meta.pagination.total;
+                    _this.current_page = response.meta.pagination.current_page;
+                    _this.total_pages = response.meta.pagination.total_pages;
                 })
             },
             getList(params) {
@@ -128,9 +128,9 @@
                 this.pageType = params
                 fetch('get','/approvals_general/my?status='+params).then((params) => {
                     _this.projectsInfo = params.data
-                    _this.total = params.total;
-                    _this.current_page = params.current_page;
-                    _this.total_pages = params.last_page;
+                    _this.total = params.meta.pagination.total;
+                    _this.current_page = params.meta.pagination.current_page;
+                    _this.total_pages = params.meta.pagination.total_pages;
                 })
             },
             goDetail (num) {

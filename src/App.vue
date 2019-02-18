@@ -41,6 +41,7 @@
                     || this.$route.path === '/rolemanagement'
                     || this.$route.path === '/appmanagement'
                     || this.$route.path === '/organization'
+                    || this.$route.path === '/setting'
                     || this.$route.path.indexOf('staff') > 0
                     || this.$route.path === '/organization/management') {
                     this.isLeftMenuShow = false

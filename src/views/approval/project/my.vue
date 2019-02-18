@@ -115,9 +115,9 @@
                 }
                 fetch('get', '/approvals_project/approval', data).then(response => {
                     _this.projectsInfo = response.data
-                    _this.total = response.total;
-                    _this.current_page = response.current_page;
-                    _this.total_pages = response.last_page;
+                    _this.total = response.meta.pagination.total;
+                    _this.current_page = response.meta.pagination.current_page * 1; // 转成数字，否则当前页码不变色
+                    _this.total_pages = response.meta.pagination.total_pages;
                 })
             },
             getList(params) {
@@ -125,9 +125,9 @@
                 let _this = this
                 fetch('get','/approvals_project/approval?status='+params).then((params) => {
                     _this.projectsInfo = params.data
-                    _this.total = params.meta.pagination;
-                    _this.current_page = params.meta.current_page;
-                    _this.total_pages = params.meta.total_pages;
+                    _this.total = params.meta.pagination.total;
+                    _this.current_page = params.meta.pagination.current_page;
+                    _this.total_pages = params.meta.pagination.total_pages;
                 })
             },
             goDetail (num) {

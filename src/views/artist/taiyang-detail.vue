@@ -120,13 +120,13 @@
                             <li class="nav-item" role="presentation" v-if="artistInfo.sign_contract_status == 2">
                                 <a class="nav-link" data-toggle="tab" href="#forum-artist-projects"
                                    aria-controls="forum-present"
-                                   aria-expanded="false" role="tab" @click="getProject">项目</a>
+                                   aria-expanded="false" role="tab" @click="getProject()">项目</a>
                             </li>
                             <li class="nav-item" role="presentation">
                                 <a class="nav-link"
                                    data-toggle="tab" href="#forum-artist-tasks"
                                    aria-controls="forum-present"
-                                   aria-expanded="true" role="tab" @click="getTaskList">
+                                   aria-expanded="true" role="tab" @click="getTaskList()">
                                     <template v-if="allTaskList.length > 0">
                                         <ToolTips :title="`已完成数量${doneTaskNum}`">
                                             任务 ({{taskNum}})
@@ -140,14 +140,14 @@
                             <li class="nav-item" role="presentation" v-if="artistInfo.sign_contract_status == 2">
                                 <a class="nav-link" data-toggle="tab" href="#forum-artist-work"
                                    aria-controls="forum-present"
-                                   aria-expanded="false" role="tab" @click="getWoks">作品库</a>
+                                   aria-expanded="false" role="tab" @click="getWoks()">作品库</a>
                             </li>
                             <!--<li class="nav-item" role="presentation" v-show="artistInfo.sign_contract_status == 2">-->
                             <!--<a class="nav-link" data-toggle="tab" href="#forum-artist-fans"-->
                             <!--aria-controls="forum-present"-->
                             <!--aria-expanded="false" role="tab">粉丝数据</a>-->
                             <!--</li>-->
-                            <li class="nav-item" role="presentation" @click="getArtistsBill"
+                            <li class="nav-item" role="presentation" @click="getArtistsBill()"
                                 v-if="artistInfo.sign_contract_status == 2">
                                 <a class="nav-link" data-toggle="tab" href="#forum-artist-bill"
                                    aria-controls="forum-present"
@@ -187,7 +187,7 @@
                                         <th class="cell-300" scope="col">艺人分成</th>
                                     </tr>
                                     <tr v-for="(item,index) in artistProjectsInfo" :key="index"
-                                        @click="toProject(item.id)" style="cursor: pointer;">
+                                        @click="toProject(item.id)" style="cursor: pointer;" class="projectcontent">
                                         <td>
                                             {{item.title}}
                                         </td>
@@ -195,7 +195,7 @@
                                         <td v-if="item.principal">{{item.principal.data.name}}</td>
                                         <td v-if="!item.principal"></td>
                                         <td>{{item.company}}</td>
-                                        <td>{{item.created_at.date}}</td>
+                                        <td>{{item.created_at}}</td>
                                         <td>
                                             <template v-if="item.relate_project_bills_resource">
                                                 {{item.relate_project_bills_resource}}
@@ -226,7 +226,7 @@
                                         <th class="cell-300" scope="col">截止时间</th>
                                     </tr>
                                     <tr v-for="(task,index) in allTaskList" :key="index" @click="toTask(task.id)"
-                                        style="cursor: pointer;">
+                                        style="cursor: pointer;" class="taskcontent">
                                         <td>
                                             {{task.title}}
                                         </td>
@@ -1327,6 +1327,7 @@
                 toastX: 0,
                 toastY: 0,
                 projectContractDefault:'',
+                taskDate:{}
             }
         },
 
@@ -1390,17 +1391,17 @@
                 })
 
             },
-            getProject() {
+            getProject(page = 1) {
                 let _this = this;
-                fetch('get', '/stars/' + this.artistId + '/project').then(function (response) {
-
+                fetch('get', '/stars/' + this.artistId + '/project',{page:page}).then(function (response) {
+                   
                     _this.artistProjectsInfo = response.data
                     _this.current_page = response.meta.pagination.current_page;
                     _this.total = response.meta.pagination.total;
                     _this.total_pages = response.meta.pagination.total_pages;
                 })
             },
-            getWoks() {
+            getWoks(page = 1) {
                 let _this = this;
                 fetch('get', '/stars/' + this.artistId + '/works').then(function (response) {
                     _this.artistWorksInfo = response.data
@@ -1817,7 +1818,7 @@
 
             //获取账单
             getArtistsBill: function (page = 1, expense_type) {
-
+              
                 let _this = this
                 if (expense_type) {
                     _this.expense_type = expense_type
@@ -1825,7 +1826,7 @@
                     _this.expense_type = 0
                 }
                 fetch('get', `/stars/${this.$route.params.id}/bill`, {
-                    page: page,
+                    page:page,
                     expense_type: _this.expense_type
                 }).then(response => {
                     _this.artistBillsInfo = response.data
@@ -1855,10 +1856,14 @@
             }
             ,
             //获取任务列表
-            getTaskList: function () {
+            getTaskList: function (page = 1) {
+               
                 let _this = this
-                fetch('get', `/stars/${this.$route.params.id}/tasks`).then(response => {
+                fetch('get', `/stars/${this.$route.params.id}/tasks/`,{
+                    page:page
+                }).then(response => {
                     _this.allTaskList = response.data
+                   
                     _this.current_page = response.meta.pagination.current_page;
                     _this.total = response.meta.pagination.total;
                     _this.total_pages = response.meta.pagination.total_pages;
@@ -1881,7 +1886,7 @@
 
                         }
                     }
-                    _this.taskNum = `${_this.doneTaskNum}/${_this.allTaskList.length}`
+                    _this.taskNum = `${_this.doneTaskNum}/${response.meta.pagination.total}`
                 })
             },
             selectDate: function (value) {
@@ -2641,6 +2646,8 @@
         text-overflow:ellipsis;/* 当对象内文本溢出时显示省略标记(...) ；需与overflow:hidden;一起使用。*/
         white-space:nowrap;
     }
-
+    .projectcontent:hover,.taskcontent:hover{
+        background: #eee
+    }
 </style>
 
