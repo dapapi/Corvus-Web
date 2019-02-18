@@ -17,22 +17,54 @@
         mounted() {
             
             let _this = this;
-            $(this.$refs.number).asSpinner(
-                {
-                    format: function format(value) {
-                        return value;
-                    },
-                    precision:2,
-                    step: 0.01,
-                    min: 0,
-                    max: 1000000000,
-                }
+            if(['请假天数','金额'].includes(this.consdata[0].control_title)){
+                $(this.$refs.number).asSpinner(
+                    {
+                        format: function format(value) {
+                            return value;
+                        },
+                        precision:2,
+                        step: 0.01,
+                        min: 0,
+                        max: 1000000000,
+                    }
+                ).on('asSpinner::change', function (e) {
+                    let {id} = _this.consdata[0]
+                    let {related_field} = _this.consdata[0]
+
+                    _this.$emit('change', {key:id,value:e.currentTarget.value,type:related_field})
+                });
+            }else{
+                $(this.$refs.number).asSpinner(
+                    {
+                        format: function format(value) {
+                            return value;
+                        },
+                        min: 0,
+                        max: 1000000000,
+                    }
             ).on('asSpinner::change', function (e) {
                 let {id} = _this.consdata[0]
                 let {related_field} = _this.consdata[0]
-
                 _this.$emit('change', {key:id,value:e.currentTarget.value,type:related_field})
             });
+            }
+            // $(this.$refs.number).asSpinner(
+            //     {
+            //         format: function format(value) {
+            //             return value;
+            //         },
+            //         precision:2,
+            //         step: 0.01,
+            //         min: 0,
+            //         max: 1000000000,
+            //     }
+            // ).on('asSpinner::change', function (e) {
+            //     let {id} = _this.consdata[0]
+            //     let {related_field} = _this.consdata[0]
+
+            //     _this.$emit('change', {key:id,value:e.currentTarget.value,type:related_field})
+            // });
             $('.asSpinner').parent().css('width', '50%')
             if(this.consdata[0].control_value){
                 this.setValue(this.consdata[0].control_value)
