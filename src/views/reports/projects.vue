@@ -118,11 +118,11 @@
                             <div class="col-md-3 float-left pl-0">
                                 <Selectors :options="newTrailSearchArr" @change="changeSelectTime" placeholder="请选择查询时间"></Selectors>
                             </div>
-                            <div class="col-md-3 float-left pl-0">
-                                <Selectors :options="starsArr" @change="changeStar" placeholder="请选择目标艺人"></Selectors>
-                            </div>
                             <div class="col-md-3 float-left">
                                 <DropDepartment name="组别" :data="departmentsInfo" @change="selectNewDepartment"/>
+                            </div>
+                            <div class="col-md-3 float-left pl-0">
+                                <Selectors :options="starsArr" @change="changeStar" placeholder="请选择目标艺人"></Selectors>
                             </div>
                         </div>
                         <div class="col-md-12">

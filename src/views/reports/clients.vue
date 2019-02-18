@@ -119,7 +119,7 @@
                 taskLevelArr: config.taskLevelArr,
                 clientTypeArr: [
                     {
-                        name: '客户类型',
+                        name: '全部',
                         value: '',
                     },
                     {
@@ -138,7 +138,7 @@
                 clientType: '',
                 newTrailSearchArr: [
                     {
-                        name: '查询时间',
+                        name: '全部',
                         value: '',
                     },
                     {
