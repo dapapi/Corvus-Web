@@ -3,6 +3,14 @@
         <Loading :is-loading="isLoading"></Loading>
         <div class="page-header page-header-bordered">
             <h1 class="page-title">销售线索管理</h1>
+            <div class="page-header-actions">
+                <import-and-export class="float-left" :type="'export'" :moduleName="'trails'">
+                    <i class="iconfont icon-daoru px-5 font-size-20 pr-20" aria-hidden="true"></i>
+                </import-and-export>
+                <import-and-export class="float-left" :type="'import'" :moduleName="'trails'">
+                    <i class="iconfont icon-daochu font-size-20" aria-hidden="true"></i>
+                </import-and-export>
+            </div>
             <!-- <div class="page-header-actions">
                 <i class="iconfont icon-daoru px-5 font-size-20 pr-20" aria-hidden="true"></i>
                 <i class="iconfont icon-daochu font-size-20" aria-hidden="true"></i>
@@ -230,8 +238,12 @@
     import config from '../../assets/js/config'
     import {mapState} from 'vuex'
     import Cookies from 'js-cookie'
+    import ImportAndExport from '@/components/ImportAndExport.vue'
 
     export default {
+         components: {
+            ImportAndExport
+        },
         data: function () {
             return {
                 total: 0,
