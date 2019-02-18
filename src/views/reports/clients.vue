@@ -11,22 +11,22 @@
                     </div>
                     <div class="col-md-7 p-20 clearfix float-left" style="z-index: 0">
                         <div class="col-md-3 float-left">
-                            <button type="button" class="btn btn-block btn-success waves-effect waves-classic"
+                            <button type="button" class="btn btn-block btn-success waves-effect waves-classic search-button"
                                     :disabled="designationDateNum === 'day'" @click="selectDate('day')">7天
                             </button>
                         </div>
                         <div class="col-md-3 float-left">
-                            <button type="button" class="btn btn-block btn-success waves-effect waves-classic"
+                            <button type="button" class="btn btn-block btn-success waves-effect waves-classic search-button"
                                     :disabled="designationDateNum === 'month'" @click="selectDate('month')">30天
                             </button>
                         </div>
                         <div class="col-md-3 float-left">
-                            <button type="button" class="btn btn-block btn-success waves-effect waves-classic"
+                            <button type="button" class="btn btn-block btn-success waves-effect waves-classic search-button"
                                     :disabled="designationDateNum === 'quarter'" @click="selectDate('quarter')">季度
                             </button>
                         </div>
                         <div class="col-md-3 float-left">
-                            <button type="button" class="btn btn-block btn-success waves-effect waves-classic"
+                            <button type="button" class="btn btn-block btn-success waves-effect waves-classic search-button"
                                     :disabled="designationDateNum === 'year'" @click="selectDate('year')">年度
                             </button>
                         </div>
@@ -119,7 +119,7 @@
                 taskLevelArr: config.taskLevelArr,
                 clientTypeArr: [
                     {
-                        name: '客户类型',
+                        name: '全部',
                         value: '',
                     },
                     {
@@ -138,7 +138,7 @@
                 clientType: '',
                 newTrailSearchArr: [
                     {
-                        name: '查询时间',
+                        name: '全部',
                         value: '',
                     },
                     {
