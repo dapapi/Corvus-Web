@@ -56,7 +56,8 @@ export default {
                 return String(this.url).split('.').pop()
             }
 
-        }
+        },
+        
     }
 }
 </script>
