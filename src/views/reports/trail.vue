@@ -203,7 +203,7 @@
                 ],
                 trailType: '',
                 trailStatusArr: config.trailStatusArr,
-                priorityArr: config.priorityArr,
+                priorityArr: config.levelArr,
                 departmentsInfo: [
                     {
                         name: '请选择组别',
