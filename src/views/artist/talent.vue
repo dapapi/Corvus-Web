@@ -175,7 +175,7 @@
                                     </template>
                                 </td>
                                 <td @click="redirectArtistDetail(artist.id)">{{artist.created_at}}</td>
-                                <td @click="redirectArtistDetail(artist.id)">{{artist.updated_at}}</td>
+                                <td @click="redirectArtistDetail(artist.id)">{{artist.last_follow_up_at}}</td>
                             </tr>
                             </tbody>
 
@@ -281,8 +281,7 @@
                                     </span>
                                 </td>
                                 <td @click="redirectBolggerDetail(artist.id)">{{artist.created_at}}</td>
-                                <td v-for="(v,index) in artist.operatelogs.data" :key="index"
-                                    @click="redirectBolggerDetail(artist.id)">{{v.created_at}}
+                                <td @click="redirectBolggerDetail(artist.id)">{{artist.last_follow_up_at}}
                                 </td>
                             </tr>
 
