@@ -55,6 +55,18 @@
                         </div>
                         <div class="summernote" id="summernote"></div>
                         <File-Uploader class="upload" url="javascript:void()" @changePlus="fileUploaded" :givenfilename='givenfilename' @deleteAtachment='deleteAttachment' broadcast='true'>上传附件</File-Uploader>
+                        <!-- <figure style="text-align:center;width:100px" v-for="(item, index) in items" :key="index" class="attachdetail ml-20"> 
+                            <img src="@/assets/img/attachment.png" alt="" style="width:40px">
+                            <p class="pt-10">{{fileName ||"未选择任何附件"}}</p>
+                            <div class="img-control">
+                                <div class="icon-control">
+                                    <a :href="fileUrl" target="_blank">
+                                        <i class="iconfont icon-liulan"></i>
+                                    </a>
+                                    <i class="iconfont icon-shanchu1" @click="imgDelete"></i>
+                                </div>
+                            </div>
+                        </figure> -->
                         <br/>
                         <input type="checkbox" v-model="topFlag">
                         <span class="set-top-flag" >&nbsp;&nbsp;置顶</span>
@@ -94,7 +106,8 @@ export default {
             scope:[],
             accessory_name:'',
             whoamiid:'',
-            creator_id:','
+            creator_id:'',
+            affix:[],
         }
     },
     created(){
@@ -223,9 +236,10 @@ export default {
                     stick:topflag,                          //置顶标示
                     desc:this.text,                         //富文本代码
                     is_accessory : this.is_accessory,       //是否带附件
-                    accessory : this.accessory,             //附件内容
+                    // accessory : this.accessory,             //附件内容
                     readflag : 0, 
-                    accessory_name : this.accessory_name                          //已读状态         
+                    // accessory_name : this.accessory_name            
+                    affix:this.affix      
             }
             //发布模式
             if(this.pageType === '发布'){
@@ -249,9 +263,20 @@ export default {
         },
         //上传
         fileUploaded(value){
-            console.log(value);
-            this.accessory_name = value.fileName
-            this.accessory = value.fileUrl
+            let currentId = this.$route.params.id
+            let attachData = {
+                title:value.fileName,
+                url:value.fileUrl,
+                size:value.fileSize,
+                type:1
+            }
+            this.affix.push(attachData)
+            // fetch('post','/announcements/'+currentId+'/affix',attachData).then((params) => {
+                
+            // })
+            // console.log(value);
+            // this.accessory_name = value.fileName
+            // this.accessory = value.fileUrl
         }
     }
 }
