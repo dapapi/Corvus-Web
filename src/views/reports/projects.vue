@@ -11,22 +11,26 @@
                     </div>
                     <div class="col-md-7 p-20 clearfix float-left" style="z-index: 0">
                         <div class="col-md-3 float-left">
-                            <button type="button" class="btn btn-block btn-success waves-effect waves-classic search-button"
+                            <button type="button"
+                                    class="btn btn-block btn-success waves-effect waves-classic search-button"
                                     :disabled="designationDateNum === 'day'" @click="selectDate('day')">7天
                             </button>
                         </div>
                         <div class="col-md-3 float-left">
-                            <button type="button" class="btn btn-block btn-success waves-effect waves-classic search-button"
+                            <button type="button"
+                                    class="btn btn-block btn-success waves-effect waves-classic search-button"
                                     :disabled="designationDateNum === 'month'" @click="selectDate('month')">30天
                             </button>
                         </div>
                         <div class="col-md-3 float-left">
-                            <button type="button" class="btn btn-block btn-success waves-effect waves-classic search-button"
+                            <button type="button"
+                                    class="btn btn-block btn-success waves-effect waves-classic search-button"
                                     :disabled="designationDateNum === 'quarter'" @click="selectDate('quarter')">季度
                             </button>
                         </div>
                         <div class="col-md-3 float-left">
-                            <button type="button" class="btn btn-block btn-success waves-effect waves-classic search-button"
+                            <button type="button"
+                                    class="btn btn-block btn-success waves-effect waves-classic search-button"
                                     :disabled="designationDateNum === 'year'" @click="selectDate('year')">年度
                             </button>
                         </div>
@@ -70,9 +74,6 @@
                 <div class="page-content tab-content nav-tabs-animate bg-white">
                     <div class="tab-pane animation-fade active" id="forum-trail-report" role="tabpanel">
                         <div class="clearfix">
-                            <div class="col-md-3 float-left pl-0">
-                                <Selectors :options="projectsTypeArr" @change="changeProjectType" placeholder="请选择项目类型"></Selectors>
-                            </div>
                             <div class="col-md-3 float-left pl-0" v-if="departmentsInfo.length > 1">
                                 <DropDepartment name="组别" :data="departmentsInfo" @change="selectDepartment"/>
                             </div>
@@ -82,6 +83,10 @@
                                data-selectable="selectable">
                             <tr class="animation-fade"
                                 style="animation-fill-mode: backwards; animation-duration: 250ms; animation-delay: 0ms;">
+                                <th class="cell-100" scope="col">
+                                    <Selectors :options="projectsTypeArr" @change="changeProjectType"
+                                               placeholder="请选择项目类型"></Selectors>
+                                </th>
                                 <th class="cell-100" scope="col">项目名称</th>
                                 <th class="cell-100" scope="col">组别</th>
                                 <th class="cell-100" scope="col">签约艺人</th>
@@ -92,6 +97,9 @@
                             </tr>
                             <tbody>
                             <tr v-for="data in tableData.project">
+                                <td class="cell-100" scope="col">{{ projectsTypeArr.find(item => item.value ==
+                                    data.type) ? projectsTypeArr.find(item => item.value == data.type).name : '' }}
+                                </td>
                                 <td class="cell-100" scope="col">{{ data.title }}</td>
                                 <td class="cell-100" scope="col">{{ data.deparment_name }}</td>
                                 <td class="cell-100" scope="col">{{ data.star_name }}</td>
@@ -101,7 +109,7 @@
                                     <span :style="{color:projectStatusArr.find(item => item.value == data.status).color}">
                                         {{ projectStatusArr.find(item => item.value == data.status).name }}
                                     </span>
-                                    
+
                                 </td>
                                 <td class="cell-100" scope="col">{{ data.principal_name }}</td>
                             </tr>
@@ -116,7 +124,8 @@
                     <div class="tab-pane animation-fade" id="forum-trail-add" role="tabpanel">
                         <div class="clearfix pb-20">
                             <div class="col-md-3 float-left pl-0">
-                                <Selectors :options="newTrailSearchArr" @change="changeSelectTime" placeholder="请选择查询时间"></Selectors>
+                                <Selectors :options="newTrailSearchArr" @change="changeSelectTime"
+                                           placeholder="请选择查询时间"></Selectors>
                             </div>
                             <div class="col-md-3 float-left">
                                 <DropDepartment name="组别" :data="departmentsInfo" @change="selectNewDepartment"/>
@@ -132,7 +141,8 @@
                     <div class="tab-pane animation-fade" id="forum-industry-analysis" role="tabpanel">
                         <div class="clearfix pb-20">
                             <div class="col-md-3 float-left pl-0">
-                                <Selectors :options="starsArr" @change="changeProportionStar" placeholder="请选择目标艺人"></Selectors>
+                                <Selectors :options="starsArr" @change="changeProportionStar"
+                                           placeholder="请选择目标艺人"></Selectors>
                             </div>
                             <div class="col-md-3 float-left pl-0" v-if="departmentsInfo.length > 1">
                                 <DropDepartment name="组别" :data="departmentsInfo" @change="selectProportionDepartment"/>
@@ -149,7 +159,7 @@
 </template>
 
 <script>
-    import { mapState } from 'vuex'
+    import {mapState} from 'vuex'
     import fetch from '../../assets/utils/fetch.js'
     import config from '../../assets/js/config'
 
@@ -227,12 +237,12 @@
             ...mapState([
                 'department',
             ]),
-            _department () {
+            _department() {
                 return this.department
             }
         },
-         watch: {
-            _department () {
+        watch: {
+            _department() {
                 this.departmentsInfo = this.departmentsInfo.concat(this.department);
             }
         },
