@@ -413,6 +413,9 @@
                                                   @click="downloadAttachment(attachment.id, attachment.url)"><i
                                                     class="iconfont icon-download"></i> 下载</span>
                                             <span class="float-right px-10">{{ attachment.size }}</span>
+                                            <a data-toggle="modal" data-target='#docPreview'
+                                                @click="previewFile(attachment.url, attachment.title)"
+                                                class="iconfont icon-liulan float-right px-10 pointer-content" style="color:#3f51b5 ;cursor:pointer"></a>
                                         </li>
                                     </ul>
                                     <div style="margin: 6rem auto;width: 100px"
@@ -581,7 +584,7 @@
             </div>
         </Modal>
         <customize-field></customize-field>
-
+        <DocPreview :url="previewUrl" :givenFileName="previewName"/>
     </div>
 </template>
 
@@ -640,7 +643,9 @@
                 isLoading: true,
                 tabIndex: 0,
                 canSend: true, // 是否可以提交问卷
-                questionMemberList: [] // 问卷评优团人员
+                questionMemberList: [], // 问卷评优团人员
+                previewUrl: '', // 附件地址
+                previewName: '' // 附件名字
             }
         },
         created() {
@@ -1215,7 +1220,12 @@
                 fetch('get', '/data_dictionary/appraising/448').then(res => {
                     this.questionMemberList = res.data
                 })
-            }
+            },
+            // 预览附件
+            previewFile (url, name) {
+                this.previewUrl = url
+                this.previewName = name
+            },
         }
     }
 </script>

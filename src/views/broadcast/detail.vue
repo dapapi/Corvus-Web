@@ -68,10 +68,10 @@
                         <div v-if="currentData.accessory"
                         data-plugin="actionBtn" 
                         data-toggle="modal" 
-                        data-target="#docPreview"
+@click='previewHandler(item.values.data.value)'
                         aria-hidden="true"
-                        ><a href="#">查看附件</a></div>
-                        <DocPreview :url='currentData.accessory' :givenfilename='currentData.accessory_name' />
+                        ><a href="#" >查看附件</a></div>
+                        <DocPreview :url='docPreviewHandler' :givenfilename='currentData.accessory_name' />
                         <h5>公告范围
                             <span  v-for=" item in currentData.scope.data" :key="item.department_id" v-if="item.department_id">&nbsp;&nbsp;
                                 <span v-if="department[0]" class="badge badge-round badge-dark">{{department.find(department => department.id == item.department_id).name}}</span>
@@ -83,6 +83,30 @@
             </div>
         </div>
         <AddModifyBroadCast :notedata='currentData' position='broadCast' @goback='goBack' @refresh='dataInit' :givenfilename='currentData.accessory_name'/>
+        <div class="modal fade  bootbox" id="docPreviewSelector" aria-labelledby="docPreviewPositionCenter" data-backdrop="static"
+             role="dialog" tabindex="-1">
+            <div class="modal-dialog modal-simple modal-center modal-lg">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                            <span aria-hidden="true">×</span>
+                        </button>
+                        <h4 class="modal-title">请选择要预览的文件</h4>
+                    </div>
+                    <div class="modal-body">
+                        <div v-for="(item, index) in previewUrlArr" :key="index" @click='previewHandler(item)'>
+                            {{item}}
+                            <!-- <figure>
+                                <img class="ml-20 mt-20 float-left" :src="item" style='max-width:400px;border:1px solid rgba(7,17,27,0.5)' :alt="item" >
+                            </figure> -->
+                        </div>
+                    </div>
+                    <!-- <div class="modal-footer">
+                        <button type="button" class="btn btn-default btn-pure waves-effect waves-light waves-round" data-dismiss="modal">关闭</button>
+                    </div> -->
+                </div>
+            </div>
+        </div>
     </div>   
 </template>
 
@@ -118,12 +142,24 @@ export default {
             'department',
             'userList'
         ]),
+         docPreviewHandler(){
+            let temp = this.currentData.affixes.data
+            let tempArr = []
+            for (const key in temp) {
+                tempArr.push(temp[key].url)
+                // if (object.hasOwnProperty(key)) {
+                //     const element = object[key];
+                    
+                // }
+            }
+            return tempArr.join('|')
+        }
     },
     methods:{
         //初始化数据
         dataInit(){
             let _this = this
-                fetch('get', '/announcements/'+this.currentId+'?include=scope,creator').then(function (response) {
+                fetch('get', '/announcements/'+this.currentId+'?include=scope,creator,affixes').then(function (response) {
                     _this.currentData = response.data
                     let {creator:{data:{id='-'}}} = response.data
                     _this.creator_id = id
@@ -143,7 +179,18 @@ export default {
             fetch('get','/users/my').then((params) => {
                 _this.my_id = params.data.id
             })
-        }
+        },
+         previewHandler(params) {
+                $('#docPreviewSelector').modal('hide')
+                this.previewUrlArr = String(params).split(',')
+                if (this.previewUrlArr.length === 1) {
+                    $('#docPreview').modal('show')
+                    this.previewUrl = this.previewUrlArr[0]
+                } else {
+                    $('#docPreviewSelector').modal('show')
+                }
+            },
+       
     }
 }
 
