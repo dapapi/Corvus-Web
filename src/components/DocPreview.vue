@@ -45,7 +45,9 @@ export default {
         
     },
     mounted(){
-
+        $('#docPreview').on('hidden.bs.modal',function(){
+            document.getElementsByTagName('body')[0].classList.add('modal-open')   
+        })
     },
     computed:{
         //获取扩展名
@@ -55,9 +57,10 @@ export default {
             }else{
                 return String(this.url).split('.').pop()
             }
-
-        },
-        
+        }
+    },
+    methods:{
+    
     }
 }
 </script>

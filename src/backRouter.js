@@ -78,6 +78,11 @@ const backRouter = [{
             path: '/staff/apply',
             name: 'staffApply',
             component: () => import('./views/staff/apply.vue'),
+        },
+        {
+            path: '/setting',
+            name: 'setting',
+            component: () => import('./views/setting/index.vue')
         }
     ]},
     {

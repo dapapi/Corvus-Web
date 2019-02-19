@@ -175,7 +175,7 @@
                                     </template>
                                 </td>
                                 <td @click="redirectArtistDetail(artist.id)">{{artist.created_at}}</td>
-                                <td @click="redirectArtistDetail(artist.id)">{{artist.updated_at}}</td>
+                                <td @click="redirectArtistDetail(artist.id)">{{artist.last_follow_up_at}}</td>
                             </tr>
                             </tbody>
 
@@ -281,8 +281,7 @@
                                     </span>
                                 </td>
                                 <td @click="redirectBolggerDetail(artist.id)">{{artist.created_at}}</td>
-                                <td v-for="(v,index) in artist.operatelogs.data" :key="index"
-                                    @click="redirectBolggerDetail(artist.id)">{{v.created_at}}
+                                <td @click="redirectBolggerDetail(artist.id)">{{artist.last_follow_up_at}}
                                 </td>
                             </tr>
 
@@ -319,7 +318,7 @@
             <div class="modal-dialog modal-simple">
                 <div class="modal-content">
                     <div class="modal-header">
-                        <button type="button" class="close" aria-hidden="true" data-dismiss="modal">
+                        <button type="button" class="close" aria-hidden="true" data-dismiss="modal" @click="emptyBolgger">
                             <i class="iconfont icon-guanbi" aria-hidden="true"></i>
                         </button>
                         <h4 class="modal-title">新增博主</h4>
@@ -416,7 +415,8 @@
                                 <Upload @change='getUploadUrl' class="upload-image">
                                     <div class="puls" :style="{ backgroundImage: 'url(' + uploadUrl + ')' }"
                                          v-if="uploadUrl">
-                                    </div>
+                                         <div><span>再次点击重新上传</span></div>
+                                    </div> 
                                     <div v-if="!uploadUrl" class="addMember-trigger-button addMember-trigger-left"><i
                                             class="iconfont icon-tianjia"></i></div>
                                 </Upload>
@@ -430,7 +430,7 @@
                         </div>
                     </div>
                     <div class="modal-footer">
-                        <button class="btn btn-sm btn-white btn-pure" data-dismiss="modal" >取消</button>
+                        <button class="btn btn-sm btn-white btn-pure" data-dismiss="modal" @click="emptyBolgger">取消</button>
                         <button class="btn btn-primary" type="submit" @click="addBolgger">确定</button>
                     </div>
 
@@ -645,6 +645,7 @@
                                 <Upload @change='getUploadUrl' class="upload-image">
                                     <div class="puls" :style="{ backgroundImage: 'url(' + uploadUrl + ')' }"
                                          v-if="uploadUrl">
+                                         <div><span>再次点击重新上传</span></div>
                                     </div>
                                     <div v-if="!uploadUrl" class="addMember-trigger-button addMember-trigger-left"><i
                                             class="iconfont icon-tianjia"></i></div>
@@ -877,7 +878,8 @@
                 Preview:'',
                 previewUrl: '',
                 previewName: '',
-                affixIndex:''
+                affixIndex:'',
+                isdilog:true
             }
         },
         watch: {
@@ -1157,26 +1159,28 @@
                     _this.$router.push({path: 'blogger/' + response.data.id});
                     _this.getBlogger()
                     $('#addBolgger').on('hidden.bs.modal', function () {
-
-                        _this.bolggerName = '';//昵称
-                        _this.star_weibo_infos.url = '';//微博地址
-                        _this.$refs.weibo.setValue('0');//微博粉丝
-                        _this.star_douyin_infos.url = '';//抖音地址
-                        _this.$refs.douyin.setValue('0');//抖音粉丝
-                        _this.star_xiaohongshu_infos.url = '';//小红书地址
-                        _this.$refs.xiaohongshu.setValue('0')//小红书粉丝
-                        _this.$refs.papitype.setValue('')//类型
-                        _this.$refs.communicationType.setValue('')//沟通类型
-                        _this.$refs.signIntention.setValue('')//我公司意向
-                        _this.$refs.isSign.setValue('')//其他公司意向
-                        _this.artistDesc = '';//备注
-                        _this.platformType = [];
-                        _this.uploadUrl = ''
+                        _this.emptyBolgger()
+                        
                     })
                 })
 
             },
-
+            emptyBolgger:function(){
+                this.bolggerName = '';//昵称
+                this.star_weibo_infos.url = '';//微博地址
+                this.$refs.weibo.setValue('0');//微博粉丝
+                this.star_douyin_infos.url = '';//抖音地址
+                this.$refs.douyin.setValue('0');//抖音粉丝
+                this.star_xiaohongshu_infos.url = '';//小红书地址
+                this.$refs.xiaohongshu.setValue('0')//小红书粉丝
+                this.$refs.papitype.setValue('')//类型
+                this.$refs.communicationType.setValue('')//沟通类型
+                this.$refs.signIntention.setValue('')//我公司意向
+                this.$refs.isSign.setValue('')//其他公司意向
+                this.artistDesc = '';//备注
+                this.platformType = [];
+                this.uploadUrl = ''
+            },
             selectArtists: function (value) {
                 
                 if (value === 'all') {
@@ -1507,11 +1511,9 @@
                 //   alert(this.affixesType)
 
             },
-
-            //上传头像
-            // getUploadUrl(res) {
-            //     this.uploadUrl = res
-            // },
+            hide:function(){
+                this.isdilog = !this.isdilog 
+            }
         },
         filters: {
             jsGetAge: function (strBirthday) {
@@ -1579,18 +1581,31 @@
         background-repeat:no-repeat; 
         background-size:100% 100%;
         -moz-background-size:100% 100%;
+        position: relative;
     }
-
-    .puls span {
-        font-size: 30px;
-       
-    }
-
-    .fileupload {
+    .puls div{
         position: absolute;
-        top: 0px;
-        left: 0px;
+        top:0;
+        left:0;
+        border-radius: 50%;
+        width: 100%;
+        height: 100%;
+        background: rgba(0, 0, 0, .4);
+        z-index: 10;
         opacity: 0;
+    }
+    .puls:hover div{
+        opacity: 1; 
         
+    }
+    .puls div span{
+        width: 100px;
+        height:20px;
+        line-height: 20px;
+        background: #eee;
+        position: absolute;
+        left:20px;
+        top:10px;
+        font-size: 12px;
     }
 </style>

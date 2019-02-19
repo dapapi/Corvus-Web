@@ -168,7 +168,8 @@
         mounted() {
             this.getField()
             this.getClients();
-            this.getFilterProjects();
+            // this.getFilterProjects();
+            this.getMyProjects('my_principal')
             if (this.userList.length > 0) {
                 for (let i = 0; i < this.userList.length; i++) {
                     this.allUsers.push({
