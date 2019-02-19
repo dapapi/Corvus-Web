@@ -916,7 +916,7 @@
                             <div class="card-block">
                                 <div class="col-md-12 pl-0">
                                     <TaskFollowUp :follow-type="'项目'" :trailId="projectId"
-                                                  trailType="projects"></TaskFollowUp>
+                                                  trailType="projects" ref="projectFollow"></TaskFollowUp>
                                 </div>
                             </div>
                         </div>
@@ -2069,6 +2069,7 @@
                     this.coursesLength += 1;
                     toastr.success('进度更新成功');
                     this.getProjectProgress();
+                    this.$refs.projectFollow.getTrail();
                 })
             },
 
