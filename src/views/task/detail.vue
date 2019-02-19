@@ -374,13 +374,13 @@
                                             {{ taskInfo.operate ? taskInfo.operate.created_at : ''  }}
                                         </div>
                                     </div>
-                                    <div class="card-text py-10 px-0 clearfix col-md-6 float-left">
+                                    <div class="card-text py-10 px-0 clearfix col-md-6 float-left" v-if="oldInfo.status === 2">
                                         <div class="col-md-3 float-left text-right pl-0">完成时间</div>
                                         <div class="col-md-9 float-left font-weight-bold">
                                             {{ taskInfo.complete_at }}
                                         </div>
                                     </div>
-                                    <div class="card-text py-10 px-0 clearfix col-md-6 float-left">
+                                    <div class="card-text py-10 px-0 clearfix col-md-6 float-left" v-if="oldInfo.status === 3">
                                         <div class="col-md-3 float-left text-right pl-0">停止时间</div>
                                         <div class="col-md-9 float-left font-weight-bold">
                                             {{ taskInfo.stop_at }}
