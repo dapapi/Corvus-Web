@@ -171,7 +171,6 @@ export default {
                 this.userId = res.data.id
                 this.iconUrl = res.data.icon_url
                 this.job = res.data.position.id
-                console.log(this.job)
                 this.$nextTick(() => {
                     this.$refs.jobEl.setValue(this.job)
                 })
