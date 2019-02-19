@@ -88,7 +88,7 @@
                          <div class="example" style="margin-top: -20px">
                             <div class="float-left" style="width: 40px;">职位</div>
                             <div class="float-left pl-0" style="width: 240px;">
-                                <selectors :options="jobArr" @change="changeJob"></selectors>
+                                <selectors ref="jobEl" :options="jobArr" @change="changeJob"></selectors>
                             </div>
                         </div>
                         <div class="example mt-10 mb-20">
@@ -123,6 +123,7 @@ export default {
             userId: '',
             departmentId: '', // 部门id
             iconUrl: '', // 头像
+            newIconUrl: '', // 新头像
             jobArr: [], // 职位数组
             userInfo: null // cookie中个人信息
         }
@@ -169,6 +170,11 @@ export default {
             fetch('get', '/users/my').then(res => {
                 this.userId = res.data.id
                 this.iconUrl = res.data.icon_url
+                this.job = res.data.position.id
+                console.log(this.job)
+                this.$nextTick(() => {
+                    this.$refs.jobEl.setValue(this.job)
+                })
                 this.name = res.data.name
                 this.departmentId = res.data.department.id
             })
@@ -190,21 +196,23 @@ export default {
         // 保存个人信息
         saveInfo() {
             const params = {
-                positionId: this.job,
+                position_id: this.job,
                 name: this.name,
-                department_id: this.departmentId,
-                icon_url: this.iconUrl
+                icon_url: this.newIconUrl
             }
-            fetch('put', `/edit/${this.userId}/personal`, params).then(res => {
+            fetch('put', `/edit/data/${this.userId}`, params).then(res => {
                 toastr.success('设置成功！')
                 this.userInfo.avatar = this.iconUrl
                 this.userInfo.nickname = this.name
+                this.getAccountInfo()
+                this.getJobList()
                 Cookies.set('user', this.userInfo)
             })
         },
         // 上传头像
         uploadAvatar (url) {
             this.iconUrl = url
+            this.newIconUrl = url
         }
     }
 }
