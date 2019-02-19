@@ -11,22 +11,26 @@
                     </div>
                     <div class="col-md-7 p-20 clearfix float-left" style="z-index: 0">
                         <div class="col-md-3 float-left">
-                            <button type="button" class="btn btn-block btn-success waves-effect waves-classic search-button"
+                            <button type="button"
+                                    class="btn btn-block btn-success waves-effect waves-classic search-button"
                                     :disabled="designationDateNum === 'day'" @click="selectDate('day')">7天
                             </button>
                         </div>
                         <div class="col-md-3 float-left">
-                            <button type="button" class="btn btn-block btn-success waves-effect waves-classic search-button"
+                            <button type="button"
+                                    class="btn btn-block btn-success waves-effect waves-classic search-button"
                                     :disabled="designationDateNum === 'month'" @click="selectDate('month')">30天
                             </button>
                         </div>
                         <div class="col-md-3 float-left">
-                            <button type="button" class="btn btn-block btn-success waves-effect waves-classic search-button"
+                            <button type="button"
+                                    class="btn btn-block btn-success waves-effect waves-classic search-button"
                                     :disabled="designationDateNum === 'quarter'" @click="selectDate('quarter')">季度
                             </button>
                         </div>
                         <div class="col-md-3 float-left">
-                            <button type="button" class="btn btn-block btn-success waves-effect waves-classic search-button"
+                            <button type="button"
+                                    class="btn btn-block btn-success waves-effect waves-classic search-button"
                                     :disabled="designationDateNum === 'year'" @click="selectDate('year')">年度
                             </button>
                         </div>
@@ -54,20 +58,23 @@
                         </li>
                     </ul>
                 </div>
-                <div class="page-content tab-content nav-tabs-animate bg-white">
+                <div class="page-content tab-content nav-tabs-animate bg-white pt-0">
                     <div class="tab-pane animation-fade active" id="forum-trail-report" role="tabpanel">
                         <div class="clearfix col-md-3 pl-0">
-                            <Selectors :options="clientTypeArr" @change="changeClientType"
-                                       placeholder="请选择客户类型"></Selectors>
+
                         </div>
                         <table class="table table-hover is-indent example" data-plugin="animateList" data-animate="fade"
                                data-child="tr"
                                data-selectable="selectable">
                             <tr class="animation-fade"
-                                style="animation-fill-mode: backwards; animation-duration: 250ms; animation-delay: 0ms;">
+                               >
                                 <th class="cell-100" scope="col">公司名称</th>
                                 <th class="cell-100" scope="col">级别</th>
                                 <th class="cell-100" scope="col">决策关键人/部门</th>
+                                <th class="cell-100" scope="col">
+                                    <Selectors :options="clientTypeArr" @change="changeClientType"
+                                               placeholder="客户类型"></Selectors>
+                                </th>
                                 <th class="cell-100" scope="col">规模</th>
                                 <th class="cell-100" scope="col">客户评级</th>
                                 <th class="cell-100" scope="col">负责人</th>
@@ -79,18 +86,17 @@
                                     item.value == data.grade).name : '' }}
                                 </td>
                                 <td>{{ data.keyman }}</td>
-                                <td>{{ data.size }}</td>
-                                <td>
-                                    {{ taskLevelArr.find(item => item.value ==
-                                    data.client_rating)?taskLevelArr.find(item => item.value == data.client_rating).name
-                                    : '' }}
+                                <td>{{ clientTypeArr.find(item => item.value == data.type) ? clientTypeArr.find(item =>
+                                    item.value == data.type).name : '' }}
                                 </td>
+                                <td>{{ data.size }}</td>
+                                <td>{{ data.client_rating }}</td>
                                 <td>{{ data.principal_name }}</td>
                             </tr>
                             </tbody>
                         </table>
                     </div>
-                    <div class="tab-pane animation-fade" id="forum-trail-add" role="tabpanel">
+                    <div class="tab-pane animation-fade pt-30" id="forum-trail-add" role="tabpanel">
                         <div class="clearfix pb-20 col-md-3">
                             <Selectors :options="newTrailSearchArr" @change="changeSelectTime"></Selectors>
                         </div>

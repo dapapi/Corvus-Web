@@ -5,10 +5,10 @@
             <h1 class="page-title">客户管理</h1>
             <div class="page-header-actions">
                 <import-and-export class="float-left" :type="'export'" :moduleName="'clients'">
-                    <i class="iconfont icon-daoru px-5 font-size-20 pr-20" aria-hidden="true"></i>
+                    <i class="iconfont icon-daochu px-5 font-size-20 pr-20" aria-hidden="true"></i>
                 </import-and-export>
                 <import-and-export class="float-left" :type="'import'" :moduleName="'clients'">
-                    <i class="iconfont icon-daochu font-size-20" aria-hidden="true"></i>
+                    <i class="iconfont icon-daoru font-size-20" aria-hidden="true"></i>
                 </import-and-export>
             </div>
         </div>
