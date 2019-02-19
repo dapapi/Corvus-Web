@@ -11,22 +11,22 @@
                     </div>
                     <div class="col-md-7 p-20 clearfix float-left" style="z-index: 0">
                         <div class="col-md-3 float-left">
-                            <button type="button" class="btn btn-block btn-success waves-effect waves-classic"
+                            <button type="button" class="btn btn-block btn-success waves-effect waves-classic search-button"
                                     :disabled="designationDateNum === 'day'" @click="selectDate('day')">7天
                             </button>
                         </div>
                         <div class="col-md-3 float-left">
-                            <button type="button" class="btn btn-block btn-success waves-effect waves-classic"
+                            <button type="button" class="btn btn-block btn-success waves-effect waves-classic search-button"
                                     :disabled="designationDateNum === 'month'" @click="selectDate('month')">30天
                             </button>
                         </div>
                         <div class="col-md-3 float-left">
-                            <button type="button" class="btn btn-block btn-success waves-effect waves-classic"
+                            <button type="button" class="btn btn-block btn-success waves-effect waves-classic search-button"
                                     :disabled="designationDateNum === 'quarter'" @click="selectDate('quarter')">季度
                             </button>
                         </div>
                         <div class="col-md-3 float-left">
-                            <button type="button" class="btn btn-block btn-success waves-effect waves-classic"
+                            <button type="button" class="btn btn-block btn-success waves-effect waves-classic search-button"
                                     :disabled="designationDateNum === 'year'" @click="selectDate('year')">年度
                             </button>
                         </div>
@@ -118,11 +118,11 @@
                             <div class="col-md-3 float-left pl-0">
                                 <Selectors :options="newTrailSearchArr" @change="changeSelectTime" placeholder="请选择查询时间"></Selectors>
                             </div>
-                            <div class="col-md-3 float-left pl-0">
-                                <Selectors :options="starsArr" @change="changeStar" placeholder="请选择目标艺人"></Selectors>
-                            </div>
                             <div class="col-md-3 float-left">
                                 <DropDepartment name="组别" :data="departmentsInfo" @change="selectNewDepartment"/>
+                            </div>
+                            <div class="col-md-3 float-left pl-0">
+                                <Selectors :options="starsArr" @change="changeStar" placeholder="请选择目标艺人"></Selectors>
                             </div>
                         </div>
                         <div class="col-md-12">

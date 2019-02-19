@@ -177,6 +177,7 @@
                                     </div>
                                 </div>
                                 <div class="card-block">
+                                    <h5 class="pl-10">基本资料</h5>
                                     <div class="clearfix">
                                         <div class="card-text py-10 px-0 clearfix col-md-6 float-left ">
                                             <div class="col-md-3 float-left text-right pl-0">线索名称</div>
@@ -278,6 +279,7 @@
                                                               :content='trailInfo.cooperation_type'></EditSelector>
                                             </div>
                                         </div>
+                                        <h5 class="pl-10 pt-10 clearfix col-md-12 float-left">客户资料</h5>
                                         <div class="card-text py-10 px-0 clearfix col-md-6 float-left">
                                             <div class="col-md-3 float-left text-right pl-0">品牌名称</div>
                                             <div class="col-md-9 float-left font-weight-bold">
@@ -332,7 +334,7 @@
                                         </div>
                                     </div>
 
-                                    <div class="segmentation-line example"></div>
+                                    <h5 class="pl-10 pt-10">更新信息</h5>
                                     <div class="card-text py-10 px-0 clearfix col-md-6 float-left">
                                         <div class="col-md-3 float-left text-right pl-0">录入人</div>
                                         <div class="col-md-9 float-left font-weight-bold">{{trailInfo.creator}}

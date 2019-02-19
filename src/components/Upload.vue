@@ -1,6 +1,7 @@
 <template>
     <div class="upload">
-        <input type="file" @change="uploadFile" :accept="accept ? accept : ''" />
+        <input type="file" @change="uploadFile" :accept="accept ? accept : ''"  title="" /> 
+        <!--title属性 控制input鼠标划入时的提示信息-->
         <slot></slot>
     </div>
 </template>

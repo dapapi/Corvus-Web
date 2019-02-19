@@ -272,4 +272,22 @@
         white-space: nowrap;
     }
 
+    .search-button {
+        background: white;
+        color: #4caf50;
+    }
+
+    .search-button:disabled {
+        background: #4caf50;
+        color: white;
+        opacity: 1;
+    }
+
+    .search-button:hover {
+        color: #fff;
+        background-color: #4caf50;
+        border-color: #4caf50;
+        opacity: 0.65;
+    }
+
 </style>
