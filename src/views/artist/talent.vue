@@ -12,7 +12,7 @@
                     <import-and-export :type="'import'" :moduleName="'bloggers'">
                         <a class="dropdown-item" role="menuitem">导入</a>
                     </import-and-export>
-                    <import-and-export :type="'export'" :moduleName="'bloggers'">
+                    <import-and-export :type="'export'" :moduleName="'bloggers'" :params="exportParams">
                         <a class="dropdown-item" role="menuitem">导出</a>
                     </import-and-export>
                     <a class="dropdown-item" role="menuitem" data-toggle="modal"
@@ -23,7 +23,7 @@
                      <import-and-export :type="'import'" :moduleName="'stars'">
                         <a class="dropdown-item" role="menuitem">导入</a>
                     </import-and-export>
-                    <import-and-export :type="'export'" :moduleName="'stars'">
+                    <import-and-export :type="'export'" :moduleName="'stars'" :params="exportParams">
                         <a class="dropdown-item" role="menuitem">导出</a>
                     </import-and-export>
                     <a class="dropdown-item" role="menuitem" data-toggle="modal" data-target="#giveBroker"
@@ -879,7 +879,8 @@
                 previewUrl: '',
                 previewName: '',
                 affixIndex:'',
-                isdilog:true
+                isdilog:true,
+                exportParams:{}
             }
         },
         watch: {
@@ -936,6 +937,12 @@
                     this.listData.sign_contract_status = signStatus
                 }
                 this.listData.page = page
+                this.exportParams = {
+                    name: this.listData.name,
+                    sign_contract_status: this.listData.sign_contract_status,//  签约状态
+                    communication_status: this.listData.communication_status, //沟通状态
+                }
+                console.log(this.exportParams)
                 fetch('get', '/stars', this.listData).then(function (response) {
                     if(response.data){
                         _this.artistsInfo = response.data;
@@ -977,6 +984,12 @@
                     data.name = this.blogName
                 }
                 data.page = page
+                //导出需要传的参数
+                this.exportParams = {
+                    status:this.blogStatus,
+                    communication_status:this.blogCommunication,
+                    name:this.blogName
+                }
                 fetch('get', '/bloggers', data).then(function (response) {
                     
                     if(response.data){

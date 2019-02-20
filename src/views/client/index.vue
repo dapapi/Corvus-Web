@@ -4,7 +4,7 @@
         <div class="page-header page-header-bordered">
             <h1 class="page-title">客户管理</h1>
             <div class="page-header-actions">
-                <import-and-export class="float-left" :type="'export'" :moduleName="'clients'">
+                <import-and-export class="float-left" :type="'export'" :moduleName="'clients'" :params="exportParams">
                     <i class="iconfont icon-daochu px-5 font-size-20 pr-20" aria-hidden="true"></i>
                 </import-and-export>
                 <import-and-export class="float-left" :type="'import'" :moduleName="'clients'">
@@ -224,6 +224,7 @@
                 isLoading: true,
                 taskLevelArr: config.taskLevelArr,
                 cleanUp: false,
+                exportParams:{},//导出参数
             }
         },
 
@@ -269,7 +270,11 @@
                 if (this.clientPrincipalIdSearch.length > 0) {
                     params.principal_ids = this.clientPrincipalIdSearch
                 }
-
+                this.exportParams = {
+                    keyword:this.companyName,
+                    grade:this.clientLevelSearch,
+                    principal_ids:this.clientPrincipalIdSearch
+                }
                 if (this.companyName || this.clientLevelSearch || this.clientPrincipalIdSearch.length > 0) {
                     url = '/clients/filter'
                 }
