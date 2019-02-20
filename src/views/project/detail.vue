@@ -867,7 +867,7 @@
                                                 <div class="col-md-9 float-left font-weight-bold">
                                                     <template v-for="project in projectInfo.relate_projects.data">
                                                         <span class="pointer-content"
-                                                              @click="redirectProject(project.id)">{{project.title }}</span>
+                                                              @click="redirectProject(project.id)">{{project.title }} </span>
                                                     </template>
                                                 </div>
                                             </div>
@@ -876,7 +876,7 @@
                                                 <div class="col-md-3 float-left text-right pl-0">关联任务</div>
                                                 <div class="col-md-9 float-left font-weight-bold">
                                                     <template v-for="task in projectInfo.relate_tasks.data">
-                                                        <span class="pointer-content" @click="redirectTask(task.id)">{{ task.title }}</span>
+                                                        <span class="pointer-content" @click="redirectTask(task.id)">{{ task.title }} </span>
                                                     </template>
                                                 </div>
                                             </div>
