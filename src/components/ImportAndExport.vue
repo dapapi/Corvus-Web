@@ -10,7 +10,6 @@
                 <slot></slot>
                 </label>
             </form>
-            
         </span>
     </span>
 </template>
@@ -31,6 +30,10 @@ export default {
         type:{
             type:String,
             required:true
+        },
+        //导出需要传递的参数
+        params:{
+            type:Object
         }
     },
     data(){
@@ -43,12 +46,14 @@ export default {
     mounted(){
     },
     methods:{
+        //导入
         importFile:function(event){
             this.header['Content-Type'] = 'multipart/form-data;boundary = ' + new Date().getTime()
             this.file = event.target.files[0];
             let importUrl = `${config.apiUrl}/${this.moduleName}/import`
             let formData = new FormData();
             formData.append('file', this.file);
+            //创建一个干净的axios对象
             var instance = axios.create();
             instance.defaults.headers = this.header
             instance.post(importUrl, formData)
@@ -60,9 +65,20 @@ export default {
             });
             
         },
+        //导出
         exportFile:function(){
             var xhh = new XMLHttpRequest();
-            var page_url = `${config.apiUrl}/${this.moduleName}/export`
+            //导出参数
+            let getParams = []
+            if(this.params){
+               for (const key in this.params) {
+                   if(this.params[key]){
+                       getParams.push(`${key}=${this.params[key]}`)
+                   }
+               }
+            }
+            getParams = getParams.join('&')
+            var page_url = `${config.apiUrl}/${this.moduleName}/export?${getParams}`
             xhh.open("GET", page_url)
             xhh.setRequestHeader('Accept', 'application/vnd.Corvus.v1+json')
             xhh.setRequestHeader('Authorization', `Bearer ${config.getAccessToken() || ''}`)
@@ -70,7 +86,7 @@ export default {
             xhh.onreadystatechange = function () {
                 if (xhh.readyState === 4 && xhh.status === 200) {
                     var filename = xhh.getResponseHeader("Content-disposition")
-                        console.log(filename)
+                        // console.log(filename)
                         filename = decodeURI(filename)
                         filename = filename.split("filename*=utf-8''")[1]
                     var blob = new Blob([xhh.response], {type: 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet;charset=utf-8'})
