@@ -99,7 +99,7 @@
                                     </template>
                                 </td>
                                 <td @click="goDetail(trail.id)">{{ trail.creator }}</td>
-                                <td @click="goDetail(trail.id)">{{ trail.last_updated_at }}</td>
+                                <td @click="goDetail(trail.id)">{{ trail.last_follow_up_at }}</td>
                             </tr>
                             </tbody>
 

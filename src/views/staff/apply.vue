@@ -113,7 +113,7 @@ export default {
                entry_status: status
             } 
             fetch('put', `/audit/${userId}`, params).then(res => {
-                toastr.success('已同意！')
+                toastr.success(status == 2 ? '已删除！':'已同意！')
                 this.getApplyList()
                 this.getDepartment()
             })

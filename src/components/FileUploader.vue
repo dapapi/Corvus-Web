@@ -6,7 +6,7 @@
                     上传附件
                 </template>
             </label>
-            <figure style="text-align:center;width:100px" class="attachdetail ml-20" v-if="broadcast"> 
+            <!-- <figure style="text-align:center;width:100px" class="attachdetail ml-20" v-if="broadcast"> 
                 <img src="@/assets/img/attachment.png" alt="" style="width:40px" v-if="fileName || givenfilename ">
                 <p class="pt-10" :class="broadcast?'broadcast':''">{{fileName || givenfilename ||"未选择任何附件"}}</p>
                 <div class="img-control" v-if="fileName || givenfilename ">
@@ -17,7 +17,7 @@
                         <i class="iconfont icon-shanchu1" @click="imgDelete"></i>
                     </div>
                 </div>
-            </figure>
+            </figure> -->
         </div>
         <span v-show="!isIcon && !broadcast">&nbsp;&nbsp;{{fileName || givenfilename ||"未选择任何附件"}}</span>
         <input type="file" @change="uploadFile" title='123' :id="`fileUploader${mulId}`" v-show="false">

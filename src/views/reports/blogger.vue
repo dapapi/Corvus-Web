@@ -11,22 +11,26 @@
                     </div>
                     <div class="col-md-7 p-20 clearfix float-left" style="z-index: 0;">
                         <div class="col-md-3 float-left">
-                            <button type="button" class="btn btn-block btn-success waves-effect waves-classic"
+                            <button type="button"
+                                    class="btn btn-block btn-success waves-effect waves-classic search-button"
                                     :disabled="designationDateNum === 'day'" @click="selectDate('day')">7天
                             </button>
                         </div>
                         <div class="col-md-3 float-left">
-                            <button type="button" class="btn btn-block btn-success waves-effect waves-classic"
+                            <button type="button"
+                                    class="btn btn-block btn-success waves-effect waves-classic search-button"
                                     :disabled="designationDateNum === 'month'" @click="selectDate('month')">30天
                             </button>
                         </div>
                         <div class="col-md-3 float-left">
-                            <button type="button" class="btn btn-block btn-success waves-effect waves-classic"
+                            <button type="button"
+                                    class="btn btn-block btn-success waves-effect waves-classic search-button"
                                     :disabled="designationDateNum === 'quarter'" @click="selectDate('quarter')">季度
                             </button>
                         </div>
                         <div class="col-md-3 float-left">
-                            <button type="button" class="btn btn-block btn-success waves-effect waves-classic"
+                            <button type="button"
+                                    class="btn btn-block btn-success waves-effect waves-classic search-button"
                                     :disabled="designationDateNum === 'year'" @click="selectDate('year')">年度
                             </button>
                         </div>
@@ -68,10 +72,6 @@
                                 <Selectors :options="artistStatusArr" @change="changeArtistStatus"
                                            placeholder="请选择博主状态"></Selectors>
                             </div>
-                            <div class="col-md-2 float-left pl-0" v-if="artistStatus != 1">
-                                <Selectors :options="trailsNumArr" @change="changeTrailsNum"
-                                           placeholder="请选择线索数量"></Selectors>
-                            </div>
                             <div class="col-md-3 float-left pl-0"
                                  v-if="departmentsInfo.length > 1 && artistStatus != 1">
                                 <DropDepartment name="组别" :data="departmentsInfo" @change="selectDepartment"/>
@@ -92,6 +92,10 @@
                                 <template v-else>
                                     <th class="cell-100" scope="col">制作组</th>
                                     <th class="cell-100" scope="col">昵称</th>
+                                    <th class="cell-100" scope="col">
+                                        <Selectors :options="trailsNumArr" @change="changeTrailsNum"
+                                                   placeholder="线索数量"></Selectors>
+                                    </th>
                                     <th class="cell-100" scope="col">预计订单收入</th>
                                     <th class="cell-100" scope="col">合同金额</th>
                                     <th class="cell-100" scope="col">花费金额</th>
@@ -112,7 +116,8 @@
                                 <template v-else>
                                     <td>{{ data.department_name }}</td>
                                     <td>{{ data.nickname }}</td>
-                                    <td></td>
+                                    <td>{{ data.trail_total }}</td>
+                                    <td>{{ data.total_fee }}</td>
                                     <td></td>
                                     <td></td>
                                 </template>
@@ -140,6 +145,10 @@
                 designationDateNum: 'day',
                 papiCommunicationStatusArr: config.papiCommunicationStatusArr,
                 artistStatusArr: [
+                    {
+                        name: '全部',
+                        value: ''
+                    },
                     {
                         name: '签约中',
                         value: 1

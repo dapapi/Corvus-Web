@@ -454,6 +454,7 @@
                                         </div>
                                     </div>
                                     <div class="card-block px-0" v-if="artistInfo">
+                                        <h5 class="pl-15">基本资料</h5>
                                         <div class="clearfix">
                                             <div class="card-text py-10 px-0 clearfix col-md-6 float-left ">
                                                 <div class="col-md-4 float-left text-right pl-0">昵称</div>
@@ -481,15 +482,7 @@
                                                                   @change="changeArtistCommunication"></EditSelector>
                                                 </div>
                                             </div>
-                                            <div class="card-text py-10 px-0 clearfix col-md-6 float-left ">
-                                                <div class="col-md-4 float-left text-right pl-0">平台</div>
-                                                <div class="col-md-8 float-left font-weight-bold">
-                                                    <EditSelector :is-edit="isEdit" :multiple="true"
-                                                                  :content="artistInfo.platform ? artistInfo.platform.split(',') : ''"
-                                                                  :options="artistSocialPlatform"
-                                                                  @valuelistener="changeArtistPlatform_id"></EditSelector>
-                                                </div>
-                                            </div>
+                                            
                                             <div class="card-text py-10 px-0 clearfix col-md-6 float-left edit-height">
                                                 <div class="col-md-4 float-left text-right pl-0 pr-2">与我司签约意向</div>
                                                 <div class="col-md-8 float-left font-weight-bold">
@@ -510,7 +503,16 @@
                                                                       @change="(value) => changeArtistSigning(value, 'sign_contract_other')"></ConditionalInput>
                                                 </div>
                                             </div>
-
+                                            <h5 class="pl-15 pt-10 clearfix col-md-12 float-left">联系信息</h5>
+                                            <div class="card-text py-10 px-0 clearfix col-md-6 float-left ">
+                                                <div class="col-md-4 float-left text-right pl-0">平台</div>
+                                                <div class="col-md-8 float-left font-weight-bold">
+                                                    <EditSelector :is-edit="isEdit" :multiple="true"
+                                                                  :content="artistInfo.platform ? artistInfo.platform.split(',') : ''"
+                                                                  :options="artistSocialPlatform"
+                                                                  @valuelistener="changeArtistPlatform_id"></EditSelector>
+                                                </div>
+                                            </div>
                                             <div class="card-text py-10 px-0 clearfix col-md-6 float-left ">
                                                 <div class="col-md-4 float-left text-right pl-0">微博链接</div>
                                                 <div class="col-md-8 float-left font-weight-bold">
@@ -596,9 +598,7 @@
                                                                          @change="changeArtistHatch"></EditGroupDatePicker>
                                                 </div>
                                             </div>
-
-                                            <div class="segmentation-line example float-left"></div>
-
+                                            <h5 class=" pt-10 clearfix col-md-12 float-left">更新信息</h5>
                                             <div class="card-text py-10 px-0 clearfix col-md-6 float-left ">
                                                 <div class="col-md-4 float-left text-right pl-0">录入人</div>
                                                 <div class="col-md-8 float-left font-weight-bold"

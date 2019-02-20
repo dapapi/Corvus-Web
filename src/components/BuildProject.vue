@@ -151,6 +151,13 @@
                                 <NumberSpinner :default='newArray.find(item=>item.key === field.key)'
                                                @change="(value) => addInfo(value, field.id )"></NumberSpinner>
                             </template>
+                             <template v-if="field.field_type === 12">
+                               <CheckboxGroup :optionData="platformLists" @change="(value) => addInfo(value, field.id )" :isLine="true">
+                                    <template slot-scope="scope">
+                                        <span>{{scope.row.name}}</span>
+                                    </template>
+                                </CheckboxGroup>
+                            </template>
                         </div>
                     </div>
                     <div class="col-md-12 example clearfix">
@@ -216,7 +223,20 @@
                 user: '',
                 cooperationDefault: '',
                 trailStatusDefault: '',
-
+                platformLists: [
+                    {
+                        value: '微博',
+                        name: '微博'
+                    },
+                    {
+                        value: '抖音',
+                        name: '抖音'
+                    },
+                    {
+                        value: '小红书',
+                        name: '小红书'
+                    },
+                ],
             }
         }, 
         created() {
