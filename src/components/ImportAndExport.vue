@@ -72,9 +72,13 @@ export default {
             let getParams = []
             if(this.params){
                for (const key in this.params) {
-                   if(this.params[key]){
+                   if(this.params[key] instanceof Array){
+                       if(this.params[key].length>0){
+                           getParams.push(`${key}=${this.params[key]}`)
+                       }
+                   }else if(this.params[key]){
                        getParams.push(`${key}=${this.params[key]}`)
-                   }
+                   }else{}
                }
             }
             getParams = getParams.join('&')
