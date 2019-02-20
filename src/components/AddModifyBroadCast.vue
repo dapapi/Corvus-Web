@@ -54,22 +54,24 @@
                             <selectors ref='classifySelector' class="col-sm-4" :options="classifyArr" @change="changeClassify" placeholder='请选择类型' ></selectors>
                         </div>
                         <div class="summernote" id="summernote"></div>
-                        <File-Uploader class="upload" url="javascript:void()" @changePlus="fileUploaded" :givenfilename='givenfilename' @deleteAtachment='deleteAttachment' broadcast='true'>上传附件</File-Uploader>
-                        <!-- <figure style="text-align:center;width:100px" v-for="(item, index) in items" :key="index" class="attachdetail ml-20"> 
+                        <File-Uploader class="upload" url="javascript:void()" @changePlus="fileUploaded" :givenfilename='givenfilename' broadcast='true'>上传附件</File-Uploader>
+                        <figure style="text-align:center;width:100px" v-for="(item, index) in this.affix" :key="index" class="attachdetail ml-20 float-left"> 
                             <img src="@/assets/img/attachment.png" alt="" style="width:40px">
-                            <p class="pt-10">{{fileName ||"未选择任何附件"}}</p>
+                            <p class="pt-10">{{item.title}}</p>
                             <div class="img-control">
                                 <div class="icon-control">
-                                    <a :href="fileUrl" target="_blank">
+                                    <a :href="item.url" target="_blank">
                                         <i class="iconfont icon-liulan"></i>
                                     </a>
-                                    <i class="iconfont icon-shanchu1" @click="imgDelete"></i>
+                                    <i class="iconfont icon-shanchu1" @click="imgDelete(item.url)"></i>
                                 </div>
                             </div>
-                        </figure> -->
-                        <br/>
-                        <input type="checkbox" v-model="topFlag">
-                        <span class="set-top-flag" >&nbsp;&nbsp;置顶</span>
+                        </figure>
+                        
+                        <div class="col-md-12 float-left">
+                            <input type="checkbox" v-model="topFlag">
+                            <span class="set-top-flag" >&nbsp;&nbsp;置顶</span>
+                        </div>
                     </div>
                     
                     <div class="modal-footer">
@@ -148,9 +150,8 @@ export default {
         }
     },
     methods:{
-        deleteAttachment(){
-            this.accessory_name = ''
-            this.accessory = ''
+        imgDelete(params){
+            this.affix.splice(this.affix.indexOf(this.affix.find(item=>item.url === params)),1)
         },
         //数据初始化
         noteInit(){
@@ -300,6 +301,13 @@ export default {
 .bootbox-close-button{
     margin-left:20px;
 }
-
+p{
+    text-align: center;
+    margin-bottom: 0 !important;
+    text-overflow: ellipsis;
+    overflow: hidden;
+   white-space: nowrap;
+   text-overflow: ellipsis;
+}
 
 </style>

@@ -12,10 +12,10 @@
         </div>
       </div>
       </div>
-        <div class="page-header page-header-bordered">
+        <div class="page-header page-header-bordered pb-25">
             <h1 class="page-title">
                 <i class="md-chevron-left" @click="goBack"></i>
-                <span class="mx-20" style='color:#000'>公告</span>
+                <span class="mx-20" style='color:#000'>返回</span>
             </h1>
             <i class="iconfont icon-gengduo1" aria-hidden="true"
             id="taskDropdown" data-toggle="dropdown" aria-expanded="false"  v-if="my_id === creator_id"></i>
@@ -94,12 +94,12 @@
                         <h4 class="modal-title">请选择要预览的文件</h4>
                     </div>
                     <div class="modal-body">
-                        <div v-for="(item, index) in previewUrlArr" :key="index" @click='previewHandler(item)'>
+                        <!-- <div v-for="(item, index) in previewUrlArr" :key="index" @click='previewHandler(item)'>
                             {{item}}
-                            <!-- <figure>
+                            <figure>
                                 <img class="ml-20 mt-20 float-left" :src="item" style='max-width:400px;border:1px solid rgba(7,17,27,0.5)' :alt="item" >
-                            </figure> -->
-                        </div>
+                            </figure>
+                        </div> -->
                     </div>
                     <!-- <div class="modal-footer">
                         <button type="button" class="btn btn-default btn-pure waves-effect waves-light waves-round" data-dismiss="modal">关闭</button>
@@ -135,7 +135,7 @@ export default {
         this.dataInit()
     },
     mounted(){
-        console.log(this.userList);
+        // console.log(window.history);
     },
     computed: {
         ...mapState([
@@ -203,6 +203,9 @@ hr{
 iframe{
     position: fixed;
 
+}
+.page{
+    margin-left: 260px !important;
 }
 .loader-overlay{
         margin-left: 100px;
