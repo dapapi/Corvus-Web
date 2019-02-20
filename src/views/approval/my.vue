@@ -154,7 +154,7 @@
             <div class="example">
               <div class="col-md-2 text-right float-left">截止时间</div>
               <div class="col-md-5 float-left pl-0">
-                <Datepicker @change="changeEndTime"></Datepicker>
+                <Datepicker @change="changeEndTime" :startDate="startTime"></Datepicker>
               </div>
               <div class="col-md-5 float-left pl-0">
                 <Timepicker :default="endMinutes" @change="changeEndMinutes"></Timepicker>

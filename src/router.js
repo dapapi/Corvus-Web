@@ -419,13 +419,27 @@ export default new Router({
         }, {
             path: '/broadcast',
             // name: 'broadcast',
-            component: () => import('./views/broadcast/index.vue')
+            redirect: '/broadcast/receive',
+            component: () => import('./views/broadcast/index.vue'),
+            children:[
+                {
+                    path: '/broadcast/receive',
+                    // name: 'approval',
+                    component: () => import('./views/broadcast/indexList.vue')
+                },
+                {
+                    path: '/broadcast/send',
+                    // name: 'approval',
+                    component: () => import('./views/broadcast/indexList.vue')
+                },
+                {
+                    path: '/broadcast/:id',
+                    name: 'broadcast/detail',
+                    component: () => import('./views/broadcast/detail.vue')
+                },
+            ]
         },
-        {
-            path: '/broadcast/:id',
-            name: 'broadcast/detail',
-            component: () => import('./views/broadcast/detail.vue')
-        },
+        
         {
             path: '/management',
             name: 'management/index',

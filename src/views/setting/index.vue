@@ -59,7 +59,9 @@
                         <p>选择一张个人正面照片作为头像，企业成员可以更容易认识你</p>
                         <Avatar style="width: 100px; height: 100px;" :imgUrl="iconUrl"/>
                         <div class="my-10">
-                            <button class="btn btn-primary">选择照片</button>
+                            <Upload accept="image/*" @change="uploadAvatar">
+                                <button class="btn btn-primary">选择照片</button>
+                            </Upload>
                         </div>
 
                         <div class="line"></div>
@@ -86,7 +88,7 @@
                          <div class="example" style="margin-top: -20px">
                             <div class="float-left" style="width: 40px;">职位</div>
                             <div class="float-left pl-0" style="width: 240px;">
-                                <selectors :options="jobArr" @change="changeJob"></selectors>
+                                <selectors ref="jobEl" :options="jobArr" @change="changeJob"></selectors>
                             </div>
                         </div>
                         <div class="example mt-10 mb-20">
@@ -108,6 +110,7 @@
 
 <script>
 import fetch from '@/assets/utils/fetch'
+import Cookies from 'js-cookie'
 
 export default {
     name: 'Setting',
@@ -120,12 +123,15 @@ export default {
             userId: '',
             departmentId: '', // 部门id
             iconUrl: '', // 头像
-            jobArr: [] // 职位数组
+            newIconUrl: '', // 新头像
+            jobArr: [], // 职位数组
+            userInfo: null // cookie中个人信息
         }
     },
     mounted () {
         this.getAccountInfo()
         this.getJobList()
+        this.userInfo = JSON.parse(Cookies.get('user'))
     },
     methods: {
         savePassword () { // 保存密码
@@ -164,6 +170,11 @@ export default {
             fetch('get', '/users/my').then(res => {
                 this.userId = res.data.id
                 this.iconUrl = res.data.icon_url
+                this.job = res.data.position.id
+                this.$nextTick(() => {
+                    this.$refs.jobEl.setValue(this.job)
+                })
+                this.name = res.data.name
                 this.departmentId = res.data.department.id
             })
         },
@@ -184,14 +195,23 @@ export default {
         // 保存个人信息
         saveInfo() {
             const params = {
-                positionId: this.job,
+                position_id: this.job,
                 name: this.name,
-                department_id: this.departmentId
+                icon_url: this.newIconUrl
             }
-            alert('等等等...')
-            // fetch('put', `/edit/${this.userId}/personal`, params).then(res => {
-            //     console.log(res)
-            // })
+            fetch('put', `/edit/data/${this.userId}`, params).then(res => {
+                toastr.success('设置成功！')
+                this.userInfo.avatar = this.iconUrl
+                this.userInfo.nickname = this.name
+                this.getAccountInfo()
+                this.getJobList()
+                Cookies.set('user', this.userInfo)
+            })
+        },
+        // 上传头像
+        uploadAvatar (url) {
+            this.iconUrl = url
+            this.newIconUrl = url
         }
     }
 }

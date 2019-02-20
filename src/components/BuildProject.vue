@@ -88,7 +88,7 @@
                         <div class="col-md-2 text-right float-left px-0 require">预计支出</div>
                         <div class="col-md-10 float-left">
                             <NumberSpinner ref="projectExpenditureFee"
-                                           @change="(value) => addProjectBaseInfo(value, 'projected_expenditure')"></NumberSpinner>
+                                           @change="(value) => addProjectBaseInfo(value, 'projected_expenditure')" ></NumberSpinner>
                         </div>
                     </div>
                     <div class="col-md-12 example clearfix" v-show="projectType != 5">
@@ -150,6 +150,13 @@
                             <template v-if="field.field_type === 11">
                                 <NumberSpinner :default='newArray.find(item=>item.key === field.key)'
                                                @change="(value) => addInfo(value, field.id )"></NumberSpinner>
+                            </template>
+                             <template v-if="field.field_type === 12">
+                               <CheckboxGroup :optionData="platformLists" @change="(value) => addInfo(value, field.id )" :isLine="true">
+                                    <template slot-scope="scope">
+                                        <span>{{scope.row.name}}</span>
+                                    </template>
+                                </CheckboxGroup>
                             </template>
                         </div>
                     </div>
@@ -216,7 +223,20 @@
                 user: '',
                 cooperationDefault: '',
                 trailStatusDefault: '',
-
+                platformLists: [
+                    {
+                        value: '微博',
+                        name: '微博'
+                    },
+                    {
+                        value: '抖音',
+                        name: '抖音'
+                    },
+                    {
+                        value: '小红书',
+                        name: '小红书'
+                    },
+                ],
             }
         }, 
         created() {

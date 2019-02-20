@@ -155,7 +155,7 @@
                         <div class="clearfix">
                             <div class="col-md-2 text-right float-left line-fixed-height">结束时间</div>
                             <div class="col-md-5 float-left pl-0">
-                                <datepicker @change="changeEndTime" ref="scheduleEndDate"></datepicker>
+                                <datepicker @change="changeEndTime" ref="scheduleEndDate" :startDate="startTime"></datepicker>
                             </div>
                             <div class="col-md-5 float-left pl-0" v-show="!isScheduleAllday">
                                 <timepicker :default="endMinutes" @change="changeEndMinutes"
@@ -209,8 +209,7 @@
                             <div class="example">
                                 <div class="col-md-2 text-right float-left">提醒</div>
                                 <div class="col-md-10 float-left pl-0">
-                                    <selectors :options="remindArr" ref="scheduleRemind"
-                                               @change="changeScheduleRemind"></selectors>
+                                    <AddRemind @change="changeScheduleRemind" :options="remindArr" :conditionLength="conditionLength" :selectorHidden="selectorHidden"></AddRemind>                     
                                 </div>
                             </div>
                             <div class="clearfix my-20">
@@ -253,7 +252,7 @@
                         </div>
                     </div>
                     <div class="modal-footer">
-                        <button class="btn btn-sm btn-white btn-pure" data-dismiss="modal">取消</button>
+                        <button class="btn btn-sm btn-white btn-pure" data-dismiss="modal" @click="cancelSchedule">取消</button>
                         <template v-if="scheduleType === 'add'">
                             <button class="btn btn-primary" type="submit" @click="addSchedule">确定</button>
                         </template>
@@ -582,7 +581,7 @@
     import fetch from '../../assets/utils/fetch.js'
     import config from '../../assets/js/config'
     import Cookies from 'js-cookie';
-
+    import AddRemind from '../../components/AddRemind'
     export default {
         data: function () {
             return {
@@ -649,9 +648,13 @@
                 toastShow: false,
                 scheduleRemind: '',
                 userInfo: '',
+                conditionLength: 0,
+                selectorHidden: [],
             }
         },
-
+        components:{
+            AddRemind
+        },
         mounted() {
             this.getStars();
             this.getCalendarList();
@@ -1239,9 +1242,13 @@
                 this.$refs.scheduleEndMinute.setValue('00:00');
                 this.$refs.scheduleResource.setValue('');
                 this.$refs.scheduleRepeat.setValue('0');
-                this.$refs.scheduleRemind.setValue('0');
+                // this.$refs.scheduleRemind.setValue('0');
             },
-
+            cancelSchedule:function(){
+                
+                this.conditionLength = 0
+                this.selectorHidden = []
+            },
             addCalendarVisible: function (value) {
                 this.calendarVisible = value
             },
