@@ -58,7 +58,7 @@
                         <div class="example">
                             <div class="col-md-2 text-right float-left">结束时间</div>
                             <div class="col-md-5 float-left pl-0">
-                                <Datepicker :placeholder="'选择结束时间'" @change="changeEndDate"></Datepicker>
+                                <Datepicker :placeholder="'选择结束时间'" @change="changeEndDate" :startDate="startDate"></Datepicker>
                             </div>
                             <div class="col-md-5 float-left pl-0">
                                 <Timepicker :default="endMinutes" @change="changeEndTime"></Timepicker>

@@ -88,7 +88,7 @@
                         <div class="col-md-2 text-right float-left px-0 require">预计支出</div>
                         <div class="col-md-10 float-left">
                             <NumberSpinner ref="projectExpenditureFee"
-                                           @change="(value) => addProjectBaseInfo(value, 'projected_expenditure')"></NumberSpinner>
+                                           @change="(value) => addProjectBaseInfo(value, 'projected_expenditure')" ></NumberSpinner>
                         </div>
                     </div>
                     <div class="col-md-12 example clearfix" v-show="projectType != 5">

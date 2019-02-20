@@ -172,7 +172,7 @@
                             <li class="nav-item" role="presentation">
                                 <a class="nav-link" data-toggle="tab" href="#forum-artist-tasks"
                                    aria-controls="forum-present"
-                                   aria-expanded="false" role="tab" @click="getArtistTasks">
+                                   aria-expanded="false" role="tab" @click="getArtistTasks()">
                                     <template v-if="alltaskshow.length > 0">
                                         <ToolTips :title="`已完成数量${doneTaskNum}`">
                                             任务 ({{taskNum}})
@@ -186,7 +186,7 @@
                             <li class="nav-item" role="presentation" v-show="artistInfo.sign_contract_status == 2">
                                 <a class="nav-link" data-toggle="tab" href="#forum-artist-work"
                                    aria-controls="forum-present"
-                                   aria-expanded="false" role="tab" @click="getTaskDate">作品库</a>
+                                   aria-expanded="false" role="tab" @click="getTaskDate()">作品库</a>
                             </li>
                             <li class="nav-item" role="presentation" v-show="artistInfo.sign_contract_status == 3">
                                 <a class="nav-link" data-toggle="tab" href="#forum-artist-fans"
@@ -194,7 +194,7 @@
                                    aria-expanded="false" role="tab">粉丝数据</a>
                             </li>
                             <li class="nav-item" role="presentation" v-show="artistInfo.sign_contract_status == 2"
-                                @click="getArtistsBill">
+                                @click="getArtistsBill()">
                                 <a class="nav-link" data-toggle="tab" href="#forum-artist-bill"
                                    aria-controls="forum-present"
                                    aria-expanded="false" role="tab">账单</a>
@@ -725,7 +725,7 @@
                         <div class="example">
                             <div class="col-md-2 text-right float-left require">截止时间</div>
                             <div class="col-md-5 float-left pl-0">
-                                <datepicker @change="changeEndTime" ref="deadline"></datepicker>
+                                <datepicker @change="changeEndTime" ref="deadline" :startDate="startTime"></datepicker>
                             </div>
                             <div class="col-md-5 float-left pl-0">
                                 <timepicker :default="endTaskMinutes" @change="changeEndMinutes"
@@ -908,7 +908,7 @@
                         <div class="clearfix">
                             <div class="col-md-2 text-right float-left line-fixed-height">结束时间</div>
                             <div class="col-md-5 float-left pl-0">
-                                <datepicker @change="changeEndTime" ref="scheduleEndDate"></datepicker>
+                                <datepicker @change="changeEndTime" ref="scheduleEndDate" :startDate="startTime"></datepicker>
                             </div>
                             <div class="col-md-5 float-left pl-0" v-show="!isAllday">
                                 <timepicker :default="endMinutes" @change="changeEndMinutes"
@@ -1351,7 +1351,8 @@
                 toastX: 0,
                 toastY: 0,
                 scheduleRemind: '',
-                projectContractDefault: ''
+                projectContractDefault: '',
+                projectPage:''
             }
         },
         computed: {
@@ -1482,7 +1483,7 @@
 
 
                     _this.artistInfo = response.data;
-                    console.log(response.data)
+                   
                     _this.uploadUrl = _this.artistInfo.avatar;
                     if (_this.artistInfo.intention) {
                         _this.artistInfo.intention = 1
@@ -1543,11 +1544,11 @@
                 })
             },
             getProject(page = 1){
+               
                 let _this =this;
                  fetch('get', '/bloggers/' + this.artistId+'/project',{
                      page:page
                  }).then(function (response) {
-                     console.log(response.data)
                     _this.ProjectsInfo  = response.data
                     _this.current_page = response.meta.pagination.current_page;
                     _this.total = response.meta.pagination.total;
@@ -1933,6 +1934,7 @@
             },
             //账单
             getArtistsBill(page = 1, expense_type) {
+               
                 let _this = this;
                 if (!expense_type) {
                     _this.expense_type = 0
@@ -1940,7 +1942,7 @@
                     _this.expense_type = expense_type
                 }
 
-                fetch('get', '/bloggers/' + this.artistId + '/bill', {
+                fetch('get', `/bloggers/${this.artistId}/bill`, {
                     page: page,
                     expense_type: expense_type
                 }).then(function (response) {
@@ -1952,10 +1954,11 @@
                 })
             },
             //作品
-            getTaskDate:function(page = 1){
+            getTaskDate:function(data = 1){
+              
                 let _this = this;
                 fetch('get','/bloggers/index/production?blogger_id='+this.artistId+'',{
-                    page:page
+                    page:data
                 }).then(function(response){
                     _this.worksData=response.data
                     _this.current_page = response.meta.pagination.current_page;
@@ -1972,6 +1975,7 @@
             },
             //任务数据
             getArtistTasks: function (page = 1) {
+                
                 let _this = this;
                 fetch('get', '/bloggers/' + this.artistId+'/tasks',{
                     page:page
@@ -2191,6 +2195,10 @@
                 }
                 if (!this.updatelevel) {
                     delete(this.changeArtistInfo.level)
+                }
+                if(!this.isShowPrivacy){
+                    delete(this.changeArtistInfo.hatch_star_at)
+                    delete(this.changeArtistInfo.hatch_end_at)
                 }
                 fetch('put', '/bloggers/' + this.artistId, this.changeArtistInfo).then(function (response) {
                     toastr.success('修改成功');

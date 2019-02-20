@@ -120,13 +120,13 @@
                             <li class="nav-item" role="presentation" v-if="artistInfo.sign_contract_status == 2">
                                 <a class="nav-link" data-toggle="tab" href="#forum-artist-projects"
                                    aria-controls="forum-present"
-                                   aria-expanded="false" role="tab" @click="getProject">项目</a>
+                                   aria-expanded="false" role="tab" @click="getProject()">项目</a>
                             </li>
                             <li class="nav-item" role="presentation">
                                 <a class="nav-link"
                                    data-toggle="tab" href="#forum-artist-tasks"
                                    aria-controls="forum-present"
-                                   aria-expanded="true" role="tab" @click="getTaskList">
+                                   aria-expanded="true" role="tab" @click="getTaskList()">
                                     <template v-if="allTaskList.length > 0">
                                         <ToolTips :title="`已完成数量${doneTaskNum}`">
                                             任务 ({{taskNum}})
@@ -140,14 +140,14 @@
                             <li class="nav-item" role="presentation" v-if="artistInfo.sign_contract_status == 2">
                                 <a class="nav-link" data-toggle="tab" href="#forum-artist-work"
                                    aria-controls="forum-present"
-                                   aria-expanded="false" role="tab" @click="getWoks">作品库</a>
+                                   aria-expanded="false" role="tab" @click="getWoks()">作品库</a>
                             </li>
                             <!--<li class="nav-item" role="presentation" v-show="artistInfo.sign_contract_status == 2">-->
                             <!--<a class="nav-link" data-toggle="tab" href="#forum-artist-fans"-->
                             <!--aria-controls="forum-present"-->
                             <!--aria-expanded="false" role="tab">粉丝数据</a>-->
                             <!--</li>-->
-                            <li class="nav-item" role="presentation" @click="getArtistsBill"
+                            <li class="nav-item" role="presentation" @click="getArtistsBill()"
                                 v-if="artistInfo.sign_contract_status == 2">
                                 <a class="nav-link" data-toggle="tab" href="#forum-artist-bill"
                                    aria-controls="forum-present"
@@ -711,7 +711,7 @@
                             <div class="col-md-2 text-right float-left require">截止时间</div>
                             <div class="col-md-5 float-left pl-0">
                                 <datepicker @change="changeEndTime" :placeholder="'请输入结束时间'"
-                                            ref="taskEndDate"></datepicker>
+                                            ref="taskEndDate" :startDate="startTime"></datepicker>
                             </div>
                             <div class="col-md-5 float-left pl-0">
                                 <timepicker :default="endMinutes" @change="changeEndMinutes"
@@ -878,7 +878,7 @@
                         <div class="clearfix">
                             <div class="col-md-2 text-right float-left line-fixed-height">结束时间</div>
                             <div class="col-md-5 float-left pl-0">
-                                <datepicker @change="changeEndTime" ref="scheduleEndDate"></datepicker>
+                                <datepicker @change="changeEndTime" ref="scheduleEndDate" :startDate="startTime"></datepicker>
                             </div>
                             <div class="col-md-5 float-left pl-0" v-show="!isAllday">
                                 <timepicker :default="endMinutes" @change="changeEndMinutes"
@@ -1392,17 +1392,17 @@
                 })
 
             },
-            getProject(page) {
+            getProject(page = 1) {
                 let _this = this;
                 fetch('get', '/stars/' + this.artistId + '/project',{page:page}).then(function (response) {
-                    console.log(response.data)
+                   
                     _this.artistProjectsInfo = response.data
                     _this.current_page = response.meta.pagination.current_page;
                     _this.total = response.meta.pagination.total;
                     _this.total_pages = response.meta.pagination.total_pages;
                 })
             },
-            getWoks() {
+            getWoks(page = 1) {
                 let _this = this;
                 fetch('get', '/stars/' + this.artistId + '/works').then(function (response) {
                     _this.artistWorksInfo = response.data
@@ -1819,7 +1819,7 @@
 
             //获取账单
             getArtistsBill: function (page = 1, expense_type) {
-
+              
                 let _this = this
                 if (expense_type) {
                     _this.expense_type = expense_type
@@ -1827,7 +1827,7 @@
                     _this.expense_type = 0
                 }
                 fetch('get', `/stars/${this.$route.params.id}/bill`, {
-                    page: page,
+                    page:page,
                     expense_type: _this.expense_type
                 }).then(response => {
                     _this.artistBillsInfo = response.data
@@ -1864,7 +1864,7 @@
                     page:page
                 }).then(response => {
                     _this.allTaskList = response.data
-                    console.log(response)
+                   
                     _this.current_page = response.meta.pagination.current_page;
                     _this.total = response.meta.pagination.total;
                     _this.total_pages = response.meta.pagination.total_pages;
