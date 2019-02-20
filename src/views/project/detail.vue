@@ -768,7 +768,8 @@
                                             <h5 class="pl-15 pt-10 clearfix float-left col-md-12">合作信息</h5>
                                             <div v-if="projectInfo.type != 5 && projectInfo.fields">
                                                 <div class="card-text py-10 px-0 clearfix col-md-6 float-left "
-                                                     v-for="field in projectInfo.fields">
+                                                     v-for="field in projectInfo.fields"
+                                                     v-show="field.key !== '合作小组' || (field.key === '合作小组' && cooperationOther === '是')">
                                                     <div class="col-md-3 float-left text-right pl-0">{{ field.key }}
                                                     </div>
                                                     <div class="col-md-9 float-left font-weight-bold">
@@ -870,7 +871,7 @@
                                                 <div class="col-md-9 float-left font-weight-bold">
                                                     <template v-for="project in projectInfo.relate_projects.data">
                                                         <span class="pointer-content"
-                                                              @click="redirectProject(project.id)">{{project.title }}</span>
+                                                              @click="redirectProject(project.id)">{{project.title }} </span>
                                                     </template>
                                                 </div>
                                             </div>
@@ -879,7 +880,7 @@
                                                 <div class="col-md-3 float-left text-right pl-0">关联任务</div>
                                                 <div class="col-md-9 float-left font-weight-bold">
                                                     <template v-for="task in projectInfo.relate_tasks.data">
-                                                        <span class="pointer-content" @click="redirectTask(task.id)">{{ task.title }}</span>
+                                                        <span class="pointer-content" @click="redirectTask(task.id)">{{ task.title }} </span>
                                                     </template>
                                                 </div>
                                             </div>
@@ -1659,6 +1660,8 @@
                 billExpenses: 0,
                 divideArrInfo: '',
                 projectProgress: '',
+                cooperationOther: '',
+                cooperationKeyId: '',
             }
         },
 
@@ -1756,6 +1759,12 @@
                                     value: fieldsArr[i].content[j],
                                 })
                             }
+                        }
+                        if (fieldsArr[i].key === '是否与他组合作') {
+                            if (fieldsArr[i].values) {
+                                this.cooperationOther = fieldsArr[i].values.data.value
+                            }
+                            this.cooperationKeyId = fieldsArr[i].id
                         }
                     }
                     response.data.fields = fieldsArr;
@@ -2524,10 +2533,15 @@
             },
 
             addInfo: function (value, name) {
+                if (name === this.cooperationKeyId) {
+                    this.cooperationOther = value;
+                    console.log(this.cooperationOther)
+                }
                 if (this.projectInfo.fields.find(item => item.id == name).values.data.value == value) {
                     return
                 }
                 this.addInfoArr[name] = value
+                console.log(this.cooperationOther)
             },
 
             changeToastrText: function (status) {
