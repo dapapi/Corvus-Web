@@ -83,6 +83,12 @@
                         code: 'staff',
                         image: 'https://res.papitube.com/corvus/images/baobiao.png',
                         hoverImage: 'https://res.papitube.com/corvus/images/select-baobiao.png',
+                    },
+                    {
+                        name: '账号设置',
+                        code: 'setting',
+                        image: 'https://res.papitube.com/corvus/images/baobiao.png',
+                        hoverImage: 'https://res.papitube.com/corvus/images/select-baobiao.png',
                     }
                 ],
                 pageRoute: '',

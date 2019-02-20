@@ -143,13 +143,13 @@
                                 <th class="cell-300" scope="col">最后跟进时间</th>
                             </tr>
                             <tbody>
-
-                            <tr v-for="(artist,index) in artistsInfo" :key="index" class="pointer-content">
+                            
+                            <tr v-for="artist in artistsInfo" :key="artist.id" class="pointer-content">
                                 <td>
                                     <span class="checkbox-custom checkbox-primary">
-                                        <input class="selectable-item" type="checkbox" :id="'row-' + artist.id"
+                                        <input class="selectable-item" type="checkbox" :id="'artist-' + artist.id"
                                                :value="artist.id" @change="selectArtists(artist.id)">
-                                        <label :for="'row-' + artist.id"></label>
+                                        <label :for="'artist-' + artist.id"></label>
                                     </span>
                                 </td>
                                 <td @click="redirectArtistDetail(artist.id)">{{ artist.name }}</td>
@@ -175,7 +175,7 @@
                                     </template>
                                 </td>
                                 <td @click="redirectArtistDetail(artist.id)">{{artist.created_at}}</td>
-                                <td @click="redirectArtistDetail(artist.id)">{{artist.updated_at}}</td>
+                                <td @click="redirectArtistDetail(artist.id)">{{artist.last_follow_up_at}}</td>
                             </tr>
                             </tbody>
 
@@ -281,8 +281,7 @@
                                     </span>
                                 </td>
                                 <td @click="redirectBolggerDetail(artist.id)">{{artist.created_at}}</td>
-                                <td v-for="(v,index) in artist.operatelogs.data" :key="index"
-                                    @click="redirectBolggerDetail(artist.id)">{{v.created_at}}
+                                <td @click="redirectBolggerDetail(artist.id)">{{artist.last_follow_up_at}}
                                 </td>
                             </tr>
 
@@ -319,7 +318,7 @@
             <div class="modal-dialog modal-simple">
                 <div class="modal-content">
                     <div class="modal-header">
-                        <button type="button" class="close" aria-hidden="true" data-dismiss="modal">
+                        <button type="button" class="close" aria-hidden="true" data-dismiss="modal" @click="emptyBolgger">
                             <i class="iconfont icon-guanbi" aria-hidden="true"></i>
                         </button>
                         <h4 class="modal-title">新增博主</h4>
@@ -416,7 +415,8 @@
                                 <Upload @change='getUploadUrl' class="upload-image">
                                     <div class="puls" :style="{ backgroundImage: 'url(' + uploadUrl + ')' }"
                                          v-if="uploadUrl">
-                                    </div>
+                                         <div><span>再次点击重新上传</span></div>
+                                    </div> 
                                     <div v-if="!uploadUrl" class="addMember-trigger-button addMember-trigger-left"><i
                                             class="iconfont icon-tianjia"></i></div>
                                 </Upload>
@@ -430,7 +430,7 @@
                         </div>
                     </div>
                     <div class="modal-footer">
-                        <button class="btn btn-sm btn-white btn-pure" data-dismiss="modal">取消</button>
+                        <button class="btn btn-sm btn-white btn-pure" data-dismiss="modal" @click="emptyBolgger">取消</button>
                         <button class="btn btn-primary" type="submit" @click="addBolgger">确定</button>
                     </div>
 
@@ -614,19 +614,21 @@
                         </div>
                         <div class="example" v-show="affixesType>0">
                             <div class="col-md-2 text-right float-left require">附件</div>
-                            <div class="col-md-10 float-left pl-0">
-                                <Upload  @change="uploadAttachment" class="upload-image">
+                            <Upload  @change="uploadAttachment" class="upload-image" >
                                     <div  class="addMember-trigger-button addMember-trigger-left"><i
                                             class="iconfont icon-tianjia"></i></div>
                                 </Upload>
-                                <div class="mt-5" v-for="(attach,index) in affixes" :key="index">
+                            <div class="col-md-10 float-left pl-0 ml-100" style="display:flex;flex-wrap:wrap">
+                                
+                                <div class="m-10" v-for="(attach,index) in affixes" :key="index" >
                                     <img src="@/assets/img/attachment.png" alt="" style="width:40px" class="ml-30">
                                     <p class="mb-0 pt-5">{{attachmentTypeArr.find(item => item.value == attach.type).name}}-{{attach.title}}</p>  
                                     <div class="img-control ">
-                                        <div class="icon-control ml-40">
+                                        <div class="icon-control ml-20">
                                             <a data-toggle="modal" data-target='#docPreview'
                                             @click="previewFile(attach.url,attach.title)"
-                                            class="iconfont icon-liulan  mr-15" style="color:#3f51b5 ;cursor:pointer"></a>
+                                            class="iconfont icon-liulan  mr-30" style="color:#3f51b5 ;cursor:pointer"></a>
+                                            <i class="iconfont icon-shanchu1"  @click="deleteAffix(index)"></i>
                                         </div>
                                     </div>
                                 </div>
@@ -643,6 +645,7 @@
                                 <Upload @change='getUploadUrl' class="upload-image">
                                     <div class="puls" :style="{ backgroundImage: 'url(' + uploadUrl + ')' }"
                                          v-if="uploadUrl">
+                                         <div><span>再次点击重新上传</span></div>
                                     </div>
                                     <div v-if="!uploadUrl" class="addMember-trigger-button addMember-trigger-left"><i
                                             class="iconfont icon-tianjia"></i></div>
@@ -686,8 +689,7 @@
                 </div>
             </div>
         </div>
-
-        <DocPreview :url="previewUrl" :givenFileName="previewName"/>
+        
         <!--分配经理人-->
         <div class="modal fade" id="giveBroker" aria-hidden="true" aria-labelledby="addLabelForm"
              role="dialog" tabindex="-1" data-backdrop="static">
@@ -715,6 +717,7 @@
                 </div>
             </div>
         </div>
+        <DocPreview :url="previewUrl" :givenFileName="previewName"/>
     </div>
 </template>
 <script>
@@ -875,6 +878,8 @@
                 Preview:'',
                 previewUrl: '',
                 previewName: '',
+                affixIndex:'',
+                isdilog:true
             }
         },
         watch: {
@@ -986,9 +991,21 @@
                     _this.selectAllBlogger = false;
                     _this.selectedArtistsArr = [];
                     
+                    
                 });
                 
             },
+            deleteAffix: function (index) {
+                this.affixes.forEach((item,index)=>{
+                    if(index == this.affixIndex){
+                        this.affixes.splice(index,1)           
+                    }
+                })
+                $('#affix').modal('hide');
+            },
+            // getAffixIndex: function (index) {
+            //     this.affixIndex = index
+            // },
              previewFile: function (url, name) {
                 this.previewUrl = url
                 this.previewName = name
@@ -1037,7 +1054,14 @@
             },
             //头像
             getUploadUrl(value) {
-                this.uploadUrl = value
+                console.log(String(value).split('.').pop())
+                let Suffix = ['png','gif','bmp','jpg','jpeg']
+                if(Suffix.includes(String(value).split('.').pop())){
+                    this.uploadUrl = value
+                }else{
+                    toastr.error("请选择图片作为头像")
+                }
+                
             },
             changeCheckbox: function (value) {
                 this.platformType = []
@@ -1136,26 +1160,28 @@
                     _this.$router.push({path: 'blogger/' + response.data.id});
                     _this.getBlogger()
                     $('#addBolgger').on('hidden.bs.modal', function () {
-
-                        _this.bolggerName = '';//昵称
-                        _this.star_weibo_infos.url = '';//微博地址
-                        _this.$refs.weibo.setValue('0');//微博粉丝
-                        _this.star_douyin_infos.url = '';//抖音地址
-                        _this.$refs.douyin.setValue('0');//抖音粉丝
-                        _this.star_xiaohongshu_infos.url = '';//小红书地址
-                        _this.$refs.xiaohongshu.setValue('0')//小红书粉丝
-                        _this.$refs.papitype.setValue('')//类型
-                        _this.$refs.communicationType.setValue('')//沟通类型
-                        _this.$refs.signIntention.setValue('')//我公司意向
-                        _this.$refs.isSign.setValue('')//其他公司意向
-                        _this.artistDesc = '';//备注
-                        _this.platformType = [];
-                        _this.uploadUrl = ''
+                        _this.emptyBolgger()
+                        
                     })
                 })
 
             },
-
+            emptyBolgger:function(){
+                this.bolggerName = '';//昵称
+                this.star_weibo_infos.url = '';//微博地址
+                this.$refs.weibo.setValue('0');//微博粉丝
+                this.star_douyin_infos.url = '';//抖音地址
+                this.$refs.douyin.setValue('0');//抖音粉丝
+                this.star_xiaohongshu_infos.url = '';//小红书地址
+                this.$refs.xiaohongshu.setValue('0')//小红书粉丝
+                this.$refs.papitype.setValue('')//类型
+                this.$refs.communicationType.setValue('')//沟通类型
+                this.$refs.signIntention.setValue('')//我公司意向
+                this.$refs.isSign.setValue('')//其他公司意向
+                this.artistDesc = '';//备注
+                this.platformType = [];
+                this.uploadUrl = ''
+            },
             selectArtists: function (value) {
                 
                 if (value === 'all') {
@@ -1236,7 +1262,7 @@
                 this.selectedArtistsArr = []
                 if(value == 0){
                     this.getArtists()
-                     this.isShow = true
+                    this.isShow = true
                     
                 }else if(value == 1){
                     this.getBlogger()
@@ -1339,7 +1365,6 @@
                     url: url,
                     type: this.affixesType
                 })
-                console.log(this.affixes)
             },
             addArtist: function () {
                 if (!this.artistName) {
@@ -1470,6 +1495,7 @@
                 this.signCompany = ''
                 this.sign_contract_other_name = ''
                 this.affixesType = ''
+                this.affixes = []
                 this.uploadUrl = ''
                 this.$refs.gender.setValue('')
                 this.$refs.birthday.setValue('')
@@ -1486,11 +1512,9 @@
                 //   alert(this.affixesType)
 
             },
-
-            //上传头像
-            getUploadUrl(res) {
-                this.uploadUrl = res
-            },
+            hide:function(){
+                this.isdilog = !this.isdilog 
+            }
         },
         filters: {
             jsGetAge: function (strBirthday) {
@@ -1558,17 +1582,31 @@
         background-repeat:no-repeat; 
         background-size:100% 100%;
         -moz-background-size:100% 100%;
+        position: relative;
     }
-
-    .puls span {
-        font-size: 30px;
-    }
-
-    .fileupload {
+    .puls div{
         position: absolute;
-        top: 0px;
-        left: 0px;
+        top:0;
+        left:0;
+        border-radius: 50%;
+        width: 100%;
+        height: 100%;
+        background: rgba(0, 0, 0, .4);
+        z-index: 10;
         opacity: 0;
+    }
+    .puls:hover div{
+        opacity: 1; 
         
+    }
+    .puls div span{
+        width: 100px;
+        height:20px;
+        line-height: 20px;
+        background: #eee;
+        position: absolute;
+        left:20px;
+        top:10px;
+        font-size: 12px;
     }
 </style>

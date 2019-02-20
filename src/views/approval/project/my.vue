@@ -114,9 +114,9 @@
                     data.sign_contract_status = signStatus
                 }
                 fetch('get', '/approvals_project/approval', data).then(response => {
-                    _this.projectsInfo = params.data
+                    _this.projectsInfo = response.data
                     _this.total = response.meta.pagination.total;
-                    _this.current_page = response.meta.pagination.current_page;
+                    _this.current_page = response.meta.pagination.current_page * 1; // 转成数字，否则当前页码不变色
                     _this.total_pages = response.meta.pagination.total_pages;
                 })
             },
@@ -125,7 +125,7 @@
                 let _this = this
                 fetch('get','/approvals_project/approval?status='+params).then((params) => {
                     _this.projectsInfo = params.data
-                   _this.total = params.meta.pagination.total;
+                    _this.total = params.meta.pagination.total;
                     _this.current_page = params.meta.pagination.current_page;
                     _this.total_pages = params.meta.pagination.total_pages;
                 })

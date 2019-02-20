@@ -172,7 +172,7 @@
                             <li class="nav-item" role="presentation">
                                 <a class="nav-link" data-toggle="tab" href="#forum-artist-tasks"
                                    aria-controls="forum-present"
-                                   aria-expanded="false" role="tab" @click="getArtistTasks">
+                                   aria-expanded="false" role="tab" @click="getArtistTasks()">
                                     <template v-if="alltaskshow.length > 0">
                                         <ToolTips :title="`已完成数量${doneTaskNum}`">
                                             任务 ({{taskNum}})
@@ -186,7 +186,7 @@
                             <li class="nav-item" role="presentation" v-show="artistInfo.sign_contract_status == 2">
                                 <a class="nav-link" data-toggle="tab" href="#forum-artist-work"
                                    aria-controls="forum-present"
-                                   aria-expanded="false" role="tab" @click="getTaskDate">作品库</a>
+                                   aria-expanded="false" role="tab" @click="getTaskDate()">作品库</a>
                             </li>
                             <li class="nav-item" role="presentation" v-show="artistInfo.sign_contract_status == 3">
                                 <a class="nav-link" data-toggle="tab" href="#forum-artist-fans"
@@ -194,7 +194,7 @@
                                    aria-expanded="false" role="tab">粉丝数据</a>
                             </li>
                             <li class="nav-item" role="presentation" v-show="artistInfo.sign_contract_status == 2"
-                                @click="getArtistsBill">
+                                @click="getArtistsBill()">
                                 <a class="nav-link" data-toggle="tab" href="#forum-artist-bill"
                                    aria-controls="forum-present"
                                    aria-expanded="false" role="tab">账单</a>
@@ -454,6 +454,7 @@
                                         </div>
                                     </div>
                                     <div class="card-block px-0" v-if="artistInfo">
+                                        <h5 class="pl-15">基本资料</h5>
                                         <div class="clearfix">
                                             <div class="card-text py-10 px-0 clearfix col-md-6 float-left ">
                                                 <div class="col-md-4 float-left text-right pl-0">昵称</div>
@@ -481,15 +482,7 @@
                                                                   @change="changeArtistCommunication"></EditSelector>
                                                 </div>
                                             </div>
-                                            <div class="card-text py-10 px-0 clearfix col-md-6 float-left ">
-                                                <div class="col-md-4 float-left text-right pl-0">平台</div>
-                                                <div class="col-md-8 float-left font-weight-bold">
-                                                    <EditSelector :is-edit="isEdit" :multiple="true"
-                                                                  :content="artistInfo.platform ? artistInfo.platform.split(',') : ''"
-                                                                  :options="artistSocialPlatform"
-                                                                  @valuelistener="changeArtistPlatform_id"></EditSelector>
-                                                </div>
-                                            </div>
+                                            
                                             <div class="card-text py-10 px-0 clearfix col-md-6 float-left edit-height">
                                                 <div class="col-md-4 float-left text-right pl-0 pr-2">与我司签约意向</div>
                                                 <div class="col-md-8 float-left font-weight-bold">
@@ -510,7 +503,16 @@
                                                                       @change="(value) => changeArtistSigning(value, 'sign_contract_other')"></ConditionalInput>
                                                 </div>
                                             </div>
-
+                                            <h5 class="pl-15 pt-10 clearfix col-md-12 float-left">联系信息</h5>
+                                            <div class="card-text py-10 px-0 clearfix col-md-6 float-left ">
+                                                <div class="col-md-4 float-left text-right pl-0">平台</div>
+                                                <div class="col-md-8 float-left font-weight-bold">
+                                                    <EditSelector :is-edit="isEdit" :multiple="true"
+                                                                  :content="artistInfo.platform ? artistInfo.platform.split(',') : ''"
+                                                                  :options="artistSocialPlatform"
+                                                                  @valuelistener="changeArtistPlatform_id"></EditSelector>
+                                                </div>
+                                            </div>
                                             <div class="card-text py-10 px-0 clearfix col-md-6 float-left ">
                                                 <div class="col-md-4 float-left text-right pl-0">微博链接</div>
                                                 <div class="col-md-8 float-left font-weight-bold">
@@ -596,9 +598,7 @@
                                                                          @change="changeArtistHatch"></EditGroupDatePicker>
                                                 </div>
                                             </div>
-
-                                            <div class="segmentation-line example float-left"></div>
-
+                                            <h5 class=" pt-10 clearfix col-md-12 float-left">更新信息</h5>
                                             <div class="card-text py-10 px-0 clearfix col-md-6 float-left ">
                                                 <div class="col-md-4 float-left text-right pl-0">录入人</div>
                                                 <div class="col-md-8 float-left font-weight-bold"
@@ -1351,7 +1351,8 @@
                 toastX: 0,
                 toastY: 0,
                 scheduleRemind: '',
-                projectContractDefault: ''
+                projectContractDefault: '',
+                projectPage:''
             }
         },
         computed: {
@@ -1482,7 +1483,7 @@
 
 
                     _this.artistInfo = response.data;
-                    console.log(response.data)
+                   
                     _this.uploadUrl = _this.artistInfo.avatar;
                     if (_this.artistInfo.intention) {
                         _this.artistInfo.intention = 1
@@ -1543,11 +1544,11 @@
                 })
             },
             getProject(page = 1){
+               
                 let _this =this;
                  fetch('get', '/bloggers/' + this.artistId+'/project',{
                      page:page
                  }).then(function (response) {
-                     console.log(response.data)
                     _this.ProjectsInfo  = response.data
                     _this.current_page = response.meta.pagination.current_page;
                     _this.total = response.meta.pagination.total;
@@ -1933,6 +1934,7 @@
             },
             //账单
             getArtistsBill(page = 1, expense_type) {
+               
                 let _this = this;
                 if (!expense_type) {
                     _this.expense_type = 0
@@ -1940,7 +1942,7 @@
                     _this.expense_type = expense_type
                 }
 
-                fetch('get', '/bloggers/' + this.artistId + '/bill', {
+                fetch('get', `/bloggers/${this.artistId}/bill`, {
                     page: page,
                     expense_type: expense_type
                 }).then(function (response) {
@@ -1952,10 +1954,11 @@
                 })
             },
             //作品
-            getTaskDate:function(page = 1){
+            getTaskDate:function(data = 1){
+              
                 let _this = this;
                 fetch('get','/bloggers/index/production?blogger_id='+this.artistId+'',{
-                    page:page
+                    page:data
                 }).then(function(response){
                     _this.worksData=response.data
                     _this.current_page = response.meta.pagination.current_page;
@@ -1972,6 +1975,7 @@
             },
             //任务数据
             getArtistTasks: function (page = 1) {
+                
                 let _this = this;
                 fetch('get', '/bloggers/' + this.artistId+'/tasks',{
                     page:page
@@ -2191,6 +2195,10 @@
                 }
                 if (!this.updatelevel) {
                     delete(this.changeArtistInfo.level)
+                }
+                if(!this.isShowPrivacy){
+                    delete(this.changeArtistInfo.hatch_star_at)
+                    delete(this.changeArtistInfo.hatch_end_at)
                 }
                 fetch('put', '/bloggers/' + this.artistId, this.changeArtistInfo).then(function (response) {
                     toastr.success('修改成功');

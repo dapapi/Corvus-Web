@@ -647,7 +647,9 @@
                                         </div>
                                     </div>
                                     <div class="py-20" v-if="projectInfo.title">
+                                        
                                         <div class="clearfix">
+                                            <h5 class="pl-15">基本资料</h5>
                                             <div class="card-text py-10 px-0 clearfix col-md-6 float-left ">
                                                 <div class="col-md-3 float-left text-right pl-0">项目名称</div>
                                                 <div class="col-md-9 float-left font-weight-bold">
@@ -763,6 +765,7 @@
                                                                     @change="(value) => changeProjectBaseInfo(value, 'end_at')"></EditDatepicker>
                                                 </div>
                                             </div>
+                                            <h5 class="pl-15 pt-10 clearfix float-left col-md-12">合作信息</h5>
                                             <div v-if="projectInfo.type != 5 && projectInfo.fields">
                                                 <div class="card-text py-10 px-0 clearfix col-md-6 float-left "
                                                      v-for="field in projectInfo.fields">
@@ -832,8 +835,8 @@
                                             </div>
                                         </div>
 
-                                        <div class="segmentation-line example"></div>
-
+                                        
+                                        <h5 class="pl-15 pt-10">更新信息</h5>
                                         <div class="clearfix">
                                             <div class="card-text py-10 px-0 clearfix col-md-6 float-left"
                                                  v-if="projectInfo.creator">
@@ -860,6 +863,7 @@
                                                     {{ projectInfo.last_updated_at }}
                                                 </div>
                                             </div>
+                                            <h5 class="pl-15 pt-10 clearfix float-left col-md-12">关联信息</h5>
                                             <div class="card-text py-10 px-0 clearfix col-md-6 float-left"
                                                  v-if="projectInfo.relate_projects">
                                                 <div class="col-md-3 float-left text-right pl-0">关联项目</div>
@@ -888,9 +892,8 @@
                                                 </div>
                                             </div>
                                         </div>
-
-                                        <div class="segmentation-line example float-left"></div>
-
+                                        <h5 class="pl-15 pt-10">审批流程</h5>
+                                        <div class="segmentation-line float-left"></div>
                                         <div v-if="projectInfo.type != 5">
                                             <ApprovalProgress :formid="projectInfo.form_instance_number"
                                                               :formstatus="projectInfo.approval_text" projcetinfo='true'
@@ -913,7 +916,7 @@
                             <div class="card-block">
                                 <div class="col-md-12 pl-0">
                                     <TaskFollowUp :follow-type="'项目'" :trailId="projectId"
-                                                  trailType="projects"></TaskFollowUp>
+                                                  trailType="projects" ref="projectFollow"></TaskFollowUp>
                                 </div>
                             </div>
                         </div>
@@ -2066,6 +2069,7 @@
                     this.coursesLength += 1;
                     toastr.success('进度更新成功');
                     this.getProjectProgress();
+                    this.$refs.projectFollow.getTrail();
                 })
             },
 

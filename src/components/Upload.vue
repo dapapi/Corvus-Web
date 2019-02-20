@@ -1,7 +1,10 @@
 <template>
     <div class="upload">
-        <input type="file" @change="uploadFile" :accept="accept ? accept : ''" />
-        <slot></slot>
+        <input id='fileUpload' type="file" @change="uploadFile" :accept="accept ? accept : ''"/>
+        <label for="fileUpload">
+           <slot></slot>
+        </label>
+        
     </div>
 </template>
 
@@ -10,7 +13,7 @@ import config from '../assets/js/config'
 import * as qiniu from 'qiniu-js'
 
 export default {
-    props:['id', 'accept'],
+    props:['id', 'accept',],
     name: 'file-upload',
     data(){
         return{
@@ -37,7 +40,9 @@ export default {
             }
         }
     },
+
     methods: {
+
         uploadFile(e) {
             let file = e.target.files[0];
             let putExtra = null;

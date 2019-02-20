@@ -20,7 +20,10 @@
                                 <span class="hover-icon"><img :src="menu.hoverImage" alt=""></span>
                             </div>
                             <span class="site-menu-title">{{ menu.name }}</span>
-                            <span v-if="menu.name =='我的'&&unReadMsg>0" class="unRead ml-5">{{unReadMsg}}</span>
+                            <span v-if="menu.name =='我的'&&unReadMsg>0" class="unRead ml-5" :class="unReadMsg>=100?'unReadLine':''">
+                                <template v-if="unReadMsg>=100">...</template>
+                                <template v-else>{{unReadMsg}}</template>
+                            </span>
                         </router-link>
                     </template>
                     <template v-else>
@@ -317,7 +320,9 @@
         top: 8px;
         right: 26px;
     }
-
+    .unReadLine{
+        line-height: 12px;
+    }
     .site-menu-item {
         position: relative;
     }
