@@ -5,14 +5,14 @@
         </div>
         <div class="page-content container-fluid">
             <div class="panel">
-                <!--<div class="col-md-4  p-20">-->
-                    <!--<div class="input-search">-->
-                        <!--<button type="button" class="input-search-btn"><i class="iconfont icon-buoumaotubiao13" aria-hidden="true"></i>-->
-                        <!--</button>-->
-                        <!--<input v-model="keywords" type="text" class="form-control" placeholder="输入编号、类型或申请人"-->
-                               <!--@blur="getList">-->
-                    <!--</div>-->
-                <!--</div>-->
+                <div class="col-md-4  p-20">
+                    <div class="input-search">
+                        <button type="button" class="input-search-btn"><i class="iconfont icon-buoumaotubiao13" aria-hidden="true"></i>
+                        </button>
+                        <input v-model="keywords" type="text" class="form-control" placeholder="输入编号、类型或申请人"
+                               @blur="getList">
+                    </div>
+                </div>
                 <div class="col-md-12">
                     <ul class="nav nav-tabs nav-tabs-line" role="tablist">
                         <li class="nav-item" role="presentation" @click="getList(1)">
@@ -98,6 +98,7 @@
                 projectsInfo: [],
                 projectProgress:PROJECT_CONFIG.approvalProgress,
                 pageType:1,
+                status:1,
             }
         },
         mounted(){
@@ -129,9 +130,15 @@
                 })
             },
              getList(params) {
-                this.pageType = params
                 let _this = this
-                    fetch('get','/approvals_general/approval?status='+params).then((params) => {
+                let currentStatus = params
+                if(isNaN(params)){
+                    currentStatus = this.status
+                }else{
+                    this.status = currentStatus
+                }
+                this.pageType = currentStatus
+                    fetch('get','/approvals_general/approval?status='+currentStatus+'&keywords='+this.keywords).then((params) => {
                         _this.projectsInfo = params.data
                         _this.total = params.meta.pagination.total;
                         _this.current_page = params.meta.pagination.current_page;
