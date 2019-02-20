@@ -160,7 +160,7 @@
                 status: '',
                 isLoading: true,
                 projectSearchType: '',
-                getProjectStatus: 'principal_id',
+                getProjectStatus: 'my_principal',
                 cleanUp: false,
             }
         },
