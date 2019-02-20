@@ -725,7 +725,7 @@
                         <div class="example">
                             <div class="col-md-2 text-right float-left require">截止时间</div>
                             <div class="col-md-5 float-left pl-0">
-                                <datepicker @change="changeEndTime" ref="deadline"></datepicker>
+                                <datepicker @change="changeEndTime" ref="deadline" :startDate="startTime"></datepicker>
                             </div>
                             <div class="col-md-5 float-left pl-0">
                                 <timepicker :default="endTaskMinutes" @change="changeEndMinutes"
@@ -908,7 +908,7 @@
                         <div class="clearfix">
                             <div class="col-md-2 text-right float-left line-fixed-height">结束时间</div>
                             <div class="col-md-5 float-left pl-0">
-                                <datepicker @change="changeEndTime" ref="scheduleEndDate"></datepicker>
+                                <datepicker @change="changeEndTime" ref="scheduleEndDate" :startDate="startTime"></datepicker>
                             </div>
                             <div class="col-md-5 float-left pl-0" v-show="!isAllday">
                                 <timepicker :default="endMinutes" @change="changeEndMinutes"

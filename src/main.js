@@ -75,6 +75,7 @@ Vue.component('ApprovalGreatModule', ApprovalGreatModule);
 Vue.component('ApprovalProgress', ApprovalProgress);
 
 Vue.component('AddMember', AddMember);
+
 Vue.component('BuildProject', BuildProject);
 Vue.component('Calendar', Calendar);
 Vue.component('ChangeSizeInput', ChangeSizeInput);
