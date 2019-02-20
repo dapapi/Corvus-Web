@@ -42,7 +42,7 @@
                                aria-controls="forum-base"
                                aria-expanded="true" role="tab">所有项目</a>
                         </li>
-                        <li class="nav-item" role="presentation" @click="getMyProjects('principal_id')">
+                        <li class="nav-item" role="presentation" @click="getMyProjects('my_principal')">
                             <a class="nav-link active" data-toggle="tab" href="#forum-project"
                                aria-controls="forum-present"
                                aria-expanded="false" role="tab">我负责的</a>
@@ -165,7 +165,7 @@
                 status: '',
                 isLoading: true,
                 projectSearchType: '',
-                getProjectStatus: 'principal_id',
+                getProjectStatus: 'my_principal',
                 cleanUp: false,
                 exportParams:{},//导出参数
             }
