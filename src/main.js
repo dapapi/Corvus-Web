@@ -66,7 +66,7 @@ import ApprovalGoModal from '@/components/ForApproval/ApprovalGoModal.vue'
 import AppDetail from  '@/views/approval/appdetail.vue'
 import Avatar from '@/components/Avatar.vue'
 import ApprovalProgress from '@/components/ForApproval/ApprovalProgress'
-
+import AddTrail from '@/components/addTrail'
 import DepartmentPicker from '@/components/DepartmentPicker'
 Vue.config.productionTip = false;
 Vue.component('ApprovalGoModal', ApprovalGoModal);
@@ -135,6 +135,8 @@ Vue.component('AddClientType', AddClientType);
 Vue.component('DocPreview', DocPreview)
 Vue.component('ToolTips', ToolTips)
 Vue.component('Avatar', Avatar)
+Vue.component('AddTrail', AddTrail)
+
 
 Vue.prototype.globalClick = function (callback) {
     document.getElementById('app').addEventListener('click', (event) => {
