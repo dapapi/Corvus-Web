@@ -9,13 +9,16 @@
             <div class="modal-dialog modal-simple modal-center modal-lg">
                 <div class="modal-content">
                 <div class="modal-header">
-                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-                    <span aria-hidden="true">×</span>
+                    <button type="button" class="close" >
+                        <i class="iconfont px-20" :class="!isFullScreen?'icon-quanping':'icon-quxiaoquanping'" @click='fullScreenHandler'></i>
+                        <span aria-hidden="true" data-dismiss="modal" aria-label="Close" @click="exitFullscreen()">×</span>
                     </button>
+                    <!-- <i class="iconfont icon-quanping"></i> -->
+
                     <h4 class="modal-title">文件预览{{fileNameHandler}}</h4>{{fileNameHandler}}
                 </div>
                 <div class="modal-body">
-                    <iframe v-if="['doc','docx','xls','xlsx','ppt','pptx'].includes(fileNameHandler)" class="mt-20 ml-30" :src='"https://view.officeapps.live.com/op/view.aspx?src="+url' width='800px' height='500px' frameborder='1'>
+                    <iframe v-if="['doc','docx','xls','xlsx','ppt','pptx'].includes(fileNameHandler)" class=" mt-30" :src='"https://view.officeapps.live.com/op/view.aspx?src="+url' width='100%' height='90%' frameborder='1'>
 			        </iframe>
                     <img v-else-if="['png','gif','bmp','jpg','jpeg'].includes(fileNameHandler)" :src="url">
                     <embed v-else-if="fileNameHandler === 'pdf'" :src="url" type="application/pdf" width="100%" height="100%">
@@ -41,12 +44,17 @@ export default {
     name:'docPreview',
         //文件url     文件名
     props:['url','givenFileName'],
+    data(){
+        return {
+            isFullScreen:0,
+        }
+    },
     created(){
         
     },
     mounted(){
         $('#docPreview').on('hidden.bs.modal',function(){
-            document.getElementsByTagName('body')[0].classList.add('modal-open')   
+            // document.getElementsByTagName('body')[0].classList.add('modal-open')
         })
     },
     computed:{
@@ -60,15 +68,40 @@ export default {
         }
     },
     methods:{
-    
+        exitFullscreen(){
+           if (document.exitFullscreen) {
+                document.exitFullscreen();
+            } else if (document.webkitExitFullscreen) {
+                document.webkitExitFullscreen();
+            } else if (document.mozCancelFullScreen) {
+                document.mozCancelFullScreen();
+            } else if (document.msExitFullscreen) {
+                document.msExitFullscreen();
+            }
+            this.isFullScreen = 0
+        },
+        fullScreenHandler(){
+                if (!document.fullscreenElement) {
+                    $('.modal-content')[0].webkitRequestFullscreen();
+                    this.isFullScreen = 1
+                } else {
+                    if (document.exitFullscreen) {
+                        // $('.modal-content')[0].webkitExitFullscreen();
+                        this.exitFullscreen()
+                    }
+                }
+        }
     }
 }
 </script>
 
 <style scoped>
 img{
-    max-width: 860px !important;
+    width: 100%;
     /* height: 500px !important; */
+}
+.modal-body{
+    height: 500px;
 }
 </style>
 

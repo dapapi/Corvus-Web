@@ -1,6 +1,6 @@
 <template>
 
-    <input type="text" class="form-control addtrail" data-plugin="asSpinner" value="0" increment="0.1"
+    <input type="text" class="form-control addtrail" data-plugin="asSpinner"  increment="0.1"
            :class="[shortInput ? 'short-spinner-input' : '']">
 
 </template>

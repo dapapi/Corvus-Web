@@ -58,7 +58,7 @@
                         </div>
                         <span class="ml-6">{{currentData.creator.data.name}}</span>
                         <span class="">{{currentData.created_at}}</span>
-                        <span v-if="classifyArr[0]" class="ml-20">{{classifyArr.find(classifyArr => classifyArr.value == currentData.classify).name}}</span>
+                        <span v-if="classifyArr[0]" class="ml-20">{{classifyArr.find(classifyArr => classifyArr.id == currentData.classify).name}}</span>
                     </div>
                     <br>
                     <hr/>
@@ -121,7 +121,7 @@ export default {
             broadCastInfo:{},
             currentId:'',
             currentData:{},
-            classifyArr:config.classifyArr,
+            classifyArr:[],
             broadCastPost:{},
             paramsId:'',
             isLoading:true,
@@ -129,9 +129,12 @@ export default {
             my_id:'',
             previewUrlArr:[],
             previewUrl:'',
+            department:[],
         } 
     },
     created() { 
+        this.getDepartment()
+        this.getClassify()
         this.whoami()
         this.getCurrentId()
         this.dataInit()
@@ -141,12 +144,21 @@ export default {
     },
     computed: {
         ...mapState([
-            'department',
             'userList'
         ]),
          
     },
-    methods:{
+    methods:{ 
+        getClassify(){
+            fetch('get','/announcements/Classify/').then((params) => {
+                this.classifyArr = params.data
+            })
+        },
+        getDepartment(){
+            fetch('get','/departments_lists').then((params) => {
+                this.department = params
+            })
+        },
         //初始化数据
         dataInit(){
             let _this = this
