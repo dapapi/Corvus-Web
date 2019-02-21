@@ -711,19 +711,17 @@
                                             ref="taskStartDate"></datepicker>
                             </div>
                             <div class="col-md-5 float-left pl-0">
-                                <timepicker :default="startMinutes" @change="changeStartMinutes"
-                                            ref="taskStartTime"></timepicker>
+                                <TimeChoice @change="changeStartMinutes" ref="taskStartTime"></TimeChoice>
                             </div>
                         </div>
                         <div class="example">
                             <div class="col-md-2 text-right float-left require">截止时间</div>
                             <div class="col-md-5 float-left pl-0">
                                 <datepicker @change="changeEndTime" :placeholder="'请输入结束时间'"
-                                            ref="taskEndDate"></datepicker>
+                                            ref="taskEndDate" :startDate="startTime"></datepicker>
                             </div>
                             <div class="col-md-5 float-left pl-0">
-                                <timepicker :default="endMinutes" @change="changeEndMinutes"
-                                            ref="taskEndTime"></timepicker>
+                                <TimeChoice @change="changeEndMinutes" ref="taskEndTime"></TimeChoice>
                             </div>
                         </div>
                         <div class="example">
@@ -879,18 +877,20 @@
                                 <datepicker @change="changeStartTime" ref="scheduleStartDate"></datepicker>
                             </div>
                             <div class="col-md-5 float-left pl-0" v-show="!isAllday">
-                                <timepicker :default="startMinutes" @change="changeStartMinutes"
-                                            ref="scheduleStartMinute"></timepicker>
+                                <!-- <timepicker :default="startMinutes" @change="changeStartMinutes"
+                                            ref="scheduleStartMinute"></timepicker> -->
+                                <TimeChoice @change="changeStartMinutes" ref="scheduleStartMinute"></TimeChoice>
                             </div>
                         </div>
                         <div class="clearfix">
                             <div class="col-md-2 text-right float-left line-fixed-height">结束时间</div>
                             <div class="col-md-5 float-left pl-0">
-                                <datepicker @change="changeEndTime" ref="scheduleEndDate"></datepicker>
+                                <datepicker @change="changeEndTime" ref="scheduleEndDate" :startDate="startTime"></datepicker>
                             </div>
                             <div class="col-md-5 float-left pl-0" v-show="!isAllday">
-                                <timepicker :default="endMinutes" @change="changeEndMinutes"
-                                            ref="scheduleEndMinute"></timepicker>
+                                <!-- <timepicker :default="endMinutes" @change="changeEndMinutes"
+                                            ref="scheduleEndMinute"></timepicker> -->
+                                <TimeChoice @change="changeEndMinutes" ref="scheduleEndMinute"></TimeChoice>
                             </div>
                         </div>
                         <div class="clearfix">
@@ -1594,7 +1594,24 @@
             }
             ,
             taskcancel: function () {
+                this.getTaskList()
+                this.getArtist()
+                this.setDefaultPrincipal()
                 this.$store.state.newParticipantsInfo = []
+                this.taskType = ''
+                this.taskName = ''
+                this.taskLevel = ''
+                this.startTime = ''
+                this.endTime = ''
+                this.startMinutes = ''
+                this.endMinutes = ''
+                this.taskIntroduce = ''
+                this.$refs.taskType.setValue('')
+                this.$refs.taskStartTime.setValue('0')
+                this.$refs.taskStartDate.setValue('')
+                this.$refs.taskEndDate.setValue('')
+                this.$refs.taskEndTime.setValue('0')
+                this.$refs.taskLevel.setValue('')
             }
             ,
             selectScheduleCalendar: function (value) {
@@ -1816,8 +1833,8 @@
                 };
                 this.$refs.scheduleStartDate.setValue('');
                 this.$refs.scheduleEndDate.setValue('');
-                this.$refs.scheduleStartMinute.setValue('00:00');
-                this.$refs.scheduleEndMinute.setValue('00:00');
+                this.$refs.scheduleStartMinute.setValue('0');
+                this.$refs.scheduleEndMinute.setValue('0');
                 this.$refs.scheduleResource.setValue('');
                 this.$refs.scheduleRepeat.setValue('0');
                 this.$refs.scheduleNotice.setValue('0');
@@ -2135,10 +2152,10 @@
                     _this.endMinutes = ''
                     _this.taskIntroduce = ''
                     _this.$refs.taskType.setValue('')
-                    _this.$refs.taskStartTime.setValue('')
+                    _this.$refs.taskStartTime.setValue('0')
                     _this.$refs.taskStartDate.setValue('')
                     _this.$refs.taskEndDate.setValue('')
-                    _this.$refs.taskEndTime.setValue('')
+                    _this.$refs.taskEndTime.setValue('0')
                     _this.$refs.taskLevel.setValue('')
                 })
             }

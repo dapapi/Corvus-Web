@@ -116,7 +116,9 @@
                                    aria-controls="forum-present"
                                    aria-expanded="false" role="tab">合同</a>
                             </li>
-                            <li class="nav-item" role="presentation" @click="getClientTask">
+                            <!-- <li class="nav-item" role="presentation" @click="getClientTask"> --> 
+                            <!-- 默认先展示任务的数量 ，所以要先请求数据了 -->
+                            <li class="nav-item" role="presentation">
                                 <a class="nav-link" data-toggle="tab" href="#forum-task"
                                    aria-controls="forum-present"
                                    aria-expanded="false" role="tab">
@@ -638,19 +640,21 @@
                                             ref="startTime"></datepicker>
                             </div>
                             <div class="col-md-5 float-left pl-0">
-                                <timepicker :default="startMinutes" @change="changeStartMinutes"
-                                            ref="taskStartTime"></timepicker>
+                                <!-- <timepicker :default="startMinutes" @change="changeStartMinutes"
+                                            ref="taskStartTime"></timepicker> -->
+                                <TimeChoice @change="changeStartMinutes" ref="taskStartTime"></TimeChoice>
                             </div>
                         </div>
                         <div class="example">
                             <div class="col-md-2 text-right float-left require">截止时间</div>
                             <div class="col-md-5 float-left pl-0">
                                 <datepicker @change="changeEndTime" :placeholder="'请输入结束时间'"
-                                            ref="endTime"></datepicker>
+                                            ref="endTime" :startDate="taskStartTime"></datepicker>
                             </div>
                             <div class="col-md-5 float-left pl-0">
-                                <timepicker :default="endMinutes" @change="changeEndMinutes"
-                                            ref="taskEndTime"></timepicker>
+                                <!-- <timepicker :default="endMinutes" @change="changeEndMinutes"
+                                            ref="taskEndTime"></timepicker> -->
+                                 <TimeChoice @change="changeEndMinutes" ref="taskEndTime"></TimeChoice>
                             </div>
                         </div>
                         <div class="example">
@@ -757,6 +761,9 @@
                 // 清空state
                 this.cancleContact()
             })
+
+            this.getClientTask() // 为了默认展示任务数量 先在这里请求
+            
         },
         computed: {
             completeNum() {
@@ -1145,6 +1152,15 @@
             addTrailCallBack () {
                 this.getClientTrail()
             },
+            // 跳转
+            redirectContract (id) {
+                console.log(id)
+                // TODO 没有合同编号
+                // this.$router.push({
+                //     name: 'approval/detail',
+                //     params: {id: id}
+                // })
+            }
         }
     }
 </script>
