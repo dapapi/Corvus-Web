@@ -637,8 +637,9 @@
                                             ref="startTime"></datepicker>
                             </div>
                             <div class="col-md-5 float-left pl-0">
-                                <timepicker :default="startMinutes" @change="changeStartMinutes"
-                                            ref="taskStartTime"></timepicker>
+                                <!-- <timepicker :default="startMinutes" @change="changeStartMinutes"
+                                            ref="taskStartTime"></timepicker> -->
+                                <TimeChoice @change="changeStartMinutes" ref="taskStartTime"></TimeChoice>
                             </div>
                         </div>
                         <div class="example">
@@ -648,8 +649,9 @@
                                             ref="endTime" :startDate="taskStartTime"></datepicker>
                             </div>
                             <div class="col-md-5 float-left pl-0">
-                                <timepicker :default="endMinutes" @change="changeEndMinutes"
-                                            ref="taskEndTime"></timepicker>
+                                <!-- <timepicker :default="endMinutes" @change="changeEndMinutes"
+                                            ref="taskEndTime"></timepicker> -->
+                                 <TimeChoice @change="changeEndMinutes" ref="taskEndTime"></TimeChoice>
                             </div>
                         </div>
                         <div class="example">

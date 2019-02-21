@@ -1,5 +1,5 @@
 <template>
-    <div>
+    <div >
     <div v-for="n in Promptinglength" class="clearfix" :key="n">
         <div :id="'selector' + n" v-show="data.indexOf('selector' + n) === -1">
             <div class="float-left col-md-11 p-0">

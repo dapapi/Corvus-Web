@@ -718,8 +718,9 @@
                                 <datepicker @change="changeStartTime" ref="startTime"></datepicker>
                             </div>
                             <div class="col-md-5 float-left pl-0">
-                                <timepicker :default="startTaskMinutes" @change="changeStartMinutes"
-                                            ref="taskstart"></timepicker>
+                                <!-- <timepicker :default="startTaskMinutes" @change="changeStartMinutes"
+                                            ref="taskstart"></timepicker> -->
+                                <TimeChoice @change="changeStartMinutes" ref="taskstart"></TimeChoice>
                             </div>
                         </div>
                         <div class="example">
@@ -728,8 +729,9 @@
                                 <datepicker @change="changeEndTime" ref="deadline" :startDate="startTime"></datepicker>
                             </div>
                             <div class="col-md-5 float-left pl-0">
-                                <timepicker :default="endTaskMinutes" @change="changeEndMinutes"
-                                            ref="taskend"></timepicker>
+                                <!-- <timepicker :default="endTaskMinutes" @change="changeEndMinutes"
+                                            ref="taskend"></timepicker> -->
+                                <TimeChoice @change="changeEndMinutes" ref="taskend"></TimeChoice>
                             </div>
                         </div>
                         <div class="example">
@@ -901,8 +903,9 @@
                                 <datepicker @change="changeStartTime" ref="scheduleStartDate"></datepicker>
                             </div>
                             <div class="col-md-5 float-left pl-0" v-show="!isAllday">
-                                <timepicker :default="startTaskMinutes" @change="changeStartMinutes"
-                                            ref="scheduleStartMinute"></timepicker>
+                                <!-- <timepicker :default="startTaskMinutes" @change="changeStartMinutes"
+                                            ref="scheduleStartMinute"></timepicker> -->
+                                 <TimeChoice @change="changeStartMinutes" ref="scheduleStartMinute"></TimeChoice>
                             </div>
                         </div>
                         <div class="clearfix">
@@ -911,8 +914,9 @@
                                 <datepicker @change="changeEndTime" ref="scheduleEndDate" :startDate="startTime"></datepicker>
                             </div>
                             <div class="col-md-5 float-left pl-0" v-show="!isAllday">
-                                <timepicker :default="endMinutes" @change="changeEndMinutes"
-                                            ref="scheduleEndMinute"></timepicker>
+                                <!-- <timepicker :default="endMinutes" @change="changeEndMinutes"
+                                            ref="scheduleEndMinute"></timepicker> -->
+                                <TimeChoice @change="changeEndMinutes" ref="scheduleEndMinute"></TimeChoice>
                             </div>
                         </div>
                         <div class="clearfix">
@@ -1385,8 +1389,8 @@
                 _this.$refs.taskpriority.setValue('');
                 _this.$refs.startTime.setValue('');
                 _this.$refs.deadline.setValue('');
-                _this.$refs.taskstart.setValue('00:00')
-                _this.$refs.taskend.setValue('00:00')
+                _this.$refs.taskstart.setValue('0')
+                _this.$refs.taskend.setValue('0')
                 _this.$store.state.newParticipantsInfo = [];//参与人
                 _this.taskIntroduce = '';
                 _this.taskName = '';
@@ -1916,8 +1920,8 @@
                 };
                 this.$refs.scheduleStartDate.setValue('');
                 this.$refs.scheduleEndDate.setValue('');
-                this.$refs.scheduleStartMinute.setValue('00:00');
-                this.$refs.scheduleEndMinute.setValue('00:00');
+                this.$refs.scheduleStartMinute.setValue('0');
+                this.$refs.scheduleEndMinute.setValue('0');
                 this.$refs.scheduleResource.setValue('');
                 this.$refs.scheduleRepeat.setValue('0');
                 this.$refs.scheduleNotice.setValue('0');

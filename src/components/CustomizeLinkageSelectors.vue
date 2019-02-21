@@ -21,7 +21,7 @@
                    :onchange="inputChange">
             <datepicker v-if="valueType === 3" @change="datePickerChange"></datepicker>
             <number-spinner v-if="valueType === 2" ref="numberSpinner" :shortInput="true"
-                            @change="numberSpinnerChange"></number-spinner>
+                            @change="numberSpinnerChange" :min="0" :max="1000000000" :precision="2" :value="0"></number-spinner>
             <!-- <input-selectors v-if="valueType === 6" :otherslot="true"></input-selectors> -->
             <div v-if="valueType === 6" class="">
                 <selectors class="pr-40" ref='selectors' :options="users" @valuelistener="changeUsers" :multiple="true"
