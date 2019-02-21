@@ -49,7 +49,9 @@
                         </div>
                         <div class="form-group row col-sm-12">
                             <label for="" class="col-sm-2 col-form-label"><strong>公告范围</strong></label>
-                            <selectors class="scopeSelector col-sm-4" ref='scopeSelector' :options="departments" @valuelistener="changeDepartments"  multiple='true' :placeholder='"请选择范围"'></selectors>
+                            
+                            <RangeSelector class="scopeSelector"  ref='scopeSelector' :options='departments' @change='changeDepartments'/>
+                            <!-- <selectors class="scopeSelector col-sm-4" ref='scopeSelector' :options="departments" @valuelistener="changeDepartments"  multiple='true' :placeholder='"请选择范围"'></selectors> -->
                             <label for="" class="col-sm-2 col-form-label text-right"><strong>选择分类</strong></label>
                             <selectors ref='classifySelector' class="col-sm-4" :options="classifyArr" @change="changeClassify" placeholder='请选择类型' ></selectors>
                         </div>
@@ -89,9 +91,12 @@
 import { mapState } from 'vuex'
 import fetch from '@/assets/utils/fetch.js'
 import config from '@/assets/js/config'
-
+import RangeSelector from '@/components/RangeSelector'
 export default {
     props:['notedata','givenfilename'],
+    components:{
+        RangeSelector
+    },
     data(){
         return{
             title:'',               //标题内容
@@ -104,7 +109,7 @@ export default {
             accessory:'',           //附件内容
             is_accessory:false,     //是否携带附件
             departments:{},         //公告范围
-            classifyArr:config.classifyArr, 
+            classifyArr:[], 
             scope:[],
             accessory_name:'',
             whoamiid:'',
@@ -113,9 +118,10 @@ export default {
         }
     },
     created(){
-        if (this.department.length > 0) {
-            this.departments = this.department
-        }
+        this.getClassify()
+        // if (this.department.length > 0) {
+        //     this.departments = this.department
+        // }
     },
     mounted(){
         this.noteInit()
@@ -132,6 +138,7 @@ export default {
         },
     },
     watch:{
+
         notedata:function(value){
             let {creator:{data:{id = '-'}}} = value
             this.creator_id = id
@@ -150,6 +157,14 @@ export default {
         }
     },
     methods:{
+        getClassify(){
+            fetch('get','/announcements/Classify/').then((params) => {
+                this.classifyArr = params.data
+            })
+        },
+        rangeSelect(params,type,value){
+            console.log(params,type,value);
+        },
         imgDelete(params){
             this.affix.splice(this.affix.indexOf(this.affix.find(item=>item.url === params)),1)
         },
@@ -177,17 +192,29 @@ export default {
     
         //修复富文本编辑器多层弹窗bug
         modalInit(){
+            let _this = this
+            fetch('get','departments_lists').then((params) => {
+                _this.departments = params
+            })
+            this.$nextTick((params) => {
+                $('.select2-container').addClass('col-md-4')
+                $('.select2-container').addClass('px-0')
+
+                
+            })
             $('.summernoteUploadModal').click(() => {
                 $('.summernoteUploadModal').modal('hide');
             })
         },
         //公告范围选择（数组）
         changeDepartments(value){
+            console.log(value);
             this.scope = value
         },
         //公告类型选择
         changeClassify(value){
-            this.type = value
+            console.log(value);
+            this.type = Number(value)
         },
         //富文本编辑器初始化
         getSummernote(){
