@@ -1328,7 +1328,12 @@
                 toastX: 0,
                 toastY: 0,
                 projectContractDefault:'',
-                taskDate:{}
+                taskDate:{},
+                scheduleRemind:'',
+                conditionLength: 0,
+                selectorHidden: [],
+                isCancel:false,
+                scheduleRemindDate:[]
             }
         },
 
@@ -1487,6 +1492,9 @@
                         }
                     }
                 }
+                for (let key in this.scheduleRemind ){
+                    this.scheduleRemindDate.push(this.scheduleRemind[key])
+                }
                 let data = {
                     title: this.scheduleName,
                     calendar_id: this.calendarId[0],
@@ -1495,7 +1503,8 @@
                     start_at: startTime,
                     end_at: endTime,
                     repeat: this.scheduleRepeat,
-                    desc: this.eventDesc
+                    desc: this.eventDesc,
+                    remind: this.scheduleRemindDate
                 };
                 if (this.eventPlace) {
                     data.position = this.eventPlace;
@@ -1799,6 +1808,10 @@
                     toastr.success('删除成功');
                     this.$refs.calendar.refresh()
                 })
+            },
+            changeScheduleRemind: function (value) {
+                
+                this.scheduleRemind = value
             }
             ,
             initAddScheduleModal: function () {
@@ -1830,6 +1843,7 @@
                 this.$refs.scheduleResource.setValue('');
                 this.$refs.scheduleRepeat.setValue('0');
                 this.$refs.scheduleNotice.setValue('0');
+                this.this.scheduleRemindDate = []
             }
             ,
             /*查看日历详情 --添加日历 -- 修改日历 --结束*/

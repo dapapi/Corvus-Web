@@ -965,8 +965,9 @@
                             <div class="example">
                                 <div class="col-md-2 text-right float-left">提醒</div>
                                 <div class="col-md-10 float-left pl-0">
-                                    <selectors :options="remindArr" ref="scheduleRemind"
-                                               @change="changeScheduleRemind"></selectors>
+                                    <!-- <selectors :options="remindArr" ref="scheduleRemind"
+                                               @change="changeScheduleRemind"></selectors> -->
+                                    <AddRemind @change="changeScheduleRemind" :options="remindArr" :isCancel="isCancel" :conditionLength="conditionLength" :selectorHidden="selectorHidden" ref="scheduleRemind"></AddRemind>
                                 </div>
                             </div>
                             <div class="clearfix my-20">
@@ -1356,7 +1357,11 @@
                 toastY: 0,
                 scheduleRemind: '',
                 projectContractDefault: '',
-                projectPage:''
+                projectPage:'',
+                conditionLength: 0,
+                selectorHidden: [],
+                isCancel:false,
+                scheduleRemindDate:[]
             }
         },
         computed: {
@@ -1648,6 +1653,9 @@
                         }
                     }
                 }
+                for (let key in this.scheduleRemind ){
+                    this.scheduleRemindDate.push(this.scheduleRemind[key])
+                }
                 let data = {
                     title: this.scheduleName,
                     calendar_id: this.calendarId[0],
@@ -1657,7 +1665,7 @@
                     end_at: endTime,
                     repeat: this.scheduleRepeat,
                     desc: this.eventDesc,
-                    remind: this.scheduleRemind
+                    remind: this.scheduleRemindDate
 
                 };
                 if (this.eventPlace) {
@@ -1925,7 +1933,8 @@
                 this.$refs.scheduleResource.setValue('');
                 this.$refs.scheduleRepeat.setValue('0');
                 this.$refs.scheduleNotice.setValue('0');
-                this.$refs.scheduleRemind.setValue('0');
+                // this.$refs.scheduleRemind.setValue('0');
+                this.this.scheduleRemindDate = []
             },
             changeScheduleRepeat: function (value) {
                 this.scheduleRepeat = value;
