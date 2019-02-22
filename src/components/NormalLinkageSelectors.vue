@@ -2,7 +2,7 @@
 
     <div class="row">
         <div class="float-left col-md-6 pl-0">
-            <select id="father" title="">
+            <select id="father" title="" :value="resource">
                 <selectorsOptions v-for="(option, index) in data" v-bind:id="option.id" :index="index" :val="option.value"
                                   :key="option.id">
                     {{option.name}}
@@ -10,7 +10,7 @@
             </select>
         </div>
         <div class="float-left col-md-6 pl-0">
-            <select id="child" title="">
+            <select id="child" title="" :value="resourceable">
                 <selectorsOptions v-for="option in newData[index].child" v-bind:id="option.id" :val="option.value"
                                   :key="option.id">
                     {{option.name}}
@@ -23,7 +23,7 @@
 </template>
 <script>
     export default {
-        props: ['data'],
+        props: ['data', 'resource', 'resourceable'],
         data() {
             return {
                 item: function () {
