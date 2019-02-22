@@ -15,7 +15,7 @@
                     <!-- <a class="dropdown-item" role="menuitem" data-toggle="modal" data-target="#customizeFieldContent">自定义字段</a> -->
                     <a class="dropdown-item" role="menuitem" @click="privacyTask(oldInfo.privacy ? 0 : 1)">
                         {{oldInfo.privacy ? '转公开':'转私密'}}</a>
-                    <a class="dropdown-item" role="menuitem" @click="deleteTask">删除</a>
+                    <a class="dropdown-item" role="menuitem" @click="shouleDeleteTask">删除</a>
                 </div>
             </div>
         </div>
@@ -70,7 +70,7 @@
                         <div class="float-right text-right pr-0" v-if="oldInfo.resource">
                             <span>关联资源</span>
                             <span class="pl-2 font-weight-bold">
-                                {{oldInfo.resource.data.resource.data.title}} -
+                                {{ oldInfo.resource.data.resource.data.title }} -
                                 <template v-if="oldInfo.resource.data.resourceable_type === 'project'">{{ oldInfo.resource.data.resourceable.data.title }}</template>
                                 <template v-if="oldInfo.resource.data.resourceable_type === 'client'">{{ oldInfo.resource.data.resourceable.data.company }}</template>
                                 <template v-if="oldInfo.resource.data.resourceable_type === 'star'">{{ oldInfo.resource.data.resourceable.data.name }}</template>
@@ -284,6 +284,7 @@
                                         <button class="btn btn-primary" @click="changeTaskBaseInfo">确定</button>
                                     </div>
                                 </div>
+
                                 <div class="py-20 clearfix">
                                     <div class="clearfix">
                                         <div class="card-text py-10 px-0 clearfix col-md-8">
@@ -291,6 +292,26 @@
                                             <div class="col-md-10 float-left font-weight-bold">
                                                 <EditInput :content="taskInfo.title" :is-edit="isEdit"
                                                            @change="(value) => changeTaskInfo(value, 'title')"></EditInput>
+                                            </div>
+                                        </div>
+                                        <div class="card-text py-10 px-0 clearfix col-md-8">
+                                            <div class="col-md-2 float-left text-right pl-0">关联资源</div>
+                                            <div class="col-md-10 float-left font-weight-bold">
+                                                <span class="font-weight-bold" v-if="oldInfo.resource && !isEdit">
+                                                    {{oldInfo.resource.data.resource.data.title}} -
+                                                    <template v-if="oldInfo.resource.data.resourceable_type === 'project'">{{ oldInfo.resource.data.resourceable.data.title }}</template>
+                                                    <template v-if="oldInfo.resource.data.resourceable_type === 'client'">{{ oldInfo.resource.data.resourceable.data.company }}</template>
+                                                    <template v-if="oldInfo.resource.data.resourceable_type === 'star'">{{ oldInfo.resource.data.resourceable.data.name }}</template>
+                                                    <template v-if="oldInfo.resource.data.resourceable_type === 'blogger'">{{ oldInfo.resource.data.resourceable.data.nickname }}</template>
+                                                    <template v-if="oldInfo.resource.data.resourceable_type === 'trail'">{{ oldInfo.resource.data.resourceable.data.title }}</template>
+                                                </span>
+                                                <template v-else>
+                                                    <normal-linkage-selectors class="ml-0" ref="linkage" v-if="linkData.length>0" :myData="linkData"
+                                                        :data="linkData"
+                                                        :resource="oldInfo.resource.data.resource.data.code"
+                                                        :resourceable="oldInfo.resource.data.resourceable.data.id"
+                                                        @change="addLinkage"></normal-linkage-selectors>
+                                                </template>
                                             </div>
                                         </div>
                                         <div class="card-text py-10 px-0 clearfix col-md-8">
@@ -590,6 +611,7 @@
         </Modal>
         <customize-field></customize-field>
         <DocPreview :url="previewUrl" :givenFileName="previewName"/>
+        <flag :id="'delTask'" @confirmFlag="deleteTask"/>
     </div>
 </template>
 
@@ -653,9 +675,6 @@
                 previewName: '' // 附件名字
             }
         },
-        created() {
-            this.getLinkData()
-        },
 
         mounted() {
             
@@ -698,6 +717,9 @@
                     this.getTask();
                 }, 100)
                 $('#taskTab a:first').tab('show')
+            },
+            resourceType () {
+                console.log(this.resourceType)
             }
         },
 
@@ -740,6 +762,9 @@
                     params.data = response.data.principal.data;
                     this.$store.dispatch('changePrincipal', params);
                     this.isLoading = false;
+                    this.getLinkData()
+                    this.resourceType =  this.oldInfo.resource.data.resource.data.id // 资源type
+                    this.resourceableId = this.oldInfo.resource.data.resourceable.data.id // 资源id
                 })
             },
 
@@ -802,6 +827,10 @@
                     toastr.success(this.taskInfo.privacy ? '转公开成功!' : '转私密成功!');
                     this.getTask()
                 })
+            },
+
+            shouleDeleteTask () {
+                $("#delTask").modal();
             },
 
             deleteTask: function () {
@@ -956,7 +985,7 @@
                     self.getTask();
                 })
             },
-
+// changeInfo
             addTaskType: function (value) {
                 this.taskType = value
             },
@@ -989,8 +1018,10 @@
                 if (type === 'father') {
                     this.getChildLinkData(value, index)
                     this.resourceType = id
+                    this.changeInfo.resource_type = id
                 } else if (type === 'child') {
                     this.resourceableId = value
+                    this.changeInfo.resourceable_id = value
                 }
             },
 
@@ -1026,6 +1057,10 @@
                     })
                     if (this.linkData[0].child.length === 0) {
                         this.getChildLinkData('', 0)
+                    }
+                    console.log(this.oldInfo.resource.data.resource.data.code)
+                    if (this.oldInfo && this.oldInfo.resource.data.resource.data.code) {
+                        this.getChildLinkData(this.oldInfo.resource.data.resource.data.code, 0)
                     }
                 })
             },
