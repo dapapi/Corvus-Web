@@ -12,7 +12,7 @@
         </div>
     </div>
     
-    <span @click="addCondition">+<a href="javascript:;" style="color:#000">添加新提醒</a></span>
+    <span @click="addCondition">+<a href="javascript:;" style="color:#757575">添加新提醒</a></span>
     
     </div>
 </template>
@@ -56,7 +56,10 @@
                 this.Remind[id] = value
                 console.log( this.Remind)
                 this.$emit('change',this.Remind)
-            }
+            },
+             setValue(value) {
+                $(this.$el).selectpicker('val', value);
+            },
         }
     }
 </script>
