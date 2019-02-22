@@ -339,26 +339,40 @@
                                         <div class="card-text py-10 px-0 clearfix col-md-8">
                                             <div class="col-md-2 float-left text-right pl-0">开始时间</div>
                                             <div class="col-md-10 float-left font-weight-bold" v-if="taskInfo.start_at">
-                                                <EditDatepicker class="col-md-6 px-0 float-left"
+                                                <div v-show="!isEdit">
+                                                    {{ taskInfo.start_at[0] }} {{ taskInfo.start_at[1] }}
+                                                </div>
+                                                <div v-show="isEdit">
+                                                    <EditDatepicker class="col-md-6 px-0 float-left"
                                                                 :content="taskInfo.start_at[0]" :is-edit="isEdit"
                                                                 @change="(value) => changeTaskInfo(value, 'start_at')"></EditDatepicker>
-                                                <EditTimeChoice class="col-md-6 px-0 float-left"
+                                                    <EditTimeChoice class="col-md-6 px-0 float-left"
                                                                 :content="taskInfo.start_at[1]" :is-edit="isEdit"
                                                                 @change="(value) => changeTaskInfo(value, 'start_minutes')"></EditTimeChoice>
+                                                </div>
+                                                
                                             </div>
                                         </div>
                                         <div class="card-text py-10 px-0 clearfix col-md-8">
                                             <div class="col-md-2 float-left text-right pl-0">结束时间</div>
                                             <div class="col-md-10 float-left font-weight-bold" v-if="taskInfo.end_at">
-                                                <EditDatepicker class="col-md-6 px-0 float-left"
+                                                <div v-show="!isEdit">
+                                                    {{ taskInfo.end_at[0] }} {{ taskInfo.end_at[1] }}
+                                                </div>
+                                                <div v-show="isEdit">
+                                                    <EditDatepicker class="col-md-6 px-0 float-left"
                                                                 :content="taskInfo.end_at[0]" :is-edit="isEdit"
                                                                 @change="(value) => changeTaskInfo(value, 'end_at')"></EditDatepicker>
                                                 <!-- <EditTimepicker class="col-md-6 px-0 float-left"
                                                                 :content="taskInfo.end_at[1]" :is-edit="isEdit"
                                                                 @change="(value) => changeTaskInfo(value, 'end_minutes')"></EditTimepicker> -->
-                                                <EditTimeChoice class="col-md-6 px-0 float-left"
+                                                    <EditTimeChoice class="col-md-6 px-0 float-left"
                                                                 :content="taskInfo.end_at[1]" :is-edit="isEdit"
                                                                 @change="(value) => changeTaskInfo(value, 'end_minutes')"></EditTimeChoice>
+                                                    <!-- <EditTimepicker class="col-md-6 px-0 float-left"
+                                                                :content="taskInfo.end_at[1]" :is-edit="isEdit"
+                                                                @change="(value) => changeTaskInfo(value, 'end_minutes')"></EditTimepicker> -->
+                                                </div>
                                             </div>
                                         </div>
                                         <div class="card-text py-10 px-0 clearfix col-md-8">
@@ -985,7 +999,6 @@
                     self.getTask();
                 })
             },
-// changeInfo
             addTaskType: function (value) {
                 this.taskType = value
             },
@@ -1018,10 +1031,12 @@
                 if (type === 'father') {
                     this.getChildLinkData(value, index)
                     this.resourceType = id
+                    this.changeInfo.resourceable_id = this.resourceableId
                     this.changeInfo.resource_type = id
                 } else if (type === 'child') {
                     this.resourceableId = value
                     this.changeInfo.resourceable_id = value
+                    this.changeInfo.resource_type = this.resourceType
                 }
             },
 
@@ -1058,7 +1073,6 @@
                     if (this.linkData[0].child.length === 0) {
                         this.getChildLinkData('', 0)
                     }
-                    console.log(this.oldInfo.resource.data.resource.data.code)
                     if (this.oldInfo && this.oldInfo.resource.data.resource.data.code) {
                         this.getChildLinkData(this.oldInfo.resource.data.resource.data.code, 0)
                     }
