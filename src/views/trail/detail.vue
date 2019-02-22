@@ -182,7 +182,7 @@
                                         <div class="py-10 px-0 clearfix col-md-6 float-left ">
                                             <TrailOrigin :trailType='trailType'
                                                          typeName='线索' :isEdit='isEdit'
-                                                         :content='trailInfo.resource'
+                                                         :content='trailInfo.resource || oldInfo.resource'
                                                          @changeTrailOrigin='changeTrailOrigin'
                                                          :contentType='trailInfo.resource_type'
                                                          @changeEmail='changeEmail' detailPage='true'

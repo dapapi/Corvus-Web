@@ -69,6 +69,7 @@ import ApprovalProgress from '@/components/ForApproval/ApprovalProgress'
 import TimeChoice from '@/components/TimeChoice.vue'
 import EditTimeChoice from '@/components/EditTimeChoice.vue'
 
+import AddTrail from '@/components/addTrail'
 import DepartmentPicker from '@/components/DepartmentPicker'
 Vue.config.productionTip = false;
 Vue.component('ApprovalGoModal', ApprovalGoModal);
@@ -140,6 +141,8 @@ Vue.component('ToolTips', ToolTips)
 Vue.component('Avatar', Avatar)
 Vue.component('TimeChoice', TimeChoice)
 Vue.component('EditTimeChoice', EditTimeChoice)
+Vue.component('AddTrail', AddTrail)
+
 
 Vue.prototype.globalClick = function (callback) {
     document.getElementById('app').addEventListener('click', (event) => {

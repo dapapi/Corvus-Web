@@ -41,7 +41,7 @@
                                            NEW
                                         </span> -->
                                     </td>
-                                    <td>{{classifyArr.find(classifyArr => classifyArr.value == item.classify).name}}</td>
+                                    <td>{{classifyArr.find(classifyArr => classifyArr.id == item.classify).name}}</td>
                                     <td>
                                         <span>{{item.created_at}}</span>
                                     </td>
@@ -74,7 +74,7 @@ export default {
     data(){
         return{
              broadCastInfo:{},
-             classifyArr:config.classifyArr,
+             classifyArr:[],
              memberList:[],
              isLoading:true,
              status:'',
@@ -82,12 +82,15 @@ export default {
           
     },
     created() {
+        this.getClassify()
+
         if (this.userList.length > 0) {
             this.memberList = this.userList
         }
         
     },
     mounted(){
+
          if(this.$route.path.split('/').pop() === 'receive'){
                 this.status = 1
                 this.dataInit()
@@ -121,6 +124,12 @@ export default {
         }
     },
     methods:{
+        getClassify(){
+            let _this = this
+            fetch('get','/announcements/Classify/').then((params) => {
+                _this.classifyArr = params.data
+            })
+        },
         //初始化数据
         dataInit(){
             let _this = this

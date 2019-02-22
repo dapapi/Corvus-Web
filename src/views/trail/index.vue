@@ -4,7 +4,7 @@
         <div class="page-header page-header-bordered">
             <h1 class="page-title">销售线索管理</h1>
             <div class="page-header-actions">
-                <import-and-export class="float-left" :type="'export'" :moduleName="'trails'">
+                <import-and-export class="float-left" :type="'export'" :moduleName="'trails'" :params="exportParams">
                     <i class="iconfont icon-daoru px-5 font-size-20 pr-20" aria-hidden="true"></i>
                 </import-and-export>
                 <import-and-export class="float-left" :type="'import'" :moduleName="'trails'">
@@ -315,6 +315,7 @@
                 isLoading: true,
                 cleanUp: false,
                 trailIsLocked: '',
+                exportParams:{},//导出参数
 
             }
         },
@@ -451,6 +452,12 @@
             fetchHandler(methods, url) {
                 let _this = this
                 this.fetchData.include = 'principal,client,contact,recommendations,expectations'
+                console.log(this.fetchData)
+                this.exportParams ={
+                    keyword: this.fetchData.keyword,
+                    status: this.fetchData.status,
+                    principal_ids:this.fetchData.principal_ids,
+                }
                 fetch(methods, url, this.fetchData).then((response) => {
                     _this.trailsInfo = response.data
                     _this.total = response.meta.pagination.total;

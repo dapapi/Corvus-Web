@@ -3,6 +3,11 @@
         <Loading :is-loading="isLoading"></Loading>
         <div class="page-header page-header-bordered">
             <h1 class="page-title">项目管理</h1>
+            <div class="page-header-actions">
+                <import-and-export class="float-left" :type="'export'" :moduleName="'projects'" :params="exportParams">
+                    <i class="iconfont icon-daochu px-5 font-size-20 pr-20" aria-hidden="true"></i>
+                </import-and-export>
+            </div>
         </div>
 
         <div class="page-content container-fluid">
@@ -37,7 +42,7 @@
                                aria-controls="forum-base"
                                aria-expanded="true" role="tab">所有项目</a>
                         </li>
-                        <li class="nav-item" role="presentation" @click="getMyProjects('principal_id')">
+                        <li class="nav-item" role="presentation" @click="getMyProjects('my_principal')">
                             <a class="nav-link active" data-toggle="tab" href="#forum-project"
                                aria-controls="forum-present"
                                aria-expanded="false" role="tab">我负责的</a>
@@ -128,7 +133,7 @@
     import config from '../../assets/js/config'
     import {mapState} from 'vuex'
     import Cookies from 'js-cookie'
-
+    import ImportAndExport from '../../components/ImportAndExport.vue'
     const projectStatusArr = [{name: '全部', value: ''}, ...config.projectStatusArr];
     const projectTypeArr = [{name: '全部', value: ''}, ...config.projectTypeArr];
 
@@ -160,8 +165,9 @@
                 status: '',
                 isLoading: true,
                 projectSearchType: '',
-                getProjectStatus: 'principal_id',
+                getProjectStatus: 'my_principal',
                 cleanUp: false,
+                exportParams:{},//导出参数
             }
         },
 
@@ -188,7 +194,9 @@
                 return this.userList
             }
         },
-
+        components: {
+            ImportAndExport
+        },
         watch: {
             _userList() {
                 for (let i = 0; i < this.userList.length; i++) {
@@ -240,6 +248,13 @@
                 }
                 if (this.principal_ids.length > 0) {
                     data.principal_ids = this.principal_ids;
+                }
+                //导出参数
+                this.exportParams={
+                    my : this.getProjectStatus,
+                    type : this.projectSearchType,
+                    keyword : this.projectKeyword,
+                    principal_ids : this.principal_ids
                 }
                 fetch('get', '/projects', data).then(response => {
                     this.projectsInfo = response.data;
