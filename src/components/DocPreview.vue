@@ -7,7 +7,7 @@
     <div>
         <div class="modal fade  bootbox" id="docPreview" aria-labelledby="docPreviewPositionCenter" role="dialog" tabindex="-1" data-backdrop="static">
             <div class="modal-dialog modal-simple modal-center modal-lg">
-                <div class="modal-content">
+                <div class="modal-content preview-content">
                 <div class="modal-header">
                     <button type="button" class="close" >
                         <i class="iconfont px-20" :class="!isFullScreen?'icon-quanping':'icon-quxiaoquanping'" @click='fullScreenHandler'></i>
@@ -43,7 +43,7 @@
 export default {
     name:'docPreview',
         //文件url     文件名
-    props:['url','givenFileName'],
+    props:['url','givenFileName','detailpage'],
     data(){
         return {
             isFullScreen:0,
@@ -53,9 +53,11 @@ export default {
         
     },
     mounted(){
-        $('#docPreview').on('hidden.bs.modal',function(){
-            // document.getElementsByTagName('body')[0].classList.add('modal-open')
-        })
+        if(!this.detailpage){
+            $('#docPreview').on('hidden.bs.modal',function(){
+                document.getElementsByTagName('body')[0].classList.add('modal-open')
+            })
+        }
     },
     computed:{
         //获取扩展名
@@ -82,7 +84,7 @@ export default {
         },
         fullScreenHandler(){
                 if (!document.fullscreenElement) {
-                    $('.modal-content')[0].webkitRequestFullscreen();
+                    $('.preview-content')[0].webkitRequestFullscreen();
                     this.isFullScreen = 1
                 } else {
                     if (document.exitFullscreen) {

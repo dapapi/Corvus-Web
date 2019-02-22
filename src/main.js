@@ -66,13 +66,14 @@ import ApprovalGoModal from '@/components/ForApproval/ApprovalGoModal.vue'
 import AppDetail from  '@/views/approval/appdetail.vue'
 import Avatar from '@/components/Avatar.vue'
 import ApprovalProgress from '@/components/ForApproval/ApprovalProgress'
-
+import VueUeditorWrap from 'vue-ueditor-wrap'
 import DepartmentPicker from '@/components/DepartmentPicker'
 Vue.config.productionTip = false;
 Vue.component('ApprovalGoModal', ApprovalGoModal);
 Vue.component('AppDetail', AppDetail);
 Vue.component('ApprovalGreatModule', ApprovalGreatModule);
 Vue.component('ApprovalProgress', ApprovalProgress);
+Vue.component('VueUeditorWrap', VueUeditorWrap);
 
 Vue.component('AddMember', AddMember);
 Vue.component('BuildProject', BuildProject);

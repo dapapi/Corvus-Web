@@ -1,7 +1,7 @@
 <template>
     <div class="approval-text-container col-md-12 pl-0">
         <span class="col-md-2 text-right pl-0 " :class="consdata[0].required===1?'require':''">{{title || consdata[0].control_title || '测试文本输入框'}}</span>
-        <textarea name="" id="" class="form-control" v-model="textContent"></textarea>  
+        <textarea name="" id="" class="form-control" v-model="textContent" :placeholder="consdata[0].control_placeholder"></textarea>  
     </div>    
 </template>
 

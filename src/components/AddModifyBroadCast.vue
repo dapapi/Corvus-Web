@@ -69,7 +69,7 @@
                                 </div>
                             </div>
                         </figure>
-                        
+                        <vue-ueditor-wrap v-model="msg"></vue-ueditor-wrap>
                         <div class="col-md-12 float-left">
                             <input type="checkbox" v-model="topFlag">
                             <span class="set-top-flag" >&nbsp;&nbsp;置顶</span>
@@ -115,6 +115,7 @@ export default {
             whoamiid:'',
             creator_id:'',
             affix:[],
+            msg:'',
         }
     },
     created(){

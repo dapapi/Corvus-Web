@@ -8,6 +8,7 @@ import Vue from 'vue';
 Vue.use(Vuex);
 
 const state = {
+    previewurl:'',
     participantsInfo: [],
     newParticipantsInfo: [],
     //隐私设置--参数
