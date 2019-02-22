@@ -946,6 +946,7 @@
             },
 
             changeScheduleRemind: function (value) {
+                console.log(value)
                 this.scheduleRemind = value;
             },
 
@@ -1216,8 +1217,6 @@
             },
 
             initAddScheduleModal: function () {
-                console.log(this.conditionLength)
-                console.log(this.selectorHidden)
                 this.showMore = false;
                 this.$store.dispatch('changeParticipantsInfo', {data: []});
                 this.scheduleName = '';
@@ -1246,8 +1245,6 @@
                 this.$refs.scheduleEndMinute.setValue('0');
                 this.$refs.scheduleResource.setValue('');
                 this.$refs.scheduleRepeat.setValue('0');
-                this.conditionLength = 0
-                this.selectorHidden = []
             },
             cancelSchedule:function(){
                 

@@ -1,7 +1,7 @@
 <template>
-    <div >
-    <div v-for="n in Promptinglength" class="clearfix" :key="n">
-        <div :id="'selector' + n" v-show="data.indexOf('selector' + n) === -1">
+    <div>
+    <div v-for="(n,index) in Promptinglength" class="clearfix" :key="index">
+        <div :id="'selector' + n" v-if="data.indexOf('selector' + n) === -1">
             <div class="float-left col-md-11 p-0">
                   <selectors :options="options" ref="scheduleRemind"></selectors> 
             </div>
