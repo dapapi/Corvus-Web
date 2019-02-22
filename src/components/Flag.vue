@@ -1,6 +1,6 @@
 <template>
     <div class="modal fade modal-simple"
-         id="confirmFlag"
+         :id="id? id : 'confirmFlag'"
          aria-labelledby="exampleModalTitle"
          role="dialog" tabindex="-1"
          data-backdrop="static"
@@ -33,7 +33,7 @@
 
 <script>
     export default {
-        props: ['typeText'],
+        props: ['typeText', 'id'], // 当一个页面有多个这个组件 需要赋值不同id
         methods: {
             //发送
             confirmFlag() {
