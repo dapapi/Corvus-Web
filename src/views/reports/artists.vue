@@ -11,22 +11,26 @@
                     </div>
                     <div class="col-md-7 p-20 clearfix float-left" style="z-index: 0;">
                         <div class="col-md-3 float-left">
-                            <button type="button" class="btn btn-block btn-success waves-effect waves-classic search-button"
+                            <button type="button"
+                                    class="btn btn-block btn-success waves-effect waves-classic search-button"
                                     :disabled="designationDateNum === 'day'" @click="selectDate('day')">7天
                             </button>
                         </div>
                         <div class="col-md-3 float-left">
-                            <button type="button" class="btn btn-block btn-success waves-effect waves-classic search-button"
+                            <button type="button"
+                                    class="btn btn-block btn-success waves-effect waves-classic search-button"
                                     :disabled="designationDateNum === 'month'" @click="selectDate('month')">30天
                             </button>
                         </div>
                         <div class="col-md-3 float-left">
-                            <button type="button" class="btn btn-block btn-success waves-effect waves-classic search-button"
+                            <button type="button"
+                                    class="btn btn-block btn-success waves-effect waves-classic search-button"
                                     :disabled="designationDateNum === 'quarter'" @click="selectDate('quarter')">季度
                             </button>
                         </div>
                         <div class="col-md-3 float-left">
-                            <button type="button" class="btn btn-block btn-success waves-effect waves-classic search-button"
+                            <button type="button"
+                                    class="btn btn-block btn-success waves-effect waves-classic search-button"
                                     :disabled="designationDateNum === 'year'" @click="selectDate('year')">年度
                             </button>
                         </div>
@@ -34,21 +38,23 @@
                 </div>
 
                 <div class="col-md-12 clearfix my-10 px-0">
-                    <div class="col-md-3 float-left">
+                    <div class="col-md-3 float-left px-0">
                         <div class="col-md-7 float-left text-right">艺人数量合计</div>
-                        <div class="col-md-5 float-left pl-0">{{ tableData.total }}个</div>
+                        <div class="col-md-5 float-left px-0">{{ tableData.total }}个</div>
                     </div>
-                    <div class="col-md-3 float-left">
+                    <div class="col-md-3 float-left px-0">
                         <div class="col-md-7 float-left text-right pl-0">预计订单收入总额</div>
-                        <div class="col-md-5 float-left pl-0">{{ tableData.total_fee }}元</div>
+                        <div class="col-md-5 float-left px-0">{{ tableData.total_fee }}元</div>
                     </div>
-                    <div class="col-md-3 float-left">
+                    <div class="col-md-3 float-left px-0">
                         <div class="col-md-7 float-left text-right">合同金额总额</div>
-                        <div class="col-md-5 float-left pl-0">666元</div>
+                        <div class="col-md-5 float-left px-0">{{ tableData.total_contract_amount }}元</div>
                     </div>
-                    <div class="col-md-3 float-left">
+                    <div class="col-md-3 float-left px-0">
                         <div class="col-md-7 float-left text-right">花费金额总额</div>
-                        <div class="col-md-5 float-left pl-0">666元</div>
+                        <div class="col-md-5 float-left px-0">{{ tableData.total_expenditure ?
+                            tableData.total_expenditure : 0 }}元
+                        </div>
                     </div>
                 </div>
 
@@ -114,7 +120,8 @@
                                         </template>
                                     </td>
                                     <td>{{ taiyangCommunicationStatusArr.find(item => item.value ==
-                                        data.communication_status) ? taiyangCommunicationStatusArr.find(item => item.value ==
+                                        data.communication_status) ? taiyangCommunicationStatusArr.find(item =>
+                                        item.value ==
                                         data.communication_status).name : '' }}
                                     </td>
                                     <td>{{ data.created_at }}</td>
@@ -123,7 +130,9 @@
                                 <template v-else>
                                     <td>{{ data.department_name }}</td>
                                     <td>{{ data.name}}</td>
-                                    <td>{{ data.total_fee }}</td>
+                                    <td>{{ data.total_fee ? data.total_fee : 0}}元</td>
+                                    <td>{{ data.total_contract_money ? data.total_contract_money : 0 }}元</td>
+                                    <td>{{ data.total_expenditure_money ? data.total_expenditure_money : 0 }}元</td>
                                 </template>
 
                             </tr>
