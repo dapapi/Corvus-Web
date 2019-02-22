@@ -12,7 +12,7 @@
         </div>
     </div>
     
-    <span @click="addCondition">+<a href="javascript:;" style="color:#000">添加更多条件</a></span>
+    <span @click="addCondition">+<a href="javascript:;" style="color:#000">添加新提醒</a></span>
     
     </div>
 </template>
