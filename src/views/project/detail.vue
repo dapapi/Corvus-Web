@@ -983,8 +983,9 @@
                                 <datepicker ref="startTime" @change="changeStartTime"></datepicker>
                             </div>
                             <div class="col-md-5 float-left pl-0">
-                                <timepicker ref="startMinutes" :default="startMinutes"
-                                            @change="changeStartMinutes"></timepicker>
+                                <!-- <timepicker ref="startMinutes" :default="startMinutes"
+                                            @change="changeStartMinutes"></timepicker> -->
+                                <TimeChoice @change="changeStartMinutes" ref="startMinutes"></TimeChoice>
                             </div>
                         </div>
                         <div class="example">
@@ -993,8 +994,9 @@
                                 <datepicker ref="endTime" @change="changeEndTime" :startDate="startTime"></datepicker>
                             </div>
                             <div class="col-md-5 float-left pl-0">
-                                <timepicker ref="endMinutes" :default="endMinutes"
-                                            @change="changeEndMinutes"></timepicker>
+                                <!-- <timepicker ref="endMinutes" :default="endMinutes"
+                                            @change="changeEndMinutes"></timepicker> -->
+                                <TimeChoice @change="changeEndMinutes" ref="endMinutes"></TimeChoice>
                             </div>
                         </div>
                         <div class="example">
@@ -1160,7 +1162,7 @@
                             <div class="col-md-2 text-right float-left px-0">计划回款金额</div>
                             <div class="col-md-10 float-left">
                                 <NumberSpinner ref="paybackMoney"
-                                               @change="(value) => addProjectReturn(value, 'plan_returned_money')"></NumberSpinner>
+                                               @change="(value) => addProjectReturn(value, 'plan_returned_money')" :min="0" :max="1000000000" :precision="2" :value="0"></NumberSpinner>
                             </div>
                         </div>
                         <div class="example">
@@ -1235,7 +1237,7 @@
                             <div class="col-md-2 text-right float-left px-0">回款金额</div>
                             <div class="col-md-10 float-left">
                                 <NumberSpinner ref="paybackMoney1"
-                                               @change="(value) => addProjectReturn(value, 'plan_returned_money')"></NumberSpinner>
+                                               @change="(value) => addProjectReturn(value, 'plan_returned_money')" :min="0" :max="1000000000" :precision="2" :value="0"></NumberSpinner>
                             </div>
                         </div>
                         <div class="example">
@@ -1313,7 +1315,7 @@
                             <div class="col-md-2 text-right float-left px-0">开票金额</div>
                             <div class="col-md-10 float-left">
                                 <NumberSpinner ref="paybackMoney2"
-                                               @change="(value) => addProjectReturn(value, 'plan_returned_money')"></NumberSpinner>
+                                               @change="(value) => addProjectReturn(value, 'plan_returned_money')" :min="0" :max="1000000000" :precision="2" :value="0"></NumberSpinner>
                             </div>
                         </div>
                         <div class="example">
@@ -1709,9 +1711,9 @@
                 this.endMinutes = '';
                 this.taskIntroduce = '';
                 this.$refs.startTime.setValue('');
-                this.$refs.startMinutes.setValue('00:00');
+                this.$refs.startMinutes.setValue('0');
                 this.$refs.endTime.setValue('');
-                this.$refs.endMinutes.setValue('00:00');
+                this.$refs.endMinutes.setValue('0');
                 this.$store.commit('changeNewPrincipal', {});
                 this.$store.commit('changeNewParticipantsInfo', [])
             })

@@ -148,8 +148,9 @@
                                 <datepicker @change="changeStartTime" ref="scheduleStartDate"></datepicker>
                             </div>
                             <div class="col-md-5 float-left pl-0" v-show="!isScheduleAllday">
-                                <timepicker :default="startMinutes" @change="changeStartMinutes"
-                                            ref="scheduleStartMinute"></timepicker>
+                                <!-- <timepicker :default="startMinutes" @change="changeStartMinutes"
+                                            ref="scheduleStartMinute"></timepicker> -->
+                                      <TimeChoice @change="changeStartMinutes" ref="scheduleStartMinute"></TimeChoice>       
                             </div>
                         </div>
                         <div class="clearfix">
@@ -158,8 +159,9 @@
                                 <datepicker @change="changeEndTime" ref="scheduleEndDate" :startDate="startTime"></datepicker>
                             </div>
                             <div class="col-md-5 float-left pl-0" v-show="!isScheduleAllday">
-                                <timepicker :default="endMinutes" @change="changeEndMinutes"
-                                            ref="scheduleEndMinute"></timepicker>
+                                <!-- <timepicker :default="endMinutes" @change="changeEndMinutes"
+                                            ref="scheduleEndMinute"></timepicker> -->
+                                 <TimeChoice @change="changeEndMinutes" ref="scheduleEndMinute"></TimeChoice>  
                             </div>
                         </div>
                         <div class="clearfix">
@@ -209,7 +211,7 @@
                             <div class="example">
                                 <div class="col-md-2 text-right float-left">提醒</div>
                                 <div class="col-md-10 float-left pl-0">
-                                    <AddRemind @change="changeScheduleRemind" :options="remindArr" :conditionLength="conditionLength" :selectorHidden="selectorHidden"></AddRemind>                     
+                                    <AddRemind @change="changeScheduleRemind" :options="remindArr" :conditionLength="conditionLength" :selectorHidden="selectorHidden" ref="scheduleRemind"></AddRemind>                     
                                 </div>
                             </div>
                             <div class="clearfix my-20">
@@ -944,6 +946,7 @@
             },
 
             changeScheduleRemind: function (value) {
+                console.log(value)
                 this.scheduleRemind = value;
             },
 
@@ -1238,16 +1241,14 @@
                 this.$refs.calendarSelector.setValue('');
                 this.$refs.scheduleStartDate.setValue('');
                 this.$refs.scheduleEndDate.setValue('');
-                this.$refs.scheduleStartMinute.setValue('00:00');
-                this.$refs.scheduleEndMinute.setValue('00:00');
+                this.$refs.scheduleStartMinute.setValue('0');
+                this.$refs.scheduleEndMinute.setValue('0');
                 this.$refs.scheduleResource.setValue('');
                 this.$refs.scheduleRepeat.setValue('0');
-                // this.$refs.scheduleRemind.setValue('0');
             },
             cancelSchedule:function(){
                 
-                this.conditionLength = 0
-                this.selectorHidden = []
+              
             },
             addCalendarVisible: function (value) {
                 this.calendarVisible = value

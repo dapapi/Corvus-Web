@@ -67,7 +67,7 @@
                         <div class="example">
                             <div class="col-md-2 text-right float-left">{{name}}天数</div>
                             <div class="col-md-10 float-left pl-0">
-                                <NumberSpinner @change="getNumber"></NumberSpinner>
+                                <NumberSpinner @change="getNumber" :min="0" :max="1000000000" :precision="2" :value="0"></NumberSpinner>
                             </div>
                         </div>
                         <div class="example">
