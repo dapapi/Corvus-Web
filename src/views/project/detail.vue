@@ -17,7 +17,7 @@
                     <a class="dropdown-item" role="menuitem" data-toggle="modal" data-target="#confirmFlag"
                        @click="changeToastrText(2)" v-show="projectInfo.status != 2">完成</a>
                     <a class="dropdown-item" role="menuitem" data-toggle="modal" data-target="#confirmFlag"
-                       @click="changeToastrText(3)" v-show="projectInfo.status != 3">撤单</a>
+                       @click="changeToastrText(3)" v-show="projectInfo.status != 3 && projectInfo.status != 2">撤单</a>
                     <a class="dropdown-item" role="menuitem" data-toggle="modal" data-target="#addPrivacy">隐私设置</a>
                     <a class="dropdown-item" role="menuitem" @click="getApprovalsFormData"
                        v-if="projectInfo.approval_status == 232 || projectInfo.type == 5">创建合同</a>
