@@ -1,10 +1,10 @@
 <template>
-    <select class="selectpicker show-tick form-control" data-plugin="selectpicker" :value="value"
+    <select style="z-index:10000" class="selectpicker show-tick form-control" data-plugin="selectpicker" :value="value"
             :data-live-search="isSelectable"
             :data-show-subtext="isSelectable" :id="_uid"
             :multiple="multiple" :title="title" v-model="valueListener">
         <option v-if="!options" value=""></option>
-        <selectorsOptions v-for="option in options" v-bind:id="option.id" :val="option.value || option.id"
+        <selectorsOptions style="z-index:10000;" v-for="option in options" v-bind:id="option.id" :val="option.value || option.id"
                           :key="option.id">
             {{option.name || option.title || option.nickname}}
             <!-- 增强组件扩展性和数据通用性 -->

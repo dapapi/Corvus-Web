@@ -236,6 +236,7 @@
                 previewUrlArr: [],
                 projectTypeTemp:'',
                 detail_control:{},
+                msg:'',
             }
         },
 
