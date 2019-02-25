@@ -8097,7 +8097,6 @@ UE.Editor.defaultOptions = function(editor){
                     'method': 'GET',
                     'dataType': isJsonp ? 'jsonp':'',
                     'onsuccess':function(r){
-                        console.log(333);
                         try {
                             
                             var config = isJsonp ? r:eval("("+r.responseText+")");

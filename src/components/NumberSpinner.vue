@@ -17,7 +17,7 @@
                     },
                     min: 0,
                     max: 1000000000,
-                    // precision: 2
+                    precision: 2
                 }
             ).on('asSpinner::change', function (e) {
                 self.$emit('change', e.currentTarget.value)
