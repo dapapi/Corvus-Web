@@ -297,7 +297,7 @@
                                         <div class="card-text py-10 px-0 clearfix col-md-8">
                                             <div class="col-md-2 float-left text-right pl-0">关联资源</div>
                                             <div class="col-md-10 float-left font-weight-bold">
-                                                <span class="font-weight-bold" v-if="oldInfo.resource && !isEdit">
+                                                <span class="font-weight-bold" v-if="oldInfo.resource && oldInfo.resource.data && !isEdit">
                                                     {{oldInfo.resource.data.resource.data.title}} -
                                                     <template v-if="oldInfo.resource.data.resourceable_type === 'project'">{{ oldInfo.resource.data.resourceable.data.title }}</template>
                                                     <template v-if="oldInfo.resource.data.resourceable_type === 'client'">{{ oldInfo.resource.data.resourceable.data.company }}</template>
@@ -305,11 +305,11 @@
                                                     <template v-if="oldInfo.resource.data.resourceable_type === 'blogger'">{{ oldInfo.resource.data.resourceable.data.nickname }}</template>
                                                     <template v-if="oldInfo.resource.data.resourceable_type === 'trail'">{{ oldInfo.resource.data.resourceable.data.title }}</template>
                                                 </span>
-                                                <template v-else>
+                                                <template v-if="oldInfo.resource && oldInfo.resource.data && isEdit">
                                                     <normal-linkage-selectors class="ml-0" ref="linkage" v-if="linkData.length>0" :myData="linkData"
                                                         :data="linkData"
-                                                        :resource="oldInfo.resource.data.resource.data.code"
-                                                        :resourceable="oldInfo.resource.data.resourceable.data.id"
+                                                        :resource="oldInfo.resource ? oldInfo.resource.data.resource.data.code : ''"
+                                                        :resourceable="oldInfo.resource ? oldInfo.resource.data.resourceable.data.id : ''"
                                                         @loadMore="getMoreChildLinkData"
                                                         @change="addLinkage"></normal-linkage-selectors>
                                                 </template>
@@ -775,8 +775,8 @@
                     this.$store.dispatch('changePrincipal', params);
                     this.isLoading = false;
                     this.getLinkData()
-                    this.resourceType =  this.oldInfo.resource.data.resource.data.id // 资源type
-                    this.resourceableId = this.oldInfo.resource.data.resourceable.data.id // 资源id
+                    this.resourceType =  this.oldInfo.resource && this.oldInfo.resource.data.resource.data.id // 资源type
+                    this.resourceableId = this.oldInfo.resource && this.oldInfo.resource.data.resourceable.data.id // 资源id
                 })
             },
 
@@ -1068,7 +1068,7 @@
                     if (this.linkData[0].child.length === 0) {
                         this.getChildLinkData('', 0)
                     }
-                    if (this.oldInfo && this.oldInfo.resource.data.resource.data.code) {
+                    if (this.oldInfo && this.oldInfo.resource && this.oldInfo.resource.data.resource.data.code) {
                         this.getChildLinkData(this.oldInfo.resource.data.resource.data.code, 0)
                     }
                 })
