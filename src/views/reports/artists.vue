@@ -2,6 +2,12 @@
     <div class="page-main" style="background-color:#f3f4f5">
         <div class="page-header page-header-bordered">
             <h1 class="page-title">艺人报表</h1>
+
+            <div class="page-header-actions">
+                <ImportAndExport class="float-left" :type="'export'" :moduleName="'reportfrom/starreport'" :params="exportParams">
+                    <i class="iconfont icon-daochu font-size-20" aria-hidden="true"></i>
+                </ImportAndExport>
+            </div>
         </div>
         <div class="page-content container-fluid">
             <div class="bg-white">
@@ -248,6 +254,7 @@
                 ],
                 departmentId: '',
                 departmentAnalysisId: '',
+                exportParams: {},
             }
         },
         mounted() {
@@ -300,6 +307,7 @@
                 if (this.trailsNum) {
                     data.type = this.trailsNum
                 }
+                this.exportParams = data;
                 this.$refs.timeInterval.setValue(start_time, end_time);
                 let _this = this;
                 fetch('get', '/reportfrom/starreport', data).then(function (response) {

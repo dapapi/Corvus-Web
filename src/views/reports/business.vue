@@ -2,6 +2,13 @@
     <div class="page-main" style="background-color:#f3f4f5">
         <div class="page-header page-header-bordered">
             <h1 class="page-title">商业漏斗分析</h1>
+
+            <div class="page-header-actions">
+                <ImportAndExport class="float-left" :type="'export'" :moduleName="'reportfrom/commercialfunnel'" :params="exportParams">
+                    <i class="iconfont icon-daochu font-size-20" aria-hidden="true"></i>
+                </ImportAndExport>
+            </div>
+
         </div>
         <div class="page-content container-fluid">
             <div class="bg-white">
@@ -126,6 +133,7 @@
                 tableData: [],
                 nowDate: '',
                 designationDateNum: 'day',
+                exportParams: {},
             }
         },
         mounted() {
@@ -152,6 +160,7 @@
                     start_time: start_time,
                     end_time: end_time,
                 };
+                this.exportParams = data;
                 this.$refs.timeInterval.setValue(start_time, end_time);
                 let _this = this;
                 fetch('get', '/reportfrom/commercialfunnel', data).then(function (response) {
