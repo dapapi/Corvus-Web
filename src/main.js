@@ -69,6 +69,7 @@ import ApprovalProgress from '@/components/ForApproval/ApprovalProgress'
 import AddTrail from '@/components/addTrail'
 import TimeChoice from '@/components/TimeChoice.vue'
 import EditTimeChoice from '@/components/EditTimeChoice.vue'
+import AddRemind from '@/components/AddRemind.vue'
 
 import DepartmentPicker from '@/components/DepartmentPicker'
 Vue.config.productionTip = false;
@@ -143,6 +144,7 @@ Vue.component('AddTrail', AddTrail)
 
 Vue.component('TimeChoice', TimeChoice)
 Vue.component('EditTimeChoice', EditTimeChoice)
+Vue.component('AddRemind', AddRemind)
 
 Vue.prototype.globalClick = function (callback) {
     document.getElementById('app').addEventListener('click', (event) => {
