@@ -10,7 +10,7 @@
         <div class="col-md-5 py-20">
           <div class="input-search">
             <i class="input-search-icon iconfont icon-buoumaotubiao13" aria-hidden="true"></i>
-            <input type="text" class="form-control" name="" placeholder="输入编号、类型、申请人">
+            <input type="text" class="form-control project-search" name="" placeholder="输入编号、类型、申请人">
             <button type="button" class="input-search-closeiconfont icon-guanbi" aria-label="Close"></button>
           </div>
         </div>
@@ -369,5 +369,8 @@ tr:hover {
 }
 .head:hover{
     background-color: #fff;
+}
+.project-search::-webkit-input-placeholder{
+  font-weight: 200;
 }
 </style>

@@ -41,7 +41,10 @@
                                             <i class="md-check"
                                                v-show="selectedCalendar.indexOf(calendar.id) > -1"></i>
                                         </div>
-                                        <div class="float-left ml-10">{{ calendar.title }}</div>
+                                        <div class="float-left col-md-9 pr-0"
+                                             style="overflow: hidden;text-overflow:ellipsis;white-space: nowrap;">
+                                            {{ calendar.title }}
+                                        </div>
                                         <div class="float-right position-relative">
                                             <i class="iconfont icon-gengduo1" aria-hidden="true" id="taskDropdown"
                                                data-toggle="dropdown" aria-expanded="false"></i>
@@ -150,18 +153,19 @@
                             <div class="col-md-5 float-left pl-0" v-show="!isScheduleAllday">
                                 <!-- <timepicker :default="startMinutes" @change="changeStartMinutes"
                                             ref="scheduleStartMinute"></timepicker> -->
-                                      <TimeChoice @change="changeStartMinutes" ref="scheduleStartMinute"></TimeChoice>       
+                                <TimeChoice @change="changeStartMinutes" ref="scheduleStartMinute"></TimeChoice>
                             </div>
                         </div>
                         <div class="clearfix">
                             <div class="col-md-2 text-right float-left line-fixed-height">结束时间</div>
                             <div class="col-md-5 float-left pl-0">
-                                <datepicker @change="changeEndTime" ref="scheduleEndDate" :startDate="startTime"></datepicker>
+                                <datepicker @change="changeEndTime" ref="scheduleEndDate"
+                                            :startDate="startTime"></datepicker>
                             </div>
                             <div class="col-md-5 float-left pl-0" v-show="!isScheduleAllday">
                                 <!-- <timepicker :default="endMinutes" @change="changeEndMinutes"
                                             ref="scheduleEndMinute"></timepicker> -->
-                                 <TimeChoice @change="changeEndMinutes" ref="scheduleEndMinute"></TimeChoice>  
+                                <TimeChoice @change="changeEndMinutes" ref="scheduleEndMinute"></TimeChoice>
                             </div>
                         </div>
                         <div class="clearfix">
@@ -211,7 +215,9 @@
                             <div class="example">
                                 <div class="col-md-2 text-right float-left">提醒</div>
                                 <div class="col-md-10 float-left pl-0">
-                                    <AddRemind @change="changeScheduleRemind" :options="remindArr" :isCancel="isCancel" :conditionLength="conditionLength" :selectorHidden="selectorHidden" ref="scheduleRemind"></AddRemind>                     
+                                    <AddRemind @change="changeScheduleRemind" :options="remindArr" :isCancel="isCancel"
+                                               :conditionLength="conditionLength" :selectorHidden="selectorHidden"
+                                               ref="scheduleRemind"></AddRemind>
                                 </div>
                             </div>
                             <div class="clearfix my-20">
@@ -254,7 +260,8 @@
                         </div>
                     </div>
                     <div class="modal-footer">
-                        <button class="btn btn-sm btn-white btn-pure" data-dismiss="modal" @click="cancelSchedule">取消</button>
+                        <button class="btn btn-sm btn-white btn-pure" data-dismiss="modal" @click="cancelSchedule">取消
+                        </button>
                         <template v-if="scheduleType === 'add'">
                             <button class="btn btn-primary" type="submit" @click="addSchedule">确定</button>
                         </template>
@@ -583,6 +590,7 @@
     import fetch from '../../assets/utils/fetch.js'
     import config from '../../assets/js/config'
     import Cookies from 'js-cookie';
+
     export default {
         data: function () {
             return {
@@ -647,12 +655,12 @@
                 toastX: 0,
                 toastY: 0,
                 toastShow: false,
-                scheduleRemind:'',
+                scheduleRemind: '',
                 userInfo: '',
                 conditionLength: 0,
                 selectorHidden: [],
-                isCancel:false,
-                scheduleRemindDate:[]
+                isCancel: false,
+                scheduleRemindDate: []
             }
         },
         mounted() {
@@ -670,7 +678,7 @@
                 _this.calendarVisible = 1;
                 _this.$refs.linkageStar.setValue('');
                 _this.$refs.visibleSelector.setValue('');
-                
+
             });
 
             $('#changeSchedule').on('hidden.bs.modal', function () {
@@ -945,7 +953,7 @@
             },
 
             changeScheduleRemind: function (value) {
-                
+
                 this.scheduleRemind = value
             },
 
@@ -1177,7 +1185,7 @@
                         }
                     }
                 }
-                for (let key in this.scheduleRemind ){
+                for (let key in this.scheduleRemind) {
                     this.scheduleRemindDate.push(this.scheduleRemind[key])
                 }
                 let data = {
@@ -1250,9 +1258,9 @@
                 this.isCancel = true
                 this.this.scheduleRemindDate = []
             },
-            cancelSchedule:function(){
-                
-              
+            cancelSchedule: function () {
+
+
             },
             addCalendarVisible: function (value) {
                 this.calendarVisible = value
