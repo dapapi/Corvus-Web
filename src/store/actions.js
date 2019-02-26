@@ -59,7 +59,9 @@ export default {
     changeIsExpanded: function (data, params) {
         data.commit('changeIsExpanded', params)
     },
-
+    changePreview:function(data,params){
+        data.commit('changePreview',params)
+    },
     // 获取部门数据
     getDepartment ({commit}) {
         fetch('get', '/departments').then(res => {
