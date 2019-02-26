@@ -90,6 +90,7 @@ export default {
         },
         uploadFile(e) {
             let file = e.target.files[0];
+            console.log(file);
             let putExtra = null;
             let type = file.type.split('/');
             if (type[type.length - 1] === 'vnd.ms-powerpoint') {

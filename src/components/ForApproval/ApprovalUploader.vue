@@ -111,6 +111,7 @@ export default {
             let fileSize = file.size;
             let _this = this;
             this.getQiniuAccessToken((token) => {
+                console.log(token,'token');
                 let observable = qiniu.upload(file, key, token, putExtra, conf);
                 let subscription = observable.subscribe(function (res) {
                 }, function (error) {
@@ -136,6 +137,7 @@ export default {
                 headers: config.getHeaders(),
                 // statusCode: config.getStatusCode()
             }).done(function (response) {
+                console.log(response);
                 callback(response.data.token)
             })
         },

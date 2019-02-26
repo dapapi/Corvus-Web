@@ -52,12 +52,10 @@
                             <RangeSelector class="scopeSelector"  ref='scopeSelector' :options='departments' @change='changeDepartments'/>
                             <!-- <selectors class="scopeSelector col-sm-4" ref='scopeSelector' :options="departments" @valuelistener="changeDepartments"  multiple='true' :placeholder='"请选择范围"'></selectors> -->
                             <label for="" class="col-sm-2 col-form-label text-right" style="z-index:10000"><strong>选择分类</strong></label>
-                            <selectors ref='classifySelector' class="col-sm-4" :options="classifyArr" @change="changeClassify" placeholder='请选择类型'></selectors>
+                            <selectors ref='classifySelector' class="col-sm-4 test" :options="classifyArr" @change="changeClassify" placeholder='请选择类型'></selectors>
                         </div>
                         <!-- <div class="summernote" id="summernote"></div> -->
-                        <div class="px-10">
-                            <vue-ueditor-wrap v-model="msg" :config="myConfig"></vue-ueditor-wrap>
-                        </div>
+                        <vue-ueditor-wrap v-model="msg" :config="myConfig"></vue-ueditor-wrap>
                         <File-Uploader class="upload" url="javascript:void()" @changePlus="fileUploaded" :givenfilename='givenfilename' broadcast='true'>上传附件</File-Uploader>
                         <figure style="text-align:center;width:100px" v-for="(item, index) in this.affix" :key="index" class="attachdetail ml-20 float-left"> 
                             <img src="@/assets/img/attachment.png" alt="" style="width:40px">
@@ -128,7 +126,7 @@ export default {
             serverUrl:'http://35.201.165.105:8000/controller.php',
             // UEditor 资源文件的存放路径，如果你使用的是 vue-cli 生成的项目，通常不需要设置该选项，vue-ueditor-wrap 会自动处理常见的情况，如果需要特殊配置，参考下方的常见问题2
             UEDITOR_HOME_URL: '/UEditor/',
-            zIndex : 3000,
+            zIndex : 2000,
             }
         }
     },
@@ -300,14 +298,8 @@ export default {
 </script>
 
 <style scoped>
-/* .upload{
-    width:88px;
-    height:30px;
-    font-weight:400;
-    color:rgba(50,152,220,1);
-} */
-#edui_fixedlayer{
-    z-index:13000 !important;
+.test{
+    z-index:3001 !important;
 }
 .set-top-flag{
     width:44px;

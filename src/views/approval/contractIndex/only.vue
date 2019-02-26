@@ -9,7 +9,7 @@
                     <div class="input-search">
                         <button type="button" class="input-search-btn"><i class="iconfont icon-buoumaotubiao13" aria-hidden="true"></i>
                         </button>
-                        <input v-model="keywords" type="text" class="form-control" placeholder="输入编号、类型或申请人"
+                        <input v-model="keywords" type="text" class="form-control" placeholder="输入编号或申请人"
                                @blur="getList">
                     </div>
                 </div>

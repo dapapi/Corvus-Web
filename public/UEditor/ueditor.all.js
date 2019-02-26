@@ -8098,7 +8098,6 @@ UE.Editor.defaultOptions = function(editor){
                     'dataType': isJsonp ? 'jsonp':'',
                     'onsuccess':function(r){
                         try {
-                            
                             var config = isJsonp ? r:eval("("+r.responseText+")");
                             utils.extend(me.options, config);
                             me.fireEvent('serverConfigLoaded');
@@ -10020,7 +10019,6 @@ UE.plugins['defaultfilter'] = function () {
                         }
                         break;
                     case 'img':
-                    console.log(123);
                         //todo base64暂时去掉，后边做远程图片上传后，干掉这个
                         if (val = node.getAttr('src')) {
                             if (/^data:/.test(val)) {
