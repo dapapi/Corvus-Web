@@ -17,7 +17,7 @@
                     <a class="dropdown-item" role="menuitem" data-toggle="modal" data-target="#confirmFlag"
                        @click="changeToastrText(2)" v-show="projectInfo.status != 2">完成</a>
                     <a class="dropdown-item" role="menuitem" data-toggle="modal" data-target="#confirmFlag"
-                       @click="changeToastrText(3)" v-show="projectInfo.status != 3">撤单</a>
+                       @click="changeToastrText(3)" v-show="projectInfo.status != 3 && projectInfo.status != 2">撤单</a>
                     <a class="dropdown-item" role="menuitem" data-toggle="modal" data-target="#addPrivacy">隐私设置</a>
                     <a class="dropdown-item" role="menuitem" @click="getApprovalsFormData"
                        v-if="projectInfo.approval_status == 232 || projectInfo.type == 5">创建合同</a>
@@ -733,7 +733,8 @@
                                                                   @change="(value) => changeProjectBaseInfo(value, 'priority')"></EditSelector>
                                                 </div>
                                             </div>
-                                            <div class="card-text py-10 px-0 clearfix col-md-6 float-left ">
+                                            <div class="card-text py-10 px-0 clearfix col-md-6 float-left"
+                                                 v-if="projectInfo.type != 5">
                                                 <div class="col-md-3 float-left text-right pl-0">合作类型</div>
                                                 <div class="col-md-9 float-left font-weight-bold">
                                                     <EditSelector :is-edit="isEdit" :options="cooperationTypeArr"
@@ -741,7 +742,8 @@
                                                                   @change="(value) => changeProjectBaseInfo(value, 'cooperation_type')"></EditSelector>
                                                 </div>
                                             </div>
-                                            <div class="card-text py-10 px-0 clearfix col-md-6 float-left ">
+                                            <div class="card-text py-10 px-0 clearfix col-md-6 float-left"
+                                                 v-if="projectInfo.type != 5">
                                                 <div class="col-md-3 float-left text-right pl-0">状态</div>
                                                 <div class="col-md-9 float-left font-weight-bold">
                                                     <EditSelector :is-edit="isEdit" :options="trailStatusArr"

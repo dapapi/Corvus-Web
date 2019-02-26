@@ -2,6 +2,12 @@
     <div class="page-main" style="background-color:#f3f4f5">
         <div class="page-header page-header-bordered">
             <h1 class="page-title">项目报表</h1>
+
+            <div class="page-header-actions">
+                <ImportAndExport class="float-left" :type="'export'" :moduleName="'reportfrom/projectreport'" :params="exportParams">
+                    <i class="iconfont icon-daochu font-size-20" aria-hidden="true"></i>
+                </ImportAndExport>
+            </div>
         </div>
         <div class="page-content container-fluid">
             <div class="bg-white">
@@ -44,11 +50,15 @@
                     </div>
                     <div class="col-md-3 float-left">
                         <div class="col-md-6 float-left  text-right pl-0">合同金额总额</div>
-                        <div class="col-md-6 float-left">888元</div>
+                        <div class="col-md-6 float-left">
+                            {{ tableData.total_contract_amount ? tableData.total_contract_amount : 0 }}元
+                        </div>
                     </div>
                     <div class="col-md-3 float-left">
                         <div class="col-md-6 float-left  text-right pl-0">项目成本总额</div>
-                        <div class="col-md-6 float-left">888元</div>
+                        <div class="col-md-6 float-left">
+                            {{ tableData.total_project_cost ? tableData.total_project_cost : 0 }}元
+                        </div>
                     </div>
                 </div>
 
@@ -103,7 +113,9 @@
                                 <td class="cell-100" scope="col">{{ data.title }}</td>
                                 <td class="cell-100" scope="col">{{ data.deparment_name }}</td>
                                 <td class="cell-100" scope="col">{{ data.star_name }}</td>
-                                <td class="cell-100" scope="col"></td>
+                                <td class="cell-100" scope="col">{{ data.total_contract_money ?
+                                    data.total_contract_money : 0 }}元
+                                </td>
                                 <td class="cell-100" scope="col"></td>
                                 <td class="cell-100" scope="col">
                                     <span :style="{color:projectStatusArr.find(item => item.value == data.status).color}">
@@ -223,7 +235,7 @@
                 starId: '',
                 departmentNewId: '',
                 proportionDepartmentId: '',
-
+                exportParams: {},
             }
         },
         mounted() {
@@ -275,6 +287,7 @@
                 if (this.projectType) {
                     data.type = this.projectType
                 }
+                this.exportParams = data;
                 this.$refs.timeInterval.setValue(start_time, end_time);
                 let _this = this;
                 fetch('get', '/reportfrom/projectreport', data).then(function (response) {

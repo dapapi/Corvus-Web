@@ -2,7 +2,7 @@
 
     <div class="row">
         <div class="float-left col-md-6 pl-0">
-            <select id="father" title="">
+            <select id="father" title="" :value="resource">
                 <selectorsOptions v-for="(option, index) in data" v-bind:id="option.id" :index="index" :val="option.value"
                                   :key="option.id">
                     {{option.name}}
@@ -10,7 +10,7 @@
             </select>
         </div>
         <div class="float-left col-md-6 pl-0">
-            <select id="child" title="">
+            <select id="child" title="" :value="resourceable" ref="childSelect">
                 <selectorsOptions v-for="option in newData[index].child" v-bind:id="option.id" :val="option.value"
                                   :key="option.id">
                     {{option.name}}
@@ -23,7 +23,7 @@
 </template>
 <script>
     export default {
-        props: ['data'],
+        props: ['data', 'resource', 'resourceable'],
         data() {
             return {
                 item: function () {
@@ -57,6 +57,16 @@
             child.selectpicker().on('hidden.bs.select', function () {
                 self.$emit('change', 'child', $(this).val(), $(this)[0].selectedOptions[0].id);
             });
+
+            this.$el.querySelectorAll('div.dropdown-menu')[1].addEventListener('scroll', (e) => {
+                const scrollTop = e.target.scrollTop
+                const clientHeight = e.target.clientHeight
+                const scrollHeight = e.target.scrollHeight
+                if (scrollTop + clientHeight >= scrollHeight) {
+                    this.$emit('loadMore')
+                }
+            }, true)
+            
         },
 
         watch: {

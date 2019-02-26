@@ -2,6 +2,12 @@
     <div class="page-main" style="background-color:#f3f4f5">
         <div class="page-header page-header-bordered">
             <h1 class="page-title">博主报表</h1>
+
+            <div class="page-header-actions">
+                <ImportAndExport class="float-left" :type="'export'" :moduleName="'reportfrom/bloggerreport'" :params="exportParams">
+                    <i class="iconfont icon-daochu font-size-20" aria-hidden="true"></i>
+                </ImportAndExport>
+            </div>
         </div>
         <div class="page-content container-fluid">
             <div class="bg-white">
@@ -44,15 +50,19 @@
                     </div>
                     <div class="col-md-3 float-left">
                         <div class="col-md-7 float-left text-right pl-0">预计订单收入总额</div>
-                        <div class="col-md-5 float-left">666元</div>
+                        <div class="col-md-5 float-left">{{ tableData.total_fee }}元</div>
                     </div>
                     <div class="col-md-3 float-left">
                         <div class="col-md-7 float-left text-right">合同金额总额</div>
-                        <div class="col-md-5 float-left">666元</div>
+                        <div class="col-md-5 float-left">
+                            {{ tableData.total_contract_amount ? tableData.total_contract_amount : 0 }}元
+                        </div>
                     </div>
                     <div class="col-md-3 float-left">
                         <div class="col-md-7 float-left text-right">花费金额总额</div>
-                        <div class="col-md-5 float-left">666元</div>
+                        <div class="col-md-5 float-left">
+                            {{ tableData.total_expenditure_money ? tableData.total_expenditure_money : 0 }}元
+                        </div>
                     </div>
                 </div>
 
@@ -117,9 +127,9 @@
                                     <td>{{ data.department_name }}</td>
                                     <td>{{ data.nickname }}</td>
                                     <td>{{ data.trail_total }}</td>
-                                    <td>{{ data.total_fee }}</td>
-                                    <td></td>
-                                    <td></td>
+                                    <td>{{ data.total_fee ? data.total_fee : 0 }}元</td>
+                                    <td>{{ data.total_contract_money ? data.total_contract_money : 0 }}元</td>
+                                    <td>{{ data.total_expenditure_money ? data.total_expenditure_money : 0 }}元</td>
                                 </template>
                             </tr>
                             </tbody>
@@ -217,6 +227,7 @@
                         value: ''
                     }
                 ],
+                exportParams: {},
             }
         },
         mounted() {
@@ -269,6 +280,7 @@
                 if (this.trailsNum) {
                     data.type = this.trailsNum
                 }
+                this.exportParams = data;
                 this.$refs.timeInterval.setValue(start_time, end_time);
                 let _this = this;
                 fetch('get', '/reportfrom/bloggerreport', data).then(function (response) {
