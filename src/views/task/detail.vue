@@ -783,7 +783,7 @@
                     this.$store.dispatch('changePrincipal', params);
                     this.isLoading = false;
                     this.getLinkData()
-                    this.resourceType =  this.oldInfo.resource && this.oldInfo.resource.data.resource.data.id // 资源type
+                    this.resourceType =  this.oldInfo.resource && this.oldInfo.resource.data.resource.data.type // 资源type
                     this.resourceableId = this.oldInfo.resource && this.oldInfo.resource.data.resourceable.data.id // 资源id
                 })
             },
@@ -1039,10 +1039,12 @@
                     this.resourceType = id
                     this.changeInfo.resourceable_id = this.resourceableId
                     this.changeInfo.resource_type = id
+                    this.changeInfo.code = this.linkCode
                 } else if (type === 'child') {
                     this.resourceableId = value
                     this.changeInfo.resourceable_id = value
                     this.changeInfo.resource_type = this.resourceType
+                    this.changeInfo.code = this.linkCode
                 }
             },
 
