@@ -9,7 +9,7 @@
                     <div class="input-search">
                         <button type="button" class="input-search-btn"><i class="iconfont icon-buoumaotubiao13" aria-hidden="true"></i>
                         </button>
-                        <input v-model="keywords" type="text" class="form-control" placeholder="输入编号、类型或申请人"
+                        <input v-model="keywords" type="text" class="form-control project-search" placeholder="输入编号、类型或申请人"
                                @blur="getList">
                     </div>
                 </div>
@@ -149,6 +149,8 @@
     }
 </script>
 
-<style scoped>
-
+<style >
+    .project-search::-webkit-input-placeholder{
+        font-weight: 200;
+    }
 </style>
