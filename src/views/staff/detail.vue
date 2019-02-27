@@ -508,6 +508,7 @@ export default {
             info: {
                 name: '',
                 phone: '',
+                icon_url: '',
                 department: '',
                 departmentId: '',
                 workEmail: '',
@@ -691,7 +692,7 @@ export default {
         },
         // 改变部门
         selectDepartment(data) {
-            // this.info.departmentId = data.id
+            this.info.departmentId = data.id
         },
         // 获取岗位
         getJobs (data) {
