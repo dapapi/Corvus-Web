@@ -236,7 +236,7 @@
                                 </tr>
                                 <tbody>
                                 <tr v-for="contract in clientContractsInfo"
-                                    @click="redirectContract(contract.contract_number)">
+                                    @click="redirectContract(contract.instance_number)">
                                     <td>{{ contract.contract_number }}</td>
                                     <td>{{ contract.project }}</td>
                                     <td>{{ contract.talents }}</td>
@@ -846,9 +846,9 @@
             },
 
             getClientTask: function () {
-                if (this.clientTasksInfo.length > 0) {
-                    return
-                }
+                // if (this.clientTasksInfo.length > 0) {
+                //     return
+                // }
                 let data = {
                     type: 'clients',
                     id: this.clientId,
@@ -1031,7 +1031,7 @@
                     toastr.success('创建成功');
                     $('#addTask').modal('hide');
                     this.editConfig = {}
-                    this.clientTasksInfo.push(response.data)
+                    this.getClientTask()
                     this.getClient();
                     this.getClientTrail();
                     this.getClientProject()
@@ -1154,12 +1154,11 @@
             },
             // 跳转
             redirectContract (id) {
-                console.log(id)
                 // TODO 没有合同编号
-                // this.$router.push({
-                //     name: 'approval/detail',
-                //     params: {id: id}
-                // })
+                this.$router.push({
+                    name: 'approval/detail',
+                    params: {id: id}
+                })
             }
         }
     }
