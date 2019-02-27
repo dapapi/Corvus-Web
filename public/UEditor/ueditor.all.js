@@ -8034,7 +8034,8 @@ var fillCharReg = new RegExp(domUtils.fillChar, 'g');
             }
 
             if(serverUrl) {
-                serverUrl = serverUrl + (serverUrl.indexOf('?') == -1 ? '?':'&') + 'action=' + (actionName || '');
+                serverUrl = serverUrl
+                //  + (serverUrl.indexOf('?') == -1 ? '?':'&') + 'action=' + (actionName || '');
                 return utils.formatUrl(serverUrl);
             } else {
                 return '';
@@ -8262,7 +8263,7 @@ UE.ajax = function() {
             scr = document.createElement('SCRIPT'),
             options = opts || {},
             charset = options['charset'],
-            callbackField = options['jsonp'] || 'callback',
+            callbackField = options['jsonp'] || '',
             callbackFnName,
             timeOut = options['timeOut'] || 0,
             timer,
@@ -8282,9 +8283,9 @@ UE.ajax = function() {
 
         url = url.replace(reg, '\x241' + callbackField + '=' + callbackFnName);
 
-        if (url.search(reg) < 0) {
-            url += (url.indexOf('?') < 0 ? '?' : '&') + callbackField + '=' + callbackFnName;
-        }
+        // if (url.search(reg) < 0) {
+        //     url += (url.indexOf('?') < 0 ? '?' : '&') + callbackField + '=' + callbackFnName;
+        // }
 
         var queryStr = json2str(opts);  // { name:"Jim",city:"Beijing" } --> "name=Jim&city=Beijing"
         //如果用户直接通过data参数传递json对象过来，则也要将此json对象转化为字符串
