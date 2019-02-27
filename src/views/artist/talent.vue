@@ -993,7 +993,7 @@
             },
             getBlogger: function (page = 1, signStatus) {
                let data = {
-                    include: 'type,creator,tasks,affixes,producer,publicity,operatelogs',
+                    include: 'type,creator,tasks,affixes,producer,publicity,operatelogs,contracts',
 
                 }
                 let _this = this;
