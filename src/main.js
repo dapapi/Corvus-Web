@@ -71,12 +71,14 @@ import TimeChoice from '@/components/TimeChoice.vue'
 import EditTimeChoice from '@/components/EditTimeChoice.vue'
 import AddRemind from '@/components/AddRemind.vue'
 import ImportAndExport from '@/components/ImportAndExport.vue'
+import VueUeditorWrap from 'vue-ueditor-wrap'
 import DepartmentPicker from '@/components/DepartmentPicker'
 Vue.config.productionTip = false;
 Vue.component('ApprovalGoModal', ApprovalGoModal);
 Vue.component('AppDetail', AppDetail);
 Vue.component('ApprovalGreatModule', ApprovalGreatModule);
 Vue.component('ApprovalProgress', ApprovalProgress);
+Vue.component('VueUeditorWrap', VueUeditorWrap);
 
 Vue.component('AddMember', AddMember);
 

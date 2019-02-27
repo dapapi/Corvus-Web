@@ -10,8 +10,8 @@
                 <div class="img-control">
                     <!-- <hr> -->
                     <div class="icon-control">
-                        <a :href="item.fileUrl" target="_blank">
-                            <i class="iconfont icon-liulan"></i>
+                        <a >
+                            <i class="iconfont icon-liulan" @click='previewHandler(item.fileUrl)'></i>
                         </a>
                         <i class="iconfont icon-shanchu1" @click="imgDelete(item)"></i>
                     </div>
@@ -25,7 +25,7 @@
             <span class="plus-icon">+</span>
             <input type="file" @change="uploadFile" accept="image/png,image/gif,image/jpeg,image/tiff,application/pdf" />
          </div>
-         <DocPreview :url="fileUrl" :givenFileName="givenFileName" />
+         <!-- <DocPreview :url="fileUrl" :givenFileName="givenFileName" /> -->
     </div>
 </template>
 
@@ -65,6 +65,17 @@ export default {
         // }
     },
     methods: {
+        previewHandler(params) {
+            this.$store.dispatch('changePreview',params)
+            $('#docPreviewSelector').modal('hide')
+            this.previewUrlArr = String(params).split(',')
+            if (this.previewUrlArr.length === 1) {
+                $('#docPreview').modal('show')
+                this.previewUrl = this.previewUrlArr[0]
+            } else {
+                $('#docPreviewSelector').modal('show')
+            }
+        },
         hoverHandler(){
             $('.img-control').css('display','block')
         },
@@ -79,6 +90,7 @@ export default {
         },
         uploadFile(e) {
             let file = e.target.files[0];
+            console.log(file);
             let putExtra = null;
             let type = file.type.split('/');
             if (type[type.length - 1] === 'vnd.ms-powerpoint') {

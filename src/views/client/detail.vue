@@ -846,9 +846,9 @@
             },
 
             getClientTask: function () {
-                if (this.clientTasksInfo.length > 0) {
-                    return
-                }
+                // if (this.clientTasksInfo.length > 0) {
+                //     return
+                // }
                 let data = {
                     type: 'clients',
                     id: this.clientId,
@@ -1031,7 +1031,7 @@
                     toastr.success('创建成功');
                     $('#addTask').modal('hide');
                     this.editConfig = {}
-                    this.clientTasksInfo.push(response.data)
+                    this.getClientTask()
                     this.getClient();
                     this.getClientTrail();
                     this.getClientProject()

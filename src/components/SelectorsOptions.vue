@@ -1,5 +1,5 @@
 <template>
-    <option :value="val" ><slot></slot></option>
+    <option :value="val" class="test"><slot></slot></option>
 </template>
 <script>
     export default {
@@ -16,4 +16,8 @@
     }
 </script>
 
-
+<style scope>
+    .test{
+        z-index: 10000;
+    }
+</style>
