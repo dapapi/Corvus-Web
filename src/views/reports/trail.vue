@@ -2,6 +2,12 @@
     <div class="page-main" style="background-color:#f3f4f5">
         <div class="page-header page-header-bordered">
             <h1 class="page-title">销售线索报表</h1>
+
+            <div class="page-header-actions">
+                <ImportAndExport class="float-left" :type="'export'" :moduleName="'reportfrom/trail'" :params="exportParams">
+                    <i class="iconfont icon-daochu font-size-20" aria-hidden="true"></i>
+                </ImportAndExport>
+            </div>
         </div>
         <div class="page-content container-fluid">
             <div class="bg-white">
@@ -227,6 +233,7 @@
                 starId: '',
                 start_time: '',
                 end_time: '',
+                exportParams: {},
             }
         },
         mounted() {
@@ -279,6 +286,7 @@
                 if (this.departmentId) {
                     data.department = this.departmentId
                 }
+                this.exportParams = data;
                 this.$refs.timeInterval.setValue(start_time, end_time);
                 fetch('get', '/reportfrom/trail', data).then(response => {
                     this.tableData = response

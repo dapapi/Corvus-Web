@@ -480,6 +480,7 @@
                     page: pageNum,
                     include: 'principal,client,expectations',
                 };
+                Object.assign(data,this.fetchData)
                 fetch('get', '/trails', data).then(function (response) {
                     _this.trailsInfo = response.data;
                     _this.total = response.meta.pagination.total;

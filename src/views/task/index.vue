@@ -188,6 +188,7 @@
                             <div class="col-md-10 float-left">
                                 <normal-linkage-selectors ref="linkage" v-if="linkData.length>0" :myData="linkData"
                                                           :data="linkData"
+                                                          @loadMore="getMoreChildLinkData"
                                                           @change="addLinkage"></normal-linkage-selectors>
                             </div>
                         </div>
@@ -311,7 +312,12 @@
                 user: {}, // 个人信息
                 isLoading: true,
                 priorityArr:config.priorityArr,
-                my:'',//tasks 筛选  3我负责的 2 我参与的 1我创建的 4我分配的
+                my: '',//tasks 筛选  3我负责的 2 我参与的 1我创建的 4我分配的
+                linkCurrentPage: 2, // 关联资源当前页数
+                linkTotalPage: 1, // 关联资源总页数
+                linkCode: '', // 关联资源父数据的code
+                linkIndex: 0, //
+                canLoadMore: false, // 关联资源是否可以加载更多
             };
         },
         created() {
@@ -520,11 +526,19 @@
             getChildLinkData(url, index) {
                 if (url) {
                     let data = {}
+                    this.linkCode = url
+                    this.linkIndex = index
                     if (url === 'bloggers' || url === 'stars') {
                         data.sign_contract_status = 2
                     }
                     fetch('get', `/${url === 'bloggers'? url + '/all' : url}`, data).then(res => {
                         const temp = this.linkData[index]
+                        if (res.meta && res.meta.pagination) {
+                            this.canLoadMore = true
+                            this.linkTotalPage = res.meta.pagination.total_pages
+                        } else {
+                            this.canLoadMore = false
+                        }
                         temp.child = res.data.map(n => {
                             return {
                                 name: n.name || n.nickname || n.title || n.company,
@@ -550,6 +564,41 @@
                     setTimeout(() => {
                         this.$refs.linkage.refresh()
                     }, 100)
+                }
+            },
+            // 关联子资源滚动到底加载更多
+            getMoreChildLinkData () {
+                const url = this.linkCode
+                const index = this.linkIndex
+                if (url && this.canLoadMore) {
+                    
+                    if (this.linkCurrentPage >= this.linkTotalPage) {
+                        return
+                    }
+                    let data = {
+                        page: this.linkCurrentPage
+                    }
+                    if (url === 'bloggers' || url === 'stars') {
+                        data.sign_contract_status = 2
+                    }
+                    fetch('get', `/${url === 'bloggers'? url + '/all' : url}`, data).then(res => {
+                        this.linkCurrentPage = this.linkCurrentPage + 1
+                        const temp = this.linkData[index]
+                        // const temp = this.linkData
+                        const tempArr = res.data.map(n => {
+                            return {
+                                name: n.name || n.nickname || n.title || n.company,
+                                id: n.id,
+                                value: n.id,
+                            }
+                        })
+                        temp.child = [...temp.child, ...tempArr]
+                        this.resourceableId = temp.child[0].id
+                        this.$set(this.linkData, index, temp)
+                        setTimeout(() => {
+                            this.$refs.linkage.refresh()
+                        }, 100)
+                    })
                 }
             },
             // 获取任务类型列表
