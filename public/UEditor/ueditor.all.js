@@ -8034,8 +8034,7 @@ var fillCharReg = new RegExp(domUtils.fillChar, 'g');
             }
 
             if(serverUrl) {
-                serverUrl = serverUrl
-                //  + (serverUrl.indexOf('?') == -1 ? '?':'&') + 'action=' + (actionName || '');
+                serverUrl = serverUrl + (serverUrl.indexOf('?') == -1 ? '?':'&') + 'action=' + (actionName || '');
                 return utils.formatUrl(serverUrl);
             } else {
                 return '';
@@ -8263,7 +8262,7 @@ UE.ajax = function() {
             scr = document.createElement('SCRIPT'),
             options = opts || {},
             charset = options['charset'],
-            callbackField = options['jsonp'] || '',
+            callbackField = options['jsonp'] || 'callback',
             callbackFnName,
             timeOut = options['timeOut'] || 0,
             timer,
@@ -8283,9 +8282,9 @@ UE.ajax = function() {
 
         url = url.replace(reg, '\x241' + callbackField + '=' + callbackFnName);
 
-        // if (url.search(reg) < 0) {
-        //     url += (url.indexOf('?') < 0 ? '?' : '&') + callbackField + '=' + callbackFnName;
-        // }
+        if (url.search(reg) < 0) {
+            url += (url.indexOf('?') < 0 ? '?' : '&') + callbackField + '=' + callbackFnName;
+        }
 
         var queryStr = json2str(opts);  // { name:"Jim",city:"Beijing" } --> "name=Jim&city=Beijing"
         //如果用户直接通过data参数传递json对象过来，则也要将此json对象转化为字符串
@@ -24501,6 +24500,53 @@ UE.plugin.register('simpleupload', function() {
     containerBtn.appendChild(form);
 
     input.addEventListener('change', function(event) {
+        console.log(document.cookie)
+        UE.ajax.request('http://sandbox-api-crm.papitube.com/image',{
+            headers :{
+                'Accept': 'application/vnd.Corvus.v1+json',
+                'Access-Control-Expose-Headers': 'Location',
+                'Access-Control-Allow-Headers': 'Authorization',
+                'Authorization':'Bearer '+'eyJ0eXAiOiJKV1QiLCJhbGciOiJSUzI1NiIsImp0aSI6ImQxMzlkZTY1ZDA0YzI1N2EyNWFkZjcyZWEyNzM1M2I0OWZhYTkwMTNhZTE4OWVkMzQ2MDBjYTdhMGFmOGFlODEzNmYxYmUwMjg4YjVmMjIyIn0.eyJhdWQiOiIyIiwianRpIjoiZDEzOWRlNjVkMDRjMjU3YTI1YWRmNzJlYTI3MzUzYjQ5ZmFhOTAxM2FlMTg5ZWQzNDYwMGNhN2EwYWY4YWU4MTM2ZjFiZTAyODhiNWYyMjIiLCJpYXQiOjE1NTEyMzQ4OTEsIm5iZiI6MTU1MTIzNDg5MSwiZXhwIjoxNTgyNzcwODkxLCJzdWIiOiIzIiwic2NvcGVzIjpbIioiXX0.nhIkS8Z0n2tX34m5HrVx19Z32_EN2uwEcYuvQrSexS0xdl8XseuQdvnhTJ79w_V4G67TcChsrA6xqlDLkI9XgMzky9cmdlT4fhafe_nBc008lsJhonGUpA6bF76VJoGzM6u2ZyD4mrfTmXYmiXAj3tUV_c8KsVzKaKf_vKiY29gcbH2YnYhi4MbHNNFU-xBWk2nFWn0-t_wV3XVb-ofyd1DHeNmQcQ6fnyeeBYyYhD4Q2wp3Yu1UeHS0JCqJv_6Dvplryjf-7RcunR7_-0rJs39PKM8WtLlnFjPq_xf_gGQClPUf19pvb2rqxSLyx3wli4P1fFBxtfSqNuijbFZgcl8BIIeysRSYi8x9-Vx4JHYqB7BHTUxUWBGXvLmDH4KAmDsZysO4cUP7eX7_YSn3mglj8wlxOTcZg6-ibPf6Wgy4g22L1R7tDAfNpbfRARWx150jOQtUx5tQTpT6ujYrEUlA6FlzP1xii5qA0UcZQmSMAhAvgGjsWDtmn47vslY0q2HpGq4-p3Jdq7GG13ESxy0-B7bsPu3vyX7E3kBM75rqRZq8oNTRSCqugdn38qY99pcmlWyjafPSdx5pc96D_4Lkj2KZCvaJOHjfoxaRc1_eJLYjRD6qu4CYVKMPSgVrTgZGGVv61_mKTasx5pDAAdCh8OhnGuG2lJGaMwVarm8',
+                'Content-Type':'application/x-www-form-urlencoded;charset=UTF-8',
+            },
+            data:{
+                file:event.target.files[0]
+            }
+        })
+        // xhr.open('post', 'https://res-crm.papitube.com/image', true)
+    //     if (me.options.headers && Object.prototype.toString.apply(me.options.headers) === "[object Object]") {
+    //       for (var key in me.options.headers) {
+    //         xhr.setRequestHeader(key, me.options.headers[key])
+    //       }
+    //     }
+    //     xhr.onload = function() {
+    //       if ((xhr.status >= 200 && xhr.status < 300) || xhr.status == 304) {
+    //         var res = JSON.parse(xhr.responseText)
+    //         var link = me.options.imageUrlPrefix + res.url;
+  
+    //         if (res.state == 'SUCCESS' && res.url) {
+    //           loader = me.document.getElementById(loadingId);
+    //           loader.setAttribute('src', link);
+    //           loader.setAttribute('_src', link);
+    //           loader.setAttribute('title', res.title || '');
+    //           loader.setAttribute('alt', res.original || '');
+    //           loader.removeAttribute('id');
+    //           domUtils.removeClasses(loader, 'loadingclass');
+    //           me.fireEvent("contentchange");
+    //         } else {
+    //           showErrorLoader(res.state);
+    //         }
+    //       } else {
+    //         showErrorLoader(me.getLang('simpleupload.loadError'));
+    //       }
+    //     };
+    //     xhr.onerror = function() {
+    //       showErrorLoader(me.getLang('simpleupload.loadError'));
+    //     };
+    //     xhr.send(new FormData(form));
+    //     form.reset();
+    //   })
+        console.log(event.target.files[0]);
       if (!input.value) return;
       var loadingId = 'loading_' + (+new Date()).toString(36);
       var imageActionUrl = me.getActionUrl(me.getOpt('imageActionName'));

@@ -236,7 +236,7 @@
                                 </tr>
                                 <tbody>
                                 <tr v-for="contract in clientContractsInfo"
-                                    @click="redirectContract(contract.contract_number)">
+                                    @click="redirectContract(contract.instance_number)">
                                     <td>{{ contract.contract_number }}</td>
                                     <td>{{ contract.project }}</td>
                                     <td>{{ contract.talents }}</td>
@@ -1154,12 +1154,11 @@
             },
             // 跳转
             redirectContract (id) {
-                console.log(id)
                 // TODO 没有合同编号
-                // this.$router.push({
-                //     name: 'approval/detail',
-                //     params: {id: id}
-                // })
+                this.$router.push({
+                    name: 'approval/detail',
+                    params: {id: id}
+                })
             }
         }
     }
