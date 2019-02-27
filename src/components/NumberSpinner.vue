@@ -10,7 +10,6 @@
         props: ['shortInput','min','max','precision','value'],
         mounted() {
             let self = this;
-            console.log(this)
             $(this.$el).asSpinner(
                 
                 {

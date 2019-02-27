@@ -6,6 +6,32 @@
         </div>
         <div class="page-content container-fluid">
             <div class="panel col-md-12 col-lg-12 py-5">
+                <div class="clearfix">
+                    <div class="col-md-3 example float-left">
+                        <input type="text"
+                               class="form-control"
+                               @blur="changeTaskName"
+                               id="inputPlaceholder"
+                               v-model="taskNameSearch"
+                               placeholder="请输入任务名称">
+                    </div>
+                    <div class="col-md-3 example float-left">
+                        <Selectors :options="taskTypeArr" @change="changeTaskTypeSearch" placeholder="请选择任务类型"></Selectors>
+                    </div>
+                    <!-- todo 任务类型暂无 -->
+                    <div class="col-md-3 example float-left">
+                        <Selectors :options="taskStatusArr" @change="changeTaskStatusSearch" placeholder="请选择任务状态"></Selectors>
+                    </div>
+                    <!--<div class="col-md-3 example float-left">-->
+                        <!--<button type="button"-->
+                                <!--class="btn btn-default waves-effect waves-classic float-right"-->
+                                <!--data-toggle="modal"-->
+                                <!--data-target="#customizeContent"-->
+                                <!--data-placement="right"-->
+                                <!--title>自定义筛选-->
+                        <!--</button>-->
+                    <!--</div>-->
+                </div>
                 <div class="col-md-12">
                     <ul class="nav nav-tabs nav-tabs-line" role="tablist">
                         <li class="nav-item" role="presentation" @click="getTasks(1)">
@@ -13,22 +39,22 @@
                                 aria-controls="forum-base"
                                 aria-expanded="true" role="tab">所有任务</a>
                         </li>
-                        <li class="nav-item" role="presentation" @click="getMyTasks(1,3)">
+                        <li class="nav-item" role="presentation" @click="getMyTasks(3)">
                             <a class="nav-link" data-toggle="tab" href="#forum-task"
                                 aria-controls="forum-present"
                                 aria-expanded="false" role="tab">我负责的</a>
                         </li>
-                        <li class="nav-item" role="presentation" @click="getMyTasks(1,2)">
+                        <li class="nav-item" role="presentation" @click="getMyTasks(2)">
                             <a class="nav-link" data-toggle="tab" href="#forum-task"
                                 aria-controls="forum-present"
                                 aria-expanded="false" role="tab">我参与的</a>
                         </li>
-                        <li class="nav-item" role="presentation" @click="getMyTasks(1,1)">
+                        <li class="nav-item" role="presentation" @click="getMyTasks(1)">
                             <a class="nav-link" data-toggle="tab" href="#forum-task"
                                 aria-controls="forum-present"
                                 aria-expanded="false" role="tab">我创建的</a>
                         </li>
-                        <li class="nav-item" role="presentation" @click="getMyTasks(1,4)">
+                        <li class="nav-item" role="presentation" @click="getMyTasks(4)">
                             <a class="nav-link"
                                data-toggle="tab"
                                href="#forum-task"
@@ -254,7 +280,8 @@
                 resourceType: "", // 资源type
                 resourceableId: "", // 资源id
                 user: {}, // 个人信息
-                isLoading:true
+                isLoading:true,
+                my:''
             };
         },
         created() {
@@ -279,6 +306,7 @@
             getTasks(pageNum = 1) {
                 let params = {
                     page: pageNum,
+                    my:this.my,
                     include:
                         "principal,pTask,tasks,resource.resourceable,resource.resource,participants"
                 };
@@ -307,33 +335,10 @@
                 });
             },
 
-            getMyTasks(pageNum = 1, type = null) {
-                let _this = this;
-                if (type) {
-                    this.taskFinishType = type;
-                }
-
-                let data = {
-                    page: pageNum,
-                    include:
-                        "principal,pTask,tasks,resource.resourceable,resource.resource,participants",
-                    type: this.taskFinishType,
-                    status: 0
-                };
-
-                $.ajax({
-                    type: "get",
-                    url: config.apiUrl + "/tasks/my",
-                    headers: config.getHeaders(),
-                    data: data
-                }).done(function (response) {
-                    _this.tasksInfo = response.data;
-                    
-                    _this.current_page = response.meta.pagination.current_page;
-                    _this.total = response.meta.pagination.total;
-                    _this.total_pages = response.meta.pagination.total_pages;
-                    
-                });
+            getMyTasks(my) {
+                this.my = my
+                this.getTasks(1)
+                
             },
 
             addTask() {
