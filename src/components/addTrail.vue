@@ -27,7 +27,13 @@
                     <div class="example">
                         <div class="col-md-2 text-right float-left require">公司名称</div>
                         <div class="col-md-10 float-left pl-0">
-                            <edit-company @change="changeCompanyName"></edit-company>
+                            <!-- <edit-company @change="changeCompanyName"></edit-company> -->
+                            <div class="float-left col-md-6 pl-0">
+                                <input type="text" v-model="companyInfo.company" :disabled="true" class="form-control" />
+                            </div>
+                            <div class="float-left col-md-6 pl-0">
+                                <selectors :options="clientLevelArr" :default="companyInfo.grade" :disabled="true"></selectors>
+                            </div>
                         </div>
                     </div>
                     <div class="example">
@@ -109,7 +115,7 @@
                     <div class="example">
                         <div class="col-md-2 text-right float-left require">预计订单收入</div>
                         <div class="col-md-5 float-left pl-0 pr-0">
-                            <number-spinner @change="changeTrailFee"></number-spinner>
+                            <NumberSpinner @change="changeTrailFee" :min="0" :max="1000000000" :precision="2" :value="0"></NumberSpinner>
                         </div>
                         <div class="col-md-3 float-left" v-if="trailType == 4">
                             <div class="checkbox-custom checkbox-primary">
@@ -144,10 +150,11 @@
 
     export default {
         name: "addTrail",
+        props: ['trailType', 'companyInfo', 'clientId'], // 线索类型,公司信息, 客户id
         data() {
             return {
                 trailName: '',
-                trailType: '',
+                // trailType: '',
                 cooperationTypeArr: config.cooperationTypeArr,
                 priorityArr: config.priorityArr,
                 brandName: '',
@@ -158,7 +165,7 @@
                 salesProgressText: '未确定合作',
                 trailDesc: '',
                 cooperation: '',
-                selectCompany: '',
+                // selectCompany: '',
                 trailOriginPerson: '',
                 trailOrigin: '',
                 industry: '',
@@ -170,6 +177,7 @@
                 trailIsLocked: '',
                 currentUser: {},
                 starsArr: [],
+                clientLevelArr: config.clientLevelArr,
             }
         },
 
@@ -179,25 +187,12 @@
 
         mounted() {
             this.getStars();
+            this.getIndustries()
         },
 
         methods: {
             changeCooperationType: function (value) {
                 this.cooperation = value
-            },
-
-            changeCompanyName: function () {
-                let companyInfo = this.$store.state.companyInfo;
-                if (companyInfo.value) {
-                    this.selectCompany = {
-                        id: companyInfo.value
-                    }
-                } else {
-                    this.selectCompany = {
-                        grade: companyInfo.grade,
-                        company: companyInfo.name
-                    }
-                }
             },
 
             changeTrailOriginPerson(value) {
@@ -272,7 +267,6 @@
             cleanTempData() {
                 this.trailName = ''
                 this.brandName = ''
-                this.selectCompany = ''
                 this.recommendStars = ''
                 this.targetStars = ''
                 this.trailContact = ''
@@ -290,7 +284,9 @@
                 let data = {
                     title: this.trailName,
                     brand: this.brandName,
-                    client: this.selectCompany,
+                    client: {
+                        id: this.clientId
+                    },
                     resource_type: this.trailOrigin,
                     recommendations: this.recommendStars,
                     expectations: this.targetStars,
@@ -328,7 +324,8 @@
                 if (this.trailTypeValidate()) {
                     fetch('post', '/trails', data).then(function (response) {
                         $('#addTrail').modal('hide');
-                        _this.$router.push({path: '/trails/' + response.data.id})
+                        // 回调
+                        _this.$emit('ok')
                         _this.cleanTempData()
 
                     })
@@ -366,6 +363,73 @@
                         this.starsArr.push({
                             name: response.data[i].name,
                             value: response.data[i].flag + '-' + response.data[i].id,
+                        })
+                    }
+                })
+            },
+            trailTypeValidate() {
+                if (!this.trailType) {
+                    toastr.error("销售线索为必填");
+                    return false;
+                } else if (!this.brandName) {
+                    toastr.error("品牌名称为必填")
+                    return false;
+                } else if (!this.companyInfo) {
+                    toastr.error("公司名称为必填")
+                    return false;
+                } else if (!this.trailName) {
+                    toastr.error("线索名称为必填")
+                    return false;
+                } else if (!this.trailOrigin) {
+                    toastr.error("线索来源为必填")
+                    return false;
+                } else if (!this.trailPrincipal && !this.currentUser) {
+                    toastr.error("负责人为必填")
+                    return false;
+                } else if (!this.targetStars) {
+                    toastr.error("目标艺人为必填")
+                    return false;
+                } else if (!this.priority) {
+                    toastr.error("优先级为必填")
+                    return false;
+                } else if (!this.industry) {
+                    toastr.error("行业为必填")
+                    return false;
+                } else if (!this.industry) {
+                    toastr.error("行业为必填")
+                    return false;
+                } else if (!this.trailContact) {
+                    toastr.error("联系人为必填")
+                    return false;
+                }
+                else if (!this.trailFee) {
+                    toastr.error("预计订单收入为必填")
+                    return false;
+                } else if (this.trailContactPhone) {
+                    let phone = this.trailContactPhone
+                    if (!(/^1(3|4|5|7|8)\d{9}$/.test(phone))) {
+                        // alert("手机号码有误，请重填");  
+                        toastr.error("请输入正确的手机号码");
+                        return false;
+                    } else {
+                        return true;
+                    }
+                } else if (!this.trailContactPhone) {
+                    toastr.error("手机号码为必填")
+                    return false;
+                } else {
+                    return true
+                }
+            },
+            // 获取行业
+            getIndustries () {
+                let _this = this;
+                fetch('get', '/industries/all').then(function (response) {
+                    for (let i = 0; i < response.data.length; i++) {
+                        _this.industriesArr.push({
+                            id: response.data[i].id,
+                            name: response.data[i].name,
+                            value: response.data[i].id
                         })
                     }
                 })

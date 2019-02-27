@@ -17,7 +17,7 @@
                     <a class="dropdown-item" role="menuitem" data-toggle="modal" data-target="#confirmFlag"
                        @click="changeToastrText(2)" v-show="projectInfo.status != 2">完成</a>
                     <a class="dropdown-item" role="menuitem" data-toggle="modal" data-target="#confirmFlag"
-                       @click="changeToastrText(3)" v-show="projectInfo.status != 3">撤单</a>
+                       @click="changeToastrText(3)" v-show="projectInfo.status != 3 && projectInfo.status != 2">撤单</a>
                     <a class="dropdown-item" role="menuitem" data-toggle="modal" data-target="#addPrivacy">隐私设置</a>
                     <a class="dropdown-item" role="menuitem" @click="getApprovalsFormData"
                        v-if="projectInfo.approval_status == 232 || projectInfo.type == 5">创建合同</a>
@@ -733,7 +733,8 @@
                                                                   @change="(value) => changeProjectBaseInfo(value, 'priority')"></EditSelector>
                                                 </div>
                                             </div>
-                                            <div class="card-text py-10 px-0 clearfix col-md-6 float-left ">
+                                            <div class="card-text py-10 px-0 clearfix col-md-6 float-left"
+                                                 v-if="projectInfo.type != 5">
                                                 <div class="col-md-3 float-left text-right pl-0">合作类型</div>
                                                 <div class="col-md-9 float-left font-weight-bold">
                                                     <EditSelector :is-edit="isEdit" :options="cooperationTypeArr"
@@ -741,7 +742,8 @@
                                                                   @change="(value) => changeProjectBaseInfo(value, 'cooperation_type')"></EditSelector>
                                                 </div>
                                             </div>
-                                            <div class="card-text py-10 px-0 clearfix col-md-6 float-left ">
+                                            <div class="card-text py-10 px-0 clearfix col-md-6 float-left"
+                                                 v-if="projectInfo.type != 5">
                                                 <div class="col-md-3 float-left text-right pl-0">状态</div>
                                                 <div class="col-md-9 float-left font-weight-bold">
                                                     <EditSelector :is-edit="isEdit" :options="trailStatusArr"
@@ -768,7 +770,8 @@
                                             <h5 class="pl-15 pt-10 clearfix float-left col-md-12">合作信息</h5>
                                             <div v-if="projectInfo.type != 5 && projectInfo.fields">
                                                 <div class="card-text py-10 px-0 clearfix col-md-6 float-left "
-                                                     v-for="field in projectInfo.fields">
+                                                     v-for="field in projectInfo.fields"
+                                                     v-show="field.key !== '合作小组' || (field.key === '合作小组' && cooperationOther === '是')">
                                                     <div class="col-md-3 float-left text-right pl-0">{{ field.key }}
                                                     </div>
                                                     <div class="col-md-9 float-left font-weight-bold">
@@ -870,7 +873,7 @@
                                                 <div class="col-md-9 float-left font-weight-bold">
                                                     <template v-for="project in projectInfo.relate_projects.data">
                                                         <span class="pointer-content"
-                                                              @click="redirectProject(project.id)">{{project.title }}</span>
+                                                              @click="redirectProject(project.id)">{{project.title }} </span>
                                                     </template>
                                                 </div>
                                             </div>
@@ -879,7 +882,7 @@
                                                 <div class="col-md-3 float-left text-right pl-0">关联任务</div>
                                                 <div class="col-md-9 float-left font-weight-bold">
                                                     <template v-for="task in projectInfo.relate_tasks.data">
-                                                        <span class="pointer-content" @click="redirectTask(task.id)">{{ task.title }}</span>
+                                                        <span class="pointer-content" @click="redirectTask(task.id)">{{ task.title }} </span>
                                                     </template>
                                                 </div>
                                             </div>
@@ -983,18 +986,20 @@
                                 <datepicker ref="startTime" @change="changeStartTime"></datepicker>
                             </div>
                             <div class="col-md-5 float-left pl-0">
-                                <timepicker ref="startMinutes" :default="startMinutes"
-                                            @change="changeStartMinutes"></timepicker>
+                                <!-- <timepicker ref="startMinutes" :default="startMinutes"
+                                            @change="changeStartMinutes"></timepicker> -->
+                                <TimeChoice @change="changeStartMinutes" ref="startMinutes"></TimeChoice>
                             </div>
                         </div>
                         <div class="example">
                             <div class="col-md-2 text-right float-left">截止时间</div>
                             <div class="col-md-5 float-left pl-0">
-                                <datepicker ref="endTime" @change="changeEndTime"></datepicker>
+                                <datepicker ref="endTime" @change="changeEndTime" :startDate="startTime"></datepicker>
                             </div>
                             <div class="col-md-5 float-left pl-0">
-                                <timepicker ref="endMinutes" :default="endMinutes"
-                                            @change="changeEndMinutes"></timepicker>
+                                <!-- <timepicker ref="endMinutes" :default="endMinutes"
+                                            @change="changeEndMinutes"></timepicker> -->
+                                <TimeChoice @change="changeEndMinutes" ref="endMinutes"></TimeChoice>
                             </div>
                         </div>
                         <div class="example">
@@ -1160,7 +1165,7 @@
                             <div class="col-md-2 text-right float-left px-0">计划回款金额</div>
                             <div class="col-md-10 float-left">
                                 <NumberSpinner ref="paybackMoney"
-                                               @change="(value) => addProjectReturn(value, 'plan_returned_money')"></NumberSpinner>
+                                               @change="(value) => addProjectReturn(value, 'plan_returned_money')" :min="0" :max="1000000000" :precision="2" :value="0"></NumberSpinner>
                             </div>
                         </div>
                         <div class="example">
@@ -1235,7 +1240,7 @@
                             <div class="col-md-2 text-right float-left px-0">回款金额</div>
                             <div class="col-md-10 float-left">
                                 <NumberSpinner ref="paybackMoney1"
-                                               @change="(value) => addProjectReturn(value, 'plan_returned_money')"></NumberSpinner>
+                                               @change="(value) => addProjectReturn(value, 'plan_returned_money')" :min="0" :max="1000000000" :precision="2" :value="0"></NumberSpinner>
                             </div>
                         </div>
                         <div class="example">
@@ -1313,7 +1318,7 @@
                             <div class="col-md-2 text-right float-left px-0">开票金额</div>
                             <div class="col-md-10 float-left">
                                 <NumberSpinner ref="paybackMoney2"
-                                               @change="(value) => addProjectReturn(value, 'plan_returned_money')"></NumberSpinner>
+                                               @change="(value) => addProjectReturn(value, 'plan_returned_money')" :min="0" :max="1000000000" :precision="2" :value="0"></NumberSpinner>
                             </div>
                         </div>
                         <div class="example">
@@ -1659,6 +1664,8 @@
                 billExpenses: 0,
                 divideArrInfo: '',
                 projectProgress: '',
+                cooperationOther: '',
+                cooperationKeyId: '',
             }
         },
 
@@ -1709,9 +1716,9 @@
                 this.endMinutes = '';
                 this.taskIntroduce = '';
                 this.$refs.startTime.setValue('');
-                this.$refs.startMinutes.setValue('00:00');
+                this.$refs.startMinutes.setValue('0');
                 this.$refs.endTime.setValue('');
-                this.$refs.endMinutes.setValue('00:00');
+                this.$refs.endMinutes.setValue('0');
                 this.$store.commit('changeNewPrincipal', {});
                 this.$store.commit('changeNewParticipantsInfo', [])
             })
@@ -1756,6 +1763,12 @@
                                     value: fieldsArr[i].content[j],
                                 })
                             }
+                        }
+                        if (fieldsArr[i].key === '是否与他组合作') {
+                            if (fieldsArr[i].values) {
+                                this.cooperationOther = fieldsArr[i].values.data.value
+                            }
+                            this.cooperationKeyId = fieldsArr[i].id
                         }
                     }
                     response.data.fields = fieldsArr;
@@ -2524,10 +2537,15 @@
             },
 
             addInfo: function (value, name) {
+                if (name === this.cooperationKeyId) {
+                    this.cooperationOther = value;
+                    console.log(this.cooperationOther)
+                }
                 if (this.projectInfo.fields.find(item => item.id == name).values.data.value == value) {
                     return
                 }
                 this.addInfoArr[name] = value
+                console.log(this.cooperationOther)
             },
 
             changeToastrText: function (status) {

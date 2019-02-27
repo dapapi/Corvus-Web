@@ -8,4 +8,4 @@ var redirect = function (url) {
 
 
 window.dd = dd;
-module.exports = redirect;
+export default redirect;

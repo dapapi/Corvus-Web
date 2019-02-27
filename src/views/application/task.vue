@@ -176,18 +176,20 @@
                                 <Datepicker ref="startTime" @change="changeStartTime"></Datepicker>
                             </div>
                             <div class="col-md-5 float-left pl-0">
-                                <Timepicker ref="startMinutes" :default="startMinutes"
-                                            @change="changeStartMinutes"></Timepicker>
+                                <!-- <Timepicker ref="startMinutes" :default="startMinutes"
+                                            @change="changeStartMinutes"></Timepicker> -->
+                                <TimeChoice @change="changeStartMinutes" ref="startMinutes"></TimeChoice>
                             </div>
                         </div>
                         <div class="example">
                             <div class="col-md-2 text-right float-left require">截止时间</div>
                             <div class="col-md-5 float-left pl-0">
-                                <Datepicker ref="endTime" @change="changeEndTime"></Datepicker>
+                                <Datepicker ref="endTime" @change="changeEndTime" :startDate="startTime"></Datepicker>
                             </div>
                             <div class="col-md-5 float-left pl-0">
-                                <Timepicker ref="endMinutes" :default="endMinutes"
-                                            @change="changeEndMinutes"></Timepicker>
+                                <!-- <Timepicker ref="endMinutes" :default="endMinutes"
+                                            @change="changeEndMinutes"></Timepicker> -->
+                                <TimeChoice @change="changeEndMinutes" ref="endMinutes"></TimeChoice>
                             </div>
                         </div>
                         <div class="example">
@@ -536,9 +538,9 @@
                 this.endMinutes = ''
                 this.taskIntroduce = ''
                 this.$refs.startTime.setValue('')
-                this.$refs.startMinutes.setValue('00:00')
+                this.$refs.startMinutes.setValue('0')
                 this.$refs.endTime.setValue('')
-                this.$refs.endMinutes.setValue('00:00')
+                this.$refs.endMinutes.setValue('0')
                 this.linkData = []
                 this.getLinkData()
                 this.setDefaultPrincipal()

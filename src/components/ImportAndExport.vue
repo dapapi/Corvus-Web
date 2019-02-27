@@ -71,10 +71,17 @@ export default {
             //导出参数
             let getParams = []
             if(this.params){
+                //客户里边的参数必须传数组
                for (const key in this.params) {
                    if(this.params[key] instanceof Array){
                        if(this.params[key].length>0){
-                           getParams.push(`${key}=${this.params[key]}`)
+                          if(this.moduleName == 'clients'){
+                              for (let i = 0; i < this.params[key].length; i++) {
+                                  getParams.push(`${key}[]=${this.params[key][i]}`)
+                              }
+                          }else{
+                              getParams.push(`${key}=${this.params[key]}`)
+                          }
                        }
                    }else if(this.params[key]){
                        getParams.push(`${key}=${this.params[key]}`)

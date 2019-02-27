@@ -15,7 +15,7 @@
                     <!-- <a class="dropdown-item" role="menuitem" data-toggle="modal" data-target="#customizeFieldContent">自定义字段</a> -->
                     <a class="dropdown-item" role="menuitem" @click="privacyTask(oldInfo.privacy ? 0 : 1)">
                         {{oldInfo.privacy ? '转公开':'转私密'}}</a>
-                    <a class="dropdown-item" role="menuitem" @click="deleteTask">删除</a>
+                    <a class="dropdown-item" role="menuitem" @click="shouleDeleteTask">删除</a>
                 </div>
             </div>
         </div>
@@ -70,7 +70,7 @@
                         <div class="float-right text-right pr-0" v-if="oldInfo.resource">
                             <span>关联资源</span>
                             <span class="pl-2 font-weight-bold">
-                                {{oldInfo.resource.data.resource.data.title}} -
+                                {{ oldInfo.resource.data.resource.data.title }} -
                                 <template v-if="oldInfo.resource.data.resourceable_type === 'project'">{{ oldInfo.resource.data.resourceable.data.title }}</template>
                                 <template v-if="oldInfo.resource.data.resourceable_type === 'client'">{{ oldInfo.resource.data.resourceable.data.company }}</template>
                                 <template v-if="oldInfo.resource.data.resourceable_type === 'star'">{{ oldInfo.resource.data.resourceable.data.name }}</template>
@@ -284,6 +284,7 @@
                                         <button class="btn btn-primary" @click="changeTaskBaseInfo">确定</button>
                                     </div>
                                 </div>
+
                                 <div class="py-20 clearfix">
                                     <div class="clearfix">
                                         <div class="card-text py-10 px-0 clearfix col-md-8">
@@ -291,6 +292,27 @@
                                             <div class="col-md-10 float-left font-weight-bold">
                                                 <EditInput :content="taskInfo.title" :is-edit="isEdit"
                                                            @change="(value) => changeTaskInfo(value, 'title')"></EditInput>
+                                            </div>
+                                        </div>
+                                        <div class="card-text py-10 px-0 clearfix col-md-8">
+                                            <div class="col-md-2 float-left text-right pl-0">关联资源</div>
+                                            <div class="col-md-10 float-left font-weight-bold">
+                                                <span class="font-weight-bold" v-if="oldInfo.resource && oldInfo.resource.data && !isEdit">
+                                                    {{oldInfo.resource.data.resource.data.title}} -
+                                                    <template v-if="oldInfo.resource.data.resourceable_type === 'project'">{{ oldInfo.resource.data.resourceable.data.title }}</template>
+                                                    <template v-if="oldInfo.resource.data.resourceable_type === 'client'">{{ oldInfo.resource.data.resourceable.data.company }}</template>
+                                                    <template v-if="oldInfo.resource.data.resourceable_type === 'star'">{{ oldInfo.resource.data.resourceable.data.name }}</template>
+                                                    <template v-if="oldInfo.resource.data.resourceable_type === 'blogger'">{{ oldInfo.resource.data.resourceable.data.nickname }}</template>
+                                                    <template v-if="oldInfo.resource.data.resourceable_type === 'trail'">{{ oldInfo.resource.data.resourceable.data.title }}</template>
+                                                </span>
+                                                <template v-if="oldInfo.resource && oldInfo.resource.data && isEdit">
+                                                    <normal-linkage-selectors class="ml-0" ref="linkage" v-if="linkData.length>0" :myData="linkData"
+                                                        :data="linkData"
+                                                        :resource="oldInfo.resource ? oldInfo.resource.data.resource.data.code : ''"
+                                                        :resourceable="oldInfo.resource ? oldInfo.resource.data.resourceable.data.id : ''"
+                                                        @loadMore="getMoreChildLinkData"
+                                                        @change="addLinkage"></normal-linkage-selectors>
+                                                </template>
                                             </div>
                                         </div>
                                         <div class="card-text py-10 px-0 clearfix col-md-8">
@@ -318,23 +340,40 @@
                                         <div class="card-text py-10 px-0 clearfix col-md-8">
                                             <div class="col-md-2 float-left text-right pl-0">开始时间</div>
                                             <div class="col-md-10 float-left font-weight-bold" v-if="taskInfo.start_at">
-                                                <EditDatepicker class="col-md-6 px-0 float-left"
+                                                <div v-show="!isEdit">
+                                                    {{ taskInfo.start_at[0] }} {{ taskInfo.start_at[1] }}
+                                                </div>
+                                                <div v-show="isEdit">
+                                                    <EditDatepicker class="col-md-6 px-0 float-left"
                                                                 :content="taskInfo.start_at[0]" :is-edit="isEdit"
                                                                 @change="(value) => changeTaskInfo(value, 'start_at')"></EditDatepicker>
-                                                <EditTimepicker class="col-md-6 px-0 float-left"
+                                                    <EditTimeChoice class="col-md-6 px-0 float-left"
                                                                 :content="taskInfo.start_at[1]" :is-edit="isEdit"
-                                                                @change="(value) => changeTaskInfo(value, 'start_minutes')"></EditTimepicker>
+                                                                @change="(value) => changeTaskInfo(value, 'start_minutes')"></EditTimeChoice>
+                                                </div>
+                                                
                                             </div>
                                         </div>
                                         <div class="card-text py-10 px-0 clearfix col-md-8">
                                             <div class="col-md-2 float-left text-right pl-0">结束时间</div>
                                             <div class="col-md-10 float-left font-weight-bold" v-if="taskInfo.end_at">
-                                                <EditDatepicker class="col-md-6 px-0 float-left"
+                                                <div v-show="!isEdit">
+                                                    {{ taskInfo.end_at[0] }} {{ taskInfo.end_at[1] }}
+                                                </div>
+                                                <div v-show="isEdit">
+                                                    <EditDatepicker class="col-md-6 px-0 float-left"
                                                                 :content="taskInfo.end_at[0]" :is-edit="isEdit"
                                                                 @change="(value) => changeTaskInfo(value, 'end_at')"></EditDatepicker>
-                                                <EditTimepicker class="col-md-6 px-0 float-left"
+                                                <!-- <EditTimepicker class="col-md-6 px-0 float-left"
                                                                 :content="taskInfo.end_at[1]" :is-edit="isEdit"
-                                                                @change="(value) => changeTaskInfo(value, 'end_minutes')"></EditTimepicker>
+                                                                @change="(value) => changeTaskInfo(value, 'end_minutes')"></EditTimepicker> -->
+                                                    <EditTimeChoice class="col-md-6 px-0 float-left"
+                                                                :content="taskInfo.end_at[1]" :is-edit="isEdit"
+                                                                @change="(value) => changeTaskInfo(value, 'end_minutes')"></EditTimeChoice>
+                                                    <!-- <EditTimepicker class="col-md-6 px-0 float-left"
+                                                                :content="taskInfo.end_at[1]" :is-edit="isEdit"
+                                                                @change="(value) => changeTaskInfo(value, 'end_minutes')"></EditTimepicker> -->
+                                                </div>
                                             </div>
                                         </div>
                                         <div class="card-text py-10 px-0 clearfix col-md-8">
@@ -545,17 +584,19 @@
                                 <datepicker ref='startTime' @change="addStartTime"></datepicker>
                             </div>
                             <div class="col-md-5 float-left pl-0">
-                                <timepicker ref="startMinutes" :default="startMinutes"
-                                            @change="addStartMinutes"></timepicker>
+                                <!-- <timepicker ref="startMinutes" :default="startMinutes"
+                                            @change="addStartMinutes"></timepicker> -->
+                                <TimeChoice @change="addStartMinutes" ref="startMinutes"></TimeChoice>
                             </div>
                         </div>
                         <div class="example">
                             <div class="col-md-2 text-right float-left require">截止时间</div>
                             <div class="col-md-5 float-left pl-0">
-                                <datepicker ref="endTime" @change="addEndTime"></datepicker>
+                                <datepicker ref="endTime" @change="addEndTime" :startDate="startTime"></datepicker>
                             </div>
                             <div class="col-md-5 float-left pl-0">
-                                <timepicker ref="endMinutes" :default="endMinutes" @change="addEndMinutes"></timepicker>
+                                <!-- <timepicker ref="endMinutes" :default="endMinutes" @change="addEndMinutes"></timepicker> -->
+                                <TimeChoice @change="addEndMinutes" ref="endMinutes"></TimeChoice>
                             </div>
                         </div>
                         <div class="example">
@@ -585,6 +626,7 @@
         </Modal>
         <customize-field></customize-field>
         <DocPreview :url="previewUrl" :givenFileName="previewName"/>
+        <flag :id="'delTask'" @confirmFlag="deleteTask"/>
     </div>
 </template>
 
@@ -645,11 +687,13 @@
                 canSend: true, // 是否可以提交问卷
                 questionMemberList: [], // 问卷评优团人员
                 previewUrl: '', // 附件地址
-                previewName: '' // 附件名字
+                previewName: '', // 附件名字
+                linkCurrentPage: 2, // 关联资源当前页数
+                linkTotalPage: 1, // 关联资源总页数
+                linkCode: '', // 关联资源父数据的code
+                linkIndex: 0, //
+                canLoadMore: false, // 关联资源是否可以加载更多
             }
-        },
-        created() {
-            this.getLinkData()
         },
 
         mounted() {
@@ -693,6 +737,9 @@
                     this.getTask();
                 }, 100)
                 $('#taskTab a:first').tab('show')
+            },
+            resourceType () {
+                console.log(this.resourceType)
             }
         },
 
@@ -735,22 +782,28 @@
                     params.data = response.data.principal.data;
                     this.$store.dispatch('changePrincipal', params);
                     this.isLoading = false;
+                    this.getLinkData()
+                    this.resourceType =  this.oldInfo.resource && this.oldInfo.resource.data.resource.data.type // 资源type
+                    this.resourceableId = this.oldInfo.resource && this.oldInfo.resource.data.resourceable.data.id // 资源id
                 })
             },
 
             changeTaskInfo: function (value, name) {
+                
                 switch (name) {
                     case 'principal_id':
                         value = this.$store.state.principalInfo.id;
                         break;
                     case 'start_minutes':
+                    this.changeInfo.start_at = ''
                         if (this.changeInfo.start_at) {
                             this.changeInfo.start_at = this.changeInfo.start_at + ' ' + value
                         } else {
                             this.changeInfo.start_at = this.taskInfo.start_at[0] + ' ' + value
                         }
-                        return;
+                        break;
                     case 'end_minutes':
+                    this.changeInfo.end_at = ''
                         if (this.changeInfo.end_at) {
                             this.changeInfo.end_at = this.changeInfo.end_at + ' ' + value
                         } else {
@@ -794,6 +847,10 @@
                     toastr.success(this.taskInfo.privacy ? '转公开成功!' : '转私密成功!');
                     this.getTask()
                 })
+            },
+
+            shouleDeleteTask () {
+                $("#delTask").modal();
             },
 
             deleteTask: function () {
@@ -948,7 +1005,6 @@
                     self.getTask();
                 })
             },
-
             addTaskType: function (value) {
                 this.taskType = value
             },
@@ -981,8 +1037,14 @@
                 if (type === 'father') {
                     this.getChildLinkData(value, index)
                     this.resourceType = id
+                    this.changeInfo.resourceable_id = this.resourceableId
+                    this.changeInfo.resource_type = id
+                    this.changeInfo.code = this.linkCode
                 } else if (type === 'child') {
                     this.resourceableId = value
+                    this.changeInfo.resourceable_id = value
+                    this.changeInfo.resource_type = this.resourceType
+                    this.changeInfo.code = this.linkCode
                 }
             },
 
@@ -1019,17 +1081,28 @@
                     if (this.linkData[0].child.length === 0) {
                         this.getChildLinkData('', 0)
                     }
+                    if (this.oldInfo && this.oldInfo.resource && this.oldInfo.resource.data.resource.data.code) {
+                        this.getChildLinkData(this.oldInfo.resource.data.resource.data.code, 0)
+                    }
                 })
             },
             // 获取关联子资源数据
             getChildLinkData(url, index) {
                 if (url) {
                     let data = {}
+                    this.linkCode = url
+                    this.linkIndex = index
                     if (url === 'bloggers' || url === 'stars') {
                         data.sign_contract_status = 2
                     }
                     fetch('get', `/${url === 'bloggers' ? url + '/all' : url}`, data).then(res => {
                         const temp = this.linkData[index]
+                        if (res.meta && res.meta.pagination) {
+                            this.canLoadMore = true
+                            this.linkTotalPage = res.meta.pagination.total_pages
+                        } else {
+                            this.canLoadMore = false
+                        }
                         temp.child = res.data.map(n => {
                             return {
                                 name: n.name || n.nickname || n.title || n.company,
@@ -1058,6 +1131,41 @@
                 }
 
             },
+            // 关联子资源滚动到底加载更多
+            getMoreChildLinkData () {
+                const url = this.linkCode
+                const index = this.linkIndex
+                if (url && this.canLoadMore) {
+                    
+                    if (this.linkCurrentPage >= this.linkTotalPage) {
+                        return
+                    }
+                    let data = {
+                        page: this.linkCurrentPage
+                    }
+                    if (url === 'bloggers' || url === 'stars') {
+                        data.sign_contract_status = 2
+                    }
+                    fetch('get', `/${url === 'bloggers'? url + '/all' : url}`, data).then(res => {
+                        this.linkCurrentPage = this.linkCurrentPage + 1
+                        const temp = this.linkData[index]
+                        // const temp = this.linkData
+                        const tempArr = res.data.map(n => {
+                            return {
+                                name: n.name || n.nickname || n.title || n.company,
+                                id: n.id,
+                                value: n.id,
+                            }
+                        })
+                        temp.child = [...temp.child, ...tempArr]
+                        this.resourceableId = temp.child[0].id
+                        this.$set(this.linkData, index, temp)
+                        setTimeout(() => {
+                            this.$refs.linkage.refresh()
+                        }, 100)
+                    })
+                }
+            },
             // 获取任务类型列表
             getTaskType() {
                 fetch('get', '/task_types').then(res => {
@@ -1084,9 +1192,9 @@
                 this.endMinutes = ''
                 this.taskIntroduce = ''
                 this.$refs.startTime.setValue('')
-                this.$refs.startMinutes.setValue('00:00')
+                this.$refs.startMinutes.setValue('0')
                 this.$refs.endTime.setValue('')
-                this.$refs.endMinutes.setValue('00:00')
+                this.$refs.endMinutes.setValue('0')
                 this.linkData = []
                 this.getLinkData()
                 this.setDefaultPrincipal()

@@ -10,7 +10,7 @@
         <div class="col-md-5 py-20">
           <div class="input-search">
             <i class="input-search-icon iconfont icon-buoumaotubiao13" aria-hidden="true"></i>
-            <input type="text" class="form-control" name="" placeholder="输入编号、类型、申请人">
+            <input type="text" class="form-control project-search" name="" placeholder="输入编号、类型、申请人">
             <button type="button" class="input-search-closeiconfont icon-guanbi" aria-label="Close"></button>
           </div>
         </div>
@@ -148,16 +148,18 @@
                 <Datepicker @change="changeStartTime"></Datepicker>
               </div>
               <div class="col-md-5 float-left pl-0">
-                <Timepicker :default="startMinutes" @change="changeStartMinutes"></Timepicker>
+                <!-- <Timepicker :default="startMinutes" @change="changeStartMinutes"></Timepicker> -->
+                <TimeChoice @change="changeStartMinutes" ></TimeChoice>
               </div>
             </div>
             <div class="example">
               <div class="col-md-2 text-right float-left">截止时间</div>
               <div class="col-md-5 float-left pl-0">
-                <Datepicker @change="changeEndTime"></Datepicker>
+                <Datepicker @change="changeEndTime" :startDate="startTime"></Datepicker>
               </div>
               <div class="col-md-5 float-left pl-0">
-                <Timepicker :default="endMinutes" @change="changeEndMinutes"></Timepicker>
+                <!-- <Timepicker :default="endMinutes" @change="changeEndMinutes"></Timepicker> -->
+                 <TimeChoice @change="changeEndMinutes" ></TimeChoice>
               </div>
             </div>
             <div class="example">
@@ -367,5 +369,8 @@ tr:hover {
 }
 .head:hover{
     background-color: #fff;
+}
+.project-search::-webkit-input-placeholder{
+  font-weight: 200;
 }
 </style>

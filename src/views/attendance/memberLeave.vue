@@ -13,7 +13,7 @@
                         <Datepicker :placeholder="'开始时间'" @change="getStartTime"></Datepicker>
                     </div>
                     <div class="col-md-3 float-left">
-                        <Datepicker :placeholder="'结束时间'" @change="getEndTime"></Datepicker>
+                        <Datepicker :placeholder="'结束时间'" @change="getEndTime" :startDate="searchData.start_time"></Datepicker>
                     </div>
                 <!-- </div> -->
                 
