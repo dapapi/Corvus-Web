@@ -992,8 +992,8 @@
                 })
             },
             getBlogger: function (page = 1, signStatus) {
-                let data = {
-                    include: 'type,creator,affixes,publicity,operatelogs,contracts',
+               let data = {
+                    include: 'type,creator,tasks,affixes,producer,publicity,operatelogs',
 
                 }
                 let _this = this;
@@ -1002,32 +1002,32 @@
                 if (signStatus) {
                     this.blogStatus = signStatus
                 }
-                data.status = '&status='+this.blogStatus
+                data.status = this.blogStatus
+                //博主类型
+                if (this.blogType) {
+                    data.type = this.blogType
+                }
                 //沟通状态
                 if (this.blogCommunication) {
-                    data.communication_status = '&communication_status='+this.blogCommunication
+                    data.communication_status = this.blogCommunication
                 }
                 //博主名称
                 if (this.blogName) {
-                    data.name = '&name='+this.blogName
+                    data.name = this.blogName
                 }
-                data.page = '&page='+page
-                fetch('post', '/bloggers/filter?include=type,creator,affixes,publicity,operatelogs,contracts'+data.status+data.communication_status+data.name+data.page).then(function (response) {
-                    
-                    if(response.data){
-                        _this.bloggerInfo = response.data;
-                    }
-                    if (response.meta) {
-                        _this.Bcurrent_page = response.meta.pagination.current_page;
-                        _this.Btotal = response.meta.pagination.total;
-                        _this.Btotal_pages = response.meta.pagination.total_pages;
-                    }
+                data.page = page
+                fetch('get', '/bloggers', data).then(function (response) {
+
+                    _this.artistsInfo = response.data;
+                    _this.current_page = response.meta.pagination.current_page;
+                    _this.total = response.meta.pagination.total;
+                    _this.total_pages = response.meta.pagination.total_pages;
                     _this.isLoading = false;
                     _this.selectAllBlogger = false;
                     _this.selectedArtistsArr = [];
 
-
                 });
+
 
             },
             deleteAffix: function (index) {
