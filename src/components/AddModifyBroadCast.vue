@@ -55,7 +55,15 @@
                             <selectors ref='classifySelector' class="col-sm-4 test" :options="classifyArr" @change="changeClassify" placeholder='请选择类型'></selectors>
                         </div>
                         <!-- <div class="summernote" id="summernote"></div> -->
-                        <vue-ueditor-wrap v-model="msg" :config="myConfig"></vue-ueditor-wrap>
+                        <div class="my-upload">
+                            <label for="my-upload">12312312312</label>
+                            <input id="my-upload" type="file" @change="uploadFile" accept="image/png,image/gif,image/jpeg,image/tiff,application/pdf" />
+                        </div>
+                        <vue-ueditor-wrap v-model="msg" :config="myConfig">
+                            
+                        </vue-ueditor-wrap>
+                        
+                        
                         <File-Uploader class="upload" url="javascript:void()" @changePlus="fileUploaded" :givenfilename='givenfilename' broadcast='true'>上传附件</File-Uploader>
                         <figure style="text-align:center;width:100px" v-for="(item, index) in this.affix" :key="index" class="attachdetail ml-20 float-left"> 
                             <img src="@/assets/img/attachment.png" alt="" style="width:40px">
@@ -123,7 +131,7 @@ export default {
             // 初始容器宽度
             initialFrameWidth: '100%',
             // 上传文件接口（这个地址是我为了方便各位体验文件上传功能搭建的临时接口，请勿在生产环境使用！！！）
-            serverUrl:'http://35.201.165.105:8000/controller.php',
+            // serverUrl:'http://35.201.165.105:8000/controller.php',
             // UEditor 资源文件的存放路径，如果你使用的是 vue-cli 生成的项目，通常不需要设置该选项，vue-ueditor-wrap 会自动处理常见的情况，如果需要特殊配置，参考下方的常见问题2
             UEDITOR_HOME_URL: '/UEditor/',
             zIndex : 2000,
@@ -170,6 +178,9 @@ export default {
         }
     },
     methods:{
+        uploadFile(params){
+            console.log(params);
+        },
         getClassify(){
             fetch('get','/announcements/Classify/').then((params) => {
                 this.classifyArr = params.data
@@ -298,6 +309,24 @@ export default {
 </script>
 
 <style scoped>
+.my-upload{
+    position: absolute;
+    right: 200px;
+    top: 200px;
+    width: 20px;
+    height: 20px;
+    background-color: red;
+    z-index: 2000000;
+}
+.my-upload:hover{
+    /* position: relative; */
+    background-color: #fff5d4;
+    border: 1px solid #dcac6c;
+    padding: 0;
+}
+#my-upload{
+    display: none
+}
 .test{
     z-index:3001 !important;
 }
