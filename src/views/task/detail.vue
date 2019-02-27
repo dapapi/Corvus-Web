@@ -370,7 +370,9 @@
                                                     <EditTimeChoice class="col-md-6 px-0 float-left"
                                                                 :content="taskInfo.end_at[1]" :is-edit="isEdit"
                                                                 @change="(value) => changeTaskInfo(value, 'end_minutes')"></EditTimeChoice>
-
+                                                    <!-- <EditTimepicker class="col-md-6 px-0 float-left"
+                                                                :content="taskInfo.end_at[1]" :is-edit="isEdit"
+                                                                @change="(value) => changeTaskInfo(value, 'end_minutes')"></EditTimepicker> -->
                                                 </div>
                                             </div>
                                         </div>

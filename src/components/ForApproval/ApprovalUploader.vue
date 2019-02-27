@@ -20,8 +20,8 @@
                 <div class="img-control">
                     <!-- <hr> -->
                     <div class="icon-control">
-                        <a :href="item.fileUrl" target="_blank">
-                            <i class="iconfont icon-download"></i>
+                        <a >
+                            <i class="iconfont icon-liulan" @click='previewHandler(item.fileUrl)'></i>
                         </a>
                         <i class="iconfont icon-shanchu1" @click="imgDelete(item)"></i>
                     </div>
@@ -39,7 +39,6 @@
         </label>
             </div>
          </div>
-        <DocPreview :url='previewUrl' :given-file-name='givenFileName' />
     </div>
 </template>
 
@@ -76,10 +75,17 @@ export default {
         // }
     },
     methods: {
-        previewHandler(params){
-            this.previewUrl = params.fileUrl
-            this.givenFileName = params.fileName
-        },
+         previewHandler(params) {
+            this.$store.dispatch('changePreview',params)
+                $('#docPreviewSelector').modal('hide')
+                this.previewUrlArr = String(params).split(',')
+                if (this.previewUrlArr.length === 1) {
+                    $('#docPreview').modal('show')
+                    this.previewUrl = this.previewUrlArr[0]
+                } else {
+                    $('#docPreviewSelector').modal('show')
+                }
+            },
         imgDelete(params){
             let {id} = this.consdata[0]
             let {related_field} = this.consdata[0]
@@ -105,6 +111,7 @@ export default {
             let fileSize = file.size;
             let _this = this;
             this.getQiniuAccessToken((token) => {
+                console.log(token,'token');
                 let observable = qiniu.upload(file, key, token, putExtra, conf);
                 let subscription = observable.subscribe(function (res) {
                 }, function (error) {
@@ -130,6 +137,7 @@ export default {
                 headers: config.getHeaders(),
                 // statusCode: config.getStatusCode()
             }).done(function (response) {
+                console.log(response);
                 callback(response.data.token)
             })
         },

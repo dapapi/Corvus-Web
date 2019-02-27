@@ -218,6 +218,9 @@ export default {
 </script>
 
 <style scoped>
+img{
+    width: 100% !important;
+}
 hr{
     margin: 0 !important;
 }
