@@ -330,9 +330,7 @@ export default {
                 if(module_id == 214){
                     this.showScheduleModal(module_data_id)
                 }else if (module_id == 216){
-                    alert(222)
-                    alert(`${this.msgLink.find(item =>item.value == module_id).name}/${module_data_id}?mode=approver`)
-                    // return false
+                    
                     this.$router.push(`${this.msgLink.find(item =>item.value == module_id).name}/${module_data_id}?mode=approver`) 
                 }else{
                     this.$router.push(`${this.msgLink.find(item =>item.value == module_id).name}/${module_data_id}`) 
