@@ -40,23 +40,38 @@
                                 <path fill-rule="evenodd" d="M11 2H9c0-.55-.45-1-1-1H5c-.55 0-1 .45-1 1H2c-.55 0-1 .45-1 1v1c0 .55.45 1 1 1v9c0 .55.45 1 1 1h7c.55 0 1-.45 1-1V5c.55 0 1-.45 1-1V3c0-.55-.45-1-1-1zm-1 12H3V5h1v8h1V5h1v8h1V5h1v8h1V5h1v9zm1-10H2V3h9v1z"/>
                             </svg>
                         </button> -->
-                        <div class="bootbox-body"><h4>{{pageType}}公告</h4></div>
-                        <br/>
-                        <div class="form-group row col-sm-12">
-                            <label for="" class="col-sm-2 col-form-label"><strong>标题内容</strong></label>
+                        <div class="bootbox-body px-10"><h4>{{pageType}}公告</h4></div>
+                        <hr class="px-0 mx-0">
+                        <div class="form-group row col-sm-12 px-0">
+                            <label for="" class="col-sm-2 col-form-label text-center"><strong>标题内容</strong></label>
                             <input type="text" class="form-control col-sm-10" id="" placeholder="输入标题" v-model="title">
                         </div>
-                        <div class="form-group row col-sm-12">
-                            <label for="" class="col-sm-2 col-form-label"><strong>公告范围</strong></label>
+                        <div class="form-group row col-sm-12 px-0">
+                            <label for="" class="col-sm-2 col-form-label text-center"><strong>公告范围</strong></label>
                             
                             <RangeSelector class="scopeSelector"  ref='scopeSelector' :options='departments' @change='changeDepartments'/>
                             <!-- <selectors class="scopeSelector col-sm-4" ref='scopeSelector' :options="departments" @valuelistener="changeDepartments"  multiple='true' :placeholder='"请选择范围"'></selectors> -->
-                            <label for="" class="col-sm-2 col-form-label text-right" style="z-index:10000"><strong>选择分类</strong></label>
+                            <label for="" class="col-sm-2 col-form-label text-center" style="z-index:10000"><strong>选择分类</strong></label>
                             <selectors ref='classifySelector' class="col-sm-4 test" :options="classifyArr" @change="changeClassify" placeholder='请选择类型'></selectors>
                         </div>
                         <!-- <div class="summernote" id="summernote"></div> -->
-                        <vue-ueditor-wrap v-model="msg" :config="myConfig"></vue-ueditor-wrap>
-                        <File-Uploader class="upload" url="javascript:void()" @changePlus="fileUploaded" :givenfilename='givenfilename' broadcast='true'>上传附件</File-Uploader>
+                        <div class="my-upload">
+                            <label for="my-upload" style="width:100%;height:100%;">
+                                <template>
+                                    <!-- <i class="iconfont icon-fujian"></i> -->
+                                    <div class="upload-icon"></div>
+                                     <!-- <img src="@/assets/img/icons.png" alt=""> -->
+                                </template>
+                            </label>
+                            <input id="my-upload" type="file" @change="uploadFile" accept="image/png,image/gif,image/jpeg,image/tiff,application/pdf" />
+                        </div>
+                        <div class="pl-20 pr-15 mb-15" >
+                            <vue-ueditor-wrap  v-model="msg" :config="myConfig">
+                                
+                            </vue-ueditor-wrap>
+                        </div>
+                        
+                        <File-Uploader class="upload px-15" url="javascript:void()" @changePlus="fileUploaded" :givenfilename='givenfilename' broadcast='true'>上传附件</File-Uploader>
                         <figure style="text-align:center;width:100px" v-for="(item, index) in this.affix" :key="index" class="attachdetail ml-20 float-left"> 
                             <img src="@/assets/img/attachment.png" alt="" style="width:40px">
                             <p class="pt-10">{{item.title}}</p>
@@ -91,6 +106,7 @@ import { mapState } from 'vuex'
 import fetch from '@/assets/utils/fetch.js'
 import config from '@/assets/js/config'
 import RangeSelector from '@/components/RangeSelector'
+import * as qiniu from 'qiniu-js'
 export default {
     props:['notedata','givenfilename'],
     components:{
@@ -123,11 +139,12 @@ export default {
             // 初始容器宽度
             initialFrameWidth: '100%',
             // 上传文件接口（这个地址是我为了方便各位体验文件上传功能搭建的临时接口，请勿在生产环境使用！！！）
-            serverUrl:'http://35.201.165.105:8000/controller.php',
+            // serverUrl:'http://35.201.165.105:8000/controller.php',
             // UEditor 资源文件的存放路径，如果你使用的是 vue-cli 生成的项目，通常不需要设置该选项，vue-ueditor-wrap 会自动处理常见的情况，如果需要特殊配置，参考下方的常见问题2
             UEDITOR_HOME_URL: '/UEditor/',
             zIndex : 2000,
-            }
+            },
+            fileInfo:[],
         }
     },
     created(){
@@ -170,6 +187,61 @@ export default {
         }
     },
     methods:{
+        uploadFile(e) {
+            let file = e.target.files[0];
+            let putExtra = null;
+            let type = file.type.split('/');
+            if (type[type.length - 1] === 'vnd.ms-powerpoint') {
+                type[type.length - 1] = 'ppt';
+            } else if (type[type.length - 1] === 'vnd.openxmlformats-officedocument.presentationml.presentation') {
+                type[type.length - 1] = 'pptx';
+            } else if (type[type.length - 1] === 'vnd.openxmlformats-officedocument.spreadsheetml.sheet') {
+                type[type.length - 1] = 'xlsx';
+            } else if (type[type.length - 1] === 'plain') {
+                type[type.length - 1] = 'txt';
+            }
+            let key = this.guid() + '.' + type[type.length - 1];
+            let conf = null;
+            let fileSize = file.size;
+            let _this = this;
+            this.getQiniuAccessToken((token) => {
+                let observable = qiniu.upload(file, key, token, putExtra, conf);
+                let subscription = observable.subscribe(function (res) {
+                }, function (error) {
+                    console.log(error)
+                }, function (res) {
+                    let fileUrl = config.imgUrl + res.key;
+                    let fileName = file.name;
+                    _this.msg += `<p><img src=${fileUrl} title=${fileName} style="max-width:100%;"/></p>`
+                    _this.fileInfo.push({fileUrl, fileName, fileSize})
+                })
+            });
+        },
+
+        getQiniuAccessToken: function (callback) {
+            $.ajax({
+                type: 'get',
+                url: config.apiUrl + '/services/request_qiniu_token',
+                headers: config.getHeaders(),
+                // statusCode: config.getStatusCode()
+            }).done(function (response) {
+                callback(response.data.token)
+            })
+        },
+
+        guid: function () {
+            function s4() {
+                return Math.floor((1 + Math.random()) * 0x10000)
+                    .toString(16)
+                    .substring(1);
+            }
+
+            return s4() + s4() + '-' + s4() + '-' + s4() + '-' + s4() + '-' + s4() + s4() + s4();
+        },
+
+        getFileExt(){
+            this.fileExt = this.fileInfo.name.split('.').pop()
+        },
         getClassify(){
             fetch('get','/announcements/Classify/').then((params) => {
                 this.classifyArr = params.data
@@ -298,6 +370,26 @@ export default {
 </script>
 
 <style scoped>
+.my-upload{
+    background-image: url('../assets/img/icons.png');
+    background-position: 617px 0px;
+    position: absolute;
+    left: 300px;
+    top: 250px;
+    width: 20px;
+    height: 20px;
+    /* background-color: red; */
+    z-index: 2000000;
+}
+.my-upload:hover{
+    /* position: relative; */
+    background-color: #fff5d4;
+    border: 1px solid #dcac6c;
+    padding: 0;
+}
+#my-upload{
+    display: none
+}
 .test{
     z-index:3001 !important;
 }

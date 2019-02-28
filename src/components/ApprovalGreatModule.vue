@@ -35,6 +35,7 @@
             </div>
         </div>
       <DocPreview :url='$store.state.previewurl' />
+
         
     </div>
 </template>
