@@ -54,14 +54,11 @@ export default {
     },
     mounted(){
         if(!this.detailpage){
-            console.log(1234567);
             $('#docPreview').on('hidden.bs.modal',function(){
-                console.log(this.detailpage);
-                console.log('窗口关闭');
                 document.getElementsByTagName('body')[0].classList.add('modal-open')
             })
         }else{
-            console.log(8888888);
+            
         }
     },
     computed:{

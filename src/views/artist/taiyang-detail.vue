@@ -1207,10 +1207,8 @@
             </div>
         </div>
         <!--附件预览-->
-        <DocPreview :url="previewUrl" :givenFileName="previewName" detailpage='true' />
-
-
-        <ApprovalGreatModule :formData='formDate' :detailpage="isDetail" :default-value="{value:projectContractDefault,id:$route.params.id}"></ApprovalGreatModule>
+        <ApprovalGreatModule :formData='formDate' :detailpage='isDetail' :default-value="{value:projectContractDefault,id:$route.params.id}"></ApprovalGreatModule>
+        <DocPreview :url="previewUrl" :givenFileName="previewName" :detailpage='isDetail' />
     </div>
 </template>
 
@@ -2459,6 +2457,7 @@
             }
             ,
             contractlist(status) {
+                this.isDetail = false
                 let _this = this;
                 this.isDetail = false
                 let data = {

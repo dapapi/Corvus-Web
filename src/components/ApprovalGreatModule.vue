@@ -34,7 +34,7 @@
                 </div>
             </div>
         </div>
-      <DocPreview :url='$store.state.previewurl' :detailpage='isDetail'/>
+      <DocPreview :url='$store.state.previewurl' :detailpage='detailpage' />
 
         
     </div>
