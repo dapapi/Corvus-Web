@@ -180,8 +180,8 @@ export default {
         },
         // 获取职位列表
         getJobList () {
-            fetch('get', '/departments_jobs').then(res => {
-                this.jobArr = res.data.map(n => {
+            fetch('get', '/departments_position').then(res => {
+                this.jobArr = res.map(n => {
                     return {
                         name: n.name,
                         value: n.id
