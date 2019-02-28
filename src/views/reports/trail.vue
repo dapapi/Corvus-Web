@@ -154,7 +154,7 @@
                     </div>
                     <div class="tab-pane animation-fade" id="forum-industry-analysis" role="tabpanel">
                         <div class="col-md-3 pl-0">
-                            <Selectors :options="trailTypeArr" @change="changeIndustryTrailType"></Selectors>
+                            <Selectors :options="trailTypeArr" @change="changeIndustryTrailType" placeholder="请选择线索类型"></Selectors>
                         </div>
                         <div class="col-md-12">
                             <div ref="industry" style="width: 800px;height:500px;margin: 0 auto"></div>
@@ -406,7 +406,7 @@
             setReports(start_time, end_time) {
                 if (!start_time || !end_time) {
                     start_time = this.start_time;
-                    end_time = this.start_time;
+                    end_time = this.end_time;
                 }
                 let data = {
                     start_time: start_time,
@@ -518,9 +518,9 @@
                 fetch('get', '/reportfrom/industryanalysis', data).then(function (response) {
                     let data = [];
                     let dataValue = [];
-                    for (let i = 0; i < response.trails.length; i++) {
-                        data.push(response.trails[i].industry_name);
-                        dataValue.push(response.trails[i].total)
+                    for (let i = 0; i < response.length; i++) {
+                        data.push(response[i].industry_name);
+                        dataValue.push(response[i].total)
                     }
                     let industryOption = {
                         xAxis: {
