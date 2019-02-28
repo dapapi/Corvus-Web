@@ -912,7 +912,8 @@
                 previewName: '',
                 affixIndex: '',
                 isdilog: true,
-                exportParams: {}
+                exportParams: {},
+                customizeInfo:{},
             }
         },
         watch: {
@@ -992,7 +993,6 @@
                 })
             },
             getBlogger: function (page = 1, signStatus) {
-
                 let data = {
                     include: 'type,creator,affixes,publicity,operatelogs,contracts',
 
@@ -1003,25 +1003,27 @@
                 if (signStatus) {
                     this.blogStatus = signStatus
                 }
-                data.status = this.blogStatus
+                if(this.blogStatus){
+                    data.status = '&status='+this.blogStatus
+                }else{
+                    data.status = ''
+                }
                 //沟通状态
                 if (this.blogCommunication) {
-                    data.communication_status = this.blogCommunication
+                    data.communication_status = '&communication_status='+this.blogCommunication
+                }else{
+                    data.communication_status = ''
                 }
                 //博主名称
                 if (this.blogName) {
-                    data.name = this.blogName
+                    data.name = '&name='+this.blogName
+                }else{
+                    data.name = ''
                 }
-                data.page = page
-                //导出需要传的参数
-                this.exportParams = {
-                    status: this.blogStatus,
-                    communication_status: this.blogCommunication,
-                    name: this.blogName
-                }
-                fetch('get', '/bloggers', data).then(function (response) {
-
-                    if (response.data) {
+                data.page = '&page='+page
+                fetch('post', '/bloggers/filter?include=type,creator,affixes,publicity,operatelogs,contracts'+data.status +data.communication_status +data.name +data.page ,this.customizeInfo).then(function (response) {
+                    
+                    if(response.data){
                         _this.bloggerInfo = response.data;
                     }
                     if (response.meta) {
@@ -1078,7 +1080,31 @@
             },
             customize: function (value) {
                 let _this = this
-                fetch('post', '/' + this.customizeContentType + '/filter', value).then((params) => {
+                let data = {
+                    include: 'type,creator,affixes,publicity,operatelogs,contracts',
+
+                }
+                if (this.blogStatus) {
+                    data.status = '&status='+this.blogStatus
+                }else{
+                    data.status = ''
+                }
+                //沟通状态
+                if (this.blogCommunication) {
+                    data.communication_status = '&communication_status='+this.blogCommunication
+                }else{
+                    data.communication_status = ''
+                }
+                //博主名称
+                if (this.blogName) {
+                    data.name = '&name='+this.blogName
+                }else{
+                    data.name = ''
+                }
+                data.page = '&page='+this.current_page
+                this.customizeInfo = value
+                fetch('post', '/bloggers/filter?include=type,creator,affixes,publicity,operatelogs,contracts'+data.status +data.communication_status +data.name ,value).then(function (params) {
+                // fetch('post', '/'+this.customizeContentType+'/filter', value).then((params) => {
                     console.log(params.data);
                     // _this.bloggerInfo =params.data
                     if (_this.customizeContentType == 'stars') {

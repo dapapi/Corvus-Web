@@ -172,6 +172,9 @@
                                 </tr>
                                 </tbody>
                             </table>
+                            <pagination :current_page="current_page" :method="getDefaultDate"
+                                        :total_pages="total_pages"
+                                        :total="total"></pagination>
                         </div>
                         <div class="tab-pane animation-fade selectable-wrap" :id="'forum-authority'+item.id"
                              role="tabpanel"
@@ -575,7 +578,10 @@
                 idArray:[],
                 defaultDate:'',
                 selectgroupingDate:[],
-                isLoading:true
+                isLoading:true,
+                total: 0,
+                current_page: 1,
+                total_pages: 1,
             }
         },
         mounted() {
@@ -601,10 +607,15 @@
                 });
             },
             //获取默认数据
-            getDefaultDate(){
+            getDefaultDate(page = 1){
                 let _this = this;
-                fetch('get','/console/director').then(function(resouce){
+                fetch('get','/console/director',{
+                     page:page
+                 }).then(function(resouce){
                     _this.defaultDate = resouce.data
+                    _this.current_page = parseInt(resouce.meta.pagination.current_page);
+                    _this.total = resouce.meta.pagination.total;
+                    _this.total_pages = resouce.meta.pagination.total_pages;
                 })
             },
             //获取分组数据

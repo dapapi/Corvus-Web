@@ -1,8 +1,7 @@
 <template>
 
-
-    <input type="text" class="form-control addtrail" data-plugin="asSpinner"  increment="0.1" :value="value"
-           :class="[shortInput ? 'short-spinner-input' : '']">
+    <input type="text" class="form-control addtrail" data-plugin="asSpinner"  :value="value" increment="0.1"
+           :class="[shortInput ? 'short-spinner-input' : '']" >
 
 </template>
 
@@ -12,6 +11,7 @@
         mounted() {
             let self = this;
             $(this.$el).asSpinner(
+                
                 {
                     format: function format(value) {
                         if(this.max == 23||this.max == 59){
