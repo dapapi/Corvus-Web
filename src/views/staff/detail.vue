@@ -187,10 +187,10 @@
                                         </div>
                                     </upload> -->
                                     <!-- <Avatar v-if="!editDetail" :imgUrl="detail.idCardUrl" style="width: 60px; height: 60px; font-size: 24px;" /> -->
-                                    <img v-if="!editDetail" :src="detail.idCardUrl" style="width: 60px; height: 60px;" />
+                                    <img v-if="!editDetail" :src="detail.idCardUrl?detail.idCardUrl:'https://res-crm.papitube.com/image/artist-no-avatar.png'" style="width: 60px; height: 60px;" />
                                     <upload @change="uploadIDImg" v-else accept="image/png, image/jpeg, image/gif, image/jpg" class="idImg">
                                         <div class="upload-head">
-                                            <img v-if="detail.idCardUrl" :src="detail.idCardUrl" alt="头像" />
+                                            <img v-if="detail.idCardUrl" :src="detail.idCardUrl" alt="图片暂无" />
                                             <template v-else>
                                                 +
                                             </template>
@@ -811,6 +811,7 @@ export default {
     .upload-head {
         width: 60px;
         height: 60px;
+        line-height: 60px;
     }
 }
 </style>
