@@ -53,11 +53,22 @@ export default {
         
     },
     mounted(){
-        if(!this.detailpage){
+        if(this.detailpage===false){
             $('#docPreview').on('hidden.bs.modal',function(){
-                document.getElementsByTagName('body')[0].classList.add('modal-open')
+                    document.getElementsByTagName('body')[0].classList.add('modal-open')
             })
+            
         }else{
+            console.log(this.detailpage);
+        }
+    },
+    watch:{
+        detailpage:function(value){
+            if(!value){
+                $('#docPreview').on('hidden.bs.modal',function(){
+                    document.getElementsByTagName('body')[0].classList.add('modal-open')
+                })
+            }
             
         }
     },
