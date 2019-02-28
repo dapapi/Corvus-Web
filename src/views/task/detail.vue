@@ -625,7 +625,7 @@
             </div>
         </Modal>
         <customize-field></customize-field>
-        <DocPreview :url="previewUrl" :givenFileName="previewName"/>
+        <DocPreview :url="previewUrl" :givenFileName="previewName" detailpage='true'/>
         <flag :id="'delTask'" @confirmFlag="deleteTask"/>
     </div>
 </template>
