@@ -1207,8 +1207,9 @@
             </div>
         </div>
         <!--附件预览-->
-        <DocPreview :url="previewUrl" :givenFileName="previewName"/>
         <ApprovalGreatModule :formData='formDate' :default-value="{value:projectContractDefault,id:$route.params.id}"></ApprovalGreatModule>
+        <DocPreview :url="previewUrl" :givenFileName="previewName" detailpage=true />
+        
     </div>
 </template>
 

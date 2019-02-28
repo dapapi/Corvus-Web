@@ -161,6 +161,10 @@
                             //     name: '知识库',
                             //     code: 'knowledgebase'
                             // },
+                            {
+                                name:'仪表盘',
+                                code:'dashboard'
+                            }
                         ]
                     },
                 ],
