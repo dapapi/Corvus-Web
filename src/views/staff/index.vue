@@ -16,10 +16,10 @@
                         <selectors :options="[{value: '',name: '全部'}, ...staffPositionStatus]" :defaultFirst="true" changeKey="positionType" @select="changeState"></selectors>
                     </div>
                     <div class="col-md-2 example float-left">
-                        <selectors :options="[{value: '',name: '全部'}, ...hireShapeArr]" :defaultFirst="true" changeKey="hireShape" @select="changeState"></selectors>
+                        <selectors :options="[{value: '',name: '请选择聘用形式'}, ...hireShapeArr]" :defaultFirst="true" changeKey="hireShape" @select="changeState"></selectors>
                     </div>
                     <div class="col-md-2 example float-left">
-                        <selectors :options="[{value: '',name: '全部'}, ...staffStatus]" :defaultFirst="true" changeKey="status" @select="changeState"></selectors>
+                        <selectors :options="[{value: '',name: '请选择状态'}, ...staffStatus]" :defaultFirst="true" changeKey="status" @select="changeState"></selectors>
                     </div>
                    
                     <div class="col-md-3 example float-left">
