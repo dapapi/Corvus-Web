@@ -83,6 +83,7 @@
                                         <a class="dropdown-item" role="menuitem" @click="changeStaffStatus(item, 3)">离职</a>
                                         <a v-if="(item.hire_shape == 1 || item.hire_shape == 4) && item.status == 3" 
                                             class="dropdown-item" role="menuitem" @click="changeStaffStatus(item, 5)">归档</a>
+                                        <a class="dropdown-item" role="menuitem" @click="disableAccount(item.id)">禁用</a>
                                         <!-- 劳务外包 -->
                                     </div>
                                 </div>
@@ -274,6 +275,15 @@ export default {
                 this.getDepartment();
                 this.getStaffList()
             });
+        },
+        // 禁用账号
+        disableAccount (id) {
+            const params = {
+                disable: 2 // 1 启用；2 禁用
+            }
+            fetch('put', `/position/disable/${id}`, params).then(res => {
+                toastr.success('禁用成功！')
+            })
         }
     }
 };
