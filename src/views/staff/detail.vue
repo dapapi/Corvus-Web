@@ -254,7 +254,7 @@
                                 <div class="col-md-2 text-right float-left">聘用形式</div>
                                 <div class="col-md-6 float-left pl-0">
                                     <EditSelector 
-                                        :options="employmentArr" 
+                                        :options="hireShapeArr" 
                                         :isEdit="editDetail" 
                                         :content="detail.hireShape"
                                         @change="item => changeState('detail.hireShape', item)"
@@ -478,17 +478,18 @@ import fetch from '../../assets/utils/fetch'
 import config from '../../assets/js/config'
 import { mapState, mapActions } from 'vuex'
 const { workPlaceArr, employment, 
+hireShape,
         positiveStateArr, schoolRecordArr,
         incomeTaxTypeArr, genderArr
     } = config
 import { toHump, toLine } from '../../assets/utils/tool'
-
-const employmentArr = Object.entries(employment).map(n => {
-    return {
-        name: n[1],
-        value: n[0]
-    }
-})
+console.log(hireShape)
+// const employmentArr = Object.entries(employment).map(n => {
+//     return {
+//         name: n[1],
+//         value: n[0]
+//     }
+// })
 
 export default {
     name: 'staffDetail',
@@ -499,7 +500,8 @@ export default {
             editJob: false,
             editSalary: false,
             userId: this.$route.params.id,
-            employmentArr: employmentArr,
+            // employmentArr: employmentArr,
+            hireShapeArr: hireShape,
             workPlaceArr: workPlaceArr,
             genderArr: genderArr,
             positiveStateArr: positiveStateArr,

@@ -300,7 +300,8 @@ import { mapState, mapActions } from 'vuex'
             // 获取禁用账号列表
             getDisabledList (page = 1) {
                 const params = {
-                    page: page
+                    page: page,
+                    disable: 2
                 }
                 fetch('get', '/position/disable', params).then(res => {
                     this.disabledArr = res.data
