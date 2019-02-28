@@ -1,3 +1,21 @@
+Skip to content
+ 
+Search or jump to…
+
+Pull requests
+Issues
+Marketplace
+Explore
+ @ycsx Sign out
+5
+0 1 dapapi/Corvus-Web
+ Code  Issues 0  Pull requests 0  Projects 0  Wiki  Insights
+Corvus-Web/src/views/artist/talent.vue
+@Cxiaoyu Cxiaoyu 报表模块添加导出
+0295d27  2 days ago
+@hanpeng111 @Cxiaoyu @ycsx @Apple-0722
+1657 lines (1574 sloc)  81.8 KB
+    
 <template>
     <div class="page">
         <Loading :is-loading="isLoading"></Loading>
@@ -757,7 +775,6 @@
     import fetch from '../../assets/utils/fetch.js'
     import config from '../../assets/js/config'
     import Cookies from 'js-cookie'
-
     export default {
         data: function () {
             return {
@@ -924,16 +941,13 @@
         created() {
             this.getStarsField()
             this.getBloggerField()
-
             this.getStars();
         },
         mounted() {
             this.getArtists();
             this.getBlogger();
             this.getBlogType() //获取博主类型
-
             $('table').asSelectable();
-
         },
         methods: {
             getStarsField() {
@@ -995,35 +1009,30 @@
             getBlogger: function (page = 1, signStatus) {
                 let data = {
                     include: 'type,creator,affixes,publicity,operatelogs,contracts',
-
                 }
                 let _this = this;
-
                 //博主状态
                 if (signStatus) {
                     this.blogStatus = signStatus
                 }
-                if(this.blogStatus){
-                    data.status = '&status='+this.blogStatus
-                }else{
-                    data.status = ''
-                }
+                data.status = this.blogStatus
                 //沟通状态
                 if (this.blogCommunication) {
-                    data.communication_status = '&communication_status='+this.blogCommunication
-                }else{
-                    data.communication_status = ''
+                    data.communication_status = this.blogCommunication
                 }
                 //博主名称
                 if (this.blogName) {
-                    data.name = '&name='+this.blogName
-                }else{
-                    data.name = ''
+                    data.name = this.blogName
                 }
-                data.page = '&page='+page
-                fetch('post', '/bloggers/filter?include=type,creator,affixes,publicity,operatelogs,contracts'+data.status +data.communication_status +data.name +data.page ,this.customizeInfo).then(function (response) {
-                    
-                    if(response.data){
+                data.page = page
+                //导出需要传的参数
+                this.exportParams = {
+                    status: this.blogStatus,
+                    communication_status: this.blogCommunication,
+                    name: this.blogName
+                }
+                fetch('get', '/bloggers', data).then(function (response) {
+                    if (response.data) {
                         _this.bloggerInfo = response.data;
                     }
                     if (response.meta) {
@@ -1034,10 +1043,7 @@
                     _this.isLoading = false;
                     _this.selectAllBlogger = false;
                     _this.selectedArtistsArr = [];
-
-
                 });
-
             },
             deleteAffix: function (index) {
                 this.affixes.forEach((item, index) => {
@@ -1064,14 +1070,12 @@
                     }
                     _this.artistTypeArr = response.data
                     _this.artistTypeArr.unshift(data)
-
                 })
             },
             //选择博主类型
             typeFilter(value) {
                 this.blogStatus = value
                 this.getBlogger()
-
             },
             //沟通状态
             CommunicationStatus(value) {
@@ -1080,31 +1084,7 @@
             },
             customize: function (value) {
                 let _this = this
-                let data = {
-                    include: 'type,creator,affixes,publicity,operatelogs,contracts',
-
-                }
-                if (this.blogStatus) {
-                    data.status = '&status='+this.blogStatus
-                }else{
-                    data.status = ''
-                }
-                //沟通状态
-                if (this.blogCommunication) {
-                    data.communication_status = '&communication_status='+this.blogCommunication
-                }else{
-                    data.communication_status = ''
-                }
-                //博主名称
-                if (this.blogName) {
-                    data.name = '&name='+this.blogName
-                }else{
-                    data.name = ''
-                }
-                data.page = '&page='+this.current_page
-                this.customizeInfo = value
-                fetch('post', '/bloggers/filter?include=type,creator,affixes,publicity,operatelogs,contracts'+data.status +data.communication_status +data.name ,value).then(function (params) {
-                // fetch('post', '/'+this.customizeContentType+'/filter', value).then((params) => {
+                fetch('post', '/' + this.customizeContentType + '/filter', value).then((params) => {
                     console.log(params.data);
                     // _this.bloggerInfo =params.data
                     if (_this.customizeContentType == 'stars') {
@@ -1115,7 +1095,6 @@
                     _this.total = params.meta.pagination.total;
                     _this.cleanUp = true
                 })
-
             },
             changeArtistStatus: function (value) {
                 this.artistStatus = value
@@ -1129,7 +1108,6 @@
                 } else {
                     toastr.error("请选择图片作为头像")
                 }
-
             },
             changeCheckbox: function (value) {
                 this.platformType = []
@@ -1137,28 +1115,21 @@
                     this.platformType.push(value[i].value)
                 }
             },
-
             changeCommunicationType: function (value) {
                 this.communication = value
-
             },
-
             changeSignIntention: function (value) {
                 this.signIntention = value
             },
-
             isSignCompany: function (value) {
                 this.signCompany = value
             },
-
             changeWeiboFansNum: function (value) {
                 this.star_weibo_infos.avatar = value
             },
-
             changeDouyinFansNum: function (value) {
                 this.star_douyin_infos.avatar = value
             },
-
             changeXHSFansNum: function (value) {
                 this.star_xiaohongshu_infos.avatar = value
             },
@@ -1229,10 +1200,8 @@
                     _this.getBlogger()
                     $('#addBolgger').on('hidden.bs.modal', function () {
                         _this.emptyBolgger()
-
                     })
                 })
-
             },
             emptyBolgger: function () {
                 this.bolggerName = '';//昵称
@@ -1251,7 +1220,6 @@
                 this.uploadUrl = ''
             },
             selectArtists: function (value) {
-
                 if (value === 'all') {
                     this.selectedArtistsArr = [];
                     for (let i = 0; i < this.bloggerInfo.length; i++) {
@@ -1266,8 +1234,6 @@
                     }
                 }
             },
-
-
             redirectArtistDetail: function (artistId) {
                 this.$router.push({path: 'artists/' + artistId})
             },
@@ -1290,7 +1256,6 @@
                 }
                 for (let i = 0; i < this.$store.state.participantsInfo.length; i++) {
                     data.person_ids.push(this.$store.state.participantsInfo[i].id)
-
                 }
                 fetch('post', 'distribution/person', data).then(function (response) {
                     if (_this.selectedArtistsArr.length == 0) {
@@ -1303,7 +1268,6 @@
                     _this.$store.state.participantsInfo = []
                     _this.selectedArtistsArr = []
                 })
-
             },
             abrogate: function () {
                 this.$store.state.participantsInfo = []
@@ -1320,10 +1284,8 @@
                 let organization_id = JSON.parse(Cookies.get('user')).organization_id
                 if (organization_id == 411) {
                     this.isShow = true
-
                 } else if (organization_id == 412) {
                     this.isShow = false
-
                 }
             },
             tab: function (value) {
@@ -1331,7 +1293,6 @@
                 if (value == 0) {
                     this.getArtists()
                     this.isShow = true
-
                 } else if (value == 1) {
                     this.getBlogger()
                     this.isShow = false
@@ -1365,10 +1326,8 @@
                         type: 2, //宣传人
                     }
                 }
-
                 for (let i = 0; i < this.$store.state.participantsInfo.length; i++) {
                     data.person_ids.push(this.$store.state.participantsInfo[i].id)
-
                 }
                 fetch('post', url, data).then(function (response) {
                     toastr.success(toast)
@@ -1384,48 +1343,31 @@
                 for (let i = 0; i < value.length; i++) {
                     this.platformType.push(value[i].value)
                 }
-
             },
-
             changeCommunicationType: function (value) {
-
                 this.communication = value
             },
-
             changeSignIntention: function (value) {
-
                 this.signIntention = value
-
-
             },
-
             isSignCompany: function (value) {
-
                 this.signCompany = value
-
-
             },
-
             changeGender: function (value) {
                 this.artistGender = value
             },
-
             changeBirthday: function (value) {
                 this.artistBirthday = value
             },
-
             changeSource: function (value) {
                 this.artistSource = value
             },
             uploadAttachment: function (url, name, size) {
-
                 this.Preview = url
                 // for (let i = 0; i < this.affixes.length; i++) {
                 //     if (this.affixes[i].type == this.affixesType) {
-
                 //         this.affixes.splice(i, 1)
                 //     }
-
                 // }
                 this.affixes.push({
                     title: name,
@@ -1444,7 +1386,6 @@
                     return false
                 }
                 if (!this.artistBirthday) {
-
                     toastr.error('请选择艺人出生日期');
                     return false
                 }
@@ -1527,7 +1468,6 @@
                     affix: this.affixes,//附件
                     desc: this.artistDesc,//  备注
                     avatar: this.uploadUrl
-
                 }
                 let _this = this;
                 fetch('post', '/stars', data).then(function (response) {
@@ -1537,7 +1477,6 @@
                     _this.cancleData()
                 })
             },
-
             //清空数据
             cancleData: function () {
                 this.artistName = ''
@@ -1578,7 +1517,6 @@
                 this.affixesType = value
                 //   alert(value)
                 //   alert(this.affixesType)
-
             },
             hide: function () {
                 this.isdilog = !this.isdilog
@@ -1594,12 +1532,10 @@
                     var birthYear = strBirthdayArr[0];
                     var birthMonth = strBirthdayArr[1];
                     var birthDay = strBirthdayArr[2];
-
                     var d = new Date();
                     var nowYear = d.getFullYear();
                     var nowMonth = d.getMonth() + 1;
                     var nowDay = d.getDate();
-
                     if (nowYear == birthYear) {
                         returnAge = 0;//同年 则为0岁
                     }
@@ -1652,7 +1588,6 @@
         -moz-background-size: 100% 100%;
         position: relative;
     }
-
     .puls div {
         position: absolute;
         top: 0;
@@ -1664,12 +1599,9 @@
         z-index: 10;
         opacity: 0;
     }
-
     .puls:hover div {
         opacity: 1;
-
     }
-
     .puls div span {
         width: 100px;
         height: 20px;

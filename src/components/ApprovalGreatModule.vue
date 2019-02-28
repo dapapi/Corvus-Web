@@ -34,7 +34,7 @@
                 </div>
             </div>
         </div>
-      <DocPreview :url='$store.state.previewurl' />
+      <DocPreview :url='$store.state.previewurl' :detailpage='isDetail'/>
 
         
     </div>
@@ -66,7 +66,7 @@
     import ApprovalChainReaction from '@/components/ForApproval/ApprovalChainReaction'
 
     export default {
-        props: ['formData', 'singlemode', 'defaultData', 'contract_id', 'defaultValue'],
+        props: ['formData', 'singlemode', 'defaultData', 'contract_id', 'defaultValue','detailpage'],
         data() {
             return {
                 importData: '',
