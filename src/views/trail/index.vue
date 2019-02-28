@@ -33,13 +33,13 @@
                         <selectors ref='principal_id' :options="memberList" multiple='true'
                                    @valuelistener="principalFilter" placeholder="请选择负责人"></selectors>
                     </div>
-                    <!-- <div class="col-md-3 example float-left">
+                    <div class="col-md-3 example float-left">
                         <button type="button" class="btn btn-default waves-effect waves-classic float-right"
                                 data-toggle="modal" data-target="#customizeContent"
                                 data-placement="right" title="">
                             自定义筛选
                         </button>
-                    </div> -->
+                    </div>
                 </div>
 
                 <div class="col-md-12">
@@ -316,6 +316,7 @@
                 cleanUp: false,
                 trailIsLocked: '',
                 exportParams:{},//导出参数
+                customizeCondition:{}
 
             }
         },
@@ -449,16 +450,38 @@
                     return true
                 }
             },
-            fetchHandler(methods, url) {
-                let _this = this
-                this.fetchData.include = 'principal,client,contact,recommendations,expectations'
-                console.log(this.fetchData)
+            fetchHandler(methods, url,type) {
+                let _this = this,
+                fetchData = this.fetchData,
+                newUrl
+                this.fetchData.include = 'include=principal,client,contact,recommendations,expectations'
+                if(type=='filter'){
+                    fetchData = this.customizeCondition 
+                    let keyword,status,principal_ids
+                    if(this.fetchData.keyword){
+                        keyword = '&keyword='+this.fetchData.keyword
+                    }else{
+                        keyword = ''
+                    }
+                    if(this.fetchData.status){
+                        status = '&status='+this.fetchData.status
+                    }else{
+                        status = ''
+                    }
+                     if(this.fetchData.principal_ids){
+                        principal_ids = '&principal_ids='+this.fetchData.principal_ids
+                    }else{
+                        principal_ids = ''
+                    }
+                    newUrl = url+'?'+this.fetchData.include+keyword+status+principal_ids
+                }
+                // console.log(this.fetchData)
                 this.exportParams ={
                     keyword: this.fetchData.keyword,
                     status: this.fetchData.status,
                     principal_ids:this.fetchData.principal_ids,
                 }
-                fetch(methods, url, this.fetchData).then((response) => {
+                fetch(methods, newUrl || url, fetchData).then((response) => {
                     _this.trailsInfo = response.data
                     _this.total = response.meta.pagination.total;
                     _this.current_page = response.meta.pagination.current_page;
@@ -468,11 +491,11 @@
             },
             filterGo() {
                 this.fetchData.keyword = this.trailFilter
-                this.fetchHandler('get', '/trails/filter')
+                this.fetchHandler('post', '/trails/filter','filter')
             },
             progressStatusFilter(value) {
                 this.fetchData.status = value
-                this.fetchHandler('get', '/trails/filter')
+                this.fetchHandler('post', '/trails/filter','filter')
             },
             getSales: function (pageNum = 1) {
                 let _this = this;
@@ -526,14 +549,16 @@
             },
 
             customize: function (value) {
-                let _this = this
-                fetch('post', '/trails/filter?include=principal,client,contact,recommendations,expectations', value).then((params) => {
-                    _this.trailsInfo = params.data
-                    _this.total = params.meta.pagination.total;
-                    _this.total_pages = params.meta.pagination.total_pages;
-                    _this.current_page = params.meta.pagination.current_page
-                    _this.cleanUp = true
-                })
+                // let _this = this
+                this.customizeCondition = value
+                this.fetchHandler('post', '/trails/filter','filter')
+                // fetch('post', '/trails/filter?include=principal,client,contact,recommendations,expectations', value).then((params) => {
+                //     _this.trailsInfo = params.data
+                //     _this.total = params.meta.pagination.total;
+                //     _this.total_pages = params.meta.pagination.total_pages;
+                //     _this.current_page = params.meta.pagination.current_page
+                //     _this.cleanUp = true
+                // })
 
             },
 

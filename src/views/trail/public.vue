@@ -255,6 +255,8 @@
                 if (this.receive_type) {
                     data.receive_type = this.receive_type
                 }
+                Object.assign(data,this.fetchData)
+                
                 fetch('get', '/pool', data).then(response => {
                     this.trailsInfo = response.data;
                     this.total = response.meta.pagination.total;

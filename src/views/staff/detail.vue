@@ -47,7 +47,7 @@
                         <div class="example">
                             <div class="col-md-3 text-right float-left">工作邮箱</div>
                             <div class="col-md-9 float-left pl-0">
-                                <EditInput :content="info.workEmail" :isEdit="editInfo" @change="item => changeState('info.workEmail', item)" />
+                                <EditInput :content="info.email" :isEdit="editInfo" @change="item => changeState('info.email', item)" />
                             </div>
                         </div>
                     </div>
@@ -98,9 +98,19 @@
 
                     <div class="col-md-4">
                         <div class="example" style="text-align: center;">
-                            <upload>
+                            <!-- <upload>
                                 <div class="upload-head" style="margin-top: 52px;">
                                     上传头像
+                                </div>
+                            </upload> -->
+                        <!-- </div> -->
+                            <Avatar v-if="!editInfo" :imgUrl="info.icon_url" style="width: 120px; height: 120px; font-size: 24px;" />
+                            <upload @change="uploadImg" v-else accept="image/png, image/jpeg, image/gif, image/jpg">
+                                <div class="upload-head">
+                                    <img v-if="info.icon_url" :src="info.icon_url" alt="头像" />
+                                    <template v-else>
+                                        上传头像
+                                    </template>
                                 </div>
                             </upload>
                         </div>
@@ -170,10 +180,20 @@
                             <div class="col-md-8 example">
                                 <div class="col-md-2 text-right float-left">身份证照</div>
                                 <div class="col-md-6 float-left pl-0">
-                                    <upload>
-                                        <div class="id-upload">
+                                    <!-- <upload>
+                                        <div class="id-upload"> -->
                                             <!-- <i class="iconfont icon-tianjia" style="font-size: 50px" aria-hidden="true"></i> -->
-                                            +
+                                            <!-- +
+                                        </div>
+                                    </upload> -->
+                                    <!-- <Avatar v-if="!editDetail" :imgUrl="detail.idCardUrl" style="width: 60px; height: 60px; font-size: 24px;" /> -->
+                                    <img v-if="!editDetail" :src="detail.idCardUrl" style="width: 60px; height: 60px;" />
+                                    <upload @change="uploadIDImg" v-else accept="image/png, image/jpeg, image/gif, image/jpg" class="idImg">
+                                        <div class="upload-head">
+                                            <img v-if="detail.idCardUrl" :src="detail.idCardUrl" alt="头像" />
+                                            <template v-else>
+                                                +
+                                            </template>
                                         </div>
                                     </upload>
                                     <small style="color: #F44336;">图片格式为JPG/JPEG/PNG/PDF 大小在2MB内</small>
@@ -194,7 +214,7 @@
                             <div class="col-md-8 example">
                                 <div class="col-md-2 text-right float-left">个人邮箱</div>
                                 <div class="col-md-6 float-left pl-0">
-                                    <EditInput :content="detail.email" :isEdit="editDetail" @change="item => changeState('detail.email', item)" />
+                                    <EditInput :content="detail.workEmail" :isEdit="editDetail" @change="item => changeState('detail.workEmail', item)" />
                                 </div>
                             </div>
                             <div class="col-md-8 example">
@@ -251,10 +271,10 @@
                                 </div>
                             </div>
                             <div class="col-md-8 example">
-                                <div class="col-md-2 text-right float-left">聘用形式</div>
+                                <div class="col-md-2 text-right float-left require">聘用形式</div>
                                 <div class="col-md-6 float-left pl-0">
                                     <EditSelector 
-                                        :options="employmentArr" 
+                                        :options="hireShapeArr" 
                                         :isEdit="editDetail" 
                                         :content="detail.hireShape"
                                         @change="item => changeState('detail.hireShape', item)"
@@ -477,18 +497,11 @@
 import fetch from '../../assets/utils/fetch'
 import config from '../../assets/js/config'
 import { mapState, mapActions } from 'vuex'
-const { workPlaceArr, employment, 
+const { workPlaceArr, employment, hireShape,
         positiveStateArr, schoolRecordArr,
         incomeTaxTypeArr, genderArr
     } = config
 import { toHump, toLine } from '../../assets/utils/tool'
-
-const employmentArr = Object.entries(employment).map(n => {
-    return {
-        name: n[1],
-        value: n[0]
-    }
-})
 
 export default {
     name: 'staffDetail',
@@ -499,7 +512,8 @@ export default {
             editJob: false,
             editSalary: false,
             userId: this.$route.params.id,
-            employmentArr: employmentArr,
+            // employmentArr: employmentArr,
+            hireShapeArr: hireShape,
             workPlaceArr: workPlaceArr,
             genderArr: genderArr,
             positiveStateArr: positiveStateArr,
@@ -508,9 +522,11 @@ export default {
             info: {
                 name: '',
                 phone: '',
+                icon_url: '',
                 department: '',
                 departmentId: '',
-                workEmail: '',
+                // workEmail: '',
+                email: '',
                 gender: '',
                 age: '',
                 birthTime: '',
@@ -525,7 +541,7 @@ export default {
                 idCardUrl: '',
                 idNumber: '',
                 passportCode: '',
-                email: '',
+                workEmail: '',
                 cardNumberOne: '',
                 creditCard: '', // 信用卡
                 accumulationFund: '', // 公积金
@@ -618,6 +634,15 @@ export default {
                 this.detail.hireShape = data.hire_shape && data.hire_shape != 0 ? data.hire_shape : ''
                 this.info.positionId = data.position ? data.position.data.id : ''
 
+                // 特殊处理
+                // this.info.workEmail = data.email
+                // this.detail.email = data.work_email || ''
+
+                this.info.email = data.email || ''
+                this.detail.workEmail = data.work_email || ''
+
+                console.log(this.info.email, this.detail.workEmail)
+
                 this.infoCopy = JSON.parse(JSON.stringify(this.info))
                 this.detailCopy = JSON.parse(JSON.stringify(this.detail))
                 this.jobCopy = JSON.parse(JSON.stringify(this.job))
@@ -653,7 +678,11 @@ export default {
             if (name === 'editDetail') {
                 _data = this.detail
                 url = `/edit/${this.userId}/detail`
-                type = 'put' 
+                type = 'put'
+                if (!this.detail.hireShape) {
+                    toastr.error('聘用形式必须填写！')
+                    return
+                }
             } else if (name === 'editJob') {
                 _data = this.job
                 url = !this.jobId ? `/jobs/${this.userId}` :`/edit/${this.userId}/jobs/${this.jobId}`
@@ -691,7 +720,7 @@ export default {
         },
         // 改变部门
         selectDepartment(data) {
-            // this.info.departmentId = data.id
+            this.info.departmentId = data.id
         },
         // 获取岗位
         getJobs (data) {
@@ -703,7 +732,15 @@ export default {
                     }
                 })
             })
-        }
+        },
+        // 头像修改
+        uploadImg (fileUrl, fileName, fileSize) {
+            this.info.icon_url = fileUrl
+        },
+        // 身份证号修改
+        uploadIDImg (fileUrl, fileName, fileSize) {
+            this.detail.idCardUrl = fileUrl
+        },
     },
 }
 
@@ -769,5 +806,11 @@ export default {
 .example {
     display: flex;
     align-items: center;
+}
+.idImg {
+    .upload-head {
+        width: 60px;
+        height: 60px;
+    }
 }
 </style>
