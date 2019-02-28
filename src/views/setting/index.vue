@@ -170,7 +170,7 @@ export default {
             fetch('get', '/users/my').then(res => {
                 this.userId = res.data.id
                 this.iconUrl = res.data.icon_url
-                this.job = res.data.position.id
+                this.job = res.data.position ? res.data.position.id : ''
                 this.$nextTick(() => {
                     this.$refs.jobEl.setValue(this.job)
                 })
