@@ -1,5 +1,5 @@
 <template>
-    <div class="site-menubar" style="height: 100%!important;top: 0;width: 100px" @click="hideBackModel">
+    <div class="site-menubar" style="height: 100%!important;top: 0;width: 80px" @click="hideBackModel">
         <div class="site-menubar-body">
             <div class="py-10 menu-icon"
                  style="position: relative;background-color: #3f51b5;z-index: 2">
@@ -33,6 +33,10 @@
                                 <span class="hover-icon"><img :src="menu.hoverImage" alt=""></span>
                             </div>
                             <span class="site-menu-title">{{ menu.name }}</span>
+                            <span v-if="menu.name =='我的'&&unReadMsg>0" class="unRead ml-5" :class="unReadMsg>=100?'unReadLine':''">
+                                <template v-if="unReadMsg>=100">...</template>
+                                <template v-else>{{unReadMsg}}</template>
+                            </span>
                         </a>
                         <ul class="site-menu-sub" style="">
                             <li class="site-menu-item" v-for="subMenu in menu.data"
@@ -72,97 +76,84 @@
                     {
                         name: '我的',
                         code: 'my',
-                        image: 'https://res.papitube.com/corvus/images/gongzuotai.png',
-                        hoverImage: 'https://res.papitube.com/corvus/images/select-gongzuotai.png'
+                        image: 'https://res-crm.papitube.com/image/login-icon/wode.png',
+                        hoverImage: 'https://res-crm.papitube.com/image/login-icon/select-wode.png',
+                        data:[
+                            {
+                                name:'工作台',
+                                code:'my'
+                            },
+                            {
+                                name:'报表',
+                                code:'reports'
+                            }
+                        ]
                     },
                     {
                         name: '日历',
                         code: 'calendar',
-                        image: 'https://res.papitube.com/corvus/images/rili.png',
-                        hoverImage: 'https://res.papitube.com/corvus/images/select-rili.png'
+                        image: 'https://res-crm.papitube.com/image/login-icon/rili.png',
+                        hoverImage: 'https://res-crm.papitube.com/image/login-icon/select-rili.png'
+                    },
+                    {
+                        name: '审批',
+                        code: 'approval',
+                        image: 'https://res-crm.papitube.com/image/login-icon/shenpi.png',
+                        hoverImage: 'https://res-crm.papitube.com/image/login-icon/select-shenpi.png',
+                    },
+                    {
+                        name: '任务',
+                        code: 'tasks',
+                        image: 'https://res-crm.papitube.com/image/login-icon/renwu.png',
+                        hoverImage: 'https://res-crm.papitube.com/image/login-icon/select-renwu.png',
+                    },
+                    {
+                        name: '项目',
+                        code: 'projects',
+                        image: 'https://res-crm.papitube.com/image/login-icon/xiangmu.png',
+                        hoverImage: 'https://res-crm.papitube.com/image/login-icon/select-xiangmu.png',
+                    },
+                    {
+                        name: '线索',
+                        code: 'trails',
+                        image: 'https://res-crm.papitube.com/image/login-icon/xiansuo.png',
+                        hoverImage: 'https://res-crm.papitube.com/image/login-icon/select-xiansuo.png',
+                    },
+                    {
+                        name: '客户',
+                        code: 'clients',
+                        image: 'https://res-crm.papitube.com/image/login-icon/kehu.png',
+                        hoverImage: 'https://res-crm.papitube.com/image/login-icon/select-kehu.png',
                     },
                     {
                         name: 'Talent',
                         code: 'talent',
                         image: 'https://res.papitube.com/corvus/images/talent.png',
                         hoverImage: 'https://res.papitube.com/corvus/images/select-talent.png',
-                        // data: [
-                        //     {
-                        //         name: '艺人',
-                        //         code: 'artists'
-                        //     },
-                        //     {
-                        //         name: '博主',
-                        //         code: 'blogger'
-                        //     }
-                        // ]
                     },
                     {
-                        name: 'CRM',
-                        image: 'https://res.papitube.com/corvus/images/crm.png',
-                        hoverImage: 'https://res.papitube.com/corvus/images/select-crm.png',
-                        data: [
-                            {
-                                name: '项目',
-                                code: 'projects'
-                            },
-                            {
-                                name: '线索',
-                                code: 'trails'
-                            },
-                            {
-                                name: '线索公海池',
-                                code: 'publictrails'
-                            },
-                            {
-                                name: '客户',
-                                code: 'clients'
-                            },
-                            {
-                                name: '任务',
-                                code: 'tasks'
-                            },
-                        ]
-                    },
-                    {
-                        name: '审批',
-                        code: 'approval',
-                        image: 'https://res.papitube.com/corvus/images/shenpi.png',
-                        hoverImage: 'https://res.papitube.com/corvus/images/select-shenpi.png',
-                    },
-                    {
-                        name: '报表',
-                        code: 'reports',
-                        image: 'https://res.papitube.com/corvus/images/baobiao.png',
-                        hoverImage: 'https://res.papitube.com/corvus/images/select-baobiao.png',
-                    },
-                    {
-                        name: '应用',
-                        image: 'https://res.papitube.com/corvus/images/yingyong.png',
-                        hoverImage: 'https://res.papitube.com/corvus/images/select-yingyong.png',
-                        data: [
-                            // {
-                            //     name: '考勤',
-                            //     code: 'attendance'
-                            // },
+                        name: '人事',
+                        image: 'https://res-crm.papitube.com/image/login-icon/renshi.png',
+                        hoverImage: 'https://res-crm.papitube.com/image/login-icon/select-renshi.png',
+                        data:[
                             {
                                 name: '公告',
                                 code: 'broadcast'
                             },
-                            // {
-                            //     name: '简报',
-                            //     code: 'brief'
-                            // },
                             {
                                 name: '通讯录',
                                 code: 'address'
                             },
-                            // {
-                            //     name: '知识库',
-                            //     code: 'knowledgebase'
-                            // },
+                            {
+                                name: '简报',
+                                code: 'brief'
+                            },
+                            {
+                                name: '仪表盘',
+                                code: ''
+                            }
                         ]
-                    },
+                    }
                 ],
                 pageRoute: '',
                 visible: false,
@@ -219,6 +210,9 @@
 </script>
 
 <style scoped>
+    .site-menu{
+        margin-bottom:54px;
+    }
     .site-menu-item a img {
         width: 30%;
         height: auto;
@@ -266,8 +260,8 @@
         height: 50px;
         border-radius: 100%;
         position: absolute;
-        bottom: 24px;
-        left: 30px;
+        bottom: 14px;
+        left: 20px;
     }
 
     .active .base-icon {
@@ -317,8 +311,8 @@
         line-height: 16px;
         border-radius: 50%;
         position: absolute;
-        top: 8px;
-        right: 26px;
+        top:8px;
+        right: 22px;
     }
     .unReadLine{
         line-height: 12px;

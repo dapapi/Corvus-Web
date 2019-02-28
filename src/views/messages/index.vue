@@ -321,9 +321,7 @@ export default {
             uri:`${this.msgLink.find(item => item.value == module_id).url}${module_data_id}`,
             id:module_data_id
         }
-        // console.log(`${config.apiUrl}${this.msgLink.find(item => item.value == module_id).url}${module_data_id}`)
         fetch('get', '/console/checkpower', data).then(response => {
-            // console.log(response.data.power)
             //日历模块显示弹框
             
             if(response.data.power === 'true'){
