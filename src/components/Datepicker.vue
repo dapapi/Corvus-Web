@@ -3,6 +3,7 @@
         <input type="text" id="dateInput" autocomplete="off" class="form-control" title=""
                :placeholder="this.placeholder"
                @change="getInputValue">
+               
         <span class="input-group-addon">
             <i class="icon md-apps" aria-hidden="true"></i>
         </span>
