@@ -150,7 +150,7 @@
                             },
                             {
                                 name: '仪表盘',
-                                code: ''
+                                code: 'dashboard'
                             }
                         ]
                     }

@@ -24477,6 +24477,7 @@ UE.plugin.register('section', function (){
  * @date 2018-12-20
  */
 UE.plugin.register('simpleupload', function() {
+    
   var me = this,
     containerBtn,
     timestrap = (+new Date()).toString(36);

@@ -127,6 +127,16 @@ export default new Router({
             component: () => import('./views/address/index.vue')
         },
         {
+            path:'/dashboard',
+            name:'dashboard',
+            redirect: '/dashboard/commerce',
+            component:() => import('./views/dashboard/index.vue'),
+            children:[{
+                path: '/dashboard/commerce',
+                component: () => import('./views/dashboard/commerce.vue')
+            }]
+        },
+        {
             path: '/approval',
             name: 'approval',
             redirect: '/approval/project/initiate',
