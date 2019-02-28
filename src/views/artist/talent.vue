@@ -914,6 +914,7 @@
                 isdilog: true,
                 exportParams: {},
                 customizeInfo:{},
+                customizeInfoId:''
             }
         },
         watch: {
@@ -972,7 +973,6 @@
                     sign_contract_status: this.listData.sign_contract_status,//  签约状态
                     communication_status: this.listData.communication_status, //沟通状态
                 }
-                console.log(this.exportParams)
                 fetch('get', '/stars', this.listData).then(function (response) {
                     if (response.data) {
                         _this.artistsInfo = response.data;
@@ -1103,9 +1103,9 @@
                 }
                 data.page = '&page='+this.current_page
                 this.customizeInfo = value
-                fetch('post', '/bloggers/filter?include=type,creator,affixes,publicity,operatelogs,contracts'+data.status +data.communication_status +data.name ,value).then(function (params) {
+                fetch('post', this.customizeContentType +'/filter?include=type,creator,affixes,publicity,operatelogs,contracts'+data.status +data.communication_status +data.name ,value).then(function (params) {
                 // fetch('post', '/'+this.customizeContentType+'/filter', value).then((params) => {
-                    console.log(params.data);
+                    
                     // _this.bloggerInfo =params.data
                     if (_this.customizeContentType == 'stars') {
                         _this.artistsInfo = params.data
@@ -1329,10 +1329,13 @@
             tab: function (value) {
                 this.selectedArtistsArr = []
                 if (value == 0) {
+                    this.customizeInfo = ''
                     this.getArtists()
+                    
                     this.isShow = true
 
                 } else if (value == 1) {
+                    this.customizeInfo = ''
                     this.getBlogger()
                     this.isShow = false
                 }

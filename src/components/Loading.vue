@@ -22,7 +22,7 @@
 
 <style lang="css" scoped>
     .loader-overlay {
-        margin-left: 100px;
+        margin-left: 80px;
         background-color: rgba(7, 17, 27, 0.2)
     }
 </style>
