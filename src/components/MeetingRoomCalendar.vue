@@ -40,7 +40,7 @@
                     <div v-for="event in material.events" class="example">
                         <div class="col-md-2 float-left pl-0">{{ event.start }} - {{ event.end }}</div>
                         <div class="col-md-8 float-left">{{ event.title }}</div>
-                        <div class="col-md-2 float-right text-right pr-0">{{ event.creator }}</div>
+                        <div class="col-md-2 float-right text-right pr-0">{{ event.department }} - {{ event.creator }}</div>
                     </div>
                 </template>
             </div>
@@ -84,9 +84,6 @@
                     this.getSchedules();
                 }
             },
-            date(newValue) {
-                this.getSchedules()
-            }
         },
 
         methods: {
@@ -136,7 +133,8 @@
                             color: response.data[i].calendar.data.color,
                             allDay: !!response.data[i].is_allday,
                             id: response.data[i].id,
-                            creator: response.data[i].creator.data.name
+                            creator: response.data[i].creator.data.name,
+                            department: response.data[i].creator.data.department.name
                         };
                         let material = JSON.parse(JSON.stringify(this.meetingRomeList.find(item => item.id == response.data[i].material.data.id)));
                         if (this.meetingRomeListInfo.find(item => item.id == material.id)) {
