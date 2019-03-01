@@ -11,7 +11,9 @@
         props: ['shortInput','min','max','precision','value'],
         mounted() {
             let self = this;
+            console.log(this)
             $(this.$el).asSpinner(
+                
                 {
                     format: function format(value) {
                         if(this.max == 23||this.max == 59){

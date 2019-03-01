@@ -35,7 +35,10 @@ export default {
     changeNewPrincipal(state, data) {
         state.newPrincipalInfo = data
     },
-
+    changePreview(state,data){
+        console.log(data);
+        state.previewurl = data
+    },
     changeCompany(state, data) {
         state.companyInfo = data
     },

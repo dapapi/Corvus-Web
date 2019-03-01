@@ -170,7 +170,7 @@
                     </div>
                 </div>
             </div>
-            <DocPreview :url='previewUrl'/>
+            <DocPreview :url='previewUrl' detailpage='true'/>
         </div>
         <BuildProject :project-type="projectTypeTemp" :project-fields-arr="projectFieldsArr" mode='detail'
                       :default-data='{fields:(info.fields && info.fields.data),list:list,trailInfo:trailInfo}'></BuildProject>
@@ -236,6 +236,7 @@
                 previewUrlArr: [],
                 projectTypeTemp:'',
                 detail_control:{},
+                msg:'',
             }
         },
 

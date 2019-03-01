@@ -170,7 +170,7 @@ export default {
             fetch('get', '/users/my').then(res => {
                 this.userId = res.data.id
                 this.iconUrl = res.data.icon_url
-                this.job = res.data.position.id
+                this.job = res.data.position ? res.data.position.id : ''
                 this.$nextTick(() => {
                     this.$refs.jobEl.setValue(this.job)
                 })
@@ -180,8 +180,8 @@ export default {
         },
         // 获取职位列表
         getJobList () {
-            fetch('get', '/departments_jobs').then(res => {
-                this.jobArr = res.data.map(n => {
+            fetch('get', '/departments_position').then(res => {
+                this.jobArr = res.map(n => {
                     return {
                         name: n.name,
                         value: n.id
