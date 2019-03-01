@@ -17,7 +17,7 @@
                         <li class="nav-item" role="presentation">
                             <a class="nav-link" data-toggle="tab" href="#forum-blogger"
                                aria-controls="forum-present"
-                               aria-expanded="false" role="tab" @click="getList('economic')">经济合同</a>
+                               aria-expanded="false" role="tab" @click="getList('economic')">经纪合同</a>
                         </li>
                         <!-- <i v-if="isShow"
                            style="position: absolute;right:10px;top:10px;color: rgb(0, 176, 255);font-style: normal;"
