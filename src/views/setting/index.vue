@@ -88,7 +88,7 @@
                          <div class="example" style="margin-top: -20px">
                             <div class="float-left" style="width: 40px;">职位</div>
                             <div class="float-left pl-0" style="width: 240px;">
-                                <selectors ref="jobEl" :options="jobArr" @change="changeJob"></selectors>
+                                <selectors ref="jobEl" :unAutoDrop="true" :options="jobArr" @change="changeJob"></selectors>
                             </div>
                         </div>
                         <div class="example mt-10 mb-20">
