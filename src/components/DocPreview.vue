@@ -5,7 +5,7 @@
     内置下载按钮
 -->
     <div>
-        <div class="modal fade  bootbox" id="docPreview" aria-labelledby="docPreviewPositionCenter" role="dialog" tabindex="-1" data-backdrop="static">
+        <div class="modal fade  bootbox" id="docPreview" :class='givenid' style='z-index:10086' aria-labelledby="docPreviewPositionCenter" role="dialog" tabindex="-1" data-backdrop="static">
             <div class="modal-dialog modal-simple modal-center modal-lg">
                 <div class="modal-content preview-content">
                 <div class="modal-header">
@@ -43,7 +43,7 @@
 export default {
     name:'docPreview',
         //文件url     文件名
-    props:['url','givenFileName','detailpage'],
+    props:['url','givenFileName','detailpage','givenid'],
     data(){
         return {
             isFullScreen:0,
