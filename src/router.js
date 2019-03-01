@@ -126,16 +126,16 @@ export default new Router({
             name: 'address',
             component: () => import('./views/address/index.vue')
         },
-        {
-            path:'/dashboard',
-            name:'dashboard',
-            redirect: '/dashboard/commerce',
-            component:() => import('./views/dashboard/index.vue'),
-            children:[{
-                path: '/dashboard/commerce',
-                component: () => import('./views/dashboard/commerce.vue')
-            }]
-        },
+        // {
+        //     path:'/dashboard',
+        //     name:'dashboard',
+        //     redirect: '/dashboard/commerce',
+        //     component:() => import('./views/dashboard/index.vue'),
+        //     children:[{
+        //         path: '/dashboard/commerce',
+        //         component: () => import('./views/dashboard/commerce.vue')
+        //     }]
+        // },
         {
             path: '/approval',
             name: 'approval',
