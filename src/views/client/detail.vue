@@ -640,19 +640,21 @@
                                             ref="startTime"></datepicker>
                             </div>
                             <div class="col-md-5 float-left pl-0">
-                                <timepicker :default="startMinutes" @change="changeStartMinutes"
-                                            ref="taskStartTime"></timepicker>
+                                <!-- <timepicker :default="startMinutes" @change="changeStartMinutes"
+                                            ref="taskStartTime"></timepicker> -->
+                                <TimeChoice @change="changeStartMinutes" ref="taskStartTime"></TimeChoice>
                             </div>
                         </div>
                         <div class="example">
                             <div class="col-md-2 text-right float-left require">截止时间</div>
                             <div class="col-md-5 float-left pl-0">
                                 <datepicker @change="changeEndTime" :placeholder="'请输入结束时间'"
-                                            ref="endTime"></datepicker>
+                                            ref="endTime" :startDate="taskStartTime"></datepicker>
                             </div>
                             <div class="col-md-5 float-left pl-0">
-                                <timepicker :default="endMinutes" @change="changeEndMinutes"
-                                            ref="taskEndTime"></timepicker>
+                                <!-- <timepicker :default="endMinutes" @change="changeEndMinutes"
+                                            ref="taskEndTime"></timepicker> -->
+                                 <TimeChoice @change="changeEndMinutes" ref="taskEndTime"></TimeChoice>
                             </div>
                         </div>
                         <div class="example">

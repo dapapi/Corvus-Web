@@ -37,6 +37,10 @@ const backRouter = [{
             component: () => import('./views/management/approval.vue'),
         },
         {
+            path: '/apps/notice',
+            component: () => import('./views/management/notice.vue'),
+        },
+        {
             path: '/rolemanagement',
             component: () => import('./views/management/rolemanagement.vue')
         }, {

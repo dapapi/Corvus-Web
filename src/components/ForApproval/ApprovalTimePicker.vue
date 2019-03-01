@@ -1,19 +1,24 @@
 <template>
     <div class="col-md-12 approval-text-container pl-0">
         <span class="col-md-2 text-right pl-0" :class="consdata[0].required===1?'require':''">{{title || consdata[0].control_title || "时间选择器测试"}}</span>
-        <datepicker class=" time-picker "  :class="consdata[0].control_data_select_format==94?'col-md-5 pl-0':'col-md-10'" :default='defaultDate' v-if="!duration" :placeholder="consdata[0].control_placeholder" @change='ymdPicker' :clear='clear' />
-        <timepicker class="col-md-5 time-picker" v-if="consdata[0].control_data_select_format==94" @change='hmsPicker'/>
+        <datepicker class=" time-picker " :disabled="isDisabled" :startDate="start_date"  :class="consdata[0].control_data_select_format==94?'col-md-5 pl-0':'col-md-10'" :default='defaultDate' v-if="!duration" :placeholder="consdata[0].control_placeholder" @change='ymdPicker' :clear='clear' />
+        <timepicker class="col-md-5 time-picker" :disabled="isDisabled" v-if="consdata[0].control_data_select_format==94" @change='hmsPicker'/>
+        <!-- <div v-if="consdata[0].related_field==='contract_end_date'">
+        无限期<input class="col-md-12" type="checkbox" >
+        </div> -->
     </div>
 </template>
 
 <script>
 export default {
-    props:['duration','title','consdata','refresh','clear','defaultData'],
+    props:['duration','title','consdata','refresh','clear','defaultData','startDate'],
     data(){
         return{
             defaultDate:'',
             ymd:'',
             hms:'',
+            start_date:'',
+            isDisabled:false
         }
     },
     mounted(){
@@ -51,15 +56,20 @@ export default {
     watch:{
        defaultDate:function(value){
            this.change(value)
-       }
+       },
+       startDate(newValue) {
+           if(this.consdata[0].related_field === 'contract_end_date'){
+               this.start_date = newValue
+           }
+        },
     }
 }
 </script>
 
 <style scoped>
-.approval-text-container span{
-    height: 30px;
-}
+    .approval-text-container span{
+        height: 30px;
+    }
     .col-md-10{
         padding:0 !important;
     }

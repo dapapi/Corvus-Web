@@ -67,14 +67,21 @@ import AppDetail from  '@/views/approval/appdetail.vue'
 import Avatar from '@/components/Avatar.vue'
 import ApprovalProgress from '@/components/ForApproval/ApprovalProgress'
 import AddTrail from '@/components/addTrail'
+import TimeChoice from '@/components/TimeChoice.vue'
+import EditTimeChoice from '@/components/EditTimeChoice.vue'
+import AddRemind from '@/components/AddRemind.vue'
+import ImportAndExport from '@/components/ImportAndExport.vue'
+import VueUeditorWrap from 'vue-ueditor-wrap'
 import DepartmentPicker from '@/components/DepartmentPicker'
 Vue.config.productionTip = false;
 Vue.component('ApprovalGoModal', ApprovalGoModal);
 Vue.component('AppDetail', AppDetail);
 Vue.component('ApprovalGreatModule', ApprovalGreatModule);
 Vue.component('ApprovalProgress', ApprovalProgress);
+Vue.component('VueUeditorWrap', VueUeditorWrap);
 
 Vue.component('AddMember', AddMember);
+
 Vue.component('BuildProject', BuildProject);
 Vue.component('Calendar', Calendar);
 Vue.component('ChangeSizeInput', ChangeSizeInput);
@@ -137,6 +144,13 @@ Vue.component('ToolTips', ToolTips)
 Vue.component('Avatar', Avatar)
 Vue.component('AddTrail', AddTrail)
 
+Vue.component('TimeChoice', TimeChoice)
+Vue.component('EditTimeChoice', EditTimeChoice)
+Vue.component('TimeChoice', TimeChoice)
+Vue.component('EditTimeChoice', EditTimeChoice)
+Vue.component('AddTrail', AddTrail)
+Vue.component('AddRemind', AddRemind)
+Vue.component('ImportAndExport', ImportAndExport)
 
 Vue.prototype.globalClick = function (callback) {
     document.getElementById('app').addEventListener('click', (event) => {

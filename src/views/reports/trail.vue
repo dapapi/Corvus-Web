@@ -2,6 +2,12 @@
     <div class="page-main" style="background-color:#f3f4f5">
         <div class="page-header page-header-bordered">
             <h1 class="page-title">销售线索报表</h1>
+
+            <div class="page-header-actions">
+                <ImportAndExport class="float-left" :type="'export'" :moduleName="'reportfrom/trail'" :params="exportParams">
+                    <i class="iconfont icon-daochu font-size-20" aria-hidden="true"></i>
+                </ImportAndExport>
+            </div>
         </div>
         <div class="page-content container-fluid">
             <div class="bg-white">
@@ -11,22 +17,26 @@
                     </div>
                     <div class="col-md-7 p-20 clearfix float-left" style="z-index: 0">
                         <div class="col-md-3 float-left">
-                            <button type="button" class="btn btn-block btn-success waves-effect waves-classic search-button"
+                            <button type="button"
+                                    class="btn btn-block btn-success waves-effect waves-classic search-button"
                                     :disabled="designationDateNum === 'day'" @click="selectDate('day')">7天
                             </button>
                         </div>
                         <div class="col-md-3 float-left">
-                            <button type="button" class="btn btn-block btn-success waves-effect waves-classic search-button"
+                            <button type="button"
+                                    class="btn btn-block btn-success waves-effect waves-classic search-button"
                                     :disabled="designationDateNum === 'month'" @click="selectDate('month')">30天
                             </button>
                         </div>
                         <div class="col-md-3 float-left">
-                            <button type="button" class="btn btn-block btn-success waves-effect waves-classic search-button"
+                            <button type="button"
+                                    class="btn btn-block btn-success waves-effect waves-classic search-button"
                                     :disabled="designationDateNum === 'quarter'" @click="selectDate('quarter')">季度
                             </button>
                         </div>
                         <div class="col-md-3 float-left">
-                            <button type="button" class="btn btn-block btn-success waves-effect waves-classic search-button"
+                            <button type="button"
+                                    class="btn btn-block btn-success waves-effect waves-classic search-button"
                                     :disabled="designationDateNum === 'year'" @click="selectDate('year')">年度
                             </button>
                         </div>
@@ -144,7 +154,7 @@
                     </div>
                     <div class="tab-pane animation-fade" id="forum-industry-analysis" role="tabpanel">
                         <div class="col-md-3 pl-0">
-                            <Selectors :options="trailTypeArr" @change="changeIndustryTrailType"></Selectors>
+                            <Selectors :options="trailTypeArr" @change="changeIndustryTrailType" placeholder="请选择线索类型"></Selectors>
                         </div>
                         <div class="col-md-12">
                             <div ref="industry" style="width: 800px;height:500px;margin: 0 auto"></div>
@@ -223,6 +233,7 @@
                 starId: '',
                 start_time: '',
                 end_time: '',
+                exportParams: {},
             }
         },
         mounted() {
@@ -275,6 +286,7 @@
                 if (this.departmentId) {
                     data.department = this.departmentId
                 }
+                this.exportParams = data;
                 this.$refs.timeInterval.setValue(start_time, end_time);
                 fetch('get', '/reportfrom/trail', data).then(response => {
                     this.tableData = response
@@ -313,7 +325,9 @@
                 let date1 = new Date();
                 let date2 = new Date(date1);
                 date2.setDate(date1.getDate() + value);
-                return date2.getFullYear() + "-" + (date2.getMonth() + 1) + "-" + date2.getDate();
+                let time = date2.getFullYear() + "-" + (date2.getMonth() + 1) + "-" + date2.getDate();
+                this.start_time = time;
+                return time
             },
 
             selectDate(value) {
@@ -392,7 +406,7 @@
             setReports(start_time, end_time) {
                 if (!start_time || !end_time) {
                     start_time = this.start_time;
-                    end_time = this.start_time;
+                    end_time = this.end_time;
                 }
                 let data = {
                     start_time: start_time,
@@ -504,9 +518,9 @@
                 fetch('get', '/reportfrom/industryanalysis', data).then(function (response) {
                     let data = [];
                     let dataValue = [];
-                    for (let i = 0; i < response.trails.length; i++) {
-                        data.push(response.trails[i].industry_name);
-                        dataValue.push(response.trails[i].total)
+                    for (let i = 0; i < response.length; i++) {
+                        data.push(response[i].industry_name);
+                        dataValue.push(response[i].total)
                     }
                     let industryOption = {
                         xAxis: {

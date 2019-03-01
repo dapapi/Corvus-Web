@@ -3,16 +3,37 @@
         <ul class="pagination pagination-no-border">
             <template v-if="current_page !== 1">
                 <li class="page-item"
-                    @click="method(current_page - 1)">
+                    @click="method(1)">
                     <a class="page-link" aria-label="Next">
-                        <span aria-hidden="true">«</span>
+                        <span aria-hidden="true">
+                            <i class="iconfont icon-jiantou_yemian_xiangzuo_o" style="color: black"></i>
+                        </span>
                     </a>
                 </li>
             </template>
             <template v-else>
                 <li class="disabled page-item">
                     <a class="page-link" aria-label="Next">
-                        <span aria-hidden="true">«</span>
+                        <i class="iconfont icon-jiantou_yemian_xiangzuo_o" style="color: black"></i>
+                    </a>
+                </li>
+            </template>
+            <template v-if="current_page !== 1">
+                <li class="page-item"
+                    @click="method(current_page - 1)">
+                    <a class="page-link" aria-label="Next">
+                        <span aria-hidden="true">
+                            <i class="iconfont icon-jiantou_liebiaoxiangzuo_o" style="color: black"></i>
+                        </span>
+                    </a>
+                </li>
+            </template>
+            <template v-else>
+                <li class="disabled page-item">
+                    <a class="page-link" aria-label="Next">
+                        <span aria-hidden="true">
+                            <i class="iconfont icon-jiantou_liebiaoxiangzuo_o" style="color: black"></i>
+                        </span>
                     </a>
                 </li>
             </template>
@@ -29,14 +50,37 @@
                 <li class="page-item"
                     @click="method(current_page + 1)">
                     <a class="page-link" aria-label="Next">
-                        <span aria-hidden="true">»</span>
+                        <span aria-hidden="true">
+                            <i class="iconfont icon-jiantou_liebiaoxiangyou_o" style="color: black"></i>
+                        </span>
                     </a>
                 </li>
             </template>
             <template v-else>
                 <li class="disabled page-item">
                     <a class="page-link" aria-label="Next">
-                        <span aria-hidden="true">»</span>
+                        <span aria-hidden="true">
+                            <i class="iconfont icon-jiantou_liebiaoxiangyou_o" style="color: black"></i>
+                        </span>
+                    </a>
+                </li>
+            </template>
+            <template v-if="current_page !== total_pages">
+                <li class="page-item"
+                    @click="method(total_pages)">
+                    <a class="page-link" aria-label="Next">
+                        <span aria-hidden="true">
+                            <i class="iconfont icon-jiantou_yemian_xiangyou_o" style="color: black"></i>
+                        </span>
+                    </a>
+                </li>
+            </template>
+            <template v-else>
+                <li class="disabled page-item">
+                    <a class="page-link" aria-label="Next">
+                        <span aria-hidden="true">
+                            <i class="iconfont icon-jiantou_yemian_xiangyou_o" style="color: black"></i>
+                        </span>
                     </a>
                 </li>
             </template>
@@ -89,8 +133,8 @@
 </script>
 
 <style scoped>
-.page-item {
-    cursor: pointer;
-}
+    .page-item {
+        cursor: pointer;
+    }
 </style>
 

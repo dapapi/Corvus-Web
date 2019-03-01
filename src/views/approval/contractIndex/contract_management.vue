@@ -156,7 +156,6 @@
     import Cookies from 'js-cookie'
     import {PROJECT_CONFIG} from '@/views/approval/project/projectConfig.js'
 
-    import ImportAndExport from '@/components/ImportAndExport.vue'
     export default {
         data: function () {
             return {
@@ -289,9 +288,6 @@
             platformType: function () {
                 return this.platformType
             }
-        },
-        components: {
-            ImportAndExport
         },
         mounted() {
             this.getList('project')

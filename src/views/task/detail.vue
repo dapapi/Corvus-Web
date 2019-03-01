@@ -347,9 +347,9 @@
                                                     <EditDatepicker class="col-md-6 px-0 float-left"
                                                                 :content="taskInfo.start_at[0]" :is-edit="isEdit"
                                                                 @change="(value) => changeTaskInfo(value, 'start_at')"></EditDatepicker>
-                                                    <EditTimepicker class="col-md-6 px-0 float-left"
+                                                    <EditTimeChoice class="col-md-6 px-0 float-left"
                                                                 :content="taskInfo.start_at[1]" :is-edit="isEdit"
-                                                                @change="(value) => changeTaskInfo(value, 'start_minutes')"></EditTimepicker>
+                                                                @change="(value) => changeTaskInfo(value, 'start_minutes')"></EditTimeChoice>
                                                 </div>
                                                 
                                             </div>
@@ -364,9 +364,15 @@
                                                     <EditDatepicker class="col-md-6 px-0 float-left"
                                                                 :content="taskInfo.end_at[0]" :is-edit="isEdit"
                                                                 @change="(value) => changeTaskInfo(value, 'end_at')"></EditDatepicker>
-                                                    <EditTimepicker class="col-md-6 px-0 float-left"
+                                                <!-- <EditTimepicker class="col-md-6 px-0 float-left"
                                                                 :content="taskInfo.end_at[1]" :is-edit="isEdit"
-                                                                @change="(value) => changeTaskInfo(value, 'end_minutes')"></EditTimepicker>
+                                                                @change="(value) => changeTaskInfo(value, 'end_minutes')"></EditTimepicker> -->
+                                                    <EditTimeChoice class="col-md-6 px-0 float-left"
+                                                                :content="taskInfo.end_at[1]" :is-edit="isEdit"
+                                                                @change="(value) => changeTaskInfo(value, 'end_minutes')"></EditTimeChoice>
+                                                    <!-- <EditTimepicker class="col-md-6 px-0 float-left"
+                                                                :content="taskInfo.end_at[1]" :is-edit="isEdit"
+                                                                @change="(value) => changeTaskInfo(value, 'end_minutes')"></EditTimepicker> -->
                                                 </div>
                                             </div>
                                         </div>
@@ -578,17 +584,19 @@
                                 <datepicker ref='startTime' @change="addStartTime"></datepicker>
                             </div>
                             <div class="col-md-5 float-left pl-0">
-                                <timepicker ref="startMinutes" :default="startMinutes"
-                                            @change="addStartMinutes"></timepicker>
+                                <!-- <timepicker ref="startMinutes" :default="startMinutes"
+                                            @change="addStartMinutes"></timepicker> -->
+                                <TimeChoice @change="addStartMinutes" ref="startMinutes"></TimeChoice>
                             </div>
                         </div>
                         <div class="example">
                             <div class="col-md-2 text-right float-left require">截止时间</div>
                             <div class="col-md-5 float-left pl-0">
-                                <datepicker ref="endTime" @change="addEndTime"></datepicker>
+                                <datepicker ref="endTime" @change="addEndTime" :startDate="startTime"></datepicker>
                             </div>
                             <div class="col-md-5 float-left pl-0">
-                                <timepicker ref="endMinutes" :default="endMinutes" @change="addEndMinutes"></timepicker>
+                                <!-- <timepicker ref="endMinutes" :default="endMinutes" @change="addEndMinutes"></timepicker> -->
+                                <TimeChoice @change="addEndMinutes" ref="endMinutes"></TimeChoice>
                             </div>
                         </div>
                         <div class="example">
@@ -617,7 +625,7 @@
             </div>
         </Modal>
         <customize-field></customize-field>
-        <DocPreview :url="previewUrl" :givenFileName="previewName"/>
+        <DocPreview :url="previewUrl" :givenFileName="previewName" detailpage='true'/>
         <flag :id="'delTask'" @confirmFlag="deleteTask"/>
     </div>
 </template>
@@ -781,18 +789,21 @@
             },
 
             changeTaskInfo: function (value, name) {
+                
                 switch (name) {
                     case 'principal_id':
                         value = this.$store.state.principalInfo.id;
                         break;
                     case 'start_minutes':
+                    this.changeInfo.start_at = ''
                         if (this.changeInfo.start_at) {
                             this.changeInfo.start_at = this.changeInfo.start_at + ' ' + value
                         } else {
                             this.changeInfo.start_at = this.taskInfo.start_at[0] + ' ' + value
                         }
-                        return;
+                        break;
                     case 'end_minutes':
+                    this.changeInfo.end_at = ''
                         if (this.changeInfo.end_at) {
                             this.changeInfo.end_at = this.changeInfo.end_at + ' ' + value
                         } else {
@@ -1181,9 +1192,9 @@
                 this.endMinutes = ''
                 this.taskIntroduce = ''
                 this.$refs.startTime.setValue('')
-                this.$refs.startMinutes.setValue('00:00')
+                this.$refs.startMinutes.setValue('0')
                 this.$refs.endTime.setValue('')
-                this.$refs.endMinutes.setValue('00:00')
+                this.$refs.endMinutes.setValue('0')
                 this.linkData = []
                 this.getLinkData()
                 this.setDefaultPrincipal()

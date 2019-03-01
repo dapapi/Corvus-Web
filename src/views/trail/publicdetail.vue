@@ -522,9 +522,10 @@
                             </div>
                             <div class="col-md-2 text-right float-left require">截止时间</div>
                             <div class="col-md-4 float-left pl-0">
-                                <datepicker @change="changeEndTime"></datepicker>
+                                <datepicker @change="changeEndTime" :startDate="startTime"></datepicker>
                             </div>
                         </div>
+                        
                         <div class="example">
                             <div class="col-md-2 text-right float-left">任务说明</div>
                             <div class="col-md-10 float-left pl-0">

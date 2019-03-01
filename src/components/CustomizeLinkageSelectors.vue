@@ -21,7 +21,7 @@
                    :onchange="inputChange">
             <datepicker v-if="valueType === 3" @change="datePickerChange"></datepicker>
             <number-spinner v-if="valueType === 2" ref="numberSpinner" :shortInput="true"
-                            @change="numberSpinnerChange"></number-spinner>
+                            @change="numberSpinnerChange" :min="0" :max="1000000000" :precision="2" :value="0"></number-spinner>
             <!-- <input-selectors v-if="valueType === 6" :otherslot="true"></input-selectors> -->
             <div v-if="valueType === 6" class="">
                 <selectors class="pr-40" ref='selectors' :options="users" @valuelistener="changeUsers" :multiple="true"
@@ -69,6 +69,7 @@ import config from '@/assets/js/config'
                     field:'',
                     type:'',
                     operator:'',
+                    id:''
                 },
             }
         },
@@ -99,10 +100,12 @@ import config from '@/assets/js/config'
                 this.sendData.value = this.normalInput
             },
             fatherData:function(){
+                
                 let currentData = this.data.find(item => item.value == this.fatherData)
                 this.sendData.field = currentData.code
                 this.sendData.type = currentData.type
                 this.sendData.value = ''
+                this.sendData.id = currentData.id
             },
             childData:function(){
                 let currentData = this.item.find(item =>item.value == this.childData)
@@ -133,7 +136,6 @@ import config from '@/assets/js/config'
 
             father.selectpicker().on('hidden.bs.select', function () {
                 let id = $(this)[0].selectedOptions[0].id;
-                console.log(id);
                 let father = _this.data.find(item => item.id === parseInt(id));
                 _this.item = father.operator;
                 _this.optionsData = father.content
@@ -175,7 +177,8 @@ import config from '@/assets/js/config'
                     key: this.keyId,
                     condition: this.conditionId,
                     value: params,
-                    n: this.n
+                    n: this.n,
+
                 };
                 this.$emit('change', data)
             },

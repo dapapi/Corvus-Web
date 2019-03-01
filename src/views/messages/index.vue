@@ -321,14 +321,15 @@ export default {
             uri:`${this.msgLink.find(item => item.value == module_id).url}${module_data_id}`,
             id:module_data_id
         }
-        // console.log(`${config.apiUrl}${this.msgLink.find(item => item.value == module_id).url}${module_data_id}`)
         fetch('get', '/console/checkpower', data).then(response => {
-            // console.log(response.data.power)
             //日历模块显示弹框
             
             if(response.data.power === 'true'){
                 if(module_id == 214){
                     this.showScheduleModal(module_data_id)
+                }else if (module_id == 216){
+                    
+                    this.$router.push(`${this.msgLink.find(item =>item.value == module_id).name}/${module_data_id}?mode=approver`) 
                 }else{
                     this.$router.push(`${this.msgLink.find(item =>item.value == module_id).name}/${module_data_id}`) 
                 }

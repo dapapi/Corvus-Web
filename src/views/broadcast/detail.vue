@@ -12,10 +12,10 @@
         </div>
       </div>
       </div>
-        <div class="page-header page-header-bordered">
+        <div class="page-header page-header-bordered pb-25">
             <h1 class="page-title">
                 <i class="md-chevron-left" @click="goBack"></i>
-                <span class="mx-20" style='color:#000'>公告</span>
+                <span class="mx-20" style='color:#000'>返回</span>
             </h1>
             <i class="iconfont icon-gengduo1" aria-hidden="true"
             id="taskDropdown" data-toggle="dropdown" aria-expanded="false"  v-if="my_id === creator_id"></i>
@@ -58,20 +58,20 @@
                         </div>
                         <span class="ml-6">{{currentData.creator.data.name}}</span>
                         <span class="">{{currentData.created_at}}</span>
-                        <span v-if="classifyArr[0]" class="ml-20">{{classifyArr.find(classifyArr => classifyArr.value == currentData.classify).name}}</span>
+                        <span v-if="classifyArr[0]" class="ml-20">{{classifyArr.find(classifyArr => classifyArr.id == currentData.classify).name}}</span>
                     </div>
                     <br>
                     <hr/>
                     <br>
                     <div class="panel-content" v-if="currentData.scope && department">
                         <h5 v-html="currentData.desc" class="broadcast-content"></h5>
-                        <div v-if="currentData.accessory"
+                        <div v-if="currentData.affixes.data.length > 0"
                         data-plugin="actionBtn" 
                         data-toggle="modal" 
-@click='previewHandler(item.values.data.value)'
+                        @click='previewHandler()'
                         aria-hidden="true"
                         ><a href="#" >查看附件</a></div>
-                        <DocPreview :url='docPreviewHandler' :givenfilename='currentData.accessory_name' />
+                        <DocPreview :url='previewUrl' :givenfilename='currentData.accessory_name' />
                         <h5>公告范围
                             <span  v-for=" item in currentData.scope.data" :key="item.department_id" v-if="item.department_id">&nbsp;&nbsp;
                                 <span v-if="department[0]" class="badge badge-round badge-dark">{{department.find(department => department.id == item.department_id).name}}</span>
@@ -121,41 +121,44 @@ export default {
             broadCastInfo:{},
             currentId:'',
             currentData:{},
-            classifyArr:config.classifyArr,
+            classifyArr:[],
             broadCastPost:{},
             paramsId:'',
             isLoading:true,
             creator_id:'',
-            my_id:''
+            my_id:'',
+            previewUrlArr:[],
+            previewUrl:'',
+            department:[],
         } 
     },
     created() { 
+        this.getDepartment()
+        this.getClassify()
         this.whoami()
         this.getCurrentId()
         this.dataInit()
     },
     mounted(){
-        console.log(this.userList);
+        // console.log(window.history);
     },
     computed: {
         ...mapState([
-            'department',
             'userList'
         ]),
-         docPreviewHandler(){
-            let temp = this.currentData.affixes.data
-            let tempArr = []
-            for (const key in temp) {
-                tempArr.push(temp[key].url)
-                // if (object.hasOwnProperty(key)) {
-                //     const element = object[key];
-                    
-                // }
-            }
-            return tempArr.join('|')
-        }
+         
     },
-    methods:{
+    methods:{ 
+        getClassify(){
+            fetch('get','/announcements/Classify/').then((params) => {
+                this.classifyArr = params.data
+            })
+        },
+        getDepartment(){
+            fetch('get','/departments_lists').then((params) => {
+                this.department = params
+            })
+        },
         //初始化数据
         dataInit(){
             let _this = this
@@ -164,7 +167,36 @@ export default {
                     let {creator:{data:{id='-'}}} = response.data
                     _this.creator_id = id
                     _this.isLoading = false
+                    _this.docPreviewHandler()
+
             })
+        },
+        docPreviewHandler(){
+            let temp = this.currentData.affixes.data
+            let tempArr = []
+            this.previewUrlArr = []
+            for (const key in temp) {
+                console.log(temp[key].url);
+                this.previewUrlArr.push(temp[key].url)
+                // if (object.hasOwnProperty(key)) {
+                //     const element = object[key];
+                    
+                // }
+            }
+        },
+        previewHandler(params) {
+            this.docPreviewHandler()
+            $('#docPreviewSelector').modal('hide')
+            if(params){
+                this.previewUrlArr = String(params).split(',')
+            }
+            if (this.previewUrlArr.length === 1) {
+                $('#docPreview').modal('show')
+                console.log(this.previewUrlArr);
+                this.previewUrl = this.previewUrlArr[0]
+            } else {
+                $('#docPreviewSelector').modal('show')
+            }
         },
         //获取公告id
         getCurrentId(){
@@ -180,29 +212,24 @@ export default {
                 _this.my_id = params.data.id
             })
         },
-         previewHandler(params) {
-                $('#docPreviewSelector').modal('hide')
-                this.previewUrlArr = String(params).split(',')
-                if (this.previewUrlArr.length === 1) {
-                    $('#docPreview').modal('show')
-                    this.previewUrl = this.previewUrlArr[0]
-                } else {
-                    $('#docPreviewSelector').modal('show')
-                }
-            },
-       
     }
 }
 
 </script>
 
 <style scoped>
+img{
+    width: 100% !important;
+}
 hr{
     margin: 0 !important;
 }
 iframe{
     position: fixed;
 
+}
+.page{
+    margin-left: 260px !important;
 }
 .loader-overlay{
         margin-left: 100px;

@@ -16,7 +16,7 @@
                                  :consdata='item' :predata='sendData' class="container"
                                  :singlemode='singlemode' :clear='clearFlag' :directional-sender='directionalData'
                                  @change="changeHandler" @directional='directionalWatcher' is-selectable='true'
-                                 :formid='form_id'></div>
+                                 :formid='form_id' :startDate="start_date"></div>
                             <!-- ⬆️核心模块 -->
                         </div>
                         <ApprovalProgress :formid='form_id' :trend='trendApprover.condition[0]?trendApprover:""'
@@ -34,6 +34,9 @@
                 </div>
             </div>
         </div>
+      <DocPreview :url='$store.state.previewurl' :detailpage='detailpage' />
+
+        
     </div>
 </template>
 
@@ -63,7 +66,7 @@
     import ApprovalChainReaction from '@/components/ForApproval/ApprovalChainReaction'
 
     export default {
-        props: ['formData', 'singlemode', 'defaultData', 'contract_id', 'defaultValue'],
+        props: ['formData', 'singlemode', 'defaultData', 'contract_id', 'defaultValue','detailpage'],
         data() {
             return {
                 importData: '',
@@ -83,6 +86,7 @@
                 },
                 clearFlag: false,
                 directionalData: {},
+                start_date:''
             }
         },
         created() {
@@ -209,6 +213,9 @@
             changeHandler(params) {
                 if (this.formData.condition) {
                     this.trendApproverChecker(params)
+                }
+                if(params.type === 'contract_start_date'){
+                    this.start_date = params.value
                 }
                 if (!this.sendData.values.find(item => item.key === params.key)) {
                     this.sendData.values.push(params)
