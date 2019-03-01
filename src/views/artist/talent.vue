@@ -90,14 +90,14 @@ Corvus-Web/src/views/artist/talent.vue
                             <div class="col-md-3 example float-left">
                                 <selectors :options="signState" placeholder="请选择签约状态" @change="getSource"></selectors>
                             </div>
-                            <!-- <div class="col-md-3 example float-left">
+                            <div class="col-md-3 example float-left">
                                 <button type="button" class="btn btn-default waves-effect waves-classic float-right"
                                         data-toggle="modal" data-target="#customizeContent"
                                         @click='customizeContentType="stars"'
                                         data-placement="right" title="">
                                     自定义筛选
                                 </button>
-                            </div> -->
+                            </div>
                         </div>
                         <table class="table table-hover is-indent ml-5" data-plugin="selectable"
                                data-selectable="selectable">
@@ -187,11 +187,11 @@ Corvus-Web/src/views/artist/talent.vue
                                     </template>
                                 </td>
                                 <td @click="redirectArtistDetail(artist.id)"
-                                    v-if="artistsInfo.find(item=>item.sign_contract_status==2)">{{
+                                    v-if="artistsInfo.find(item=>item.sign_contract_status==2)&&artist.contracts">{{
                                     artist.contracts.data.contract_start_date }}
                                 </td>
                                 <td @click="redirectArtistDetail(artist.id)"
-                                    v-if="artistsInfo.find(item=>item.sign_contract_status==3)">{{
+                                    v-if="artistsInfo.find(item=>item.sign_contract_status==3)&&artist.contracts">{{
                                     artist.contracts.data.contract_end_date}}
                                 </td>
                                 <td @click="redirectArtistDetail(artist.id)"
@@ -232,14 +232,14 @@ Corvus-Web/src/views/artist/talent.vue
                             <div class="col-md-3 example float-left">
                                 <selectors :options="signState" @change="typeFilter" placeholder="请选择签约状态"></selectors>
                             </div>
-                            <!-- <div class="col-md-3 example float-left">
+                            <div class="col-md-3 example float-left">
                                 <button type="button" class="btn btn-default waves-effect waves-classic float-right"
                                         data-toggle="modal" data-target="#customizeContent"
                                         @click='customizeContentType="bloggers"'
                                         data-placement="right" title="">
                                     自定义筛选
                                 </button>
-                            </div> -->
+                            </div>
                         </div>
                         <table class="table table-hover is-indent ml-5" data-plugin="selectable"
                                data-selectable="selectable">
@@ -931,6 +931,7 @@ Corvus-Web/src/views/artist/talent.vue
                 isdilog: true,
                 exportParams: {},
                 customizeInfo:{},
+                customizeInfoId:''
             }
         },
         watch: {
@@ -986,7 +987,6 @@ Corvus-Web/src/views/artist/talent.vue
                     sign_contract_status: this.listData.sign_contract_status,//  签约状态
                     communication_status: this.listData.communication_status, //沟通状态
                 }
-                console.log(this.exportParams)
                 fetch('get', '/stars', this.listData).then(function (response) {
                     if (response.data) {
                         _this.artistsInfo = response.data;
@@ -1110,9 +1110,9 @@ Corvus-Web/src/views/artist/talent.vue
                 }
                 data.page = '&page='+this.current_page
                 this.customizeInfo = value
-                fetch('post', '/bloggers/filter?include=type,creator,affixes,publicity,operatelogs,contracts'+data.status +data.communication_status +data.name ,value).then(function (params) {
+                fetch('post', this.customizeContentType +'/filter?include=creator,affixes,publicity,operatelogs,contracts'+data.status +data.communication_status +data.name ,value).then(function (params) {
                 // fetch('post', '/'+this.customizeContentType+'/filter', value).then((params) => {
-                    console.log(params.data);
+                    
                     // _this.bloggerInfo =params.data
                     if (_this.customizeContentType == 'stars') {
                         _this.artistsInfo = params.data
@@ -1318,9 +1318,12 @@ Corvus-Web/src/views/artist/talent.vue
             tab: function (value) {
                 this.selectedArtistsArr = []
                 if (value == 0) {
+                    this.customizeInfo = ''
                     this.getArtists()
+                    
                     this.isShow = true
                 } else if (value == 1) {
+                    this.customizeInfo = ''
                     this.getBlogger()
                     this.isShow = false
                 }

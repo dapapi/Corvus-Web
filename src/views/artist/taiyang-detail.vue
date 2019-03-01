@@ -192,13 +192,13 @@
                                             {{item.title}}
                                         </td>
 
-                                        <td v-if="item.principal">{{item.principal.data.name}}</td>
+                                        <td v-if="item.principal">{{item.principal}}</td>
                                         <td v-if="!item.principal"></td>
                                         <td>{{item.company}}</td>
                                         <td>{{item.created_at}}</td>
                                         <td>
-                                            <template v-if="item.relate_project_bills_resource">
-                                                {{item.relate_project_bills_resource}}
+                                            <template v-if="item.contract_sharing_ratio">
+                                                {{item.contract_sharing_ratio}}
                                             </template>
                                             <template>0</template>
                                         </td>
@@ -1207,8 +1207,8 @@
             </div>
         </div>
         <!--附件预览-->
-        <DocPreview :url="previewUrl" :givenFileName="previewName" :detailpage='isDetail' />
         <ApprovalGreatModule :formData='formDate' :detailpage='isDetail' :default-value="{value:projectContractDefault,id:$route.params.id}"></ApprovalGreatModule>
+        <DocPreview :url="previewUrl" :givenFileName="previewName" :detailpage='isDetail' />
     </div>
 </template>
 

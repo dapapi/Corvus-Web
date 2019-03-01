@@ -51,7 +51,9 @@
                 <li class="site-menu-item" style="height: 150px;">&nbsp;</li>
             </ul>
             <div class="user-wrap">
-                <Avatar :imgUrl="avatar" style="width: 40px; height: 40px; font-size: 14px"/>
+                <router-link to="/setting">
+                    <Avatar :imgUrl="avatar" style="width: 40px; height: 40px; font-size: 14px"/>
+                </router-link>
             </div>
             <div class="console" v-if="visible">
                 <ul>
@@ -150,7 +152,7 @@
                             },
                             {
                                 name: '仪表盘',
-                                code: ''
+                                code: 'dashboard'
                             }
                         ]
                     }
