@@ -10,7 +10,7 @@
                 <div data-role="container" class="scrollable-container" style="height: 691px; width: 259px;">
                     <div data-role="content" class="scrollable-content" style="width: 259px;">
                         <section class="page-aside-section">
-                            <h5 class="page-title pl-30 mb-45">仪表盘</h5>
+                            <h5 class="page-title pl-30 mb-20">仪表盘</h5>
                             <treeView :menus="urlData"></treeView>
                         </section>
                     </div>

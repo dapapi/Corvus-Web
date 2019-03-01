@@ -1,6 +1,6 @@
 <template>
     <div class="upload">
-        <input id='fileUpload' type="file" @change="uploadFile" :accept="accept ? accept : ''"/>
+        <input id='fileUpload' type="file" @change="uploadFile" :accept="accept ? accept : ''" multiple="multiple"/>
         <label for="fileUpload">
            <slot></slot>
         </label>
@@ -46,7 +46,6 @@ export default {
         uploadFile(e) {
             let file = e.target.files[0];
             let putExtra = null;
-            console.log(file);
             let type = file.type.split('/');
             if (type[type.length - 1] === 'vnd.ms-powerpoint') {
                 type[type.length - 1] = 'ppt';
