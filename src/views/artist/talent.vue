@@ -169,11 +169,11 @@
                                     </template>
                                 </td>
                                 <td @click="redirectArtistDetail(artist.id)"
-                                    v-if="artistsInfo.find(item=>item.sign_contract_status==2)">{{
+                                    v-if="artistsInfo.find(item=>item.sign_contract_status==2)&&artist.contracts">{{
                                     artist.contracts.data.contract_start_date }}
                                 </td>
                                 <td @click="redirectArtistDetail(artist.id)"
-                                    v-if="artistsInfo.find(item=>item.sign_contract_status==3)">{{
+                                    v-if="artistsInfo.find(item=>item.sign_contract_status==3)&&artist.contracts">{{
                                     artist.contracts.data.contract_end_date}}
                                 </td>
                                 <td @click="redirectArtistDetail(artist.id)"
@@ -1103,7 +1103,7 @@
                 }
                 data.page = '&page='+this.current_page
                 this.customizeInfo = value
-                fetch('post', this.customizeContentType +'/filter?include=type,creator,affixes,publicity,operatelogs,contracts'+data.status +data.communication_status +data.name ,value).then(function (params) {
+                fetch('post', this.customizeContentType +'/filter?include=creator,affixes,publicity,operatelogs,contracts'+data.status +data.communication_status +data.name ,value).then(function (params) {
                 // fetch('post', '/'+this.customizeContentType+'/filter', value).then((params) => {
                     
                     // _this.bloggerInfo =params.data

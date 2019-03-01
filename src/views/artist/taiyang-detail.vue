@@ -192,7 +192,7 @@
                                             {{item.title}}
                                         </td>
 
-                                        <td v-if="item.principal">{{item.principal.data.name}}</td>
+                                        <td v-if="item.principal">{{item.principal}}</td>
                                         <td v-if="!item.principal"></td>
                                         <td>{{item.company}}</td>
                                         <td>{{item.created_at}}</td>

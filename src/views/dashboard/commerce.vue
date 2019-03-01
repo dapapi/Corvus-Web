@@ -1,11 +1,15 @@
 <template>
     <div class="page-main" style="background-color:#f3f4f5">
-        <div class="page-header page-header-bordered">
+        <div class="page-header page-header-bordered mb-0">
             <h1 class="page-title">仪表盘</h1>
         </div>
          <div class="page-content container-fluid">
                 <div class="clearfix" style="color:#fff">
-
+                    <div class="tab" style="display:flex">
+                        <div class="task my-10 mx-20"></div>
+                        <div class="task my-10 mx-20"></div>
+                        <div class="task my-10 mx-20"></div>
+                    </div>
                     <div class="panel mb-0 task-panel">
                         <div  class="circular m-30 float-left">
                                 <span>90</span>
@@ -46,6 +50,15 @@
         font-size: 30px;
         color: rgb(5, 169, 219);
         font-weight: bold;
+    }
+    .task{
+        width: 200px;
+        height:150px;
+        background: #fff;
+    }
+    .tab{
+        justify-content: space-between;
+        align-items: center
     }
 </style>
 
