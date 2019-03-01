@@ -452,6 +452,11 @@ export default new Router({
             component: () => import('./views/contracts/index.vue')
         },
         {
+            path: '/setting',
+            name: 'setting',
+            component: () => import('./views/setting/index.vue')
+        },
+        {
             path: '/404',
             name: '404',
             component: () => import('./views/special/404.vue')
