@@ -31,6 +31,7 @@
                     <span v-if="list.form_status=== 231">&nbsp;{{currentStatus.slice(0,1)}}{{pending.name}}{{currentStatus.slice(1)}}</span>
                     <span v-if="list.form_status !== 231">{{pending.name}}{{currentStatus}}</span>
                     <i v-if="list.form_status==232 && (info.approval.user_id === currentId || (list.creator && list.creator.data.id === currentId)) ">
+                        <button class="btn btn-success" v-if="info.contract" @click='approvalHandler("archive")'>归档</button>
                         <button class="btn btn-primary" @click='approvalHandler("discard")'>作废</button>
                     </i>
                     <i v-if="list.form_status==231 && (info.approval.user_id === currentId || (list.creator && list.creator.data.id === currentId)) ">
@@ -170,7 +171,9 @@
                     </div>
                 </div>
             </div>
-            <DocPreview :url='previewUrl' detailpage='true'/>
+         <DocPreview :url='$store.state.previewurl' detailpage='true' />
+
+            <!-- <DocPreview :url='previewUrl' detailpage='true'/> -->
         </div>
         <BuildProject :project-type="projectTypeTemp" :project-fields-arr="projectFieldsArr" mode='detail'
                       :default-data='{fields:(info.fields && info.fields.data),list:list,trailInfo:trailInfo}'></BuildProject>
@@ -274,6 +277,7 @@
                 })
             },
             previewHandler(params) {
+            this.$store.dispatch('changePreview',params)
                 $('#docPreviewSelector').modal('hide')
                 this.previewUrlArr = String(params).split(',')
                 if (this.previewUrlArr.length === 1) {

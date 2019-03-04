@@ -1,5 +1,5 @@
 <template>
-        <div class="page">
+        <div class="page-main" style="background-color:#f3f4f5">
             <div class="loader-overlay" v-if="isLoading">
                 <div class="loader-content">
                     <div class="loader-index">

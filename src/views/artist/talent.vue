@@ -1,21 +1,3 @@
-Skip to content
- 
-Search or jump to…
-
-Pull requests
-Issues
-Marketplace
-Explore
- @ycsx Sign out
-5
-0 1 dapapi/Corvus-Web
- Code  Issues 0  Pull requests 0  Projects 0  Wiki  Insights
-Corvus-Web/src/views/artist/talent.vue
-@Cxiaoyu Cxiaoyu 报表模块添加导出
-0295d27  2 days ago
-@hanpeng111 @Cxiaoyu @ycsx @Apple-0722
-1657 lines (1574 sloc)  81.8 KB
-    
 <template>
     <div class="page">
         <Loading :is-loading="isLoading"></Loading>
