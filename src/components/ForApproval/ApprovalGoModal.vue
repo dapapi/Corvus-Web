@@ -18,7 +18,7 @@
                     <textarea class="approval-comment form-control" name="" id="" rows="5"
                               v-model="approvalComment"></textarea>
                 </div>
-                <Upload class="py-20" @change="uploadControl"><p class="upload-file"><i class="iconfont icon-fujian"></i>合同扫描上传</p></Upload>
+                <Upload class="py-20" v-if="mode === 'archive'" @change="uploadControl"><p class="upload-file"><i class="iconfont icon-fujian"></i>合同扫描上传</p></Upload>
 
                 <div v-if="mode === 'archive'" class="row px-50 pb-40">
                     <figure v-for="(item, index) in fileArr" :key="index" style="margin-right:0px;width:100px;overfolw:hidden;" class="ml-10">
