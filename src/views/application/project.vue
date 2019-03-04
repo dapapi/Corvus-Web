@@ -4,184 +4,280 @@
             <h1 class="page-title">我的项目</h1>
         </div>
         <div class="page-content container-fluid">
-            <div class="panel col-md-12 col-lg-12 py-5">
+            <div class="panel col-md-12 clearfix py-5">
+                <div class="clearfix">
+                    <div class="col-md-3 example float-left">
+                        <input type="text" class="form-control" id="inputPlaceholder" placeholder="请输入项目名称"
+                               v-model="projectKeyword"
+                               @blur="getFilterProjects()">
+                    </div>
+                    <div class="col-md-3 example float-left">
+                        <selectors @change="(value) => getProjectSearch('project_type', value)" placeholder="请选择项目类型"
+                                   :options="projectTypeArr"></selectors>
+                    </div>
+                    <div class="col-md-3 example float-left" v-if="allUsers.length > 0">
+                        <selectors @change="(value) => getProjectSearch('principal_ids', value)" placeholder="请选择项目负责人"
+                                   :options="allUsers" multiple="true"></selectors>
+                    </div>
+                    <!-- <div class="col-md-3 example float-left">
+                        <button type="button" class="btn btn-default waves-effect waves-classic float-right"
+                                data-toggle="modal" data-target="#customizeContent"
+                                data-placement="right" title="">
+                            自定义筛选
+                        </button>
+                    </div> -->
+                </div>
+
                 <div class="col-md-12">
                     <ul class="nav nav-tabs nav-tabs-line" role="tablist">
-                        <li class="nav-item" role="presentation" @click="getTasks(1,1)">
-                            <a class="nav-link active" data-toggle="tab" href="#forum-task"
-                                aria-controls="forum-base"
-                                aria-expanded="true" role="tab">所有项目</a>
+                        <li class="nav-item" role="presentation" @click="getMyProjects()">
+                            <a class="nav-link" data-toggle="tab" href="#forum-project"
+                               aria-controls="forum-base"
+                               aria-expanded="true" role="tab">所有项目</a>
                         </li>
-                        <li class="nav-item" role="presentation" @click="getDate(1,2)">
-                            <a class="nav-link" data-toggle="tab" href="#forum-task"
-                                aria-controls="forum-present"
-                                aria-expanded="false" role="tab">我负责的</a>
+                        <li class="nav-item" role="presentation" @click="getMyProjects('my_principal')">
+                            <a class="nav-link active" data-toggle="tab" href="#forum-project"
+                               aria-controls="forum-present"
+                               aria-expanded="false" role="tab">我负责的</a>
                         </li>
-                        <li class="nav-item" role="presentation" @click="getDate(1,3)">
-                            <a class="nav-link" data-toggle="tab" href="#forum-task"
-                                aria-controls="forum-present"
-                                aria-expanded="false" role="tab">我参与的</a>
+                        <li class="nav-item" role="presentation" @click="getMyProjects('my_participant')">
+                            <a class="nav-link" data-toggle="tab" href="#forum-project"
+                               aria-controls="forum-present"
+                               aria-expanded="false" role="tab">我参与的</a>
                         </li>
-                        
                     </ul>
                 </div>
+
                 <div class="page-content tab-content nav-tabs-animate bg-white pb-0">
-                    <div class="tab-pane animation-fade active" id="forum-task" role="tabpanel">
-                        <table class="table table-hover is-indent" data-plugin="animateList" data-animate="fade"
-                                data-child="tr"
-                                data-selectable="selectable" >
+                    <div class="tab-pane animation-fade active" id="forum-project" role="tabpanel">
+                        <table class="table table-hover is-indent mb-20" data-plugin="animateList" data-animate="fade"
+                               data-child="tr" data-selectable="selectable">
                             <tr class="animation-fade"
                                 style="animation-fill-mode: backwards; animation-duration: 250ms; animation-delay: 0ms;">
                                 <th class="cell-300" scope="col">项目名称</th>
                                 <th class="cell-300" scope="col">负责人</th>
-                                <th class="cell-300" scope="col">项目状态</th>
-                                <th class="cell-300" scope="col">合作类型</th>
-                                <th class="cell-300" scope="col">优先级</th>
+                                <th class="cell-300" scope="col">目标艺人</th>
+                                <th class="cell-300" scope="col">预计订单收入</th>
                                 <th class="cell-300" scope="col">跟进时间</th>
                             </tr>
                             <tbody>
-                            <tr v-for="item in projectInfo" :key="item.id" @click="projectDetail(item.id)" style="cursor: pointer">
+                            <tr v-for="project in projectsInfo" @click="redirectDetail(project.id)" :key='project.id'>
                                 <td class="pointer-content">
-                                    {{item.title}}
-                                </td>
-                                <td >{{item.principal.data.name}}</td>
-                                <td>
-                                    <template v-if="item.status === 1"><span style="color:#FF9800">进行中</span></template>
-                                    <template v-if="item.status === 2"><span style="color:#4CAF50">已完成</span></template>
-                                    <template v-if="item.status === 3"><span style="color:#9E9E9E">撤单</span></template>
-                                    
-                                </td>
-                                <td v-if="item.trail">
-                                    <template v-if="item.trail.data.cooperation_type ==1">
-                                        代言 
-                                    </template>
-                                    <template v-if="item.trail.data.cooperation_type ==2">
-                                        合作 
-                                    </template>
-                                        <template v-if="item.trail.data.cooperation_type ==3">
-                                        活动 
-                                    </template>
-                                    <template v-if="item.trail.data.cooperation_type ==4">
-                                        微博 
-                                    </template>
-                                        <template v-if="item.trail.data.cooperation_type ==5">
-                                        抖音 
-                                    </template>
-                                        <template v-if="item.trail.data.cooperation_type ==6">
-                                        短期代言 
-                                    </template>
-                                        <template v-if="item.trail.data.cooperation_type ==7">
-                                        时装周 
-                                    </template>
-                                        <template v-if="item.trail.data.cooperation_type ==8">
-                                        未确定 
-                                    </template>
-                                </td>
-                                <td v-if="!item.trail"></td>
-                                <td v-if="item.priority">
-                                    <template v-if="item.priority === 1">高</template>
-                                    <template v-if="item.priority === 2">中</template>
-                                    <template v-if="item.priority === 3">低</template>
+                                    {{ project.title }}
                                 </td>
                                 <td>
-                                    {{item.last_follow_up_at}}
+                                    <template v-if="project.principal">
+                                        {{ project.principal.data.name }}
+                                    </template>
                                 </td>
+                                <td>
+                                    <template v-if="project.trail && project.trail.data.expectations">
+                                        <template v-for="expectation in project.trail.data.expectations.data">
+                                            <template v-if="expectation.name">
+                                                {{ expectation.name }}
+                                            </template>
+                                            <template v-else>
+                                                {{ expectation.nickname }}
+                                            </template>
+                                        </template>
+                                    </template>
+                                </td>
+                                <td>
+                                    <template v-if="project.trail">
+                                        <template v-if="project.trail.data.fee === 'privacy'">
+                                            **
+                                        </template>
+                                        <template v-else>
+                                            {{ project.trail.data.fee ? project.trail.data.fee : 0 }}
+                                        </template>
+                                        元
+                                    </template>
+                                </td>
+                                <td>{{ project.last_follow_up_at }}</td>
                             </tr>
                             </tbody>
                         </table>
-                            <div style="margin: 6rem auto;width: 100px"  v-if="projectInfo.length==0">
-                                <img src="https://res.papitube.com/corvus/images/content-none.png" alt="" style="width: 100%">
-                            </div>
-                        <template>
-                            <Pagination :current_page="current_page" :method="getTasks" :total_pages="total_pages"
-                                        :total="total"></Pagination>
-                        </template>
+                        <div style="margin: 6rem auto;width: 100px" v-if="projectsInfo.length === 0">
+                            <img src="https://res.papitube.com/corvus/images/content-none.png" alt=""
+                                 style="width: 100%">
+                        </div>
+                        <pagination :current_page="current_page" :method="getFilterProjects" :total_pages="total_pages"
+                                    :total="total"></pagination>
                     </div>
                 </div>
+
+
             </div>
+
         </div>
+
+        <customize-filter :data="customizeInfo" @change="customize" :stararr='starsArr' :cleanup="cleanUp"
+                          @cleanupdone='cleanUp=false'></customize-filter>
+
         <AddClientType type="project" @change="changeProjectType"></AddClientType>
+
         <BuildProject :project-fields-arr="projectFieldsArr" :project-type="projectType"></BuildProject>
-   </div>
+    </div>
+
 </template>
+
 <script>
-import fetch from '../../assets/utils/fetch.js';
-import config from '../../assets/js/config';
-export default {
-  name: '',
-  data () {
+    import fetch from '../../assets/utils/fetch.js'
+    import config from '../../assets/js/config'
+    import {mapState} from 'vuex'
+    import Cookies from 'js-cookie'
+
+    const projectStatusArr = [{name: '全部', value: ''}, ...config.projectStatusArr];
+    const projectTypeArr = [{name: '全部', value: ''}, ...config.projectTypeArr];
+
+    export default {
+
+        data: function () {
             return {
                 total: 0,
                 current_page: 1,
                 total_pages: 1,
-                participants: [],
-                multiple: false,
-                taskIntroduce: '',
-                startTime: '',
-                startMinutes: '00:00',
-                endTime: '',
-                endMinutes: '00:00',
-                tasksInfo: '',
-                taskStatus: 0,
-                newTask: {},
-                taskType: '',
-                taskFinishType: '',
-                taskName: '',
-                taskLevel: '',
-                taskLevelArr: config.taskLevelArr,
-                taskTypeArr: config.taskTypeArr,
-                customizeInfo: config.customizeInfo,
-                projectStatus:1,//项目区别
-                projectInfo:'',
-                myType:'',
+                companyArr: [],
+                starsArr: [],
+                projectName: '',
+                projectTypeArr: projectTypeArr,
                 projectFieldsArr: [],
                 projectType: '',
+                projectFields: '',
+                projectsInfo: '',
+                customizeInfo: {},
+                addInfoArr: {},
+                levelArr: config.levelArr,
+                trailsAllInfo: '',
+                trailOriginContent: '',
+                projectKeyword: '',
+                projectStatusArr: projectStatusArr,
+                allUsers: [],
+                principal_ids: [],
+                keyword: '',
+                status: '',
+                isLoading: true,
+                projectSearchType: '',
+                getProjectStatus: 'principal_id',
+                cleanUp: false,
             }
-
-
         },
 
-  mounted() {
-    this.getTasks();
-    this.getDate();
- 
-  },
+        mounted() {
+            this.getField()
+            this.getClients();
+            // this.getFilterProjects();
+            this.getMyProjects('my_principal')
+            if (this.userList.length > 0) {
+                for (let i = 0; i < this.userList.length; i++) {
+                    this.allUsers.push({
+                        name: this.userList[i].name,
+                        value: this.userList[i].id
+                    })
+                }
+            }
+        },
 
-  methods: {
-            getTasks: function (page = 1,signStatus) {
-                let data={
-                    include:'principal,trail.expectations',
-                    status:this.projectStatus
+        computed: {
+            ...mapState([
+                'userList'
+            ]),
+            _userList() {
+                return this.userList
+            }
+        },
+
+        watch: {
+            _userList() {
+                for (let i = 0; i < this.userList.length; i++) {
+                    this.allUsers.push({
+                        name: this.userList[i].name,
+                        value: this.userList[i].id
+                    })
                 }
-                let _this = this;
-                // if(signStatus){
-                //     this.projectStatus = signStatus
-                // }
-                fetch('get', '/projects/my_all', data).then(function (response) {
-                    _this.projectInfo = response.data;
-                    _this.current_page = response.meta.pagination.current_page;
-                    _this.total = response.meta.pagination.total;
-                    _this.total_pages = response.meta.pagination.total_pages;
-                });
+            }
+        },
+
+        methods: {
+            getField() {
+                let _this = this
+                fetch('get', '/projects/filter_fields').then((params) => {
+                    _this.customizeInfo = params.data
+                })
             },
-            getDate: function (page = 1,type) {
-                let data={
-                    include:'principal,trail.expectations',
-                    // status:this.projectStatus,
-                   
-                }
-                let _this = this;
-                if(type){
-                    this.myType = type
-                }
-                data.type=this.myType
-                fetch('get', '/projects/my', data).then(function (response) {
-                    _this.projectInfo = response.data;
-                    _this.current_page = response.meta.pagination.current_page;
-                    _this.total = response.meta.pagination.total;
-                    _this.total_pages = response.meta.pagination.total_pages;
-                });
+            getMyProjects: function (value) {
+                this.getProjectStatus = value;
+                this.getFilterProjects();
             },
+
+            getProjectSearch: function (type, value) {
+                if (type === 'principal_ids') {
+                    this.principal_ids = value.join(',');
+                } else if (type === 'project_type') {
+                    this.projectSearchType = value
+                }
+                this.getFilterProjects();
+            },
+
+            getFilterProjects: function (pageNum = 1) {
+                let data = {
+                    page: pageNum,
+                    include: 'principal,trail.expectations'
+                };
+                if (this.getProjectStatus) {
+                    data.my = this.getProjectStatus;
+                }
+                if (this.projectSearchType) {
+                    if (this.projectSearchType == 3) {
+                        this.projectSearchType = '3,4'
+                    }
+                    data.type = this.projectSearchType
+                }
+                if (this.projectKeyword) {
+                    data.keyword = this.projectKeyword
+                }
+                if (this.principal_ids.length > 0) {
+                    data.principal_ids = this.principal_ids;
+                }
+                fetch('get', '/projects', data).then(response => {
+                    this.projectsInfo = response.data;
+                    this.total = response.meta.pagination.total;
+                    this.current_page = response.meta.pagination.current_page;
+                    this.total_pages = response.meta.pagination.total_pages;
+                    this.isLoading = false;
+                })
+            },
+
+            getClients: function () {
+                let _this = this;
+                fetch('get', '/clients/all').then(function (response) {
+                    for (let i = 0; i < response.data.length; i++) {
+                        _this.companyArr.push({
+                            name: response.data[i].company,
+                            id: response.data[i].id,
+                            grade: response.data[i].grade
+                        })
+                    }
+
+                })
+            },
+
+            redirectDetail: function (projectId) {
+                this.$router.push({path: '/projects/' + projectId})
+            },
+
+            customize: function (value) {
+                let _this = this
+                fetch('post', '/projects/filter?include=principal,trail.expectations', value).then((params) => {
+                    _this.projectsInfo = params.data
+                    _this.total = params.meta.pagination.total;
+                    _this.total_pages = params.meta.pagination.total_pages;
+                    _this.current_page = params.meta.pagination.current_page
+                    _this.cleanUp = true
+                })
+
+            },
+
             changeProjectType: function (value) {
                 let organization_id = JSON.parse(Cookies.get('user')).organization_id
                 if (value == 3) {
@@ -196,6 +292,7 @@ export default {
                 this.selectProjectType();
                 $('#addProject').modal('show');
             },
+
             selectProjectType: function () {
                 this.projectFieldsArr = [];
                 if (this.projectType == 5) {
@@ -221,60 +318,23 @@ export default {
 
                 });
             },
-            projectDetail(projectId){
-                this.$router.push({path: '/projects/' + projectId})
-            },
-            customize (value) {
-                console.log(value)
+
+            addInfo: function (value, name) {
+                this.addInfoArr[name] = value
             },
 
-            changeLinkage (value) {
-                console.log(value)
-            },
-
-            changeTaskType (value) {
-                this.taskType = value
-            },
-
-            principalChange (value) {
-                this.principal = value
-            },
-
-            participantChange (value) {
-                let flagArr = [];
-                for (let i = 0; i < value.length; i++) {
-                    flagArr.push(value[i].id)
-                }
-                this.participants = flagArr
-            },
-
-            changeTaskLevel (value) {
-                this.taskLevel = value
-            },
-
-            changeStartTime (value) {
-                this.startTime = value
-            },
-
-            changeStartMinutes (value) {
-                this.startMinutes = value
-            },
-
-            changeEndTime (value) {
-                this.endTime = value
-            },
-
-            changeEndMinutes (value) {
-                this.endMinutes = value
-            },
-    },
-
-    };
-
-    </script>
-    <style>
-    .panel{
-        box-shadow: 0 0 0 0;
+        }
     }
-    </style>
+</script>
 
+<style lang="scss" scoped>
+    /deep/ .addMember {
+        .addMember-trigger-dropdown {
+            top: -400px !important;
+        }
+    }
+
+    table tbody tr {
+        cursor: pointer;
+    }
+</style>

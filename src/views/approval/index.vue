@@ -24,9 +24,12 @@
 </script>
 <style scoped>
     .page-aside{
-        overflow: hidden !important;
+        overflow-x: hidden !important;
+        overflow-y: scroll !important;
+
         position: fixed;
         left: 100px;
     }
+    .page-aside::-webkit-scrollbar { width: 0 !important }
 </style>
 

@@ -188,11 +188,11 @@ Corvus-Web/src/views/artist/talent.vue
                                     </template>
                                 </td>
                                 <td @click="redirectArtistDetail(artist.id)"
-                                    v-if="artistsInfo.find(item=>item.sign_contract_status==2)">{{
+                                    v-if="artistsInfo.find(item=>item.sign_contract_status==2)&&artist.contracts">{{
                                     artist.contracts.data.contract_start_date }}
                                 </td>
                                 <td @click="redirectArtistDetail(artist.id)"
-                                    v-if="artistsInfo.find(item=>item.sign_contract_status==3)">{{
+                                    v-if="artistsInfo.find(item=>item.sign_contract_status==3)&&artist.contracts">{{
                                     artist.contracts.data.contract_end_date}}
                                 </td>
                                 <td @click="redirectArtistDetail(artist.id)"
@@ -931,7 +931,9 @@ Corvus-Web/src/views/artist/talent.vue
                 previewName: '',
                 affixIndex: '',
                 isdilog: true,
-                exportParams: {}
+                exportParams: {},
+                customizeInfo:{},
+                customizeInfoId:''
             }
         },
         watch: {
@@ -987,7 +989,6 @@ Corvus-Web/src/views/artist/talent.vue
                     sign_contract_status: this.listData.sign_contract_status,//  签约状态
                     communication_status: this.listData.communication_status, //沟通状态
                 }
-                console.log(this.exportParams)
                 fetch('get', '/stars', this.listData).then(function (response) {
                     if (response.data) {
                         _this.artistsInfo = response.data;
@@ -1016,24 +1017,27 @@ Corvus-Web/src/views/artist/talent.vue
                 if (signStatus) {
                     this.blogStatus = signStatus
                 }
-                data.status = this.blogStatus
+                if(this.blogStatus){
+                    data.status = '&status='+this.blogStatus
+                }else{
+                    data.status = ''
+                }
                 //沟通状态
                 if (this.blogCommunication) {
-                    data.communication_status = this.blogCommunication
+                    data.communication_status = '&communication_status='+this.blogCommunication
+                }else{
+                    data.communication_status = ''
                 }
                 //博主名称
                 if (this.blogName) {
-                    data.name = this.blogName
+                    data.name = '&name='+this.blogName
+                }else{
+                    data.name = ''
                 }
-                data.page = page
-                //导出需要传的参数
-                this.exportParams = {
-                    status: this.blogStatus,
-                    communication_status: this.blogCommunication,
-                    name: this.blogName
-                }
-                fetch('get', '/bloggers', data).then(function (response) {
-                    if (response.data) {
+                data.page = '&page='+page
+                fetch('post', '/bloggers/filter?include=type,creator,affixes,publicity,operatelogs,contracts'+data.status +data.communication_status +data.name +data.page ,this.customizeInfo).then(function (response) {
+                    
+                    if(response.data){
                         _this.bloggerInfo = response.data;
                     }
                     if (response.meta) {
@@ -1085,8 +1089,32 @@ Corvus-Web/src/views/artist/talent.vue
             },
             customize: function (value) {
                 let _this = this
-                fetch('post', '/' + this.customizeContentType + '/filter', value).then((params) => {
-                    console.log(params.data);
+                let data = {
+                    include: 'type,creator,affixes,publicity,operatelogs,contracts',
+
+                }
+                if (this.blogStatus) {
+                    data.status = '&status='+this.blogStatus
+                }else{
+                    data.status = ''
+                }
+                //沟通状态
+                if (this.blogCommunication) {
+                    data.communication_status = '&communication_status='+this.blogCommunication
+                }else{
+                    data.communication_status = ''
+                }
+                //博主名称
+                if (this.blogName) {
+                    data.name = '&name='+this.blogName
+                }else{
+                    data.name = ''
+                }
+                data.page = '&page='+this.current_page
+                this.customizeInfo = value
+                fetch('post', this.customizeContentType +'/filter?include=creator,affixes,publicity,operatelogs,contracts'+data.status +data.communication_status +data.name ,value).then(function (params) {
+                // fetch('post', '/'+this.customizeContentType+'/filter', value).then((params) => {
+                    
                     // _this.bloggerInfo =params.data
                     if (_this.customizeContentType == 'stars') {
                         _this.artistsInfo = params.data
@@ -1292,9 +1320,12 @@ Corvus-Web/src/views/artist/talent.vue
             tab: function (value) {
                 this.selectedArtistsArr = []
                 if (value == 0) {
+                    this.customizeInfo = ''
                     this.getArtists()
+                    
                     this.isShow = true
                 } else if (value == 1) {
+                    this.customizeInfo = ''
                     this.getBlogger()
                     this.isShow = false
                 }
