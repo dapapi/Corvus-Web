@@ -151,7 +151,6 @@
 
 <script>
     import fetch from '../../assets/utils/fetch.js'
-    import config from '../../assets/js/config';
     import env from '../../assets/js/env';
     import Cookies from 'js-cookie';
     import Verify from '../../assets/utils/verify.js';
@@ -376,8 +375,8 @@
                     username: username,
                     password: password,
                     grant_type: 'password',
-                    client_id: config.clientId,
-                    client_secret: config.clientSecret,
+                    client_id: env.clientId,
+                    client_secret: env.clientSecret,
                     scope: '*'
                 };
                 $.ajax({
