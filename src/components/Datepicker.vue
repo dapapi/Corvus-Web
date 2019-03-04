@@ -100,6 +100,7 @@
                 // $(this.$el).datepicker('update', 'infinite');
                 if(this.infiniteCheck === true){
                     // this.destroy()
+                    this.$emit('change','无限期')
                     $('.datepicker').css('display','none')
                     $(this.$el).datepicker('update', '');
                     this.placeholder = '无限期'
