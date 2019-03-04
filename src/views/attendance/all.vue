@@ -69,6 +69,7 @@
 <script>
 import fetch from '@/assets/utils/fetch'
 import config from '@/assets/js/config'
+import env from '@/assets/js/env'
 // const allType = {1:'请假',2:'加班',3:'出差',4:'外勤'}
 export default {
     data(){
@@ -154,7 +155,7 @@ export default {
         },
         getlist:function(type){
             this.searchData.type = type
-            fetch('get',`${config.apiUrl}/attendance/collect`,this.searchData).then((res) => {
+            fetch('get',`${env.apiUrl}/attendance/collect`,this.searchData).then((res) => {
                 this.list = res
             })
         }

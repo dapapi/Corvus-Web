@@ -52,7 +52,7 @@
 </template>
 <script>
 import fetch from '@/assets/utils/fetch'
-import config from '@/assets/js/config'
+import env from '@/assets/js/env'
 import briefright from '@/components/briefRight'
 
 export default {
@@ -102,7 +102,7 @@ export default {
                 end_time:this.end_time
             }
             
-            fetch('get',`${config.apiUrl}/review/my/template`,data).then((res) => {
+            fetch('get',`${env.apiUrl}/review/my/template`,data).then((res) => {
                 
                 this.list = res.data
                 

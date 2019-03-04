@@ -75,7 +75,7 @@
 </style>
 <script>
 import fetch from '@/assets/utils/fetch'
-import config from '@/assets/js/config'
+import env from '@/assets/js/env'
 export default {
     props:{
        templateId:'',//添加问题之后新生成的id
@@ -115,7 +115,7 @@ export default {
         //获取简报详情
         getDetails:function(){
             
-            fetch('get',`${config.apiUrl}/review/${this.templateId}?include=issues`).then((res) => {
+            fetch('get',`${env.apiUrl}/review/${this.templateId}?include=issues`).then((res) => {
                 this.temDetails= res.data
                 this.list = res.data.issues.data
                 for (let i = 0; i < this.list.length; i++) {
@@ -133,7 +133,7 @@ export default {
         //提交评审
         review:function(status){
             
-            fetch('put',`${config.apiUrl}/review/${this.templateId}`,{status:status}).then((res) => {
+            fetch('put',`${env.apiUrl}/review/${this.templateId}`,{status:status}).then((res) => {
                 toastr.success('评审成功');
                 $('#submitReport').modal('hide')
                 this.$emit('refresh')
@@ -145,7 +145,7 @@ export default {
            this.isIf = true
            let id = this.$store.state.newParticipantsInfo[0].id
         //    console.log(id)
-           fetch('post',`${config.apiUrl}/issues/${id}/follow_up`,{content:'跟进'}).then((res) => {
+           fetch('post',`${env.apiUrl}/issues/${id}/follow_up`,{content:'跟进'}).then((res) => {
                 toastr.success('跟进成功');
                 this.$store.state.newParticipantsInfo = []
                 this.getDetails()

@@ -62,7 +62,7 @@
 </template>
 <script>
 import fetch from '@/assets/utils/fetch'
-import config from '@/assets/js/config'
+import env from '@/assets/js/env'
 import switchTimeDetails from '@/components/switchTimeDetails.vue'
 export default {
     data(){
@@ -122,7 +122,7 @@ export default {
                 end_time:this.end_time
 
             }
-            fetch('get',`${config.apiUrl}/review/member/template`,data).then((res) => {
+            fetch('get',`${env.apiUrl}/review/member/template`,data).then((res) => {
                 
                 _this.list = res.data
                 for (let i = 0; i < _this.list.length; i++) {

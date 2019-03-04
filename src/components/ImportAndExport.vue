@@ -15,8 +15,7 @@
 </template>
 <script>
 import axios from 'axios'
-import config from '../assets/js/config'
-import fetch from '../assets/utils/fetch.js'
+import env from '../assets/js/env'
 //导入和导出调通的模块只有 客户
 export default {
     name:'ImportAndExport',
@@ -40,7 +39,7 @@ export default {
         return {
           getRandom:Math.round(Math.random() * 1000),
           file:'',
-          header:config.getHeaders()
+          header:env.getHeaders()
         }
     },
     mounted(){
@@ -50,7 +49,7 @@ export default {
         importFile:function(event){
             this.header['Content-Type'] = 'multipart/form-data;boundary = ' + new Date().getTime()
             this.file = event.target.files[0];
-            let importUrl = `${config.apiUrl}/${this.moduleName}/import`
+            let importUrl = `${env.apiUrl}/${this.moduleName}/import`
             let formData = new FormData();
             formData.append('file', this.file);
             //创建一个干净的axios对象
@@ -89,10 +88,10 @@ export default {
                }
             }
             getParams = getParams.join('&')
-            var page_url = `${config.apiUrl}/${this.moduleName}/export?${getParams}`
+            var page_url = `${env.apiUrl}/${this.moduleName}/export?${getParams}`
             xhh.open("GET", page_url)
             xhh.setRequestHeader('Accept', 'application/vnd.Corvus.v1+json')
-            xhh.setRequestHeader('Authorization', `Bearer ${config.getAccessToken() || ''}`)
+            xhh.setRequestHeader('Authorization', `Bearer ${env.getAccessToken() || ''}`)
             xhh.responseType = 'blob'
             xhh.onreadystatechange = function () {
                 if (xhh.readyState === 4 && xhh.status === 200) {

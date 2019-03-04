@@ -61,8 +61,7 @@
 </template>
 
 <script>
-    import fetch from '@/assets/utils/fetch.js'
-    import config from '@/assets/js/config'
+    import fetch from '@/assets/utils/fetch'
     import ApprovalImageUploader from '@/components/ForApproval/ApprovalImageUploader'
     export default {
          components: {

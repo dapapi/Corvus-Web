@@ -112,8 +112,7 @@
 
 <script>
 import { mapState } from 'vuex'
-import fetch from '@/assets/utils/fetch.js'
-import config from '@/assets/js/config'
+import fetch from '@/assets/utils/fetch'
 
 export default {
     data(){
@@ -173,15 +172,9 @@ export default {
         },
         docPreviewHandler(){
             let temp = this.currentData.affixes.data
-            let tempArr = []
             this.previewUrlArr = []
             for (const key in temp) {
-                console.log(temp[key].url);
                 this.previewUrlArr.push(temp[key].url)
-                // if (object.hasOwnProperty(key)) {
-                //     const element = object[key];
-                    
-                // }
             }
         },
         previewHandler(params) {
@@ -192,7 +185,6 @@ export default {
             }
             if (this.previewUrlArr.length === 1) {
                 $('#docPreview').modal('show')
-                console.log(this.previewUrlArr);
                 this.previewUrl = this.previewUrlArr[0]
             } else {
                 $('#docPreviewSelector').modal('show')

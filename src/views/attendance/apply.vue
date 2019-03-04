@@ -72,7 +72,7 @@
 </template>
 <script>
 import fetch from '@/assets/utils/fetch'
-import config from '@/assets/js/config'
+import env from '@/assets/js/env'
 
 export default {
     data(){
@@ -94,7 +94,7 @@ export default {
         
         getlist:function(type){
             type == 2?this.sendData.status =[2,3,4]:this.sendData.status = [1]
-            fetch('get',`${config.apiUrl}/attendance/myapply`,this.sendData).then((res) => {
+            fetch('get',`${env.apiUrl}/attendance/myapply`,this.sendData).then((res) => {
                 this.list = res.data
             })
         },

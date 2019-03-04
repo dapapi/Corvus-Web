@@ -15,8 +15,7 @@
 </template>
 
 <script>
-import config from '@/assets/js/config.js'
-import fetch from '@/assets/utils/fetch.js'
+import fetch from '@/assets/utils/fetch'
 export default {
      // 凡是多选，都有搜索框；不是多选传入selectable为true也可以有搜索框
         // changeKey为父组件的data，且可以被改变

@@ -207,9 +207,8 @@
 
 </template>
 <script>
-    import fetch from '@/assets/utils/fetch.js'
-    import config from '@/assets/js/config'
-    import {PROJECT_CONFIG} from '@/views/approval/project/projectConfig.js'
+    import fetch from '@/assets/utils/fetch'
+    import {PROJECT_CONFIG} from '@/views/approval/project/projectConfig'
     import ApprovalGreatModule from '@/components/ApprovalGreatModule'
     import ApprovalProgress from '@/components/ForApproval/ApprovalProgress'
 
@@ -348,7 +347,6 @@
 
             },
             addProject(value) {
-                console.log(value);
                 this.projectType = value;
                 let _this = this
                 if (this.list.title.includes('合同')) {

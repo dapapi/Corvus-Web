@@ -71,7 +71,7 @@
 </template>
 <script>
 import fetch from '@/assets/utils/fetch'
-import config from '@/assets/js/config'
+import env from '@/assets/js/env'
 
 export default {
     data(){
@@ -105,7 +105,7 @@ export default {
                 this.status = status
             }
            
-            fetch('get',`${config.apiUrl}/review`,{search:this.search,status:this.status}).then((res) => {
+            fetch('get',`${env.apiUrl}/review`,{search:this.search,status:this.status}).then((res) => {
                 _this.list = res.data
                 for (let i = 0; i < _this.list.length; i++) {
                     if(_this.list[i].title){

@@ -6,9 +6,7 @@
 </template>
 
 <script>
-    import fetch from '@/assets/utils/fetch'
     import secondLeft from '@/components/SecondLeft.vue'
-    import config from '@/assets/js/config'
     import {mapState, mapGetters,mapActions} from 'vuex'
     export default {
         components: {

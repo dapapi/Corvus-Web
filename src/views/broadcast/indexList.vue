@@ -67,7 +67,6 @@
 
 <script>
 import fetch from '../../assets/utils/fetch.js'
-import config from '../../assets/js/config'
 import {mapState} from 'vuex'
 
 export default {

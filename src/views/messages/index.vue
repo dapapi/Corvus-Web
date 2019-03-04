@@ -171,9 +171,9 @@
 
 <script>
 import Main from './detail.vue';
-import messagesData from './messages.json'
 import fetch from '@/assets/utils/fetch'
 import config from '@/assets/js/config'
+import env from '@/assets/js/env'
 import {mapState, mapGetters,mapActions} from 'vuex'
 export default {
   name: 'messagesIndex',
@@ -235,8 +235,6 @@ export default {
   mounted() {
       //数据初始化
       this.getModule()
-      console.log(this.$route.fullPath)
-      
   },
   computed:{
       ...mapState([
@@ -276,7 +274,7 @@ export default {
     renderMsg:function(){
         if(this.$route.query.moduleType){
             this.moduleType = this.$route.query.moduleType
-            fetch('get',`${config.apiUrl}/getmsg?include=recive.data&module=${this.moduleType}&state=${this.state}`).then((res) => {
+            fetch('get',`${env.apiUrl}/getmsg?include=recive.data&module=${this.moduleType}&state=${this.state}`).then((res) => {
         
             this.messageList = res.data
         })
@@ -306,7 +304,7 @@ export default {
                 message_id:id
                 }
             }
-            fetch('get',`${config.apiUrl}/changestae`,data).then((res) => {
+            fetch('get',`${env.apiUrl}/changestae`,data).then((res) => {
                 this.getModule()
                 if(!type){
                     this.isAuthority(module_id,module_data_id)
