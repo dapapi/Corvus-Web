@@ -2246,7 +2246,8 @@
                     toastr.success('创建成功');
                     $('#addTask').modal('hide');
                     this.projectTasksInfo.push(response.data);
-                    this.getProjectTasking();
+                    // this.getProjectTasking();
+                    this.getProject();
                 })
             },
 
