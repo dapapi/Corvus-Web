@@ -4,7 +4,8 @@
             <h1 class="page-title">艺人报表</h1>
 
             <div class="page-header-actions">
-                <ImportAndExport class="float-left" :type="'export'" :moduleName="'reportfrom/starreport'" :params="exportParams">
+                <ImportAndExport class="float-left" :type="'export'" :moduleName="'reportfrom/starreport'"
+                                 :params="exportParams">
                     <i class="iconfont icon-daochu font-size-20" aria-hidden="true"></i>
                 </ImportAndExport>
             </div>
@@ -83,15 +84,7 @@
                         <div class="clearfix">
                             <div class="col-md-3 float-left pl-0">
                                 <Selectors :options="artistStatusArr" @change="changeArtistStatus"
-                                           placeholder="请选择艺人状态"></Selectors>
-                            </div>
-                            <div class="col-md-3 float-left pl-0" v-if="artistStatus != 1">
-                                <Selectors :options="trailsNumArr" @change="changeTrailsNum"
-                                           placeholder="请选择项目类型"></Selectors>
-                            </div>
-                            <div class="col-md-3 float-left pl-0"
-                                 v-if="departmentsInfo.length > 1 && artistStatus != 1">
-                                <DropDepartment name="组别" :data="departmentsInfo" @change="selectDepartment"/>
+                                           placeholder="请选择艺人状态" ref="artistStatus"></Selectors>
                             </div>
                         </div>
                         <table class="table table-hover is-indent example" data-plugin="animateList" data-animate="fade"
@@ -108,9 +101,19 @@
                                     <th class="cell-100" scope="col">最后跟进时间</th>
                                 </template>
                                 <template v-else>
-                                    <th class="cell-100" scope="col">组别</th>
+                                    <th class="cell-100" scope="col">
+                                        <DropDepartment name="组别" :data="departmentsInfo" @change="selectDepartment"/>
+                                    </th>
                                     <th class="cell-100" scope="col">姓名</th>
+                                    <th class="cell-100" scope="col">
+                                        <Selectors :options="trailsNumArr" @change="changeTrailsNum"
+                                                   placeholder="线索数量" ref="trailNum"></Selectors>
+                                    </th>
                                     <th class="cell-100" scope="col">预计订单收入</th>
+                                    <th class="cell-100" scope="col">
+                                        <Selectors :options="projectsNumArr" @change="changeProjectsNum"
+                                                   placeholder="项目数量" ref="projectNum"></Selectors>
+                                    </th>
                                     <th class="cell-100" scope="col">合同金额</th>
                                     <th class="cell-100" scope="col">花费金额</th>
                                 </template>
@@ -136,7 +139,9 @@
                                 <template v-else>
                                     <td>{{ data.department_name }}</td>
                                     <td>{{ data.name}}</td>
+                                    <td>{{ data.trail_total }}</td>
                                     <td>{{ data.total_fee ? data.total_fee : 0}}元</td>
+                                    <td>{{ data.project_total }}</td>
                                     <td>{{ data.total_contract_money ? data.total_contract_money : 0 }}元</td>
                                     <td>{{ data.total_expenditure_money ? data.total_expenditure_money : 0 }}元</td>
                                 </template>
@@ -197,7 +202,7 @@
                         value: 3
                     }
                 ],
-                artistStatus: 1,
+                artistStatus: 2,
                 trailsNum: '',
                 projectsNum: '',
                 trailsNumArr: [
@@ -263,6 +268,7 @@
             if (this.department.length > 0) {
                 this.departmentsInfo = this.departmentsInfo.concat(this.department)
             }
+            this.$refs.artistStatus.setValue(2)
         },
 
         computed: {
@@ -305,7 +311,10 @@
                     data.department = this.departmentId
                 }
                 if (this.trailsNum) {
-                    data.type = this.trailsNum
+                    data.trail_type = this.trailsNum
+                }
+                if (this.projectsNum) {
+                    data.project_type = this.projectsNum
                 }
                 this.exportParams = data;
                 this.$refs.timeInterval.setValue(start_time, end_time);
@@ -396,11 +405,20 @@
 
             changeArtistStatus(value) {
                 this.artistStatus = value;
+                if (value == 1) {
+                    this.$refs.trailNum.destroy();
+                    this.$refs.projectNum.destroy()
+                }
                 this.getReport();
             },
 
             changeTrailsNum(value) {
                 this.trailsNum = value;
+                this.getReport();
+            },
+
+            changeProjectsNum(value) {
+                this.projectsNum = value;
                 this.getReport();
             },
 
