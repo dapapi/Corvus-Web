@@ -130,6 +130,7 @@
                 })
                 $('#approvalGo').modal('hide')
                 this.approvalComment = ''
+                
             },
 
         }

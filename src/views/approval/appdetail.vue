@@ -308,6 +308,7 @@
                 }
                 this.getData()
                 toastr.success('审批成功')
+                this.$emit('unreadupdate')
             },
             getCurrentApprover() {
                 let _this = this
