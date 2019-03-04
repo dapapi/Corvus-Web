@@ -105,7 +105,11 @@
                 this.$emit('change', this.sendFilterData);
                 $('.modal').modal('hide');
             },
+            setValue:function(value){
+                this.sendFilterData = value
+            },
             getCusData:function(data,n){
+                
                 this.sendFilterData.conditions[n-1]=data
             },
         }
