@@ -72,11 +72,7 @@
                             <div class="col-md-3 example float-left">
                                 <selectors :options="signState" placeholder="请选择签约状态" @change="getSource"></selectors>
                             </div>
-<<<<<<< HEAD
                             <div class="col-md-3 example float-left">
-=======
-                            <!-- <div class="col-md-3 example float-left">
->>>>>>> wx
                                 <button type="button" class="btn btn-default waves-effect waves-classic float-right"
                                         data-toggle="modal" data-target="#customizeContent"
                                         @click='customizeContentType="stars"'
@@ -218,11 +214,7 @@
                             <div class="col-md-3 example float-left">
                                 <selectors :options="signState" @change="typeFilter" placeholder="请选择签约状态"></selectors>
                             </div>
-<<<<<<< HEAD
                             <div class="col-md-3 example float-left">
-=======
-                            <!-- <div class="col-md-3 example float-left">
->>>>>>> wx
                                 <button type="button" class="btn btn-default waves-effect waves-classic float-right"
                                         data-toggle="modal" data-target="#customizeContent"
                                         @click='customizeContentType="bloggers"'
