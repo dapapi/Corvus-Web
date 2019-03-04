@@ -1130,7 +1130,6 @@ Corvus-Web/src/views/artist/talent.vue
             },
             //头像
             getUploadUrl(value) {
-                console.log(String(value).split('.').pop())
                 let Suffix = ['png', 'gif', 'bmp', 'jpg', 'jpeg']
                 if (Suffix.includes(String(value).split('.').pop())) {
                     this.uploadUrl = value

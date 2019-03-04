@@ -152,6 +152,7 @@
 <script>
     import fetch from '../../assets/utils/fetch.js'
     import config from '../../assets/js/config';
+    import env from '../../assets/js/env';
     import Cookies from 'js-cookie';
     import Verify from '../../assets/utils/verify.js';
     import redirect from '../../assets/js/bootstrap';
@@ -242,7 +243,7 @@
                     return
                 }
                 let _this = this;
-                config.setAccessToken(this.access_token);
+                env.setAccessToken(this.access_token);
                 setTimeout(function () {
                     _this.fetchUserInfo(function (userJson) {
                         _this.storeToLocal(userJson);
@@ -323,7 +324,7 @@
                 };
                 let _this = this;
                 fetch('post', '/wechat/merge', data).then(function (response) {
-                    config.setAccessToken(response.access_token);
+                    env.setAccessToken(response.access_token);
                     setTimeout(function () {
                         _this.fetchUserInfo(function (userJson) {
                             _this.storeToLocal(userJson);
@@ -381,8 +382,8 @@
                 };
                 $.ajax({
                     type: 'post',
-                    url: config.apiUrl + '/oauth/token',
-                    headers: config.getHeaders(),
+                    url: env.apiUrl + '/oauth/token',
+                    headers: env.getHeaders(),
                     data: data,
                     statusCode: {
                         401: function () {
@@ -391,7 +392,7 @@
                     }
                 }).done(response => {
                     let token = response.access_token;
-                    config.setAccessToken(token);
+                    env.setAccessToken(token);
                     setTimeout(() => {
                         this.fetchUserInfo(userJson => {
                             this.storeToLocal(userJson);
@@ -415,9 +416,9 @@
             fetchUserInfo(callback) {
                 $.ajax({
                     type: 'get',
-                    url: config.apiUrl + '/users/my',
-                    headers: config.getHeaders(),
-                    statusCode: config.getStatusCode()
+                    url: env.apiUrl + '/users/my',
+                    headers: env.getHeaders(),
+                    statusCode: env.getStatusCode()
                 }).done(function (response) {
                     let userData = response.data;
                     let json = {
@@ -450,7 +451,7 @@
                 let _this = this;
                 fetch('put', '/users/telephone', data).then(function (response) {
                     toastr.success('密码修改成功');
-                    config.setAccessToken(response.access_token);
+                    env.setAccessToken(response.access_token);
                     setTimeout(function () {
                         _this.fetchUserInfo(function (userJson) {
                             _this.storeToLocal(userJson);

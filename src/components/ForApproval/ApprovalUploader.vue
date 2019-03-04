@@ -43,7 +43,7 @@
 </template>
 
 <script>
-import config from '@/assets/js/config'
+import env from '@/assets/js/env'
 import * as qiniu from 'qiniu-js'
 export default {
     props:['consdata','clear'],
@@ -111,13 +111,12 @@ export default {
             let fileSize = file.size;
             let _this = this;
             this.getQiniuAccessToken((token) => {
-                console.log(token,'token');
                 let observable = qiniu.upload(file, key, token, putExtra, conf);
                 let subscription = observable.subscribe(function (res) {
                 }, function (error) {
                     console.log(error)
                 }, function (res) {
-                    let fileUrl = config.imgUrl + res.key;
+                    let fileUrl = env.imgUrl + res.key;
                     let fileName = file.name;
                     // _this.$emit('change', fileUrl, fileName, fileSize,_this.fileExt,_this.id);
                     let {id} = _this.consdata[0]
@@ -133,11 +132,9 @@ export default {
         getQiniuAccessToken: function (callback) {
             $.ajax({
                 type: 'get',
-                url: config.apiUrl + '/services/request_qiniu_token',
-                headers: config.getHeaders(),
-                // statusCode: config.getStatusCode()
+                url: env.apiUrl + '/services/request_qiniu_token',
+                headers: env.getHeaders(),
             }).done(function (response) {
-                console.log(response);
                 callback(response.data.token)
             })
         },

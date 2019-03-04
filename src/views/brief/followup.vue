@@ -63,7 +63,7 @@
 </template>
 <script>
 import fetch from '@/assets/utils/fetch'
-import config from '@/assets/js/config'
+import env from '@/assets/js/env'
 
 export default {
     data(){
@@ -82,7 +82,7 @@ export default {
             this.$router.push({path:'/brief/add'})
         },
         getlist:function(){
-            fetch('get',`${config.apiUrl}/issues/1293569893/operate_log`).then((res) => {
+            fetch('get',`${env.apiUrl}/issues/1293569893/operate_log`).then((res) => {
                 this.list = res.data
             })
         }

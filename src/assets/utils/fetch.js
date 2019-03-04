@@ -1,15 +1,15 @@
 import axios from 'axios'
 import qs from 'qs'
-import config from '../js/config'
+import env from '../js/env'
 
 // axios 配置
 axios.defaults.timeout = 300000;
 axios.defaults.headers.common['Accept'] = 'application/vnd.Corvus.v1+json';
 axios.defaults.headers.common['Access-Control-Expose-Headers'] = 'Location';
 axios.defaults.headers.common['Access-Control-Allow-Headers'] = 'Authorization';
-axios.defaults.headers.common['Authorization'] = 'Bearer ' + config.getAccessToken() || '';
+axios.defaults.headers.common['Authorization'] = 'Bearer ' + env.getAccessToken() || '';
 axios.defaults.headers.post['Content-Type'] = 'application/x-www-form-urlencoded;charset=UTF-8';
-axios.defaults.baseURL = config.apiUrl;
+axios.defaults.baseURL = env.apiUrl;
 
 //POST传参序列化
 axios.interceptors.request.use((config) => {
@@ -42,7 +42,7 @@ axios.interceptors.response.use((res) => {
     const {response: {status}} = error
     const {response} = error
     if (status === 401) {
-        config.getStatusCode()[401]()
+        env.getStatusCode()[401]()
     } else if (status === 422) {
         const errors = response.data.errors
         const errInfoArr = Object.keys(errors)

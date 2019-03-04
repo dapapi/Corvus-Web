@@ -5,8 +5,7 @@
 </template>
 
 <script>
-import config from '@/assets/js/config'
-import fetch from '@/assets/utils/fetch'
+import env from '@/assets/js/env'
 import {mapState, mapGetters,mapActions} from 'vuex'
 import Cookies from 'js-cookie'
 export default {
@@ -40,7 +39,7 @@ export default {
              'getModuleList'
         ]),
         initWebSocket:function(){
-            this.websocket = new WebSocket(config.socketUrl)
+            this.websocket = new WebSocket(env.socketUrl)
             this.websocket.onmessage = this.websocketonmessage
             this.websocket.onopen = this.websocketonopen
             this.websocket.onerror = this.websocketonerror
@@ -53,7 +52,7 @@ export default {
             let user = JSON.parse(Cookies.get('user'))
             login.username = user.nickname
             login.userId = user.id
-            login.authorization = 'Bearer ' + config.getAccessToken() || ''
+            login.authorization = 'Bearer ' + env.getAccessToken() || ''
             login.action = "login"
 
             this.websocketsend(JSON.stringify(login))

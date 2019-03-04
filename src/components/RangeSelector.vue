@@ -18,7 +18,6 @@ export default {
         mounted(){
             let self = this
             $(this.$el).select2().on('select2:select', function (e) {
-                console.log(e.params.data);
                 self.$emit('change', $(this).val(), 'select', e.params.data.id)
             }).on('select2:unselect', function (e) {
 

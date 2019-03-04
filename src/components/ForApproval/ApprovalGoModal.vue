@@ -31,8 +31,7 @@
 </template>
 
 <script>
-    import fetch from '@/assets/utils/fetch.js'
-    import config from '@/assets/js/config'
+    import fetch from '@/assets/utils/fetch'
 
     export default {
         props: ['mode', 'id'],
