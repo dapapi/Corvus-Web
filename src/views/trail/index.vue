@@ -3,7 +3,8 @@
         <Loading :is-loading="isLoading"></Loading>
         <div class="page-header page-header-bordered">
             <h1 class="page-title">销售线索管理
-                <span style="color: #3298dc;" class="pl-20 font-size-20 pointer-content" @click="redirectPublicTrail"><i class="iconfont icon-jiantou_xiayiye font-size-22 pr-5"></i>公海池</span>
+                <span style="color: #3298dc;" class="pl-20 font-size-20 pointer-content" @click="redirectPublicTrail"><i
+                        class="iconfont icon-jiantou_xiayiye font-size-22 pr-5"></i>公海池</span>
             </h1>
             <div class="page-header-actions">
                 <import-and-export class="float-left" :type="'import'" :moduleName="'trails'">
@@ -238,6 +239,7 @@
     import {mapState} from 'vuex'
     import Cookies from 'js-cookie'
     import ImportAndExport from '@/components/ImportAndExport.vue'
+
     export default {
         components: {
             ImportAndExport
@@ -313,13 +315,8 @@
                 isLoading: true,
                 cleanUp: false,
                 trailIsLocked: '',
-<<<<<<< HEAD
                 exportParams: {},//导出参数
                 customizeCondition: {}
-
-=======
-                exportParams:{},//导出参数
->>>>>>> c1aeea4a74a312287c7683b692ade30152f8da5b
             }
         },
         created() {
@@ -449,44 +446,14 @@
                     return true
                 }
             },
-<<<<<<< HEAD
             redirectPublicTrail() {
                 this.$router.push({path: '/publictrails'})
             },
-            fetchHandler(methods, url, type) {
-                let _this = this,
-                    fetchData = this.fetchData,
-                    newUrl
-                this.fetchData.include = 'include=principal,client,contact,recommendations,expectations'
-                if (type == 'filter') {
-                    fetchData = this.customizeCondition
-                    let keyword, status, principal_ids
-                    if (this.fetchData.keyword) {
-                        keyword = '&keyword=' + this.fetchData.keyword
-                    } else {
-                        keyword = ''
-                    }
-                    if (this.fetchData.status) {
-                        status = '&status=' + this.fetchData.status
-                    } else {
-                        status = ''
-                    }
-                    if (this.fetchData.principal_ids) {
-                        principal_ids = '&principal_ids=' + this.fetchData.principal_ids
-                    } else {
-                        principal_ids = ''
-                    }
-                    newUrl = url + '?' + this.fetchData.include + keyword + status + principal_ids
-                }
-                // console.log(this.fetchData)
-                this.exportParams = {
-=======
             fetchHandler(methods, url) {
                 let _this = this
                 this.fetchData.include = 'principal,client,contact,recommendations,expectations'
                 console.log(this.fetchData)
-                this.exportParams ={
->>>>>>> c1aeea4a74a312287c7683b692ade30152f8da5b
+                this.exportParams = {
                     keyword: this.fetchData.keyword,
                     status: this.fetchData.status,
                     principal_ids: this.fetchData.principal_ids,
@@ -501,19 +468,16 @@
             },
             filterGo() {
                 this.fetchData.keyword = this.trailFilter
-<<<<<<< HEAD
                 this.fetchHandler('post', '/trails/filter', 'filter')
             },
             progressStatusFilter(value) {
                 this.fetchData.status = value
                 this.fetchHandler('post', '/trails/filter', 'filter')
-=======
                 this.fetchHandler('get', '/trails/filter')
             },
             progressStatusFilter(value) {
                 this.fetchData.status = value
                 this.fetchHandler('get', '/trails/filter')
->>>>>>> c1aeea4a74a312287c7683b692ade30152f8da5b
             },
             getSales: function (pageNum = 1) {
                 let _this = this;
@@ -521,10 +485,7 @@
                     page: pageNum,
                     include: 'principal,client,expectations',
                 };
-<<<<<<< HEAD
                 Object.assign(data, this.fetchData)
-=======
->>>>>>> c1aeea4a74a312287c7683b692ade30152f8da5b
                 fetch('get', '/trails', data).then(function (response) {
                     _this.trailsInfo = response.data;
                     _this.total = response.meta.pagination.total;
@@ -565,19 +526,6 @@
                 })
             },
             customize: function (value) {
-<<<<<<< HEAD
-                // let _this = this
-                this.customizeCondition = value
-                this.fetchHandler('post', '/trails/filter', 'filter')
-                // fetch('post', '/trails/filter?include=principal,client,contact,recommendations,expectations', value).then((params) => {
-                //     _this.trailsInfo = params.data
-                //     _this.total = params.meta.pagination.total;
-                //     _this.total_pages = params.meta.pagination.total_pages;
-                //     _this.current_page = params.meta.pagination.current_page
-                //     _this.cleanUp = true
-                // })
-
-=======
                 let _this = this
                 fetch('post', '/trails/filter?include=principal,client,contact,recommendations,expectations', value).then((params) => {
                     _this.trailsInfo = params.data
@@ -586,7 +534,6 @@
                     _this.current_page = params.meta.pagination.current_page
                     _this.cleanUp = true
                 })
->>>>>>> c1aeea4a74a312287c7683b692ade30152f8da5b
             },
             addTrail: function () {
                 let data = {
@@ -751,24 +698,25 @@
         border: 1px solid red;
         border-radius: 5px;
     }
+
     .clear-principal-filter {
         cursor: pointer;
     }
+
     .trial-origin .require::before {
         margin-left: 9px;
         line-height: 34px;
     }
+
     table tbody tr {
         cursor: pointer;
     }
+
     .modal-body .example {
         display: flex;
         align-items: center;
     }
 </style>
-
-
-
 
 
 © 2019 GitHub, Inc.
