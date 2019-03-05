@@ -31,8 +31,8 @@
             <!-- <p>{{item.fileName.split('.')[0]}}</p> -->
         </figure>
             <div>
-                <input type="file" @change="uploadFile" id="fileUploader" v-show="false"/>
-                <label for="fileUploader" class="pt-10 noselect" style="color:#00bcd4">
+                <input type="file" @change="uploadFile" :id="'fileUploader'+consdata[0].id" v-show="false"/>
+                <label :for="'fileUploader'+consdata[0].id" class="pt-10 noselect" style="color:#00bcd4">
                 <template>
                     上传附件
                 </template>
