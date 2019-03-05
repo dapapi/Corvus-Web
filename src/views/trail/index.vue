@@ -2,7 +2,10 @@
     <div class="page">
         <Loading :is-loading="isLoading"></Loading>
         <div class="page-header page-header-bordered">
-            <h1 class="page-title">销售线索管理</h1>
+            <h1 class="page-title">销售线索管理
+                <span style="color: #3298dc;" class="pl-20 font-size-20 pointer-content" @click="redirectPublicTrail"><i
+                        class="iconfont icon-jiantou_xiayiye font-size-22 pr-5"></i>公海池</span>
+            </h1>
             <div class="page-header-actions">
                 <import-and-export class="float-left" :type="'import'" :moduleName="'trails'">
                     <i class="iconfont icon-daochu font-size-20 pr-20" aria-hidden="true"></i>
@@ -11,10 +14,6 @@
                     <i class="iconfont icon-daoru px-5 font-size-20 " aria-hidden="true"></i>
                 </import-and-export>
             </div>
-            <!-- <div class="page-header-actions">
-                <i class="iconfont icon-daoru px-5 font-size-20 pr-20" aria-hidden="true"></i>
-                <i class="iconfont icon-daochu font-size-20" aria-hidden="true"></i>
-            </div> -->
         </div>
 
         <div class="page-content container-fluid">
@@ -203,7 +202,8 @@
                         <div class="example">
                             <div class="col-md-2 text-right float-left require">预计订单收入</div>
                             <div class="col-md-5 float-left pl-0 pr-0">
-                                <number-spinner @change="changeTrailFee" :min="0" :max="1000000000" :precision="2" :value="0"></number-spinner>
+                                <number-spinner @change="changeTrailFee" :min="0" :max="1000000000" :precision="2"
+                                                :value="0"></number-spinner>
                             </div>
                             <div class="col-md-3 float-left" v-if="trailType == 4">
                                 <div class="checkbox-custom checkbox-primary">
@@ -239,8 +239,9 @@
     import {mapState} from 'vuex'
     import Cookies from 'js-cookie'
     import ImportAndExport from '@/components/ImportAndExport.vue'
+
     export default {
-         components: {
+        components: {
             ImportAndExport
         },
         data: function () {
@@ -314,7 +315,8 @@
                 isLoading: true,
                 cleanUp: false,
                 trailIsLocked: '',
-                exportParams:{},//导出参数
+                exportParams: {},//导出参数
+                customizeCondition: {}
             }
         },
         created() {
@@ -444,14 +446,17 @@
                     return true
                 }
             },
+            redirectPublicTrail() {
+                this.$router.push({path: '/publictrails'})
+            },
             fetchHandler(methods, url) {
                 let _this = this
                 this.fetchData.include = 'principal,client,contact,recommendations,expectations'
                 console.log(this.fetchData)
-                this.exportParams ={
+                this.exportParams = {
                     keyword: this.fetchData.keyword,
                     status: this.fetchData.status,
-                    principal_ids:this.fetchData.principal_ids,
+                    principal_ids: this.fetchData.principal_ids,
                 }
                 fetch(methods, url, this.fetchData).then((response) => {
                     _this.trailsInfo = response.data
@@ -463,6 +468,11 @@
             },
             filterGo() {
                 this.fetchData.keyword = this.trailFilter
+                this.fetchHandler('post', '/trails/filter', 'filter')
+            },
+            progressStatusFilter(value) {
+                this.fetchData.status = value
+                this.fetchHandler('post', '/trails/filter', 'filter')
                 this.fetchHandler('get', '/trails/filter')
             },
             progressStatusFilter(value) {
@@ -475,6 +485,7 @@
                     page: pageNum,
                     include: 'principal,client,expectations',
                 };
+                Object.assign(data, this.fetchData)
                 fetch('get', '/trails', data).then(function (response) {
                     _this.trailsInfo = response.data;
                     _this.total = response.meta.pagination.total;
@@ -687,24 +698,25 @@
         border: 1px solid red;
         border-radius: 5px;
     }
+
     .clear-principal-filter {
         cursor: pointer;
     }
+
     .trial-origin .require::before {
         margin-left: 9px;
         line-height: 34px;
     }
+
     table tbody tr {
         cursor: pointer;
     }
+
     .modal-body .example {
         display: flex;
         align-items: center;
     }
 </style>
-
-
-
 
 
 © 2019 GitHub, Inc.

@@ -20,7 +20,8 @@
                                 <span class="hover-icon"><img :src="menu.hoverImage" alt=""></span>
                             </div>
                             <span class="site-menu-title">{{ menu.name }}</span>
-                            <span v-if="menu.name =='我的'&&unReadMsg>0" class="unRead ml-5" :class="unReadMsg>=100?'unReadLine':''">
+                            <span v-if="menu.name =='我的'&&unReadMsg>0" class="unRead ml-5"
+                                  :class="unReadMsg>=100?'unReadLine':''">
                                 <template v-if="unReadMsg>=100">...</template>
                                 <template v-else>{{unReadMsg}}</template>
                             </span>
@@ -33,7 +34,8 @@
                                 <span class="hover-icon"><img :src="menu.hoverImage" alt=""></span>
                             </div>
                             <span class="site-menu-title">{{ menu.name }}</span>
-                            <span v-if="menu.name =='我的'&&unReadMsg>0" class="unRead ml-5" :class="unReadMsg>=100?'unReadLine':''">
+                            <span v-if="menu.name =='我的'&&unReadMsg>0" class="unRead ml-5"
+                                  :class="unReadMsg>=100?'unReadLine':''">
                                 <template v-if="unReadMsg>=100">...</template>
                                 <template v-else>{{unReadMsg}}</template>
                             </span>
@@ -80,14 +82,14 @@
                         code: 'my',
                         image: 'https://res-crm.papitube.com/image/login-icon/wode.png',
                         hoverImage: 'https://res-crm.papitube.com/image/login-icon/select-wode.png',
-                        data:[
+                        data: [
                             {
-                                name:'工作台',
-                                code:'my'
+                                name: '工作台',
+                                code: 'my'
                             },
                             {
-                                name:'报表',
-                                code:'reports'
+                                name: '报表',
+                                code: 'reports'
                             }
                         ]
                     },
@@ -137,7 +139,7 @@
                         name: '人事',
                         image: 'https://res-crm.papitube.com/image/login-icon/renshi.png',
                         hoverImage: 'https://res-crm.papitube.com/image/login-icon/select-renshi.png',
-                        data:[
+                        data: [
                             {
                                 name: '公告',
                                 code: 'broadcast'
@@ -146,14 +148,14 @@
                                 name: '通讯录',
                                 code: 'address'
                             },
-                            {
-                                name: '简报',
-                                code: 'brief'
-                            },
-                            {
-                                name: '仪表盘',
-                                code: 'dashboard'
-                            }
+                            // {
+                            //     name: '简报',
+                            //     code: 'brief'
+                            // },
+                            // {
+                            //     name: '仪表盘',
+                            //     code: 'dashboard'
+                            // }
                         ]
                     }
                 ],
@@ -169,11 +171,9 @@
             ])
         },
         mounted() {
-            // console.log(JSON.parse(Cookies.get('user')).avatar)
-            if(Cookies.get('user')){
-                 this.avatar = JSON.parse(Cookies.get('user')).avatar;
+            if (Cookies.get('user')) {
+                this.avatar = JSON.parse(Cookies.get('user')).avatar;
             }
-            // console.log(this.avatar)
             document.body.onclick = () => {
                 this.visible = false
             }
@@ -182,7 +182,7 @@
             '$route'(to, from) {
                 this.pageRoute = to.path.split('/')[1];
             },
-            
+
         },
         methods: {
             showBackModel() {
@@ -212,9 +212,10 @@
 </script>
 
 <style scoped>
-    .site-menu{
-        margin-bottom:54px;
+    .site-menu {
+        margin-bottom: 54px;
     }
+
     .site-menu-item a img {
         width: 30%;
         height: auto;
@@ -313,12 +314,14 @@
         line-height: 16px;
         border-radius: 50%;
         position: absolute;
-        top:8px;
+        top: 8px;
         right: 22px;
     }
-    .unReadLine{
+
+    .unReadLine {
         line-height: 12px;
     }
+
     .site-menu-item {
         position: relative;
     }
