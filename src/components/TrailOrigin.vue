@@ -17,7 +17,7 @@
                     </div>
                 </template>
                 <template v-else-if="(trailOrigin == 4 || trailOrigin == 5)">
-                    <div class="col-md-6 float-left pr-0">
+                    <div class="col-md-6 float-left pr-0" style='z-index:20;'>
                         <input-selectors @change="changeTrailOrigin" :placeholder='memberFinder' type="selector" class="test" :submit='submit'
                                          :propSelectMemberName='trailOriginPerson.name'></input-selectors>
                     </div>

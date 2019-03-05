@@ -4,11 +4,11 @@
         <div class="page-header page-header-bordered">
             <h1 class="page-title">销售线索管理</h1>
             <div class="page-header-actions">
-                <import-and-export class="float-left" :type="'export'" :moduleName="'trails'" :params="exportParams">
-                    <i class="iconfont icon-daoru px-5 font-size-20 pr-20" aria-hidden="true"></i>
-                </import-and-export>
                 <import-and-export class="float-left" :type="'import'" :moduleName="'trails'">
-                    <i class="iconfont icon-daochu font-size-20" aria-hidden="true"></i>
+                    <i class="iconfont icon-daochu font-size-20 pr-20" aria-hidden="true"></i>
+                </import-and-export>
+                <import-and-export class="float-left" :type="'export'" :moduleName="'trails'" :params="exportParams">
+                    <i class="iconfont icon-daoru px-5 font-size-20 " aria-hidden="true"></i>
                 </import-and-export>
             </div>
             <!-- <div class="page-header-actions">
