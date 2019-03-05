@@ -178,6 +178,7 @@
 <script>
 import fetch from "../../assets/utils/fetch.js";
 import config from "../../assets/js/config";
+import env from "../../assets/js/env";
 
 export default {
   name: "",
@@ -243,8 +244,8 @@ export default {
 
       $.ajax({
         type: "get",
-        url: config.apiUrl + "/tasks/my",
-        headers: config.getHeaders(),
+        url: env.apiUrl + "/tasks/my",
+        headers: env.getHeaders(),
         data: data
       }).done(function(response) {
         _this.tasksInfo = response.data;
@@ -275,8 +276,8 @@ export default {
       };
       $.ajax({
         type: "post",
-        url: config.apiUrl + "/tasks",
-        headers: config.getHeaders(),
+        url: env.apiUrl + "/tasks",
+        headers: env.getHeaders(),
         data: data,
         statusCode: {
           400: function(response) {

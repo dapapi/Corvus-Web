@@ -2539,13 +2539,11 @@
             addInfo: function (value, name) {
                 if (name === this.cooperationKeyId) {
                     this.cooperationOther = value;
-                    console.log(this.cooperationOther)
                 }
                 if (this.projectInfo.fields.find(item => item.id == name).values.data.value == value) {
                     return
                 }
                 this.addInfoArr[name] = value
-                console.log(this.cooperationOther)
             },
 
             changeToastrText: function (status) {

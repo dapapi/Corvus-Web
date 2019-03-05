@@ -8,7 +8,7 @@
 
 import fetch from '@/assets/utils/fetch'
 import secondLeft from '@/components/SecondLeft.vue'
-import config from '@/assets/js/config'
+import env from '@/assets/js/env'
 export default {
      components:{
        secondLeft
@@ -73,7 +73,7 @@ export default {
             this.getlist()
         },
         getlist:function(){
-            fetch('get',`${config.apiUrl}/launch`).then((res) => {
+            fetch('get',`${env.apiUrl}/launch`).then((res) => {
                 let data={}
                 for (let i = 0; i < this.leftData.length; i++) {
                     if(this.leftData[i].id == 3){

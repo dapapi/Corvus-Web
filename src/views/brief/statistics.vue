@@ -97,6 +97,7 @@
 <script>
 import fetch from '@/assets/utils/fetch'
 import config from '@/assets/js/config'
+import env from '@/assets/js/env'
 import switchTimeDetails from '@/components/switchTimeDetails.vue'
 export default {
     data(){
@@ -160,7 +161,7 @@ export default {
                 start_time:this.start_time
             }
 
-            fetch('get',`${config.apiUrl}/review/member/statistic`,data).then((res) => {
+            fetch('get',`${env.apiUrl}/review/member/statistic`,data).then((res) => {
                 _this.list = res.data
                 let newList = []
                 if(_this.list.length>0){

@@ -1,7 +1,7 @@
 <template>
-    <div class="page-main" style="background-color:#f3f4f5">
+    <div class="page">
         <div class="page-header page-header-bordered">
-            <h1 class="page-title">项目管理</h1>
+            <h1 class="page-title">账号设置</h1>
         </div>
 
         <div class="page-content container-fluid">
@@ -88,7 +88,7 @@
                          <div class="example" style="margin-top: -20px">
                             <div class="float-left" style="width: 40px;">职位</div>
                             <div class="float-left pl-0" style="width: 240px;">
-                                <selectors ref="jobEl" :options="jobArr" @change="changeJob"></selectors>
+                                <selectors ref="jobEl" :unAutoDrop="true" :options="jobArr" @change="changeJob"></selectors>
                             </div>
                         </div>
                         <div class="example mt-10 mb-20">
@@ -162,6 +162,8 @@ export default {
                 newpassword: this.newPwd
             }
             fetch('put', `/users/${this.userId}`, params).then(res => {
+                this.oldPwd = ''
+                this.newPwd = ''
                 toastr.success('密码修改成功')
             })
         },

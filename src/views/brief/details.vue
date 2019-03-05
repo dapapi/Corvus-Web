@@ -95,7 +95,7 @@
 </template>
 <script>
 import fetch from '@/assets/utils/fetch'
-import config from '@/assets/js/config'
+import env from '@/assets/js/env'
 import numberinput from '@/components/numberInput'
 import checkbox from '@/components/checkbox'
 import switchTimeDetails from '@/components/switchTimeDetails.vue'
@@ -148,7 +148,7 @@ export default {
         //获取所有的问题
         getAll:function(){
             this.template_name = this.$route.query.name
-            fetch('get',`${config.apiUrl}/launch/all`,{accessory:this.accessory,start_time:this.startTime,end_time:this.endTime}).then((res) => {
+            fetch('get',`${env.apiUrl}/launch/all`,{accessory:this.accessory,start_time:this.startTime,end_time:this.endTime}).then((res) => {
                 this.quesList = res.data
                 this.isEdit = true
                 this.getData()
@@ -208,7 +208,7 @@ export default {
                 size:size,
                 type:1
             }
-            fetch('put',`${config.apiUrl}/reports/${id}/affix`,data).then((res) => {
+            fetch('put',`${env.apiUrl}/reports/${id}/affix`,data).then((res) => {
                 this.taskList = res.data
             })
         },
@@ -219,7 +219,7 @@ export default {
         },
         //获取任务列表
         getTaskList:function(){
-            fetch('get',`${config.apiUrl}/tasks/my?status=0`).then((res) => {
+            fetch('get',`${env.apiUrl}/tasks/my?status=0`).then((res) => {
                 this.taskList = res.data
             })
         },
@@ -240,13 +240,13 @@ export default {
                     this.submitAnswerData[key] =JSON.stringify(this.submitAnswerData[key]) 
                 }
             }
-            fetch('post',`${config.apiUrl}/launch`,this.submitAnswerData).then((res) => {
+            fetch('post',`${env.apiUrl}/launch`,this.submitAnswerData).then((res) => {
                toastr.success('提交成功');
                 
             })
         },
         modify:function(){
-            fetch('post',`${config.apiUrl}/launch`,this.submitAnswerData).then((res) => {
+            fetch('post',`${env.apiUrl}/launch`,this.submitAnswerData).then((res) => {
                toastr.success('提交成功');
                 
             })
@@ -255,7 +255,7 @@ export default {
         draft:function(){
             this.submitAnswerData.reviewer_id = this.$store.state.newPrincipalInfo.id
             this.submitAnswerData.accessory = this.$route.query.id
-            fetch('post',`${config.apiUrl}/launch/${this.$route.query.id}/draft`,this.submitAnswerData).then((res) => {
+            fetch('post',`${env.apiUrl}/launch/${this.$route.query.id}/draft`,this.submitAnswerData).then((res) => {
                toastr.success('保存草稿成功');
                 
             })

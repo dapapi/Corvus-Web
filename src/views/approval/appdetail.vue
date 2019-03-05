@@ -1,6 +1,18 @@
 <template>
     <div class="page-main" style="background-color:#f3f4f5">
-        <Loading :is-loading="isLoading"></Loading>
+        <!-- <Loading :is-loading="isLoading"></Loading> -->
+        <div class="loader-overlay" v-if="isLoading">
+                <div class="loader-content">
+                    <div class="loader-index">
+                    <div></div>
+                    <div></div>
+                    <div></div>
+                    <div></div>
+                    <div></div>
+                    <div></div>
+                    </div>
+                </div>
+            </div>
         <div>
             <div class="page-header page-header-bordered mb-0">
                 <h6 class="page-title nav-head" v-if="info">
@@ -31,6 +43,7 @@
                     <span v-if="list.form_status=== 231">&nbsp;{{currentStatus.slice(0,1)}}{{pending.name}}{{currentStatus.slice(1)}}</span>
                     <span v-if="list.form_status !== 231">{{pending.name}}{{currentStatus}}</span>
                     <i v-if="list.form_status==232 && (info.approval.user_id === currentId || (list.creator && list.creator.data.id === currentId)) ">
+                        <button class="btn btn-success" v-if="info.contract" @click='approvalHandler("archive")'>归档</button>
                         <button class="btn btn-primary" @click='approvalHandler("discard")'>作废</button>
                     </i>
                     <i v-if="list.form_status==231 && (info.approval.user_id === currentId || (list.creator && list.creator.data.id === currentId)) ">
@@ -170,7 +183,9 @@
                     </div>
                 </div>
             </div>
-            <DocPreview :url='previewUrl' detailpage='true'/>
+         <DocPreview :url='$store.state.previewurl' detailpage='true' />
+
+            <!-- <DocPreview :url='previewUrl' detailpage='true'/> -->
         </div>
         <BuildProject :project-type="projectTypeTemp" :project-fields-arr="projectFieldsArr" mode='detail'
                       :default-data='{fields:(info.fields && info.fields.data),list:list,trailInfo:trailInfo}'></BuildProject>
@@ -204,9 +219,8 @@
 
 </template>
 <script>
-    import fetch from '@/assets/utils/fetch.js'
-    import config from '@/assets/js/config'
-    import {PROJECT_CONFIG} from '@/views/approval/project/projectConfig.js'
+    import fetch from '@/assets/utils/fetch'
+    import {PROJECT_CONFIG} from '@/views/approval/project/projectConfig'
     import ApprovalGreatModule from '@/components/ApprovalGreatModule'
     import ApprovalProgress from '@/components/ForApproval/ApprovalProgress'
 
@@ -275,6 +289,7 @@
                 })
             },
             previewHandler(params) {
+            this.$store.dispatch('changePreview',params)
                 $('#docPreviewSelector').modal('hide')
                 this.previewUrlArr = String(params).split(',')
                 if (this.previewUrlArr.length === 1) {
@@ -305,6 +320,7 @@
                 }
                 this.getData()
                 toastr.success('审批成功')
+                this.$emit('unreadupdate')
             },
             getCurrentApprover() {
                 let _this = this
@@ -344,7 +360,6 @@
 
             },
             addProject(value) {
-                console.log(value);
                 this.projectType = value;
                 let _this = this
                 if (this.list.title.includes('合同')) {
@@ -441,7 +456,7 @@
     }
 
     .loader-overlay {
-        margin-left: 320px;
+        margin-left: 300px;
         background-color: rgba(7, 17, 27, 0.2)
     }
 

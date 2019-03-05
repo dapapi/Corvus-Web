@@ -2459,6 +2459,7 @@
             contractlist(status) {
                 this.isDetail = false
                 let _this = this;
+                this.isDetail = false
                 let data = {
                     type: this.contractType
                 }
