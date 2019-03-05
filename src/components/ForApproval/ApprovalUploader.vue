@@ -57,6 +57,7 @@ export default {
         }
     },
     mounted () {
+        console.log(this.consdata);
     },
     computed:{
         // imageUrl(){
@@ -94,6 +95,7 @@ export default {
             this.$emit('change',{key:id,value:this.fileInfo,type:related_field})
         },
         uploadFile(e) {
+            console.log(e);
             let file = e.target.files[0];
             let putExtra = null;
             let type = file.type.split('/');
