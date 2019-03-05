@@ -177,7 +177,7 @@ export default {
     font-size: 5px;
 }
 .loader-overlay{
-        margin-left: 100px;
+        margin-left: 80px;
         background-color: rgba(7, 17, 27, 0.2)
 }
 table tbody tr {
