@@ -31,8 +31,8 @@
             <!-- <p>{{item.fileName.split('.')[0]}}</p> -->
         </figure>
             <div>
-                <input type="file" @change="uploadFile" id="fileUploader" v-show="false"/>
-                <label for="fileUploader" class="pt-10 noselect" style="color:#00bcd4">
+                <input type="file" @change="uploadFile" :id="'fileUploader'+consdata[0].id" v-show="false"/>
+                <label :for="'fileUploader'+consdata[0].id" class="pt-10 noselect" style="color:#00bcd4">
                 <template>
                     上传附件
                 </template>
@@ -57,6 +57,7 @@ export default {
         }
     },
     mounted () {
+        console.log(this.consdata);
     },
     computed:{
         // imageUrl(){
@@ -94,6 +95,7 @@ export default {
             this.$emit('change',{key:id,value:this.fileInfo,type:related_field})
         },
         uploadFile(e) {
+            console.log(e);
             let file = e.target.files[0];
             let putExtra = null;
             let type = file.type.split('/');
@@ -111,7 +113,6 @@ export default {
             let fileSize = file.size;
             let _this = this;
             this.getQiniuAccessToken((token) => {
-                console.log(token,'token');
                 let observable = qiniu.upload(file, key, token, putExtra, conf);
                 let subscription = observable.subscribe(function (res) {
                 }, function (error) {

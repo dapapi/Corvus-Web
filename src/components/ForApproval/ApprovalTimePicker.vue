@@ -1,7 +1,7 @@
 <template>
     <div class="col-md-12 approval-text-container pl-0" >
         <span class="col-md-2 text-right pl-0" :class="consdata[0].required===1?'require':''">{{title || consdata[0].control_title || "时间选择器测试"}}</span>
-        <datepicker class="col-md-6 time-picker " :disabled="isDisabled" :startDate="start_date" :infinite='consdata[0].related_field==="contract_end_date"' :class="consdata[0].control_data_select_format==94?'col-md-5 pl-0':'col-md-10'" :default='defaultDate' v-if="!duration" :placeholder="consdata[0].control_placeholder" @change='ymdPicker' :clear='clear' />
+        <datepicker class="col-md-6 time-picker " :disabled="isDisabled" :startDate="start_date" :infinite='consdata[0].indefinite_show==="1"' :class="consdata[0].control_data_select_format==94?'col-md-5 pl-0':'col-md-10'" :default='defaultDate' v-if="!duration" :placeholder="consdata[0].control_placeholder" @change='ymdPicker' :clear='clear' />
         <timepicker class="col-md-4 clearfix" :disabled="isDisabled" v-if="consdata[0].control_data_select_format==94" @change='hmsPicker'/>
     </div>
 </template>

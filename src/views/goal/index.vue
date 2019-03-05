@@ -3,6 +3,10 @@
         <Loading :is-loading="isLoading"></Loading>
         <div class="page-header page-header-bordered my-1 ">
             <h1 class="page-title">目标管理</h1>
+            <div class="float-right goals-range">2019年Q1季度</div>
+            <div class="float-right goals-add"  data-toggle="modal" 
+            data-target="#goals-add" >+新建目标</div>
+
         </div>
         <div class="page-header page-header-bordered py-0">
             <ul class="nav nav-tabs nav-tabs-line" role="tablist" style="position: relative;">
@@ -28,15 +32,52 @@
                         </li>
                     </ul>
         </div>
-        <div class="row mx-10">
-            <div class=" col-md-5 panel mx-20">
-                aaaaaa
+        <div class="row mx-20">
+            <div class="col-md-5 pl-25 mr-0 pr-0">
+                <div class="panel row float-left  " style="width:100%">
+                    <dir class="col-md-4">
+                        <div class="total-goals-logo">456个</div>
+                        <div class="total-goals-title">目标总数</div>
+                    </dir>
+                    <div class="col-md-8 py-20">
+                        <div class="py-10 progress-bar-test">
+                            <div class="progress progress-sm py-0 my-0">
+                                <div class="progress-bar progress-bar-indicating active" style="width: 40%;" role="progressbar"></div>
+                            </div>
+                            <div>
+                                <span>已完成<span style="color:#00bcd4"> 1个</span></span>
+                                <span class="float-right">待完成800个</span>
+                            </div>
+                        </div>
+                        <div class="py-10 progress-bar-test">
+                            <div class="progress progress-sm py-0 my-0">
+                                <div class="progress-bar progress-bar-indicating active" style="width: 40%;" role="progressbar"></div>
+                            </div>
+                            <div>
+                                <span>近七天更新<span style="color:#00bcd4"> 100个</span></span>
+                            </div>
+                        </div>
+                        <div class="py-10 progress-bar-test">
+                            <div class="progress progress-sm py-0 my-0">
+                                <div class="progress-bar progress-bar-indicating active" style="width: 23%;" role="progressbar"></div>
+                            </div>
+                            <div>
+                                <span>平均完成度<span style="color:#00bcd4;">23%</span></span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
             </div>
-            <div class=" col-md-5 panel mx-20">
-                aaaaa
+            <div class="col-md-7">
+                <div class="panel px-30" style="height:183px;font-size:18px;">
+                    <div class="py-20"><span style="color:#ff9800;">你真棒！</span>请继续努力～</div>
+                    <div class="mx-5 row " style="width:100%;height:100px;border-radius:50px;background-color:rgba(7,17,27,0.04);">
+                        <div class="goals-percent-logo">74%</div>
+                        <span class="ml-20" style="line-height:100px">今年较去年目标完成度同期增长/降低<span><strong> 23%</strong></span></span></div>
+                </div>
             </div>
         </div>
-        <div class="page-content container-fluid">
+        <div class="page-content container-fluid pt-0 mt-0">
             <div class="panel col-md-12 col-lg-12 py-5">
                 <div class="clearfix">
                     <div class="col-md-3 example float-left">
@@ -98,13 +139,13 @@
                     </ul>
                 </div> -->
 
-                <div class="page-content tab-content nav-tabs-animate bg-white pb-0">
+                <div class="page-content tab-content nav-tabs-animate bg-white pt-0">
                     <div class="tab-pane animation-fade active" id="forum-task" role="tabpanel">
                         <table class="table table-hover is-indent" data-plugin="animateList" data-animate="fade"
                                 data-child="tr"
                                 data-selectable="selectable">
-                            <tr class="animation-fade"
-                                style="animation-fill-mode: backwards; animation-duration: 250ms; animation-delay: 0ms;">
+                            <tr class="animation-fade" 
+                                style="animation-fill-mode: backwards; animation-duration: 250ms; animation-delay: 0ms; border-bottom:1px solid rgba(7,17,27,0.2);">
                                 <th class="cell-300" scope="col">目标名称</th>
                                 <th class="cell-300" scope="col">父/子</th>
                                 <th class="cell-300" scope="col">负责人</th>
@@ -160,128 +201,21 @@
                         </template>
                     </div>
                 </div>
-                <div class="site-action" data-plugin="actionBtn" data-toggle="modal" data-target="#addTask">
-            <button type="button"
-                    class="site-action-toggle btn-raised btn btn-success btn-floating waves-effect waves-classic">
-                <i class="front-icon iconfont icon-tianjia1 animation-scale-up" aria-hidden="true"
-                   style="font-size:30px"></i>
-                <i class="back-icon iconfont icon-tianjia1 animation-scale-up" aria-hidden="true"
-                   style="font-size:30px"></i>
-            </button>
-        </div>
-
-        <div class="modal fade"
-             id="addTask"
-             aria-hidden="true"
-             aria-labelledby="addLabelForm"
-             role="dialog"
-             data-backdrop="static"
-             tabindex="-1">
-            <div class="modal-dialog modal-simple">
-                <div class="modal-content">
-                    <div class="modal-header">
-                        <button type="button" class="close" aria-hidden="true" data-dismiss="modal">
-                            <i class="iconfont icon-guanbi" aria-hidden="true"></i>
-                        </button>
-                        <h4 class="modal-title">新增任务</h4>
-                    </div>
-                    <div class="modal-body">
-                        <div class="example">
-                            <div class="col-md-2 text-right float-left">关联资源</div>
-                            <div class="col-md-10 float-left">
-                                <normal-linkage-selectors ref="linkage" v-if="linkData.length>0" :myData="linkData"
-                                                          :data="linkData"
-                                                          @change="addLinkage"></normal-linkage-selectors>
-                            </div>
-                        </div>
-                        <div class="example">
-                            <div class="col-md-2 text-right float-left require">任务类型</div>
-                            <div class="col-md-10 float-left pl-0">
-                                <Selectors :options="taskTypeArr" ref="taskType"
-                                           @change="changeTaskType"></Selectors>
-                            </div>
-                        </div>
-                        <div class="example">
-                            <div class="col-md-2 text-right float-left require">任务名称</div>
-                            <div class="col-md-10 float-left pl-0">
-                                <input type="text" class="form-control" placeholder="请输入任务名称" v-model="taskName">
-                            </div>
-                        </div>
-                        <div class="example">
-                            <div class="col-md-2 text-right float-left require">负责人</div>
-                            <div class="col-md-5 float-left pl-0">
-                                <InputSelectors :placeholder="'请选择负责人'" @change="principalChange"></InputSelectors>
-                            </div>
-                        </div>
-                        <div class="example">
-                            <div class="col-md-2 text-right float-left">参与人</div>
-                            <div class="col-md-10 float-left pl-0">
-                                <AddMember @change="participantChange"></AddMember>
-                            </div>
-                        </div>
-                        <div class="example">
-                            <div class="col-md-2 text-right float-left pl-0 require">任务优先级</div>
-                            <div class="col-md-10 float-left pl-0">
-                                <Selectors
-                                        :options="taskLevelArr"
-                                        @change="changeTaskLevel"
-                                        ref="taskLevel"
-                                ></Selectors>
-                            </div>
-                        </div>
-                        <div class="example">
-                            <div class="col-md-2 text-right float-left require">开始时间</div>
-                            <div class="col-md-5 float-left pl-0">
-                                <Datepicker ref="startTime" @change="changeStartTime"></Datepicker>
-                            </div>
-                            <div class="col-md-5 float-left pl-0">
-                                <!-- <Timepicker ref="startMinutes" :default="startMinutes"
-                                            @change="changeStartMinutes"></Timepicker> -->
-                                <TimeChoice @change="changeStartMinutes" ref="startMinutes"></TimeChoice>
-                            </div>
-                        </div>
-                        <div class="example">
-                            <div class="col-md-2 text-right float-left require">截止时间</div>
-                            <div class="col-md-5 float-left pl-0">
-                                <Datepicker ref="endTime" @change="changeEndTime" :startDate="startTime"></Datepicker>
-                            </div>
-                            <div class="col-md-5 float-left pl-0">
-                                <!-- <Timepicker ref="endMinutes" :default="endMinutes"
-                                            @change="changeEndMinutes"></Timepicker> -->
-                                <TimeChoice @change="changeEndMinutes" ref="endMinutes"></TimeChoice>
-                            </div>
-                        </div>
-                        <div class="example">
-                            <div class="col-md-2 text-right float-left">任务说明</div>
-                            <div class="col-md-10 float-left pl-0">
-                        <textarea class="form-control"
-                          name="taskDescription"
-                          id
-                          cols="30"
-                          rows="5"
-                          title
-                          v-model="taskIntroduce"></textarea>
-                            </div>
-                        </div>
-                    </div>
-                    <div class="modal-footer">
-                        <button class="btn btn-sm btn-white btn-pure" data-dismiss="modal">取消</button>
-                        <button class="btn btn-primary" type="submit" @click="addTask">确定</button>
-                    </div>
-                </div>
             </div>
         </div>
-            </div>
-        </div>
+        <addGoals />
     </div>
 </template>
 <script>
     import fetch from "../../assets/utils/fetch.js";
     import config from "../../assets/js/config";
     import Cookies from 'js-cookie'
-
+    import addGoals from "./addGoals"
     const taskStatusArr = [{name: "全部", value: ""}, ...config.taskStatusArr];
     export default {
+        components:{
+            addGoals
+        },
         name: "",
         data() {
             return {
@@ -599,6 +533,61 @@
     };
 </script>
 <style>
+.goals-add{
+    position: relative;
+    width: 100px;
+    height: 30px;
+    right: 50px;
+    bottom: 30px;
+    font-size: 16px;
+    background-color: #3f51b5;
+    color: #fff;
+    border-radius: 20px;
+    text-align: center;
+    line-height: 30px;
+    cursor: pointer;
+}
+.goals-range{
+    position: relative;
+    line-height: 30px;
+    cursor: pointer;
+    font-size: 16px;
+    right: 20px;
+    bottom: 30px;
+}
+.progress-bar-test{
+    font-size: 10px;
+}
+.total-goals-logo{
+    background-image: url('../../assets/img/project_total.png');
+    width: 100px;
+    height: 100px;
+    background-size: contain;
+    margin:10px 0 0 10px;
+    line-height: 100px;
+    text-align: center;
+    font-size: 20px;
+    color: #3f51b5;
+    font-weight: 600;
+}
+.total-goals-title{
+    font-size: 10px;
+    text-align: center;
+    margin-left: 5px;
+    margin-top: 5px;
+}
+.goals-percent-logo{
+    background-image:url('../../assets/img/goals_percent.png');
+    width:80px;
+    height:80px;
+    margin: 10px 0 0 20px;
+    font-size: 20px;
+    font-weight: 600;
+    line-height: 80px;
+    text-align: center;
+    color: #ff9800;
+    background-size: contain;
+}
 .panel{
     box-shadow: 0 0 0 0;
 }
