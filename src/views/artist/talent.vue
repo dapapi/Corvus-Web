@@ -1074,7 +1074,6 @@
                 this.getBlogger()
             },
             customize: function (value) {
-                console.log(value)
                 
                 let _this = this
                 let data = {
@@ -1103,7 +1102,6 @@
                 // this.customizeInfo.name = this.currentpagename
                 this.customizeInfo.sign_contract_status = this.currentpagestatus
                 // this.customizeInfo.communication_status = this.currentcommunicationstatus
-                console.log(this.customizeInfo)
                 fetch('post', this.customizeContentType +'/filter?include=creator,affixes,publicity,operatelogs,contracts'+data.status +data.communication_status +data.name ,value).then(function (params) {
                 // fetch('post', '/'+this.customizeContentType+'/filter', value).then((params) => {
                     
@@ -1128,7 +1126,6 @@
             },
             //头像
             getUploadUrl(value) {
-                console.log(String(value).split('.').pop())
                 let Suffix = ['png', 'gif', 'bmp', 'jpg', 'jpeg']
                 if (Suffix.includes(String(value).split('.').pop())) {
                     this.uploadUrl = value
