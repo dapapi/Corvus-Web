@@ -1,7 +1,7 @@
 <template>
-    <div class="page-main" style="background-color:#f3f4f5">
+    <div class="page">
         <div class="page-header page-header-bordered">
-            <h1 class="page-title">项目管理</h1>
+            <h1 class="page-title">账号设置</h1>
         </div>
 
         <div class="page-content container-fluid">
@@ -88,7 +88,7 @@
                          <div class="example" style="margin-top: -20px">
                             <div class="float-left" style="width: 40px;">职位</div>
                             <div class="float-left pl-0" style="width: 240px;">
-                                <selectors ref="jobEl" :options="jobArr" @change="changeJob"></selectors>
+                                <selectors ref="jobEl" :unAutoDrop="true" :options="jobArr" @change="changeJob"></selectors>
                             </div>
                         </div>
                         <div class="example mt-10 mb-20">
@@ -162,6 +162,8 @@ export default {
                 newpassword: this.newPwd
             }
             fetch('put', `/users/${this.userId}`, params).then(res => {
+                this.oldPwd = ''
+                this.newPwd = ''
                 toastr.success('密码修改成功')
             })
         },
@@ -170,7 +172,7 @@ export default {
             fetch('get', '/users/my').then(res => {
                 this.userId = res.data.id
                 this.iconUrl = res.data.icon_url
-                this.job = res.data.position.id
+                this.job = res.data.position ? res.data.position.id : ''
                 this.$nextTick(() => {
                     this.$refs.jobEl.setValue(this.job)
                 })
@@ -180,8 +182,8 @@ export default {
         },
         // 获取职位列表
         getJobList () {
-            fetch('get', '/departments_jobs').then(res => {
-                this.jobArr = res.data.map(n => {
+            fetch('get', '/departments_position').then(res => {
+                this.jobArr = res.map(n => {
                     return {
                         name: n.name,
                         value: n.id

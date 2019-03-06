@@ -4,7 +4,8 @@
             <h1 class="page-title">博主报表</h1>
 
             <div class="page-header-actions">
-                <ImportAndExport class="float-left" :type="'export'" :moduleName="'reportfrom/bloggerreport'" :params="exportParams">
+                <ImportAndExport class="float-left" :type="'export'" :moduleName="'reportfrom/bloggerreport'"
+                                 :params="exportParams">
                     <i class="iconfont icon-daochu font-size-20" aria-hidden="true"></i>
                 </ImportAndExport>
             </div>
@@ -107,6 +108,10 @@
                                                    placeholder="线索数量"></Selectors>
                                     </th>
                                     <th class="cell-100" scope="col">预计订单收入</th>
+                                    <th class="cell-100" scope="col">
+                                        <Selectors :options="projectsNumArr" @change="changeProjectsNum"
+                                                   placeholder="项目数量"></Selectors>
+                                    </th>
                                     <th class="cell-100" scope="col">合同金额</th>
                                     <th class="cell-100" scope="col">花费金额</th>
                                 </template>
@@ -278,7 +283,10 @@
                     data.department = this.departmentId
                 }
                 if (this.trailsNum) {
-                    data.type = this.trailsNum
+                    data.trail_type = this.trailsNum
+                }
+                if (this.projectsNum) {
+                    data.project_type = this.projectsNum
                 }
                 this.exportParams = data;
                 this.$refs.timeInterval.setValue(start_time, end_time);
@@ -351,6 +359,11 @@
 
             changeTrailsNum(value) {
                 this.trailsNum = value;
+                this.getReport();
+            },
+
+            changeProjectsNum(value) {
+                this.projectsNum = value;
                 this.getReport();
             },
 

@@ -2246,7 +2246,8 @@
                     toastr.success('创建成功');
                     $('#addTask').modal('hide');
                     this.projectTasksInfo.push(response.data);
-                    this.getProjectTasking();
+                    // this.getProjectTasking();
+                    this.getProject();
                 })
             },
 
@@ -2539,13 +2540,11 @@
             addInfo: function (value, name) {
                 if (name === this.cooperationKeyId) {
                     this.cooperationOther = value;
-                    console.log(this.cooperationOther)
                 }
                 if (this.projectInfo.fields.find(item => item.id == name).values.data.value == value) {
                     return
                 }
                 this.addInfoArr[name] = value
-                console.log(this.cooperationOther)
             },
 
             changeToastrText: function (status) {

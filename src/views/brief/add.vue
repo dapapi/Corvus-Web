@@ -234,6 +234,7 @@
 <script>
 import fetch from '@/assets/utils/fetch'
 import config from '@/assets/js/config'
+import env from '@/assets/js/env'
 
 export default {
     data(){
@@ -291,7 +292,7 @@ export default {
             let data ={
                 page:pageNum
             }
-            fetch('get',`${config.apiUrl}/report`,data).then((res) => {
+            fetch('get',`${env.apiUrl}/report`,data).then((res) => {
                 this.list = res.data
                 this.current_page = res.meta.pagination.current_page
                 this.total_pages = res.meta.pagination.total_pages
@@ -352,7 +353,7 @@ export default {
             this.modelType == 'add'?url = '/report':url = `/report/${this.editId}`
             this.modelType == 'add'?type = 'post':type='put'
             
-            fetch(type,`${config.apiUrl}${url}`,this.addModelData).then((res) =>{
+            fetch(type,`${env.apiUrl}${url}`,this.addModelData).then((res) =>{
                 $('#addModelDetails').modal('hide')
                 this.getlist()
             })
@@ -367,14 +368,14 @@ export default {
             let data ={
                 template_id:this.delId
             }
-            fetch('delete',`${config.apiUrl}/report?all=${this.delId}`).then((res) =>{
+            fetch('delete',`${env.apiUrl}/report?all=${this.delId}`).then((res) =>{
                 $('#delModel').modal('hide')
                 _this.getlist()
             })
         },
         //检查模版名称是否存在
         // isExist:function(){
-        //     fetch('get',`${config.apiUrl}/report/all`,{template_name:this.addModelData.template_name}).then((res) =>{
+        //     fetch('get',`${env.apiUrl}/report/all`,{template_name:this.addModelData.template_name}).then((res) =>{
         //         if(res.data.length>0){
         //             alert('简报名称重复，请重新输入')
         //         }
@@ -388,7 +389,7 @@ export default {
         //问题
         getQuesList:function(id,pageNum = 1){
             this.addQuesData.accessory = id
-            fetch('get',`${config.apiUrl}/report/issues`,{id:id}).then((res) => {
+            fetch('get',`${env.apiUrl}/report/issues`,{id:id}).then((res) => {
                 
                 this.quesList = res.data
                 this.current_page = res.meta.pagination.current_page
@@ -432,7 +433,7 @@ export default {
             this.addQuesData.member_id = aUser.join(',')
             this.modelType == 'add'?url = '/report/issues':url = `/report/issues/${this.editQuesId}`
             this.modelType == 'add'?type = 'post':type='put'
-            fetch(type,`${config.apiUrl}${url}`,this.addQuesData).then((res) =>{
+            fetch(type,`${env.apiUrl}${url}`,this.addQuesData).then((res) =>{
                 $('#addQuesDetails').modal('hide')
                 this.getQuesList(this.addQuesData.accessory)
             })
@@ -446,7 +447,7 @@ export default {
         //删除问题
         deleteQues:function(){
 
-           fetch('delete',`${config.apiUrl}/report/issues?all=${this.delQuesId}`).then((res) =>{
+           fetch('delete',`${env.apiUrl}/report/issues?all=${this.delQuesId}`).then((res) =>{
                 $('#delQues').modal('hide')
                 this.getQuesList(this.addQuesData.accessory);
             })
@@ -476,7 +477,7 @@ export default {
                 other_id:other_id
 
             }
-            fetch('put',`${config.apiUrl}/report/issues/order/template`,data).then((res) =>{
+            fetch('put',`${env.apiUrl}/report/issues/order/template`,data).then((res) =>{
                
                 this.getQuesList(this.addQuesData.accessory);
             })

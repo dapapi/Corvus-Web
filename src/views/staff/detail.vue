@@ -104,10 +104,10 @@
                                 </div>
                             </upload> -->
                         <!-- </div> -->
-                            <Avatar v-if="!editInfo" :imgUrl="info.icon_url" style="width: 120px; height: 120px; font-size: 24px;" />
+                            <Avatar v-if="!editInfo" :imgUrl="iconUrlCopy" style="width: 120px; height: 120px; font-size: 24px;" />
                             <upload @change="uploadImg" v-else accept="image/png, image/jpeg, image/gif, image/jpg">
                                 <div class="upload-head">
-                                    <img v-if="info.icon_url" :src="info.icon_url" alt="头像" />
+                                    <img v-if="iconUrlCopy" :src="iconUrlCopy" alt="头像" />
                                     <template v-else>
                                         上传头像
                                     </template>
@@ -187,10 +187,10 @@
                                         </div>
                                     </upload> -->
                                     <!-- <Avatar v-if="!editDetail" :imgUrl="detail.idCardUrl" style="width: 60px; height: 60px; font-size: 24px;" /> -->
-                                    <img v-if="!editDetail" :src="detail.idCardUrl" style="width: 60px; height: 60px;" />
+                                    <img v-if="!editDetail" :src="detail.idCardUrl?detail.idCardUrl:'https://res-crm.papitube.com/image/artist-no-avatar.png'" style="width: 60px; height: 60px;" />
                                     <upload @change="uploadIDImg" v-else accept="image/png, image/jpeg, image/gif, image/jpg" class="idImg">
                                         <div class="upload-head">
-                                            <img v-if="detail.idCardUrl" :src="detail.idCardUrl" alt="头像" />
+                                            <img v-if="detail.idCardUrl" :src="detail.idCardUrl" alt="图片暂无" />
                                             <template v-else>
                                                 +
                                             </template>
@@ -519,6 +519,7 @@ export default {
             positiveStateArr: positiveStateArr,
             incomeTaxTypeArr: incomeTaxTypeArr,
             schoolRecordArr: schoolRecordArr, // 学历
+            iconUrlCopy: '', // 头像原始url
             info: {
                 name: '',
                 phone: '',
@@ -634,14 +635,10 @@ export default {
                 this.detail.hireShape = data.hire_shape && data.hire_shape != 0 ? data.hire_shape : ''
                 this.info.positionId = data.position ? data.position.data.id : ''
 
-                // 特殊处理
-                // this.info.workEmail = data.email
-                // this.detail.email = data.work_email || ''
-
                 this.info.email = data.email || ''
                 this.detail.workEmail = data.work_email || ''
-
-                console.log(this.info.email, this.detail.workEmail)
+                this.info.icon_url = ''
+                this.iconUrlCopy = data.icon_url
 
                 this.infoCopy = JSON.parse(JSON.stringify(this.info))
                 this.detailCopy = JSON.parse(JSON.stringify(this.detail))
@@ -811,6 +808,7 @@ export default {
     .upload-head {
         width: 60px;
         height: 60px;
+        line-height: 60px;
     }
 }
 </style>

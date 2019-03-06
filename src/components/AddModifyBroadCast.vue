@@ -104,7 +104,7 @@
 <script>
 import { mapState } from 'vuex'
 import fetch from '@/assets/utils/fetch.js'
-import config from '@/assets/js/config'
+import env from '@/assets/js/env'
 import RangeSelector from '@/components/RangeSelector'
 import * as qiniu from 'qiniu-js'
 export default {
@@ -210,7 +210,7 @@ export default {
                 }, function (error) {
                     console.log(error)
                 }, function (res) {
-                    let fileUrl = config.imgUrl + res.key;
+                    let fileUrl = env.imgUrl + res.key;
                     let fileName = file.name;
                     _this.msg += `<p><img src=${fileUrl} title=${fileName} style="max-width:100%;"/></p>`
                     _this.fileInfo.push({fileUrl, fileName, fileSize})
@@ -221,9 +221,8 @@ export default {
         getQiniuAccessToken: function (callback) {
             $.ajax({
                 type: 'get',
-                url: config.apiUrl + '/services/request_qiniu_token',
-                headers: config.getHeaders(),
-                // statusCode: config.getStatusCode()
+                url: env.apiUrl + '/services/request_qiniu_token',
+                headers: env.getHeaders(),
             }).done(function (response) {
                 callback(response.data.token)
             })
@@ -290,12 +289,10 @@ export default {
         },
         //公告范围选择（数组）
         changeDepartments(value){
-            console.log(value);
             this.scope = value
         },
         //公告类型选择
         changeClassify(value){
-            console.log(value);
             this.type = Number(value)
         },
         

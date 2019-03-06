@@ -106,7 +106,6 @@ export default {
             // this.$emit('change',this.multipleData)
         },
         saveChangeData(params,index){
-            console.log(params,index);
             this.changeData[index] = params
             this.isShowhandler(1)
         },

@@ -69,11 +69,6 @@
                         name: '员工档案',
                         code: 'staff',
                         icon: 'icon-yuangongdangan'
-                    },
-                    {
-                        name: '账号设置',
-                        code: 'setting',
-                        icon: 'icon-shezhi'
                     }
                 ],
                 pageRoute: '',

@@ -48,7 +48,6 @@
                         this.setValue(this.default)
 
                     })
-                    console.log(this.default);
                 }
             }
 

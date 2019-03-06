@@ -383,6 +383,7 @@
 <script>
     import fetch from '../../assets/utils/fetch.js'
     import config from '../../assets/js/config'
+    import env from '../../assets/js/env'
 
     export default {
         data: function () {
@@ -540,7 +541,7 @@
                     start_time:'2018-01-01',
                     end_time:'2018-12-01'
                 }
-                fetch('get',`${config.apiUrl}/attendance/calendar`,data).then((res) => {
+                fetch('get',`${env.apiUrl}/attendance/calendar`,data).then((res) => {
                      
                     
                 })

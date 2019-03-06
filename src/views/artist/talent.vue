@@ -72,7 +72,8 @@
                             <div class="col-md-3 example float-left">
                                 <selectors :options="signState" placeholder="请选择签约状态" @change="getSource"></selectors>
                             </div>
-                            <!-- <div class="col-md-3 example float-left">
+		            <!--
+                            <div class="col-md-3 example float-left">
                                 <button type="button" class="btn btn-default waves-effect waves-classic float-right"
                                         data-toggle="modal" data-target="#customizeContent"
                                         @click='customizeContentType="stars"'
@@ -169,11 +170,11 @@
                                     </template>
                                 </td>
                                 <td @click="redirectArtistDetail(artist.id)"
-                                    v-if="artistsInfo.find(item=>item.sign_contract_status==2)">{{
+                                    v-if="artistsInfo.find(item=>item.sign_contract_status==2)&&artist.contracts">{{
                                     artist.contracts.data.contract_start_date }}
                                 </td>
                                 <td @click="redirectArtistDetail(artist.id)"
-                                    v-if="artistsInfo.find(item=>item.sign_contract_status==3)">{{
+                                    v-if="artistsInfo.find(item=>item.sign_contract_status==3)&&artist.contracts">{{
                                     artist.contracts.data.contract_end_date}}
                                 </td>
                                 <td @click="redirectArtistDetail(artist.id)"
@@ -214,7 +215,8 @@
                             <div class="col-md-3 example float-left">
                                 <selectors :options="signState" @change="typeFilter" placeholder="请选择签约状态"></selectors>
                             </div>
-                            <!-- <div class="col-md-3 example float-left">
+		           <!--
+                            <div class="col-md-3 example float-left">
                                 <button type="button" class="btn btn-default waves-effect waves-classic float-right"
                                         data-toggle="modal" data-target="#customizeContent"
                                         @click='customizeContentType="bloggers"'
@@ -996,25 +998,31 @@
                 //博主状态
                 if (signStatus) {
                     this.blogStatus = signStatus
+                    this.getBlogger()
                 }
-                data.status = this.blogStatus
+                if(this.blogStatus){
+                    data.status = '&status='+this.blogStatus
+                }else{
+                    data.status = ''
+                }
                 //沟通状态
                 if (this.blogCommunication) {
-                    data.communication_status = this.blogCommunication
+                    data.communication_status = '&communication_status='+this.blogCommunication
+                    this.getBlogger()
+                }else{
+                    data.communication_status = ''
                 }
                 //博主名称
                 if (this.blogName) {
-                    data.name = this.blogName
+                    data.name = '&name='+this.blogName
+                    this.getBlogger()
+                }else{
+                    data.name = ''
                 }
-                data.page = page
-                //导出需要传的参数
-                this.exportParams = {
-                    status: this.blogStatus,
-                    communication_status: this.blogCommunication,
-                    name: this.blogName
-                }
-                fetch('get', '/bloggers', data).then(function (response) {
-                    if (response.data) {
+                data.page = '&page='+page
+                fetch('get', '/bloggers?include=type,creator,affixes,publicity,operatelogs,contracts'+data.status +data.communication_status +data.name +data.page ,this.customizeInfo).then(function (response) {
+                    
+                    if(response.data){
                         _this.bloggerInfo = response.data;
                     }
                     if (response.meta) {
@@ -1091,7 +1099,7 @@
                 this.customizeInfo = value
                 fetch('post', this.customizeContentType +'/filter?include=type,creator,affixes,publicity,operatelogs,contracts'+data.status +data.communication_status +data.name ,value).then(function (params) {
                 // fetch('post', '/'+this.customizeContentType+'/filter', value).then((params) => {
-                    
+                    console.log(params)
                     // _this.bloggerInfo =params.data
                     if (_this.customizeContentType == 'stars') {
                         _this.artistsInfo = params.data
@@ -1107,7 +1115,6 @@
             },
             //头像
             getUploadUrl(value) {
-                console.log(String(value).split('.').pop())
                 let Suffix = ['png', 'gif', 'bmp', 'jpg', 'jpeg']
                 if (Suffix.includes(String(value).split('.').pop())) {
                     this.uploadUrl = value

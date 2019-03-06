@@ -6,9 +6,7 @@
 </template>
 
 <script>
-    import fetch from '@/assets/utils/fetch'
     import secondLeft from '@/components/SecondLeft.vue'
-    import config from '@/assets/js/config'
     import {mapState, mapGetters,mapActions} from 'vuex'
     export default {
         components: {
@@ -46,7 +44,7 @@
                     //     level: 1,
                     // },
                     {
-                        id: 2,
+                        id: 1,
                         name: '我的消息',
                         url: '/my/message',
                         type: 'button',

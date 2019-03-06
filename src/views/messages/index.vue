@@ -44,8 +44,8 @@
                                                 <i class="iconfont  font-size-30 icon-color" :class="iconList[moduleList.find(item => item.id == moduleType).val]"></i>
                                             </div>
                                             <div class="float-left mb-10 col-md-11" style="margin-left:-10px">
-                                                <p class="mb-5"><span class="module_title mr-5 title">{{moduleList.find(item=>item.id ==moduleType).name}}助手</span><i class="timesR">{{item2.created_at}}</i></p>
-                                                <p class="desc txt font-size-16">{{item2.message_title}}</p>
+                                                <p class="text-left mb-5"><span class="module_title mr-5 title">{{moduleList.find(item=>item.id ==moduleType).name}}助手</span><i class="timesR">{{item2.created_at}}</i></p>
+                                                <p class="desc txt text-left font-size-16">{{item2.message_title}}</p>
                                             </div>
                                         </div>
                                         <div class="content py-15 pl-40 col-md-8 ml-80" @click="msgStatus(item2.message_id,item2.module,item2.module_data_id)">
@@ -171,9 +171,9 @@
 
 <script>
 import Main from './detail.vue';
-import messagesData from './messages.json'
 import fetch from '@/assets/utils/fetch'
 import config from '@/assets/js/config'
+import env from '@/assets/js/env'
 import {mapState, mapGetters,mapActions} from 'vuex'
 export default {
   name: 'messagesIndex',
@@ -235,8 +235,6 @@ export default {
   mounted() {
       //数据初始化
       this.getModule()
-      console.log(this.$route.fullPath)
-      
   },
   computed:{
       ...mapState([
@@ -276,7 +274,7 @@ export default {
     renderMsg:function(){
         if(this.$route.query.moduleType){
             this.moduleType = this.$route.query.moduleType
-            fetch('get',`${config.apiUrl}/getmsg?include=recive.data&module=${this.moduleType}&state=${this.state}`).then((res) => {
+            fetch('get',`${env.apiUrl}/getmsg?include=recive.data&module=${this.moduleType}&state=${this.state}`).then((res) => {
         
             this.messageList = res.data
         })
@@ -306,7 +304,7 @@ export default {
                 message_id:id
                 }
             }
-            fetch('get',`${config.apiUrl}/changestae`,data).then((res) => {
+            fetch('get',`${env.apiUrl}/changestae`,data).then((res) => {
                 this.getModule()
                 if(!type){
                     this.isAuthority(module_id,module_data_id)
@@ -327,7 +325,7 @@ export default {
             if(response.data.power === 'true'){
                 if(module_id == 214){
                     this.showScheduleModal(module_data_id)
-                }else if (module_id == 216){
+                }else if (module_id == 216 || module_id == 213){
                     
                     this.$router.push(`${this.msgLink.find(item =>item.value == module_id).name}/${module_data_id}?mode=approver`) 
                 }else{
