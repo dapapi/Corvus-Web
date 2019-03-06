@@ -13,7 +13,7 @@
                     <div class="modal-body modal-greater ">
                         <div v-for="(item, index) in moduleInfo" :key="index" class="great-option example ">
                             <div :is='sortChecker(item)' :ref='item[0].control.data_dictionary_id'
-                                 :consdata='item' :predata='sendData' class="container"
+                                 :consdata='item' :predata='sendData' class="container" @changestarttime='changestarttime'
                                  :singlemode='singlemode' :clear='clearFlag' :directional-sender='directionalData'
                                  @change="changeHandler" @directional='directionalWatcher' is-selectable='true'
                                  :formid='form_id' :startDate="start_date"></div>
@@ -208,12 +208,14 @@
                     })
                 }
             },
+            changestarttime(params){
+                if(params.type === 'start_time'){
+                    this.start_date = params.value
+                }
+            },
             changeHandler(params) {
                 if (this.formData.condition) {
                     this.trendApproverChecker(params)
-                }
-                if(params.type === 'contract_start_date'){
-                    this.start_date = params.value
                 }
                 if (!this.sendData.values.find(item => item.key === params.key)) {
                     this.sendData.values.push(params)
