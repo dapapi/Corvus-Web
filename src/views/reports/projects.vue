@@ -529,18 +529,18 @@
                     let firstInfo = [];
                     let secondName = [];
                     let secondInfo = [];
-                    for (let i = 0; i < response.length; i++) {
+                    for (let i = 0; i < response.type_cat.length; i++) {
                         firstInfo.push(
                             {
-                                value: response[i].type_total,
-                                name: response[i].type_name
+                                value: response.type_cat[i].count,
+                                name: response.type_cat[i].type
                             }
                         );
-                        for (let j = 0; j < response[i].value.length; j++) {
-                            secondName.push(response[i].value[j].value);
+                        for (let j = 0; j < response.type_cat[i].list.length; j++) {
+                            secondName.push(response.type_cat[i].list[j].value);
                             secondInfo.push({
-                                value: response[i].value[j].p_total,
-                                name: response[i].value[j].value
+                                value: response.type_cat[i].list[j].num,
+                                name: response.type_cat[i].list[j].industry_name
                             })
                         }
                     }
