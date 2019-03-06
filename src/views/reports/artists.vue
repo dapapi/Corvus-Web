@@ -72,11 +72,11 @@
                                aria-controls="forum-base"
                                aria-expanded="true" role="tab">艺人报表</a>
                         </li>
-                        <li class="nav-item" role="presentation" @click="setReports">
-                            <a class="nav-link" data-toggle="tab" href="#forum-sales-funnel"
-                               aria-controls="forum-present"
-                               aria-expanded="false" role="tab">艺人分析</a>
-                        </li>
+                        <!--<li class="nav-item" role="presentation" @click="setReports">-->
+                            <!--<a class="nav-link" data-toggle="tab" href="#forum-sales-funnel"-->
+                               <!--aria-controls="forum-present"-->
+                               <!--aria-expanded="false" role="tab">艺人分析</a>-->
+                        <!--</li>-->
                     </ul>
                 </div>
                 <div class="page-content tab-content nav-tabs-animate bg-white">
