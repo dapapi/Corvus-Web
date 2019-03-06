@@ -161,7 +161,7 @@
                             </div>
                         </div>
                         <div class="col-md-12">
-                            <div ref="industry" style="width: 600px;height:500px;margin: 0 auto"></div>
+                            <div ref="industry" style="width: 700px;height:500px;margin: 0 auto"></div>
                         </div>
                     </div>
                 </div>
