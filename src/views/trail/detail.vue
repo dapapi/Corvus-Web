@@ -653,6 +653,7 @@
                 currentUser: {},
                 principalName: '',
                 lockUser:{},
+                startTime:''
             }
         },
         created() {
@@ -888,11 +889,9 @@
 
             changeTrailBaseInfo: function () {
                 if (this.changeInfo.resource_type) {
-                    if (this.changeInfo.resource_type == this.oldInfo.resource_type) {
-                        delete this.changeInfo.resource_type
-                    } else {
-                        this.changeInfo.resource_type = Number(this.changeInfo.resource_type)
-                    }
+                    this.changeInfo.resource_type = Number(this.changeInfo.resource_type)
+                }else{
+                    this.changeInfo.resource_type = Number(this.oldInfo.resource_type)
                 }
                 if (this.changeInfo.hasOwnProperty('resource') && this.changeInfo.resource != this.oldInfo.resource) {
                     if (!this.changeInfo.resource_type) {
@@ -906,9 +905,13 @@
                         return
                 }
                 if([1,2,3,4,5].includes(this.trailOrigin)){
-                    if(!this.changeInfo.resource){
+                    if(!this.changeInfo.resource && !this.oldInfo.resource){
                         toastr.error('线索来源不能为空')
                         return
+                    }else{
+                        if(!this.changeInfo.resource){
+                            this.changeInfo.resource = this.oldInfo.resource
+                        }
                     }
                 }
                     fetch('put', '/trails/' + this.trailId, data).then(() => {
