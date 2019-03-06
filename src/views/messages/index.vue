@@ -44,8 +44,8 @@
                                                 <i class="iconfont  font-size-30 icon-color" :class="iconList[moduleList.find(item => item.id == moduleType).val]"></i>
                                             </div>
                                             <div class="float-left mb-10 col-md-11" style="margin-left:-10px">
-                                                <p class="mb-5"><span class="module_title mr-5 title">{{moduleList.find(item=>item.id ==moduleType).name}}助手</span><i class="timesR">{{item2.created_at}}</i></p>
-                                                <p class="desc txt font-size-16">{{item2.message_title}}</p>
+                                                <p class="mb-5 text-left"><span class="module_title mr-5 title">{{moduleList.find(item=>item.id ==moduleType).name}}助手</span><i class="timesR">{{item2.created_at}}</i></p>
+                                                <p class="desc text-left txt font-size-16">{{item2.message_title}}</p>
                                             </div>
                                         </div>
                                         <div class="content py-15 pl-40 col-md-8 ml-80" @click="msgStatus(item2.message_id,item2.module,item2.module_data_id)">
@@ -325,7 +325,7 @@ export default {
             if(response.data.power === 'true'){
                 if(module_id == 214){
                     this.showScheduleModal(module_data_id)
-                }else if (module_id == 216){
+                }else if (module_id == 216||module_id == 213){
                     
                     this.$router.push(`${this.msgLink.find(item =>item.value == module_id).name}/${module_data_id}?mode=approver`) 
                 }else{
